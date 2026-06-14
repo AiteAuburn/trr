@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "糖錄錄",
+    "slug": "bloodsugar-mobile",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "bloodsugar",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.bloodsugar.mobile",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "糖錄錄需要麥克風權限以便在本機轉錄語音紀錄。"
+      }
+    },
+    "android": {
+      "package": "app.bloodsugar.mobile"
+    },
+    "plugins": [],
+    "extra": {
+      "apiBaseUrl": "http://localhost:8000"
+    }
+  }
+}

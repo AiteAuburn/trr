@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tanglulu.local/schemas/model-manifest.schema.json",
+  "title": "Tanglulu Local Model Manifest",
+  "type": "object",
+  "required": ["schema_version", "models"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "model-manifest-v1"
+    },
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "label",
+          "runtime",
+          "available",
+          "distribution",
+          "checksum_sha256",
+          "min_app_version",
+          "device_tiers"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["stt", "llm"]
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "runtime": {
+            "type": "string",
+            "enum": ["browser", "local", "server_stub", "cloud_disabled"]
+          },
+          "available": {
+            "type": "boolean"
+          },
+          "distribution": {
+            "type": "string",
+            "enum": ["bundled", "download", "browser", "server_stub", "disabled"]
+          },
+          "asset_path": {
+            "type": ["string", "null"]
+          },
+          "download_url": {
+            "type": ["string", "null"]
+          },
+          "checksum_sha256": {
+            "type": ["string", "null"]
+          },
+          "size_mb": {
+            "type": ["number", "null"],
+            "minimum": 0
+          },
+          "min_app_version": {
+            "type": "string"
+          },
+          "device_tiers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["2022_mid_android", "2022_mid_ios", "modern_android", "modern_ios"]
+            }
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,26 @@
+{
+  "name": "complex mixed day with uncertain glucose and negative events",
+  "input": "今天好像有點亂，早上量血糖好像是 110 左右，忘記是不是空腹，早餐吃了三明治跟咖啡。中午沒量血糖但有吃麵，下午有點心吃餅乾，晚上吃飯之後量血糖是 165，後來又量一次變 150，睡前沒再量但今天有運動一下，大概 20 分鐘。",
+  "expected": {
+    "total": 7,
+    "counts": {
+      "glucose": 3,
+      "meal": 3,
+      "exercise": 1
+    },
+    "must_include": {
+      "glucose_values": [110, 165, 150],
+      "foods": ["三明治", "咖啡", "麵", "餅乾"],
+      "exercise_minutes": [20]
+    },
+    "must_not_include": {
+      "glucose_source_texts": ["中午沒量血糖", "睡前沒再量"]
+    },
+    "uncertainty": [
+      {
+        "glucose_value": 110,
+        "meal_timing": "unknown"
+      }
+    ]
+  }
+}

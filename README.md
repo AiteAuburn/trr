@@ -1,0 +1,316 @@
+# 糖錄錄
+
+Docker-first development skeleton for the blood sugar recording app.
+
+## Run Locally
+
+Backend:
+
+```bash
+docker compose up backend
+```
+
+Web simulator:
+
+```bash
+docker compose up web
+```
+
+All services:
+
+```bash
+make dev
+```
+
+Backend health:
+
+```text
+http://localhost:8000/health
+```
+
+Web:
+
+```text
+http://localhost:5173
+```
+
+Local defaults are intentionally developer-friendly:
+
+- `APP_ENV=local`
+- `ALLOW_DEV_AUTH=true`
+- `ENABLE_DEBUG_TOOLS=false`
+- local PostgreSQL in Docker
+- local web API endpoint at `http://localhost:8000`
+
+Do not reuse local credentials in staging or production.
+
+## Docker Compose
+
+Development Compose:
+
+```bash
+docker compose up -d db backend web
+docker compose run --rm backend alembic upgrade head
+```
+
+Minimal production-style Compose:
+
+```bash
+cp infra/minimal/.env.example infra/minimal/.env
+# edit every change-me value before first boot
+docker compose --env-file infra/minimal/.env -f infra/minimal/docker-compose.yml up -d
+```
+
+Production-style defaults disable dev auth and debug tools:
+
+```text
+APP_ENV=production
+ALLOW_DEV_AUTH=false
+ENABLE_DEBUG_TOOLS=false
+VITE_ENABLE_DEBUG_TOOLS=false
+```
+
+If `AUTH_JWT_SECRET` is configured for the bootstrap HS256 auth path in production,
+also set `AUTH_JWT_ISSUER` and `AUTH_JWT_AUDIENCE`; production config rejects
+issuerless or audienceless JWT validation.
+Production also requires `AUTH_JWT_REQUIRE_JTI=true` so accepted access tokens
+can be checked against the revocation denylist.
+
+The production backend image runs as a non-root `app` user. The production web image uses `nginxinc/nginx-unprivileged`.
+
+## Cloud Deployment
+
+The backend is designed to run as a stateless container. Use managed services for durable state and secrets.
+
+Required production posture:
+
+- managed PostgreSQL: Cloud SQL, RDS, or Aurora
+- cloud secret manager: Google Secret Manager, AWS Secrets Manager, or SSM Parameter Store
+- private database networking
+- no long-lived cloud keys in repo, images, or app config
+- workload identity / GitHub Actions OIDC / task roles for cloud access
+- `ALLOW_DEV_AUTH=false`
+- `ENABLE_DEBUG_TOOLS=false`
+
+GCP options:
+
+- Cloud Run for the simplest backend deployment.
+- GKE when Kubernetes HPA, ingress policy, workers, or network policy are needed.
+- Cloud SQL for PostgreSQL.
+- Secret Manager for `DATABASE_URL` and future auth/payment/API secrets.
+- Artifact Registry for container images.
+
+AWS options:
+
+- ECS Fargate for the simplest backend container deployment.
+- EKS when Kubernetes HPA, ingress policy, workers, or network policy are needed.
+- RDS or Aurora PostgreSQL for database.
+- Secrets Manager or SSM Parameter Store for secrets.
+- ECR for container images.
+
+Detailed runbooks:
+
+- `ai_context/CLOUD_DEPLOYMENT_GUIDE.md`
+- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`
+- `ai_context/REPO_QUALITY_WORKFLOW.md`
+
+Production blocker: real auth is not implemented yet. Do not expose the current API to real users until JWT/OIDC validation and profile permission scopes replace local development auth.
+
+## Mobile Preview
+
+The `mobile/` app is a React Native + Expo preview shell. It connects to the same backend and lets you test the mobile-first flow without using the web simulator.
+
+Mobile env defaults are documented in `mobile/.env.example`.
+For local Expo or Android Studio work, copy it first:
+
+```bash
+cd mobile
+cp .env.example .env
+```
+
+On Windows WSL, start the backend:
+
+```bash
+docker compose up -d db backend ollama
+```
+
+On Mac, connect to the Windows LAN IP:
+
+```bash
+cd mobile
+EXPO_PUBLIC_API_BASE_URL=http://WINDOWS_LAN_IP:8000 npm run start
+```
+
+For production-like mobile builds, disable dev login explicitly:
+
+```bash
+cd mobile
+EXPO_PUBLIC_API_BASE_URL=https://api.example.com \
+EXPO_PUBLIC_ALLOW_DEV_AUTH=false \
+EXPO_PUBLIC_ENABLE_DEBUG_TOOLS=false \
+npm run start
+```
+
+With `EXPO_PUBLIC_ALLOW_DEV_AUTH=false`, the mobile app will not call
+`/auth/dev-login`; protected actions remain unavailable until production
+JWT/OIDC login and secure token storage are connected.
+Mobile dev auth is opt-in, so omitting `EXPO_PUBLIC_ALLOW_DEV_AUTH=true` has
+the same fail-closed behavior.
+
+Then open the Expo app in an iOS simulator or scan the QR code from a phone. The app also has an editable Backend URL field, so you can change the IP without rebuilding.
+
+Before and after mobile UI/navigation changes, run the local quality gate:
+
+```bash
+cd mobile
+npm run quality
+```
+
+This runs TypeScript checking and the source-level navigation verifier without starting Expo, backend, AI, auth, payment, or database services.
+
+After major mobile layout changes, also run the visual smoke checklist in `ai_context/MOBILE_VISUAL_SMOKE_WORKFLOW.md`. Keep screenshots local, use seeded/sample/demo content only, and do not use backend writes, AI, LLM, Vision, STT, payments, production credentials, or real health data for evidence.
+
+### Android APK Export
+
+Debug APKs load JavaScript from Metro, so they still require `npm run start` /
+`npx expo start` while testing:
+
+```bash
+cd mobile/android
+./gradlew assembleDebug
+```
+
+For a standalone APK that does not require Metro, build release:
+
+```bash
+cd mobile/android
+./gradlew assembleRelease
+```
+
+The APK is written to:
+
+```text
+mobile/android/app/build/outputs/apk/release/app-release.apk
+```
+
+Before building, check the local Android environment:
+
+```bash
+cd mobile
+npm run apk:android-prereqs
+```
+
+For production-like APKs, also verify the bundled Expo public env before
+building and confirm the Android release signing is not debug-signed:
+
+```bash
+cd mobile
+npm run verify:release-env
+npm run verify:android-release-signing
+```
+
+This fails if the build would include dev auth, debug tools, visual-smoke route
+shortcuts, localhost, emulator, LAN, or non-HTTPS API URLs. For internal release
+APK smoke tests against a local backend, local API URLs can be allowed while
+still blocking dev auth and debug tools:
+
+```bash
+cd mobile
+python3 ../scripts/verify_mobile_release_env.py --allow-local-api
+```
+
+On Windows, prefer PowerShell for APK export because `mobile/android/local.properties`
+uses the Windows Android SDK path:
+
+```powershell
+cd D:\bloodsugar\mobile\android
+.\gradlew.bat assembleRelease
+```
+
+Do not run Linux Gradle in WSL against the Windows SDK path from
+`local.properties`; Linux Gradle can report Windows build-tools as corrupted.
+For WSL-only APK builds, install a Linux Android SDK and set `sdk.dir` to that
+Linux SDK path, such as `/home/aite/Android/Sdk`.
+
+The current release build is still signed with the debug keystore in
+`mobile/android/app/build.gradle`. That is acceptable for internal install
+tests only; production distribution needs a real release keystore and signing
+config.
+
+For that internal install smoke path, make the exception explicit:
+
+```bash
+cd mobile
+python3 ../scripts/verify_android_release_signing.py --allow-debug-signing
+```
+
+Current mobile scope:
+
+- dev login for local development only
+- profile loading / first profile creation
+- LLM model selection
+- text transcript input
+- parse preview
+- confirmation cards
+- save records
+- recent records
+
+Native voice, `whisper.rn`, encrypted SQLite, biometrics, and `llama.rn` require Expo prebuild / dev client and are planned after the shell is stable.
+
+### iPhone Dev Client For Local Models
+
+Expo Go cannot load `whisper.rn` or `llama.rn` because they are native modules. Use a development build:
+
+```bash
+cd mobile
+npm run prebuild
+npm run ios
+npm run start:dev
+```
+
+The current native model adapter supports:
+
+- `whisper.rn` file transcription from a local Whisper model path and audio file path
+- `llama.rn` GGUF completion with JSON schema constrained output
+- model download into app document storage from a test URL
+- picking a downloaded model path for Whisper or Llama tests
+
+Model files are not committed to the repo. Keep them outside git and load them by local file path during testing.
+
+Expo Go can still run the UI-only mobile shell, but it cannot execute `whisper.rn` or `llama.rn`. The native module buttons are for dev-client builds only and are hidden unless `EXPO_PUBLIC_ENABLE_DEBUG_TOOLS=true`.
+
+If an iPhone cannot reach WSL services over LAN, run these commands in an Administrator PowerShell on Windows:
+
+```powershell
+New-NetFirewallRule -DisplayName "BloodSugar Backend 8000" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8000
+New-NetFirewallRule -DisplayName "BloodSugar Expo Metro 8081" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8081
+```
+
+## Rules
+
+- Do not commit real `.env` files.
+- Do not use production data locally or in staging.
+- Do not log PHI or sensitive health data.
+
+## Planning Docs
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`: unified MVP / future architecture, page tree, module notes, and blueprint tasks.
+- `ai_context/UI_UX_SPEC.md`: complete UI / UX design system, screen specs, navigation, animation, and implementation guardrails.
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`: MVP route map for Home, Today, History, Basic Analysis, Subscription, and Settings.
+- `ai_context/VOICE_RECORDING_QUOTA_CONTRACT.md`: MVP voice quota, single-recording limit, warning behavior, and silent-audio rejection contract.
+- `ai_context/SUBSCRIPTION_ENTITLEMENT_SCHEMA.md`: plans, subscriptions, entitlements, usage counters, and voice quota enforcement contract.
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`: central permission service, record schema registry, report date-window, and request-id logging notes.
+- `ai_context/MOBILE_NATIVE_AI_SPIKE.md`: Expo Dev Client local Whisper/Llama spike, benchmark harness, and checksum proof notes.
+- `ai_context/VOICE_COMMAND_EXECUTION_POLICY.md`: non-write voice action execution and audit policy.
+- `ai_context/MINIMAL_PRODUCTION_STACK.md`: minimal self-hosted Docker Compose production stack, security checklist, backups, token strategy, and Kubernetes migration path.
+- `ai_context/CLOUD_DEPLOYMENT_GUIDE.md`: GCP Cloud Run/GKE and AWS ECS/EKS deployment guide with secret and IAM assumptions.
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`: module-by-module production hardening audit, risk list, and prioritized implementation plan.
+- `ai_context/PRODUCTION_GRADE_DESIGN_AUDIT.md`: production-grade design audit, fixed risks, remaining risks, and extensibility/scaling recommendations.
+- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`: Kubernetes, autoscaling, managed database, Redis, CI/CD, observability, and security deployment blueprint.
+- `infra/k8s/README.md`: initial Kubernetes manifests for namespace, deployment, service, ingress, HPA, PDB, network policy, secret shape, and migration job.
+- `ai_context/REPO_QUALITY_WORKFLOW.md`: repeatable backend, web, mobile, infra, release, and debug-incident quality gates.
+- `ai_context/IMPLEMENTATION_LOG.md`: dated PHI-safe log for every bug fix or implementation change.
+- `ai_context/architecture.md`: technical architecture and local-first product direction.
+- `ai_context/MASTER_ROADMAP.md`: long-term product phases.
+- `ai_context/IMPLEMENTATION_PLAN.md`: engineering implementation order.
+- `ai_context/TASK_QUEUE.md`: current implementation queue and completed task evidence.

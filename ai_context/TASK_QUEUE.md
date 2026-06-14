@@ -1,0 +1,19769 @@
+# 糖錄錄 Task Queue
+
+## Rules
+
+- Only one `active` task at a time.
+- When a task is completed, move it to `Done`.
+- When a task is no longer needed, move it to `Cancelled`.
+- Pick the next task from `Next Up`.
+- Do not skip infrastructure basics before product features.
+- Every bug fix or implementation change must be recorded in `ai_context/IMPLEMENTATION_LOG.md`.
+- Logs must stay PHI-safe: do not record real transcripts, glucose records, health payloads, secrets, request bodies, or raw model output.
+
+## Current UI / UX Baseline
+
+Canonical UI spec:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Current design baseline:
+
+- Mobile-first iPhone-style interface.
+- Deep forest green and mint green palette.
+- Rounded white cards, soft borders/shadows, large spacing, readable Traditional Chinese typography.
+- Core MVP loop: Home / Today -> voice or text input -> transcript confirmation -> AI structured confirmation -> save -> Today / History / Analysis.
+- Future modules remain visible as menu destinations only when requested by task: achievements, yearly review, store, food photo analysis.
+
+## Active
+
+None.
+
+## Feature Enhancement Priority
+
+Highest priority to lowest priority:
+
+1. Real authentication and account security
+   - Replace `dev-login` and `X-Account-Id` with production auth.
+   - Add Apple / Google / email login path.
+   - Add JWT/session validation, refresh-token handling, logout, and basic device/session management.
+   - Related queue item: `T037`.
+
+2. MVP recording flow polish
+   - Build the smooth core loop: Home -> input -> transcript confirm -> AI confirm -> save.
+   - Keep voice and text on the same parse pipeline.
+   - Related queue items: `T027`, `T028`, `T030`.
+
+3. Record detail, edit, history, and delete UX
+   - Add Today, History, record detail, edit, and soft delete user flows.
+   - Make correction easy so users trust the health record.
+   - Related queue items: `T031`, `T032`.
+
+4. Subscription and entitlement foundation
+   - Add trial status, subscription status, entitlements, usage counters, referral/discount placeholders, and voice quota rules.
+   - Related queue item: `T034`.
+
+5. Basic analytics
+   - Add 本週 / 本月 / 自訂日期區間 glucose trends, highest/lowest/average glucose, total glucose measurement count, before-meal count, and after-meal count.
+   - Avoid diagnosis or treatment advice.
+   - Related queue item: `T033`.
+
+6. Production permission model
+   - Add owner/caregiver/doctor/export/share scopes through a central permission service.
+   - Do this after real auth is in place.
+   - Related queue item: `T037`.
+
+7. Better AI parsing reliability
+   - Add versioned record schema registry, parser golden tests, confidence flags, needs-confirmation flags, rejected-event handling, and debug-only decision traces.
+   - Related queue items: `T037`, `T019`, `T024`.
+
+8. Voice quota and recording constraints
+   - Add daily quota, trial/paid minute limits, low-remaining warning, silent audio rejection, and silence trimming contract.
+   - Related queue item: `T029`.
+
+9. Cloud deployment readiness
+   - Add deploy artifacts and runbooks for Cloud Run/GKE/ECS/EKS, migration jobs, image tagging, rollback, and secret injection.
+   - Related queue items: `T036`, `T040`.
+
+10. Observability
+    - Add request IDs, structured JSON logs, PHI-safe metrics, parser failure metrics, DB timing metrics, and later OpenTelemetry.
+    - Related queue items: `T037`, `T040`.
+
+11. Mobile native AI spike
+    - Benchmark whisper.rn and llama.rn in a dev client, add checksum validation, manifest-based model download, and device compatibility notes.
+    - Related queue item: `T013`.
+
+12. Food photo recognition
+    - Add image upload, food recognition, nutrition estimate, user confirmation, and save-to-meal flow.
+    - Future expansion item; not MVP-critical.
+
+13. Doctor / clinic sharing
+    - Add share token, doctor read-only portal, visit summary report, exportable report, expiration, and revoke access.
+    - Requires real auth and permission model first.
+
+14. Gamification / achievements
+    - Add streaks, badges, consistency milestones, exercise milestones, and achievement tables.
+    - Useful for retention after the core record loop is stable.
+
+15. Annual review / wrapped-style summary
+    - Add yearly stats, longest streak, most recorded type, best month, and shareable summary.
+    - Requires accumulated user data first.
+
+Recommended next five:
+
+1. Implement real auth boundary or auth abstraction so dev auth is fully isolated.
+2. Build the complete MVP record flow: Home -> transcript confirm -> AI confirm -> save.
+3. Add Today / History / Detail / Edit / Delete UI.
+4. Add subscription entitlement schema and voice quota counters.
+5. Add basic analytics page with MVP period selector and six required glucose stats.
+
+## Next Up
+None.
+
+## Done
+
+### T949: Show Home recording elapsed seconds in minimal hint
+
+Status: done
+
+Summary:
+
+- Home keeps the minimal mic-only layout but now shows elapsed recording seconds in the secondary hint while the user is pressing the mic.
+- The elapsed copy is generated by a bounded helper and reuses `homeHintSecondary`, avoiding extra cards, text boxes, or third-line UI.
+- Mobile navigation verifier now guards the elapsed-seconds hint contract.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T948: Preserve signed food glucose deltas in community database
+
+Status: done
+
+Summary:
+
+- Mobile food community API/display mapping now clamps average/max/min glucose delta with signed bounds instead of forcing values to zero or above.
+- Backend food detail regression now covers a lower-after-glucose share and verifies negative min delta, average aggregation, newest-first share ordering, and individual share fields.
+- Mobile navigation verifier now guards signed delta mapping for food community stats.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+- `pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search` passed in backend container.
+
+### T947: Guard MVP menu-only History and Analysis navigation
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now source-checks that primary tabs are limited to Today, Record, and Menu.
+- Verifier rejects History, Analysis, and Achievements being reintroduced into primary tabs.
+- Verifier also guards History and Analysis screen chrome as hamburger fallback destinations instead of back-arrow pages.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T946: Count Year Review cumulative and streak badges
+
+Status: done
+
+Summary:
+
+- Year Review backend badge metrics now include both cumulative and streak achievement progress from the shared achievement taxonomy.
+- Added regression coverage proving 10 consecutive glucose records count as two achieved badges: cumulative 10 and streak 10.
+- Mobile navigation verifier now guards the cumulative plus streak badge metric source.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+- `pytest -q tests/test_community_store_year_review.py::test_year_review_badge_metrics_include_cumulative_and_streak_achievements tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records` passed in backend container.
+
+### T945: Align mobile store fallback catalog with backend rewards
+
+Status: done
+
+Summary:
+
+- Mobile fallback store products now use backend reward codes, titles, points costs, and redeemable/preview badges.
+- UI spec now treats backend `/store/rewards` as the canonical reward catalog for coupon, supplement discount, partner product, special badge, and member benefit items.
+- Mobile navigation verifier now guards fallback reward code and points-cost parity.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+- `pytest -q tests/test_community_store_year_review.py::test_store_redemption_deducts_points_and_rejects_future_rewards` passed in backend container.
+
+### T944: Mask account ids in public community leaderboards
+
+Status: done
+
+Summary:
+
+- Backend community leaderboard responses now return public display names and scores without exposing raw account UUIDs.
+- Community leaderboard tests now assert `account_id` is masked for share-count, contribution, and food-tester leaderboards.
+- Mobile navigation verifier rejects reintroducing raw account id exposure in leaderboard entries.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+- `pytest -q tests/test_community_store_year_review.py::test_food_share_creates_food_stats_points_and_leaderboards` passed in backend container.
+
+### T943: Share backend achievement taxonomy with Year Review
+
+Status: done
+
+Summary:
+
+- Added a shared backend achievement catalog for levels, colors, categories, and streak badge styling.
+- `/achievements/summary` and Year Review snapshot badge metrics now read achievement levels from the shared catalog instead of duplicating local constants.
+- Mobile navigation verifier now requires the shared catalog import and rejects local Year Review/API achievement level definitions.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+- `pytest -q tests/test_community_store_year_review.py::test_achievement_summary_calculates_mvp_badge_progress tests/test_community_store_year_review.py::test_year_review_scheduler_defaults_to_previous_calendar_year` passed in backend container.
+
+### T942: Guard backend basic report glucose summary contract
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now source-checks backend `/reports/basic` API, reporting service, and date-window regression test.
+- The guard fixes the inclusive `start_at`, exclusive `end_at`, fasting-before-meal, after-meal, and six glucose summary expectations.
+- This keeps Analysis/Detailed Report parity from drifting when backend report logic changes.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T941: Remove stale History range/custom-date dead code
+
+Status: done
+
+Summary:
+
+- Removed unused History range/custom-date type, config, state, display helper, handlers, and apply function from `mobile/App.tsx`.
+- History records now feed the calendar directly from the bounded loaded record list; selected date filtering remains driven by the calendar.
+- Mobile navigation verifier now rejects reintroducing the stale History range/custom-date symbols.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T940: Guard Home hamburger fallback chrome
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now explicitly guards Today/Home chrome as an empty-subtitle screen with no `backTo` or `actionLabel` override.
+- The verifier checks the header button still falls back to the `☰` hamburger glyph.
+- This keeps the MVP Home screen minimal while preserving the right-top menu entry.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T939: Guard backend food-share glucose delta preflight in mobile verifier
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now checks backend `/community/foods/shares` source keeps the client-supplied `glucose_delta` preflight dependency.
+- The verifier guards the structured error code/message and server-calculated `glucose_delta=after-before`.
+- The verifier rejects moving the delta rejection back into schema-level raw validation error text.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T938: Reject client-supplied food share glucose delta
+
+Status: done
+
+Summary:
+
+- Backend food-share API preflight now rejects `glucose_delta` in create requests with structured non-echoing detail.
+- Food-share success tests now cover server-calculated delta without client input.
+- Added regression coverage proving rejected client deltas do not echo submitted food/note text and do not create food items or community points.
+
+Verification:
+
+- Targeted backend pytest passed.
+- `npm run quality` passed in `mobile/`.
+
+### T937: Fail closed on invalid Store redemption identifiers
+
+Status: done
+
+Summary:
+
+- Store redemption create now refuses to POST when the bounded reward id is empty.
+- Store redemption use now refuses to POST when the bounded redemption id is empty.
+- Mobile navigation verification now guards both fail-closed checks before the backend redemption calls.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T936: Bound Year Review share package identifiers
+
+Status: done
+
+Summary:
+
+- Year Review share package ids are now bounded before mobile stores them or uses them in share result and revoke endpoints.
+- Invalid share package ids fail closed and clear the local revoke state instead of preserving raw backend identifiers.
+- Mobile navigation verification now guards the bounded id path and rejects direct raw `share_package_id` state writes.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T935: Bound Food Community share CTA accessibility copy
+
+Status: done
+
+Summary:
+
+- Food Community share CTA now uses render-before bounded button and accessibility labels.
+- Mobile navigation verification now guards the derived labels and rejects the stale inline share accessibility copy.
+- The share submission flow remains unchanged: protected backend ready writes the food share, creates points, and refreshes store and leaderboard data.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T934: Align Analysis local glucose metrics to selected date records
+
+Status: done
+
+Summary:
+
+- Mobile Analysis glucose metrics now derive from `analysisRecords`, the same date-windowed local record set used by the page.
+- Removed the independent full-list glucose memo path so custom Analysis ranges cannot drift from the selected local records.
+- Mobile navigation verification now guards the `analysisRecords` dependency and rejects reintroducing the independent glucose memo.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T933: Guard achievement unlock sync contract
+
+Status: done
+
+Summary:
+
+- Mobile navigation verification now guards the achievement sync button label and accessibility copy.
+- The verifier checks the achievement sync path POSTs `/achievements/sync`, reads `/achievements/unlocks`, and renders the newly unlocked section.
+- UI spec now documents backend summary versus persisted unlock sync behavior accurately.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T932: Wire Ranking page opt-in toggle to backend settings
+
+Status: done
+
+Summary:
+
+- Ranking page opt-in action now toggles `/community/settings` through the shared community settings save path.
+- Ranking opt-in button text and accessibility label now reflect open/close state and backend setting behavior.
+- Mobile navigation verification now rejects the stale status-only opt-in handler.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T931: Guard Store wallet refresh after redeem and use
+
+Status: done
+
+Summary:
+
+- Mobile navigation verification now checks redeem success refreshes store catalog, points, and wallet state.
+- The verifier also checks successful coupon/discount use refreshes the same store state.
+- UI spec now requires both redeem and use success paths to refresh catalog / points / wallet.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T930: Align Year Review copy with backend-ready share package
+
+Status: done
+
+Summary:
+
+- Year Review copy now separates local fallback preview from backend-ready snapshot and privacy-masked share package behavior.
+- Removed stale wording that implied share images, annual materials, or privacy masking are not available at all.
+- Mobile navigation verification now guards the backend-aware Year Review copy and rejects stale no-share/no-privacy-mask wording.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T929: Align Store copy with immediate coupon and discount code fulfillment
+
+Status: done
+
+Summary:
+
+- Store redeemable item copy now distinguishes immediate coupon/discount-code issuance from reservation-based fulfillment.
+- Store boundary copy no longer claims every redeemable item still does not issue codes.
+- Mobile navigation verification now guards the immediate-code copy and rejects stale reservation-only/no-issue store wording.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T928: Align Food Community copy with backend-ready behavior
+
+Status: done
+
+Summary:
+
+- Community/Food Community copy now states backend-ready paths can sync real food shares, points, leaderboards, and store points.
+- Removed stale preview-only claims that food search does not query backend or food sharing is not enabled.
+- Mobile navigation verification now guards the backend-aware copy and rejects stale preview-only food community wording.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T927: Refresh leaderboards after community opt-in settings save
+
+Status: done
+
+Summary:
+
+- Community public settings save now refreshes backend leaderboards after display-name or opt-in changes succeed.
+- Mobile navigation verification guards that the public settings save path triggers leaderboard refresh.
+- UI spec now requires opt-in updates to refresh `/community/leaderboards` so public ranking state reflects join/exit changes immediately.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T926: Refresh community leaderboards after food share success
+
+Status: done
+
+Summary:
+
+- Food share success now triggers a community leaderboard refresh in addition to the existing store points/catalog refresh.
+- Mobile navigation verification guards that the food share success path refreshes both store points and leaderboards.
+- UI spec now states successful food sharing must refresh store points/redemptions and public leaderboard data.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T925: Guard mobile food share auto-calculated glucose rise
+
+Status: done
+
+Summary:
+
+- Mobile navigation verification now guards the share form `血糖上升值` row and its automatic before/after calculation.
+- The verifier checks the food share submit payload sends `before_glucose` and `after_glucose`.
+- The verifier fails if the mobile submit path sends client-side `glucose_delta`, preserving the backend-owned rise calculation contract.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T924: Guard food detail share ordering in mobile verifier
+
+Status: done
+
+Summary:
+
+- Mobile navigation verification now reads the backend community API and guards the food detail share ordering contract.
+- The verifier fails if `/community/foods/{id}` no longer orders individual shares by `eaten_at` descending with deterministic fallback.
+- UI spec now explicitly requires the verifier to cover the backend detail shares ordering contract.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T923: Order food detail shares by eaten time
+
+Status: done
+
+Summary:
+
+- Backend food detail shares now sort by `eaten_at` descending, then creation time and id for deterministic fallback.
+- Regression coverage verifies the food detail response returns the newer eaten share before older shares.
+- UI spec now requires individual food share records to appear newest-first by eaten time.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T922: Stabilize community leaderboard tie ordering
+
+Status: done
+
+Summary:
+
+- Backend community leaderboards now apply stable tie-break ordering after score.
+- Ties are ordered by public display name, then account id, across share count, contribution, and food tester leaderboards.
+- Regression coverage verifies two opted-in accounts with equal scores appear in stable public-name order.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T921: Guard mobile store redemption usable condition
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now checks Store redemption display items only mark issued, coded, unused coupon/discount redemptions as usable.
+- This preserves the Store wallet boundary that reserved or already-used redemptions stay disabled on mobile.
+- UI spec now requires verifier coverage for the full usable-redemption condition.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T920: Guard reused store redemption side effects
+
+Status: done
+
+Summary:
+
+- Backend store regression coverage now verifies a used coupon cannot be used a second time.
+- The denied reuse preserves the original `used_at` timestamp and leaves points unchanged.
+- UI spec now requires reused coupon/discount use to remain side-effect free.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T919: Guard reserved store redemption use side effects
+
+Status: done
+
+Summary:
+
+- Backend store regression coverage now verifies reserved special-badge redemptions cannot be marked used.
+- The rejected use request returns `redemption_not_usable`, preserves reserved status, and leaves points unchanged.
+- UI spec now requires non-issued coupon/discount redemption use to remain side-effect free.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T918: Guard cross-account store redemption use
+
+Status: done
+
+Summary:
+
+- Backend store regression coverage now verifies one account cannot use another account's issued redemption.
+- Cross-account redemption use returns the same structured `redemption_not_found` detail.
+- The test verifies neither account's redemption wallet or points are changed by the denied request.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T917: Structure missing store redemption use errors
+
+Status: done
+
+Summary:
+
+- Backend `/store/redemptions/{id}/use` now returns structured `redemption_not_found` details for missing or inaccessible redemptions.
+- Regression coverage verifies a missing use request leaves the redemption wallet empty and points unchanged.
+- UI spec now requires structured not-found behavior for redemption use requests.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T916: Guard blank food-share name side effects
+
+Status: done
+
+Summary:
+
+- Backend regression coverage now verifies blank `food_name` rejection does not create food database entries or community points.
+- This strengthens the second-stage food sharing contract around invalid public food data.
+- UI spec now requires the blank-name path to remain side-effect free alongside the structured `food_name_blank` error.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T915: Structure blank food-share name errors
+
+Status: done
+
+Summary:
+
+- Backend food-share creation now returns a stable `food_name_blank` detail when `food_name` is all whitespace.
+- The schema still trims valid names and rejects non-string names through validation.
+- UI spec now requires the structured blank-name error so mobile does not depend on raw validation messages.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T914: Guard Year Review January 1 generation copy
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now checks the Year Review preview copy says January 1 automatically generates the previous-year review.
+- Verifier also checks the generation label is derived through the bounded helper and used by the Year Review live-calculation display path.
+- UI spec now requires verifier coverage for this visible schedule rule.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T913: Guard Year Review health outcome labels
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now checks Year Review health outcome rows include 年平均血糖, 年度最高血糖, and 年度最低血糖.
+- This preserves the third-stage Year Review health outcome requirements on the mobile fallback/render path.
+- UI spec now requires mobile verifier coverage for the three health outcome labels in addition to backend integration coverage.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T912: Guard achievement progress ratio bounds
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now checks achievement display items clamp target to at least 1 and progress to target.
+- Verifier also checks achievement progress bar ratio remains capped at 1 before width rendering.
+- UI spec now requires verifier coverage for the achievement progress-bar safety bounds.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T911: Guard Analysis custom date conditional fields
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now checks the Analysis custom date inputs are rendered only behind `analysisRange === "custom"`.
+- This preserves the MVP Analysis behavior where 本週 / 本月 do not expose custom date fields.
+- UI spec now requires verifier coverage for the custom-date conditional render alongside dedicated bounded input handlers.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T910: Guard Analysis default range
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now checks the Analysis range initial state is `month`.
+- This preserves the MVP Analysis default selection of `本月`.
+- UI spec now requires verifier coverage for the default Analysis range.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T909: Guard History calendar lit-date legend
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now checks the History calendar legend text `亮燈日期有紀錄`.
+- This preserves the MVP history affordance that lit calendar dates indicate days with records.
+- UI spec now requires verifier coverage for the lit-date legend alongside has-record and muted-day styles.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T908: Guard minimal Home mic button size
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now checks `homeMicButton` height, width, and border radius so the minimal Home microphone stays a large circular control.
+- This strengthens the MVP Home requirement beyond checking that the mic Pressable exists.
+- UI spec now requires verifier coverage for the large circular Home mic size.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T907: Guard invalid food-share eaten_at side effects
+
+Status: done
+
+Summary:
+
+- Backend regression now verifies invalid food-share `eaten_at` submissions do not create food items.
+- The same regression verifies rejected time submissions do not award community points.
+- UI spec now requires invalid `eaten_at` paths to avoid food, share, and point-ledger side effects.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T906: Guard community food share eaten_at timezone validation
+
+Status: done
+
+Summary:
+
+- Backend regression now verifies food share `eaten_at` without timezone returns structured `invalid_datetime`.
+- The regression locks the field to `eaten_at`, not the generic record `occurred_at` name.
+- UI spec now requires food share eaten time to include timezone.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T905: Guard community food share future eaten_at validation
+
+Status: done
+
+Summary:
+
+- Food share creation now validates future timestamps with the field-specific `eaten_at` name.
+- Backend regression verifies future `eaten_at` returns structured `invalid_record_time` and does not use the generic `occurred_at` wording.
+- UI spec now requires food share eaten time to fail closed when it is in the future.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py tests/test_records.py::test_record_create_rejects_future_occurred_at_before_permission_lookup tests/test_records.py::test_record_update_rejects_future_occurred_at_before_record_lookup tests/test_ai_pipeline.py::test_parse_preview_rejects_future_occurred_at_before_profile_and_parser` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T904: Structure community display-name blank validation
+
+Status: done
+
+Summary:
+
+- `/community/settings` now returns structured `community_display_name_blank` detail for whitespace-only public display names.
+- Backend regression verifies blank display-name updates leave the existing public display name and leaderboard opt-in unchanged.
+- UI spec now requires public display-name validation to fail closed without changing community settings.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T903: Structure community food detail not-found errors
+
+Status: done
+
+Summary:
+
+- `/community/foods/{id}` now returns structured `food_not_found` detail for missing food items.
+- Backend regression verifies the missing detail path includes the requested food item id.
+- UI spec now requires mobile to receive structured food detail not-found errors instead of relying on raw error strings.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T902: Reject blank community food search queries
+
+Status: done
+
+Summary:
+
+- Community food search now rejects query strings that normalize to blank instead of treating them as wildcard searches.
+- Backend regression verifies whitespace-only `query` returns structured `food_query_blank`.
+- UI spec now requires blank food search queries to fail closed so the shared food database is not broadly listed by accidental whitespace input.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T901: Guard unknown store reward redemption fail-closed path
+
+Status: done
+
+Summary:
+
+- Store redemption for an unknown reward code now returns structured `reward_not_found` detail.
+- Backend regression verifies the unknown reward path creates no redemption and leaves the points balance unchanged.
+- UI spec now requires unknown reward redemption attempts to fail closed without point or wallet side effects.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T900: Harden Year Review snapshot immutability baseline
+
+Status: done
+
+Summary:
+
+- Strengthened the Year Review batch immutability regression so the first snapshot summary is captured with an independent deep copy.
+- This prevents a mutable ORM JSON dict reference from masking accidental summary refreshes during the rerun comparison.
+- UI spec now requires snapshot summary immutability regressions to compare against an independent baseline copy.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T899: Guard Year Review batch snapshot immutability
+
+Status: done
+
+Summary:
+
+- Strengthened backend Year Review batch-generation coverage for missing-only snapshots.
+- The test now creates a snapshot, adds another record that would change the yearly summary, reruns the batch, and verifies the existing snapshot id, `generated_at`, and summary remain unchanged.
+- UI spec now requires scheduled batch generation to avoid refreshing existing annual snapshots.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T898: Reject non-string community food names during normalization
+
+Status: done
+
+Summary:
+
+- Fixed community food share normalization so non-string `food_name` values are not coerced with `str(value)`.
+- The schema now trims only real strings and leaves non-string values for Pydantic validation, preventing `null` from becoming `"None"`.
+- Backend integration coverage now verifies `food_name: null` is rejected.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T897: Guard Year Review share revoke idempotency
+
+Status: done
+
+Summary:
+
+- Strengthened backend Year Review share package lifecycle coverage.
+- The test now verifies repeated revoke calls keep the package revoked and do not refresh `revoked_at`.
+- UI spec now requires revoked share packages to reject later share result updates and keep revoke idempotent.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T896: Normalize community food share text inputs
+
+Status: done
+
+Summary:
+
+- Added backend schema normalization for community food share text fields.
+- Blank food names are rejected after trimming; valid food names are trimmed; blank optional serving descriptions and public notes normalize to `null`.
+- Backend integration coverage now guards these food database quality boundaries.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T895: Guard Year Review achievement-level parity
+
+Status: done
+
+Summary:
+
+- Strengthened mobile navigation verification for achievement level parity.
+- The verifier now checks the shared achievement level sequence across mobile, backend `/achievements`, and Year Review snapshot service.
+- UI spec now requires Year Review annual badge stats to stay aligned with the Achievements taxonomy.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T894: Guard History calendar has-records visual state
+
+Status: done
+
+Summary:
+
+- Strengthened mobile navigation verification for the History calendar.
+- The verifier now checks that calendar day `hasRecords` comes from that date's record count, selected state comes from the selected date key, and the render block binds has-records/muted/selected styles plus the record dot.
+- UI spec now requires History calendar lighting/dimmed states to stay tied to real per-date loaded records.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T893: Fix minimal Home CTA negative verifier markers
+
+Status: done
+
+Summary:
+
+- Fixed the minimal Home verifier's manual-entry negative marker to match the real `openTodayManualEntry` handler name.
+- Added negative checks so the Today/Home render block cannot include record-entry CTA or the Today quick-entry press wrapper.
+- UI spec now requires the Home block guard to reject quick-entry wrappers, manual-entry CTA, record-entry CTA, text input, analysis CTA, and record cards.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T892: Guard local analysis custom-date filtering
+
+Status: done
+
+Summary:
+
+- Strengthened mobile navigation verification for the MVP Analysis custom date range.
+- The verifier now checks that local `analysisRecords` and `analysisGlucoseRecords` both use `analysisSelectedDateBounds`, matching the `/reports/basic` query bounds.
+- UI spec now requires custom date ranges to apply to both backend reports and local fallback metrics.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+- `docker compose run --rm backend pytest -q tests/test_reports.py` passed.
+
+### T891: Guard store redemption insufficient-points fail-closed path
+
+Status: done
+
+Summary:
+
+- Strengthened backend store redemption coverage for the insufficient-points path.
+- The test now verifies a redemption attempt with zero balance returns `insufficient_points`, does not create another redemption, and leaves the points balance unchanged.
+- UI spec now requires store redemptions to fail closed without negative balances when points are insufficient.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T890: Guard food tester leaderboard distinct-food scoring
+
+Status: done
+
+Summary:
+
+- Strengthened backend community leaderboard coverage for the food tester ranking.
+- The test now adds a repeated share for the same food item and verifies share-count/contribution scores increase while `food_tester` remains based on distinct food items.
+- UI spec now defines food tester scoring as distinct food item count, not raw share count.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T889: Guard community food category taxonomy endpoint
+
+Status: done
+
+Summary:
+
+- Added backend integration coverage for `/community/foods/categories`.
+- The test now verifies the required ten food category code/label pairs in stable order: vegetables, meat, seafood, eggs, beans, starches, drinks, fruit, snacks, and supplements.
+- UI spec now requires the backend category endpoint to stay aligned with the requested food database taxonomy.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T888: Guard Year Review share payload health-value masking
+
+Status: done
+
+Summary:
+
+- Strengthened backend Year Review share regression coverage for privacy-masked public payloads.
+- The test now verifies share-card text, SVG asset, and confirmed share package do not expose health outcome keys, Chinese glucose result labels, actual glucose values, or `mg/dL` fragments.
+- UI spec now requires backend share regressions to preserve low-sensitivity annual summary sharing only.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T887: Guard Year Review CronJob default-year contract
+
+Status: done
+
+Summary:
+
+- Strengthened Kubernetes manifest coverage for the annual Year Review snapshot CronJob.
+- The verifier now fails if `year-review-cronjob.yaml` passes `--year`, preserving the backend default-year contract for January 1 execution.
+- UI spec now requires the manifest verifier to guard the January 1 schedule, command target, and absence of a fixed year argument.
+
+Verification:
+
+- `python scripts/verify_k8s_manifests.py` passed.
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T886: Guard Year Review health labels and AI summary text
+
+Status: done
+
+Summary:
+
+- Strengthened backend Year Review integration coverage for health outcome labels.
+- The test now verifies AI summary has both `important_observation` and `encouragement` text, and the observation includes year, record days, glucose count, and average glucose.
+- UI spec now requires backend tests to preserve health labels and non-empty AI summary content.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+
+### T885: Guard food upsert and cross-category search boundaries
+
+Status: done
+
+Summary:
+
+- Strengthened backend food database regression coverage for same-name food upsert boundaries.
+- The test now proves same category/name shares aggregate into one food item, while the same name in another category creates an independent food item.
+- The test also covers direct search across categories and category-filtered search returning only the selected category.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+
+### T884: Guard History calendar-first wording and render
+
+Status: done
+
+Summary:
+
+- Updated History boundary copy and UI spec wording from range-tab language to calendar selected-date language.
+- Strengthened mobile navigation verifier so the History render block must not contain range tab rendering or custom range inputs.
+- Kept Analysis range tabs separate from History calendar mode in the UI spec.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T883: Remove Home quick-entry wording drift
+
+Status: done
+
+Summary:
+
+- Updated UI spec wording so quick-entry cards, sample text, recording-result actions, and CTA accessibility requirements are Record-flow only.
+- Updated mobile quick-record intro copy so Home is described as recording-only, with text/manual entry routed through the Record page.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T882: Align main flow docs with minimal Home
+
+Status: done
+
+Summary:
+
+- Updated the UI spec main flow so Home is described as the single microphone entry instead of a Today summary/list surface.
+- The flow now routes History, Basic Analysis, and Achievements through the hamburger menu, matching the current minimal Home objective.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T881: Restrict primary tabs to Home, Record, and Menu
+
+Status: done
+
+Summary:
+
+- Removed History and Analysis from `primaryScreens` so those MVP feature entries remain reachable through the hamburger menu instead of primary tabs.
+- Updated UI spec coverage to require primary tabs to contain only Today, Record, and Menu.
+- UI spec now explicitly states History and Basic Analysis must not appear in primary tabs.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T880: Guard achievement cumulative level colors
+
+Status: done
+
+Summary:
+
+- Strengthened backend achievement regression coverage for cumulative badge level colors.
+- The achievement summary test now verifies each category uses the same six cumulative level colors while retaining its shared category icon.
+- UI spec now requires backend integration coverage for the cumulative level color sequence.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+
+### T879: Guard report fasting as before-meal count
+
+Status: done
+
+Summary:
+
+- Strengthened backend `/reports/basic` date-window coverage so `fasting` glucose records count toward the before-meal metric.
+- The custom date-window report test now verifies all six glucose summary metrics with both `before_meal` and `fasting` records inside the window.
+- UI spec now requires the backend date-window integration test to guard the fasting-as-before-meal convention.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_reports.py` passed.
+
+### T878: Guard store reward catalog identity
+
+Status: done
+
+Summary:
+
+- Strengthened backend store regression coverage for the reward catalog identity.
+- The test now locks the five reward codes, Traditional Chinese titles, categories, points costs, and redeemable/preview status expected by the mobile Store mapping.
+- UI spec now requires backend tests to preserve the full reward catalog identity, not only category presence.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+
+### T877: Guard backend-calculated food glucose rise
+
+Status: done
+
+Summary:
+
+- Strengthened backend food-share integration coverage so client-provided `glucose_delta` cannot override the system-calculated rise value.
+- UI spec now requires backend tests to prove food share rise is calculated from `after_glucose - before_glucose`.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+
+### T876: Add Year Review annual stats to UI spec coverage
+
+Status: done
+
+Summary:
+
+- Added `yearlyReviewMetricRows.map` to the canonical Year Review screen markers in `verify_mobile_ui_spec_coverage.py`.
+- UI spec now requires Year Review annual-stat rows to be covered by both navigation verification and UI spec coverage.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T875: Guard Year Review annual-stat rows
+
+Status: done
+
+Summary:
+
+- Aligned mobile Year Review fallback annual-stat labels with the backend `annual_stats` contract and the requested seven annual-stat rows.
+- Strengthened mobile navigation verifier coverage so Year Review must render annual stat rows and preserve all seven labels.
+- UI spec now records that mobile fallback and backend annual stats must stay aligned on the seven annual-stat rows.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T874: Guard food category individual-item coverage
+
+Status: done
+
+Summary:
+
+- Strengthened mobile navigation verifier coverage for the Food Community fallback database.
+- The verifier now confirms `foodCommunityItems` exists and every top-level food category has at least one individual food item.
+- UI spec now requires the mobile fallback database to preserve individual food entries for all ten major categories, not only category tabs.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T873: Cover community leaderboard opt-out removal
+
+Status: done
+
+Summary:
+
+- Expanded community leaderboard backend integration coverage for opt-out behavior.
+- The test now toggles `leaderboard_opt_in` back to false after appearing on all three leaderboard types.
+- It verifies the account is removed from share count, contribution, and food tester public leaderboards while existing shares and points remain intact.
+- UI spec now states opt-out accounts must not appear in public leaderboards.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T872: Guard Store points and redemption mobile path
+
+Status: done
+
+Summary:
+
+- Strengthened mobile navigation verifier coverage for the Store points/redemption flow.
+- The verifier now guards backend sync for `/store/rewards`, `/store/points`, and `/store/redemptions`.
+- The verifier also guards POST `/store/redemptions`, reward-code payloads, the bounded "我的兌換券" wallet render, usable-state disabled handling, and POST `/store/redemptions/{id}/use`.
+- UI spec now requires verifier coverage for the mobile Store points/reward/redemption/use path.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T871: Guard food glycemic reference values on mobile
+
+Status: done
+
+Summary:
+
+- Added `mg/dL` units to Food Community detail values for average, maximum, and minimum glucose rise.
+- Strengthened mobile navigation verifier coverage for the Food Community data page.
+- The verifier now guards list metric summaries and the four detail-page statistics: share count, average rise, maximum rise, and minimum rise.
+- UI spec now requires mobile Food Community screens to show share count plus actual glycemic reference values with units.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T870: Cover report custom date-window glucose metrics
+
+Status: done
+
+Summary:
+
+- Strengthened backend `/reports/basic` date-window integration coverage for Analysis / Detailed Report parity.
+- The test now verifies a custom `start_at` / `end_at` window returns glucose count, before-meal count, after-meal count, average, minimum, maximum, latest value, and latest timestamp.
+- The test also verifies the report window excludes records at the `end_at` boundary.
+- UI spec now requires backend custom date-window coverage for the full six Analysis glucose metrics.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_reports.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T869: Cover achievement badge taxonomy and visual reuse
+
+Status: done
+
+Summary:
+
+- Expanded backend achievement integration coverage for the MVP badge taxonomy.
+- The test now verifies each category has six cumulative and six streak badges across levels 10 / 50 / 100 / 150 / 200 / 250.
+- The test also verifies cumulative badges reuse the category icon, while streak badges use the independent streak icon and color.
+- UI spec now requires backend integration coverage for the shared cumulative badge pattern and independent streak badge pattern.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T868: Tighten minimal Home render guard
+
+Status: done
+
+Summary:
+
+- Strengthened the mobile navigation verifier for the MVP Home screen.
+- The verifier now requires the Today/Home render block to contain exactly one Pressable mic control.
+- The verifier also rejects primary/secondary buttons, section titles, status/evidence copy, inline info blocks, and card/timeline surfaces inside the Home render block.
+- UI spec now documents this stricter Home-only source-level contract and clarifies that any retained Today-related handlers must not surface extra Home CTAs.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T867: Guard Year Review native share payload boundary
+
+Status: done
+
+Summary:
+
+- Added mobile navigation verifier coverage for the Year Review native share handler.
+- The verifier now checks the handler requests the privacy-masked share-card asset, confirms the share package with privacy acknowledgement, calls native `Share.share`, reports opened/dismissed results, and wires revoke.
+- The verifier also asserts native share message uses bounded `sharePackage.share_text` and does not pass raw SVG text, package SVG text, or raw JSON snapshot payload.
+- UI spec now documents this mobile source-level share payload boundary.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T866: Cover food detail share records and cross-category search
+
+Status: done
+
+Summary:
+
+- Added backend integration coverage for `/community/foods/{id}` food detail responses.
+- The test now verifies same-food shares upsert to one food item, glucose deltas are auto-calculated, food stats aggregate share count / average / max / min deltas, and individual share records include serving and note fields.
+- The test also verifies direct food-name search without category finds the food item across categories.
+- UI spec now requires this backend detail/search coverage for the food community data page contract.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+
+### T865: Guard History raw transcript source boundary
+
+Status: done
+
+Summary:
+
+- Added a function-level mobile navigation verifier check for `historyRawRecordDisplayItem`.
+- The verifier now confirms History raw display only reads `metadata_json?.source_text`, type-guards it, bounds source text before rendering, labels source availability, and uses the safe fallback when no bounded source text exists.
+- UI spec now states the raw transcript tab must not preserve or reconstruct raw transcripts beyond bounded `source_text`.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T864: Guard Detailed Report glucose timing rows
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now checks Detailed Report consumes backend `before_meal_count` and `after_meal_count`.
+- The verifier also guards that Detailed Report metric rows render before-meal and after-meal glucose counts.
+- UI spec now documents that Detailed Report timing-count rows are part of the report parity contract.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T863: Align backend report glucose timing counts
+
+Status: done
+
+Summary:
+
+- Backend `/reports/basic` glucose summary now includes `before_meal_count` and `after_meal_count`.
+- Backend reporting counts `fasting` / `before_meal` as before-meal glucose and `after_meal` as after-meal glucose, matching mobile Analysis behavior.
+- Mobile `BasicReport` type, bounded report normalization, visual-smoke report seed, and Detailed Report metrics now include before/after meal glucose counts.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_reports.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T862: Guard Home hint text inside render block
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now checks the two required Home hint lines inside the Today/Home JSX render block.
+- The guard confirms the primary hint uses `styles.homeHint` and the secondary hint uses `styles.homeHintSecondary`.
+- UI spec now documents that Home hint verification must inspect the Home render block, not only global text markers.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T861: Guard MVP menu destination labels
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now checks exact top-level menu labels, not only destination ids.
+- The guard locks MVP user-facing menu entries such as History, Basic Analysis, and Achievements to their required Traditional Chinese labels.
+- UI spec now documents menu id/label parity as part of the hamburger-menu entry contract.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T860: Cover Store reward catalog and redemption classes
+
+Status: done
+
+Summary:
+
+- Backend store regression test now verifies all five planned reward categories are present in `/store/rewards`.
+- The test covers redeemable coupons, supplement discounts, and special badges using food-share points.
+- The test also verifies partner products and member benefits remain preview-only and fail closed with `reward_not_redeemable`.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+
+### T859: Guard Year Review scheduler default year
+
+Status: done
+
+Summary:
+
+- Backend regression coverage now directly verifies the year-review scheduler defaults to the previous calendar year.
+- The test covers January 1 execution so the annual CronJob contract cannot drift into generating the current-year report.
+- UI spec now documents that scheduler default-year behavior must remain tested alongside the January 1 CronJob manifest.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T858: Cover all Community leaderboard types
+
+Status: done
+
+Summary:
+
+- Backend community/store/year-review regression test now covers all three requested leaderboard types.
+- The test verifies share-count ranking, contribution ranking from awarded food-share points, and food-tester ranking from distinct shared foods after public opt-in.
+- UI spec now documents that `/community/leaderboards` must support all three public leaderboard types and remain opt-in gated.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py` passed.
+
+### T857: Guard Food Community category parity
+
+Status: done
+
+Summary:
+
+- Fixed mobile Food Community API mapping so backend `snacks` category maps to the mobile `snack` display category instead of falling back to vegetables.
+- Mobile navigation verifier now checks the ten required food categories across mobile fallback data, mobile API mappers, and backend `FOOD_CATEGORY_LABELS`.
+- UI spec now documents that Food Community category parity must cover backend plural category codes and mobile singular display ids.
+
+Verification:
+
+- `npm run verify:navigation` passed in `mobile/`.
+
+### T856: Guard Achievement taxonomy parity across mobile and backend
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now checks the Achievement taxonomy contract across `mobile/App.tsx` and backend `/achievements/summary`.
+- The verifier guards the three required categories, six required levels, cumulative/streak kinds, category-shared cumulative icons, independent streak icon/style, and visible badge level number.
+- UI spec now documents that Achievement verifier coverage must prove mobile fallback and backend summary parity.
+
+Verification:
+
+- `npm run verify:navigation` passed in `mobile/`.
+
+### T855: Guard History calendar and AI-first detail render order
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now extracts the History JSX render block directly.
+- The verifier now asserts the calendar grid renders before the selected-date detail panel.
+- The verifier now asserts the structured AI-organized records branch renders before the raw transcript branch.
+- The verifier now guards that selecting a calendar date resets History detail mode to structured.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T854: Guard minimal Home render block against extra affordances
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now extracts the Today/Home JSX render block directly.
+- The verifier now rejects quick-entry rail, quick-entry map, TextInput, Analysis CTA, manual-add CTA, and today-record cards inside Home.
+- Record page quick-entry remains allowed and continues to be verified separately.
+- UI spec now documents that the verifier must guard the Home render block, not only global markers.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T853: Add editable Food Community share food name
+
+Status: done
+
+Summary:
+
+- Food Community share form now includes an editable food-name input.
+- Share submission uses the bounded user-entered food name and only falls back to the selected food when the input is empty.
+- Submission now validates that a food name is available before calling backend `/community/foods/shares`.
+- Navigation verifier now guards the food-name field, updater, input binding, payload, and validation message.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T852: Make Food Community search category-independent
+
+Status: done
+
+Summary:
+
+- Food Community search now bypasses the selected category tab when a search query is present.
+- Backend `/community/foods` requests omit the category filter while searching and only apply category when the search box is empty.
+- Cache keys distinguish category browsing from all-category search.
+- Navigation verifier now guards the UI filter and backend query behavior for category-independent search.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T851: Sync Food Community categories from backend
+
+Status: done
+
+Summary:
+
+- Food Community now loads `/community/foods/categories` for backend category labels in normal operation.
+- Mobile keeps the canonical 10-category local fallback for visual-smoke and backend-unavailable paths.
+- Category display options now prefer backend category labels while preserving the existing mobile category ids and filtering behavior.
+- Navigation verifier now guards the category API type, backend category state, endpoint, sync function, open-page sync, and fallback display contract.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T850: Load Food Community detail shares on selection
+
+Status: done
+
+Summary:
+
+- Food Community now loads `/community/foods/{id}` for backend food items so detail pages can show individual share records.
+- The first backend food item also refreshes its detail shares after a list sync.
+- Local preview items remain local-only and do not send non-UUID preview ids to the backend detail endpoint.
+- Navigation verifier now guards the detail sync function, endpoint, list refresh, selected-item refresh, and in-flight guard.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T849: Add Kubernetes Year Review snapshot CronJob
+
+Status: done
+
+Summary:
+
+- Added `infra/k8s/year-review-cronjob.yaml` to run the annual snapshot generator every January 1.
+- The CronJob uses the backend image, shared backend service account, production config/secret refs, non-root security context, read-only root filesystem, resource bounds, and `concurrencyPolicy: Forbid`.
+- Kubernetes manifest verifier now guards the CronJob schedule, command, security context, env refs, and resource settings.
+- Kubernetes README and UI spec now point to the deployment-level annual snapshot schedule.
+
+Verification:
+
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T848: Expose special badge store redemption category
+
+Status: done
+
+Summary:
+
+- Store now has an explicit `特殊徽章` category between partner products and member benefits.
+- Local preview includes a special badge reward card for point redemption planning.
+- Backend `special_badges` rewards now map to the mobile `specialBadges` category instead of being folded into member benefits.
+- Navigation verifier now guards the category, backend mapping, preview product, and redemption boundary copy.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T847: Sync Community public leaderboards in Ranking
+
+Status: done
+
+Summary:
+
+- Ranking now synchronizes backend `/community/leaderboards` for share count, contribution, and food-tester rankings.
+- Public leaderboard entries are rendered through bounded display sections and only show rank, public display name, and non-sensitive score labels.
+- Visual-smoke and backend-unavailable paths remain local preview only and do not upload streaks or publish health values.
+- Navigation verifier now guards the leaderboard sync function, API endpoint, three leaderboard types, display helper, state, and render path.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T846: Clarify Food Community individual share records
+
+Status: done
+
+Summary:
+
+- Food Community detail pages now explicitly label backend/example rows as individual share records.
+- The display item contract exposes `individualShareDisplayItems` so the data-page requirement is guarded separately from aggregate stats.
+- Empty food detail shares now show a bounded empty state instead of silently omitting the section.
+- Navigation verifier now guards backend `shares` mapping, the individual-share display contract, and the UI label/render path.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T845: Normalize Analysis glucose timing counts
+
+Status: done
+
+Summary:
+
+- Analysis now normalizes `meal_timing` before counting before-meal and after-meal glucose records.
+- Before-meal counts now accept `fasting`, `before_meal`, `before-meal`, and `before`.
+- After-meal counts now accept `after_meal`, `after-meal`, and `after`.
+- Navigation verifier now guards the normalization helper and its Analysis count usage.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T844: Show newly unlocked achievement badges
+
+Status: done
+
+Summary:
+
+- Achievement sync responses now mark badges created in the current sync with `newly_unlocked`.
+- Mobile achievement sync keeps a bounded "本次新解鎖" section before persisted unlock history.
+- Navigation and visual-smoke route verifiers now guard the newly-unlocked achievement section.
+
+Verification:
+
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py::test_achievement_summary_calculates_mvp_badge_progress -q` passed.
+- `docker compose run --rm backend ruff check app tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend mypy app tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+Note:
+
+- Full `tests/test_community_store_year_review.py` hit a pre-existing non-isolated community leaderboard assertion against the accumulated local test DB; the achievement test passed directly.
+
+### T843: Render Analysis six metrics from bounded rows
+
+Status: done
+
+Summary:
+
+- Analysis six required MVP metrics now use a render-before `analysisMetricRows` contract.
+- Metric labels and values are bounded through `metricDisplayItem` before rendering.
+- Navigation and visual-smoke route verifiers now guard the row contract and the six required metric labels.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T842: Clarify History raw transcript mode
+
+Status: done
+
+Summary:
+
+- History AI/Raw detail tabs now use render-before bounded display items instead of hardcoded JSX labels.
+- Raw history records show whether a bounded original transcript exists or the record is structure-only.
+- Mobile verifier now guards the display-item wrapper contract for History detail mode tabs.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T841: Make Home microphone button icon-only
+
+Status: done
+
+Summary:
+
+- Removed the inner `按住` / `錄音中` text from the Today Home microphone button.
+- Home now keeps the mic as an icon-only large hold target with the two required light hint lines below it.
+- Updated the canonical UI spec to state the Home mic button is icon-only.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T840: Add achievement unlock history list
+
+Status: done
+
+Summary:
+
+- Added `GET /achievements/unlocks` to return persisted unlocked badges sorted by unlock time.
+- Backend tests now verify unlock history after sync and prevent relying only on computed summary state.
+- Mobile achievement screen now reads unlock history and shows a recent persisted unlock section.
+- Summary failures and unlock-history failures remain bounded and PHI-safe.
+
+Verification:
+
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py -q` passed.
+- `docker compose run --rm backend ruff check app tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend mypy app tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T839: Persist achievement unlock records
+
+Status: done
+
+Summary:
+
+- Added `achievement_unlocks` with one persisted row per profile and achievement id.
+- `GET /achievements/summary` remains read-only and returns computed progress plus existing persisted unlock timestamps.
+- Added `POST /achievements/sync` to save newly unlocked badges and preserve first unlock time.
+- Mobile achievement sync button now calls the write sync endpoint and reports new/persisted unlock counts.
+
+Verification:
+
+- `docker compose run --rm backend alembic upgrade head` passed.
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py -q` passed.
+- `docker compose run --rm backend ruff check app tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend mypy app tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T838: Persist year-review share package lifecycle
+
+Status: done
+
+Summary:
+
+- Backend now persists year-review share packages with package id, privacy level, asset checksum, share text, status, and lifecycle timestamps.
+- Added status, native share result reporting, and revoke endpoints for confirmed year-review share packages.
+- Mobile Year Review share action reports opened/dismissed native share results and exposes a revoke action for the latest package.
+- Revoked packages reject later share-result updates.
+
+Verification:
+
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py -q` passed.
+- `docker compose run --rm backend ruff check app tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend mypy app tests/test_community_store_year_review.py` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T837: Wire year-review confirmed package to native share text
+
+Status: done
+
+Summary:
+
+- Mobile Year Review share action now opens React Native `Share.share` after backend privacy acknowledgement and package confirmation.
+- Shared content uses only backend-provided privacy-masked `share_text`.
+- Raw SVG, snapshot payload, glucose metrics, secrets, and tokens are not passed to the native share sheet.
+- Visual-smoke and backend-unavailable paths remain side-effect free.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T836: Add year-review share confirmation package
+
+Status: done
+
+Summary:
+
+- Added backend `/year-reviews/{year}/share-card/confirm`.
+- Endpoint requires `privacy_acknowledged=true`; otherwise it fails closed with `privacy_acknowledgement_required`.
+- Confirmed response returns a share package with privacy-masked asset and share text.
+- Mobile Year Review share action now prepares the SVG asset and confirms the share package before showing bounded readiness status.
+- Native/external sharing is still not invoked.
+
+Verification:
+
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend ruff check app tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend mypy app` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T835: Add privacy-masked year-review SVG share asset
+
+Status: done
+
+Summary:
+
+- Added backend `/year-reviews/{year}/share-card/asset`.
+- Endpoint returns a privacy-masked SVG card asset with mime type, filename, alt text, and SHA-256 checksum.
+- SVG uses the public summary metrics only and excludes average/highest/lowest glucose values.
+- Mobile Year Review share action now prepares the SVG asset and displays bounded filename/checksum status.
+- External sharing remains disabled until platform share permission, user confirmation, and revoke/delete flows exist.
+
+Verification:
+
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend ruff check app tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend mypy app` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T834: Add privacy-masked year-review share-card contract
+
+Status: done
+
+Summary:
+
+- Added backend `/year-reviews/{year}/share-card`.
+- Share-card payload is generated from the saved snapshot and defaults to `privacy_level=public_summary`.
+- Public card metrics intentionally exclude average/highest/lowest glucose values.
+- Mobile Year Review share action now requests the backend share-card and shows bounded privacy-mask status.
+- External sharing remains disabled until image generation, platform share permission, user confirmation, and revoke/delete flows exist.
+
+Verification:
+
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend ruff check app tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend mypy app` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T833: Add scheduled year-review snapshot generator command
+
+Status: done
+
+Summary:
+
+- Extracted year-review snapshot generation into reusable backend service code.
+- Added `python -m app.jobs.generate_year_review_snapshots --year YYYY` for CronJob / scheduler use.
+- Command defaults to the previous calendar year and processes missing profile/year snapshots in bounded batches.
+- Existing snapshots are not overwritten; rerunning the job is idempotent.
+- Added regression coverage for batch generation and repeated no-op behavior.
+
+Verification:
+
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend python -m app.jobs.generate_year_review_snapshots --year 2025 --batch-size 50` passed.
+- `docker compose run --rm backend ruff check app tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend mypy app` passed.
+
+### T832: Persist year review snapshots
+
+Status: done
+
+Summary:
+
+- Added `year_review_snapshots` with one saved snapshot per profile/year.
+- `/year-reviews/{year}` now returns an existing snapshot when present.
+- First request for a profile/year generates and saves the annual stats, health outcomes, and bounded AI-style observations.
+- Mobile accepts snapshot metadata and shows a bounded saved-snapshot sync status.
+- Visual-smoke year review remains side-effect free and local.
+
+Verification:
+
+- `docker compose run --rm backend alembic upgrade head` passed.
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend ruff check app tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend mypy app` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T831: Add backend achievement summary and mobile sync
+
+Status: done
+
+Summary:
+
+- Added backend `/achievements/summary` for MVP badge progress derived from existing profile records.
+- Summary covers 血糖記錄, 飲食記錄, and 運動記錄 across cumulative and streak achievement kinds.
+- Levels remain `10`, `50`, `100`, `150`, `200`, and `250`.
+- Mobile Achievements syncs backend summary when protected backend/profile is ready.
+- Mobile keeps local record-derived achievement fallback for backend unavailable and visual-smoke routes.
+- No achievement records, ranking writes, public profile changes, AI calls, or medical advice were added.
+
+Verification:
+
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend ruff check app tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend mypy app` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T830: Add store redemption wallet and coupon use status
+
+Status: done
+
+Summary:
+
+- Added `used_at` to store redemptions and a migration for coupon/discount-code usage state.
+- Added `GET /store/redemptions` for the current account's redemption wallet.
+- Added `POST /store/redemptions/{id}/use` to mark unused issued coupon/discount-code redemptions as used.
+- Mobile Store now syncs reward catalog, points, and the user's redemption wallet together.
+- Mobile Store shows「我的兌換券」with bounded code/status display and a disabled state for already-used or non-usable redemptions.
+
+Verification:
+
+- `docker compose run --rm backend alembic upgrade head` passed.
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend ruff check app tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend mypy app` passed.
+- `npm run quality` passed in `mobile/`.
+
+### T829: Add instant coupon and discount-code fulfillment for store redemptions
+
+Status: done
+
+Summary:
+
+- Extended store redemptions with fulfillment type, fulfillment code, and fulfilled-at timestamp.
+- Coupon and supplement-discount rewards now issue bounded fulfillment codes immediately after points are deducted.
+- Partner products, member benefits, and other future rewards remain preview/reserved until inventory, entitlement, or fulfillment systems exist.
+- Mobile Store now displays issued coupon/discount codes after successful redemption.
+
+Verification:
+
+- `docker compose run --rm backend alembic upgrade head` passed.
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend ruff check app tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend mypy app` passed.
+
+### T828: Add community public profile and leaderboard opt-in boundary
+
+Status: done
+
+Summary:
+
+- Added backend community public profile settings with bounded public display name and leaderboard opt-in.
+- Changed community leaderboards to include only opted-in accounts and to display the public community name instead of raw account display names.
+- Wired mobile Community to read/update `/community/settings`, edit public display name, and toggle leaderboard opt-in.
+- Kept food sharing points separate from public ranking: users can earn points without being shown on public leaderboards.
+- Preserved visual-smoke safety: debug routes do not update public settings or ranking opt-in.
+
+Verification:
+
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend ruff check app tests/test_community_store_year_review.py` passed.
+- `docker compose run --rm backend mypy app` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T827: Wire mobile second/third-phase screens to backend contracts
+
+Status: done
+
+Summary:
+
+- Wired mobile Community to the backend food community APIs for category/search sync, food share submission, automatic glucose-delta calculation, awarded points, and refreshed food detail display.
+- Wired mobile Store to backend reward catalog, point balance, and redeemable reward reservation flow; future/preview rewards remain blocked by backend.
+- Wired mobile Year Review to `/year-reviews/{year}` so annual stats, health outcomes, and bounded AI-style summary can come from backend profile records.
+- Preserved visual-smoke safety: debug visual-smoke routes keep local demo state and skip backend/API writes.
+- Kept fulfillment gaps explicit: social posting, public privacy settings, coupon issuance, inventory, payment, share image generation, and social media sharing are still future production work.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T826: Add backend contracts for food community, points store, and year review
+
+Status: done
+
+Summary:
+
+- Added persisted backend tables for food items, food shares, community point ledger entries, and store redemptions.
+- Added food community API contracts for category listing, search/list, food details, food share creation, automatic glucose-delta calculation, share stats, point awards, and leaderboards.
+- Added store API contracts for reward catalog, point balance, preview-safe reward blocking, and redeemable reward reservations with point deduction.
+- Added year-review API contract that aggregates a profile's yearly records into required annual stats, annual glucose outcomes, and bounded AI-style observation/encouragement text without calling an AI model.
+- Kept mobile second/third phase screens preview-only for now; production mobile wiring to these backend APIs remains a separate integration step.
+
+Verification:
+
+- `python3 -m compileall -q backend/app backend/tests/test_community_store_year_review.py` passed with `PYTHONPATH=backend`.
+- `docker compose run --rm backend alembic upgrade head` passed.
+- `docker compose run --rm backend pytest tests/test_community_store_year_review.py` passed.
+
+### T825: Align Year Review preview with third-phase annual review requirements
+
+Status: done
+
+Summary:
+
+- Updated Year Review to target the previous calendar year and display the January 1 automatic-generation rule.
+- Added required annual statistics: total record days, glucose count, meal count, exercise count, longest streak, achieved badge count, and highest unlocked badge level.
+- Added annual health outcomes: average glucose, highest glucose, and lowest glucose.
+- Added bounded AI annual observation and AI encouragement preview copy without calling AI or storing prompts/model output.
+- Kept sharing preview-only: no annual summary writes, share image generation, social posting, backend calls, AI calls, or public data exposure.
+- Updated navigation, visual-smoke, UI-spec coverage verifiers, fallback harness copy, and the canonical UI spec for the third-phase year-review contract.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T824: Align store preview with second-phase points redemption architecture
+
+Status: done
+
+Summary:
+
+- Reworked the Store preview categories into the second-phase redemption types: coupons, supplement discounts, partner products, and special member benefits.
+- Replaced price-oriented product display with points-cost redemption display.
+- Added Store redemption boundary rows for points source, redeemable item types, required production systems, and current preview-only behavior.
+- Updated Store copy so the preview does not imply point deduction, coupon issuance, order creation, payment, entitlement writes, or medical claims.
+- Updated navigation, visual-smoke, UI-spec coverage verifiers, fallback harness copy, and the canonical UI spec for the points-store contract.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T823: Add second-phase food community database preview
+
+Status: done
+
+Summary:
+
+- Expanded the Community preview into a second-phase food blood-glucose database preview.
+- Added food categories for vegetables, meat, seafood, eggs, beans, starches, drinks, fruit, snacks, and supplements.
+- Added local food search, selectable food cards, and a food detail panel with share count, average rise, highest rise, lowest rise, and individual share examples.
+- Added food sharing field preview, automatic glucose-rise calculation copy, points rules, ranking placeholders, and store redemption linkage copy.
+- Kept the flow preview-only: no food database writes, points creation, ranking updates, store redemption, backend calls, AI, or public posting.
+- Updated navigation, visual-smoke, UI-spec coverage verifiers, fallback harness copy, and the canonical UI spec for the second-phase food community contract.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T822: Align achievements with MVP badge categories and levels
+
+Status: done
+
+Summary:
+
+- Replaced the ad hoc achievement list with MVP badge definitions for 血糖記錄, 飲食記錄, and 運動記錄.
+- Added 累積型 and 連續型 achievements for each category across 10, 50, 100, 150, 200, and 250 levels.
+- Made cumulative badges share the same category artwork while changing only level color/number; continuous badges use an independent badge style.
+- Kept calculations local to mobile-loaded records with no achievement writes, ranking writes, backend sync, AI, or medical claims.
+- Updated navigation, visual-smoke, UI-spec coverage verifiers, fallback harness copy, and the canonical UI spec for the MVP badge contract.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T821: Align Analysis with MVP period and six-stat requirements
+
+Status: done
+
+Summary:
+
+- Replaced the Analysis period model with 本週 / 本月 / 自訂日期區間.
+- Added bounded custom start/end date inputs and shared local date bounds for Analysis filtering and detailed-report query parameters.
+- Replaced the old four-card average summary with six MVP stats: highest glucose, lowest glucose, average glucose, total glucose measurements, before-meal count, and after-meal count.
+- Updated navigation, visual-smoke, UI-spec coverage verifiers, fallback harness copy, and the canonical UI spec for the new Analysis contract.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T820: Add MVP history calendar mode
+
+Status: done
+
+Summary:
+
+- Reworked the History route to prioritize a month calendar instead of range tabs and date-range inputs.
+- Added lit/dim calendar day states, selected date handling through a display-item press wrapper, and selected-date detail content.
+- Added structured "AI 整理" and "原始紀錄" tabs; raw transcript view uses bounded `source_text` when available and a safe fallback otherwise.
+- Updated navigation and visual-smoke route verifiers to guard the calendar, selected date, structured/raw tabs, and raw transcript fallback.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run verify:visual-smoke-routes` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T819: Simplify MVP home to mic-only entry
+
+Status: done
+
+Summary:
+
+- Reworked the Today/Home route into the new MVP first-phase design: app title, right hamburger menu, centered large microphone button, and two hint lines only.
+- Removed Home-only primary tabs, flow stepper, sync/status block, summary pill, quick-entry cards, transcript input, record list, empty states, manual/text CTAs, and analysis CTA from the home screen.
+- Updated source-level navigation and visual-smoke verifiers plus fallback harness expectations so the mic-only Home cannot regress back into a dashboard-style page.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_visual_smoke_routes.py scripts/verify_mobile_visual_smoke_harness.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run verify:visual-smoke-routes` in `mobile/` passed.
+- `npm run verify:visual-smoke-harness` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T818: Bound record payloads before mobile state retention
+
+Status: done
+
+Summary:
+
+- Added a bounded record payload sanitizer before record responses are retained in mobile state.
+- Limited payload strings, keys, arrays, nesting depth, non-finite numbers, glucose values, exercise minutes, and raw transcript/prompt/model-output style keys.
+- Extended the mobile navigation verifier so record state boundaries include payload sanitization, not only metadata and display summaries.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T817: Add Android APK preflight script guard
+
+Status: done
+
+Summary:
+
+- Added production and internal Android APK preflight npm scripts that chain release env, signing, and SDK/Gradle prerequisite checks.
+- Added a lightweight package-script verifier so production preflight cannot silently allow local API URLs or debug signing, while internal preflight keeps explicit smoke-test exceptions.
+- Included the APK script verifier in `npm run quality` and documented the required preflight boundary in the canonical UI spec.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_android_apk_scripts.py` passed.
+- `npm run verify:android-apk-scripts` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T816: Guard save-success unsaved-candidate priority
+
+Status: done
+
+Summary:
+
+- Extended the mobile navigation verifier so Save Success keeps the unsaved-candidate return card before Today / History / Analysis.
+- Added verifier coverage that hides manual/record entry CTAs while unsaved AI candidates remain and keeps the inline pause copy visible.
+- Updated the canonical UI spec so partial AI save results cannot route users around unresolved candidates during future result-page refactors.
+
+Verification:
+
+- Source scan confirmed Save Success still routes destination cards through the bounded display item and dedicated card press wrapper.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T815: Guard analysis chart point touch targets
+
+Status: done
+
+Summary:
+
+- Increased the analysis chart point Pressable width to a 44px touch target while preserving the existing chart height.
+- Extended the mobile navigation verifier so chart point width and selected visual markers stay aligned with `accessibilityState.selected`.
+- Updated the canonical UI spec so analysis chart points follow the same compact touch-target and selected-state rules as other interactive controls.
+
+Verification:
+
+- Source scan confirmed analysis chart points use a dedicated press wrapper, bounded accessibility label, button role, selected accessibility state, and selected visual stem/point markers.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T814: Guard shared Pressable card touch targets
+
+Status: done
+
+Summary:
+
+- Added explicit `minHeight` to shared interactive card and row styles that previously relied on current content height.
+- Extended the mobile navigation verifier to cover account, settings, timeline, history, AI review, post-save, record, menu, upload, full-width CTA, and hold-to-record touch targets.
+- Updated the canonical UI spec so interactive cards and rows keep stable touch areas even if copy changes later.
+
+Verification:
+
+- Source scan confirmed zero shared Pressable touch-target styles missing or below their minimum.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T813: Guard global icon-control touch targets
+
+Status: done
+
+Summary:
+
+- Extended the mobile navigation verifier so header menu, close, and round icon action controls are included in compact touch-target checks.
+- Added width checks for icon-only controls so they keep at least 44px in both dimensions.
+- Updated the canonical UI spec so global icon controls follow the same touch-target rule as chips and buttons.
+
+Verification:
+
+- Source scan confirmed `menuButton` is 48x48 and `closeButton` / `roundActionButton` are 44x44.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T812: Align selected accessibility state with visual selection
+
+Status: done
+
+Summary:
+
+- Added verifier coverage that compares selected accessibility state with visual selected styles on primary tabs, segmented pills, and selection chips.
+- Kept recording active state out of this selected-option guard because it is not a selection control.
+- Updated the canonical UI spec so selected visual controls and assistive-tech selected state must stay aligned.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T811: Align disabled accessibility state with control props
+
+Status: done
+
+Summary:
+
+- Added verifier coverage that compares `Pressable disabled` expressions with `accessibilityState.disabled`.
+- Added verifier coverage that compares `TextInput editable={!...}` expressions with the inverse disabled accessibility state.
+- Updated the canonical UI spec so visual disabled state, actual control props, and assistive-tech disabled state must stay aligned.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T810: Add keyboard avoiding root for form screens
+
+Status: done
+
+Summary:
+
+- Wrapped the main mobile `ScrollView` in a `KeyboardAvoidingView` with platform-specific behavior.
+- Added a flex root style so the keyboard-avoiding container preserves the existing full-screen scroll layout.
+- Extended the mobile navigation verifier so keyboard avoidance remains present around the main form scroll.
+
+Verification:
+
+- Source scan confirmed the KeyboardAvoidingView import, Platform behavior, root style, and main ScrollView wrapping markers.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T809: Preserve ScrollView taps while keyboard is open
+
+Status: done
+
+Summary:
+
+- Added `keyboardShouldPersistTaps="handled"` to every mobile `ScrollView`, including the main content scroll and horizontal tab/profile/model rails.
+- Extended the mobile navigation verifier so future `ScrollView` additions must keep keyboard tap handling explicit.
+- Updated the canonical UI spec so form CTAs, tabs, chips, and model options remain tappable while the keyboard is open.
+
+Verification:
+
+- Source scan confirmed 5 ScrollViews and zero missing keyboard tap handling.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T808: Guard multiline TextInput style boundaries
+
+Status: done
+
+Summary:
+
+- Added verifier coverage so every multiline `TextInput` must use an approved named height-bound style.
+- Added verifier checks for multiline input style `minHeight` and `lineHeight` lower bounds.
+- Updated the canonical UI spec so transcript, JSON, meal, and tag fields keep stable long-form input layout.
+
+Verification:
+
+- Source scan confirmed zero multiline TextInputs missing an approved named style.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T807: Guard multiline TextInput layout
+
+Status: done
+
+Summary:
+
+- Added a mobile navigation verifier guard so every multiline `TextInput` must use `textAlignVertical="top"`.
+- Confirmed all 11 current multiline inputs keep transcript, meal, tag, and fallback JSON text top-aligned.
+- Updated the canonical UI spec so long-form inputs stay predictable across Android and iOS.
+
+Verification:
+
+- Source scan confirmed 11 multiline TextInputs and zero missing top alignment.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T806: Guard numeric TextInput keyboard type
+
+Status: done
+
+Summary:
+
+- Added a mobile navigation verifier guard for structured numeric TextInputs.
+- Confirmed glucose value and exercise minutes inputs across preview edit, manual record, and saved-record edit all use `keyboardType="numeric"`.
+- Updated the canonical UI spec so numeric health fields keep numeric keyboards plus bounded update and submit validation.
+
+Verification:
+
+- Source scan confirmed zero numeric TextInputs missing numeric keyboard.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T805: Normalize TextInput keyboard behavior
+
+Status: done
+
+Summary:
+
+- Added explicit `autoCapitalize="none"` and `autoCorrect={false}` to all mobile TextInputs that were missing keyboard normalization.
+- Extended the mobile navigation verifier so every `TextInput` must disable autocorrect and autocapitalization.
+- Updated the canonical UI spec so keyboard behavior cannot silently rewrite health text, JSON, paths, search strings, or transcript drafts.
+
+Verification:
+
+- Source scan confirmed zero TextInputs missing keyboard normalization.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T804: Enforce disabled state for editable TextInputs
+
+Status: done
+
+Summary:
+
+- Added disabled accessibility state to the editable advanced settings and native debug TextInputs.
+- Extended the mobile navigation verifier so every `TextInput` with `editable=` must expose a disabled `accessibilityState`.
+- Updated the canonical UI spec so busy/disabled input visuals stay aligned with assistive-tech state.
+
+Verification:
+
+- Source scan confirmed zero editable TextInputs missing `accessibilityState`.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T803: Guard TextInput hard length limits
+
+Status: done
+
+Summary:
+
+- Added a mobile navigation verifier guard so every `TextInput` must include a `maxLength`.
+- Confirmed all 43 current mobile `TextInput` fields are labeled and length-limited at the component boundary.
+- Updated the canonical UI spec so input bounding requires both named update wrappers and component-level hard limits.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T802: Guard Pressable accessibility label sources
+
+Status: done
+
+Summary:
+
+- Added a mobile navigation verifier guard so Pressable `accessibilityLabel` sources must be static or bounded display sources.
+- Allowed existing render-prepared display item labels such as `item.accessibilityLabel`, bounded display label objects, and named accessibility label variables.
+- Updated the canonical UI spec so future Pressable labels cannot be inline templates, helper calls, raw state, backend/config/model values, or record payloads.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T801: Enforce disabled Pressable accessibility states
+
+Status: done
+
+Summary:
+
+- Added disabled accessibility state to remaining disabled mobile Pressables, including quick-entry cards, subscription/quota sync, dev reset, and auth controls.
+- Extended the mobile navigation verifier so every disabled Pressable must expose `accessibilityState`.
+- Updated the canonical UI spec so visual disabled state and assistive-tech disabled state stay aligned.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T800: Enforce Pressable button roles
+
+Status: done
+
+Summary:
+
+- Added explicit `accessibilityRole="button"` to the remaining mobile Pressables, including header action, hold-to-record buttons, close buttons, dev reset, and visual-smoke route chips.
+- Extended the mobile navigation verifier so every `Pressable` opening tag must include both `accessibilityLabel` and button role.
+- Updated the canonical UI spec so Pressable accessibility no longer depends on inner text or implicit roles.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+
+### T799: Guard TextInput accessibility label sources
+
+Status: done
+
+Summary:
+
+- Extended the mobile navigation verifier so `TextInput` accessibility labels must be short static text or `auxiliaryDisplayLabels.*` references.
+- The guard blocks inline templates, raw state, raw backend/config values, token/model output, or transcript-derived strings from entering TextInput screen-reader labels.
+- Updated the canonical UI spec so input labels remain bounded before render instead of depending on placeholders or nearby visible labels.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+
+### T798: Guard TextInput placeholder boundaries
+
+Status: done
+
+Summary:
+
+- Extended the mobile navigation verifier so `TextInput` placeholders must be short static strings or omitted.
+- The guard blocks JSX placeholder expressions, backend/config-driven placeholder copy, and oversized input hints from bypassing the input update boundary.
+- Updated the canonical UI spec so placeholder text cannot become an unbounded PHI/raw payload display path.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+
+### T797: Guard TextInput controlled value bindings
+
+Status: done
+
+Summary:
+
+- Extended the mobile navigation verifier so every `TextInput` must be controlled with a `value` binding.
+- The guard allows only state or state-field references in JSX `value={...}`, blocking helper calls, ternary fallback, templates, or raw backend/config values from entering input render paths.
+- Updated the canonical UI spec so input bounding remains centralized in `update*` handlers and downstream helpers.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+
+### T796: Guard inline press callback arguments
+
+Status: done
+
+Summary:
+
+- Extended the mobile navigation verifier so inline JSX `onPress={() => press*...}` callbacks must pass only approved render-prepared display arguments.
+- The guard blocks future inline closures from passing raw `item.target`, `item.record`, string literals, or unbounded payload/status values directly into press wrappers.
+- Updated the canonical UI spec so inline press wrapper arguments stay aligned with render-before-bounded display item rules.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+
+### T795: Verify harness section heading metadata
+
+Status: done
+
+Summary:
+
+- Added non-empty section heading metadata to each generated visual-smoke harness manifest route entry.
+- Extended the source harness verifier so every route section must have non-empty heading and copy text.
+- Extended the harness artifact verifier so actual generated evidence must include three non-empty section headings for every route.
+
+Verification:
+
+- `python3 -m py_compile scripts/generate_mobile_visual_smoke_harness.py scripts/verify_mobile_visual_smoke_harness.py scripts/verify_mobile_visual_smoke_harness_artifact.py` passed.
+- `npm run verify:visual-smoke-harness` in `mobile/` passed.
+- `npm run visual-smoke:harness -- --output-dir /tmp/bloodsugar-mobile-visual-smoke/2026-06-04-t795-harness` in `mobile/` passed.
+- `npm run visual-smoke:harness:verify-artifact -- --output-dir /tmp/bloodsugar-mobile-visual-smoke/2026-06-04-t795-harness` in `mobile/` passed.
+
+### T794: Verify harness route section counts
+
+Status: done
+
+Summary:
+
+- Added `section_count` metadata to each generated visual-smoke harness manifest route entry.
+- Extended the source harness verifier so all 41 `RoutePreview` entries must keep the expected number of content sections.
+- Extended the harness artifact verifier so actual generated evidence must include canonical titles, CTAs, and section counts.
+
+Verification:
+
+- `python3 -m py_compile scripts/generate_mobile_visual_smoke_harness.py scripts/verify_mobile_visual_smoke_harness.py scripts/verify_mobile_visual_smoke_harness_artifact.py` passed.
+- `npm run verify:visual-smoke-harness` in `mobile/` passed.
+- `npm run visual-smoke:harness -- --output-dir /tmp/bloodsugar-mobile-visual-smoke/2026-06-04-t794-harness` in `mobile/` passed.
+- `npm run visual-smoke:harness:verify-artifact -- --output-dir /tmp/bloodsugar-mobile-visual-smoke/2026-06-04-t794-harness` in `mobile/` passed.
+
+### T793: Verify harness artifact CTA metadata
+
+Status: done
+
+Summary:
+
+- Added canonical CTA metadata to each generated visual-smoke harness manifest route entry.
+- Extended the source harness verifier so all 41 `RoutePreview` CTAs must stay aligned with the expected route actions.
+- Extended the harness artifact verifier so actual generated evidence must include canonical manifest titles and CTAs.
+
+Verification:
+
+- `python3 -m py_compile scripts/generate_mobile_visual_smoke_harness.py scripts/verify_mobile_visual_smoke_harness.py scripts/verify_mobile_visual_smoke_harness_artifact.py` passed.
+- `npm run verify:visual-smoke-harness` in `mobile/` passed.
+- `npm run visual-smoke:harness -- --output-dir /tmp/bloodsugar-mobile-visual-smoke/2026-06-04-t793-harness` in `mobile/` passed.
+- `npm run visual-smoke:harness:verify-artifact -- --output-dir /tmp/bloodsugar-mobile-visual-smoke/2026-06-04-t793-harness` in `mobile/` passed.
+
+### T792: Verify harness artifact manifest titles
+
+Status: done
+
+Summary:
+
+- Added route titles to each generated visual-smoke harness manifest route entry.
+- Extended the harness artifact verifier so actual generated evidence must include canonical manifest titles for all 41 routes.
+- Updated the canonical UI spec so local fallback evidence checks route metadata, PNG dimensions, nonblank images, checks, and PHI-safe safety flags.
+
+Verification:
+
+- `python3 -m py_compile scripts/generate_mobile_visual_smoke_harness.py scripts/verify_mobile_visual_smoke_harness_artifact.py` passed.
+- `npm run verify:visual-smoke-harness` in `mobile/` passed.
+- `npm run visual-smoke:harness -- --output-dir /tmp/bloodsugar-mobile-visual-smoke/2026-06-04-t792-harness` in `mobile/` passed.
+- `npm run visual-smoke:harness:verify-artifact -- --output-dir /tmp/bloodsugar-mobile-visual-smoke/2026-06-04-t792-harness` in `mobile/` passed.
+
+### T791: Align visual-smoke harness route titles
+
+Status: done
+
+Summary:
+
+- Extended the static visual-smoke harness verifier so every `RoutePreview` must expose the canonical route title for its route.
+- Aligned fallback harness titles with the App route identity markers for MVP, account, future, commerce, and food-photo preview routes.
+- Updated the canonical UI spec so fallback screenshot evidence cannot drift away from the mobile route titles.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_visual_smoke_harness.py scripts/generate_mobile_visual_smoke_harness.py` passed.
+- `npm run verify:visual-smoke-harness` in `mobile/` passed.
+
+### T790: Add visual-smoke route identity markers
+
+Status: done
+
+Summary:
+
+- Extended the mobile visual-smoke route verifier so all 41 route branches must expose a route-specific visible identity marker.
+- Added a one-to-one identity marker map that must stay aligned with `visualSmokeRouteJumps` and `VISUAL_SMOKE_ROUTES`.
+- Updated the canonical UI spec so visual-smoke evidence covers route identity, not only branch presence and generic UI markers.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `npm run verify:visual-smoke-routes` in `mobile/` passed.
+
+### T789: Enforce accessibility labels on all Pressables
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels and button roles to remaining Future Module Detail, Doctor Share, Health Integration, and Community return CTAs.
+- Generalized the future-preview return accessibility label so it applies to all future module preview returns without implying a specific ranking side effect.
+- Added a navigation verifier invariant that every mobile `Pressable` opening tag must include an `accessibilityLabel`.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T788: Add accessible range and settings controls
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels, button roles, and selected state for History and Analysis range chips plus Analysis chart points.
+- Added bounded accessibility labels and state for Settings local clear, advanced settings toggle, and backend reconnect controls.
+- Added bounded accessibility for the Ranking preview return CTA and verifier coverage for the new range/settings/future-return contracts.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T787: Add accessible primary tabs and form chips
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels for primary tab navigation and selected/disabled accessibility state coverage.
+- Added render-prepared accessibility labels, button roles, and selected states for shared glucose unit, glucose timing, meal type, manual record type, and store category chips.
+- Extended the mobile navigation verifier and canonical UI spec so segmented controls remain accessible without implying parser, backend write, order, payment, or AI side effects.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T786: Add accessible preview and future return CTAs
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels for AI candidate edit return/apply controls and their validation disabled state.
+- Added bounded accessibility labels for Achievement, Year Review, Store, Store Cart, and Food Photo return or disabled checkout CTAs.
+- Extended the mobile navigation verifier and canonical UI spec so preview-edit and future/commerce/Vision return controls preserve no-save/no-payment/no-share/no-Vision boundaries.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T785: Add accessible result and analysis CTAs
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels for Save Success bottom CTAs, Analysis no-data/report CTAs, Detailed Report navigation CTAs, and Tutorial entry CTAs.
+- Added explicit button roles and report-loading disabled accessibility state where the detailed report CTA can be temporarily unavailable.
+- Extended the mobile navigation verifier and canonical UI spec so result, analysis, report, and tutorial controls distinguish navigation-only, bounded report query, no-AI/no-parser, and no-backend-write boundaries.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T784: Add accessible record-management CTAs
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels for Manual Record, Manual Record Confirm, History empty state, Record Detail, Delete Confirm, Edit Record, Delete Success, and Update Success CTA controls.
+- Added explicit button roles and disabled accessibility states for manual create, manual submit, delete open/confirm/cancel, and record update actions.
+- Extended the mobile navigation verifier and canonical UI spec so record-management controls distinguish navigation-only, create/update/delete backend-write, and no-AI/no-parser boundaries.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T783: Add accessible confirmation-flow CTAs
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels for AI Review, AI Save Confirm, AI Remove Confirm, AI Save Failure, and Transcript Review CTA controls.
+- Added explicit button roles and disabled accessibility states for confirmation, save, retry, parser-submit, remove, and fallback actions.
+- Extended the mobile navigation verifier and canonical UI spec so confirmation-flow controls distinguish navigation, parser, backend save, fallback, and unsaved-candidate removal boundaries.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T782: Add accessible Home and Record entry CTAs
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels for Home and Record re-record, recording-text fallback, sample-fill, manual-add, text-record, next-organize, and analysis CTA controls.
+- Added explicit button roles and disabled accessibility state for core text-organize submit Pressables.
+- Extended the mobile navigation verifier and canonical UI spec so core record-entry actions stay screen-reader clear while preserving no-STT/no-AI/no-parser/no-write boundaries.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T781: Add accessible native debug Settings controls
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels for native download kind, native module check, model download, Whisper, Llama, and benchmark controls.
+- Added explicit button roles plus selected/disabled accessibility states to native debug Pressables.
+- Extended the mobile navigation verifier and canonical UI spec so local model controls remain screen-reader clear while preserving no-cloud-AI/no-health-upload/no-raw-output boundaries.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T780: Add accessible advanced Settings option chips
+
+Status: done
+
+Summary:
+
+- Added bounded display items for Settings profile, LLM, and STT option chips.
+- Added explicit accessibility labels, button roles, and selected/disabled states to advanced Settings option Pressables.
+- Extended the mobile navigation verifier and canonical UI spec so backend-driven profile/model labels stay bounded before render and screen-reader exposure.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T779: Add accessible Settings subpage boundary CTAs
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels for Profile edit integration, Recording Quota sync, Reminder integration, and Privacy integration CTAs.
+- Added explicit button roles to Settings subpage return and integration/sync Pressables.
+- Extended the mobile navigation verifier and canonical UI spec so settings subpage controls remain accessible while preserving no-write/no-upload/no-schedule/no-export boundaries.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T778: Add accessible Account Security auth/session CTAs
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels for Account Security auth provider and session management preview rows.
+- Added bounded accessibility labels and explicit button roles to refresh session, load sessions, local logout, and logout-all CTAs.
+- Extended the mobile navigation verifier and canonical UI spec so auth/session controls remain accessible without exposing raw token, claims, or device fingerprint data.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T777: Add accessible commerce and Vision preview CTAs
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels for Achievement integration, Year Review sharing, Store cart entry, and Food Photo integration/retake CTA buttons.
+- Added explicit button roles to Store product action, Store cart entry, Food Photo upload/integration/retake, Achievement integration, and Year Review share Pressables.
+- Extended the mobile navigation verifier and canonical UI spec so commerce, Vision, and achievement preview actions remain accessible while preserving no-write/no-payment/no-Vision boundaries.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T776: Add accessible Future preview boundary CTAs
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels for Doctor Share, Health Integration, Community, and Ranking preview CTA buttons.
+- Added explicit button roles to future preview CTA Pressables while preserving no-op/status-only privacy and permission boundaries.
+- Extended the mobile navigation verifier and canonical UI spec so future-module preview actions remain accessible and render-prepared.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T775: Add accessible Subscription and membership CTAs
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels for Subscription, Subscription Management, and Membership Status CTA buttons.
+- Added explicit button roles to subscription quota sync, trial/payment status, management, membership status, renewal, and plan management Pressables.
+- Extended the mobile navigation verifier and canonical UI spec so subscription preview actions remain accessible while preserving payment/entitlement no-op boundaries.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T774: Add accessible Settings navigation rows
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels to Settings list display rows before render.
+- Added explicit button roles to the Settings account card and Settings row Pressables.
+- Extended the mobile navigation verifier and canonical UI spec so Settings subpage navigation remains accessible and render-prepared.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T773: Add AI Review candidate action accessibility labels
+
+Status: done
+
+Summary:
+
+- Added bounded edit/remove accessibility labels to AI Review candidate display items.
+- Added explicit button roles to candidate edit/remove action Pressables.
+- Extended the mobile navigation verifier and canonical UI spec so AI confirmation correction/removal remains accessible and render-prepared.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T772: Add accessible Today and History record detail cards
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels to Today and History record cards through `recordListDisplayItem`.
+- Added explicit button roles to Today timeline cards and History record rows so the Record Detail entry path is announced as interactive.
+- Extended the mobile navigation verifier and canonical UI spec to keep record-card detail navigation accessible and render-prepared.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T771: Add button roles and labels to primary/result navigation
+
+Status: done
+
+Summary:
+
+- Added explicit button roles to primary tab Pressables.
+- Added bounded accessibility labels plus button roles to Save Success, Delete Success, and Update Success destination cards.
+- Extended the mobile navigation verifier and canonical UI spec so core cross-page result navigation remains accessible and render-prepared.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T770: Add button roles to main multi-page entry controls
+
+Status: done
+
+Summary:
+
+- Added `accessibilityRole="button"` to Function Menu destination cards, the `查看更多功能` entry point, and Future Modules list cards.
+- Extended the mobile navigation verifier so these main multi-page entry controls keep explicit button roles.
+- Updated the canonical UI spec so primary navigation cards and multi-page entry Pressables expose both bounded labels and button roles.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T769: Add Future Modules card accessibility labels
+
+Status: done
+
+Summary:
+
+- Added bounded accessibility labels to Future Modules list cards so the regular multi-page future-module entry path is usable with screen readers.
+- Kept labels generated in the render-prepared display item instead of composing raw module titles in JSX.
+- Extended the mobile navigation verifier to keep Future Modules card accessibility labels and bindings covered.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T768: Strengthen mobile multi-page UI coverage gate
+
+Status: done
+
+Summary:
+
+- Extended `verify_mobile_ui_spec_coverage.py` beyond canonical 4.x section markers to also prove all 41 `AppScreen` routes are represented.
+- The verifier now aligns `AppScreen`, `screenChrome`, render branches, debug-gated visual-smoke route jumps, and static visual-smoke harness routes.
+- Updated the canonical UI spec so `npm run verify:ui-spec-coverage` guards against the mobile app regressing back to a single-page placeholder shell.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_ui_spec_coverage.py` passed.
+- `npm run verify:ui-spec-coverage` in `mobile/` passed and reported 32 canonical 4.x screens, 41 `AppScreen` routes, and 11 top-level menu destinations aligned.
+- `npm run quality` in `mobile/` passed.
+
+### T767: Add backend AI cost boundary verifier
+
+Status: done
+
+Summary:
+
+- Added a backend AI cost verifier for local parser token caps, dynamic token budgeting, v1 cloud fallback disablement, and deterministic repair fallback behavior.
+- Added the verifier to the backend quality workflow.
+- Updated the efficiency/cost strategy so future backend parser work keeps repair fallback from becoming a second LLM/cloud call.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_backend_ai_cost_boundaries.py` passed.
+- `python3 scripts/verify_backend_ai_cost_boundaries.py` passed.
+- `python3 scripts/verify_backend_constraints.py` passed.
+- Direct local `python3 -m pytest ...` was blocked because the host Python environment is missing `fastapi`.
+- `docker compose run --rm backend pytest -q tests/test_ai_pipeline.py::test_local_llm_output_token_budget_scales_with_segment_count tests/test_ai_pipeline.py::test_local_parser_response_size_guard_omits_phi_content` passed.
+
+### T766: Add protected auth header boundary verifier
+
+Status: done
+
+Summary:
+
+- Extended the mobile secure auth verifier so protected API headers stay centralized behind `protectedRequestHeaders`.
+- Bounded the dev `X-Account-Id` fallback and made empty dev account ids fail closed instead of sending a blank protected header.
+- Added checks that oversized access tokens fail closed, Bearer Authorization is preferred before dev `X-Account-Id`, dev account ids are bounded/non-empty, and request callsites do not inline protected auth headers.
+- Updated the canonical UI spec so the production auth boundary is covered by `npm run verify:secure-auth-storage`.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_secure_auth_storage.py` passed.
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:secure-auth-storage` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T765: Add Android release signing guard
+
+Status: done
+
+Summary:
+
+- Added an Android release signing verifier that blocks production-like APK/AAB export when the release build is still signed with `signingConfigs.debug`.
+- Added `npm run verify:android-release-signing` in `mobile/`.
+- Documented that the current debug-signed release APK path is for internal install smoke tests only and requires an explicit `--allow-debug-signing` exception.
+- Updated the canonical UI spec so production-like Android distribution must prove release signing is non-debug.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_android_release_signing.py` passed.
+- `npm run verify:android-release-signing` in `mobile/` correctly failed because the current release build uses `signingConfigs.debug`.
+- `python3 ../scripts/verify_android_release_signing.py --allow-debug-signing` in `mobile/` passed for the explicit internal smoke exception.
+- `npm run quality` in `mobile/` passed.
+
+### T764: Add mobile release environment guard
+
+Status: done
+
+Summary:
+
+- Added a mobile release env verifier that fails production-like APK/AAB builds when dev auth, debug tools, visual-smoke initial routes, non-HTTPS API URLs, or local/private API hosts would be bundled.
+- Added `npm run verify:release-env` in `mobile/`.
+- Documented the release env check in the Android APK export flow.
+- Updated the canonical UI spec so production-like mobile builds must prove dev-only flags are absent before release export.
+
+Verification:
+
+- `python3 -m py_compile scripts/verify_mobile_release_env.py` passed.
+- `npm run verify:release-env` in `mobile/` correctly failed against the current local `.env` because it enables dev auth and uses a localhost API URL.
+- `EXPO_PUBLIC_API_BASE_URL=https://api.example.com EXPO_PUBLIC_ALLOW_DEV_AUTH=false EXPO_PUBLIC_ENABLE_DEBUG_TOOLS=false npm run verify:release-env` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T763: Add Android APK build prerequisite guard
+
+Status: done
+
+Summary:
+
+- Added a read-only APK build prerequisite checker for local Android Gradle exports.
+- Added `npm run apk:android-prereqs` in `mobile/`.
+- Documented that debug APKs require Metro while release APKs are standalone.
+- Documented the WSL/Windows Android SDK mismatch that causes `sdk.dir` and corrupted build-tools failures.
+
+Verification:
+
+- `python3 -m py_compile scripts/check_android_apk_build_prereqs.py` passed.
+- `npm run apk:android-prereqs` in `mobile/` correctly reported the current WSL/Windows SDK mismatch as a blocker.
+- `npm run quality` in `mobile/` passed.
+
+### T762: Cover every AppScreen with visual-smoke evidence routes
+
+Status: done
+
+Summary:
+
+- Added visual-smoke route jumps for the remaining uncovered AppScreen values: AI save failure, doctor share, health integration, community, and ranking.
+- Added PHI-safe seeded AI save failure state and reused existing future-preview navigation handlers for doctor, health, community, and ranking routes.
+- Extended source-level visual-smoke route verification and fallback harness contracts from 36 to all 41 AppScreen routes.
+- Updated the canonical UI spec so visual-smoke route and harness evidence must cover every AppScreen.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_visual_smoke_routes.py scripts/verify_mobile_visual_smoke_harness.py scripts/verify_mobile_visual_smoke_harness_artifact.py scripts/generate_mobile_visual_smoke_harness.py` passed.
+- `python3 scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `python3 scripts/verify_mobile_visual_smoke_harness.py` passed.
+- `npm run visual-smoke:harness -- --output-dir /tmp/bloodsugar-mobile-visual-smoke/2026-06-03-t762-harness` generated 41 PHI-safe route previews.
+- `npm run visual-smoke:harness:verify-artifact -- --output-dir /tmp/bloodsugar-mobile-visual-smoke/2026-06-03-t762-harness` passed.
+- Targeted AppScreen-vs-visual-smoke audit confirmed no AppScreen values are missing visual-smoke coverage.
+
+### T761: Expand visual-smoke access to remaining core UI pages
+
+Status: done
+
+Summary:
+
+- Added debug-gated visual-smoke route jumps for AI candidate edit/remove confirmation, manual record confirmation, delete confirmation, delete/update success, detailed report, and tutorial pages.
+- Added PHI-safe seeded state for the new direct routes so form, selected-record, preview, result, and report pages can render deterministically without backend, AI, payment, or database side effects.
+- Extended source-level visual-smoke route verification and fallback harness contracts from 28 to 36 routes.
+- Updated the canonical UI spec so future visual evidence covers the additional core flow pages.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_visual_smoke_routes.py scripts/verify_mobile_visual_smoke_harness.py scripts/verify_mobile_visual_smoke_harness_artifact.py scripts/generate_mobile_visual_smoke_harness.py` passed.
+- `python3 scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `python3 scripts/verify_mobile_visual_smoke_harness.py` passed.
+- `npm run visual-smoke:harness -- --output-dir /tmp/bloodsugar-mobile-visual-smoke/2026-06-03-t761-harness` generated 36 PHI-safe route previews.
+- `npm run visual-smoke:harness:verify-artifact -- --output-dir /tmp/bloodsugar-mobile-visual-smoke/2026-06-03-t761-harness` passed.
+
+### T760: Add global TextInput update-wrapper verifier
+
+Status: done
+
+Summary:
+
+- Added a global navigation verifier guard that scans JSX `onChangeText` bindings in `mobile/App.tsx`.
+- Required TextInput change handlers to use named `update*` wrappers and rejected inline callbacks.
+- Updated the canonical UI spec so future input fields preserve bounded input and state-update boundaries.
+- Kept existing input behavior unchanged because current fields already use named update handlers.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed current JSX `onChangeText` bindings in `mobile/App.tsx` use `update*` handlers.
+
+### T759: Add global JSX press-wrapper verifier
+
+Status: done
+
+Summary:
+
+- Added a global navigation verifier guard that scans inline JSX `onPress={() => ...}` callbacks in `mobile/App.tsx`.
+- Required inline `onPress` closures to call `press*` wrappers before reaching lower-level state, navigation, status, or async handlers.
+- Updated the canonical UI spec so future inline press callbacks preserve render-item boundary handling.
+- Kept named handler bindings unchanged for existing dedicated no-argument handlers.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed current inline JSX `onPress` callbacks in `mobile/App.tsx` call `press*` wrappers.
+
+### T758: Add dedicated Settings profile and model press handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated item press wrappers for Settings care profile, LLM model, and STT model chips.
+- Replaced audited JSX direct Settings profile/model id callbacks with wrapper bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing bounded profile/model selection behavior and in-flight disabling.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct Settings profile/model id callbacks remain in `mobile/App.tsx`.
+
+### T757: Add dedicated Today and History record card press handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated item press wrappers for Today and History record detail cards.
+- Replaced audited JSX direct record-detail card callbacks with wrapper bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing Today / History detail return-target behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct Today / History record detail card callbacks remain in `mobile/App.tsx`.
+
+### T756: Add dedicated result destination card press handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated item press wrappers for Save Success, Delete Success, and Update Success destination cards.
+- Replaced audited JSX direct result destination target callbacks with wrapper bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing result-page destination behavior and stale candidate/edit/remove cleanup.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct result destination target callbacks remain in `mobile/App.tsx`.
+
+### T755: Add dedicated AI candidate action press handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated item press wrappers for AI Review candidate edit and remove actions.
+- Replaced audited JSX direct AI candidate index callbacks with wrapper bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing candidate edit/remove behavior and confirmation flow.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct AI candidate index callbacks remain in `mobile/App.tsx`.
+
+### T754: Add dedicated quick-entry item press handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated item press wrappers for Home and Record quick-entry cards.
+- Replaced audited JSX direct quick-entry source callbacks with wrapper bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing bounded quick-entry behavior for voice prompt, text flow, and manual record entry.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct quick-entry source callbacks remain in `mobile/App.tsx`.
+
+### T753: Add dedicated Store preview press handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated press wrappers for Store category tabs and product status buttons.
+- Replaced audited JSX direct Store category/status callbacks with wrapper bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing bounded Store category selection and product status behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct Store category/status callbacks remain in `mobile/App.tsx`.
+
+### T752: Add dedicated record form option press handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated option press wrappers for AI candidate edit, manual record, and record edit chip selections.
+- Replaced audited JSX direct form option callbacks with wrapper bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing bounded form field selection handlers and manual record type behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct record form option callbacks remain in `mobile/App.tsx`.
+
+### T751: Add dedicated History and Analysis press handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated press wrappers for History range tabs, Analysis range tabs, and Analysis chart points.
+- Replaced audited JSX direct History / Analysis selection callbacks with wrapper bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing bounded range selection and chart tooltip state behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct History / Analysis range or chart point callbacks remain in `mobile/App.tsx`.
+
+### T750: Add dedicated menu and preview navigation press handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated press wrappers for Menu destination cards, visual-smoke route chips, Future Module cards, and Settings rows.
+- Replaced audited JSX direct navigation callbacks with row/card wrapper bindings.
+- Updated navigation and visual-smoke route verifier checks plus the canonical UI spec.
+- Preserved existing menu, settings, future preview, and debug-gated visual-smoke routing behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct Menu / Settings / Future Module / visual-smoke navigation callbacks remain in `mobile/App.tsx`.
+
+### T749: Add dedicated Account Security row press handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated Account Security row press wrappers for auth provider preview and session management preview rows.
+- Replaced audited JSX direct provider/session status callbacks with wrapper bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing bounded provider challenge and session action status handlers.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct Account Security provider/session callbacks remain in `mobile/App.tsx`.
+
+### T748: Add dedicated Settings option press handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated Settings option wrappers for care profile, LLM model, STT model, and native download kind choices.
+- Replaced audited JSX direct Settings option callbacks with wrapper bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved the existing bounded profile/model/download state boundary handlers.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct Settings profile/model/native download option callback remains in `mobile/App.tsx`.
+
+### T747: Add dedicated primary tab press handler
+
+Status: done
+
+Summary:
+
+- Added a dedicated primary tab press wrapper around the existing primary tab destination handler.
+- Replaced audited JSX direct `openPrimaryTab(screen.id)` callback with a wrapper binding.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing primary-tab destination behavior, including the Menu special case.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct primary tab destination callback remains in `mobile/App.tsx`.
+
+### T746: Add dedicated Today and History record detail card handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated record-detail card handlers for Today and History record lists.
+- Replaced audited JSX direct detail-opener callbacks with card handler bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing Today / History return-target behavior and selected-record state handling.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct Today / History record detail callbacks remain in `mobile/App.tsx`.
+
+### T745: Add dedicated result destination card handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated destination card handlers for Save Success, Delete Success, and Update Success pages.
+- Added a dedicated Delete Success history shortcut handler.
+- Replaced audited JSX direct result destination callbacks with handler bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct result destination callbacks remain in `mobile/App.tsx`.
+
+### T744: Add dedicated AI candidate action handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated AI Review candidate edit and remove action handlers.
+- Replaced audited JSX direct candidate edit/remove opener callbacks with action handler bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing candidate edit bounds, remove-confirm flow, and no-backend-write-before-confirmation behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct AI candidate edit/remove opener remains in `mobile/App.tsx`.
+
+### T743: Add dedicated native debug input handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated bounded handlers for native model download URL, Whisper model path, audio path, and Llama model path inputs.
+- Replaced audited JSX direct native debug input setters with handler bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing debug-only native module check, download, Whisper, Llama, and benchmark actions.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct native debug input setters remain in `mobile/App.tsx`.
+
+### T742: Add dedicated Store search input handler
+
+Status: done
+
+Summary:
+
+- Added a dedicated bounded Store search input handler.
+- Replaced the audited JSX direct `setStoreSearchText(boundStoreSearchText(...))` callback with a handler binding.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved existing local catalog filtering behavior while keeping the search string behind a fixed display/input length boundary.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct Store search setter remains in `mobile/App.tsx`.
+
+### T741: Add dedicated quick-entry source handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated Home and Record quick-entry wrappers around the shared quick-entry mode handler.
+- Replaced audited JSX direct return-screen calls to `handleQuickEntryMode(...)` with wrapper bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved the existing quick-entry boundary: voice only prompts, text opens the record flow, and manual opens manual entry without AI, STT, Vision, or backend writes.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct quick-entry return-screen callbacks remain in `mobile/App.tsx`.
+
+### T740: Add dedicated recording result fallback handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated Home and Record recording-result handlers for the text fallback action.
+- Replaced audited JSX direct calls to `handleRecordingResultPrimaryAction(...)` with handler bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved the existing short-recording reset and normal text-fallback behavior without calling STT, AI, or backend writes.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct recording-result callback remains in `mobile/App.tsx`.
+
+### T739: Add dedicated transcript sample-fill handler
+
+Status: done
+
+Summary:
+
+- Added a dedicated sample-fill handler for the Home and Record transcript inputs.
+- Replaced audited JSX direct sample transcript updater callbacks with a handler binding.
+- Updated navigation verifier checks and the canonical UI spec.
+- Preserved the existing sample-text parser block so sample text can preview UI but cannot be submitted to the parser.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct sample-fill callbacks remain in `mobile/App.tsx`.
+
+### T738: Add dedicated History filter handlers
+
+Status: done
+
+Summary:
+
+- Added a dedicated History range selection handler that clears custom-range state through one bounded path.
+- Added dedicated bounded input handlers for History custom start and end dates.
+- Replaced audited JSX inline History range/date callbacks with handler bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX inline History range/date callbacks remain.
+
+### T737: Add dedicated core form input handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated bounded input handlers for AI candidate edit, manual record, and saved-record edit date/time fields.
+- Added dedicated bounded field handlers for glucose, meal, exercise, medication, note, and fallback JSON inputs across core edit forms.
+- Replaced audited JSX direct field-updater callbacks with handler bindings.
+- Updated navigation verifier checks and the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `python3 scripts/verify_mobile_navigation.py` passed.
+- Targeted grep confirmed no audited JSX direct field-updater callbacks remain.
+
+### T736: Add dedicated core submit and reset handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated submit handlers for transcript parse, AI save confirm, manual record create, record update, and record delete actions.
+- Added a dedicated dev reset handler for the Menu dev-only reset action.
+- Replaced audited JSX inline async submit/reset calls with handler bindings.
+- Updated navigation and visual-smoke route verifier checks, and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T735: Add dedicated Settings advanced and native debug handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated handlers for Settings advanced toggle, backend reconnect, profile selection, and STT/LLM model selection.
+- Added dedicated handlers for native download kind, module check, model download, Whisper, Llama, and benchmark actions.
+- Replaced audited Settings advanced JSX inline state setters and async calls with handler bindings.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T734: Add dedicated Manual Record and Analysis selection handlers
+
+Status: done
+
+Summary:
+
+- Added a dedicated Manual Record type selection handler.
+- Added dedicated Analysis range and chart point selection handlers.
+- Replaced audited JSX inline state setters for manual type chips, analysis range tabs, and chart tooltip points with handler bindings.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T733: Add dedicated achievement commerce and food-photo status handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated handlers for Achievement integration and Year Review share preview status actions.
+- Added dedicated handlers for Store category selection and product preview status actions.
+- Added dedicated handlers for Food Photo upload, integration, and retake preview status actions.
+- Replaced audited JSX inline action-status setters with handler bindings.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T732: Add dedicated Future preview status action handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated status handlers for Doctor Share authorization/report preview actions.
+- Added dedicated status handlers for Health Integration platform/meter preview actions.
+- Added dedicated status handlers for Community posting/privacy preview actions.
+- Added dedicated status handlers for Ranking public/opt-in preview actions.
+- Replaced audited Future preview JSX inline action-status setters with handler bindings.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T731: Add dedicated Settings and account action handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated handlers for Settings local clear, Account Security provider/session actions, and session-management status previews.
+- Added dedicated handlers for Profile edit preview, Recording Quota sync, Reminder integration status, and Privacy integration status.
+- Replaced audited Settings/account JSX inline status mutations and async action calls with handler bindings.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T730: Add dedicated primary tab and Settings row navigation handlers
+
+Status: done
+
+Summary:
+
+- Added a dedicated primary tab handler so top tabs no longer branch or switch screens directly inside JSX.
+- Tightened Settings row navigation so tutorial and subscription rows preserve Settings as the return source through existing handlers.
+- Removed raw `setCurrentScreen(screen.id)` and `setCurrentScreen(row.target)` transition paths from the audited UI entry points.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T729: Add dedicated Menu and Future Modules card navigation handlers
+
+Status: done
+
+Summary:
+
+- Added a dedicated Menu close handler that returns to the saved source screen with bounded status.
+- Added a dedicated Menu destination handler so menu grid cards no longer contain inline route branching.
+- Added a dedicated Future Modules destination handler for preview targets and module detail routes.
+- Replaced audited Menu and Future Modules JSX inline route transitions with handler bindings.
+- Added navigation and visual-smoke route verifier checks, and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T728: Add dedicated achievements commerce and food-photo preview navigation handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated handlers for Achievements, Year Review, Store, Store Cart, and Food Photo preview navigation.
+- Store cart navigation and return paths update bounded status and do not create cart, order, payment, or backend writes.
+- Food Photo return stays local and does not invoke camera, Vision, AI, or record writes.
+- Replaced JSX inline preview navigation transitions with handler bindings.
+- Added navigation and visual-smoke route verifier checks, and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T727: Add dedicated Future preview return handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated handlers for opening Future Modules from Menu and returning Future Modules to Menu.
+- Added dedicated return handlers for Future Module Detail, Doctor Share, Health Integration, Community, and Ranking previews.
+- Replaced Future preview JSX inline return transitions with handler bindings.
+- Return handlers update bounded status and do not call backend, AI, Vision, payment, or write APIs.
+- Added navigation and visual-smoke route verifier checks, and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T726: Add dedicated Settings subpage return handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated handlers for opening Account Security from Settings and returning from Settings subpages.
+- Account Security, Profile, Recording Quota, Reminder, and Privacy subpage return controls now use a shared bounded-status handler.
+- Replaced Settings subpage JSX inline return transitions with handler bindings.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T725: Add dedicated manual/detail/tutorial return handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated handlers for Manual Record return, Record Detail return, Tutorial start, and Tutorial manual entry.
+- Return handlers update bounded status and do not submit backend write requests.
+- Tutorial entry handlers navigate without calling AI, LLM, STT, or backend writes.
+- Replaced Manual Record, Record Detail, and Tutorial JSX inline transitions with handler bindings.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T724: Add dedicated core record manual fallback handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated handlers for Record manual entry, AI Review manual fallback, and Transcript Review manual fallback.
+- AI Review no-preview return now uses the existing transcript edit return handler.
+- Manual fallback handlers clear stale candidate edit/remove state before opening Manual Record.
+- Replaced core record-flow JSX inline manual fallback transitions with handler bindings.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T723: Add dedicated subscription preview navigation handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated handlers for Subscription quota sync, trial integration status, subscription management navigation, and membership status navigation.
+- Added dedicated handlers for Subscription Management sync, return, and payment integration status.
+- Added dedicated handlers for Membership Status return, renewal integration, and manage-plan navigation.
+- Replaced subscription preview JSX inline handlers with handler bindings.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T722: Add dedicated Analysis and Detailed Report navigation handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated Analysis handlers for manual entry, returning to Today, and opening Detailed Report.
+- Added dedicated Detailed Report handlers for returning to Analysis, opening manual entry, and returning to Today.
+- Analysis report entry continues to use the existing protected backend readiness guard and fixed report query limit.
+- Replaced Analysis/Detailed Report JSX inline navigation transitions with handler bindings.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T721: Add dedicated History screen navigation handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated History handlers for returning to Today, opening manual entry, and opening record detail.
+- History navigation now updates bounded status and preserves the History return target for record detail.
+- Replaced History JSX inline navigation transitions with handler bindings.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T720: Add dedicated Today screen navigation handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated Today handlers for manual entry, text record entry, record detail, and analysis navigation.
+- Today navigation now updates bounded status and preserves the Today return target for record detail.
+- Replaced Today JSX inline navigation transitions with handler bindings.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T719: Add dedicated Save Success bottom CTA handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated Save Success handlers for continuing manual entry, opening text/voice record entry, viewing saved record detail, and returning to Today.
+- Bottom CTAs now clear stale save/edit/remove state, update bounded status, and navigate without retrying backend save or calling AI.
+- Replaced Save Success JSX inline bottom CTA transitions with handler bindings.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T718: Add dedicated Delete and Update Success destination handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated Delete and Update Success destination handlers.
+- Success destination cards and bottom return CTAs now update bounded status and navigate without retrying backend delete/update requests or calling AI.
+- Update Success detail CTA uses a dedicated handler to preserve the updated record detail target.
+- Replaced Delete/Update Success JSX inline destination transitions with handlers.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T717: Add dedicated Record Edit open and return handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated handlers for opening Record Edit from Record Detail and returning to Record Detail.
+- Opening Record Edit now rebuilds the edit draft from the selected record before showing the edit page.
+- Cancelling Record Edit discards the edit draft, preserves the formal record, and returns to Record Detail.
+- Replaced Record Edit JSX inline open/return transitions with handlers.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T716: Add dedicated Delete Confirm open and return handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated handlers for opening Delete Confirm from Record Detail and returning to Record Detail.
+- Opening Delete Confirm now only shows the in-app confirmation page and bounded status; it does not send the delete request.
+- Returning or cancelling preserves the selected record and returns to Record Detail.
+- Replaced Delete Confirm JSX inline open/return transitions with handlers.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T715: Add dedicated AI candidate edit return handler
+
+Status: done
+
+Summary:
+
+- Added a dedicated AI candidate edit return/cancel handler.
+- Returning or cancelling from candidate edit now clears edit and pending remove transient state while preserving the AI candidate list.
+- Replaced candidate edit JSX inline return/cancel transitions with the handler.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T714: Add dedicated Manual Record Confirm enter and return handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated handlers for entering Manual Record Confirm and returning to Manual Record.
+- Entering confirmation now performs local validation and protected backend readiness guards before opening the confirm page.
+- Returning from confirmation preserves the current manual form inputs for editing.
+- Replaced Manual Record JSX inline confirmation/return transitions with handlers.
+- Added navigation verifier checks and updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T713: Add dedicated AI Save Failure return handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated AI Save Failure handlers for returning to AI Review and returning to AI Save Confirm.
+- Both return paths clear stale save error, candidate edit state, and pending remove state while preserving the AI candidate list.
+- Replaced the AI Save Failure JSX return actions with the dedicated handlers.
+- Added navigation verifier checks for the handlers and bindings.
+- Updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T712: Add dedicated AI candidate remove-confirm return handler
+
+Status: done
+
+Summary:
+
+- Added a dedicated AI candidate remove-confirm return/cancel handler.
+- Returning or cancelling now clears pending remove and candidate edit state while preserving the AI candidate list.
+- Replaced the AI remove-confirm JSX inline return actions with the handler.
+- Added navigation verifier checks for the handler and binding.
+- Updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T711: Add dedicated AI Save Failure manual fallback handler
+
+Status: done
+
+Summary:
+
+- Added a dedicated AI Save Failure manual fallback handler.
+- Manual fallback now clears candidate edit and pending remove state before opening the manual record form.
+- AI candidates remain preserved in the confirmation flow; the fallback does not retry backend save or call AI / STT.
+- Replaced the AI Save Failure manual-add JSX inline action with the handler.
+- Added navigation verifier checks for the handler and binding.
+- Updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T710: Add dedicated Save Success unsaved-candidate recovery handlers
+
+Status: done
+
+Summary:
+
+- Added a dedicated handler for processing unsaved AI candidates after partial save success.
+- Added a dedicated Save Success destination handler for post-save shortcut cards.
+- Processing unsaved candidates now preserves candidate records while clearing stale save error, candidate edit, and pending remove state before returning to AI Review.
+- Post-save shortcut navigation now clears stale save error, candidate edit, and pending remove state before navigating.
+- Replaced Save Success direct screen transitions for unsaved-candidate recovery and shortcut cards with handlers.
+- Added navigation verifier checks for the new handlers and bindings.
+- Updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T709: Add dedicated AI Save Confirm enter and return handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated handlers for entering and leaving AI Save Confirm.
+- Entering Save Confirm now clears stale save errors, candidate edit state, and pending remove state before showing the final confirmation page.
+- Returning from Save Confirm preserves candidate records while clearing stale save errors, candidate edit state, and pending remove state.
+- Replaced the main AI Review -> Save Confirm and Save Confirm -> AI Review JSX direct screen transitions with handlers.
+- Added navigation verifier checks for the dedicated handlers and bindings.
+- Updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T708: Add dedicated Transcript Review back and retry handlers
+
+Status: done
+
+Summary:
+
+- Added dedicated Transcript Review back and retry handlers.
+- Back now preserves the current transcript while clearing parser preview, candidate edit, remove, and recovery state before returning to the source page.
+- Retry now clears transcript text, sample flag, recording preview state, parser preview, candidate edit, remove, and recovery state before returning to the source page.
+- Removed inline multi-state Transcript Review button handlers from JSX.
+- Added navigation verifier checks for the dedicated handlers and bindings.
+- Updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T707: Route recording-preview result CTA to text fallback flow
+
+Status: done
+
+Summary:
+
+- Fixed the recording-preview result primary CTA so it no longer only resets the preview.
+- Short recordings still route to the bounded rerecord/reset branch.
+- Normal recording-preview endings now clear the preview state and route to the Record text-entry flow.
+- Kept the fallback honest: no fake transcript, no audio capture, no STT call, no AI call, and no record write.
+- Added navigation verifier checks for the recording-result primary action helper and Home / Record fallback wiring.
+- Updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T706: Make Home and Record quick-entry cards actionable
+
+Status: done
+
+Summary:
+
+- Converted the Home and Record quick-entry mode cards from static display rows into accessible Pressable action cards.
+- Added a shared bounded quick-entry action handler.
+- Voice mode now gives a bounded prompt to use the hold-to-record button without faking audio, STT, or AI output.
+- Text mode routes to the Record flow, where transcript confirmation and AI organization continue through the existing MVP pipeline.
+- Manual mode opens the manual record form with the correct return target.
+- Added quick-entry touch-target and action checks to the mobile navigation verifier.
+- Updated the canonical UI spec.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T705: Add mobile OIDC nonce/state challenge boundary
+
+Status: done
+
+Summary:
+
+- Added a mobile provider challenge module for Apple / Google / Email login setup.
+- Generated nonce/state values with crypto-secure random and failed closed when secure random is unavailable.
+- Kept the pending challenge in a ref-only memory boundary with bounded TTL and callback state validation.
+- Wired Account Security provider buttons to create challenges without fake login, fake token issuance, provider SDK calls, AI calls, or token storage.
+- Added a future callback helper that validates provider/state before calling the existing bounded `/auth/oidc-login` exchange helper.
+- Updated mobile secure-auth verifier plus UI/security/hardening docs.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T704: Require OIDC nonce validation for login exchange
+
+Status: done
+
+Summary:
+
+- Required `/auth/oidc-login` requests to include a bounded OIDC nonce.
+- Rejected provider ID tokens whose verified `nonce` claim does not match the submitted nonce.
+- Required the mobile provider callback exchange helper to pass a bounded nonce with the ID token.
+- Kept nonce values bounded and out of logs, persistent UI state, ordinary storage, and visual-smoke artifacts.
+- Updated mobile secure-auth verifier plus UI/security/hardening docs.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_auth_oidc_login.py tests/test_config.py` passed.
+- `docker compose run --rm backend ruff check app/api/auth.py app/schemas/auth.py tests/test_auth_oidc_login.py` passed.
+- `docker compose run --rm backend mypy app/api/auth.py app/schemas/auth.py tests/test_auth_oidc_login.py` passed.
+- `npm run quality` in `mobile/` passed.
+
+### T703: Add mobile OIDC exchange client boundary
+
+Status: done
+
+Summary:
+
+- Added mobile-side OIDC provider-token exchange boundary for Apple / Google / Email callback results.
+- Added bounded provider, compact ID token, and device fingerprint request helpers.
+- Added `completeOidcLoginFromProviderToken(...)` so a real provider callback can call backend `/auth/oidc-login`, persist issued tokens through SecureStore, and then bootstrap account/profile/model/quota state through Bearer auth.
+- Added backend `/auth/me` so mobile can initialize account state after OIDC token exchange without dev-login or `X-Account-Id`.
+- Kept provider buttons honest: no fake login, no fake token issuance, no raw token display, and no raw token logging.
+- Updated secure-auth verifier and UI spec to cover the mobile OIDC exchange boundary.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `docker compose run --rm backend pytest -q tests/test_auth_oidc_login.py` passed.
+- `docker compose run --rm backend pytest -q tests/test_auth_oidc_login.py tests/test_auth_refresh.py tests/test_auth_jwks.py` passed.
+- `docker compose run --rm backend ruff check app/api/auth.py` passed.
+- `docker compose run --rm backend mypy app/api/auth.py` passed.
+
+### T702: Add backend provider-neutral OIDC login exchange
+
+Status: done
+
+Summary:
+
+- Added backend `/auth/oidc-login` for provider-neutral OIDC ID token exchange.
+- Verified provider ID tokens through configured `AUTH_OIDC_JWKS_URL`, `AUTH_OIDC_ISSUER`, `AUTH_OIDC_AUDIENCE`, bounded timeout, and bounded max-age settings.
+- Added OIDC config production fail-fast rules and deployment example env vars for local Compose, minimal production Compose, and Kubernetes.
+- Added bounded `OidcLoginRequest` schema for provider id, compact JWT shape, ID token length, and optional device fingerprint.
+- Added client-level DB-backed login rate limiting before JWKS lookup or crypto verification.
+- Created or reused accounts by verified email, created hash-only refresh sessions, and issued short-lived app access tokens.
+- Rejected invalid OIDC tokens and `email_verified=false` without echoing raw tokens or raw claims.
+- Updated security / production hardening docs.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q` passed: 274 tests.
+- `docker compose run --rm backend ruff check .` passed.
+- `docker compose run --rm backend mypy app/api/auth.py app/core/config.py app/schemas/auth.py tests/test_auth_oidc_login.py` passed.
+- `python3 scripts/verify_backend_constraints.py` passed.
+- `python3 scripts/verify_deployment_config.py` passed.
+
+### T701: Wire mobile refresh/logout/session-list auth operations
+
+Status: done
+
+Summary:
+
+- Added mobile-side production auth operations for already-issued tokens: refresh token rotation, logout revoke, logout-all revoke, and bounded session list display.
+- Used the existing backend `/auth/refresh`, `/auth/logout`, `/auth/logout-all`, and `/auth/sessions` endpoints without adding new token issuance or fake provider login.
+- Persisted rotated tokens only through the SecureStore boundary added in T700.
+- Made SecureStore write failure fail closed by clearing local token state after refresh.
+- Added account-security page controls for refresh session, load sessions, local logout, and logout all.
+- Displayed only bounded session metadata and never raw access tokens, refresh tokens, token hashes, raw device fingerprints, raw claims, or request bodies.
+- Updated UI/security docs and secure-auth verifier coverage for the new auth operations.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed, including TypeScript, navigation, UI spec coverage, visual-smoke route checks, visual-smoke harness checks, and secure-auth-storage checks.
+- `python3 -m py_compile scripts/verify_mobile_secure_auth_storage.py` passed.
+
+### T700: Add mobile secure auth token storage boundary
+
+Status: done
+
+Summary:
+
+- Added a mobile `SecureStore` token storage adapter for future production access/refresh tokens.
+- Bounded access token and refresh token values before persistence, header use, or UI state.
+- Made token persistence fail closed when native secure storage is unavailable, without fallback to AsyncStorage, ordinary file storage, logs, alerts, request bodies, or visual-smoke artifacts.
+- Integrated secure-session loading and clearing into `App.tsx` while preserving dev-auth isolation and skipping token storage work in visual-smoke mode.
+- Updated Account Security UI status so it reports secure-token storage state without displaying token values.
+- Added `expo-secure-store` to mobile dependencies.
+- Added `scripts/verify_mobile_secure_auth_storage.py` and wired it into `npm run quality`.
+- Updated security and UI specs to reflect the secure-storage boundary.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed, including TypeScript, navigation, UI spec coverage, visual-smoke route checks, visual-smoke harness checks, and the new secure-auth-storage verifier.
+
+### T699: Add provider-neutral JWKS Bearer JWT authentication
+
+Status: done
+
+Summary:
+
+- Added provider-neutral RS256 Bearer JWT validation through configured `AUTH_JWKS_URL`.
+- Preserved the existing HS256 bootstrap path for local/minimal self-host auth while allowing production protected endpoints to prefer JWKS when configured.
+- Kept auth memory/CPU boundaries tight: bounded `Authorization` header, JWT part lengths, decoded JSON size, claim count/width, audience list width, JWKS URL, and JWKS timeout before account lookup or crypto/JWKS work.
+- Enforced production fail-fast config for JWKS: HTTPS URL, issuer, audience, and `AUTH_JWT_REQUIRE_JTI=true`.
+- Extended logout/logout-all access-token denylist support to valid JWKS Bearer tokens, storing only hashed `jti` values.
+- Added PyJWT crypto dependency pins and wired JWKS env vars through local Compose, minimal production Compose, and Kubernetes ConfigMap examples.
+- Updated production hardening and security docs to reflect JWKS support and remaining login/session UI work.
+- Fixed a date-sensitive profile grant API test by replacing a now-past hard-coded expiration with a relative future timestamp.
+- Fixed a dev reset typing issue exposed by targeted mypy by casting SQLAlchemy delete results before reading `rowcount`.
+
+Verification:
+
+- `docker compose build backend` passed after adding PyJWT/cryptography dependency pins.
+- `docker compose run --rm backend pytest -q` passed: 268 tests.
+- `docker compose run --rm backend ruff check .` passed.
+- `docker compose run --rm backend mypy app/core/auth.py app/core/config.py app/api/deps.py app/api/auth.py app/api/dev.py tests/test_auth_jwks.py` passed.
+- `python3 scripts/verify_backend_constraints.py` passed.
+- `python3 scripts/verify_deployment_config.py` passed.
+
+### T698: Expand native visual smoke pass to canonical UI spec screens
+
+Status: done
+
+Summary:
+
+- Captured and audited PHI-safe native Android visual evidence for the MVP/account-critical canonical screen group: Today, Record, Transcript Review, AI Review, AI Save Confirm, Save Success, History, Record Detail, Edit Record, Manual Record, Analysis, Subscription, Settings, and Menu.
+- Used direct Windows Android SDK `emulator.exe` / `adb.exe` from WSL for accepted native evidence; PowerShell was not used for the completed direct workflow.
+- Added and verified the dev-only `bloodsugar://visual-smoke?route=<routeId>` selector so native visual smoke runs can switch routes without restarting Metro or rebuilding the bundle.
+- Added visual-smoke preview guards and `recordsForDisplay` so Today / History / Analysis can render bounded local demo records without backend boot, record sync cleanup, database writes, AI / LLM / STT / Vision calls, payment calls, production credentials, or real health data.
+- Accepted seeded native History / Analysis evidence and native Settings evidence after recapturing the missing data/header states.
+- Consolidated the cross-run native evidence audit at `/tmp/bloodsugar-mobile-visual-smoke/2026-06-02-t698-native-deeplink/t698-evidence-audit.json`.
+- Kept the 28-route non-production visual-smoke harness as verified fallback layout evidence under `/tmp/bloodsugar-mobile-visual-smoke/2026-06-02-t698-harness/`.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed after the visual-smoke route, harness, and display-record changes.
+- `/tmp/bloodsugar-mobile-visual-smoke/2026-06-02-t698-native-deeplink/manifest.json` marks History, Analysis, Settings, and the deeplink-captured native routes as accepted.
+- Native screenshots were manually inspected for route correctness, visible headers/content where required, and PHI-safe local demo state only.
+- `/tmp/bloodsugar-mobile-visual-smoke/2026-06-02-t698-native-deeplink/t698-evidence-audit.json` records accepted evidence for the canonical MVP/account-critical screen list and confirms no PHI, backend writes, database writes, AI / LLM / STT / Vision calls, payment calls, or production credentials were used.
+
+### T697: Add canonical mobile UI spec coverage gate
+
+Status: done
+
+Summary:
+
+- Added a source-level verifier that compares `ai_context/UI_UX_SPEC.md` 4.x canonical screen headings against `mobile/App.tsx`.
+- The verifier confirms every canonical screen has an `AppScreen` value, `screenChrome` entry, `currentScreen` render branch, and route-specific implementation markers.
+- The verifier also confirms the top-level Function Menu keeps the intended MVP / future preview destinations available, preventing regression back to a single-screen app.
+- Wired the verifier into `mobile` quality as `npm run verify:ui-spec-coverage`.
+- Kept the check deterministic, PHI-safe, and free of Expo runtime, backend calls, database writes, auth, payment, AI, LLM, STT, Vision, or native model execution.
+
+Verification:
+
+- `python3 scripts/verify_mobile_ui_spec_coverage.py` passed and reported 32 canonical 4.x screens plus 11 top-level menu destinations covered.
+
+### T696: Extend mobile visual smoke coverage to future and commerce preview routes
+
+Status: done
+
+Summary:
+
+- Extended visual smoke coverage to Future Modules, Future Module Detail, Achievements, Year Review, Store, Store Cart, and Food Photo routes.
+- Added the deterministic dev-only route jump helper, gated behind both debug tools and dev auth, plus an `EXPO_PUBLIC_VISUAL_SMOKE_INITIAL_ROUTE` startup selector for local screenshot work.
+- Added a deterministic source-level visual-smoke route verifier to the mobile quality gate. It proves the seven T696 preview route branches, route-specific UI markers, return CTAs, dev-only gates, initial-route selector, and side-effect-free route jump handler.
+- Added a temporary non-production visual harness for the seven preview routes. `npm run visual-smoke:harness` in `mobile/` generates PHI-safe seeded PNG previews and a manifest without Expo runtime, backend, database, AI / LLM / STT / Vision, payment, or production credentials.
+- Added a read-only Android visual-smoke prerequisite checker. `npm run visual-smoke:android-prereqs` in `mobile/` writes PHI-safe evidence about installed SDK tools, system images, and AVD page-size readiness before attempting native screenshots.
+- Installed Android command-line tools, added the non-16 KB `android-35/google_apis/x86_64` system image, and created `Pixel_8_API_35_Non16K` for stable native screenshot capture after the original 16 KB emulator path exposed compatibility / ANR issues.
+- Captured route-correct native screenshots with direct Windows `adb.exe` for Future Modules, Future Module Detail, Achievements, Year Review, Store, Store Cart, Food Photo, and the debug route-jump menu.
+- Native evidence is stored outside the repo at `/tmp/bloodsugar-mobile-visual-smoke/2026-06-01-t696-native/`, with manifest `/tmp/bloodsugar-mobile-visual-smoke/2026-06-01-t696-native/manifest.json`.
+- Evidence uses local preview/demo state only. No PHI, secrets, prompts, raw model output, payment data, production credentials, backend writes, database writes, AI / LLM / STT / Vision calls, or payment calls were used.
+
+Verification:
+
+- `npm run visual-smoke:android-prereqs -- --evidence /tmp/bloodsugar-mobile-visual-smoke/2026-06-01-t696-android-prereqs/prereqs-after-avd.json` confirmed native screenshot readiness after the non-16 KB image / AVD was added.
+- `npm run visual-smoke:harness` generated seven fallback preview PNGs plus `manifest.json`.
+- Native screenshots were manually inspected for route correctness, open-section layout, CTA visibility, wrapping/readability, and route-return affordances.
+- `npm run quality` in `mobile/` passed.
+
+### T695: Run first mobile visual smoke pass and record UI gaps
+
+Status: done
+
+Summary:
+
+- Ran the documented mobile visual smoke workflow against the current Expo development build on a Pixel 9 Android emulator.
+- Verified the app can be launched from WSL through Windows `adb.exe` and an explicit Expo dev-client URL when the WSL Expo CLI cannot find `adb`.
+- Captured PHI-safe local screenshots for Today/Home, Record quick entry, History, Analysis, Menu, Menu bottom, and Settings under `/tmp/bloodsugar-mobile-visual-smoke/2026-05-31/`.
+- Inspected the captured screens for open-section, nested-panel, clipped-text, dense-row, touch-target, and route-return regressions.
+- No blocking visual defects were found in the inspected screens; extended future/commerce/food-photo preview route coverage remains queued.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- Expo development build loaded successfully on Android emulator through Metro port 8082.
+
+### T694: Add mobile visual smoke evidence workflow
+
+Status: done
+
+Summary:
+
+- Added `ai_context/MOBILE_VISUAL_SMOKE_WORKFLOW.md` with a developer-triggered visual smoke evidence process for major mobile layout changes.
+- Documented required mobile routes, open-section/nested-panel visual pass criteria, PHI-safe evidence rules, and local screenshot storage guidance.
+- Linked the workflow from `ai_context/REPO_QUALITY_WORKFLOW.md` and `README.md`.
+- Kept the workflow low-cost and free of required backend writes, AI, LLM, Vision, STT, payments, production credentials, database mutations, or real health data.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T693: Extend verifier for shared card wrapping styles
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` to assert shared single-layer cards and rows remain wrapping.
+- The verifier now checks `emptyStateCard`, `timelineCard`, `accountCard`, `flowStepperCard`, `subscriptionStatusCard`, and `planCardHeader`.
+- Kept checks deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported shared card wrapping style coverage.
+
+### T692: Audit remaining mobile UI surfaces for open-section regressions
+
+Status: done
+
+Summary:
+
+- Re-scanned mobile AppScreen render branches and key styles for remaining nested-panel, fixed-row, or overly indented layout regressions.
+- Added wrapping to shared single-layer card/row styles: `emptyStateCard`, `timelineCard`, `accountCard`, `flowStepperCard`, `subscriptionStatusCard`, and `planCardHeader`.
+- Updated the canonical UI spec to require those shared rows/cards to wrap instead of squeezing text on small screens.
+- Preserved existing data flow and did not add backend, auth, session, token, payment, entitlement, permission, AI, LLM, Vision, database, or network behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T691: Extend verifier for achievement and year review wrapping
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` to assert achievement cards and yearly badge rows remain wrapping single-layer layouts.
+- The verifier now checks `achievementCard` wrapping and background plus `yearBadgeRow` wrapping.
+- Kept checks deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported achievement and year review wrapping coverage.
+
+### T690: Audit achievement and yearly review open-section spacing
+
+Status: done
+
+Summary:
+
+- Audited Achievements and Year Review screens for nested-panel or overly indented layout regressions.
+- Added wrapping to `achievementCard` so icon, title, status, and progress remain readable in a single-layer card.
+- Added wrapping to `yearBadgeRow` so the annual badge icon and copy do not squeeze in fixed horizontal layout.
+- Updated the canonical UI spec to require wrapping achievement and year-review badge rows.
+- Preserved existing data flow and did not add backend, auth, session, token, payment, entitlement, permission, AI, LLM, Vision, database, or network behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T689: Extend verifier for future and commerce card wrapping
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` to assert future preview hero cards and store product cards remain single-layer wrapping cards.
+- The verifier now checks `heroCardFeature` and `productCard` wrapping plus their single-layer backgrounds.
+- Kept checks deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported future and commerce card wrapping coverage.
+
+### T688: Audit future and commerce preview open-section spacing
+
+Status: done
+
+Summary:
+
+- Audited Future Modules, Future Module Detail, Store, Store Cart, Food Photo, Doctor Share, Health Integration, Community, and Ranking screens for nested-panel or overly indented layout regressions.
+- Confirmed future and commerce pages already use open page sections and inline boundary/status blocks.
+- Added wrapping to `heroCardFeature` so future preview hero/status cards stay single-layer without cramped horizontal layout.
+- Added wrapping to `productCard` so Store product cards remain single-layer and readable on narrow screens.
+- Updated the canonical UI spec to require wrapping single-layer future preview and product cards.
+- Preserved existing data flow and did not add backend, auth, session, token, payment, entitlement, permission, AI, LLM, Vision, database, or network behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T687: Extend verifier for pricing and comparison open-section styles
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` to assert pricing sections stay open and comparison rows remain single-layer wrapping rows.
+- The verifier now prevents `pricingCard` from reintroducing background/border wrapper styles and checks `comparisonRow` remains a wrapping single-layer row.
+- Kept checks deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported pricing and comparison open-section style coverage.
+
+### T686: Audit subscription and quota surfaces open-section spacing
+
+Status: done
+
+Summary:
+
+- Audited Subscription, Subscription Management, Membership Status, and Recording Quota surfaces for nested-panel or overly indented layout regressions.
+- Changed `pricingCard` from an outer淡綠 panel into an open section container.
+- Changed comparison rows into single-layer wrapping white rows so feature comparison and member feature lists are not nested inside a large panel.
+- Updated the canonical UI spec to require pricing/comparison open-section treatment.
+- Preserved existing data flow and did not add backend, auth, session, token, payment, entitlement, permission, AI, LLM, Vision, database, or network behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T685: Extend verifier for settings open-stack rows
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` to assert Settings rows render as an open stack without an outer white settings panel.
+- The verifier now prevents `settingsList` from reintroducing background/border wrapper styles and checks `settingsRow` remains a wrapping single-layer row.
+- Kept checks deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported Settings open-stack row coverage.
+
+### T684: Audit Settings subpages open-section spacing
+
+Status: done
+
+Summary:
+
+- Audited Settings and related settings subpage layout patterns for nested-panel or overly indented regressions.
+- Changed the Settings list from an outer white list panel to an open stack.
+- Changed each Settings row into its own single-layer clickable row with wrapping.
+- Updated the canonical UI spec to require the Settings open-stack treatment.
+- Preserved existing data flow and did not add backend, auth, session, token, payment, entitlement, permission, AI, LLM, Vision, database, or network behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T683: Extend verifier for detail row open-section styles
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` to assert detail rows use淡綠 single-layer information row styles with wrapping.
+- The verifier now checks `detailRow` background, border color, and `flexWrap` so detail/form rows do not regress into cramped white card rows.
+- Kept checks deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported detail row open-section style coverage.
+
+### T682: Audit Record Detail and Edit form open-section spacing
+
+Status: done
+
+Summary:
+
+- Audited Record Detail, Delete Confirm, and Edit Record pages for nested-panel or overly indented form/detail layout regressions.
+- Changed shared detail rows from white card rows to淡綠 single-layer information rows.
+- Added row wrapping and gaps so long labels/values can flow without creating cramped nested-card visuals.
+- Updated the canonical UI spec to require open detail/form row treatment.
+- Preserved existing data flow and did not add backend, auth, session, token, payment, entitlement, permission, AI, LLM, Vision, database, or network behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T681: Extend verifier for AI Review rejected-event open stack
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` to assert AI Review rejected-event outer stack stays open and individual rejected events use the淡色 warning row.
+- The verifier now prevents `rejectedBox` from reintroducing background/border wrapper styles and checks `rejectedEventCard` uses the warning background.
+- Kept checks deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported AI Review rejected-event open-stack coverage.
+
+### T680: Audit AI Review and Save Confirm open-section spacing
+
+Status: done
+
+Summary:
+
+- Audited AI Review and Save Confirm pages for nested-panel or overly indented candidate-list layout regressions.
+- Confirmed candidate lists already render as open stacks with single-layer candidate cards.
+- Changed AI Review rejected events so the outer rejected area is an open inline stack and only individual rejected events use a淡色 warning row.
+- Updated the canonical UI spec to require that rejected-event open-stack pattern.
+- Preserved existing data flow and did not add backend, auth, session, token, payment, entitlement, permission, AI, LLM, Vision, database, or network behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T679: Extend verifier for History and Analysis open-section styles
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` to assert History date range uses the淡綠 single-layer strip style and Analysis chart wrapper stays open.
+- The verifier now checks `dateRangeCard` background/border colors and prevents `chartCard` from reintroducing background or border wrapper styles.
+- Kept checks deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported History and Analysis open-section style coverage.
+
+### T678: Audit History and Analysis open-section spacing
+
+Status: done
+
+Summary:
+
+- Audited History and Analysis pages for nested-panel or overly indented card-in-card layout regressions.
+- Changed the History date range summary from a white card to a淡綠 single-layer information strip.
+- Changed the Analysis chart wrapper to an open container so only the actual chart canvas is framed.
+- Updated the canonical UI spec to require those open-section patterns.
+- Preserved existing data flow and did not add backend, auth, session, token, payment, entitlement, permission, AI, LLM, Vision, database, or network behavior.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T677: Extend verifier for Record quick-entry affordance
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` to assert the Record page also renders the shared quick-entry affordance.
+- The verifier now checks the shared render mapping, the Record-specific quick-entry key prefix, and reports Home plus Record quick-entry coverage.
+- Kept the check source-level, deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported Home and Record quick-entry affordance coverage.
+
+### T676: Align Record page quick-entry affordance with Home
+
+Status: done
+
+Summary:
+
+- Audited the Record page quick-start section against Home so voice preview, text organize, and manual add affordances are consistent.
+- Reused the bounded `quickEntryModeDisplayItems` helper for both Home and Record rendering.
+- Kept the rail informational only; it does not add backend, STT, AI, Vision, auth, payment, entitlement, database, or network behavior.
+- Updated the canonical UI spec so the Record page must share the same three-entry affordance without introducing nested panels.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T675: Extend verifier for Home quick-entry affordance
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` to assert Home quick-entry affordance remains wired.
+- The verifier now checks `quickEntryModeDisplayItems`, the three bounded mode labels, `quickEntryRail`, and `quickEntryItem`.
+- Kept the check source-level, deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported Home quick-entry affordance coverage.
+
+### T674: Audit Home quick-entry ergonomics
+
+Status: done
+
+Summary:
+
+- Audited Home / Today quick-start ergonomics against the UI spec.
+- Added bounded `quickEntryModeDisplayItems` for three visible entry modes: Voice Preview, Text Organize, and Manual Add.
+- Rendered a lightweight `quickEntryRail` above the voice capture card so users can immediately understand the available paths.
+- Kept the rail informational only; it does not add backend, STT, AI, Vision, auth, payment, entitlement, database, or network behavior.
+- Updated canonical UI spec so Home quick-start must explicitly show voice/text/manual affordances.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T673: Extend verifier for dense row readability styles
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` with source-level readability style checks for dense rows.
+- The verifier now checks wrapping/shrink behavior on section headers, record headers, quota stat rows, comparison rows, and core display text styles.
+- Updated verifier success output to report dense-row readability style coverage.
+- Kept verifier deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported 41 screens, 11 menu destinations, 8 future targets, 4 preview return CTAs, header/close/non-header accessibility labels, 43 labeled TextInputs, 8 compact touch-target styles, and 6 dense-row readability styles.
+
+### T672: Audit mobile text wrapping and dense UI readability
+
+Status: done
+
+Summary:
+
+- Audited dense mobile UI rows for likely overflow and cramped layout risks.
+- Added wrapping/shrink-friendly constraints to section headers, record headers, quota stat rows, comparison rows/cells, achievement cards, year badge rows, product cards, badges, and shared text styles.
+- Kept the page structure open and did not reintroduce nested panels.
+- Updated canonical UI spec so dense rows must allow long text to wrap or shrink on small screens.
+- Preserved production/cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, permission requests, network calls, Expo runtime, automatic retries, parser behavior changes, AI calls, LLM calls, record writes, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, native audio capture, STT calls, Vision calls, background jobs, or integration calls were added.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T671: Extend verifier for compact control touch target styles
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` with source-level style checks for compact touch targets.
+- The verifier now checks 44px-class sizing for tab pills, chips, primary/secondary/danger buttons, segment pills, More, and Store product round action buttons.
+- Fixed the verifier block parser to use multiline regex matching for `StyleSheet.create` style blocks.
+- Kept the check deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported 41 screens, 11 menu destinations, 8 future targets, 4 preview return CTAs, header/close/non-header accessibility labels, 43 labeled TextInputs, and 8 compact touch-target styles.
+
+### T670: Audit mobile touch target sizing for icon and compact controls
+
+Status: done
+
+Summary:
+
+- Audited compact mobile control styles for practical touch target size.
+- Added 44px-class minimum height/size to tab pills, chips, segment pills, primary/secondary/danger buttons, More, and Store product round arrow buttons.
+- Preserved the existing visual system, card structure, navigation, and behavior.
+- Updated canonical UI spec with compact control touch target requirements.
+- Preserved production/cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, permission requests, network calls, Expo runtime, automatic retries, parser behavior changes, AI calls, LLM calls, record writes, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, native audio capture, STT calls, Vision calls, background jobs, or integration calls were added.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T669: Extend verifier for TextInput accessibility labels
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` with a source-level scan that fails if any `TextInput` lacks an `accessibilityLabel`.
+- The mobile quality gate now reports the number of labeled TextInputs in addition to screen/menu/future-target/CTA/accessibility checks.
+- Kept verifier source-level, deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported 41 screens, 11 menu destinations, 8 future targets, 4 preview return CTAs, header/close/non-header accessibility labels, and 43 labeled TextInputs.
+
+### T668: Audit mobile TextInput accessibility labels
+
+Status: done
+
+Summary:
+
+- Audited all mobile `TextInput` fields for missing accessibility labels.
+- Added bounded labels for transcript inputs, date/time inputs, history range inputs, record form fields, fallback JSON inputs, backend URL, native model URL/path fields, audio path, and Store search.
+- Confirmed all 43 `TextInput` instances now include an `accessibilityLabel`.
+- Updated canonical UI spec so mobile inputs cannot rely only on placeholder/example text or adjacent visual labels.
+- Preserved behavior and production/cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, permission requests, network calls, Expo runtime, automatic retries, parser behavior changes, AI calls, LLM calls, record writes, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, native audio capture, STT calls, Vision calls, background jobs, or integration calls were added.
+
+Verification:
+
+- Source-level check found 43 `TextInput` instances and 0 missing `accessibilityLabel`.
+- `npm run quality` in `mobile/` passed.
+
+### T667: Extend navigation verifier for non-header action accessibility
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` to assert non-header accessibility labels remain wired.
+- Added verifier coverage for recording buttons, menu cards, More/Future Modules action, dev reset danger action, Store product arrow actions, and Food Photo upload area.
+- Updated verifier success output to report header/close/non-header accessibility label coverage.
+- Kept verifier source-level, deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported 41 screens, 11 menu destinations, 8 future targets, 4 preview return CTAs, and header/close/non-header accessibility labels.
+
+### T666: Audit non-header mobile action accessibility labels
+
+Status: done
+
+Summary:
+
+- Audited non-header controls for ambiguous icon-only or symbol-heavy actions.
+- Added bounded `recordingButtonAccessibilityLabel` for Home and Record hold-to-record controls.
+- Added bounded accessibility labels for menu cards, the More/Future Modules action, the dev reset danger action, Store product arrow actions, and the Food Photo upload area.
+- Updated canonical UI spec so important non-header controls require explicit bounded accessibility labels.
+- Preserved behavior and production/cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, permission requests, network calls, Expo runtime, automatic retries, parser behavior changes, AI calls, LLM calls, record writes, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, native audio capture, STT calls, Vision calls, background jobs, or integration calls were added.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T665: Extend navigation verifier for icon-only accessibility labels
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` to assert header action accessibility helper wiring remains present.
+- Added verifier coverage for the header action `accessibilityLabel` binding.
+- Added verifier coverage for bounded close-button accessibility label copy.
+- Added a source-level scan that fails if any `styles.closeButton` Pressable is missing an `accessibilityLabel`.
+- Kept verifier source-level, deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported 41 screens, 11 menu destinations, 8 future targets, 4 preview return CTAs, and header/close accessibility labels.
+
+### T664: Add accessibility labels for mobile navigation controls
+
+Status: done
+
+Summary:
+
+- Added bounded `closeReturn` accessibility label copy for X close buttons.
+- Added `headerActionAccessibilityLabel` helper to provide bounded Traditional Chinese labels for header menu, back, and close actions.
+- Wired the header action `Pressable` to `headerActionDisplayAccessibilityLabel`.
+- Wired all existing `styles.closeButton` Pressables to `auxiliaryDisplayLabels.closeReturn`.
+- Updated canonical UI spec so header symbol buttons and X close buttons require concise Traditional Chinese accessibility labels.
+- Preserved behavior and production/cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, permission requests, network calls, Expo runtime, automatic retries, parser behavior changes, AI calls, LLM calls, record writes, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, native audio capture, STT calls, Vision calls, background jobs, or integration calls were added.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- Targeted grep confirmed the header action and all `styles.closeButton` Pressables now have accessibility labels.
+
+### T663: Extend mobile navigation verifier for preview return CTAs
+
+Status: done
+
+Summary:
+
+- Extended `scripts/verify_mobile_navigation.py` to assert that shared preview pages expose explicit destination-aware bottom return CTA wiring.
+- The verifier now checks the return label helper, derived return labels, `setCurrentScreen(...ReturnScreen)` handlers, and rendered label bindings for Achievement, Year Review, Store, and Food Photo.
+- Updated canonical UI spec so route/menu/chrome/shared-preview-return changes must run `npm run verify:navigation`.
+- Kept verifier source-level, deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, STT, or native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed and reported 41 screens, 11 menu destinations, 8 future targets, and 4 preview return CTAs.
+
+### T662: Audit mobile page CTA and return-path usability
+
+Status: done
+
+Summary:
+
+- Audited mobile CTA and return-path usability for core MVP pages and future preview pages.
+- Added bounded `returnDestinationButtonLabel` helper for destination-aware return CTA labels.
+- Added explicit bottom return CTAs to Achievement, Year Review, Store, and Food Photo preview pages.
+- The new preview return CTAs route to each page's stored return screen, so pages entered from Menu can return to Menu and pages entered from Future Modules can return to Future Modules.
+- Updated canonical UI spec to require explicit bottom return CTAs for shared preview pages.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, permission requests, network calls, Expo runtime, automatic retries, parser behavior changes, AI calls, LLM calls, record writes, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, native audio capture, STT calls, Vision calls, background jobs, or integration calls were added.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+
+### T661: Wire mobile quality gate into repository CI
+
+Status: done
+
+Summary:
+
+- Updated `.github/workflows/ci.yml` so the mobile CI step runs `npm ci && npm run quality` instead of typecheck alone.
+- Updated `ai_context/REPO_QUALITY_WORKFLOW.md` so the Mobile Gate is `npm run quality` and explicitly includes the source-level navigation verifier.
+- Preserved existing backend, web, deployment, and security gates without unrelated CI refactors.
+- Kept the CI step PHI-free and deterministic; it does not start Expo, backend, database, auth, payment, AI, LLM, Vision, or native model tooling.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- Targeted grep confirmed CI, README, mobile package scripts, and repo quality workflow reference the mobile quality gate/navigation verifier.
+
+### T660: Add a lightweight mobile quality gate script
+
+Status: done
+
+Summary:
+
+- Added `npm run quality` in `mobile/package.json` to run mobile TypeScript checking and source-level navigation verification together.
+- Added `make mobile-quality` as a root shortcut for the same mobile gate.
+- Documented the mobile quality gate in `README.md` under Mobile Preview.
+- Kept the gate local, deterministic, PHI-free, and free of Expo runtime, backend, network, auth, payment, database, AI, LLM, Vision, native audio capture, STT, and native model calls.
+
+Verification:
+
+- `npm run quality` in `mobile/` passed.
+- `make mobile-quality` from repo root passed.
+
+### T659: Add route-state regression coverage for mobile navigation
+
+Status: done
+
+Summary:
+
+- Added `scripts/verify_mobile_navigation.py`, a source-level mobile navigation verifier that parses `mobile/App.tsx` without starting Expo or React Native.
+- Added `npm run verify:navigation` in `mobile/package.json`.
+- The verifier checks `AppScreen` coverage, `screenChrome` coverage, exact menu destinations, future-module targets, primary menu modal return behavior, and the subpage back-to-menu guard.
+- Updated canonical UI spec so route/menu/chrome changes must run `npm run verify:navigation` in `mobile/`.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, permission requests, network calls, Expo runtime, automatic retries, parser behavior changes, AI calls, LLM calls, record writes, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, native audio capture, STT calls, Vision calls, background jobs, or integration calls were added.
+
+Verification:
+
+- `npm run verify:navigation` in `mobile/` passed and reported 41 screens, 11 menu destinations, and 8 future targets.
+- `npm run typecheck` in `mobile/` passed.
+
+### T658: Verify mobile multi-page route completeness and fill MVP UI gaps
+
+Status: done
+
+Summary:
+
+- Audited the mobile `AppScreen` union, render branches, menu destinations, header actions, and return paths against the canonical UI navigation map.
+- Verified all 41 declared `AppScreen` values have current-screen render/check coverage.
+- Verified the menu has the expected MVP destinations plus useful quick-entry routes for record/manual/tutorial while future-only Food Photo remains reachable from Future Modules.
+- Fixed a header navigation gap: primary pages still use the hamburger action to open Menu as a returnable modal, while subpages whose back target is Menu now return to the existing Menu directly instead of reopening Menu with the subpage as its close target.
+- Updated canonical UI spec with the header behavior distinction between opening Menu and returning to Menu.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, permission requests, automatic retries, parser behavior changes, AI calls, LLM calls, record writes, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, native audio capture, STT calls, Vision calls, background jobs, or integration calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- `node` source audit confirmed 41 declared `AppScreen` values and no missing current-screen checks.
+- Menu source audit confirmed 11 menu destinations: Today, Record, Manual Record, History, Analysis, Subscription, Tutorial, Achievements, Year Review, Store, Settings.
+
+### T657: Audit remaining direct JSX display text and plan next product slice
+
+Status: done
+
+Summary:
+
+- Ran a source-level grep audit for remaining direct JSX display text after the bounded-label sweep.
+- Classified the remaining direct JSX text as mostly single-use screen titles, explanatory prose, placeholder/glyph icons, close symbols, and a few destructive action labels rather than backend/LLM-derived unbounded content.
+- Confirmed the next queue item should move back toward product completeness instead of continuing only display-copy cleanup.
+- Added `T658` to verify mobile multi-page route completeness and fill MVP UI navigation gaps against the canonical UI spec.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, permission requests, automatic retries, parser behavior changes, AI calls, LLM calls, record writes, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, native audio capture, STT calls, Vision calls, background jobs, or integration calls were added.
+
+Verification:
+
+- `rg --count "<Text[^>]*>[^<{]*[一-龥A-Za-z][^<{]*</Text>" mobile/App.tsx` found 87 remaining direct JSX text lines for follow-up classification.
+- Targeted audits showed remaining direct JSX display text is concentrated in static titles/prose/glyphs/destructive labels; bounded helper usage from T650-T656 remains present.
+- `T658` is now the sole pending task in `Next Up`.
+
+### T656: Bound remaining tutorial and auxiliary debug labels
+
+Status: done
+
+Summary:
+
+- Added bounded `auxiliarySectionLabels` and dynamic label helpers for tutorial, menu, achievements/year review, store/cart, food photo, developer/debug, native model, analysis summary, candidate confirmation, and preview badge/action labels.
+- Changed audited auxiliary JSX labels to use helper-derived bounded values instead of repeated inline labels.
+- Updated canonical UI spec so tutorial/menu/debug/native and auxiliary preview labels must be generated through bounded display helpers before render.
+- Preserved tutorial navigation, menu routing, preview status behavior, debug tool behavior, native model tool behavior, analysis/candidate display behavior, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, permission requests, automatic retries, parser behavior changes, AI calls, LLM calls, record writes, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, native audio capture, STT calls, Vision calls, background jobs, or integration calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `auxiliarySectionLabels`, `auxiliaryDisplayLabels`, and dynamic auxiliary label helpers exist and are used by audited JSX.
+- Targeted grep found audited auxiliary labels only in bounded helper definitions, helper-derived JSX usage, canonical UI spec examples, older completed task/log history, or explanatory prose; remaining direct JSX display text is queued for `T657` audit.
+
+### T655: Bound remaining core flow section labels
+
+Status: done
+
+Summary:
+
+- Added bounded `coreFlowSectionLabels` helper for core record, transcript, AI review/save, manual create/confirm, save/update/delete result, history, detail, edit, analysis, and detailed report section/action labels.
+- Changed core flow JSX to use helper-derived labels instead of repeated inline labels for sync status, recording result, transcript actions, AI confirmation sections, manual fallback actions, result boundaries, history controls, detail sections, edit/delete checks, analysis boundaries, and report notes.
+- Updated canonical UI spec so core flow section/action labels must be generated through bounded display helpers before render.
+- Preserved MVP record flow behavior, validation, parser flow, save/update/delete paths, history filters, analysis/report paths, return paths, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, permission requests, automatic retries, parser behavior changes, AI calls, LLM calls, record writes beyond existing handlers, PHI logging, raw prompts, raw model output, secrets, tokens, unrelated database writes, native audio capture, STT calls, Vision calls, background jobs, or integration calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed core flow helper-derived label usage in JSX.
+- Targeted grep found audited core flow labels only in bounded helper definitions, helper-derived JSX usage, canonical UI spec examples, or older completed task/log history; remaining direct labels are auxiliary tutorial/menu/debug/future-preview status labels now queued for `T656`.
+
+### T654: Bound settings and subscription readiness section labels
+
+Status: done
+
+Summary:
+
+- Added bounded `settingsSubscriptionSectionLabels` helper for subscription, membership, settings, account security, profile, recording quota, reminder, and privacy section/action/status labels.
+- Changed Subscription, Subscription Management, Membership Status, Settings, Account Security, Profile Settings, Recording Quota, Reminder Settings, and Privacy Settings JSX to use helper-derived labels instead of repeated inline preview labels.
+- Updated canonical UI spec so subscription/settings preview labels must be generated through bounded display helpers before render.
+- Preserved local preview behavior, quota sync behavior, settings return paths, status actions, local state clear behavior, payment-preview behavior, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, permission requests, automatic retries, parser behavior changes, AI calls, LLM calls, record writes, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, native audio capture, STT calls, Vision calls, background jobs, or integration calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed subscription/settings helper-derived label usage in JSX.
+- Targeted grep found audited subscription/settings labels only in bounded helper definitions, helper-derived JSX usage, canonical UI spec examples, or older completed task/log history.
+
+### T653: Bound future preview readiness section labels
+
+Status: done
+
+Summary:
+
+- Added bounded `futurePreviewSectionLabels` helper for future preview readiness/status/return/action labels.
+- Changed Future Modules, Future Module Detail, Doctor Share, Health Integration, Community, and Ranking JSX to use helper-derived section labels and action labels instead of repeated inline future-preview strings.
+- Updated canonical UI spec so future preview readiness/status/return/action labels must be generated through bounded display helpers before render.
+- Preserved future preview local behavior, target routing, return paths, status actions, checklist rendering, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, permission requests, external API calls, background jobs, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, record writes, native audio capture, STT calls, Vision calls, external sharing, ranking writes, or integration calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed future preview helper-derived label usage in JSX.
+- Targeted grep found audited future preview labels only in bounded helper definitions, helper-derived JSX usage, canonical UI spec examples, older completed task/log history, or out-of-scope settings/subscription pages now queued for `T654`.
+
+### T652: Bound Food Photo preview display copy
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Food Photo intro copy, upload-box label, AI result title, readiness title, photo integration button label, and retake integration button label.
+- Changed Food Photo JSX to use helper-derived values instead of fixed inline Vision preview/action fallback strings.
+- Updated canonical UI spec so Food Photo intro/action/result/readiness display copy must be generated through bounded display helpers before render.
+- Preserved Food Photo local preview behavior, no-camera/no-upload boundary, empty-result checklist, no nutrition estimate, action status behavior, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, camera permission requests, image reads/uploads, Vision calls, AI calls, LLM calls, record writes, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, native audio capture, STT calls, background jobs, or integration calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Food Photo helper-derived display usage in JSX.
+- Targeted grep found audited Food Photo intro/upload/result/readiness/action-label strings only in bounded helper definitions, canonical UI spec examples, or older completed task/log history; repeated readiness labels in other future preview screens remain for `T653`.
+
+### T651: Bound Store preview and cart display copy
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Store preview boundary copy, empty-search display, cart integration button label, local commerce boundary copy, cart intro copy, checkout-readiness title, and return-to-store label.
+- Changed Store and Store Cart JSX to use helper-derived values instead of fixed inline commerce preview/cart fallback strings.
+- Updated canonical UI spec so Store preview/cart fallback copy must be generated through bounded display helpers before render.
+- Preserved Store local filtering, product display items, product action status behavior, Store Cart disabled checkout behavior, return paths, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, order writes, product API calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, native audio capture, STT calls, Vision calls, background jobs, or integration calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Store and Store Cart helper-derived display usage in JSX.
+- Targeted grep found audited Store preview/cart fallback and action-label strings only in bounded helper definitions, canonical UI spec examples, or older completed task/log history.
+
+### T650: Bound Achievement and Year Review preview display text
+
+Status: done
+
+Summary:
+
+- Wired existing bounded display helpers into Achievement preview boundary copy, local-computation boundary copy, next-badge copy, and badge integration button label.
+- Added bounded display helpers for Achievement integration button label, Year Review badge-material fallback copy, and Year Review share button label.
+- Changed Year Review JSX to use helper-derived preview boundary, hero record count, live-calculation source copy, badge-material fallback, and share button label instead of direct inline display strings.
+- Updated canonical UI spec so Achievement and Year Review preview/boundary/action-label copy must be generated through bounded display helpers before render.
+- Preserved Achievement and Year Review local aggregate behavior, action status behavior, return paths, future-module boundaries, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, notification permission requests, reminder writes, privacy preference writes, export/delete calls, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, report query behavior, order writes, native audio capture, STT calls, Vision calls, background jobs, external sharing, ranking writes, achievement writes, or integration calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Achievement and Year Review helper-derived display usage in JSX.
+- Targeted grep found audited Achievement/Year Review preview, next-badge, hero-count, live-calculation, badge-material, and action-label strings only in bounded helper definitions or canonical UI spec examples.
+
+### T649: Bound Future Module detail boundary display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Future Module detail reserved-architecture boundary copy and implementation-order copy.
+- Changed Future Module detail JSX to use helper-derived values instead of fixed inline no-API/no-write/no-AI and implementation-order strings.
+- Updated canonical UI spec so Future Module detail reserved-architecture and implementation-order copy must use bounded helpers.
+- Preserved Future Module detail behavior, selected-module display, requirement rendering, return path, future module navigation, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, notification permission requests, reminder writes, privacy preference writes, export/delete calls, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, report query behavior, order writes, native audio capture, STT calls, Vision calls, background jobs, external sharing, ranking writes, or integration calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Future Module detail boundary/order helper usage.
+- Targeted grep found no remaining audited inline Future Module detail no-API/no-write/no-AI or implementation-order strings in JSX outside bounded helper definitions.
+
+### T648: Bound Reminder and Privacy settings intro/action labels
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Reminder Settings intro copy and notification integration button label.
+- Added bounded display helpers for Privacy Settings intro copy and privacy integration button label.
+- Changed Reminder and Privacy settings JSX to use helper-derived values instead of fixed inline preview-boundary copy and action labels.
+- Updated canonical UI spec so Reminder/Privacy settings intro and integration action labels must use bounded helpers.
+- Preserved Reminder Settings behavior, Privacy Settings behavior, action status display, settings return path, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, notification permission requests, reminder writes, privacy preference writes, export/delete calls, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, report query behavior, order writes, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Reminder and Privacy settings intro/action-label helper usage.
+- Targeted grep found no remaining audited inline Reminder/Privacy settings intro strings or integration action labels in JSX outside bounded helper definitions.
+
+### T647: Bound Recording Quota intro and sync display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Recording Quota intro copy, quota-control boundary copy, and sync quota button label.
+- Changed Recording Quota Settings JSX to use helper-derived values instead of fixed inline quota/entitlement boundary strings and inline sync busy-label branch.
+- Updated canonical UI spec so Recording Quota intro, quota-control copy, and sync button label must use bounded helpers.
+- Preserved Recording Quota page behavior, quota sync behavior, data/cost boundary display, settings return path, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, report query behavior, order writes, native audio capture, audio upload, transcript storage, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Recording Quota intro/control/sync-button helper usage.
+- Targeted grep found no remaining audited inline Recording Quota page quota/entitlement boundary strings or sync busy-label branch in JSX outside bounded helper definitions.
+
+### T646: Bound Subscription Management boundary display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Subscription Management intro copy, no-action/payment boundary copy, and sync status button label.
+- Changed Subscription Management JSX to use helper-derived values instead of fixed inline payment/entitlement boundary strings and inline sync busy-label branch.
+- Updated canonical UI spec so Subscription Management header intro, no-action copy, and sync button label must use bounded helpers.
+- Preserved Subscription Management behavior, quota sync behavior, payment integration status action, settings return path, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, report query behavior, order writes, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Subscription Management boundary helper usage.
+- Targeted grep found no remaining audited inline Subscription Management intro/no-action boundary strings or sync status busy-label branch in JSX outside bounded helper definitions; recording quota sync label remains a separate screen for follow-up audit.
+
+### T645: Bound Subscription payment boundary display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Subscription trial/payment boundary copy, payment-unwired copy, CTA boundary warning copy, and quota sync button label.
+- Changed Subscription page JSX to use helper-derived values instead of fixed inline payment/entitlement strings and inline quota sync busy-label branch.
+- Updated canonical UI spec so Subscription payment boundary, entitlement warning, and quota sync button label must use bounded helpers.
+- Preserved Subscription page behavior, quota sync behavior, trial integration status behavior, subscription management navigation, membership status navigation, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, report query behavior, order writes, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Subscription payment-boundary helper usage.
+- Targeted grep found no remaining audited inline Subscription main-page payment/entitlement boundary strings or quota sync busy-label branch in JSX outside bounded helper definitions; subscription management and recording quota sync labels remain separate screens for follow-up audit.
+
+### T644: Bound Detailed Report note display rows
+
+Status: done
+
+Summary:
+
+- Added bounded checklist items for Detailed Report note rows covering medical-advice boundary, backend/local source behavior, and report query limit.
+- Changed Detailed Report JSX to render the note rows from bounded display items instead of fixed inline strings.
+- Updated canonical UI spec so Detailed Report note rows must be converted to bounded checklist items before render.
+- Preserved Detailed Report source/status display, fallback behavior, query limit behavior, no-data CTAs, metrics, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, report query behavior, order writes, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Detailed Report note display item usage.
+- Targeted grep found no remaining audited inline Detailed Report note strings in JSX outside bounded checklist item definitions.
+
+### T643: Bound Analysis safety, empty, summary, and report button display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Analysis safety intro copy, chart empty-state copy, range summary copy, and detailed-report button label.
+- Changed Analysis JSX to use helper-derived values instead of fixed inline safety/no-data strings, direct glucose-record count interpolation, and inline report loading-label branch.
+- Clamped the Analysis glucose-record count before composing the range summary display text.
+- Updated canonical UI spec so Analysis safety, empty-state, range summary, and report button copy must use bounded helpers.
+- Preserved Analysis range filtering, chart point selection, metrics, no-data CTAs, report navigation, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, report query behavior, order writes, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Analysis safety/empty/summary/report-button helper usage.
+- Targeted grep found no remaining audited inline Analysis safety intro, chart empty-state, range summary, direct glucose count interpolation, or report loading-label branch in JSX outside bounded helper definitions.
+
+### T642: Bound History empty-state display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for History no-records empty-state title/body copy.
+- Added bounded display helpers for History selected-range no-records empty-state title/body copy.
+- Changed History empty-state JSX to use helper-derived values instead of fixed inline no-data strings.
+- Updated canonical UI spec so History empty-state title/body copy must use bounded helpers.
+- Preserved History filtering, custom date range behavior, record grouping, empty-state CTAs, sync boundary behavior, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, order writes, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed History empty-state helper usage.
+- Targeted grep found no remaining audited inline History no-records or selected-range no-records empty-state strings in JSX outside bounded helper definitions.
+
+### T641: Bound record edit intro display text
+
+Status: done
+
+Summary:
+
+- Added a bounded display helper for the formal record edit intro / structured-payload guidance copy.
+- Changed the Edit Record page JSX to use the helper-derived value instead of a fixed inline update guidance string.
+- Updated canonical UI spec so formal record edit intro guidance must use a bounded helper.
+- Preserved formal record edit behavior, field bounds, validation, update checklist, update request path, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, new database writes beyond the existing explicit update path, order writes, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed formal record edit intro helper usage.
+- Targeted grep found no remaining audited inline formal record edit structured-payload guidance string in JSX outside the bounded helper definition.
+
+### T640: Bound manual and delete confirmation display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Manual Record Confirm intro copy and submit label.
+- Added bounded display helpers for Delete Confirm danger intro copy, record date/source meta copy, and danger submit label.
+- Changed Manual Record Confirm and Delete Confirm JSX to use helper-derived values instead of fixed inline boundary strings, direct date/source composition, and inline busy-label branches.
+- Updated canonical UI spec so manual confirmation and delete confirmation boundary/meta/button copy must use bounded helpers.
+- Preserved manual record confirmation behavior, delete confirmation behavior, busy disabling, backend readiness gating, create/delete request paths, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, new order writes, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Manual Record Confirm and Delete Confirm display helper usage.
+- Targeted grep found no remaining audited inline manual/delete confirmation boundary strings, direct delete date/source composition, or inline busy-label branches in JSX outside bounded helper definitions.
+
+### T639: Bound preview record edit boundary display text
+
+Status: done
+
+Summary:
+
+- Added a bounded display helper for the preview record edit unsaved-candidate boundary copy.
+- Changed the candidate edit page JSX to use the helper-derived value instead of a fixed inline database/save-confirmation boundary string.
+- Updated canonical UI spec so candidate edit boundary copy must use a bounded helper.
+- Preserved candidate edit form behavior, input bounds, validation, save-preview edit behavior, AI Review return behavior, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, database writes, order writes, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed preview record edit boundary helper usage.
+- Targeted grep found no remaining audited inline candidate-edit database/save-confirmation boundary string in JSX outside the bounded helper definition.
+
+### T638: Bound Transcript Review guidance and preflight display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Transcript Review intro copy, pre-parse guidance copy, sample-text warning copy, and local preflight-passed copy.
+- Changed Transcript Review JSX to use helper-derived values instead of fixed inline parser/STT/cost guidance strings.
+- Kept transcript validation, sample blocking, backend/model gating, parser recovery, and parse submission behavior unchanged.
+- Updated canonical UI spec so Transcript Review intro, pre-parse guidance, sample warning, and preflight-passed status must use bounded helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Transcript Review guidance/preflight helper usage.
+- Targeted grep found no remaining audited inline Transcript Review parser/STT/cost guidance strings in JSX outside bounded helper definitions.
+
+### T637: Bound AI Remove Confirm boundary and source display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for AI Remove Confirm boundary label/copy and candidate confidence/source display text.
+- Changed AI Remove Confirm JSX to use helper-derived values instead of fixed inline boundary copy and inline confidence/source string composition.
+- Clamped the candidate confidence percent before composing the remove-confirm source display text.
+- Updated canonical UI spec so AI Remove Confirm boundary copy and confidence/source display must use bounded helpers.
+- Preserved AI Remove Confirm behavior, pending-candidate selection, cancel path, confirm-remove path, review return path, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, delete API calls, order writes, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed AI Remove Confirm boundary/source helper usage.
+- Targeted grep found no remaining audited inline AI Remove Confirm boundary copy or direct confidence/source string composition in JSX outside bounded helper definitions.
+
+### T636: Bound AI Save Confirm intro and submit label display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for AI Save Confirm intro copy and primary submit label.
+- Changed AI Save Confirm JSX to use helper-derived values instead of fixed inline intro text and nested inline button-label selection.
+- Kept busy, backend-blocked, warning, and normal submit label branches display-only; submit disabled/enabled behavior still uses existing state.
+- Updated canonical UI spec so AI Save Confirm intro copy and primary submit label must use bounded helpers.
+- Preserved AI Save Confirm behavior, warning display behavior, backend-ready gating, save request path, candidate list rendering, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes beyond the existing explicit save path, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed AI Save Confirm intro and submit-label helper usage.
+- Targeted grep found no remaining audited inline AI Save Confirm intro string or nested submit-label branch in JSX outside bounded helper definitions.
+
+### T635: Bound AI Review warning and rejected-event display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for AI Review intro copy, low-confidence warning copy, rejected-event boundary copy, rejected reason display text, and backend-required warning copy.
+- Changed AI Review warning/rejected-event JSX to use helper-derived values instead of fixed inline strings or inline reason-prefix composition.
+- Bounded rejected reason labels before composing the final display string.
+- Updated canonical UI spec so AI Review intro, warnings, rejected-event copy, rejected reason display, and backend-required warning must use bounded helpers.
+- Preserved AI Review behavior, candidate edit/remove flow, transcript return flow, manual fallback flow, rejected-event display behavior, backend-ready gating, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed AI Review warning/rejected-event helper usage.
+- Targeted grep found no remaining audited inline AI Review intro, low-confidence warning, rejected-event boundary, rejected reason prefix, or backend-required warning strings in JSX outside bounded helper definitions.
+
+### T634: Bound shared recording result card display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for recording elapsed-second label, recording result body copy, and recording result primary action label.
+- Changed Home and Record recording result cards to use shared helper-derived values instead of duplicated inline strings and raw elapsed-second interpolation.
+- Updated canonical UI spec so recording result card seconds, body copy, and primary action label must use bounded helpers and share the same source across Home and Record.
+- Preserved recording preview UI behavior, reset behavior, text/manual entry paths, quota warning behavior, native recorder disabled behavior, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, native audio capture, silence trimming, audio storage, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed shared recording result card helper usage in Home and Record.
+- Targeted grep found no remaining audited inline recording result-card body copy, primary action label, or raw elapsed-second label interpolation in Home/Record JSX outside bounded helper definitions.
+
+### T633: Bound AI Review empty-state display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for AI Review 0-candidate empty-state title/body/boundary copy.
+- Added bounded display helpers for AI Review missing-preview empty-state title/body copy.
+- Changed AI Review empty-state JSX to use helper-derived values instead of fixed inline strings.
+- Updated canonical UI spec so AI Review empty-state copy must be generated through bounded display helpers.
+- Preserved AI Review behavior, candidate edit/remove flow, transcript return flow, manual fallback flow, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed AI Review empty-state helper usage.
+- Targeted grep found no remaining audited inline AI Review 0-candidate or missing-preview empty-state strings in JSX outside bounded helper definitions.
+
+### T632: Bound Home and Record recording preview guidance display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for quick-record intro copy, recording idle/active preview copy, Home recording boundary copy, Record page recording boundary copy, and simulated recording result copy.
+- Changed Home and Record recording preview UI to use helper-derived values instead of fixed JSX strings and inline elapsed-second interpolation.
+- Clamped elapsed recording seconds before including them in display copy.
+- Updated canonical UI spec so recording preview guidance and native recorder/STT fallback copy must be generated through bounded display helpers.
+- Preserved recording preview UI behavior, text/manual entry paths, quota warning behavior, native recorder disabled behavior, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, native audio capture, silence trimming, audio storage, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Home/Record recording preview guidance helper usage.
+- Targeted grep found no remaining audited inline Home/Record recording preview guidance JSX strings or unbounded elapsed-second interpolation outside bounded helper definitions.
+
+### T631: Bound settings and auth preview boundary display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Account Security provider preview, session preview, auth readiness, and no-action boundary copy.
+- Added bounded display helpers for Profile no-action copy, Recording Quota data/cost boundary copy, Reminder preview boundary, and Privacy preview boundary.
+- Changed Settings/Auth/Profile/Quota/Reminder/Privacy JSX to use helper-derived values instead of fixed boundary strings.
+- Updated canonical UI spec so these settings/auth preview boundary strings must be generated through bounded display helpers.
+- Preserved preview-only behavior, local clear behavior, quota sync behavior, reminder/privacy action status behavior, auth provider/session preview actions, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, profile update calls, reminder writes, notification permission requests, privacy preference writes, export/delete calls, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed settings/auth preview boundary helper usage.
+- Targeted grep found no remaining audited inline Account Security, Profile, Recording Quota, Reminder, or Privacy preview boundary JSX strings outside bounded helper definitions; existing action/status and checklist copy remains in bounded display helpers or bounded checklist mappers.
+
+### T630: Bound settings model option display labels
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for model option chip labels and model-selection boundary copy.
+- Changed LLM and STT model chips to use the helper instead of directly rendering backend model labels or inline unavailable suffixes.
+- Changed the model-selection boundary text to use a helper-derived value instead of a fixed JSX string.
+- Updated canonical UI spec so settings model option labels and model-selection boundary copy must be generated through bounded display helpers.
+- Preserved model availability disabling, selected model state, advanced settings behavior, parser readiness behavior, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, model-list mutation, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed settings model option display helper usage.
+- Targeted grep found no remaining raw model label/unavailable suffix composition or fixed model-selection boundary string in settings JSX.
+
+### T629: Bound future preview boundary display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Doctor Share, Health Integration, Community, and Ranking preview boundary badge/copy pairs.
+- Added bounded display helpers for Doctor Share backend foundation, Health Integration external-data boundary, Community public-name boundary, and Ranking local-preview boundary copy.
+- Changed future preview JSX to use helper-derived values instead of fixed boundary strings.
+- Updated canonical UI spec so these future preview boundary strings must be generated through bounded display helpers.
+- Preserved preview-only behavior, local ranking calculation, account/profile display behavior, integration status actions, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, share-token creation, grant writes, external health reads, BLE scans, community post writes, ranking writes, public-profile writes, or public sharing calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed future preview boundary helper usage.
+- Targeted grep found no remaining audited inline Doctor Share, Health Integration, Community, or Ranking preview boundary JSX strings outside bounded helper definitions; existing integration action status copy remains in its bounded status-message helpers.
+
+### T628: Bound Year Review boundary and share fallback display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Year Review share-unavailable status and Year Review boundary copy.
+- Changed Year Review share status derivation and boundary inline copy to use those helpers instead of fixed strings in the component body/JSX.
+- Updated canonical UI spec so Year Review boundary and share fallback copy must be generated through bounded display helpers.
+- Preserved yearly aggregate display behavior, local-only preview behavior, share button disabled semantics, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, Vision calls, annual summary writes, share-image generation, or public share calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Year Review boundary/share fallback helper usage.
+- Targeted grep found no remaining audited inline Year Review boundary JSX copy or direct `boundUiMessage("分享圖片尚未產生...")` composition outside the bounded helper.
+
+### T627: Bound Store cart and Food Photo preview fallback display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Store cart unavailable title/copy/evidence, legal warning, and disabled checkout label.
+- Added bounded display helpers for Food Photo Vision-not-wired badge/copy, upload unavailable copy, result pending label, future boundary copy, and empty-result checklist items.
+- Changed Store cart preview and Food Photo preview UI to use helper-derived values instead of fixed fallback strings in JSX/checklist arrays.
+- Updated canonical UI spec so Store cart and Food Photo preview fallback copy must be generated through bounded display helpers.
+- Preserved preview-only behavior, disabled checkout, food-photo empty result boundaries, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, cart persistence, checkout calls, image reads, camera access, native audio capture, STT calls, Vision calls, or nutrition writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Store cart and Food Photo preview fallback helper usage.
+- Targeted grep found no remaining audited inline Store cart or Food Photo preview fallback JSX/checklist strings outside bounded helper definitions.
+
+### T626: Bound Analysis and report no-data fallback display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Analysis no-data badge/copy and Analysis boundary data-source copy.
+- Changed Analysis no-data inline block and boundary checklist to use helpers instead of fixed strings in JSX/checklist arrays.
+- Added a bounded report source display helper that returns source label and copy for backend report, local summary, and no-data fallback states.
+- Changed Detailed Report source label/copy derivation to use the helper instead of multi-branch inline composition in the component body.
+- Updated canonical UI spec so Analysis no-data and Detailed Report source fallback copy must be generated through bounded display helpers.
+- Preserved analysis calculations, report fallback behavior, report query limits, no-data CTAs, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, Vision calls, report query expansion, full-history queries, or analytics persistence were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Analysis/report no-data fallback helper usage.
+- Targeted grep found no remaining audited inline Analysis no-data JSX/checklist copy or Detailed Report source label/copy ternary composition outside bounded helper definitions.
+
+### T625: Bound Today and History empty-record fallback display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Today record summary, no-real-record health-value copy, and loaded-record action copy.
+- Changed Today summary pill to use the helper instead of composing record-count/no-data copy inline.
+- Changed History no-real-record inline status and History boundary checklist copy to use bounded helpers instead of fixed strings in JSX/checklist arrays.
+- Removed the now-unused direct `todayRecordDisplayCount` display variable.
+- Updated canonical UI spec so Today/History empty-record fallback copy must be generated through bounded display helpers.
+- Preserved empty-state CTAs, local-only history filtering, record sync behavior, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, Vision calls, full-history queries, or pagination changes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Today/History empty-record fallback helper usage.
+- Targeted grep found no remaining audited inline Today summary or History no-real-record fixed fallback strings outside bounded helper definitions.
+
+### T624: Bound parser model readiness fallback display text
+
+Status: done
+
+Summary:
+
+- Added a bounded display helper for parser model readiness fallback copy.
+- Changed LLM/STT missing and unavailable model messages to be produced through the helper instead of composing strings in the component body.
+- Bounded backend-provided model labels before including them in unavailable-model status copy.
+- Updated canonical UI spec so parser model readiness copy must be generated through bounded display helpers.
+- Preserved parser readiness gating, selected model state, parser submit behavior, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, Vision calls, or model-list mutation were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed parser model readiness helper usage.
+- Targeted grep found no remaining inline parser model readiness ternary or raw selected model label interpolation outside the bounded helper.
+
+### T623: Bound quota and subscription fallback display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for quota plan labels, subscription status summaries, membership trial days, quota used/remaining labels, and settings quota helper copy.
+- Changed subscription, membership, quota, settings, and recording-quota boundary display values to use the helpers instead of composing fallback strings inline.
+- Clamped trial-day counts before building display text.
+- Updated canonical UI spec so quota/subscription fallback copy must be produced through bounded display helpers.
+- Preserved quota calculations, entitlement state, low-quota warning behavior, recording quota settings behavior, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, Vision calls, subscription mutations, receipt validation, or webhook handling were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed quota/subscription fallback helper usage.
+- Targeted grep found the audited quota/subscription fallback copy only inside bounded helper definitions and helper-derived render values.
+
+### T622: Bound active profile and community public-name fallback display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for active profile label, active profile inline label, active profile relationship, and community public display name fallback.
+- Changed active profile fallback display values to use helpers instead of composing unbounded fallback strings in the component body.
+- Changed Community public display name preview to use a bounded helper instead of JSX conditional fallback copy.
+- Updated canonical UI spec so active profile fallback and Community public-name fallback copy must be produced through bounded display helpers.
+- Preserved profile state, community preview-only behavior, settings/profile display behavior, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, Vision calls, social post writes, ranking writes, or public-profile persistence were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed active profile and Community public-name fallback helper usage.
+- Targeted grep found no remaining audited inline active-profile fallback or Community public-name conditional fallback composition outside bounded helper definitions.
+
+### T621: Bound account fallback and doctor share account boundary display text
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for account display name, account email, account login label, and Doctor Share account boundary copy.
+- Changed render-time account fallback display values to use the helpers instead of directly composing fallback strings inline.
+- Changed Doctor Share account-connected / no-share copy to use a bounded helper instead of JSX conditional copy.
+- Updated canonical UI spec so account fallback and Doctor Share account boundary copy must be produced through bounded display helpers.
+- Preserved account state, auth mode behavior, Doctor Share preview-only behavior, and all backend request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, Vision calls, share-token creation, grant writes, or external doctor API calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed account fallback and Doctor Share account boundary helper usage.
+- Targeted grep found the audited account fallback and Doctor Share account boundary copy only inside bounded helper definitions and helper-derived render values.
+
+### T620: Bound main connection initial status message
+
+Status: done
+
+Summary:
+
+- Added a bounded display helper for the mobile main connection initial status.
+- Changed the main `status` state initialization to use that helper instead of a fixed inline status string.
+- Updated canonical UI spec so initial main connection status copy must be produced through a bounded display helper.
+- Preserved backend reconnect behavior, dev-auth gating, local state reset behavior, and all request paths.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, Vision calls, or future-module data persistence were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed main initial status helper usage.
+- Targeted grep found no remaining direct status setter or user-facing status `useState("...")` initializers in `mobile/App.tsx` for the audited status-string pattern.
+
+### T619: Bound future preview action status clear paths
+
+Status: done
+
+Summary:
+
+- Added a shared preview action status clear helper for future-module preview surfaces.
+- Changed Doctor Share, Health Integration, Community, Ranking, Future Module Detail, and future preview target-switch clear paths to use the helper instead of setting inline empty status strings.
+- Initialized future preview action status state through the same helper for consistent reset semantics.
+- Updated canonical UI spec so future-module preview action status clears must use the shared reset helper.
+- Preserved preview-only behavior and production boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, Vision calls, or future-module data persistence were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed future preview action status clear helper usage.
+- Targeted grep found no remaining inline `set...ActionStatus("")` or `set...Status("")` reset writes in `mobile/App.tsx`.
+
+### T618: Bound record and quota initial/loading status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for voice quota initial status, record sync initial status, and record sync loading status.
+- Changed mobile state initialization, mobile session clear, and record sync loading paths to use those helpers instead of setting fixed inline status strings.
+- Updated canonical UI spec so record sync initial/loading and voice quota initial statuses must be produced through bounded display helpers.
+- Preserved existing backend sync behavior, local session clear behavior, and record/query limits.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed record/quota initial and loading status helper usage.
+- Targeted grep found no remaining audited inline record/quota initial or loading status writes; remaining inline empty status clears belong to future-module preview action reset paths.
+
+### T617: Bound History custom date range status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for History custom date format, date-order, applied, and clear statuses.
+- Changed History custom date range apply and tab-switch clear handlers to use those helpers instead of setting inline status strings.
+- Kept local-only filtering behavior unchanged; applying a custom range or switching tabs still does not issue backend queries.
+- Updated canonical UI spec so History custom date range statuses must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed History custom date range status helper usage.
+- Targeted grep found no remaining audited inline History custom date format, date-order, applied, or clear status writes.
+
+### T616: Bound native benchmark status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for native benchmark progress, missing-input, and result statuses.
+- Changed the native benchmark handler to use those helpers instead of composing benchmark status/result strings inline.
+- Bounded benchmark result rows and clamped duration/output character counts before building the UI summary.
+- Updated canonical UI spec so native benchmark statuses and result summaries must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed native benchmark status helper usage.
+- Targeted grep found no remaining audited inline native benchmark progress, missing-input, or unbounded result status writes; benchmark task, duration, and output character fields are bounded/clamped inside the helper.
+
+### T615: Bound native module, Whisper, and Llama status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for native module check progress/result/failure statuses.
+- Added bounded display helpers for native Whisper missing-input, progress, success, and failure statuses.
+- Added bounded display helpers for native Llama missing-input, progress, output-summary, success, and failure statuses.
+- Changed native module, Whisper, and Llama handlers to use those helpers instead of setting inline status strings.
+- Clamped native Llama output length before building the UI-only summary, while continuing to avoid retaining raw model output in UI.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed native module, Whisper, and Llama status helper usage.
+- Targeted grep found no remaining audited inline native module check, Whisper, Llama, or raw-output summary status writes; native failure fallbacks now only appear inside bounded helpers.
+
+### T614: Bound native debug model download status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for native debug default status, disabled status, downloaded-model list failure, model download progress, model download success, and model download failure.
+- Changed native debug status initialization/reset, downloaded-model refresh, model download handler, and native debug disabled branches to use those helpers instead of setting inline status strings.
+- Kept debug-tool gating, download behavior, downloaded-model response bounding, and native path input bounding unchanged.
+- Updated canonical UI spec so native debug model-download statuses must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed native debug model download status helper usage.
+- Targeted grep found no remaining audited inline native debug default, disabled, downloaded-model list failure, model-download progress, model-download success, or model-download failure status writes; native list/download failure fallbacks now only appear inside bounded helpers.
+
+### T613: Bound transcript review flow status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for transcript review ready, return-edit, and cleared statuses.
+- Changed transcript review entry, AI-review return-edit, and transcript clear actions to use those helpers instead of setting inline status strings.
+- Kept transcript validation, parser guards, input bounds, and sample-text behavior unchanged.
+- Updated canonical UI spec so transcript review flow statuses must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed transcript review flow status helper usage.
+- Targeted grep found no remaining audited inline transcript review ready, return-edit, or cleared status writes.
+
+### T612: Bound detailed report status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for detailed report not-loaded, reset, backend-unavailable, in-flight, loading, success, and failure statuses.
+- Changed detailed report state initialization, session reset, and report loading handler to use those helpers instead of setting inline status strings.
+- Kept `/reports/basic` query limit, response bounding, stale-response guard, and local-summary fallback behavior unchanged.
+- Updated canonical UI spec so detailed report statuses must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed detailed report status helper usage.
+- Targeted grep found no remaining audited inline detailed-report not-loaded, reset, unavailable, in-flight, loading, success, or failure status writes; report unavailable copy now only appears inside its bounded helper.
+
+### T611: Bound voice quota sync status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for voice quota unavailable, sync success, and sync failure statuses.
+- Changed `loadVoiceQuota` and the subscription quota sync button unavailable branch to use those helpers instead of composing or setting inline status strings.
+- Kept quota request, response bounding, and fail-closed readiness behavior unchanged.
+- Updated canonical UI spec so voice quota sync statuses must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed voice quota sync status helper usage.
+- Targeted grep found no remaining audited inline quota unavailable, sync success, or sync failure status writes; quota unavailable copy now only appears inside its bounded helper.
+
+### T610: Bound dev reset and local clear status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for dev reset unavailable, busy, progress, success, and failure statuses.
+- Added a paired bounded display helper for local clear main/auth action statuses.
+- Changed dev reset and local clear handlers to use those helpers instead of composing or setting inline status strings.
+- Clamped dev reset deleted-record count before building success display text.
+- Updated canonical UI spec so dev reset and local clear statuses must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed dev reset and local clear status helper usage.
+- Targeted grep found no remaining audited inline dev reset unavailable, busy, progress, success, failure, or local-clear status writes; dev reset failure fallback now only appears inside its bounded helper.
+
+### T609: Bound backend URL and reconnect status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for Backend URL change, dev-login disabled, reconnect progress, reconnect success, and reconnect failure statuses.
+- Changed Backend URL update and boot/reconnect handlers to use those helpers instead of setting inline status strings.
+- Kept state-clearing behavior unchanged while deriving paired main/auth action status messages through bounded helpers.
+- Updated canonical UI spec so Backend URL and reconnect statuses must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed Backend URL and reconnect status helper usage.
+- Targeted grep found no remaining audited inline Backend URL change, dev-login disabled, reconnect progress, reconnect success, or reconnect failure status writes; reconnect failure fallback now only appears inside its bounded helper.
+
+### T608: Bound recording preview and busy guard status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for header busy guard and recording preview quota-exhausted, started, reset, and finished statuses.
+- Changed header navigation and recording preview handlers to use those helpers instead of setting inline status strings.
+- Clamped recording elapsed seconds inside the finished-status helper before using it for display-bound status decisions.
+- Updated canonical UI spec so recording preview and busy guard statuses must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, native audio capture, STT calls, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed recording preview and busy guard status helper usage.
+- Targeted grep found no remaining audited inline recording-preview or busy-guard status writes; recording-preview copy now only appears inside bounded helper definitions.
+
+### T607: Bound AI candidate edit and remove status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for AI candidate edit-open, remove-confirm, remove-result, edit-success, and edit-failure statuses.
+- Changed candidate edit/remove handlers to use those helpers instead of setting inline status strings.
+- Clamped remaining candidate counts before building remove-result display text.
+- Updated canonical UI spec so AI candidate edit/remove statuses must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed AI candidate edit/remove status helper usage.
+- Targeted grep found no remaining audited inline candidate edit-open, remove-confirm, remove-result, edit-success, or edit-failure status writes; edit failure fallback now only appears inside its bounded helper.
+
+### T606: Bound AI candidate save runtime status and summary messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for AI candidate save progress, success, failure, records status, success summary, partial records status, and partial summary messages.
+- Changed `savePreviewRecords` to use those helpers instead of composing save status and count summaries inline.
+- Clamped AI save success and partial-save counts before building display text.
+- Updated canonical UI spec so AI Save runtime statuses and summaries must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed AI candidate save runtime status and summary helper usage.
+- Targeted grep found no remaining audited inline AI save progress, success, failure, records status, success summary, or partial-summary writes; save failure fallback now only appears inside its bounded helper.
+
+### T605: Bound parser submit runtime status and recovery messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for parser backend-unavailable, model-unavailable, sample-blocked, progress, success, failure, and recovery statuses.
+- Changed `parseTranscript` to use those helpers instead of composing parser status and recovery strings inline.
+- Clamped parser success candidate counts before building display text.
+- Updated canonical UI spec so parser submit statuses and recovery messages must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed parser submit status and recovery helper usage.
+- Targeted grep found no remaining audited inline parser backend/model unavailable, sample-blocked, progress, success, or recovery status writes; parser failure fallback now only appears inside its bounded helper.
+
+### T604: Bound manual record create runtime status and summary messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for manual record create backend-unavailable, progress, success, failure, and result-summary statuses.
+- Changed the manual record create handler to use those helpers instead of composing or setting inline status and summary strings.
+- Clamped manual record create summary counts before building display text.
+- Updated canonical UI spec so manual record create runtime statuses and summaries must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed manual record create status and summary helper usage.
+- Targeted grep found no remaining audited inline manual create backend-unavailable, progress, success, failure, or fixed-count summary status writes.
+
+### T603: Bound record update/delete runtime status and summary messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for record update/delete progress, success, failure, and result-summary statuses.
+- Changed record update/delete handlers to use those helpers instead of setting inline status or summary strings.
+- Clamped update/delete summary counts before building display text.
+- Updated canonical UI spec so record update/delete runtime statuses and summaries must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed record update/delete runtime status and summary helper usage.
+- Targeted grep found no remaining audited inline update/delete progress, success, failure, or fixed-count summary status writes.
+
+### T602: Bound record update/delete unavailable status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for record update and delete backend-unavailable statuses.
+- Changed the record update and delete protected-backend guards to use those helpers instead of composing `boundUiMessage(...)` inline.
+- Updated canonical UI spec so record update/delete backend-unavailable statuses must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed record update/delete unavailable helper usage and UI spec / log copy.
+- Targeted grep confirmed the audited update/delete backend-unavailable phrases now only appear in the bounded helper definitions, with handlers calling those helpers.
+
+### T601: Bound record sync status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for record-sync backend-unavailable, success, and failure statuses.
+- Changed the record sync handler to use those helpers instead of composing `boundUiMessage(...)` or raw count strings inline.
+- Clamped sync success count and limit before building the display status.
+- Updated canonical UI spec so record-sync statuses must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed record-sync unavailable, success, and failure helper usage.
+- Targeted grep found no remaining inline `setRecordsStatus(boundUiMessage(...))` in the audited record sync handler.
+
+### T600: Bound AI save request status messages
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for AI save backend-unavailable status and partial-save failure status.
+- Changed AI save guard and partial-save catch paths to use those helpers instead of composing `boundUiMessage(...)` inline.
+- Updated canonical UI spec so AI Save request statuses must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `aiSaveUnavailableStatusMessage` and `aiPartialSaveFailureStatusMessage` usage.
+- Targeted grep found no remaining inline `setStatus(boundUiMessage(...))` in the audited AI save guard / partial-save catch paths.
+
+### T599: Bound dev reset failure status messages
+
+Status: done
+
+Summary:
+
+- Added a bounded display helper for uncertain / failed dev reset UI statuses.
+- Changed the dev reset catch path to derive both the dev reset status and main status through that helper before setting state.
+- Updated canonical UI spec so dev reset failure status pairs must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `devResetFailureDisplayMessages` and `failureDisplay.devResetStatus` / `failureDisplay.status` usage in the dev reset catch path.
+- Targeted grep found no remaining direct `setDevResetStatus(boundUiMessage(...))` in the audited dev reset failure path.
+
+### T598: Bound backend boot failure status messages
+
+Status: done
+
+Summary:
+
+- Added a bounded display helper for backend boot/reconnect failure UI statuses.
+- Changed the boot failure catch path to derive both the main status and auth action status through that helper before setting state.
+- Updated canonical UI spec so reconnect / boot failure status pairs must be produced through bounded display helpers.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `bootFailureDisplayMessages` and `failureDisplay` usage in the boot failure catch path.
+- Targeted grep confirmed the audited boot failure path no longer directly sets multiple UI statuses via inline `boundUiMessage(...)` composition.
+
+### T597: Bound auth provider and session preview action status messages
+
+Status: done
+
+Summary:
+
+- Added bounded action status values to auth provider preview display items.
+- Added bounded action status values to session management preview display items.
+- Changed Account Security auth provider and session management press handlers to set `item.actionStatus` instead of composing `boundUiMessage(...)` from row titles inside JSX handlers.
+- Updated canonical UI spec so Account Security auth/session preview action statuses must be derived before handler use.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed auth/session preview display action status derivation and `setAuthActionStatus(item.actionStatus)` handler usage.
+- Targeted grep shows one remaining `setAuthActionStatus(boundUiMessage(...))` outside this preview-row slice in backend reconnect failure handling; it should be audited separately.
+
+### T596: Bound Food Photo preview action status messages
+
+Status: done
+
+Summary:
+
+- Added pre-derived bounded status messages for Food Photo upload, integration-status, and retake preview actions.
+- Changed the Food Photo action handlers to set pre-derived bounded messages instead of composing `boundUiMessage(...)` inside JSX handlers.
+- Updated canonical UI spec so Food Photo preview action statuses must be derived before handler use.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed pre-derived Food Photo status messages and handler usage for upload, integration-status, and retake actions.
+- Targeted grep confirmed these Food Photo handlers no longer compose `boundUiMessage(...)` inline for the audited actions.
+
+### T595: Bound settings preview action status messages
+
+Status: done
+
+Summary:
+
+- Added pre-derived bounded status messages for Account Security local clear, Profile edit integration, Recording Quota syncing/unavailable, Reminder integration, and Privacy integration states.
+- Changed the related Settings subpage action handlers to set pre-derived bounded messages instead of composing `boundUiMessage(...)` inside JSX handlers.
+- Updated canonical UI spec so Settings preview action statuses must be derived before handler use.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed pre-derived settings status messages and handler usage for Account Security local clear, Profile edit integration, Recording Quota sync/unavailable, Reminder integration, and Privacy integration.
+- Targeted grep shows other auth status handlers remain outside this settings-preview slice and should be audited separately.
+
+### T594: Bound future preview action status messages
+
+Status: done
+
+Summary:
+
+- Added pre-derived bounded status messages for Doctor Share authorization/report actions, Health Integration permission/meter actions, Community posting/privacy actions, and Ranking public/opt-in actions.
+- Changed those future-preview action handlers to set pre-derived bounded messages instead of composing `boundUiMessage(...)` inside JSX handlers.
+- Updated canonical UI spec so these future preview action statuses must be derived before handler use.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed the eight pre-derived Doctor Share / Health Integration / Community / Ranking status messages and handler usage.
+- Targeted grep confirmed these future-preview handlers no longer compose `boundUiMessage(...)` inline for the audited actions.
+
+### T593: Bound subscription action status messages
+
+Status: done
+
+Summary:
+
+- Added pre-derived bounded status messages for subscription trial integration, renewal integration, subscription-management syncing, subscription-management unavailable, and payment integration preview states.
+- Changed Subscription, Membership Status, and Subscription Management action handlers to set those bounded messages instead of composing `boundUiMessage(...)` inside JSX handlers.
+- Updated canonical UI spec so subscription CTA / sync action statuses must be derived before handler use.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed pre-derived subscription action status messages and handler usage.
+- Targeted grep confirmed these Subscription / Membership Status / Subscription Management handlers no longer compose `boundUiMessage(...)` inline for the audited actions.
+
+### T592: Bound Achievement and Year Review action status messages
+
+Status: done
+
+Summary:
+
+- Added pre-derived bounded status messages for Achievement integration status and Year Review sharing integration status.
+- Changed the Achievement and Year Review action handlers to set those bounded messages instead of composing `boundUiMessage(...)` inside JSX handlers.
+- Updated canonical UI spec so these preview action statuses must be derived before rendering/handler use.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `achievementIntegrationStatusMessage` and `yearReviewShareStatusMessage` are pre-derived and used by the corresponding action handlers.
+- Targeted grep confirmed the action handlers no longer call `boundUiMessage(...)` inline for these two preview actions.
+
+### T591: Bound Store product action status text
+
+Status: done
+
+Summary:
+
+- Added a bounded product action status to Store product display items.
+- Changed the Store product arrow action to reuse the pre-derived bounded status text instead of composing status copy from the product title inside the JSX handler.
+- Updated canonical UI spec so Store product action status must come from bounded product display items.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `actionStatus` is derived in `storeProductDisplayItem` and the Store product button calls `setStoreActionStatus(product.actionStatus)`.
+- Targeted grep found no remaining render-handler composition using `${product.title} 目前只顯示商品預覽...`.
+
+### T590: Bound Store category tab display options
+
+Status: done
+
+Summary:
+
+- Added bounded display options for Store category tabs.
+- Changed the Store category tab render path to use bounded labels while preserving raw category ids for selection and filtering behavior.
+- Updated canonical UI spec so Store category tabs must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `storeCategoryDisplayItem` and `storeCategoryDisplayOptions` usage.
+- Targeted grep confirmed `storeCategories.map` now only appears in bounded display-option derivation, not in the Store category tab render path.
+
+### T589: Bound selected future module detail display item
+
+Status: done
+
+Summary:
+
+- Added a bounded display item for the selected Future Module detail page.
+- Changed Future Module Detail title, description, icon, readiness, safety, and requirement rows to render pre-derived bounded display values.
+- Preserved the raw selected module only for state and navigation behavior.
+- Updated canonical UI spec so Future Module Detail selected-module values must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `selectedFutureModuleDisplayItem` and Future Module Detail display usage.
+- Targeted grep found no remaining direct `futureModuleText(selectedFutureModule...)`, `futureModuleIcon(selectedFutureModule...)`, or `futureModuleRequirements(selectedFutureModule...)` calls in render paths.
+
+### T588: Bound future module list display cards
+
+Status: done
+
+Summary:
+
+- Added bounded display cards for Future Modules list entries.
+- Changed the Future Modules render path to use pre-derived bounded icon, title, description, readiness, safety, and requirement rows.
+- Preserved the raw future module object only for detail navigation and target behavior.
+- Updated canonical UI spec so Future Modules list cards must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `futureModuleCardDisplayItem` and `futureModuleDisplayCards` render usage.
+- Targeted grep confirmed `futureModuleCards.map` now only appears in bounded display-card derivation, not in the Future Modules render path.
+
+### T587: Bound function menu display items
+
+Status: done
+
+Summary:
+
+- Added bounded display items for Function Menu grid entries.
+- Changed the Function Menu render path to use bounded labels and icons while preserving the raw `AppScreen` target for navigation behavior.
+- Updated canonical UI spec so Function Menu items must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `menuScreenDisplayItem` and `menuDisplayItems` usage.
+- Targeted grep confirmed `menuScreens.map` now only appears in bounded display derivation, not in the Function Menu render path.
+
+### T586: Bound History and Analysis range tab display options
+
+Status: done
+
+Summary:
+
+- Added bounded display options for History and Analysis range tabs.
+- Changed History and Analysis tab render paths to use bounded labels while preserving raw range ids for selection, filtering, and chart behavior.
+- Added a bounded History current range display text for the date range card.
+- Updated canonical UI spec so History / Analysis range tabs and current range text must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed History / Analysis range display option builders and render usage.
+- Targeted grep confirmed `historyRanges.map` and `analysisRanges.map` now only appear in bounded display derivation, not in tab render paths.
+
+### T585: Bound manual record type option chips
+
+Status: done
+
+Summary:
+
+- Added bounded display options for Manual Record type chips.
+- Changed the Manual Record form to render bounded type labels while preserving the raw typed id for selection state and form behavior.
+- Updated canonical UI spec so Manual Record type chips must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `manualRecordTypeDisplayItem` and `manualRecordTypeDisplayOptions` usage.
+- Targeted grep confirmed `manualRecordTypes.map` now only appears in bounded display derivation, not in the Manual Record render path.
+
+### T584: Bound manual record confirmation display item
+
+Status: done
+
+Summary:
+
+- Added a bounded display item builder for Manual Record Confirm.
+- Changed the manual confirmation card to render pre-derived icon, type label, payload summary, and date/source line.
+- Removed the manual confirmation card's direct render-time calls to record type and payload display helpers.
+- Preserved raw manual form state only for validation and create-payload behavior.
+- Updated canonical UI spec so Manual Record Confirm display values must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `manualRecordConfirmDisplayItem` and confirmation-card display item usage.
+- Targeted grep found no remaining direct `recordTypeIcon(manualRecordType)`, `recordTypeLabel(manualRecordType)`, `displayPayload(manualRecordType, ...)`, or stale `manualRecordPreviewSummary` usage in the confirmation card.
+
+### T583: Bound selected record detail and delete display items
+
+Status: done
+
+Summary:
+
+- Added a bounded display item builder for the selected persisted record.
+- Changed Record Detail hero fields, main detail rows, source/exercise/medication summaries, Delete Confirm summary, and Edit Record type label to render pre-derived bounded display values.
+- Preserved the raw selected record only for form-type branching, update/delete API behavior, and navigation.
+- Updated canonical UI spec so selected-record display values must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `recordDetailDisplayItem` and selected-record display item usage in Record Detail, Delete Confirm, and Edit Record.
+- Targeted grep found no remaining direct selected-record helper calls for type label, payload summary, date/time, source, exercise summary, or medication summary in those render paths.
+
+### T582: Bound Today and History record list display items
+
+Status: done
+
+Summary:
+
+- Added a bounded display item builder for persisted record list rows.
+- Changed Today record cards and History grouped record rows to render pre-derived bounded icon, type label, payload summary, time label, section key, and date label.
+- Preserved raw record objects only for record-detail navigation behavior.
+- Updated canonical UI spec so Today / History record list display rows must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `recordListDisplayItem`, Today display item usage, and History grouped display-section usage.
+- Remaining direct record helper calls are now limited to display item derivation helpers instead of Today / History row render paths.
+
+### T581: Bound AI candidate card display items
+
+Status: done
+
+Summary:
+
+- Added a shared bounded display item builder for pending AI candidate records.
+- Changed AI Review candidate cards, AI Save Confirm cards, AI Candidate Remove Confirm, and candidate edit type labels to render pre-derived bounded display values.
+- Added a bounded AI Review date label for the date confirmation card.
+- Preserved raw pending record objects and indexes only for edit, remove, and save behavior.
+- Updated canonical UI spec so AI candidate display rows must be shared bounded display items before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `pendingRecordDisplayItem`, AI Review / Save Confirm / Remove Confirm / candidate edit display-item usage, and bounded AI Review date label usage.
+- Remaining direct record display helper calls are outside this candidate-card scope in Today and History record lists.
+
+### T580: Bound rejected event, analysis range, and profile chip display rows
+
+Status: done
+
+Summary:
+
+- Added bounded rejected-event display items for AI Review so rejected source text and reason labels are derived before rendering.
+- Added a bounded analysis range display label for the Analysis chart title.
+- Added bounded profile choice display items for advanced Settings profile chips while preserving the raw profile id for active-profile selection behavior.
+- Changed the related render paths to use the bounded display values instead of calling `boundDisplayText`, `rejectedReasonLabel`, or range lookup helpers directly in JSX.
+- Updated canonical UI spec so rejected event rows, analysis range title copy, and profile choice chips must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed bounded rejected-event display rows, analysis range display label, profile choice display rows, and render usage; audited direct JSX rejected-event helper calls, analysis range lookup, and profile-display bounding were removed.
+
+### T579: Bound inline warning and sync-limit display copy
+
+Status: done
+
+Summary:
+
+- Added bounded display values for AI Save Confirm low-confidence, rejected-segment, and backend-blocked warnings.
+- Added bounded display values for Transcript Review backend/model unavailable warnings and Manual Record backend unavailable warnings.
+- Added bounded display values for History sync-limit, Analysis sync-limit, and Detailed Report query-limit explanatory copy.
+- Changed the related render paths to use those display values instead of calling `boundUiMessage` or `resultChecklistItem` directly in JSX with dynamic interpolated copy.
+- Updated canonical UI spec so these warning and sync/query-limit messages must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed bounded warning/sync-limit display values and render usage; audited direct JSX low-confidence/rejected count interpolation, parser/manual backend warnings, and sync/query limit `resultChecklistItem` calls were removed.
+
+### T578: Bound subscription status, active profile, and yearly average display copy
+
+Status: done
+
+Summary:
+
+- Added bounded display values for subscription plan/status copy, subscription-management plan/status copy, membership trial hero copy, settings active-profile inline copy, and yearly glucose-average highlight copy.
+- Changed Subscription, Subscription Management, Membership Status, Settings, and Year Review render paths to use those display values instead of assembling dynamic labels directly in JSX.
+- Updated canonical UI spec so subscription/member status copy, settings active-profile copy, and yearly-average copy must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed bounded subscription/profile/yearly display values and render usage; audited direct JSX plan/status/trial, active-profile inline, and yearly-average sentence composition was removed.
+
+### T577: Bound detailed report generated time and quota display copy
+
+Status: done
+
+Summary:
+
+- Added bounded display values for Detailed Report generated time, quota used/remaining copy, quota daily-limit copy, settings quota helper copy, and quota bar percentage.
+- Changed Detailed Report, Subscription quota card, Settings quota row, and Recording Quota page to render the bounded display values instead of assembling dynamic time/quota strings in JSX.
+- Updated canonical UI spec so report generated time and quota display copy must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed bounded report/quota display values and render usage; audited direct `new Date(basicReport.generated_at)`, raw quota ratio width, and direct JSX `formatVoiceMinutes` quota strings were removed.
+
+### T576: Bound remaining boundary metric grids
+
+Status: done
+
+Summary:
+
+- Added bounded derived boundary metric rows for AI Save Confirm, Detailed Report, Doctor Share, Health Integration, Community, Ranking, Recording Quota, and Privacy Settings.
+- Changed the related `reportBoundaryGrid` render paths to map named bounded rows instead of declaring raw `[label, value]` tuples inside JSX.
+- Updated canonical UI spec so these boundary grids must use render-before bounded row arrays.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T576` boundary row arrays, render usage, and UI spec copy; audited boundary grid raw tuples now only appear at bounded display derivation points.
+
+### T575: Bound remaining confirmation, subscription, and privacy display rows
+
+Status: done
+
+Summary:
+
+- Added bounded derived checklist arrays for AI Review cost boundaries, Transcript Review cost boundaries, Subscription readiness, and Subscription Management readiness.
+- Added bounded derived display rows for Subscription Management payment/status tuples and Privacy Settings reserved-control tuples.
+- Changed the related render paths to map bounded display items instead of raw inline checklist strings or raw `[title, status, copy]` tuples in JSX.
+- Updated canonical UI spec so these confirmation, subscription, and privacy rows must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T575` display arrays, render usage, and UI spec copy; audited subscription/privacy raw tuples now only appear at bounded display source definitions.
+
+### T574: Bound result-page destination card rows
+
+Status: done
+
+Summary:
+
+- Added bounded derived destination-card arrays for Save Success, Delete Success, and Update Success result pages.
+- Changed result-page post-save navigation grids to render bounded destination display items instead of inline raw icon/label/helper/target tuples.
+- Preserved existing conditional navigation behavior, including the unsaved-candidate return path and selected-record detail shortcut.
+- Updated canonical UI spec so result-page destination card tuples must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T574`, bounded result-page destination arrays, render usage, and UI spec copy; audited raw destination tuples now only appear at bounded display derivation points.
+
+### T573: Bound record flow, history, and analysis checklist rows
+
+Status: done
+
+Summary:
+
+- Added bounded derived checklist arrays for record-flow setup, AI candidate removal, AI save failure, history boundary, delete confirmation, record update, and analysis boundary sections.
+- Changed Record, AI Remove Confirm, AI Save Failure, History, Delete Confirm, Edit Record, and Analysis checklist sections to render bounded checklist display items.
+- Preserved existing dynamic count/status logic by deriving bounded checklist strings from already clamped display values and safe UI messages.
+- Updated canonical UI spec so these record-flow/history/analysis checklist sections must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T573`, bounded record-flow/history/analysis checklist arrays, render usage, and UI spec copy; audited target checklist strings now only appear at bounded display derivation points.
+
+### T572: Bound protected operation checklist rows
+
+Status: done
+
+Summary:
+
+- Added bounded derived checklist arrays for protected record operations and operation result pages.
+- Changed AI Save Confirm, Save Success, Delete Success, Update Success, Manual Record Confirm, and Record Detail checklist sections to render bounded checklist display items.
+- Preserved existing dynamic count/status logic by deriving bounded checklist strings from already clamped display values.
+- Updated canonical UI spec so protected operation checklist copy must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T572`, bounded protected operation checklist arrays, render usage, and UI spec copy; audited target checklist strings now only appear at bounded display derivation points.
+
+### T571: Bound form option chips and subscription comparison rows
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for option values, value/label option tuples, and subscription comparison rows.
+- Moved glucose unit, glucose timing, meal type, and subscription comparison definitions into shared bounded display derivations.
+- Changed Preview Record Edit, Manual Record, and Record Edit unit/timing/meal chips to render bounded option display rows.
+- Changed Subscription feature comparison rows to render bounded comparison display rows.
+- Updated canonical UI spec so form option chips and subscription comparison tuples must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, notification permission requests, reminder scheduling, payment calls, entitlement writes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T571`, bounded form option/comparison helpers, derived option rows, render usage, and UI spec copy; audited raw option/comparison tuples now only appear in shared definitions before bounded display derivation.
+
+### T570: Bound future-module and commerce checklist rows
+
+Status: done
+
+Summary:
+
+- Added bounded derived checklist arrays for future-module and commerce/Vision preview sections.
+- Changed Doctor Share, Health Integration, Community, and Ranking readiness checklist sections to render bounded checklist display items.
+- Changed Store Cart checkout readiness, Food Photo empty-result, and Food Photo readiness checklist sections to render bounded checklist display items.
+- Updated canonical UI spec so future-module and commerce/Vision preview checklist arrays must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, external health permission requests, BLE scans, profile grants, social posts, ranking writes, order writes, payment calls, image reads, camera access, Vision calls, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T570`, bounded future-module/commerce checklist arrays, render usage, and UI spec copy; audited target raw checklist strings now only appear at bounded display derivation points or existing future-module requirement definitions.
+
+### T569: Bound settings checklist and reminder preview rows
+
+Status: done
+
+Summary:
+
+- Added a bounded reminder preview display helper for reminder-setting tuples.
+- Changed Account Security, Profile Settings, Recording Quota, Reminder Settings, Privacy Settings, and Tutorial checklist sections to render bounded checklist display items.
+- Changed Reminder Settings preview rows to render bounded title/time/copy/status display items instead of raw reminder tuples.
+- Updated canonical UI spec so settings/tutorial checklist arrays and reminder preview tuples must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, notification permission requests, reminder scheduling, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T569`, bounded settings checklist arrays, bounded reminder preview display rows, render usage, and UI spec copy; audited target raw checklist/reminder strings now only appear at bounded display derivation points.
+
+### T568: Bound remaining metric and detail tuple rows
+
+Status: done
+
+Summary:
+
+- Added bounded metric and detail-pair display helpers for non-boundary tuple rows.
+- Changed Detailed Report metric cards to render bounded metric display rows.
+- Changed Membership Status feature rows to render bounded detail-pair display rows.
+- Changed Year Review statistic cards to render bounded metric display rows.
+- Updated canonical UI spec so non-boundary metric/detail tuple rows must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T568`, bounded metric/detail display helpers, derived rows, render usage, and UI spec copy; no remaining direct `[label, value]` tuple render loops were found in `mobile/App.tsx`.
+
+### T567: Bound remaining boundary status metric grids
+
+Status: done
+
+Summary:
+
+- Reused the bounded boundary metric display helper for remaining `reportBoundaryGrid` status cards.
+- Changed AI Save Confirm, Detailed Report, Recording Quota, Privacy Settings, Doctor Share, Health Integration, Community, and Ranking boundary/status grids to render bounded label/value rows.
+- Left real analytics/year-review metric grids and membership feature detail rows unchanged; this task only covered boundary/status summary cards.
+- Updated canonical UI spec so all `reportBoundaryGrid` / boundary / status summary cards must use bounded status metric display items before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T567`, bounded boundary metric helper usage, converted `reportBoundaryGrid` render paths, and UI spec copy; remaining direct `[label, value]` render loops are non-boundary metric/detail rows and were intentionally left for separate audit.
+
+### T566: Bound account security and profile status metric cards
+
+Status: done
+
+Summary:
+
+- Added a bounded boundary metric display helper for compact status cards.
+- Changed Account Security status summary cards to render bounded label/value display rows instead of inline raw tuple values.
+- Changed Profile Settings status summary cards to render bounded label/value display rows instead of inline raw tuple values.
+- Updated canonical UI spec so auth/profile status metric labels and values must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T566`, bounded status metric helper, Account Security/Profile Settings derived rows, render usage, and UI spec copy; audited target raw tuple values now only appear at bounded display derivation points.
+
+### T565: Bound auth provider and session readiness preview display
+
+Status: done
+
+Summary:
+
+- Added a bounded preview tuple display helper for auth provider, session management, and production auth readiness rows.
+- Changed Settings, Account Security, and Profile Settings auth mode copy to render bounded display values.
+- Changed Account Security provider/session/readiness lists to render bounded display items instead of raw tuple fields.
+- Updated canonical UI spec so auth provider, session management, and readiness tuple fields must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, session creation, token persistence, logout/revoke calls, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T565`, bounded auth provider/session/readiness display variables, render usage, and UI spec copy; audited raw tuple mapping now only appears at bounded display derivation points.
+
+### T564: Bound account and profile identity display text
+
+Status: done
+
+Summary:
+
+- Added bounded display values for account email, account login label, and active profile relationship.
+- Changed Settings, Account Security, and Profile Settings identity rows to render bounded display values instead of direct account/profile fields.
+- Preserved existing account/profile state bounds, auth mode logic, profile switching, and backend behavior; only UI-rendered identity copy changed.
+- Updated canonical UI spec so account/profile identity fields must use bounded display values before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T564`, bounded identity display values, render usage, and UI spec copy; audited account/profile identity render paths now use bounded display values.
+
+### T563: Bound saved-record date, time, and source display text
+
+Status: done
+
+Summary:
+
+- Added bounded saved-record display helpers for date, time, date-time, and source values.
+- Changed Today timeline, History rows, Record Detail hero/main info/source rows, and Delete Confirm summary to render bounded date/time/source values.
+- Preserved existing saved-record payload summary helpers, record selection, edit/delete flows, and backend behavior; only UI-rendered saved-record metadata changed.
+- Updated canonical UI spec so saved-record cards/detail/delete-confirm date/time/source displays must use bounded display helpers before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T563`, saved-record date/time/source display helpers, render usage, and UI spec copy; audited direct saved-record date/source render paths now use bounded helpers.
+
+### T562: Bound AI candidate metadata display text
+
+Status: done
+
+Summary:
+
+- Bounded AI Review date labels before rendering.
+- Added bounded display helpers for AI candidate source text, decision trace, rejected-event source text/reason, and clamped confidence percent.
+- Changed AI Review, AI Save Confirm, AI Candidate Remove Confirm, and rejected-event render paths to use bounded/clamped metadata display values.
+- Preserved parser preview response bounds, candidate save behavior, and existing candidate list logic; only UI-rendered metadata/count formatting changed.
+- Updated canonical UI spec so AI candidate metadata, decision trace, rejected-event text/reason, and confidence percent must be bounded/clamped before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T562`, bounded AI candidate metadata helpers, clamped confidence display usage, and UI spec copy; audited raw source text and confidence render paths now use bounded/clamped helpers.
+
+### T561: Bound validation and save-summary display text
+
+Status: done
+
+Summary:
+
+- Added bounded display text for transcript validation, transcript-review validation, manual record validation, preview-record edit validation, selected-record edit validation, parser recovery, save success summary, and save failure summary.
+- Changed Home/Record transcript validation, Transcript Review validation/recovery, Manual Record validation, Manual Record Confirm validation, Preview Record Edit validation, Record Edit validation, Save Success summary, and AI Save Failure summary to render bounded display values.
+- Preserved existing disabled conditions, validation logic, parser readiness checks, save behavior, and recovery behavior; only UI-rendered display text changed.
+- Updated canonical UI spec so validation/recovery/save-summary copy must pass through bounded display helpers before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T561`, bounded validation/save summary display variables, render usage, and UI spec copy; audited raw validation/save-summary state no longer renders directly.
+
+### T560: Clamp AI candidate review and save-flow count displays
+
+Status: done
+
+Summary:
+
+- Added clamped display counts for low-confidence AI candidates and rejected parser events.
+- Changed AI Review candidate count, AI Save Confirm summary counts, warning copy, and pre-submit checklist to render clamped/bounded display values.
+- Changed AI Save Failure retained-candidate count checklist to render clamped/bounded display values.
+- Preserved existing save enablement, candidate list rendering, parser preview bounds, and backend save behavior; only UI-rendered count/checklist copy changed.
+- Updated canonical UI spec so AI candidate counts, rejected-event counts, save-confirm checklist counts, and save-failure retained-candidate counts must use clamped/bounded display values before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T560`, clamped AI candidate/rejected display counts, bounded checklist rendering, render usage, and UI spec copy; audited raw AI candidate/rejected count expressions no longer render directly.
+
+### T559: Bound record and history status display text
+
+Status: done
+
+Summary:
+
+- Added bounded display text for shared record sync status before rendering on Today, History, and Analysis.
+- Added bounded display text for History custom date-range status before rendering.
+- Added display-only clamped counts for Today and History record count copy.
+- Changed Today summary, History date-range count, History custom status, and record sync status blocks to render bounded/clamped display values while preserving existing list/filter logic.
+- Updated canonical UI spec so Today/History/Analysis record status and count copy must pass through bounded/clamped display helpers before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T559`, record/history bounded status display variables, clamped count display values, render usage, and UI spec copy; no direct render of audited raw record/history status or count expressions remains.
+
+### T558: Bound subscription and settings status display text
+
+Status: done
+
+Summary:
+
+- Added bounded display text for quota, subscription, subscription management, auth, native debug, dev reset, profile, recording quota, reminder, and privacy status strings.
+- Changed Subscription, Subscription Management, Settings, Account Security, Profile Settings, Recording Quota, Reminder Settings, Privacy Settings, and Dev Client status renders to use bounded display values.
+- Preserved existing status state, readiness checks, quota sync behavior, and local clear behavior; only the UI-rendered display path changed.
+- Updated canonical UI spec so subscription/settings status copy must pass through bounded display helpers before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T558`, bounded subscription/settings status display variables, render usage, and UI spec copy; no direct render of the audited raw subscription/settings status state remains.
+
+### T557: Bound Store and Food Photo status display text
+
+Status: done
+
+Summary:
+
+- Added bounded display text for Store product integration status before rendering.
+- Added bounded display text for Food Photo integration status before rendering.
+- Changed Store and Food Photo status blocks to render bounded display values while preserving existing preview-only behavior.
+- Updated canonical UI spec so Store commerce status and Food Photo Vision status copy must pass through bounded display helpers before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, order writes, image reads, camera access, or Vision calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T557`, Store/Food Photo bounded status display variables, render usage, and UI spec copy; no direct render of raw `storeActionStatus` or `foodPhotoActionStatus` remains.
+
+### T556: Bound future-module preview status display text
+
+Status: done
+
+Summary:
+
+- Added bounded display text for Future Modules, Doctor Share, Health Integration, Community, and Ranking integration status blocks.
+- Added a display-only clamped Ranking streak day value before rendering the local streak preview.
+- Changed future-module preview status blocks and Ranking hero streak to render bounded/clamped display values while preserving existing local preview behavior.
+- Updated canonical UI spec so these future-module integration statuses and Ranking streak display must pass through bounded/clamped display helpers before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T556`, future-module bounded status display variables, Ranking streak display value, render usage, and UI spec copy; no direct render of the audited raw future-module status state remains.
+
+### T555: Bound Achievement status display text
+
+Status: done
+
+Summary:
+
+- Added bounded display text for Achievement integration status before rendering.
+- Changed the Achievement status block to render the bounded display value while preserving existing local preview behavior.
+- Updated canonical UI spec so Achievement integration status copy must pass through bounded display helpers before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T555`, Achievement bounded status display variable, render usage, and UI spec copy; no direct render of raw `achievementActionStatus` remains.
+
+### T554: Bound Year Review highlight and status display text
+
+Status: done
+
+Summary:
+
+- Added bounded display mapping for Year Review highlight list text.
+- Added bounded display text for Year Review share integration status before rendering.
+- Changed Year Review highlight list and status block to render bounded display values while preserving existing local aggregate logic.
+- Updated canonical UI spec so Year Review highlight/status copy must pass through bounded display helpers before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T554`, Year Review bounded highlight/status display variables, render usage, and UI spec copy; no direct render of raw `yearReviewActionStatus` remains.
+
+### T553: Clamp achievement and yearly review aggregate display values
+
+Status: done
+
+Summary:
+
+- Added display-only clamped values for Achievement hero unlocked count and next badge days.
+- Added display-only clamped values for Year Review total records, record-type counts, longest streak, most-recorded count, and glucose average.
+- Changed Achievement and Year Review hero/stat/highlight copy to render clamped display values while preserving existing local preview logic.
+- Updated canonical UI spec so Achievement and Year Review aggregate displays must use bounded/clamped values before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T553`, clamped Achievement/Year Review display variables, render usage, and UI spec copy; remaining audited aggregate source reads are limited to display-value derivation.
+
+### T552: Clamp Analysis and Detailed Report metric display values
+
+Status: done
+
+Summary:
+
+- Added display-only clamped values for Analysis record counts, glucose record counts, fasting/post-meal/highest glucose metrics, and Detailed Report counts/glucose metrics.
+- Changed Analysis metric cards and evidence copy to render clamped display values instead of raw array lengths or direct numeric metrics.
+- Changed Detailed Report hero count and metric grid values to render clamped display values while preserving existing report/fallback logic.
+- Updated canonical UI spec so Analysis and Detailed Report count/glucose metric copy must use display-only clamped values before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T552`, clamped Analysis/Detailed Report metric display variables, render usage, and UI spec copy; no direct render of the audited raw analysis/report count expressions remains.
+
+### T551: Bound detailed report status and source display text
+
+Status: done
+
+Summary:
+
+- Added bounded display variables for Detailed Report status text, source label, and source copy.
+- Changed Detailed Report header status, inline source block, and source boundary grid to render bounded display values.
+- Updated canonical UI spec so Detailed Report status/source copy must pass through bounded display helpers before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T551`, bounded Detailed Report display variables, render usage, and UI spec copy; no direct render of raw `reportStatus`, `reportSourceCopy`, or `reportSourceLabel` remains in the Detailed Report source block/grid.
+
+### T550: Bound detailed report query-limit display copy
+
+Status: done
+
+Summary:
+
+- Added a clamped `mobileReportQueryDisplayLimit` for UI-only report query-limit copy.
+- Changed Analysis data-boundary checklist copy to use the clamped report query display limit.
+- Changed Detailed Report source copy, boundary grid value, and report-note copy to use the clamped display limit.
+- Changed Doctor Share report-boundary status copy to use the clamped display limit.
+- Kept the actual `/reports/basic` request limit fixed at `mobileReportQueryLimit`; no backend behavior or query scope was expanded.
+- Updated canonical UI spec so report query-limit copy must render clamped display values while preserving the fixed actual query limit.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T550`, clamped `mobileReportQueryDisplayLimit`, remaining `mobileReportQueryLimit` usage limited to the fixed constant/request key/query limit and historical docs, plus UI spec copy.
+
+### T549: Bound history and analysis sync-limit copy
+
+Status: done
+
+Summary:
+
+- Changed History data-boundary checklist copy to use the clamped mobile record sync display limit and bounded checklist rendering.
+- Changed History sync-limit inline status to render bounded text with the clamped display limit.
+- Changed Analysis data-boundary checklist copy to use the clamped mobile record sync display limit and bounded checklist rendering.
+- Changed Analysis sync-limit inline status to render bounded text with the clamped display limit.
+- Updated canonical UI spec so History/Analysis sync-limit copy must use bounded checklist items and clamped display values.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T549`, clamped `mobileRecordSyncDisplayLimit`, bounded History/Analysis checklist rendering, bounded History/Analysis sync-limit inline text, bounded record-sync success status, and UI spec copy.
+
+### T548: Bound result-page checklist dynamic copy
+
+Status: done
+
+Summary:
+
+- Added `resultChecklistItem` for bounded result-page checklist text.
+- Clamped unsaved AI candidate count and mobile record sync limit before using them in result-page copy.
+- Changed Save Success, Delete Success, and Update Success boundary checklists to render bounded checklist items.
+- Updated save-result summary copy to use the clamped candidate count.
+- Updated canonical UI spec so result-page checklist dynamic copy and numeric values must be bounded/clamped before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T548`, `resultChecklistItem`, clamped display counts/limits, bounded Save/Delete/Update Success checklist rendering, and UI spec copy.
+
+### T547: Bound success-page destination card render fields
+
+Status: done
+
+Summary:
+
+- Added `destinationCardDisplayItem` for success/result destination cards.
+- Changed Save Success, Delete Success, and Update Success destination grids to render bounded icon, label, and helper text.
+- Preserved existing destination navigation targets while bounding display text.
+- Updated canonical UI spec so result-page destination card tuples must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T547`, `destinationCardDisplayItem`, bounded Save/Delete/Update Success destination grid rendering, and UI spec copy.
+
+### T546: Bound settings rows and tutorial step render fields
+
+Status: done
+
+Summary:
+
+- Added bounded display helpers for settings rows and tutorial steps.
+- Changed Settings list rendering to use bounded row id, label, icon, and helper text.
+- Bounded the dynamic recording-quota helper text before rendering in the Settings list.
+- Changed Tutorial rendering to use bounded step icon, title, and description.
+- Updated canonical UI spec so settings/tutorial local navigation data must be bounded before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T546`, settings/tutorial bounded display helpers, bounded Settings list rendering, bounded Tutorial step rendering, and UI spec copy.
+
+### T545: Bound store preview product render fields
+
+Status: done
+
+Summary:
+
+- Added `storeProductDisplayItem` to bound store product id, badge, title, description, price, and icon before UI use.
+- Changed store search filtering to use bounded display items instead of raw product fields.
+- Changed store product card rendering to use bounded display fields.
+- Changed store product action status to compose from the bounded title.
+- Updated canonical UI spec so store preview product data must be bounded before search, rendering, or action-status composition.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T545`, `storeProductDisplayItem`, bounded store search/filter source, bounded store card render fields, bounded product-title action status, and UI spec copy.
+
+### T544: Bound achievement preview render fields
+
+Status: done
+
+Summary:
+
+- Added bounded achievement display helpers for id, title, description, icon, progress, and target.
+- Clamped achievement progress and target before rendering status text and progress bar width.
+- Updated the achievement list render path to use bounded display items instead of raw achievement fields.
+- Updated canonical UI spec so achievement/badge preview fields must be bounded or clamped before rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T544`, bounded achievement helpers, bounded achievement display items for hero counts and list rendering, clamped progress/target usage, and UI spec copy.
+
+### T543: Bound future-module card and detail render text
+
+Status: done
+
+Summary:
+
+- Added bounded render helpers for future-module text, icon, and requirements.
+- Bounded future-module card title, description, readiness, safety, icon, and requirements before rendering.
+- Bounded future-module detail title, description, readiness, safety, icon, and requirements before rendering selected module state.
+- Limited future-module requirements by list count and per-item display length.
+- Updated canonical UI spec so future-module card/detail content must be bounded before rendering, including requirements lists.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T543`, future-module bounded render helpers, bounded future-module card/detail render sites, requirements list bounding, and UI spec copy.
+
+### T542: Bound local preview action status messages
+
+Status: done
+
+Summary:
+
+- Wrapped local preview/future/settings action status writes with `boundUiMessage`.
+- Covered subscription trial/renewal, subscription management, doctor share, health integration, community, ranking, account/auth, profile, reminder, privacy, achievement, year review, store, food photo, recording quota, and boot/reset action status paths.
+- Bounded dynamic store product title before composing product preview status text.
+- Updated canonical UI spec so local preview action status messages require fixed bounds before entering UI state, including dynamic labels.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T542`, local preview action-status spec copy, bounded dynamic store product title, and no remaining non-empty direct string/template writes to `set*ActionStatus` setters.
+
+### T541: Bound native debug downloaded-model display text
+
+Status: done
+
+Summary:
+
+- Added `downloadedModelDisplayLabel` to render downloaded native/local model rows as bounded short summaries.
+- Changed downloaded model rows to show only kind, bounded file name, and optional short checksum prefix instead of rendering full local/download URI text.
+- Bounded Llama debug output summary before storing it in UI state.
+- Updated canonical UI spec so downloaded native model lists must not directly render full download URIs or local file paths.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T541`, `downloadedModelDisplayLabel`, bounded downloaded-model row rendering, bounded Llama debug output summary, and UI spec copy.
+
+### T540: Bound UI-rendered readiness warning text
+
+Status: done
+
+Summary:
+
+- Added bounded display variants for parser model and protected backend unavailable messages before rendering readiness warnings.
+- Bounded JSX-rendered protected/backend/model warning copy in Home capture guidance, AI save confirmation, transcript review, and manual record create/confirm screens.
+- Updated canonical UI spec so dynamically composed protected-action unavailable messages require fixed bounds before either UI-state storage or direct JSX rendering.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T540`, bounded readiness display helpers, bounded JSX render sites, UI spec copy, and no remaining direct JSX interpolation of protected/model unavailable messages.
+
+### T539: Bound protected-action fail-closed status messages
+
+Status: done
+
+Summary:
+
+- Wrapped protected backend/account fail-closed status messages with `boundUiMessage` before storing them in mobile UI state.
+- Covered voice quota sync, detailed report loading, AI candidate save, record sync, record update, record delete, manual record create, subscription management sync, and recording quota sync action status paths.
+- Updated canonical UI spec so dynamically composed protected-action unavailable messages require fixed UI-state bounds and only show necessary summaries.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T539`, bounded protected-action fail-closed status writes, no remaining direct protected unavailable template strings passed into status setters, and UI spec copy.
+
+### T538: Bound mobile dev reset response before using status counts
+
+Status: done
+
+Summary:
+
+- Added `maxDevResetDeletedCountKeys` and `boundDevResetResponse` for the dev-only reset response.
+- Bounded dev reset `status`, `deleted_counts` key count, key length, and count values before using the response in UI status copy.
+- Updated the dev reset success path to run `/dev/reset-data` response through the bounded mapper before reading the records count.
+- Updated canonical UI spec so dev reset response maps require fixed bounds and UI only displays necessary summary.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T538`, `maxDevResetDeletedCountKeys`, `boundDevResetResponse`, bounded dev reset request handling, and UI spec copy.
+
+### T537: Bound mobile quota and report response objects
+
+Status: done
+
+Summary:
+
+- Added numeric clamp helpers and bounded date/time handling for quota and report response fields.
+- Added `boundVoiceQuota` to bound plan/status/referral/date fields and clamp daily/used/remaining seconds before storing voice quota state.
+- Added `boundBasicReport` to bound profile/generated time fields and clamp report counts and glucose metrics before storing backend report state.
+- Updated `loadVoiceQuota` and detailed report loading to store bounded response objects only.
+- Updated canonical UI spec so quota and report responses require fixed string bounds and numeric clamps before entering mobile state.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T537`, quota/report bound helpers, bounded `setVoiceQuota`, bounded `setBasicReport`, numeric clamp helpers, and UI spec copy.
+
+### T536: Bound mobile record and parser preview response objects
+
+Status: done
+
+Summary:
+
+- Added bounded mappers for record items, pending AI records, parser segments, rejected events, metadata, and full parse preview responses.
+- Changed parser preview handling to drop raw transcript and normalized-text echo from mobile preview state while bounding model ids, segments, candidates, rejected events, source text, reasons, confidence, and decision traces.
+- Changed record sync, AI save results, manual create results, and record update results to store bounded `RecordItem` objects.
+- Re-applied parse preview bounds after AI candidate edits, removals, and partial-save recovery.
+- Updated canonical UI spec so parser preview and record responses require fixed object-field and list bounds before entering mobile state.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T536`, parse preview/record bound helpers, bounded parser preview state writes, bounded record result writes, and UI spec copy.
+
+### T535: Bound mobile response object fields before storing state
+
+Status: done
+
+Summary:
+
+- Added `boundIdentifier`, `boundAccount`, `boundProfile`, `boundAiModelOption`, and `boundDownloadedModel` helpers.
+- Bounded account id/email/display name before storing dev-login response in mobile state.
+- Bounded profile id/account id/display name/relationship before storing profile lists.
+- Bounded AI model id/label/description and downloaded model file name/uri/md5 before storing model lists.
+- Bounded downloaded model URI before copying it into native debug path state after a model download.
+- Updated canonical UI spec so backend/native object fields require fixed client-side field-length bounds before entering mobile state.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T535`, object field bound helpers, bounded account/profile/model/downloaded-model writes, bounded downloaded URI copy, and UI spec copy.
+
+### T534: Bound mobile list state from backend and native sources
+
+Status: done
+
+Summary:
+
+- Added fixed list-size limits for mobile profiles, AI model options, downloaded model rows, and records retained in mobile state.
+- Added `boundProfiles`, `boundAiModelOptions`, `boundDownloadedModels`, and `boundRecordsList` helpers.
+- Bounded `/ai/models`, `/profiles`, native downloaded model list, `/records` sync, AI save prepends, manual create prepends, and record update state writes.
+- Updated canonical UI spec so backend/native list responses and mobile records state require fixed client-side list bounds.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T534`, list bound constants, list bound helpers, bounded backend/native state writes, and UI spec copy.
+
+### T533: Bound derived mobile display text from records and profiles
+
+Status: done
+
+Summary:
+
+- Added fixed display text limits with `boundDisplayText`, `displayTextValue`, and `displayJsonPayload`.
+- Bounded record timeline summaries, record detail rows, unknown payload JSON previews, record type fallback labels, food item lists, note tags, and numeric string display.
+- Bounded account/profile display names before rendering them in profile, community, settings, and profile-selection UI.
+- Bounded `recordPayloadToEditFields` so backend-loaded record payloads cannot initialize edit form state with unbounded strings or unbounded list joins.
+- Updated canonical UI spec so record summaries/details and profile labels require fixed display bounds.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T533`, display bounds helpers, bounded record payload display, bounded edit-field initialization, bounded profile/account display names, and UI spec copy.
+
+### T532: Bound dynamic mobile UI status messages
+
+Status: done
+
+Summary:
+
+- Added `maxUiMessageLength` and `boundUiMessage` for dynamic mobile UI status and recovery messages.
+- Updated `safeUiError` so accepted backend-style error summaries and fallback errors are bounded before reaching UI state.
+- Bounded parser recovery messages, dev reset uncertainty status, reconnect failure status, partial AI save status, native module check status, and native benchmark summary status.
+- Updated canonical UI spec so dynamic parser/backend/native status messages require fixed-length bounds and must not retain raw backend/native messages.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T532`, `maxUiMessageLength`, `boundUiMessage`, bounded `safeUiError`, bounded parser recovery/dev reset/native status, and UI spec copy.
+
+### T531: Bound store search input and complete transcript input maxLength coverage
+
+Status: done
+
+Summary:
+
+- Added `maxStoreSearchTextLength` and `boundStoreSearchText` for the mobile store preview search state.
+- Applied setter-level truncation and input-level `maxLength` to the Store search field.
+- Added the missing input-level `maxLength` to the Record screen transcript input, keeping the existing setter-level transcript bound.
+- Updated canonical UI spec so Store search remains local, bounded, and does not query commerce APIs or call AI.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, tokens, commerce API calls, cart persistence, or order writes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T531`, `boundStoreSearchText`, `maxStoreSearchTextLength`, Store search `maxLength`, no direct `onChangeText={setStoreSearchText}`, and Store search bound spec copy; source inspection confirmed the Record screen transcript input has `maxLength={maxTranscriptTextLength}`.
+
+### T530: Bound mobile date and time inputs before storing form state
+
+Status: done
+
+Summary:
+
+- Added fixed mobile date and time input length constants plus `boundDateInputText` and `boundTimeInputText` helpers.
+- Applied setter-level truncation and input-level `maxLength` to AI candidate edit date/time inputs.
+- Applied setter-level truncation and input-level `maxLength` to manual record date/time inputs and existing record edit date/time inputs.
+- Applied the same bounded date handling to History custom start/end date inputs.
+- Updated canonical UI spec so record form and History date/time inputs require fixed-length input-level and setter-level bounds.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T530`, `boundDateInputText`, `boundTimeInputText`, `maxDateInputLength`, `maxTimeInputLength`, and date/time input bound spec copy in mobile code, UI spec, task queue, and implementation log.
+
+### T529: Bound mobile record form fields before storing edit state
+
+Status: done
+
+Summary:
+
+- Added shared `recordEditFieldMaxLength` and `boundRecordEditField` helpers for mobile record form state.
+- Applied setter-level truncation to AI candidate edits, manual record creation fields, and existing record edit fields.
+- Added input-level `maxLength` to visible record form text inputs for glucose, meal, exercise, medication, note, and fallback JSON payload fields.
+- Updated canonical UI spec so manual, edit, and AI candidate form fields require both input-level and setter-level bounds before validation.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T529`, `boundRecordEditField`, `recordEditFieldMaxLength`, `maxLength={recordEditFieldMaxLength`, and form-bound spec copy in mobile code, UI spec, task queue, and implementation log.
+
+### T528: Bound transcript text before storing mobile parser input state
+
+Status: done
+
+Summary:
+
+- Changed `updateTranscriptDraft` to cap transcript text with `maxTranscriptTextLength` before storing it in mobile state.
+- Kept sample-text detection based on the bounded transcript value.
+- Added `maxLength={maxTranscriptTextLength}` to the Home quick text input and Transcript Review input.
+- Updated canonical UI spec so transcript inputs require both input-level and setter-level bounds before parser validation.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T528`, `boundedValue`, `maxLength={maxTranscriptTextLength}`, and transcript input bound spec copy in mobile code, UI spec, task queue, and implementation log.
+
+### T527: Bound Backend URL input before storing mobile request base URL
+
+Status: done
+
+Summary:
+
+- Added a `maxBackendUrlLength` constant for the mobile Backend URL setting.
+- Changed `updateApiBaseUrlDraft` to slice the incoming value before comparing, clearing state, and storing it.
+- Added `maxLength` to the Backend URL input.
+- Updated canonical UI spec so Backend URL input must have a length limit before entering mobile state or request base URL handling.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T527`, `maxBackendUrlLength`, `nextValue`, Backend URL `maxLength`, and Backend URL length-limit spec copy in mobile code, UI spec, task queue, and implementation log.
+
+### T526: Bound native debug path and URL inputs in mobile state
+
+Status: done
+
+Summary:
+
+- Added a `maxNativeDebugInputLength` constant for native debug URL/path inputs.
+- Added `boundNativeDebugInput` to cap values before storing them in mobile state.
+- Applied the cap and `maxLength` to model download URL, Whisper model path, audio path, and Llama GGUF path inputs.
+- Updated canonical UI spec so debug/native local model URL and path inputs must have length limits.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T526`, `maxNativeDebugInputLength`, `boundNativeDebugInput`, `maxLength`, and debug-input length-limit spec copy in mobile code, UI spec, task queue, and implementation log.
+
+### T525: Clear native debug paths and local model state during mobile session reset
+
+Status: done
+
+Summary:
+
+- Extended `clearMobileSessionState` to clear native debug status, Whisper model path, audio path, Llama model path, Llama debug output, model download URL, download kind, download progress, and downloaded model list.
+- Kept the existing account, profile, quota, parser model, records, report, preview, and in-flight cleanup behavior.
+- Updated canonical UI spec so Backend URL changes and local-state clears must remove native debug paths and local model state.
+- Reduced stale local-path exposure after dev reset, local clear, Backend URL change, or failed reconnect cleanup.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T525`, native debug state setters in `clearMobileSessionState`, `downloaded model list`, `本機路徑殘留`, and spec copy in mobile code, UI spec, task queue, and implementation log.
+
+### T524: Avoid retaining raw native Llama output in mobile debug UI
+
+Status: done
+
+Summary:
+
+- Changed the native Llama debug path to store a short output-length summary instead of the full constrained JSON output.
+- Updated the native Llama success status to state that the full output is not retained in the UI.
+- Kept benchmark output limited to task, duration, and output character counts.
+- Updated canonical UI spec so debug/native local model tools must not retain or display full raw model output in UI state.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T524`, `為避免保留 raw model output`, `完整輸出未保留在 UI`, raw-output spec copy, and bounded `setLlamaDebugOutput` usage in mobile code, UI spec, task queue, and implementation log.
+
+### T523: Sanitize native debug tool status errors and model download paths
+
+Status: done
+
+Summary:
+
+- Changed native downloaded-model refresh failures to use `safeUiError`.
+- Changed native model download failure, module check failure, Whisper failure, and llama.cpp failure UI messages to use `safeUiError`.
+- Replaced the model-download success message that exposed the full local URI with a generic success status.
+- Updated canonical UI spec so debug/native local model tools must not display raw native errors, full local paths, download URIs, or stack traces.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T523`, native `setNativeStatus(safeUiError(...))` usage, `模型已下載，已更新本機模型清單`, raw native error/path spec copy, and no direct native `setNativeStatus(error instanceof Error ? error.message ...)` usage.
+
+### T522: Conservatively clear local state after uncertain dev reset failure
+
+Status: done
+
+Summary:
+
+- Updated mobile dev reset failure handling to call `clearMobileSessionState`.
+- Added safe UI copy telling the user that local state was conservatively cleared and backend data should be confirmed by reconnecting.
+- Added top-level status copy for the uncertain dev reset failure path.
+- Updated canonical UI spec so failed or uncertain dev reset results must clear local state instead of retaining potentially stale test data.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T522`, `已保守清除本機狀態`, `Dev reset 未確認完成`, uncertain dev reset spec copy, and `clearMobileSessionState` in mobile code, UI spec, task queue, and implementation log.
+
+### T521: Align local clear status copy with full mobile session reset scope
+
+Status: done
+
+Summary:
+
+- Updated Settings local clear result copy to include account, profile, model list, voice quota, records, report, and AI candidate state.
+- Updated Account Security local clear result copy with the same expanded local-state scope.
+- Updated canonical UI spec for dev reset, Settings local clear, and Account Security local clear so the documented reset scope matches `clearMobileSessionState`.
+- Kept production logout boundaries explicit: local clear is still not token revoke, session-list update, or secure-storage clearing.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T521`, `模型清單、語音額度、紀錄、報表與候選狀態`, local clear spec copy, and production logout boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T520: Clear partial mobile boot state after failed backend reconnect
+
+Status: done
+
+Summary:
+
+- Updated mobile boot failure handling to clear partially loaded session state when reconnect fails after any intermediate step.
+- Cleared potentially incomplete account, quota, model, profile, record, report, preview, and in-flight state through the existing `clearMobileSessionState` helper.
+- Added safe UI status copy explaining that incomplete connection state was cleared before retry.
+- Added Account Security action status copy for failed reconnect cleanup.
+- Updated canonical UI spec so failed reconnect cannot retain half-loaded protected session/model state.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T520`, `連線未完成`, `已清除未完成連線狀態`, failed reconnect spec copy, and `clearMobileSessionState` in mobile code, UI spec, task queue, and implementation log.
+
+### T519: Clear stale AI model state when resetting mobile backend session
+
+Status: done
+
+Summary:
+
+- Extended `clearMobileSessionState` to clear backend-provided AI model options along with account, quota, records, report, preview, and in-flight state.
+- Reset STT and LLM model ids to the local defaults when clearing session state.
+- Updated Backend URL change status copy to state that old backend model-list state is cleared, not only account and record state.
+- Updated canonical UI spec so Backend URL changes and local-state clears must not preserve stale parser model selections across environments.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T519`, `setModels({ stt_models: [], llm_models: [] })`, `parser model`, stale model spec copy, and Backend URL copy in mobile code, UI spec, task queue, and implementation log.
+
+### T518: Prefer available AI models when bootstrapping mobile parser defaults
+
+Status: done
+
+Summary:
+
+- Changed mobile boot model selection to prefer the first available STT model instead of blindly selecting the first returned model.
+- Changed preferred LLM selection to choose `ollama-qwen2.5-1.5b` only when it is available, otherwise fall back to the first available LLM, then the first returned model.
+- Kept the parser submission guard from `T517` as the final fail-closed boundary if no available model exists.
+- Updated canonical UI spec so backend model-list sync must not set unavailable models as parser defaults.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T518`, `defaultStt`, available model fallback, `ollama-qwen2.5-1.5b`, and available-default spec copy in mobile code, UI spec, task queue, and implementation log.
+
+### T517: Block parser submission when selected AI models are unavailable
+
+Status: done
+
+Summary:
+
+- Added derived parser model readiness state for selected STT and LLM options.
+- Blocked parser submission when the selected model ids are missing from the loaded model list or marked unavailable.
+- Added a handler-level `parseTranscript` guard so unavailable or stale model selections do not send `/ai/parse-preview`.
+- Disabled the Transcript Review primary submit button when parser models are unavailable.
+- Updated Transcript Review cost-boundary copy and warning text to tell users to choose an available model before parsing.
+- Updated canonical UI spec so parser submission requires available STT and LLM model options at the handler level, not only disabled chips.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T517`, `parserModelReady`, `parserModelUnavailableMessage`, `請先在設定選擇可用模型`, `/ai/parse-preview`, and model-availability spec copy in mobile code, UI spec, task queue, and implementation log.
+
+### T516: Fail closed parser submit handler when protected backend is unavailable
+
+Status: done
+
+Summary:
+
+- Added a handler-level `protectedBackendReady` guard to `parseTranscript`.
+- When protected backend access is unavailable, the parser handler now updates safe UI status and recovery text, stays on Transcript Review, and does not send `/ai/parse-preview`.
+- Kept existing transcript validation and sample-text cost guards after the backend readiness check.
+- Preserved the existing button guard; this task protects indirect or future calls to the same parser handler.
+- Updated canonical UI spec so parser submission must fail closed at the handler level, not only through disabled UI.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T516`, `parseTranscript`, `protectedBackendReady`, `目前不送出 parser 請求`, `/ai/parse-preview`, and fail-closed parser spec copy in mobile code, UI spec, task queue, and implementation log.
+
+### T515: Fail closed voice quota sync on account-level protected auth readiness
+
+Status: done
+
+Summary:
+
+- Added shared account-level protected auth readiness state for quota and entitlement reads.
+- Kept profile-level `protectedBackendReady` for record/report operations while allowing quota sync during boot before active profile state is committed.
+- Added a handler-level guard to `loadVoiceQuota` so missing account id, oversized token, or unavailable production/dev auth only updates safe UI status and does not send `/subscriptions/voice-quota`.
+- Updated subscription and recording-quota sync buttons to use the same account-level protected auth boundary before calling quota sync.
+- Updated canonical UI spec so quota and entitlement syncs fail closed at the handler level, not only in UI copy.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T515`, `protectedAccountBackendReady`, `protectedAuthReady`, `目前不送出語音額度同步請求`, `/subscriptions/voice-quota`, and fail-closed quota spec copy in mobile code, UI spec, task queue, and implementation log.
+
+### T514: Fail closed protected record sync and detailed report reads when backend is unavailable
+
+Status: done
+
+Summary:
+
+- Added `protectedBackendReady` guards to mobile record sync and detailed report loading.
+- When protected backend access is unavailable, record sync now updates inline status and does not send `/records` queries.
+- When protected backend access is unavailable, detailed report loading now stays on the detailed report page, uses local loaded-record summary behavior, and does not send `/reports/basic` queries.
+- Kept existing no-account and no-profile early returns after the readiness guard for type safety.
+- Updated canonical UI spec so protected read/sync handlers fail closed, not only write handlers.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T514`, protected read/sync guards, `目前不送出紀錄同步請求`, `不送出報表請求`, `/records`, `/reports/basic`, and fail-closed spec copy in mobile code, UI spec, task queue, and implementation log.
+
+### T513: Fail closed manual update and delete record handlers when protected backend is unavailable
+
+Status: done
+
+Summary:
+
+- Added handler-level `protectedBackendReady` guards to manual record create, selected record update, and selected record delete flows.
+- Kept existing no-record and no-profile early returns separate from protected backend readiness checks.
+- When protected backend access is unavailable, handlers now update safe UI status text, stay on the relevant confirmation/edit screen, and do not send create, update, or delete requests.
+- Kept existing button guards; this task protects indirect or future calls to the same write handlers.
+- Updated canonical UI spec so manual create, edit update, and delete handlers must fail closed, not only their buttons.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T513`, protected backend write-handler guards, `目前不會送出手動紀錄建立請求`, `目前不會送出紀錄更新請求`, `目前不會送出紀錄刪除請求`, and fail-closed spec copy in mobile code, UI spec, task queue, and implementation log.
+
+### T512: Fail closed AI preview save handler when protected backend is unavailable
+
+Status: done
+
+Summary:
+
+- Added a handler-level `protectedBackendReady` guard inside `savePreviewRecords`.
+- Kept the no-candidate early return separate from backend readiness checks.
+- When protected backend access is unavailable, the handler now updates safe UI status text, stays in AI Save Confirm, and does not send `/records`.
+- Kept the UI button guard from `T511`; this task protects indirect or future calls to the same save handler.
+- Updated canonical UI spec so the save handler itself must fail closed, not only the button.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T512`, `savePreviewRecords`, `protectedBackendReady`, `目前不會送出 AI 候選儲存請求`, and fail-closed spec copy in mobile code, UI spec, task queue, and implementation log.
+
+### T511: Block AI Save Confirm on protected backend readiness
+
+Status: done
+
+Summary:
+
+- Added an `isAiSaveConfirmBlockedByBackend` state that uses the existing protected backend readiness boundary.
+- Changed AI Save Confirm submit disabling from account-only to the full protected API readiness check.
+- Added a `儲存連線狀態` inline block when backend account, active profile, or protected auth is not ready.
+- Changed the disabled submit label to `等待 backend 連線` while protected backend access is unavailable.
+- Expanded protected backend unavailable copy to cover oversized access tokens and missing production/dev auth.
+- Updated canonical UI spec so AI Save Confirm cannot send save requests until protected backend access is ready.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T511`, `isAiSaveConfirmBlockedByBackend`, `儲存連線狀態`, `等待 backend 連線`, and protected-backend readiness copy in mobile code, UI spec, task queue, and implementation log.
+
+### T510: Clarify AI Save Confirm submit label when warnings exist
+
+Status: done
+
+Summary:
+
+- Added a derived `hasAiSaveConfirmWarnings` state for low-confidence candidates or rejected preview segments.
+- Changed the AI Save Confirm primary submit label to `了解提醒並儲存候選` when warning blocks are present.
+- Kept the normal `確認儲存` label when there are no low-confidence or rejected-segment warnings.
+- Preserved the save behavior: the button still only sends current candidates and does not rerun AI.
+- Updated canonical UI spec so warning states use an explicit submit label.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T510`, `hasAiSaveConfirmWarnings`, `了解提醒並儲存候選`, and warning-submit-label copy in mobile code, UI spec, task queue, and implementation log.
+
+### T509: Add rejected-segment warning on AI Save Confirm
+
+Status: done
+
+Summary:
+
+- Added a derived `rejectedPreviewEventCount` for AI preview rejected events.
+- Reused that count in the AI Save Confirm summary grid.
+- Added a `未建立片段提醒` inline block when one or more transcript segments did not become saveable candidates.
+- Clarified that confirming save only sends current candidates and does not save rejected segments or rerun AI.
+- Updated canonical UI spec so rejected-segment AI Save Confirm states explicitly warn before save.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T509`, `rejectedPreviewEventCount`, `未建立片段提醒`, and no-rerun rejected-segment copy in mobile code, UI spec, task queue, and implementation log.
+
+### T508: Add low-confidence warning on AI Save Confirm
+
+Status: done
+
+Summary:
+
+- Added a derived `lowConfidencePreviewRecordCount` for mobile AI preview candidates.
+- Reused that count in the AI Save Confirm summary grid.
+- Added a `低信心候選提醒` inline block when one or more candidates are below the confidence threshold.
+- Guided users to return to AI Review for inspection without rerunning AI.
+- Updated canonical UI spec so low-confidence AI Save Confirm states explicitly recommend returning to confirmation before save.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T508`, `lowConfidencePreviewRecordCount`, `低信心候選提醒`, and no-rerun warning copy in mobile code, UI spec, task queue, and implementation log.
+
+### T507: Hide AI Review date card when no candidates remain
+
+Status: done
+
+Summary:
+
+- Hid the mobile AI Review `日期時間` confirmation card when the candidate list has zero records.
+- Kept the zero-candidate empty state, `返回修改`, and `手動新增` actions visible.
+- Prevented a stale date/time confirmation card from implying that there is still a savable AI candidate.
+- Updated canonical UI spec so zero-candidate AI Review shows only the empty-state recovery path.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T507`, `preview.records.length > 0`, zero-candidate AI Review, and date-card hiding copy in mobile code, UI spec, task queue, and implementation log.
+
+### T506: Hide new-entry actions while AI candidates remain
+
+Status: done
+
+Summary:
+
+- Hid the mobile Save Success `繼續手動新增`, `繼續記錄`, and `語音 / 文字` actions whenever AI candidates remain unsaved.
+- Added inline guidance telling users to handle pending AI candidates before starting another new-entry flow.
+- Kept `查看詳情` and the primary `處理未儲存候選` path available so users can inspect the saved record and return to AI Review.
+- Updated canonical UI spec so pending AI candidates suppress competing new-entry actions on Save Success.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T506`, `請先處理未儲存 AI 候選`, hidden new-entry actions, and Save Success recovery-priority copy in mobile code, UI spec, task queue, and implementation log.
+
+### T505: Prioritize return-confirm shortcut when AI candidates remain
+
+Status: done
+
+Summary:
+
+- Reordered the mobile Save Success shortcut grid so `返回確認` appears before Today, History, and Analysis whenever AI candidates remain unsaved.
+- Kept the ordinary full-save and manual-save shortcut order unchanged when no AI candidates remain.
+- Reinforced the existing primary CTA behavior by making the first shortcut match the pending-candidate recovery path.
+- Updated canonical UI spec so pending AI candidates put `返回確認` before data-browsing shortcuts.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T505`, `返回確認`, pending-candidate shortcut ordering, and Save Success shortcut copy in mobile code, UI spec, task queue, and implementation log.
+
+### T504: Keep MVP flow stepper after manual fallback with pending AI candidates
+
+Status: done
+
+Summary:
+
+- Moved Save Success pending-candidate derived state before MVP flow-step visibility is computed.
+- Kept the MVP flow stepper visible on Save Success when a manual fallback succeeds but AI candidates remain pending.
+- Preserved the existing behavior that ordinary manual-save success hides the MVP flow stepper.
+- Updated canonical UI spec so manual fallback success with pending AI candidates remains visually tied to the AI confirmation/save flow.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T504`, `showMvpFlowStepper`, `hasUnsavedPreviewRecords`, and manual fallback stepper copy in mobile code, UI spec, task queue, and implementation log.
+
+### T503: Clarify manual fallback success with pending AI candidates
+
+Status: done
+
+Summary:
+
+- Added derived mobile Save Success state for pending AI candidates after manual fallback.
+- Changed manual fallback success title to `手動儲存完成` instead of showing partial AI save wording.
+- Changed Save Success copy so manual fallback with pending AI candidates states that the manual record was created with zero parser / LLM cost while the original AI candidates remain in the confirmation flow.
+- Kept `處理未儲存候選` as the primary CTA whenever pending AI candidates remain.
+- Updated canonical UI spec so manual fallback success cannot claim there are no AI candidates left.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T503`, `hasManualFallbackWithAiCandidates`, `手動儲存完成`, and manual fallback pending-candidate copy in mobile code, UI spec, task queue, and implementation log.
+
+### T502: Return manual fallback from AI save failure to AI Review
+
+Status: done
+
+Summary:
+
+- Changed the mobile AI Save Failure `手動新增` action to open Manual Record with `aiReview` as the return target.
+- Prevented successful manual fallback from routing users back to the failure page.
+- Kept unsaved AI candidates preserved in the AI Review flow so users can continue reviewing them after manual fallback.
+- Updated canonical UI spec so manual fallback from AI Save Failure returns to AI Review rather than the error state.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T502`, `openManualRecord("aiReview")`, manual fallback return-target copy, and AI save failure copy in mobile code, UI spec, task queue, and implementation log.
+
+### T501: Keep AI save failure in save-confirm flow stage
+
+Status: done
+
+Summary:
+
+- Added an explicit header-back target for the mobile `aiSaveFailure` screen to return to `aiSaveConfirm`.
+- Mapped `aiSaveFailure` to the existing `aiSaveConfirm` MVP flow-step stage so the failure page does not appear as a new processing stage.
+- Updated canonical UI spec so AI save failure remains part of the save-confirm recovery flow.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T501`, `mvpFlowCurrentScreen`, `aiSaveFailure`, and save-confirm flow-stage copy in mobile code, UI spec, task queue, and implementation log.
+
+### T500: Add explicit AI save failure screen
+
+Status: done
+
+Summary:
+
+- Added a mobile `aiSaveFailure` screen for full AI candidate save failure when no candidate record is created.
+- Added `lastSaveErrorSummary` state so the failure page can show a safe UI error summary without exposing request bodies, payloads, transcripts, prompts, or model output.
+- Routed full save failures to `儲存未完成` with actions for `回 AI 確認`, `手動新增`, and `返回儲存確認`.
+- Kept failed candidates in the existing preview confirmation state and kept retry manual: no automatic retry, parser rerun, or AI call is triggered.
+- Updated canonical UI spec so full AI save failure has an explicit page instead of only a status message.
+- Preserved production and cost boundaries: no backend endpoint changes, automatic retries, parser behavior changes, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T500`, `aiSaveFailure`, `儲存未完成`, no-automatic-retry boundary copy, and safe-error copy in mobile code, UI spec, task queue, and implementation log.
+
+### T499: Prioritize unsaved AI candidates after partial save
+
+Status: done
+
+Summary:
+
+- Changed the mobile Save Success primary CTA to `處理未儲存候選` when partial AI save success leaves unsaved candidate records.
+- Routed that primary CTA back to AI Review so users can review/edit/save remaining candidates.
+- Kept `回今日紀錄` as the primary CTA only for full-save or manual-save success.
+- Updated canonical UI spec so partial-save users are guided back to pending AI candidates rather than away from them.
+- Preserved production and cost boundaries: no backend calls, save retry calls, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T499`, `處理未儲存候選`, partial save primary CTA, and no-retry boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T498: Clarify partial AI save success title
+
+Status: done
+
+Summary:
+
+- Changed the mobile Save Success title to show `部分儲存完成` when AI-confirmed saving leaves unsaved candidate records.
+- Kept the full-success title as `儲存完成` when no unsaved AI candidates remain.
+- Updated canonical UI spec so partial AI save results cannot present as a fully completed save.
+- Preserved production and cost boundaries: no backend calls, save retry calls, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T498`, `部分儲存完成`, partial AI save success, and no-retry boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T497: Clarify AI Review primary CTA before save
+
+Status: done
+
+Summary:
+
+- Changed the mobile AI Review primary CTA from `確認儲存` to `進入儲存確認`.
+- Clarified that AI Review only routes to the explicit AI Save Confirm screen and does not directly write records.
+- Updated canonical UI spec so the AI Review CTA label matches the two-step save flow.
+- Preserved production and cost boundaries: no backend calls, save calls, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T497`, `進入儲存確認`, AI Review CTA, and two-step save boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T496: Add Home recording preview result branch
+
+Status: done
+
+Summary:
+
+- Added a Home-screen `錄音結束` result card after hold-to-record preview ends.
+- Added explicit Home CTAs for `重新錄音` and `使用文字輸入` / `再錄一次`, matching the existing Record screen recovery pattern.
+- Kept the recorder as UI preview only: no audio capture, STT call, parser call, backend call, quota write, or AI call is triggered.
+- Updated canonical UI spec so Home recording preview release shows an explicit result branch without implying real transcription.
+- Preserved production and cost boundaries: no backend calls, STT calls, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T496`, Home recording preview result branch, `錄音結束`, and no-STT boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T495: Convert Subscription trial notice banner to inline block
+
+Status: done
+
+Summary:
+
+- Changed the mobile Subscription trial notice from an `infoBanner` container to an open inline block.
+- Added a `試用付款邊界` label so trial/payment guidance is readable without adding another white card above the payment-disconnected block.
+- Kept Subscription CTA behavior as preview-only: no trial start, payment, entitlement update, backend call, or receipt validation is triggered.
+- Updated canonical UI spec so Subscription trial notice guidance uses inline copy rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend calls, payment calls, entitlement writes, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T495`, `試用付款邊界`, Subscription trial notice, and inline-block boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T494: Convert Analysis sync-limit banner to inline block
+
+Status: done
+
+Summary:
+
+- Changed the mobile Analysis sync-limit message from an `infoBanner` container to an open inline block.
+- Added an `分析同步邊界` label so bounded-analysis guidance is readable without adding another white card below the analysis boundary checklist.
+- Kept existing detailed-report CTA behavior intact.
+- Updated canonical UI spec so Analysis sync-limit guidance uses inline copy rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend calls, report calls, pagination calls, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T494`, `分析同步邊界`, Analysis sync-limit, and inline-block boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T493: Convert History empty and sync-limit banners to inline blocks
+
+Status: done
+
+Summary:
+
+- Changed the mobile History empty-record message from an `infoBanner` container to an open inline block.
+- Added a `歷史資料狀態` label so no-real-record guidance is readable without adding another white card above the empty state.
+- Changed the mobile History sync-limit message from an `infoBanner` container to an open inline block with a `歷史同步邊界` label.
+- Updated canonical UI spec so History empty-record and sync-limit guidance uses inline copy rather than banner cards or extra white panels.
+- Preserved production and cost boundaries: no backend calls, pagination calls, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T493`, `歷史資料狀態`, `歷史同步邊界`, History empty/sync-limit, and inline-block boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T492: Convert Ranking action status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Ranking status/opt-in action feedback from an `infoBanner` container to an open inline status block.
+- Added a `排行榜整合狀態` label so preview-only ranking results are readable without adding another white card.
+- Kept Ranking actions as local no-op status updates only: no ranking stats, streak upload, public comparison, backend call, or AI call is created.
+- Updated canonical UI spec so Ranking action feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend calls, external integration calls, share/grant writes, ranking writes, import jobs, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T492`, `排行榜整合狀態`, Ranking action status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T491: Convert Community action status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Community post/privacy action feedback from an `infoBanner` container to an open inline status block.
+- Added a `社群整合狀態` label so preview-only community results are readable without adding another white card.
+- Kept Community actions as local no-op status updates only: no post, comment, public health record, backend call, moderation job, or AI call is created.
+- Updated canonical UI spec so Community action feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend calls, external integration calls, share/grant writes, ranking writes, import jobs, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T491`, `社群整合狀態`, Community action status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T490: Convert Health Integration action status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Health Integration platform/meter action feedback from an `infoBanner` container to an open inline status block.
+- Added a `健康串接整合狀態` label so preview-only external-integration results are readable without adding another white card.
+- Kept Health Integration actions as local no-op status updates only: no permission request, external health read, BLE scan, import batch, backend call, record write, or AI call is created.
+- Updated canonical UI spec so Health Integration action feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend calls, external integration calls, share/grant writes, ranking writes, import jobs, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T490`, `健康串接整合狀態`, Health Integration action status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T489: Convert Health Integration external-data banner to inline block
+
+Status: done
+
+Summary:
+
+- Changed the mobile Health Integration `外部資料邊界` message from an `infoBanner` container to an open inline block.
+- Added a `外部資料邊界` label so external-source overwrite and dedupe guidance is readable without adding another white card.
+- Kept Health Integration preview actions, return routing, and no-op integration behavior intact.
+- Updated canonical UI spec so Health Integration external-data guidance uses inline copy rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend calls, external integration calls, share/grant writes, ranking writes, import jobs, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T489`, `外部資料邊界`, Health Integration external data, and inline-block boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T488: Convert Doctor Share action status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Doctor Share authorization/report action feedback from an `infoBanner` container to an open inline status block.
+- Added a `醫師合作整合狀態` label so preview-only action results are readable without adding another white card.
+- Kept Doctor Share actions as local no-op status updates only: no profile grant, share token, QR code, PDF, doctor session, backend call, or AI call is created.
+- Updated canonical UI spec so Doctor Share action feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend calls, external integration calls, share/grant writes, ranking writes, import jobs, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T488`, `醫師合作整合狀態`, Doctor Share action status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T487: Convert Doctor Share backend-foundation banner to inline block
+
+Status: done
+
+Summary:
+
+- Changed the mobile Doctor Share `後端基礎邊界` message from an `infoBanner` container to an open inline block.
+- Added a `後端基礎邊界` label so doctor-sharing backend readiness guidance is readable without adding another white card.
+- Kept existing Doctor Share preview actions, return routing, and no-op integration behavior intact.
+- Updated canonical UI spec so Doctor Share backend-foundation guidance uses inline copy rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend calls, external integration calls, share/grant writes, ranking writes, import jobs, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T487`, `後端基礎邊界`, Doctor Share backend foundation, and inline-block boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T486: Convert Future Modules MVP scope banner to inline block
+
+Status: done
+
+Summary:
+
+- Changed the mobile Future Modules `MVP 範圍邊界` message from an `infoBanner` container to an open inline block.
+- Added a `MVP 範圍邊界` label so scope guidance is readable without adding another white card.
+- Kept existing future-module navigation, preview routing, and integration-status behavior intact.
+- Updated canonical UI spec so the Future Modules MVP scope note uses inline copy rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend calls, external integration calls, share/grant writes, ranking writes, import jobs, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T486`, `MVP 範圍邊界`, Future Modules MVP scope, and inline-block boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T485: Convert Future Module detail implementation-order banner to inline block
+
+Status: done
+
+Summary:
+
+- Changed the mobile Future Module Detail `實作順序建議` message from an `infoBanner` container to an open inline block.
+- Added a `建議實作順序` label so implementation sequencing guidance is readable without adding another white card.
+- Updated canonical UI spec so Future Module Detail implementation-order guidance uses inline copy rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend calls, external integration calls, share/grant writes, ranking writes, import jobs, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T485`, `建議實作順序`, Future Module Detail, and inline-block boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T484: Convert Future Modules integration status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Future Modules list integration feedback from an `infoBanner` container to an open inline status block.
+- Added a `未來模組整合狀態` label so reserved-module readiness feedback is readable without adding another white card.
+- Kept existing future-module navigation and detail-page behavior intact.
+- Updated canonical UI spec so Future Modules integration feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend calls, external integration calls, share/grant writes, ranking writes, import jobs, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T484`, `未來模組整合狀態`, Future Modules status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T483: Convert Subscription Management payment status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Subscription Management `查看付款整合狀態` / `同步狀態` result from an `infoBanner` container to an open inline status block.
+- Added a `付款整合狀態` label so payment and entitlement readiness feedback is readable without adding another white card.
+- Kept the existing backend quota / entitlement sync behavior intact when an account is connected; unauthenticated state still only shows local status text.
+- Updated canonical UI spec so Subscription Management payment/sync feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no payment deep links, trial creation, receipt validation, webhook handling, entitlement writes, quota algorithm changes, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T483`, `付款整合狀態`, Subscription Management status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T482: Convert Subscription trial integration status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Subscription page `查看試用整合狀態` result from an `infoBanner` container to an open inline status block.
+- Added a `試用整合狀態` label so trial/payment readiness feedback is readable without adding another white card.
+- Updated canonical UI spec so Subscription trial-integration feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no trial creation, payment flow, receipt validation, entitlement writes, quota changes, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T482`, `試用整合狀態`, Subscription trial status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T481: Convert Settings local clear result banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Settings page `清除本機狀態` result from an `infoBanner` container to an open inline status block.
+- Added a `本機狀態結果` label so local session-clear feedback is consistent with Account Security.
+- Updated canonical UI spec so Settings local-clear feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no auth provider calls, session creation, token persistence, logout API calls, refresh-token revocation, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T481`, Settings local-clear status, `本機狀態結果`, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T480: Convert Privacy integration status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Privacy Settings `查看隱私整合狀態` result from an `infoBanner` container to an open inline status block.
+- Added a `隱私整合狀態` label so privacy readiness feedback is readable without adding another white card.
+- Updated canonical UI spec so Privacy Settings integration feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no preference writes, grant creation, export/delete workflow calls, share revoke calls, API calls, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T480`, `隱私整合狀態`, Privacy status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T479: Convert Reminder integration status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Reminder Settings `查看通知整合狀態` result from an `infoBanner` container to an open inline status block.
+- Added a `通知整合狀態` label so reminder readiness feedback is readable without adding another white card.
+- Updated canonical UI spec so Reminder Settings integration feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no notification permission request, background scheduling, reminder table writes, API calls, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T479`, `通知整合狀態`, Reminder status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T478: Convert Recording Quota sync status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Recording Quota `同步額度` result from an `infoBanner` container to an open inline status block.
+- Added an `額度同步狀態` label so quota sync feedback is readable without adding another white card.
+- Kept the existing backend quota sync behavior intact when an account is connected; unauthenticated state still only shows local status text.
+- Updated canonical UI spec so Recording Quota sync feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no parser calls, AI calls, LLM calls, audio uploads, transcript storage, quota algorithm changes, entitlement changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T478`, `額度同步狀態`, Recording Quota sync status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T477: Convert Profile edit integration status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Profile Settings `查看編輯整合狀態` result from an `infoBanner` container to an open inline status block.
+- Added a `編輯整合狀態` label so profile-edit readiness feedback is readable without adding another white card.
+- Updated canonical UI spec so Profile Settings edit-integration feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no profile update API calls, local profile drafts, auth provider calls, permission writes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T477`, `編輯整合狀態`, Profile edit status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T476: Convert Account Security local clear result banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Account Security `清除本機狀態` result from an `infoBanner` container to an open inline status block.
+- Added a `本機狀態結果` label so local session-clear feedback is readable without adding another white card.
+- Updated canonical UI spec so Account Security local-clear feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no auth provider calls, session creation, token persistence, logout API calls, refresh-token revocation, parser behavior changes, AI calls, LLM calls, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T476`, `本機狀態結果`, Account Security local-clear status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T475: Convert Food Photo action status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Food Photo action response from an `infoBanner` container to an open inline status block.
+- Added a `拍照整合狀態` label so upload/retake integration feedback is readable without adding another white card.
+- Updated canonical UI spec so Food Photo action feedback uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no camera access, image reads/uploads, Vision calls, nutrition estimation, record writes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T475`, `拍照整合狀態`, Food Photo action status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T474: Convert Store product integration status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Store product-arrow response from an `infoBanner` container to an open inline status block.
+- Added a `商品整合狀態` label so product preview click feedback is readable without adding another white card.
+- Updated canonical UI spec so Store product integration status uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no product API queries, cart persistence, order writes, payment processing, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T474`, `商品整合狀態`, Store product status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T473: Convert Year Review share integration status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Year Review `查看分享整合狀態` response from an `infoBanner` container to an open inline status block.
+- Added a `分享整合狀態` label so the post-click state stays readable without adding another white card.
+- Updated canonical UI spec so Year Review share integration status uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no yearly summary writes, share image generation, share permission handling, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T473`, `分享整合狀態`, Year Review status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T472: Convert Achievement integration status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Achievement `查看徽章整合狀態` response from an `infoBanner` container to an open inline status block.
+- Added a `徽章整合狀態` label so the post-click state is scannable without adding another white card.
+- Updated canonical UI spec so Achievement integration status uses inline status rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no achievement persistence, backend synchronization, ranking updates, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T472`, `徽章整合狀態`, Achievement status, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T471: Convert Food Photo empty AI result card to inline boundary
+
+Status: done
+
+Summary:
+
+- Changed the mobile Food Photo `AI 分析結果` empty state from nested `highlightCard` + `emptyStateCard` containers to an open inline result boundary.
+- Kept upload area, disabled/current preview action copy, and Food Photo return behavior intact.
+- Clarified no mock nutrition values, no record save without real Vision result plus user confirmation.
+- Updated canonical UI spec so Vision-not-wired empty result uses inline boundary; real result may use a single result card after integration.
+- Preserved production and cost boundaries: no camera access, image reads/uploads, Vision calls, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T471`, Food Photo, `AI 分析結果`, `inline result boundary`, and no-mock Vision boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T470: Convert Year Review boundary banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Year Review `年度回顧邊界` message from an `infoBanner` container to an open inline status block.
+- Kept the yearly overview hero, statistics cards, highlights card, encouragement badge card, and share-integration CTA intact.
+- Updated the canonical UI spec so Year Review boundary copy uses inline status text rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend endpoint changes, yearly summary writes, share image generation, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T470`, `年度回顧邊界`, Year Review, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T469: Convert AI candidate remove scope card to inline boundary block
+
+Status: done
+
+Summary:
+
+- Changed the mobile AI Candidate Remove Confirmation `移除範圍` section from a `highlightCard` container to an open inline boundary block.
+- Kept the candidate record card, cancel action, and destructive confirm action intact.
+- Updated the canonical UI spec so AI candidate remove scope copy uses inline boundary text rather than a white card or extra panel.
+- Preserved production and cost boundaries: no backend endpoint changes, delete API calls, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T469`, `移除範圍`, AI candidate remove, and inline boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T468: Convert Detailed Report notes card to inline boundary block
+
+Status: done
+
+Summary:
+
+- Changed the mobile Detailed Report `報告備註` section from a `highlightCard` container to an open inline boundary block.
+- Kept report source status, report summary card, boundary metric grid, metric cards, no-data CTAs, and report note content intact.
+- Updated the canonical UI spec so Detailed Report notes use inline boundary copy rather than a white card or extra panel.
+- Preserved production and cost boundaries: no backend endpoint changes, report query behavior changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T468`, `報告備註`, Detailed Report, and inline boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T467: Standardize History and Analysis records status inline blocks
+
+Status: done
+
+Summary:
+
+- Changed the mobile History screen `recordsStatus` text into a labeled `紀錄同步狀態` inline status block.
+- Changed the mobile Analysis screen `recordsStatus` text into the same labeled inline status block.
+- Kept history filters, custom date controls, grouped records, analysis range tabs, charts, metrics, and CTAs intact.
+- Updated the canonical UI spec so History and Analysis record-sync status uses labeled inline status text rather than banner cards or extra white panels.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T467`, History / Analysis `紀錄同步狀態`, and inline-status boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T466: Convert Delete and Update Success result banners to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Delete Success `刪除結果` message from an `infoBanner` container to an open inline status block.
+- Changed the mobile Update Success `更新結果` message from an `infoBanner` container to an open inline status block.
+- Kept success heroes, post-action boundary checklists, destination cards, and action buttons intact.
+- Updated the canonical UI spec so Delete Success and Update Success result copy use inline status text rather than banner cards or extra white panels.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T466`, `刪除結果`, `更新結果`, Delete Success, Update Success, and banner-card boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T465: Convert Today records status banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Today screen `紀錄同步狀態` / `recordsStatus` message from an `infoBanner` container to an open inline status block.
+- Kept the Today summary pill, quick record section, record cards, empty states, and analysis CTA intact.
+- Updated the canonical UI spec so Today record-sync status uses inline status text rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T465`, `紀錄同步狀態`, Today records status, and banner-card boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T464: Convert Transcript Review fixed guidance banner to inline guidance
+
+Status: done
+
+Summary:
+
+- Changed the mobile Transcript Review fixed `整理前提示` message from an `infoBanner` container to an open inline guidance block.
+- Kept parser recovery as an actionable state area because it includes a manual-entry CTA after parse failure.
+- Updated the canonical UI spec so Transcript Review fixed pre-parse guidance uses inline guidance instead of a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T464`, `整理前提示`, Transcript Review, and inline guidance boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T463: Convert Save Success result banner to inline status
+
+Status: done
+
+Summary:
+
+- Changed the mobile Save Success `儲存結果` message from an `infoBanner` container to an open inline status block.
+- Kept the success hero, post-save boundary checklist, and destination grid intact while reducing the nested panel feel in the final MVP record-flow step.
+- Clarified in the canonical UI spec that Save Success result copy should use inline status text rather than a banner card or extra white panel.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T463`, `儲存結果`, Save Success, and banner-card boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T462: Expand AI Review cost boundary into inline checklist
+
+Status: done
+
+Summary:
+
+- Expanded the mobile AI Review `成本邊界` copy from a single inline note into a concrete inline checklist.
+- Clarified that AI Review only shows parser-returned candidates; editing, removing, or entering save confirmation does not call AI again.
+- Clarified that rejected / uncreated segments do not auto-save or auto-rerun parser, and returning to edit only creates new parser / AI cost after the user presses `下一步整理` again.
+- Added explicit memory boundary copy that mobile does not retain raw prompts, raw model output, or model debug traces.
+- Updated the canonical UI spec for AI Review cost-boundary checklist behavior.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T462`, AI Review cost-boundary checklist, rejected segment, rerun, and raw model output copy in mobile code, UI spec, task queue, and implementation log.
+
+### T461: Convert Record setup banner to inline cost and memory checklist
+
+Status: done
+
+Summary:
+
+- Changed the dedicated mobile Record screen `本次整理設定` block from a banner/card into an inline checklist.
+- Added explicit cost and memory boundaries: manual create avoids AI parser, text parse sends only the current transcript once, no database write before confirmation, and mobile does not store raw prompts, raw model output, or model debug traces.
+- Kept dynamic backend readiness copy so parser submission stays disabled when protected backend state is unavailable.
+- Updated the canonical UI spec so Record / Quick Record setup boundaries use inline checklist copy instead of banner cards.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T461`, `本次整理設定`, inline checklist, and raw prompt/model output boundary copy in mobile code, UI spec, task queue, and implementation log.
+
+### T460: Add production auth readiness checklist
+
+Status: done
+
+Summary:
+
+- Added an inline Account Security `正式 auth readiness` checklist for Provider, Backend verify, Secure storage, Session revoke, and Audit readiness.
+- Kept the readiness checklist non-operational: it only shows production-auth gaps and does not call providers, create sessions, persist tokens, revoke sessions, or call AI.
+- Updated the canonical UI spec to require the readiness checklist and its PHI-safe / no-token logging boundary.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, token persistence, refresh-token handling, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T460`, `productionAuthReadinessRows`, `正式 auth readiness`, and readiness row labels in mobile code, UI spec, task queue, and implementation log.
+
+### T459: Surface mobile access-token storage and guard status
+
+Status: done
+
+Summary:
+
+- Added explicit Account Security statuses for access-token storage mode and oversized-token guard state.
+- Changed the protected API readiness check to use the trimmed token and reject oversized access tokens for Bearer auth readiness.
+- Updated the protected request header helper so oversized access tokens return no protected header and do not fallback to dev `X-Account-Id`.
+- Made oversized access tokens show as `token 過長` instead of looking like a normal dev-auth fallback header.
+- Clarified in the Account Security boundary copy that mobile currently does not persist access tokens and that empty or over-4096-character tokens do not produce Authorization headers.
+- Updated the canonical UI spec for the token storage and token guard rows.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, token persistence, refresh-token handling, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- Targeted grep confirmed `T459`, token storage, token guard, and `4096` references in mobile code, UI spec, task queue, and implementation log.
+
+### T458: Add mobile protected auth header abstraction
+
+Status: done
+
+Summary:
+
+- Changed the mobile protected request header helper to prefer future `Authorization: Bearer <access_token>` headers and only fallback to `X-Account-Id` when local dev auth is enabled.
+- Added bounded access-token header handling without wiring provider login, token persistence, refresh, revoke, or secure storage.
+- Cleared the placeholder access-token state when mobile session state is cleared.
+- Added Account Security UI status for the active protected API header mode: `Bearer token`, `Dev X-Account-Id`, or `未可用`.
+- Updated the canonical UI spec for the production-auth header boundary.
+- Preserved current local dev behavior while preparing a production-token integration point.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, token storage, refresh-token handling, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- `rg -n "protectedRequestHeaders\\(" mobile/App.tsx` confirmed all protected mobile call sites use the new helper signature.
+
+### T457: Align UI generation prompt with inline boundary rule
+
+Status: done
+
+Summary:
+
+- Updated the UI implementation prompt template to explicitly keep preview-only, privacy, cost, entitlement, and integration-status explanations as open inline boundary text.
+- Removed prompt wording that asked for payment, commerce, or Vision preview banners.
+- Clarified that rounded cards should be reserved for real scannable objects such as records, metrics, product rows, forms, charts, and action surfaces.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T456: Remove unused banner and warning card styles
+
+Status: done
+
+Summary:
+
+- Removed unused `warningCard` and `previewModeBanner` style definitions from the mobile app after all boundary/status copy was moved to inline sections.
+- Verified there are no remaining `styles.warningCard` or `styles.previewModeBanner` usages in `mobile/App.tsx`.
+- Preserved the small `previewModeBadge` style for inline labels without reintroducing panel containers.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- `rg -n "warningCard|previewModeBanner" mobile/App.tsx` returned no matches.
+
+### T455: Convert core confirmation and report banners to inline sections
+
+Status: done
+
+Summary:
+
+- Changed AI Review `成本邊界`, AI Save Confirmation `儲存前確認`, AI Candidate Remove `只會移除待確認候選`, Manual Record Confirmation `儲存前確認`, Delete Confirmation `危險操作`, Analysis no-data `尚無資料`, and Detailed Report source boundary from banner/warning cards to inline boundary sections.
+- Kept real scannable cards for candidate records, confirmation summaries, selected record summaries, charts, metrics, and report summaries.
+- Updated the canonical UI spec so core confirmation/report boundary copy stays inline instead of adding nested panel layers.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T454: Convert retention, store, and food-photo preview banners to inline sections
+
+Status: done
+
+Summary:
+
+- Changed Achievements `本機預覽`, Year Review `年度預覽`, Store `商城預覽`, and Food Photo `Vision 未串接` from preview banners to inline boundary sections.
+- Kept real scannable cards for achievements, annual summary metrics, product rows, upload area, and AI result empty state.
+- Updated the canonical UI spec so retention, commerce, and food-photo preview copy stays inline instead of adding nested panel layers.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, image reads, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T453: Convert future module preview banners to inline sections
+
+Status: done
+
+Summary:
+
+- Changed Future Module Detail `預留架構` from a preview banner to an inline boundary section.
+- Changed Doctor Share `授權未啟用`, Health Integration `串接未啟用`, Community `社群未啟用`, and Ranking `排名未啟用` from preview banners to inline boundary sections.
+- Kept real scannable cards for module status, profile/context hero surfaces, source/sync/ranking boundary metrics, and action rows.
+- Updated the canonical UI spec so future-module preview copy stays inline instead of adding nested panel layers.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T452: Convert reminder and privacy preview banners to inline sections
+
+Status: done
+
+Summary:
+
+- Changed Reminder Settings `通知預覽` from a preview banner to an inline boundary section.
+- Changed Privacy Settings `隱私控制預覽` from a preview banner to an inline boundary section.
+- Kept real scannable cards for reminder rows, privacy status metrics, and reserved privacy control rows.
+- Updated the canonical UI spec so reminder/privacy preview copy stays inline instead of adding nested panel layers.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T451: Convert settings subpage boundary cards to inline sections
+
+Status: done
+
+Summary:
+
+- Changed Account Security `目前不做的事` from a warning card to an inline boundary section.
+- Changed Profile Settings `目前不做的事` from a warning card to an inline boundary section.
+- Changed Recording Quota `額度控制` and `資料與成本邊界` from banner/warning cards to inline boundary sections.
+- Kept real scannable cards for account/profile summaries, provider/session rows, quota bar, and status metric cards.
+- Updated the canonical UI spec so settings subpage boundary copy stays inline instead of adding nested panel layers.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T450: Convert subscription management status boundaries to inline sections
+
+Status: done
+
+Summary:
+
+- Changed Subscription Management `目前不做的事` from a warning card to an inline boundary section.
+- Changed Membership Status `續訂未串接` from a banner card to an inline boundary section.
+- Kept real scannable cards for current membership status, subscription management rows, membership feature rows, and annual price.
+- Updated the canonical UI spec so subscription-management and membership-status boundary copy stays inline instead of adding nested panel layers.
+- Preserved production and entitlement safety: these pages still do not open payment, create trials, renew subscriptions, change entitlements, or write subscription state.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T449: Convert Subscription payment boundary to inline section
+
+Status: done
+
+Summary:
+
+- Changed the Subscription page `付款未串接` explanation from a banner card to an inline boundary section.
+- Kept the real scannable cards for subscription status, voice quota, plan options, and feature comparison.
+- Updated the canonical UI spec so payment-not-connected copy stays inline and does not add another panel near the top of the paywall.
+- Preserved production and entitlement safety: CTA behavior remains preview-only and does not create trials, collect payments, change entitlements, or write subscription state.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T448: Convert Settings advanced entry to inline section
+
+Status: done
+
+Summary:
+
+- Changed the Settings advanced-settings intro from a banner card to an inline section.
+- Kept Backend URL, profile switching, model selection, Dev Client, and local model tooling collapsed behind the existing explicit toggle.
+- Preserved the single developer settings container only for the expanded form controls, reducing stacked panel feel on Settings.
+- Updated the canonical UI spec so the advanced settings entry stays inline and only actual form controls use a container.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T447: Refine Function Menu centered secondary action and dev reset inline warning
+
+Status: done
+
+Summary:
+
+- Changed the Function Menu `查看更多功能` action from a text-only pill with arrow to a centered icon + text pill.
+- Changed the dev-only reset area from a warning-card style box to an inline warning section with a top divider, reducing the nested-panel feel at the bottom of the menu.
+- Kept the dev-only `(dev) 重置所有資料` button hidden unless mobile dev auth is enabled and documented that the production entry must be removed.
+- Updated the canonical UI spec for Function Menu secondary action and dev reset layout.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T446: Clarify record detail read-only boundary
+
+Status: done
+
+Summary:
+
+- Added a read-only boundary inline checklist to the mobile Record Detail screen.
+- Clarified that Record Detail only shows the currently loaded single record, does not query backend for full history, does not call parser / AI / LLM, and does not retain raw transcript, raw prompt, raw model output, or model debug trace.
+- Clarified that edit and delete route into their own confirmation/edit flows instead of writing directly from Record Detail.
+- Updated the canonical UI spec for Record Detail read-only and cost boundaries.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T445: Add post-update and post-delete memory boundaries
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added Delete Success and Update Success inline checklists for post-action memory, retry, sync, and AI-cost boundaries.
+- Delete Success now states that no local undo copy is kept, no parser / AI / LLM calls occur, no raw AI artifacts are retained, failures are not auto-retried, and Today / History navigation uses bounded synced records.
+- Update Success now states that the page reflects the updated selected record and local list, no parser / AI / LLM calls occur, no raw AI artifacts are retained, failures are not auto-retried, and Today / History / Analysis navigation uses bounded synced records.
+- Updated the canonical UI spec for Delete Success and Update Success post-action boundaries.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T444: Clarify delete confirmation memory boundary
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Changed the Delete Confirmation pre-submit checklist from a card to an inline checklist to avoid nested-panel layout.
+- Added explicit delete memory-boundary copy: deletion sends one delete request, does not batch-load full history, does not call parser / AI / LLM, and does not attach raw transcripts, raw prompts, raw model output, or model debug traces.
+- Clarified that the delete button is disabled while deleting and failures are not automatically retried.
+- Updated the canonical UI spec for Delete Confirmation memory-boundary behavior.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T443: Clarify record edit update memory boundary
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added an inline update-boundary checklist to the mobile Record Edit screen.
+- The checklist states that editing updates only the selected record, sends only the confirmed structured payload, does not batch-load full history, does not call parser / AI / LLM, and does not attach raw transcripts, raw prompts, raw model output, or model debug traces.
+- Clarified that the save button is disabled while updating and failures are not automatically retried.
+- Updated the canonical UI spec for Record Edit memory-boundary behavior.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T442: Clarify manual record confirmation memory boundary
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Changed the Manual Record Confirmation pre-submit checklist from a card to an inline checklist to avoid nested-panel layout.
+- Added explicit 0-cost and memory-boundary copy: manual submit sends one payload, does not batch-load full history, and does not attach raw transcripts, raw prompts, raw model output, or model debug traces.
+- Clarified that the create button is disabled while creating and failures are not automatically retried.
+- Updated the canonical UI spec for Manual Record Confirmation memory-boundary behavior.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T441: Add save success memory and retry boundary
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a Save Success inline checklist that explains post-save memory, retry, and sync boundaries.
+- The checklist distinguishes manual saves from AI saves, states that AI raw text / raw prompt / raw model output / debug traces are not retained on the success page, and clarifies that unsaved candidates are not auto-retried.
+- Added the bounded mobile record sync reminder to Save Success navigation: Today / History / Analysis continue to use already synced records and the latest-record limit.
+- Updated the canonical UI spec for Save Success post-save boundary behavior.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T440: Clarify AI save confirmation memory boundary
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Changed the AI Save Confirmation pre-submit checklist from a card to an inline checklist to avoid nested-panel layout.
+- Added explicit save batch and memory-boundary copy: only current candidate payloads are submitted, full history is not loaded, and model debug traces are not attached.
+- Kept the save flow confirmation-first and cost-safe: no rejected segments are saved, no AI/parser retry is triggered, and backend validation/audit remains authoritative.
+- Updated the canonical UI spec for AI Save Confirmation memory-boundary behavior.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T439: Surface parser cost boundaries in core confirmation flow
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a low-cost parser boundary checklist to the mobile Text Confirmation screen.
+- The checklist states that blank, oversized, or sample text is not sent to parser; only the current text is submitted once; manual entry avoids parser cost; and backend-unready states block parser submission.
+- Added an AI Review cost-boundary banner clarifying that editing, removing, or moving toward save confirmation does not re-call AI.
+- Updated the canonical UI spec for Text Confirmation and AI Review cost-boundary behavior.
+- Preserved production and cost boundaries: no backend endpoint changes, parser behavior changes, AI calls, LLM calls, storage changes, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T438: Add session management preview to Account Security
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added device and session management preview rows to the mobile Account Security screen.
+- The preview covers current device, other devices, and sign-out-all-devices readiness without reading session lists or revoking tokens.
+- Session preview taps only show integration status and do not call logout APIs, auth providers, parser, AI, or LLM.
+- Documented the preview behavior in the canonical UI spec so device/session management has a production UI location while remaining clearly unwired.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, token reads, token storage, token revoke calls, session writes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T437: Add production auth provider preview to Account Security
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added Apple, Google, and Email login provider preview rows to the mobile Account Security screen.
+- Provider preview taps only show integration status and do not open auth providers, create sessions, save tokens, call backend login, call parser, call AI, or call LLM.
+- Documented the provider preview behavior in the canonical UI spec so production auth has a visible future UI location without implying it is wired.
+- Preserved production and cost boundaries: no backend endpoint changes, auth provider calls, token storage, session writes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T436: Convert dense preview requirement cards to inline checklists
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Changed future module requirement blocks from nested white cards to open inline checklists.
+- Applied the same inline checklist treatment to dense preview pages for doctor sharing, health integrations, community, ranking, subscription, auth/profile/quota/reminder/privacy settings, tutorial safety notes, store checkout requirements, and Food Photo prerequisites.
+- Kept true scan targets as cards: status cards, stat grids, product cards, upload/result cards, record cards, and confirmation cards.
+- Updated the canonical UI spec so dense preview pages use inline checklists for prerequisites and only use cards for interactive or scannable objects.
+- Preserved production and cost boundaries: no backend endpoint changes, parser calls, AI calls, LLM calls, storage changes, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T435: Reduce nested panel feel on History and Analysis
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Changed History and Basic Analysis boundary explanation sections from white card blocks to open inline information blocks.
+- Removed the extra bordered background from the History custom date editor so only the actual date inputs keep their own fields.
+- Preserved single-layer cards for real scan targets: history rows, chart, metric cards, menu items, and active controls.
+- Updated the canonical UI spec to clarify that dense pages should avoid wrapping controls or explanatory text in large white panels.
+- Preserved production and cost boundaries: no backend endpoint changes, parser calls, AI calls, LLM calls, storage changes, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T434: Clarify Food Photo disabled action labels
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Renamed the Food Photo disabled `重新拍攝` action to `查看重新拍攝整合狀態`.
+- Kept Food Photo in a future-module state without actionable camera, upload, retake, or add-to-record behavior.
+- Updated the canonical UI spec so the MVP / Vision-not-wired Food Photo screen must not show actionable `加入紀錄` or `重新拍攝` buttons.
+- Documented that those real actions should only appear after Vision, image permissions, analysis results, and user confirmation are implemented.
+- Preserved production and cost boundaries: no backend endpoint changes, image uploads, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T433: Add CTAs to Detailed Report no-data state
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added explicit next-step CTAs to the Detailed Report no-data state.
+- Detailed Report now offers `手動新增` and `回今日記錄` when there are no reportable loaded records.
+- Kept the no-data report state free of fixed mock health numbers.
+- Updated the canonical UI spec so Detailed Report empty states include actionable navigation to the core record flow.
+- Preserved production and cost boundaries: no backend endpoint changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T432: Add CTAs to Basic Analysis no-data state
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added explicit next-step CTAs to the Basic Analysis no-glucose-data state.
+- Analysis now offers `手動新增` and `回今日記錄` when there are no loaded glucose records for the selected range.
+- Kept the no-data analytics state free of fixed mock health numbers.
+- Updated the canonical UI spec so Basic Analysis empty states include actionable navigation to the core record flow.
+- Preserved production and cost boundaries: no backend endpoint changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T431: Add CTAs to Today and History empty states
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added explicit next-step CTAs to the Today empty state.
+- Today empty state now offers `手動新增` and `文字記錄` without showing fixed mock health values.
+- The same CTAs are shown both when no records are loaded and when loaded records exist but none are for today.
+- Added explicit next-step CTAs to the History empty state.
+- History empty state now offers `回今日記錄` and `手動新增` without showing fixed mock health values.
+- Updated the canonical UI spec so Today and History empty states include actionable navigation to the core record flow.
+- Preserved production and cost boundaries: no backend endpoint changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T430: Remove fixed mock health records from Today and History empty states
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Removed fixed mock health record lists from the Today and History empty states.
+- Today now shows an empty state when no real records are loaded instead of sample glucose, meal, and exercise values.
+- History now shows an empty state when no real records are loaded instead of sample date groups and glucose values.
+- Removed unused sample record constants, sample record detail state, and sample-detail navigation.
+- Record Detail now avoids fake fallback health values when no real record is selected.
+- Updated the canonical UI spec so Today and History only show real loaded records or empty states, not fixed mock health values.
+- Preserved production and cost boundaries: no backend endpoint changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T429: Remove fixed mock glucose numbers from Basic Analysis
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Removed fixed mock glucose chart points from the Basic Analysis screen when no real records are loaded.
+- Changed the no-data analysis state to show an explicit empty state instead of preview glucose values such as fixed averages or maximums.
+- Metric cards now show `尚無` or `0` until real loaded records exist.
+- Removed the unused `previewMetricHint` style definition.
+- Updated the canonical UI spec so Basic Analysis only displays chart points and glucose summary values from real loaded records.
+- Preserved production and cost boundaries: no backend endpoint changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T428: Remove Home quick record MVP stage badge
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Removed the visible `MVP` stage badge from the Home quick record section.
+- Kept the Home quick record section as a user-facing primary entry point without development-stage labels.
+- Updated the canonical UI spec so Home quick record explicitly does not show `MVP`, `預留`, or other stage badges.
+- Preserved the dev-only reset `DEV ONLY` label because it is a deliberate testing safety marker hidden unless dev auth is enabled.
+- Preserved production and cost boundaries: no backend endpoint changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T427: Remove nested Home capture panel
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Removed the outer `homeCaptureCard` shell from the Home quick record area.
+- Home quick record now uses an open `pageSection` so the title, voice preview, text input, and actions are not wrapped in one large white card.
+- Kept the voice preview block and text input as the actual single-layer framed UI elements.
+- Removed the unused `homeCaptureCard` style definition from `mobile/App.tsx`.
+- Updated the canonical UI spec so Home quick record explicitly avoids an outer white card around the full capture section.
+- Preserved production and cost boundaries: no backend endpoint changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T426: Remove full-page panel shell from MVP record flow
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Removed the full-page `panel` shell from the MVP record flow and record management destination pages.
+- Updated AI Review, AI Save Confirm, AI Candidate Remove Confirm, Transcript Review, Candidate Edit, Save Success, Delete Success, Update Success, Manual Record, Manual Record Confirm, Record Detail, Delete Confirm, and Edit Record to use open `pageSection` layout.
+- Preserved inner cards, banners, form fields, confirmation lists, and action buttons as the actual framed UI elements.
+- Confirmed there are no remaining `<View style={styles.panel}>` usages in `mobile/App.tsx`.
+- Removed the unused `panel` style definition to prevent reintroducing full-page panel shells.
+- Updated the canonical UI spec so these MVP record flow pages follow the no full-page panel rule.
+- Preserved production and cost boundaries: no backend endpoint changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T425: Remove stale Settings Detail placeholder route
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Removed the stale mobile `settingsDetail` placeholder screen now that every Settings row has a concrete destination or explicit target.
+- Removed the unused `SettingsDetailSpec`, `settingsDetailSpecs`, selected settings row state, fallback routing, and generic placeholder render block.
+- Kept Settings navigation more precise: auth, profile, recording quota, reminders, privacy, tutorial, and subscription management now route to dedicated screens.
+- Updated the canonical UI spec so `設定詳情` is no longer listed as a current content/destination page.
+- Preserved production and cost boundaries: no backend endpoint changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T424: Add Subscription Management settings screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated mobile Subscription Management preview screen from the Settings `訂閱管理` row.
+- The screen separates subscription management from the Subscription paywall page and shows current plan/status, trial days, payment source, receipt validation, discount eligibility, cancellation/expiry, and entitlement sync boundaries.
+- Routed the Subscription page `已訂閱？管理方案` action and Membership Status `管理方案` actions to the new management screen.
+- Kept the page production-safe: it does not open payment, create trials, change entitlements, write entitlement data, call parser, call AI, or call LLM.
+- Added a manual status sync action that only reads backend quota / entitlement when an account is connected.
+- Documented the Subscription Management page, Settings navigation, and no-nested-panel rule in the canonical UI spec.
+- Preserved backend authority: payment state, receipt validation, subscription webhooks, quota, and entitlement must be server-side.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T423: Add Recording Quota settings preview screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated mobile Recording Quota preview screen from the Settings `錄音額度` row.
+- The screen shows quota sync status, used time, remaining time, daily limit, plan, subscription status, low-interruption reminder state, and AI cost boundary.
+- Moved the Settings `錄音額度` row away from Subscription so recording limits have their own destination page.
+- Kept the page memory-friendly and cost-controlled: it does not call parser, call AI, upload audio, store transcripts, or create local quota writes.
+- Added a manual sync action that only reads backend quota when an account is connected; unauthenticated state shows local status copy only.
+- Documented the Recording Quota page, no-nested-panel rule, and Settings navigation in the canonical UI spec.
+- Preserved production boundary: quota and entitlement must remain backend-authoritative and production-auth protected.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T422: Add Profile Settings preview screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated mobile Profile Settings preview screen from the Settings `個人資料` row.
+- The screen shows current account display name, login identifier, auth mode, active profile display name, active profile relationship, and edit-disabled status.
+- The screen documents production auth, profile update API, field validation, permission checks, optimistic rollback, and sensitive-field minimization requirements.
+- Kept the page local-only and read-only: it does not write profile data, create local drafts, call profile update APIs, call parser, call AI, or call LLM.
+- Documented the Profile Settings page and Settings navigation in the canonical UI spec.
+- Preserved cost and memory behavior: no backend endpoint changes, storage schema changes, profile API changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T421: Add Privacy Settings preview screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated mobile Privacy Settings preview screen from the Settings `通知與隱私` row.
+- The screen shows privacy defaults, notification content minimization, share opt-in boundaries, export/delete prerequisites, revocation requirements, and PHI-safe audit requirements.
+- The screen keeps health records private by default and labels doctor/caregiver sharing, social public data, and data export/delete as not yet enabled.
+- Kept the page local-only: it does not write preferences, create share grants, export data, call APIs, call parser, call AI, or call LLM.
+- Documented the Privacy Settings page and Settings navigation in the canonical UI spec.
+- Preserved cost and memory behavior: no backend endpoint changes, storage schema changes, permission service changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T420: Extend open-page layout to tutorial and future-module previews
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Replaced the full-page white `panel` shell with `pageSection` on Tutorial and future-module preview pages.
+- Updated Future Module Detail, Doctor Share, Health Integration, Community, Ranking, and Tutorial.
+- Kept these pages as open content pages while preserving their existing cards, banners, and action buttons.
+- Updated the canonical UI spec so tutorial and future-module preview pages follow the same no-nested-panel rule.
+- Preserved cost and backend behavior: no API changes, parser calls, AI calls, LLM calls, storage changes, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T419: Extend open-page layout to secondary status pages
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Replaced the full-page white `panel` shell with `pageSection` on secondary information/status pages.
+- Updated Detailed Report, Membership Status, Account Security, Reminder Settings, Settings Detail, and Store Cart status pages.
+- Kept confirmation, edit, delete, success, and form-heavy flow screens on `panel` because they behave like focused step/form surfaces.
+- Updated the canonical UI spec so content/status pages follow the open layout rule.
+- Preserved cost and backend behavior: no API changes, parser calls, AI calls, LLM calls, storage changes, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T418: Remove full-page panel shell from Quick Record
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Replaced the Quick Record page's full-page white `panel` shell with the open `pageSection` layout.
+- Kept the actual recording, input, status, and action elements intact while removing the extra outer card layer.
+- Updated the canonical UI spec so the Record page follows the same open primary-destination layout rule as History, Analysis, Menu, Settings, and future preview pages.
+- Preserved cost and backend behavior: no API changes, parser calls, AI calls, LLM calls, storage changes, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T417: Extend open-page layout to primary destination pages
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Extended the open `pageSection` layout beyond History, Basic Analysis, and Function Menu.
+- Removed the full-page white `panel` shell from Subscription, Settings, Future Modules, Achievements, Year Review, Store, and Food Photo Analysis.
+- Kept cards for actual grouped content while avoiding card-inside-card composition on primary destination pages.
+- Documented the layout rule so primary destination pages stay open and only flow/detail/form pages use a full panel shell.
+- Preserved cost and backend behavior: no API changes, parser calls, AI calls, LLM calls, storage changes, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T416: Remove nested page panel shell from History, Analysis, and Menu
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Replaced the full-page white `panel` shell on History, Basic Analysis, and Function Menu with an open `pageSection` layout.
+- Kept real cards for list items, charts, banners, and actions while removing the extra outer white-card layer.
+- Reduced the double-panel visual effect and recovered horizontal space on dense pages.
+- Documented that list-style main pages should avoid wrapping all content in another white panel and should use single-layer cards only where needed.
+- Preserved cost and backend behavior: no API changes, parser calls, AI calls, LLM calls, storage changes, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T415: Center Menu icons and add dev-only reset data button
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `backend/app/api/dev.py`
+- `backend/app/main.py`
+- `backend/tests/test_dev_reset.py`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Updated the mobile Function Menu so each card has a centered large icon and centered label.
+- Removed visible `MVP` / `預留` stage badges from menu cards.
+- Centered the `查看更多功能` menu action.
+- Added a dev-only `(dev) 重置所有資料` menu button that calls backend `/dev/reset-data` and then clears mobile local account/profile/records state.
+- Added a backend `/dev/reset-data` endpoint guarded by local/test/development env, dev-auth enablement, and `X-Dev-Reset-Confirm: reset-all-data`.
+- The dev endpoint deletes local development rows across account/profile/record/auth/subscription/rate-limit/audit tables for testing convenience.
+- Documented that the dev reset button is temporary and must be removed before production.
+- Preserved production safety: the endpoint returns 404 outside dev-enabled local/test/development environments and the mobile button is hidden unless mobile dev auth is enabled.
+- Preserved PHI safety: reset logs and UI status only report table counts, not record payloads, transcripts, prompts, health values, secrets, or tokens.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- `docker compose exec backend pytest tests/test_dev_reset.py -q` passed.
+
+### T414: Add Reminder Settings preview screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated mobile Reminder Settings preview screen from the Settings `提醒設定` row.
+- The screen shows planned morning fasting glucose, post-meal, and pre-visit reminder structures.
+- The screen documents notification permission, quiet hours, timezone/language, backend reminder schema, idempotent scheduling/cancel flow, and PHI-minimized notification content requirements.
+- Kept the page local-only: it does not request notification permission, create background jobs, write reminders, call APIs, call parser, call AI, or call LLM.
+- Documented the Reminder Settings page and Settings navigation in the canonical UI spec.
+- Preserved cost and memory behavior: no backend endpoint changes, storage schema changes, background scheduler changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T413: Add Account Security settings screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated mobile Account Security screen from the Settings account card and `登入狀態` settings row.
+- The screen shows current account state, active profile state, dev-auth availability, protected API readiness, and production auth requirements.
+- The screen documents Apple / Google / Email provider boundary, short-lived access token, refresh-token rotation/revoke, Keychain / Keystore storage, and backend account/profile/scope validation requirements.
+- Kept the current local-only `清除本機狀態` action explicit and separate from production logout.
+- Documented the Account Security page and Settings navigation in the canonical UI spec.
+- Preserved cost and memory behavior: no backend endpoint changes, session storage changes, token storage, provider calls, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T412: Add in-app AI Candidate Remove Confirm screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated mobile AI Candidate Remove Confirm screen before removing a pending AI candidate record.
+- AI Review candidate remove now routes to the in-app confirmation screen instead of using a system Alert.
+- The confirmation screen shows candidate type, summary, confidence, `source: AI candidate`, pending-only scope, no-delete-API boundary, and no-extra-AI/LLM boundary.
+- Existing candidate removal remains local to the current preview list and does not affect persisted records.
+- Documented the AI Candidate Remove Confirm page and navigation in the canonical UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage schema changes, delete API calls, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T411: Add in-app AI Save Confirm screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated mobile AI Save Confirm screen before saving AI candidate records.
+- AI Review confirm-save now routes to the in-app confirmation screen instead of using a system Alert as the main multi-record write confirmation.
+- The confirmation screen shows candidate count, low-confidence count, rejected-event count, per-candidate summaries, no-extra-AI/LLM boundary, single-batch scope, and backend validation/permission/audit boundary.
+- Existing backend POST behavior remains unchanged and still routes to Save Success after completion.
+- Documented the AI Save Confirm page and navigation in the canonical UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage schema changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T410: Add in-app Manual Record Confirm screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated mobile Manual Record Confirm screen before creating manual records.
+- Manual Record create now routes to the in-app confirmation screen instead of using a system Alert as the main write confirmation.
+- The confirmation screen shows record type, summary, date/time, `source: manual`, no-AI/LLM cost boundary, single-record scope, backend validation/permission/audit boundary, and disabled create state while busy.
+- Existing backend POST behavior remains unchanged and still routes to Save Success after completion.
+- Documented the Manual Record Confirm page and navigation in the canonical UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage schema changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T409: Add in-app Delete Confirm screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated mobile Delete Confirm screen for real record deletion.
+- Record Detail delete now routes to the in-app confirmation screen instead of using a system Alert as the main destructive confirmation.
+- The confirmation screen shows the selected record summary, source, date/time, no-local-undo warning, delete scope, backend permission/audit boundary, cancel action, and disabled delete state while busy.
+- Existing backend DELETE behavior remains unchanged and still routes to Delete Success after completion.
+- Documented the Delete Confirm page and navigation in the canonical UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage schema changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T408: Add local Ranking preview page
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated local Ranking preview page.
+- Routed the Future Modules ranking card to the new preview instead of the generic Future Module detail page.
+- The preview shows local-only streak preview, public ranking opt-in boundary, non-sensitive ranking stats requirement, hidden health value policy, and integration status actions.
+- The page does not create ranking stats, upload streaks, compare users, publish health values, call APIs, or call AI.
+- Documented the Ranking preview page and Future Modules navigation in the canonical UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage writes, background jobs, ranking APIs, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T407: Add local Community preview page
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated local Community preview page.
+- Routed the Future Modules community card to the new preview instead of the generic Future Module detail page.
+- The preview shows display-name context, private-by-default health record boundary, explicit opt-in requirement, moderation requirements, and integration status actions.
+- The page does not create posts, send comments, publish records, call APIs, or call AI.
+- Documented the Community preview page and Future Modules navigation in the canonical UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage writes, background jobs, social APIs, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T406: Add local Health Integration preview page
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated local HealthKit / Health Connect / meter integration preview page.
+- Routed the Future Modules health card to the new preview instead of the generic Future Module detail page.
+- The preview shows external source labels, import batch id, sync status, duplicate detection, user authorization/revocation/deletion prerequisites, and integration status actions.
+- The page does not request platform permissions, scan BLE, read external health data, create import batches, write records, or call APIs.
+- Documented the Health Integration preview page and Future Modules navigation in the canonical UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage writes, background jobs, external integrations, platform permission calls, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T405: Add local Doctor Share preview page
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a dedicated local Doctor / Clinic Cooperation preview page.
+- Routed the Future Modules doctor card to the new preview instead of the generic Future Module detail page.
+- The preview shows active-profile context, authorization status, read-only doctor permission boundary, bounded report source, AI cost, required grants, revoke/export/audit prerequisites, and integration status actions.
+- The page does not create authorization codes, QR codes, profile grants, share tokens, PDFs, doctor sessions, or API calls.
+- Documented the Doctor Share preview page and Future Modules navigation in the canonical UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage writes, background jobs, external integrations, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T404: Split Future Modules into blueprint-aligned community, achievement, and ranking entries
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Split the combined ranking/community future card into separate Community, Achievements, and Ranking entries.
+- Community and Ranking now open the local Future Module detail page with distinct readiness, requirements, and safety boundaries.
+- Achievements now has its own Future Module card that routes to the existing local Achievements preview.
+- Updated the canonical UI navigation map to match the engineering blueprint future branch more closely.
+- Preserved cost behavior: no backend endpoint changes, storage writes, background jobs, external integrations, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T403: Wire Future Modules to existing preview pages with source returns
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added return-screen state for Achievements, Year Review, and Store preview pages.
+- Opening Achievements, Year Review, or Store from Menu now returns to Menu.
+- Opening those same preview pages from Future Modules now returns to Future Modules.
+- Added Future Module cards for Year Review and Store, and routed the ranking/community future card to the existing Achievements preview.
+- Documented the Future Modules navigation behavior in the canonical UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage writes, background jobs, external integrations, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T402: Add local Future Module detail screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a reusable mobile Future Module detail screen.
+- Future Modules that do not yet have a dedicated preview page now open a local detail page instead of only setting status text.
+- The detail page shows the selected module description, readiness, safety boundary, activation requirements, and recommended implementation order.
+- Food Photo continues to open its dedicated Food Photo preview and keeps its existing return behavior.
+- Documented the Future Module detail page and navigation in the canonical UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage writes, background jobs, external integrations, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T401: Preserve Save Success return target for manual and partial AI saves
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added mobile save-success return-screen state.
+- Manual-record saves now return to the page that opened Manual Record instead of always resetting the success close action to Today.
+- Continue Manual Record from Save Success now preserves the original Manual Record source page.
+- Partial AI saves with unsaved candidates now keep the Save Success close action pointed at AI Review so users do not lose the confirmation context.
+- Documented the Save Success return behavior in the UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage schema changes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T400: Preserve Food Photo return target from Future Modules
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added mobile food-photo return-screen state.
+- Opening Food Photo from Future Modules now returns to Future Modules.
+- Opening Food Photo directly from Menu remains able to return to Menu.
+- Documented the Food Photo return behavior in the UI spec.
+- Preserved cost behavior: no camera access, image reads, image upload, backend endpoint changes, storage writes, Vision calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T399: Preserve Tutorial return target from Settings
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added mobile tutorial return-screen state.
+- Opening Tutorial from Menu now returns to Menu.
+- Opening Tutorial from Settings now returns to Settings.
+- Documented the Tutorial return behavior in the UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage writes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T398: Preserve Subscription return target from Settings
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added mobile subscription return-screen state.
+- Opening Subscription from Menu now returns to Menu.
+- Opening Subscription from Settings rows such as recording quota or subscription management now returns to Settings.
+- Membership status renewal-management actions keep returning through Subscription without changing payment state.
+- Documented the Subscription return behavior in the UI spec.
+- Preserved cost behavior: no backend endpoint changes, subscription writes, entitlement writes, payment calls, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T397: Preserve success-page return target when opening record detail
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a helper for opening the currently selected saved record detail with an explicit return target.
+- Save Success -> View Detail now returns back to Save Success instead of reusing stale Today/History detail context.
+- Update Success -> View Detail now returns back to Update Success instead of reusing stale detail context.
+- Documented the success-page detail return behavior in the UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage writes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T396: Preserve return screen when closing mobile Menu
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added mobile menu return-screen state.
+- Header menu entry and the primary Menu tab now remember the page that opened Menu.
+- The Menu close button and header close action return to the opening page instead of always jumping to Today.
+- Documented the Menu return behavior in the UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage writes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T395: Preserve History return target for sample record detail
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Updated the mobile sample record detail opener to accept a return-screen target.
+- History preview sample records now return to History after opening detail instead of jumping to Today.
+- Documented the History sample-detail return rule in the UI spec.
+- Preserved cost behavior: no backend endpoint changes, storage writes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T394: Return edited AI candidate back to AI review
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Fixed the mobile AI candidate edit page secondary return action.
+- The page now returns to the AI organized confirmation screen instead of jumping back to the raw record input screen.
+- Documented the candidate-edit return rule in the UI spec so the confirmation-first flow stays intact.
+- Preserved cost behavior: no backend endpoint changes, storage writes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T393: Hide routine capture quota minutes until low warning threshold
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/VOICE_RECORDING_QUOTA_CONTRACT.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a shared mobile capture quota copy helper with a 2-minute low-warning threshold.
+- Updated Home and Record capture cards so routine quota state no longer shows exact remaining minutes.
+- Exact remaining time is only shown when daily voice quota is at or below the low-warning threshold.
+- Full quota detail remains available in Settings and Subscription surfaces where users expect usage details.
+- Preserved cost behavior: no backend endpoint changes, quota writes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T392: Clarify record delete confirmation has no local undo
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the Record Detail delete confirmation dialog.
+- Replaced the terse `刪除這筆紀錄？` prompt with wording that the record will be removed from the current list and no local undo copy is kept.
+- Keeps the destructive action aligned with the existing Delete Success screen copy.
+- Preserved cost behavior: no backend endpoint changes, storage schemas, automatic retries, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T391: Align UI prompt Analytics with bounded no-AI detailed report
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Updated the AI UI generation prompt Analytics item.
+- Added detailed-report prompt guidance for data source, `AI cost 0`, query limit, and no-medical-advice boundary.
+- Prevents generated Analytics UI from implying AI-generated reports or unbounded data loading.
+- Preserved cost behavior: no app runtime code, backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed the Analytics prompt includes bounded detailed-report, data source, AI cost 0, query limit, and no-medical-advice boundaries.
+
+### T390: Document detailed report bounded backend fallback behavior in UI spec
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added detailed-report boundaries to the Analytics spec.
+- Documented that `/reports/basic` must use a query limit and mobile currently relies on `mobileReportQueryLimit`.
+- Documented that backend report failures must fall back to the currently loaded mobile-record summary.
+- Clarified that detailed reports must not call AI and must not produce diagnosis or treatment advice.
+- Preserved cost behavior: no app runtime code, backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed the detailed-report bounded `/reports/basic`, `mobileReportQueryLimit`, fallback, no-AI, and no-medical-advice boundaries are documented in `ai_context/UI_UX_SPEC.md`.
+
+### T389: Document store cart disabled checkout wording in UI spec
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added Store Cart preview guidance to the canonical UI spec.
+- Documented that any checkout button shown in the preview cart must be disabled and labeled `結帳整合尚未啟用`.
+- Clarified that preview UI must not show an actionable `前往結帳` before commerce backend, cart, order, payment, and legal boundaries are implemented.
+- Preserved cost behavior: no app runtime code, backend endpoints, commerce API calls, payment calls, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed the UI spec and mobile Store Cart use `結帳整合尚未啟用` and the spec forbids actionable `前往結帳` before commerce boundaries are implemented.
+
+### T388: Clarify disabled store cart checkout CTA is integration-only
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Reworded the disabled Store Cart checkout button from `前往結帳` to `結帳整合尚未啟用`.
+- Keeps the cart placeholder from looking like a real checkout action before commerce backend, payment, order, and legal boundaries are implemented.
+- Preserved the existing cart, order, payment, coupon, and medical-claim safety notes.
+- Preserved cost behavior: no commerce API calls, payment calls, backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T387: Align UI prompt Settings advanced controls with collapsed default
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Updated the AI UI generation prompt item for Settings.
+- Added prompt guidance that Backend URL, model selection, and Dev Client tools must stay collapsed under advanced settings.
+- Keeps generated Settings UI aligned with the production-friendly default surface and cost-control boundary.
+- Preserved cost behavior: no app runtime code, backend endpoints, model downloads, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed the Settings prompt now says Backend URL, model selection, and Dev Client tools stay collapsed under advanced settings.
+
+### T386: Document Settings advanced/debug tooling boundaries in UI spec
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added Settings advanced-setting rules to the canonical UI spec.
+- Documented that Backend URL, model selection, Dev Client, local Whisper, and local Llama tools must be collapsed by default.
+- Clarified that debug/native model tools only appear in debug builds or when `EXPO_PUBLIC_ENABLE_DEBUG_TOOLS` is explicitly enabled.
+- Clarified that model downloads, native module checks, benchmarks, and local parser tests must be user-triggered and never automatic.
+- Preserved cost behavior: no app runtime code, backend endpoints, model downloads, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed the Settings advanced/debug tooling rules are documented in `ai_context/UI_UX_SPEC.md`.
+
+### T385: Align UI prompt Settings account action with local-state-clear preview
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Updated the AI UI generation prompt item for Settings.
+- Replaced generic `logout` wording with the MVP preview `清除本機狀態` account action.
+- Clarified that production logout and token revoke must be wired before generated UI should expose real logout wording.
+- Preserved cost behavior: no app runtime code, auth endpoints, backend calls, token storage changes, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed the Settings prompt now uses `清除本機狀態` as the current action and only mentions production logout as a future token-revoke boundary.
+
+### T384: Rename Settings logout preview action to local state clear
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Renamed the mobile Settings bottom account action from `登出` to `清除本機狀態`.
+- Updated the canonical Settings spec to clarify that MVP/dev auth preview only clears local account, profile, and loaded-record state.
+- Documented that the real `登出` label should only return after production auth supports refresh-token revoke, session list updates, and secure storage clearing.
+- Preserved cost behavior: no auth endpoints, backend calls, token storage changes, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T383: Align UI prompt year-review and store CTAs with preview boundaries
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Updated the AI UI generation prompt item for Year Review to describe a preview screen and `查看分享整合狀態` CTA until share image and privacy masking are wired.
+- Updated the AI UI generation prompt item for Store to describe a preview screen, commerce-preview banner, and `查看購物車整合狀態` CTA until cart, checkout, and payment are wired.
+- Prevents future generated UI from recreating production-like share or cart actions before the backend and privacy/payment boundaries exist.
+- Preserved cost behavior: no app runtime code, backend endpoints, commerce API calls, payment calls, share generation, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed stale `share button` and `shopping cart button` prompt wording was removed and replaced with preview integration-status CTAs.
+
+### T382: Sync UI spec store cart CTA with commerce preview boundary
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Updated the Store spec bottom CTA to use `查看購物車整合狀態` during MVP preview.
+- Kept `查看購物車` only as a post-integration label after product catalog, inventory, cart, checkout, orders, and payment are implemented.
+- Aligned the canonical spec with the current mobile Store preview behavior.
+- Preserved cost behavior: no app runtime code, backend endpoints, commerce API calls, payment calls, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed the Store spec now separates the MVP preview cart-integration CTA from the post-integration real cart CTA.
+
+### T381: Document future module status-card interaction in UI spec
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Added a Future module interaction rule to the canonical UI spec.
+- Documented that future module cards without preview pages may still be clickable, but only to show integration status and prerequisites.
+- Clarified that these status cards must not call backend, AI, external platforms, or write data.
+- Preserved cost behavior: no app runtime code, backend endpoints, integration API calls, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed the future module status-card interaction rule is documented in `ai_context/UI_UX_SPEC.md`.
+
+### T380: Make future module cards show integration status instead of dead clicks
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a `futureModuleActionStatus` UI state for the Future Modules screen.
+- Changed disabled future module cards without preview targets into active status cards that explain the missing prerequisites.
+- Preserved existing preview navigation for modules that already have preview screens, such as food-photo analysis.
+- Preserved cost behavior: no backend endpoints, integration API calls, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T379: Sync UI spec achievement and year-review preview CTA boundaries
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Marked the Achievement spec as a future/local preview module until definitions, backend sync, public ranking opt-in, privacy boundaries, and revocation are implemented.
+- Replaced the current-state Achievement CTA with `查看徽章整合狀態`; kept `查看全部徽章` only as a post-integration label.
+- Marked the Year Review spec as a future preview module until annual data sources, privacy masking, share permission, material generation, and deletion flows are implemented.
+- Replaced the current-state Year Review CTA with `查看分享整合狀態`; kept `分享我的年度回顧` only as a post-integration label.
+- Preserved cost behavior: no app runtime code, backend endpoints, achievement writes, ranking writes, share generation, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed the UI spec now separates MVP preview CTAs from post-integration Achievement and Year Review CTA labels.
+
+### T378: Fix transcript review header subtitle to text-first wording
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the shared screen chrome subtitle for `transcriptReview`.
+- Replaced the remaining voice-specific header subtitle with text-first confirmation wording.
+- Keeps the header aligned with the page body and current no-STT preview state.
+- Preserved cost behavior: no native recorder, STT calls, backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T377: Clarify Home and Record entry copy uses recording preview plus text input
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the Record screen subtitle and menu label to use `錄音預覽` instead of implying production voice capture is available.
+- Updated Home quick-start copy so recording preview and text input are described as separate paths that still enter text confirmation before parsing.
+- Reworded Home and Record recording prompt text to say recording preview does not produce text and users should use the text input.
+- Preserved cost behavior: no native recorder, STT calls, backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T376: Sync UI spec transcript review with text-first confirmation
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Renamed the canonical transcript review section from voice transcript confirmation to text confirmation.
+- Updated the subtitle, secondary CTA, and interaction notes to reflect current text-first behavior while STT is not wired.
+- Updated the AI UI generation prompt item for the confirmation screen so generated UI uses `重新輸入` and states STT is not wired in MVP preview.
+- Preserved cost behavior: no app runtime code, backend endpoints, parser calls, STT calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed stale current-spec `語音文字確認頁`, `Voice transcription confirmation`, and `重新錄音` wording were removed from `ai_context/UI_UX_SPEC.md`.
+
+### T375: Make transcript review page text-first until STT is wired
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Renamed the transcript review page from `確認語音文字` to `確認文字內容`.
+- Reworded the page explanation and placeholder so it fits text input, pasted input, and future STT output without implying STT is already connected.
+- Changed the secondary action from `重新錄音` to `重新輸入` and updated the status message to return users to text entry.
+- Preserved cost behavior: no native recorder, STT calls, backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T374: Align UI prompt overview with confirmation-first AI candidate flow
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Updated the UI generation prompt overview to describe text input, manual entry, and hold-to-record preview instead of generic voice input plus AI organization.
+- Clarified that AI organization must produce editable candidate records only.
+- Clarified that no record is saved until the user confirms.
+- Preserved cost behavior: no app runtime code, backend endpoints, parser calls, STT calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed the stale `voice input and AI organization` wording was removed and the prompt overview now requires editable candidate records with user confirmation before save.
+
+### T373: Align mobile subscription trial banner with preview-only payment boundary
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the mobile Subscription screen trial banner so it no longer says an un-cancelled trial will auto-convert while payment is disconnected.
+- Aligned the banner with the existing preview boundary: formal payment integration is required before trial activation or auto-renewal behavior exists.
+- Preserved the current quota, plan comparison, and integration-status UI.
+- Preserved cost behavior: no payment API calls, backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T372: Align UI prompt tutorial wording with confirmation-first recording flow
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Updated the AI UI generation prompt template tutorial screen description.
+- Replaced the stale `release to finish` phrasing with hold-to-record preview, text input, AI candidate confirmation, and save-complete wording.
+- Keeps generated UI aligned with the current no-STT preview and confirmation-first flow.
+- Preserved cost behavior: no app runtime code, backend endpoints, parser calls, STT calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed stale `release to finish` prompt wording was removed and the prompt now describes hold-to-record preview, text input, AI candidate confirmation, and save complete.
+
+### T371: Align mobile renewal status and UI prompt template with preview boundaries
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Reworded the mobile membership renewal status message from immediate-renewal language to a neutral renewal-integration status message.
+- Updated the UI generation prompt template so subscription screens use the payment-disconnected `查看試用整合狀態` CTA until store payment is wired.
+- Updated the UI generation prompt template so food-photo analysis is generated as a Vision-not-wired preview with an empty analysis state during MVP.
+- Preserved cost behavior: no payment API calls, camera access, image upload, backend endpoints, parser calls, Vision calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T370: Sync UI spec subscription CTAs with preview-only payment boundary
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Updated the canonical subscription spec so payment-disconnected MVP preview states do not promise trial activation, auto-conversion, entitlement changes, or immediate renewal.
+- Documented that preview CTAs should show integration status until store payment, receipt validation, subscription webhooks, trial rules, cancellation, renewal, and introductory pricing rules are implemented.
+- Kept the future post-payment CTA labels documented for when the payment boundary is actually wired.
+- Preserved cost behavior: no app runtime code, backend endpoints, payment API calls, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed the subscription spec now documents preview CTAs, no entitlement mutation, and post-payment CTA labels only after payment/receipt/webhook boundaries are wired.
+
+### T369: Neutralize UI spec membership and store claim copy
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Replaced the membership-status `趨勢與建議` wording with `趨勢摘要` in the canonical UI spec.
+- Replaced store product descriptions that could read as health or professional endorsement claims with neutral future-preview copy.
+- Aligned the UI spec with the existing mobile Store preview boundary and no-medical-advice stance.
+- Preserved cost behavior: no app runtime code, backend endpoints, commerce API calls, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed stale `趨勢與建議`, product health-claim, and professional-endorsement wording were removed from the UI spec.
+
+### T368: Clarify mobile food-photo header is preview-only
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the mobile Food Photo screen subtitle and top copy to state that it is a preview and Vision is not wired.
+- Clarified that the screen does not estimate nutrition or write records in the current MVP preview state.
+- Kept the existing future module entry and empty analysis state.
+- Preserved cost behavior: no camera access, image upload, backend endpoints, parser calls, Vision calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T367: Sync UI spec with confirmation-first recording and food-photo preview boundaries
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `ai_context/UI_UX_SPEC.md`
+
+Summary:
+
+- Updated the canonical UI spec tutorial steps so they no longer instruct AI implementers to auto-organize content immediately after recording release.
+- Documented that current recording is a UI preview, users should use text input until STT is wired, and future STT still enters transcript confirmation before save.
+- Updated the food-photo analysis spec to match the current preview boundary: no camera, upload, Vision call, mock nutrition numbers, or record writes during MVP preview.
+- Preserved cost behavior: no app runtime code, backend endpoints, parser calls, STT calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- Targeted grep confirmed the stale auto-organize tutorial wording was removed and the MVP food-photo preview boundary is documented.
+
+### T366: Add stable key to grouped History record sections
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a stable `key` to the true-record grouped History section wrapper.
+- Prevents React Native list key warnings when rendering grouped loaded records.
+- Preserved current in-memory filtering and bounded sync behavior.
+- Preserved cost behavior: no backend endpoints, parser calls, STT calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T365: Align tutorial copy with UI-only recording and confirmation-first flow
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the tutorial steps so they no longer imply that releasing the hold-to-record button automatically transcribes or organizes content.
+- Clarified that current recording is a UI preview and users should use text input until native STT is wired.
+- Clarified the future STT flow remains confirmation-first before any AI candidate records are saved.
+- Preserved cost behavior: no native audio capture, backend endpoints, parser calls, STT calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T364: Clarify Record page recording result is UI-only
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the Record screen post-recording result copy to clearly state that no audio or transcript is produced yet.
+- Replaced the `確認文字` continuation from the recording preview with a local `使用文字輸入` action that resets the preview and keeps users on the text/manual path.
+- Preserved existing text parser and manual creation paths.
+- Preserved cost behavior: no native audio capture, backend endpoints, parser calls, STT calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T363: Clarify Home recording control is UI-only until native recorder is wired
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the Home quick-recording card copy to clearly state the hold-to-record control is UI preview only.
+- Clarified that the current mobile Home recording control does not capture audio, create audio files, trim silence, or run STT.
+- Reworded the post-recording hint so it guides users to text input or manual entry instead of implying captured audio can be confirmed.
+- Preserved cost behavior: no native audio capture, backend endpoints, parser calls, STT calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T362: Clarify store preview does not query commerce APIs or persist cart state
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the mobile Store preview banner with explicit transaction boundaries.
+- Clarified that the Store preview does not query product APIs, persist cart state, create orders, or process payments.
+- Keeps product browsing and cart navigation framed as future UI only.
+- Preserved cost behavior: no new backend endpoints, commerce API calls, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T361: Clarify achievement preview does not persist badges or rankings
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the mobile Achievement preview boundary copy.
+- Clarified that local achievement calculations do not call AI, do not write achievement records, and do not update rankings.
+- Keeps completed/locked badge UI clearly framed as a local preview based on already-loaded records.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T360: Clarify yearly review preview does not call AI or write summaries
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the mobile Yearly Review preview boundary copy.
+- Clarified that the page only computes local record statistics and encouragement from already-loaded records.
+- Explicitly states that yearly review preview does not call AI, does not write yearly summaries, and does not provide diagnosis or treatment advice.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T359: Move food photo preview under future modules
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Removed the hardcoded `食物拍照` card from the primary mobile function menu.
+- Added an optional target field to future module cards.
+- Wired the `食物拍照辨識` future-module card to the existing Food Photo preview screen.
+- Keeps the primary menu focused on MVP workflows while preserving a discoverable preview path for future image recognition.
+- Preserved cost behavior: no new backend endpoints, image uploads, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T358: Centralize tutorial entry in mobile menu data
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Moved the mobile `使用教學` menu card into the shared `menuScreens` data source.
+- Removed the separate hardcoded tutorial menu card so MVP menu entries share consistent labels, icons, and stage badges.
+- Preserved the existing tutorial screen and Settings tutorial row.
+- Improved multi-page navigation maintainability without adding backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T357: Add menu entry for voice and text record flow
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an MVP `語音/文字記錄` card to the mobile function menu.
+- Routes directly to the existing shared Record screen for voice/text input, transcript confirmation, AI confirmation, and save flow.
+- Keeps `手動新增` available as the low-cost no-parser fallback instead of making it the only create-entry menu option.
+- Improves multi-page navigation coverage for the core MVP loop without adding new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T356: Guard mobile detailed report loads against duplicate and stale responses
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced the single detailed-report in-flight boolean with key-based report load de-duplication.
+- Uses backend URL, account id, active profile id, analysis range, and report limit as the report load key.
+- Prevents repeated taps from issuing duplicate `/reports/basic` loads for the same bounded report.
+- Prevents stale report responses from overwriting the current account/profile/range report state.
+- Clears report load keys when mobile session state is cleared.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T355: Guard mobile voice quota sync against stale responses
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added key-based in-flight de-duplication for mobile voice quota sync by backend URL and account id.
+- Added a latest quota sync key so stale `/subscriptions/voice-quota` responses cannot overwrite the current account/backend quota state.
+- Clears quota sync keys when mobile session state is cleared.
+- Keeps quota display non-blocking for text and manual entry flows.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T354: Guard mobile boot against duplicate and stale reconnects
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added `bootInFlight` and `latestBootKey` guards around the mobile backend reconnect/bootstrap flow.
+- Prevents duplicate boot sequences from repeatedly calling dev-login, quota, models, and profile endpoints before React busy state renders.
+- Uses the normalized backend URL as the boot key so stale reconnect responses cannot apply account, model, or profile state after the backend URL changes.
+- Clears boot guards when mobile session state is cleared.
+- Avoids stale boot completion clearing a newer reconnect's busy state.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T353: Serialize mobile parser and AI-confirmed saves
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added ref-based `parsePreviewInFlight` and `previewSaveInFlight` guards around mobile parser submission and AI-confirmed record saves.
+- Prevents duplicate `/ai/parse-preview` calls if the transcript confirmation action is triggered repeatedly before React busy state renders.
+- Prevents duplicate multi-record `/records` writes from repeated AI confirmation save actions.
+- Clears parser/save guards when mobile session state is cleared.
+- Preserved existing transcript validation, sample-transcript guard, PHI-safe metadata stripping, partial-save recovery, and bounded record sync behavior.
+- Preserved cost behavior: no new backend endpoints, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T352: Guard mobile record sync against duplicate and stale responses
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added key-based in-flight de-duplication for mobile `/records` sync by API base URL, account, and active profile.
+- Added a latest-sync key guard so stale record-list responses cannot overwrite the current profile/account list after quick profile or backend changes.
+- Reset sync keys when the mobile session state is cleared.
+- Kept the existing bounded `limit` query and local-only history/analysis behavior.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T351: Serialize mobile record update and delete
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added ref-based `recordUpdateInFlight` and `recordDeleteInFlight` guards around saved-record mutations.
+- Prevents duplicate `PATCH /records/{id}` or `DELETE /records/{id}` calls if edit/delete confirmation paths are triggered repeatedly before React busy state renders.
+- Kept existing local validation, protected request headers, local list reconciliation, and success screens.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T350: Serialize manual record creation on mobile
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a ref-based `manualCreateInFlight` guard around mobile manual record creation.
+- Prevents duplicate `/records` writes if the manual-create confirmation path is triggered repeatedly before React busy state renders.
+- Kept the existing local validation, backend protected request headers, and single-record client save metadata behavior.
+- Preserved low-cost manual-entry behavior: no parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T349: Prevent sample transcript parser calls
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a mobile `isTranscriptSample` guard for text inserted through `填入範例`.
+- Sample text can still preview the transcript confirmation UI, but cannot be submitted to `/ai/parse-preview`.
+- Disabled the transcript review `下一步整理` action for sample text and added user-facing cost-safety copy.
+- Added a defensive `parseTranscript()` guard so sample text is blocked even if the button state drifts.
+- Cleared sample state when transcript is edited, cleared, saved, or session state is reset.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T348: Neutralize store preview product claims
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Reworded store preview product descriptions to avoid health-effect or medical-benefit implications.
+- Marked supplement preview copy as requiring ingredient, labeling, and legal review before formal listing.
+- Clarified the book preview as reading material that does not replace clinician or dietitian advice.
+- Preserved future-module behavior: no checkout, cart persistence, payment, backend writes, parser calls, AI calls, LLM calls, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T347: Restore empty food-photo analysis state
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Removed static food-photo nutrition examples from the mobile Food Photo screen.
+- Restored a clear `尚未產生分析結果` empty state until camera/upload and real image analysis are implemented.
+- Removed the disabled `加入紀錄` affordance when no real Vision result exists.
+- Kept the upload area as a placeholder action that only reports integration status.
+- Preserved cost behavior: no new backend endpoints, image uploads, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T346: Centralize mobile report query limit
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a single `mobileReportQueryLimit` constant for the Detailed Report backend query limit.
+- Reused that constant in `/reports/basic` query params, report source copy, boundary cards, analysis copy, and report notes.
+- Reduced drift risk between the actual bounded backend query and the user-visible data boundary text.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T345: Clarify mobile analysis bounded data source
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added the explicit latest-100-record mobile sync limit to the Basic Analysis data-boundary section.
+- Added an inline banner when local records reach the sync limit, pointing users to the bounded Detailed Report path.
+- Clarified that Basic Analysis remains local to already-loaded records and does not call AI or produce treatment advice.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T344: Clarify mobile history pagination boundary
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the mobile History data-boundary section to show the explicit latest-100-record sync limit.
+- Clarified that history filters operate only on records already loaded on mobile and are not full backend history queries.
+- Added an inline banner when the loaded record count reaches the sync limit, explaining that older records require future cursor pagination UI.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T343: Bound mobile records sync query explicitly
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an explicit `mobileRecordSyncLimit` for mobile record sync.
+- Mobile now requests `/records` with a `limit` query instead of relying on backend defaults.
+- Updated sync status copy to say the app loaded the latest bounded record set, not the full history.
+- Preserved backend/memory-friendly behavior by keeping list sync bounded to the latest 100 records.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T342: Add mobile auth readiness settings entry
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a visible `登入狀態` row to the mobile Settings screen.
+- Added a settings detail spec for production auth readiness.
+- The auth detail page lists JWT/OIDC login, refresh-token rotation, secure token storage, logout/session wiring, and profile permission scope requirements.
+- Clarified that dev auth must be explicit opt-in and production builds must not call `/auth/dev-login` or store tokens in ordinary storage.
+- Preserved cost behavior: no backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T341: Clarify mobile dev-auth opt-in UX copy
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated mobile auth-mode copy for the fail-closed dev-auth state.
+- Boot and Settings messages now explain that local preview requires copying `mobile/.env.example` to `.env` with `EXPO_PUBLIC_ALLOW_DEV_AUTH=true`.
+- Production wording still points to JWT/OIDC login and secure token storage before protected endpoints are usable.
+- Preserved cost behavior: no backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T340: Make mobile dev auth explicitly opt-in
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/.env.example`
+- `README.md`
+
+Summary:
+
+- Changed mobile dev auth from default-on unless disabled to explicit opt-in with `EXPO_PUBLIC_ALLOW_DEV_AUTH=true`.
+- Updated mobile env example to state that local preview must copy `.env.example` to `.env` to enable dev auth.
+- Updated README to clarify that omitting `EXPO_PUBLIC_ALLOW_DEV_AUTH=true` fails closed like setting it to `false`.
+- Preserved cost behavior: no backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T339: Document mobile env copy workflow
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `README.md`
+
+Summary:
+
+- Added a README mobile setup step to copy `mobile/.env.example` to `mobile/.env`.
+- Clarified the local Expo / Android Studio env workflow before starting the backend or Expo app.
+- Verified existing gitignore behavior keeps real `.env` files ignored while allowing `.env.example` templates.
+- Preserved cost behavior: no backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `rg -n "cp .env.example .env|Mobile env defaults" README.md` passed.
+
+### T338: Add mobile env example for dev-auth gate
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/.env.example`
+- `README.md`
+
+Summary:
+
+- Added a mobile-specific `.env.example` with Expo API URL, dev-auth, and debug-tool flags.
+- Documented local development defaults and production-like mobile settings in the same file.
+- Linked the mobile env example from the README mobile preview section.
+- Preserved cost behavior: no backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `rg -n "EXPO_PUBLIC_ALLOW_DEV_AUTH|mobile/.env.example|Production-like mobile" README.md mobile/.env.example` passed.
+
+### T337: Document mobile dev-auth production gate
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `README.md`
+
+Summary:
+
+- Documented `EXPO_PUBLIC_ALLOW_DEV_AUTH=false` for production-like mobile builds.
+- Added a mobile startup example that also disables debug tools.
+- Clarified that the mobile app will not call `/auth/dev-login` when dev auth is disabled.
+- Updated current mobile scope wording so dev login is clearly local-development-only.
+- Preserved cost behavior: no backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `rg -n "EXPO_PUBLIC_ALLOW_DEV_AUTH|dev login for local development only" README.md` passed.
+
+### T336: Disable protected mobile actions until backend account is ready
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added derived protected-backend readiness state for account/profile availability.
+- Disabled parser submission and manual record creation until mobile has a connected account and active profile.
+- Disabled AI candidate save when no account is connected.
+- Added inline warning copy explaining what must be connected before protected backend actions can run.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T335: Show mobile auth mode in settings
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an auth mode badge to the mobile Settings account card.
+- Shows whether the build is currently using local `Dev Auth` or requires `Production Auth`.
+- Added short copy explaining that dev auth should be disabled for production and replaced by JWT/OIDC plus secure token storage.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T334: Clear mobile protected state when backend URL changes
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an `updateApiBaseUrlDraft` helper for backend URL edits.
+- Backend URL changes now clear local account, profile, quota, records, preview, selected record, transcript, and report state before reconnecting.
+- Added UI status copy explaining that old backend state was cleared to avoid reusing dev auth across environments.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T333: Clear mobile protected state on auth boundary exits
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a local `clearMobileSessionState` helper for account/profile/records/preview/report state.
+- Dev-auth-disabled boot now clears protected mobile state before showing the production-auth-required message.
+- Settings logout now clears local account, profile, quota, records, preview, selected record, transcript, and report state.
+- Clarified that full production logout still requires refresh-token revocation and secure token storage cleanup.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T332: Centralize mobile protected request headers
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a single `protectedRequestHeaders` helper for mobile protected API calls.
+- Replaced scattered `X-Account-Id` header literals across quota, reports, profiles, records, update, delete, and manual save paths.
+- Preserved current development auth behavior while creating one future integration point for Bearer token / secure-session headers.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T331: Gate mobile dev login by build-time flag
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added `EXPO_PUBLIC_ALLOW_DEV_AUTH=false` support to disable mobile `/auth/dev-login` calls.
+- When dev auth is disabled, mobile clears local account/profile state and shows a production-auth-required message instead of calling protected dev endpoints.
+- Updated advanced settings copy to reflect whether dev auth is enabled for the current build.
+- Preserved current local development behavior by default.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T330: Add client save metadata for manual records
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added PHI-safe client save metadata to manual record creation.
+- Manual records now include a single-item `client_save_batch_id`, sequence, batch size, and `entry_method: manual_form`.
+- Aligned manual save metadata with the AI-confirmed save path for future idempotency and reconciliation work.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T329: Add client save batch metadata for AI-confirmed records
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a PHI-safe `client_save_batch_id` for each AI-confirmed save batch.
+- Added batch sequence, batch size, and `entry_method: ai_confirmation` metadata to each saved candidate record.
+- Preserved existing raw-text metadata stripping before adding client save metadata.
+- Prepared the mobile save path for future idempotency, retry, and partial-save reconciliation without enabling automatic retries.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T328: Preserve partial AI save recovery state
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added partial-save handling for AI-confirmed candidate records.
+- Successful records are added to the local list immediately if a later sequential save fails.
+- Unsaved candidate records remain in the AI review state, with a visible return path from the save result screen.
+- The UI now explains that partial failures do not trigger automatic retry or another AI call.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T327: Avoid full records reload after AI save
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Reused each successful AI-preview POST response to update the local records list.
+- Removed the post-save full records reload from the AI-confirmed save path.
+- Preserved the post-save detail affordance by selecting the first newly created record.
+- Reduced backend read load, payload movement, and mobile memory churn without changing parser, LLM, or save semantics.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T326: Serialize AI preview record saves on mobile
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced concurrent `Promise.all` preview record writes with sequential saves.
+- Reduced backend and database burst pressure when AI parsing returns multiple candidate records.
+- Kept the existing user-confirmed save boundary and PHI-safe metadata stripping.
+- Preserved cost behavior: no new backend endpoints, parser calls, AI calls, LLM calls, storage schemas, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T325: Lock header navigation during in-flight mobile actions
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Disabled the header menu/back action while mobile request, report, or quota work is in flight.
+- Added a defensive handler guard so programmatic header presses cannot route away during parser, save, sync, or report work.
+- Added disabled styling and accessibility state for the header action button.
+- Preserved cost and backend behavior: no new backend calls, parser calls, AI calls, LLM calls, storage writes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T324: Lock primary tabs during in-flight mobile actions
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Disabled non-current primary tabs while mobile request, report, or quota work is in flight.
+- Added disabled tab styling and accessibility state so the temporary lock is visible to users and assistive tech.
+- Prevents route changes during parser, save, sync, or report work that could make UI state inconsistent.
+- Preserved cost and backend behavior: no new backend calls, parser calls, AI calls, LLM calls, storage writes, automatic retries, PHI logging, raw prompts, raw model output, secrets, or tokens were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T323: Clarify mobile detailed report boundaries
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.3
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Upgraded the Detailed Report hero into an icon-led summary card.
+- Added report boundary cards for data source, AI cost, record limit, and medical-advice status.
+- Made the report page clearer that it is a bounded record summary, not an AI medical report.
+- Preserved cost and backend behavior: no new backend calls, parser calls, AI calls, LLM calls, storage writes, or automatic retries were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T322: Add icon-led mobile store search field
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.13
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced the plain Store search input with an icon-led rounded search field matching the UI spec.
+- Kept product filtering local to the static preview product list.
+- Preserved store future-module boundaries: no backend search, order writes, cart persistence, payment calls, parser calls, AI calls, LLM calls, or automatic retries were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T321: Polish mobile subscription plan cards
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.4, 4.10
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added icon-led headers to the trial and annual subscription plan cards.
+- Added a visible recommendation badge to the annual plan card.
+- Updated the feature comparison table to show explicit checkmark-style annual benefits.
+- Preserved subscription safety boundaries: no payment calls, entitlement changes, backend reads, storage writes, parser calls, AI calls, LLM calls, or automatic retries were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T320: Polish retention page hero visuals
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.11, 4.12
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added icon-led hero cards for the mobile Achievements and Year Review screens.
+- Updated the annual encouragement badge section into a more visual badge row.
+- Kept achievements and yearly review as local preview/future-module UI using already loaded records only.
+- Preserved cost and backend boundaries: no backend fetches, parser calls, AI calls, LLM calls, storage paths, share image generation, or automatic retries were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T319: Add food photo static analysis preview UI
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.14
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a static UI preview card for food photo analysis results with recognized foods and nutrition estimate fields.
+- Marked the result clearly as UI preview so users do not mistake it for real Vision output.
+- Kept `加入紀錄` disabled and preserved the confirmation/safety copy for future Vision integration.
+- Preserved future-module boundaries: no camera access, image reads, uploads, parser calls, AI calls, LLM calls, backend calls, storage paths, or automatic retries were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T318: Add destination cards to delete and update results
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.1, 4.2, 4.3, 4.7, 4.8
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added icon-led destination cards to the Delete Success screen for Today and History.
+- Added icon-led destination cards to the Update Success screen for Record Detail, Today, History, and Analysis.
+- Kept the result screens navigation-only so users can recover orientation after edit/delete actions.
+- Preserved cost and backend behavior: no parser calls, AI calls, LLM calls, backend reads, storage schema changes, undo copies, or automatic retries were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T317: Polish mobile save success actions
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 3.1, 4.1, 4.2, 4.3, 4.8
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added icon-led destination cards on the mobile Save Success screen for Today, History, and Analysis.
+- Made the post-save continue action source-aware: manual saves now offer `繼續手動新增`, while AI/text saves continue to the Record flow.
+- Kept a separate `語音 / 文字` action for manual save success so users can switch back to the parser flow explicitly.
+- Preserved the low-cost behavior: no parser calls, AI calls, LLM calls, backend reads, storage schema changes, or automatic retries were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T316: Preserve manual record return origin
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 3.1, 4.1, 4.8, 4.9, 4.16
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added mobile state to remember which screen opened manual record creation.
+- Added a shared `openManualRecord` helper that resets manual date/time and stores the return target.
+- Updated Home, Record, AI Review fallback, parser recovery, Menu, and Tutorial manual-entry actions to use the shared helper.
+- Header back and in-page return on Manual Record now return to the correct source screen.
+- Preserved the low-cost manual path: no parser calls, AI calls, LLM calls, backend reads, storage schema changes, or automatic retries were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T315: Add icon labels to mobile record forms
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.7, 4.8
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a shared mobile form label renderer that pairs field labels with small icons.
+- Applied icon labels across candidate editing, manual record creation, record detail fields, and real record editing.
+- Kept the form payload, validation, save behavior, and parser behavior unchanged.
+- Kept LLM/backend cost unchanged: no new backend calls, parser calls, AI calls, LLM calls, storage paths, or automatic retries were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T314: Consolidate mobile AI confirmation cards
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.16
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Consolidated the mobile AI structured confirmation page into one candidate-card list instead of showing duplicate candidate sections.
+- Each candidate card now keeps the user-facing structure while retaining confidence, source text, low-confidence warning, decision reason, edit, and remove actions.
+- Preserved safety behavior: candidates are still not saved until explicit user confirmation, and edits do not trigger another parser call.
+- Kept LLM/backend cost unchanged: no new backend calls, parser calls, AI calls, LLM calls, storage paths, or automatic retries were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T313: Collapse mobile advanced settings by default
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.6
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a collapsible advanced settings section on the mobile Settings screen.
+- Kept the default Settings screen focused on account, reminders, recording quota, privacy, tutorial, subscription, and logout.
+- Moved backend URL, profile switching, model selection, and Dev Client tools behind an explicit advanced-settings toggle.
+- Preserved production/cost safety: no backend fetches, parser calls, AI calls, LLM calls, storage paths, or default model changes were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T312: Improve mobile record timeline metadata UI
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.1, 4.2, 4.7
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated real Today record cards to use the shared record type icon mapping instead of only showing a glucose icon.
+- Updated real History record cards to show icon, record type, content, and time in a structured row.
+- Localized glucose timing labels in record summaries so history/detail text avoids raw internal enum values.
+- Reused the existing small icon style instead of adding a duplicate StyleSheet key.
+- Kept the change UI-only and memory-friendly: no extra backend fetches, parser calls, AI calls, or storage paths were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T311: Upgrade mobile analysis trend chart UI
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.3
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced the simplified analysis bar visualization with a line-chart-style trend card.
+- Added chart title, mg/dL unit context, date axis labels, selectable data points, and an in-card tooltip for the selected point.
+- Kept analysis memory-friendly by using only the last visible glucose points from mobile-loaded records or bounded preview values.
+- Kept LLM cost at zero for analysis: no AI, parser, backend, or new network calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T310: Preserve transcript review return origin
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 3.1, 4.1, 4.15
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added mobile state to remember whether transcript review was opened from Home or the dedicated Record screen.
+- Header back, in-page return, and re-record cleanup now return to the correct source screen.
+- Keeps the new Home quick capture path coherent without creating a duplicate parser or storage flow.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T309: Add Home quick capture UI
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 3.1, 4.1, 4.15
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a Home quick capture card with large hold-to-record UI, compact text input, sample fill, manual add, and next-step confirmation action.
+- Reused the existing transcript draft state and transcript confirmation flow so Home text input does not introduce a second parser pipeline.
+- Kept AI/LLM cost control intact: no parser call is made from Home until the user explicitly proceeds through confirmation.
+- Improved mobile button wrapping for dense action rows to reduce small-screen overflow risk.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T308: Clear parser recovery when transcript changes
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.15-4.16
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a shared `updateTranscriptDraft` helper for mobile transcript changes.
+- Transcript edits, sample text fill, and native Whisper debug output now clear stale parser recovery messages and preview candidates.
+- Prevents outdated parser failure state or candidate results from lingering after the user changes transcript text.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T307: Add mobile parser failure recovery path
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.15-4.16
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added local parser recovery state for the mobile transcript review flow.
+- Parser failures now show an in-page recovery message instead of only a transient status string.
+- Added a low-cost `改用手動新增` fallback from the recovery message so users can avoid another parser/LLM call.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T306: Align mobile AI review header back with return-edit cleanup
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.16
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a shared `returnToTranscriptEdit` helper for leaving AI structured review back to transcript editing.
+- The AI review header back action now clears the stale preview and selected candidate edit state just like the in-page `返回修改` action.
+- Prevents old AI candidate records from lingering when the user returns to edit transcript text.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T305: Clear stale transcript on mobile re-record
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.15
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the mobile transcript review `重新錄音` action to clear the current transcript.
+- Clears any existing AI preview candidate state before returning to the Record screen.
+- Prevents stale transcript text or previous parser results from being accidentally reused on the next recording attempt.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T304: Clarify mobile achievements and year review preview boundaries
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.11, 4.12
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an explicit local-preview banner to the mobile Achievements screen.
+- Added an explicit year-preview banner to the mobile Year Review screen.
+- Clarified that achievements, annual assets, share images, privacy masking, backend sync, and public ranking are not connected yet.
+- Changed future CTAs from final-feature wording to integration-status wording.
+- Did not add backend, storage, sharing, ranking, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T303: Clarify mobile food photo Vision integration status
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.14
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an explicit Vision-not-connected banner to the mobile Food Photo Analysis screen.
+- Clarified that camera, image upload, vision model calls, nutrition estimation, and save-to-meal writes are not enabled.
+- Changed the photo action CTA from capture-like wording to integration-status wording.
+- Did not add backend, storage, camera, image upload, AI Vision, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T302: Clarify mobile store preview and cart integration status
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.13
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an explicit store-preview banner to the mobile Store screen.
+- Clarified that products, cart, checkout, and backend commerce integration are not connected yet.
+- Changed the cart CTA from purchase-like wording to integration-status wording.
+- Did not add backend, storage, payment, order, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T301: Clarify mobile subscription payment integration status
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.4, 4.10
+- `ai_context/SUBSCRIPTION_ENTITLEMENT_SCHEMA.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added explicit payment-not-connected banners to the mobile Subscription and Membership Status screens.
+- Clarified that current membership UI does not start trials, collect payment, or mutate entitlements.
+- Changed primary subscription CTAs from purchase-like wording to integration-status wording.
+- Did not add backend, storage, payment, entitlement mutation, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T300: Label mobile detailed report data source
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.3
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an explicit data-source label to the mobile Detailed Report page.
+- Distinguishes backend `/reports/basic` results, local mobile summaries, and empty report states.
+- Makes the report fallback boundary visible without adding backend requests, parser calls, storage writes, or LLM token usage.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T299: Label mobile analysis preview metrics
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.3
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an explicit `UI 預覽` banner to the mobile Analysis page when no real records are loaded.
+- Marked preview-only chart/stat values as display data so users do not confuse them with real glucose analysis.
+- Kept the existing no-diagnosis and no-AI analysis boundary.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T298: Make mobile history preview records open detail view
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.2, 4.7
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Converted mobile history preview items from plain strings into sample record objects.
+- Made empty-state history preview cards open the existing read-only sample record detail view.
+- Preserved the no-data preview boundary by labeling the items as sample data and avoiding backend writes or queries.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T297: Distinguish manual save success from AI save success
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added local save-entry-method state for the mobile save success screen.
+- AI structured saves keep the MVP recording flow completion semantics.
+- Manual record saves now show copy that confirms no parser or LLM was called.
+- Hid the AI recording flow stepper on manual save success to avoid implying the AI pipeline ran.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T296: Preserve return context after mobile record update/delete success
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.2, 4.7, 4.8
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Extended the mobile record detail return context to update and delete success screens.
+- After editing or deleting a record opened from History, the primary success action now returns to History.
+- Records opened from Today still return to Today.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T295: Preserve mobile record detail return context
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.1, 4.2, 4.7
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added local return-context state for the mobile record detail screen.
+- Records opened from Today return to Today, while records opened from History return to History.
+- Updated both the header back control and in-page Record Detail back button to use the same return context.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T294: Add post-save destinations to mobile save success
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added post-save destination cards to the mobile save success screen.
+- Gives users direct next steps to Today, History, and Basic Analysis after confirmed storage.
+- Keeps the success state as a local UI navigation improvement without adding backend requests, parser calls, storage writes, or LLM token usage.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T293: Align mobile transcript review actions with spec
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.15
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Fixed the mobile transcript review header back action so it returns to the Record input screen instead of the AI review screen.
+- Updated the left transcript review CTA from generic edit wording to the specified `重新錄音` action.
+- Kept parser submission behind the explicit `下一步整理` button and retained the local transcript validation guard.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T292: Add mobile MVP recording flow stepper
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.15-4.16
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a four-step MVP flow indicator for the mobile record flow: Record, Transcript Review, AI Review, and Save Complete.
+- Shows the stepper only on core flow screens, keeping Today, History, Analysis, Menu, and future modules uncluttered.
+- Uses local UI state only and does not add parser calls, backend requests, storage writes, or LLM token usage.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T291: Add structured confirmation cards to mobile AI review
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.16
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a top-level structured confirmation card list to the mobile AI review screen.
+- Shows a date/time summary card and one editable card per AI-generated candidate record.
+- Added record-type icons and an edit affordance so the page more closely matches the specified AI organized confirmation layout.
+- Kept the existing detailed candidate cards, confidence warnings, rejected event list, and save/return controls.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T290: Split AI structured review into its own mobile screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` section 4.16
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an explicit mobile `aiReview` screen for AI structured confirmation.
+- Changed parser success flow from returning to the Record input page to opening the dedicated AI review page.
+- Updated preview-record edit back/cancel/save navigation to return to AI review without another parser call.
+- Added an empty AI review fallback that sends users back to transcript confirmation instead of showing a blank page.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T289: Add MVP/future status labels to mobile menu
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added explicit `MVP` and `預留` status labels to mobile menu destinations.
+- Marked core destinations such as Today, manual record, History, Analysis, Subscription, Tutorial, and Settings as MVP.
+- Marked future destinations such as Achievements, Year Review, Store, and Food Photo as reserved/future so users are not misled by preview pages.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T288: Add per-screen mobile header navigation chrome
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added per-screen mobile header subtitles so Today, Record, History, Analysis, Menu, detail, edit, subscription, settings, and future pages are visually distinct.
+- Added header back/close targets for nested pages instead of always showing the menu button.
+- Limited the primary top tabs to the five main destinations only, so nested confirmation/detail pages no longer look like another state of the same tabbed page.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T287: Lock native debug path inputs during busy actions
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MOBILE_NATIVE_AI_SPIKE.md`
+- `ai_context/model_distribution_policy.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Disabled Dev Client model URL, Whisper model path, audio path, and Llama model path inputs while a native debug action is busy.
+- Reused the existing disabled input visual state for consistency with the Settings request locks.
+- Prevents native download, Whisper, Llama, and benchmark debug actions from reading user-edited paths mid-flight.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T286: Lock settings selections during in-flight actions
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/PRODUCTION_AI_INSTRUCTIONS.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a unified mobile `isAnyRequestInFlight` UI state covering busy actions, quota sync, and report loading.
+- Disabled Backend URL editing, reconnect, profile switching, and LLM/STT model switching while a request is in flight.
+- Added settings evidence text explaining that in-flight parser, sync, and save operations should not use inconsistent UI configuration.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T285: Add reconnect flow busy guard
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an `isBusy` guard to the mobile reconnect `boot()` flow.
+- Disabled the Settings `重新連線` button while the reconnect/dev-login/model/profile sync flow is already running.
+- Prevents repeated taps from issuing duplicate dev-login, model option, profile, and quota requests.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T284: Add native debug action busy guards
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MOBILE_NATIVE_AI_SPIKE.md`
+- `ai_context/model_distribution_policy.md`
+- `ai_context/security_compliance.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added `isBusy` guards to native debug actions for model download, native module checks, Whisper, Llama, and benchmark runs.
+- Disabled the related Dev Client buttons and model-kind chips while a native debug action is in progress.
+- Reduces duplicate model downloads and overlapping native model/debug executions from repeated taps.
+- Did not add backend, storage policy, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T283: Add report and quota sync in-flight guards
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/security_compliance.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added independent in-flight guards for detailed report loading and voice quota synchronization.
+- Disabled `查看詳細報告` and subscription `同步` buttons while the related backend request is already in progress.
+- Prevents repeated taps from issuing duplicate bounded report or quota requests.
+- Did not add backend, storage, AI, LLM, parser, or new network paths.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T282: Add manual/edit/delete busy guards
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added `isBusy` guards before manual record creation, saved-record update, and saved-record delete actions.
+- Disabled `建立紀錄`, `儲存修改`, and `刪除` while another write/delete action is already in progress.
+- Reduces duplicate record creation, repeated PATCH, and repeated DELETE attempts from repeated taps.
+- Did not add backend, storage, AI, LLM, parser, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T281: Add mobile parse/save busy guards
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added `isBusy` guards before opening transcript review, calling `/ai/parse-preview`, and saving AI candidate records.
+- Disabled `下一步整理` and `確認儲存` while a parse/save action is already in progress.
+- Reduces duplicate parser calls and duplicate record-save attempts from repeated taps.
+- Did not add backend, storage, AI, LLM, parser, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T280: Add mobile transcript preflight cost guard
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/security_compliance.md`
+- `ai_context/transcript_processing_pipeline.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added local transcript preflight validation before entering transcript review or calling `/ai/parse-preview`.
+- Blocks blank, overlong, and numerically dense transcript text with inline UI guidance.
+- Disables `下一步整理` on the Record and Transcript Review screens while transcript preflight fails.
+- Keeps backend transcript complexity, quota, rate-limit, and parser validation authoritative.
+- Did not add backend, storage, AI, LLM, parser, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T279: Add history data-boundary guidance
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a `歷史資料邊界` section to the mobile History page.
+- Clarified that range tabs and custom dates only filter records already loaded on mobile, do not make extra backend queries, and do not call AI.
+- Clarified preview sample behavior versus real editable records.
+- Did not add backend, storage, pagination, AI, LLM, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T278: Add analytics data-boundary guidance
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an `分析資料邊界` section to the mobile Basic Analysis page.
+- Clarified UI preview mode versus real loaded records, that basic analysis does not call AI or provide medical advice, and that detailed report queries are bounded to 500 records.
+- Kept the current chart and stats local to already loaded mobile records unless the user opens the detailed report path.
+- Did not add backend, storage, AI, LLM, report, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T277: Add onboarding safety and cost principles
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a `記錄安全原則` section to the mobile tutorial page.
+- Clarified that AI creates candidate records only, blank text is not sent to parser, manual entry avoids AI parser cost, and saved records flow into Today/History/Analysis without medical advice.
+- Added a direct `改用手動新增` path from tutorial with current local date/time prefilled.
+- Did not add backend, storage, AI, LLM, parser, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T276: Add subscription payment and entitlement readiness boundary
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/SUBSCRIPTION_ENTITLEMENT_SCHEMA.md`
+- `ai_context/security_compliance.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a subscription readiness checklist to the mobile membership plan page.
+- Clarified requirements for App Store / Play Store or production payment backend, receipt validation, subscription webhooks, trial/renewal/cancel rules, intro-price preservation, entitlements, and server-side voice quota enforcement.
+- Clarified that current subscription CTAs only show integration status and do not create subscriptions, collect payment, or mutate entitlements.
+- Did not add backend, storage, payment, entitlement mutation, AI, LLM, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T275: Add store cart checkout readiness boundary
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/security_compliance.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added checkout readiness requirements to the Store cart placeholder screen.
+- Added a disabled `前往結帳` action so the future checkout path is visible without implying transactions are enabled.
+- Clarified requirements for catalog/pricing, inventory, cart persistence, coupons, payment receipt validation, refunds, order status, and legal/product review.
+- Did not add backend, storage, payment, order, AI, LLM, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T274: Expand future modules readiness and safety UI
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Expanded future module cards with per-module enablement requirements and safety boundaries.
+- Covered doctor/clinic sharing, ranking/social challenge, HealthKit/Health Connect/meter sync, and food photo recognition.
+- Clarified that future modules remain visible as architecture placeholders without writing data, sharing data, invoking AI, or enabling integrations.
+- Did not add backend, storage, integration, AI, LLM, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T273: Add food photo analysis confirmation boundary UI
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added the future food photo flow bottom actions for `加入紀錄` and `重新拍攝`.
+- Kept `加入紀錄` disabled until a real user-confirmed image analysis result exists.
+- Added a readiness checklist for camera/photo permissions, image storage/deletion, Vision cost/rate limits, and user confirmation before saving.
+- Did not add backend, storage, camera, image upload, AI Vision, LLM, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T272: Add production-ready settings detail readiness states
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added per-setting detail specs for profile, reminders, and privacy settings.
+- Settings detail screen now shows the current disabled state, production readiness checklist, and data safety boundary for each setting row.
+- Clarified that unfinished settings do not write data, call AI, or start background work.
+- Did not add backend, storage, AI, LLM, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T271: Disable invalid mobile record form submit actions
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added local validation state for manual record creation, saved record editing, and AI candidate record editing.
+- Disabled submit buttons when the current form data is invalid and showed the validation reason inline.
+- Kept existing submit-time validation as defense in depth.
+- Did not add backend, storage, AI, LLM, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T270: Localize record type labels in mobile lists and forms
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced raw `record_type` display with `recordTypeLabel()` in Today records, AI candidate cards, record detail, and edit form type display.
+- Keeps internal record type values unchanged while making the UI match Traditional Chinese product copy.
+- Did not add backend, storage, AI, LLM, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T269: Bound mobile manual/edit form text payloads
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/no_phi_logging.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added mobile-side text length limits for meal, exercise, medication, and note form fields.
+- Added a length limit for fallback `payload_json` editing.
+- Reused a shared bounded list cap for comma/newline separated fields.
+- Prevents manual/edit flows from producing unexpectedly large payloads before backend validation.
+- Did not add backend, storage, AI, LLM, or network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T268: Clarify save success raw-text handling
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/UI_UX_SPEC.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the save success screen to state that AI raw text is only used during confirmation.
+- The success message now tells users the current text input has been cleared after save.
+- Reinforces that saved records should be structured data, not raw transcripts.
+- Did not add backend, storage, AI, LLM, or parser calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T267: Strip raw text metadata before saving AI candidates
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/production_parser_ir_design.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added mobile-side sanitization before saving AI candidate records.
+- Strips raw text metadata keys such as `transcript`, `source_text`, `raw_text`, `evidence`, and `description` from `metadata_json` before POSTing to `/records`.
+- Clears the transcript after successful AI candidate save.
+- Keeps source text visible only during confirmation while reducing risk of raw transcript/source text being persisted from mobile.
+- Did not add backend, AI, LLM, parser, or extra network calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T266: Show bounded AI candidate decision trace
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/transcript_processing_pipeline.md`
+- `ai_context/production_parser_ir_design.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added bounded `decision_trace` display on AI candidate cards when the parser provides one.
+- Truncates decision trace to a short UI-safe string.
+- Shows a concise `建立理由` without exposing raw model output or hidden reasoning.
+- Did not add backend, AI, LLM, parser, or storage calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T265: Show rejected parser event reasons in AI confirmation
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/transcript_processing_pipeline.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/UI_UX_SPEC.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added safe reason labels for `rejected_events` in the AI confirmation panel.
+- Added a note that rejected segments are not saved and do not automatically trigger another AI call.
+- Wrapped each rejected segment in a small card with source text and reason.
+- Did not add backend, AI, LLM, parser, or storage calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T264: Add low-confidence warning to AI candidate cards
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/transcript_processing_pipeline.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a visible warning on AI candidate cards when confidence is below 70%.
+- Keeps the existing confidence percentage visible while making low-confidence candidates harder to miss.
+- Reinforces that user confirmation is required before health records are saved.
+- Did not add backend, AI, LLM, or parser calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T263: Return AI confirmation edits to transcript review
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Changed AI confirmation `返回修改` behavior to navigate back to `transcriptReview`.
+- Clears the current preview and tells the user that the parser is only called again after pressing `下一步整理`.
+- Aligns the mobile flow with the spec path: transcript review -> AI confirmation -> return to transcript review for edits.
+- Reduces confusion about whether editing text automatically triggers another AI/LLM call.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T262: Add update success screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an `updateSuccess` screen after editing a real record.
+- The screen clearly confirms the update, notes that the local list has been updated, and offers routes to record detail or Today.
+- Replaced the previous immediate return to detail view that only relied on global status text.
+- Did not add backend calls, storage, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T261: Add delete success screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a `deleteSuccess` screen after deleting a real record.
+- The screen clearly confirms deletion, explains that no local undo copy is kept, and offers routes back to History or Today.
+- Replaced the previous immediate jump to Today that only relied on the global status text.
+- Did not add backend calls, storage, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T260: Disable unavailable AI model choices in Settings
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/model_distribution_policy.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Disabled unavailable STT and LLM model chips in mobile Settings.
+- Added `（未啟用）` labels and disabled chip styling for unavailable options.
+- Added a note that cloud fallback remains disabled by default in v1.
+- Prevents users from selecting disabled cloud/placeholders and accidentally changing parser behavior expectations.
+- Did not add backend, AI, LLM, or model discovery calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T259: Show active AI model/runtime on record flow
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/UI_UX_SPEC.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added active LLM and STT model/runtime labels to the mobile `快速記錄` flow.
+- Added a small runtime label helper for local, browser/device, server-stub, and disabled cloud model states.
+- Added an inline note that manual entry avoids the AI parser and text parsing sends the current transcript once.
+- Improves cost transparency without adding backend, AI, LLM, or model discovery calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T258: Make mobile request errors PHI-safe in UI
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/IMPLEMENTATION_LOG.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Stopped `requestJson()` and `requestNoContent()` from embedding backend response bodies in thrown error messages.
+- Added a `safeUiError()` helper for user-facing status messages.
+- Replaced major mobile health-record flow status errors with PHI-safe fallback messages or sanitized endpoint/status messages.
+- Reduces risk of backend details, request echoes, or health payload fragments appearing in UI.
+- Did not add backend, network, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T257: Add mobile record sync status
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added `recordsStatus` to track whether records are not loaded, syncing, synced, disconnected, or temporarily unavailable.
+- Wrapped `loadRecords()` in error handling so failed record sync does not silently look like a true empty dataset.
+- Displayed record sync status on Today, History, and Analysis screens.
+- Helps users distinguish synced data, already-loaded data, and sample preview data.
+- Did not add backend calls, pagination, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T256: Clarify History preview records are sample data
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an explicit History page info banner when no real records are loaded.
+- The banner states that displayed history rows are UI examples and are not stored.
+- Avoids presenting fixed history preview data as real user health records.
+- Did not add backend, storage, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T255: Disable parse progression when transcript is empty
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Disabled the mobile `下一步整理` actions when the transcript text is empty.
+- Added disabled button styling and an inline hint telling users to enter text or fill the sample.
+- Prevents empty inputs from looking like they can enter the parser/LLM path.
+- Did not add backend, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T254: Clarify Today sample preview count
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Changed the Today summary text from `今日已記錄 4 筆` to `今日預覽 4 筆範例` when no real records are loaded.
+- Keeps real Today count behavior unchanged when records exist.
+- Avoids presenting sample dashboard cards as real user records.
+- Did not add backend, storage, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T253: Add local Store search
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Made the Store search box editable and connected it to local product preview filtering.
+- Search checks product title, description, and price within the selected category.
+- Added an empty state when no local preview product matches the query.
+- Clearly avoids backend catalog queries, order writes, payment, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T252: Add local custom date range filter to History
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added start/end date inputs to the History screen to match the date range selector in the UI spec.
+- Added validation for `YYYY-MM-DD` format and start-before-end ordering.
+- Custom ranges filter only records already loaded in mobile memory.
+- Switching back to preset tabs clears the custom range active state.
+- Did not add backend queries, pagination, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T251: Clarify sample record detail source label
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced the sample record detail source fallback `UI preview` with `範例資料（不會儲存）`.
+- Makes sample-only detail views clearer for Traditional Chinese users.
+- Avoids implying that sample content is a real stored source or integration.
+- Did not add backend, storage, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T250: Add achievement and yearly review pending actions
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added the `查看全部徽章` action on the achievement screen with an in-page pending message.
+- Added the yearly review `年度鼓勵徽章` card.
+- Added the `分享我的年度回顧` action with an in-page pending message for future share image/privacy work.
+- Keeps gamification and yearly review visible while avoiding backend writes, sharing, AI calls, or medical advice.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T249: Add membership status screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/SUBSCRIPTION_ENTITLEMENT_SCHEMA.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a real `會員方案狀態` screen connected from the subscription page.
+- Shows synced trial/plan status, trial days remaining when available, member-only feature summary, and founding annual price.
+- `立即續訂` routes back to the subscription page with an explicit pending payment/receipt-validation message.
+- Avoids mutating membership state or implying payment has completed.
+- Did not add backend, payment, auth, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T248: Replace food photo upload alert with explicit pending state
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced the food photo `拍攝或上傳` alert-only behavior with an in-page pending integration message.
+- The page now explains that image storage, permissions, cost controls, and user confirmation are required before upload/camera can be enabled.
+- Keeps the future image recognition UI visible without invoking camera, upload, AI, or persistence.
+- Did not add backend, camera, storage, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T247: Replace logout alert with explicit auth pending state
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced the Settings logout alert-only behavior with an in-page authentication pending message.
+- The logout action now clearly states that production auth, refresh-token revoke, and local session clearing are required.
+- Avoids implying that the current `dev-login` session has been securely logged out.
+- Did not add backend, auth mutation, storage, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T246: Add store cart placeholder screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a real `購物車` placeholder screen behind the Store `查看購物車` action.
+- Replaced product arrow alert-only behavior with an in-page product preview status.
+- The cart placeholder clearly states that no cart state, order, coupon, payment, or refund flow is active.
+- Keeps the future commerce UI visible without writing commercial data or implying checkout is available.
+- Did not add backend, payment, order, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T245: Add settings detail placeholder screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a real `設定詳情` placeholder screen for Settings rows that do not yet have full flows.
+- Replaced alert-only Settings row behavior for personal profile, reminders, notification/privacy, and similar entries.
+- The detail screen clearly states that no account, notification, or privacy settings are written before production auth and settings APIs are implemented.
+- Kept existing direct routes for quota, tutorial, and subscription management.
+- Did not add backend, auth, notification, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T244: Add future modules screen from menu More action
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a real `未來擴充` screen behind the menu `查看更多功能` action.
+- Listed future architecture placeholders for doctor/clinic sharing, rankings/social challenge, HealthKit/Health Connect/meter sync, and food photo recognition.
+- Replaced the alert-only More action with an actual navigable UI page.
+- Explicitly states these modules do not write data or call AI before backend, permission, and cost controls are implemented.
+- Did not add backend, integration, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T243: Replace subscription CTA alerts with explicit pending state
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/SUBSCRIPTION_ENTITLEMENT_SCHEMA.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced subscription CTA alert-only behavior with an in-page pending integration message.
+- `開始 7 天試用` now states that payment/store integration is required and does not mutate membership state.
+- `已訂閱？管理方案` now states that App Store / Play Store or a production member portal is required.
+- Avoids implying that trial activation, payment, or subscription management has completed.
+- Did not add backend, payment, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T242: Replace food photo mock nutrition results with empty analysis state
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced fixed food photo nutrition examples with a clear `尚未產生分析結果` empty state.
+- Removed the `加入紀錄` action while no real image analysis result exists.
+- Kept a `拍攝或上傳` placeholder action for the future camera/upload flow.
+- Avoids presenting mock AI estimates as real user-specific analysis and does not add backend, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T241: Hide save action when AI parse returns zero candidates
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Updated the AI structured confirmation panel to show a clear empty state when parser output has zero candidate records.
+- Hid the `確認儲存` action unless at least one candidate record exists.
+- Added direct `返回修改` and `手動新增` options for zero-candidate results.
+- Avoids a misleading save affordance and does not add backend, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T240: Start mobile transcript input empty by default
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Changed the mobile transcript input initial state from the sample transcript to an empty string.
+- Kept the sample transcript available only through the explicit `填入範例` button.
+- Prevents accidental submission of sample text into the parser/LLM path.
+- Preserves existing validation that blocks empty transcript parsing.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T239: Fix profile and quota unloaded labels
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a shared active-profile display label for missing profile states.
+- Settings now shows `尚未建立照護對象` or `尚未選擇照護對象` instead of falling back to `自己`.
+- Subscription status now shows `額度尚未載入` before voice quota data is available.
+- Avoided presenting sample/default values as real account or entitlement state.
+- Did not add backend, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T238: Fix subscription quota unloaded fallback labels
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/SUBSCRIPTION_ENTITLEMENT_SCHEMA.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Fixed the subscription quota card so unloaded quota state no longer displays misleading zero-minute usage.
+- Shows `已用 尚未載入`, `剩餘 尚未載入`, and a daily-limit pending message until `voiceQuota` is available.
+- Keeps real used, remaining, and daily limit values visible once backend quota data is loaded.
+- Did not add backend, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T237: Fix Settings disconnected fallback labels
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced the disconnected account fallback name in Settings with `尚未連線帳號` instead of a sample user name.
+- Changed the voice quota settings row to show `錄音額度尚未載入` when quota data is unavailable.
+- Avoided displaying a misleading zero-minute quota before backend quota state is loaded.
+- Did not add backend, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T236: Fix Analysis preview fallback for real empty ranges
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Fixed Analysis so preview chart bars and sample metric values only appear when no records are loaded at all.
+- Real datasets with no glucose records in the selected range now show `尚無` instead of sample values.
+- Record count now shows true zero for empty real ranges instead of falling back to 28.
+- Added an explicit empty chart message for real ranges without glucose data.
+- Did not add backend, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T235: Fix History range empty-state preview behavior
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Fixed History so preview examples are shown only when no records are loaded at all.
+- Added a true empty-state card when the user has records but the selected history range has zero results.
+- Preserved grouped real-record display for ranges with matching records.
+- Did not add backend, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T234: Fix Today zero-record count and empty state
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Fixed Today count so true zero-record days no longer display the preview count of 4.
+- Kept the 4-item preview only when no records are loaded at all.
+- Added a real empty-state card for users who have historical records but no records today.
+- Preserved the quick-start actions so users can add a first record for the day.
+- Did not add backend, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T233: Improve mobile record detail payload display
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added typed detail formatting for glucose, meal, exercise, medication, note, and fallback records.
+- Record detail now shows a main information section with date, time, type, status/value/content, and note fields where available.
+- Added a supplemental information section for source, exercise, and medication context.
+- Keeps the detail screen read-only until the user explicitly enters edit mode.
+- Did not add backend, AI, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T232: Align mobile menu screen with UI spec
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Wrapped the mobile menu grid in a spec-aligned menu page panel.
+- Added menu title, subtitle, and a close X action that returns to Today.
+- Preserved the two-column shortcut grid and existing destinations.
+- Added a `查看更多功能` placeholder for future modules without enabling unfinished features.
+- Did not add backend calls, LLM calls, or new dependencies.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T231: Add Today quick-start record actions
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a quick-start card to the Today screen so Home supports immediate recording actions.
+- Added direct navigation from Today to the voice/text record screen.
+- Added direct navigation from Today to manual record creation with current date/time initialized.
+- Preserved the existing analysis CTA and did not add backend, STT, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T230: Add mobile post-recording next-step card
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a post-recording result card after the hold-to-record UI is released.
+- Shows recorded preview duration and distinguishes too-short recordings from normal completed recordings.
+- Provides clear actions for retrying recording or continuing to transcript/text confirmation.
+- Resets stale AI preview results when a new recording preview starts.
+- Keeps the flow as UI-only and does not add native audio capture, STT, backend calls, or LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T229: Add mobile hold-to-record UI shell
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a large hold-to-record control to the mobile quick record screen.
+- Added press-in / press-out recording preview state, elapsed seconds, release hint, and quota-aware status messages.
+- Shows daily voice quota remaining when the backend quota response is available.
+- Blocks recording preview when the loaded daily voice quota is exhausted and guides users to text/manual entry.
+- Keeps this as a UI shell only; no audio capture, STT, extra backend calls, or LLM calls were added.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T228: Add mobile detailed report screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a `detailedReport` mobile screen behind the analysis page's `查看詳細報告` CTA.
+- Loads the existing backend `/reports/basic` summary for the selected analysis range when account/profile context is available.
+- Falls back to local mobile-loaded records if the backend report is unavailable.
+- Shows record count, glucose average/min/max, meal count, exercise count, medication count, and PHI-safe report notes.
+- Keeps report loading bounded with `limit=500` and does not add LLM calls.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T227: Add editable mobile AI confirmation candidates
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added an `editPreviewRecord` mobile screen for editing AI-organized candidate records before save.
+- Added typed pre-save edits for glucose, meal, exercise, medication, note, and JSON fallback records.
+- Allows candidate date/time and payload corrections without re-running AI parsing or making extra backend calls.
+- Added candidate removal so users can drop incorrect AI results before confirmation.
+- Preserved the existing backend write path and only sends confirmed records after user approval.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T226: Add mobile save success screen to record flow
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a `saveSuccess` mobile screen for the post-save state in the MVP record flow.
+- Routes AI-confirmed record saves to the success screen after backend write and record reload.
+- Routes manual record creation to the same success screen while preserving the created record for detail navigation.
+- Added clear next actions for continuing to record, viewing details when available, or returning to Today.
+- Keeps save success UI local and does not add extra LLM calls or backend endpoints.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T225: Align mobile settings screen with UI spec
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a mobile settings account card with account identity, login method, and active profile context.
+- Added spec-aligned settings rows for personal profile, reminders, voice quota, notification/privacy, tutorial, and subscription management.
+- Wired tutorial and subscription rows to existing screens and kept unfinished settings as explicit placeholders.
+- Added a logout placeholder that does not fake production auth state.
+- Separated backend URL, profile switching, and model selectors into a developer settings area.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T224: Build spec-aligned mobile food photo preview
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced the minimal food photo analysis preview with a spec-aligned screen.
+- Added upload area copy, AI result card, nutrition estimate rows, and bottom actions for add-to-record and retake.
+- Kept camera/upload and image recognition as explicit future placeholders.
+- Preserved the safety boundary that estimated nutrition must be user-confirmed and editable before any record write.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T223: Build spec-aligned mobile store preview
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced the static mobile store text list with a spec-aligned preview UI.
+- Current Store category pills cover coupons, supplement discounts, partner products, and member benefits.
+- Current product cards show visual placeholders, badge, title, description, points cost, and action button.
+- Added a cart CTA as a disabled/placeholder flow and kept the store explicitly non-transactional.
+- Avoided medical efficacy claims and did not add checkout, order writes, or payment state.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T222: Make mobile yearly review record-derived
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced static yearly review preview numbers with summaries derived from currently loaded records.
+- Added local yearly counts for glucose, meal, exercise, total records, and longest record streak.
+- Added yearly highlights for most-recorded type, total records, longest streak, and glucose average when available.
+- Kept yearly review as a lightweight local summary with no LLM calls and no diagnosis or treatment advice.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T221: Make mobile achievements record-derived
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced the static mobile achievements list with achievements derived from currently loaded records.
+- Added local calculations for current record streak, recent morning/fasting glucose days, recent exercise days, and placeholder weight progress.
+- Shows unlocked count, nearest next-achievement distance, completion state, and progress bars.
+- Keeps achievement calculations client-side and LLM-free, with no diagnosis or treatment advice.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T220: Connect mobile subscription page to voice quota
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/SUBSCRIPTION_ENTITLEMENT_SCHEMA.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a mobile `VoiceQuota` client model aligned with `GET /subscriptions/voice-quota`.
+- Loads server-backed trial/subscription status and daily voice quota after dev login.
+- Keeps quota loading non-blocking so record, text, and manual-entry flows still work if quota display is temporarily unavailable.
+- Replaced the static subscription page with current plan status, trial-days-left display, daily usage progress, low-remaining warning styling, plan cards, and feature comparison rows.
+- Kept payment/subscription management as explicit placeholder actions without adding a fake purchase state.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T219: Make mobile basic analysis ranges functional
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added mobile analysis range state; current MVP ranges are 本週, 本月, and 自訂日期區間.
+- Made analysis segmented controls filter loaded records instead of staying static.
+- Current Analysis computes highest glucose, lowest glucose, average glucose, total glucose measurements, before-meal count, and after-meal count from the selected range.
+- Renders chart bars from real glucose records when available and keeps preview bars only for empty states.
+- Keeps analysis informational only and does not add diagnosis or treatment advice.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T218: Make mobile history filters functional
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added mobile history range state for today, yesterday, 7 days, and 30 days.
+- Made history segmented controls filter real loaded records instead of remaining static.
+- Added local date-range labels and record counts for the selected history range.
+- Grouped filtered history records by local date.
+- Kept preview sample rows only for empty history states.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T217: Add mobile transcript review screen before AI parse
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/transcript_processing_pipeline.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a `transcriptReview` mobile screen between free-text input and AI parsing.
+- Changed the Record page's `下一步整理` action to open transcript review instead of calling the parser immediately.
+- Allows users to edit the recognized/input text before `/ai/parse-preview` is called.
+- Returns to the Record page after parser success so the existing AI structured confirmation cards remain visible.
+- Reduces avoidable parser/LLM calls caused by obvious transcript mistakes while preserving the confirmation-before-save flow.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T216: Add mobile client-side validation before record writes
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/generic_health_record_abstraction.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added lightweight client-side validation before manual create and record edit submissions.
+- Validates date/time format and blocks clearly future record times before API calls.
+- Validates common record fields for glucose, meal, exercise, medication, and note records before network submission.
+- Keeps backend schema validation, future-time checks, permission checks, and audit logging authoritative.
+- Reduces avoidable API requests and avoids invoking AI/LLM for direct-entry corrections.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T215: Add mobile date and time fields for manual create and edit
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added lightweight date and time text inputs to the mobile manual record creation screen.
+- Added date and time text inputs to the mobile record edit screen.
+- Converts local `YYYY-MM-DD` and `HH:mm` inputs to ISO datetimes before calling the backend.
+- Sends edited `occurred_at` through the existing backend `PATCH /records/{record_id}` endpoint.
+- Keeps backend future-time, timezone, permission, validation, and audit paths authoritative.
+- Avoided adding a native date-picker dependency in this slice to keep the mobile build smaller and lower-risk.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T214: Add mobile manual record creation screen
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/generic_health_record_abstraction.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added a `manualRecord` mobile screen for low-cost direct entry without LLM/parser usage.
+- Added manual creation for glucose, meal, exercise, medication, and note records using the same typed field model as record editing.
+- Added entry points from the Record page and Menu grid.
+- Sends manual records through the existing backend `POST /records` endpoint with `source: manual`, so backend validation, permission checks, sanitization, and audit logging remain authoritative.
+- Opens the newly created record in the detail screen after successful save.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T213: Replace mobile record JSON editor with typed edit form
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/generic_health_record_abstraction.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Replaced the primary mobile edit experience for common records with field-specific forms.
+- Added glucose fields for value, unit, and meal timing.
+- Added meal fields for meal type and food items.
+- Added exercise fields for activity and duration minutes.
+- Added medication fields for medication name and dose text.
+- Added note fields for kind and tags.
+- Preserved JSON fallback only for future/less common record types.
+- Kept save behavior on the existing backend `PATCH /records/{record_id}` path so backend validation, permission checks, and audit logging remain authoritative.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T212: Add mobile record detail and edit screens
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Added `recordDetail` and `editRecord` mobile screens to match the UI spec's detail/edit flow.
+- Made Today timeline cards open record detail; empty-state sample cards open read-only detail preview.
+- Made History real record rows open record detail.
+- Added edit form for real records using the existing backend `PATCH /records/{record_id}` endpoint.
+- Added delete action for real records using the existing backend `DELETE /records/{record_id}` endpoint.
+- Kept writes behind explicit user confirmation and preserved the existing backend permission/audit path.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+
+### T211: Build mobile multi-page UI shell
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+
+Files:
+
+- `mobile/App.tsx`
+
+Summary:
+
+- Reworked the React Native preview from a single developer workflow screen into a multi-page app shell.
+- Added top-level mobile navigation for Today, Record, History, Analysis, and Menu.
+- Added menu destinations for subscription, settings, tutorial, achievements, yearly review, store, and food photo analysis.
+- Made Today the first screen with UI-spec-aligned record summary and timeline cards.
+- Moved text/AI parse workflow into the Record page while preserving the existing backend parser and confirmation-before-save flow.
+- Kept native model debug controls hidden behind `EXPO_PUBLIC_ENABLE_DEBUG_TOOLS=true` and moved them under Settings.
+
+Verification:
+
+- `npm run typecheck` in `mobile/` passed.
+- `npm run start -- --localhost --port 8081` launched Expo/Metro successfully; port `8081` was occupied, so Expo selected `8082`.
+
+### T210: Bound auth token and session response schemas
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/schemas/auth.py`
+- `backend/app/api/auth.py`
+- `backend/tests/test_auth_refresh.py`
+
+Summary:
+
+- Added shared response bounds for access tokens, refresh tokens, display names, logout-all revoked-session counts, and auth session list size.
+- Restricted refresh response `token_type` to the existing `bearer` literal and bounded `expires_in`.
+- Wrapped `/auth/sessions` in a bounded root response model while preserving the public JSON list shape.
+- Added regression coverage for overlong auth response fields, invalid token type, invalid refresh token shape, invalid expiry, over-limit logout-all counts, and over-limit session response lists.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py::test_auth_response_schemas_bound_token_and_session_metadata tests/test_auth_refresh.py::test_logout_all_endpoint_revokes_only_current_account_sessions tests/test_auth_refresh.py::test_list_sessions_returns_active_current_account_metadata_only` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T209: Bound profile and grant response schemas
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+
+Files:
+
+- `backend/app/schemas/profile.py`
+- `backend/tests/test_profiles.py`
+
+Summary:
+
+- Added shared bounds for profile display names, relationships, grant type, and grant scopes.
+- Bounded `ProfileRead`, `ProfileAccessGrantRead`, and `SharedProfileRead` response schemas.
+- Restricted grant response scopes and grant types to the existing allowed literals.
+- Added regression coverage for overlong profile text, too many grant scopes, and invalid shared-profile scopes.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py::test_dev_login_and_profile_flow tests/test_profiles.py::test_profile_response_schemas_bound_public_text_and_grant_scopes tests/test_profiles.py::test_profile_list_is_bounded_and_supports_before_cursor` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T208: Bound basic report response schema
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/generic_health_record_abstraction.md`
+
+Files:
+
+- `backend/app/schemas/report.py`
+- `backend/tests/test_reports.py`
+
+Summary:
+
+- Added explicit bounds for basic report record counts and summary sub-counts.
+- Bounded glucose summary values to the same validated glucose range used by record payload validation.
+- Preserved existing basic report aggregation and date-window behavior.
+- Added regression coverage for over-range glucose summary values and over-limit report counts.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_reports.py::test_basic_report_summarizes_profile_records tests/test_reports.py::test_basic_report_response_schema_bounds_counts_and_glucose_values tests/test_reports.py::test_basic_report_supports_date_window` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T207: Bound public rate-limit retry metadata
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/REPO_QUALITY_WORKFLOW.md`
+
+Files:
+
+- `backend/app/services/rate_limits.py`
+- `backend/app/api/auth.py`
+- `backend/app/api/ai.py`
+- `backend/tests/test_auth_refresh.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Added shared bounds for public `retry_after_seconds` values.
+- Clamped retry-after values at the rate-limit service boundary and before auth/AI error details and `Retry-After` headers are emitted.
+- Preserved existing refresh/logout/AI rate-limit behavior.
+- Added regression coverage for low, normal, and over-maximum retry-after values.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py::test_rate_limit_retry_after_seconds_is_bounded_for_public_responses tests/test_ai_pipeline.py::test_ai_rate_limit_detail_bounds_retry_after_seconds tests/test_auth_refresh.py::test_refresh_endpoint_rate_limits_invalid_token_attempts tests/test_ai_pipeline.py::test_parse_preview_rate_limit_blocks_before_quota_and_parser` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T206: Bound voice quota public plan metadata
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/VOICE_RECORDING_QUOTA_CONTRACT.md`
+
+Files:
+
+- `backend/app/services/entitlements.py`
+- `backend/app/api/subscriptions.py`
+- `backend/app/schemas/subscription.py`
+- `backend/tests/test_entitlements.py`
+
+Summary:
+
+- Added bounded normalization for public plan codes used in voice quota decisions and quota error details.
+- Bounded `/subscriptions/voice-quota` response fields for plan code, status, referral code, and voice-second counters.
+- Reused the normalized public plan code in the subscription API response.
+- Added regression coverage for blank, non-string, and overlong plan codes plus bounded quota response fields.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_entitlements.py::test_public_plan_code_is_bounded_for_quota_outputs tests/test_entitlements.py::test_voice_quota_response_schema_bounds_public_fields tests/test_entitlements.py::test_voice_quota_endpoint_creates_trial_subscription tests/test_entitlements.py::test_voice_quota_parse_preview_denies_over_limit` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T205: Bound Ollama model discovery identifiers
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/model_distribution_policy.md`
+
+Files:
+
+- `backend/app/services/ai_pipeline.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Added explicit bounds for model ids extracted from Ollama `/api/tags`.
+- Skipped blank and overlong runtime model ids before caching or availability comparison.
+- Capped the number of discovered Ollama model ids retained from one model-list response.
+- Added regression coverage for trimming valid ids, rejecting blank/overlong ids, and stopping at the max discovered-id count.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_ollama_model_ids_cache_uses_ttl_and_returns_copy tests/test_ai_pipeline.py::test_ollama_model_ids_bounds_model_id_values_and_count tests/test_ai_pipeline.py::test_ai_model_options_response_schema_bounds_metadata` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T204: Bound AI model options response schema
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/model_distribution_policy.md`
+
+Files:
+
+- `backend/app/schemas/ai.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Added explicit bounds for AI model option ids, labels, descriptions, and model-list sizes.
+- Kept `/ai/models` response metadata predictable before frontend model selectors consume runtime-adjusted local model state.
+- Preserved existing runtime availability behavior for Ollama/Gemma model options.
+- Added regression coverage for oversized model ids, oversized descriptions, and too many model options.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_list_ai_models tests/test_ai_pipeline.py::test_ai_model_options_response_schema_bounds_metadata` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T203: Bound local parser debug stream line parsing
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/local_model_playbook.md`
+
+Files:
+
+- `backend/app/services/ai_pipeline.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Added a hard size guard for Ollama debug-stream lines before JSON parsing.
+- Oversized local parser stream lines now return a fixed low-information error and stop processing.
+- Preserved existing streamed-content response budget and raw HTTP error minimization.
+- Added regression coverage proving an oversized stream line containing transcript-like health text is not parsed or echoed.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_local_parser_debug_stream_rejects_oversized_line_before_json_parse tests/test_ai_pipeline.py::test_local_parser_debug_stream_omits_raw_http_errors` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_local_parser_debug_stream_rejects_oversized_line_before_json_parse tests/test_ai_pipeline.py::test_local_parser_debug_stream_omits_raw_http_errors tests/test_ai_pipeline.py::test_progress_stream_quota_wrapper_rejects_oversized_event_without_json_parse` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T202: Bound progress-stream event parsing
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/transcript_processing_pipeline.md`
+
+Files:
+
+- `backend/app/api/ai.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Added a hard size guard before the progress-stream quota wrapper parses NDJSON event lines.
+- Oversized progress events now return a fixed low-information error event instead of parsing or echoing the oversized line.
+- Preserved normal progress-stream behavior and final-event voice quota commit behavior.
+- Added regression coverage proving an oversized event containing transcript-like health text is not echoed in the error event.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_progress_stream_quota_wrapper_rejects_oversized_event_without_json_parse tests/test_ai_pipeline.py::test_parse_progress_stream_reports_atomic_events_and_contextual_glucose tests/test_ai_pipeline.py::test_parse_progress_stream_error_event_omits_phi_content` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T201: Bound parse preview response schema
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/production_parser_ir_design.md`
+
+Files:
+
+- `backend/app/schemas/ai.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Added explicit bounds for parse preview response text fields, segment count, record count, rejected event count, top-level payload/metadata keys, source fields, decision traces, and confidence values.
+- Kept parser-derived API responses memory-friendly even when generated by local or future remote parser paths.
+- Preserved existing blank transcript echo minimization and record metadata sanitization behavior.
+- Added regression coverage for oversized segment text, oversized record payloads, too many segments, too many records, and oversized rejected-event hints.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_preview_response_schema_bounds_output_shape tests/test_ai_pipeline.py::test_compact_ir_maps_to_record_preview tests/test_ai_pipeline.py::test_storage_compatible_preview_records_sanitize_and_reject_invalid_payloads tests/test_ai_pipeline.py::test_command_proposal_response_schema_bounds_output_shape` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T200: Bound command proposal response schema
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/VOICE_COMMAND_EXECUTION_POLICY.md`
+
+Files:
+
+- `backend/app/schemas/ai.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Added explicit bounds for command proposal response strings, action count, top-level payload keys, and confidence values.
+- Kept command proposal responses memory-friendly and predictable before UI or agent clients consume proposed actions.
+- Preserved existing PHI minimization behavior where command proposal responses do not echo transcripts and candidate metadata omits raw/source text.
+- Added schema regression coverage for oversized UI messages, oversized action payloads, too many proposed actions, and invalid confidence values.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_command_proposal_create_record_does_not_save_directly tests/test_ai_pipeline.py::test_command_proposal_response_schema_bounds_output_shape tests/test_ai_pipeline.py::test_command_proposal_navigate tests/test_ai_pipeline.py::test_command_proposal_unknown_does_not_echo_transcript` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T199: Bound record storage sanitization traversal
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/production_parser_ir_design.md`
+
+Files:
+
+- `backend/app/services/record_sanitization.py`
+- `backend/tests/test_records.py`
+
+Summary:
+
+- Added depth, container-width, and string-length bounds to record payload/metadata storage sanitizers.
+- Preserved removal of raw transcript, source text, notes, descriptions, and free-text fields before DB storage.
+- Added truncation markers for overly deep or wide direct sanitizer inputs.
+- Reused existing record JSON bound constants so sanitizer behavior stays aligned with API validation.
+- Added regression coverage for direct recursive sanitizer use.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_records.py::test_record_create_removes_raw_text_before_storage tests/test_records.py::test_record_sanitizers_bound_direct_recursive_use tests/test_records.py::test_record_create_validates_sanitized_payload` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T198: Bound shared sensitive-data redaction traversal
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `backend/app/core/redaction.py`
+- `backend/tests/test_security_baseline.py`
+
+Summary:
+
+- Added depth, container-width, and string-length bounds to shared sensitive-data redaction.
+- Preserved sensitive-key redaction for health payloads, transcripts, tokens, prompts, and secrets.
+- Added truncation markers for overly deep or wide structures instead of recursively traversing arbitrary input.
+- Added regression coverage for depth, width, string, and invalid-bound behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_security_baseline.py::test_redaction_removes_sensitive_health_and_secret_fields tests/test_security_baseline.py::test_redaction_bounds_depth_width_and_string_length tests/test_security_baseline.py::test_redaction_rejects_invalid_bounds tests/test_security_baseline.py::test_audit_metadata_sanitizer_bounds_values_and_redacts_sensitive_keys` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T197: Bound issued JWT jti before token encoding
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/SUBSCRIPTION_ENTITLEMENT_SCHEMA.md`
+
+Files:
+
+- `backend/app/core/auth.py`
+- `backend/tests/test_auth_refresh.py`
+
+Summary:
+
+- Added issuer-side normalization and length bounds for caller-provided access-token `jti` values.
+- Rejected blank and oversized `jwt_id` values before JWT payload JSON encoding.
+- Preserved automatic UUID `jti` generation for normal backend-issued access tokens.
+- Added regression coverage for trimmed caller-provided `jti`, blank rejection, and oversized rejection.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py::test_issue_access_token_bounds_caller_provided_jwt_id tests/test_auth_refresh.py::test_refresh_endpoint_rotates_refresh_token_and_issues_access_token tests/test_auth_refresh.py::test_logout_endpoint_revokes_valid_bearer_access_token_jti` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T196: Bound Ollama model-list response before JSON parsing
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/ollama_local_parser_models.md`
+
+Files:
+
+- `backend/app/services/ai_pipeline.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Replaced eager `response.json()` parsing for Ollama `/api/tags` availability checks with a bounded streaming response-text reader.
+- Added a hard cap for raw Ollama model-list response text before JSON materialization.
+- Preserved stale-cache fallback behavior when model-list fetches fail or exceed the safe response size.
+- Added regression coverage proving oversized `/api/tags` responses are rejected before JSON parsing.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_ollama_model_ids_cache_uses_ttl_and_returns_copy tests/test_ai_pipeline.py::test_ollama_model_ids_cache_refreshes_after_ttl tests/test_ai_pipeline.py::test_ollama_model_ids_cache_falls_back_to_stale_on_fetch_error tests/test_ai_pipeline.py::test_ollama_model_ids_rejects_oversized_tags_response_before_json_parse` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T195: Bound local parser HTTP response before JSON parsing
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/production_parser_ir_design.md`
+
+Files:
+
+- `backend/app/services/ai_pipeline.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Replaced eager `response.json()` parsing on local parser HTTP responses with a bounded streaming response-text reader.
+- Added a hard cap for raw local parser HTTP response text before JSON materialization.
+- Preserved the existing compact parser content guard after JSON extraction.
+- Returned PHI-safe oversized-response errors without raw parser output, transcript fragments, or health values.
+- Added regression coverage for oversized OpenAI-compatible and Ollama local parser HTTP responses.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_ollama_response_size_guard_runs_before_json_parsing tests/test_ai_pipeline.py::test_local_parser_http_response_size_guard_runs_before_json_parsing tests/test_ai_pipeline.py::test_local_parser_error_messages_omit_phi_content` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T194: Omit raw HTTP errors from local parser debug stream
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/no_phi_logging.md`
+
+Files:
+
+- `backend/app/services/ai_pipeline.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Replaced raw `httpx` exception text in the local parser debug stream with a fixed low-information error message.
+- Prevented debug stream output from echoing parser URLs, connection details, transcript fragments, numeric health values, or secret-like query text.
+- Preserved the existing debug-tool gate so the endpoint remains disabled unless `ENABLE_DEBUG_TOOLS=true`.
+- Added regression coverage for PHI/secret-safe debug stream HTTP failures.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_local_parser_debug_stream_omits_raw_http_errors tests/test_ai_pipeline.py::test_parse_debug_stream_is_disabled_by_default` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T193: Validate production database URL shape at startup
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`
+
+Files:
+
+- `backend/app/core/config.py`
+- `backend/tests/test_config.py`
+
+Summary:
+
+- Added startup validation for `DATABASE_URL` using SQLAlchemy URL parsing.
+- Normalized surrounding whitespace before database engine creation.
+- Rejected blank, malformed, non-PostgreSQL, and database-name-less URLs before runtime DB setup.
+- Preserved support for `postgresql` and `postgresql+psycopg` deployment URLs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_config.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T192: Bound parser and runtime config strings at startup
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/local_model_adapter_contract.md`
+
+Files:
+
+- `backend/app/core/config.py`
+- `backend/tests/test_config.py`
+
+Summary:
+
+- Added startup bounds for CORS origin lists, parser/runtime URLs, local model ids, and local LLM keep-alive settings.
+- Normalized CORS origins, parser/runtime URLs, model ids, and keep-alive values before downstream HTTP/model code can use them.
+- Rejected parser/runtime URLs that are not valid absolute `http` or `https` URLs.
+- Rejected blank CORS entries, oversized origin lists, oversized individual origins, unsupported model-id characters, and invalid keep-alive values.
+- Preserved production wildcard-CORS rejection through the existing production config validator.
+- Added regression coverage for bounded and normalized config values.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_config.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T191: Bound structured JSON log string fields
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/core/logging.py`
+- `backend/tests/test_config.py`
+
+Summary:
+
+- Added a fixed maximum length for structured JSON log string fields.
+- Bounded formatter message, logger name, and allowlisted extra string values before JSON serialization.
+- Preserved the existing allowlist so transcript, payload, headers, and other unsafe extras remain omitted.
+- Added regression coverage for oversized message, logger, request id, trace id, event, and path fields.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_config.py tests/test_health.py::test_request_id_header_is_returned tests/test_health.py::test_invalid_request_id_header_is_replaced` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T190: Bound request validation error details
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/main.py`
+- `backend/tests/test_health.py`
+
+Summary:
+
+- Added a bounded JSON-safe sanitizer for global `422` validation error details.
+- Kept raw Pydantic `input` values omitted from validation responses.
+- Bounded validation detail recursion by error count, depth, node count, container width, and string length.
+- Preserved JSON-safe stringification for non-JSON validator context objects.
+- Added regression coverage for deep, wide, long, and non-JSON validation-detail values.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_health.py tests/test_config.py tests/test_auth_refresh.py::test_refresh_endpoint_rejects_invalid_token_shape_before_rate_limit tests/test_auth_refresh.py::test_refresh_endpoint_rejects_oversized_token_before_rate_limit` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T189: Normalize and bound Prometheus metric label values
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`
+
+Files:
+
+- `backend/app/core/metrics.py`
+- `backend/tests/test_health.py`
+
+Summary:
+
+- Added centralized Prometheus metric label normalization.
+- Bounded metric label values before they are stored in in-process counters.
+- Collapsed unsafe label values to `unknown` instead of escaping arbitrary text into metrics.
+- Preserved existing route-pattern, parser-result, and DB-operation metrics behavior for safe labels.
+- Added regression coverage proving unsafe parser metric labels do not expose unicode/raw text or health-like numeric content.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_health.py tests/test_ai_pipeline.py::test_parse_preview_records_phi_safe_parser_failure_metric` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T188: Avoid unbounded audit metadata pre-redaction
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/services/audit.py`
+- `backend/tests/test_security_baseline.py`
+
+Summary:
+
+- Removed the unbounded full-object redaction pass before audit metadata sanitization.
+- Kept sensitive-key redaction inside the bounded audit metadata sanitizer.
+- Preserved depth, node-count, container-width, and string-length limits before audit DB storage.
+- Added regression coverage proving very deep audit metadata is truncated by the sanitizer without first traversing the full object.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_security_baseline.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T187: Bound audit metadata before DB storage
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/services/audit.py`
+- `backend/tests/test_security_baseline.py`
+
+Summary:
+
+- Added a centralized audit metadata sanitizer in `write_audit_event`.
+- Preserved sensitive-key redaction before audit metadata is stored.
+- Bounded audit metadata by depth, node count, container width, and string length.
+- Truncated oversized non-sensitive audit metadata instead of storing unbounded values.
+- Added regression coverage for sensitive-key redaction, long strings, wide arrays, wide mappings, and deep metadata.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_security_baseline.py tests/test_permissions.py::test_profile_grant_api_creates_lists_and_revokes_with_audit tests/test_permissions.py::test_shared_profile_grant_can_be_self_revoked_by_grantee_with_audit tests/test_records.py::test_record_update_and_soft_delete_are_audited` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T186: Normalize account and profile display text before storage
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/schemas/auth.py`
+- `backend/app/schemas/profile.py`
+- `backend/tests/test_profiles.py`
+
+Summary:
+
+- Added whitespace normalization for dev-login display names before account storage.
+- Added whitespace normalization for profile display names and relationship values before profile storage.
+- Rejected blank account/profile display text after trimming.
+- Added regression coverage for normalized stored values and blank text rejection.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T185: Bound decoded JWT claim shape before account lookup
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/core/auth.py`
+- `backend/tests/test_profiles.py`
+
+Summary:
+
+- Added decoded JWT object shape bounds after base64/json decode and before claim validation or account lookup.
+- Added maximum JWT claim count.
+- Added maximum claim key/string length.
+- Added audience list width and item-shape bounds.
+- Rejected nested claim objects to keep bootstrap access tokens flat and cheap to validate.
+- Added regression coverage proving too-wide claim payloads and wide audience lists fail before account lookup.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T184: Bound semantic record units and short text fields
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/services/record_validation.py`
+- `backend/tests/test_records.py`
+
+Summary:
+
+- Added schema-level bounds for core short text payload fields before DB write.
+- Added allowed-unit checks for glucose, blood pressure, and body measurement payloads.
+- Added allowed-category checks for glucose meal timing, meal type, and body measurement kind.
+- Added note tag item validation so tags must be bounded non-empty strings.
+- Added regression coverage for create and update rejection of invalid units, empty strings, oversized short text, and invalid category values.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_records.py tests/test_record_schema_registry.py tests/test_reports.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T183: Add semantic numeric bounds for core record payloads
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/services/record_validation.py`
+- `backend/tests/test_records.py`
+
+Summary:
+
+- Added schema-level numeric range checks for glucose values.
+- Added range checks for exercise minutes.
+- Added blood pressure systolic and diastolic range checks.
+- Added body measurement range checks for weight and body-fat percentage.
+- Added regression coverage for create and update rejection of out-of-range core values.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_records.py tests/test_record_schema_registry.py tests/test_reports.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T182: Bound record JSON container width and structured list fields
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/services/record_json_bounds.py`
+- `backend/app/services/record_validation.py`
+- `backend/tests/test_records.py`
+
+Summary:
+
+- Added container-width bounds for record `payload_json` and `metadata_json` before permission lookup, sanitizer recursion, schema validation, or DB write work.
+- Added schema-level meal `food_items` count and object/name shape validation.
+- Added schema-level note `tags` count validation.
+- Added regression coverage for wide arrays, wide objects, oversized meal items, invalid meal item shape, and oversized note tags.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_records.py tests/test_record_schema_registry.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T181: Cap deterministic parser preview output
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/services/ai_pipeline.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Added a hard cap for deterministic parser preview candidate records.
+- Added a per-meal food item cap aligned with compact IR item limits.
+- Deterministic parser stops building preview candidates once the response cap is reached.
+- Added regression coverage for capped preview record output and capped meal food item output.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T180: Reject numerically dense AI transcripts before LLM work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/services/ai_pipeline.py`
+- `backend/app/api/ai.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Added a transcript numeric-density budget for candidate numeric values.
+- Numeric-density checks stop after `max_numeric_values + 1`, avoiding full scans of clearly over-budget transcripts.
+- API rejects numerically dense transcripts before runtime model lookup, profile lookup, quota work, parser execution, or LLM work.
+- Added regression coverage for early API rejection and bounded numeric counting.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T179: Bound compact IR arrays and short text fields
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/production_parser_ir_design.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/services/ai_pipeline.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Added hard bounds for compact IR records, rejected events, item lists, flags, short text fields, and evidence.
+- Mirrored those bounds into the Ollama structured JSON schema.
+- Bounded compact IR normalization before deeper repair/schema validation work, so oversized model arrays are sliced early.
+- Added regression coverage for oversized compact IR payload rejection and bounded normalization.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T178: Reject blank AI transcripts at schema boundary
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/schemas/ai.py`
+- `backend/app/main.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Added schema-level transcript normalization for parse-preview and command-proposal requests.
+- Blank or whitespace-only AI transcripts now fail request validation before route-level profile lookup, quota work, parser execution, or LLM work.
+- Fixed validation-error sanitization so validator context values are JSON-safe while raw `input` remains omitted.
+- Added regression coverage for blank transcript schema rejection and no voice usage counter creation.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T177: Bound local parser response content before JSON parsing
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/services/ai_pipeline.py`
+- `backend/tests/test_ai_pipeline.py`
+
+Summary:
+
+- Added a hard character budget for local/Ollama parser response content before JSON extraction and parsing.
+- Added the same bounded accumulation guard to local parser debug streaming.
+- Kept oversized-output failure messages PHI-safe by reporting only lengths, limits, and generic failure context.
+- Added regression coverage proving oversized parser content is rejected before JSON parsing and does not echo transcript content or health values.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T176: Bound internal voice entitlement and usage counter values
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/VOICE_RECORDING_QUOTA_CONTRACT.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Files:
+
+- `backend/app/services/entitlements.py`
+- `backend/tests/test_entitlements.py`
+
+Summary:
+
+- Added bounded service-level normalization for voice entitlement daily-second values.
+- Added bounded normalization for stored voice usage counters before quota display and decisions.
+- Updated atomic voice quota upsert to use bounded existing usage, preventing corrupt negative counters from expanding quota.
+- Added regression coverage for oversized entitlement values, invalid stored usage counters, and negative-counter atomic update behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_entitlements.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T175: Require timezone-aware voice quota counter windows
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/VOICE_RECORDING_QUOTA_CONTRACT.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added service-level timezone-aware datetime validation for voice usage-counter day windows.
+- Rejected timezone-naive `now` values before deriving quota period dates.
+- Preserved default UTC window behavior when no explicit datetime is provided.
+- Added regression coverage for timezone-naive rejection and timezone-aware period derivation.
+- Updated voice quota, security, and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_entitlements.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T174: Bound voice quota requested seconds before subscription and usage work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/VOICE_RECORDING_QUOTA_CONTRACT.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added a service-level maximum for requested voice seconds aligned with the API schema cap.
+- Rejected negative requested voice seconds before subscription lookup, usage-counter lookup, quota upsert, parser execution, or LLM work.
+- Rejected oversized requested voice seconds before subscription lookup, usage-counter lookup, quota upsert, parser execution, or LLM work.
+- Preserved zero-second quota display/check behavior.
+- Added regression coverage proving invalid voice seconds are rejected before subscription lookup.
+- Updated voice quota, security, and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_entitlements.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T173: Hard-cap inactive profile-grant prune batch size before query work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Enforced `PROFILE_GRANT_PRUNE_BATCH_SIZE` as the maximum allowed inactive profile-grant pruning batch size.
+- Rejected oversized profile-grant prune batches before select/delete query construction.
+- Kept timezone-aware cutoff validation, positive batch validation, and deterministic id selection.
+- Added regression coverage proving oversized batches are rejected before query construction.
+- Updated security and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_permissions.py::test_inactive_profile_access_grant_pruning_rejects_oversized_batch_before_query tests/test_permissions.py::test_inactive_profile_access_grant_pruning_rejects_naive_cutoff_before_query tests/test_permissions.py::test_inactive_profile_access_grant_pruning_is_batched tests/test_permissions.py::test_inactive_profile_access_grants_can_be_pruned_by_retention_cutoff` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T172: Hard-cap expired revoked-JWT prune batch size before query work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Enforced `REVOKED_JWT_PRUNE_BATCH_SIZE` as the maximum allowed expired revoked-JWT pruning batch size.
+- Rejected oversized revoked-JWT prune batches before select/delete query construction.
+- Kept positive batch validation and deterministic id selection.
+- Added regression coverage proving oversized batches are rejected before query construction.
+- Updated security and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py::test_expired_revoked_jwt_pruning_rejects_oversized_batch_before_query tests/test_profiles.py::test_expired_revoked_jwt_pruning_is_batched tests/test_profiles.py::test_expired_revoked_jwts_can_be_pruned` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T171: Hard-cap expired auth-session prune batch size before query work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Enforced `AUTH_SESSION_PRUNE_BATCH_SIZE` as the maximum allowed expired-session pruning batch size.
+- Rejected oversized expired auth-session prune batches before select/delete query construction.
+- Kept positive batch validation and deterministic id selection.
+- Added regression coverage proving oversized batches are rejected before query construction.
+- Updated security and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_sessions.py::test_expired_auth_session_pruning_rejects_oversized_batch_before_query tests/test_auth_sessions.py::test_expired_auth_session_pruning_is_batched tests/test_auth_sessions.py::test_expired_auth_sessions_can_be_pruned_without_touching_active_sessions` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T170: Hard-cap rate-limit prune batch size before query work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Enforced `RATE_LIMIT_PRUNE_BATCH_SIZE` as the maximum allowed pruning batch size.
+- Rejected oversized rate-limit prune batches before select/delete query construction.
+- Kept timezone-aware cutoff validation and positive batch validation.
+- Added regression coverage proving oversized batches are rejected before query construction.
+- Updated security and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py::test_rate_limit_counter_pruning_rejects_oversized_batch_before_query tests/test_auth_refresh.py::test_rate_limit_counter_pruning_rejects_naive_cutoff_before_query tests/test_auth_refresh.py::test_rate_limit_counter_pruning_is_batched tests/test_auth_refresh.py::test_rate_limit_counters_can_be_pruned_by_retention_cutoff` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T169: Reject timezone-naive profile-grant prune cutoffs before query work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added service-level timezone-aware datetime validation for inactive profile-grant prune retention cutoffs.
+- Rejected timezone-naive `older_than` before select/delete query construction.
+- Kept pruning bounded by batch size and deterministic id selection.
+- Added regression coverage proving naive cutoffs are rejected before query construction.
+- Updated security and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_permissions.py::test_inactive_profile_access_grant_pruning_rejects_naive_cutoff_before_query tests/test_permissions.py::test_inactive_profile_access_grants_can_be_pruned_by_retention_cutoff tests/test_permissions.py::test_inactive_profile_access_grant_pruning_is_batched` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T168: Reject timezone-naive rate-limit prune cutoffs before query work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added service-level timezone-aware datetime validation for rate-limit prune retention cutoffs.
+- Rejected timezone-naive `older_than` before select/delete query construction.
+- Kept pruning bounded by batch size and deterministic id selection.
+- Added regression coverage proving naive cutoffs are rejected before query construction.
+- Updated security and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py::test_rate_limit_counter_pruning_rejects_naive_cutoff_before_query tests/test_auth_refresh.py::test_rate_limit_counters_can_be_pruned_by_retention_cutoff tests/test_auth_refresh.py::test_rate_limit_counter_pruning_is_batched tests/test_auth_refresh.py::test_refresh_endpoint_rate_limits_invalid_token_attempts` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T167: Reject timezone-naive JWT denylist expirations before hashing or storage
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added service-level timezone-aware datetime validation for JWT denylist expiration fields.
+- Rejected timezone-naive `expires_at` before `jti` hashing or denylist DB upsert work.
+- Kept error details bounded and non-PHI.
+- Added regression coverage proving naive denylist expiration values are rejected before hashing.
+- Updated security and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py::test_revoke_jwt_id_rejects_naive_expiration_before_hashing tests/test_profiles.py::test_production_bearer_jwt_rejects_revoked_jti tests/test_profiles.py::test_expired_revoked_jwts_can_be_pruned tests/test_auth_refresh.py::test_logout_endpoint_revokes_valid_bearer_access_token_jti tests/test_auth_refresh.py::test_logout_all_endpoint_revokes_current_bearer_access_token_jti` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T166: Reject timezone-naive auth-session expirations before hashing or storage
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added service-level timezone-aware datetime validation for auth-session expiration fields.
+- Rejected timezone-naive `expires_at` before refresh-session create hashes or storage work.
+- Rejected timezone-naive `next_expires_at` before refresh-session rotation token hashing or comparison work.
+- Kept error details bounded and non-PHI.
+- Added regression coverage proving naive expiration values are rejected before hashing.
+- Updated security and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_sessions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T165: Bound auth-session token hash inputs before refresh-session work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added a service-level max length for auth-session token hash inputs.
+- Whitespace-normalized token hash inputs before hashing.
+- Rejected empty or oversized token hash inputs before SHA-256 work.
+- Applied the guard across refresh-session create, lookup, and rotation paths through the shared hash helper.
+- Added regression coverage proving oversized token hash inputs are rejected before hashing.
+- Updated security and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_sessions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T164: Bound rate-limit keys before hashing and counter upsert
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added service-level max lengths for rate-limit scopes and keys.
+- Whitespace-normalized rate-limit keys before hashing.
+- Rejected empty or oversized rate-limit keys before hashing.
+- Rejected empty or oversized rate-limit scopes before counter upsert.
+- Rejected non-positive rate-limit counts and windows before DB work.
+- Added regression coverage proving oversized keys are rejected before hashing and invalid limits/windows before DB work.
+- Updated security and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py::test_rate_limit_key_hash_normalizes_whitespace tests/test_auth_refresh.py::test_rate_limit_key_hash_rejects_oversized_value_before_hashing tests/test_auth_refresh.py::test_rate_limit_consume_rejects_invalid_limits_before_db_work tests/test_auth_refresh.py::test_refresh_endpoint_rate_limits_invalid_token_attempts tests/test_auth_refresh.py::test_refresh_endpoint_rate_limits_distinct_invalid_tokens_by_client tests/test_auth_refresh.py::test_rate_limit_counters_can_be_pruned_by_retention_cutoff tests/test_ai_pipeline.py::test_parse_preview_rate_limit_blocks_before_quota_and_parser` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T163: Bound JWT ids inside revocation service before hashing and storage
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Moved the JWT `jti` max-length constant into the token revocation service.
+- Normalized JWT ids before denylist hashing.
+- Rejected empty or oversized JWT ids inside the revocation service before hash, DB lookup, or DB storage work.
+- Kept API-level JWT id validation aligned with the service-level bound.
+- Added regression coverage proving oversized JWT ids are rejected before hashing.
+- Updated security and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py::test_jwt_id_hash_normalizes_whitespace tests/test_profiles.py::test_jwt_id_hash_rejects_oversized_value_before_hashing tests/test_profiles.py::test_production_bearer_jwt_rejects_oversized_jti_before_lookup tests/test_profiles.py::test_production_bearer_jwt_rejects_revoked_jti tests/test_profiles.py::test_expired_revoked_jwts_can_be_pruned` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T162: Bound device fingerprints before auth-session hashing and storage
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Whitespace-normalized optional device fingerprints before hashing.
+- Rejected oversized device fingerprints at the auth-session service boundary before hash or DB storage work.
+- Kept refresh-session storage hash-only with no raw device fingerprint exposure.
+- Added regression coverage proving oversized device fingerprints are rejected before hashing.
+- Updated security and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_sessions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T161: Reject timezone-naive profile grant datetimes before permission/query work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Rejected timezone-naive profile, shared-profile, and profile-grant cursor datetimes before query work.
+- Rejected timezone-naive profile grant `expires_at` before share-permission lookup or datetime comparison.
+- Kept error details bounded and PHI-safe.
+- Added regression coverage for profile list, shared-profile list, profile-grant list, and grant create timezone-naive datetime rejection.
+- Updated permission/schema, security, and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py::test_profile_list_rejects_naive_cursor_before_query tests/test_profiles.py::test_profile_list_is_bounded_and_supports_before_cursor tests/test_permissions.py::test_profile_grant_create_rejects_naive_expiration_before_permission_lookup tests/test_permissions.py::test_profile_grant_create_rejects_expired_grant_before_permission_lookup tests/test_permissions.py::test_profile_grant_listing_rejects_naive_cursor_before_permission_lookup tests/test_permissions.py::test_profile_grant_listing_supports_before_cursor tests/test_permissions.py::test_shared_profiles_rejects_naive_cursor_before_query tests/test_permissions.py::test_shared_profiles_supports_before_cursor` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T160: Reject timezone-naive record/report datetimes before query work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added a shared timezone-aware datetime validator.
+- Rejected timezone-naive record list cursor datetimes before profile permission or DB query work.
+- Rejected timezone-naive report window datetimes before export permission or DB query work.
+- Kept error details bounded and PHI-safe.
+- Updated permission/schema, security, and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_records.py::test_record_list_rejects_naive_cursor_before_permission_lookup tests/test_records.py::test_record_list_rejects_incomplete_cursor_before_permission_lookup tests/test_records.py::test_record_list_is_paginated_and_supports_before_cursor tests/test_reports.py::test_basic_report_rejects_naive_window_before_permission_lookup tests/test_reports.py::test_basic_report_rejects_invalid_date_window_before_permission_lookup tests/test_reports.py::test_basic_report_supports_date_window` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T159: Bound record payload and metadata JSON before permission and storage work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added bounded JSON depth, node count, and string-length guards for record `payload_json` and `metadata_json`.
+- Ran the guards before permission lookup, sanitizer recursion, schema validation, or DB write work.
+- Returned only bounded field/reason error details without echoing payload or metadata values.
+- Added regression coverage proving oversized record create/update JSON is rejected before permission or record lookup.
+- Updated PHI, permission/schema, and production hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_records.py::test_record_create_rejects_oversized_metadata_before_permission_lookup tests/test_records.py::test_record_update_rejects_oversized_payload_before_record_lookup tests/test_records.py::test_record_create_removes_raw_text_before_storage tests/test_records.py::test_record_create_validates_sanitized_payload tests/test_records.py::test_record_update_and_soft_delete_are_audited` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T158: Reject future record occurrence times before expensive work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added a shared record timestamp guard for `occurred_at`.
+- Rejected clearly future record and AI parse `occurred_at` values with a bounded, PHI-safe error.
+- Performed AI parse rejection before profile lookup, quota work, parser execution, or LLM work.
+- Performed record create/update rejection before permission and DB write work.
+- Documented the guard in cost, hardening, and permission/schema docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_preview_rejects_future_occurred_at_before_profile_and_parser tests/test_ai_pipeline.py::test_parse_preview_returns_structured_records tests/test_records.py::test_record_create_rejects_future_occurred_at_before_permission_lookup tests/test_records.py::test_record_update_rejects_future_occurred_at_before_record_lookup tests/test_records.py::test_create_and_list_records_for_profile tests/test_records.py::test_record_update_and_soft_delete_are_audited` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T157: Avoid runtime LLM lookup for static model decisions
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Rejected unknown or statically disabled `llm_model_id` values before runtime model availability lookup.
+- Accepted statically available non-runtime LLM models without calling Ollama availability checks.
+- Preserved runtime availability checks for Gemma and Ollama-backed model ids.
+- Added regression coverage for unknown LLM IDs and local stub model selection.
+- Updated cost/hardening docs with the static LLM selection behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_preview_accepts_static_llm_without_runtime_model_lookup tests/test_ai_pipeline.py::test_parse_preview_rejects_unknown_llm_before_runtime_and_profile_lookup tests/test_ai_pipeline.py::test_parse_preview_rejects_runtime_unavailable_ollama_before_parser tests/test_ai_pipeline.py::test_parse_preview_rejects_unavailable_model_before_profile_lookup` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T156: Reject expired profile grants before permission and DB work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Rejected profile access grant creation when `expires_at` is not in the future.
+- Performed the rejection before share-permission lookup and grant DB work.
+- Added a bounded, PHI-safe validation detail.
+- Updated shared-profile filtering tests to seed inactive grants directly instead of relying on now-invalid public API input.
+- Updated permission/security docs with the early expired-grant rejection.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_permissions.py::test_profile_grant_create_rejects_expired_grant_before_permission_lookup tests/test_permissions.py::test_profile_grant_api_creates_lists_and_revokes_with_audit tests/test_permissions.py::test_profile_grant_api_limits_delegated_scopes_to_current_permissions` passed.
+- `docker compose exec backend pytest tests/test_permissions.py::test_profile_grant_create_rejects_expired_grant_before_permission_lookup tests/test_permissions.py::test_shared_profiles_lists_only_active_readable_grants tests/test_permissions.py::test_shared_profiles_applies_active_readable_filters_before_limit` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T155: Reject incomplete record pagination cursor before DB work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Rejected `before_created_at` when `before` is missing before permission/query work.
+- Added a bounded, PHI-safe validation detail.
+- Added regression coverage proving incomplete cursors do not call profile permission checks.
+- Updated hardening/security docs with the early record-cursor rejection.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_records.py::test_record_list_rejects_incomplete_cursor_before_permission_lookup tests/test_records.py::test_record_list_cursor_uses_created_at_tie_breaker tests/test_records.py::test_record_list_is_paginated_and_supports_before_cursor` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T154: Reject invalid report time windows before DB work
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Rejected report requests where `start_at >= end_at` before permission or query work.
+- Added a bounded, PHI-safe validation detail.
+- Added regression coverage proving invalid windows do not call export permission checks.
+- Updated hardening/security docs with the early report-window rejection.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_reports.py::test_basic_report_rejects_invalid_date_window_before_permission_lookup tests/test_reports.py::test_basic_report_supports_date_window tests/test_reports.py::test_basic_report_requires_profile_ownership` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T153: Bound Content-Length header parsing
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Bounded `Content-Length` parsing before integer conversion.
+- Oversized, signed, whitespace-padded, or otherwise malformed values now fail with a PHI-safe `400 invalid_content_length`.
+- Added ASGI regression coverage proving oversized `Content-Length` values are not echoed and do not read request bodies.
+- Updated hardening/security docs with the bounded `Content-Length` parser.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_health.py::test_oversized_content_length_header_is_rejected_before_integer_conversion tests/test_health.py::test_signed_content_length_is_rejected_before_route_handling tests/test_health.py::test_malformed_content_length_is_rejected_before_route_handling tests/test_health.py::test_negative_content_length_is_rejected_before_route_handling tests/test_health.py::test_oversized_request_body_is_rejected_before_route_handling` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T152: Reject malformed Content-Length before route parsing
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Rejected non-integer or negative `Content-Length` headers before route parsing.
+- Added a PHI-safe `400 invalid_content_length` response without reading or logging request bodies.
+- Added ASGI regression coverage for malformed and negative `Content-Length`.
+- Updated hardening/security docs with the malformed `Content-Length` boundary.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_health.py::test_malformed_content_length_is_rejected_before_route_handling tests/test_health.py::test_negative_content_length_is_rejected_before_route_handling tests/test_health.py::test_oversized_request_body_without_content_length_is_rejected_before_route_handling tests/test_health.py::test_oversized_request_body_is_rejected_before_route_handling` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T151: Enforce request body limit without Content-Length
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Added bounded request-body pre-read for protected JSON API requests without `Content-Length`.
+- Oversized no-content-length bodies now fail with `413` before route parsing.
+- Bounded accepted bodies are replayed to downstream routes without logging raw request body data.
+- Added ASGI regression coverage for chunked/no-content-length oversized requests.
+- Updated hardening/security docs with the no-content-length body guard.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_health.py::test_oversized_request_body_without_content_length_is_rejected_before_route_handling tests/test_health.py::test_oversized_request_body_is_rejected_before_route_handling tests/test_health.py::test_non_json_api_body_is_rejected_before_route_handling tests/test_health.py::test_json_content_type_with_charset_is_allowed` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T150: Revoke current access token jti on logout-all
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Extended `/auth/logout-all` to revoke the current valid Bearer access token when provided.
+- Reused hash-only JWT `jti` denylist storage and avoided raw token / raw `jti` persistence.
+- Kept logout-all account-scoped and refresh-session bulk revocation behavior unchanged.
+- Added regression coverage proving logout-all denylisting rejects the same access token afterward.
+- Updated auth/security docs with the logout-all access-token denylist behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py::test_logout_all_endpoint_revokes_current_bearer_access_token_jti tests/test_auth_refresh.py::test_logout_all_endpoint_revokes_only_current_account_sessions tests/test_auth_refresh.py::test_logout_all_endpoint_requires_authentication` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T149: Revoke valid access token jti on logout
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added a hash-only helper to insert/update revoked JWT `jti` rows.
+- Extended `/auth/logout` to optionally revoke a valid Bearer access token when provided.
+- Kept refresh-session logout idempotent and avoided storing raw access tokens or raw `jti` values.
+- Added regression coverage proving logout denylisting rejects the same access token afterward.
+- Updated auth/security docs with the logout access-token denylist behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py::test_logout_endpoint_revokes_valid_bearer_access_token_jti tests/test_auth_refresh.py::test_logout_endpoint_revokes_refresh_session tests/test_profiles.py::test_production_bearer_jwt_rejects_revoked_jti` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T148: Bound JWT jti before revocation lookup
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added a bounded, non-empty JWT `jti` validation boundary before revocation lookup.
+- Oversized or malformed required `jti` values now fail before revoked-token DB lookup or account lookup.
+- Added regression coverage proving oversized `jti` does not reach revocation or account lookup.
+- Updated auth/security docs with the bounded token-id requirement.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py::test_production_bearer_jwt_rejects_oversized_jti_before_lookup tests/test_profiles.py::test_production_bearer_jwt_requires_jti_when_configured tests/test_profiles.py::test_production_bearer_jwt_rejects_revoked_jti tests/test_auth_refresh.py::test_refresh_endpoint_rotates_refresh_token_and_issues_access_token` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T147: Reject invalid STT model before transcript complexity counting
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Split static STT validation from runtime LLM model validation.
+- Invalid STT model IDs now fail before transcript complexity counting, profile ownership lookup, quota consumption, parser execution, or LLM work.
+- Runtime LLM availability validation still runs after transcript complexity checks and before profile ownership lookup.
+- Added regression coverage proving invalid STT requests do not trigger transcript budget counting or profile lookup.
+- Updated efficiency and hardening docs with the refined early-rejection ordering.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_preview_rejects_invalid_stt_before_transcript_budget tests/test_ai_pipeline.py::test_parse_preview_rejects_unavailable_model_before_profile_lookup tests/test_ai_pipeline.py::test_parse_preview_rejects_too_many_segments_before_profile_lookup` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T146: Reject unavailable AI models before profile lookup
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Moved AI model selection validation before profile ownership lookup in AI parse, debug-stream, progress-stream, and command-proposal routes.
+- Unavailable model requests now fail after transcript complexity checks but before profile DB lookup, quota consumption, parser execution, or LLM work.
+- Added regression coverage proving profile lookup is not called for unavailable model requests.
+- Updated efficiency and hardening docs with the earlier model-rejection ordering.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_preview_rejects_unavailable_model_before_profile_lookup tests/test_ai_pipeline.py::test_parse_preview_rejects_runtime_unavailable_ollama_before_parser tests/test_ai_pipeline.py::test_parse_preview_rejects_too_many_segments_before_profile_lookup` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T145: Reject over-budget AI transcripts before profile lookup
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Moved transcript complexity checks before profile ownership lookup in AI parse, debug-stream, progress-stream, and command-proposal routes.
+- Over-budget transcripts now fail after authentication but before profile DB lookup, model availability lookup, quota consumption, parser execution, or LLM work.
+- Added regression coverage proving profile lookup is not called for clearly over-budget parse-preview requests.
+- Updated efficiency and hardening docs with the earlier cheap-rejection ordering.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_preview_rejects_too_many_segments_before_profile_lookup tests/test_ai_pipeline.py::test_parse_preview_rejects_too_many_segments_before_quota_and_parser tests/test_ai_pipeline.py::test_parse_preview_rejects_too_many_segments_before_runtime_model_lookup` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T144: Stop counting over-budget transcript segments early
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Updated the transcript complexity guard to count atomic events only up to `max_segments + 1`.
+- Over-budget transcripts still fail before model availability lookup, quota consumption, and parser execution.
+- Added regression coverage proving clearly over-budget transcripts report `max_segments + 1` without counting the full input.
+- Updated efficiency and hardening docs with the memory-friendly early-stop behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_transcript_complexity_budget_stops_counting_after_limit tests/test_ai_pipeline.py::test_parse_preview_rejects_too_many_segments_before_quota_and_parser tests/test_ai_pipeline.py::test_parse_preview_rejects_too_many_segments_before_runtime_model_lookup` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T143: Preserve tail context in bounded LLM prompt segments
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Changed local LLM prompt segment truncation from head-only to head-and-tail preservation while keeping the same per-segment character bound.
+- Added regression coverage proving long segment prompts keep both early meal context and late glucose context without sending the full long segment.
+- Updated efficiency and hardening docs with the bounded head/tail prompt behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_prompt_segment_truncation_preserves_head_and_tail_context tests/test_ai_pipeline.py::test_local_parser_prompt_bounds_segment_text_for_token_budget` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+
+### T142: Lower local LLM batch output hard cap
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Reduced `LOCAL_LLM_BATCH_MAX_TOKENS` from 1200 to 960.
+- Reduced `LOCAL_LLM_MAX_TOKENS` config default and validation upper bound from 1200 to 960.
+- Updated local `.env.example`, local Docker Compose default, deployment verifier, and cost/hardening docs.
+- Kept minimal production default at 900, below the new hard cap.
+- Recreated the local backend container so runtime env changed from the stale 1200 value to 960.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_config.py tests/test_ai_pipeline.py::test_local_llm_output_token_budget_scales_with_segment_count tests/test_ai_pipeline.py::test_local_parser_prompt_bounds_segment_text_for_token_budget` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+- `docker compose config` shows local backend `LOCAL_LLM_MAX_TOKENS=960`.
+- `docker compose exec backend env` shows runtime `LOCAL_LLM_MAX_TOKENS=960`.
+
+### T141: Require revocable JWT ids for production bootstrap auth
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Production config now rejects `AUTH_JWT_SECRET` unless `AUTH_JWT_REQUIRE_JTI=true`.
+- Updated production auth tests so accepted JWTs include `jti`, and missing-`jti` tokens are rejected.
+- Exposed `AUTH_JWT_REQUIRE_JTI` through local/minimal Compose and Kubernetes examples.
+- Added deployment verifier coverage requiring production examples to keep `AUTH_JWT_REQUIRE_JTI=true`.
+- Updated README, hardening audit, and security compliance docs with the production `jti` requirement.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_config.py tests/test_profiles.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T140: Require issuer and audience for production JWT bootstrap auth
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Production config now rejects `AUTH_JWT_SECRET` unless `AUTH_JWT_ISSUER` and `AUTH_JWT_AUDIENCE` are also set.
+- Updated production auth tests so generated JWTs include issuer/audience and validation checks those claims.
+- Exposed `AUTH_JWT_SECRET`, `AUTH_JWT_ISSUER`, and `AUTH_JWT_AUDIENCE` through local/minimal Compose and Kubernetes examples.
+- Added deployment verifier checks for production issuer/audience examples and Kubernetes JWT secret wiring.
+- Fixed a PHI-safe logging test marker that could collide with timestamp digits.
+- Updated README, hardening audit, and security compliance docs with the issuer/audience production requirement.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_config.py tests/test_profiles.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+
+### T139: Bound JWT auth configuration values
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Added bounded settings for `AUTH_JWT_SECRET`, `AUTH_JWT_ISSUER`, and `AUTH_JWT_AUDIENCE`.
+- Normalized issuer and audience configuration whitespace before token issuance/validation.
+- Added regression coverage for bounded JWT auth config values.
+- Updated hardening/security docs with the memory-friendly auth configuration boundary.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_config.py tests/test_profiles.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+
+### T138: Add PHI-safe trace ID propagation
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Added bounded W3C `traceparent` trace-id extraction in request middleware.
+- Valid trace ids are returned as `X-Trace-ID`; invalid or oversized traceparent headers are replaced with generated trace ids.
+- Structured request logs now include only the bounded `trace_id`, not the full header, span id, flags, query string, body, or headers.
+- Added regression coverage for valid trace propagation, invalid trace replacement, and metrics not exposing trace headers.
+- Updated hardening/security docs with the PHI-safe trace-id behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_health.py tests/test_config.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+
+### T137: Bound JWT parts before decoding
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added explicit JWT header/payload/signature part length bounds before base64url decode.
+- Added decoded JSON byte-size bounds before JSON parsing.
+- Added strict base64url character validation for JWT parts.
+- Added regression coverage proving oversized JWT payload parts are rejected before account lookup and without token echoing.
+- Updated security and hardening docs with the JWT part-bound behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py tests/test_auth_refresh.py tests/test_config.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+
+### T136: Bound production Authorization header size
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added a 4096-character maximum for incoming Bearer `Authorization` headers before JWT decoding.
+- Oversized production Bearer headers now fail with the fixed `invalid_auth_token` response before account lookup.
+- Added regression coverage proving oversized Bearer headers do not run account lookup and do not echo token content.
+- Updated security and hardening docs with the bounded auth-header behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py tests/test_auth_refresh.py tests/test_config.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `python scripts/verify_deployment_config.py` passed.
+
+### T135: Add CI guard for deployment config examples
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/REPO_QUALITY_WORKFLOW.md`
+
+Completed:
+
+- Added `scripts/verify_deployment_config.py` to verify local, minimal production, and Kubernetes config examples.
+- The verifier checks production examples keep dev auth/debug disabled, explicit non-wildcard CORS, bounded local LLM caps, and managed PostgreSQL/Redis placeholders.
+- Added the verifier to GitHub Actions before image builds.
+- Added the verifier to the repo quality workflow.
+- Updated hardening audit to mark deployment example config validation as CI-covered.
+
+Verification:
+
+- `python -m py_compile scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_deployment_config.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+- `python scripts/verify_minimal_backup_restore.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose --env-file infra/minimal/.env.example -f infra/minimal/docker-compose.yml config` passed.
+
+### T134: Add CI guard for Kubernetes production manifests
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`
+- `infra/k8s/README.md`
+- `ai_context/REPO_QUALITY_WORKFLOW.md`
+
+Completed:
+
+- Added `scripts/verify_k8s_manifests.py` to statically verify required Kubernetes production guardrails.
+- The verifier checks backend/web deployments, resources, security contexts, probes, HPA, PDB, NetworkPolicy, TLS ingress, config defaults, and migration job shape.
+- Added the verifier to GitHub Actions before image builds.
+- Added the verifier to the repo quality workflow and Kubernetes README.
+- Updated hardening audit to distinguish existing provider-neutral Kubernetes manifests from still-missing cloud IAM/Terraform/Helm artifacts.
+
+Verification:
+
+- `python -m py_compile scripts/verify_k8s_manifests.py` passed.
+- `python scripts/verify_k8s_manifests.py` passed.
+- `python scripts/verify_backend_constraints.py` passed.
+- `python scripts/verify_minimal_backup_restore.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+- `docker compose --env-file infra/minimal/.env.example -f infra/minimal/docker-compose.yml config` passed.
+
+### T133: Harden minimal backup and restore scripts
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MINIMAL_PRODUCTION_STACK.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/REPO_QUALITY_WORKFLOW.md`
+
+Completed:
+
+- Updated minimal backup/restore scripts to require `MINIMAL_ENV_FILE` or `infra/minimal/.env` before running Compose commands.
+- Backup now writes to a temporary dump file and renames to the final `.dump` only after `pg_dump -Fc` succeeds.
+- Restore now rejects unreadable dump paths before invoking `pg_restore`.
+- Added `scripts/verify_minimal_backup_restore.py` to statically verify backup/restore guardrails.
+- Added the backup/restore verifier to GitHub Actions and repo quality workflow.
+- Updated minimal stack and hardening docs with the safer backup/restore behavior.
+
+Verification:
+
+- `sh -n infra/minimal/backup.sh` passed.
+- `sh -n infra/minimal/restore.sh` passed.
+- `python -m py_compile scripts/verify_minimal_backup_restore.py` passed.
+- `python scripts/verify_minimal_backup_restore.py` passed.
+- `python scripts/verify_backend_constraints.py` passed.
+- `docker compose --env-file infra/minimal/.env.example -f infra/minimal/docker-compose.yml config` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T132: Fail fast on oversized local LLM token caps
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Reduced `LOCAL_LLM_MAX_TOKENS` config upper bound from 6000 to the actual parser batch hard cap of 1200.
+- Updated local env and Docker Compose defaults from 3000 to 1200.
+- Added config regression coverage for rejecting `LOCAL_LLM_MAX_TOKENS` values above 1200.
+- Updated cost/hardening docs so deployment guidance matches runtime validation.
+
+Verification:
+
+- `docker compose up -d backend` recreated the backend container with the updated Compose default.
+- `docker compose exec backend pytest tests/test_config.py tests/test_ai_pipeline.py` passed.
+- `docker compose config` passed and shows local backend `LOCAL_LLM_MAX_TOKENS=1200`.
+- `docker compose --env-file infra/minimal/.env.example -f infra/minimal/docker-compose.yml config` passed and shows minimal production backend `LOCAL_LLM_MAX_TOKENS=900`.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T131: Add CI guard for backend dependency constraints
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_AI_INSTRUCTIONS.md`
+- `ai_context/REPO_QUALITY_WORKFLOW.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `scripts/verify_backend_constraints.py` to verify backend direct dependencies are pinned in `backend/constraints.txt`.
+- The verifier also checks both backend Dockerfiles copy/use `constraints.txt` with `-c constraints.txt`.
+- Added the verifier to the GitHub Actions quality job before Docker image builds.
+- Updated the repo quality workflow and hardening audit with the constraints guard.
+
+Verification:
+
+- `python -m py_compile scripts/verify_backend_constraints.py` passed.
+- `python scripts/verify_backend_constraints.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T130: Align minimal production backend healthcheck with readiness
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`
+- `ai_context/MINIMAL_PRODUCTION_STACK.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Changed the minimal production backend container healthcheck from `/healthz` to `/readyz`.
+- Kept `/healthz` as the process liveness endpoint while using `/readyz` for DB-backed readiness in the minimal production stack.
+- Ensured the minimal production proxy dependency waits on backend readiness rather than only process health.
+- Updated minimal production and hardening docs with the readiness healthcheck behavior.
+
+Verification:
+
+- `docker compose --env-file infra/minimal/.env.example -f infra/minimal/docker-compose.yml config` passed and shows backend healthcheck calling `/readyz`.
+- `docker compose exec backend pytest tests/test_health.py` passed.
+
+### T129: Add backend dependency constraints for reproducible builds
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/PRODUCTION_AI_INSTRUCTIONS.md`
+
+Completed:
+
+- Added `backend/constraints.txt` with pinned backend runtime/dev dependency versions from the verified backend environment.
+- Updated the local backend Dockerfile to install editable dev dependencies with `-c constraints.txt`.
+- Updated the production backend Dockerfile to install runtime dependencies with `-c constraints.txt`.
+- Reduced Docker build resolver drift so local and production images do not silently pick unreviewed dependency versions.
+
+Verification:
+
+- `docker compose build backend` passed.
+- `docker compose --env-file infra/minimal/.env.example -f infra/minimal/docker-compose.yml build backend` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T128: Use set-based single-session revoke
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Changed account-scoped single auth-session revoke to use a direct bounded `UPDATE` instead of hydrating the session ORM row.
+- Kept active-session, account ownership, expiration, and idempotent unknown-session semantics unchanged.
+- Aligned single-session revoke with the memory-friendly set-based revoke-all pattern.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py tests/test_auth_sessions.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T127: Expose logout rate-limit deployment settings
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `AUTH_LOGOUT_CLIENT_RATE_LIMIT_COUNT` and `AUTH_LOGOUT_CLIENT_RATE_LIMIT_WINDOW_SECONDS` to the local `.env.example`.
+- Passed the logout client rate-limit settings through the local backend Docker Compose service.
+- Added the same production-oriented knobs to `infra/minimal/.env.example`.
+- Passed the settings through the minimal production backend Docker Compose service.
+- Updated hardening/security notes so infra status matches the backend setting surface.
+
+Verification:
+
+- `docker compose config` passed and shows the local backend receives both logout rate-limit settings.
+- `docker compose --env-file infra/minimal/.env.example -f infra/minimal/docker-compose.yml config` passed and shows the minimal production backend receives both settings.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed before this deploy-config-only change.
+- `docker compose exec backend ruff check app tests` passed before this deploy-config-only change.
+- `docker compose exec backend mypy app` passed before this deploy-config-only change.
+
+### T126: Add client rate limiting to logout endpoint
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added bounded `AUTH_LOGOUT_CLIENT_RATE_LIMIT_COUNT` and `AUTH_LOGOUT_CLIENT_RATE_LIMIT_WINDOW_SECONDS` settings.
+- Added DB-backed client-key rate limiting to `POST /auth/logout` before refresh-session lookup.
+- Logout attempts now commit rate-limit counters even when the refresh token is unknown.
+- Over-limit logout attempts return `429` before session lookup.
+- Added regression coverage proving over-limit logout attempts do not call session lookup.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py tests/test_config.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T125: Bound refresh-token shape and redact validation inputs
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Reduced accepted refresh-token length from `2048` to `512` characters.
+- Added refresh-token character validation for bounded opaque token strings.
+- Invalid refresh-token shape now fails Pydantic validation before auth rate-limit hashing or session lookup.
+- Added a global request validation error handler that removes raw `input` values from `422` responses.
+- Added regression coverage proving invalid and oversized refresh tokens do not create auth rate-limit counters and do not echo token values.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py tests/test_health.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T124: Bound and sanitize request IDs before logging
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+
+Completed:
+
+- Added a request ID sanitizer for inbound `X-Request-ID`.
+- Accepted request IDs are limited to 80 characters and trace-safe characters.
+- Invalid, missing, or oversized request IDs are replaced with backend-generated UUIDs.
+- Sanitized request IDs are used for both the response header and PHI-safe structured request logs.
+- Added regression coverage for replacing oversized request IDs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_health.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T123: Reject non-JSON API request bodies before route parsing
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_GRADE_DESIGN_AUDIT.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added app-level content-type guard for JSON API methods with request bodies.
+- `POST` / `PATCH` API requests with non-JSON bodies now return `415 unsupported_media_type` before route parsing.
+- Accepted JSON media types include `application/json` and structured `+json` content types.
+- Rejection preserves `X-Request-ID` and uses a PHI-safe error body.
+- Added regression coverage for non-JSON rejection and JSON content type with charset.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_health.py tests/test_config.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T122: Add app-level request body size guard
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_GRADE_DESIGN_AUDIT.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added bounded `MAX_REQUEST_BODY_BYTES` backend setting, default `1048576`.
+- Added app-level middleware guard that returns `413 request_body_too_large` from `Content-Length` before route parsing.
+- Oversized rejection preserves `X-Request-ID` and uses a PHI-safe error body.
+- Added local and minimal Compose environment wiring for `MAX_REQUEST_BODY_BYTES`.
+- Aligned minimal NGINX `client_max_body_size` with the backend default.
+- Added regression coverage for config bounds and oversized request rejection.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_config.py tests/test_health.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose config` passed and includes `MAX_REQUEST_BODY_BYTES`.
+- `docker compose --env-file infra/minimal/.env.example -f infra/minimal/docker-compose.yml config` passed and includes `MAX_REQUEST_BODY_BYTES`.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T121: Filter basic reports through record schema report eligibility
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `report_eligible_record_types()` to the record schema registry.
+- Changed `/reports/basic` to filter SQL rows by registry report eligibility.
+- Basic report `record_count` now excludes non-eligible future/extended record types such as body measurements and lab results.
+- Added regression coverage for the registry report-eligible list and report filtering behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_reports.py tests/test_record_schema_registry.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T120: Attach record schema version metadata on write
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/PRODUCTION_GRADE_DESIGN_AUDIT.md`
+
+Completed:
+
+- Added record schema metadata helpers to the schema registry.
+- `POST /records` now attaches backend-owned `record_schema_version` metadata from the registry.
+- `PATCH /records/{record_id}` now preserves or reapplies backend-owned schema version metadata when payload or metadata changes.
+- Client-provided `record_schema_version` is overwritten by the registry value to avoid stale or spoofed schema metadata.
+- Added regression coverage for registry metadata helpers, record creation, and record update behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_records.py tests/test_record_schema_registry.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T119: Commit progress-stream voice quota only after final parse success
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/VOICE_RECORDING_QUOTA_CONTRACT.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added account-id based voice quota consumption helper for post-response-start stream finalization.
+- Changed user-visible `/ai/parse-preview/progress-stream` to preflight quota without incrementing usage.
+- Progress stream now commits voice quota only when a `final` parse event is ready to be emitted.
+- Parser failure progress streams no longer consume voice seconds.
+- Over-limit progress-stream requests fail with PHI-safe quota details before parser execution.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py tests/test_entitlements.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T118: Stream basic report glucose aggregation without per-record lists
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/PRODUCTION_GRADE_DESIGN_AUDIT.md`
+
+Completed:
+
+- Changed basic report summary building to aggregate glucose count, total, min, max, and latest value in one pass.
+- Removed per-report `glucose_points` / `glucose_values` list materialization.
+- Preserved existing report response shape and date-window behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_reports.py tests/test_security_baseline.py::test_report_view_writes_audit_event_without_phi_payload` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T117: Add created-at tie-breaker cursor for record listing
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added optional `before_created_at` cursor parameter to `GET /records`.
+- Record list pagination now supports stable tuple cursor semantics for `(occurred_at, created_at)`.
+- Existing `before` behavior remains available for clients that only pass `occurred_at`.
+- Added regression coverage for multiple records sharing the same `occurred_at`.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_records.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T116: Avoid usage-counter writes for read-only quota checks
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/VOICE_RECORDING_QUOTA_CONTRACT.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added read-only usage counter lookup helpers for current voice usage.
+- Changed `GET /subscriptions/voice-quota` to report zero usage without creating a `usage_counters` row.
+- Changed `voice_seconds=0` quota checks to avoid creating a usage counter.
+- Over-limit error paths now read existing usage without creating a zero counter row.
+- Positive voice usage still uses the atomic upsert path from `T114`.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_entitlements.py tests/test_ai_pipeline.py::test_parse_preview_enforces_voice_quota_from_entitlements tests/test_ai_pipeline.py::test_parse_preview_local_parser_failure_returns_non_phi_detail` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T115: Bound and index active subscription lookup
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/SUBSCRIPTION_ENTITLEMENT_SCHEMA.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `LIMIT 1` to active subscription lookup in `ensure_trial_subscription`.
+- Added Alembic migration `20260430_0016_subscription_active_lookup_index`.
+- Added composite index `ix_subscriptions_account_status_created`.
+- Index supports quota path lookup by account, active/trialing status, and latest `created_at`.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_entitlements.py tests/test_ai_pipeline.py::test_parse_preview_enforces_voice_quota_from_entitlements` passed.
+- `docker compose exec backend alembic upgrade head` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T114: Make voice quota consumption atomic
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/VOICE_RECORDING_QUOTA_CONTRACT.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Changed positive voice quota consumption from read-modify-write to PostgreSQL atomic upsert.
+- The upsert only increments usage when `used_units + requested_seconds <= limit_seconds`.
+- Over-limit requests now fail without incrementing usage.
+- Existing quota error response shape is preserved.
+- Added regression coverage for a single request above the daily limit.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_entitlements.py tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T113: Commit voice quota only after non-stream parser success
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/VOICE_RECORDING_QUOTA_CONTRACT.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Changed non-stream `/ai/parse-preview` to commit AI rate-limit consumption before parser execution, but commit voice quota only after parser success.
+- Parser unavailable / parser failure now rolls back pending voice quota usage.
+- Preserved rate-limit accounting for failed parser attempts.
+- Added regression coverage to ensure parser failure does not consume voice seconds.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py tests/test_entitlements.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+Notes:
+
+- User-visible progress-stream quota finalization was later implemented in `T119`; debug-stream remains debug-only and still uses the simpler pre-stream quota path.
+
+### T112: Reject over-budget transcripts before model availability lookup
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Moved transcript complexity budget validation before LLM model availability checks on AI parse endpoints.
+- Applies to parse preview, debug stream, progress stream, and command proposal.
+- Over-budget transcripts now fail before Ollama model lookup, rate-limit consumption, voice quota usage, or parser execution.
+- Added regression coverage to ensure Ollama availability lookup is not called for over-budget transcripts.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T111: Scale local LLM output token budget by segment count
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added dynamic local LLM output token budgeting by transcript segment count.
+- One-segment batches now use a smaller output cap.
+- Larger batches scale upward and remain capped by configured max and hard batch max.
+- Applied the dynamic cap to OpenAI-compatible local parser, Ollama structured parser, and Ollama debug stream.
+- Added regression coverage for the token-budget formula.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T110: Stream basic report summary fields
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Changed `/reports/basic` to select only `record_type`, `payload`, and `occurred_at` instead of full `Record` ORM rows.
+- Added `yield_per=500` execution option for report row iteration.
+- Added `build_basic_report_from_fields` to accumulate report summaries without materializing a record list.
+- Preserved report output and PHI-safe audit metadata.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_reports.py tests/test_security_baseline.py::test_report_view_writes_audit_event_without_phi_payload` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T109: Push profile grant scope checks into the database
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Changed active profile grant permission checks to filter revoked and expired grants in SQL.
+- Changed single-scope grant checks to use JSONB scope containment with `LIMIT 1`.
+- Changed effective-scope calculation to select only the `scopes` JSONB column instead of full grant ORM rows.
+- Added Alembic migration `20260430_0015_profile_grant_scopes_gin_index`.
+- Added GIN index `ix_profile_access_grants_scopes_gin` for JSONB scope containment queries.
+- Added regression coverage to ensure revoked and expired grants do not contribute effective scopes.
+
+Verification:
+
+- `docker compose exec backend alembic upgrade head` passed.
+- `docker compose exec backend pytest tests/test_permissions.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T108: Use bulk update for logout-all session revocation
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Changed `revoke_all_account_sessions` from loading active sessions into Python to a database bulk `UPDATE`.
+- Preserved account scoping, active-session filtering, and revoked session count response.
+- Other-account, expired, and already-revoked sessions remain untouched.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py::test_logout_all_endpoint_revokes_only_current_account_sessions tests/test_auth_refresh.py::test_logout_all_endpoint_requires_authentication tests/test_auth_sessions.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T107: Add retention pruning query indexes
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added Alembic migration `20260430_0014_retention_prune_indexes`.
+- Added `ix_rate_limit_counters_window_start` for bounded rate-limit counter retention pruning.
+- Added `ix_profile_access_grants_revoked_created` for revoked grant retention pruning.
+- Added `ix_profile_access_grants_expires_created` for expired grant retention pruning.
+- Existing revoked JWT and auth session retention cleanup already had `expires_at` indexes.
+
+Verification:
+
+- `docker compose exec backend alembic upgrade head` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T106: Batch remaining retention prune helpers
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added bounded batch pruning to expired revoked JWT cleanup.
+- Added bounded batch pruning to expired auth session cleanup.
+- Added bounded batch pruning to inactive profile access grant cleanup.
+- Each helper now validates positive `batch_size`, orders candidate ids deterministically, and applies SQL `LIMIT` before delete.
+- Added regression coverage for each batched cleanup path.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_sessions.py::test_expired_auth_sessions_can_be_pruned_without_touching_active_sessions tests/test_auth_sessions.py::test_expired_auth_session_pruning_is_batched tests/test_profiles.py::test_expired_revoked_jwts_can_be_pruned tests/test_profiles.py::test_expired_revoked_jwt_pruning_is_batched tests/test_permissions.py::test_inactive_profile_access_grants_can_be_pruned_by_retention_cutoff tests/test_permissions.py::test_inactive_profile_access_grant_pruning_is_batched` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T105: Batch rate-limit counter pruning
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added a default bounded batch size to `prune_rate_limit_counters`.
+- Pruning now selects expired counter ids with SQL `LIMIT` before delete.
+- Added deterministic ordering by `window_start`.
+- Added regression coverage for batched pruning and retention-cutoff behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py::test_rate_limit_counters_can_be_pruned_by_retention_cutoff tests/test_auth_refresh.py::test_rate_limit_counter_pruning_is_batched tests/test_auth_refresh.py::test_refresh_endpoint_rate_limits_distinct_invalid_tokens_by_client` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T104: Add auth session listing query index
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added Alembic migration `20260430_0013_auth_session_listing_index`.
+- Added composite index `ix_auth_sessions_account_active_list`.
+- Index supports active session listing by `account_id`, `revoked_at`, `expires_at`, `last_used_at`, and `created_at`.
+
+Verification:
+
+- `docker compose exec backend alembic upgrade head` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T103: Bound active auth session listing
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added bounded `limit` query parameter to `GET /auth/sessions`.
+- Default limit is `100`; maximum is `500`.
+- Applied the bound at the database query layer with SQL `LIMIT`.
+- Preserved current-account isolation and metadata-only response behavior.
+- Added regression coverage for bounded list behavior and too-large limit validation.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T102: Add owned profile listing query index
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added Alembic migration `20260430_0012_user_profile_account_created_index`.
+- Added composite index `ix_user_profiles_account_created`.
+- Index supports `GET /profiles` query shape by `account_id` and `created_at` cursor.
+- Updated permission and production-hardening docs.
+
+Verification:
+
+- `docker compose exec backend alembic upgrade head` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T101: Add bounded cursor pagination to owned profiles
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added bounded `limit` query parameter to `GET /profiles`.
+- Default limit is `100`; maximum is `500`.
+- Added `before` cursor pagination using profile `created_at`.
+- Preserved owned-profile isolation: only current-account profiles are returned.
+- Added regression coverage for bounded list behavior, too-large limit validation, and cursor pagination.
+- Updated permission, security, and production-hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T100: Add profile access grant query indexes
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added Alembic migration `20260430_0011_profile_access_grant_query_indexes`.
+- Added composite index for profile grant history queries by `profile_id` and `created_at`.
+- Added composite index for shared-profile discovery queries by `grantee_account_id`, `revoked_at`, and `created_at`.
+- Added composite index for shared-profile expiration filtering by `grantee_account_id` and `expires_at`.
+- Updated permission and production-hardening docs.
+
+Verification:
+
+- `docker compose exec backend alembic upgrade head` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T099: Add cursor pagination to grant listings
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `before` cursor pagination to `GET /profiles/{profile_id}/grants`.
+- Added `before` cursor pagination to `GET /profiles/shared`.
+- Cursors use grant `created_at`, matching descending grant-list order.
+- Shared-profile response now includes grant `created_at` as bounded operational metadata so clients can request the next page.
+- Existing `limit` bounds and permission checks are preserved.
+- Added regression coverage for owner grant-list pagination and shared-profile pagination.
+- Updated permission, security, and production-hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_permissions.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T098: Filter shared-profile grants before limiting
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Moved shared-profile active/readable grant filtering into the database query.
+- `GET /profiles/shared` now filters revoked, expired, and non-readable grants before applying `limit`.
+- This prevents inactive or write-only grants from consuming limited response slots.
+- Added regression coverage proving `limit=1` still returns the active readable grant when newer inactive/non-readable grants exist.
+- Updated permission, security, and production-hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_permissions.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T097: Add inactive profile grant pruning helper
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `prune_inactive_profile_access_grants` maintenance helper.
+- Cleanup deletes grants revoked before a caller-provided retention cutoff.
+- Cleanup deletes grants expired before a caller-provided retention cutoff.
+- Cleanup preserves active, unexpired, and recently inactive grants.
+- Cleanup does not read health record payloads or require PHI.
+- Added regression coverage for revoked, expired, recent inactive, and active grant retention behavior.
+- Updated permission, security, and production-hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_permissions.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T096: Bound profile grant listing
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added bounded `limit` query parameter to `GET /profiles/{profile_id}/grants`.
+- Default limit is `100`; maximum is `500`.
+- Existing `profile:share` permission requirement is preserved.
+- Added regression coverage for limited grant listing and too-large limit validation.
+- Updated permission, security, and production-hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_permissions.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T095: Enforce least-privilege grant scope delegation
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added effective profile-scope calculation to the central permission service.
+- Owner accounts retain all bounded profile scopes.
+- Non-owner actors with `profile:share` can only create grants for scopes they currently hold.
+- Grant attempts that request excess scopes now return a stable non-PHI `403` error.
+- Added regression coverage proving delegated actors can re-grant allowed scopes but cannot escalate to write scope.
+- Updated permission, security, and production-hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_permissions.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T094: Add grantee self-revoke for shared profile grants
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `DELETE /profiles/shared/{grant_id}` for grantees to revoke their own received profile grants.
+- Endpoint only matches grants where the current account is the grantee.
+- Wrong-account access remains hidden as `404`.
+- Self-revoke is idempotent for already-revoked grants.
+- Self-revoke writes exactly one audit event with bounded non-PHI metadata.
+- Revoked grants no longer appear in `GET /profiles/shared`.
+- Updated permission, security, and production-hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_permissions.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T093: Add shared-profile discovery endpoint
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `GET /profiles/shared` for accounts to discover profiles shared with them.
+- Shared listing returns only active, non-revoked, non-expired grants with readable scopes.
+- Shared listing omits owner account ids from the response.
+- Added a bounded response schema for shared profiles with profile metadata and grant metadata only.
+- Preserved owned `/profiles` behavior.
+- Added regression coverage for active, expired, and write-only grants.
+- Updated permission, security, and production-hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_permissions.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T092: Add audited profile grant-management API
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added profile grant create/list/revoke API endpoints.
+- Grant management requires `profile:share` permission through the central permission service.
+- Create validates the grantee account exists and accepts only bounded grant types and profile scopes.
+- Revoke is idempotent for already-revoked grants.
+- Create/revoke operations write audit events with bounded non-PHI metadata only.
+- The API does not accept free-form grant metadata.
+- Added regression coverage for create, list, revoke, audit output, missing grantee handling, and unauthorized profile hiding.
+- Updated permission, security, and production-hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_permissions.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T091: Add persistent profile access grant foundation
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `ProfileAccessGrant` model for account-to-profile grants.
+- Added Alembic migration `20260430_0010_profile_access_grants`.
+- Grants support `grant_type`, bounded scope list, non-PHI metadata, optional expiration, and optional revocation.
+- Permission service now allows active non-revoked, non-expired grants for profile scopes.
+- Record read/write decisions map to profile read/write scopes through the central permission service.
+- Existing public denial behavior remains `404` for missing or unauthorized resources.
+- No public grant issuance/revoke API was added yet; this is the storage and decision foundation for future caregiver/doctor/share flows.
+- Added regression coverage for active, revoked, expired, and read-only grants.
+- Updated permission, security, and production-hardening docs.
+
+Verification:
+
+- `docker compose exec backend alembic upgrade head` passed.
+- `docker compose exec backend pytest tests/test_permissions.py tests/test_records.py::test_record_profile_must_belong_to_account tests/test_reports.py::test_basic_report_requires_profile_ownership` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T090: Add explicit permission decision layer
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added explicit profile permission decision objects with scope, allowed flag, bounded reason code, and resolved profile when allowed.
+- Added explicit record permission decision objects with scope, allowed flag, bounded reason code, and resolved active record when allowed.
+- Preserved current MVP owner-only behavior while making caregiver/doctor/export/share expansion a single service-layer change.
+- Centralized record read/write assertions so record detail, update, and delete do not duplicate ownership joins in the router.
+- Kept public denial behavior as `404` for missing or unowned profiles/records to avoid ownership probing.
+- Added direct permission regression tests for owned, unowned, and active-record decisions.
+- Updated permission, security, and production-hardening docs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_permissions.py tests/test_records.py::test_record_profile_must_belong_to_account tests/test_records.py::test_record_update_and_soft_delete_are_audited tests/test_reports.py::test_basic_report_requires_profile_ownership` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py tests/test_permissions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T089: Add client-key refresh endpoint rate limiting
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added bounded `AUTH_REFRESH_CLIENT_RATE_LIMIT_COUNT` and `AUTH_REFRESH_CLIENT_RATE_LIMIT_WINDOW_SECONDS` settings.
+- `/auth/refresh` now consumes a DB-backed client-key rate limit before token-key rate limiting and refresh-session lookup.
+- Client rate-limit keys are stored only as SHA-256 hashes through the shared rate-limit service.
+- Refactored refresh rate-limit error construction into a shared helper to keep responses stable.
+- Added regression coverage proving distinct invalid refresh tokens from the same client are blocked by the client-key boundary without exposing raw token material.
+- Updated security and production-hardening docs with the client-key refresh rate-limit boundary.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py::test_refresh_endpoint_rate_limits_distinct_invalid_tokens_by_client` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T088: Make DB-backed rate-limit consumption atomic
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Replaced rate-limit read-then-increment logic with PostgreSQL atomic upsert increment.
+- `consume_fixed_window_rate_limit` now inserts first use or increments the existing counter in one database statement.
+- The upsert only increments when `count < limit`; over-limit attempts return `429` without increasing the counter.
+- Existing hash-only key storage is preserved.
+- Fixed rate-limit pruning test isolation so full-suite reruns are deterministic.
+- Updated security and production-hardening docs with the atomic consume boundary.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py::test_refresh_endpoint_rate_limits_invalid_token_attempts tests/test_ai_pipeline.py::test_parse_preview_rate_limit_blocks_before_quota_and_parser` passed.
+- `docker compose exec backend pytest tests/test_auth_refresh.py::test_rate_limit_counters_can_be_pruned_by_retention_cutoff` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T087: Add account-scoped AI parse rate limiting
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Completed:
+
+- Added `AI_PARSE_RATE_LIMIT_COUNT` and `AI_PARSE_RATE_LIMIT_WINDOW_SECONDS` bounded config settings.
+- Added account-scoped DB-backed fixed-window rate limiting to AI parse routes.
+- Applied the guard to direct parse preview, progress stream, debug stream, and command proposal routes.
+- Rate limiting runs after profile/model/complexity validation but before voice quota usage and parser / LLM execution.
+- Rate-limit counters store only SHA-256 account-key hashes.
+- Added regression coverage proving the second over-limit parse request is rejected before parser execution and before additional voice quota usage.
+- Updated security and production-hardening docs with the AI parse rate-limit boundary.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_preview_rate_limit_blocks_before_quota_and_parser` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T086: Add rate-limit counter pruning helper
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `prune_rate_limit_counters` maintenance helper.
+- Cleanup deletes only counter rows older than a caller-provided retention cutoff.
+- Cleanup does not need raw rate-limit keys and preserves hash-only storage.
+- Added regression coverage proving old counters are deleted while newer counters remain.
+- Updated security and production-hardening docs with the rate-limit counter pruning boundary.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T085: Add DB-backed refresh-token rate limiting
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `rate_limit_counters` model and Alembic migration.
+- Added DB-backed fixed-window rate-limit service.
+- Rate-limit keys are stored only as SHA-256 hashes.
+- Added `AUTH_REFRESH_RATE_LIMIT_COUNT` and `AUTH_REFRESH_RATE_LIMIT_WINDOW_SECONDS` bounded config settings.
+- `/auth/refresh` now consumes rate limit before session lookup, so invalid refresh-token attempts are limited too.
+- Rate-limit responses return `429`, stable non-PHI error detail, and `Retry-After`.
+- Added regression coverage for repeated invalid refresh attempts, hash-only counter storage, and non-exposure of raw refresh tokens.
+- Updated security and production-hardening docs with the DB-backed hash-only rate-limit boundary.
+
+Verification:
+
+- `docker compose exec backend alembic upgrade head` passed.
+- `docker compose exec backend pytest tests/test_auth_refresh.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T084: Add account-scoped single-session revoke endpoint
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `revoke_account_session_by_id` service helper.
+- Added authenticated `DELETE /auth/sessions/{session_id}` endpoint.
+- Endpoint revokes only active refresh sessions owned by the current account.
+- Other-account sessions are left untouched.
+- Endpoint is idempotent for unknown, expired, already-revoked, or other-account session ids.
+- Response does not reveal whether the session id existed or belonged to another account.
+- Added regression coverage for account-scoped revoke, other-account isolation, unknown-id idempotency, and auth requirement.
+- Updated security and production-hardening docs with the single-session revoke boundary.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T083: Add authenticated session listing endpoint
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `list_active_account_sessions` service helper.
+- Added authenticated `GET /auth/sessions` endpoint.
+- Endpoint lists active refresh-session metadata for the current account only.
+- Expired sessions and other-account sessions are excluded.
+- Response exposes only `id`, `created_at`, `expires_at`, `last_used_at`, and `has_device_fingerprint`.
+- Response does not expose raw refresh tokens, refresh-token hashes, raw device fingerprints, or device-fingerprint hashes.
+- Added regression coverage for account scoping, active-only filtering, auth requirement, and non-exposure of token/fingerprint values.
+- Updated security and production-hardening docs with the session-listing boundary.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T082: Add authenticated logout-all endpoint
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `/auth/logout-all` endpoint.
+- Endpoint requires current account authentication through the existing auth dependency.
+- Logout-all revokes all active refresh sessions for the current account only.
+- Other accounts' refresh sessions are left untouched.
+- Response includes only the count of current-account sessions revoked.
+- Added regression coverage for account-scoped revoke-all behavior and missing-auth rejection.
+- Updated security and production-hardening docs with the logout-all boundary.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T081: Add refresh-session logout endpoint
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `/auth/logout` endpoint.
+- Logout accepts a refresh token, finds the matching active hash-only auth session, and revokes it.
+- Logout is idempotent for unknown, expired, or already-invalid refresh tokens.
+- Response does not reveal whether a matching session existed.
+- Added regression coverage for successful refresh-session revocation and idempotent unknown-token logout.
+- Updated security and production-hardening docs to clarify logout revokes refresh-session state, not already-issued access tokens.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T080: Add refresh-token rotation endpoint
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added HS256 access-token issuer utility for the bootstrap auth boundary.
+- Added `AUTH_REFRESH_TOKEN_DAYS` bounded config setting.
+- Added `/auth/refresh` endpoint.
+- Refresh endpoint fails closed when `AUTH_JWT_SECRET` is not configured.
+- Refresh endpoint accepts a valid refresh token, finds the active hash-only auth session, rotates the stored refresh-token hash, and returns a new refresh token only to the caller.
+- Issued access tokens include `sub`, `iat`, `exp`, and `jti`.
+- Old refresh tokens are invalid after successful rotation.
+- Added regression coverage for successful rotation/access-token issuance and fail-closed unconfigured auth.
+- Updated security and production-hardening docs with the refresh endpoint boundary.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_refresh.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py tests/test_auth_refresh.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T079: Add refresh session maintenance helpers
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `revoke_all_account_sessions` for logout-all and account-risk handling.
+- Added `prune_expired_auth_sessions` maintenance helper.
+- Cleanup deletes only expired auth-session rows by internal row id.
+- Refresh-session storage remains hash-only: no raw refresh tokens and no raw device fingerprints.
+- Added regression coverage for revoke-all behavior and expired-session pruning.
+- Tightened a PHI-safe parser metrics test so random duration numbers cannot be mistaken for leaked health values.
+- Updated security and production-hardening docs with refresh-session maintenance boundaries.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_auth_sessions.py` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_preview_records_phi_safe_parser_failure_metric tests/test_auth_sessions.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T078: Add hash-only refresh session foundation
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `auth_sessions` model and Alembic migration.
+- Refresh session rows store only SHA-256 hashes of refresh tokens and optional device fingerprints.
+- Added service helpers for creating sessions, finding active sessions by refresh token, rotating refresh-token hashes, and revoking sessions.
+- Rotation rejects wrong, expired, or revoked sessions and invalidates the previous token hash.
+- Added regression coverage for hash-only storage, active lookup, rotation, and failed rotation.
+- Updated security and production-hardening docs with the refresh-session boundary.
+
+Verification:
+
+- `docker compose exec backend alembic upgrade head` passed.
+- `docker compose exec backend pytest tests/test_auth_sessions.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py tests/test_entitlements.py tests/test_record_schema_registry.py tests/test_auth_sessions.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T077: Add expired revoked JWT cleanup helper
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `prune_expired_revoked_jwts` maintenance helper.
+- Cleanup deletes only expired revoked JWT rows by internal row id.
+- Revocation storage remains hash-only: no raw token and no raw `jti` storage.
+- Added regression coverage proving expired rows are removed while unexpired revoked token hashes remain.
+- Updated security and production-hardening docs with the cleanup boundary.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T076: Add optional production JWT jti requirement
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `AUTH_JWT_REQUIRE_JTI` config setting.
+- Production Bearer JWT auth can now require `jti` so every accepted access token is individually revocable.
+- Default remains compatible with existing bootstrap tokens that do not carry `jti`.
+- Added regression coverage for rejecting a token without `jti` when the requirement is enabled.
+- Updated security and hardening docs with the require-jti switch.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py tests/test_config.py tests/test_security_baseline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T075: Add JWT jti denylist revocation foundation
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `revoked_jwts` model and Alembic migration.
+- Revoked JWT rows store only SHA-256 hashes of `jti`, not raw tokens or raw token ids.
+- Added token revocation helper for hashing and active denylist checks.
+- Production Bearer JWT auth now rejects tokens whose `jti` hash is present and unexpired in the denylist.
+- Tokens without `jti` remain accepted for bootstrap compatibility, but cannot be individually revoked.
+- Added regression coverage for rejecting a revoked `jti`.
+- Updated security and hardening docs with the revocation boundary.
+
+Verification:
+
+- `docker compose exec backend alembic upgrade head` passed.
+- `docker compose exec backend pytest tests/test_profiles.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T074: Enforce maximum JWT access-token lifetime
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added `AUTH_JWT_MAX_AGE_SECONDS`, defaulting to 900 seconds.
+- JWT bootstrap validation now rejects tokens whose `exp - iat` exceeds the configured max age.
+- Test JWTs now include `iat` so lifetime validation is exercised.
+- Added regression coverage for rejecting a long-lived production Bearer access token.
+- Error responses continue to use fixed `invalid_auth_token` details without exposing token claims.
+- Updated security docs with the access-token lifetime setting.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py tests/test_config.py tests/test_security_baseline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T073: Validate JWT not-before and issued-at clock skew
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/security_compliance.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added JWT bootstrap validation for optional `iat` and `nbf` claims.
+- Tokens with `iat` or `nbf` more than 60 seconds in the future are rejected.
+- Error responses continue to use the fixed `invalid_auth_token` detail without leaking claim values.
+- Added regression coverage for rejecting a production Bearer JWT with future `nbf`.
+- Updated security docs with the JWT time-window behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py tests/test_config.py tests/test_security_baseline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T072: Enforce strong production JWT shared secret
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Added production config validation requiring `AUTH_JWT_SECRET` to be at least 32 characters when configured.
+- Preserved local/test flexibility for short test secrets outside production.
+- Updated production JWT regression tests to use a strong test secret.
+- Added regression coverage for rejecting a weak production JWT secret.
+- Updated security and hardening docs with the secret length requirement.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_config.py tests/test_profiles.py tests/test_security_baseline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T071: Add minimal production Bearer JWT account authentication
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Added dependency-free HS256 Bearer JWT validation for protected endpoints when dev auth is disabled.
+- Added `AUTH_JWT_SECRET`, `AUTH_JWT_ISSUER`, and `AUTH_JWT_AUDIENCE` settings.
+- JWT `sub` must be a valid account id and `exp` must be unexpired.
+- Invalid, expired, unsupported, or unknown-account tokens return a fixed `invalid_auth_token` error without leaking token/claim details.
+- Production still fails closed with `production_auth_not_configured` when no JWT secret is configured.
+- Preserved local dev-login and `X-Account-Id` behavior when dev auth is enabled.
+- Added regression coverage for valid production Bearer JWT auth and invalid signatures.
+- Updated hardening/security docs to mark this as a bootstrap boundary before OIDC/JWKS/refresh-token support.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py tests/test_config.py tests/test_security_baseline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T070: Return structured fail-closed response before production auth exists
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Added a structured `production_auth_not_configured` error detail for protected endpoints when dev auth is disabled.
+- Stopped returning development-mode auth wording from production-protected endpoint failures.
+- Added regression coverage proving placeholder Bearer tokens are not silently accepted before real JWT/OIDC auth exists.
+- Preserved local dev-login and `X-Account-Id` behavior when dev auth is enabled.
+- Updated production hardening notes to describe the fail-closed boundary.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_profiles.py tests/test_config.py tests/test_security_baseline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T069: Fail production config when dev auth is explicitly enabled
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/security_compliance.md`
+
+Completed:
+
+- Tightened production auth configuration so `APP_ENV=production` rejects `ALLOW_DEV_AUTH=true`.
+- Preserved local/test/development dev auth behavior.
+- Added regression coverage for the explicit production misconfiguration.
+- Rechecked existing production dev-auth disablement tests and security baseline.
+- Updated production hardening notes to document the fail-fast guard.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_config.py tests/test_profiles.py tests/test_security_baseline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py tests/test_profiles.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T068: Add PHI-safe DB operation timing metrics
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`
+
+Completed:
+
+- Added DB operation counters and duration sums to the lightweight `/metrics` exporter.
+- Added SQLAlchemy engine event hooks to record DB timings centrally without touching each API handler.
+- DB metric labels are limited to bounded operation type, for example `select`, `insert`, `update`, `delete`, or `other`.
+- SQL text, SQL parameters, request body, record ids, payload_json, and health values are not emitted.
+- Added regression coverage proving `/metrics` exposes DB timing metrics without SQL or payload content.
+- Updated production hardening notes with the DB metric label policy.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_health.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T067: Add PHI-safe parser result metrics
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Completed:
+
+- Added parser result counters to the lightweight `/metrics` exporter.
+- Parser metrics are labeled only by bounded model id, outcome, and fixed reason code.
+- Direct parse-preview success, fallback, unavailable, and failed outcomes are recorded without logging transcript, prompt, payload, exception message, or raw model output.
+- Reused parser repair reasons for fallback metrics so deterministic repair usage is visible.
+- Added regression coverage for parser failure metrics and `/metrics` parser output.
+- Updated production hardening notes with parser metric label policy.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_health.py tests/test_ai_pipeline.py::test_parse_preview_records_phi_safe_parser_failure_metric tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T066: Add PHI-safe Prometheus metrics endpoint
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/no_phi_logging.md`
+
+Completed:
+
+- Added a lightweight in-process Prometheus text metrics exporter without adding a dependency.
+- Added `/metrics` endpoint for HTTP request counters and duration sums.
+- Metrics labels are limited to method, route pattern, and status.
+- Query strings, request bodies, headers, transcripts, payloads, record ids, and raw paths are not emitted.
+- Request middleware now records metrics using FastAPI route templates to keep label cardinality low.
+- Added regression coverage proving `/metrics` omits transcript-like query content and request headers.
+- Updated production deployment and hardening docs to reflect the metrics endpoint and no-PHI label policy.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_health.py tests/test_config.py tests/test_security_baseline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py tests/test_health.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T065: Add PHI-safe structured JSON backend request logs
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added a PHI-safe JSON logging formatter with an explicit allowlist of extra fields.
+- Structured request logs now include only timestamp, level, logger, message, event, request_id, method, path, status, and duration_ms.
+- Request body, query string, headers, transcript, payload_json, and arbitrary extras are not serialized.
+- Updated request middleware to log structured fields instead of interpolated text.
+- Kept `httpx` and `httpcore` debug suppression from T064.
+- Added regression coverage proving transcript, payload, and headers are omitted from formatted logs.
+- Updated the production hardening audit to reflect structured JSON request logs.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_config.py tests/test_security_baseline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T064: Suppress noisy third-party HTTP debug logs
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+Completed:
+
+- Added a centralized backend logging configuration helper.
+- Kept app-level log level configurable while forcing `httpx` and `httpcore` loggers to WARNING.
+- Ensured logging configuration explicitly updates the root logger even when handlers already exist.
+- Added regression coverage proving DEBUG app logging does not enable noisy HTTP client debug logs.
+- Updated the production hardening audit to reflect request IDs and third-party HTTP log suppression.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_config.py tests/test_security_baseline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py tests/test_config.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T063: Sanitize command proposal record payload metadata
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/VOICE_COMMAND_EXECUTION_POLICY.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Completed:
+
+- Added a shared sanitized preview-record dump helper for command proposal payload records.
+- Command proposal `actions` and top-level `payload.records` now both omit transcript/source text metadata.
+- Preserved the pending-record shape needed by the frontend confirmation flow.
+- Added regression coverage so command proposals cannot reintroduce transcript, raw text, or source text in duplicated candidate metadata.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_command_proposal_create_record_does_not_save_directly tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T062: Gate parser preview candidates through storage-compatible schema validation
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/production_parser_ir_design.md`
+- `ai_context/no_phi_logging.md`
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+
+Completed:
+
+- Added a shared parser-preview gate that sanitizes candidate payloads with storage minimization rules before schema validation.
+- Valid parser candidates now return the same payload shape that `/records` would store.
+- Invalid parser candidates are converted to `rejected_events` instead of reaching confirmation/save as broken payloads.
+- Applied the gate to compact IR previews, deterministic previews, and command proposal record candidates.
+- Added regression coverage proving free-text fields are stripped from valid preview candidates and description-only candidates are rejected before save.
+- Updated parser IR documentation to describe the storage-compatible preview gate.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T061: Require explicit exercise activity in compact parser IR
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/production_parser_ir_design.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/generic_health_record_abstraction.md`
+
+Completed:
+
+- Tightened `CompactIrRecord` validation so exercise IR must include an activity item.
+- Updated the local parser prompt contract to tell small models that exercise records must include explicit activity items.
+- Added deterministic repair that fills exercise activity from matched evidence or segment text for common small-model omissions.
+- Updated exercise IR identity and evidence matching so duration-only exercise records do not pass validation.
+- Added regression coverage for rejecting duration-only exercise IR and repairing Qwen-style exercise schema slips.
+- Updated parser IR documentation to align compact IR with PHI-minimized storage requirements.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T060: Require structured record payload fields after PHI minimization
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/generic_health_record_abstraction.md`
+- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+
+Completed:
+
+- Removed free-text `description` fallback acceptance from storage-facing record validation.
+- Meal records now require `food_items`.
+- Exercise records now require `activity`.
+- Medication records now require `name`.
+- Lifestyle records now require `kind`.
+- Added schema-registry regression coverage for rejecting description-only payloads across these record types.
+- Updated record API regression coverage to assert validation is based on the sanitized storage payload.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_record_schema_registry.py tests/test_records.py` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T059: Validate records after PHI-minimizing payload sanitization
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/generic_health_record_abstraction.md`
+- `ai_context/REPO_QUALITY_WORKFLOW.md`
+
+Completed:
+
+- Record create now sanitizes payload before schema validation, so validation reflects the exact payload that would be stored.
+- Record update now sanitizes payload before schema validation.
+- Free-text-only payloads that would be stripped during storage are rejected instead of temporarily passing raw validation.
+- Added regression coverage for rejecting a meal record that only supplies `description` after storage minimization.
+- Rechecked record creation sanitization, update sanitization, audit behavior, reports, security baseline, and AI parser record candidates.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_records.py::test_record_create_validates_sanitized_payload tests/test_records.py::test_record_create_removes_raw_text_before_storage tests/test_records.py::test_record_update_and_soft_delete_are_audited` passed.
+- `docker compose exec backend pytest tests/test_records.py tests/test_security_baseline.py tests/test_reports.py tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T058: Stop top-level normalized text echo in parse preview responses
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/production_parser_ir_design.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Completed:
+
+- Direct parse-preview responses no longer echo full normalized text in the top-level `normalized_text` field.
+- Progress-stream final preview no longer echoes full normalized text in `preview.normalized_text`.
+- Progress-stream `normalized` event still provides normalized text once for the optional debug pipeline display.
+- Web final-preview handling now preserves existing normalized text unless a non-empty final value is returned.
+- Confirmation data remains available through segments, rejected events, and candidate record metadata.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_preview_returns_structured_records tests/test_ai_pipeline.py::test_parse_progress_stream_reports_atomic_events_and_contextual_glucose` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend mypy app` passed.
+- `npm run typecheck` passed in `web/`.
+- `npm run lint` passed in `web/`.
+- `npm test -- --run` passed in `web/`.
+- `npm run build` passed in `web/`.
+
+### T057: Stop top-level transcript echo in parse preview responses
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/production_parser_ir_design.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Completed:
+
+- Direct parse-preview responses no longer echo the submitted transcript in the top-level `transcript` field.
+- Progress-stream final preview no longer echoes the submitted transcript in the top-level `preview.transcript` field.
+- Confirmation data remains available through normalized text, segments, rejected events, and candidate record metadata.
+- Added regression coverage for direct parse-preview and progress-stream final preview transcript minimization.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_preview_returns_structured_records tests/test_ai_pipeline.py::test_parse_progress_stream_reports_atomic_events_and_contextual_glucose` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend mypy app` passed.
+- `npm run typecheck` passed in `web/`.
+- `npm run lint` passed in `web/`.
+- `npm test -- --run` passed in `web/`.
+- `npm run build` passed in `web/`.
+
+### T056: Reduce duplicate segment source text in parser progress stream
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/production_parser_ir_design.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Completed:
+
+- Progress stream `segments_ready` now sends only the atomic segment count.
+- Removed the duplicate full segment list from `segments_ready`; full confirmation segments remain available in final preview.
+- Kept `segment_active` events for current-event progress display.
+- Updated web progress event typing and handling so it no longer expects all segments before final preview.
+- Added backend regression coverage proving `segments_ready` contains only count metadata.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_progress_stream_reports_atomic_events_and_contextual_glucose` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend mypy app` passed.
+- `npm run typecheck` passed in `web/`.
+- `npm run lint` passed in `web/`.
+- `npm test -- --run` passed in `web/`.
+- `npm run build` passed in `web/`.
+
+### T055: Minimize frontend debug state for parser and command summaries
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/REPO_QUALITY_WORKFLOW.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Completed:
+
+- Web parser completion no longer stores the full `ParsePreviewResponse` in `llmDebugOutput`.
+- Web command proposal handling no longer stores the full command proposal API response in `commandDebugOutput`.
+- Added non-PHI debug summary formatters that keep only model ids, counts, intents, action types, and record types.
+- Preserved confirmation UI state for user review while keeping debug state free of transcript/source text/payload values.
+- Added web regression tests proving debug summaries omit transcript text, source text, and glucose/food values.
+
+Verification:
+
+- `npm test -- --run` passed in `web/`.
+- `npm run typecheck` passed in `web/`.
+- `npm run lint` passed in `web/`.
+- `npm run build` passed in `web/`.
+
+### T054: Stop command proposal transcript echo for unknown/non-save flows
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/voice_command_interface.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Completed:
+
+- `UNKNOWN` command proposals no longer include the raw transcript in proposal payload or action payload.
+- Command proposal API responses no longer echo the submitted transcript at the top level.
+- Unknown command payloads now use a stable non-PHI `reason=unknown_intent`.
+- Added regression coverage proving unknown command responses omit transcript text.
+- Rechecked create-record, navigate, and report command proposal flows after removing the transcript echo.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_command_proposal_unknown_does_not_echo_transcript tests/test_ai_pipeline.py::test_command_proposal_create_record_does_not_save_directly tests/test_ai_pipeline.py::test_command_proposal_navigate tests/test_ai_pipeline.py::test_command_proposal_generate_report` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend mypy app` passed.
+- `npm run typecheck` passed in `web/`.
+- `npm run lint` passed in `web/`.
+- `npm test -- --run` passed in `web/`.
+- `npm run build` passed in `web/`.
+
+### T053: Minimize confirmation-only PHI before record creation
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/production_parser_ir_design.md`
+- `ai_context/efficiency_cost_strategy.md`
+
+Completed:
+
+- Command proposal `create_record` actions now sanitize metadata before returning action metadata, avoiding duplicate `transcript` / `source_text` in executable action metadata.
+- Command proposal payload still keeps candidate record metadata needed for the confirmation UI.
+- Web `createRecord` now sanitizes pending records before POSTing to `/records`, stripping transcript/source text/raw text/evidence-like free-text keys from payload and metadata.
+- Added regression coverage proving action metadata is text-minimized while confirmation records still have source text for user review.
+- Added web regression coverage proving create payload minimization removes confirmation-only text before storage submission.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_command_proposal_create_record_does_not_save_directly` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend mypy app` passed.
+- `npm run typecheck` passed in `web/`.
+- `npm run lint` passed in `web/`.
+- `npm test -- --run` passed in `web/`.
+- `npm run build` passed in `web/`.
+
+### T052: Cap transcript atomic segment complexity before LLM parsing
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/production_parser_ir_design.md`
+- `ai_context/no_phi_logging.md`
+
+Completed:
+
+- Added `LOCAL_LLM_MAX_TRANSCRIPT_SEGMENTS` and a parser service complexity guard.
+- AI parse, progress-stream, debug-stream, and command proposal routes now reject too-complex transcripts before quota usage and parser execution.
+- Added structured non-PHI `transcript_too_complex` API details with segment count and max segment count only.
+- Web error mapping now shows a fixed Traditional Chinese message asking users to split long multi-event input.
+- Added regression coverage proving too-complex requests do not call the parser and do not consume voice quota.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_preview_rejects_too_many_segments_before_quota_and_parser` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend mypy app` passed.
+- `npm run typecheck` passed in `web/`.
+- `npm run lint` passed in `web/`.
+- `npm test -- --run` passed in `web/`.
+- `npm run build` passed in `web/`.
+
+### T051: Enforce runtime LLM availability before parser calls
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/local_model_adapter_contract.md`
+- `ai_context/efficiency_cost_strategy.md`
+- `ai_context/no_phi_logging.md`
+
+Completed:
+
+- AI parse, progress-stream, debug-stream, and command proposal routes now validate LLM selection against `runtime_llm_models()` instead of static model metadata.
+- Unavailable local parser selections are rejected before quota usage and before any parser or Ollama call starts.
+- Added structured non-PHI `llm_model_unavailable` API errors with stable hints for generic model switching and Gemma parser setup.
+- Web error mapping now shows a fixed Traditional Chinese message for unavailable LLM selections instead of generic HTTP failure text.
+- Added regression tests for Gemma missing endpoint, unavailable Ollama model rejection before parser execution, disabled fallback rejection, and web error formatting.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_preview_gemma4_requires_local_endpoint tests/test_ai_pipeline.py::test_parse_preview_rejects_runtime_unavailable_ollama_before_parser tests/test_ai_pipeline.py::test_command_proposal_rejects_disabled_model` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend mypy app` passed.
+- `npm run typecheck` passed in `web/`.
+- `npm run lint` passed in `web/`.
+- `npm test -- --run` passed in `web/`.
+- `npm run build` passed in `web/`.
+
+### T050: Cache Ollama model availability checks
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/local_model_adapter_contract.md`
+- `ai_context/ollama_local_parser_models.md`
+
+Completed:
+
+- Added a short TTL cache for Ollama `/api/tags` model availability checks.
+- `/ai/models` and runtime parser availability no longer need to hit Ollama on every request inside the TTL window.
+- Cache entries return copies so caller-side mutation cannot corrupt cached runtime state.
+- Expired cache entries are used as a stale fallback if Ollama is temporarily unreachable.
+- Added backend tests for TTL reuse, TTL refresh, returned-copy behavior, and stale fallback behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_ollama_model_ids_cache_uses_ttl_and_returns_copy tests/test_ai_pipeline.py::test_ollama_model_ids_cache_refreshes_after_ttl tests/test_ai_pipeline.py::test_ollama_model_ids_cache_falls_back_to_stale_on_fetch_error` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend ruff check app tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T049: Type and map parser progress errors in web
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/local_model_adapter_contract.md`
+
+Completed:
+
+- Extended web `ParseProgressEvent` typing so `error` and `llm_fallback` events may carry structured non-PHI `code` and `hint` fields.
+- Added `formatParserProgressErrorMessage` to map progress-stream parser errors by stable code rather than raw stream message.
+- Web progress errors now reuse the same non-PHI guidance as structured API errors.
+- Added tests proving progress-stream error formatting ignores raw health text, glucose values, and evidence-like payload text.
+
+Verification:
+
+- `npm run typecheck` passed in `web/`.
+- `npm run lint` passed in `web/`.
+- `npm test -- --run` passed in `web/`.
+- `npm run build` passed in `web/`.
+
+### T048: Sanitize parser progress stream error events
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/production_parser_ir_design.md`
+
+Completed:
+
+- `/ai/parse-preview/progress-stream` no longer emits raw `str(exc)` in `error` events.
+- Parser stream failures now emit stable non-PHI `code`, `message`, `hint`, and `reason` fields.
+- Local parser unavailable errors use `local_parser_unavailable` and model-switch guidance.
+- Gemma4 missing endpoint uses the non-PHI `set_gemma4_parser_url` hint.
+- Local parser failures use `local_parser_failed` and retry/manual-input guidance.
+- Fallback progress events also use sanitized parser guidance instead of exception text.
+- Added focused tests proving progress-stream error events omit health text, glucose values, and raw parser content.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_progress_stream_error_event_omits_phi_content` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed: 25 tests.
+- `docker compose exec backend ruff check app tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T047: Map structured parser errors in web UI
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/local_model_adapter_contract.md`
+
+Completed:
+
+- Added a small web `ApiError` wrapper that reads structured backend `detail.code` values.
+- Web API failures now map known parser errors to fixed non-PHI Traditional Chinese guidance.
+- `local_parser_failed` prompts retry/manual input/model switch guidance without echoing backend exception text.
+- `local_parser_unavailable` prompts model-switch guidance, with a specific Gemma4 setup hint when applicable.
+- Voice quota errors use a stable non-PHI message.
+- `requestJson`, delete requests, parser progress stream, and debug stream now use the shared error wrapper.
+- Added tests proving structured parser messages do not include health text or values even if backend detail contains them.
+
+Verification:
+
+- `npm run typecheck` passed in `web/`.
+- `npm run lint` passed in `web/`.
+- `npm test -- --run` passed in `web/`.
+- `npm run build` passed in `web/`.
+
+### T046: Return structured non-PHI parser API errors
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/local_model_adapter_contract.md`
+
+Completed:
+
+- Added structured parser error details at the `/ai/parse-preview` API boundary.
+- `LocalParserUnavailableError` now returns `code=local_parser_unavailable`, a stable message, and a non-PHI hint.
+- Gemma4 missing endpoint keeps an actionable non-PHI hint: `set_gemma4_parser_url`.
+- `LocalParserError` now returns `code=local_parser_failed` and a stable message instead of echoing exception text.
+- Added focused tests proving parser failures do not echo transcript text, glucose values, raw model output, or parser exception content in HTTP responses.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_parse_preview_gemma4_requires_local_endpoint tests/test_ai_pipeline.py::test_parse_preview_local_parser_failure_returns_non_phi_detail` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed: 24 tests.
+- `docker compose exec backend ruff check app tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T045: Sanitize local parser error details
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/no_phi_logging.md`
+- `ai_context/production_parser_ir_design.md`
+
+Completed:
+
+- Removed raw local parser content and extracted JSON candidate excerpts from parser JSON-decode error messages.
+- Removed parsed compact IR content excerpts from schema-validation error messages.
+- Parser errors now report reason, location, content lengths, schema problems, and PHI-safety omission text only.
+- Kept validation strict while preventing API error details from echoing transcript-derived evidence or raw model output.
+- Added focused tests proving parser error messages omit health text and values.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_local_parser_error_messages_omit_phi_content` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed: 23 tests.
+- `docker compose exec backend ruff check app tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T044: Add local LLM prompt budget guard
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/production_parser_ir_design.md`
+- `ai_context/local_model_adapter_contract.md`
+
+Completed:
+
+- Added bounded local LLM prompt segment construction in `backend/app/services/ai_pipeline.py`.
+- Added `LOCAL_LLM_PROMPT_SEGMENT_CHAR_LIMIT` and `LOCAL_LLM_PROMPT_SEGMENTS_CHAR_BUDGET` to cap prompt text sent to local LLM adapters.
+- Local parser prompt now sends shortened atomic segment text while preserving `segment_id`, so backend can map model output back to full source text for confirmation.
+- Added prompt instruction telling the model to prefer `segment_id` when segment text is shortened.
+- Kept full transcript/segments out of logs and did not add any new backend persistence.
+- Added focused test coverage for prompt truncation and segment budget behavior.
+
+Verification:
+
+- `docker compose exec backend pytest tests/test_ai_pipeline.py::test_local_parser_prompt_bounds_segment_text_for_token_budget` passed.
+- `docker compose exec backend pytest tests/test_ai_pipeline.py` passed: 22 tests.
+- `docker compose exec backend ruff check app tests/test_ai_pipeline.py` passed.
+- `docker compose exec backend mypy app` passed.
+
+### T043: Add implementation log discipline to workflow docs
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/IMPLEMENTATION_LOG.md`
+- `ai_context/REPO_QUALITY_WORKFLOW.md`
+
+Completed:
+
+- Added an implementation log gate to `ai_context/REPO_QUALITY_WORKFLOW.md`.
+- Documented that every future bugfix, feature, infrastructure change, test-only change, or production-hardening update must update `ai_context/IMPLEMENTATION_LOG.md`.
+- Documented required log fields: date, type, files changed, summary, verification, and follow-up.
+- Added implementation-log checks to backend, web, mobile, infra, and release gates.
+- Reaffirmed PHI-safe log restrictions for transcripts, health payloads, request bodies, raw prompts, raw model output, secrets, tokens, and credentials.
+- Implementation log contains entries for Docker build hardening, Ollama model availability fix, UI spec/task update, T041, T042, and T043.
+
+Verification:
+
+- `rg -n "IMPLEMENTATION_LOG|Implementation Log Gate|PHI-safe" ai_context/REPO_QUALITY_WORKFLOW.md ai_context/IMPLEMENTATION_LOG.md ai_context/TASK_QUEUE.md` confirmed workflow, task queue, and log references.
+
+### T041: Align web/mobile UI with 2026-05-28 visual baseline
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 2-4
+
+Completed:
+
+- Audited current web and mobile UI against the 2026-05-28 visual baseline.
+- Web design tokens added for deep forest green, mint green, soft borders, card radius, control radius, and soft shadows.
+- Web shell, sticky header, menu grid, cards, form controls, recorder, transcript confirmation, AI confirmation, record detail, history tabs, analysis tabs, chart card, metric cards, and subscription card now use the updated soft medical visual system.
+- Mobile preview palette, cards, inputs, chips, buttons, record cards, debug panel, and typography updated to the same deep green / mint baseline.
+- Home remains focused on quick recording / text input and current record context; future module content was not added to MVP Home.
+- Responsive guards added for button/input overflow and narrow mobile metric/action layouts.
+- Implementation log updated at `ai_context/IMPLEMENTATION_LOG.md`.
+
+Verification:
+
+- `npm run typecheck` passed in `web/`.
+- `npm run lint` passed in `web/`.
+- `npm run build` passed in `web/`.
+- `npm run typecheck` passed in `mobile/`.
+- Color scan confirmed old blue/gray primary values were removed from `web/src/styles.css` and `mobile/App.tsx`.
+
+### T042: Complete missing UI destinations from the updated spec
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/UI_UX_SPEC.md` sections 4.9-4.16
+
+Completed:
+
+- Added web menu destinations for 使用教學, 試用狀態, 成就榜, 年度回顧, 商城, and 食物拍照分析.
+- 使用教學 page presents the four-step hold/release/confirm/save onboarding flow and returns to Home.
+- 試用狀態 page presents trial countdown, member feature preview, and disabled renewal CTA.
+- 成就榜, 年度回顧, 商城, and 食物拍照分析 are clearly marked as future/read-only previews.
+- Future screens use disabled CTAs for payment, cart, sharing, upload, camera, and save-to-record actions.
+- No backend writes, image upload, payment flow, marketplace transaction, medical advice, or LLM calls were added.
+- Future module content remains outside MVP Home.
+- Implementation log updated at `ai_context/IMPLEMENTATION_LOG.md`.
+
+Verification:
+
+- `npm run typecheck` passed in `web/`.
+- `npm run lint` passed in `web/`.
+- `npm test -- --run` passed in `web/`.
+- `npm run build` passed in `web/`.
+- Source scan confirmed the new future destinations are routed from `appViews` and guarded as disabled/read-only previews.
+
+### T035: Add minimal self-hosted production stack
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/MINIMAL_PRODUCTION_STACK.md`
+
+Completed:
+
+- minimal production guide with 16 required sections
+- `infra/minimal/docker-compose.yml`
+- `infra/minimal/.env.example`
+- `infra/minimal/nginx.conf`
+- `infra/minimal/schema.sql`
+- `infra/minimal/backup.sh`
+- `infra/minimal/restore.sh`
+- `backend/Dockerfile.prod`
+- `web/Dockerfile.prod`
+- `/healthz` backend endpoint
+- `/readyz` backend endpoint
+- `docker compose --env-file infra/minimal/.env.example -f infra/minimal/docker-compose.yml config` passed
+- `docker compose run --rm backend pytest -q tests/test_health.py` passed
+- `docker compose --env-file infra/minimal/.env.example -f infra/minimal/docker-compose.yml build backend web` verified through separate backend and web production image builds
+- minimal production backend `/readyz` smoke test passed inside the production compose backend container
+- temporary smoke-test containers stopped with `docker compose --env-file infra/minimal/.env.example -f infra/minimal/docker-compose.yml down`
+
+### T018: Execute non-write voice actions
+
+Status: done
+
+Completed:
+
+- `NAVIGATE` proposals execute known safe web views
+- `GENERATE_REPORT` proposals open Basic Analysis and select the requested range
+- `QUERY_DATA` placeholder opens History without generating a result card yet
+- unknown navigation targets are ignored with a status message
+- no record writes happen from non-write action execution
+- action execution and audit policy documented at `ai_context/VOICE_COMMAND_EXECUTION_POLICY.md`
+- README planning docs index updated
+- `npm run lint`, `npm run typecheck`, `npm test -- --run`, and `npm run build` passed in `web/`
+
+### T013: Add real mobile local AI spike
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md` BP060-BP064
+
+Completed:
+
+- Expo Dev Client prebuild plan documented at `ai_context/MOBILE_NATIVE_AI_SPIKE.md`
+- existing `whisper.rn` integration wrapper kept and documented
+- existing `llama.rn` JSON-schema integration wrapper kept and documented
+- native benchmark wrappers added for Whisper and Llama
+- dev-client debug panel button added to run local benchmarks
+- model storage now records size and MD5 metadata
+- model download supports max size and expected MD5 validation proof
+- production SHA-256/signed manifest gap documented
+- README planning docs index updated
+- mobile typecheck passed
+
+### T037: Add production-grade permission and record schema registries
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_GRADE_DESIGN_AUDIT.md`
+
+Completed:
+
+- `backend/app/services/permissions.py` added for read/write/export/share profile checks
+- record and report routers now use the central permission service
+- `backend/app/services/record_schema_registry.py` added for schema version and supported record type registry
+- record create/update validation now routes through the schema registry
+- report date-window API added with `start_at`, `end_at`, and bounded `limit`
+- request-id middleware added with `X-Request-ID` response header
+- request logging remains PHI-safe: method/path/status/duration/request_id only
+- permission/schema registry notes documented at `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`
+- tests added for report date window, request ID, and schema registry behavior
+- focused backend suite passed: 18 tests
+- backend ruff and mypy passed
+
+### T036: Add production Kubernetes deployment foundation
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`
+
+Completed:
+
+- `/healthz` and `/readyz` backend endpoints already present and used by probes
+- production Dockerfiles already use non-root runtime images
+- initial Kubernetes manifests added under `infra/k8s`
+- Namespace, ConfigMap, Secret example, ExternalSecret example, and ServiceAccount shape added
+- backend and web Deployment / Service manifests added
+- Ingress with `/api` to backend and `/` to web added
+- backend HPA added for CPU and memory
+- backend and web PDBs added
+- NetworkPolicy baseline added
+- migration Job added for Alembic deploy step
+- PgBouncer / managed PostgreSQL connection contract documented in `infra/k8s/README.md`
+- Redis / future worker contract documented in `infra/k8s/README.md`
+- CI/CD deploy plan with migration and rollback steps documented in `infra/k8s/README.md`
+- README planning docs index updated
+- Kubernetes YAML parse check passed
+- full backend suite passed: 48 tests
+- backend ruff and mypy passed
+- minimal production Compose config check passed
+
+### T034: Add subscription entitlement and usage schema
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md` BP050-BP053
+
+Completed:
+
+- `plans`, `plan_entitlements`, `subscriptions`, and `usage_counters` models added
+- Alembic migration `20260430_0006_subscription_entitlements_usage.py` added and applied
+- minimal production schema updated for subscription and usage tables
+- trial start/end, cancellation field, referral_code placeholder, and intro-price preservation field added
+- `GET /subscriptions/voice-quota` added for server-backed quota display
+- voice quota enforcement now reads entitlement and usage counter state in backend AI endpoints
+- web quota display now loads server-backed voice quota after dev login
+- subscription entitlement schema documented at `ai_context/SUBSCRIPTION_ENTITLEMENT_SCHEMA.md`
+- entitlement tests added for trial provisioning, usage increments, and over-limit denial
+- focused backend entitlement/parser tests passed: 24 tests
+- backend ruff and mypy passed
+- web lint, typecheck, tests, and build passed
+- minimal production Compose config check passed
+
+### T033: Add basic analysis charts and summaries
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md` BP042-BP043
+- `ai_context/UI_UX_SPEC.md` section 5.5
+
+Completed:
+
+- Basic Analysis view now uses 本週, 本月, and 自訂日期區間 range controls
+- lightweight glucose trend visualization added without a new chart dependency
+- custom Analysis date inputs are bounded and only filter mobile-loaded records
+- highest glucose, lowest glucose, average glucose, total glucose measurement count, before-meal count, and after-meal count summaries added
+- no diagnosis or treatment advice wording used
+- report abstraction remains backend-compatible because frontend reads existing record/report-safe payloads only
+- `npm run lint`, `npm run typecheck`, `npm test -- --run`, and `npm run build` passed in `web/`
+
+### T032: Add Today and History record pages
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md` BP040-BP041
+- `ai_context/UI_UX_SPEC.md` sections 5.3-5.4
+
+Completed:
+
+- Today view lists active-profile records for the current local date
+- History view supports a date input query
+- History view supports quick ranges for today, recent 7 days, and recent 30 days
+- record type labels added for glucose / meal / exercise / medication / lifestyle / note plus current extended types
+- record detail entry points added from Today and History rows
+- backend active-profile ownership filtering remains covered by record tests
+- `npm run lint`, `npm run typecheck`, `npm test -- --run`, and `npm run build` passed in `web/`
+
+### T031: Add record detail, edit, and soft delete flow
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md` BP033, BP040-BP041
+- `ai_context/UI_UX_SPEC.md` sections 5.9-5.10
+
+Completed:
+
+- record detail panel added to the web simulator
+- saved record payload JSON can be edited and sent through `PATCH /records/{record_id}`
+- saved records can be deleted through `DELETE /records/{record_id}` with explicit confirmation
+- deleted records are removed from the active UI list after backend soft delete succeeds
+- backend already emits audit events for update/delete without PHI payloads
+- active profile permission checks remain covered by backend record tests
+- `npm run lint`, `npm run typecheck`, `npm test -- --run`, and `npm run build` passed in `web/`
+- `docker compose run --rm backend pytest -q tests/test_records.py` passed
+
+### T030: Complete two-step confirmation UX
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md` BP030-BP033
+- `ai_context/UI_UX_SPEC.md` sections 5.1-5.2
+
+Completed:
+
+- transcript confirmation panel added before parse
+- transcript can be edited before AI整理
+- parsed candidate confirmation still required before save
+- confirmation cards display active profile, source text, confidence, content, and decision trace
+- candidate payload JSON can be edited before save
+- save action requires explicit `window.confirm`
+- web styles added for transcript review and candidate JSON edit fields
+- `npm run lint`, `npm run typecheck`, `npm test -- --run`, and `npm run build` passed in `web/`
+
+### T029: Add voice quota and recording state contract
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md` BP021-BP023, BP050-BP052
+
+Completed:
+
+- push-to-talk state machine documented at `ai_context/VOICE_RECORDING_QUOTA_CONTRACT.md`
+- browser simulator blocks voice recording when same-session quota is exhausted
+- single-recording limit added through `VITE_SINGLE_RECORDING_LIMIT_SECONDS`
+- trial / paid daily voice quota env contract added
+- quota status shows used time while healthy and remaining time only when close to limit
+- silent MediaRecorder audio rejection added through `VITE_SILENT_AUDIO_MIN_BYTES`
+- env examples, Docker Compose env, minimal production Compose build args, and web production Dockerfile updated
+- web render test updated for quota status
+- `npm run lint`, `npm run typecheck`, `npm test -- --run`, and `npm run build` passed in `web/`
+- minimal production Compose config check passed
+
+### T028: Polish MVP home recording surface
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md` BP020-BP024
+- `ai_context/UI_UX_SPEC.md` sections 2-5, 7-8
+
+Completed:
+
+- Home layout reduced to quick recording, text input, live transcript, parse preview, and status
+- large push-to-talk control remains the primary action in the web simulator
+- text input and voice transcript still share `handleBuildPreview` and `/ai/parse-preview/progress-stream`
+- today record count is shown in the active profile context above all views
+- STT / LLM model controls moved to Settings so Home is less crowded
+- command proposal button moved behind debug tools in Settings
+- full charts and secondary navigation are not shown on Home
+- web render test updated to assert Home stays focused
+- `npm run lint`, `npm run typecheck`, `npm test -- --run`, and `npm run build` passed in `web/`
+
+### T027: Align MVP information architecture with blueprint
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/ENGINEERING_BLUEPRINT_V1.md` BP010-BP012
+- `ai_context/UI_UX_SPEC.md` sections 5-7
+
+Completed:
+
+- Home / Today / History / Basic Analysis / Subscription / Settings view model added to `web/src/App.tsx`
+- right-top function menu added as expandable grid
+- active profile context shown above all MVP views
+- Settings view owns profile switching and backend health
+- Today, History, Basic Analysis, and Subscription placeholder views added without changing backend contracts
+- MVP route map documented at `ai_context/MVP_INFORMATION_ARCHITECTURE.md`
+- README planning docs index updated
+- web render test updated for current view, right-top menu button, and active profile context
+
+### T040: Add production hardening audit and cloud deployment guardrails
+
+Status: done
+
+Completed:
+
+- module-by-module production hardening audit added at `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- cloud deployment guide added at `ai_context/CLOUD_DEPLOYMENT_GUIDE.md`
+- README updated with local Docker, minimal production Compose, GCP, and AWS deployment instructions
+- backend config validation added for production debug and wildcard CORS safety
+- production dev-auth guard added with `ALLOW_DEV_AUTH`
+- PHI-safe request logging added without body, header, query, or payload logging
+- backend tests added for config safety and production dev-auth disablement
+- CI quality job now includes mobile typecheck
+
+### T039: Add repo quality workflow
+
+Status: done
+
+Completed:
+
+- repeatable quality workflow added at `ai_context/REPO_QUALITY_WORKFLOW.md`
+- backend gate documented
+- web gate documented
+- mobile gate documented
+- infra gate documented
+- release checklist documented
+- debug incident workflow documented
+- README planning docs index updated
+
+### T016: Add debug mode controls
+
+Status: done
+
+Deliverables:
+
+- hide/show debug panels
+- debug mode environment flag
+- prevent debug panels in production builds
+- no debug persistence
+
+Completed:
+
+- backend `ENABLE_DEBUG_TOOLS=false` default added
+- `/ai/parse-preview/debug-stream` returns 404 unless debug tools are enabled
+- web `VITE_ENABLE_DEBUG_TOOLS=false` default added
+- mobile `EXPO_PUBLIC_ENABLE_DEBUG_TOOLS=false` default added
+- raw LLM debug button and debug panels hidden unless explicitly enabled
+- mobile native local-model dev panel hidden unless explicitly enabled
+- debug-disabled backend test added
+- default web render test asserts debug panels are hidden
+- mobile typecheck now includes helper modules
+
+### T038: Complete production-grade design audit and record lifecycle hardening
+
+Status: done
+
+Blueprint refs:
+
+- `ai_context/PRODUCTION_GRADE_DESIGN_AUDIT.md`
+
+Completed:
+
+- production-grade design audit added
+- unbounded record listing fixed with `limit` and `before`
+- record detail endpoint added
+- record update endpoint added
+- record soft delete endpoint added
+- `deleted_at` migration and active-record index added
+- reports now exclude soft-deleted records
+- structured `note` payload contract fixed to avoid PHI text storage conflict
+- minimal production schema updated with `deleted_at`
+- focused backend suite passed: 17 tests
+- full backend suite passed: 37 tests
+- ruff passed
+- mypy passed
+- minimal production Compose config check passed
+
+### T001: Scaffold Docker-first monorepo
+
+Status: done
+
+Completed:
+
+- `backend/`
+- `web/`
+- `docker-compose.yml`
+- `Makefile`
+- `.env.example`
+- backend health endpoint
+- web page calling backend health
+- `docker compose up -d backend web`
+- backend health verified at `http://127.0.0.1:8000/health`
+- web verified at `http://127.0.0.1:5173`
+- backend pytest passed
+- web typecheck passed
+- no real secrets committed
+
+### T002: Add backend quality gates
+
+Status: done
+
+Completed:
+
+- pytest configured
+- ruff configured
+- mypy configured
+- backend test structure created
+- `/health` test added
+- `docker compose run --rm backend ruff check .` passed
+- `docker compose run --rm backend mypy .` passed
+- `docker compose run --rm backend pytest -q` passed
+
+### T003: Add web quality gates
+
+Status: done
+
+Completed:
+
+- TypeScript check configured
+- ESLint configured
+- Vitest configured
+- first React render test added
+- `docker compose run --rm web npm run typecheck` passed
+- `docker compose run --rm web npm run lint` passed
+- `docker compose run --rm web npm test -- --run` passed
+
+### T004: Add initial database and migrations
+
+Status: done
+
+Completed:
+
+- PostgreSQL service configured
+- SQLAlchemy setup added
+- Alembic setup added
+- initial migration added
+- `accounts` table created
+- `user_profiles` table created
+- `records` table created
+- `audit_logs` table created
+- `docker compose run --rm backend alembic upgrade head` passed
+- `docker compose run --rm backend ruff check .` passed
+- `docker compose run --rm backend mypy .` passed
+- `docker compose run --rm backend pytest -q` passed
+- database table list verified with psql
+
+### T005: Add active profile switching API
+
+Status: done
+
+Completed:
+
+- dev login endpoint added for local development
+- create profile API added
+- list profiles API added
+- profile endpoints require `X-Account-Id`
+- web app loads/creates default `自己` profile
+- web app can add and switch active profile
+- `records.profile_id` is required by model and migration
+- `docker compose run --rm backend alembic upgrade head` passed
+- `docker compose run --rm backend ruff check .` passed
+- `docker compose run --rm backend mypy .` passed
+- `docker compose run --rm backend pytest -q` passed
+- `docker compose run --rm web npm run lint` passed
+- `docker compose run --rm web npm run typecheck` passed
+- `docker compose run --rm web npm test -- --run` passed
+- backend health verified at `http://127.0.0.1:8000/health`
+- profile create/list verified through HTTP
+- web verified at `http://127.0.0.1:5173`
+
+### T006: Add generic record API
+
+Status: done
+
+Completed:
+
+- `POST /records` added
+- `GET /records?profile_id=...` added
+- record create/list require `X-Account-Id`
+- profile ownership checked before record read/write
+- API accepts and returns `payload_json`
+- `record_type`, `occurred_at`, `profile_id`, `source` validation added
+- ownership failure test added
+- `docker compose run --rm backend ruff check .` passed
+- `docker compose run --rm backend mypy .` passed
+- `docker compose run --rm backend pytest -q` passed
+- record create/list verified through HTTP
+
+### T007: Add web record flow
+
+Status: done
+
+Completed:
+
+- text input added to simulate transcript
+- placeholder parse preview card added
+- explicit confirmation before saving
+- web saves records through `POST /records`
+- web loads current profile's records through `GET /records`
+- switching profile reloads that profile's record list
+- `docker compose run --rm web npm run lint` passed
+- `docker compose run --rm web npm run typecheck` passed
+- `docker compose run --rm web npm test -- --run` passed
+- web verified at `http://127.0.0.1:5173`
+
+### T008: Add basic report engine
+
+Status: done
+
+Completed:
+
+- `GET /reports/basic?profile_id=...` added
+- report data provider added
+- glucose count / average / min / max / latest summary added
+- meal count summary added
+- exercise / medication / lifestyle / note summary added
+- profile ownership check enforced
+- no PDF generated or persisted
+- report API tests added
+- `docker compose run --rm backend ruff check .` passed
+- `docker compose run --rm backend mypy .` passed
+- `docker compose run --rm backend pytest -q` passed
+- report endpoint verified through HTTP
+
+### T009: Add CI pipeline
+
+Status: done
+
+Completed:
+
+- GitHub Actions workflow added at `.github/workflows/ci.yml`
+- PR / main push quality job added
+- backend Docker build added
+- web Docker build added
+- backend migration / lint / typecheck / test checks added
+- web lint / typecheck / test checks added
+- gitleaks secret scan added
+- backend dependency scan with `pip-audit` added
+- web dependency scan with `npm audit --audit-level=high` added
+- backend and web container scans with Trivy added
+- `docker compose build backend web` passed locally
+- `docker compose run --rm backend ruff check .` passed
+- `docker compose run --rm backend mypy .` passed
+- `docker compose run --rm backend pytest -q` passed
+- `docker compose run --rm web npm run lint` passed
+- `docker compose run --rm web npm run typecheck` passed
+- `docker compose run --rm web npm test -- --run` passed
+- `.gitignore` now excludes Windows `Zone.Identifier` metadata files
+
+### T010: Add security baseline
+
+Status: done
+
+Completed:
+
+- log redaction helper added at `backend/app/core/redaction.py`
+- audit log event writer added at `backend/app/services/audit.py`
+- record creation writes `record.created` audit event
+- basic report view writes `report.basic_viewed` audit event
+- audit metadata avoids PHI payloads
+- auth/permission baseline test added
+- redaction tests added
+- audit event tests added
+- no-PHI logging convention documented at `ai_context/no_phi_logging.md`
+- `docker compose run --rm backend ruff check .` passed
+- `docker compose run --rm backend mypy .` passed
+- `docker compose run --rm backend pytest -q` passed
+
+### T011: Add selectable STT and LLM parse pipeline
+
+Status: done
+
+Completed:
+
+- `GET /ai/models` added
+- `POST /ai/parse-preview` added
+- selectable STT model added to web
+- selectable LLM parser model added to web
+- browser Web Speech path added for web simulator voice input
+- parse preview now returns structured candidate records
+- multiple candidate records can be confirmed and saved
+- disabled local whisper and OpenAI fallback placeholders exposed as unavailable
+- no raw audio upload or persistence added
+- backend tests added for model list, parse preview, disabled model, profile ownership
+- `docker compose run --rm backend ruff check .` passed
+- `docker compose run --rm backend mypy .` passed
+- `docker compose run --rm backend pytest -q` passed
+- `docker compose run --rm web npm run lint` passed
+- `docker compose run --rm web npm run typecheck` passed
+- `docker compose run --rm web npm test -- --run` passed
+- `/ai/models` and `/ai/parse-preview` verified through HTTP
+
+### T012: Add local model adapter documentation and model manifest
+
+Status: done
+
+Completed:
+
+- local STT adapter contract documented
+- local LLM parser adapter contract documented
+- mobile whisper.rn / llama.rn integration notes documented
+- model manifest schema added at `ai_context/model_manifest.schema.json`
+- model manifest example added at `ai_context/model_manifest.example.json`
+- model bundled/download distribution policy added
+- model checksum / version / device tier policy documented
+- no raw audio / PHI handling rules documented
+- `docker compose run --rm backend ruff check .` passed
+- `docker compose run --rm backend mypy .` passed
+- `docker compose run --rm backend pytest -q` passed
+- `docker compose run --rm web npm run lint` passed
+- `docker compose run --rm web npm run typecheck` passed
+- `docker compose run --rm web npm test -- --run` passed
+
+### T015: Add live STT and LLM debug output
+
+Status: done
+
+Completed:
+
+- live speech interim result display added
+- live speech final result display added
+- Web Speech now uses `interimResults`
+- LLM parse response debug JSON panel added
+- debug output is displayed only in local web UI
+- no raw audio persistence added
+- no general log output added
+- `docker compose run --rm web npm run lint` passed
+- `docker compose run --rm web npm run typecheck` passed
+- `docker compose run --rm web npm test -- --run` passed
+
+### T017: Add voice command proposal layer
+
+Status: done
+
+Completed:
+
+- voice command interface documented at `ai_context/voice_command_interface.md`
+- `POST /ai/command-proposal` added
+- MVP intents supported: `CREATE_RECORD`, `NAVIGATE`, `GENERATE_REPORT`
+- parser returns action proposals only
+- parser does not directly write DB
+- `CREATE_RECORD` proposal requires confirmation
+- web Command Debug panel added
+- web command proposal button added
+- command proposal can populate record confirmation cards
+- `docker compose run --rm backend ruff check .` passed
+- `docker compose run --rm backend mypy .` passed
+- `docker compose run --rm backend pytest -q` passed
+- `docker compose run --rm web npm run lint` passed
+- `docker compose run --rm web npm run typecheck` passed
+- `docker compose run --rm web npm test -- --run` passed
+- `/ai/command-proposal` verified through HTTP
+
+### T014: Improve parser schema and validation
+
+Status: done
+
+Completed:
+
+- formal record preview JSON schema added through typed API schemas
+- generic `records` abstraction documented at `ai_context/generic_health_record_abstraction.md`
+- canonical record types defined: glucose, meal, exercise, medication, vital, body_measurement, lab_result, lifestyle, note
+- parser preview and command proposal use `occurred_at`
+- parser preview and record API support `metadata_json`
+- parser stores transcript/model provenance in metadata instead of health payload
+- medication payload changed to safer generic description shape
+- `POST /records` validates payload by `record_type`
+- `CREATE_RECORD` command proposal returns action proposals only and does not save directly
+- Alembic migration added for `records.occurred_at` and `records.metadata_json`
+
+### T019: Add parser golden regression case
+
+Status: done
+
+Completed:
+
+- complex mixed-day parser fixture added at `backend/tests/parser_cases/complex_mixed_day_001.json`
+- schema-style checks added for record type, source, confidence, and source text
+- count checks added for glucose / meal / exercise records
+- value checks added for glucose values, food items, and exercise minutes
+- uncertainty check added so ambiguous morning glucose keeps `meal_timing=unknown`
+- negative event check added so "沒量血糖" phrases do not create glucose records
+- parser metadata now includes `source_text` for UI correspondence display
+- web confirmation card now displays original source text
+- Gemma 4 local candidate added as disabled pending benchmark option
+
+### T020: Enable Gemma 4 local test slot
+
+Status: done
+
+Completed:
+
+- `gemma-4-e2b-local-pending` is selectable in local `/ai/models`
+- model manifest marks the Gemma 4 slot available for local parser selection tests
+- production policy still requires artifact, license, GGUF, grammar, and benchmark checks before real rollout
+
+### T021: Enable Whisper Tiny local test slot
+
+Status: done
+
+Completed:
+
+- `local-whisper-tiny-placeholder` is selectable in local `/ai/models`
+- model manifest marks `local-whisper-tiny-q5` available for local adapter selection tests
+- web simulator still uses browser Web Speech for actual audio until whisper.rn is wired
+- production mobile use still requires asset, checksum, whisper.rn integration, and device benchmark
+
+### T022: Add Transformers.js Whisper Tiny web STT spike
+
+Status: done
+
+Completed:
+
+- `@huggingface/transformers` added to the web app
+- `web-transformers-whisper-tiny` STT option added
+- browser MediaRecorder capture added for Transformers.js STT path
+- recorded audio is transcribed locally in browser through Transformers.js Whisper Tiny
+- first-use model download status is shown to the user
+- parser receives `web-transformers-whisper-tiny` as the STT model id
+
+### T023: Add transcript processing pipeline response
+
+Status: done
+
+Completed:
+
+- parse-preview response now includes `normalized_text`
+- parse-preview response now includes `segments`
+- parse-preview response now includes `rejected_events`
+- backend segment schema added
+- negative measurement events are represented as rejected events
+- golden parser test now checks segment and rejected-event layers
+- web UI displays normalized text, segment table, and rejected events
+- pipeline contract documented at `ai_context/transcript_processing_pipeline.md`
+
+### T024: Enforce atomic LLM segment contract
+
+Status: done
+
+Completed:
+
+- segment contract now states each segment must contain only one atomic event
+- local LLM segmentation adapter stub merges event modifiers into the same atomic segment
+- `忘記是不是空腹` stays with the glucose event instead of becoming its own segment
+- `大概 20 分鐘` stays with the exercise event instead of becoming its own segment
+- regression assertions added for atomic segment behavior
+
+### T025: Wire Gemma 4 parser endpoint
+
+Status: done
+
+Completed:
+
+- `gemma-4-e2b-local-pending` no longer silently uses the deterministic stub
+- backend calls `GEMMA4_PARSER_URL` when Gemma 4 is selected
+- OpenAI-compatible chat completions response parsing added
+- missing Gemma endpoint returns 503
+- malformed Gemma output returns 502
+- Gemma output is validated through `ParsePreviewResponse`
+- local adapter settings added to `.env.example` and `docker-compose.yml`
+- adapter contract documented at `ai_context/gemma4_local_parser_adapter.md`
+
+### T026: Add runnable Ollama local parser candidates
+
+Status: done
+
+Completed:
+
+- Docker Compose `ollama` service added
+- Makefile shortcuts added for `qwen25`, `gemma3`, and `llama32`
+- backend LLM model options added for Qwen2.5 1.5B, Gemma 3 1B, and Llama 3.2 1B
+- backend routes Ollama model options through the OpenAI-compatible local parser endpoint
+- `qwen2.5:1.5b` pulled successfully into local Ollama
+- Qwen2.5 1.5B smoke test reached `/ai/parse-preview`
+- schema validation fallback added for small-model malformed JSON output
+- repaired records are marked with `metadata_json.parser_repair = schema_validation_fallback`
+- Ollama local parser runbook documented at `ai_context/ollama_local_parser_models.md`
+
+## Cancelled
+
+None yet.

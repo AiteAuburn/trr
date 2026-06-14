@@ -1,0 +1,47 @@
+{
+  "name": "bloodsugar-mobile",
+  "private": true,
+  "version": "0.1.0",
+  "main": "expo/AppEntry",
+  "scripts": {
+    "start": "expo start",
+    "start:dev": "expo start --dev-client",
+    "prebuild": "expo prebuild",
+    "ios": "expo run:ios",
+    "android": "expo run:android",
+    "typecheck": "tsc --noEmit",
+    "verify:navigation": "python3 ../scripts/verify_mobile_navigation.py",
+    "verify:ui-spec-coverage": "python3 ../scripts/verify_mobile_ui_spec_coverage.py",
+    "verify:visual-smoke-routes": "python3 ../scripts/verify_mobile_visual_smoke_routes.py",
+    "verify:visual-smoke-harness": "python3 ../scripts/verify_mobile_visual_smoke_harness.py",
+    "verify:secure-auth-storage": "python3 ../scripts/verify_mobile_secure_auth_storage.py",
+    "verify:release-env": "python3 ../scripts/verify_mobile_release_env.py",
+    "verify:android-release-signing": "python3 ../scripts/verify_android_release_signing.py",
+    "verify:android-apk-scripts": "python3 ../scripts/verify_android_apk_scripts.py",
+    "visual-smoke:harness": "python3 ../scripts/generate_mobile_visual_smoke_harness.py",
+    "visual-smoke:harness:verify-artifact": "python3 ../scripts/verify_mobile_visual_smoke_harness_artifact.py",
+    "apk:android-prereqs": "python3 ../scripts/check_android_apk_build_prereqs.py",
+    "preflight:android-apk:production": "npm run verify:release-env && npm run verify:android-release-signing && npm run apk:android-prereqs",
+    "preflight:android-apk:internal": "npm run verify:release-env -- --allow-local-api && npm run verify:android-release-signing -- --allow-debug-signing && npm run apk:android-prereqs",
+    "visual-smoke:android-prereqs": "python3 ../scripts/check_android_visual_smoke_prereqs.py",
+    "visual-smoke:android-blockers": "python3 ../scripts/check_android_visual_smoke_blockers.py",
+    "quality": "npm run typecheck && npm run verify:navigation && npm run verify:ui-spec-coverage && npm run verify:visual-smoke-routes && npm run verify:visual-smoke-harness && npm run verify:secure-auth-storage && npm run verify:android-apk-scripts"
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "~4.0.1",
+    "expo": "~52.0.0",
+    "expo-av": "~15.0.2",
+    "expo-dev-client": "~5.0.20",
+    "expo-file-system": "~18.0.12",
+    "expo-secure-store": "~14.0.1",
+    "expo-secure-store": "~14.0.1",
+    "llama.rn": "^0.12.4",
+    "react": "18.3.1",
+    "react-native": "^0.76.9",
+    "whisper.rn": "^0.5.5"
+  },
+  "devDependencies": {
+    "@types/react": "~18.3.0",
+    "typescript": "~5.3.3"
+  }
+}

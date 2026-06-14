@@ -1,0 +1,52 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: bloodsugar-year-review-snapshots
+  namespace: bloodsugar
+spec:
+  schedule: "15 0 1 1 *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: bloodsugar
+            app.kubernetes.io/component: year-review-snapshot
+        spec:
+          restartPolicy: Never
+          serviceAccountName: bloodsugar-backend
+          securityContext:
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: year-review-snapshots
+              image: registry.example.com/bloodsugar/backend:replace-me
+              command: ["python", "-m", "app.jobs.generate_year_review_snapshots"]
+              envFrom:
+                - configMapRef:
+                    name: bloodsugar-config
+                - secretRef:
+                    name: bloodsugar-secrets
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 256Mi
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+          volumes:
+            - name: tmp
+              emptyDir: {}

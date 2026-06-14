@@ -1,0 +1,170 @@
+services:
+  proxy:
+    image: nginxinc/nginx-unprivileged:1.27-alpine
+    restart: unless-stopped
+    cap_drop: ["ALL"]
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+    ports:
+      - "80:8080"
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+      - /var/cache/nginx:size=32m,mode=1777
+      - /var/run:size=8m,mode=1777
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks: ["public", "private"]
+    depends_on:
+      backend:
+        condition: service_healthy
+      web:
+        condition: service_started
+    mem_limit: 128m
+    cpus: 0.25
+
+  web:
+    build:
+      context: ../../web
+      dockerfile: Dockerfile.prod
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-/api}
+        VITE_ENABLE_DEBUG_TOOLS: ${VITE_ENABLE_DEBUG_TOOLS:-false}
+        VITE_VOICE_PLAN: ${VITE_VOICE_PLAN:-trial}
+        VITE_TRIAL_DAILY_VOICE_SECONDS: ${VITE_TRIAL_DAILY_VOICE_SECONDS:-300}
+        VITE_PAID_DAILY_VOICE_SECONDS: ${VITE_PAID_DAILY_VOICE_SECONDS:-600}
+        VITE_SINGLE_RECORDING_LIMIT_SECONDS: ${VITE_SINGLE_RECORDING_LIMIT_SECONDS:-60}
+        VITE_VOICE_QUOTA_WARNING_SECONDS: ${VITE_VOICE_QUOTA_WARNING_SECONDS:-120}
+        VITE_SILENT_AUDIO_MIN_BYTES: ${VITE_SILENT_AUDIO_MIN_BYTES:-1024}
+    restart: unless-stopped
+    cap_drop: ["ALL"]
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+    expose: ["8080"]
+    networks: ["private"]
+    mem_limit: 128m
+    cpus: 0.25
+
+  backend:
+    build:
+      context: ../../backend
+      dockerfile: Dockerfile.prod
+    restart: unless-stopped
+    cap_drop: ["ALL"]
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      ENABLE_DEBUG_TOOLS: ${ENABLE_DEBUG_TOOLS:-false}
+      ALLOW_DEV_AUTH: ${ALLOW_DEV_AUTH:-false}
+      DATABASE_URL: ${DATABASE_URL}
+      BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS}
+      MAX_REQUEST_BODY_BYTES: ${MAX_REQUEST_BODY_BYTES:-1048576}
+      AUTH_JWT_SECRET: ${AUTH_JWT_SECRET:-}
+      AUTH_JWT_ISSUER: ${AUTH_JWT_ISSUER:-}
+      AUTH_JWT_AUDIENCE: ${AUTH_JWT_AUDIENCE:-}
+      AUTH_JWKS_URL: ${AUTH_JWKS_URL:-}
+      AUTH_JWKS_TIMEOUT_SECONDS: ${AUTH_JWKS_TIMEOUT_SECONDS:-5}
+      AUTH_JWT_REQUIRE_JTI: ${AUTH_JWT_REQUIRE_JTI:-true}
+      AUTH_OIDC_JWKS_URL: ${AUTH_OIDC_JWKS_URL:-}
+      AUTH_OIDC_ISSUER: ${AUTH_OIDC_ISSUER:-}
+      AUTH_OIDC_AUDIENCE: ${AUTH_OIDC_AUDIENCE:-}
+      AUTH_OIDC_TIMEOUT_SECONDS: ${AUTH_OIDC_TIMEOUT_SECONDS:-5}
+      AUTH_OIDC_MAX_AGE_SECONDS: ${AUTH_OIDC_MAX_AGE_SECONDS:-3600}
+      AUTH_LOGIN_CLIENT_RATE_LIMIT_COUNT: ${AUTH_LOGIN_CLIENT_RATE_LIMIT_COUNT:-30}
+      AUTH_LOGIN_CLIENT_RATE_LIMIT_WINDOW_SECONDS: ${AUTH_LOGIN_CLIENT_RATE_LIMIT_WINDOW_SECONDS:-60}
+      AUTH_LOGOUT_CLIENT_RATE_LIMIT_COUNT: ${AUTH_LOGOUT_CLIENT_RATE_LIMIT_COUNT:-120}
+      AUTH_LOGOUT_CLIENT_RATE_LIMIT_WINDOW_SECONDS: ${AUTH_LOGOUT_CLIENT_RATE_LIMIT_WINDOW_SECONDS:-60}
+      LOCAL_LLM_PARSER_URL: ${LOCAL_LLM_PARSER_URL:-http://ollama:11434/v1/chat/completions}
+      OLLAMA_CHAT_URL: ${OLLAMA_CHAT_URL:-http://ollama:11434/api/chat}
+      LOCAL_LLM_KEEP_ALIVE: ${LOCAL_LLM_KEEP_ALIVE:-10m}
+      LOCAL_LLM_MAX_TOKENS: ${LOCAL_LLM_MAX_TOKENS:-900}
+      LOCAL_LLM_TIMEOUT_SECONDS: ${LOCAL_LLM_TIMEOUT_SECONDS:-45}
+      LOCAL_LLM_REPAIR_FALLBACK_ENABLED: ${LOCAL_LLM_REPAIR_FALLBACK_ENABLED:-true}
+      OLLAMA_QWEN25_MODEL_ID: ${OLLAMA_QWEN25_MODEL_ID:-qwen2.5:1.5b}
+      OLLAMA_GEMMA3_MODEL_ID: ${OLLAMA_GEMMA3_MODEL_ID:-gemma3:1b}
+      OLLAMA_LLAMA32_MODEL_ID: ${OLLAMA_LLAMA32_MODEL_ID:-llama3.2:1b}
+    expose: ["8000"]
+    networks: ["private"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=2)"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 20s
+    mem_limit: 512m
+    cpus: 1.0
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    user: "70:70"
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-bloodsugar}
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    expose: ["5432"]
+    networks: ["private"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-app} -d $${POSTGRES_DB:-bloodsugar}"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    mem_limit: 768m
+    cpus: 1.0
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    user: "999:999"
+    cap_drop: ["ALL"]
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+    tmpfs:
+      - /data:size=64m,mode=1777
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+    expose: ["6379"]
+    networks: ["private"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    mem_limit: 96m
+    cpus: 0.25
+
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["llm"]
+    restart: unless-stopped
+    user: "1000:1000"
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    environment:
+      OLLAMA_MODELS: /models
+    expose: ["11434"]
+    volumes:
+      - ollama_data:/models
+    networks: ["private"]
+    mem_limit: 4096m
+    cpus: 4.0
+
+networks:
+  public:
+  private:
+    internal: true
+
+volumes:
+  postgres_data:
+  ollama_data:

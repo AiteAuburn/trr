@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  security-events: write
+
+env:
+  COMPOSE_PROJECT_NAME: bloodsugar
+
+jobs:
+  quality:
+    name: Lint, Typecheck, Test, Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify backend dependency constraints
+        run: python scripts/verify_backend_constraints.py
+
+      - name: Verify minimal backup restore scripts
+        run: python scripts/verify_minimal_backup_restore.py
+
+      - name: Verify Kubernetes manifests
+        run: python scripts/verify_k8s_manifests.py
+
+      - name: Verify deployment config examples
+        run: python scripts/verify_deployment_config.py
+
+      - name: Build Docker images
+        run: docker compose build backend web
+
+      - name: Run database migrations
+        run: docker compose run --rm backend alembic upgrade head
+
+      - name: Backend lint
+        run: docker compose run --rm backend ruff check .
+
+      - name: Backend typecheck
+        run: docker compose run --rm backend mypy .
+
+      - name: Backend tests
+        run: docker compose run --rm backend pytest -q
+
+      - name: Web lint
+        run: docker compose run --rm web npm run lint
+
+      - name: Web typecheck
+        run: docker compose run --rm web npm run typecheck
+
+      - name: Web tests
+        run: docker compose run --rm web npm test -- --run
+
+      - name: Mobile quality
+        working-directory: mobile
+        run: npm ci && npm run quality
+
+      - name: Stop services
+        if: always()
+        run: docker compose down -v --remove-orphans
+
+  security:
+    name: Security Scans
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker images
+        run: docker compose build backend web
+
+      - name: Backend dependency scan
+        run: docker compose run --rm backend sh -c "pip install --no-cache-dir pip-audit && pip-audit"
+
+      - name: Web dependency scan
+        run: docker compose run --rm web npm audit --audit-level=high
+
+      - name: Backend container image scan
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: bloodsugar-backend
+          format: table
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+
+      - name: Web container image scan
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: bloodsugar-web
+          format: table
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+
+      - name: Stop services
+        if: always()
+        run: docker compose down -v --remove-orphans
