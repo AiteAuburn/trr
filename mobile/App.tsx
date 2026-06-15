@@ -5453,7 +5453,7 @@ export default function App() {
   const [activeProfileId, setActiveProfileId] = useState("");
   const [models, setModels] = useState<AiModelOptions>({ stt_models: [], llm_models: [] });
   const [sttModelId, setSttModelId] = useState("browser-web-speech");
-  const [llmModelId, setLlmModelId] = useState("ollama-qwen2.5-1.5b");
+  const [llmModelId, setLlmModelId] = useState("deepseek-chat");
   const [transcript, setTranscript] = useState(
     initialVisualSmokeScreen === "transcriptReview" ? sampleText : ""
   );
@@ -7351,7 +7351,7 @@ export default function App() {
     setQuotaStatus(voiceQuotaInitialStatusMessage());
     setModels({ stt_models: [], llm_models: [] });
     setSttModelId("browser-web-speech");
-    setLlmModelId("ollama-qwen2.5-1.5b");
+    setLlmModelId("deepseek-chat");
     setNativeStatus(nativeDebugDefaultStatusMessage());
     setWhisperModelPath("");
     setAudioPath("");
@@ -7553,6 +7553,7 @@ export default function App() {
       setSttModelId(defaultStt.id);
     }
     const preferredLlm =
+      modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??
       modelOptions.llm_models.find((model) => model.id === "ollama-qwen2.5-1.5b" && model.available) ??
       modelOptions.llm_models.find((model) => model.available) ??
       modelOptions.llm_models[0];
@@ -9817,6 +9818,7 @@ export default function App() {
         setSttModelId(defaultStt.id);
       }
       const preferredLlm =
+        modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??
         modelOptions.llm_models.find((model) => model.id === "ollama-qwen2.5-1.5b" && model.available) ??
         modelOptions.llm_models.find((model) => model.available) ??
         modelOptions.llm_models[0];

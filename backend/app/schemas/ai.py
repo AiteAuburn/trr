@@ -45,7 +45,7 @@ class ParsePreviewRequest(BaseModel):
     profile_id: UUID
     transcript: str = Field(min_length=1, max_length=4000)
     stt_model_id: str = Field(default="browser-web-speech", min_length=1, max_length=120)
-    llm_model_id: str = Field(default="local-llm-schema-stub", min_length=1, max_length=120)
+    llm_model_id: str = Field(default="deepseek-chat", min_length=1, max_length=120)
     occurred_at: datetime | None = None
     voice_seconds: int = Field(default=0, ge=0, le=3600)
 
@@ -140,7 +140,7 @@ class CommandProposalRequest(BaseModel):
     profile_id: UUID
     transcript: str = Field(min_length=1, max_length=4000)
     stt_model_id: str = Field(default="browser-web-speech", min_length=1, max_length=120)
-    llm_model_id: str = Field(default="local-llm-schema-stub", min_length=1, max_length=120)
+    llm_model_id: str = Field(default="deepseek-chat", min_length=1, max_length=120)
     occurred_at: datetime | None = None
     voice_seconds: int = Field(default=0, ge=0, le=3600)
 

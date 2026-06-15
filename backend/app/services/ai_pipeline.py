@@ -1834,6 +1834,7 @@ def _local_llm_max_tokens_for_segments(*, segment_count: int, configured_max: in
 def _local_parser_request_body(
     *,
     model_id: str,
+    llm_model_id: str,
     prompt: str,
     max_tokens: int,
     keep_alive: str,
@@ -1844,11 +1845,7 @@ def _local_parser_request_body(
         "messages": [
             {
                 "role": "system",
-                "content": (
-                    "You are a health record parser. Return compact JSON only. "
-                    "Use segment_id. Do not repeat transcript text. "
-                    "Do not provide medical advice. Do not guess missing values."
-                ),
+                "content": _local_parser_system_prompt(llm_model_id=llm_model_id),
             },
             {"role": "user", "content": prompt},
         ],
@@ -1858,6 +1855,22 @@ def _local_parser_request_body(
         "keep_alive": keep_alive,
         "stream": stream,
     }
+
+
+def _local_parser_system_prompt(*, llm_model_id: str) -> str:
+    base = (
+        "You are a health record parser. Return compact JSON only. "
+        "Use segment_id. Do not repeat transcript text. "
+        "Do not provide medical advice. Do not guess missing values."
+    )
+    if llm_model_id != DEEPSEEK_LLM_MODEL_ID:
+        return base
+    return (
+        f"{base} For analysis mode: read the transcript first, perform cautious step-by-step event extraction, "
+        "and emit only facts that are explicitly present in the text. "
+        "Prefer precision over recall: if an event is ambiguous, keep it in rejected instead of fabricating fields. "
+        "Keep needs_confirmation true and keep records minimal so the repair path can flag uncertain items safely."
+    )
 
 
 def _compact_ir_json_schema() -> dict[str, object]:
@@ -2111,6 +2124,7 @@ def _call_openai_compatible_local_parser(
             )
             body = _local_parser_request_body(
                 model_id=model_id,
+                llm_model_id=llm_model_id,
                 prompt=prompt,
                 max_tokens=_local_llm_max_tokens_for_segments(
                     segment_count=len(segment_batch),
