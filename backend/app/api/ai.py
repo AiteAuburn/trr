@@ -21,6 +21,7 @@ from app.schemas.ai import (
 )
 from app.services.ai_pipeline import (
     GEMMA4_LLM_MODEL_ID,
+    DEEPSEEK_LLM_MODEL_ID,
     LLM_MODELS,
     LocalParserError,
     LocalParserUnavailableError,
@@ -54,6 +55,7 @@ RUNTIME_DEPENDENT_LLM_MODEL_IDS = {
     OLLAMA_QWEN25_LLM_MODEL_ID,
     OLLAMA_GEMMA3_LLM_MODEL_ID,
     OLLAMA_LLAMA32_LLM_MODEL_ID,
+    DEEPSEEK_LLM_MODEL_ID,
 }
 STATIC_LLM_MODELS_BY_ID = {model.id: model for model in LLM_MODELS}
 MAX_PROGRESS_STREAM_EVENT_CHARS = 256 * 1024
@@ -64,6 +66,8 @@ def parser_unavailable_detail(exc: LocalParserUnavailableError) -> dict[str, str
     hint = "parser_unavailable"
     if "GEMMA4_PARSER_URL" in raw_message:
         hint = "set_gemma4_parser_url"
+    if "DEEPSEEK_PARSER_URL" in raw_message or "DEEPSEEK_API_KEY" in raw_message:
+        hint = "set_deepseek_parser_url_and_key"
     return {
         "code": "local_parser_unavailable",
         "message": "Selected local parser is not available.",
@@ -82,6 +86,8 @@ def unavailable_llm_detail(llm_model_id: str) -> dict[str, str]:
     hint = "select_available_llm_model"
     if llm_model_id == GEMMA4_LLM_MODEL_ID:
         hint = "set_gemma4_parser_url"
+    if llm_model_id == DEEPSEEK_LLM_MODEL_ID:
+        hint = "set_deepseek_parser_url_and_key"
     return {
         "code": "llm_model_unavailable",
         "message": "Selected LLM model is not available.",

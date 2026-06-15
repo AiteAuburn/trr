@@ -64,6 +64,9 @@ class Settings(BaseSettings):
         default="http://ollama:11434/v1/chat/completions",
         max_length=MAX_CONFIG_URL_LENGTH,
     )
+    deepseek_parser_url: str = Field(default="", max_length=MAX_CONFIG_URL_LENGTH)
+    deepseek_api_key: str = Field(default="", max_length=4096)
+    deepseek_model_id: str = Field(default="deepseek-chat", max_length=MAX_MODEL_ID_LENGTH)
     ollama_chat_url: str = Field(default="http://ollama:11434/api/chat", max_length=MAX_CONFIG_URL_LENGTH)
     local_llm_keep_alive: str = Field(default="30m", max_length=MAX_KEEP_ALIVE_LENGTH)
     local_llm_max_tokens: int = Field(default=960, ge=1, le=960)
@@ -136,6 +139,7 @@ class Settings(BaseSettings):
 
     @field_validator(
         "gemma4_model_id",
+        "deepseek_model_id",
         "ollama_qwen25_model_id",
         "ollama_gemma3_model_id",
         "ollama_llama32_model_id",

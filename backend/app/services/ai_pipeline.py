@@ -37,6 +37,7 @@ GEMMA4_LLM_MODEL_ID = "gemma-4-e2b-local-pending"
 OLLAMA_QWEN25_LLM_MODEL_ID = "ollama-qwen2.5-1.5b"
 OLLAMA_GEMMA3_LLM_MODEL_ID = "ollama-gemma3-1b"
 OLLAMA_LLAMA32_LLM_MODEL_ID = "ollama-llama3.2-1b"
+DEEPSEEK_LLM_MODEL_ID = "deepseek-chat"
 LOCAL_LLM_SEGMENT_BATCH_SIZE = 10
 LOCAL_LLM_BATCH_MAX_TOKENS = 960
 LOCAL_LLM_BATCH_MIN_TOKENS = 240
@@ -252,6 +253,14 @@ LLM_MODELS = [
         description="Runnable local parser through Ollama. Useful for small-model benchmark comparison.",
     ),
     AiModelOption(
+        id=DEEPSEEK_LLM_MODEL_ID,
+        label="DeepSeek Chat",
+        kind="llm",
+        runtime="local",
+        available=True,
+        description="OpenAI-compatible DeepSeek parser. Requires DEEPSEEK_PARSER_URL and DEEPSEEK_API_KEY.",
+    ),
+    AiModelOption(
         id="openai-fallback-disabled",
         label="OpenAI Fallback Disabled",
         kind="llm",
@@ -279,6 +288,20 @@ def runtime_llm_models() -> list[AiModelOption]:
                     update={
                         "available": False,
                         "description": f"{model.description} Not available until GEMMA4_PARSER_URL is set.",
+                    }
+                )
+            )
+            continue
+        if model.id == DEEPSEEK_LLM_MODEL_ID:
+            has_parser = bool(settings.deepseek_parser_url)
+            has_key = bool(settings.deepseek_api_key)
+            can_use = has_parser and has_key
+            suffix = " DeepSeek chat endpoint ready." if can_use else " Set DEEPSEEK_PARSER_URL and DEEPSEEK_API_KEY."
+            adjusted.append(
+                model.model_copy(
+                    update={
+                        "available": can_use,
+                        "description": f"{model.description}{suffix}",
                     }
                 )
             )
@@ -1360,6 +1383,16 @@ def _build_parse_preview(
             occurred_at=occurred_at,
         )
 
+    if llm_model_id == DEEPSEEK_LLM_MODEL_ID:
+        return _call_deepseek_parser(
+            profile_id=profile_id,
+            transcript=transcript.strip(),
+            normalized_text=normalized_text,
+            stt_model_id=stt_model_id,
+            llm_model_id=llm_model_id,
+            occurred_at=occurred_at,
+        )
+
     if llm_model_id in {
         OLLAMA_QWEN25_LLM_MODEL_ID,
         OLLAMA_GEMMA3_LLM_MODEL_ID,
@@ -1592,6 +1625,35 @@ def _call_gemma4_parser(
         parser_url=settings.gemma4_parser_url,
         model_id=settings.gemma4_model_id,
         timeout_seconds=settings.gemma4_timeout_seconds,
+    )
+
+
+def _call_deepseek_parser(
+    *,
+    profile_id: UUID,
+    transcript: str,
+    normalized_text: str,
+    stt_model_id: str,
+    llm_model_id: str,
+    occurred_at: datetime | None,
+) -> ParsePreviewResponse:
+    settings = get_settings()
+    if not settings.deepseek_parser_url or not settings.deepseek_api_key:
+        raise LocalParserUnavailableError(
+            "DEEPSEEK_PARSER_URL and DEEPSEEK_API_KEY must be configured to use DeepSeek."
+        )
+
+    return _call_openai_compatible_local_parser(
+        profile_id=profile_id,
+        transcript=transcript,
+        normalized_text=normalized_text,
+        stt_model_id=stt_model_id,
+        llm_model_id=llm_model_id,
+        occurred_at=occurred_at,
+        parser_url=settings.deepseek_parser_url,
+        model_id=settings.deepseek_model_id,
+        timeout_seconds=settings.local_llm_timeout_seconds,
+        headers={"Authorization": f"Bearer {settings.deepseek_api_key}"},
     )
 
 
@@ -1908,6 +1970,7 @@ def _request_local_parser_json(
     body: dict[str, object],
     timeout_seconds: float,
     batch_number: int,
+    headers: dict[str, str] | None = None,
 ) -> object:
     try:
         with httpx.Client(timeout=timeout_seconds) as client:
@@ -1915,6 +1978,7 @@ def _request_local_parser_json(
                 client=client,
                 parser_url=parser_url,
                 body=body,
+                headers=headers,
                 parser_name="Local parser",
             )
     except httpx.HTTPError as exc:
@@ -1997,11 +2061,12 @@ def _read_bounded_local_parser_response_text(
     client: httpx.Client,
     parser_url: str,
     body: dict[str, object],
+    headers: dict[str, str] | None,
     parser_name: str,
 ) -> str:
     chunks: list[str] = []
     total_chars = 0
-    with client.stream("POST", parser_url, json=body) as response:
+    with client.stream("POST", parser_url, json=body, headers=headers) as response:
         response.raise_for_status()
         for chunk in response.iter_text():
             if not chunk:
@@ -2028,6 +2093,7 @@ def _call_openai_compatible_local_parser(
     parser_url: str,
     model_id: str,
     timeout_seconds: float,
+    headers: dict[str, str] | None = None,
 ) -> ParsePreviewResponse:
     settings = get_settings()
     segments = segment_transcript(normalized_text)
@@ -2058,6 +2124,7 @@ def _call_openai_compatible_local_parser(
                 body=body,
                 timeout_seconds=timeout_seconds,
                 batch_number=batch_number,
+                headers=headers,
             )
             compact_candidate = _normalize_compact_ir_candidate(
                 parsed,
