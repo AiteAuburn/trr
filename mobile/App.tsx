@@ -777,6 +777,7 @@ const analysisRanges: Array<{ id: AnalysisRange; label: string }> = [
 ];
 
 const achievementLevels = [10, 50, 100, 150, 200, 250];
+const achievementLevelStep = 50;
 
 const achievementCategoryDefinitions: Array<{
   id: AchievementCategory;
@@ -6075,12 +6076,26 @@ export default function App() {
     currentScreen !== "today" &&
     (currentScreen !== "saveSuccess" || lastSaveEntryMethod !== "manual" || hasUnsavedPreviewRecords);
   const localAchievements = useMemo<AchievementItem[]>(() => {
+    const maxObservedRecords = recordsForDisplay.length;
+    const maxObservedStreak = Math.max(
+      ...achievementCategoryDefinitions.map((definition) => currentRecordTypeStreakDays(recordsForDisplay, definition.recordType)),
+      0
+    );
+    const maxBaseLevel = achievementLevels[achievementLevels.length - 1] ?? 250;
+    const maxObservedLevel = Math.max(maxObservedRecords, maxObservedStreak, maxBaseLevel);
+    const dynamicLevels: number[] = [...achievementLevels];
+    let nextLevel = maxBaseLevel + achievementLevelStep;
+    while (nextLevel <= maxObservedLevel) {
+      dynamicLevels.push(nextLevel);
+      nextLevel += achievementLevelStep;
+    }
+
     return achievementCategoryDefinitions.flatMap((definition) => {
       const cumulativeProgress = recordsForDisplay.filter(
         (record) => record.record_type === definition.recordType
       ).length;
       const streakProgress = currentRecordTypeStreakDays(recordsForDisplay, definition.recordType);
-      return achievementLevels.flatMap((level, levelIndex) => {
+      return dynamicLevels.flatMap((level, levelIndex) => {
         const badgeColor = achievementLevelColors[levelIndex] ?? definition.cumulativeColor;
         return [
           {
