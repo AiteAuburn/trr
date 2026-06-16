@@ -161,7 +161,7 @@ class Settings(BaseSettings):
             raise ValueError("LOCAL_LLM_KEEP_ALIVE must be -1, 0, or a duration like 30m")
         return normalized
 
-    @field_validator("gemma4_parser_url", "local_llm_parser_url", "ollama_chat_url")
+    @field_validator("gemma4_parser_url", "local_llm_parser_url", "ollama_chat_url", "deepseek_parser_url")
     @classmethod
     def validate_runtime_url(cls, value: str) -> str:
         normalized = value.strip()

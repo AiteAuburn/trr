@@ -38,6 +38,16 @@ OLLAMA_QWEN25_LLM_MODEL_ID = "ollama-qwen2.5-1.5b"
 OLLAMA_GEMMA3_LLM_MODEL_ID = "ollama-gemma3-1b"
 OLLAMA_LLAMA32_LLM_MODEL_ID = "ollama-llama3.2-1b"
 DEEPSEEK_LLM_MODEL_ID = "deepseek-chat"
+DEEPSEEK_SYSTEM_PROMPT = (
+    "You are a strict Traditional-Chinese health transcript parser. "
+    "Return only compact structured JSON that matches the schema. "
+    "Do not invent events, numbers, times, or units. "
+    "Never provide advice or interpretations."
+)
+DEEPSEEK_ANALYSIS_ADDENDUM = (
+    "For analysis mode: extract only facts explicitly present in the transcript, "
+    "prioritize precision over recall, and send ambiguous events to rejected."
+)
 LOCAL_LLM_SEGMENT_BATCH_SIZE = 10
 LOCAL_LLM_BATCH_MAX_TOKENS = 960
 LOCAL_LLM_BATCH_MIN_TOKENS = 240
@@ -1863,14 +1873,9 @@ def _local_parser_system_prompt(*, llm_model_id: str) -> str:
         "Use segment_id. Do not repeat transcript text. "
         "Do not provide medical advice. Do not guess missing values."
     )
-    if llm_model_id != DEEPSEEK_LLM_MODEL_ID:
-        return base
-    return (
-        f"{base} For analysis mode: read the transcript first, perform cautious step-by-step event extraction, "
-        "and emit only facts that are explicitly present in the text. "
-        "Prefer precision over recall: if an event is ambiguous, keep it in rejected instead of fabricating fields. "
-        "Keep needs_confirmation true and keep records minimal so the repair path can flag uncertain items safely."
-    )
+    if llm_model_id == DEEPSEEK_LLM_MODEL_ID:
+        return f"{DEEPSEEK_SYSTEM_PROMPT} {DEEPSEEK_ANALYSIS_ADDENDUM} {base}"
+    return base
 
 
 def _compact_ir_json_schema() -> dict[str, object]:
