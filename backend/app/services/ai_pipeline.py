@@ -39,14 +39,12 @@ OLLAMA_GEMMA3_LLM_MODEL_ID = "ollama-gemma3-1b"
 OLLAMA_LLAMA32_LLM_MODEL_ID = "ollama-llama3.2-1b"
 DEEPSEEK_LLM_MODEL_ID = "deepseek-chat"
 DEEPSEEK_SYSTEM_PROMPT = (
-    "You are a strict Traditional-Chinese health transcript parser. "
-    "Return only compact structured JSON that matches the schema. "
-    "Do not invent events, numbers, times, or units. "
-    "Never provide advice or interpretations."
+    "你是嚴格的中文健康記錄轉錄解析器，請只回傳符合 schema 的精簡 JSON，\n"
+    "不得新增不存在的事件、數值、時間或單位；不得輸出醫療建議。"
 )
 DEEPSEEK_ANALYSIS_ADDENDUM = (
-    "For analysis mode: extract only facts explicitly present in the transcript, "
-    "prioritize precision over recall, and send ambiguous events to rejected."
+    "分析模式規則：僅抽取逐字逐句明確出現的事實，優先提高精確度，\n"
+    "對不確定/含糊內容一律放入 rejected，避免臆測。"
 )
 LOCAL_LLM_SEGMENT_BATCH_SIZE = 10
 LOCAL_LLM_BATCH_MAX_TOKENS = 960
@@ -1874,7 +1872,10 @@ def _local_parser_system_prompt(*, llm_model_id: str) -> str:
         "Do not provide medical advice. Do not guess missing values."
     )
     if llm_model_id == DEEPSEEK_LLM_MODEL_ID:
-        return f"{DEEPSEEK_SYSTEM_PROMPT} {DEEPSEEK_ANALYSIS_ADDENDUM} {base}"
+        settings = get_settings()
+        deepseek_prompt = settings.deepseek_system_prompt or DEEPSEEK_SYSTEM_PROMPT
+        deepseek_addendum = settings.deepseek_analysis_addendum or DEEPSEEK_ANALYSIS_ADDENDUM
+        return f"{deepseek_prompt}\n{deepseek_addendum}\n{base}"
     return base
 
 

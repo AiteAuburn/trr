@@ -64,6 +64,20 @@ class Settings(BaseSettings):
         default="http://ollama:11434/v1/chat/completions",
         max_length=MAX_CONFIG_URL_LENGTH,
     )
+    deepseek_system_prompt: str = Field(
+        default=(
+            "你是嚴格的中文健康記錄轉錄解析器，請只回傳符合 schema 的精簡 JSON，"
+            "不得新增不存在的事件、數值、時間或單位；不得輸出醫療建議。"
+        ),
+        max_length=2000,
+    )
+    deepseek_analysis_addendum: str = Field(
+        default=(
+            "分析模式規則：僅抽取逐字逐句明確出現的事實，優先提高精確度，"
+            "對不確定/含糊內容一律放入 rejected，避免臆測。"
+        ),
+        max_length=1200,
+    )
     deepseek_parser_url: str = Field(default="", max_length=MAX_CONFIG_URL_LENGTH)
     deepseek_api_key: str = Field(default="", max_length=4096)
     deepseek_model_id: str = Field(default="deepseek-chat", max_length=MAX_MODEL_ID_LENGTH)
@@ -174,6 +188,11 @@ class Settings(BaseSettings):
         if parsed.scheme not in {"http", "https"}:
             raise ValueError("runtime URL must use http or https")
         return normalized
+
+    @field_validator("deepseek_system_prompt", "deepseek_analysis_addendum")
+    @classmethod
+    def normalize_deepseek_prompt(cls, value: str) -> str:
+        return value.strip()
 
     @model_validator(mode="after")
     def validate_production_defaults(self) -> "Settings":

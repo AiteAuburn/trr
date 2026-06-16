@@ -21,6 +21,7 @@ from app.api.ai import (
     stream_progress_with_success_voice_quota,
 )
 from app.services.ai_pipeline import (
+    DEEPSEEK_LLM_MODEL_ID,
     COMPACT_IR_MAX_ITEMS_PER_RECORD,
     COMPACT_IR_MAX_RECORDS_PER_BATCH,
     COMPACT_IR_MAX_REJECTED_PER_BATCH,
@@ -54,6 +55,7 @@ from app.services.ai_pipeline import (
     enforce_transcript_complexity_budget,
     parse_transcript_to_records,
     segment_transcript,
+    _local_parser_system_prompt,
     storage_compatible_preview_records,
     stream_local_parser_debug,
     TranscriptTooComplexError,
@@ -151,6 +153,18 @@ def test_list_ai_models() -> None:
     assert "ollama-qwen2.5-1.5b" in llm_model_ids
     assert "ollama-gemma3-1b" in llm_model_ids
     assert "ollama-llama3.2-1b" in llm_model_ids
+
+
+def test_deepseek_system_prompt_can_be_customized(monkeypatch) -> None:
+    custom_prompt = "中文測試：嚴格抽取，非 JSON 不要回傳。"
+    custom_addendum = "若不確定直接拒絕，不做猜測。"
+    monkeypatch.setenv("DEEPSEEK_SYSTEM_PROMPT", custom_prompt)
+    monkeypatch.setenv("DEEPSEEK_ANALYSIS_ADDENDUM", custom_addendum)
+    get_settings.cache_clear()
+
+    prompt = _local_parser_system_prompt(llm_model_id=DEEPSEEK_LLM_MODEL_ID)
+    assert custom_prompt in prompt
+    assert custom_addendum in prompt
 
 
 def test_ai_model_options_response_schema_bounds_metadata() -> None:
