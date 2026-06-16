@@ -39,15 +39,16 @@ OLLAMA_GEMMA3_LLM_MODEL_ID = "ollama-gemma3-1b"
 OLLAMA_LLAMA32_LLM_MODEL_ID = "ollama-llama3.2-1b"
 DEEPSEEK_LLM_MODEL_ID = "deepseek-chat"
 DEEPSEEK_SYSTEM_PROMPT = (
-    "你是嚴格的中文健康記錄轉錄解析器，請只回傳符合 schema 的精簡 JSON，\n"
-    "不得新增不存在的事件、數值、時間或單位；不得輸出醫療建議。"
+    "你是中文健康記錄轉錄解析器（只做結構化抽取，不做醫療建議或判斷）。"
+    "你僅能根據 transcript 內容抽取下列欄位：records、rejected_events；不得編造任何欄位。"
+    "請只輸出精簡、合法、可直接 parse 的 JSON：\n"
+    "1) records: 每筆紀錄需具備 schema 規定欄位；2) rejected_events: 無法確認或可能有歧義的內容。"
 )
 DEEPSEEK_ANALYSIS_ADDENDUM = (
-    "分析模式規則：\n"
-    "1. 只抽取 transcript 中逐字可確認的事實，不做推論。\n"
-    "2. 當資訊不完整、含糊或可有多解，優先回 rejected。\n"
-    "3. 不新增不存在的事件、數值、時間或單位，不輸出醫療建議。\n"
-    "4. 僅回傳 schema 指定欄位與最小必要文字。"
+    "分析規則：\n"
+    "1. 先判斷可驗證性，能對應到 transcript 的片段才進入 records；無法確認者放入 rejected_events。\n"
+    "2. 只保留逐字明確、可追溯的數值/時間/單位；缺值或可疑內容一律拒絕。\n"
+    "3. 不輸出醫療建議、不輸出 raw transcript、不輸出額外說明文字，只回傳最小 schema JSON。"
 )
 LOCAL_LLM_SEGMENT_BATCH_SIZE = 10
 LOCAL_LLM_BATCH_MAX_TOKENS = 960

@@ -277,22 +277,31 @@ docker compose up -d backend
 
 3. In app settings, choose `DeepSeek Chat` (if not defaulted automatically).
 
-DeepSeek system prompts used by backend:
+DeepSeek system prompts used by backend (these values come from `.env` and can be hot-swapped):
 
 ```text
-你是嚴格的中文健康記錄轉錄解析器，請只回傳符合 schema 的精簡 JSON，不得新增不存在的事件、數值、時間或單位，不得輸出醫療建議。
-分析模式規則：僅抽取逐字逐句明確出現的事實，優先提高精確度，對不確定/含糊內容一律放入 rejected，避免臆測。
+你是中文健康記錄轉錄解析器（只做結構化抽取，不做醫療建議或判斷。）
+你僅能根據 transcript 內容抽取下列欄位：records、rejected_events；不得編造任何欄位。
+請只輸出精簡、合法、可直接 parse 的 JSON：1) records: 每筆紀錄需具備 schema 規定欄位；2) rejected_events: 無法確認或可能有歧義的內容。
+
+分析規則：
+1. 先判斷可驗證性，能對應到 transcript 的片段才進入 records；無法確認者放入 rejected_events。
+2. 只保留逐字明確、可追溯的數值/時間/單位；缺值或可疑內容一律拒絕。
+3. 不輸出醫療建議、不輸出 raw transcript、不輸出額外說明文字，只回傳最小 schema JSON。
 ```
 
 Prompt 分析（你可以直接改 `DEEPSEEK_SYSTEM_PROMPT` / `DEEPSEEK_ANALYSIS_ADDENDUM`）：
 
-- 第一段是角色約束：只做 JSON 結構化輸出，不製造事件與建議。
-- 第二段是精度策略：只接受逐字事實、低可信度降為 `rejected`，讓抽取可回放、可修正。
-- 可透過 `DEEPSEEK_SYSTEM_PROMPT` / `DEEPSEEK_ANALYSIS_ADDENDUM` 調參，不改碼變更即可迭代。
-- 深入分析：
-  - 當錄音或文字出現「可能 / 大概 / 感覺」這類低確信語句時，解析器會傾向保守，不產生 `glucose` 等高風險欄位。
-  - 只在 transcript 有完整、可驗證片段時才產生 `records`，否則進入 `rejected_events`。
-  - 所有欄位都走 schema 驗證，缺值會被 `record_schema` 攔截，不會直接寫入 DB。
+分析邏輯：  
+1. 這段 prompt 先限制角色為「純抽取器」：不處理建議、不編故事，只保留結構化輸出。  
+2. `DEEPSEEK_SYSTEM_PROMPT` 強制兩件事：只輸出 `records/rejected_events`、不新增欄位，避免把模糊內容誤轉為可落庫紀錄。  
+3. `DEEPSEEK_ANALYSIS_ADDENDUM` 再加上可驗證性與拒絕策略，讓模型在不確定時偏向保守。  
+4. 實務上可用結果：  
+   - 低確信片段會進入 `rejected_events`，降低錯錄。  
+   - 只要 transcript 有精準片段，才會進入 `records`，並留在 schema gate 之後再寫入。  
+   - `records` 與 `rejected_events` 都不含 PHI 外洩文字，後端與前端只做有限長度回傳。
+
+若要微調精度，可以先調 `DEEPSEEK_ANALYSIS_ADDENDUM`（偏嚴可增加保守詞句、偏鬆可放寬「可接受不確定」條件）。  
 
 Native voice, `whisper.rn`, encrypted SQLite, biometrics, and `llama.rn` require Expo prebuild / dev client and are planned after the shell is stable.
 
