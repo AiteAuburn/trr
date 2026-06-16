@@ -105,6 +105,14 @@ type AiModelOptions = {
   llm_models: AiModelOption[];
 };
 
+function pickInitialLlmModel(options: AiModelOptions["llm_models"]): string {
+  return (
+    options.find((model) => model.id === "deepseek-chat" && model.available)?.id ??
+    options.find((model) => model.available)?.id ??
+    "deepseek-chat"
+  );
+}
+
 type ParsePreviewResponse = {
   transcript: string;
   normalized_text: string;
@@ -927,7 +935,7 @@ export function App() {
   const [recordStatus, setRecordStatus] = useState("輸入文字後可先整理預覽。");
   const [aiModels, setAiModels] = useState<AiModelOptions | null>(null);
   const [selectedSttModel, setSelectedSttModel] = useState("browser-web-speech");
-  const [selectedLlmModel, setSelectedLlmModel] = useState("local-llm-schema-stub");
+  const [selectedLlmModel, setSelectedLlmModel] = useState("deepseek-chat");
   const [speechRecognition, setSpeechRecognition] = useState<SpeechRecognitionLike | null>(null);
   const [isListening, setIsListening] = useState(false);
   const [liveFinalTranscript, setLiveFinalTranscript] = useState("");
@@ -962,7 +970,7 @@ export function App() {
       .then((models) => {
         setAiModels(models);
         setSelectedSttModel(models.stt_models.find((model) => model.available)?.id ?? "");
-        setSelectedLlmModel(models.llm_models.find((model) => model.available)?.id ?? "");
+        setSelectedLlmModel(pickInitialLlmModel(models.llm_models));
       })
       .catch((err: unknown) => {
         setRecordStatus(err instanceof Error ? err.message : "AI 模型列表載入失敗");

@@ -284,11 +284,15 @@ DeepSeek system prompts used by backend:
 分析模式規則：僅抽取逐字逐句明確出現的事實，優先提高精確度，對不確定/含糊內容一律放入 rejected，避免臆測。
 ```
 
-Prompt analysis:
+Prompt 分析（你可以直接改 `DEEPSEEK_SYSTEM_PROMPT` / `DEEPSEEK_ANALYSIS_ADDENDUM`）：
 
 - 第一段是角色約束：只做 JSON 結構化輸出，不製造事件與建議。
 - 第二段是精度策略：只接受逐字事實、低可信度降為 `rejected`，讓抽取可回放、可修正。
 - 可透過 `DEEPSEEK_SYSTEM_PROMPT` / `DEEPSEEK_ANALYSIS_ADDENDUM` 調參，不改碼變更即可迭代。
+- 深入分析：
+  - 當錄音或文字出現「可能 / 大概 / 感覺」這類低確信語句時，解析器會傾向保守，不產生 `glucose` 等高風險欄位。
+  - 只在 transcript 有完整、可驗證片段時才產生 `records`，否則進入 `rejected_events`。
+  - 所有欄位都走 schema 驗證，缺值會被 `record_schema` 攔截，不會直接寫入 DB。
 
 Native voice, `whisper.rn`, encrypted SQLite, biometrics, and `llama.rn` require Expo prebuild / dev client and are planned after the shell is stable.
 
