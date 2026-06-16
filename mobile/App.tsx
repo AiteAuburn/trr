@@ -429,16 +429,14 @@ const screenChrome: Record<AppScreen, { subtitle: string; backTo?: AppScreen; ac
 };
 
 const menuScreens: Array<{ id: AppScreen; label: string; icon: string }> = [
-  { id: "today", label: "今日紀錄", icon: "📅" },
-  { id: "record", label: "錄音預覽/文字", icon: "🎙" },
-  { id: "manualRecord", label: "手動新增", icon: "＋" },
+  { id: "today", label: "今日錄音", icon: "🎙" },
   { id: "history", label: "歷史紀錄", icon: "🗂" },
   { id: "analysis", label: "基本分析", icon: "📊" },
-  { id: "subscription", label: "會員方案", icon: "⭐" },
-  { id: "tutorial", label: "使用教學", icon: "📖" },
   { id: "achievements", label: "成就榜", icon: "🏆" },
-  { id: "yearReview", label: "年度回顧", icon: "🔁" },
+  { id: "yearReview", label: "年度回顧（預留）", icon: "🔁" },
   { id: "store", label: "商城", icon: "🛍" },
+  { id: "community", label: "食物社群（預留）", icon: "🤝" },
+  { id: "ranking", label: "社群排行（預留）", icon: "🏅" },
   { id: "settings", label: "設定", icon: "⚙" }
 ];
 
@@ -8355,6 +8353,14 @@ export default function App() {
   }
 
   function openMenuDestination(target: AppScreen) {
+    if (target === "community") {
+      openCommunity("menu");
+      return;
+    }
+    if (target === "ranking") {
+      openRanking("menu");
+      return;
+    }
     if (target === "manualRecord") {
       openManualRecord("menu");
       return;
