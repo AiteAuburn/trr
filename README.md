@@ -255,6 +255,41 @@ Current mobile scope:
 - save records
 - recent records
 
+### DeepSeek Parser Connection
+
+Backend can run DeepSeek as the parser model (`deepseek-chat`) when `DEEPSEEK_PARSER_URL`
+and `DEEPSEEK_API_KEY` are configured.
+
+1. Copy env and set keys:
+
+```bash
+cp .env.example .env
+# set these values
+DEEPSEEK_PARSER_URL=https://api.deepseek.com/v1/chat/completions
+DEEPSEEK_API_KEY=sk-...
+```
+
+2. Restart backend:
+
+```bash
+docker compose up -d backend
+```
+
+3. In app settings, choose `DeepSeek Chat` (if not defaulted automatically).
+
+DeepSeek system prompts used by backend:
+
+```text
+你是嚴格的中文健康記錄轉錄解析器，請只回傳符合 schema 的精簡 JSON，不得新增不存在的事件、數值、時間或單位，不得輸出醫療建議。
+分析模式規則：僅抽取逐字逐句明確出現的事實，優先提高精確度，對不確定/含糊內容一律放入 rejected，避免臆測。
+```
+
+Prompt analysis:
+
+- 第一段是角色約束：只做 JSON 結構化輸出，不製造事件與建議。
+- 第二段是精度策略：只接受逐字事實、低可信度降為 `rejected`，讓抽取可回放、可修正。
+- 可透過 `DEEPSEEK_SYSTEM_PROMPT` / `DEEPSEEK_ANALYSIS_ADDENDUM` 調參，不改碼變更即可迭代。
+
 Native voice, `whisper.rn`, encrypted SQLite, biometrics, and `llama.rn` require Expo prebuild / dev client and are planned after the shell is stable.
 
 ### iPhone Dev Client For Local Models

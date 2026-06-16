@@ -150,6 +150,7 @@ def test_list_ai_models() -> None:
     assert models["stt_models"][2]["available"] is True
     llm_model_ids = [model["id"] for model in models["llm_models"]]
     assert "local-llm-schema-stub" in llm_model_ids
+    assert DEEPSEEK_LLM_MODEL_ID in llm_model_ids
     assert "ollama-qwen2.5-1.5b" in llm_model_ids
     assert "ollama-gemma3-1b" in llm_model_ids
     assert "ollama-llama3.2-1b" in llm_model_ids
