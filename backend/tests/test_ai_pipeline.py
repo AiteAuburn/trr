@@ -22,6 +22,8 @@ from app.api.ai import (
 )
 from app.services.ai_pipeline import (
     DEEPSEEK_LLM_MODEL_ID,
+    DEEPSEEK_ANALYSIS_ADDENDUM,
+    DEEPSEEK_SYSTEM_PROMPT,
     COMPACT_IR_MAX_ITEMS_PER_RECORD,
     COMPACT_IR_MAX_RECORDS_PER_BATCH,
     COMPACT_IR_MAX_REJECTED_PER_BATCH,
@@ -166,6 +168,13 @@ def test_deepseek_system_prompt_can_be_customized(monkeypatch) -> None:
     prompt = _local_parser_system_prompt(llm_model_id=DEEPSEEK_LLM_MODEL_ID)
     assert custom_prompt in prompt
     assert custom_addendum in prompt
+
+
+def test_deepseek_system_prompt_default_is_composed_with_analysis_addendum() -> None:
+    get_settings.cache_clear()
+    prompt = _local_parser_system_prompt(llm_model_id=DEEPSEEK_LLM_MODEL_ID)
+    assert DEEPSEEK_SYSTEM_PROMPT in prompt
+    assert DEEPSEEK_ANALYSIS_ADDENDUM in prompt
 
 
 def test_ai_model_options_response_schema_bounds_metadata() -> None:

@@ -43,8 +43,11 @@ DEEPSEEK_SYSTEM_PROMPT = (
     "不得新增不存在的事件、數值、時間或單位；不得輸出醫療建議。"
 )
 DEEPSEEK_ANALYSIS_ADDENDUM = (
-    "分析模式規則：僅抽取逐字逐句明確出現的事實，優先提高精確度，\n"
-    "對不確定/含糊內容一律放入 rejected，避免臆測。"
+    "分析模式規則：\n"
+    "1. 只抽取 transcript 中逐字可確認的事實，不做推論。\n"
+    "2. 當資訊不完整、含糊或可有多解，優先回 rejected。\n"
+    "3. 不新增不存在的事件、數值、時間或單位，不輸出醫療建議。\n"
+    "4. 僅回傳 schema 指定欄位與最小必要文字。"
 )
 LOCAL_LLM_SEGMENT_BATCH_SIZE = 10
 LOCAL_LLM_BATCH_MAX_TOKENS = 960
