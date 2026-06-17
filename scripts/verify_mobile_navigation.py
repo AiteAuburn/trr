@@ -2063,8 +2063,13 @@ def main() -> int:
             ("native recording options", "Audio.RecordingOptionsPresets.HIGH_QUALITY"),
             ("native recording start", "await recording.startAsync();"),
             ("native recording stop unload", "await recording.stopAndUnloadAsync();"),
-            ("native recording uri bounded", "setAudioPath(uri ? boundNativeDebugInput(uri) : \"\");"),
-            ("native recording no auto stt boundary", "不自動呼叫 STT、AI、LLM 或寫入 backend"),
+            ("native recording uri bounded", "capturedAudioPath = uri ? boundNativeDebugInput(uri) : \"\";"),
+            ("native recording transcribe helper", "async function transcribeRecordingToReview(returnScreen: AppScreen, sourceAudioPath: string)"),
+            ("native recording whisper call", "const text = await transcribeWithNativeWhisper({"),
+            ("native recording bounded transcript", "const boundedText = text.slice(0, maxTranscriptTextLength);"),
+            ("native recording transcript confirmation", 'setCurrentScreen("transcriptReview");'),
+            ("native recording no direct parser boundary", "確認後再交給 AI 整理"),
+            ("home recording whisper handoff", 'void transcribeRecordingToReview("today", capturedAudioPath);'),
         ):
             _assert_contains(label, content, marker)
         today_home_block = _today_home_render_block(content)

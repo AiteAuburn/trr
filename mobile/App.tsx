@@ -3778,7 +3778,7 @@ function recordingResetStatusMessage() {
 }
 
 function recordingTextFallbackStatusMessage() {
-  return boundUiMessage("錄音已結束；目前請用文字輸入，確認後再交給 AI 整理。");
+  return boundUiMessage("錄音已結束；尚未設定 Whisper 模型，請用文字輸入，確認後再交給 AI 整理。");
 }
 
 function recordingPermissionDeniedStatusMessage() {
@@ -3798,8 +3798,28 @@ function recordingFinishedStatusMessage(elapsedSeconds: number) {
   return boundUiMessage(
     boundedSeconds <= 1
       ? "錄音太短，請按住說完後再放開。"
-      : "錄音已結束；音檔已保留於本機，轉文字需接 Whisper 或改用文字輸入。"
+      : "錄音已結束；音檔已保留於本機，可用 Whisper 轉文字後進入確認。"
   );
+}
+
+function recordingWhisperMissingModelStatusMessage() {
+  return boundUiMessage("錄音已保留；請先在設定填入 Whisper model path，或改用文字輸入。");
+}
+
+function recordingWhisperProgressStatusMessage() {
+  return boundUiMessage("正在將錄音轉成文字，完成後會進入文字確認。");
+}
+
+function recordingWhisperSuccessStatusMessage() {
+  return boundUiMessage("錄音已轉成文字；請確認內容後再交給 AI 整理。");
+}
+
+function recordingWhisperEmptyStatusMessage() {
+  return boundUiMessage("Whisper 沒有產生文字；請重新錄音或改用文字輸入。");
+}
+
+function recordingWhisperFailureStatusMessage(error: unknown) {
+  return safeUiError(error, "錄音轉文字失敗");
 }
 
 function transcriptReviewReadyStatusMessage() {
@@ -4450,14 +4470,14 @@ function homeRecordingPreviewBoundaryCopy() {
 
 function recordPageRecordingPreviewBoundaryCopy() {
   return boundDisplayText(
-    "按住會使用 expo-av 擷取本機音檔；靜音裁切與 STT 仍需 native Whisper 接續，儲存前必須先文字確認。",
+    "按住會使用 expo-av 擷取本機音檔；若已設定 Whisper model path，可轉文字後進入確認，儲存前仍必須先文字確認。",
     maxDisplayDetailTextLength
   );
 }
 
 function recordingSimulatedResultCopy(elapsedSeconds: number) {
   return boundDisplayText(
-    `錄音已擷取 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒；目前不自動轉文字，請使用文字輸入或手動新增。`,
+    `錄音已擷取 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒；可用 Whisper 轉文字後確認，或改用文字輸入。`,
     maxDisplayDetailTextLength
   );
 }
@@ -4471,7 +4491,7 @@ function recordingResultBodyCopy(elapsedSeconds: number) {
   return boundDisplayText(
     boundedSeconds <= 1
       ? "錄音時間太短，建議重新按住錄音。"
-      : "錄音已結束並保留本機音檔；目前不自動產生文字稿，請改用下方文字輸入，或用手動新增。",
+      : "錄音已結束並保留本機音檔；已設定 Whisper 時可轉文字後確認，否則請改用下方文字輸入。",
     maxDisplayDetailTextLength
   );
 }
@@ -7794,10 +7814,54 @@ export default function App() {
     setStatus(recordingResetStatusMessage());
   }
 
-  function handleRecordingResultPrimaryAction(returnScreen: AppScreen) {
+  async function transcribeRecordingToReview(returnScreen: AppScreen, sourceAudioPath: string) {
+    const safeAudioPath = boundNativeDebugInput(sourceAudioPath.trim());
+    const safeModelPath = boundNativeDebugInput(whisperModelPath.trim());
+    if (!safeAudioPath) {
+      setStatus(recordingTextFallbackStatusMessage());
+      return false;
+    }
+    if (!safeModelPath) {
+      setStatus(recordingWhisperMissingModelStatusMessage());
+      return false;
+    }
+    setIsBusy(true);
+    setStatus(recordingWhisperProgressStatusMessage());
+    try {
+      const text = await transcribeWithNativeWhisper({
+        modelPath: safeModelPath,
+        audioPath: safeAudioPath
+      });
+      const boundedText = text.slice(0, maxTranscriptTextLength);
+      if (!boundedText.trim()) {
+        setStatus(recordingWhisperEmptyStatusMessage());
+        return false;
+      }
+      updateTranscriptDraft(boundedText);
+      setIsRecordingPreview(false);
+      setRecordingStartedAt(null);
+      setRecordingElapsedSeconds(0);
+      setPreview(null);
+      setTranscriptReviewReturnScreen(returnScreen);
+      setCurrentScreen("transcriptReview");
+      setStatus(recordingWhisperSuccessStatusMessage());
+      return true;
+    } catch (error) {
+      setStatus(recordingWhisperFailureStatusMessage(error));
+      return false;
+    } finally {
+      setIsBusy(false);
+    }
+  }
+
+  async function handleRecordingResultPrimaryAction(returnScreen: AppScreen) {
     const boundedSeconds = clampNumber(recordingElapsedSeconds, 0, maxMobileCountValue);
     if (boundedSeconds <= 1) {
       resetRecordingPreview();
+      return;
+    }
+    const transcribed = await transcribeRecordingToReview(returnScreen, audioPath);
+    if (transcribed) {
       return;
     }
     setIsRecordingPreview(false);
@@ -7810,11 +7874,11 @@ export default function App() {
   }
 
   function useTodayRecordingResultTextFallback() {
-    handleRecordingResultPrimaryAction("today");
+    void handleRecordingResultPrimaryAction("today");
   }
 
   function useRecordRecordingResultTextFallback() {
-    handleRecordingResultPrimaryAction("record");
+    void handleRecordingResultPrimaryAction("record");
   }
 
   async function finishRecordingPreview() {
@@ -7828,12 +7892,14 @@ export default function App() {
     const elapsedSeconds =
       recordingStartedAt === null ? recordingElapsedSeconds : Math.ceil((Date.now() - recordingStartedAt) / 1000);
     const recording = audioRecordingRef.current;
+    let capturedAudioPath = "";
     audioRecordingRef.current = null;
     try {
       if (recording) {
         await recording.stopAndUnloadAsync();
         const uri = recording.getURI();
-        setAudioPath(uri ? boundNativeDebugInput(uri) : "");
+        capturedAudioPath = uri ? boundNativeDebugInput(uri) : "";
+        setAudioPath(capturedAudioPath);
       }
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: false,
@@ -7849,6 +7915,9 @@ export default function App() {
       setRecordingStartedAt(null);
       setRecordingElapsedSeconds(elapsedSeconds);
       recordingStopInFlight.current = false;
+    }
+    if (currentScreen === "today" && elapsedSeconds > 1 && capturedAudioPath && whisperModelPath.trim()) {
+      void transcribeRecordingToReview("today", capturedAudioPath);
     }
   }
 

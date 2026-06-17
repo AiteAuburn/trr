@@ -26178,6 +26178,36 @@
 
 - Continue with T042 to add or polish the remaining menu destinations from the updated UI spec.
 
+### T851 route captured recordings through Whisper confirmation
+
+類型：mobile / recording / stt / transcript-review / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- 新增 `transcribeRecordingToReview` 主流程 helper，使用已設定的 Whisper model path 與 bounded audio URI 呼叫 native Whisper。
+- Whisper 轉錄結果先限制到 transcript draft 長度，再導入既有 Transcript Review screen。
+- Record 頁錄音結果主動作會先嘗試 Whisper 轉文字；未設定模型或轉錄失敗時才停在文字 fallback。
+- Home 維持只有 mic 與兩行提示；放開後若已有 Whisper model path，可直接轉入文字確認，不新增 Home CTA。
+- 流程仍不跳過文字確認、不直接送 AI/parser、不儲存紀錄、不寫 backend、不保存 raw prompt 或 raw model output。
+- Navigation verifier 新增錄音轉 Whisper、bounded transcript 與 Transcript Review handoff markers。
+
+驗證：
+
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+
+後續：
+
+- 將 Whisper model path 設定從 debug tools 整理成正式本機模型設定流程，並在 parser 成功後接 voice quota commit。
+
 ### T850 expo-av hold-to-record capture
 
 類型：mobile / recording / verifier / ui-spec

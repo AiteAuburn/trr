@@ -1738,6 +1738,26 @@ Verification:
 
 - `npm run quality` passed in `mobile/`.
 
+### T851: Route captured recordings through Whisper confirmation
+
+Status: done
+
+Summary:
+
+- Captured audio can now be transcribed with native Whisper when a Whisper model path is configured.
+- Record-page recording result actions attempt Whisper transcription first, then route the bounded transcript into the existing Transcript Review screen.
+- Home remains visually minimal; releasing the mic can route to Transcript Review after Whisper transcription without adding Home CTAs.
+- The flow still does not skip transcript confirmation, call AI/parser directly, save records, or write backend data.
+
+Verification:
+
+- `npm run typecheck` passed in `mobile/`.
+- `npm run verify:navigation` passed in `mobile/`.
+
+Next:
+
+- Add a production-grade model selection/download path outside debug settings, then connect quota commit after successful parse.
+
 ### T850: Capture Home and Record audio with expo-av
 
 Status: done
