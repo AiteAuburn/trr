@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T962: Preserve persisted achievement unlocks in summary
+
+Status: done
+
+Summary:
+
+- Updated `/achievements/summary` so persisted `AchievementUnlock` rows remain `unlocked` in the returned summary even if current active-record progress later drops below the target.
+- `unlocked_count` and `next_remaining` now use the returned unlock state instead of only current progress.
+- Added backend regression coverage for a synced badge after one qualifying record is soft-deleted.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_achievement_summary_calculates_mvp_badge_progress tests/test_community_store_year_review.py::test_achievement_summary_extends_levels_after_base_ladder tests/test_community_store_year_review.py::test_year_review_badge_metrics_include_cumulative_and_streak_achievements` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+
 ### T961: Include full custom analysis end day
 
 Status: done

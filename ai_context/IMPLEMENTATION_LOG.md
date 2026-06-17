@@ -15,6 +15,33 @@
 
 ## 2026-06-14
 
+### T962 preserve persisted achievement unlocks in summary
+
+類型：backend / test / docs / achievements
+
+檔案：
+
+- `backend/app/api/achievements.py`
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated achievement summary mapping so persisted `AchievementUnlock` rows keep their returned item state unlocked.
+- `unlocked_count` and `next_remaining` now follow the returned unlock state instead of only active-record progress.
+- Added regression coverage for a synced glucose cumulative/streak badge after a qualifying record is soft-deleted.
+- 未變更 mobile UI、year review generation、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_achievement_summary_calculates_mvp_badge_progress tests/test_community_store_year_review.py::test_achievement_summary_extends_levels_after_base_ladder tests/test_community_store_year_review.py::test_year_review_badge_metrics_include_cumulative_and_streak_achievements` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+
+後續：
+
+- If achievement reset behavior is ever desired, add an explicit reset/revoke model instead of silently deriving it from record deletion.
+
 ### T961 include full custom analysis end day
 
 類型：mobile / verifier / docs / analysis

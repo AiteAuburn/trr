@@ -134,6 +134,36 @@ def test_achievement_summary_calculates_mvp_badge_progress() -> None:
         "glucose-streak-10",
     }
 
+    with SessionLocal() as db:
+        soft_deleted_record = db.scalar(
+            select(Record)
+            .where(
+                Record.profile_id == UUID(profile_id),
+                Record.record_type == "glucose",
+                Record.deleted_at.is_(None),
+            )
+            .order_by(Record.occurred_at.asc())
+        )
+        assert soft_deleted_record is not None
+        soft_deleted_record.deleted_at = datetime.now(UTC)
+        db.commit()
+
+    after_delete_response = client.get(
+        f"/achievements/summary?profile_id={profile_id}",
+        headers={"X-Account-Id": account_id},
+    )
+    assert after_delete_response.status_code == 200
+    after_delete_body = after_delete_response.json()
+    assert after_delete_body["unlocked_count"] == 2
+    assert after_delete_body["persisted_unlocked_count"] == 2
+    after_delete_by_id = {item["id"]: item for item in after_delete_body["items"]}
+    assert after_delete_by_id["glucose-cumulative-10"]["progress"] == 9
+    assert after_delete_by_id["glucose-cumulative-10"]["unlocked"] is True
+    assert after_delete_by_id["glucose-cumulative-10"]["unlocked_at"]
+    assert after_delete_by_id["glucose-streak-10"]["progress"] == 9
+    assert after_delete_by_id["glucose-streak-10"]["unlocked"] is True
+    assert after_delete_by_id["glucose-streak-10"]["unlocked_at"]
+
 
 def test_achievement_summary_extends_levels_after_base_ladder() -> None:
     client = TestClient(app)

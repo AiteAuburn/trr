@@ -166,6 +166,7 @@ def _achievement_summary(
     for item in items:
         persisted_unlock = unlocks_by_id.get(item.id)
         if persisted_unlock is not None:
+            item.unlocked = True
             item.unlocked_at = persisted_unlock.unlocked_at
         elif sync_unlocks and item.unlocked:
             new_unlock = AchievementUnlock(
@@ -199,12 +200,13 @@ def _achievement_summary(
         for item in items:
             persisted_unlock = persisted_unlocks.get(item.id)
             if persisted_unlock is not None:
+                item.unlocked = True
                 item.unlocked_at = persisted_unlock.unlocked_at
                 item.newly_unlocked = item.id in newly_unlocked_ids
-    unlocked_count = sum(1 for item in items if item.progress >= item.target)
+    unlocked_count = sum(1 for item in items if item.unlocked)
     persisted_unlocked_count = sum(1 for item in items if item.unlocked_at is not None)
     next_remaining = min(
-        (item.target - item.progress for item in items if item.progress < item.target),
+        (item.target - item.progress for item in items if not item.unlocked),
         default=0,
     )
     return AchievementSummaryRead(
