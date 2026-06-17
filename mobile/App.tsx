@@ -6621,9 +6621,6 @@ export default function App() {
     `${foodCommunityShareButtonDisplayLabel}，backend 會計算升糖幅度並建立社群點數`,
     maxDisplayDetailTextLength
   );
-  const rankingOptInStatusMessage = boundUiMessage(
-    "opt-in 尚未啟用；正式開放前需完成加入、退出、撤回歷史資料與公開顯示名稱設定。"
-  );
   const storeActionStatusDisplayText = boundUiMessage(storeActionStatus);
   const storePreviewBoundaryDisplayText = storePreviewBoundaryCopy();
   const storeEmptySearchDisplay = storeEmptySearchDisplayItem();
@@ -14167,7 +14164,7 @@ export default function App() {
               ))}
             </View>
             <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>社群排行榜預留</Text>
+              <Text style={styles.label}>社群排行榜</Text>
               {foodCommunityRankingRows.map((row) => (
                 <View key={row.label} style={styles.highlightRow}>
                   <Text style={styles.recordType}>{row.label}</Text>

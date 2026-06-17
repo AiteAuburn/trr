@@ -111,6 +111,20 @@ None.
 
 ## Done
 
+### T955: Remove stale community leaderboard preview copy
+
+Status: done
+
+Summary:
+
+- Food Community now labels the leaderboard section as `社群排行榜` instead of a reserved placeholder.
+- Removed the stale mobile `opt-in 尚未啟用` copy now that leaderboard opt-in is updated through `/community/settings`.
+- Mobile navigation verifier now rejects the stale reserved leaderboard label and unavailable opt-in copy.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
 ### T954: Preserve bounded source text for History raw records
 
 Status: done

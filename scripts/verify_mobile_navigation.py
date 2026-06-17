@@ -3173,6 +3173,7 @@ def main() -> int:
             ("food community share auto-calculation fallback", '"系統自動計算"'),
             ("food community share bounded button label", 'const foodCommunityShareButtonDisplayLabel = boundDisplayText("送出食物分享", maxDisplayTextLength);'),
             ("food community share bounded accessibility label", "const foodCommunityShareAccessibilityDisplayLabel = boundDisplayText(\n    `${foodCommunityShareButtonDisplayLabel}，backend 會計算升糖幅度並建立社群點數`,\n    maxDisplayDetailTextLength\n  );"),
+            ("food community backend-aware leaderboard label", "社群排行榜"),
             ("food community share food name updater", "function updateFoodCommunityFoodName(value: string)"),
             ("food community share food name input", 'accessibilityLabel="輸入食物名稱"'),
             ("food community share food name binding", "onChangeText={updateFoodCommunityFoodName}"),
@@ -3287,6 +3288,16 @@ def main() -> int:
             "ranking opt-in stale status-only handler",
             ranking_opt_in_block,
             "setRankingActionStatus(rankingOptInStatusMessage);",
+        )
+        _assert_not_contains(
+            "ranking stale opt-in unavailable copy",
+            content,
+            "opt-in 尚未啟用",
+        )
+        _assert_not_contains(
+            "food community stale leaderboard reserved label",
+            content,
+            "社群排行榜預留",
         )
         redeem_store_block = _match_block(
             content,

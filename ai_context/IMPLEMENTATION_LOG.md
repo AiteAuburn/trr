@@ -15,6 +15,33 @@
 
 ## 2026-06-14
 
+### T955 Remove stale community leaderboard preview copy
+
+類型：mobile / verifier / docs / community
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Food Community 頁內排行榜小節現在顯示 `社群排行榜`，不再標成預留。
+- 移除 mobile 中已過期的 `opt-in 尚未啟用` 文案；排行榜 opt-in 目前已經透過 `/community/settings` 更新，成功後會刷新 leaderboards。
+- Mobile navigation verifier 現在會拒絕 stale reserved leaderboard label 與 unavailable opt-in copy。
+- 未變更 backend endpoint、database schema、排行榜分數算法、food share 寫入、點數 ledger、AI、LLM、STT、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run quality` 通過。
+
+後續：
+
+- 排行榜退出後歷史資料撤回、封鎖/檢舉與審核流程完成前，仍不可公開健康數值或跨使用者健康內容。
+
 ### T954 Preserve bounded source text for History raw records
 
 類型：backend / mobile / verifier / docs / history
