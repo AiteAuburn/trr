@@ -15,6 +15,42 @@
 
 ## 2026-06-17
 
+### T1043 catch Windows SDK build-tools in WSL APK preflight
+
+類型：android / verifier / docs
+
+檔案：
+
+- `scripts/check_android_apk_build_prereqs.py`
+- `README.md`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Tightened Android APK prereq detection for WSL builds that point `sdk.dir` at a mounted Windows Android SDK path such as `/mnt/c/.../Android/Sdk`.
+- The prereq checker now reads the configured root Gradle `buildToolsVersion` and requires the environment-specific `aapt` binary before reporting APK build readiness.
+- README now explains that Windows SDK build-tools expose `aapt.exe`, while Linux Gradle expects `aapt`, which is why WSL builds can report build-tools as corrupted.
+- 未變更 Android runtime build config、backend runtime、mobile network request paths、AI/LLM calls、STT、parser、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile/android && rtk ./gradlew assembleRelease` failed before this fix because `/home/aite/.gradle` was read-only.
+- `cd mobile/android && rtk env GRADLE_USER_HOME=/tmp/bloodsugar-gradle ./gradlew assembleRelease` reached Android configuration but failed at `:app:lintVitalReportRelease` because configured build-tools `35.0.0` is missing Linux `aapt` under the mounted Windows SDK.
+- `cd mobile && rtk npm run apk:android-prereqs` now correctly fails early with blockers: WSL Gradle is configured with a Windows Android SDK path, and configured Android build-tools `35.0.0` are not usable from this environment because `aapt` is missing.
+- `cd mobile && rtk npm run verify:android-apk-scripts` passed.
+- `rtk python3 -m py_compile scripts/verify_android_apk_scripts.py scripts/check_android_apk_build_prereqs.py` passed.
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing the remaining goal requirements against current evidence before final completion.
+
 ### T1042 guard standalone Android APK export docs
 
 類型：docs / verifier / android

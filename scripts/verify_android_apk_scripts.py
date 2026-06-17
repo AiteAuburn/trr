@@ -11,6 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_JSON = REPO_ROOT / "mobile" / "package.json"
 README = REPO_ROOT / "README.md"
 ANDROID_APP_BUILD_GRADLE = REPO_ROOT / "mobile" / "android" / "app" / "build.gradle"
+APK_PREREQ_SCRIPT = REPO_ROOT / "scripts" / "check_android_apk_build_prereqs.py"
 
 REQUIRED_SCRIPTS = {
     "verify:release-env": "python3 ../scripts/verify_mobile_release_env.py",
@@ -36,6 +37,7 @@ def main() -> int:
     package = json.loads(PACKAGE_JSON.read_text(encoding="utf-8"))
     readme = README.read_text(encoding="utf-8")
     build_gradle = ANDROID_APP_BUILD_GRADLE.read_text(encoding="utf-8")
+    prereq_script = APK_PREREQ_SCRIPT.read_text(encoding="utf-8")
     scripts = package.get("scripts", {})
     errors: list[str] = []
 
@@ -78,6 +80,17 @@ def main() -> int:
     for label, marker in required_gradle_markers.items():
         if marker not in build_gradle:
             errors.append(f"Android Gradle config must keep {label}: missing {marker!r}")
+
+    required_prereq_markers = {
+        "configured build-tools version": "def _configured_build_tools_version()",
+        "mounted Windows SDK path detection": "def _is_mounted_windows_sdk_path(value: str) -> bool:",
+        "Linux aapt requirement": 'required_tool = "aapt.exe" if os.name == "nt" else "aapt"',
+        "Windows SDK alternate aapt warning": 'alternate_tool = "aapt" if os.name == "nt" else "aapt.exe"',
+        "corrupted build-tools blocker": "are not usable from this environment",
+    }
+    for label, marker in required_prereq_markers.items():
+        if marker not in prereq_script:
+            errors.append(f"Android APK prereq checker must keep {label}: missing {marker!r}")
 
     if errors:
         for error in errors:

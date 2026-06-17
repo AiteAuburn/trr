@@ -228,9 +228,11 @@ cd D:\bloodsugar\mobile\android
 ```
 
 Do not run Linux Gradle in WSL against the Windows SDK path from
-`local.properties`; Linux Gradle can report Windows build-tools as corrupted.
-For WSL-only APK builds, install a Linux Android SDK and set `sdk.dir` to that
-Linux SDK path, such as `/home/aite/Android/Sdk`.
+`local.properties`, including `/mnt/c/.../Android/Sdk`; Linux Gradle expects
+Linux tool binaries such as `aapt`, while the Windows SDK contains `aapt.exe`,
+and Gradle can report the build-tools as corrupted. For WSL-only APK builds,
+install a Linux Android SDK and set `sdk.dir` to that Linux SDK path, such as
+`/home/aite/Android/Sdk`.
 
 The current release build is still signed with the debug keystore in
 `mobile/android/app/build.gradle`. That is acceptable for internal install
