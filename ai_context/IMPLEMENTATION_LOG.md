@@ -15,6 +15,39 @@
 
 ## 2026-06-17
 
+### T1023 align Food Community and Store entry chrome with backend-ready paths
+
+類型：mobile / docs / verifier / community / store
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated Store, Food Community, and Ranking screen chrome subtitles so Menu-launched routes no longer read as future-only preview pages.
+- Promoted visual-smoke route label for Community from `社群預覽` to `食物社群`.
+- Updated Future Modules cards for Food Community and Store to state the backend-ready database/share/points/ranking and point-redemption/wallet paths while keeping posting, checkout, shipping, payment, and legal review boundaries explicit.
+- Renamed the canonical spec section from `社群預覽頁` to `食物社群頁` and clarified that local preview only applies to visual-smoke or backend-unavailable fallback.
+- Added verifier guards against stale preview/future chrome labels returning.
+- Updated UI spec coverage verifier to use the renamed `4.14.4 食物社群頁` canonical heading.
+- 未變更 backend community/store schema、points ledger、redemption behavior、leaderboard scoring、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- Future Modules page can later be split into active expansion status vs future-only modules if product navigation needs less preview wording.
+
 ### T1022 keep Home recording elapsed seconds in the secondary hint
 
 類型：mobile / verifier / UX alignment

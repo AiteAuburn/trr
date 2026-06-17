@@ -1552,12 +1552,12 @@ AI 分析結果：
 - 健康串接 preview 的 Header 返回與底部返回 CTA 必須使用 dedicated handler；handler 只回到既有 return target 並更新 bounded status，不請求權限、不讀取外部資料、不呼叫 backend / AI。
 - 外部資料不可覆蓋手動紀錄；正式匯入後仍需保留來源、同步批次、同步狀態與去重證據。
 
-### 4.14.4 社群預覽頁
+### 4.14.4 食物社群頁
 
 目前狀態：
 
-- Future module / 本機預覽。
-- 目前一般操作路徑已可同步第二階段食物社群資料庫、公開資料邊界、使用者 opt-in、食物分享、點數與排行榜；仍不建立貼文、不送出留言、不公開健康紀錄。
+- 一般操作路徑已可同步第二階段食物社群資料庫、公開資料邊界、使用者 opt-in、食物分享、點數與排行榜；仍不建立貼文、不送出留言、不公開健康紀錄。
+- Visual-smoke route 與 backend unavailable 時才顯示本機預覽，不寫入 food database、不建立積分、不更新排行榜、不串接商城。
 - Mobile 食物資料庫一般操作路徑會同步 backend food database；visual-smoke route 與 backend unavailable 時仍顯示本機 preview，不寫入 food database、不建立積分、不更新排行榜、不串接商城。Community / Food Community copy 必須區分 backend-ready 一般操作與 visual-smoke/backend-unavailable fallback，不可再宣稱食物資料庫「目前不查詢 backend」或食物分享「尚未啟用」。
 - Backend 已有 `/community/foods/categories`、`/community/foods`、`/community/foods/{id}`、`/community/foods/shares` 與 `/community/leaderboards` contract；食物分享會 upsert food item、計算升糖幅度、寫入 share、給點數並更新排行榜聚合。
 - Backend 已有 `/community/settings` 公開顯示名稱與 leaderboard opt-in contract；leaderboard 只顯示 opted-in accounts，且顯示公開社群名稱，不直接顯示 raw account display name。公開顯示名稱 trim 後不可為空白；空白更新必須回結構化 `community_display_name_blank`，且不可改變既有公開名稱或 opt-in 狀態。
@@ -1938,7 +1938,7 @@ Header 行為規則：
 
 未來擴充
 ├── 醫師 / 醫院合作 -> 醫師 / 醫院合作預覽頁
-├── 社群 -> 社群預覽頁
+├── 食物社群資料庫 -> 食物社群頁
 ├── 成就榜 / 徽章 -> 成就榜頁
 ├── 排行榜 -> 排行榜預覽頁
 ├── 年度回顧 -> 年度回顧頁

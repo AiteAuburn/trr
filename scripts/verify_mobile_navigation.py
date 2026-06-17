@@ -3573,6 +3573,13 @@ def main() -> int:
             ("community privacy accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}"),
             ("food community menu promoted label", '{ id: "community", label: "食物社群", icon: "🤝" }'),
             ("ranking menu promoted label", '{ id: "ranking", label: "社群排行", icon: "🏅" }'),
+            ("food community visual smoke promoted label", '{ id: "community", label: "食物社群" }'),
+            ("food community screen chrome backend-ready subtitle", 'community: { subtitle: "同步食物升糖資料庫、分享、點數與公開排名。", backTo: "futureModules", actionLabel: "‹" }'),
+            ("ranking screen chrome backend-ready subtitle", 'ranking: { subtitle: "查看 opt-in 公開社群排行與非敏感分數。", backTo: "futureModules", actionLabel: "‹" }'),
+            ("store screen chrome backend-ready subtitle", 'store: { subtitle: "同步點數商城、兌換券與購物車邊界。", backTo: "menu", actionLabel: "‹" }'),
+            ("future module food community database card title", 'title: "食物社群資料庫"'),
+            ("future module food community database card readiness", "資料庫、分享、點數與排行榜已接 backend；貼文留言治理仍待正式開放。"),
+            ("future module store backend-ready readiness", "點數兌換與兌換券已接 backend；購物車、出貨、付款與法務仍待完成。"),
             ("food community promoted title", '<Text style={styles.sectionTitle}>食物社群</Text>'),
             ("ranking promoted title", '<Text style={styles.sectionTitle}>社群排行</Text>'),
             ("food community backend-ready badge", '"食物社群",'),
@@ -3663,9 +3670,29 @@ def main() -> int:
             "食物社群（預留）",
         )
         _assert_not_contains(
+            "food community stale visual smoke preview label",
+            content,
+            '{ id: "community", label: "社群預覽" }',
+        )
+        _assert_not_contains(
+            "food community stale preview chrome subtitle",
+            content,
+            "社群交流與公開資料邊界預覽。",
+        )
+        _assert_not_contains(
             "ranking stale reserved menu label",
             content,
             "社群排行（預留）",
+        )
+        _assert_not_contains(
+            "ranking stale preview chrome subtitle",
+            content,
+            "排行榜統計與公開排名 opt-in 預覽。",
+        )
+        _assert_not_contains(
+            "store stale future chrome subtitle",
+            content,
+            "瀏覽未來商城與優惠入口。",
         )
         _assert_not_contains(
             "food community stale disabled badge",
