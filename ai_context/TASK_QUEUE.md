@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T959: Add food category individual-item summaries
+
+Status: done
+
+Summary:
+
+- Extended `/community/foods/categories` so each food category returns `food_count` and up to 3 representative individual food names.
+- Mobile now bounds and stores category food counts/sample foods, and renders the selected category summary below the category tabs.
+- Added backend regression coverage for empty category summaries and populated individual-food summaries.
+- Updated the mobile verifier and canonical UI spec so category sync cannot drift back to code/label only.
+
+Verification:
+
+- `cd mobile && rtk npm run quality` passed.
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py -k "food_categories or food_share_creates_food_stats_points_and_leaderboards"` passed.
+
 ### T958: Extend achievement levels after base ladder
 
 Status: done

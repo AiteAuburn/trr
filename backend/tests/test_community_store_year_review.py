@@ -8,7 +8,7 @@ from sqlalchemy import select
 from app.db.session import SessionLocal
 from app.jobs.generate_year_review_snapshots import default_target_year
 from app.main import app
-from app.models import AchievementUnlock, Record, YearReviewSnapshot
+from app.models import AchievementUnlock, FoodItem, Record, YearReviewSnapshot
 from app.services.year_review_snapshots import generate_missing_year_review_snapshots
 from tests.helpers import create_account_and_profile, create_record
 
@@ -196,18 +196,58 @@ def test_food_categories_endpoint_returns_required_taxonomy() -> None:
     )
 
     assert response.status_code == 200
-    assert response.json() == [
-        {"code": "vegetables", "label": "蔬菜"},
-        {"code": "meat", "label": "肉類"},
-        {"code": "seafood", "label": "海鮮"},
-        {"code": "eggs", "label": "蛋類"},
-        {"code": "beans", "label": "豆類"},
-        {"code": "starches", "label": "澱粉類"},
-        {"code": "drinks", "label": "飲料"},
-        {"code": "fruit", "label": "水果"},
-        {"code": "snacks", "label": "零食"},
-        {"code": "supplements", "label": "保健食品"},
+    body = response.json()
+    assert [(item["code"], item["label"]) for item in body] == [
+        ("vegetables", "蔬菜"),
+        ("meat", "肉類"),
+        ("seafood", "海鮮"),
+        ("eggs", "蛋類"),
+        ("beans", "豆類"),
+        ("starches", "澱粉類"),
+        ("drinks", "飲料"),
+        ("fruit", "水果"),
+        ("snacks", "零食"),
+        ("supplements", "保健食品"),
     ]
+    assert all(item["food_count"] >= 0 for item in body)
+    assert all(len(item["sample_foods"]) <= 3 for item in body)
+
+
+def test_food_categories_include_individual_food_summary() -> None:
+    client = TestClient(app)
+    account_id, _ = create_account_and_profile(client, "community-food-category-summary")
+    created_at = datetime(2099, 1, 3, 8, 0, tzinfo=UTC)
+    names = [f"分類青菜 {index} {uuid4()}" for index in range(4)]
+    before_response = client.get(
+        "/community/foods/categories",
+        headers={"X-Account-Id": account_id},
+    )
+    assert before_response.status_code == 200
+    before_categories = {item["code"]: item for item in before_response.json()}
+    previous_count = before_categories["vegetables"]["food_count"]
+
+    with SessionLocal() as db:
+        db.add_all(
+            FoodItem(
+                category="vegetables",
+                name=name,
+                normalized_name=name.lower(),
+                created_by_account_id=UUID(account_id),
+                created_at=created_at + timedelta(minutes=index),
+            )
+            for index, name in enumerate(names)
+        )
+        db.commit()
+
+    response = client.get(
+        "/community/foods/categories",
+        headers={"X-Account-Id": account_id},
+    )
+
+    assert response.status_code == 200
+    categories = {item["code"]: item for item in response.json()}
+    assert categories["vegetables"]["food_count"] == previous_count + 4
+    assert categories["vegetables"]["sample_foods"] == list(reversed(names[-3:]))
 
 
 def test_food_share_normalizes_text_fields_and_rejects_blank_names() -> None:

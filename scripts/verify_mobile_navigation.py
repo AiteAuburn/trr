@@ -303,9 +303,16 @@ def _verify_food_community_category_contract(content: str) -> None:
         "const foodCommunityCategories: Array<{ id: FoodCommunityCategory; label: string }> = [",
     )
     _assert_contains("food community backend labels", backend_content, "FOOD_CATEGORY_LABELS: dict[FoodCategory, str] = {")
+    _assert_contains("food community category count schema", backend_content, "food_count: int = Field(default=0, ge=0, le=1_000_000)")
+    _assert_contains("food community category sample schema", backend_content, "sample_foods: list[str] = Field(default_factory=list, max_length=3)")
     _assert_contains("food community api-to-mobile mapper", content, "function mobileFoodCategoryFromApi(value: string)")
     _assert_contains("food community mobile-to-api mapper", content, "function apiFoodCategoryFromMobile(value: FoodCommunityCategory)")
     _assert_contains("food community mobile individual food items", content, "const foodCommunityItems: FoodCommunityItem[] = [")
+    _assert_contains("food community category count response", backend_api_content, "select(FoodItem.category, func.count(FoodItem.id)).group_by(FoodItem.category)")
+    _assert_contains("food community category sample response", backend_api_content, "sample_foods=sample_foods_by_category.get(code, [])")
+    _assert_contains("food community mobile category count state", content, "foodCount: clampNumber(category.food_count ?? 0, 0, maxMobileCountValue)")
+    _assert_contains("food community mobile category samples state", content, "sampleFoods: (category.sample_foods ?? [])")
+    _assert_contains("food community category summary render", content, "{selectedFoodCommunityCategoryDisplay.summary}")
     _assert_contains(
         "food community detail newest eaten share ordering",
         backend_api_content,

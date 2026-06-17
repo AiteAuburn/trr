@@ -15,6 +15,38 @@
 
 ## 2026-06-14
 
+### T959 add food category individual-item summaries
+
+類型：backend / mobile / verifier / docs / community
+
+檔案：
+
+- `backend/app/schemas/community.py`
+- `backend/app/api/community.py`
+- `backend/tests/test_community_store_year_review.py`
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extended `/community/foods/categories` to return each category's individual food count and up to 3 representative food names.
+- Mobile now bounds category food counts/sample foods and renders the selected category summary below category tabs.
+- Added backend regression coverage for empty category summaries and populated category summaries with individual food names.
+- Updated verifier and canonical UI spec so food categories cannot drift back to code/label only.
+- 未變更 auth、leaderboard opt-in、store redemption、points ledger semantics、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run quality` passed.
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py -k "food_categories or food_share_creates_food_stats_points_and_leaderboards"` passed.
+
+後續：
+
+- Category summaries can later power richer nested category pages without changing the current share/detail endpoints.
+
 ### T958 extend achievement levels after base ladder
 
 類型：backend / mobile / verifier / docs / achievements

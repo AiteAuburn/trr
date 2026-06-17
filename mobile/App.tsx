@@ -139,6 +139,8 @@ type FoodCommunityApiCategory =
 type FoodCommunityApiCategoryRead = {
   code: FoodCommunityApiCategory;
   label: string;
+  food_count?: number;
+  sample_foods?: string[];
 };
 
 type FoodCommunityApiStats = {
@@ -2308,12 +2310,23 @@ function storeCategoryDisplayItem(value: { id: StoreCategory; label: string }) {
   };
 }
 
-function foodCommunityCategoryDisplayItem(value: { id: FoodCommunityCategory; label: string }) {
+function foodCommunityCategoryDisplayItem(value: { id: FoodCommunityCategory; label: string; foodCount?: number; sampleFoods?: string[] }) {
   const label = boundDisplayText(value.label || "分類", 60);
+  const foodCount = clampNumber(value.foodCount ?? 0, 0, maxMobileCountValue);
+  const sampleFoods = (value.sampleFoods ?? [])
+    .slice(0, 3)
+    .map((food) => boundDisplayText(food, 40))
+    .filter(Boolean);
+  const summary = sampleFoods.length > 0
+    ? boundDisplayText(`${foodCount} 種食物：${sampleFoods.join("、")}`, maxDisplayDetailTextLength)
+    : boundDisplayText(foodCount > 0 ? `${foodCount} 種食物` : "尚未有個別食物", maxDisplayDetailTextLength);
   return {
     value: value.id,
     label,
-    accessibilityLabel: boundDisplayText(`切換食物分類：${label}，只篩選本機社群資料預覽`, maxDisplayDetailTextLength)
+    foodCount,
+    sampleFoods,
+    summary,
+    accessibilityLabel: boundDisplayText(`切換食物分類：${label}，${summary}`, maxDisplayDetailTextLength)
   };
 }
 
@@ -5702,7 +5715,7 @@ export default function App() {
   const [healthIntegrationActionStatus, setHealthIntegrationActionStatus] = useState(previewActionClearStatusMessage());
   const [communityActionStatus, setCommunityActionStatus] = useState(previewActionClearStatusMessage());
   const [foodCommunityCategory, setFoodCommunityCategory] = useState<FoodCommunityCategory>("vegetable");
-  const [foodCommunityBackendCategories, setFoodCommunityBackendCategories] = useState<Array<{ id: FoodCommunityCategory; label: string }>>([]);
+  const [foodCommunityBackendCategories, setFoodCommunityBackendCategories] = useState<Array<{ id: FoodCommunityCategory; label: string; foodCount: number; sampleFoods: string[] }>>([]);
   const [foodCommunitySearchText, setFoodCommunitySearchText] = useState("");
   const [selectedFoodCommunityItemId, setSelectedFoodCommunityItemId] = useState("leafy-greens");
   const [foodCommunityBackendItems, setFoodCommunityBackendItems] = useState<FoodCommunityItem[]>([]);
@@ -6416,6 +6429,10 @@ export default function App() {
     () => foodCommunityCategoriesForDisplay.map(foodCommunityCategoryDisplayItem),
     [foodCommunityCategoriesForDisplay]
   );
+  const selectedFoodCommunityCategoryDisplay =
+    foodCommunityCategoryDisplayOptions.find((category) => category.value === foodCommunityCategory) ??
+    foodCommunityCategoryDisplayOptions[0] ??
+    null;
   const foodCommunityItemsForDisplay =
     foodCommunityBackendItems.length > 0 ? foodCommunityBackendItems : foodCommunityItems;
   const foodCommunityDisplayItems = useMemo(
@@ -9381,7 +9398,12 @@ export default function App() {
       );
       const mappedCategories = categories.slice(0, foodCommunityCategories.length).map((category) => ({
         id: mobileFoodCategoryFromApi(category.code),
-        label: boundDisplayText(category.label || "分類", maxDisplayTextLength)
+        label: boundDisplayText(category.label || "分類", maxDisplayTextLength),
+        foodCount: clampNumber(category.food_count ?? 0, 0, maxMobileCountValue),
+        sampleFoods: (category.sample_foods ?? [])
+          .slice(0, 3)
+          .map((food) => boundDisplayText(food, 40))
+          .filter(Boolean)
       }));
       setFoodCommunityBackendCategories(mappedCategories.length > 0 ? mappedCategories : []);
     } catch {
@@ -14309,6 +14331,9 @@ export default function App() {
                 </Pressable>
               ))}
             </View>
+            {selectedFoodCommunityCategoryDisplay ? (
+              <Text style={styles.evidence}>{selectedFoodCommunityCategoryDisplay.summary}</Text>
+            ) : null}
             <View style={styles.openSection}>
               {visibleFoodCommunityItems.map((item) => (
                 <Pressable

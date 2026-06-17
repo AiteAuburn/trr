@@ -117,9 +117,33 @@ def _food_detail_read(db: Session, item: FoodItem) -> FoodItemDetailRead:
 
 
 @router.get("/foods/categories", response_model=list[FoodCategoryRead])
-def list_food_categories() -> list[FoodCategoryRead]:
+def list_food_categories(
+    account: Account = Depends(get_current_account),
+    db: Session = Depends(get_db),
+) -> list[FoodCategoryRead]:
+    _ = account
+    category_counts = {
+        str(category): int(count or 0)
+        for category, count in db.execute(
+            select(FoodItem.category, func.count(FoodItem.id)).group_by(FoodItem.category)
+        )
+    }
+    sample_rows = db.execute(
+        select(FoodItem.category, FoodItem.name)
+        .order_by(FoodItem.category.asc(), FoodItem.created_at.desc(), FoodItem.id.desc())
+    )
+    sample_foods_by_category: dict[str, list[str]] = {}
+    for category, name in sample_rows:
+        samples = sample_foods_by_category.setdefault(str(category), [])
+        if len(samples) < 3:
+            samples.append(str(name))
     return [
-        FoodCategoryRead(code=code, label=label)
+        FoodCategoryRead(
+            code=code,
+            label=label,
+            food_count=category_counts.get(code, 0),
+            sample_foods=sample_foods_by_category.get(code, []),
+        )
         for code, label in FOOD_CATEGORY_LABELS.items()
     ]
 

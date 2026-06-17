@@ -34,6 +34,8 @@ FOOD_CATEGORY_LABELS: dict[FoodCategory, str] = {
 class FoodCategoryRead(BaseModel):
     code: FoodCategory
     label: str = Field(min_length=1, max_length=20)
+    food_count: int = Field(default=0, ge=0, le=1_000_000)
+    sample_foods: list[str] = Field(default_factory=list, max_length=3)
 
 
 class FoodShareCreate(BaseModel):
