@@ -60,8 +60,8 @@ EXPECTED_MENU_LABELS = {
     "achievements": "成就榜",
     "yearReview": "年度回顧",
     "store": "商城",
-    "community": "食物社群（預留）",
-    "ranking": "社群排行（預留）",
+    "community": "食物社群",
+    "ranking": "社群排行",
     "settings": "設定",
 }
 
@@ -3553,6 +3553,12 @@ def main() -> int:
             ("health meter accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.healthMeterAccessibility}"),
             ("community post accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPostAccessibility}"),
             ("community privacy accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}"),
+            ("food community menu promoted label", '{ id: "community", label: "食物社群", icon: "🤝" }'),
+            ("ranking menu promoted label", '{ id: "ranking", label: "社群排行", icon: "🏅" }'),
+            ("food community promoted title", '<Text style={styles.sectionTitle}>食物社群</Text>'),
+            ("ranking promoted title", '<Text style={styles.sectionTitle}>社群排行</Text>'),
+            ("food community backend-ready badge", '"食物社群",'),
+            ("food community backend-ready badge copy", "backend ready 時可同步食物資料庫、送出食物分享、建立點數並刷新排行榜；貼文、留言與內容治理仍未開放。"),
             ("food community search accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}"),
             ("food community category accessibility binding", "accessibilityLabel={category.accessibilityLabel}"),
             ("food community item accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
@@ -3632,6 +3638,21 @@ def main() -> int:
             "food community stale leaderboard reserved label",
             content,
             "社群排行榜預留",
+        )
+        _assert_not_contains(
+            "food community stale reserved menu label",
+            content,
+            "食物社群（預留）",
+        )
+        _assert_not_contains(
+            "ranking stale reserved menu label",
+            content,
+            "社群排行（預留）",
+        )
+        _assert_not_contains(
+            "food community stale disabled badge",
+            content,
+            "社群未啟用",
         )
         redeem_store_block = _match_block(
             content,

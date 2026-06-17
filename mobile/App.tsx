@@ -439,8 +439,8 @@ const menuScreens: Array<{ id: AppScreen; label: string; icon: string }> = [
   { id: "achievements", label: "成就榜", icon: "🏆" },
   { id: "yearReview", label: "年度回顧", icon: "🔁" },
   { id: "store", label: "商城", icon: "🛍" },
-  { id: "community", label: "食物社群（預留）", icon: "🤝" },
-  { id: "ranking", label: "社群排行（預留）", icon: "🏅" },
+  { id: "community", label: "食物社群", icon: "🤝" },
+  { id: "ranking", label: "社群排行", icon: "🏅" },
   { id: "settings", label: "設定", icon: "⚙" }
 ];
 
@@ -4406,14 +4406,14 @@ function healthIntegrationExternalDataBoundaryCopy() {
 
 function communityPreviewBoundaryDisplayItem() {
   return futurePreviewBoundaryDisplayItem(
-    "社群未啟用",
-    "目前不建立貼文、不送出留言、不公開任何紀錄；只顯示公開資料邊界、權限與內容治理需求。"
+    "食物社群",
+    "backend ready 時可同步食物資料庫、送出食物分享、建立點數並刷新排行榜；貼文、留言與內容治理仍未開放。"
   );
 }
 
 function communityPublicNameBoundaryCopy() {
   return boundDisplayText(
-    "正式社群需先完成 display name、公開/私密資料邊界與使用者 opt-in。",
+    "公開名稱與排行榜 opt-in 已可同步 backend；健康紀錄仍預設私密，貼文與留言需另行 opt-in。",
     maxDisplayDetailTextLength
   );
 }
@@ -14668,8 +14668,8 @@ export default function App() {
           <View style={styles.pageSection}>
             <View style={styles.sectionHeader}>
               <View>
-                <Text style={styles.sectionTitle}>社群</Text>
-                <Text style={styles.evidence}>糖友交流、留言討論與小型互動的 future module 預覽。</Text>
+                <Text style={styles.sectionTitle}>食物社群</Text>
+                <Text style={styles.evidence}>同步真實食物升糖分享、點數與公開排行榜；貼文留言治理仍待正式開放。</Text>
               </View>
               <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromCommunityPreview}>
                 <Text style={styles.closeButtonText}>×</Text>
@@ -14954,8 +14954,8 @@ export default function App() {
           <View style={styles.pageSection}>
             <View style={styles.sectionHeader}>
               <View>
-                <Text style={styles.sectionTitle}>排行榜</Text>
-                <Text style={styles.evidence}>連續記錄排行榜、社群競賽與公開排名 opt-in 的 future module 預覽。</Text>
+                <Text style={styles.sectionTitle}>社群排行</Text>
+                <Text style={styles.evidence}>同步分享次數、貢獻度與食物測試達人公開榜單；只顯示 opt-in 使用者的非敏感分數。</Text>
               </View>
               <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromRankingPreview}>
                 <Text style={styles.closeButtonText}>×</Text>

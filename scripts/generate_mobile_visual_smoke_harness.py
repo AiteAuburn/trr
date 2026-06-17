@@ -485,21 +485,21 @@ ROUTES: tuple[RoutePreview, ...] = (
     ),
     RoutePreview(
         route="community",
-        title="社群",
-        subtitle="社群交流與公開資料邊界預覽。",
+        title="食物社群",
+        subtitle="真實食物升糖分享、點數與公開排行榜入口。",
         icon="社",
         sections=(
-            ("食物血糖資料庫", "分類、搜尋與食物資料頁預留"),
+            ("食物血糖資料庫", "分類、搜尋與食物資料頁可同步 backend"),
             ("分享紀錄", "食物名稱、食用前後血糖、上升值與備註心得"),
             ("積分與商城", "分享得點數，未來兌換優惠券、商品折扣與會員福利"),
         ),
         cta="查看食物分享狀態",
-        note="社群 preview 不送貼文、不寫食物資料庫、不建立積分。",
+        note="visual smoke 不送貼文、不寫食物資料庫、不建立積分。",
     ),
     RoutePreview(
         route="ranking",
-        title="排行榜",
-        subtitle="排行榜統計與公開排名 opt-in 預覽。",
+        title="社群排行",
+        subtitle="分享次數、貢獻度與食物測試達人公開榜單。",
         icon="榜",
         sections=(
             ("連續記錄", "本機 demo streak，只顯示非敏感統計"),

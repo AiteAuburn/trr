@@ -15,6 +15,43 @@
 
 ## 2026-06-17
 
+### T1020 promote community and ranking backend-ready entry copy
+
+類型：mobile / docs / verifier / community / ranking
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `scripts/generate_mobile_visual_smoke_harness.py`
+- `scripts/verify_mobile_visual_smoke_harness.py`
+- `scripts/verify_mobile_visual_smoke_harness_artifact.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Promoted Menu entries from `食物社群（預留）` / `社群排行（預留）` to `食物社群` / `社群排行`.
+- Updated Community and Ranking screen headers and inline boundary copy to reflect existing backend-ready food database, sharing, points, leaderboard, and opt-in paths.
+- Kept unfinished social posting, comments, moderation, and history-withdrawal boundaries explicit.
+- Added verifier guards to prevent stale reserved/disabled community and ranking labels from returning.
+- 未變更 backend community/store schema、leaderboard scoring、points ledger、redemption behavior、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_visual_smoke_routes.py scripts/generate_mobile_visual_smoke_harness.py scripts/verify_mobile_visual_smoke_harness.py scripts/verify_mobile_visual_smoke_harness_artifact.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- When social posting is implemented, add separate opt-in, moderation, deletion, and audit tests before changing the posting CTA from boundary status to creation flow.
+
 ### T1019 add DeepSeek-backed Year Review AI summary
 
 類型：backend / feature / test / docs / year-review / deepseek

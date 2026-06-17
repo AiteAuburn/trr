@@ -1557,15 +1557,15 @@ AI 分析結果：
 目前狀態：
 
 - Future module / 本機預覽。
-- 目前顯示第二階段食物社群資料庫、公開資料邊界、使用者 opt-in、留言治理與內容安全需求，不建立貼文、不送出留言、不公開任何紀錄。
+- 目前一般操作路徑已可同步第二階段食物社群資料庫、公開資料邊界、使用者 opt-in、食物分享、點數與排行榜；仍不建立貼文、不送出留言、不公開健康紀錄。
 - Mobile 食物資料庫一般操作路徑會同步 backend food database；visual-smoke route 與 backend unavailable 時仍顯示本機 preview，不寫入 food database、不建立積分、不更新排行榜、不串接商城。Community / Food Community copy 必須區分 backend-ready 一般操作與 visual-smoke/backend-unavailable fallback，不可再宣稱食物資料庫「目前不查詢 backend」或食物分享「尚未啟用」。
 - Backend 已有 `/community/foods/categories`、`/community/foods`、`/community/foods/{id}`、`/community/foods/shares` 與 `/community/leaderboards` contract；食物分享會 upsert food item、計算升糖幅度、寫入 share、給點數並更新排行榜聚合。
 - Backend 已有 `/community/settings` 公開顯示名稱與 leaderboard opt-in contract；leaderboard 只顯示 opted-in accounts，且顯示公開社群名稱，不直接顯示 raw account display name。公開顯示名稱 trim 後不可為空白；空白更新必須回結構化 `community_display_name_blank`，且不可改變既有公開名稱或 opt-in 狀態。
 
 頁面內容：
 
-- 標題：「社群」。
-- Inline 說明：「社群未啟用」，不使用 banner card。
+- 標題：「食物社群」。
+- Inline 說明：「食物社群」，不使用 banner card。
 - 食物血糖資料庫 preview 必須顯示大分類：蔬菜、肉類、海鮮、蛋類、豆類、澱粉類、飲料、水果、零食、保健食品；一般操作路徑會先同步 `/community/foods/categories` 的 backend label、該分類個別食物數與最多 3 個代表食物，backend unavailable 或 visual-smoke 時才使用本機 fallback。Backend integration test 必須直接驗證 `/community/foods/categories` 回傳這十個 code/label 且順序穩定，空分類回 `food_count: 0` 與空 `sample_foods`，有資料分類可回個別食物摘要。
 - Mobile navigation verifier 必須同時檢查 mobile fallback、mobile API category mapper 與 backend `FOOD_CATEGORY_LABELS` 的十個食物大分類 parity；特別要守住 backend plural code（例如 `snacks`）與 mobile singular display id（例如 `snack`）的雙向 mapping。Verifier 也必須確認 mobile fallback `foodCommunityItems` 每個大分類至少有一個可點擊的個別食物項目，避免只剩分類 tab 而沒有資料庫內容。
 - 食物搜尋可直接搜尋食物名稱，不必從分類進入；有搜尋文字且未指定 category 時 mobile 與 backend query 都必須跨分類搜尋，有指定 category 時只回該分類，沒有搜尋文字時才套用目前分類 tab。Backend query trim 後不可為空白，空白 query 必須回結構化 `food_query_blank`，不可被當成 wildcard 全資料查詢。Backend integration test 必須證明同分類同 normalized food name 會 upsert/聚合到同一 food item，不同分類同名食物會建立獨立 food item，避免大型升糖資料庫跨分類污染。一般操作路徑會同步 backend food database，visual-smoke route 與 backend unavailable 時才只篩選本機 preview。
@@ -1579,7 +1579,7 @@ AI 分析結果：
 - 公開顯示名稱：一般操作路徑顯示 `/community/settings` 的 public display name，未同步時 fallback 到 bounded account display name；可由使用者更新。
 - Future preview hero / 狀態摘要卡必須是單層淡綠卡，可 wrap；不可在卡內再包另一層白色 panel。
 - 公開顯示名稱預覽的 account display name / fallback 必須透過 bounded display helper 產生；不可在 JSX 內直接依 account 條件組 fallback copy。
-- 社群未啟用 badge/copy 與公開顯示名稱 boundary 說明必須透過 bounded display helper 產生；不可在 JSX 內直接寫 future preview boundary 文案。
+- 食物社群 badge/copy 與公開顯示名稱 boundary 說明必須透過 bounded display helper 產生；不可在 JSX 內直接寫 future preview boundary 文案。
 - 食物分類、食物列表、食物資料頁、分享欄位、積分 rows 與排行榜 rows 必須在 render 前轉成 bounded display item；不可直接 render raw preview config。
 - 邊界卡：健康紀錄預設私密、公開內容需 opt-in、留言治理需封鎖 / 檢舉 / 審核、AI 成本 `0 次呼叫`。
 - 啟用前條件：公開 / 私密可見範圍、貼文留言治理、刪除撤回與 audit-friendly event stream；display name 與 leaderboard opt-in 已有 backend/mobile contract。
@@ -1602,13 +1602,13 @@ AI 分析結果：
 
 目前狀態：
 
-- Future module / 公開榜單只讀。
+- 公開榜單一般操作路徑已接 backend leaderboard read 與 opt-in 設定。
 - 一般操作路徑會同步 backend `/community/leaderboards` 的分享次數、貢獻度與食物測試達人榜單，只顯示 opt-in 使用者的公開名稱與非敏感分數；public leaderboard response 不可暴露 raw account id。
 - Visual-smoke route 與 backend unavailable 時只用 mobile 已載入紀錄計算非敏感連續記錄天數，不公開排名、不寫 ranking stats、不呼叫 API。
 
 頁面內容：
 
-- 標題：「排行榜」。
+- 標題：「社群排行」。
 - Inline 說明：「公開榜單」，不使用 banner card。
 - 本機連續記錄預覽：顯示目前已載入紀錄推算出的連續天數。
 - 公開榜單區塊：分享次數排行、貢獻度排行、食物測試達人排行；每筆只顯示排名、公開顯示名稱與對應非敏感分數，不顯示或傳遞 raw account id。
@@ -1971,7 +1971,7 @@ Main screens:
 2. History screen with month calendar mode, lit dates for days with records, dim dates for empty days, selected-date AI-organized records first, and an original speech-to-text view.
 3. Analytics screen with 本週／本月／自訂日期區間 tabs, bounded custom start/end date inputs, blood glucose trend line chart, summary cards for highest glucose, lowest glucose, average glucose, total glucose measurements, before-meal count, after-meal count, and bounded detailed-report view that shows data source, AI cost 0, query limit, and no-medical-advice boundary.
 4. Subscription screen with trial and yearly membership plan, feature comparison table, inline payment-disconnected boundary text, and「查看試用整合狀態」button until store payment is wired.
-5. Menu screen with grid shortcuts: 今日錄音, 歷史紀錄, 基本分析, 成就榜, 年度回顧, 商城, 食物社群（預留）, 社群排行（預留）, 設定.
+5. Menu screen with grid shortcuts: 今日錄音, 歷史紀錄, 基本分析, 成就榜, 年度回顧, 商城, 食物社群, 社群排行, 設定.
 6. Settings screen with user profile, personal info, reminders, recording quota, privacy, tutorial, subscription management, and「清除本機狀態」button until production logout/token revoke is wired; keep Backend URL, model selection, and Dev Client tools collapsed under advanced settings.
 7. Record detail screen showing date, time, type, status, value, note, exercise, medication, with edit and delete buttons.
 8. Edit record form with date, time, type, glucose value, context, meal, exercise, medication, note, save and cancel.
