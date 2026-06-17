@@ -791,6 +791,25 @@ def test_food_detail_returns_share_records_stats_and_cross_category_search() -> 
         cross_category_body["food"]["id"],
         fuzzy_body["food"]["id"],
     }
+    search_items_by_id = {item["id"]: item for item in search_items}
+    assert search_items_by_id[food_id]["stats"] == {
+        "share_count": 3,
+        "average_glucose_delta": 17.0,
+        "max_glucose_delta": 46,
+        "min_glucose_delta": -20,
+    }
+    assert search_items_by_id[cross_category_body["food"]["id"]]["stats"] == {
+        "share_count": 1,
+        "average_glucose_delta": 20.0,
+        "max_glucose_delta": 20,
+        "min_glucose_delta": 20,
+    }
+    assert search_items_by_id[fuzzy_body["food"]["id"]]["stats"] == {
+        "share_count": 1,
+        "average_glucose_delta": 21.0,
+        "max_glucose_delta": 21,
+        "min_glucose_delta": 21,
+    }
     assert search_items[-1]["id"] == fuzzy_body["food"]["id"]
     assert all("created_by_account_id" not in item for item in search_items)
 

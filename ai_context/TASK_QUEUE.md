@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T990: Batch food list stats lookup
+
+Status: done
+
+Summary:
+
+- Changed `/community/foods` to batch aggregate stats for returned food items with one grouped query instead of recalculating stats per food item.
+- Added regression coverage that food search list responses still include correct stats for foods with multiple share records and signed glucose deltas.
+- Extended the mobile/backend navigation verifier to guard the batched food-list stats contract.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search tests/test_community_store_year_review.py::test_food_search_limits_results_to_latest_matching_items` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T989: Show recording seconds on minimal Home
 
 Status: done

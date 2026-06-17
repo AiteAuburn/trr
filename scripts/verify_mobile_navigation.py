@@ -326,6 +326,9 @@ def _verify_food_community_category_contract(content: str) -> None:
         ("food community server calculated glucose delta", "glucose_delta=payload.after_glucose - payload.before_glucose"),
         ("community leaderboard public account id masked", "CommunityLeaderboardEntry(account_id=None, display_name=display_name, score=int(score or 0))"),
         ("community leaderboard opt-in only", "CommunityPublicProfile.leaderboard_opt_in.is_(True)"),
+        ("food community batched list stats helper", "def _food_stats_for_items(db: Session, food_item_ids: list[UUID]) -> dict[UUID, FoodStatsRead]:"),
+        ("food community batched list stats grouping", ".group_by(FoodShare.food_item_id)"),
+        ("food community list uses batched stats", "stats_by_food_id = _food_stats_for_items(db, [item.id for item in items])"),
     ):
         _assert_contains(label, backend_api_content, marker)
     for label, marker in (

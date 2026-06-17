@@ -15,6 +15,34 @@
 
 ## 2026-06-14
 
+### T990 batch food list stats lookup
+
+類型：backend / performance / test / docs / community
+
+檔案：
+
+- `backend/app/api/community.py`
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Changed `/community/foods` to batch aggregate stats for returned food items with one grouped query instead of recalculating stats per food item.
+- Added regression coverage that food search list responses still include correct stats for foods with multiple share records and signed glucose deltas.
+- Extended the mobile/backend navigation verifier to guard the batched food-list stats contract.
+- 未變更 food share creation、points awards、leaderboards、store redemption、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search tests/test_community_store_year_review.py::test_food_search_limits_results_to_latest_matching_items` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If public food search grows beyond simple name matching, add cursor pagination and database indexes before exposing broader discovery modes.
+
 ### T989 show recording seconds on minimal Home
 
 類型：mobile / UX / verifier / docs

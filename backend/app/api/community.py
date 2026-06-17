@@ -89,15 +89,53 @@ def _food_stats(db: Session, food_item_id: UUID) -> FoodStatsRead:
     )
 
 
-def _food_read(db: Session, item: FoodItem) -> FoodItemRead:
+def _empty_food_stats() -> FoodStatsRead:
+    return FoodStatsRead(
+        share_count=0,
+        average_glucose_delta=None,
+        max_glucose_delta=None,
+        min_glucose_delta=None,
+    )
+
+
+def _food_stats_for_items(db: Session, food_item_ids: list[UUID]) -> dict[UUID, FoodStatsRead]:
+    if not food_item_ids:
+        return {}
+    rows = db.execute(
+        select(
+            FoodShare.food_item_id,
+            func.count(FoodShare.id),
+            func.avg(FoodShare.glucose_delta),
+            func.max(FoodShare.glucose_delta),
+            func.min(FoodShare.glucose_delta),
+        )
+        .where(FoodShare.food_item_id.in_(food_item_ids))
+        .group_by(FoodShare.food_item_id)
+    )
+    return {
+        food_item_id: FoodStatsRead(
+            share_count=int(share_count or 0),
+            average_glucose_delta=round(float(average_delta), 1) if average_delta is not None else None,
+            max_glucose_delta=int(max_delta) if max_delta is not None else None,
+            min_glucose_delta=int(min_delta) if min_delta is not None else None,
+        )
+        for food_item_id, share_count, average_delta, max_delta, min_delta in rows
+    }
+
+
+def _food_read_with_stats(item: FoodItem, stats: FoodStatsRead) -> FoodItemRead:
     category = cast(FoodCategory, item.category)
     return FoodItemRead(
         id=item.id,
         name=item.name,
         category=category,
         category_label=FOOD_CATEGORY_LABELS[category],
-        stats=_food_stats(db, item.id),
+        stats=stats,
     )
+
+
+def _food_read(db: Session, item: FoodItem) -> FoodItemRead:
+    return _food_read_with_stats(item, _food_stats(db, item.id))
 
 
 def _food_detail_read(db: Session, item: FoodItem) -> FoodItemDetailRead:
@@ -246,7 +284,9 @@ def list_foods(
             FoodItem.id.desc(),
         ]
     statement = statement.order_by(*order_by_clauses).limit(limit)
-    return [_food_read(db, item) for item in db.scalars(statement)]
+    items = list(db.scalars(statement))
+    stats_by_food_id = _food_stats_for_items(db, [item.id for item in items])
+    return [_food_read_with_stats(item, stats_by_food_id.get(item.id, _empty_food_stats())) for item in items]
 
 
 @router.get("/foods/{food_item_id}", response_model=FoodItemDetailRead)
