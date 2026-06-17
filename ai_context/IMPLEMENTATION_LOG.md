@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T977 cover Community leaderboard result cap
+
+類型：backend / test / docs / community
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that all three Community leaderboard types honor `limit=1`.
+- The test also keeps public leaderboard account identifiers masked in capped responses.
+- 未變更 Community API behavior、leaderboard scoring、points ledger、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_community_leaderboard_ties_are_stably_ordered_by_public_name tests/test_community_store_year_review.py::test_community_leaderboard_limit_caps_entries_and_masks_accounts` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If leaderboard pagination or season windows are added, keep result bounds and account masking covered together.
+
 ### T976 cover bounded Food Community search results
 
 類型：backend / test / docs / community

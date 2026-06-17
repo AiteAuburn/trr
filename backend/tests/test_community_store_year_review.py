@@ -962,6 +962,43 @@ def test_community_leaderboard_ties_are_stably_ordered_by_public_name() -> None:
         assert [entry["display_name"] for entry in matching_entries] == [alpha_display_name, beta_display_name]
 
 
+def test_community_leaderboard_limit_caps_entries_and_masks_accounts() -> None:
+    client = TestClient(app)
+    account_id, _ = create_account_and_profile(client, "community-leaderboard-limit")
+    display_name = f"leaderboard-limit-{uuid4()}"
+
+    settings_response = client.patch(
+        "/community/settings",
+        headers={"X-Account-Id": account_id},
+        json={"display_name": display_name, "leaderboard_opt_in": True},
+    )
+    assert settings_response.status_code == 200
+    for offset in range(2):
+        response = client.post(
+            "/community/foods/shares",
+            headers={"X-Account-Id": account_id},
+            json={
+                "food_name": f"{display_name}-food-{offset}",
+                "category": "vegetables",
+                "eaten_at": (datetime(2026, 1, 6, 12, 0, tzinfo=UTC) + timedelta(minutes=offset)).isoformat(),
+                "before_glucose": 100,
+                "after_glucose": 112,
+            },
+        )
+        assert response.status_code == 201
+
+    for leaderboard_type in ("share_count", "contribution", "food_tester"):
+        response = client.get(
+            f"/community/leaderboards?leaderboard_type={leaderboard_type}&limit=1",
+            headers={"X-Account-Id": account_id},
+        )
+        assert response.status_code == 200
+        entries = response.json()["entries"]
+        assert len(entries) == 1
+        assert entries[0]["account_id"] is None
+        assert entries[0]["score"] >= 1
+
+
 def test_store_redemption_deducts_points_and_reserves_fulfillment_rewards() -> None:
     client = TestClient(app)
     account_id, _ = create_account_and_profile(client, "store-redemption")

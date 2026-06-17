@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T977: Cover Community leaderboard result cap
+
+Status: done
+
+Summary:
+
+- Added backend regression coverage that all three Community leaderboard types honor `limit=1`.
+- The test also keeps public leaderboard account identifiers masked in capped responses.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_community_leaderboard_ties_are_stably_ordered_by_public_name tests/test_community_store_year_review.py::test_community_leaderboard_limit_caps_entries_and_masks_accounts` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T976: Cover bounded Food Community search results
 
 Status: done
