@@ -1831,18 +1831,29 @@ def test_year_review_rejects_unfinished_year_before_snapshot_creation() -> None:
     client = TestClient(app)
     account_id, profile_id = create_account_and_profile(client, "year-review-unfinished-year")
     unfinished_year = datetime.now(UTC).year
-
-    response = client.get(
-        f"/year-reviews/{unfinished_year}?profile_id={profile_id}",
-        headers={"X-Account-Id": account_id},
-    )
-
-    assert response.status_code == 422
-    assert response.json()["detail"] == {
+    expected_detail = {
         "code": "year_review_year_not_completed",
         "message": "Year review can only be generated for completed calendar years.",
         "latest_completed_year": unfinished_year - 1,
     }
+
+    for path, method, json_payload in (
+        (f"/year-reviews/{unfinished_year}?profile_id={profile_id}", "get", None),
+        (f"/year-reviews/{unfinished_year}/share-card?profile_id={profile_id}", "get", None),
+        (f"/year-reviews/{unfinished_year}/share-card/asset?profile_id={profile_id}", "get", None),
+        (
+            f"/year-reviews/{unfinished_year}/share-card/confirm?profile_id={profile_id}",
+            "post",
+            {"privacy_acknowledged": True},
+        ),
+    ):
+        if method == "post":
+            response = client.post(path, headers={"X-Account-Id": account_id}, json=json_payload)
+        else:
+            response = client.get(path, headers={"X-Account-Id": account_id})
+        assert response.status_code == 422
+        assert response.json()["detail"] == expected_detail
+
     with SessionLocal() as db:
         snapshot = db.scalar(
             select(YearReviewSnapshot).where(
@@ -1850,7 +1861,16 @@ def test_year_review_rejects_unfinished_year_before_snapshot_creation() -> None:
                 YearReviewSnapshot.year == unfinished_year,
             )
         )
+        share_packages = list(
+            db.scalars(
+                select(YearReviewSharePackage).where(
+                    YearReviewSharePackage.profile_id == UUID(profile_id),
+                    YearReviewSharePackage.year == unfinished_year,
+                )
+            )
+        )
     assert snapshot is None
+    assert share_packages == []
 
 
 def test_year_review_badge_metrics_include_cumulative_and_streak_achievements() -> None:

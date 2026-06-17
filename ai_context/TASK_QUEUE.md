@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T992: Cover unfinished Year Review share endpoints
+
+Status: done
+
+Summary:
+
+- Extended unfinished-year regression coverage across Year Review summary, share-card, share-card asset, and share-card confirmation endpoints.
+- Confirmed current/future year share paths do not create official snapshots or share packages.
+- Extended the mobile/backend navigation verifier to guard the unfinished-year share endpoint coverage.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_rejects_unfinished_year_before_snapshot_creation` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T991: Reject unfinished Year Review years
 
 Status: done

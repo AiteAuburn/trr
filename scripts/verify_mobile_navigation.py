@@ -18,6 +18,7 @@ COMMUNITY_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "community.py"
 REPORTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "reports.py"
 REPORTING_SERVICE_PATH = REPO_ROOT / "backend" / "app" / "services" / "reporting.py"
 REPORTS_TEST_PATH = REPO_ROOT / "backend" / "tests" / "test_reports.py"
+COMMUNITY_STORE_YEAR_REVIEW_TEST_PATH = REPO_ROOT / "backend" / "tests" / "test_community_store_year_review.py"
 
 EXPECTED_MENU_DESTINATIONS = {
     "today",
@@ -3702,6 +3703,14 @@ def main() -> int:
             ("year review unfinished year message", '"message": "Year review can only be generated for completed calendar years."'),
         ):
             _assert_contains(label, year_reviews_api_content, marker)
+        year_review_tests_content = COMMUNITY_STORE_YEAR_REVIEW_TEST_PATH.read_text(encoding="utf-8")
+        for label, marker in (
+            ("year review unfinished year share-card test path", 'f"/year-reviews/{unfinished_year}/share-card?profile_id={profile_id}"'),
+            ("year review unfinished year asset test path", 'f"/year-reviews/{unfinished_year}/share-card/asset?profile_id={profile_id}"'),
+            ("year review unfinished year confirm test path", 'f"/year-reviews/{unfinished_year}/share-card/confirm?profile_id={profile_id}"'),
+            ("year review unfinished year no share packages assertion", "assert share_packages == []"),
+        ):
+            _assert_contains(label, year_review_tests_content, marker)
         if year_reviews_api_content.count("_validate_completed_review_year(year)") != 4:
             raise AssertionError("Year Review year endpoints must validate completed calendar year before snapshot work.")
         year_review_share_block = _function_block(content, "loadYearReviewShareCard")

@@ -15,6 +15,34 @@
 
 ## 2026-06-14
 
+### T992 cover unfinished Year Review share endpoints
+
+類型：backend / test / verifier / docs / year-review
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extended unfinished-year regression coverage across Year Review summary, share-card, share-card asset, and share-card confirmation endpoints.
+- Confirmed current/future year share paths do not create official snapshots or share packages.
+- Extended the mobile/backend navigation verifier to guard the unfinished-year share endpoint coverage.
+- 未變更 Year Review runtime behavior、年度統計計算、年度分享隱私遮罩、share package result/revoke、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_rejects_unfinished_year_before_snapshot_creation` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If future in-progress yearly previews are added, keep official share package creation limited to completed-year snapshots.
+
 ### T991 reject unfinished Year Review years
 
 類型：backend / validation / test / verifier / docs / year-review
