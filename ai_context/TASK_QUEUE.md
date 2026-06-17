@@ -111,6 +111,26 @@ None.
 
 ## Done
 
+### T1016: Add explicit Analysis custom-range apply action
+
+Status: done
+
+Summary:
+
+- Added a `套用自訂區間` CTA to Analysis custom date controls.
+- The action clears selected chart points, refreshes the bounded `/reports/basic` summary, and reports that no AI/LLM work is triggered.
+- Added verifier coverage for the apply handler, bounded accessibility label, disabled state, and render binding.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1015: Add History calendar month navigation
 
 Status: done

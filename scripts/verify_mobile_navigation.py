@@ -2873,6 +2873,11 @@ def main() -> int:
             content,
             "function updateAnalysisCustomEndInput(value: string)",
         )
+        _assert_contains(
+            "analysis custom apply handler",
+            content,
+            "async function applyAnalysisCustomRange()",
+        )
         for label, marker in (
             ("analysis week range option", '{ id: "week", label: "本週" }'),
             ("analysis month range option", '{ id: "month", label: "本月" }'),
@@ -2885,6 +2890,7 @@ def main() -> int:
             ("analysis custom invalid format status", "自訂日期格式無效；目前改用本月資料。"),
             ("analysis custom invalid order status", "開始日期晚於結束日期；目前改用本月資料。"),
             ("analysis custom valid full-day status", "自訂日期區間已套用，結束日期包含當天完整紀錄。"),
+            ("analysis custom apply status", "已套用自訂日期區間並同步 bounded report；不呼叫 AI 或 LLM。"),
             ("analysis custom range status display", "const analysisCustomRangeStatusDisplayText = analysisCustomRangeStatusCopy("),
             ("analysis selected date bounds", "const analysisSelectedDateBounds = useMemo("),
             ("analysis local records date bounds", "const { start, end } = analysisSelectedDateBounds;\n    return recordsForDisplay.filter((record) => {"),
@@ -2940,6 +2946,7 @@ def main() -> int:
             ("analysis manual accessibility label", 'analysisManualAccessibility: boundDisplayText("從分析頁改用手動新增，不呼叫 AI 或寫入資料", maxDisplayDetailTextLength)'),
             ("analysis today accessibility label", 'analysisReturnTodayAccessibility: boundDisplayText("從分析頁回今日紀錄，不查詢 backend", maxDisplayDetailTextLength)'),
             ("analysis detailed report accessibility label", 'analysisDetailedReportAccessibility: boundDisplayText("查看詳細報告，只在符合條件時查詢 bounded report", maxDisplayDetailTextLength)'),
+            ("analysis custom apply accessibility label", 'analysisApplyCustomRangeAccessibility: boundDisplayText("套用分析自訂日期區間並同步 bounded report，不呼叫 AI", maxDisplayDetailTextLength)'),
             ("report return analysis accessibility label", 'reportReturnAnalysisAccessibility: boundDisplayText("返回基本分析，不重新查詢報告", maxDisplayDetailTextLength)'),
             ("report manual accessibility label", 'reportManualAccessibility: boundDisplayText("從詳細報告改用手動新增，不呼叫 AI 或寫入資料", maxDisplayDetailTextLength)'),
             ("report today accessibility label", 'reportReturnTodayAccessibility: boundDisplayText("從詳細報告回今日紀錄，不重新查詢 backend", maxDisplayDetailTextLength)'),
@@ -2947,6 +2954,9 @@ def main() -> int:
             ("analysis today accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.analysisReturnTodayAccessibility}"),
             ("analysis detailed report accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.analysisDetailedReportAccessibility}"),
             ("analysis detailed report disabled state", "accessibilityState={{ disabled: isReportLoading }}"),
+            ("analysis custom apply accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.analysisApplyCustomRangeAccessibility}"),
+            ("analysis custom apply disabled state", "accessibilityState={{ disabled: isReportLoading }}"),
+            ("analysis custom apply binding", "onPress={applyAnalysisCustomRange}"),
             ("report return analysis accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.reportReturnAnalysisAccessibility}"),
             ("report manual accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.reportManualAccessibility}"),
             ("report today accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.reportReturnTodayAccessibility}"),
@@ -2977,6 +2987,7 @@ def main() -> int:
             ("analysis start date input binding", "onChangeText={updateAnalysisCustomStartInput}"),
             ("analysis end date input binding", "onChangeText={updateAnalysisCustomEndInput}"),
             ("analysis custom range status render", "{analysisCustomRangeStatusDisplayText}"),
+            ("analysis custom apply label render", "{coreFlowDisplayLabels.analysisApplyCustomRange}"),
             ("manual glucose unit selected state", "accessibilityState={{ selected: manualRecordFields.glucoseUnit === option.value }}"),
             ("manual glucose timing selected state", "accessibilityState={{ selected: manualRecordFields.glucoseTiming === option.value }}"),
             ("manual meal selected state", "accessibilityState={{ selected: manualRecordFields.mealType === option.value }}"),

@@ -15,6 +15,38 @@
 
 ## 2026-06-17
 
+### T1016 add explicit Analysis custom-range apply action
+
+類型：mobile / feature / verifier / docs / analysis
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a `套用自訂區間` CTA to the Analysis custom date controls.
+- The action clears selected chart points, refreshes the bounded `/reports/basic` summary, and shows a bounded no-AI/LLM status.
+- Added verifier coverage for the custom apply handler, accessibility label, disabled state, and render binding.
+- 未變更 backend report schema、record storage、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If product wants manual-only report syncing later, remove the existing auto-sync effect after preserving this explicit apply action.
+
 ### T1015 add History calendar month navigation
 
 類型：mobile / feature / verifier / docs / history

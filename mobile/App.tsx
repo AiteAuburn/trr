@@ -4980,6 +4980,10 @@ function analysisReportButtonLabel(isLoading: boolean) {
   return boundDisplayText(isLoading ? "報告載入中..." : "查看詳細報告", maxDisplayTextLength);
 }
 
+function analysisCustomApplyStatusMessage() {
+  return boundUiMessage("已套用自訂日期區間並同步 bounded report；不呼叫 AI 或 LLM。");
+}
+
 function analysisManualEntryStatusMessage() {
   return boundUiMessage("已從基本分析進入手動新增；此路徑不呼叫 AI、LLM 或 STT。");
 }
@@ -5095,6 +5099,8 @@ function coreFlowSectionLabels() {
     historyLoadMore: boundDisplayText("載入更多", maxDisplayTextLength),
     historyLoadMoreAccessibility: boundDisplayText("使用 cursor 載入更早紀錄，不呼叫 AI 或修改資料", maxDisplayDetailTextLength),
     analysisReportStatus: boundDisplayText("分析統計同步", maxDisplayTextLength),
+    analysisApplyCustomRange: boundDisplayText("套用自訂區間", maxDisplayTextLength),
+    analysisApplyCustomRangeAccessibility: boundDisplayText("套用分析自訂日期區間並同步 bounded report，不呼叫 AI", maxDisplayDetailTextLength),
     mainInfo: boundDisplayText("主要資訊", maxDisplayTextLength),
     supplementalInfo: boundDisplayText("補充資訊", maxDisplayTextLength),
     source: boundDisplayText("來源", maxDisplayTextLength),
@@ -7562,6 +7568,15 @@ export default function App() {
   function updateAnalysisCustomEndInput(value: string) {
     setAnalysisCustomEnd(boundDateInputText(value));
     setSelectedAnalysisPointIndex(null);
+  }
+
+  async function applyAnalysisCustomRange() {
+    if (isReportLoading) {
+      return;
+    }
+    setSelectedAnalysisPointIndex(null);
+    setStatus(analysisCustomApplyStatusMessage());
+    await loadBasicReportForCurrentRange("analysis");
   }
 
   function toggleAnalysisPoint(index: number) {
@@ -13803,6 +13818,16 @@ export default function App() {
                   </View>
                 </View>
                 <Text style={styles.evidence}>{analysisCustomRangeStatusDisplayText}</Text>
+                <Pressable
+                  accessibilityLabel={coreFlowDisplayLabels.analysisApplyCustomRangeAccessibility}
+                  accessibilityRole="button"
+                  accessibilityState={{ disabled: isReportLoading }}
+                  style={[styles.secondaryButton, isReportLoading ? styles.buttonDisabled : null]}
+                  disabled={isReportLoading}
+                  onPress={applyAnalysisCustomRange}
+                >
+                  <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.analysisApplyCustomRange}</Text>
+                </Pressable>
               </>
             ) : null}
             {analysisPreviewMode ? (
