@@ -15,6 +15,36 @@
 
 ## 2026-06-17
 
+### T996 add community leaderboard lookup indexes
+
+類型：backend / performance / migration / verifier / docs / community
+
+檔案：
+
+- `backend/app/models/community.py`
+- `backend/alembic/versions/20260430_0026_community_leaderboard_indexes.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added ORM and Alembic composite indexes for the community share-count, food-tester, contribution, and opt-in profile leaderboard query paths.
+- This keeps Phase 2 social ranking features aligned with the planned large shared food blood-sugar database.
+- Extended the mobile/backend navigation verifier to guard the leaderboard index contract.
+- 未變更 community API response shape、leaderboard privacy masking、opt-in settings、food share creation、points awards、store redemption、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_share_creates_food_stats_points_and_leaderboards tests/test_community_store_year_review.py::test_community_leaderboard_ties_are_stably_ordered_by_public_name tests/test_community_store_year_review.py::test_community_leaderboard_limit_caps_entries_and_masks_accounts` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/alembic/versions/20260430_0026_community_leaderboard_indexes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Revisit leaderboard materialized summaries only if production query plans show aggregation cost after representative community data exists.
+
 ### T995 align food share latest index
 
 類型：backend / performance / migration / verifier / docs / community

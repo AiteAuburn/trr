@@ -56,6 +56,7 @@ class FoodShare(Base):
 
     __table_args__ = (
         Index("ix_food_shares_food_item_eaten_created_id", "food_item_id", "eaten_at", "created_at", "id"),
+        Index("ix_food_shares_account_food_item", "account_id", "food_item_id"),
     )
 
 
@@ -74,6 +75,10 @@ class CommunityPointLedger(Base):
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
+    __table_args__ = (
+        Index("ix_community_point_ledger_account_delta", "account_id", "delta"),
+    )
+
 
 class CommunityPublicProfile(Base):
     __tablename__ = "community_public_profiles"
@@ -89,6 +94,10 @@ class CommunityPublicProfile(Base):
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
+    )
+
+    __table_args__ = (
+        Index("ix_community_public_profiles_opt_in_display", "leaderboard_opt_in", "display_name", "account_id"),
     )
 
 

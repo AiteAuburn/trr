@@ -111,6 +111,23 @@ None.
 
 ## Done
 
+### T996: Add community leaderboard lookup indexes
+
+Status: done
+
+Summary:
+
+- Added ORM and Alembic composite indexes for the community share-count, food-tester, contribution, and opt-in profile leaderboard query paths.
+- This keeps Phase 2 social ranking features aligned with the planned large shared food blood-sugar database.
+- Extended the mobile/backend navigation verifier to guard the leaderboard index contract.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_share_creates_food_stats_points_and_leaderboards tests/test_community_store_year_review.py::test_community_leaderboard_ties_are_stably_ordered_by_public_name tests/test_community_store_year_review.py::test_community_leaderboard_limit_caps_entries_and_masks_accounts` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/alembic/versions/20260430_0026_community_leaderboard_indexes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T995: Align food share latest index
 
 Status: done

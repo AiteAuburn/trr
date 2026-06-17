@@ -22,6 +22,9 @@ COMMUNITY_FOOD_INDEX_MIGRATION_PATH = (
 COMMUNITY_FOOD_LATEST_INDEX_MIGRATION_PATH = (
     REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0025_community_food_share_latest_index.py"
 )
+COMMUNITY_LEADERBOARD_INDEX_MIGRATION_PATH = (
+    REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0026_community_leaderboard_indexes.py"
+)
 REPORTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "reports.py"
 REPORTING_SERVICE_PATH = REPO_ROOT / "backend" / "app" / "services" / "reporting.py"
 REPORTS_TEST_PATH = REPO_ROOT / "backend" / "tests" / "test_reports.py"
@@ -311,6 +314,7 @@ def _verify_food_community_category_contract(content: str) -> None:
     backend_model_content = COMMUNITY_MODEL_PATH.read_text(encoding="utf-8")
     backend_index_migration_content = COMMUNITY_FOOD_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
     backend_latest_index_migration_content = COMMUNITY_FOOD_LATEST_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
+    backend_leaderboard_index_migration_content = COMMUNITY_LEADERBOARD_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
     _assert_contains(
         "food community mobile fallback categories",
         content,
@@ -351,6 +355,18 @@ def _verify_food_community_category_contract(content: str) -> None:
             "food share latest detail ORM index",
             'Index("ix_food_shares_food_item_eaten_created_id", "food_item_id", "eaten_at", "created_at", "id")',
         ),
+        (
+            "food share leaderboard ORM index",
+            'Index("ix_food_shares_account_food_item", "account_id", "food_item_id")',
+        ),
+        (
+            "community point leaderboard ORM index",
+            'Index("ix_community_point_ledger_account_delta", "account_id", "delta")',
+        ),
+        (
+            "community profile leaderboard ORM index",
+            'Index("ix_community_public_profiles_opt_in_display", "leaderboard_opt_in", "display_name", "account_id")',
+        ),
     ):
         _assert_contains(label, backend_model_content, marker)
     for label, marker in (
@@ -363,6 +379,15 @@ def _verify_food_community_category_contract(content: str) -> None:
         ("food share latest detail migration columns", '["food_item_id", "eaten_at", "created_at", "id"]'),
     ):
         _assert_contains(label, backend_latest_index_migration_content, marker)
+    for label, marker in (
+        ("food share leaderboard migration index", '"ix_food_shares_account_food_item"'),
+        ("food share leaderboard migration columns", '["account_id", "food_item_id"]'),
+        ("community point leaderboard migration index", '"ix_community_point_ledger_account_delta"'),
+        ("community point leaderboard migration columns", '["account_id", "delta"]'),
+        ("community profile leaderboard migration index", '"ix_community_public_profiles_opt_in_display"'),
+        ("community profile leaderboard migration columns", '["leaderboard_opt_in", "display_name", "account_id"]'),
+    ):
+        _assert_contains(label, backend_leaderboard_index_migration_content, marker)
     for label, marker in (
         ("food community API average delta signed clamp", "averageRise: clampNumber(Math.round(stats.average_glucose_delta ?? 0), -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
         ("food community API max delta signed clamp", "maximumRise: clampNumber(stats.max_glucose_delta ?? 0, -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
