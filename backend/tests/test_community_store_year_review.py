@@ -868,6 +868,54 @@ def test_food_detail_limits_individual_share_records_to_latest_50() -> None:
     assert set(created_share_ids[:5]).isdisjoint(returned_share_ids)
 
 
+def test_food_search_limits_results_to_latest_matching_items() -> None:
+    client = TestClient(app)
+    account_id, _ = create_account_and_profile(client, "community-food-search-limit")
+    food_prefix = f"large-db-search-{uuid4().hex}"
+    created_food_ids: list[str] = []
+
+    for offset in range(5):
+        response = client.post(
+            "/community/foods/shares",
+            headers={"X-Account-Id": account_id},
+            json={
+                "food_name": f"{food_prefix}-{offset}",
+                "category": "fruit",
+                "eaten_at": (
+                    datetime(2026, 2, 2, 8, 0, tzinfo=UTC) + timedelta(minutes=offset)
+                ).isoformat(),
+                "before_glucose": 100,
+                "after_glucose": 108,
+            },
+        )
+        assert response.status_code == 201
+        created_food_ids.append(response.json()["food"]["id"])
+
+    base_created_at = datetime(2026, 2, 3, 8, 0, tzinfo=UTC)
+    with SessionLocal() as db:
+        food_items = {
+            str(food_item.id): food_item
+            for food_item in db.scalars(
+                select(FoodItem).where(FoodItem.id.in_([UUID(value) for value in created_food_ids]))
+            )
+        }
+        for offset, food_id in enumerate(created_food_ids):
+            food_items[food_id].created_at = base_created_at + timedelta(minutes=offset)
+        db.commit()
+
+    search_response = client.get(
+        f"/community/foods?query={food_prefix}&limit=3",
+        headers={"X-Account-Id": account_id},
+    )
+    assert search_response.status_code == 200
+    search_items = search_response.json()
+    assert len(search_items) == 3
+    assert [item["id"] for item in search_items] == list(reversed(created_food_ids[-3:]))
+    assert all(item["category"] == "fruit" for item in search_items)
+    assert all(item["stats"]["share_count"] == 1 for item in search_items)
+    assert set(created_food_ids[:2]).isdisjoint({item["id"] for item in search_items})
+
+
 def test_community_leaderboard_ties_are_stably_ordered_by_public_name() -> None:
     client = TestClient(app)
     run_id = uuid4()

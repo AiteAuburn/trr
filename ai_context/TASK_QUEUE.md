@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T976: Cover bounded Food Community search results
+
+Status: done
+
+Summary:
+
+- Added backend regression coverage that Food Community search honors `limit` and returns the newest matching food items first.
+- This keeps large shared food database search results bounded and predictable.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_search_limits_results_to_latest_matching_items tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T975: Cover Year Review soft-deleted record exclusion
 
 Status: done

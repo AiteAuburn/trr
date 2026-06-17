@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T976 cover bounded Food Community search results
+
+類型：backend / test / docs / community
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that Food Community search honors `limit` and returns newest matching food items first.
+- This keeps large shared food database search results bounded and predictable.
+- 未變更 Community API behavior、food stats calculation、points ledger、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_search_limits_results_to_latest_matching_items tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If food search pagination or relevance ranking expands, keep result bounds and newest-first tie behavior covered.
+
 ### T975 cover Year Review soft-deleted record exclusion
 
 類型：backend / test / docs / year-review
