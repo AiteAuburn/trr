@@ -6595,9 +6595,19 @@ export default function App() {
   ];
   const foodCommunityShareFieldRows = foodCommunityShareFieldTuples.map(detailPairDisplayItem);
   const foodCommunityPointTuples: Array<readonly [string, string]> = [
-    ["分享資料", "+10 點"],
-    ["完整前後血糖", "+20 點"],
-    ["通過審核", "可進入貢獻度排行"],
+    ["本次分享", "+10 點"],
+    [
+      "點數餘額",
+      storePointsBalance
+        ? `${clampNumber(storePointsBalance.balance, 0, maxMobileCountValue)} 點`
+        : "尚未同步"
+    ],
+    [
+      "累積獲得",
+      storePointsBalance
+        ? `${clampNumber(storePointsBalance.lifetime_earned, 0, maxMobileCountValue)} 點`
+        : "分享後同步"
+    ],
     ["點數用途", "優惠券、商品折扣、特殊徽章、會員福利"]
   ];
   const foodCommunityPointRows = foodCommunityPointTuples.map(detailPairDisplayItem);
@@ -11373,6 +11383,7 @@ export default function App() {
       void loadCommunityPublicSettings();
       void loadFoodCommunityCategories();
       void loadCommunityFoods();
+      void loadStoreCatalogAndPoints();
     }
   }, [currentScreen, foodCommunityCategory, foodCommunitySearchText, account?.id, protectedAccountBackendReady]);
 

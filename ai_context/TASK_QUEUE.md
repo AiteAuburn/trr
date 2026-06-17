@@ -111,6 +111,26 @@ None.
 
 ## Done
 
+### T1017: Surface community point balance on food sharing page
+
+Status: done
+
+Summary:
+
+- Updated the Food Community point section to show current point balance and lifetime earned points from the shared store point ledger.
+- Synced store catalog/points when opening the Community screen so users do not need to visit Store first to see point balance.
+- Added verifier coverage for the community-to-store point bridge.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1016: Add explicit Analysis custom-range apply action
 
 Status: done

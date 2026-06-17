@@ -15,6 +15,38 @@
 
 ## 2026-06-17
 
+### T1017 surface community point balance on food sharing page
+
+類型：mobile / feature / verifier / docs / community / store
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated the Food Community point section to show current point balance and lifetime earned points from the shared store point ledger.
+- Synced store catalog, points, and redemptions when opening the Community screen so the food-sharing page reflects the point-store bridge without requiring a Store visit first.
+- Added verifier coverage for the community-to-store point bridge.
+- 未變更 backend community/store schema、payment/order behavior、record storage、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If community and store traffic grows, split point balance into a lighter shared fetch instead of syncing full store catalog from Community.
+
 ### T1016 add explicit Analysis custom-range apply action
 
 類型：mobile / feature / verifier / docs / analysis
