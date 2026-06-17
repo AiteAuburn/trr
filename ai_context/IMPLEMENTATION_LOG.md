@@ -15,6 +15,39 @@
 
 ## 2026-06-17
 
+### T1019 add DeepSeek-backed Year Review AI summary
+
+類型：backend / feature / test / docs / year-review / deepseek
+
+檔案：
+
+- `backend/app/services/year_review_snapshots.py`
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added optional DeepSeek JSON-mode generation for Year Review `important_observation` and `encouragement`.
+- The DeepSeek request only sends annual aggregate stats and health outcomes, not raw records, food items, timestamps, profile ids, transcripts, raw prompts, or raw model output.
+- Preserved deterministic fallback when DeepSeek URL/key are not configured, HTTP fails, the response is oversized, or JSON/schema content is invalid.
+- Added regression coverage and verifier markers for the bounded aggregate-only DeepSeek Year Review path.
+- 未變更 Year Review snapshot/share package schema、CronJob schedule、mobile external share flow、STT、record storage、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk python3 -m py_compile backend/app/services/year_review_snapshots.py backend/tests/test_community_store_year_review.py scripts/verify_mobile_navigation.py` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records tests/test_community_store_year_review.py::test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured tests/test_community_store_year_review.py::test_year_review_scheduler_defaults_to_previous_calendar_year` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If product wants richer annual prose, extend only the aggregate payload contract first and keep raw record exclusion tests in place.
+
 ### T1018 align Year Review copy with backend snapshot flow
 
 類型：mobile / docs / verifier / year-review

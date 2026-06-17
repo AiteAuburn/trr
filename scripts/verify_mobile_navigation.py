@@ -280,6 +280,12 @@ def _verify_achievement_contract(content: str) -> None:
         ("year review achieved badge source", "achieved_badges, highest_badge = achieved_badge_summary("),
         ("year review glucose bool guard", "if isinstance(value, bool):"),
         ("year review glucose numeric string parsing", "return float(value.strip())"),
+        ("year review DeepSeek summary helper", "def deepseek_year_review_ai_summary("),
+        ("year review DeepSeek system prompt", "YEAR_REVIEW_AI_SYSTEM_PROMPT = ("),
+        ("year review DeepSeek aggregate payload", '"annual_stats": [metric.model_dump(mode="json") for metric in annual_stats]'),
+        ("year review DeepSeek health outcomes payload", '"health_outcomes": [metric.model_dump(mode="json") for metric in health_outcomes]'),
+        ("year review DeepSeek JSON response format", '"response_format": {"type": "json_object"}'),
+        ("year review deterministic fallback helper", "def deterministic_year_review_ai_summary("),
     ):
         _assert_contains(label, year_review_content, marker)
 
@@ -332,6 +338,11 @@ def _verify_achievement_contract(content: str) -> None:
         "year review persisted unlock regression",
         tests_content,
         "test_year_review_includes_persisted_achievement_unlocks_after_active_progress_drops",
+    )
+    _assert_contains(
+        "year review DeepSeek bounded summary regression",
+        tests_content,
+        "test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured",
     )
 
 

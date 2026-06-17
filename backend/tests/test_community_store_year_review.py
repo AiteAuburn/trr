@@ -1,3 +1,4 @@
+import json
 from copy import deepcopy
 from datetime import UTC, datetime, timedelta
 from uuid import UUID, uuid4
@@ -6,6 +7,7 @@ from fastapi.testclient import TestClient
 from pytest import raises
 from sqlalchemy import select
 
+from app.core.config import get_settings
 from app.db.session import SessionLocal
 from app.jobs.generate_year_review_snapshots import default_target_year
 from app.main import app
@@ -1916,6 +1918,121 @@ def test_year_review_summarizes_previous_year_records() -> None:
     )
     assert revoked_update_response.status_code == 409
     assert revoked_update_response.json()["detail"]["code"] == "share_package_revoked"
+
+
+def test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured(monkeypatch) -> None:
+    from app.services import year_review_snapshots
+
+    captured_requests: list[dict[str, object]] = []
+
+    class FakeResponse:
+        def __enter__(self) -> "FakeResponse":
+            return self
+
+        def __exit__(self, *args: object) -> bool:
+            return False
+
+        def raise_for_status(self) -> None:
+            return None
+
+        def iter_text(self) -> list[str]:
+            return [
+                json.dumps(
+                    {
+                        "choices": [
+                            {
+                                "message": {
+                                    "content": json.dumps(
+                                        {
+                                            "important_observation": "DeepSeek 年度觀察：記錄天數穩定，血糖紀錄可形成年度趨勢。",
+                                            "encouragement": "DeepSeek 年度鼓勵：持續用簡短紀錄累積下一年度回顧。",
+                                        },
+                                        ensure_ascii=False,
+                                    )
+                                }
+                            }
+                        ]
+                    },
+                    ensure_ascii=False,
+                )
+            ]
+
+    class FakeClient:
+        def __init__(self, *, timeout: float) -> None:
+            assert timeout == get_settings().local_llm_timeout_seconds
+
+        def __enter__(self) -> "FakeClient":
+            return self
+
+        def __exit__(self, *args: object) -> bool:
+            return False
+
+        def stream(self, method: str, url: str, **kwargs: object) -> FakeResponse:
+            assert method == "POST"
+            assert url == "https://api.deepseek.com/v1/chat/completions"
+            captured_requests.append(kwargs)
+            return FakeResponse()
+
+    monkeypatch.setattr(
+        year_review_snapshots,
+        "get_settings",
+        lambda: get_settings().model_copy(
+            update={
+                "deepseek_parser_url": "https://api.deepseek.com/v1/chat/completions",
+                "deepseek_api_key": "sk-year-review-test",
+                "deepseek_model_id": "deepseek-chat",
+            }
+        ),
+    )
+    monkeypatch.setattr(year_review_snapshots.httpx, "Client", FakeClient)
+
+    client = TestClient(app)
+    account_id, profile_id = create_account_and_profile(client, "year-review-deepseek")
+    occurred_at = datetime(2025, 3, 2, 8, 0, tzinfo=UTC)
+    create_record(
+        client,
+        account_id,
+        profile_id,
+        "glucose",
+        occurred_at,
+        {"value": 132, "unit": "mg/dL", "meal_timing": "before_meal"},
+    )
+    create_record(
+        client,
+        account_id,
+        profile_id,
+        "meal",
+        occurred_at + timedelta(hours=1),
+        {"food_items": [{"name": "測試飯糰"}], "meal_type": "breakfast"},
+    )
+
+    response = client.get(
+        f"/year-reviews/2025?profile_id={profile_id}",
+        headers={"X-Account-Id": account_id},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    ai_summary_by_kind = {item["kind"]: item["text"] for item in body["ai_summary"]}
+    assert ai_summary_by_kind == {
+        "important_observation": "DeepSeek 年度觀察：記錄天數穩定，血糖紀錄可形成年度趨勢。",
+        "encouragement": "DeepSeek 年度鼓勵：持續用簡短紀錄累積下一年度回顧。",
+    }
+    assert len(captured_requests) == 1
+    request_body = captured_requests[0]["json"]
+    assert isinstance(request_body, dict)
+    assert request_body["model"] == "deepseek-chat"
+    assert request_body["response_format"] == {"type": "json_object"}
+    messages = request_body["messages"]
+    assert isinstance(messages, list)
+    assert "不可提供診療建議" in messages[0]["content"]
+    aggregate_prompt = messages[1]["content"]
+    assert "annual_stats" in aggregate_prompt
+    assert "health_outcomes" in aggregate_prompt
+    assert "測試飯糰" not in aggregate_prompt
+    assert "food_items" not in aggregate_prompt
+    assert "occurred_at" not in aggregate_prompt
+    assert "profile_id" not in aggregate_prompt
 
 
 def test_year_review_rejects_unfinished_year_before_snapshot_creation() -> None:

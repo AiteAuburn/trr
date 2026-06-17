@@ -1,12 +1,15 @@
+import json
 from datetime import UTC, date, datetime
 from hashlib import sha256
 from html import escape
 from typing import Literal, cast
 from uuid import UUID
 
+import httpx
 from sqlalchemy import exists, select
 from sqlalchemy.orm import Session
 
+from app.core.config import get_settings
 from app.models import AchievementUnlock, Record, UserProfile, YearReviewSharePackage, YearReviewSnapshot
 from app.schemas.year_review import (
     YearReviewMetric,
@@ -20,7 +23,15 @@ from app.services.achievement_catalog import ACHIEVEMENT_CATEGORY_DEFINITIONS, a
 from app.services.audit import write_audit_event
 
 YEAR_REVIEW_GENERATION_BATCH_SIZE = 500
+YEAR_REVIEW_AI_RESPONSE_CHAR_BUDGET = 4000
+YEAR_REVIEW_AI_SUMMARY_TEXT_MAX_LENGTH = 240
 YearReviewSharePackageStatus = Literal["confirmed", "opened", "dismissed", "revoked"]
+YEAR_REVIEW_AI_SYSTEM_PROMPT = (
+    "你是糖錄錄年度回顧摘要助手。只根據使用者提供的年度聚合統計撰寫繁體中文回顧，"
+    "不可要求更多資料、不可編造、不可提供診療建議或療效宣稱。"
+    "只輸出 JSON object，欄位必須是 important_observation 與 encouragement，"
+    "每個欄位都要是 120 字以內的字串。"
+)
 
 
 def latest_completed_year(now: datetime | None = None) -> int:
@@ -233,6 +244,123 @@ def create_year_review_share_package(snapshot: YearReviewSnapshot, db: Session) 
     return share_package
 
 
+def deterministic_year_review_ai_summary(
+    *,
+    year: int,
+    record_day_count: int,
+    glucose_count: int,
+    average_glucose: float,
+    has_records: bool,
+) -> tuple[str, str]:
+    observation = (
+        f"{year} 年共記錄 {record_day_count} 天，血糖記錄 {glucose_count} 次，"
+        f"年平均血糖 {average_glucose} mg/dL。"
+    )
+    encouragement = (
+        "你已建立可回顧的年度健康資料，持續記錄會讓分析更穩定。"
+        if has_records
+        else "今年尚無可分析紀錄，開始記錄後年度回顧會自動累積成果。"
+    )
+    return observation, encouragement
+
+
+def _bounded_year_review_ai_text(value: object) -> str:
+    if not isinstance(value, str):
+        return ""
+    return value.strip()[:YEAR_REVIEW_AI_SUMMARY_TEXT_MAX_LENGTH]
+
+
+def _read_bounded_year_review_ai_response_text(
+    *,
+    client: httpx.Client,
+    parser_url: str,
+    body: dict[str, object],
+    headers: dict[str, str],
+) -> str:
+    chunks: list[str] = []
+    total_chars = 0
+    with client.stream("POST", parser_url, json=body, headers=headers) as response:
+        response.raise_for_status()
+        for chunk in response.iter_text():
+            if not chunk:
+                continue
+            total_chars += len(chunk)
+            if total_chars > YEAR_REVIEW_AI_RESPONSE_CHAR_BUDGET:
+                raise ValueError("year_review_ai_response_too_large")
+            chunks.append(chunk)
+    return "".join(chunks)
+
+
+def _extract_openai_compatible_message_content(payload: object) -> str:
+    if not isinstance(payload, dict):
+        return ""
+    choices = payload.get("choices")
+    if not isinstance(choices, list) or not choices:
+        return ""
+    first_choice = choices[0]
+    if not isinstance(first_choice, dict):
+        return ""
+    message = first_choice.get("message")
+    if not isinstance(message, dict):
+        return ""
+    content = message.get("content")
+    return content if isinstance(content, str) else ""
+
+
+def deepseek_year_review_ai_summary(
+    *,
+    year: int,
+    annual_stats: list[YearReviewMetric],
+    health_outcomes: list[YearReviewMetric],
+) -> tuple[str, str] | None:
+    settings = get_settings()
+    if not settings.deepseek_parser_url or not settings.deepseek_api_key:
+        return None
+
+    aggregate_payload = {
+        "year": year,
+        "annual_stats": [metric.model_dump(mode="json") for metric in annual_stats],
+        "health_outcomes": [metric.model_dump(mode="json") for metric in health_outcomes],
+        "instructions": (
+            "請整理年度重要觀察與年度鼓勵。只能使用上述聚合統計；不要輸出診斷、治療建議、"
+            "raw records、個人識別資訊或額外欄位。"
+        ),
+    }
+    body = {
+        "model": settings.deepseek_model_id,
+        "messages": [
+            {"role": "system", "content": YEAR_REVIEW_AI_SYSTEM_PROMPT},
+            {"role": "user", "content": json.dumps(aggregate_payload, ensure_ascii=False)},
+        ],
+        "temperature": 0,
+        "max_tokens": min(settings.local_llm_max_tokens, 240),
+        "response_format": {"type": "json_object"},
+        "stream": False,
+    }
+    headers = {"Authorization": f"Bearer {settings.deepseek_api_key}"}
+    try:
+        with httpx.Client(timeout=settings.local_llm_timeout_seconds) as client:
+            response_text = _read_bounded_year_review_ai_response_text(
+                client=client,
+                parser_url=settings.deepseek_parser_url,
+                body=body,
+                headers=headers,
+            )
+        response_payload = json.loads(response_text)
+        content = _extract_openai_compatible_message_content(response_payload)
+        summary_payload = json.loads(content)
+    except (httpx.HTTPError, json.JSONDecodeError, ValueError):
+        return None
+
+    if not isinstance(summary_payload, dict):
+        return None
+    observation = _bounded_year_review_ai_text(summary_payload.get("important_observation"))
+    encouragement = _bounded_year_review_ai_text(summary_payload.get("encouragement"))
+    if not observation or not encouragement:
+        return None
+    return observation, encouragement
+
+
 def build_year_review_summary(year: int, profile_id: UUID, db: Session) -> dict[str, object]:
     start = datetime(year, 1, 1, tzinfo=UTC)
     end = datetime(year + 1, 1, 1, tzinfo=UTC)
@@ -283,34 +411,38 @@ def build_year_review_summary(year: int, profile_id: UUID, db: Session) -> dict[
         persisted_unlocks,
     )
 
-    observation = (
-        f"{year} 年共記錄 {len(record_days)} 天，血糖記錄 {len(glucose_records)} 次，"
-        f"年平均血糖 {average_glucose} mg/dL。"
-    )
-    encouragement = (
-        "你已建立可回顧的年度健康資料，持續記錄會讓分析更穩定。"
-        if records
-        else "今年尚無可分析紀錄，開始記錄後年度回顧會自動累積成果。"
+    annual_stats = [
+        YearReviewMetric(key="record_days", label="本年度總記錄天數", value=len(record_days)),
+        YearReviewMetric(key="glucose_count", label="本年度血糖記錄次數", value=len(glucose_records)),
+        YearReviewMetric(key="meal_count", label="本年度飲食記錄次數", value=meal_count),
+        YearReviewMetric(key="exercise_count", label="本年度運動記錄次數", value=exercise_count),
+        YearReviewMetric(key="longest_streak_days", label="最長連續記錄天數", value=longest_streak_days),
+        YearReviewMetric(key="achieved_badges", label="達成徽章數量", value=achieved_badges),
+        YearReviewMetric(key="highest_badge_level", label="解鎖最高等級徽章", value=highest_badge),
+    ]
+    health_outcomes = [
+        YearReviewMetric(key="average_glucose", label="年平均血糖", value=average_glucose),
+        YearReviewMetric(key="highest_glucose", label="年度最高血糖", value=highest_glucose),
+        YearReviewMetric(key="lowest_glucose", label="年度最低血糖", value=lowest_glucose),
+    ]
+    observation, encouragement = deepseek_year_review_ai_summary(
+        year=year,
+        annual_stats=annual_stats,
+        health_outcomes=health_outcomes,
+    ) or deterministic_year_review_ai_summary(
+        year=year,
+        record_day_count=len(record_days),
+        glucose_count=len(glucose_records),
+        average_glucose=average_glucose,
+        has_records=bool(records),
     )
     review = YearReviewRead(
         year=year,
         generated_for_previous_year=True,
         generated_at=None,
         source="generated",
-        annual_stats=[
-            YearReviewMetric(key="record_days", label="本年度總記錄天數", value=len(record_days)),
-            YearReviewMetric(key="glucose_count", label="本年度血糖記錄次數", value=len(glucose_records)),
-            YearReviewMetric(key="meal_count", label="本年度飲食記錄次數", value=meal_count),
-            YearReviewMetric(key="exercise_count", label="本年度運動記錄次數", value=exercise_count),
-            YearReviewMetric(key="longest_streak_days", label="最長連續記錄天數", value=longest_streak_days),
-            YearReviewMetric(key="achieved_badges", label="達成徽章數量", value=achieved_badges),
-            YearReviewMetric(key="highest_badge_level", label="解鎖最高等級徽章", value=highest_badge),
-        ],
-        health_outcomes=[
-            YearReviewMetric(key="average_glucose", label="年平均血糖", value=average_glucose),
-            YearReviewMetric(key="highest_glucose", label="年度最高血糖", value=highest_glucose),
-            YearReviewMetric(key="lowest_glucose", label="年度最低血糖", value=lowest_glucose),
-        ],
+        annual_stats=annual_stats,
+        health_outcomes=health_outcomes,
         ai_summary=[
             YearReviewObservation(kind="important_observation", text=observation),
             YearReviewObservation(kind="encouragement", text=encouragement),

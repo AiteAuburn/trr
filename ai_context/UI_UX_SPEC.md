@@ -1275,7 +1275,8 @@ Dev-only visual smoke route jump：
 
 - 年度回顧一般操作路徑已接 backend snapshot、privacy-masked share package 與原生分享面板；離線 fallback 仍可用已載入紀錄即時計算前一年度回顧。
 - Mobile fallback 不呼叫 AI、不寫入 snapshot；backend-ready 一般操作路徑可同步保存 snapshot、準備 privacy-masked share package，並開啟原生分享面板分享隱私遮罩文字。年度回顧文案不可再宣稱年度回顧仍是預留、分享圖片、年度素材或隱私遮罩都尚未產生。
-- Backend 已有 `/year-reviews/{year}` snapshot contract，可從正式 profile records 產生並保存年度統計、年度血糖成果與 bounded AI-style 年度觀察；同一 profile/year 會回傳已保存 snapshot，不因後續紀錄變動自動改寫。Mobile 一般操作路徑會嘗試同步此 API，visual-smoke route 必須維持本機 demo 且不呼叫 backend。
+- Backend 已有 `/year-reviews/{year}` snapshot contract，可從正式 profile records 產生並保存年度統計、年度血糖成果與 bounded AI 年度觀察；同一 profile/year 會回傳已保存 snapshot，不因後續紀錄變動自動改寫。Mobile 一般操作路徑會嘗試同步此 API，visual-smoke route 必須維持本機 demo 且不呼叫 backend。
+- 年度 AI 觀察在 `DEEPSEEK_PARSER_URL` 與 `DEEPSEEK_API_KEY` 設定齊全時可呼叫 DeepSeek JSON mode；request 只能包含年度 `annual_stats`、`health_outcomes` 與固定 instructions，不可傳 raw records、food item、occurred_at、profile id、raw transcript、raw prompt 或 raw model output。DeepSeek 未設定、HTTP 失敗、回應過大或 JSON/schema 無效時必須回 deterministic fallback，不可阻斷 snapshot 產生。
 - Backend 已有 `/year-reviews/{year}/share-card` contract，可從 snapshot 產生 privacy-masked public summary card payload；預設只含記錄天數、最長連續、達成徽章與最高級距等低敏摘要，不包含平均/最高/最低血糖數值，且 `external_share_enabled=false`。
 - Backend 已有 `/year-reviews/{year}/share-card/asset` contract，可產生 privacy-masked SVG share-card asset、mime type、filename、alt text 與 checksum；mobile 只可顯示 bounded asset metadata，不可把 raw SVG 直接放入狀態訊息或外部分享。
 - Backend 已有 `/year-reviews/{year}/share-card/confirm` contract，必須收到 `privacy_acknowledged=true` 才回傳 share package；未確認隱私遮罩必須 fail-closed。Share package 可標示 `external_share_enabled=true`，mobile 可用 React Native `Share.share` 開啟原生分享面板，但分享內容只可使用 privacy-masked `share_text`，不可分享 raw SVG、血糖數值或 snapshot payload。
