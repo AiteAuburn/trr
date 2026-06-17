@@ -2629,6 +2629,14 @@ def main() -> int:
             ("history detail mode display options", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModes.map(historyDetailModeDisplayItem), [])"),
             ("history detail mode press handler", "function pressHistoryDetailModeOption(item: ReturnType<typeof historyDetailModeDisplayItem>)"),
             ("history detail mode binding", "onPress={() => pressHistoryDetailModeOption(item)}"),
+            ("history cursor cache limit", "const maxMobileRecordCacheLimit = 500;"),
+            ("history record cursor created_at field", "created_at: string;"),
+            ("history cursor merge helper", "function mergeRecordsByCursorOrder(current: RecordItem[], incoming: RecordItem[])"),
+            ("history cursor before query", "before: cursorRecord.occurred_at,"),
+            ("history cursor created_at query", "before_created_at: cursorRecord.created_at"),
+            ("history load more handler", "async function loadMoreRecords()"),
+            ("history load more availability", "const canLoadMoreRecords ="),
+            ("history load more accessibility label", "historyLoadMoreAccessibility: boundDisplayText(\"使用 cursor 載入更早紀錄，不呼叫 AI 或修改資料\", maxDisplayDetailTextLength)"),
             ("history structured records render", "selectedHistoryRecordDisplayItems.map((item) =>"),
             ("history raw records render", "selectedHistoryRawDisplayItems.map((item) =>"),
             ("history raw source status", "sourceStatusLabel: boundDisplayText(hasSourceText ? \"原始片段\" : \"僅結構化\", 40)"),
@@ -2658,6 +2666,8 @@ def main() -> int:
             ("history calendar selected style binding", "item.isSelected ? styles.historyCalendarDaySelected : null"),
             ("history calendar record dot binding", "item.hasRecords ? <View style={styles.historyCalendarDot} /> : null"),
             ("history calendar lit-date legend", "亮燈日期有紀錄"),
+            ("history load more button binding", "onPress={loadMoreRecords}"),
+            ("history load more disabled state", "accessibilityState={{ disabled: !canLoadMoreRecords }}"),
         ):
             _assert_contains(label, history_block, marker)
         for label, marker in (

@@ -15,6 +15,38 @@
 
 ## 2026-06-17
 
+### T1010 enable mobile cursor pagination for History records
+
+類型：mobile / feature / verifier / docs / history / analysis
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a History `載入更多` action that uses backend record cursor pagination with `before` and `before_created_at`.
+- Kept each backend page bounded at 100 records and capped mobile local History/Analysis cache at 500 deduplicated records.
+- Updated History boundary copy and verifier coverage so calendar lighting, AI-organized history, raw record view, and local analysis can expand beyond the first synced page without unbounded loading.
+- 未變更 backend API schema、record create/update/delete behavior、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If product requires true complete export, add a separate export/report path instead of raising the mobile cache cap.
+
 ### T1009 include persisted achievement unlocks in Year Review badge metrics
 
 類型：backend / bugfix / test / verifier / docs / year-review

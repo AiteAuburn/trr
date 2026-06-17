@@ -111,6 +111,26 @@ None.
 
 ## Done
 
+### T1010: Enable mobile cursor pagination for History records
+
+Status: done
+
+Summary:
+
+- Added mobile History load-more support using backend `/records` cursor pagination with `before` and `before_created_at`.
+- Kept each backend page bounded at 100 records while allowing the local History/Analysis cache to grow to 500 deduplicated records.
+- Updated History boundary copy and verifier coverage so calendar lighting, raw/structured history, and local analysis can expand beyond the first page without unbounded loading.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1009: Include persisted achievement unlocks in Year Review badge metrics
 
 Status: done

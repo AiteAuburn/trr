@@ -110,6 +110,7 @@ type RecordItem = {
   payload_json: Record<string, unknown>;
   metadata_json: Record<string, unknown>;
   source: string;
+  created_at: string;
 };
 
 type VoiceQuota = {
@@ -1129,6 +1130,7 @@ const mobileSingleRecordingLimitSeconds = 60;
 const maxMobileGlucoseValue = 1000;
 const maxDevResetDeletedCountKeys = 20;
 const mobileRecordSyncLimit = 100;
+const maxMobileRecordCacheLimit = 500;
 const mobileReportQueryLimit = 500;
 const voiceQuotaLowWarningThresholdSeconds = 120;
 
@@ -2528,12 +2530,32 @@ function boundRecordItem(value: RecordItem): RecordItem {
     occurred_at: boundDisplayText(value.occurred_at, 40),
     payload_json: boundRecordPayload(recordType, value.payload_json),
     metadata_json: boundMetadata(value.metadata_json) ?? {},
-    source: boundDisplayText(value.source, 40)
+    source: boundDisplayText(value.source, 40),
+    created_at: boundDisplayText(value.created_at, 40)
   };
 }
 
-function boundRecordsList(value: RecordItem[]) {
-  return value.slice(0, mobileRecordSyncLimit).map(boundRecordItem);
+function mergeRecordsByCursorOrder(current: RecordItem[], incoming: RecordItem[]) {
+  const byId = new Map<string, RecordItem>();
+  for (const record of [...current, ...incoming].map(boundRecordItem)) {
+    if (record.id) {
+      byId.set(record.id, record);
+    }
+  }
+  return Array.from(byId.values())
+    .sort((left, right) => {
+      const occurredDelta = Date.parse(right.occurred_at) - Date.parse(left.occurred_at);
+      if (Number.isFinite(occurredDelta) && occurredDelta !== 0) {
+        return occurredDelta;
+      }
+      const createdDelta = Date.parse(right.created_at) - Date.parse(left.created_at);
+      return Number.isFinite(createdDelta) ? createdDelta : 0;
+    })
+    .slice(0, maxMobileRecordCacheLimit);
+}
+
+function boundRecordsList(value: RecordItem[], limit = maxMobileRecordCacheLimit) {
+  return value.slice(0, limit).map(boundRecordItem);
 }
 
 function boundPendingRecord(value: PendingRecord): PendingRecord {
@@ -2613,7 +2635,8 @@ function visualSmokeDemoRecord(): RecordItem {
       meal_timing: "fasting"
     },
     metadata_json: {},
-    source: "visual_smoke_demo"
+    source: "visual_smoke_demo",
+    created_at: visualSmokeDemoIsoAt(3, 12)
   });
 }
 
@@ -2630,7 +2653,8 @@ function visualSmokeDemoRecords(): RecordItem[] {
         food_items: [{ name: "水煮蛋" }, { name: "無糖豆漿" }]
       },
       metadata_json: {},
-      source: "visual_smoke_demo"
+      source: "visual_smoke_demo",
+      created_at: visualSmokeDemoIsoAt(2, 32)
     },
     {
       id: "visual-smoke-record-003",
@@ -2642,7 +2666,8 @@ function visualSmokeDemoRecords(): RecordItem[] {
         minutes: 25
       },
       metadata_json: {},
-      source: "visual_smoke_demo"
+      source: "visual_smoke_demo",
+      created_at: visualSmokeDemoIsoAt(1, 52)
     }
   ]);
 }
@@ -3669,10 +3694,24 @@ function recordSyncLoadingStatusMessage() {
   return boundUiMessage("紀錄同步中...");
 }
 
-function recordSyncSuccessStatusMessage(count: number, limit: number) {
+function recordSyncPageLoadingStatusMessage() {
+  return boundUiMessage("正在載入更早紀錄...");
+}
+
+function recordSyncSuccessStatusMessage(count: number, pageLimit: number, cacheLimit: number, hasMore: boolean) {
   const boundedCount = clampNumber(count, 0, maxMobileCountValue);
-  const boundedLimit = clampNumber(limit, 0, maxMobileCountValue);
-  return boundUiMessage(`已同步最近 ${boundedCount} 筆紀錄（上限 ${boundedLimit} 筆）`);
+  const boundedPageLimit = clampNumber(pageLimit, 0, maxMobileCountValue);
+  const boundedCacheLimit = clampNumber(cacheLimit, 0, maxMobileCountValue);
+  const moreCopy = hasMore ? "可繼續載入更早紀錄" : "目前沒有更多已知紀錄";
+  return boundUiMessage(`已同步 ${boundedCount} 筆紀錄（每頁 ${boundedPageLimit} 筆，本機上限 ${boundedCacheLimit} 筆）；${moreCopy}。`);
+}
+
+function recordSyncPageSuccessStatusMessage(count: number, pageCount: number, cacheLimit: number, hasMore: boolean) {
+  const boundedCount = clampNumber(count, 0, maxMobileCountValue);
+  const boundedPageCount = clampNumber(pageCount, 0, maxMobileCountValue);
+  const boundedCacheLimit = clampNumber(cacheLimit, 0, maxMobileCountValue);
+  const moreCopy = hasMore ? "仍可繼續載入" : "已無更多已知紀錄";
+  return boundUiMessage(`已載入更早 ${boundedPageCount} 筆，目前本機共有 ${boundedCount} 筆（上限 ${boundedCacheLimit} 筆）；${moreCopy}。`);
 }
 
 function recordSyncFailureStatusMessage() {
@@ -5017,6 +5056,8 @@ function coreFlowSectionLabels() {
     historyReturnTodayAccessibility: boundDisplayText("回今日紀錄，不查詢 backend 或建立紀錄", maxDisplayDetailTextLength),
     historyDataStatus: boundDisplayText("歷史資料狀態", maxDisplayTextLength),
     historySyncBoundary: boundDisplayText("歷史同步邊界", maxDisplayTextLength),
+    historyLoadMore: boundDisplayText("載入更多", maxDisplayTextLength),
+    historyLoadMoreAccessibility: boundDisplayText("使用 cursor 載入更早紀錄，不呼叫 AI 或修改資料", maxDisplayDetailTextLength),
     mainInfo: boundDisplayText("主要資訊", maxDisplayTextLength),
     supplementalInfo: boundDisplayText("補充資訊", maxDisplayTextLength),
     source: boundDisplayText("來源", maxDisplayTextLength),
@@ -5601,6 +5642,7 @@ export default function App() {
   );
   const [isVisualSmokePreviewMode, setIsVisualSmokePreviewMode] = useState(Boolean(initialVisualSmokeScreen));
   const [recordsStatus, setRecordsStatus] = useState(recordSyncInitialStatusMessage());
+  const [recordsHasMore, setRecordsHasMore] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<RecordItem | null>(
     visualSmokeNeedsSelectedRecord(initialVisualSmokeScreen) ? visualSmokeDemoRecord() : null
   );
@@ -6056,7 +6098,7 @@ export default function App() {
     hasUnsavedPreviewRecords
       ? `仍有 ${unsavedPreviewRecordDisplayCount} 筆候選紀錄留在確認流程；系統不會自動重試或重新呼叫 AI。`
       : "沒有未儲存候選需要自動重試；下一步只做頁面導覽。",
-    `回到今日 / 歷史 / 分析只使用已同步紀錄；mobile 單次同步上限仍是最近 ${mobileRecordSyncDisplayLimit} 筆。`,
+    `回到今日 / 歷史 / 分析只使用已同步紀錄；mobile 每頁載入 ${mobileRecordSyncDisplayLimit} 筆，可用歷史頁載入更多。`,
     "成功頁不新增 backend request，除非使用者主動進入其他頁面觸發既有同步。"
   ].map(resultChecklistItem);
   const deleteSuccessBoundaryChecklistItems = [
@@ -6064,14 +6106,14 @@ export default function App() {
     "不會呼叫 parser、AI 或 LLM，成本為 0。",
     "不會保留 raw transcript、raw prompt、raw model output 或模型 debug trace。",
     "失敗不會自動重試；若需要確認 backend 狀態，請稍後重新同步。",
-    `回到今日 / 歷史只使用已同步紀錄；mobile 單次同步上限仍是最近 ${mobileRecordSyncDisplayLimit} 筆。`
+    `回到今日 / 歷史只使用已同步紀錄；mobile 每頁載入 ${mobileRecordSyncDisplayLimit} 筆，可用歷史頁載入更多。`
   ].map(resultChecklistItem);
   const updateSuccessBoundaryChecklistItems = [
     "成功頁只反映目前已更新的選取紀錄與本機清單。",
     "不會呼叫 parser、AI 或 LLM，成本為 0。",
     "不會保留 raw transcript、raw prompt、raw model output 或模型 debug trace。",
     "失敗不會自動重試；若需要確認其他裝置狀態，請稍後重新同步。",
-    `回到今日 / 歷史 / 分析只使用已同步紀錄；mobile 單次同步上限仍是最近 ${mobileRecordSyncDisplayLimit} 筆。`
+    `回到今日 / 歷史 / 分析只使用已同步紀錄；mobile 每頁載入 ${mobileRecordSyncDisplayLimit} 筆，可用歷史頁載入更多。`
   ].map(resultChecklistItem);
   const manualSubmitChecklistItems = [
     "不會呼叫 AI 或 LLM，成本為 0。",
@@ -6108,9 +6150,9 @@ export default function App() {
   ].map(resultChecklistItem);
   const historyBoundaryChecklistItems = [
     "月曆選取日期只套用在 mobile 目前已載入的紀錄。",
-    `目前每次同步最多載入最近 ${mobileRecordSyncDisplayLimit} 筆；這不是完整歷史匯出。`,
+    `每頁最多載入 ${mobileRecordSyncDisplayLimit} 筆，本機最多保留 ${maxMobileRecordCacheLimit} 筆；這不是完整歷史匯出。`,
     "點擊月曆日期或切換 AI 整理 / 原始紀錄不會額外查詢 backend，也不會呼叫 AI。",
-    "載入更多會等 cursor pagination UI 完成後再開放。",
+    "載入更多使用 backend cursor pagination，只追加更早紀錄並以 id 去重。",
     recordsForDisplay.length === 0 ? noRealRecordHealthValueDisplayText : loadedRecordActionCopy()
   ].map(resultChecklistItem);
   const deleteConfirmChecklistItems = [
@@ -6131,7 +6173,7 @@ export default function App() {
   ].map(resultChecklistItem);
   const analysisBoundaryChecklistItems = [
     analysisBoundaryDataDisplayCopy,
-    `mobile 本機分析最多基於最近 ${mobileRecordSyncDisplayLimit} 筆同步紀錄。`,
+    `mobile 本機分析最多基於目前已同步的 ${maxMobileRecordCacheLimit} 筆紀錄。`,
     "基本分析不呼叫 AI，不會產生診療建議。",
     `詳細報告會使用 ${mobileReportQueryDisplayLimit} 筆上限查詢，避免一次載入過多資料。`
   ].map(resultChecklistItem);
@@ -7158,11 +7200,18 @@ export default function App() {
   const manualRecordBackendUnavailableDisplayText = boundUiMessage(
     `${protectedBackendUnavailableDisplayMessage}，才可建立手動紀錄。`
   );
+  const recordsAtCacheLimit = recordsForDisplay.length >= maxMobileRecordCacheLimit;
+  const canLoadMoreRecords =
+    protectedBackendReady && recordsHasMore && !recordsAtCacheLimit && recordsForDisplay.length > 0 && !isBusy;
   const historySyncBoundaryDisplayText = resultChecklistItem(
-    `已達本次同步上限 ${mobileRecordSyncDisplayLimit} 筆；載入更早紀錄需要 cursor pagination，尚未在 mobile UI 啟用。`
+    recordsAtCacheLimit
+      ? `已達本機紀錄上限 ${maxMobileRecordCacheLimit} 筆；避免 mobile 一次保留過多健康紀錄。`
+      : recordsHasMore
+        ? `目前已同步 ${recordsForDisplay.length} 筆；可用 cursor pagination 載入更早紀錄。`
+        : `目前已同步 ${recordsForDisplay.length} 筆；backend 未回傳更多紀錄。`
   );
   const analysisSyncBoundaryDisplayText = resultChecklistItem(
-    `本機紀錄已達同步上限 ${mobileRecordSyncDisplayLimit} 筆；若要用較大但仍有上限的資料範圍，請使用詳細報告。`
+    `本機分析使用目前已同步紀錄，最多保留 ${maxMobileRecordCacheLimit} 筆；若要固定查詢範圍，請使用詳細報告。`
   );
   const detailedReportQueryLimitDisplayText = resultChecklistItem(
     `報表查詢限制 ${mobileReportQueryDisplayLimit} 筆，避免 mobile 與 backend 一次載入過多資料。`
@@ -7506,6 +7555,7 @@ export default function App() {
     recordSyncInFlightKeys.current.clear();
     setIsBusy(false);
     setRecordsStatus(visualSmokeRecordSyncStatusMessage());
+    setRecordsHasMore(false);
   }
 
   function clearMobileSessionState(options: { clearAuthTokens?: boolean } = {}) {
@@ -7538,6 +7588,7 @@ export default function App() {
     setDownloadedModels([]);
     setRecords([]);
     setRecordsStatus(recordSyncInitialStatusMessage());
+    setRecordsHasMore(false);
     latestBootKey.current = "";
     bootInFlight.current = false;
     latestQuotaSyncKey.current = "";
@@ -10455,13 +10506,81 @@ export default function App() {
       if (latestRecordSyncKey.current !== syncKey) {
         return;
       }
-      const boundedResponse = boundRecordsList(response);
+      const boundedResponse = boundRecordsList(response, mobileRecordSyncLimit);
       setRecords(boundedResponse);
-      setRecordsStatus(recordSyncSuccessStatusMessage(boundedResponse.length, mobileRecordSyncDisplayLimit));
+      setRecordsHasMore(response.length >= mobileRecordSyncLimit);
+      setRecordsStatus(
+        recordSyncSuccessStatusMessage(
+          boundedResponse.length,
+          mobileRecordSyncDisplayLimit,
+          maxMobileRecordCacheLimit,
+          response.length >= mobileRecordSyncLimit
+        )
+      );
     } catch {
       if (latestRecordSyncKey.current === syncKey) {
         setRecordsStatus(recordSyncFailureStatusMessage());
+        setRecordsHasMore(false);
       }
+    } finally {
+      recordSyncInFlightKeys.current.delete(syncKey);
+    }
+  }
+
+  async function loadMoreRecords() {
+    if (visualSmokePreviewActive.current) {
+      setRecordsStatus(visualSmokeRecordSyncStatusMessage());
+      return;
+    }
+    if (!protectedBackendReady) {
+      setRecordsStatus(recordSyncUnavailableStatusMessage(protectedBackendUnavailableMessage));
+      return;
+    }
+    if (!account || !activeProfileId || recordsForDisplay.length === 0 || recordsForDisplay.length >= maxMobileRecordCacheLimit) {
+      return;
+    }
+    const cursorRecord = recordsForDisplay[recordsForDisplay.length - 1];
+    if (!cursorRecord?.occurred_at || !cursorRecord.created_at) {
+      setRecordsStatus(recordSyncFailureStatusMessage());
+      setRecordsHasMore(false);
+      return;
+    }
+    const syncKey = `${normalizedApiBaseUrl}:${account.id}:${activeProfileId}:before:${cursorRecord.occurred_at}:${cursorRecord.created_at}`;
+    if (recordSyncInFlightKeys.current.has(syncKey)) {
+      return;
+    }
+    recordSyncInFlightKeys.current.add(syncKey);
+    setRecordsStatus(recordSyncPageLoadingStatusMessage());
+    try {
+      const query = new URLSearchParams({
+        profile_id: activeProfileId,
+        limit: String(mobileRecordSyncLimit),
+        before: cursorRecord.occurred_at,
+        before_created_at: cursorRecord.created_at
+      });
+      const response = await requestJson<RecordItem[]>(
+        normalizedApiBaseUrl,
+        `/records?${query.toString()}`,
+        { headers: protectedRequestHeaders(account.id, accessToken) }
+      );
+      const boundedPage = boundRecordsList(response, mobileRecordSyncLimit);
+      setRecords((current) => mergeRecordsByCursorOrder(current, boundedPage));
+      const hasMoreAfterPage = response.length >= mobileRecordSyncLimit;
+      setRecordsHasMore(hasMoreAfterPage);
+      const nextCount = Math.min(
+        mergeRecordsByCursorOrder(recordsForDisplay, boundedPage).length,
+        maxMobileRecordCacheLimit
+      );
+      setRecordsStatus(
+        recordSyncPageSuccessStatusMessage(
+          nextCount,
+          boundedPage.length,
+          maxMobileRecordCacheLimit,
+          hasMoreAfterPage && nextCount < maxMobileRecordCacheLimit
+        )
+      );
+    } catch {
+      setRecordsStatus(recordSyncFailureStatusMessage());
     } finally {
       recordSyncInFlightKeys.current.delete(syncKey);
     }
@@ -12900,6 +13019,16 @@ export default function App() {
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{coreFlowDisplayLabels.historySyncBoundary}</Text>
                 <Text style={styles.evidence}>{historySyncBoundaryDisplayText}</Text>
+                <Pressable
+                  accessibilityLabel={coreFlowDisplayLabels.historyLoadMoreAccessibility}
+                  accessibilityRole="button"
+                  accessibilityState={{ disabled: !canLoadMoreRecords }}
+                  style={[styles.secondaryButton, !canLoadMoreRecords ? styles.buttonDisabled : null]}
+                  disabled={!canLoadMoreRecords}
+                  onPress={loadMoreRecords}
+                >
+                  <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.historyLoadMore}</Text>
+                </Pressable>
               </View>
             ) : null}
             <View style={styles.historySelectedDatePanel}>
