@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T980 cover blank Store reward code side effects
+
+類型：backend / test / docs / store
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that blank Store reward codes are rejected without creating redemptions or changing points.
+- This protects the points-to-store redemption flow from malformed reward identifiers.
+- 未變更 Store API behavior、points ledger、reward catalog、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_store_redemption_deducts_points_and_reserves_fulfillment_rewards tests/test_community_store_year_review.py::test_store_redemption_list_limits_to_latest_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If reward identifiers expand beyond catalog codes, keep malformed-input no-side-effect checks aligned with the accepted identifier shape.
+
 ### T979 cover invalid food-share glucose bounds side effects
 
 類型：backend / test / docs / community

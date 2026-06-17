@@ -1111,6 +1111,19 @@ def test_store_redemption_deducts_points_and_reserves_fulfillment_rewards() -> N
         "lifetime_redeemed": 0,
     }
 
+    blank_reward_response = client.post(
+        "/store/redemptions",
+        headers={"X-Account-Id": account_id},
+        json={"reward_code": "   "},
+    )
+    assert blank_reward_response.status_code == 422
+    blank_reward_redemptions_response = client.get("/store/redemptions", headers={"X-Account-Id": account_id})
+    assert blank_reward_redemptions_response.status_code == 200
+    assert blank_reward_redemptions_response.json() == []
+    blank_reward_points_response = client.get("/store/points", headers={"X-Account-Id": account_id})
+    assert blank_reward_points_response.status_code == 200
+    assert blank_reward_points_response.json() == pre_points_response.json()
+
     missing_redemption_id = uuid4()
     missing_use_response = client.post(
         f"/store/redemptions/{missing_redemption_id}/use",
