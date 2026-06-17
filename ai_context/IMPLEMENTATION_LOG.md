@@ -15,6 +15,38 @@
 
 ## 2026-06-17
 
+### T1015 add History calendar month navigation
+
+類型：mobile / feature / verifier / docs / history
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added previous-month and next-month controls to the History calendar header.
+- Month navigation selects the first day of the target month and resets the date detail view to the AI-organized structured tab.
+- Added verifier coverage for month navigation handlers, bounded accessibility labels, render bindings, and compact styles.
+- 未變更 backend、record storage、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If long-range history browsing becomes common, pair month navigation with backend cursor loading or a bounded month query endpoint.
+
 ### T1014 surface newly unlocked badges on Save Success
 
 類型：mobile / feature / verifier / docs / achievements

@@ -111,6 +111,26 @@ None.
 
 ## Done
 
+### T1015: Add History calendar month navigation
+
+Status: done
+
+Summary:
+
+- Added previous-month and next-month controls to the History calendar header.
+- Month navigation selects the first day of the target month and resets the detail view to the AI-organized structured tab.
+- Added verifier coverage for month navigation handlers, bounded accessibility labels, render bindings, and compact button styles.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1014: Surface newly unlocked badges on Save Success
 
 Status: done

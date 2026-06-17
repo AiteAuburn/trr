@@ -5979,6 +5979,16 @@ export default function App() {
     maxMobileCountValue
   );
   const selectedHistoryDateDisplayText = boundDisplayText(selectedHistoryDate, 40);
+  const historyPreviousMonthButtonLabel = boundDisplayText("上一月", 20);
+  const historyNextMonthButtonLabel = boundDisplayText("下一月", 20);
+  const historyPreviousMonthAccessibilityLabel = boundDisplayText(
+    "查看上一個月份月曆，不呼叫 AI 或寫入資料",
+    maxDisplayDetailTextLength
+  );
+  const historyNextMonthAccessibilityLabel = boundDisplayText(
+    "查看下一個月份月曆，不呼叫 AI 或寫入資料",
+    maxDisplayDetailTextLength
+  );
   const analysisSelectedDateBounds = useMemo(
     () => analysisDateBounds(analysisRange, analysisCustomStart, analysisCustomEnd),
     [analysisCustomEnd, analysisCustomStart, analysisRange]
@@ -7499,6 +7509,24 @@ export default function App() {
 
   function pressHistoryCalendarDay(item: ReturnType<typeof historyCalendarDayDisplayItem>) {
     selectHistoryCalendarDate(item.value);
+  }
+
+  function selectHistoryCalendarMonthOffset(offset: number) {
+    const nextMonth = new Date(
+      historyCalendarMonthStart.getFullYear(),
+      historyCalendarMonthStart.getMonth() + offset,
+      1
+    );
+    setSelectedHistoryDate(formatLocalDateInput(nextMonth));
+    setHistoryDetailMode("structured");
+  }
+
+  function openPreviousHistoryMonth() {
+    selectHistoryCalendarMonthOffset(-1);
+  }
+
+  function openNextHistoryMonth() {
+    selectHistoryCalendarMonthOffset(1);
   }
 
   function selectHistoryDetailMode(mode: HistoryDetailMode) {
@@ -13090,8 +13118,28 @@ export default function App() {
               ))}
             </View>
             <View style={styles.historyCalendarHeader}>
-              <Text style={styles.recordContent}>{historyCalendarTitle}</Text>
-              <Text style={styles.confidence}>亮燈日期有紀錄</Text>
+              <View>
+                <Text style={styles.recordContent}>{historyCalendarTitle}</Text>
+                <Text style={styles.confidence}>亮燈日期有紀錄</Text>
+              </View>
+              <View style={styles.historyMonthActionRow}>
+                <Pressable
+                  accessibilityLabel={historyPreviousMonthAccessibilityLabel}
+                  accessibilityRole="button"
+                  style={styles.historyMonthButton}
+                  onPress={openPreviousHistoryMonth}
+                >
+                  <Text style={styles.secondaryButtonText}>{historyPreviousMonthButtonLabel}</Text>
+                </Pressable>
+                <Pressable
+                  accessibilityLabel={historyNextMonthAccessibilityLabel}
+                  accessibilityRole="button"
+                  style={styles.historyMonthButton}
+                  onPress={openNextHistoryMonth}
+                >
+                  <Text style={styles.secondaryButtonText}>{historyNextMonthButtonLabel}</Text>
+                </Pressable>
+              </View>
             </View>
             <View style={styles.historyCalendarGrid}>
               {historyCalendarDisplayItems.map((item) => (
@@ -17036,6 +17084,23 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     gap: 8,
     justifyContent: "space-between"
+  },
+  historyMonthActionRow: {
+    flexDirection: "row",
+    flexShrink: 0,
+    gap: 8
+  },
+  historyMonthButton: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#3FA67F",
+    borderRadius: 14,
+    borderWidth: 1,
+    justifyContent: "center",
+    minHeight: 40,
+    minWidth: 68,
+    paddingHorizontal: 10,
+    paddingVertical: 8
   },
   historyCalendarGrid: {
     flexDirection: "row",
