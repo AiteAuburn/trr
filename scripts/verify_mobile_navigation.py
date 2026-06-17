@@ -4009,6 +4009,8 @@ def main() -> int:
             ("year review backend-aware badge material", "年度分享卡使用 backend 隱私遮罩摘要。"),
             ("year review share accessibility binding", "accessibilityLabel={yearReviewShareAccessibilityDisplayLabel}"),
             ("year review native share import", "Share,"),
+            ("year review future module backend-ready readiness", "年度 snapshot、隱私遮罩分享卡與原生分享已接 backend；外部平台深度整合與刪除治理仍待完成。"),
+            ("year review future module backend-ready requirements", 'requirements: ["每年 1 月 1 日自動產生", "privacy-masked share package", "外部平台深度整合與刪除治理"]'),
             ("year review file system import", 'import * as FileSystem from "expo-file-system";'),
             ("year review share asset filename helper", "function safeYearReviewShareAssetFileName(value: string)"),
             ("year review share asset cache helper", "async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset)"),
@@ -4059,6 +4061,8 @@ def main() -> int:
         for label, marker in (
             ("food community stale future store bridge copy", "點數未來可串接商城兌換優惠券、商品折扣、特殊徽章與會員福利。"),
             ("store stale empty wallet coupon-only copy", "尚未同步兌換券；完成食物分享取得點數後可兌換優惠券或折扣碼。"),
+            ("year review stale future module privacy incomplete copy", "需先累積年度資料、完成隱私遮罩與分享權限。"),
+            ("year review stale future module requirements", 'requirements: ["年度 aggregate job 或報表查詢", "分享圖隱私遮罩", "使用者分享與刪除控制"]'),
             ("community readiness stale public settings incomplete copy", "公開顯示名稱與可見範圍設定"),
             ("ranking readiness stale opt-in incomplete copy", "user public ranking opt-in 與退出流程"),
             ("ranking future module stale opt-in requirement", 'requirements: ["user public ranking opt-in", "ranking stats structure", "排名退出與歷史資料撤回流程"]'),

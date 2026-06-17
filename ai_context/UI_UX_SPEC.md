@@ -1275,6 +1275,7 @@ Dev-only visual smoke route jump：
 
 - 年度回顧一般操作路徑已接 backend snapshot、privacy-masked share package 與原生分享面板；離線 fallback 仍可用已載入紀錄即時計算前一年度回顧。
 - Mobile fallback 不呼叫 AI、不寫入 snapshot；backend-ready 一般操作路徑可同步保存 snapshot、準備 privacy-masked share package，並開啟原生分享面板分享隱私遮罩文字。年度回顧文案不可再宣稱年度回顧仍是預留、分享圖片、年度素材或隱私遮罩都尚未產生。
+- Future Module 的年度回顧 card 也必須使用 backend-ready 語氣：年度 snapshot、隱私遮罩分享卡與原生分享已接 backend；未完成項只可列外部社群平台深度整合、平台分享權限細節、刪除/撤回治理或類似後續營運流程。
 - Backend 已有 `/year-reviews/{year}` snapshot contract，可從正式 profile records 產生並保存年度統計、年度血糖成果與 bounded AI 年度觀察；同一 profile/year 會回傳已保存 snapshot，不因後續紀錄變動自動改寫。Mobile 一般操作路徑會嘗試同步此 API，visual-smoke route 必須維持本機 demo 且不呼叫 backend。
 - 年度 AI 觀察在 `DEEPSEEK_PARSER_URL` 與 `DEEPSEEK_API_KEY` 設定齊全時可呼叫 DeepSeek JSON mode；request 只能包含年度 `annual_stats`、`health_outcomes` 與固定 instructions，不可傳 raw records、food item、occurred_at、profile id、raw transcript、raw prompt 或 raw model output。DeepSeek 未設定、HTTP 失敗、回應過大或 JSON/schema 無效時必須回 deterministic fallback，不可阻斷 snapshot 產生。
 - Backend regression 必須解析 DeepSeek 年度回顧 user prompt，確認 payload keys 只包含 `year`、`annual_stats`、`health_outcomes` 與 `instructions`，且 instructions 明確限制只能使用聚合統計；測試也必須守住不包含 food item、`occurred_at`、profile id、raw transcript、raw prompt 或 raw model output。

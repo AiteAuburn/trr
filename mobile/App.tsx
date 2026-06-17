@@ -568,8 +568,8 @@ const futureModuleCards: FutureModuleCard[] = [
     id: "yearReview",
     title: "年度回顧",
     description: "年度血糖、飲食、運動與連續記錄摘要。",
-    readiness: "需先累積年度資料、完成隱私遮罩與分享權限。",
-    requirements: ["年度 aggregate job 或報表查詢", "分享圖隱私遮罩", "使用者分享與刪除控制"],
+    readiness: "年度 snapshot、隱私遮罩分享卡與原生分享已接 backend；外部平台深度整合與刪除治理仍待完成。",
+    requirements: ["每年 1 月 1 日自動產生", "privacy-masked share package", "外部平台深度整合與刪除治理"],
     safety: "年度回顧只能做紀錄摘要與鼓勵，不提供診療建議或療效宣稱。",
     icon: "年",
     target: "yearReview"
