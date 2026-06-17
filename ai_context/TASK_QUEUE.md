@@ -111,6 +111,23 @@ None.
 
 ## Done
 
+### T1000: Add Year Review share package storage constraints
+
+Status: done
+
+Summary:
+
+- Added ORM and Alembic check constraints for Year Review share package privacy level, asset kind, checksum length, status, and last share result.
+- This moves the share-card privacy/status contract into storage so corrupted or invalid share package states fail closed.
+- Extended the mobile/backend navigation verifier to guard the Year Review share package storage constraints.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records tests/test_community_store_year_review.py::test_year_review_rejects_unfinished_year_before_snapshot_creation` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/models/year_review.py backend/alembic/versions/20260430_0028_year_review_share_package_constraints.py scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T999: Guard Year Review batch generation years
 
 Status: done

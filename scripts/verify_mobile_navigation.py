@@ -29,6 +29,9 @@ COMMUNITY_LEADERBOARD_INDEX_MIGRATION_PATH = (
 STORE_REDEMPTION_INDEX_MIGRATION_PATH = (
     REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0027_store_redemption_wallet_index.py"
 )
+YEAR_REVIEW_SHARE_CONSTRAINT_MIGRATION_PATH = (
+    REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0028_year_review_share_package_constraints.py"
+)
 REPORTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "reports.py"
 REPORTING_SERVICE_PATH = REPO_ROOT / "backend" / "app" / "services" / "reporting.py"
 REPORTS_TEST_PATH = REPO_ROOT / "backend" / "tests" / "test_reports.py"
@@ -3774,6 +3777,12 @@ def main() -> int:
             _assert_contains(label, content, marker)
         year_reviews_api_content = YEAR_REVIEWS_API_PATH.read_text(encoding="utf-8")
         year_review_service_content = YEAR_REVIEW_SNAPSHOTS_PATH.read_text(encoding="utf-8")
+        year_review_model_content = (REPO_ROOT / "backend" / "app" / "models" / "year_review.py").read_text(
+            encoding="utf-8"
+        )
+        year_review_share_constraint_migration_content = YEAR_REVIEW_SHARE_CONSTRAINT_MIGRATION_PATH.read_text(
+            encoding="utf-8"
+        )
         for label, marker in (
             ("year review completed-year service validator", "def validate_completed_year_review_year(year: int, now: datetime | None = None) -> int:"),
             ("year review latest completed year helper", "def latest_completed_year(now: datetime | None = None) -> int:"),
@@ -3787,6 +3796,15 @@ def main() -> int:
             ("year review unfinished year message", '"message": "Year review can only be generated for completed calendar years."'),
         ):
             _assert_contains(label, year_reviews_api_content, marker)
+        for label, marker in (
+            ("year review share package privacy ORM constraint", "ck_year_review_share_packages_privacy_level"),
+            ("year review share package asset ORM constraint", "ck_year_review_share_packages_asset_kind"),
+            ("year review share package checksum ORM constraint", "ck_year_review_share_packages_checksum_len"),
+            ("year review share package status ORM constraint", "ck_year_review_share_packages_status"),
+            ("year review share package result ORM constraint", "ck_year_review_share_packages_last_result"),
+        ):
+            _assert_contains(label, year_review_model_content, marker)
+            _assert_contains(label.replace("ORM", "migration"), year_review_share_constraint_migration_content, marker)
         year_review_tests_content = COMMUNITY_STORE_YEAR_REVIEW_TEST_PATH.read_text(encoding="utf-8")
         for label, marker in (
             ("year review unfinished year share-card test path", 'f"/year-reviews/{unfinished_year}/share-card?profile_id={profile_id}"'),

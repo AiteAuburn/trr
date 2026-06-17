@@ -15,6 +15,36 @@
 
 ## 2026-06-17
 
+### T1000 add Year Review share package storage constraints
+
+類型：backend / migration / verifier / docs / year-review
+
+檔案：
+
+- `backend/app/models/year_review.py`
+- `backend/alembic/versions/20260430_0028_year_review_share_package_constraints.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added ORM and Alembic check constraints for Year Review share package privacy level, asset kind, checksum length, status, and last share result.
+- This moves the share-card privacy/status contract into storage so corrupted or invalid share package states fail closed.
+- Extended the mobile/backend navigation verifier to guard the Year Review share package storage constraints.
+- 未變更 Year Review response shape、snapshot generation、share result/revoke behavior、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records tests/test_community_store_year_review.py::test_year_review_rejects_unfinished_year_before_snapshot_creation` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/models/year_review.py backend/alembic/versions/20260430_0028_year_review_share_package_constraints.py scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If additional share asset kinds are introduced, expand the constraint and schema together with migration coverage.
+
 ### T999 guard Year Review batch generation years
 
 類型：backend / bugfix / test / verifier / docs / year-review
