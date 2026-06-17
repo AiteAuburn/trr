@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T1008: Extend dev reset to achievements and Year Review data
+
+Status: done
+
+Summary:
+
+- Added `AchievementUnlock`, `YearReviewSharePackage`, and `YearReviewSnapshot` to backend dev reset cleanup so local/test resets clear gamification and annual review state.
+- Added regression coverage that seeds those records and verifies `/dev/reset-data` reports and removes them.
+- Extended mobile navigation verifier coverage for the backend reset scope and deleted-count regression assertions.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_dev_reset.py::test_dev_reset_clears_development_data tests/test_dev_reset.py::test_dev_reset_requires_confirmation_header tests/test_dev_reset.py::test_dev_reset_is_disabled_in_production` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/api/dev.py backend/tests/test_dev_reset.py scripts/verify_mobile_navigation.py` passed.
+
 ### T1007: Attach Year Review share constraints to share package model
 
 Status: done

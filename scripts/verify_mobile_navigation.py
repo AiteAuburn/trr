@@ -16,6 +16,7 @@ YEAR_REVIEWS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "year_reviews.py
 COMMUNITY_SCHEMA_PATH = REPO_ROOT / "backend" / "app" / "schemas" / "community.py"
 COMMUNITY_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "community.py"
 STORE_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "store.py"
+DEV_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "dev.py"
 COMMUNITY_MODEL_PATH = REPO_ROOT / "backend" / "app" / "models" / "community.py"
 COMMUNITY_FOOD_INDEX_MIGRATION_PATH = (
     REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0024_community_food_lookup_indexes.py"
@@ -1830,6 +1831,20 @@ def main() -> int:
             ("dev reset menu submit binding", "onPress={resetDevelopmentDataFromMenu}"),
         ):
             _assert_contains(label, content, marker)
+        dev_api_content = DEV_API_PATH.read_text(encoding="utf-8")
+        dev_reset_tests_content = (REPO_ROOT / "backend" / "tests" / "test_dev_reset.py").read_text(encoding="utf-8")
+        for label, marker in (
+            ("dev reset includes year review share packages", "YearReviewSharePackage,"),
+            ("dev reset includes year review snapshots", "YearReviewSnapshot,"),
+            ("dev reset includes achievement unlocks", "AchievementUnlock,"),
+        ):
+            _assert_contains(label, dev_api_content, marker)
+        for label, marker in (
+            ("dev reset tests achievement deleted count", 'body["deleted_counts"]["achievement_unlocks"] >= 1'),
+            ("dev reset tests year review package deleted count", 'body["deleted_counts"]["year_review_share_packages"] >= 1'),
+            ("dev reset tests year review snapshot deleted count", 'body["deleted_counts"]["year_review_snapshots"] >= 1'),
+        ):
+            _assert_contains(label, dev_reset_tests_content, marker)
         _assert_contains(
             "delete confirm open handler",
             content,

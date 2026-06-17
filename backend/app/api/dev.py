@@ -7,6 +7,7 @@ from app.core.config import get_settings
 from app.db.session import get_db
 from app.models import (
     Account,
+    AchievementUnlock,
     AuditLog,
     AuthSession,
     CommunityPointLedger,
@@ -23,6 +24,8 @@ from app.models import (
     Subscription,
     UsageCounter,
     UserProfile,
+    YearReviewSharePackage,
+    YearReviewSnapshot,
 )
 
 router = APIRouter(prefix="/dev", tags=["dev"])
@@ -42,6 +45,9 @@ RESETTABLE_MODELS = (
     CommunityPublicProfile,
     FoodShare,
     FoodItem,
+    YearReviewSharePackage,
+    YearReviewSnapshot,
+    AchievementUnlock,
     AuditLog,
     Record,
     UserProfile,

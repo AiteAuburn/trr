@@ -15,6 +15,35 @@
 
 ## 2026-06-17
 
+### T1008 extend dev reset to achievements and Year Review data
+
+類型：backend / bugfix / test / verifier / docs / dev-tools
+
+檔案：
+
+- `backend/app/api/dev.py`
+- `backend/tests/test_dev_reset.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added achievement unlocks, Year Review share packages, and Year Review snapshots to `/dev/reset-data` cleanup so local/test resets do not leave stale gamification or annual-review state.
+- Added regression coverage that seeds those records, calls dev reset, verifies deleted counts, and confirms the rows are gone.
+- Extended verifier coverage so backend dev reset scope and regression assertions keep tracking these product data tables.
+- 未變更 production availability, mobile UI shape, reset confirmation header, AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_dev_reset.py::test_dev_reset_clears_development_data tests/test_dev_reset.py::test_dev_reset_requires_confirmation_header tests/test_dev_reset.py::test_dev_reset_is_disabled_in_production` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/api/dev.py backend/tests/test_dev_reset.py scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- Remove or keep production-disabled dev reset controls before any production release.
+
 ### T1007 attach Year Review share constraints to share package model
 
 類型：backend / bugfix / test / verifier / docs / year-review
