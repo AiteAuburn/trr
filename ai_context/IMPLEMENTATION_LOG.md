@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T986 cover underscore literal food search
+
+類型：backend / test / docs / community
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extended community food search regression coverage so `_` is treated as a literal character rather than a SQL LIKE wildcard.
+- This keeps direct food-name search precise for the shared food blood-sugar database.
+- 未變更 food search runtime behavior、food share creation、points awards、leaderboards、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_search_treats_like_wildcards_as_literal_characters` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If search syntax is expanded later, keep wildcard search behind an explicit mode rather than overloading direct food-name search.
+
 ### T985 treat food search wildcards as literal characters
 
 類型：backend / bugfix / test / docs / community

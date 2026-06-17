@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T986: Cover underscore literal food search
+
+Status: done
+
+Summary:
+
+- Extended community food search regression coverage so `_` is treated as a literal character rather than a SQL LIKE wildcard.
+- This keeps direct food-name search precise for the shared food blood-sugar database.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_search_treats_like_wildcards_as_literal_characters` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T985: Treat food search wildcards as literal characters
 
 Status: done

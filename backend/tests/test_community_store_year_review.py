@@ -954,8 +954,9 @@ def test_food_search_treats_like_wildcards_as_literal_characters() -> None:
     unique_suffix = str(uuid4())
     plain_name = f"literal search plain {unique_suffix}"
     percent_name = f"literal search 100% yogurt {unique_suffix}"
+    underscore_name = f"literal search low_gi snack {unique_suffix}"
 
-    for food_name in (plain_name, percent_name):
+    for food_name in (plain_name, percent_name, underscore_name):
         response = client.post(
             "/community/foods/shares",
             headers={"X-Account-Id": account_id},
@@ -976,7 +977,10 @@ def test_food_search_treats_like_wildcards_as_literal_characters() -> None:
     )
     assert wildcard_response.status_code == 200
     wildcard_items = wildcard_response.json()
-    assert [item["name"] for item in wildcard_items] == [percent_name]
+    wildcard_names = {item["name"] for item in wildcard_items}
+    assert percent_name in wildcard_names
+    assert plain_name not in wildcard_names
+    assert underscore_name not in wildcard_names
 
     literal_response = client.get(
         "/community/foods",
@@ -985,6 +989,17 @@ def test_food_search_treats_like_wildcards_as_literal_characters() -> None:
     )
     assert literal_response.status_code == 200
     assert [item["name"] for item in literal_response.json()] == [percent_name]
+
+    underscore_response = client.get(
+        "/community/foods",
+        params={"query": "_", "category": "supplements"},
+        headers={"X-Account-Id": account_id},
+    )
+    assert underscore_response.status_code == 200
+    underscore_names = {item["name"] for item in underscore_response.json()}
+    assert underscore_name in underscore_names
+    assert plain_name not in underscore_names
+    assert percent_name not in underscore_names
 
 
 def test_community_leaderboard_ties_are_stably_ordered_by_public_name() -> None:
