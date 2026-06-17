@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T978: Cover Analysis report soft-deleted record exclusion
+
+Status: done
+
+Summary:
+
+- Added backend regression coverage that basic analysis reports ignore soft-deleted records.
+- This protects MVP Analysis highest, lowest, average, total count, and before/after meal counts from deleted user data.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_reports.py::test_basic_report_summarizes_profile_records tests/test_reports.py::test_basic_report_supports_date_window` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T977: Cover Community leaderboard result cap
 
 Status: done

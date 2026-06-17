@@ -4,6 +4,7 @@ from uuid import UUID
 from fastapi.testclient import TestClient
 from pydantic import ValidationError
 from pytest import raises
+from sqlalchemy import select
 
 from app.db.session import SessionLocal
 from app.main import app
@@ -49,6 +50,25 @@ def test_basic_report_summarizes_profile_records() -> None:
         datetime(2026, 4, 30, 19, 0, tzinfo=UTC),
         {"activity": "walk", "minutes": 30},
     )
+    create_record(
+        client,
+        account_id,
+        profile_id,
+        "glucose",
+        datetime(2026, 4, 30, 20, 0, tzinfo=UTC),
+        {"value": 400, "unit": "mg/dL", "meal_timing": "after_meal"},
+    )
+    with SessionLocal() as db:
+        soft_deleted_record = db.scalar(
+            select(Record).where(
+                Record.profile_id == UUID(profile_id),
+                Record.record_type == "glucose",
+                Record.payload["value"].as_integer() == 400,
+            )
+        )
+        assert soft_deleted_record is not None
+        soft_deleted_record.deleted_at = datetime.now(UTC)
+        db.commit()
 
     response = client.get(
         f"/reports/basic?profile_id={profile_id}",

@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T978 cover Analysis report soft-deleted record exclusion
+
+類型：backend / test / docs / analysis
+
+檔案：
+
+- `backend/tests/test_reports.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that basic analysis reports ignore soft-deleted records.
+- This protects MVP Analysis highest, lowest, average, total count, and before/after meal counts from deleted user data.
+- 未變更 Report API behavior、record deletion behavior、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_reports.py::test_basic_report_summarizes_profile_records tests/test_reports.py::test_basic_report_supports_date_window` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If analysis adds new record states or archive filters, keep report inclusion rules explicit and regression-tested.
+
 ### T977 cover Community leaderboard result cap
 
 類型：backend / test / docs / community
