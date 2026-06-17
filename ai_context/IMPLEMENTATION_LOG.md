@@ -15,6 +15,33 @@
 
 ## 2026-06-14
 
+### T965 normalize store reward code input
+
+類型：backend / test / docs / store
+
+檔案：
+
+- `backend/app/schemas/store.py`
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added schema-level trimming for `StoreRedemptionCreate.reward_code`.
+- Added regression coverage that a valid coupon reward code with surrounding whitespace redeems the canonical reward.
+- This hardens the points-to-store redemption path without changing reward catalog or point ledger semantics.
+- 未變更 store reward costs、points ledger semantics、fulfillment status rules、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_store_redemption_deducts_points_and_reserves_fulfillment_rewards` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+
+後續：
+
+- Keep reward-code normalization at the schema boundary if additional store redemption endpoints are added.
+
 ### T964 prevent year-review share opened downgrade
 
 類型：backend / test / docs / year-review

@@ -929,10 +929,11 @@ def test_store_redemption_deducts_points_and_reserves_fulfillment_rewards() -> N
     redeem_response = client.post(
         "/store/redemptions",
         headers={"X-Account-Id": account_id},
-        json={"reward_code": "coupon_50"},
+        json={"reward_code": "  coupon_50  "},
     )
     assert redeem_response.status_code == 201
     redemption = redeem_response.json()
+    assert redemption["reward_code"] == "coupon_50"
     assert redemption["points_cost"] == 100
     assert redemption["status"] == "issued"
     assert redemption["fulfillment_type"] == "coupon"

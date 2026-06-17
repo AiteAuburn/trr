@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 StoreRewardCategory = Literal[
     "coupons",
@@ -29,6 +29,13 @@ class PointsBalanceRead(BaseModel):
 
 class StoreRedemptionCreate(BaseModel):
     reward_code: str = Field(min_length=1, max_length=80)
+
+    @field_validator("reward_code", mode="before")
+    @classmethod
+    def normalize_reward_code(cls, value: object) -> object:
+        if not isinstance(value, str):
+            return value
+        return value.strip()
 
 
 class StoreRedemptionRead(BaseModel):

@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T965: Normalize store reward code input
+
+Status: done
+
+Summary:
+
+- Added schema-level trimming for store redemption `reward_code`.
+- Added backend regression coverage so a valid coupon code with surrounding whitespace still redeems the intended reward.
+- This makes the points-to-store redemption API more tolerant of client input formatting.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_store_redemption_deducts_points_and_reserves_fulfillment_rewards` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+
 ### T964: Prevent year-review share opened downgrade
 
 Status: done
