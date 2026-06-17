@@ -15,6 +15,34 @@
 
 ## 2026-06-17
 
+### T1031 strengthen Year Review DeepSeek prompt regression
+
+類型：backend / test / docs / verifier
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Strengthened the Year Review DeepSeek regression test to parse the user prompt and require the exact aggregate-only payload keys: `year`, `annual_stats`, `health_outcomes`, and `instructions`.
+- Added assertions that the instructions explicitly restrict DeepSeek to aggregate statistics and that the prompt does not include raw transcript, raw prompt, or raw model output markers.
+- Added navigation verifier guards for the stronger backend regression coverage.
+- 未變更 runtime backend snapshot generation、DeepSeek request implementation、mobile、STT、parser、network paths、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose exec backend pytest -q tests/test_community_store_year_review.py::test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- Continue auditing Year Review fallback and share-card privacy tests against the third-phase requirements.
+
 ### T1030 clarify Year Review hero schedule wording
 
 類型：mobile / docs / verifier

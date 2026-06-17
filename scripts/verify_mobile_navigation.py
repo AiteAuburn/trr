@@ -344,6 +344,16 @@ def _verify_achievement_contract(content: str) -> None:
         tests_content,
         "test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured",
     )
+    for label, marker in (
+        ("year review DeepSeek aggregate prompt parsed", "aggregate_payload = json.loads(aggregate_prompt)"),
+        ("year review DeepSeek aggregate prompt exact keys", 'assert set(aggregate_payload) == {"year", "annual_stats", "health_outcomes", "instructions"}'),
+        ("year review DeepSeek instructions aggregate-only", 'assert "只能使用上述聚合統計" in aggregate_payload["instructions"]'),
+        ("year review DeepSeek raw records instruction", 'assert "raw records" in aggregate_payload["instructions"]'),
+        ("year review DeepSeek no raw transcript prompt", 'assert "raw_transcript" not in aggregate_prompt'),
+        ("year review DeepSeek no raw prompt", 'assert "raw prompt" not in aggregate_prompt'),
+        ("year review DeepSeek no raw model output", 'assert "raw model output" not in aggregate_prompt'),
+    ):
+        _assert_contains(label, tests_content, marker)
 
 
 def _verify_food_community_category_contract(content: str) -> None:

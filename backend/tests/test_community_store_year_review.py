@@ -2029,10 +2029,17 @@ def test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured(monkey
     aggregate_prompt = messages[1]["content"]
     assert "annual_stats" in aggregate_prompt
     assert "health_outcomes" in aggregate_prompt
+    aggregate_payload = json.loads(aggregate_prompt)
+    assert set(aggregate_payload) == {"year", "annual_stats", "health_outcomes", "instructions"}
+    assert "只能使用上述聚合統計" in aggregate_payload["instructions"]
+    assert "raw records" in aggregate_payload["instructions"]
     assert "測試飯糰" not in aggregate_prompt
     assert "food_items" not in aggregate_prompt
     assert "occurred_at" not in aggregate_prompt
     assert "profile_id" not in aggregate_prompt
+    assert "raw_transcript" not in aggregate_prompt
+    assert "raw prompt" not in aggregate_prompt
+    assert "raw model output" not in aggregate_prompt
 
 
 def test_year_review_rejects_unfinished_year_before_snapshot_creation() -> None:
