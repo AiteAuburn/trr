@@ -25,8 +25,15 @@ YearReviewSharePackageStatus = Literal["confirmed", "opened", "dismissed", "revo
 
 def number_value(payload: dict[str, object], key: str) -> float | None:
     value = payload.get(key)
+    if isinstance(value, bool):
+        return None
     if isinstance(value, int | float):
         return float(value)
+    if isinstance(value, str):
+        try:
+            return float(value.strip())
+        except ValueError:
+            return None
     return None
 
 

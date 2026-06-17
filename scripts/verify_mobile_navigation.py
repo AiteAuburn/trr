@@ -255,6 +255,8 @@ def _verify_achievement_contract(content: str) -> None:
         ("year review dynamic achieved badge levels", "achievement_levels_for_progress(count)"),
         ("year review achieved badge source", "achieved_badges = achieved_badge_count(annual_badge_progress_counts)"),
         ("year review highest badge source", "highest_badge = highest_unlocked_level(annual_badge_progress_counts)"),
+        ("year review glucose bool guard", "if isinstance(value, bool):"),
+        ("year review glucose numeric string parsing", "return float(value.strip())"),
     ):
         _assert_contains(label, year_review_content, marker)
 

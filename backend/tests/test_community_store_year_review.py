@@ -1901,6 +1901,67 @@ def test_year_review_badge_metrics_include_cumulative_and_streak_achievements() 
     assert annual_stats["highest_badge_level"] == 10
 
 
+def test_year_review_health_outcomes_ignore_bool_and_parse_numeric_strings() -> None:
+    client = TestClient(app)
+    account_id, profile_id = create_account_and_profile(client, "year-review-value-parsing")
+
+    with SessionLocal() as db:
+        db.add_all(
+            [
+                Record(
+                    profile_id=UUID(profile_id),
+                    record_type="glucose",
+                    occurred_at=datetime(2025, 4, 1, 8, 0, tzinfo=UTC),
+                    payload={"value": True, "unit": "mg/dL"},
+                    metadata_json={},
+                    source="legacy_import",
+                ),
+                Record(
+                    profile_id=UUID(profile_id),
+                    record_type="glucose",
+                    occurred_at=datetime(2025, 4, 2, 8, 0, tzinfo=UTC),
+                    payload={"value": " 120 ", "unit": "mg/dL"},
+                    metadata_json={},
+                    source="legacy_import",
+                ),
+                Record(
+                    profile_id=UUID(profile_id),
+                    record_type="glucose",
+                    occurred_at=datetime(2025, 4, 3, 8, 0, tzinfo=UTC),
+                    payload={"value": "not-a-number", "unit": "mg/dL"},
+                    metadata_json={},
+                    source="legacy_import",
+                ),
+                Record(
+                    profile_id=UUID(profile_id),
+                    record_type="glucose",
+                    occurred_at=datetime(2025, 4, 4, 8, 0, tzinfo=UTC),
+                    payload={"value": 160, "unit": "mg/dL"},
+                    metadata_json={},
+                    source="legacy_import",
+                ),
+            ]
+        )
+        db.commit()
+
+    response = client.get(
+        f"/year-reviews/2025?profile_id={profile_id}",
+        headers={"X-Account-Id": account_id},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    annual_stats = {item["key"]: item["value"] for item in body["annual_stats"]}
+    health_outcomes = {item["key"]: item["value"] for item in body["health_outcomes"]}
+    assert annual_stats["glucose_count"] == 4
+    assert health_outcomes == {
+        "average_glucose": 140.0,
+        "highest_glucose": 160,
+        "lowest_glucose": 120,
+    }
+    assert "年平均血糖 140.0 mg/dL" in body["ai_summary"][0]["text"]
+
+
 def test_year_review_batch_generation_creates_missing_snapshots_once() -> None:
     client = TestClient(app)
     first_account_id, first_profile_id = create_account_and_profile(client, "year-review-batch-a")

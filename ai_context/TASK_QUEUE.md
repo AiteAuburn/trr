@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T993: Harden Year Review glucose value parsing
+
+Status: done
+
+Summary:
+
+- Updated Year Review glucose value parsing so boolean payload values are ignored instead of counted as `1/0`.
+- Aligned Year Review with basic report behavior by accepting legacy numeric strings for health outcome calculations.
+- Added regression coverage and verifier guards for the annual health outcome parsing boundary.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_health_outcomes_ignore_bool_and_parse_numeric_strings` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T992: Cover unfinished Year Review share endpoints
 
 Status: done

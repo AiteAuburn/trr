@@ -15,6 +15,35 @@
 
 ## 2026-06-14
 
+### T993 harden Year Review glucose value parsing
+
+類型：backend / bugfix / test / verifier / docs / year-review
+
+檔案：
+
+- `backend/app/services/year_review_snapshots.py`
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated Year Review glucose value parsing so boolean payload values are ignored instead of counted as `1/0`.
+- Aligned Year Review with basic report behavior by accepting legacy numeric strings for health outcome calculations.
+- Added regression coverage and verifier guards for the annual health outcome parsing boundary.
+- 未變更年度 snapshot 建立流程、年度分享隱私遮罩、share package result/revoke、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_health_outcomes_ignore_bool_and_parse_numeric_strings` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If additional legacy import formats are supported, keep annual health outcomes aligned with `backend/app/services/reporting.py` parsing semantics.
+
 ### T992 cover unfinished Year Review share endpoints
 
 類型：backend / test / verifier / docs / year-review
