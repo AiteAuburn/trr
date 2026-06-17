@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T979 cover invalid food-share glucose bounds side effects
+
+類型：backend / test / docs / community
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that out-of-range food-share glucose values are rejected without creating food items or awarding points.
+- This protects the shared food database and community points system from invalid glycemic data.
+- 未變更 Community API behavior、points ledger、food stats calculation、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_share_normalizes_text_fields_and_rejects_blank_names tests/test_community_store_year_review.py::test_food_share_creates_food_stats_points_and_leaderboards` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If food-share schema ranges change, keep invalid-input side-effect checks aligned with the accepted glucose bounds.
+
 ### T978 cover Analysis report soft-deleted record exclusion
 
 類型：backend / test / docs / analysis

@@ -285,6 +285,7 @@ def test_food_share_normalizes_text_fields_and_rejects_blank_names() -> None:
     client = TestClient(app)
     account_id, _ = create_account_and_profile(client, "community-food-normalization")
     food_name = f"side-effect-food-{uuid4()}"
+    invalid_glucose_food_name = f"invalid-glucose-food-{uuid4()}"
 
     blank_response = client.post(
         "/community/foods/shares",
@@ -373,6 +374,33 @@ def test_food_share_normalizes_text_fields_and_rejects_blank_names() -> None:
     rejected_time_points_response = client.get("/store/points", headers={"X-Account-Id": account_id})
     assert rejected_time_points_response.status_code == 200
     assert rejected_time_points_response.json() == {
+        "balance": 0,
+        "lifetime_earned": 0,
+        "lifetime_redeemed": 0,
+    }
+
+    invalid_glucose_response = client.post(
+        "/community/foods/shares",
+        headers={"X-Account-Id": account_id},
+        json={
+            "food_name": invalid_glucose_food_name,
+            "category": "vegetables",
+            "eaten_at": datetime(2026, 1, 2, 13, 30, tzinfo=UTC).isoformat(),
+            "before_glucose": 19,
+            "after_glucose": 110,
+        },
+    )
+    assert invalid_glucose_response.status_code == 422
+    assert "before_glucose" in invalid_glucose_response.text
+    invalid_glucose_foods_response = client.get(
+        f"/community/foods?query={invalid_glucose_food_name}",
+        headers={"X-Account-Id": account_id},
+    )
+    assert invalid_glucose_foods_response.status_code == 200
+    assert invalid_glucose_foods_response.json() == []
+    invalid_glucose_points_response = client.get("/store/points", headers={"X-Account-Id": account_id})
+    assert invalid_glucose_points_response.status_code == 200
+    assert invalid_glucose_points_response.json() == {
         "balance": 0,
         "lifetime_earned": 0,
         "lifetime_redeemed": 0,
