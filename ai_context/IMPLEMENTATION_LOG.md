@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T981 cover invalid Year Review share result side effects
+
+類型：backend / test / docs / year-review
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that unsupported Year Review share result values are rejected without mutating the share package.
+- This keeps annual review social-sharing state limited to confirmed, opened, dismissed, and revoked transitions.
+- 未變更 Year Review API behavior、share payload content、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If external share providers add new result states, update the schema and no-mutation regression together.
+
 ### T980 cover blank Store reward code side effects
 
 類型：backend / test / docs / store

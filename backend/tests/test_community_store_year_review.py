@@ -1638,6 +1638,22 @@ def test_year_review_summarizes_previous_year_records() -> None:
     assert owner_status_after_unauthorized["shared_at"] is None
     assert owner_status_after_unauthorized["revoked_at"] is None
 
+    invalid_share_result_response = client.post(
+        f"/year-reviews/share-packages/{share_package_id}/result",
+        headers={"X-Account-Id": account_id},
+        json={"share_result": "posted"},
+    )
+    assert invalid_share_result_response.status_code == 422
+    owner_status_after_invalid_result_response = client.get(
+        f"/year-reviews/share-packages/{share_package_id}",
+        headers={"X-Account-Id": account_id},
+    )
+    assert owner_status_after_invalid_result_response.status_code == 200
+    owner_status_after_invalid_result = owner_status_after_invalid_result_response.json()
+    assert owner_status_after_invalid_result["status"] == "confirmed"
+    assert owner_status_after_invalid_result["shared_at"] is None
+    assert owner_status_after_invalid_result["revoked_at"] is None
+
     opened_response = client.post(
         f"/year-reviews/share-packages/{share_package_id}/result",
         headers={"X-Account-Id": account_id},
