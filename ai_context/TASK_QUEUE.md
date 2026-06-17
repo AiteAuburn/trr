@@ -111,6 +111,20 @@ None.
 
 ## Done
 
+### T956: Align Store search and cart copy with backend rewards
+
+Status: done
+
+Summary:
+
+- Store spec now states the general path syncs backend reward catalog, points, and redemption wallet before local search filtering.
+- Store cart intro copy no longer claims the points ledger is unavailable; it now distinguishes synced points/redemptions from unavailable cart/shipping/payment.
+- Mobile verifier rejects stale Store copy that says the points ledger or all reward issuing paths are unavailable.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
 ### T955: Remove stale community leaderboard preview copy
 
 Status: done

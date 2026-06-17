@@ -4110,7 +4110,7 @@ function storeLocalBoundaryCopy() {
 }
 
 function storeCartIntroCopy() {
-  return boundDisplayText("點數兌換流程尚未接上點數帳本、訂單與付款。", maxDisplayDetailTextLength);
+  return boundDisplayText("點數帳本、兌換券與折扣碼已可同步；購物車、出貨訂單與付款仍未接上。", maxDisplayDetailTextLength);
 }
 
 function storeCheckoutReadinessTitle() {

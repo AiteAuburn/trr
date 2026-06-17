@@ -15,6 +15,33 @@
 
 ## 2026-06-14
 
+### T956 Align Store search and cart copy with backend rewards
+
+類型：mobile / verifier / docs / store
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Store spec now reflects the current general path: sync backend reward catalog, points, and redemption wallet, then filter the synced catalog locally.
+- Store cart intro no longer says the points ledger is unavailable; it now distinguishes available points/redemptions/coupon-code sync from unavailable cart, shipping order, and payment.
+- Mobile navigation verifier now rejects stale Store copy that claims points ledger or all issuing paths are unavailable.
+- 未變更 backend endpoint、database schema、store reward catalog、points ledger、redemption lifecycle、payment behavior、AI、LLM、STT、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run quality` 通過。
+
+後續：
+
+- Full cart/checkout should remain disabled until inventory, shipping/order, payment, refund, and entitlement fulfillment are implemented.
+
 ### T955 Remove stale community leaderboard preview copy
 
 類型：mobile / verifier / docs / community
