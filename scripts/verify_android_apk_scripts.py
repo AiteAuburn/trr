@@ -9,6 +9,8 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_JSON = REPO_ROOT / "mobile" / "package.json"
+README = REPO_ROOT / "README.md"
+ANDROID_APP_BUILD_GRADLE = REPO_ROOT / "mobile" / "android" / "app" / "build.gradle"
 
 REQUIRED_SCRIPTS = {
     "verify:release-env": "python3 ../scripts/verify_mobile_release_env.py",
@@ -32,6 +34,8 @@ FORBIDDEN_PRODUCTION_FLAGS = {
 
 def main() -> int:
     package = json.loads(PACKAGE_JSON.read_text(encoding="utf-8"))
+    readme = README.read_text(encoding="utf-8")
+    build_gradle = ANDROID_APP_BUILD_GRADLE.read_text(encoding="utf-8")
     scripts = package.get("scripts", {})
     errors: list[str] = []
 
@@ -54,12 +58,36 @@ def main() -> int:
     if "npm run verify:android-apk-scripts" not in quality:
         errors.append("quality must include npm run verify:android-apk-scripts")
 
+    required_readme_markers = {
+        "debug APKs require Metro": "Debug APKs load JavaScript from Metro",
+        "release APK is standalone": "For a standalone APK that does not require Metro, build release:",
+        "release command": "./gradlew assembleRelease",
+        "release output path": "mobile/android/app/build/outputs/apk/release/app-release.apk",
+        "Windows PowerShell release command": ".\\gradlew.bat assembleRelease",
+        "WSL Windows SDK mismatch warning": "Do not run Linux Gradle in WSL against the Windows SDK path",
+    }
+    for label, marker in required_readme_markers.items():
+        if marker not in readme:
+            errors.append(f"README must document {label}: missing {marker!r}")
+
+    required_gradle_markers = {
+        "Expo embedded release bundle": 'bundleCommand = "export:embed"',
+        "Expo CLI bundle path": "require.resolve('@expo/cli'",
+        "release build type": "release {",
+    }
+    for label, marker in required_gradle_markers.items():
+        if marker not in build_gradle:
+            errors.append(f"Android Gradle config must keep {label}: missing {marker!r}")
+
     if errors:
         for error in errors:
             print(f"Android APK script verification failed: {error}", file=sys.stderr)
         return 1
 
-    print("Android APK scripts verified: production/internal preflight guardrails are wired.")
+    print(
+        "Android APK scripts verified: production/internal preflight guardrails are wired, "
+        "README documents standalone release APK export, and Gradle embeds the Expo JS bundle."
+    )
     return 0
 
 

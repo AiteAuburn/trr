@@ -15,6 +15,39 @@
 
 ## 2026-06-17
 
+### T1042 guard standalone Android APK export docs
+
+類型：docs / verifier / android
+
+檔案：
+
+- `scripts/verify_android_apk_scripts.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Expanded the Android APK script verifier so it also guards README release-export guidance.
+- Added source-level checks that debug APK docs still state Metro / Expo start is required, while `assembleRelease` is documented as the standalone APK path.
+- Added Gradle source checks that release builds keep Expo CLI `bundleCommand = "export:embed"`, so the JS bundle/assets are embedded instead of depending on Metro.
+- 未變更 Android runtime build config、backend runtime、mobile network request paths、AI/LLM calls、STT、parser、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run verify:android-apk-scripts` passed.
+- `rtk python3 -m py_compile scripts/verify_android_apk_scripts.py scripts/check_android_apk_build_prereqs.py` passed.
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `cd mobile && rtk npm run apk:android-prereqs` passed in current WSL environment with JDK 17 and SDK/build-tools available; warning remains that Gradle builds under `/mnt/*` can hit I/O errors, so PowerShell or Linux storage is still recommended.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing the remaining goal requirements against current evidence before final completion.
+
 ### T1041 document Year Review DeepSeek prompt
 
 類型：docs / verifier
