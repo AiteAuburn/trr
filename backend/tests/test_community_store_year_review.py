@@ -786,6 +786,7 @@ def test_food_detail_returns_share_records_stats_and_cross_category_search() -> 
         fuzzy_body["food"]["id"],
     }
     assert search_items[-1]["id"] == fuzzy_body["food"]["id"]
+    assert all("created_by_account_id" not in item for item in search_items)
 
     blank_search_response = client.get(
         "/community/foods?query=%20%20%20",
@@ -814,6 +815,7 @@ def test_food_detail_returns_share_records_stats_and_cross_category_search() -> 
     assert detail["name"] == food_name
     assert detail["category"] == "drinks"
     assert detail["category_label"] == "飲料"
+    assert "created_by_account_id" not in detail
     assert detail["stats"] == {
         "share_count": 3,
         "average_glucose_delta": 17.0,

@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T984: Cover public food item creator privacy
+
+Status: done
+
+Summary:
+
+- Added backend regression coverage that public food search and detail responses do not expose the internal creator account identifier.
+- This keeps the shared food blood-sugar database searchable by food and category without leaking who created the food item row.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search tests/test_community_store_year_review.py::test_food_search_limits_results_to_latest_matching_items` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T983: Cover public food detail share privacy
 
 Status: done

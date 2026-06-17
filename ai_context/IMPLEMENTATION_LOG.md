@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T984 cover public food item creator privacy
+
+類型：backend / test / docs / community
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that public food search and detail responses do not expose the internal creator account identifier.
+- This keeps the shared food blood-sugar database searchable by category/name while preserving creator privacy for the food item row itself.
+- 未變更 community API behavior、food search/detail payload content、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search tests/test_community_store_year_review.py::test_food_search_limits_results_to_latest_matching_items` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If food item pages later show contributor reputation, expose only deliberate pseudonymous public profile fields, not internal account identifiers.
+
 ### T983 cover public food detail share privacy
 
 類型：backend / test / docs / community
