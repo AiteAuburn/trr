@@ -31,7 +31,7 @@ class AiModelOption(BaseModel):
     id: str = Field(min_length=1, max_length=AI_MODEL_ID_MAX_LENGTH)
     label: str = Field(min_length=1, max_length=AI_MODEL_LABEL_MAX_LENGTH)
     kind: Literal["stt", "llm"]
-    runtime: Literal["browser", "local", "server_stub", "cloud_disabled"]
+    runtime: Literal["browser", "local", "server_api", "server_stub", "cloud_disabled"]
     available: bool
     description: str = Field(max_length=AI_MODEL_DESCRIPTION_MAX_LENGTH)
 

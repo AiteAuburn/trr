@@ -268,7 +268,7 @@ LLM_MODELS = [
         id=DEEPSEEK_LLM_MODEL_ID,
         label="DeepSeek Chat",
         kind="llm",
-        runtime="local",
+        runtime="server_api",
         available=True,
         description="OpenAI-compatible DeepSeek parser. Requires DEEPSEEK_PARSER_URL and DEEPSEEK_API_KEY.",
     ),

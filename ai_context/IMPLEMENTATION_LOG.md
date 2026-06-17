@@ -15,6 +15,37 @@
 
 ## 2026-06-14
 
+### T953 Mark DeepSeek as backend API parser and document prompt
+
+類型：backend / mobile / docs / test / ai
+
+檔案：
+
+- `backend/app/schemas/ai.py`
+- `backend/app/services/ai_pipeline.py`
+- `backend/tests/test_ai_pipeline.py`
+- `mobile/App.tsx`
+- `README.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- DeepSeek Chat model option now uses a backend API runtime label instead of a local-model runtime label.
+- Mobile model status labels now display backend API models distinctly from local models and backend test stubs.
+- README now lists the actual backend DeepSeek prompt stack: configurable system prompt, configurable analysis addendum, and fixed compact JSON parser base rule.
+- Added backend regression tests for DeepSeek endpoint/key availability and system-prompt composition.
+- 未記錄或輸出 PHI、真實健康資料、request body、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_ai_pipeline.py::test_deepseek_model_option_requires_endpoint_and_key tests/test_ai_pipeline.py::test_deepseek_system_prompt_includes_configured_prompt_analysis_and_base` 通過。
+- `cd mobile && rtk npm run quality` 通過。
+
+後續：
+
+- If production DeepSeek is enabled, provide `DEEPSEEK_PARSER_URL` and `DEEPSEEK_API_KEY` through secret management, not committed env files.
+
 ### T952 Align hamburger menu verifier with phase-based destinations
 
 類型：mobile-test / docs / navigation

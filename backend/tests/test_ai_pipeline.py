@@ -2027,6 +2027,51 @@ def test_parse_preview_gemma4_requires_local_endpoint() -> None:
     }
 
 
+def test_deepseek_model_option_requires_endpoint_and_key(monkeypatch) -> None:
+    from app.services import ai_pipeline
+
+    monkeypatch.setattr(ai_pipeline, "_installed_ollama_model_ids", lambda _: set())
+    monkeypatch.setattr(
+        ai_pipeline,
+        "get_settings",
+        lambda: get_settings().model_copy(
+            update={
+                "deepseek_parser_url": "https://api.deepseek.com/v1/chat/completions",
+                "deepseek_api_key": "sk-test",
+            }
+        ),
+    )
+
+    models = ai_pipeline.runtime_llm_models()
+    deepseek = next(model for model in models if model.id == DEEPSEEK_LLM_MODEL_ID)
+
+    assert deepseek.runtime == "server_api"
+    assert deepseek.available is True
+    assert "DeepSeek chat endpoint ready." in deepseek.description
+
+
+def test_deepseek_system_prompt_includes_configured_prompt_analysis_and_base(monkeypatch) -> None:
+    from app.services import ai_pipeline
+
+    monkeypatch.setattr(
+        ai_pipeline,
+        "get_settings",
+        lambda: get_settings().model_copy(
+            update={
+                "deepseek_system_prompt": "SYSTEM: strict parser only",
+                "deepseek_analysis_addendum": "ANALYSIS: reject uncertain facts",
+            }
+        ),
+    )
+
+    prompt = _local_parser_system_prompt(llm_model_id=DEEPSEEK_LLM_MODEL_ID)
+
+    assert "SYSTEM: strict parser only" in prompt
+    assert "ANALYSIS: reject uncertain facts" in prompt
+    assert "Return compact JSON only" in prompt
+    assert "Do not provide medical advice" in prompt
+
+
 def test_parse_preview_accepts_static_llm_without_runtime_model_lookup(monkeypatch) -> None:
     from app.services import ai_pipeline
 

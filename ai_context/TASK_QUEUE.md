@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T953: Mark DeepSeek as backend API parser and document prompt
+
+Status: done
+
+Summary:
+
+- DeepSeek Chat now reports as a backend API parser runtime instead of a local model runtime.
+- Mobile model labels render DeepSeek as a backend API path.
+- README documents the actual DeepSeek system prompt stack used by backend configuration: env system prompt, env analysis addendum, and fixed compact JSON parser base prompt.
+- Backend tests lock DeepSeek availability requirements and prompt composition.
+
+Verification:
+
+- `pytest -q tests/test_ai_pipeline.py::test_deepseek_model_option_requires_endpoint_and_key tests/test_ai_pipeline.py::test_deepseek_system_prompt_includes_configured_prompt_analysis_and_base` passed.
+- `npm run quality` passed in `mobile/`.
+
 ### T952: Align hamburger menu verifier with phase-based destinations
 
 Status: done

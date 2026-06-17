@@ -53,7 +53,7 @@ type AiModelOption = {
   id: string;
   label: string;
   kind: "stt" | "llm";
-  runtime: "browser" | "local" | "server_stub" | "cloud_disabled";
+  runtime: "browser" | "local" | "server_api" | "server_stub" | "cloud_disabled";
   available: boolean;
   description: string;
 };
@@ -3007,6 +3007,9 @@ function modelRuntimeLabel(runtime?: AiModelOption["runtime"]) {
   }
   if (runtime === "server_stub") {
     return "後端測試模型";
+  }
+  if (runtime === "server_api") {
+    return "後端 API";
   }
   if (runtime === "cloud_disabled") {
     return "雲端停用";
