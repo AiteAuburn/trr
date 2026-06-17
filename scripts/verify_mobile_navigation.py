@@ -1202,10 +1202,20 @@ def main() -> int:
             ("home recording timer interval", "const timer = setInterval(() => {"),
             ("home recording timer clamp", "setRecordingElapsedSeconds(clampNumber(nextElapsedSeconds, 0, limitSeconds));"),
             ("home recording auto stop at limit", 'void finishRecordingPreview("limit");'),
-            ("home recording timer render", '<Text style={styles.homeRecordingTimer}>{recordingElapsedSecondsDisplayText}</Text>'),
-            ("home recording timer style", "homeRecordingTimer: {"),
+            ("home recording secondary hint render", "<Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>"),
+            ("home recording secondary hint active copy", "已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，放開即結束"),
         ):
             _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "home recording must not render a third timer line",
+            content,
+            '<Text style={styles.homeRecordingTimer}>{recordingElapsedSecondsDisplayText}</Text>',
+        )
+        _assert_not_contains(
+            "home recording timer style must not exist",
+            content,
+            "homeRecordingTimer: {",
+        )
         deepseek_preference_marker = (
             'modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??'
         )
@@ -2308,15 +2318,23 @@ def main() -> int:
         for label, marker in (
             ("minimal home block primary hint", "<Text style={styles.homeHint}>按住開始說話記錄</Text>"),
             ("minimal home block secondary hint", "<Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>"),
-            ("minimal home block active recording timer condition", "isRecordingPreview ? ("),
-            ("minimal home block active recording timer binding", "<Text style={styles.homeRecordingTimer}>{recordingElapsedSecondsDisplayText}</Text>"),
         ):
             _assert_contains(label, today_home_block, marker)
-        for label, marker in (
-            ("minimal home active recording timer style", "homeRecordingTimer: {"),
-            ("recording elapsed seconds display helper", "function recordingElapsedSecondsCopy(elapsedSeconds: number)"),
-        ):
-            _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "minimal home block no active recording timer condition",
+            today_home_block,
+            "isRecordingPreview ? (",
+        )
+        _assert_not_contains(
+            "minimal home block no separate recording timer binding",
+            today_home_block,
+            "<Text style={styles.homeRecordingTimer}",
+        )
+        _assert_contains(
+            "recording elapsed seconds display helper",
+            content,
+            "function recordingElapsedSecondsCopy(elapsedSeconds: number)",
+        )
         for label, marker in (
             ("minimal home no quick-entry rail", "styles.quickEntryRail"),
             ("minimal home no quick-entry map", "quickEntryModeDisplayItemsForRender.map"),
@@ -4175,7 +4193,7 @@ def main() -> int:
             f"{len(MIN_TOUCH_TARGET_STYLE_RULES)} compact touch-target styles plus "
             f"{len(MIN_TOUCH_TARGET_WIDTH_STYLE_RULES)} width checks, "
             f"{len(READABILITY_STYLE_RULES)} dense-row readability styles, "
-            "minimal Home mic entry, hold/release hints, elapsed timer, and Record quick-entry affordances, "
+            "minimal Home mic entry, hold/release hints, secondary elapsed hint, and Record quick-entry affordances, "
             "History and Analysis open-section styles, "
             "AI Review rejected-event open stack, "
             "detail row open-section styles, "

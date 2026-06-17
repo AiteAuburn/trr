@@ -15,6 +15,33 @@
 
 ## 2026-06-17
 
+### T1022 keep Home recording elapsed seconds in the secondary hint
+
+類型：mobile / verifier / UX alignment
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Removed the separate Home recording timer line so the minimal Home screen stays at one mic button plus two hint lines.
+- Kept elapsed recording seconds visible by using the existing bounded `homeHintSecondary` copy while recording.
+- Updated the mobile navigation verifier to reject a third Home timer line or `homeRecordingTimer` style and to describe the elapsed display as a secondary hint.
+- 未變更錄音擷取、Whisper 轉文字、parser、backend write、AI/LLM、STT model selection、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- 若要做真機視覺確認，需用 dev client 或 Android build 檢查 Home 按住錄音時第二行提示是否保持垂直穩定。
+
 ### T1021 align Store copy with active point-redemption flow
 
 類型：mobile / docs / verifier / store
