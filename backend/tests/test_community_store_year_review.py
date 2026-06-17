@@ -1463,6 +1463,36 @@ def test_year_review_summarizes_previous_year_records() -> None:
     assert package_status_response.status_code == 200
     assert package_status_response.json()["status"] == "confirmed"
 
+    other_account_id, _ = create_account_and_profile(client, "year-review-share-other")
+    unauthorized_status_response = client.get(
+        f"/year-reviews/share-packages/{share_package_id}",
+        headers={"X-Account-Id": other_account_id},
+    )
+    assert unauthorized_status_response.status_code == 404
+    assert unauthorized_status_response.json()["detail"] == "Profile not found"
+    unauthorized_open_response = client.post(
+        f"/year-reviews/share-packages/{share_package_id}/result",
+        headers={"X-Account-Id": other_account_id},
+        json={"share_result": "opened"},
+    )
+    assert unauthorized_open_response.status_code == 404
+    assert unauthorized_open_response.json()["detail"] == "Profile not found"
+    unauthorized_revoke_response = client.post(
+        f"/year-reviews/share-packages/{share_package_id}/revoke",
+        headers={"X-Account-Id": other_account_id},
+    )
+    assert unauthorized_revoke_response.status_code == 404
+    assert unauthorized_revoke_response.json()["detail"] == "Profile not found"
+    owner_status_after_unauthorized_response = client.get(
+        f"/year-reviews/share-packages/{share_package_id}",
+        headers={"X-Account-Id": account_id},
+    )
+    assert owner_status_after_unauthorized_response.status_code == 200
+    owner_status_after_unauthorized = owner_status_after_unauthorized_response.json()
+    assert owner_status_after_unauthorized["status"] == "confirmed"
+    assert owner_status_after_unauthorized["shared_at"] is None
+    assert owner_status_after_unauthorized["revoked_at"] is None
+
     opened_response = client.post(
         f"/year-reviews/share-packages/{share_package_id}/result",
         headers={"X-Account-Id": account_id},

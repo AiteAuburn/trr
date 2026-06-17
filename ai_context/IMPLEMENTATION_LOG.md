@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T974 cover Year Review share package account isolation
+
+類型：backend / test / docs / year-review
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that another account cannot read, mark opened, or revoke an owner's Year Review share package.
+- The test verifies unauthorized attempts do not mutate the owner's confirmed share package state.
+- 未變更 Year Review API behavior、share payload content、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If share-package collaboration or delegated profile access is added, keep owner isolation and grant semantics tested separately.
+
 ### T973 cover Store redemption list cap
 
 類型：backend / test / docs / store
