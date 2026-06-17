@@ -8,7 +8,7 @@ from sqlalchemy import select
 from app.db.session import SessionLocal
 from app.jobs.generate_year_review_snapshots import default_target_year
 from app.main import app
-from app.models import AchievementUnlock, YearReviewSnapshot
+from app.models import AchievementUnlock, Record, YearReviewSnapshot
 from app.services.year_review_snapshots import generate_missing_year_review_snapshots
 from tests.helpers import create_account_and_profile, create_record
 
@@ -133,6 +133,57 @@ def test_achievement_summary_calculates_mvp_badge_progress() -> None:
         "glucose-cumulative-10",
         "glucose-streak-10",
     }
+
+
+def test_achievement_summary_extends_levels_after_base_ladder() -> None:
+    client = TestClient(app)
+    account_id, profile_id = create_account_and_profile(client, "achievement-dynamic-levels")
+    first_day = datetime(2026, 3, 1, 8, 0, tzinfo=UTC)
+
+    with SessionLocal() as db:
+        db.add_all(
+            Record(
+                profile_id=UUID(profile_id),
+                record_type="glucose",
+                occurred_at=first_day + timedelta(days=offset),
+                payload={"value": 100 + (offset % 40), "unit": "mg/dL", "meal_timing": "before_meal"},
+                metadata_json={},
+                source="manual",
+            )
+            for offset in range(250)
+        )
+        db.commit()
+
+    response = client.get(
+        f"/achievements/summary?profile_id={profile_id}",
+        headers={"X-Account-Id": account_id},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["levels"] == [10, 50, 100, 150, 200, 250, 300]
+    assert body["unlocked_count"] == 12
+    assert body["next_remaining"] == 10
+    assert len(body["items"]) == 42
+    by_id = {item["id"]: item for item in body["items"]}
+    assert by_id["glucose-cumulative-250"]["unlocked"] is True
+    assert by_id["glucose-streak-250"]["unlocked"] is True
+    assert by_id["glucose-cumulative-300"]["progress"] == 250
+    assert by_id["glucose-cumulative-300"]["target"] == 300
+    assert by_id["glucose-cumulative-300"]["unlocked"] is False
+    assert by_id["glucose-streak-300"]["progress"] == 250
+    assert by_id["glucose-streak-300"]["target"] == 300
+    assert by_id["glucose-streak-300"]["unlocked"] is False
+
+    sync_response = client.post(
+        f"/achievements/sync?profile_id={profile_id}",
+        headers={"X-Account-Id": account_id},
+    )
+    assert sync_response.status_code == 200
+    synced_body = sync_response.json()
+    assert synced_body["persisted_unlocked_count"] == 12
+    assert synced_body["newly_unlocked_count"] == 12
+    assert not any(item["id"].endswith("-300") and item["unlocked_at"] for item in synced_body["items"])
 
 
 def test_food_categories_endpoint_returns_required_taxonomy() -> None:

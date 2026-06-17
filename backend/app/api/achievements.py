@@ -12,8 +12,8 @@ from app.schemas.achievement import AchievementRead, AchievementSummaryRead
 from app.services.achievement_catalog import (
     ACHIEVEMENT_CATEGORY_DEFINITIONS,
     ACHIEVEMENT_LEVEL_COLORS,
-    ACHIEVEMENT_LEVELS,
     ACHIEVEMENT_STREAK_BADGE_COLOR,
+    achievement_levels_for_progress,
 )
 from app.services.audit import write_audit_event
 from app.services.permissions import assert_can_read_profile
@@ -35,17 +35,31 @@ def _longest_streak(days: set[date]) -> int:
     return longest
 
 
-def _achievement_items(records: list[Record]) -> list[AchievementRead]:
-    items: list[AchievementRead] = []
+def _achievement_progress(records: list[Record]) -> list[tuple[dict[str, object], int, int]]:
+    progress: list[tuple[dict[str, object], int, int]] = []
     for definition in ACHIEVEMENT_CATEGORY_DEFINITIONS:
-        category = str(definition["id"])
-        label = str(definition["label"])
         record_type = str(definition["record_type"])
         cumulative_progress = sum(1 for record in records if record.record_type == record_type)
         streak_progress = _longest_streak(
             {record.occurred_at.date() for record in records if record.record_type == record_type}
         )
-        for level_index, level in enumerate(ACHIEVEMENT_LEVELS):
+        progress.append((definition, cumulative_progress, streak_progress))
+    return progress
+
+
+def _achievement_items(records: list[Record], levels: tuple[int, ...] | None = None) -> list[AchievementRead]:
+    items: list[AchievementRead] = []
+    progress_by_definition = _achievement_progress(records)
+    if levels is None:
+        max_progress = max(
+            (max(cumulative_progress, streak_progress) for _, cumulative_progress, streak_progress in progress_by_definition),
+            default=0,
+        )
+        levels = achievement_levels_for_progress(max_progress)
+    for definition, cumulative_progress, streak_progress in progress_by_definition:
+        category = str(definition["id"])
+        label = str(definition["label"])
+        for level_index, level in enumerate(levels):
             badge_color = ACHIEVEMENT_LEVEL_COLORS[level_index] if level_index < len(ACHIEVEMENT_LEVEL_COLORS) else str(
                 definition["cumulative_color"]
             )
@@ -140,7 +154,13 @@ def _achievement_summary(
             )
         )
     )
-    items = _achievement_items(records)
+    progress_by_definition = _achievement_progress(records)
+    max_progress = max(
+        (max(cumulative_progress, streak_progress) for _, cumulative_progress, streak_progress in progress_by_definition),
+        default=0,
+    )
+    levels = achievement_levels_for_progress(max_progress)
+    items = _achievement_items(records, levels)
     unlocks_by_id = _achievement_unlocks_by_id(profile_id, db)
     newly_unlocked_ids: list[str] = []
     for item in items:
@@ -188,7 +208,7 @@ def _achievement_summary(
         default=0,
     )
     return AchievementSummaryRead(
-        levels=list(ACHIEVEMENT_LEVELS),
+        levels=list(levels),
         unlocked_count=unlocked_count,
         persisted_unlocked_count=persisted_unlocked_count,
         newly_unlocked_count=len(newly_unlocked_ids),

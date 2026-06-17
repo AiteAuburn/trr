@@ -1238,12 +1238,12 @@ Dev-only visual smoke route jump：
 
 - 分類固定為「血糖記錄」、「飲食記錄」、「運動記錄」。
 - 每個分類都要有「累積型成就」與「連續型成就」。
-- 級距固定先提供 `10`、`50`、`100`、`150`、`200`、`250`，後續可持續增加。
+- 級距先提供 `10`、`50`、`100`、`150`、`200`、`250`；達到最高基礎級距後，backend summary、mobile fallback 與年度回顧需以每 `50` 進度延伸下一級距，例如 `300`。
 - 同一分類的累積型徽章共用同款徽章圖樣，只更換顏色與等級數字。
 - 連續型徽章採獨立款式，仍只用顏色與等級數字區分級距。
 - MVP 階段 backend summary 使用 profile 既有 records 計算累積筆數與分類連續天數；mobile fallback 使用已載入紀錄計算同一套徽章，不做公開排名或跨使用者展示承諾。
-- Backend 成就 taxonomy 必須以共用 achievement catalog 作為唯一來源；`/achievements/summary` 與 Year Review snapshot service 都必須引用同一套級距，年度回顧不可私有定義徽章級距。
-- Mobile navigation verifier 必須同時檢查 mobile fallback、backend achievement catalog、backend `/achievements/summary` 與 Year Review snapshot service 的成就 taxonomy parity：三大分類、六個級距、累積/連續型、累積型共用分類圖樣、連續型獨立圖樣與 badge level number 都不可漂移。Backend integration test 也必須驗證每個分類各有 6 張累積型與 6 張連續型徽章、累積型同分類共用 icon、累積型六個級距共用同一套顏色序列、連續型共用獨立 icon/color，且級距順序完整。
+- Backend 成就 taxonomy 必須以共用 achievement catalog 作為唯一來源；`/achievements/summary` 與 Year Review snapshot service 都必須引用同一套基礎級距與動態延伸 helper，年度回顧不可私有定義徽章級距。
+- Mobile navigation verifier 必須同時檢查 mobile fallback、backend achievement catalog、backend `/achievements/summary` 與 Year Review snapshot service 的成就 taxonomy parity：三大分類、基礎六個級距、250 後動態延伸、累積/連續型、累積型共用分類圖樣、連續型獨立圖樣與 badge level number 都不可漂移。Backend integration test 也必須驗證每個分類各有基礎 6 張累積型與 6 張連續型徽章、250 後可延伸到下一級距、累積型同分類共用 icon、累積型基礎六個級距共用同一套顏色序列、連續型共用獨立 icon/color，且級距順序完整。
 
 上方總覽卡：
 

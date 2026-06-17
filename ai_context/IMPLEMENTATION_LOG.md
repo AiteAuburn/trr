@@ -15,6 +15,40 @@
 
 ## 2026-06-14
 
+### T958 extend achievement levels after base ladder
+
+類型：backend / mobile / verifier / docs / achievements
+
+檔案：
+
+- `backend/app/services/achievement_catalog.py`
+- `backend/app/api/achievements.py`
+- `backend/app/services/year_review_snapshots.py`
+- `backend/tests/test_community_store_year_review.py`
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared backend achievement level helper that preserves the base 10 / 50 / 100 / 150 / 200 / 250 ladder and extends by 50 after the base ceiling is reached.
+- Updated backend achievement summary/sync, Year Review badge metrics, and mobile fallback achievements to use the dynamic level path.
+- Added regression coverage for 250 glucose records showing 300-level cumulative and streak badges as locked next targets.
+- Updated verifier and canonical UI spec to keep mobile, backend, and Year Review achievement ladders aligned.
+- 未變更 auth、permission scopes、record write APIs、排行榜公開行為、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run quality` passed.
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py -k "achievement"` passed.
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_badge_metrics_include_cumulative_and_streak_achievements` passed.
+
+後續：
+
+- If the app needs more than 16 displayed achievement levels, widen the API schema item cap and mobile rendering limits together.
+
 ### T957 align tutorial copy with local Whisper recording
 
 類型：mobile / verifier / docs / tutorial

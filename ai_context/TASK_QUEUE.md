@@ -111,6 +111,23 @@ None.
 
 ## Done
 
+### T958: Extend achievement levels after base ladder
+
+Status: done
+
+Summary:
+
+- Added a shared backend achievement level helper that keeps the base 10 / 50 / 100 / 150 / 200 / 250 ladder and extends by 50 after users reach the base ceiling.
+- Updated `/achievements/summary`, `/achievements/sync`, Year Review badge metrics, and mobile fallback level generation to use the dynamic level path.
+- Added regression coverage for 250 glucose records showing the 300-level cumulative and streak badges as locked next targets.
+- Updated the mobile verifier and canonical UI spec so the dynamic achievement ladder cannot drift from backend/year-review behavior.
+
+Verification:
+
+- `cd mobile && rtk npm run quality` passed.
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py -k "achievement"` passed.
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_badge_metrics_include_cumulative_and_streak_achievements` passed.
+
 ### T957: Align tutorial copy with local Whisper recording
 
 Status: done

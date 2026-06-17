@@ -16,7 +16,7 @@ from app.schemas.year_review import (
     YearReviewShareCardRead,
     YearReviewSharePackageRead,
 )
-from app.services.achievement_catalog import ACHIEVEMENT_CATEGORY_DEFINITIONS, ACHIEVEMENT_LEVELS
+from app.services.achievement_catalog import ACHIEVEMENT_CATEGORY_DEFINITIONS, achievement_levels_for_progress
 from app.services.audit import write_audit_event
 
 YEAR_REVIEW_GENERATION_BATCH_SIZE = 500
@@ -33,14 +33,14 @@ def number_value(payload: dict[str, object], key: str) -> float | None:
 def highest_unlocked_level(counts: tuple[int, ...]) -> int:
     best = 0
     for count in counts:
-        for level in ACHIEVEMENT_LEVELS:
+        for level in achievement_levels_for_progress(count):
             if count >= level:
                 best = max(best, level)
     return best
 
 
 def achieved_badge_count(counts: tuple[int, ...]) -> int:
-    return sum(1 for count in counts for level in ACHIEVEMENT_LEVELS if count >= level)
+    return sum(1 for count in counts for level in achievement_levels_for_progress(count) if count >= level)
 
 
 def longest_streak(days: set[date]) -> int:

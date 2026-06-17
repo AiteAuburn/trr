@@ -6183,7 +6183,7 @@ export default function App() {
     const maxObservedLevel = Math.max(maxObservedRecords, maxObservedStreak, maxBaseLevel);
     const dynamicLevels: number[] = [...achievementLevels];
     let nextLevel = maxBaseLevel + achievementLevelStep;
-    while (nextLevel <= maxObservedLevel) {
+    while (maxObservedLevel >= maxBaseLevel && dynamicLevels.length < 16 && nextLevel <= maxObservedLevel + achievementLevelStep) {
       dynamicLevels.push(nextLevel);
       nextLevel += achievementLevelStep;
     }

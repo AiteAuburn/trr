@@ -242,7 +242,7 @@ def _verify_achievement_contract(content: str) -> None:
     _assert_contains(
         "year review achievement catalog import",
         year_review_content,
-        "from app.services.achievement_catalog import ACHIEVEMENT_CATEGORY_DEFINITIONS, ACHIEVEMENT_LEVELS",
+        "from app.services.achievement_catalog import ACHIEVEMENT_CATEGORY_DEFINITIONS, achievement_levels_for_progress",
     )
     _assert_not_contains("year review local achievement levels", year_review_content, catalog_level_marker)
     _assert_not_contains("achievement api local achievement levels", backend_content, catalog_level_marker)
@@ -250,6 +250,7 @@ def _verify_achievement_contract(content: str) -> None:
         ("year review cumulative badge counts", "cumulative_counts = tuple("),
         ("year review streak badge counts", "streak_counts = tuple("),
         ("year review badge counts combine cumulative streak", "annual_badge_progress_counts = cumulative_counts + streak_counts"),
+        ("year review dynamic achieved badge levels", "achievement_levels_for_progress(count)"),
         ("year review achieved badge source", "achieved_badges = achieved_badge_count(annual_badge_progress_counts)"),
         ("year review highest badge source", "highest_badge = highest_unlocked_level(annual_badge_progress_counts)"),
     ):
@@ -273,6 +274,7 @@ def _verify_achievement_contract(content: str) -> None:
         ("mobile cumulative label", 'kindLabel: "累積型"'),
         ("mobile cumulative shared category icon", "icon: definition.cumulativeIcon"),
         ("mobile cumulative level color", "const badgeColor = achievementLevelColors[levelIndex] ?? definition.cumulativeColor"),
+        ("mobile dynamic achievement next level", "nextLevel <= maxObservedLevel + achievementLevelStep"),
         ("mobile streak kind", 'kind: "streak"'),
         ("mobile streak label", 'kindLabel: "連續型"'),
         ("mobile streak independent icon", 'icon: "連"'),
@@ -282,6 +284,7 @@ def _verify_achievement_contract(content: str) -> None:
         ("backend cumulative label", 'kind_label="累積型"'),
         ("backend cumulative shared category icon", 'icon=str(definition["cumulative_icon"])'),
         ("backend cumulative level color", "badge_color=badge_color"),
+        ("backend dynamic achievement levels", "levels = achievement_levels_for_progress(max_progress)"),
         ("backend streak kind", 'kind="streak"'),
         ("backend streak label", 'kind_label="連續型"'),
         ("backend streak independent icon", 'icon="連"'),
