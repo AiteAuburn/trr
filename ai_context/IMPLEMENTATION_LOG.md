@@ -15,6 +15,35 @@
 
 ## 2026-06-14
 
+### T966 align raw transcript metadata stripping
+
+類型：mobile / backend / test / verifier / docs / history
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `backend/tests/test_records.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Expanded mobile pending-record metadata stripping to remove `raw_transcript`, `original_text`, and `normalized_text` before save.
+- Kept bounded `source_text` available so History can still show the original per-record transcript excerpt.
+- Added mobile verifier guards and backend sanitizer regression coverage for the same raw transcript aliases.
+- 未變更 parser output, record payload schemas, AI, LLM, STT, PHI logging, raw prompt, raw model output, secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk docker compose run --rm backend pytest -q tests/test_records.py::test_record_sanitizers_bound_direct_recursive_use tests/test_records.py::test_record_create_preserves_bounded_source_text_and_removes_other_raw_text` passed.
+- `cd mobile && rtk npm run typecheck` passed.
+
+後續：
+
+- If new transcript metadata aliases are introduced, update mobile stripping and backend sanitizer together.
+
 ### T965 normalize store reward code input
 
 類型：backend / test / docs / store

@@ -3120,7 +3120,16 @@ function stripRawTextMetadata(metadata?: Record<string, unknown>) {
   if (!metadata) {
     return undefined;
   }
-  const blockedKeys = new Set(["transcript", "raw_text", "rawText", "evidence", "description"]);
+  const blockedKeys = new Set([
+    "transcript",
+    "raw_transcript",
+    "raw_text",
+    "rawText",
+    "original_text",
+    "normalized_text",
+    "evidence",
+    "description"
+  ]);
   const sanitized = Object.fromEntries(
     Object.entries(metadata).filter(([key]) => !blockedKeys.has(key))
   );

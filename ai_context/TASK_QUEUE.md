@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T966: Align raw transcript metadata stripping
+
+Status: done
+
+Summary:
+
+- Expanded mobile pending-record metadata stripping to remove `raw_transcript`, `original_text`, and `normalized_text` before save while still preserving bounded `source_text`.
+- Added verifier guards so mobile cannot regress to sending full raw transcript metadata.
+- Added backend sanitizer regression coverage for the same raw transcript aliases.
+
+Verification:
+
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk docker compose run --rm backend pytest -q tests/test_records.py::test_record_sanitizers_bound_direct_recursive_use tests/test_records.py::test_record_create_preserves_bounded_source_text_and_removes_other_raw_text` passed.
+- `cd mobile && rtk npm run typecheck` passed.
+
 ### T965: Normalize store reward code input
 
 Status: done

@@ -443,14 +443,20 @@ def test_record_sanitizers_bound_direct_recursive_use() -> None:
             "source_text": "bounded source text kept",
             "long_model": "m" * (MAX_RECORD_JSON_STRING_LENGTH + 5),
             "transcript": "full transcript removed",
+            "raw_transcript": "raw transcript removed",
             "raw_text": "raw text removed",
+            "original_text": "original text removed",
+            "normalized_text": "normalized text removed",
         }
     )
 
     assert "description" not in payload
     assert metadata["source_text"] == "bounded source text kept"
     assert "transcript" not in metadata
+    assert "raw_transcript" not in metadata
     assert "raw_text" not in metadata
+    assert "original_text" not in metadata
+    assert "normalized_text" not in metadata
     assert payload["tags"] == ["x" * MAX_RECORD_JSON_STRING_LENGTH]
     assert metadata["long_model"] == "m" * MAX_RECORD_JSON_STRING_LENGTH
     assert payload["wide"]["_truncated"] is True

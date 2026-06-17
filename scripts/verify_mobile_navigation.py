@@ -2517,6 +2517,14 @@ def main() -> int:
             strip_metadata_block,
             '"source_text"',
         )
+        for label, marker in (
+            ("history save strips transcript metadata", '"transcript"'),
+            ("history save strips raw transcript metadata", '"raw_transcript"'),
+            ("history save strips raw text metadata", '"raw_text"'),
+            ("history save strips original text metadata", '"original_text"'),
+            ("history save strips normalized text metadata", '"normalized_text"'),
+        ):
+            _assert_contains(label, strip_metadata_block, marker)
         _assert_contains(
             "history record detail handler",
             content,
