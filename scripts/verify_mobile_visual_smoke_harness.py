@@ -139,7 +139,7 @@ REQUIRED_HARNESS_CTAS = {
     "ranking": "查看排名狀態",
     "achievements": "返回功能選單",
     "yearReview": "查看分享整合狀態",
-    "store": "查看兌換整合狀態",
+    "store": "查看購物車整合狀態",
     "storeCart": "返回商城",
     "foodPhoto": "返回功能選單",
 }

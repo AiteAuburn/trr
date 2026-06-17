@@ -1365,10 +1365,10 @@ AI 年度觀察與鼓勵：
 
 - 標題：「商城」。
 - 左上角：返回箭頭。
-- Inline 說明：「商城預覽」，不使用 banner card。
+- Inline 說明：「點數商城」，不使用 banner card。
 - 搜尋框 placeholder：「搜尋商品」，左側放大鏡 icon。
 - 搜尋框必須使用 input-level `maxLength` 與 setter-level 截斷；一般操作路徑會先同步 backend reward catalog / points / redemption wallet，再對已同步目錄做本機搜尋篩選；backend unavailable 或 visual-smoke route 時才使用本機 fallback catalog。搜尋不可呼叫 AI，也不可查詢付款、出貨或外部商品 API。
-- 商城必須明確呈現點數兌換預留架構：點數來源、可兌換項目、正式啟用前條件、目前 preview 狀態。
+- 商城必須明確呈現點數兌換架構：點數來源、可兌換項目、已啟用的兌換能力、仍待完成的庫存 / 出貨 / 付款條件。
 - Backend 已有 `/store/rewards`、`/store/points`、`/store/redemptions` 與 `/store/redemptions/{id}/use` contract；redeemable rewards 會寫入 redemption 與點數 ledger，preview-only rewards 必須回 `reward_not_redeemable`，不存在的 reward code 必須回結構化 `reward_not_found` 且不可建立 redemption 或改變點數，點數不足必須回 `insufficient_points` 且不可建立 redemption 或扣成負餘額。不存在或不屬於目前 account 的 redemption use request 必須回結構化 `redemption_not_found`，不可改變任一帳號的 redemption wallet 或點數，也不可洩漏其他帳號 wallet 狀態。Reserved 特殊徽章或其他非 issued coupon/discount redemption use request 必須回 `redemption_not_usable`，不可標記 used、不可改變點數。已使用的 coupon/discount 二次 use 必須回 `redemption_not_usable`，不可刷新 `used_at` 或改變點數。優惠券與保健食品折扣可 immediate issue bounded fulfillment code；合作商品、會員福利與出貨/付款仍需後續 fulfillment。Mobile 一般操作路徑會同步 reward catalog/points/redemption wallet，按可兌換項目才送 redemption；visual-smoke route 必須維持本機 demo 且不扣點。
 - Backend store regression test 必須守住五個 reward categories：優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利；也必須鎖住各 reward 的 code、中文 title、category、points cost 與 redeemable/preview status。五個分類皆為可兌換項目；優惠券與保健食品折扣可 immediate issue bounded fulfillment code，合作商品、特殊徽章與特殊會員福利只建立 reservation，後續 fulfillment 完成前不可被 `/use` 當成 issued coupon/discount code 使用。
 - 點數來源：食物分享、完整前後血糖、審核通過。
@@ -1396,14 +1396,14 @@ AI 年度觀察與鼓勵：
 - 點擊商品箭頭後顯示「商品整合狀態」inline status，不使用 banner card 或額外白色 panel。
 - 商品整合狀態文字必須先經 bounded display helper 再 render，避免未來 commerce backend/config copy 過長。
 - 商品卡的點數成本必須由 bounded display item 提供，不可直接 render raw product config。
-- 商城預覽說明、搜尋無結果 title/copy/evidence、兌換整合 CTA、商城本機導覽邊界、兌換 intro、結帳 readiness 標題與返回商城 label 必須透過 bounded display helper 產生；不可在 JSX 內直接寫 commerce preview/cart fallback 文案。
+- 點數商城說明、搜尋無結果 title/copy/evidence、購物車整合 CTA、商城本機導覽邊界、兌換 intro、結帳 readiness 標題與返回商城 label 必須透過 bounded display helper 產生；不可在 JSX 內直接寫 commerce preview/cart fallback 文案。
 - 「我的兌換券」列表必須由 bounded redemption display item 提供 title、subtitle、status label、accessibility label 與 action label；不可直接 render raw fulfillment code、reward code 或 backend status。只有 `issued` 且未使用的 coupon/discount code 可顯示可操作使用按鈕，已使用或 reserved 狀態必須 disabled。
 - Store reward code 與 redemption id 必須先經 bounded display item / `boundIdentifier` 後才能送 `/store/redemptions` 或 `/store/redemptions/{id}/use`；bounded id 為空時 mobile 必須 fail closed，只顯示 bounded status，不建立兌換、不更新兌換券狀態。
 - Mobile navigation verifier 必須守住 Store 一般操作路徑會同步 `/store/rewards`、`/store/points`、`/store/redemptions`，redeemable 商品會 POST `/store/redemptions`，兌換成功與兌換券使用成功後都必須刷新 catalog / points / wallet，我的兌換券會 render bounded redemption display item，且 usable 判斷必須同時符合 `issued`、有 fulfillment code、fulfillment type 為 coupon/discount code、尚未 used，只有 usable coupon/discount 才能 POST `/store/redemptions/{id}/use`。
 
 底部固定按鈕：
 
-- MVP 預覽狀態：「查看兌換整合狀態」。
+- 購物車/付款整合狀態：「查看購物車整合狀態」。
 - 進入購物車整合狀態、返回商城與返回來源頁都必須走 dedicated handler 並設定 bounded commerce / preview status；不可在 JSX 中直接呼叫 `setCurrentScreen("storeCart")`、`setCurrentScreen("store")` 或 `setCurrentScreen(storeReturnScreen)`。
 - 點數帳本、商品目錄、coupon/discount-code issue 與 coupon use status 已有 backend contract；購物車整合頁不得再宣稱點數帳本尚未接上。庫存、購物車、結帳、出貨訂單與付款完成後才可改為完整「查看購物車」或商品兌換流程。
 - 購物車預覽頁若顯示結帳按鈕，必須是 disabled 狀態且文字為「結帳整合尚未啟用」，不可顯示可操作的「前往結帳」。

@@ -15,6 +15,42 @@
 
 ## 2026-06-17
 
+### T1021 align Store copy with active point-redemption flow
+
+類型：mobile / docs / verifier / store
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/generate_mobile_visual_smoke_harness.py`
+- `scripts/verify_mobile_visual_smoke_harness.py`
+- `scripts/verify_mobile_visual_smoke_harness_artifact.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated Store badge and CTA copy from preview/redemption-status wording to `點數商城` and `查看購物車整合狀態`.
+- Clarified that product cards can already redeem points and issue coupon/discount codes or reservations, while cart, shipping orders, payment, and fulfillment remain unavailable.
+- Updated visual-smoke fallback copy so it no longer claims Store can never deduct points or issue codes in the normal backend-ready path.
+- Added verifier guards against stale no-issue and no-points Store wording.
+- 未變更 backend store schema、reward costs、points ledger、redemption behavior、payment/order behavior、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/generate_mobile_visual_smoke_harness.py scripts/verify_mobile_visual_smoke_harness.py scripts/verify_mobile_visual_smoke_harness_artifact.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Full cart/checkout should remain disabled until inventory, order, shipping, payment, refund, and legal review are implemented.
+
 ### T1020 promote community and ranking backend-ready entry copy
 
 類型：mobile / docs / verifier / community / ranking

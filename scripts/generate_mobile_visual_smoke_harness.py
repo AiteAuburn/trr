@@ -538,15 +538,15 @@ ROUTES: tuple[RoutePreview, ...] = (
     RoutePreview(
         route="store",
         title="商城",
-        subtitle="點數商城與兌換入口 preview。",
+        subtitle="點數商城、兌換券與購物車整合入口。",
         icon="□",
         sections=(
-            ("優惠券", "會員專屬折價券 - 500 點"),
-            ("保健食品折扣", "折扣碼 - 800 點"),
-            ("合作商品 / 會員福利", "合作商品兌換券與特殊會員福利"),
+            ("優惠券", "backend ready 時可扣點並立即發出 bounded coupon code"),
+            ("保健食品折扣", "backend ready 時可扣點並立即發出 bounded discount code"),
+            ("合作商品 / 會員福利", "可建立 reservation，後續仍需 fulfillment"),
         ),
-        cta="查看兌換整合狀態",
-        note="商城預覽不得扣點、發券、啟動結帳或金流整合。",
+        cta="查看購物車整合狀態",
+        note="visual smoke 不扣點、不發券、不啟動結帳或金流整合。",
     ),
     RoutePreview(
         route="storeCart",

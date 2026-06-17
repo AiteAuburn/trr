@@ -4272,11 +4272,11 @@ function storeEmptySearchDisplayItem() {
 }
 
 function storeCartButtonLabel() {
-  return boundDisplayText("查看兌換整合狀態", maxDisplayTextLength);
+  return boundDisplayText("查看購物車整合狀態", maxDisplayTextLength);
 }
 
 function storeCartButtonAccessibilityLabel() {
-  return boundDisplayText("查看點數兌換整合狀態，不扣點、不建立訂單或付款", maxDisplayDetailTextLength);
+  return boundDisplayText("查看購物車、出貨訂單與付款整合狀態；不建立訂單或付款", maxDisplayDetailTextLength);
 }
 
 function storeLocalBoundaryCopy() {
@@ -5155,14 +5155,14 @@ function auxiliarySectionLabels() {
     yearReviewBoundary: boundDisplayText("年度回顧邊界", maxDisplayTextLength),
     yearEncouragementBadge: boundDisplayText("年度鼓勵徽章", maxDisplayTextLength),
     shareStatus: boundDisplayText("分享整合狀態", maxDisplayTextLength),
-    storePreview: boundDisplayText("商城預覽", maxDisplayTextLength),
+    storePreview: boundDisplayText("點數商城", maxDisplayTextLength),
     storeProductStatus: boundDisplayText("商品整合狀態", maxDisplayTextLength),
     foodPhotoStatus: boundDisplayText("拍照整合狀態", maxDisplayTextLength),
     achievementsReturnAccessibility: boundDisplayText("返回上一個功能入口，不寫入成就資料", maxDisplayDetailTextLength),
     yearReviewReturnAccessibility: boundDisplayText("返回上一個功能入口，不產生分享圖或公開資料", maxDisplayDetailTextLength),
     storeReturnAccessibility: boundDisplayText("返回上一個功能入口，不建立訂單或付款", maxDisplayDetailTextLength),
     storeCartCheckoutAccessibility: boundDisplayText("結帳尚未開放，不建立訂單或付款", maxDisplayDetailTextLength),
-    storeCartReturnAccessibility: boundDisplayText("返回商城預覽，不建立訂單或付款", maxDisplayDetailTextLength),
+    storeCartReturnAccessibility: boundDisplayText("返回商城，不建立訂單或付款", maxDisplayDetailTextLength),
     foodPhotoReturnAccessibility: boundDisplayText("返回上一個功能入口，不讀取照片或呼叫 Vision", maxDisplayDetailTextLength),
     visualSmokeRoutes: boundDisplayText("Visual smoke routes", maxDisplayTextLength),
     visualSmokeRouteCopy: boundDisplayText(
@@ -5566,7 +5566,7 @@ function commercePreviewOpenCartStatusMessage() {
 }
 
 function commercePreviewReturnStoreStatusMessage() {
-  return boundUiMessage("已返回商城預覽；購物車 preview 不建立訂單、不保存購物車，也不處理付款。");
+  return boundUiMessage("已返回商城；購物車整合狀態不建立訂單、不保存購物車，也不處理付款。");
 }
 
 function achievementPreviewBoundaryCopy() {
@@ -9807,7 +9807,7 @@ export default function App() {
     }
     if (!protectedAccountBackendReady || !account) {
       setStoreActionStatus(
-        boundUiMessage(`${protectedAccountBackendUnavailableMessage || "backend account 尚未 ready"}；目前只顯示本機商城預覽。`)
+        boundUiMessage(`${protectedAccountBackendUnavailableMessage || "backend account 尚未 ready"}；目前只顯示本機商城目錄。`)
       );
       return;
     }
