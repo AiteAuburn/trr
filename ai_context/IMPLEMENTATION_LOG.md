@@ -15,6 +15,38 @@
 
 ## 2026-06-17
 
+### T1018 align Year Review copy with backend snapshot flow
+
+類型：mobile / docs / verifier / year-review
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Removed stale `年度回顧（預留）` menu copy now that Year Review has backend snapshot sync, privacy-masked share package creation, native share handoff, and revoke handling.
+- Updated Year Review inline copy so the normal path points to backend snapshot persistence while the loaded-record path is clearly an offline fallback.
+- Synced the canonical UI spec and navigation verifier with the backend-aware Year Review wording.
+- 未變更 backend year-review schema、CronJob schedule、share package persistence、AI parser runtime、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Complete external social-platform deep links only after platform permissions and deletion/revoke requirements are finalized.
+
 ### T1017 surface community point balance on food sharing page
 
 類型：mobile / feature / verifier / docs / community / store

@@ -437,7 +437,7 @@ const menuScreens: Array<{ id: AppScreen; label: string; icon: string }> = [
   { id: "history", label: "歷史紀錄", icon: "🗂" },
   { id: "analysis", label: "基本分析", icon: "📊" },
   { id: "achievements", label: "成就榜", icon: "🏆" },
-  { id: "yearReview", label: "年度回顧（預留）", icon: "🔁" },
+  { id: "yearReview", label: "年度回顧", icon: "🔁" },
   { id: "store", label: "商城", icon: "🛍" },
   { id: "community", label: "食物社群（預留）", icon: "🤝" },
   { id: "ranking", label: "社群排行（預留）", icon: "🏅" },
@@ -4364,7 +4364,7 @@ function yearReviewShareUnavailableStatusMessage() {
 
 function yearReviewBoundaryDisplayCopy() {
   return boundDisplayText(
-    "年度回顧只做紀錄統計與鼓勵，不呼叫 AI、不寫入年度摘要、不提供診療建議；更多資料可由 backend 報表服務接手。",
+    "年度回顧由 backend snapshot 保存年度統計、AI-style 觀察與鼓勵；不提供診療建議或療效宣稱。",
     maxDisplayDetailTextLength
   );
 }
@@ -5147,7 +5147,7 @@ function auxiliarySectionLabels() {
     tutorialStartAccessibility: boundDisplayText("開始使用並前往記錄頁，不呼叫 AI 或寫入資料", maxDisplayDetailTextLength),
     tutorialManualAccessibility: boundDisplayText("從教學改用手動新增，不呼叫 AI、LLM 或 STT", maxDisplayDetailTextLength),
     localPreview: boundDisplayText("本機預覽", maxDisplayTextLength),
-    yearPreview: boundDisplayText("年度預覽", maxDisplayTextLength),
+    yearPreview: boundDisplayText("年度回顧", maxDisplayTextLength),
     unlocked: boundDisplayText("已解鎖", maxDisplayTextLength),
     achievementStatus: boundDisplayText("徽章整合狀態", maxDisplayTextLength),
     yearHighlights: boundDisplayText("今年亮點", maxDisplayTextLength),
@@ -5601,7 +5601,7 @@ function achievementIntegrationButtonAccessibilityLabel() {
 
 function yearReviewPreviewBoundaryCopy() {
   return boundDisplayText(
-    "mobile 已載入紀錄可本機預覽；backend ready 時可同步保存 snapshot，並準備 privacy-masked 年度分享 package。",
+    "backend ready 時同步保存年度 snapshot，並準備 privacy-masked 年度分享 package；離線時使用已載入紀錄即時計算。",
     maxDisplayDetailTextLength
   );
 }
@@ -5612,7 +5612,7 @@ function yearReviewHeroRecordCountCopy(count: number) {
 }
 
 function yearReviewLiveCalculationCopy(targetYear: number, generationLabel: string) {
-  return boundDisplayText(`${targetYear} 年資料；${generationLabel}。目前只用已載入紀錄預覽。`, maxDisplayDetailTextLength);
+  return boundDisplayText(`${targetYear} 年資料；${generationLabel}。同步成功後會使用 backend snapshot。`, maxDisplayDetailTextLength);
 }
 
 function yearReviewSourceDisplayCopy(summary: YearReviewApiResponse | null, sharePackageId: string) {

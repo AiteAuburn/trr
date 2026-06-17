@@ -1273,8 +1273,8 @@ Dev-only visual smoke route jump：
 
 目前狀態：
 
-- Future module / 年度預覽。
-- Mobile fallback 仍可用已載入紀錄即時計算前一年度預覽，不呼叫 AI；backend-ready 一般操作路徑可同步保存 snapshot、準備 privacy-masked share package，並開啟原生分享面板分享隱私遮罩文字。年度回顧文案不可再宣稱分享圖片、年度素材或隱私遮罩都尚未產生。
+- 年度回顧一般操作路徑已接 backend snapshot、privacy-masked share package 與原生分享面板；離線 fallback 仍可用已載入紀錄即時計算前一年度回顧。
+- Mobile fallback 不呼叫 AI、不寫入 snapshot；backend-ready 一般操作路徑可同步保存 snapshot、準備 privacy-masked share package，並開啟原生分享面板分享隱私遮罩文字。年度回顧文案不可再宣稱年度回顧仍是預留、分享圖片、年度素材或隱私遮罩都尚未產生。
 - Backend 已有 `/year-reviews/{year}` snapshot contract，可從正式 profile records 產生並保存年度統計、年度血糖成果與 bounded AI-style 年度觀察；同一 profile/year 會回傳已保存 snapshot，不因後續紀錄變動自動改寫。Mobile 一般操作路徑會嘗試同步此 API，visual-smoke route 必須維持本機 demo 且不呼叫 backend。
 - Backend 已有 `/year-reviews/{year}/share-card` contract，可從 snapshot 產生 privacy-masked public summary card payload；預設只含記錄天數、最長連續、達成徽章與最高級距等低敏摘要，不包含平均/最高/最低血糖數值，且 `external_share_enabled=false`。
 - Backend 已有 `/year-reviews/{year}/share-card/asset` contract，可產生 privacy-masked SVG share-card asset、mime type、filename、alt text 與 checksum；mobile 只可顯示 bounded asset metadata，不可把 raw SVG 直接放入狀態訊息或外部分享。
@@ -1284,15 +1284,15 @@ Dev-only visual smoke route jump：
 - Backend 已有可排程 command：`python -m app.jobs.generate_year_review_snapshots --year YYYY`；Kubernetes deployment foundation 已有 `infra/k8s/year-review-cronjob.yaml` 在每年 1 月 1 日呼叫，預設 year 為前一年度，且只產生缺漏 snapshots。Backend regression 必須確認 batch 重跑不會刷新既有 snapshot id、`generated_at` 或 summary，即使 snapshot 產生後又新增同年度紀錄；summary baseline 必須用獨立副本比對，避免 mutable JSON 參照掩蓋重算。
 - Backend test 必須直接驗證 scheduler default target year：在 1 月 1 日執行 `generate_year_review_snapshots` 不帶 `--year` 時，目標年度為前一個 calendar year，避免年度回顧排程誤產生當年度空報告。
 - Kubernetes manifest verifier 必須同時檢查 Year Review CronJob 的 January 1 schedule、command target，並 fail-closed 禁止 manifest 帶入 `--year`，讓部署排程使用 backend default-year contract。
-- 正式啟用前仍需完成平台分享權限細節、分享後狀態追蹤與撤回/刪除流程。
-- 正式年度回顧應在每年 1 月 1 日自動產生前一年度回顧；preview 必須明確顯示此排程規則。Mobile navigation verifier 必須守住年度回顧 preview 的 1 月 1 日自動產生文案與 hero/live-calculation render path。
+- 正式啟用前仍需完成平台分享權限細節與外部社群平台的深度整合。
+- 正式年度回顧應在每年 1 月 1 日自動產生前一年度回顧；mobile 必須明確顯示此排程規則。Mobile navigation verifier 必須守住年度回顧的 1 月 1 日自動產生文案與 hero/live-calculation render path。
 
 頁面內容：
 
 - 標題：「年度回顧」。
 - 副標：「看看前一年度的控糖成果」。
 - 左上角：返回箭頭。
-- Inline 說明：「年度預覽」，不使用 banner card。
+- Inline 說明：「年度回顧」，不使用 banner card。
 - 年度回顧邊界使用 inline status，不使用 banner card 或額外白色 panel。
 - 年度回顧 hero、統計列表、健康成果、亮點摘要、AI 觀察與 AI 鼓勵都必須使用 display-only clamped/bounded values；實際 aggregate job / sharing logic 不可依顯示字串判斷。
 - Backend 同步狀態可 bounded 顯示 snapshot 已保存與短識別；不可 render raw snapshot payload 或未 bounded id。
@@ -1302,7 +1302,7 @@ Dev-only visual smoke route jump：
 - 年度回顧分享整合狀態按鈕必須走 dedicated handler；不可在 JSX Pressable 內直接呼叫 `setYearReviewActionStatus`。
 - 年度回顧邊界說明與分享未啟用狀態也必須透過 bounded display helper 產生；不可在 JSX 或 component body 內直接寫年度素材/分享權限 fallback 文案。
 - 年度血糖平均/最高/最低提示必須先轉成 bounded display text 或 metric row；不可在 JSX 內直接把 numeric metric 插入長句。
-- 年度回顧的年度預覽說明、hero 總記錄句、hero 資料來源提示、徽章素材 fallback 與分享整合按鈕 label 必須透過 bounded display helper 產生；不可在 JSX 中直接組紀錄次數或年度素材 fallback copy。
+- 年度回顧的來源說明、hero 總記錄句、hero 資料來源提示、徽章素材 fallback 與分享整合按鈕 label 必須透過 bounded display helper 產生；不可在 JSX 中直接組紀錄次數或年度素材 fallback copy。
 
 年度總覽卡：
 
@@ -1970,7 +1970,7 @@ Main screens:
 2. History screen with month calendar mode, lit dates for days with records, dim dates for empty days, selected-date AI-organized records first, and an original speech-to-text view.
 3. Analytics screen with 本週／本月／自訂日期區間 tabs, bounded custom start/end date inputs, blood glucose trend line chart, summary cards for highest glucose, lowest glucose, average glucose, total glucose measurements, before-meal count, after-meal count, and bounded detailed-report view that shows data source, AI cost 0, query limit, and no-medical-advice boundary.
 4. Subscription screen with trial and yearly membership plan, feature comparison table, inline payment-disconnected boundary text, and「查看試用整合狀態」button until store payment is wired.
-5. Menu screen with grid shortcuts: 今日錄音, 歷史紀錄, 基本分析, 成就榜, 年度回顧（預留）, 商城, 食物社群（預留）, 社群排行（預留）, 設定.
+5. Menu screen with grid shortcuts: 今日錄音, 歷史紀錄, 基本分析, 成就榜, 年度回顧, 商城, 食物社群（預留）, 社群排行（預留）, 設定.
 6. Settings screen with user profile, personal info, reminders, recording quota, privacy, tutorial, subscription management, and「清除本機狀態」button until production logout/token revoke is wired; keep Backend URL, model selection, and Dev Client tools collapsed under advanced settings.
 7. Record detail screen showing date, time, type, status, value, note, exercise, medication, with edit and delete buttons.
 8. Edit record form with date, time, type, glucose value, context, meal, exercise, medication, note, save and cancel.
