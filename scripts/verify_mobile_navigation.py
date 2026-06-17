@@ -3251,6 +3251,7 @@ def main() -> int:
             ("food community share food name field", "foodName: string;"),
             ("food community share calculated rise row", '"血糖上升值"'),
             ("food community share calculated rise expression", "Number(foodCommunityShareFields.afterGlucose) - Number(foodCommunityShareFields.beforeGlucose)"),
+            ("food community share calculated rise signed clamp", "clampNumber(Number(foodCommunityShareFields.afterGlucose) - Number(foodCommunityShareFields.beforeGlucose), -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
             ("food community share auto-calculation fallback", '"系統自動計算"'),
             ("food community share bounded button label", 'const foodCommunityShareButtonDisplayLabel = boundDisplayText("送出食物分享", maxDisplayTextLength);'),
             ("food community share bounded accessibility label", "const foodCommunityShareAccessibilityDisplayLabel = boundDisplayText(\n    `${foodCommunityShareButtonDisplayLabel}，backend 會計算升糖幅度並建立社群點數`,\n    maxDisplayDetailTextLength\n  );"),

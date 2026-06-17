@@ -2725,6 +2725,27 @@
 
 - 若未來調整功能選單文案，需同步更新 MVP 入口規格與 verifier expected labels。
 
+### T964 Guard signed food share form delta preview
+
+類型：mobile / verifier / food-community
+
+檔案：
+
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Mobile navigation verifier 現在鎖住食物分享表單的自動 `血糖上升值` 必須使用 signed clamp 的 `after_glucose - before_glucose`。
+- UI spec 補明表單預覽也不可把血糖下降改顯示為 `0`。
+- Runtime 原本已保留 signed delta；本次補的是使用者送出前預覽的 regression guard。
+
+驗證：
+
+- `cd mobile && npm run verify:navigation` passed.
+
 ### T963 Preserve signed deltas in food share detail rows
 
 類型：mobile / verifier / food-community

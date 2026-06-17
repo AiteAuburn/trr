@@ -1565,6 +1565,20 @@ Verification:
 
 - `npm run quality` passed in `mobile/`.
 
+### T964: Guard signed food share form delta preview
+
+Status: done
+
+Summary:
+
+- Mobile navigation verification now locks the food-share form's auto-calculated `血糖上升值` to a signed clamp of `after_glucose - before_glucose`.
+- UI spec now explicitly forbids changing the form preview to clamp glucose decreases to `0`.
+- Runtime behavior was already signed; this adds regression coverage for the user-visible pre-submit preview.
+
+Verification:
+
+- `cd mobile && npm run verify:navigation` passed.
+
 ### T963: Preserve signed deltas in food share detail rows
 
 Status: done
