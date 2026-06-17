@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T972: Cover food detail latest-share cap
+
+Status: done
+
+Summary:
+
+- Added backend regression coverage that food detail statistics still count all matching shares while the individual share list returns only the latest 50 records.
+- This keeps the food data page aligned with the required individual share records without allowing unbounded detail payloads.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search tests/test_community_store_year_review.py::test_food_detail_limits_individual_share_records_to_latest_50` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T971: Cover year-review batch-size bounds
 
 Status: done

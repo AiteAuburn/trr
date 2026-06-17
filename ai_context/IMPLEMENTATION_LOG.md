@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T972 cover food detail latest-share cap
+
+類型：backend / test / docs / community
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that food detail stats count all shares while the individual share list returns only the latest 50 records.
+- This protects the food data page from unbounded detail payloads while preserving full aggregate statistics.
+- 未變更 community API behavior、points ledger、leaderboards、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search tests/test_community_store_year_review.py::test_food_detail_limits_individual_share_records_to_latest_50` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If food detail pagination is added, keep latest-first ordering and aggregate/detail separation covered.
+
 ### T971 cover year-review batch-size bounds
 
 類型：backend / test / docs / year-review

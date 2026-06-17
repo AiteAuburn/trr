@@ -822,6 +822,52 @@ def test_food_detail_returns_share_records_stats_and_cross_category_search() -> 
     }
 
 
+def test_food_detail_limits_individual_share_records_to_latest_50() -> None:
+    client = TestClient(app)
+    account_id, _ = create_account_and_profile(client, "community-food-detail-limit")
+    food_name = f"社群分享列表上限 {uuid4()}"
+    created_share_ids: list[str] = []
+
+    for offset in range(55):
+        response = client.post(
+            "/community/foods/shares",
+            headers={"X-Account-Id": account_id},
+            json={
+                "food_name": food_name,
+                "category": "snacks",
+                "eaten_at": (
+                    datetime(2026, 2, 1, 8, 0, tzinfo=UTC) + timedelta(hours=offset)
+                ).isoformat(),
+                "before_glucose": 100,
+                "after_glucose": 110,
+                "serving_description": f"第 {offset} 份",
+                "public_note": f"第 {offset} 筆分享",
+            },
+        )
+        assert response.status_code == 201
+        body = response.json()
+        food_id = body["food"]["id"]
+        created_share_ids.append(body["share"]["id"])
+
+    detail_response = client.get(
+        f"/community/foods/{food_id}",
+        headers={"X-Account-Id": account_id},
+    )
+    assert detail_response.status_code == 200
+    detail = detail_response.json()
+
+    assert detail["stats"] == {
+        "share_count": 55,
+        "average_glucose_delta": 10.0,
+        "max_glucose_delta": 10,
+        "min_glucose_delta": 10,
+    }
+    returned_share_ids = [share["id"] for share in detail["shares"]]
+    assert len(returned_share_ids) == 50
+    assert returned_share_ids == list(reversed(created_share_ids[5:]))
+    assert set(created_share_ids[:5]).isdisjoint(returned_share_ids)
+
+
 def test_community_leaderboard_ties_are_stably_ordered_by_public_name() -> None:
     client = TestClient(app)
     run_id = uuid4()
