@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T982 cover Year Review unacknowledged share side effects
+
+類型：backend / test / docs / year-review
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that Year Review share-card confirmation without privacy acknowledgement does not create a share package.
+- This protects the annual review social-sharing flow from enabling sharing before explicit privacy confirmation.
+- 未變更 Year Review API behavior、share payload content、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If share privacy acknowledgements become versioned, keep no-package side effects covered before confirmation succeeds.
+
 ### T981 cover invalid Year Review share result side effects
 
 類型：backend / test / docs / year-review

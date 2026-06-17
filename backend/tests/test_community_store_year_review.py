@@ -9,7 +9,7 @@ from sqlalchemy import select
 from app.db.session import SessionLocal
 from app.jobs.generate_year_review_snapshots import default_target_year
 from app.main import app
-from app.models import AchievementUnlock, FoodItem, Record, StoreRedemption, YearReviewSnapshot
+from app.models import AchievementUnlock, FoodItem, Record, StoreRedemption, YearReviewSharePackage, YearReviewSnapshot
 from app.services.year_review_snapshots import YEAR_REVIEW_GENERATION_BATCH_SIZE, generate_missing_year_review_snapshots
 from tests.helpers import create_account_and_profile, create_record
 
@@ -1578,6 +1578,16 @@ def test_year_review_summarizes_previous_year_records() -> None:
     )
     assert unacknowledged_response.status_code == 409
     assert unacknowledged_response.json()["detail"]["code"] == "privacy_acknowledgement_required"
+    with SessionLocal() as db:
+        unacknowledged_packages = list(
+            db.scalars(
+                select(YearReviewSharePackage).where(
+                    YearReviewSharePackage.profile_id == UUID(profile_id),
+                    YearReviewSharePackage.year == 2025,
+                )
+            )
+        )
+    assert unacknowledged_packages == []
 
     confirmed_response = client.post(
         f"/year-reviews/2025/share-card/confirm?profile_id={profile_id}",

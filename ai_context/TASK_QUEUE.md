@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T982: Cover Year Review unacknowledged share side effects
+
+Status: done
+
+Summary:
+
+- Added backend regression coverage that Year Review share-card confirmation without privacy acknowledgement does not create a share package.
+- This protects the annual review social-sharing flow from enabling sharing before explicit privacy confirmation.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T981: Cover invalid Year Review share result side effects
 
 Status: done
