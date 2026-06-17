@@ -13,6 +13,38 @@
 後續:
 ```
 
+## 2026-06-17
+
+### T995 align food share latest index
+
+類型：backend / performance / migration / verifier / docs / community
+
+檔案：
+
+- `backend/app/models/community.py`
+- `backend/alembic/versions/20260430_0025_community_food_share_latest_index.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Replaced the food-share latest-detail ORM index with a four-column index that includes the `id` tie-breaker used by `/community/foods/{id}`.
+- Added a follow-up Alembic migration from the earlier three-column index to the full detail ordering contract.
+- Extended the mobile/backend navigation verifier to guard the full latest-share index contract.
+- 未變更 community API response shape、food share creation、points awards、leaderboards、store redemption、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search tests/test_community_store_year_review.py::test_food_detail_limits_individual_share_records_to_latest_50` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/alembic/versions/20260430_0025_community_food_share_latest_index.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If food detail needs mixed-direction or covering indexes later, evaluate against production query plans after representative data exists.
+
 ## 2026-06-14
 
 ### T994 add community food lookup indexes

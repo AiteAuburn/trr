@@ -19,6 +19,9 @@ COMMUNITY_MODEL_PATH = REPO_ROOT / "backend" / "app" / "models" / "community.py"
 COMMUNITY_FOOD_INDEX_MIGRATION_PATH = (
     REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0024_community_food_lookup_indexes.py"
 )
+COMMUNITY_FOOD_LATEST_INDEX_MIGRATION_PATH = (
+    REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0025_community_food_share_latest_index.py"
+)
 REPORTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "reports.py"
 REPORTING_SERVICE_PATH = REPO_ROOT / "backend" / "app" / "services" / "reporting.py"
 REPORTS_TEST_PATH = REPO_ROOT / "backend" / "tests" / "test_reports.py"
@@ -307,6 +310,7 @@ def _verify_food_community_category_contract(content: str) -> None:
     backend_api_content = COMMUNITY_API_PATH.read_text(encoding="utf-8")
     backend_model_content = COMMUNITY_MODEL_PATH.read_text(encoding="utf-8")
     backend_index_migration_content = COMMUNITY_FOOD_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
+    backend_latest_index_migration_content = COMMUNITY_FOOD_LATEST_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
     _assert_contains(
         "food community mobile fallback categories",
         content,
@@ -343,15 +347,22 @@ def _verify_food_community_category_contract(content: str) -> None:
         _assert_contains(label, backend_api_content, marker)
     for label, marker in (
         ("food item normalized name ORM index", 'Index("ix_food_items_normalized_name", "normalized_name")'),
-        ("food share latest detail ORM index", 'Index("ix_food_shares_food_item_eaten_created", "food_item_id", "eaten_at", "created_at")'),
+        (
+            "food share latest detail ORM index",
+            'Index("ix_food_shares_food_item_eaten_created_id", "food_item_id", "eaten_at", "created_at", "id")',
+        ),
     ):
         _assert_contains(label, backend_model_content, marker)
     for label, marker in (
         ("food item normalized name migration index", 'op.create_index("ix_food_items_normalized_name", "food_items", ["normalized_name"])'),
-        ("food share latest detail migration index", '"ix_food_shares_food_item_eaten_created"'),
-        ("food share latest detail migration columns", '["food_item_id", "eaten_at", "created_at"]'),
     ):
         _assert_contains(label, backend_index_migration_content, marker)
+    for label, marker in (
+        ("food share previous latest detail migration drop", 'op.drop_index("ix_food_shares_food_item_eaten_created", table_name="food_shares")'),
+        ("food share latest detail migration index", '"ix_food_shares_food_item_eaten_created_id"'),
+        ("food share latest detail migration columns", '["food_item_id", "eaten_at", "created_at", "id"]'),
+    ):
+        _assert_contains(label, backend_latest_index_migration_content, marker)
     for label, marker in (
         ("food community API average delta signed clamp", "averageRise: clampNumber(Math.round(stats.average_glucose_delta ?? 0), -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
         ("food community API max delta signed clamp", "maximumRise: clampNumber(stats.max_glucose_delta ?? 0, -maxMobileGlucoseValue, maxMobileGlucoseValue)"),

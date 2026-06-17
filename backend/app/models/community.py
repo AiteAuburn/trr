@@ -55,7 +55,7 @@ class FoodShare(Base):
     food_item = relationship("FoodItem", back_populates="shares")
 
     __table_args__ = (
-        Index("ix_food_shares_food_item_eaten_created", "food_item_id", "eaten_at", "created_at"),
+        Index("ix_food_shares_food_item_eaten_created_id", "food_item_id", "eaten_at", "created_at", "id"),
     )
 
 

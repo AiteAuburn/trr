@@ -111,6 +111,23 @@ None.
 
 ## Done
 
+### T995: Align food share latest index
+
+Status: done
+
+Summary:
+
+- Replaced the food-share latest-detail ORM index with a four-column index that includes the `id` tie-breaker used by `/community/foods/{id}`.
+- Added a follow-up Alembic migration from the earlier three-column index to the full detail ordering contract.
+- Extended the mobile/backend navigation verifier to guard the full latest-share index contract.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search tests/test_community_store_year_review.py::test_food_detail_limits_individual_share_records_to_latest_50` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/alembic/versions/20260430_0025_community_food_share_latest_index.py` passed.
+- `rtk git diff --check` passed.
+
 ### T994: Add community food lookup indexes
 
 Status: done
