@@ -15,6 +15,35 @@
 
 ## 2026-06-14
 
+### T968 align backend report meal timing aliases
+
+類型：backend / test / verifier / docs / analysis
+
+檔案：
+
+- `backend/app/services/reporting.py`
+- `backend/tests/test_reports.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated backend basic report meal-timing helpers to accept the same before/after aliases that mobile analysis already accepts.
+- Added regression coverage for legacy `before` and `after-meal` timing values inside a custom report window.
+- Updated verifier markers so backend report and mobile analysis meal-count semantics stay aligned.
+- 未變更 report date-window semantics、record validation enum、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_reports.py::test_basic_report_supports_date_window tests/test_reports.py::test_basic_report_summarizes_profile_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- If more legacy meal-timing aliases appear in imported records, update mobile and backend helper sets together.
+
 ### T967 guard short home recording handoff
 
 類型：mobile / verifier / docs / recording

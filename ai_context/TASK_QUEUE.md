@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T968: Align backend report meal timing aliases
+
+Status: done
+
+Summary:
+
+- Updated backend basic report meal-timing helpers to match mobile analysis aliases for `before-meal` / `before` and `after-meal` / `after`.
+- Added report regression coverage so legacy timing aliases count toward 飯前血糖次數 / 飯後血糖次數.
+- Updated mobile verifier markers to keep backend and mobile analysis semantics aligned.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_reports.py::test_basic_report_supports_date_window tests/test_reports.py::test_basic_report_summarizes_profile_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
 ### T967: Guard short home recording handoff
 
 Status: done

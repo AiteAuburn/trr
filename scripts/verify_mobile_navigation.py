@@ -393,8 +393,8 @@ def _verify_basic_report_contract() -> None:
     ):
         _assert_contains(label, reports_api_content, marker)
     for label, marker in (
-        ("basic report fasting before meal helper", 'value.strip().lower() in {"fasting", "before_meal"}'),
-        ("basic report after meal helper", 'value.strip().lower() == "after_meal"'),
+        ("basic report fasting before meal helper", 'value.strip().lower() in {"fasting", "before_meal", "before-meal", "before"}'),
+        ("basic report after meal helper", 'value.strip().lower() in {"after_meal", "after-meal", "after"}'),
         ("basic report glucose count increments with valid value", "glucose_count += 1"),
         ("basic report before meal count source", "before_meal_glucose_count += 1"),
         ("basic report after meal count source", "after_meal_glucose_count += 1"),
@@ -409,10 +409,12 @@ def _verify_basic_report_contract() -> None:
         ("basic report test exclusive end query", "&end_at=2026-05-01T00:00:00Z"),
         ("basic report test excludes end boundary value", '{"value": 90, "unit": "mg/dL", "meal_timing": "after_meal"}'),
         ("basic report test fasting timing", '{"value": 130, "unit": "mg/dL", "meal_timing": "fasting"}'),
-        ("basic report test record count", '"count": 3'),
-        ("basic report test before meal count", '"before_meal_count": 2'),
-        ("basic report test after meal count", '"after_meal_count": 1'),
-        ("basic report test average", '"average": 153.3'),
+        ("basic report test legacy before timing", '{"value": 140, "unit": "mg/dL", "meal_timing": "before"}'),
+        ("basic report test legacy after timing", '{"value": 170, "unit": "mg/dL", "meal_timing": "after-meal"}'),
+        ("basic report test record count", '"count": 5'),
+        ("basic report test before meal count", '"before_meal_count": 3'),
+        ("basic report test after meal count", '"after_meal_count": 2'),
+        ("basic report test average", '"average": 154.0'),
         ("basic report test minimum", '"minimum": 130.0'),
         ("basic report test maximum", '"maximum": 180.0'),
     ):

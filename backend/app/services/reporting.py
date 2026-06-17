@@ -22,11 +22,11 @@ def _payload_number(payload: dict[str, Any], key: str) -> float | None:
 
 
 def _is_before_meal_timing(value: Any) -> bool:
-    return isinstance(value, str) and value.strip().lower() in {"fasting", "before_meal"}
+    return isinstance(value, str) and value.strip().lower() in {"fasting", "before_meal", "before-meal", "before"}
 
 
 def _is_after_meal_timing(value: Any) -> bool:
-    return isinstance(value, str) and value.strip().lower() == "after_meal"
+    return isinstance(value, str) and value.strip().lower() in {"after_meal", "after-meal", "after"}
 
 
 BasicReportRecordFields = tuple[str, dict[str, Any], datetime]

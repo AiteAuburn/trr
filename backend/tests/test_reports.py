@@ -5,7 +5,9 @@ from fastapi.testclient import TestClient
 from pydantic import ValidationError
 from pytest import raises
 
+from app.db.session import SessionLocal
 from app.main import app
+from app.models import Record
 from app.schemas.report import GlucoseSummary, MAX_BASIC_REPORT_RECORDS, ReportSummary
 from app.services.record_validation import MAX_GLUCOSE_VALUE, MIN_GLUCOSE_VALUE
 from tests.helpers import create_account_and_profile, create_record
@@ -148,6 +150,28 @@ def test_basic_report_supports_date_window() -> None:
         datetime(2026, 4, 30, 18, 0, tzinfo=UTC),
         {"value": 180, "unit": "mg/dL", "meal_timing": "after_meal"},
     )
+    with SessionLocal() as db:
+        db.add_all(
+            [
+                Record(
+                    profile_id=UUID(profile_id),
+                    record_type="glucose",
+                    occurred_at=datetime(2026, 4, 30, 19, 0, tzinfo=UTC),
+                    payload={"value": 170, "unit": "mg/dL", "meal_timing": "after-meal"},
+                    metadata_json={},
+                    source="legacy_import",
+                ),
+                Record(
+                    profile_id=UUID(profile_id),
+                    record_type="glucose",
+                    occurred_at=datetime(2026, 4, 30, 20, 0, tzinfo=UTC),
+                    payload={"value": 140, "unit": "mg/dL", "meal_timing": "before"},
+                    metadata_json={},
+                    source="legacy_import",
+                ),
+            ]
+        )
+        db.commit()
     create_record(
         client,
         account_id,
@@ -168,16 +192,16 @@ def test_basic_report_supports_date_window() -> None:
 
     assert response.status_code == 200
     report = response.json()
-    assert report["record_count"] == 3
+    assert report["record_count"] == 5
     assert report["glucose"] == {
-        "count": 3,
-        "before_meal_count": 2,
-        "after_meal_count": 1,
-        "average": 153.3,
+        "count": 5,
+        "before_meal_count": 3,
+        "after_meal_count": 2,
+        "average": 154.0,
         "minimum": 130.0,
         "maximum": 180.0,
-        "latest_value": 180.0,
-        "latest_recorded_at": "2026-04-30T18:00:00Z",
+        "latest_value": 140.0,
+        "latest_recorded_at": "2026-04-30T20:00:00Z",
     }
 
 
