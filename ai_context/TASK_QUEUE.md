@@ -1738,6 +1738,26 @@ Verification:
 
 - `npm run quality` passed in `mobile/`.
 
+### T854: Enforce mobile single-recording limit
+
+Status: done
+
+Summary:
+
+- Mobile hold-to-record now has a 60-second single-recording limit.
+- If backend voice quota remaining is lower than 60 seconds, mobile uses the remaining quota as the effective recording limit.
+- Recording elapsed display, auto-stop behavior, and later `voice_seconds` are clamped to the effective limit.
+- Record page shows the current single-recording limit; Home remains minimal and does not add extra copy.
+
+Verification:
+
+- `npm run typecheck` passed in `mobile/`.
+- `npm run verify:navigation` passed in `mobile/`.
+
+Next:
+
+- Add retry-safe voice usage idempotency once backend exposes request ids.
+
 ### T853: Send recording duration to backend voice quota
 
 Status: done

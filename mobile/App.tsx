@@ -1122,6 +1122,7 @@ const maxMobilePreviewSegments = 40;
 const maxMobileRejectedEvents = 40;
 const maxMobileCountValue = 1_000_000;
 const maxMobileVoiceSeconds = 86_400;
+const mobileSingleRecordingLimitSeconds = 60;
 const maxMobileGlucoseValue = 1000;
 const maxDevResetDeletedCountKeys = 20;
 const mobileRecordSyncLimit = 100;
@@ -3813,6 +3814,10 @@ function recordingStopFailureStatusMessage(error: unknown) {
   return safeUiError(error, "錄音停止失敗");
 }
 
+function recordingLimitReachedStatusMessage(limitSeconds: number) {
+  return boundUiMessage(`已達單次錄音上限 ${clampNumber(limitSeconds, 0, maxMobileCountValue)} 秒，已自動結束。`);
+}
+
 function recordingFinishedStatusMessage(elapsedSeconds: number) {
   const boundedSeconds = clampNumber(elapsedSeconds, 0, maxMobileCountValue);
   return boundUiMessage(
@@ -4524,6 +4529,21 @@ function recordingSimulatedResultCopy(elapsedSeconds: number) {
 
 function recordingElapsedSecondsCopy(elapsedSeconds: number) {
   return boundDisplayText(`${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒`, 40);
+}
+
+function recordingEffectiveLimitSeconds(quota: VoiceQuota | null) {
+  if (quota && quota.remaining_seconds_today > 0) {
+    return clampNumber(
+      Math.min(mobileSingleRecordingLimitSeconds, quota.remaining_seconds_today),
+      1,
+      mobileSingleRecordingLimitSeconds
+    );
+  }
+  return mobileSingleRecordingLimitSeconds;
+}
+
+function recordingLimitCopy(limitSeconds: number) {
+  return boundDisplayText(`單次最多 ${clampNumber(limitSeconds, 1, mobileSingleRecordingLimitSeconds)} 秒`, 80);
 }
 
 function recordingResultBodyCopy(elapsedSeconds: number) {
@@ -6368,6 +6388,8 @@ export default function App() {
   const recordingPreviewDisplayText = isRecordingPreview
     ? recordingActivePreviewCopy(recordingElapsedSeconds)
     : recordingIdlePreviewCopy();
+  const recordingEffectiveLimitDisplaySeconds = recordingEffectiveLimitSeconds(voiceQuota);
+  const recordingLimitDisplayText = recordingLimitCopy(recordingEffectiveLimitDisplaySeconds);
   const homeRecordingSecondaryHintDisplayText = homeRecordingSecondaryHint(
     isRecordingPreview,
     recordingElapsedSeconds
@@ -7942,7 +7964,7 @@ export default function App() {
     void handleRecordingResultPrimaryAction("record");
   }
 
-  async function finishRecordingPreview() {
+  async function finishRecordingPreview(reason: "release" | "limit" = "release") {
     if (!isRecordingPreview) {
       return;
     }
@@ -7950,8 +7972,13 @@ export default function App() {
       return;
     }
     recordingStopInFlight.current = true;
-    const elapsedSeconds =
+    const rawElapsedSeconds =
       recordingStartedAt === null ? recordingElapsedSeconds : Math.ceil((Date.now() - recordingStartedAt) / 1000);
+    const elapsedSeconds = clampNumber(
+      rawElapsedSeconds,
+      0,
+      recordingEffectiveLimitSeconds(voiceQuota)
+    );
     const recording = audioRecordingRef.current;
     let capturedAudioPath = "";
     audioRecordingRef.current = null;
@@ -7968,7 +7995,11 @@ export default function App() {
         staysActiveInBackground: false,
         shouldDuckAndroid: true
       });
-      setStatus(recordingFinishedStatusMessage(elapsedSeconds));
+      setStatus(
+        reason === "limit"
+          ? recordingLimitReachedStatusMessage(recordingEffectiveLimitSeconds(voiceQuota))
+          : recordingFinishedStatusMessage(elapsedSeconds)
+      );
     } catch (error) {
       setStatus(recordingStopFailureStatusMessage(error));
     } finally {
@@ -7980,6 +8011,10 @@ export default function App() {
     if (currentScreen === "today" && elapsedSeconds > 1 && capturedAudioPath && whisperModelPath.trim()) {
       void transcribeRecordingToReview("today", capturedAudioPath, elapsedSeconds);
     }
+  }
+
+  function releaseRecordingPreview() {
+    void finishRecordingPreview();
   }
 
   function openPreviewRecordEdit(index: number) {
@@ -11019,10 +11054,15 @@ export default function App() {
       return;
     }
     const timer = setInterval(() => {
-      setRecordingElapsedSeconds(Math.ceil((Date.now() - recordingStartedAt) / 1000));
+      const nextElapsedSeconds = Math.ceil((Date.now() - recordingStartedAt) / 1000);
+      const limitSeconds = recordingEffectiveLimitSeconds(voiceQuota);
+      setRecordingElapsedSeconds(clampNumber(nextElapsedSeconds, 0, limitSeconds));
+      if (nextElapsedSeconds >= limitSeconds) {
+        void finishRecordingPreview("limit");
+      }
     }, 500);
     return () => clearInterval(timer);
-  }, [isRecordingPreview, recordingStartedAt]);
+  }, [isRecordingPreview, recordingStartedAt, voiceQuota?.remaining_seconds_today]);
 
   useEffect(() => {
     void loadRecords();
@@ -11170,7 +11210,7 @@ export default function App() {
                 isRecordingPreview ? styles.homeMicButtonActive : null
               ]}
               onPressIn={startRecordingPreview}
-              onPressOut={finishRecordingPreview}
+              onPressOut={releaseRecordingPreview}
             >
               <Text style={styles.homeMicIcon}>🎙</Text>
             </Pressable>
@@ -11225,7 +11265,7 @@ export default function App() {
                     isRecordingPreview ? styles.recordHoldButtonActive : null
                   ]}
                   onPressIn={startRecordingPreview}
-                  onPressOut={finishRecordingPreview}
+                  onPressOut={releaseRecordingPreview}
                 >
                   <Text style={styles.recordHoldIcon}>🎙</Text>
                   <Text style={styles.recordHoldText}>
@@ -11239,6 +11279,7 @@ export default function App() {
                   <Text style={isVoiceQuotaLow(voiceQuota) ? styles.warningText : styles.evidence}>
                     {captureVoiceQuotaCopy(voiceQuota)}
                   </Text>
+                  <Text style={styles.evidence}>{recordingLimitDisplayText}</Text>
                   <Text style={styles.evidence}>{recordPageRecordingPreviewBoundaryDisplayText}</Text>
                 </View>
               </View>

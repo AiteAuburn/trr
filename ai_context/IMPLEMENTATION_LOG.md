@@ -26178,6 +26178,36 @@
 
 - Continue with T042 to add or polish the remaining menu destinations from the updated UI spec.
 
+### T854 enforce mobile single-recording limit
+
+類型：mobile / recording / quota / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Mobile hold-to-record 新增 60 秒單次錄音上限。
+- 若 backend voice quota remaining 低於 60 秒，mobile 會以 remaining quota 作為 effective recording limit。
+- 錄音秒數顯示、auto-stop 與後續 `voice_seconds` pending value 都 clamp 到 effective limit。
+- Timer 到上限時自動呼叫 stop，不等使用者放開按鈕。
+- Record 頁顯示目前單次上限；Home 仍只保留大型 mic 與兩行提示，不增加額外文字。
+- Navigation verifier 新增 limit constant、effective limit helper、auto-stop、limit display 與 clamp markers。
+
+驗證：
+
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+
+後續：
+
+- Backend 若提供 usage idempotency request id，mobile 應將錄音 session id 帶入 parse request。
+
 ### T853 send recording duration to backend voice quota
 
 類型：mobile / recording / quota / parser / verifier

@@ -212,6 +212,7 @@ AI Review 候選卡的修改與移除按鈕必須有 render 前 bounded accessib
 AI 候選編輯頁的 header 返回、底部取消與套用修改 CTA 必須有 render 前 bounded accessibility label、`accessibilityRole="button"` 與 validation disabled accessibility state；label 必須說明候選修改仍未寫入正式紀錄、不送 backend save request、不呼叫 delete API。
 
 Recording 與 header busy guard 的 quota exhausted、permission denied、recording started、reset、finished、too-short、start/stop failure、Whisper progress/success/empty/failure 與 busy UI status 必須透過 bounded display helper 產生；錄音秒數只可用於狀態判斷，若進入顯示文案前必須先 clamp。Mobile hold-to-record 必須使用 `expo-av` / `Audio.Recording` 擷取本機音檔，URI 只可 bounded 後寫入 native debug audio path；Whisper 轉錄結果只可進入 bounded transcript draft 和文字確認頁，不得保存 raw prompt 或 raw model output。
+Mobile 單次錄音上限為 60 秒，且若 backend voice quota remaining 更低，單次上限必須使用較低值。錄音 timer 顯示、auto-stop、`voice_seconds` pending value 都必須 clamp 到 effective limit；到上限時自動停止錄音，不等使用者放開按鈕。
 Record 錄音結果主按鈕必須走 dedicated handler；不可在 JSX Pressable callback 內直接呼叫 `handleRecordingResultPrimaryAction("today")` 或 `handleRecordingResultPrimaryAction("record")`。handler 可在已設定 Whisper model path 且有 bounded audio URI 時轉文字並進入文字確認；仍不可跳過文字確認、不可直接呼叫 AI/parser 或寫入紀錄。Home 頁 mic 放開不顯示錄音結果主按鈕；若已有 Whisper model path，可直接轉文字後進文字確認，否則只保留本機 audio URI。
 Whisper 產生的 transcript 必須保留 bounded `transcriptVoiceSeconds`，送 `/ai/parse-preview` 時以 `voice_seconds` 傳給 backend；手動輸入、範例文字、重輸入、清除 session 與儲存成功都必須清為 0。Parser 成功後立即清掉 pending voice seconds 並刷新 backend voice quota；parser 失敗時保留 pending seconds，讓重試成功時才扣 backend quota。
 
