@@ -220,9 +220,11 @@ python3 ../scripts/verify_mobile_release_env.py --allow-local-api
 ```
 
 On Windows, prefer PowerShell for APK export because `mobile/android/local.properties`
-uses the Windows Android SDK path:
+must use the Windows Android SDK path:
 
 ```powershell
+# mobile\android\local.properties should contain:
+# sdk.dir=C:/Users/robin/AppData/Local/Android/Sdk
 cd D:\bloodsugar\mobile\android
 .\gradlew.bat assembleRelease
 ```

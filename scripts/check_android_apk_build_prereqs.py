@@ -49,6 +49,15 @@ def _windows_path_to_wsl(value: str) -> Path | None:
     return Path("/mnt") / drive / rest
 
 
+def _mounted_windows_path_to_windows(value: str) -> str:
+    normalized = value.replace("\\", "/")
+    parts = normalized.split("/")
+    if len(parts) < 4 or parts[1] != "mnt" or len(parts[2]) != 1:
+        return ""
+    drive = parts[2].upper()
+    return f"{drive}:/" + "/".join(parts[3:])
+
+
 def _is_mounted_windows_sdk_path(value: str) -> bool:
     normalized = value.replace("\\", "/").lower()
     return normalized.startswith("/mnt/") and "/appdata/local/android/sdk" in normalized
@@ -137,7 +146,12 @@ def inspect() -> dict[str, Any]:
         warnings.append("building Android projects directly under /mnt/* can trigger Gradle I/O errors; prefer PowerShell or copy to Linux storage")
 
     if running_wsl and windows_sdk_path:
-        recommendations.append("run from Windows PowerShell: cd D:\\bloodsugar\\mobile\\android; .\\gradlew.bat assembleRelease")
+        windows_sdk_dir = _mounted_windows_path_to_windows(sdk_dir_value)
+        if windows_sdk_dir:
+            recommendations.append(
+                f"for Windows PowerShell builds, set mobile/android/local.properties sdk.dir={windows_sdk_dir} first"
+            )
+        recommendations.append("then run from Windows PowerShell: cd D:\\bloodsugar\\mobile\\android; .\\gradlew.bat assembleRelease")
     if running_wsl:
         recommendations.append("for WSL-only builds, install Linux Android SDK and set sdk.dir=/home/aite/Android/Sdk")
         recommendations.append("set GRADLE_USER_HOME=/tmp/bloodsugar-gradle if ~/.gradle is unavailable or read-only")

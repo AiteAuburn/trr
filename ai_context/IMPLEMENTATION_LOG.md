@@ -15,6 +15,43 @@
 
 ## 2026-06-17
 
+### T1044 clarify Windows vs WSL APK SDK paths
+
+類型：android / docs / verifier
+
+檔案：
+
+- `scripts/check_android_apk_build_prereqs.py`
+- `scripts/verify_android_apk_scripts.py`
+- `README.md`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Clarified that Windows PowerShell `gradlew.bat assembleRelease` requires a Windows-style `sdk.dir=C:/.../Android/Sdk`, while WSL/Linux `./gradlew` requires a Linux Android SDK path.
+- Updated APK prereq recommendations to convert mounted `/mnt/c/.../Android/Sdk` paths into the equivalent `C:/.../Android/Sdk` value before suggesting PowerShell builds.
+- Added verifier guards so APK docs and prereq guidance keep the Windows-vs-WSL SDK path distinction.
+- 未變更 Android runtime build config、backend runtime、mobile network request paths、AI/LLM calls、STT、parser、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run verify:android-apk-scripts` passed.
+- `rtk python3 -m py_compile scripts/verify_android_apk_scripts.py scripts/check_android_apk_build_prereqs.py` passed.
+- `cd mobile && rtk npm run apk:android-prereqs` correctly fails in current WSL state with blockers for Windows SDK path and missing Linux `aapt`, and now recommends setting `sdk.dir=C:/Users/robin/AppData/Local/Android/Sdk` before PowerShell `gradlew.bat assembleRelease`.
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk powershell.exe -NoProfile -Command "cd D:\bloodsugar\mobile\android; .\gradlew.bat assembleRelease"` could not launch because Windows interop failed with `UtilBindVsockAnyPort:307: socket failed 1`.
+- `rtk /mnt/c/Windows/System32/cmd.exe /C "cd /d D:\bloodsugar\mobile\android && gradlew.bat assembleRelease"` hit the same Windows interop socket failure.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing the remaining goal requirements against current evidence before final completion.
+
 ### T1043 catch Windows SDK build-tools in WSL APK preflight
 
 類型：android / verifier / docs

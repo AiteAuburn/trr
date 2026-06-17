@@ -66,6 +66,7 @@ def main() -> int:
         "release command": "./gradlew assembleRelease",
         "release output path": "mobile/android/app/build/outputs/apk/release/app-release.apk",
         "Windows PowerShell release command": ".\\gradlew.bat assembleRelease",
+        "Windows local.properties SDK path": "sdk.dir=C:/Users/robin/AppData/Local/Android/Sdk",
         "WSL Windows SDK mismatch warning": "Do not run Linux Gradle in WSL against the Windows SDK path",
     }
     for label, marker in required_readme_markers.items():
@@ -84,6 +85,8 @@ def main() -> int:
     required_prereq_markers = {
         "configured build-tools version": "def _configured_build_tools_version()",
         "mounted Windows SDK path detection": "def _is_mounted_windows_sdk_path(value: str) -> bool:",
+        "mounted path PowerShell conversion": "def _mounted_windows_path_to_windows(value: str) -> str:",
+        "PowerShell sdk.dir recommendation": "for Windows PowerShell builds, set mobile/android/local.properties sdk.dir=",
         "Linux aapt requirement": 'required_tool = "aapt.exe" if os.name == "nt" else "aapt"',
         "Windows SDK alternate aapt warning": 'alternate_tool = "aapt" if os.name == "nt" else "aapt.exe"',
         "corrupted build-tools blocker": "are not usable from this environment",
