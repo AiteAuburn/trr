@@ -1572,6 +1572,7 @@ AI 分析結果：
 
 - 標題：「食物社群」。
 - Inline 說明：「食物社群」，不使用 banner card。
+- 食物血糖資料庫定位必須明確顯示「華人使用者真實食物升糖資料庫」與「以實際食用前後血糖分享取代理論與網路傳言」；此為資料產品定位，不代表公開個人健康紀錄，也不可新增未經同意的識別資料或健康資料公開。
 - 食物血糖資料庫 preview 必須顯示大分類：蔬菜、肉類、海鮮、蛋類、豆類、澱粉類、飲料、水果、零食、保健食品；一般操作路徑會先同步 `/community/foods/categories` 的 backend label、該分類個別食物數與最多 3 個代表食物，backend unavailable 或 visual-smoke 時才使用本機 fallback。Backend integration test 必須直接驗證 `/community/foods/categories` 回傳這十個 code/label 且順序穩定，空分類回 `food_count: 0` 與空 `sample_foods`，有資料分類可回個別食物摘要。
 - Mobile navigation verifier 必須同時檢查 mobile fallback、mobile API category mapper 與 backend `FOOD_CATEGORY_LABELS` 的十個食物大分類 parity；特別要守住 backend plural code（例如 `snacks`）與 mobile singular display id（例如 `snack`）的雙向 mapping。Verifier 也必須確認 mobile fallback `foodCommunityItems` 每個大分類至少有一個可點擊的個別食物項目，避免只剩分類 tab 而沒有資料庫內容。
 - 食物搜尋可直接搜尋食物名稱，不必從分類進入；有搜尋文字且未指定 category 時 mobile 與 backend query 都必須跨分類搜尋，有指定 category 時只回該分類，沒有搜尋文字時才套用目前分類 tab。Backend query trim 後不可為空白，空白 query 必須回結構化 `food_query_blank`，不可被當成 wildcard 全資料查詢。Backend integration test 必須證明同分類同 normalized food name 會 upsert/聚合到同一 food item，不同分類同名食物會建立獨立 food item，避免大型升糖資料庫跨分類污染。一般操作路徑會同步 backend food database，visual-smoke route 與 backend unavailable 時才只篩選本機 preview。

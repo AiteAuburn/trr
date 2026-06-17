@@ -14733,7 +14733,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>食物血糖資料庫</Text>
-              <Text style={styles.evidence}>以使用者實際食用前後血糖分享建立資料庫；backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。</Text>
+              <Text style={styles.evidence}>建立華人使用者真實食物升糖資料庫，以實際食用前後血糖分享取代理論與網路傳言；backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。</Text>
             </View>
             <TextInput
               accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}

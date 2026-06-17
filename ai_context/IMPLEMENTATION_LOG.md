@@ -15,6 +15,38 @@
 
 ## 2026-06-17
 
+### T1036 surface Food Community database positioning
+
+類型：mobile / docs / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated the Food Community database intro copy to explicitly position the feature as a real-world Chinese-user food glycemic database.
+- The copy now states that actual before/after eating glucose shares replace theory and online rumors, matching the Phase 2 product objective.
+- Added UI spec and navigation verifier guards for the database positioning copy.
+- 未變更 backend runtime、mobile network request paths、store/community redemption or leaderboard behavior、AI/LLM calls、STT、parser、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining Phase 2 and Year Review copy against the requested product positioning before final completion audit.
+
 ### T1035 align Phase 2 points-to-store copy
 
 類型：mobile / docs / verifier

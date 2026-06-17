@@ -3494,6 +3494,8 @@ def main() -> int:
             ("community privacy status handler", "function showCommunityPrivacyStatus()"),
             ("community privacy backend-aware status copy", "公開名稱與排行榜 opt-in 已可同步 backend；社群貼文、留言、刪除撤回與審核流程仍未開放。"),
             ("food community backend-aware intro copy", "backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。"),
+            ("food community Chinese-user real glycemic database positioning", "建立華人使用者真實食物升糖資料庫"),
+            ("food community replaces theory and rumors positioning", "以實際食用前後血糖分享取代理論與網路傳言"),
             ("food community backend-aware empty copy", "backend ready 時會依搜尋同步，未連線時只篩選本機預覽。"),
             ("food community backend-aware share status copy", "backend ready 時可送出食物分享、建立社群點數並刷新排行榜與商城點數；visual smoke 或 backend unavailable 時不寫入資料。"),
             ("food community points store bridge current copy", "點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利"),
