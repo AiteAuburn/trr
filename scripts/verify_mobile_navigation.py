@@ -12,6 +12,7 @@ APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
 ACHIEVEMENT_CATALOG_PATH = REPO_ROOT / "backend" / "app" / "services" / "achievement_catalog.py"
 YEAR_REVIEW_SNAPSHOTS_PATH = REPO_ROOT / "backend" / "app" / "services" / "year_review_snapshots.py"
+YEAR_REVIEWS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "year_reviews.py"
 COMMUNITY_SCHEMA_PATH = REPO_ROOT / "backend" / "app" / "schemas" / "community.py"
 COMMUNITY_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "community.py"
 REPORTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "reports.py"
@@ -3693,6 +3694,16 @@ def main() -> int:
             ("food photo return accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodPhotoReturnAccessibility}"),
         ):
             _assert_contains(label, content, marker)
+        year_reviews_api_content = YEAR_REVIEWS_API_PATH.read_text(encoding="utf-8")
+        for label, marker in (
+            ("year review completed-year validator", "def _validate_completed_review_year(year: int) -> None:"),
+            ("year review latest completed year", "latest_completed_year = datetime.now(UTC).year - 1"),
+            ("year review unfinished year error code", '"code": "year_review_year_not_completed"'),
+            ("year review unfinished year message", '"message": "Year review can only be generated for completed calendar years."'),
+        ):
+            _assert_contains(label, year_reviews_api_content, marker)
+        if year_reviews_api_content.count("_validate_completed_review_year(year)") != 4:
+            raise AssertionError("Year Review year endpoints must validate completed calendar year before snapshot work.")
         year_review_share_block = _function_block(content, "loadYearReviewShareCard")
         _assert_contains(
             "year review share uses native share",

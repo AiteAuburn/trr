@@ -15,6 +15,35 @@
 
 ## 2026-06-14
 
+### T991 reject unfinished Year Review years
+
+類型：backend / validation / test / verifier / docs / year-review
+
+檔案：
+
+- `backend/app/api/year_reviews.py`
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a completed-calendar-year guard to Year Review year endpoints so current/future years cannot create snapshots or share-card packages.
+- Added regression coverage that an unfinished year returns a structured error and does not create a `YearReviewSnapshot`.
+- Extended the mobile/backend navigation verifier to guard the Year Review completed-year contract.
+- 未變更年度統計計算、年度分享隱私遮罩、share package result/revoke、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records tests/test_community_store_year_review.py::test_year_review_rejects_unfinished_year_before_snapshot_creation` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If product later supports in-progress yearly previews, expose them as a separate preview endpoint that cannot create official snapshots or public share packages.
+
 ### T990 batch food list stats lookup
 
 類型：backend / performance / test / docs / community

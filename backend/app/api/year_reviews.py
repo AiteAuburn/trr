@@ -30,6 +30,19 @@ from app.services.year_review_snapshots import (
 router = APIRouter(prefix="/year-reviews", tags=["year-reviews"])
 
 
+def _validate_completed_review_year(year: int) -> None:
+    latest_completed_year = datetime.now(UTC).year - 1
+    if year < 2000 or year > latest_completed_year:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail={
+                "code": "year_review_year_not_completed",
+                "message": "Year review can only be generated for completed calendar years.",
+                "latest_completed_year": latest_completed_year,
+            },
+        )
+
+
 def _get_authorized_share_package(
     share_package_id: UUID,
     account: Account,
@@ -56,6 +69,7 @@ def get_year_review(
     account: Account = Depends(get_current_account),
     db: Session = Depends(get_db),
 ) -> YearReviewRead:
+    _validate_completed_review_year(year)
     assert_can_read_profile(profile_id, account, db)
     snapshot, created = get_or_create_year_review_snapshot(
         year=year,
@@ -76,6 +90,7 @@ def get_year_review_share_card(
     account: Account = Depends(get_current_account),
     db: Session = Depends(get_db),
 ) -> YearReviewShareCardRead:
+    _validate_completed_review_year(year)
     assert_can_read_profile(profile_id, account, db)
     snapshot, created = get_or_create_year_review_snapshot(
         year=year,
@@ -96,6 +111,7 @@ def get_year_review_share_asset(
     account: Account = Depends(get_current_account),
     db: Session = Depends(get_db),
 ) -> YearReviewShareAssetRead:
+    _validate_completed_review_year(year)
     assert_can_read_profile(profile_id, account, db)
     snapshot, created = get_or_create_year_review_snapshot(
         year=year,
@@ -117,6 +133,7 @@ def confirm_year_review_share_card(
     account: Account = Depends(get_current_account),
     db: Session = Depends(get_db),
 ) -> YearReviewSharePackageRead:
+    _validate_completed_review_year(year)
     assert_can_read_profile(profile_id, account, db)
     if not payload.privacy_acknowledged:
         raise HTTPException(

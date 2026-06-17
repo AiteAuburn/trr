@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T991: Reject unfinished Year Review years
+
+Status: done
+
+Summary:
+
+- Added a completed-calendar-year guard to Year Review year endpoints so current/future years cannot create snapshots or share-card packages.
+- Added regression coverage that an unfinished year returns a structured error and does not create a `YearReviewSnapshot`.
+- Extended the mobile/backend navigation verifier to guard the Year Review completed-year contract.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records tests/test_community_store_year_review.py::test_year_review_rejects_unfinished_year_before_snapshot_creation` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T990: Batch food list stats lookup
 
 Status: done
