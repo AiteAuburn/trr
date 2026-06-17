@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T1005: Guard community point ledger source uniqueness
+
+Status: done
+
+Summary:
+
+- Added a storage-level uniqueness contract for community point ledger source entries so a food share or store redemption source cannot be credited or debited twice.
+- Added Alembic migration coverage and ORM metadata regression coverage for `source_type` plus `source_id`.
+- Extended the navigation verifier to guard the point-ledger source uniqueness model, migration, and test coverage.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_community_point_ledger_declares_unique_source_constraint tests/test_community_store_year_review.py::test_food_share_creates_food_stats_points_and_leaderboards tests/test_community_store_year_review.py::test_store_redemption_deducts_points_and_reserves_fulfillment_rewards` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/models/community.py scripts/verify_mobile_navigation.py` passed.
+
 ### T1004: Align Store redemption wallet ORM index
 
 Status: done

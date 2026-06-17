@@ -32,6 +32,9 @@ STORE_REDEMPTION_INDEX_MIGRATION_PATH = (
 YEAR_REVIEW_SHARE_CONSTRAINT_MIGRATION_PATH = (
     REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0028_year_review_share_package_constraints.py"
 )
+COMMUNITY_POINT_LEDGER_SOURCE_MIGRATION_PATH = (
+    REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0029_community_point_ledger_source_unique.py"
+)
 REPORTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "reports.py"
 REPORTING_SERVICE_PATH = REPO_ROOT / "backend" / "app" / "services" / "reporting.py"
 REPORTS_TEST_PATH = REPO_ROOT / "backend" / "tests" / "test_reports.py"
@@ -333,6 +336,7 @@ def _verify_food_community_category_contract(content: str) -> None:
     backend_latest_index_migration_content = COMMUNITY_FOOD_LATEST_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
     backend_leaderboard_index_migration_content = COMMUNITY_LEADERBOARD_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
     backend_store_index_migration_content = STORE_REDEMPTION_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
+    backend_point_ledger_source_migration_content = COMMUNITY_POINT_LEDGER_SOURCE_MIGRATION_PATH.read_text(encoding="utf-8")
     food_item_model_block = _match_block(
         backend_model_content,
         r"class FoodItem\(Base\):([\s\S]*?)\n\nclass FoodShare",
@@ -392,6 +396,10 @@ def _verify_food_community_category_contract(content: str) -> None:
             'Index("ix_community_point_ledger_account_delta", "account_id", "delta")',
         ),
         (
+            "community point ledger source ORM uniqueness",
+            'UniqueConstraint("source_type", "source_id", name="uq_community_point_ledger_source")',
+        ),
+        (
             "community profile leaderboard ORM index",
             'Index("ix_community_public_profiles_opt_in_display", "leaderboard_opt_in", "display_name", "account_id")',
         ),
@@ -435,6 +443,18 @@ def _verify_food_community_category_contract(content: str) -> None:
         ("store redemption wallet migration columns", '["account_id", "created_at", "id"]'),
     ):
         _assert_contains(label, backend_store_index_migration_content, marker)
+    for label, marker in (
+        ("community point ledger source migration constraint", '"uq_community_point_ledger_source"'),
+        ("community point ledger source migration table", '"community_point_ledger"'),
+        ("community point ledger source migration columns", '["source_type", "source_id"]'),
+    ):
+        _assert_contains(label, backend_point_ledger_source_migration_content, marker)
+    backend_contract_tests_content = COMMUNITY_STORE_YEAR_REVIEW_TEST_PATH.read_text(encoding="utf-8")
+    _assert_contains(
+        "community point ledger duplicate source regression",
+        backend_contract_tests_content,
+        "test_community_point_ledger_declares_unique_source_constraint",
+    )
     for label, marker in (
         ("food community API average delta signed clamp", "averageRise: clampNumber(Math.round(stats.average_glucose_delta ?? 0), -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
         ("food community API max delta signed clamp", "maximumRise: clampNumber(stats.max_glucose_delta ?? 0, -maxMobileGlucoseValue, maxMobileGlucoseValue)"),

@@ -15,6 +15,36 @@
 
 ## 2026-06-17
 
+### T1005 guard community point ledger source uniqueness
+
+類型：backend / bugfix / migration / test / verifier / docs / community / store
+
+檔案：
+
+- `backend/app/models/community.py`
+- `backend/alembic/versions/20260430_0029_community_point_ledger_source_unique.py`
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `uq_community_point_ledger_source` so each point ledger source can only be represented once by `source_type` plus `source_id`.
+- Added Alembic migration coverage for the uniqueness contract and regression coverage for ORM metadata.
+- Extended verifier coverage to keep the model, migration, and test guard aligned with the community points and Store redemption bridge.
+- 未變更 API response shape、point award amount、redemption cost、leaderboard scoring、payment integration、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_community_point_ledger_declares_unique_source_constraint tests/test_community_store_year_review.py::test_food_share_creates_food_stats_points_and_leaderboards tests/test_community_store_year_review.py::test_store_redemption_deducts_points_and_reserves_fulfillment_rewards` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/models/community.py scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- Before applying this migration to an environment with real data, scan for duplicate non-null point ledger sources and reconcile them.
+
 ### T1004 align Store redemption wallet ORM index
 
 類型：backend / bugfix / test / verifier / docs / store

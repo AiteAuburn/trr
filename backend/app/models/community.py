@@ -76,6 +76,7 @@ class CommunityPointLedger(Base):
     )
 
     __table_args__ = (
+        UniqueConstraint("source_type", "source_id", name="uq_community_point_ledger_source"),
         Index("ix_community_point_ledger_account_delta", "account_id", "delta"),
     )
 

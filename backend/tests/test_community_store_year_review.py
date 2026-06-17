@@ -9,7 +9,15 @@ from sqlalchemy import select
 from app.db.session import SessionLocal
 from app.jobs.generate_year_review_snapshots import default_target_year
 from app.main import app
-from app.models import AchievementUnlock, FoodItem, Record, StoreRedemption, YearReviewSharePackage, YearReviewSnapshot
+from app.models import (
+    AchievementUnlock,
+    CommunityPointLedger,
+    FoodItem,
+    Record,
+    StoreRedemption,
+    YearReviewSharePackage,
+    YearReviewSnapshot,
+)
 from app.services.year_review_snapshots import (
     YEAR_REVIEW_GENERATION_BATCH_SIZE,
     generate_missing_year_review_snapshots,
@@ -1546,6 +1554,15 @@ def test_store_redemption_wallet_index_is_declared_on_redemption_model() -> None
     )
     assert [column.name for column in index.columns] == ["account_id", "created_at", "id"]
     assert all(index.name != "ix_store_redemptions_account_created_id" for index in FoodItem.__table__.indexes)
+
+
+def test_community_point_ledger_declares_unique_source_constraint() -> None:
+    constraint = next(
+        constraint
+        for constraint in CommunityPointLedger.__table__.constraints
+        if constraint.name == "uq_community_point_ledger_source"
+    )
+    assert [column.name for column in constraint.columns] == ["source_type", "source_id"]
 
 
 def test_year_review_summarizes_previous_year_records() -> None:
