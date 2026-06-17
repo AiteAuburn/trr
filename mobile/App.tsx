@@ -5151,6 +5151,7 @@ function auxiliarySectionLabels() {
     unlocked: boundDisplayText("已解鎖", maxDisplayTextLength),
     achievementStatus: boundDisplayText("徽章整合狀態", maxDisplayTextLength),
     yearHighlights: boundDisplayText("今年亮點", maxDisplayTextLength),
+    yearReviewSource: boundDisplayText("年度回顧來源", maxDisplayTextLength),
     yearReviewBoundary: boundDisplayText("年度回顧邊界", maxDisplayTextLength),
     yearEncouragementBadge: boundDisplayText("年度鼓勵徽章", maxDisplayTextLength),
     shareStatus: boundDisplayText("分享整合狀態", maxDisplayTextLength),
@@ -5612,6 +5613,22 @@ function yearReviewHeroRecordCountCopy(count: number) {
 
 function yearReviewLiveCalculationCopy(targetYear: number, generationLabel: string) {
   return boundDisplayText(`${targetYear} 年資料；${generationLabel}。目前只用已載入紀錄預覽。`, maxDisplayDetailTextLength);
+}
+
+function yearReviewSourceDisplayCopy(summary: YearReviewApiResponse | null, sharePackageId: string) {
+  const boundedSharePackageId = boundIdentifier(sharePackageId);
+  if (!summary) {
+    const shareCopy = boundedSharePackageId ? `最近分享 package ${boundedSharePackageId.slice(0, 8)}。` : "尚未建立分享 package。";
+    return boundDisplayText(`本機已載入紀錄預覽；backend snapshot 尚未同步。${shareCopy}`, maxDisplayDetailTextLength);
+  }
+  const sourceCopy = summary.source === "snapshot" ? "backend snapshot" : "backend 即時產生摘要";
+  const snapshotCopy = summary.snapshot_id ? `snapshot ${boundIdentifier(summary.snapshot_id).slice(0, 8)}` : "尚未保存 snapshot id";
+  const generatedCopy = summary.generated_at ? `產生時間 ${recordDateTimeDisplay(summary.generated_at)}` : "產生時間尚未回傳";
+  const shareCopy = boundedSharePackageId ? `最近分享 package ${boundedSharePackageId.slice(0, 8)}` : "尚未建立分享 package";
+  return boundDisplayText(
+    `${summary.year} 年來源：${sourceCopy}，${snapshotCopy}，${generatedCopy}；${shareCopy}。`,
+    maxDisplayDetailTextLength
+  );
 }
 
 function yearReviewBadgeMaterialCopy() {
@@ -7183,6 +7200,10 @@ export default function App() {
   const yearReviewLiveCalculationDisplayText = yearReviewLiveCalculationCopy(
     yearReviewTargetDisplayYear,
     yearReviewGenerationDisplayText
+  );
+  const yearReviewSourceDisplayText = yearReviewSourceDisplayCopy(
+    yearReviewBackendSummary,
+    yearReviewSharePackageId
   );
   const yearReviewBadgeMaterialDisplayText = yearReviewBadgeMaterialCopy();
   const yearReviewShareButtonDisplayLabel = yearReviewShareButtonLabel();
@@ -16162,6 +16183,10 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>AI 年度總結與鼓勵</Text>
               <Text style={styles.evidence}>{yearlyAiEncouragementDisplayText}</Text>
+            </View>
+            <View style={styles.inlineInfoBlock}>
+              <Text style={styles.label}>{auxiliaryDisplayLabels.yearReviewSource}</Text>
+              <Text style={styles.evidence}>{yearReviewSourceDisplayText}</Text>
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{auxiliaryDisplayLabels.yearReviewBoundary}</Text>
