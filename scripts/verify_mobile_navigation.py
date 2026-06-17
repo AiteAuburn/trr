@@ -3904,6 +3904,11 @@ def main() -> int:
             ("store special badge redemption boundary", "優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利"),
             ("store points cost field", "pointsCost: boundDisplayText(value.pointsCost || \"點數未設定\", 40)"),
             ("store redemption boundary rows", "storeRedemptionBoundaryRows.map"),
+            ("ranking backend-ready future module copy", "分享次數、貢獻度與食物測試達人榜單已接 backend"),
+            ("ranking backend-ready future module requirements", 'requirements: ["三種公開榜單同步", "封鎖、檢舉與審核流程", "排名退出後歷史資料撤回流程"]'),
+            ("community readiness governance-only deletion", "公開分享刪除、撤回與 audit-friendly event stream"),
+            ("ranking readiness governance-only disputes", "榜單爭議處理與公開名稱違規處置"),
+            ("store checkout readiness inventory rollback", "購物車持久化、庫存 reservation 與 rollback 規則"),
             ("food photo upload status handler", "function showFoodPhotoUploadStatus()"),
             ("food photo integration status handler", "function showFoodPhotoIntegrationStatus()"),
             ("food photo retake status handler", "function showFoodPhotoRetakeStatus()"),
@@ -4046,6 +4051,13 @@ def main() -> int:
             ("food photo return accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodPhotoReturnAccessibility}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("community readiness stale public settings incomplete copy", "公開顯示名稱與可見範圍設定"),
+            ("ranking readiness stale opt-in incomplete copy", "user public ranking opt-in 與退出流程"),
+            ("ranking future module stale opt-in requirement", 'requirements: ["user public ranking opt-in", "ranking stats structure", "排名退出與歷史資料撤回流程"]'),
+            ("store checkout stale coupon rules incomplete copy", "購物車持久化、優惠券與折扣規則"),
+        ):
+            _assert_not_contains(label, content, marker)
         year_reviews_api_content = YEAR_REVIEWS_API_PATH.read_text(encoding="utf-8")
         year_review_service_content = YEAR_REVIEW_SNAPSHOTS_PATH.read_text(encoding="utf-8")
         year_review_model_content = (REPO_ROOT / "backend" / "app" / "models" / "year_review.py").read_text(

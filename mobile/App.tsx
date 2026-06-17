@@ -558,8 +558,8 @@ const futureModuleCards: FutureModuleCard[] = [
     id: "ranking",
     title: "排行榜",
     description: "連續記錄排行榜、社群競賽與公開排名 opt-in。",
-    readiness: "需先完成公開排名 opt-in、統計資料最小化與撤回流程。",
-    requirements: ["user public ranking opt-in", "ranking stats structure", "排名退出與歷史資料撤回流程"],
+    readiness: "分享次數、貢獻度與食物測試達人榜單已接 backend；封鎖、檢舉與退出後歷史撤回仍待正式開放。",
+    requirements: ["三種公開榜單同步", "封鎖、檢舉與審核流程", "排名退出後歷史資料撤回流程"],
     safety: "不公開血糖數值或健康內容；排行榜只能使用使用者同意的非敏感統計。",
     icon: "榜",
     target: "ranking"
@@ -6840,20 +6840,18 @@ export default function App() {
     "duplicate detection，避免同一筆血糖被重複匯入"
   ].map(resultChecklistItem);
   const communityReadinessChecklistItems = [
-    "公開顯示名稱與可見範圍設定",
     "社群貼文、留言、封鎖、檢舉與審核流程",
     "健康資料不可自動公開，分享需明確 opt-in",
-    "社群權限、刪除、撤回與 audit-friendly event stream"
+    "公開分享刪除、撤回與 audit-friendly event stream"
   ].map(resultChecklistItem);
   const rankingReadinessChecklistItems = [
-    "user public ranking opt-in 與退出流程",
-    "ranking stats structure，只儲存非敏感統計",
-    "公開顯示名稱、封鎖與檢舉流程",
+    "封鎖、檢舉與審核流程",
+    "榜單爭議處理與公開名稱違規處置",
     "退出排名後的歷史資料撤回與 audit event"
   ].map(resultChecklistItem);
   const storeCheckoutReadinessChecklistItems = [
     "商品目錄、庫存與價格來源",
-    "購物車持久化、優惠券與折扣規則",
+    "購物車持久化、庫存 reservation 與 rollback 規則",
     "付款金流、receipt validation 與退款流程",
     "訂單狀態、出貨狀態與客服稽核"
   ].map(resultChecklistItem);

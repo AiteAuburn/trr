@@ -15,6 +15,39 @@
 
 ## 2026-06-17
 
+### T1034 align Phase 2 readiness copy with backend-ready contracts
+
+類型：mobile / docs / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated Community readiness copy so public display-name / backend opt-in capabilities are no longer listed as unfinished work.
+- Updated Ranking future-module and readiness copy to reflect that share-count, contribution, and food-tester leaderboards are backend-backed; remaining work is governance, dispute handling, and withdrawal/audit flows.
+- Updated Store checkout readiness copy so coupon / discount-code issue and use are no longer described as unfinished checkout work; remaining work focuses on cart persistence, inventory reservation/rollback, payment, orders, shipping, and support audit.
+- Added mobile navigation verifier guards that require the backend-ready Phase 2 copy and reject the stale unfinished-public-settings / opt-in / coupon-rules wording.
+- 未變更 backend runtime、mobile network request paths、store/community redemption or leaderboard behavior、AI/LLM calls、STT、parser、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining Phase 2 / Phase 3 user-facing copy against already-wired backend contracts.
+
 ### T1033 persist Year Review share last-result coverage
 
 類型：backend / test / docs / verifier

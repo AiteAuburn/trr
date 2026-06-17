@@ -1623,7 +1623,7 @@ AI 分析結果：
 - 本機連續記錄預覽天數必須使用 display-only clamped value；不可直接 render 未 bounded streak 計算結果。
 - 公開榜單 badge/copy、本機連續記錄 preview boundary 說明與公開榜單 entries 必須透過 bounded display helper 產生；不可在 JSX 內直接寫 future preview boundary 文案或直接 render raw leaderboard payload。
 - 邊界卡：公開排名預設關閉、排名資料只允許非敏感統計、健康數值不可公開、AI 成本 `0 次呼叫`。
-- 啟用前條件：public ranking opt-in / opt-out、ranking stats structure、公開顯示名稱、封鎖 / 檢舉、退出後歷史資料撤回與 audit event。
+- 啟用前條件只可列尚未完成的治理與撤回能力：封鎖 / 檢舉、審核流程、榜單爭議處理、公開名稱違規處置、退出後歷史資料撤回與 audit event。不可再把 public ranking opt-in / opt-out、ranking stats structure 或公開顯示名稱列為未完成，因為一般操作路徑已接 backend `/community/settings` 與 `/community/leaderboards`。
 - 狀態按鈕：「查看排名狀態」、「查看 Opt-in 邊界」。
 
 互動：
