@@ -15,6 +15,33 @@
 
 ## 2026-06-14
 
+### T967 guard short home recording handoff
+
+類型：mobile / verifier / docs / recording
+
+檔案：
+
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added verifier coverage that recordings of 1 second or less reset locally and do not proceed to transcription.
+- Added verifier coverage that Home auto-transcription requires Today screen context, more than 1 second of audio, captured audio path, and configured Whisper model path.
+- This hardens the minimal Home microphone entry against accidental taps or empty recordings.
+- 未變更 recording runtime behavior、AI、LLM、STT implementation、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Keep short-recording behavior explicit if native recording UX adds silence detection or waveform feedback.
+
 ### T966 align raw transcript metadata stripping
 
 類型：mobile / backend / test / verifier / docs / history

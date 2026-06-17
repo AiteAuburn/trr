@@ -1219,6 +1219,20 @@ def main() -> int:
             content,
             "function handleRecordingResultPrimaryAction(returnScreen: AppScreen)",
         )
+        recording_result_action_block = _function_block(content, "handleRecordingResultPrimaryAction")
+        for label, marker in (
+            ("recording short result bound", "const boundedSeconds = clampNumber(recordingElapsedSeconds, 0, maxMobileCountValue);"),
+            ("recording short result reset guard", "if (boundedSeconds <= 1) {"),
+            ("recording short result reset action", "resetRecordingPreview();"),
+            ("recording short result no transcription", "return;"),
+        ):
+            _assert_contains(label, recording_result_action_block, marker)
+        finish_recording_block = _function_block(content, "finishRecordingPreview")
+        _assert_contains(
+            "home recording auto-transcribe requires non-trivial audio",
+            finish_recording_block,
+            'if (currentScreen === "today" && elapsedSeconds > 1 && capturedAudioPath && whisperModelPath.trim()) {',
+        )
         _assert_contains(
             "recording result home fallback action",
             content,

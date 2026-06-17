@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T967: Guard short home recording handoff
+
+Status: done
+
+Summary:
+
+- Added mobile verifier coverage that short recordings of 1 second or less reset locally instead of being handed to Whisper or AI.
+- Added verifier coverage that Home auto-transcription requires the Today screen, more than 1 second of audio, a captured audio path, and a configured Whisper model path.
+- This protects the minimal Home microphone flow from empty or accidental taps.
+
+Verification:
+
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T966: Align raw transcript metadata stripping
 
 Status: done
