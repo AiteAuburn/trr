@@ -15,6 +15,38 @@
 
 ## 2026-06-17
 
+### T1045 surface food glycemic reference value
+
+類型：mobile / docs / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated Food Community list and detail copy so each food item exposes the average glucose delta as an explicit `實際升糖參考值`.
+- Kept the underlying backend/mobile stats unchanged: the value remains the signed, bounded average `glucose_delta` in `mg/dL`.
+- Added UI spec and navigation verifier guards so the large food glycemic database positioning remains visible in the food item UI.
+- 未變更 backend runtime、mobile network request paths、food share behavior、store redemption behavior、AI/LLM calls、STT、parser、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing the remaining goal requirements against current evidence before final completion.
+
 ### T1044 clarify Windows vs WSL APK SDK paths
 
 類型：android / docs / verifier

@@ -2375,7 +2375,7 @@ function foodCommunityItemDisplayItem(value: FoodCommunityItem) {
       maxDisplayDetailTextLength
     ),
     metricSummary: boundDisplayText(
-      `${shareCount} 人分享，平均上升 ${averageRise} mg/dL`,
+      `${shareCount} 人分享，實際升糖參考值 ${averageRise} mg/dL`,
       maxDisplayDetailTextLength
     )
   };
@@ -14808,7 +14808,7 @@ export default function App() {
                     <Text style={styles.recordType}>{selectedFoodCommunityItem.shareCount}</Text>
                   </View>
                   <View style={styles.reportBoundaryCard}>
-                    <Text style={styles.confidence}>平均上升血糖</Text>
+                    <Text style={styles.confidence}>實際升糖參考值（平均）</Text>
                     <Text style={styles.recordType}>{selectedFoodCommunityItem.averageRise} mg/dL</Text>
                   </View>
                   <View style={styles.reportBoundaryCard}>
