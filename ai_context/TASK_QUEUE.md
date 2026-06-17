@@ -1565,6 +1565,21 @@ Verification:
 
 - `npm run quality` passed in `mobile/`.
 
+### T963: Preserve signed deltas in food share detail rows
+
+Status: done
+
+Summary:
+
+- Mobile food detail rows now preserve backend `glucose_delta` for individual share records instead of recalculating and clamping negative changes to zero.
+- Individual share summaries now display signed `血糖變化 ... mg/dL`, so food entries where post-meal glucose is lower remain truthful.
+- Mobile navigation verification now guards API share delta mapping, signed clamp, and signed display copy.
+
+Verification:
+
+- `cd mobile && npm run verify:navigation` passed.
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search` passed.
+
 ### T962: Guard DeepSeek as default parser model
 
 Status: done

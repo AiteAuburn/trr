@@ -700,6 +700,7 @@ type FoodCommunityShare = {
   id: string;
   beforeGlucose: number;
   afterGlucose: number;
+  glucoseDelta?: number;
   note: string;
 };
 type FoodCommunityItem = {
@@ -2010,6 +2011,7 @@ function foodCommunityItemFromApi(value: FoodCommunityApiItem): FoodCommunityIte
       id: boundIdentifier(share.id),
       beforeGlucose: clampNumber(share.before_glucose, 0, maxMobileGlucoseValue),
       afterGlucose: clampNumber(share.after_glucose, 0, maxMobileGlucoseValue),
+      glucoseDelta: clampNumber(share.glucose_delta, -maxMobileGlucoseValue, maxMobileGlucoseValue),
       note: boundDisplayText(
         share.public_note || share.serving_description || recordDateTimeDisplay(share.eaten_at),
         maxDisplayDetailTextLength
@@ -2333,14 +2335,14 @@ function foodCommunityCategoryDisplayItem(value: { id: FoodCommunityCategory; la
 function foodCommunityShareDisplayItem(value: FoodCommunityShare) {
   const before = clampNumber(value.beforeGlucose, 0, maxMobileGlucoseValue);
   const after = clampNumber(value.afterGlucose, 0, maxMobileGlucoseValue);
-  const rise = clampNumber(after - before, 0, maxMobileGlucoseValue);
+  const rise = clampNumber(value.glucoseDelta ?? after - before, -maxMobileGlucoseValue, maxMobileGlucoseValue);
   return {
     id: boundIdentifier(value.id),
     before,
     after,
     rise,
     note: boundDisplayText(value.note || "尚未提供心得。", maxDisplayDetailTextLength),
-    summary: boundDisplayText(`食用前 ${before}，食用後 ${after}，上升 ${rise}`, maxDisplayDetailTextLength)
+    summary: boundDisplayText(`食用前 ${before}，食用後 ${after}，血糖變化 ${rise} mg/dL`, maxDisplayDetailTextLength)
   };
 }
 

@@ -2725,6 +2725,29 @@
 
 - 若未來調整功能選單文案，需同步更新 MVP 入口規格與 verifier expected labels。
 
+### T963 Preserve signed deltas in food share detail rows
+
+類型：mobile / verifier / food-community
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Mobile 食物資料頁的個別分享紀錄現在保留 backend `glucose_delta`，不再用 `after - before` 後把負值 clamp 成 0。
+- 個別分享摘要改顯示 signed `血糖變化 ... mg/dL`，食用後血糖下降的真實分享不會被歸零。
+- Mobile navigation verifier 新增 API share delta mapping、signed clamp 與 signed display copy markers。
+
+驗證：
+
+- `cd mobile && npm run verify:navigation` passed.
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search` passed.
+
 ### T962 Guard DeepSeek as default parser model
 
 類型：backend / mobile / verifier / ai
