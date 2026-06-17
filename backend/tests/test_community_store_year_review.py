@@ -1890,6 +1890,11 @@ def test_year_review_summarizes_previous_year_records() -> None:
     opened_then_dismissed_package = opened_then_dismissed_response.json()
     assert opened_then_dismissed_package["status"] == "opened"
     assert opened_then_dismissed_package["shared_at"] == opened_package["shared_at"]
+    with SessionLocal() as db:
+        opened_share_package_row = db.get(YearReviewSharePackage, UUID(share_package_id))
+        assert opened_share_package_row is not None
+        assert opened_share_package_row.status == "opened"
+        assert opened_share_package_row.last_share_result == "dismissed"
 
     dismissed_confirm_response = client.post(
         f"/year-reviews/2025/share-card/confirm?profile_id={profile_id}",
@@ -1908,6 +1913,11 @@ def test_year_review_summarizes_previous_year_records() -> None:
     assert dismissed_package["status"] == "dismissed"
     assert dismissed_package["shared_at"] is None
     assert dismissed_package["revoked_at"] is None
+    with SessionLocal() as db:
+        dismissed_share_package_row = db.get(YearReviewSharePackage, UUID(dismissed_share_package_id))
+        assert dismissed_share_package_row is not None
+        assert dismissed_share_package_row.status == "dismissed"
+        assert dismissed_share_package_row.last_share_result == "dismissed"
 
     revoked_response = client.post(
         f"/year-reviews/share-packages/{share_package_id}/revoke",

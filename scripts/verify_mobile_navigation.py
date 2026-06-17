@@ -4101,6 +4101,8 @@ def main() -> int:
             ("year review public package omits health outcomes", '"health_outcomes",'),
             ("year review public package omits ai summary", '"ai_summary",'),
             ("year review public package omits summary json", '"summary_json",'),
+            ("year review opened package last result persisted", 'assert opened_share_package_row.last_share_result == "dismissed"'),
+            ("year review dismissed package last result persisted", 'assert dismissed_share_package_row.last_share_result == "dismissed"'),
             ("year review batch unfinished year test", "test_year_review_batch_generation_rejects_unfinished_year_before_snapshot_creation"),
             ("year review batch unfinished year error", 'with raises(ValueError, match="year_review_year_not_completed"):'),
             ("year review older completed year regression", "validate_completed_year_review_year(2024, datetime(2026, 1, 1, 0, 15, tzinfo=UTC)) == 2024"),

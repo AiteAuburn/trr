@@ -15,6 +15,34 @@
 
 ## 2026-06-17
 
+### T1033 persist Year Review share last-result coverage
+
+類型：backend / test / docs / verifier
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression assertions that Year Review share result updates persist `last_share_result`.
+- Covered both flows: an opened package followed by dismissed remains `status=opened` while `last_share_result=dismissed`, and a package dismissed before opening stores both `status=dismissed` and `last_share_result=dismissed`.
+- Added verifier/spec guards for the share result tracking persistence behavior.
+- 未變更 runtime backend share result/revoke behavior、mobile、AI/LLM calls、STT、parser、network paths、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose exec backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- Continue auditing remaining Year Review scheduler and CronJob evidence before considering the third-phase objective complete.
+
 ### T1032 guard Year Review public package privacy
 
 類型：backend / test / docs / verifier

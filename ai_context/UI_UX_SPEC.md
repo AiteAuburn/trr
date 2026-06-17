@@ -1284,6 +1284,7 @@ Dev-only visual smoke route jump：
 - Backend regression 必須確認 Year Review share-card、SVG asset 與 confirmed share package 不含 health outcome keys、中文血糖結果標籤、實際血糖數值或 `mg/dL` 片段；公開分享只保留低敏年度摘要。
 - Backend regression 也必須檢查 confirmed share package 整包 JSON 不含 `annual_stats`、`health_outcomes`、`ai_summary`、`summary_json` 或年度血糖成果片段；允許 `snapshot_id` 作為授權/追蹤識別，但不可回傳 snapshot payload。
 - Year Review share package revoke 必須 idempotent；重複撤回不可刷新 `revoked_at`，且 revoked package 不可再接收 opened/dismissed share result update。
+- Backend regression 必須確認 share result update 會保存 `last_share_result`：opened 後再 dismissed 時 status 仍保持 opened 但 last result 更新為 dismissed；未 opened 的 dismissed package 則 status 與 last result 都為 dismissed。
 - Backend 已有可排程 command：`python -m app.jobs.generate_year_review_snapshots --year YYYY`；Kubernetes deployment foundation 已有 `infra/k8s/year-review-cronjob.yaml` 在每年 1 月 1 日呼叫，預設 year 為前一年度，且只產生缺漏 snapshots。Backend regression 必須確認 batch 重跑不會刷新既有 snapshot id、`generated_at` 或 summary，即使 snapshot 產生後又新增同年度紀錄；summary baseline 必須用獨立副本比對，避免 mutable JSON 參照掩蓋重算。
 - Backend test 必須直接驗證 scheduler default target year：在 1 月 1 日執行 `generate_year_review_snapshots` 不帶 `--year` 時，目標年度為前一個 calendar year，避免年度回顧排程誤產生當年度空報告。
 - Kubernetes manifest verifier 必須同時檢查 Year Review CronJob 的 January 1 schedule、command target，並 fail-closed 禁止 manifest 帶入 `--year`，讓部署排程使用 backend default-year contract。
