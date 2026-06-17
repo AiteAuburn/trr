@@ -7,7 +7,7 @@ from uuid import UUID
 from sqlalchemy import exists, select
 from sqlalchemy.orm import Session
 
-from app.models import Record, UserProfile, YearReviewSharePackage, YearReviewSnapshot
+from app.models import AchievementUnlock, Record, UserProfile, YearReviewSharePackage, YearReviewSnapshot
 from app.schemas.year_review import (
     YearReviewMetric,
     YearReviewObservation,
@@ -49,17 +49,32 @@ def number_value(payload: dict[str, object], key: str) -> float | None:
     return None
 
 
-def highest_unlocked_level(counts: tuple[int, ...]) -> int:
-    best = 0
-    for count in counts:
-        for level in achievement_levels_for_progress(count):
-            if count >= level:
-                best = max(best, level)
-    return best
-
-
-def achieved_badge_count(counts: tuple[int, ...]) -> int:
-    return sum(1 for count in counts for level in achievement_levels_for_progress(count) if count >= level)
+def achieved_badge_summary(
+    cumulative_counts: tuple[int, ...],
+    streak_counts: tuple[int, ...],
+    persisted_unlocks: list[AchievementUnlock],
+) -> tuple[int, int]:
+    achieved_ids: set[str] = set()
+    highest_level = 0
+    for definition, cumulative_count, streak_count in zip(
+        ACHIEVEMENT_CATEGORY_DEFINITIONS,
+        cumulative_counts,
+        streak_counts,
+        strict=True,
+    ):
+        category = str(definition["id"])
+        for level in achievement_levels_for_progress(cumulative_count):
+            if cumulative_count >= level:
+                achieved_ids.add(f"{category}-cumulative-{level}")
+                highest_level = max(highest_level, level)
+        for level in achievement_levels_for_progress(streak_count):
+            if streak_count >= level:
+                achieved_ids.add(f"{category}-streak-{level}")
+                highest_level = max(highest_level, level)
+    for unlock in persisted_unlocks:
+        achieved_ids.add(unlock.achievement_id)
+        highest_level = max(highest_level, unlock.level)
+    return len(achieved_ids), highest_level
 
 
 def longest_streak(days: set[date]) -> int:
@@ -255,13 +270,18 @@ def build_year_review_summary(year: int, profile_id: UUID, db: Session) -> dict[
         )
         for definition in ACHIEVEMENT_CATEGORY_DEFINITIONS
     )
-    annual_badge_progress_counts = cumulative_counts + streak_counts
+    persisted_unlocks = list(
+        db.scalars(select(AchievementUnlock).where(AchievementUnlock.profile_id == profile_id))
+    )
     average_glucose = round(sum(glucose_values) / len(glucose_values), 1) if glucose_values else 0
     highest_glucose = int(max(glucose_values)) if glucose_values else 0
     lowest_glucose = int(min(glucose_values)) if glucose_values else 0
     longest_streak_days = longest_streak(record_days)
-    achieved_badges = achieved_badge_count(annual_badge_progress_counts)
-    highest_badge = highest_unlocked_level(annual_badge_progress_counts)
+    achieved_badges, highest_badge = achieved_badge_summary(
+        cumulative_counts,
+        streak_counts,
+        persisted_unlocks,
+    )
 
     observation = (
         f"{year} 年共記錄 {len(record_days)} 天，血糖記錄 {len(glucose_records)} 次，"

@@ -1992,6 +1992,35 @@ def test_year_review_badge_metrics_include_cumulative_and_streak_achievements() 
     assert annual_stats["highest_badge_level"] == 10
 
 
+def test_year_review_includes_persisted_achievement_unlocks_after_active_progress_drops() -> None:
+    client = TestClient(app)
+    account_id, profile_id = create_account_and_profile(client, "year-review-persisted-badges")
+
+    with SessionLocal() as db:
+        db.add(
+            AchievementUnlock(
+                profile_id=UUID(profile_id),
+                achievement_id="glucose-cumulative-300",
+                category="glucose",
+                kind="cumulative",
+                level=300,
+                unlocked_at=datetime(2025, 12, 31, 23, 0, tzinfo=UTC),
+            )
+        )
+        db.commit()
+
+    response = client.get(
+        f"/year-reviews/2025?profile_id={profile_id}",
+        headers={"X-Account-Id": account_id},
+    )
+
+    assert response.status_code == 200
+    annual_stats = {item["key"]: item["value"] for item in response.json()["annual_stats"]}
+    assert annual_stats["record_days"] == 0
+    assert annual_stats["achieved_badges"] == 1
+    assert annual_stats["highest_badge_level"] == 300
+
+
 def test_year_review_health_outcomes_ignore_bool_and_parse_numeric_strings() -> None:
     client = TestClient(app)
     account_id, profile_id = create_account_and_profile(client, "year-review-value-parsing")

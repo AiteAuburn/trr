@@ -111,6 +111,23 @@ None.
 
 ## Done
 
+### T1009: Include persisted achievement unlocks in Year Review badge metrics
+
+Status: done
+
+Summary:
+
+- Updated Year Review badge metrics to merge active annual record progress with persisted `AchievementUnlock` rows.
+- Preserved cumulative and streak badge counting while preventing undercounted achieved badge totals after active records no longer prove an already-unlocked badge.
+- Added backend regression and mobile verifier coverage for persisted unlock participation in annual review badge stats.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_includes_persisted_achievement_unlocks_after_active_progress_drops tests/test_community_store_year_review.py::test_year_review_badge_metrics_include_cumulative_and_streak_achievements tests/test_community_store_year_review.py::test_achievement_persisted_unlocks_keep_extended_levels_without_active_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/services/year_review_snapshots.py backend/tests/test_community_store_year_review.py scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1008: Extend dev reset to achievements and Year Review data
 
 Status: done

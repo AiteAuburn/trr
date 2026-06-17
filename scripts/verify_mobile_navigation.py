@@ -267,15 +267,17 @@ def _verify_achievement_contract(content: str) -> None:
         year_review_content,
         "from app.services.achievement_catalog import ACHIEVEMENT_CATEGORY_DEFINITIONS, achievement_levels_for_progress",
     )
+    _assert_contains("year review persisted unlock model import", year_review_content, "AchievementUnlock")
     _assert_not_contains("year review local achievement levels", year_review_content, catalog_level_marker)
     _assert_not_contains("achievement api local achievement levels", backend_content, catalog_level_marker)
     for label, marker in (
         ("year review cumulative badge counts", "cumulative_counts = tuple("),
         ("year review streak badge counts", "streak_counts = tuple("),
-        ("year review badge counts combine cumulative streak", "annual_badge_progress_counts = cumulative_counts + streak_counts"),
-        ("year review dynamic achieved badge levels", "achievement_levels_for_progress(count)"),
-        ("year review achieved badge source", "achieved_badges = achieved_badge_count(annual_badge_progress_counts)"),
-        ("year review highest badge source", "highest_badge = highest_unlocked_level(annual_badge_progress_counts)"),
+        ("year review achieved badge summary helper", "def achieved_badge_summary("),
+        ("year review dynamic cumulative badge levels", "achievement_levels_for_progress(cumulative_count)"),
+        ("year review dynamic streak badge levels", "achievement_levels_for_progress(streak_count)"),
+        ("year review persisted unlock query", "select(AchievementUnlock).where(AchievementUnlock.profile_id == profile_id)"),
+        ("year review achieved badge source", "achieved_badges, highest_badge = achieved_badge_summary("),
         ("year review glucose bool guard", "if isinstance(value, bool):"),
         ("year review glucose numeric string parsing", "return float(value.strip())"),
     ):
@@ -325,6 +327,11 @@ def _verify_achievement_contract(content: str) -> None:
         "achievement persisted extended unlock regression",
         tests_content,
         "test_achievement_persisted_unlocks_keep_extended_levels_without_active_records",
+    )
+    _assert_contains(
+        "year review persisted unlock regression",
+        tests_content,
+        "test_year_review_includes_persisted_achievement_unlocks_after_active_progress_drops",
     )
 
 

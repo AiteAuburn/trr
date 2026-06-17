@@ -15,6 +15,36 @@
 
 ## 2026-06-17
 
+### T1009 include persisted achievement unlocks in Year Review badge metrics
+
+類型：backend / bugfix / test / verifier / docs / year-review
+
+檔案：
+
+- `backend/app/services/year_review_snapshots.py`
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated Year Review badge metric generation to merge annual active-record progress with persisted achievement unlock rows.
+- Preserved cumulative and streak achievement counting while preventing annual review undercounts when a previously unlocked badge remains persisted after active progress no longer proves it.
+- Added backend regression and verifier coverage for persisted unlock participation in Year Review badge totals and highest badge level.
+- 未變更 mobile UI shape、Year Review API schema、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_includes_persisted_achievement_unlocks_after_active_progress_drops tests/test_community_store_year_review.py::test_year_review_badge_metrics_include_cumulative_and_streak_achievements tests/test_community_store_year_review.py::test_achievement_persisted_unlocks_keep_extended_levels_without_active_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/services/year_review_snapshots.py backend/tests/test_community_store_year_review.py scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Keep Year Review badge semantics aligned with the achievement summary whenever unlock persistence rules change.
+
 ### T1008 extend dev reset to achievements and Year Review data
 
 類型：backend / bugfix / test / verifier / docs / dev-tools
