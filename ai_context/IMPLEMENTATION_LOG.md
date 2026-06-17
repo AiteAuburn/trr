@@ -15,6 +15,35 @@
 
 ## 2026-06-17
 
+### T1027 align food item accessibility with backend-ready detail
+
+類型：mobile / docs / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated Food Community item accessibility copy so food detail entries describe loaded share statistics and individual records instead of saying they are preview-only.
+- Added a UI spec guard that general-operation food database labels must not claim they only show local preview.
+- Added a mobile navigation verifier marker for the backend-ready food detail accessibility wording.
+- 未變更 backend、storage、AI/LLM calls、STT、parser、network paths、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- Continue auditing remaining Food Community and Store copy for any preview-only wording that conflicts with backend-ready flows.
+
 ### T1026 restore History raw transcript wording
 
 類型：mobile / verifier

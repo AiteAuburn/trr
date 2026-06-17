@@ -3487,6 +3487,7 @@ def main() -> int:
             ("food community backend-aware empty copy", "backend ready 時會依搜尋同步，未連線時只篩選本機預覽。"),
             ("food community backend-aware share status copy", "backend ready 時可送出食物分享、建立社群點數並刷新排行榜與商城點數；visual smoke 或 backend unavailable 時不寫入資料。"),
             ("food community backend share mapping", "examples: (value.shares ?? []).slice(0, 3).map((share) => ({"),
+            ("food community backend-ready item accessibility", "同步已載入食物分享統計與個別紀錄"),
             ("food community metric summary", "metricSummary: boundDisplayText(\n      `${shareCount} 人分享，平均上升 ${averageRise} mg/dL`,"),
             ("food community points balance row", '"點數餘額",\n      storePointsBalance'),
             ("food community lifetime earned row", '"累積獲得",\n      storePointsBalance'),

@@ -2370,7 +2370,10 @@ function foodCommunityItemDisplayItem(value: FoodCommunityItem) {
     maximumRise,
     minimumRise,
     individualShareDisplayItems: value.examples.map(foodCommunityShareDisplayItem).slice(0, 3),
-    accessibilityLabel: boundDisplayText(`查看${title}食物升糖資料頁，只顯示本機預覽`, maxDisplayDetailTextLength),
+    accessibilityLabel: boundDisplayText(
+      `查看${title}食物升糖資料頁，同步已載入食物分享統計與個別紀錄`,
+      maxDisplayDetailTextLength
+    ),
     metricSummary: boundDisplayText(
       `${shareCount} 人分享，平均上升 ${averageRise} mg/dL`,
       maxDisplayDetailTextLength
