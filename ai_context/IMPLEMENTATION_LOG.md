@@ -15,6 +15,36 @@
 
 ## 2026-06-14
 
+### T994 add community food lookup indexes
+
+類型：backend / performance / migration / verifier / docs / community
+
+檔案：
+
+- `backend/app/models/community.py`
+- `backend/alembic/versions/20260430_0024_community_food_lookup_indexes.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added ORM and Alembic indexes for direct food-name lookup and latest food-share detail reads.
+- This supports the planned large shared food blood-sugar database by keeping `/community/foods` and `/community/foods/{id}` query paths aligned with their filters and ordering.
+- Extended the mobile/backend navigation verifier to guard the food lookup index contract.
+- 未變更 community API response shape、food share creation、points awards、leaderboards、store redemption、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search tests/test_community_store_year_review.py::test_food_search_limits_results_to_latest_matching_items` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/alembic/versions/20260430_0024_community_food_lookup_indexes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If search grows beyond direct name matching, evaluate PostgreSQL trigram/full-text search separately from the current literal search contract.
+
 ### T993 harden Year Review glucose value parsing
 
 類型：backend / bugfix / test / verifier / docs / year-review

@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, UniqueConstraint, func
+from sqlalchemy import Boolean, DateTime, ForeignKey, Index, Integer, String, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -28,6 +28,7 @@ class FoodItem(Base):
 
     __table_args__ = (
         UniqueConstraint("category", "normalized_name", name="uq_food_item_category_normalized_name"),
+        Index("ix_food_items_normalized_name", "normalized_name"),
     )
 
 
@@ -52,6 +53,10 @@ class FoodShare(Base):
     )
 
     food_item = relationship("FoodItem", back_populates="shares")
+
+    __table_args__ = (
+        Index("ix_food_shares_food_item_eaten_created", "food_item_id", "eaten_at", "created_at"),
+    )
 
 
 class CommunityPointLedger(Base):

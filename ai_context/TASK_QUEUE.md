@@ -111,6 +111,23 @@ None.
 
 ## Done
 
+### T994: Add community food lookup indexes
+
+Status: done
+
+Summary:
+
+- Added ORM and Alembic indexes for direct food-name lookup and latest food-share detail reads.
+- This supports the planned large shared food blood-sugar database by keeping `/community/foods` and `/community/foods/{id}` query paths aligned with their filters and ordering.
+- Extended the mobile/backend navigation verifier to guard the food lookup index contract.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search tests/test_community_store_year_review.py::test_food_search_limits_results_to_latest_matching_items` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/alembic/versions/20260430_0024_community_food_lookup_indexes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T993: Harden Year Review glucose value parsing
 
 Status: done
