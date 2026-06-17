@@ -955,8 +955,9 @@ def test_food_search_treats_like_wildcards_as_literal_characters() -> None:
     plain_name = f"literal search plain {unique_suffix}"
     percent_name = f"literal search 100% yogurt {unique_suffix}"
     underscore_name = f"literal search low_gi snack {unique_suffix}"
+    backslash_name = f"literal search slash\\snack {unique_suffix}"
 
-    for food_name in (plain_name, percent_name, underscore_name):
+    for food_name in (plain_name, percent_name, underscore_name, backslash_name):
         response = client.post(
             "/community/foods/shares",
             headers={"X-Account-Id": account_id},
@@ -981,6 +982,7 @@ def test_food_search_treats_like_wildcards_as_literal_characters() -> None:
     assert percent_name in wildcard_names
     assert plain_name not in wildcard_names
     assert underscore_name not in wildcard_names
+    assert backslash_name not in wildcard_names
 
     literal_response = client.get(
         "/community/foods",
@@ -1000,6 +1002,19 @@ def test_food_search_treats_like_wildcards_as_literal_characters() -> None:
     assert underscore_name in underscore_names
     assert plain_name not in underscore_names
     assert percent_name not in underscore_names
+    assert backslash_name not in underscore_names
+
+    backslash_response = client.get(
+        "/community/foods",
+        params={"query": "\\", "category": "supplements"},
+        headers={"X-Account-Id": account_id},
+    )
+    assert backslash_response.status_code == 200
+    backslash_names = {item["name"] for item in backslash_response.json()}
+    assert backslash_name in backslash_names
+    assert plain_name not in backslash_names
+    assert percent_name not in backslash_names
+    assert underscore_name not in backslash_names
 
 
 def test_community_leaderboard_ties_are_stably_ordered_by_public_name() -> None:

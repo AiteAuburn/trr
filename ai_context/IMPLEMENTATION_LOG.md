@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T987 cover backslash literal food search
+
+類型：backend / test / docs / community
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extended community food search regression coverage so backslash is searched literally instead of breaking SQL LIKE escape semantics.
+- This completes coverage for the escaped wildcard characters used by direct food-name search.
+- 未變更 food search runtime behavior、food share creation、points awards、leaderboards、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_search_treats_like_wildcards_as_literal_characters` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If search syntax is expanded later, keep escaped direct-name search covered separately from any advanced wildcard mode.
+
 ### T986 cover underscore literal food search
 
 類型：backend / test / docs / community

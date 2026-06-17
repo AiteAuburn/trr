@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T987: Cover backslash literal food search
+
+Status: done
+
+Summary:
+
+- Extended community food search regression coverage so backslash is searched literally instead of breaking SQL LIKE escape semantics.
+- This completes coverage for the escaped wildcard characters used by direct food-name search.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_search_treats_like_wildcards_as_literal_characters` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T986: Cover underscore literal food search
 
 Status: done
