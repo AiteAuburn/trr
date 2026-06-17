@@ -14,6 +14,7 @@ import {
   TextInput,
   View
 } from "react-native";
+import { Audio } from "expo-av";
 import {
   benchmarkNativeLlama,
   benchmarkNativeWhisper,
@@ -3777,7 +3778,19 @@ function recordingResetStatusMessage() {
 }
 
 function recordingTextFallbackStatusMessage() {
-  return boundUiMessage("錄音預覽已結束；目前請用文字輸入，確認後再交給 AI 整理。");
+  return boundUiMessage("錄音已結束；目前請用文字輸入，確認後再交給 AI 整理。");
+}
+
+function recordingPermissionDeniedStatusMessage() {
+  return boundUiMessage("麥克風權限未允許，請到系統設定開啟，或改用文字/手動新增。");
+}
+
+function recordingStartFailureStatusMessage(error: unknown) {
+  return safeUiError(error, "錄音無法開始");
+}
+
+function recordingStopFailureStatusMessage(error: unknown) {
+  return safeUiError(error, "錄音停止失敗");
 }
 
 function recordingFinishedStatusMessage(elapsedSeconds: number) {
@@ -3785,7 +3798,7 @@ function recordingFinishedStatusMessage(elapsedSeconds: number) {
   return boundUiMessage(
     boundedSeconds <= 1
       ? "錄音太短，請按住說完後再放開。"
-      : "錄音 UI 已結束；真實音訊轉文字會在 Dev Client 錄音模組接上後啟用。"
+      : "錄音已結束；音檔已保留於本機，轉文字需接 Whisper 或改用文字輸入。"
   );
 }
 
@@ -4345,7 +4358,7 @@ function privacyPreviewBoundaryDisplayItem() {
 }
 
 function quickRecordIntroCopy() {
-  return boundDisplayText("首頁只保留錄音預覽；文字整理與手動新增請從記錄頁進入，整理前都會先進文字確認。", maxDisplayDetailTextLength);
+  return boundDisplayText("首頁只保留按住錄音；文字整理與手動新增請從記錄頁進入，整理前都會先進文字確認。", maxDisplayDetailTextLength);
 }
 
 function quickEntryModeDisplayItems() {
@@ -4411,7 +4424,7 @@ function transcriptReviewManualEntryStatusMessage() {
 }
 
 function recordingIdlePreviewCopy() {
-  return boundDisplayText("錄音預覽不會產生文字，請用下方文字輸入", maxDisplayDetailTextLength);
+  return boundDisplayText("放開後保留本機音檔；轉文字需接 Whisper 或改用下方文字輸入", maxDisplayDetailTextLength);
 }
 
 function recordingActivePreviewCopy(elapsedSeconds: number) {
@@ -4430,21 +4443,21 @@ function homeRecordingSecondaryHint(isRecording: boolean, elapsedSeconds: number
 
 function homeRecordingPreviewBoundaryCopy() {
   return boundDisplayText(
-    "目前按住錄音只做 UI 預覽；native recorder、靜音裁切與 STT 尚未接上，不會產生音檔或轉文字。",
+    "首頁按住會使用 expo-av 擷取本機音檔；放開只停止錄音，不自動呼叫 STT、AI、LLM 或寫入 backend。",
     maxDisplayDetailTextLength
   );
 }
 
 function recordPageRecordingPreviewBoundaryCopy() {
   return boundDisplayText(
-    "目前先保留按住錄音 UI；真實音訊、靜音裁切與 STT 會在 native recorder 接上後啟用。",
+    "按住會使用 expo-av 擷取本機音檔；靜音裁切與 STT 仍需 native Whisper 接續，儲存前必須先文字確認。",
     maxDisplayDetailTextLength
   );
 }
 
 function recordingSimulatedResultCopy(elapsedSeconds: number) {
   return boundDisplayText(
-    `錄音 UI 已模擬 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒；目前沒有擷取音訊，請使用文字輸入或手動新增。`,
+    `錄音已擷取 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒；目前不自動轉文字，請使用文字輸入或手動新增。`,
     maxDisplayDetailTextLength
   );
 }
@@ -4458,7 +4471,7 @@ function recordingResultBodyCopy(elapsedSeconds: number) {
   return boundDisplayText(
     boundedSeconds <= 1
       ? "錄音時間太短，建議重新按住錄音。"
-      : "錄音 UI 已結束，但目前沒有擷取音訊或產生文字稿；請改用下方文字輸入，或用手動新增。",
+      : "錄音已結束並保留本機音檔；目前不自動產生文字稿，請改用下方文字輸入，或用手動新增。",
     maxDisplayDetailTextLength
   );
 }
@@ -5563,6 +5576,9 @@ export default function App() {
   const latestYearReviewSyncKey = useRef("");
   const foodShareInFlight = useRef(false);
   const storeRedemptionInFlight = useRef(false);
+  const audioRecordingRef = useRef<Audio.Recording | null>(null);
+  const recordingStartInFlight = useRef(false);
+  const recordingStopInFlight = useRef(false);
   const visualSmokePreviewActive = useRef(Boolean(initialVisualSmokeScreen));
   const [nativeStatus, setNativeStatus] = useState(nativeDebugDefaultStatusMessage());
   const [whisperModelPath, setWhisperModelPath] = useState("");
@@ -7726,20 +7742,52 @@ export default function App() {
     setCurrentScreen("menu");
   }
 
-  function startRecordingPreview() {
+  async function startRecordingPreview() {
+    if (recordingStartInFlight.current || recordingStopInFlight.current || audioRecordingRef.current) {
+      setStatus(busyActionStatusMessage());
+      return;
+    }
     if (voiceQuota && voiceQuota.remaining_seconds_today <= 0) {
       setStatus(recordingQuotaExhaustedStatusMessage());
       return;
     }
-    const now = Date.now();
-    setIsRecordingPreview(true);
-    setRecordingStartedAt(now);
-    setRecordingElapsedSeconds(0);
-    setPreview(null);
-    setStatus(recordingStartedStatusMessage(Boolean(voiceQuota && voiceQuota.remaining_seconds_today <= 120)));
+    recordingStartInFlight.current = true;
+    try {
+      const permission = await Audio.requestPermissionsAsync();
+      if (!permission.granted) {
+        setStatus(recordingPermissionDeniedStatusMessage());
+        return;
+      }
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: false,
+        shouldDuckAndroid: true
+      });
+      const recording = new Audio.Recording();
+      await recording.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
+      await recording.startAsync();
+      audioRecordingRef.current = recording;
+      const now = Date.now();
+      setIsRecordingPreview(true);
+      setRecordingStartedAt(now);
+      setRecordingElapsedSeconds(0);
+      setPreview(null);
+      setAudioPath("");
+      setStatus(recordingStartedStatusMessage(Boolean(voiceQuota && voiceQuota.remaining_seconds_today <= 120)));
+    } catch (error) {
+      audioRecordingRef.current = null;
+      setIsRecordingPreview(false);
+      setRecordingStartedAt(null);
+      setRecordingElapsedSeconds(0);
+      setStatus(recordingStartFailureStatusMessage(error));
+    } finally {
+      recordingStartInFlight.current = false;
+    }
   }
 
   function resetRecordingPreview() {
+    audioRecordingRef.current = null;
     setIsRecordingPreview(false);
     setRecordingStartedAt(null);
     setRecordingElapsedSeconds(0);
@@ -7769,16 +7817,39 @@ export default function App() {
     handleRecordingResultPrimaryAction("record");
   }
 
-  function finishRecordingPreview() {
+  async function finishRecordingPreview() {
     if (!isRecordingPreview) {
       return;
     }
+    if (recordingStopInFlight.current) {
+      return;
+    }
+    recordingStopInFlight.current = true;
     const elapsedSeconds =
       recordingStartedAt === null ? recordingElapsedSeconds : Math.ceil((Date.now() - recordingStartedAt) / 1000);
-    setIsRecordingPreview(false);
-    setRecordingStartedAt(null);
-    setRecordingElapsedSeconds(elapsedSeconds);
-    setStatus(recordingFinishedStatusMessage(elapsedSeconds));
+    const recording = audioRecordingRef.current;
+    audioRecordingRef.current = null;
+    try {
+      if (recording) {
+        await recording.stopAndUnloadAsync();
+        const uri = recording.getURI();
+        setAudioPath(uri ? boundNativeDebugInput(uri) : "");
+      }
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: false,
+        shouldDuckAndroid: true
+      });
+      setStatus(recordingFinishedStatusMessage(elapsedSeconds));
+    } catch (error) {
+      setStatus(recordingStopFailureStatusMessage(error));
+    } finally {
+      setIsRecordingPreview(false);
+      setRecordingStartedAt(null);
+      setRecordingElapsedSeconds(elapsedSeconds);
+      recordingStopInFlight.current = false;
+    }
   }
 
   function openPreviewRecordEdit(index: number) {

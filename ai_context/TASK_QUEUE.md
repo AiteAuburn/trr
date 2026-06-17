@@ -1738,6 +1738,25 @@ Verification:
 
 - `npm run quality` passed in `mobile/`.
 
+### T850: Capture Home and Record audio with expo-av
+
+Status: done
+
+Summary:
+
+- Home and Record hold-to-record now request microphone permission and use `expo-av` / `Audio.Recording` to capture a local audio file.
+- Releasing the mic stops/unloads the recording and stores only the bounded local audio URI in the native debug audio path.
+- Recording still does not auto-call STT, AI, LLM, parser, save records, or write backend data; users must confirm text before AI parsing.
+- Mobile navigation verifier now guards the native audio import, recording refs, permission request, start/stop/unload flow, bounded URI storage, and no-auto-STT boundary.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+Next:
+
+- Wire native Whisper transcription from the captured audio URI into the existing transcript confirmation screen.
+
 ### T844: Show newly unlocked achievement badges
 
 Status: done

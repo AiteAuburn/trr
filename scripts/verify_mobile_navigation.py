@@ -2053,6 +2053,18 @@ def main() -> int:
             ("minimal home mic press out", "onPressOut={finishRecordingPreview}"),
             ("minimal home conditional subtitle", "{currentChrome.subtitle ? <Text style={styles.subtitle}>{currentChrome.subtitle}</Text> : null}"),
             ("minimal home empty subtitle", 'today: { subtitle: "" }'),
+            ("native audio import", 'import { Audio } from "expo-av";'),
+            ("native audio recording ref", "const audioRecordingRef = useRef<Audio.Recording | null>(null);"),
+            ("native recording start guard", "const recordingStartInFlight = useRef(false);"),
+            ("native recording stop guard", "const recordingStopInFlight = useRef(false);"),
+            ("native microphone permission request", "await Audio.requestPermissionsAsync();"),
+            ("native recording mode", "await Audio.setAudioModeAsync({"),
+            ("native recording instance", "const recording = new Audio.Recording();"),
+            ("native recording options", "Audio.RecordingOptionsPresets.HIGH_QUALITY"),
+            ("native recording start", "await recording.startAsync();"),
+            ("native recording stop unload", "await recording.stopAndUnloadAsync();"),
+            ("native recording uri bounded", "setAudioPath(uri ? boundNativeDebugInput(uri) : \"\");"),
+            ("native recording no auto stt boundary", "不自動呼叫 STT、AI、LLM 或寫入 backend"),
         ):
             _assert_contains(label, content, marker)
         today_home_block = _today_home_render_block(content)

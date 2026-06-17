@@ -26178,6 +26178,36 @@
 
 - Continue with T042 to add or polish the remaining menu destinations from the updated UI spec.
 
+### T850 expo-av hold-to-record capture
+
+類型：mobile / recording / verifier / ui-spec
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Home 與 Record 的 hold-to-record 由純 UI preview 推進為 `expo-av` / `Audio.Recording` 本機音檔擷取。
+- 按住時請求麥克風權限、設定 audio mode、建立 recording instance 並開始錄音。
+- 放開時 stop/unload recording，將 bounded audio URI 寫入 native debug audio path，方便後續 Whisper 接續。
+- 仍不自動呼叫 STT、AI、LLM、parser，不建立紀錄、不寫入 backend，也不保存 raw transcript、raw prompt 或 raw model output。
+- Canonical UI spec 與 mobile navigation verifier 已更新，守住首頁極簡 UI、native recording source markers、bounded URI storage 與 no-auto-STT/AI/backend 邊界。
+
+驗證：
+
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+- `npm run quality` in `mobile/` passed.
+
+後續：
+
+- 將 captured audio URI 接到 native Whisper，並把轉文字結果導入既有 transcript confirmation screen。
+
 ### T844 newly unlocked achievement badges
 
 類型：backend / mobile / verifier / gamification
