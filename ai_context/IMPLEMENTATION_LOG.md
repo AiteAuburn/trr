@@ -15,6 +15,39 @@
 
 ## 2026-06-17
 
+### T1041 document Year Review DeepSeek prompt
+
+類型：docs / verifier
+
+檔案：
+
+- `README.md`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Documented the Year Review DeepSeek system prompt in the README DeepSeek section.
+- Added prompt analysis explaining the aggregate-only annual payload, strict `important_observation` / `encouragement` JSON output, raw-data exclusions, and deterministic fallback.
+- Added UI spec and navigation verifier guards so the Year Review DeepSeek prompt remains documented and reviewable.
+- 未變更 backend runtime、mobile network request paths、DeepSeek request implementation、AI/LLM calls、STT、parser、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk docker compose exec backend pytest -q tests/test_community_store_year_review.py::test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured tests/test_ai_pipeline.py::test_deepseek_system_prompt_includes_configured_prompt_analysis_and_base tests/test_ai_pipeline.py::test_deepseek_request_body_sends_prompt_as_system_message` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing the remaining goal requirements against current evidence before final completion.
+
 ### T1040 align remaining future-card requirements
 
 類型：mobile / docs / verifier

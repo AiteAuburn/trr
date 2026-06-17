@@ -9,6 +9,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
+README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
 ACHIEVEMENT_CATALOG_PATH = REPO_ROOT / "backend" / "app" / "services" / "achievement_catalog.py"
 YEAR_REVIEW_SNAPSHOTS_PATH = REPO_ROOT / "backend" / "app" / "services" / "year_review_snapshots.py"
@@ -254,6 +255,7 @@ def _function_block(content: str, function_name: str) -> str:
 
 
 def _verify_achievement_contract(content: str) -> None:
+    readme_content = README_PATH.read_text(encoding="utf-8")
     backend_content = ACHIEVEMENTS_API_PATH.read_text(encoding="utf-8")
     catalog_content = ACHIEVEMENT_CATALOG_PATH.read_text(encoding="utf-8")
     year_review_content = YEAR_REVIEW_SNAPSHOTS_PATH.read_text(encoding="utf-8")
@@ -286,8 +288,13 @@ def _verify_achievement_contract(content: str) -> None:
         ("year review DeepSeek health outcomes payload", '"health_outcomes": [metric.model_dump(mode="json") for metric in health_outcomes]'),
         ("year review DeepSeek JSON response format", '"response_format": {"type": "json_object"}'),
         ("year review deterministic fallback helper", "def deterministic_year_review_ai_summary("),
+        ("README Year Review DeepSeek prompt documented", "你是糖錄錄年度回顧摘要助手。只根據使用者提供的年度聚合統計撰寫繁體中文回顧"),
+        ("README Year Review DeepSeek prompt analysis", "Year Review prompt 分析："),
+        ("README Year Review DeepSeek aggregate-only analysis", "DeepSeek 不會收到 raw records、food items、profile id、occurred_at、raw transcript、raw prompt 或 raw model output"),
+        ("README Year Review DeepSeek fallback analysis", "DeepSeek 未設定、HTTP 失敗、回應過大、JSON 無效或缺欄位時，backend 會回到 deterministic fallback"),
     ):
-        _assert_contains(label, year_review_content, marker)
+        target_content = readme_content if label.startswith("README ") else year_review_content
+        _assert_contains(label, target_content, marker)
 
     for category, label, record_type, icon in EXPECTED_ACHIEVEMENT_CATEGORIES:
         _assert_contains(

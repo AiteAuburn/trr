@@ -304,6 +304,19 @@ Prompt 分析（你可以直接改 `DEEPSEEK_SYSTEM_PROMPT` / `DEEPSEEK_ANALYSIS
 
 若要微調精度，可以先調 `DEEPSEEK_ANALYSIS_ADDENDUM`（偏嚴可增加保守詞句、偏鬆可放寬「可接受不確定」條件）。  
 
+Year Review also uses DeepSeek when the same endpoint/key are configured. This prompt is fixed in backend code because it only accepts precomputed yearly aggregates, not transcripts or records:
+
+```text
+你是糖錄錄年度回顧摘要助手。只根據使用者提供的年度聚合統計撰寫繁體中文回顧，不可要求更多資料、不可編造、不可提供診療建議或療效宣稱。只輸出 JSON object，欄位必須是 important_observation 與 encouragement，每個欄位都要是 120 字以內的字串。
+```
+
+Year Review prompt 分析：
+
+1. 角色被限制為「年度回顧摘要助手」，輸入只允許 backend 已算好的 `annual_stats` 與 `health_outcomes`。
+2. System prompt 要求 JSON object 且只允許 `important_observation` / `encouragement`，backend 會再次驗證並做長度 bounding。
+3. User payload 的 instructions 明確限制「只能使用上述聚合統計」，所以 DeepSeek 不會收到 raw records、food items、profile id、occurred_at、raw transcript、raw prompt 或 raw model output。
+4. DeepSeek 未設定、HTTP 失敗、回應過大、JSON 無效或缺欄位時，backend 會回到 deterministic fallback，不阻斷年度回顧產生。
+
 Native voice, `whisper.rn`, encrypted SQLite, biometrics, and `llama.rn` require Expo prebuild / dev client and are planned after the shell is stable.
 
 ### iPhone Dev Client For Local Models
