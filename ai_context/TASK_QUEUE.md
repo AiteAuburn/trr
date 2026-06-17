@@ -1565,6 +1565,21 @@ Verification:
 
 - `npm run quality` passed in `mobile/`.
 
+### T962: Guard DeepSeek as default parser model
+
+Status: done
+
+Summary:
+
+- Backend AI request schema regression now locks parse-preview and command-proposal default LLM model to `deepseek-chat`.
+- Mobile navigation verifier now guards the initial LLM state, both boot/reconnect DeepSeek preference paths, the parse request binding, and selected-model status render.
+- Runtime behavior is unchanged: DeepSeek remains preferred when configured and available, with existing fallback handling when unavailable.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_ai_pipeline.py::test_ai_parse_and_command_requests_default_to_deepseek tests/test_ai_pipeline.py::test_deepseek_request_body_sends_prompt_as_system_message tests/test_ai_pipeline.py::test_deepseek_system_prompt_default_is_composed_with_analysis_addendum` passed.
+- `cd mobile && npm run verify:navigation` passed.
+
 ### T961: Enable reserved partner and member store rewards
 
 Status: done

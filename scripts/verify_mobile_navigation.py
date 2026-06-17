@@ -1035,6 +1035,25 @@ def main() -> int:
             content,
             'today: { subtitle: "" }',
         )
+        for label, marker in (
+            ("deepseek initial llm model state", 'const [llmModelId, setLlmModelId] = useState("deepseek-chat");'),
+            (
+                "deepseek boot preference",
+                'modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??',
+            ),
+            (
+                "deepseek settings reconnect preference",
+                'modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??',
+            ),
+            ("deepseek record parse request binding", "llm_model_id: llmModelId"),
+            ("deepseek selected model status render", "LLM：{selectedLlmModel?.label ?? llmModelId}"),
+        ):
+            _assert_contains(label, content, marker)
+        deepseek_preference_marker = (
+            'modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??'
+        )
+        if content.count(deepseek_preference_marker) < 2:
+            raise AssertionError("DeepSeek must be preferred in both boot and settings reconnect model selection paths.")
         _assert_not_contains(
             "minimal home chrome must not override hamburger action",
             _screen_chrome_block(content),

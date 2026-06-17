@@ -178,6 +178,20 @@ def test_deepseek_system_prompt_default_is_composed_with_analysis_addendum() -> 
     assert DEEPSEEK_ANALYSIS_ADDENDUM in prompt
 
 
+def test_ai_parse_and_command_requests_default_to_deepseek() -> None:
+    parse_request = ParsePreviewRequest(
+        profile_id=UUID(int=1),
+        transcript="早上空腹血糖 120",
+    )
+    command_request = CommandProposalRequest(
+        profile_id=UUID(int=1),
+        transcript="早上空腹血糖 120",
+    )
+
+    assert parse_request.llm_model_id == DEEPSEEK_LLM_MODEL_ID
+    assert command_request.llm_model_id == DEEPSEEK_LLM_MODEL_ID
+
+
 def test_ai_model_options_response_schema_bounds_metadata() -> None:
     valid_option = AiModelOption(
         id="local-llm-schema-stub",

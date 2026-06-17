@@ -2725,6 +2725,28 @@
 
 - 若未來調整功能選單文案，需同步更新 MVP 入口規格與 verifier expected labels。
 
+### T962 Guard DeepSeek as default parser model
+
+類型：backend / mobile / verifier / ai
+
+檔案：
+
+- `backend/tests/test_ai_pipeline.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Backend AI request schema regression 現在鎖住 parse-preview 與 command-proposal 預設 LLM model 為 `deepseek-chat`。
+- Mobile navigation verifier 現在守住初始 LLM state、boot 與 settings reconnect 兩條 DeepSeek 優先選擇路徑、parse request binding 與 selected model status render。
+- 未改 runtime fallback：DeepSeek configured 且 available 時優先使用；不可用時仍沿用現有可用模型 fallback。
+
+驗證：
+
+- `docker compose run --rm backend pytest -q tests/test_ai_pipeline.py::test_ai_parse_and_command_requests_default_to_deepseek tests/test_ai_pipeline.py::test_deepseek_request_body_sends_prompt_as_system_message tests/test_ai_pipeline.py::test_deepseek_system_prompt_default_is_composed_with_analysis_addendum` passed.
+- `cd mobile && npm run verify:navigation` passed.
+
 ### T961 Enable reserved partner and member store rewards
 
 類型：backend / mobile / store / points
