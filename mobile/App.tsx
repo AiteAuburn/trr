@@ -717,6 +717,8 @@ type FoodCommunityItem = {
 };
 type FoodCommunityShareFields = {
   foodName: string;
+  eatenDate: string;
+  eatenTime: string;
   beforeGlucose: string;
   afterGlucose: string;
   note: string;
@@ -2089,8 +2091,11 @@ function storeRedemptionDisplayItem(value: StoreApiRedemption) {
 }
 
 function emptyFoodCommunityShareFields(): FoodCommunityShareFields {
+  const nowInputs = localDateTimeInputs(new Date());
   return {
     foodName: "",
+    eatenDate: nowInputs.date,
+    eatenTime: nowInputs.time,
     beforeGlucose: "",
     afterGlucose: "",
     note: ""
@@ -6600,6 +6605,7 @@ export default function App() {
     null;
   const foodCommunityShareFieldTuples: Array<readonly [string, string]> = [
     ["食物名稱", foodCommunityShareFields.foodName || selectedFoodCommunityItem?.title || "由使用者輸入"],
+    ["食用時間", `${foodCommunityShareFields.eatenDate} ${foodCommunityShareFields.eatenTime}`],
     ["食用前血糖", foodCommunityShareFields.beforeGlucose || "由使用者輸入"],
     ["食用後血糖", foodCommunityShareFields.afterGlucose || "由使用者輸入"],
     [
@@ -9043,6 +9049,20 @@ export default function App() {
     }));
   }
 
+  function updateFoodCommunityEatenDate(value: string) {
+    setFoodCommunityShareFields((current) => ({
+      ...current,
+      eatenDate: boundDateInputText(value)
+    }));
+  }
+
+  function updateFoodCommunityEatenTime(value: string) {
+    setFoodCommunityShareFields((current) => ({
+      ...current,
+      eatenTime: boundTimeInputText(value)
+    }));
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     const firstMatch = foodCommunityItemsForDisplay.find((item) => item.category === category);
@@ -10142,6 +10162,13 @@ export default function App() {
       setCommunityActionStatus(boundUiMessage("請輸入 20-600 mg/dL 之間的食用前與食用後血糖。"));
       return;
     }
+    let eatenAt = "";
+    try {
+      eatenAt = localDateTimeToIso(foodCommunityShareFields.eatenDate, foodCommunityShareFields.eatenTime);
+    } catch (error) {
+      setCommunityActionStatus(boundUiMessage(error instanceof Error ? error.message : "食用時間格式不正確。"));
+      return;
+    }
     foodShareInFlight.current = true;
     setIsBusy(true);
     setCommunityActionStatus(boundUiMessage("正在送出食物分享並建立社群點數。"));
@@ -10155,7 +10182,7 @@ export default function App() {
           body: JSON.stringify({
             food_name: foodName,
             category: apiFoodCategoryFromMobile(selectedFoodCommunityItem.category),
-            eaten_at: new Date().toISOString(),
+            eaten_at: eatenAt,
             before_glucose: beforeGlucose,
             after_glucose: afterGlucose,
             public_note: foodCommunityShareFields.note || undefined
@@ -14794,6 +14821,34 @@ export default function App() {
                 autoCapitalize="none"
                 autoCorrect={false}
               />
+              <View style={styles.dateTimeRow}>
+                <View style={styles.dateTimeField}>
+                  {renderFieldLabel("📅", "食用日期")}
+                  <TextInput
+                    accessibilityLabel="輸入食物分享食用日期"
+                    value={foodCommunityShareFields.eatenDate}
+                    onChangeText={updateFoodCommunityEatenDate}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    maxLength={maxDateInputLength}
+                    style={styles.input}
+                    placeholder="2026-04-29"
+                  />
+                </View>
+                <View style={styles.dateTimeField}>
+                  {renderFieldLabel("🕒", "食用時間")}
+                  <TextInput
+                    accessibilityLabel="輸入食物分享食用時間"
+                    value={foodCommunityShareFields.eatenTime}
+                    onChangeText={updateFoodCommunityEatenTime}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    maxLength={maxTimeInputLength}
+                    style={styles.input}
+                    placeholder="08:10"
+                  />
+                </View>
+              </View>
               <TextInput
                 accessibilityLabel="輸入食用前血糖"
                 value={foodCommunityShareFields.beforeGlucose}

@@ -15,6 +15,36 @@
 
 ## 2026-06-17
 
+### T1024 add user-selected eaten time to Food Community sharing
+
+類型：mobile / docs / verifier / community
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `eatenDate` and `eatenTime` fields to the Food Community share form state.
+- Added Food Community share date/time inputs using the existing bounded date/time input helpers and layout.
+- Updated the share summary rows to show `食用時間`.
+- Changed `/community/foods/shares` payload generation to use `localDateTimeToIso(eatenDate, eatenTime)` instead of always sending the current timestamp.
+- Added verifier guards for the date/time fields, inputs, local parser handoff, `eaten_at` payload, and against `new Date().toISOString()` returning in the share submit path.
+- 未變更 backend community schema、points ledger、leaderboard scoring、store redemption behavior、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- 可再依 UX 需要把日期/時間 input 換成 native picker；目前先沿用 repo 既有文字輸入格式與驗證。
+
 ### T1023 align Food Community and Store entry chrome with backend-ready paths
 
 類型：mobile / docs / verifier / community / store
