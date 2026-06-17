@@ -15,6 +15,38 @@
 
 ## 2026-06-17
 
+### T1012 sync achievement unlocks after record saves
+
+類型：mobile / feature / verifier / docs / achievements
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Triggered backend achievement unlock sync after AI save success, partial AI save success, and manual record creation success.
+- Kept the manual Achievements screen sync button while making persisted badge unlocks follow the core MVP record-save loop.
+- Added verifier coverage for the post-save achievement sync hook.
+- 未變更 backend achievement schema、record storage、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Consider surfacing newly unlocked badges directly on Save Success once the result page design has room for a compact achievement callout.
+
 ### T1011 use backend bounded reports for Analysis metrics
 
 類型：mobile / feature / verifier / docs / analysis

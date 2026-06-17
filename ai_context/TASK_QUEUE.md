@@ -111,6 +111,26 @@ None.
 
 ## Done
 
+### T1012: Sync achievement unlocks after record saves
+
+Status: done
+
+Summary:
+
+- Triggered backend achievement unlock sync after AI save success, partial AI save success, and manual record creation success.
+- Kept manual achievement sync available from the Achievements screen while making badge persistence follow the core MVP record-save loop.
+- Added verifier coverage so future save-flow refactors keep the post-save achievement sync hook.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1011: Use backend bounded reports for Analysis metrics
 
 Status: done

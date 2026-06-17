@@ -9029,6 +9029,10 @@ export default function App() {
     void loadAchievementSummary(true);
   }
 
+  function syncAchievementsAfterRecordSave() {
+    void loadAchievementSummary(true);
+  }
+
   function openYearReview(returnScreen: AppScreen = currentScreen) {
     setYearReviewReturnScreen(returnScreen === "yearReview" ? "menu" : returnScreen);
     setCurrentScreen("yearReview");
@@ -10501,6 +10505,7 @@ export default function App() {
       setSaveSuccessReturnScreen("today");
       setCurrentScreen("saveSuccess");
       setStatus(aiSaveSuccessStatusMessage());
+      syncAchievementsAfterRecordSave();
     } catch (error) {
       const message = aiSaveFailureStatusMessage(error);
       if (createdRecords.length > 0) {
@@ -10525,6 +10530,7 @@ export default function App() {
         setSaveSuccessReturnScreen("aiReview");
         setCurrentScreen("saveSuccess");
         setStatus(aiPartialSaveFailureStatusMessage(message));
+        syncAchievementsAfterRecordSave();
       } else {
         setLastSaveErrorSummary(message);
         setLastSaveEntryMethod("ai");
@@ -10923,6 +10929,7 @@ export default function App() {
       setSaveSuccessReturnScreen(manualRecordReturnScreen);
       setCurrentScreen("saveSuccess");
       setStatus(manualRecordCreateSuccessStatusMessage());
+      syncAchievementsAfterRecordSave();
     } catch (error) {
       setStatus(manualRecordCreateFailureStatusMessage(error));
     } finally {
