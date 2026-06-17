@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T971: Cover year-review batch-size bounds
+
+Status: done
+
+Summary:
+
+- Added backend regression coverage that annual year-review snapshot generation rejects non-positive and oversized batch sizes.
+- This protects the scheduled January 1 generation job from unsafe batch configuration.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_batch_generation_creates_missing_snapshots_once tests/test_community_store_year_review.py::test_year_review_batch_generation_rejects_invalid_batch_size tests/test_community_store_year_review.py::test_year_review_scheduler_defaults_to_previous_calendar_year` passed.
+- `rtk python3 scripts/verify_k8s_manifests.py` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+
 ### T970: Cover trimmed public leaderboard names
 
 Status: done

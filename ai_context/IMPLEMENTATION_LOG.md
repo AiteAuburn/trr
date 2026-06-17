@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T971 cover year-review batch-size bounds
+
+類型：backend / test / docs / year-review
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added regression coverage that annual year-review snapshot generation rejects non-positive and oversized batch sizes.
+- This protects the scheduled January 1 generation job from unsafe batch configuration.
+- 未變更 snapshot generation behavior、CronJob schedule、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_batch_generation_creates_missing_snapshots_once tests/test_community_store_year_review.py::test_year_review_batch_generation_rejects_invalid_batch_size tests/test_community_store_year_review.py::test_year_review_scheduler_defaults_to_previous_calendar_year` passed.
+- `rtk python3 scripts/verify_k8s_manifests.py` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+
+後續：
+
+- If scheduler flags expand, keep bounds validation covered before query construction.
+
 ### T970 cover trimmed public leaderboard names
 
 類型：backend / test / docs / community

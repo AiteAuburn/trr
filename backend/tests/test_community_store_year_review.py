@@ -3,13 +3,14 @@ from datetime import UTC, datetime, timedelta
 from uuid import UUID, uuid4
 
 from fastapi.testclient import TestClient
+from pytest import raises
 from sqlalchemy import select
 
 from app.db.session import SessionLocal
 from app.jobs.generate_year_review_snapshots import default_target_year
 from app.main import app
 from app.models import AchievementUnlock, FoodItem, Record, YearReviewSnapshot
-from app.services.year_review_snapshots import generate_missing_year_review_snapshots
+from app.services.year_review_snapshots import YEAR_REVIEW_GENERATION_BATCH_SIZE, generate_missing_year_review_snapshots
 from tests.helpers import create_account_and_profile, create_record
 
 
@@ -1528,3 +1529,15 @@ def test_year_review_batch_generation_creates_missing_snapshots_once() -> None:
     assert unchanged_first_snapshot.id == first_snapshot_id
     assert unchanged_first_snapshot.generated_at == first_generated_at
     assert unchanged_first_snapshot.summary_json == first_summary_json
+
+
+def test_year_review_batch_generation_rejects_invalid_batch_size() -> None:
+    with SessionLocal() as db:
+        with raises(ValueError, match="batch_size must be positive"):
+            generate_missing_year_review_snapshots(year=2024, db=db, batch_size=0)
+        with raises(ValueError, match="batch_size exceeds maximum"):
+            generate_missing_year_review_snapshots(
+                year=2024,
+                db=db,
+                batch_size=YEAR_REVIEW_GENERATION_BATCH_SIZE + 1,
+            )
