@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T957: Align tutorial copy with local Whisper recording
+
+Status: done
+
+Summary:
+
+- Updated the mobile tutorial release step so it no longer says STT is unavailable after the native recorder and local Whisper handoff were connected.
+- Updated the canonical UI prompt checklist to state local Whisper transcripts enter text confirmation before AI organization or save.
+- Added a mobile navigation verifier guard for the current tutorial Whisper copy and stale no-STT tutorial wording.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+
 ### T956: Align Store search and cart copy with backend rewards
 
 Status: done

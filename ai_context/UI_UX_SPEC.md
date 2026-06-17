@@ -1158,7 +1158,7 @@ Dev-only visual smoke route jump：
 教學卡片：
 
 - 按住說話：麥克風 icon，說明「按住首頁或記錄頁的大按鈕開始錄音預覽。」。
-- 放開結束：手掌 icon，說明「目前不會自動轉文字；請改用文字輸入，未來接上 STT 後也會先進文字確認。」。
+- 放開結束：手掌 icon，說明「若已選擇本機 Whisper 模型，會先轉成文字並進入確認。」。
 - 確認內容：清單 icon，說明「檢查文字與 AI 候選紀錄，確認前不會儲存。」。
 - 儲存完成：勾勾 icon，說明「確認後送出，即可加入今日紀錄。」。
 
@@ -1980,7 +1980,7 @@ Main screens:
 12. Yearly review preview screen showing annual statistics and「查看分享整合狀態」button until share image/privacy masking are wired.
 13. Store preview screen with search, categories, product cards, inline commerce-preview boundary text, and「查看購物車整合狀態」button until cart/checkout/payment are wired.
 14. Food photo analysis preview screen with upload area, inline Vision-not-wired boundary text, and empty analysis state until camera/upload/Vision are wired.
-15. Text confirmation screen with editable text and buttons「重新輸入」and「下一步整理」; STT is not wired in MVP preview.
+15. Text confirmation screen with editable text and buttons「重新輸入」and「下一步整理」; local Whisper transcripts can enter here, but users must confirm before AI organization or save.
 16. AI organized confirmation screen showing structured cards for date/time, glucose, meal, exercise, each editable, with「確認儲存」button.
 
 Use consistent spacing, rounded corners, mint green icons, and large readable Chinese typography.

@@ -15,6 +15,34 @@
 
 ## 2026-06-14
 
+### T957 align tutorial copy with local Whisper recording
+
+類型：mobile / verifier / docs / tutorial
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated the tutorial release step so it no longer tells users STT is unavailable after the native recorder and local Whisper handoff were connected.
+- Updated the canonical UI prompt checklist so generated UI keeps local Whisper transcripts flowing through text confirmation before AI organization or save.
+- Added a mobile navigation verifier guard for the current tutorial copy and the stale no-STT tutorial wording.
+- 未變更 backend endpoint、database schema、native recorder behavior、Whisper model selection、AI、LLM、parser、voice quota accounting、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+
+後續：
+
+- Keep tutorial copy in sync with future silence trimming and no-audio rejection changes.
+
 ### T956 Align Store search and cart copy with backend rewards
 
 類型：mobile / verifier / docs / store
