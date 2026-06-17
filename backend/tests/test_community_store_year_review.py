@@ -836,6 +836,8 @@ def test_food_detail_returns_share_records_stats_and_cross_category_search() -> 
     assert shares_by_id[lower_after_body["share"]["id"]]["glucose_delta"] == -20
     assert shares_by_id[lower_after_body["share"]["id"]]["serving_description"] == "少量"
     assert shares_by_id[lower_after_body["share"]["id"]]["public_note"] == "飯後有散步，血糖下降"
+    assert all("account_id" not in share for share in detail["shares"])
+    assert all("profile_id" not in share for share in detail["shares"])
 
     missing_food_id = uuid4()
     missing_detail_response = client.get(

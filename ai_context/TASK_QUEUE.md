@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T983: Cover public food detail share privacy
+
+Status: done
+
+Summary:
+
+- Added backend regression coverage that public food detail share records do not expose account or profile identifiers.
+- This keeps the shared food blood-sugar database useful while preserving privacy boundaries for individual public share rows.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search tests/test_community_store_year_review.py::test_food_detail_limits_individual_share_records_to_latest_50` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T982: Cover Year Review unacknowledged share side effects
 
 Status: done
