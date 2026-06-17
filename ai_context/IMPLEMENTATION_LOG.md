@@ -15,6 +15,38 @@
 
 ## 2026-06-17
 
+### T1011 use backend bounded reports for Analysis metrics
+
+類型：mobile / feature / verifier / docs / analysis
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Wired the main Analysis screen to synchronize `/reports/basic` for the selected week, month, or custom date range.
+- Kept the chart based on already-synced mobile records, while the six required MVP metric cards prefer the matching backend bounded report.
+- Added report-key guarding so Analysis and Detailed Report do not display stale backend statistics after range, profile, or account changes.
+- 未變更 backend report schema、record storage、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If chart completeness becomes required, add a dedicated bounded trend endpoint rather than loading full raw record history.
+
 ### T1010 enable mobile cursor pagination for History records
 
 類型：mobile / feature / verifier / docs / history / analysis

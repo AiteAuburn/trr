@@ -2301,7 +2301,7 @@ function analysisRangeDisplayItem(value: { id: AnalysisRange; label: string }) {
   return {
     value: value.id,
     label,
-    accessibilityLabel: boundDisplayText(`切換分析範圍：${label}，只使用已載入紀錄`, maxDisplayDetailTextLength)
+    accessibilityLabel: boundDisplayText(`切換分析範圍：${label}，同步 backend bounded report`, maxDisplayDetailTextLength)
   };
 }
 
@@ -3634,6 +3634,22 @@ function detailedReportFailureStatusMessage() {
   return boundUiMessage("backend 報表暫時無法載入，顯示本機已載入資料摘要。");
 }
 
+function analysisReportInFlightStatusMessage() {
+  return boundUiMessage("分析統計已在同步中...");
+}
+
+function analysisReportLoadingStatusMessage() {
+  return boundUiMessage("正在同步 backend 分析統計...");
+}
+
+function analysisReportSuccessStatusMessage() {
+  return boundUiMessage("已同步 backend 分析統計。");
+}
+
+function analysisReportFailureStatusMessage() {
+  return boundUiMessage("backend 分析統計暫時無法載入，顯示 mobile 已同步紀錄摘要。");
+}
+
 function aiSaveUnavailableStatusMessage(message: string) {
   return boundUiMessage(`${message || "backend 尚未 ready"}；目前不會送出 AI 候選儲存請求。`);
 }
@@ -4186,7 +4202,7 @@ function analysisBoundaryDataCopy(isPreviewMode: boolean) {
   return boundDisplayText(
     isPreviewMode
       ? "目前沒有可分析的真實紀錄；不顯示固定 mock 血糖數字。"
-      : "目前統計只使用 mobile 已載入的紀錄。",
+      : "六項統計優先使用 backend bounded report；圖表使用 mobile 已載入紀錄。",
     maxDisplayDetailTextLength
   );
 }
@@ -4208,6 +4224,26 @@ function reportSourceDisplayItem(report: BasicReport | null, localRecordCount: n
     label: boundDisplayText("尚無資料", 24),
     copy: boundUiMessage("目前沒有可分析的已載入紀錄；此頁只顯示空摘要。")
   };
+}
+
+function basicReportRequestKey(
+  apiBaseUrl: string,
+  accountId: string,
+  profileId: string,
+  range: AnalysisRange,
+  customStart: string,
+  customEnd: string,
+  limit: number
+) {
+  return [
+    apiBaseUrl,
+    accountId,
+    profileId,
+    range,
+    customStart,
+    customEnd,
+    String(limit)
+  ].join(":");
 }
 
 function storeCartUnavailableDisplayItem() {
@@ -5058,6 +5094,7 @@ function coreFlowSectionLabels() {
     historySyncBoundary: boundDisplayText("歷史同步邊界", maxDisplayTextLength),
     historyLoadMore: boundDisplayText("載入更多", maxDisplayTextLength),
     historyLoadMoreAccessibility: boundDisplayText("使用 cursor 載入更早紀錄，不呼叫 AI 或修改資料", maxDisplayDetailTextLength),
+    analysisReportStatus: boundDisplayText("分析統計同步", maxDisplayTextLength),
     mainInfo: boundDisplayText("主要資訊", maxDisplayTextLength),
     supplementalInfo: boundDisplayText("補充資訊", maxDisplayTextLength),
     source: boundDisplayText("來源", maxDisplayTextLength),
@@ -5758,6 +5795,7 @@ export default function App() {
   const [basicReport, setBasicReport] = useState<BasicReport | null>(
     initialVisualSmokeScreen === "detailedReport" ? visualSmokeDemoReport() : null
   );
+  const [basicReportKey, setBasicReportKey] = useState(initialVisualSmokeScreen === "detailedReport" ? "visual-smoke" : "");
   const [reportStatus, setReportStatus] = useState(
     initialVisualSmokeScreen === "detailedReport"
       ? visualSmokeRecordSyncStatusMessage()
@@ -6751,32 +6789,45 @@ export default function App() {
     "Vision 成本上限、rate limit 與重試規則",
     "使用者確認後才可轉成飲食紀錄"
   ].map(resultChecklistItem);
-  const reportRecordCount = basicReport?.record_count ?? analysisRecords.length;
-  const reportGlucoseAverage = basicReport?.glucose.average ?? averageGlucose;
+  const currentBasicReportKey =
+    account && activeProfile
+      ? basicReportRequestKey(
+          normalizedApiBaseUrl,
+          account.id,
+          activeProfile.id,
+          analysisRange,
+          analysisCustomStart,
+          analysisCustomEnd,
+          mobileReportQueryLimit
+        )
+      : "";
+  const activeAnalysisReport = basicReportKey === currentBasicReportKey ? basicReport : null;
+  const reportRecordCount = activeAnalysisReport?.record_count ?? analysisRecords.length;
+  const reportGlucoseAverage = activeAnalysisReport?.glucose.average ?? averageGlucose;
   const reportGlucoseMinimum =
-    basicReport?.glucose.minimum ??
+    activeAnalysisReport?.glucose.minimum ??
     (analysisGlucoseValues.length > 0 ? Math.min(...analysisGlucoseValues) : null);
-  const reportGlucoseMaximum = basicReport?.glucose.maximum ?? highestGlucose;
-  const reportBeforeMealGlucoseCount = basicReport?.glucose.before_meal_count ?? beforeMealGlucoseCount;
-  const reportAfterMealGlucoseCount = basicReport?.glucose.after_meal_count ?? afterMealGlucoseCount;
+  const reportGlucoseMaximum = activeAnalysisReport?.glucose.maximum ?? highestGlucose;
+  const reportBeforeMealGlucoseCount = activeAnalysisReport?.glucose.before_meal_count ?? beforeMealGlucoseCount;
+  const reportAfterMealGlucoseCount = activeAnalysisReport?.glucose.after_meal_count ?? afterMealGlucoseCount;
   const reportMealCount =
-    basicReport?.meals.count ?? analysisRecords.filter((record) => record.record_type === "meal").length;
+    activeAnalysisReport?.meals.count ?? analysisRecords.filter((record) => record.record_type === "meal").length;
   const reportExerciseCount =
-    basicReport?.lifestyle.exercise_count ??
+    activeAnalysisReport?.lifestyle.exercise_count ??
     analysisRecords.filter((record) => record.record_type === "exercise").length;
   const reportMedicationCount =
-    basicReport?.lifestyle.medication_count ??
+    activeAnalysisReport?.lifestyle.medication_count ??
     analysisRecords.filter((record) => record.record_type === "medication").length;
   const reportSourceDisplay = reportSourceDisplayItem(
-    basicReport,
+    activeAnalysisReport,
     analysisRecords.length,
     mobileReportQueryDisplayLimit
   );
   const reportStatusDisplayText = boundUiMessage(reportStatus);
   const reportSourceDisplayLabel = reportSourceDisplay.label;
   const reportSourceDisplayCopy = reportSourceDisplay.copy;
-  const reportGeneratedAtDisplayText = basicReport
-    ? boundDisplayText(`產生時間：${recordDateTimeDisplay(basicReport.generated_at)}`, maxDisplayDetailTextLength)
+  const reportGeneratedAtDisplayText = activeAnalysisReport
+    ? boundDisplayText(`產生時間：${recordDateTimeDisplay(activeAnalysisReport.generated_at)}`, maxDisplayDetailTextLength)
     : "以 mobile 目前已載入資料計算。";
   const futureModuleActionStatusDisplayText = boundUiMessage(futureModuleActionStatus);
   const futurePreviewDisplayLabels = futurePreviewSectionLabels();
@@ -6924,16 +6975,17 @@ export default function App() {
   const historyRecordDisplayCount = clampNumber(historyRecords.length, 0, maxMobileCountValue);
   const rankingStreakDisplayDays = clampNumber(currentRecordStreakDays(records), 0, maxMobileCountValue);
   const analysisGlucoseRecordDisplayCount = clampNumber(analysisGlucoseRecords.length, 0, maxMobileCountValue);
-  const analysisAverageDisplayValue = clampNullableNumber(averageGlucose, 0, maxMobileGlucoseValue);
-  const analysisHighestDisplayValue = clampNullableNumber(highestGlucose, 0, maxMobileGlucoseValue);
-  const analysisLowestDisplayValue = clampNullableNumber(lowestGlucose, 0, maxMobileGlucoseValue);
-  const analysisBeforeMealGlucoseDisplayCount = clampNumber(beforeMealGlucoseCount, 0, maxMobileCountValue);
-  const analysisAfterMealGlucoseDisplayCount = clampNumber(afterMealGlucoseCount, 0, maxMobileCountValue);
+  const analysisAverageDisplayValue = clampNullableNumber(activeAnalysisReport?.glucose.average ?? averageGlucose, 0, maxMobileGlucoseValue);
+  const analysisHighestDisplayValue = clampNullableNumber(activeAnalysisReport?.glucose.maximum ?? highestGlucose, 0, maxMobileGlucoseValue);
+  const analysisLowestDisplayValue = clampNullableNumber(activeAnalysisReport?.glucose.minimum ?? lowestGlucose, 0, maxMobileGlucoseValue);
+  const analysisBeforeMealGlucoseDisplayCount = clampNumber(activeAnalysisReport?.glucose.before_meal_count ?? beforeMealGlucoseCount, 0, maxMobileCountValue);
+  const analysisAfterMealGlucoseDisplayCount = clampNumber(activeAnalysisReport?.glucose.after_meal_count ?? afterMealGlucoseCount, 0, maxMobileCountValue);
+  const analysisGlucoseMetricCount = clampNumber(activeAnalysisReport?.glucose.count ?? analysisGlucoseRecords.length, 0, maxMobileCountValue);
   const analysisMetricRows = ([
     ["最高血糖", analysisHighestDisplayValue === null ? "尚無" : String(analysisHighestDisplayValue)],
     ["最低血糖", analysisLowestDisplayValue === null ? "尚無" : String(analysisLowestDisplayValue)],
     ["平均血糖", analysisAverageDisplayValue === null ? "尚無" : String(analysisAverageDisplayValue)],
-    ["血糖測量總次數", String(analysisGlucoseRecordDisplayCount)],
+    ["血糖測量總次數", String(analysisGlucoseMetricCount)],
     ["飯前血糖次數", String(analysisBeforeMealGlucoseDisplayCount)],
     ["飯後血糖次數", String(analysisAfterMealGlucoseDisplayCount)]
   ] as const).map(metricDisplayItem);
@@ -7046,7 +7098,7 @@ export default function App() {
   const analysisSafetyIntroDisplayText = analysisSafetyIntroCopy();
   const analysisChartEmptyDisplayText = analysisChartEmptyCopy();
   const analysisRangeSummaryDisplayText = analysisRangeSummaryCopy(
-    analysisGlucoseRecordDisplayCount,
+    analysisGlucoseMetricCount,
     analysisPreviewMode
   );
   const analysisReportButtonDisplayLabel = analysisReportButtonLabel(isReportLoading);
@@ -7589,6 +7641,8 @@ export default function App() {
     setRecords([]);
     setRecordsStatus(recordSyncInitialStatusMessage());
     setRecordsHasMore(false);
+    setBasicReport(null);
+    setBasicReportKey("");
     latestBootKey.current = "";
     bootInFlight.current = false;
     latestQuotaSyncKey.current = "";
@@ -9341,37 +9395,37 @@ export default function App() {
     openFutureModuleDestination(item.target, item.module);
   }
 
-  async function openDetailedReport() {
-    setCurrentScreen("detailedReport");
+  async function loadBasicReportForCurrentRange(mode: "analysis" | "detailed") {
     if (!protectedBackendReady) {
       setBasicReport(null);
+      setBasicReportKey("");
       setIsReportLoading(false);
       setReportStatus(detailedReportUnavailableStatusMessage(protectedBackendUnavailableMessage));
-      return;
+      return false;
     }
     if (!account || !activeProfile) {
-      return;
+      return false;
     }
 
     const startAt = analysisSelectedDateBounds.start.toISOString();
     const endAt = analysisSelectedDateBounds.end.toISOString();
-    const reportKey = [
+    const reportKey = basicReportRequestKey(
       normalizedApiBaseUrl,
       account.id,
       activeProfile.id,
       analysisRange,
       analysisCustomStart,
       analysisCustomEnd,
-      String(mobileReportQueryLimit)
-    ].join(":");
+      mobileReportQueryLimit
+    );
     latestReportLoadKey.current = reportKey;
     if (reportLoadInFlightKeys.current.has(reportKey)) {
-      setReportStatus(detailedReportInFlightStatusMessage());
-      return;
+      setReportStatus(mode === "analysis" ? analysisReportInFlightStatusMessage() : detailedReportInFlightStatusMessage());
+      return false;
     }
     reportLoadInFlightKeys.current.add(reportKey);
     setIsReportLoading(true);
-    setReportStatus(detailedReportLoadingStatusMessage());
+    setReportStatus(mode === "analysis" ? analysisReportLoadingStatusMessage() : detailedReportLoadingStatusMessage());
     const query = new URLSearchParams({
       profile_id: activeProfile.id,
       start_at: startAt,
@@ -9386,21 +9440,30 @@ export default function App() {
         { headers: protectedRequestHeaders(account.id, accessToken) }
       );
       if (latestReportLoadKey.current !== reportKey) {
-        return;
+        return false;
       }
       setBasicReport(boundBasicReport(report));
-      setReportStatus(detailedReportSuccessStatusMessage());
+      setBasicReportKey(reportKey);
+      setReportStatus(mode === "analysis" ? analysisReportSuccessStatusMessage() : detailedReportSuccessStatusMessage());
+      return true;
     } catch {
       if (latestReportLoadKey.current === reportKey) {
         setBasicReport(null);
-        setReportStatus(detailedReportFailureStatusMessage());
+        setBasicReportKey("");
+        setReportStatus(mode === "analysis" ? analysisReportFailureStatusMessage() : detailedReportFailureStatusMessage());
       }
+      return false;
     } finally {
       reportLoadInFlightKeys.current.delete(reportKey);
       if (latestReportLoadKey.current === reportKey || reportLoadInFlightKeys.current.size === 0) {
         setIsReportLoading(false);
       }
     }
+  }
+
+  async function openDetailedReport() {
+    setCurrentScreen("detailedReport");
+    await loadBasicReportForCurrentRange("detailed");
   }
 
   async function loadCommunityFoods() {
@@ -11239,6 +11302,20 @@ export default function App() {
   useEffect(() => {
     void loadRecords();
   }, [account?.id, activeProfileId]);
+
+  useEffect(() => {
+    if (currentScreen === "analysis") {
+      void loadBasicReportForCurrentRange("analysis");
+    }
+  }, [
+    currentScreen,
+    account?.id,
+    activeProfileId,
+    protectedBackendReady,
+    analysisRange,
+    analysisCustomStart,
+    analysisCustomEnd,
+  ]);
 
   useEffect(() => {
     if (currentScreen === "community") {
@@ -13584,6 +13661,10 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.recordSyncStatus}</Text>
               <Text style={styles.evidence}>{recordsStatusDisplayText}</Text>
+            </View>
+            <View style={styles.inlineInfoBlock}>
+              <Text style={styles.label}>{coreFlowDisplayLabels.analysisReportStatus}</Text>
+              <Text style={styles.evidence}>{reportStatusDisplayText}</Text>
             </View>
             <View style={styles.segmentRow}>
               {analysisRangeDisplayOptions.map((item) => (

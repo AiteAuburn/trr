@@ -111,6 +111,27 @@ None.
 
 ## Done
 
+### T1011: Use backend bounded reports for Analysis metrics
+
+Status: done
+
+Summary:
+
+- Wired the main mobile Analysis page to synchronize `/reports/basic` for the selected week, month, or custom date range.
+- Kept chart rendering on already-synced mobile records while making the six required MVP metric cards prefer the matching backend bounded report.
+- Added stale-report key guarding so Analysis and Detailed Report do not display old backend statistics after profile or range changes.
+- Updated verifier coverage for the shared report fetch, report key guard, and backend-backed Analysis metric sources.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1010: Enable mobile cursor pagination for History records
 
 Status: done
