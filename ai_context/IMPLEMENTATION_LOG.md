@@ -15,6 +15,34 @@
 
 ## 2026-06-17
 
+### T1001 clarify History raw source display
+
+類型：mobile / history / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated mobile History raw mode to label saved `source_text` as an original source segment instead of implying the full raw transcript is stored.
+- Empty or whitespace-only `source_text` now falls back to the structured-only message instead of showing an empty raw record.
+- Extended navigation verification to guard the source-text trim check, original-segment label, and safe fallback copy.
+- 未變更 backend storage policy、record payload/metadata schema、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run typecheck` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If full raw transcript history is required later, add an explicit consent/storage policy instead of overloading per-record source segments.
+
 ### T1000 add Year Review share package storage constraints
 
 類型：backend / migration / verifier / docs / year-review

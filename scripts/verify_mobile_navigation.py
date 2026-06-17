@@ -2567,8 +2567,8 @@ def main() -> int:
             ("history detail mode binding", "onPress={() => pressHistoryDetailModeOption(item)}"),
             ("history structured records render", "selectedHistoryRecordDisplayItems.map((item) =>"),
             ("history raw records render", "selectedHistoryRawDisplayItems.map((item) =>"),
-            ("history raw source status", "sourceStatusLabel: boundDisplayText(hasSourceText ? \"原始逐字稿\" : \"僅結構化\", 40)"),
-            ("history raw fallback copy", "尚無原始逐字稿；此筆紀錄只保留結構化資料。"),
+            ("history raw source status", "sourceStatusLabel: boundDisplayText(hasSourceText ? \"原始片段\" : \"僅結構化\", 40)"),
+            ("history raw fallback copy", "尚無原始片段；此筆紀錄只保留結構化資料。"),
         ):
             _assert_contains(label, content, marker)
         history_calendar_day_block = _function_block(content, "historyCalendarDayDisplayItem")
@@ -2607,10 +2607,10 @@ def main() -> int:
         history_raw_display_block = _function_block(content, "historyRawRecordDisplayItem")
         for label, marker in (
             ("history raw source metadata lookup", "const sourceText = record.metadata_json?.source_text;"),
-            ("history raw source type guard", 'const hasSourceText = typeof sourceText === "string";'),
+            ("history raw source type guard", 'const hasSourceText = typeof sourceText === "string" && sourceText.trim().length > 0;'),
             ("history raw bounded source text", "boundDisplayText(sourceText, maxDisplayDetailTextLength)"),
-            ("history raw fallback assignment", ': "尚無原始逐字稿；此筆紀錄只保留結構化資料。";'),
-            ("history raw status label", 'sourceStatusLabel: boundDisplayText(hasSourceText ? "原始逐字稿" : "僅結構化", 40)'),
+            ("history raw fallback assignment", ': "尚無原始片段；此筆紀錄只保留結構化資料。";'),
+            ("history raw status label", 'sourceStatusLabel: boundDisplayText(hasSourceText ? "原始片段" : "僅結構化", 40)'),
         ):
             _assert_contains(label, history_raw_display_block, marker)
         pending_save_block = _function_block(content, "pendingRecordForSave")

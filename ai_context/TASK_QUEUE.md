@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T1001: Clarify History raw source display
+
+Status: done
+
+Summary:
+
+- Updated mobile History raw mode to label saved `source_text` as an original source segment instead of implying the full raw transcript is stored.
+- Empty or whitespace-only `source_text` now falls back to the structured-only message instead of showing an empty raw record.
+- Extended navigation verification to guard the source-text trim check, original-segment label, and safe fallback copy.
+
+Verification:
+
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run typecheck` passed.
+- `rtk git diff --check` passed.
+
 ### T1000: Add Year Review share package storage constraints
 
 Status: done
