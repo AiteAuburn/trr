@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T973: Cover Store redemption list cap
+
+Status: done
+
+Summary:
+
+- Added backend regression coverage that the Store redemption list honors its limit and returns the newest redemption records first.
+- This keeps the points-to-store redemption history bounded and predictable for the mobile Store screen.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_store_redemption_deducts_points_and_reserves_fulfillment_rewards tests/test_community_store_year_review.py::test_store_redemption_list_limits_to_latest_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T972: Cover food detail latest-share cap
 
 Status: done

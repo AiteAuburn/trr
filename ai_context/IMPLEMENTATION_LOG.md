@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T973 cover Store redemption list cap
+
+類型：backend / test / docs / store
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that the Store redemption list honors `limit` and returns newest redemption records first.
+- This keeps mobile redemption history bounded and predictable while preserving existing points and fulfillment behavior.
+- 未變更 Store API behavior、points ledger、reward catalog、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_store_redemption_deducts_points_and_reserves_fulfillment_rewards tests/test_community_store_year_review.py::test_store_redemption_list_limits_to_latest_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If redemption history pagination is added, keep newest-first ordering and account scoping covered.
+
 ### T972 cover food detail latest-share cap
 
 類型：backend / test / docs / community

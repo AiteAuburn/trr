@@ -9,7 +9,7 @@ from sqlalchemy import select
 from app.db.session import SessionLocal
 from app.jobs.generate_year_review_snapshots import default_target_year
 from app.main import app
-from app.models import AchievementUnlock, FoodItem, Record, YearReviewSnapshot
+from app.models import AchievementUnlock, FoodItem, Record, StoreRedemption, YearReviewSnapshot
 from app.services.year_review_snapshots import YEAR_REVIEW_GENERATION_BATCH_SIZE, generate_missing_year_review_snapshots
 from tests.helpers import create_account_and_profile, create_record
 
@@ -1212,6 +1212,58 @@ def test_store_redemption_deducts_points_and_reserves_fulfillment_rewards() -> N
     unchanged_points_response = client.get("/store/points", headers={"X-Account-Id": account_id})
     assert unchanged_points_response.status_code == 200
     assert unchanged_points_response.json() == points_response.json()
+
+
+def test_store_redemption_list_limits_to_latest_records() -> None:
+    client = TestClient(app)
+    account_id, _ = create_account_and_profile(client, "store-redemption-list-limit")
+
+    for offset in range(40):
+        response = client.post(
+            "/community/foods/shares",
+            headers={"X-Account-Id": account_id},
+            json={
+                "food_name": f"商城列表測試食物 {offset}",
+                "category": "vegetables",
+                "eaten_at": (
+                    datetime(2026, 3, 1, 12, 0, tzinfo=UTC) + timedelta(minutes=offset)
+                ).isoformat(),
+                "before_glucose": 100,
+                "after_glucose": 105,
+            },
+        )
+        assert response.status_code == 201
+
+    redemption_ids: list[str] = []
+    for _ in range(5):
+        redeem_response = client.post(
+            "/store/redemptions",
+            headers={"X-Account-Id": account_id},
+            json={"reward_code": "annual_member_badge"},
+        )
+        assert redeem_response.status_code == 201
+        redemption_ids.append(redeem_response.json()["id"])
+
+    base_created_at = datetime(2026, 3, 2, 8, 0, tzinfo=UTC)
+    with SessionLocal() as db:
+        redemptions = {
+            str(redemption.id): redemption
+            for redemption in db.scalars(
+                select(StoreRedemption).where(StoreRedemption.id.in_([UUID(value) for value in redemption_ids]))
+            )
+        }
+        for offset, redemption_id in enumerate(redemption_ids):
+            redemptions[redemption_id].created_at = base_created_at + timedelta(minutes=offset)
+        db.commit()
+
+    list_response = client.get("/store/redemptions?limit=3", headers={"X-Account-Id": account_id})
+    assert list_response.status_code == 200
+    redemptions = list_response.json()
+    assert len(redemptions) == 3
+    assert [item["id"] for item in redemptions] == list(reversed(redemption_ids[-3:]))
+    assert all(item["reward_code"] == "annual_member_badge" for item in redemptions)
+    assert all(item["status"] == "reserved" for item in redemptions)
+    assert set(redemption_ids[:2]).isdisjoint({item["id"] for item in redemptions})
 
 
 def test_year_review_summarizes_previous_year_records() -> None:
