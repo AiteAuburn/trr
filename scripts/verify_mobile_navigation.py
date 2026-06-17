@@ -3834,6 +3834,7 @@ def main() -> int:
         for label, marker in (
             ("year review completed-year service validator", "def validate_completed_year_review_year(year: int, now: datetime | None = None) -> int:"),
             ("year review latest completed year helper", "def latest_completed_year(now: datetime | None = None) -> int:"),
+            ("year review validator preserves requested year", "return year"),
             ("year review batch generation validates completed year", "validate_completed_year_review_year(year)"),
         ):
             _assert_contains(label, year_review_service_content, marker)
@@ -3861,6 +3862,7 @@ def main() -> int:
             ("year review unfinished year no share packages assertion", "assert share_packages == []"),
             ("year review batch unfinished year test", "test_year_review_batch_generation_rejects_unfinished_year_before_snapshot_creation"),
             ("year review batch unfinished year error", 'with raises(ValueError, match="year_review_year_not_completed"):'),
+            ("year review older completed year regression", "validate_completed_year_review_year(2024, datetime(2026, 1, 1, 0, 15, tzinfo=UTC)) == 2024"),
         ):
             _assert_contains(label, year_review_tests_content, marker)
         if year_reviews_api_content.count("_validate_completed_review_year(year)") != 4:

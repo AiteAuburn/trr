@@ -32,7 +32,7 @@ def validate_completed_year_review_year(year: int, now: datetime | None = None) 
     completed_year = latest_completed_year(now)
     if year < 2000 or year > completed_year:
         raise ValueError("year_review_year_not_completed")
-    return completed_year
+    return year
 
 
 def number_value(payload: dict[str, object], key: str) -> float | None:

@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T1006: Preserve requested completed year in Year Review validation
+
+Status: done
+
+Summary:
+
+- Fixed the Year Review completed-year validator so older completed years remain the requested year instead of being normalized to the latest completed year.
+- Added regression coverage for a 2024 request evaluated on 2026-01-01.
+- Extended verifier coverage to guard the validator return value and regression test.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_scheduler_defaults_to_previous_calendar_year tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records tests/test_community_store_year_review.py::test_year_review_batch_generation_rejects_unfinished_year_before_snapshot_creation` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/services/year_review_snapshots.py scripts/verify_mobile_navigation.py` passed.
+
 ### T1005: Guard community point ledger source uniqueness
 
 Status: done

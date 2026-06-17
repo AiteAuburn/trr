@@ -30,6 +30,7 @@ def test_year_review_scheduler_defaults_to_previous_calendar_year() -> None:
     assert default_target_year(datetime(2026, 1, 1, 0, 15, tzinfo=UTC)) == 2025
     assert default_target_year(datetime(2026, 12, 31, 23, 59, tzinfo=UTC)) == 2025
     assert validate_completed_year_review_year(2025, datetime(2026, 1, 1, 0, 15, tzinfo=UTC)) == 2025
+    assert validate_completed_year_review_year(2024, datetime(2026, 1, 1, 0, 15, tzinfo=UTC)) == 2024
     with raises(ValueError, match="year_review_year_not_completed"):
         validate_completed_year_review_year(2026, datetime(2026, 1, 1, 0, 15, tzinfo=UTC))
 

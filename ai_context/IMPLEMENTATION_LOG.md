@@ -15,6 +15,35 @@
 
 ## 2026-06-17
 
+### T1006 preserve requested completed year in Year Review validation
+
+類型：backend / bugfix / test / verifier / docs / year-review
+
+檔案：
+
+- `backend/app/services/year_review_snapshots.py`
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Fixed `validate_completed_year_review_year` so a valid older completed year returns the requested year instead of the latest completed year.
+- Added regression coverage for requesting 2024 on 2026-01-01, preserving historical annual review correctness.
+- Extended verifier coverage for the validator return value and regression case.
+- 未變更 Year Review API response shape、snapshot schema、share package schema、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_scheduler_defaults_to_previous_calendar_year tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records tests/test_community_store_year_review.py::test_year_review_batch_generation_rejects_unfinished_year_before_snapshot_creation` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/services/year_review_snapshots.py scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- If a future API accepts a year range, reuse this validator per requested year instead of normalizing ranges to the latest completed year.
+
 ### T1005 guard community point ledger source uniqueness
 
 類型：backend / bugfix / migration / test / verifier / docs / community / store
