@@ -2671,6 +2671,8 @@ def main() -> int:
             ("analysis custom range option", '{ id: "custom", label: "自訂日期區間" }'),
             ("analysis default month range state", 'const [analysisRange, setAnalysisRange] = useState<AnalysisRange>("month");'),
             ("analysis date bounds helper", "function analysisDateBounds(range: AnalysisRange, customStart: string, customEnd: string)"),
+            ("analysis custom start inclusive midnight", 'edge === "start" ? "00:00:00.000" : "23:59:59.999"'),
+            ("analysis custom end inclusive day", '"23:59:59.999"'),
             ("analysis selected date bounds", "const analysisSelectedDateBounds = useMemo("),
             ("analysis local records date bounds", "const { start, end } = analysisSelectedDateBounds;\n    return recordsForDisplay.filter((record) => {"),
             ("analysis local glucose derives from analysis records", "const analysisGlucoseRecords = useMemo(\n    () =>\n      analysisRecords"),

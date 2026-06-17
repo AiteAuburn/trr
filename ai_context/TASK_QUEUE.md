@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T961: Include full custom analysis end day
+
+Status: done
+
+Summary:
+
+- Tightened the mobile custom analysis date boundary so the end date includes the full selected day through `23:59:59.999`.
+- Added verifier coverage so custom date ranges cannot drift back to excluding late end-of-day records.
+- This preserves the required 本週 / 本月 / 自訂日期區間 analysis flow while keeping the six glucose metrics sourced from loaded records.
+
+Verification:
+
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run typecheck` passed.
+- `rtk git diff --check` passed.
+
 ### T960: Cover dismissed year-review share result
 
 Status: done

@@ -2877,7 +2877,7 @@ function startOfCurrentMonth() {
 }
 
 function parseDateBoundary(value: string, edge: "start" | "end") {
-  const date = new Date(`${value}T${edge === "start" ? "00:00:00" : "23:59:59"}`);
+  const date = new Date(`${value}T${edge === "start" ? "00:00:00.000" : "23:59:59.999"}`);
   return Number.isNaN(date.getTime()) ? null : date;
 }
 

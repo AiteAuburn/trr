@@ -15,6 +15,34 @@
 
 ## 2026-06-14
 
+### T961 include full custom analysis end day
+
+類型：mobile / verifier / docs / analysis
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated mobile custom analysis date parsing so the selected end date covers the full day through `23:59:59.999`.
+- Added mobile navigation verifier markers for inclusive custom start/end boundaries.
+- This keeps 自訂日期區間 aligned with user expectation that the displayed end date includes all records from that date.
+- 未變更 backend report aggregation、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run typecheck` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If analysis moves to server-side pagination, keep mobile and backend date-bound semantics explicit and tested together.
+
 ### T960 cover dismissed year-review share result
 
 類型：backend / test / year-review
