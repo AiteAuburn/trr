@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T964: Prevent year-review share opened downgrade
+
+Status: done
+
+Summary:
+
+- Updated year-review share result handling so an already opened share package cannot be downgraded to dismissed by a later native share result.
+- Added backend regression coverage that preserves `status=opened` and the original `shared_at` timestamp after a later dismissed result.
+- This keeps annual-review sharing evidence stable for the yearly retention/share flow.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records tests/test_community_store_year_review.py::test_year_review_badge_metrics_include_cumulative_and_streak_achievements` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+
 ### T963: Prioritize exact food search matches
 
 Status: done

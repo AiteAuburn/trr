@@ -15,6 +15,33 @@
 
 ## 2026-06-14
 
+### T964 prevent year-review share opened downgrade
+
+類型：backend / test / docs / year-review
+
+檔案：
+
+- `backend/app/api/year_reviews.py`
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated year-review share-result handling so a share package that has reached `opened` is not downgraded to `dismissed` by a later result update.
+- Added regression coverage that preserves the opened status and original `shared_at` timestamp after a later dismissed result.
+- This keeps annual review social sharing state stable after external share handoff starts.
+- 未變更 share-card privacy mask、snapshot generation、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records tests/test_community_store_year_review.py::test_year_review_badge_metrics_include_cumulative_and_streak_achievements` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+
+後續：
+
+- Keep revoked as the explicit terminal action for removing a share package after it has been opened.
+
 ### T963 prioritize exact food search matches
 
 類型：backend / test / docs / community

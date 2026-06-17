@@ -1330,6 +1330,16 @@ def test_year_review_summarizes_previous_year_records() -> None:
     assert opened_package["status"] == "opened"
     assert opened_package["shared_at"]
 
+    opened_then_dismissed_response = client.post(
+        f"/year-reviews/share-packages/{share_package_id}/result",
+        headers={"X-Account-Id": account_id},
+        json={"share_result": "dismissed"},
+    )
+    assert opened_then_dismissed_response.status_code == 200
+    opened_then_dismissed_package = opened_then_dismissed_response.json()
+    assert opened_then_dismissed_package["status"] == "opened"
+    assert opened_then_dismissed_package["shared_at"] == opened_package["shared_at"]
+
     dismissed_confirm_response = client.post(
         f"/year-reviews/2025/share-card/confirm?profile_id={profile_id}",
         headers={"X-Account-Id": account_id},

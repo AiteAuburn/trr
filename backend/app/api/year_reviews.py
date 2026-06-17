@@ -180,10 +180,12 @@ def report_year_review_share_result(
                 "message": "Revoked share packages cannot receive share result updates.",
             },
         )
-    share_package.status = payload.share_result
     share_package.last_share_result = payload.share_result
     if payload.share_result == "opened":
+        share_package.status = "opened"
         share_package.shared_at = datetime.now(UTC)
+    elif share_package.status != "opened":
+        share_package.status = payload.share_result
     write_audit_event(
         db,
         actor_account_id=account.id,
