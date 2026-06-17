@@ -34,7 +34,7 @@ STORE_REWARDS = (
         title="合作商品體驗兌換",
         category="partner_products",
         points_cost=300,
-        status="preview",
+        status="redeemable",
     ),
     StoreRewardRead(
         code="annual_member_badge",
@@ -48,7 +48,7 @@ STORE_REWARDS = (
         title="特殊會員福利包",
         category="member_benefits",
         points_cost=500,
-        status="preview",
+        status="redeemable",
     ),
 )
 

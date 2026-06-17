@@ -1369,7 +1369,7 @@ AI 年度觀察與鼓勵：
 - 搜尋框必須使用 input-level `maxLength` 與 setter-level 截斷；一般操作路徑會先同步 backend reward catalog / points / redemption wallet，再對已同步目錄做本機搜尋篩選；backend unavailable 或 visual-smoke route 時才使用本機 fallback catalog。搜尋不可呼叫 AI，也不可查詢付款、出貨或外部商品 API。
 - 商城必須明確呈現點數兌換預留架構：點數來源、可兌換項目、正式啟用前條件、目前 preview 狀態。
 - Backend 已有 `/store/rewards`、`/store/points`、`/store/redemptions` 與 `/store/redemptions/{id}/use` contract；redeemable rewards 會寫入 redemption 與點數 ledger，preview-only rewards 必須回 `reward_not_redeemable`，不存在的 reward code 必須回結構化 `reward_not_found` 且不可建立 redemption 或改變點數，點數不足必須回 `insufficient_points` 且不可建立 redemption 或扣成負餘額。不存在或不屬於目前 account 的 redemption use request 必須回結構化 `redemption_not_found`，不可改變任一帳號的 redemption wallet 或點數，也不可洩漏其他帳號 wallet 狀態。Reserved 特殊徽章或其他非 issued coupon/discount redemption use request 必須回 `redemption_not_usable`，不可標記 used、不可改變點數。已使用的 coupon/discount 二次 use 必須回 `redemption_not_usable`，不可刷新 `used_at` 或改變點數。優惠券與保健食品折扣可 immediate issue bounded fulfillment code；合作商品、會員福利與出貨/付款仍需後續 fulfillment。Mobile 一般操作路徑會同步 reward catalog/points/redemption wallet，按可兌換項目才送 redemption；visual-smoke route 必須維持本機 demo 且不扣點。
-- Backend store regression test 必須守住五個 reward categories：優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利；也必須鎖住各 reward 的 code、中文 title、category、points cost 與 redeemable/preview status。優惠券、保健食品折扣與特殊徽章為可兌換項目，合作商品與特殊會員福利在 fulfillment 完成前必須 fail closed。
+- Backend store regression test 必須守住五個 reward categories：優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利；也必須鎖住各 reward 的 code、中文 title、category、points cost 與 redeemable/preview status。五個分類皆為可兌換項目；優惠券與保健食品折扣可 immediate issue bounded fulfillment code，合作商品、特殊徽章與特殊會員福利只建立 reservation，後續 fulfillment 完成前不可被 `/use` 當成 issued coupon/discount code 使用。
 - 點數來源：食物分享、完整前後血糖、審核通過。
 - 可兌換項目：優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利。
 - 目前一般操作路徑可扣點、發出優惠券/折扣碼、顯示「我的兌換券」，並可將 unused issued coupon/discount code 標記為已使用；仍不建立出貨訂單、不處理付款。商城文案必須清楚區分優惠券 / 保健食品折扣的 immediate code issue，以及合作商品 / 會員福利仍需 reservation + 後續 fulfillment，不可再宣稱所有可兌換項目都「仍不發券」。
@@ -1388,9 +1388,9 @@ AI 年度觀察與鼓勵：
 - 商品卡必須是單層可掃描卡片，可 wrap；圖片、商品內容與箭頭按鈕在小螢幕不可互相擠壓或被外層 panel 再縮排。
 - 合作通路 50 元優惠券：backend reward code `coupon_50`，點數成本 `100 點`，redeemable，可 immediate issue bounded coupon code。
 - 保健食品 9 折折扣：backend reward code `supplement_discount_10`，點數成本 `150 點`，redeemable，可 immediate issue bounded discount code，說明不可宣稱醫療療效。
-- 合作商品體驗兌換：backend reward code `partner_product_trial`，點數成本 `300 點`，preview-only，需完成商品目錄、庫存、出貨與客服稽核。
+- 合作商品體驗兌換：backend reward code `partner_product_trial`，點數成本 `300 點`，redeemable，只建立 reservation，需完成商品目錄、庫存、出貨與客服稽核。
 - 特殊會員徽章：backend reward code `annual_member_badge`，點數成本 `80 點`，redeemable，只建立 reservation，需完成 badge inventory、持有紀錄與撤回規則。
-- 特殊會員福利包：backend reward code `member_benefit_pack`，點數成本 `500 點`，preview-only，需完成 entitlement、到期與 rollback 規則。
+- 特殊會員福利包：backend reward code `member_benefit_pack`，點數成本 `500 點`，redeemable，只建立 reservation，需完成 entitlement、到期與 rollback 規則。
 - Mobile fallback catalog 必須使用與 backend reward catalog 相同的 code、title、category、points cost 與 redeemable/preview badge，避免 backend unavailable 或 visual-smoke 時展示不同兌換成本。
 - 點擊商品箭頭後顯示「商品整合狀態」inline status，不使用 banner card 或額外白色 panel。
 - 商品整合狀態文字必須先經 bounded display helper 再 render，避免未來 commerce backend/config copy 過長。

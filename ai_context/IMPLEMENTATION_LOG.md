@@ -2725,6 +2725,30 @@
 
 - 若未來調整功能選單文案，需同步更新 MVP 入口規格與 verifier expected labels。
 
+### T961 Enable reserved partner and member store rewards
+
+類型：backend / mobile / store / points
+
+檔案：
+
+- `backend/app/api/store.py`
+- `backend/tests/test_community_store_year_review.py`
+- `mobile/App.tsx`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Store catalog 現在將合作商品體驗兌換與特殊會員福利包標成 redeemable，點數可扣除並建立 reserved redemption。
+- Immediate fulfillment 仍只限優惠券與保健食品折扣；合作商品、特殊徽章與會員福利在 fulfillment 完成前不可被 `/use` 當成 coupon/discount code 使用。
+- Mobile fallback catalog 與 UI spec 已對齊五個 store reward 類別皆可兌換，但 reservation 類別仍不建立出貨訂單、不處理付款。
+
+驗證：
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_store_redemption_deducts_points_and_reserves_fulfillment_rewards` passed.
+- `cd mobile && npm run quality` passed.
+
 ### T860 Store reward catalog and redemption coverage
 
 類型：backend / test / store / points
@@ -2739,8 +2763,8 @@
 摘要：
 
 - Store regression test 現在驗證 `/store/rewards` 保留五個規劃兌換分類：優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利。
-- 測試用 food-share points 驗證優惠券、保健食品折扣與特殊徽章可建立 redemption 並扣點。
-- 測試也驗證合作商品與特殊會員福利在 fulfillment 完成前維持 preview-only，兌換時 fail closed 回 `reward_not_redeemable`。
+- 測試用 food-share points 驗證優惠券、保健食品折扣、合作商品、特殊徽章與特殊會員福利可建立 redemption 並扣點。
+- 測試也驗證合作商品、特殊徽章與特殊會員福利在 fulfillment 完成前維持 reserved，`/use` fail closed 回 `redemption_not_usable`。
 
 驗證：
 
@@ -2748,7 +2772,7 @@
 
 後續：
 
-- 若合作商品或會員福利正式啟用 fulfillment，需同步更新 reward status、redemption 行為與 regression expectations。
+- 若合作商品或會員福利正式啟用 fulfillment，需同步更新 fulfillment 行為與 regression expectations。
 
 ### T859 Year Review scheduler default-year guard
 
@@ -27051,7 +27075,7 @@
 
 - 新增食物社群資料庫、食物分享、社群點數 ledger、商城兌換 reservation 的 backend schema 與 migration。
 - 新增食物分類、食物搜尋/詳情、食物分享建立、升糖幅度自動計算、分享統計、排行榜、點數餘額、商城兌換與年度回顧聚合 API。
-- 食物分享會給點數；商城 redeemable reward 會扣點並建立 reservation；future reward 會 fail-closed 回 `reward_not_redeemable`。
+- 食物分享會給點數；商城 redeemable reward 會扣點，優惠券/折扣碼可 immediate issue，需後續 fulfillment 的 reward 會維持 reserved 並在 `/use` fail closed。
 - 年度回顧從 profile records 聚合年度總記錄天數、血糖/飲食/運動次數、最長 streak、徽章級距、年平均/最高/最低血糖，並回傳 bounded AI-style 年度觀察與鼓勵，不呼叫 AI、不保存 prompt 或 raw model output。
 - Mobile 第二/三階段畫面仍是 preview-only；正式串接 backend API 是後續工作。
 

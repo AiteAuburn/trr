@@ -981,9 +981,9 @@ const storeProducts: StoreProduct[] = [
   {
     id: "partner_product_trial",
     category: "partnerProducts",
-    badge: "預留",
+    badge: "可兌換",
     title: "合作商品體驗兌換",
-    description: "未來合作商品展示位置；正式兌換前需完成商品目錄、庫存、出貨與客服稽核。",
+    description: "可用社群點數建立合作商品兌換 reservation；商品目錄、庫存、出貨與客服仍需後續 fulfillment。",
     pointsCost: "300 點",
     icon: "合"
   },
@@ -999,9 +999,9 @@ const storeProducts: StoreProduct[] = [
   {
     id: "member_benefit_pack",
     category: "memberBenefits",
-    badge: "預留",
+    badge: "可兌換",
     title: "特殊會員福利包",
-    description: "未來可兌換會員專屬功能或福利；正式啟用前需完成 entitlement、到期與 rollback 規則。",
+    description: "可用社群點數建立會員福利兌換 reservation；entitlement、到期與 rollback 仍需後續 fulfillment。",
     pointsCost: "500 點",
     icon: "福"
   }

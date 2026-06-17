@@ -770,7 +770,7 @@ def test_community_leaderboard_ties_are_stably_ordered_by_public_name() -> None:
         assert [entry["display_name"] for entry in matching_entries] == [alpha_display_name, beta_display_name]
 
 
-def test_store_redemption_deducts_points_and_rejects_future_rewards() -> None:
+def test_store_redemption_deducts_points_and_reserves_fulfillment_rewards() -> None:
     client = TestClient(app)
     account_id, _ = create_account_and_profile(client, "store-redemption")
 
@@ -802,7 +802,7 @@ def test_store_redemption_deducts_points_and_rejects_future_rewards() -> None:
             "title": "合作商品體驗兌換",
             "category": "partner_products",
             "points_cost": 300,
-            "status": "preview",
+            "status": "redeemable",
         },
         "annual_member_badge": {
             "title": "特殊會員徽章",
@@ -814,11 +814,11 @@ def test_store_redemption_deducts_points_and_rejects_future_rewards() -> None:
             "title": "特殊會員福利包",
             "category": "member_benefits",
             "points_cost": 500,
-            "status": "preview",
+            "status": "redeemable",
         },
     }
 
-    for offset in range(33):
+    for offset in range(113):
         response = client.post(
             "/community/foods/shares",
             headers={"X-Account-Id": account_id},
@@ -849,26 +849,10 @@ def test_store_redemption_deducts_points_and_rejects_future_rewards() -> None:
     pre_points_response = client.get("/store/points", headers={"X-Account-Id": account_id})
     assert pre_points_response.status_code == 200
     assert pre_points_response.json() == {
-        "balance": 330,
-        "lifetime_earned": 330,
+        "balance": 1130,
+        "lifetime_earned": 1130,
         "lifetime_redeemed": 0,
     }
-
-    preview_response = client.post(
-        "/store/redemptions",
-        headers={"X-Account-Id": account_id},
-        json={"reward_code": "partner_product_trial"},
-    )
-    assert preview_response.status_code == 409
-    assert preview_response.json()["detail"]["code"] == "reward_not_redeemable"
-
-    member_preview_response = client.post(
-        "/store/redemptions",
-        headers={"X-Account-Id": account_id},
-        json={"reward_code": "member_benefit_pack"},
-    )
-    assert member_preview_response.status_code == 409
-    assert member_preview_response.json()["detail"]["code"] == "reward_not_redeemable"
 
     missing_redemption_id = uuid4()
     missing_use_response = client.post(
@@ -946,6 +930,18 @@ def test_store_redemption_deducts_points_and_rejects_future_rewards() -> None:
     assert supplement_redemption["fulfillment_code"].startswith("TL-SUPPLEMENT-DISCOUNT-10-")
     assert supplement_redemption["fulfilled_at"] is not None
 
+    partner_response = client.post(
+        "/store/redemptions",
+        headers={"X-Account-Id": account_id},
+        json={"reward_code": "partner_product_trial"},
+    )
+    assert partner_response.status_code == 201
+    partner_redemption = partner_response.json()
+    assert partner_redemption["points_cost"] == 300
+    assert partner_redemption["status"] == "reserved"
+    assert partner_redemption["fulfillment_type"] is None
+    assert partner_redemption["fulfillment_code"] is None
+
     badge_response = client.post(
         "/store/redemptions",
         headers={"X-Account-Id": account_id},
@@ -957,31 +953,48 @@ def test_store_redemption_deducts_points_and_rejects_future_rewards() -> None:
     assert badge_redemption["status"] == "reserved"
     assert badge_redemption["fulfillment_type"] is None
     assert badge_redemption["fulfillment_code"] is None
-    points_after_badge_response = client.get("/store/points", headers={"X-Account-Id": account_id})
-    assert points_after_badge_response.status_code == 200
-    assert points_after_badge_response.json() == {
+
+    member_response = client.post(
+        "/store/redemptions",
+        headers={"X-Account-Id": account_id},
+        json={"reward_code": "member_benefit_pack"},
+    )
+    assert member_response.status_code == 201
+    member_redemption = member_response.json()
+    assert member_redemption["points_cost"] == 500
+    assert member_redemption["status"] == "reserved"
+    assert member_redemption["fulfillment_type"] is None
+    assert member_redemption["fulfillment_code"] is None
+    points_after_reserved_rewards_response = client.get("/store/points", headers={"X-Account-Id": account_id})
+    assert points_after_reserved_rewards_response.status_code == 200
+    assert points_after_reserved_rewards_response.json() == {
         "balance": 0,
-        "lifetime_earned": 330,
-        "lifetime_redeemed": 330,
+        "lifetime_earned": 1130,
+        "lifetime_redeemed": 1130,
     }
 
-    reserved_use_response = client.post(
-        f"/store/redemptions/{badge_redemption['id']}/use",
-        headers={"X-Account-Id": account_id},
-    )
-    assert reserved_use_response.status_code == 409
-    assert reserved_use_response.json()["detail"] == {
-        "code": "redemption_not_usable",
-        "message": "This redemption is not an unused issued coupon or discount code.",
-    }
+    for reserved_redemption in (partner_redemption, badge_redemption, member_redemption):
+        reserved_use_response = client.post(
+            f"/store/redemptions/{reserved_redemption['id']}/use",
+            headers={"X-Account-Id": account_id},
+        )
+        assert reserved_use_response.status_code == 409
+        assert reserved_use_response.json()["detail"] == {
+            "code": "redemption_not_usable",
+            "message": "This redemption is not an unused issued coupon or discount code.",
+        }
     reserved_after_use_response = client.get("/store/redemptions", headers={"X-Account-Id": account_id})
     assert reserved_after_use_response.status_code == 200
     reserved_after_use_by_code = {item["reward_code"]: item for item in reserved_after_use_response.json()}
+    assert reserved_after_use_by_code["partner_product_trial"]["status"] == "reserved"
+    assert reserved_after_use_by_code["partner_product_trial"]["used_at"] is None
     assert reserved_after_use_by_code["annual_member_badge"]["status"] == "reserved"
     assert reserved_after_use_by_code["annual_member_badge"]["used_at"] is None
+    assert reserved_after_use_by_code["member_benefit_pack"]["status"] == "reserved"
+    assert reserved_after_use_by_code["member_benefit_pack"]["used_at"] is None
     points_after_reserved_use_response = client.get("/store/points", headers={"X-Account-Id": account_id})
     assert points_after_reserved_use_response.status_code == 200
-    assert points_after_reserved_use_response.json() == points_after_badge_response.json()
+    assert points_after_reserved_use_response.json() == points_after_reserved_rewards_response.json()
 
     use_response = client.post(
         f"/store/redemptions/{redemption['id']}/use",
@@ -993,7 +1006,7 @@ def test_store_redemption_deducts_points_and_rejects_future_rewards() -> None:
     assert used_redemption["used_at"] is not None
     points_after_first_use_response = client.get("/store/points", headers={"X-Account-Id": account_id})
     assert points_after_first_use_response.status_code == 200
-    assert points_after_first_use_response.json() == points_after_badge_response.json()
+    assert points_after_first_use_response.json() == points_after_reserved_rewards_response.json()
 
     reuse_response = client.post(
         f"/store/redemptions/{redemption['id']}/use",
@@ -1013,17 +1026,25 @@ def test_store_redemption_deducts_points_and_rejects_future_rewards() -> None:
     redemptions_response = client.get("/store/redemptions", headers={"X-Account-Id": account_id})
     assert redemptions_response.status_code == 200
     redemptions_by_code = {item["reward_code"]: item for item in redemptions_response.json()}
-    assert set(redemptions_by_code) == {"coupon_50", "supplement_discount_10", "annual_member_badge"}
+    assert set(redemptions_by_code) == {
+        "coupon_50",
+        "supplement_discount_10",
+        "partner_product_trial",
+        "annual_member_badge",
+        "member_benefit_pack",
+    }
     assert redemptions_by_code["coupon_50"]["fulfillment_code"] == redemption["fulfillment_code"]
     assert redemptions_by_code["supplement_discount_10"]["fulfillment_code"] == supplement_redemption["fulfillment_code"]
+    assert redemptions_by_code["partner_product_trial"]["status"] == "reserved"
     assert redemptions_by_code["annual_member_badge"]["status"] == "reserved"
+    assert redemptions_by_code["member_benefit_pack"]["status"] == "reserved"
 
     points_response = client.get("/store/points", headers={"X-Account-Id": account_id})
     assert points_response.status_code == 200
     assert points_response.json() == {
         "balance": 0,
-        "lifetime_earned": 330,
-        "lifetime_redeemed": 330,
+        "lifetime_earned": 1130,
+        "lifetime_redeemed": 1130,
     }
 
     insufficient_response = client.post(

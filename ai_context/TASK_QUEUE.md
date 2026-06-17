@@ -1565,6 +1565,21 @@ Verification:
 
 - `npm run quality` passed in `mobile/`.
 
+### T961: Enable reserved partner and member store rewards
+
+Status: done
+
+Summary:
+
+- Backend store catalog now marks partner product trials and member benefit packs as redeemable.
+- Coupon and supplement rewards still issue bounded fulfillment codes immediately; partner products, special badges, and member benefits deduct points and create reserved redemptions only.
+- Mobile fallback catalog now matches the backend redeemable status for all five store reward categories.
+
+Verification:
+
+- `docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_store_redemption_deducts_points_and_reserves_fulfillment_rewards` passed.
+- `cd mobile && npm run quality` passed.
+
 ### T860: Cover Store reward catalog and redemption classes
 
 Status: done
@@ -1572,8 +1587,8 @@ Status: done
 Summary:
 
 - Backend store regression test now verifies all five planned reward categories are present in `/store/rewards`.
-- The test covers redeemable coupons, supplement discounts, and special badges using food-share points.
-- The test also verifies partner products and member benefits remain preview-only and fail closed with `reward_not_redeemable`.
+- The test covers redeemable coupons, supplement discounts, partner products, special badges, and member benefits using food-share points.
+- The test verifies partner products, special badges, and member benefits remain reserved redemptions until fulfillment and fail closed on `/use` with `redemption_not_usable`.
 
 Verification:
 
