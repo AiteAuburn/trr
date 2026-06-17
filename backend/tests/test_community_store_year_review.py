@@ -1801,6 +1801,22 @@ def test_year_review_summarizes_previous_year_records() -> None:
         assert fragment not in share_package["share_text"]
     for fragment in sensitive_svg_fragments:
         assert fragment not in share_package["asset"]["svg_text"]
+    public_package_json = json.dumps(share_package, ensure_ascii=False)
+    for fragment in (
+        "annual_stats",
+        "health_outcomes",
+        "ai_summary",
+        "summary_json",
+        "average_glucose",
+        "highest_glucose",
+        "lowest_glucose",
+        "年平均血糖",
+        "年度最高血糖",
+        "年度最低血糖",
+        "140.0",
+        "mg/dL",
+    ):
+        assert fragment not in public_package_json
 
     package_status_response = client.get(
         f"/year-reviews/share-packages/{share_package_id}",

@@ -15,6 +15,34 @@
 
 ## 2026-06-17
 
+### T1032 guard Year Review public package privacy
+
+類型：backend / test / docs / verifier
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a confirmed Year Review share-package JSON privacy assertion so public package responses cannot include `annual_stats`, `health_outcomes`, `ai_summary`, `summary_json`, health outcome keys, health outcome labels, `140.0`, or `mg/dL`.
+- Updated the UI spec to require full package JSON privacy coverage while allowing `snapshot_id` only as an identifier, not a snapshot payload.
+- Added navigation verifier markers for the public package JSON privacy guard.
+- 未變更 runtime backend share package generation、mobile sharing, AI/LLM calls、STT、parser、network paths、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose exec backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- Continue auditing Year Review share result/revoke and batch generation evidence against third-phase requirements.
+
 ### T1031 strengthen Year Review DeepSeek prompt regression
 
 類型：backend / test / docs / verifier
