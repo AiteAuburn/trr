@@ -3607,7 +3607,9 @@ def main() -> int:
             ("store backend-ready remaining boundary", '["仍待完成", "庫存、出貨訂單、付款與 rollback"]'),
             ("future module food community database card title", 'title: "食物社群資料庫"'),
             ("future module food community database card readiness", "資料庫、分享、點數與排行榜已接 backend；貼文留言治理仍待正式開放。"),
+            ("future module food community governance-only requirements", 'requirements: ["貼文、留言、封鎖、檢舉與審核流程", "公開分享刪除與撤回治理", "退出後歷史資料撤回與 audit event"]'),
             ("future module store backend-ready readiness", "點數兌換與兌換券已接 backend；購物車、出貨、付款與法務仍待完成。"),
+            ("future module store remaining-commerce requirements", 'requirements: ["購物車、庫存 reservation 與 rollback", "出貨訂單、付款與退款流程", "商品法務、客服與履約稽核"]'),
             ("food community promoted title", '<Text style={styles.sectionTitle}>食物社群</Text>'),
             ("ranking promoted title", '<Text style={styles.sectionTitle}>社群排行</Text>'),
             ("food community backend-ready badge", '"食物社群",'),
@@ -4067,9 +4069,11 @@ def main() -> int:
             ("year review stale future module requirements", 'requirements: ["年度 aggregate job 或報表查詢", "分享圖隱私遮罩", "使用者分享與刪除控制"]'),
             ("achievement stale future module backend incomplete copy", "需先完成 achievement definitions、後端同步與隱私邊界。"),
             ("achievement stale future module requirements", 'requirements: ["streak days 與 badge definitions", "achievement records 同步", "公開展示需使用者 opt-in"]'),
+            ("community stale future module public opt-in requirement", 'requirements: ["公開顯示名稱與排行榜 opt-in", "食物分享、點數與排行榜同步", "貼文、留言、封鎖、檢舉與審核流程"]'),
             ("community readiness stale public settings incomplete copy", "公開顯示名稱與可見範圍設定"),
             ("ranking readiness stale opt-in incomplete copy", "user public ranking opt-in 與退出流程"),
             ("ranking future module stale opt-in requirement", 'requirements: ["user public ranking opt-in", "ranking stats structure", "排名退出與歷史資料撤回流程"]'),
+            ("store stale future module points ledger requirement", 'requirements: ["點數帳本與兌換券狀態", "購物車、出貨訂單與付款", "退款、履約與商品法務審核"]'),
             ("store checkout stale coupon rules incomplete copy", "購物車持久化、優惠券與折扣規則"),
         ):
             _assert_not_contains(label, content, marker)

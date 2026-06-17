@@ -539,7 +539,7 @@ const futureModuleCards: FutureModuleCard[] = [
     title: "食物社群資料庫",
     description: "食物升糖分享、分類搜尋、社群點數與公開排行。",
     readiness: "資料庫、分享、點數與排行榜已接 backend；貼文留言治理仍待正式開放。",
-    requirements: ["公開顯示名稱與排行榜 opt-in", "食物分享、點數與排行榜同步", "貼文、留言、封鎖、檢舉與審核流程"],
+    requirements: ["貼文、留言、封鎖、檢舉與審核流程", "公開分享刪除與撤回治理", "退出後歷史資料撤回與 audit event"],
     safety: "預設不公開任何健康紀錄；公開榜單只使用 opt-in 使用者的非敏感統計。",
     icon: "群",
     target: "community"
@@ -579,7 +579,7 @@ const futureModuleCards: FutureModuleCard[] = [
     title: "商城",
     description: "點數商城、優惠券、商品折扣、特殊徽章與會員獎勵入口。",
     readiness: "點數兌換與兌換券已接 backend；購物車、出貨、付款與法務仍待完成。",
-    requirements: ["點數帳本與兌換券狀態", "購物車、出貨訂單與付款", "退款、履約與商品法務審核"],
+    requirements: ["購物車、庫存 reservation 與 rollback", "出貨訂單、付款與退款流程", "商品法務、客服與履約稽核"],
     safety: "商城商品不得宣稱醫療療效；正式交易與出貨前仍需完成付款與商品審核。",
     icon: "商",
     target: "store"

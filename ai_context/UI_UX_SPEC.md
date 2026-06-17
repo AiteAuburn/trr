@@ -1381,6 +1381,7 @@ AI 年度觀察與鼓勵：
 - 可兌換項目：優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利。
 - 目前一般操作路徑可扣點、發出優惠券/折扣碼、顯示「我的兌換券」，並可將 unused issued coupon/discount code 標記為已使用；仍不建立出貨訂單、不處理付款。商城文案必須清楚區分優惠券 / 保健食品折扣的 immediate code issue，以及合作商品 / 會員福利仍需 reservation + 後續 fulfillment，不可再宣稱所有可兌換項目都「仍不發券」。
 - Store 邊界 rows 不可再把「點數帳本」列為正式啟用前未完成項；點數帳本、catalog、兌換券 wallet 已有 backend/mobile contract，仍待完成的只能列庫存、出貨訂單、付款、rollback 或法務/客服流程。
+- Store Future Module card 的 readiness requirements 不可再把點數帳本、兌換券狀態、reward catalog 或 coupon/discount-code issue 列為未完成；requirements 只能列購物車、庫存 reservation / rollback、出貨訂單、付款、退款、法務、客服與履約稽核等剩餘正式交易能力。
 
 分類 tab：
 
@@ -1586,6 +1587,7 @@ AI 分析結果：
 - 社群排行榜：backend `/community/leaderboards` 必須支援分享次數排行、貢獻度排行、食物測試達人排行，且 integration test 必須驗證 opt-in 後三種榜單都會包含公開名稱與正確分數；未 opt-in 或後續 opt-out 時不得出現在公開榜單。食物測試達人分數必須以 distinct food item 計算，同食物重複分享只增加分享次數與貢獻度，不增加 food_tester 分數。同分榜單必須用公開顯示名稱與 account id 作穩定排序，避免公開排名在同分時漂移。
 - Food Community 頁內排行榜小節標題必須是「社群排行榜」，不可再顯示「預留」或 `opt-in 尚未啟用`，因為一般操作路徑已可透過 backend 同步公開設定與三種榜單；未完成的仍是貼文治理、退出後歷史資料撤回與審核流程。
 - 點數與商城已在一般操作路徑串接：食物分享成功後會刷新商城點數 / 兌換券，點數可兌換優惠券、商品折扣、特殊徽章與會員福利。Community 文案不可再寫「點數未來可串接商城」；Store 空兌換紀錄文案也不可只提優惠券 / 折扣碼而漏掉特殊徽章或會員福利 reservation。
+- Food Community Future Module card 的 readiness requirements 不可再把公開顯示名稱、排行榜 opt-in、食物分享、點數或排行榜同步列為未完成；requirements 只能列貼文、留言、封鎖、檢舉、審核、公開分享刪除 / 撤回治理、退出後歷史資料撤回與 audit event 等剩餘治理能力。
 - 公開顯示名稱：一般操作路徑顯示 `/community/settings` 的 public display name，未同步時 fallback 到 bounded account display name；可由使用者更新。
 - Future preview hero / 狀態摘要卡必須是單層淡綠卡，可 wrap；不可在卡內再包另一層白色 panel。
 - 公開顯示名稱預覽的 account display name / fallback 必須透過 bounded display helper 產生；不可在 JSX 內直接依 account 條件組 fallback copy。
