@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T1007: Attach Year Review share constraints to share package model
+
+Status: done
+
+Summary:
+
+- Moved Year Review share package check constraints from the snapshot ORM block onto the `YearReviewSharePackage` ORM model.
+- Added regression coverage to verify privacy, asset, checksum, status, and share-result constraints live on the share package table and not the snapshot table.
+- Tightened verifier coverage to inspect the correct ORM class block rather than searching the whole file.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_share_package_constraints_are_declared_on_share_package_model tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records tests/test_community_store_year_review.py::test_year_review_rejects_unfinished_year_before_snapshot_creation` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/models/year_review.py scripts/verify_mobile_navigation.py` passed.
+
 ### T1006: Preserve requested completed year in Year Review validation
 
 Status: done

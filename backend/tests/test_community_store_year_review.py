@@ -1566,6 +1566,21 @@ def test_community_point_ledger_declares_unique_source_constraint() -> None:
     assert [column.name for column in constraint.columns] == ["source_type", "source_id"]
 
 
+def test_year_review_share_package_constraints_are_declared_on_share_package_model() -> None:
+    expected_constraints = {
+        "ck_year_review_share_packages_privacy_level",
+        "ck_year_review_share_packages_asset_kind",
+        "ck_year_review_share_packages_checksum_len",
+        "ck_year_review_share_packages_status",
+        "ck_year_review_share_packages_last_result",
+    }
+    share_package_constraints = {constraint.name for constraint in YearReviewSharePackage.__table__.constraints}
+    snapshot_constraints = {constraint.name for constraint in YearReviewSnapshot.__table__.constraints}
+
+    assert expected_constraints.issubset(share_package_constraints)
+    assert expected_constraints.isdisjoint(snapshot_constraints)
+
+
 def test_year_review_summarizes_previous_year_records() -> None:
     client = TestClient(app)
     account_id, profile_id = create_account_and_profile(client, "year-review")

@@ -3828,6 +3828,16 @@ def main() -> int:
         year_review_model_content = (REPO_ROOT / "backend" / "app" / "models" / "year_review.py").read_text(
             encoding="utf-8"
         )
+        year_review_snapshot_model_block = _match_block(
+            year_review_model_content,
+            r"class YearReviewSnapshot\(Base\):([\s\S]*?)\n\nclass YearReviewSharePackage",
+            "YearReviewSnapshot model block",
+        )
+        year_review_share_package_model_block = _match_block(
+            year_review_model_content,
+            r"class YearReviewSharePackage\(Base\):([\s\S]*?)\Z",
+            "YearReviewSharePackage model block",
+        )
         year_review_share_constraint_migration_content = YEAR_REVIEW_SHARE_CONSTRAINT_MIGRATION_PATH.read_text(
             encoding="utf-8"
         )
@@ -3852,10 +3862,13 @@ def main() -> int:
             ("year review share package status ORM constraint", "ck_year_review_share_packages_status"),
             ("year review share package result ORM constraint", "ck_year_review_share_packages_last_result"),
         ):
-            _assert_contains(label, year_review_model_content, marker)
+            _assert_contains(label, year_review_share_package_model_block, marker)
             _assert_contains(label.replace("ORM", "migration"), year_review_share_constraint_migration_content, marker)
+            if marker in year_review_snapshot_model_block:
+                raise AssertionError(f"{label} must not be declared on YearReviewSnapshot.")
         year_review_tests_content = COMMUNITY_STORE_YEAR_REVIEW_TEST_PATH.read_text(encoding="utf-8")
         for label, marker in (
+            ("year review share package constraint metadata regression", "test_year_review_share_package_constraints_are_declared_on_share_package_model"),
             ("year review unfinished year share-card test path", 'f"/year-reviews/{unfinished_year}/share-card?profile_id={profile_id}"'),
             ("year review unfinished year asset test path", 'f"/year-reviews/{unfinished_year}/share-card/asset?profile_id={profile_id}"'),
             ("year review unfinished year confirm test path", 'f"/year-reviews/{unfinished_year}/share-card/confirm?profile_id={profile_id}"'),

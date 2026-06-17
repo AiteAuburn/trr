@@ -29,20 +29,6 @@ class YearReviewSnapshot(Base):
     )
 
     __table_args__ = (
-        CheckConstraint("privacy_level = 'public_summary'", name="ck_year_review_share_packages_privacy_level"),
-        CheckConstraint("asset_kind = 'svg_card'", name="ck_year_review_share_packages_asset_kind"),
-        CheckConstraint("char_length(asset_checksum_sha256) = 64", name="ck_year_review_share_packages_checksum_len"),
-        CheckConstraint(
-            "status IN ('confirmed', 'opened', 'dismissed', 'revoked')",
-            name="ck_year_review_share_packages_status",
-        ),
-        CheckConstraint(
-            "last_share_result IS NULL OR last_share_result IN ('opened', 'dismissed')",
-            name="ck_year_review_share_packages_last_result",
-        ),
-    )
-
-    __table_args__ = (
         UniqueConstraint("profile_id", "year", name="uq_year_review_snapshot_profile_year"),
     )
 
@@ -74,4 +60,18 @@ class YearReviewSharePackage(Base):
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
+    )
+
+    __table_args__ = (
+        CheckConstraint("privacy_level = 'public_summary'", name="ck_year_review_share_packages_privacy_level"),
+        CheckConstraint("asset_kind = 'svg_card'", name="ck_year_review_share_packages_asset_kind"),
+        CheckConstraint("char_length(asset_checksum_sha256) = 64", name="ck_year_review_share_packages_checksum_len"),
+        CheckConstraint(
+            "status IN ('confirmed', 'opened', 'dismissed', 'revoked')",
+            name="ck_year_review_share_packages_status",
+        ),
+        CheckConstraint(
+            "last_share_result IS NULL OR last_share_result IN ('opened', 'dismissed')",
+            name="ck_year_review_share_packages_last_result",
+        ),
     )

@@ -15,6 +15,35 @@
 
 ## 2026-06-17
 
+### T1007 attach Year Review share constraints to share package model
+
+類型：backend / bugfix / test / verifier / docs / year-review
+
+檔案：
+
+- `backend/app/models/year_review.py`
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved Year Review share package check constraints onto `YearReviewSharePackage` ORM metadata instead of leaving them misplaced in the snapshot model block.
+- Added regression coverage that confirms privacy, asset kind, checksum length, status, and share result constraints belong to the share package table and not the snapshot table.
+- Tightened verifier coverage so Year Review share constraints must appear in the `YearReviewSharePackage` class block and cannot pass from the wrong model block.
+- 未變更 Year Review API response shape、migration DDL, share package lifecycle behavior、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_share_package_constraints_are_declared_on_share_package_model tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records tests/test_community_store_year_review.py::test_year_review_rejects_unfinished_year_before_snapshot_creation` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/models/year_review.py scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- If share package asset kinds expand beyond SVG cards, update both the ORM and migration constraints together.
+
 ### T1006 preserve requested completed year in Year Review validation
 
 類型：backend / bugfix / test / verifier / docs / year-review
