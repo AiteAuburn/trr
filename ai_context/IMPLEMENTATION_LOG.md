@@ -15,6 +15,34 @@
 
 ## 2026-06-17
 
+### T1013 guard Home hold-to-record elapsed timer
+
+類型：mobile / verifier / docs / recording
+
+檔案：
+
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added mobile navigation verifier coverage for the Home hold-to-record elapsed-second timer.
+- Guarded the existing live timer state, 500ms tick, clamped display value, effective-limit auto-stop, Home render marker, and timer style marker.
+- Kept the Home UI minimal: large mic button, two hint lines, live timer only while recording, and hamburger menu.
+- 未變更 backend、record storage、AI/LLM calls、STT transcription behavior、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If product wants a more visible recording affordance later, keep it within the minimal Home constraint and preserve the live elapsed-second display.
+
 ### T1012 sync achievement unlocks after record saves
 
 類型：mobile / feature / verifier / docs / achievements

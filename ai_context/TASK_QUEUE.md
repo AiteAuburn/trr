@@ -111,6 +111,23 @@ None.
 
 ## Done
 
+### T1013: Guard Home hold-to-record elapsed timer
+
+Status: done
+
+Summary:
+
+- Added verifier coverage for the Home hold-to-record elapsed-second timer that appears while recording.
+- Guarded the 500ms timer tick, clamped elapsed-second display, quota/effective-limit auto-stop, and timer style marker.
+- Kept the existing minimal Home surface unchanged: large mic, two hint lines, live timer only while recording, and hamburger menu.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1012: Sync achievement unlocks after record saves
 
 Status: done

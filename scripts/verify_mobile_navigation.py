@@ -1187,6 +1187,12 @@ def main() -> int:
             ),
             ("deepseek record parse request binding", "llm_model_id: llmModelId"),
             ("deepseek selected model status render", "LLM：{selectedLlmModel?.label ?? llmModelId}"),
+            ("home recording timer state", "const [recordingElapsedSeconds, setRecordingElapsedSeconds] = useState(0);"),
+            ("home recording timer interval", "const timer = setInterval(() => {"),
+            ("home recording timer clamp", "setRecordingElapsedSeconds(clampNumber(nextElapsedSeconds, 0, limitSeconds));"),
+            ("home recording auto stop at limit", 'void finishRecordingPreview("limit");'),
+            ("home recording timer render", '<Text style={styles.homeRecordingTimer}>{recordingElapsedSecondsDisplayText}</Text>'),
+            ("home recording timer style", "homeRecordingTimer: {"),
         ):
             _assert_contains(label, content, marker)
         deepseek_preference_marker = (
