@@ -948,6 +948,45 @@ def test_food_search_limits_results_to_latest_matching_items() -> None:
     assert set(created_food_ids[:2]).isdisjoint({item["id"] for item in search_items})
 
 
+def test_food_search_treats_like_wildcards_as_literal_characters() -> None:
+    client = TestClient(app)
+    account_id, _ = create_account_and_profile(client, "community-food-search-literal")
+    unique_suffix = str(uuid4())
+    plain_name = f"literal search plain {unique_suffix}"
+    percent_name = f"literal search 100% yogurt {unique_suffix}"
+
+    for food_name in (plain_name, percent_name):
+        response = client.post(
+            "/community/foods/shares",
+            headers={"X-Account-Id": account_id},
+            json={
+                "food_name": food_name,
+                "category": "supplements",
+                "eaten_at": datetime(2026, 2, 4, 8, 0, tzinfo=UTC).isoformat(),
+                "before_glucose": 100,
+                "after_glucose": 108,
+            },
+        )
+        assert response.status_code == 201
+
+    wildcard_response = client.get(
+        "/community/foods",
+        params={"query": "%", "category": "supplements"},
+        headers={"X-Account-Id": account_id},
+    )
+    assert wildcard_response.status_code == 200
+    wildcard_items = wildcard_response.json()
+    assert [item["name"] for item in wildcard_items] == [percent_name]
+
+    literal_response = client.get(
+        "/community/foods",
+        params={"query": f"100% yogurt {unique_suffix}", "category": "supplements"},
+        headers={"X-Account-Id": account_id},
+    )
+    assert literal_response.status_code == 200
+    assert [item["name"] for item in literal_response.json()] == [percent_name]
+
+
 def test_community_leaderboard_ties_are_stably_ordered_by_public_name() -> None:
     client = TestClient(app)
     run_id = uuid4()

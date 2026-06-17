@@ -15,6 +15,33 @@
 
 ## 2026-06-14
 
+### T985 treat food search wildcards as literal characters
+
+類型：backend / bugfix / test / docs / community
+
+檔案：
+
+- `backend/app/api/community.py`
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Escaped SQL LIKE wildcard characters in community food search queries so `%`, `_`, and backslash are searched literally.
+- Added backend regression coverage that a `%` query only returns foods whose names actually contain `%`, instead of broad-matching the public food database.
+- 未變更 food share creation、points awards、leaderboards、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_search_treats_like_wildcards_as_literal_characters tests/test_community_store_year_review.py::test_food_search_limits_results_to_latest_matching_items` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If full-text search is added later, keep literal matching and broad discovery/pagination as separate explicit modes.
+
 ### T984 cover public food item creator privacy
 
 類型：backend / test / docs / community

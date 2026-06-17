@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T985: Treat food search wildcards as literal characters
+
+Status: done
+
+Summary:
+
+- Escaped SQL LIKE wildcard characters in community food search queries so `%`, `_`, and backslash are searched literally.
+- Added backend regression coverage that a `%` query only returns foods whose names actually contain `%`, instead of broad-matching the public food database.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_search_treats_like_wildcards_as_literal_characters tests/test_community_store_year_review.py::test_food_search_limits_results_to_latest_matching_items` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T984: Cover public food item creator privacy
 
 Status: done

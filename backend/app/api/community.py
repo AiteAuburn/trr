@@ -52,6 +52,10 @@ def _normalize_food_name(value: str) -> str:
     return " ".join(value.strip().lower().split())
 
 
+def _escape_like_query(value: str) -> str:
+    return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+
+
 def _public_profile_for_account(account: Account, db: Session) -> CommunityPublicProfile:
     profile = db.scalar(
         select(CommunityPublicProfile).where(CommunityPublicProfile.account_id == account.id)
@@ -226,12 +230,13 @@ def list_foods(
                     "message": "Food search query must not be blank.",
                 },
             )
-        normalized_query = f"%{normalized_query_value}%"
-        statement = statement.where(FoodItem.normalized_name.ilike(normalized_query))
+        escaped_query_value = _escape_like_query(normalized_query_value)
+        normalized_query = f"%{escaped_query_value}%"
+        statement = statement.where(FoodItem.normalized_name.ilike(normalized_query, escape="\\"))
         order_by_clauses = [
             case(
                 (FoodItem.normalized_name == normalized_query_value, 0),
-                (FoodItem.normalized_name.like(f"{normalized_query_value}%"), 1),
+                (FoodItem.normalized_name.like(f"{escaped_query_value}%", escape="\\"), 1),
                 else_=2,
             ),
             FoodItem.created_at.desc(),
