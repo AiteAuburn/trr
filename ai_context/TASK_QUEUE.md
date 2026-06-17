@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T960: Cover dismissed year-review share result
+
+Status: done
+
+Summary:
+
+- Added backend regression coverage for a confirmed Year Review share package reported as `dismissed`.
+- The test verifies dismissed packages preserve privacy-masked share package state without setting `shared_at` or `revoked_at`.
+- This covers the cancellation path that mobile reports after the native share sheet is dismissed.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+
 ### T959: Add food category individual-item summaries
 
 Status: done

@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T960 cover dismissed year-review share result
+
+類型：backend / test / year-review
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added regression coverage for a confirmed Year Review share package reported as `dismissed`.
+- The test verifies a dismissed package keeps privacy-masked package state without setting `shared_at` or `revoked_at`.
+- This covers the cancellation path mobile sends when the native share sheet is dismissed.
+- 未變更 backend endpoint behavior、mobile sharing behavior、share payload content、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+
+後續：
+
+- Keep opened/dismissed/revoked share-result behavior covered if native share result mapping changes.
+
 ### T959 add food category individual-item summaries
 
 類型：backend / mobile / verifier / docs / community
