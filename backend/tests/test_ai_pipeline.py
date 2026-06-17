@@ -50,6 +50,7 @@ from app.services.ai_pipeline import (
     _json_decode_error_message,
     _local_llm_max_tokens_for_segments,
     _local_parser_prompt,
+    _local_parser_request_body,
     _normalize_compact_ir_candidate,
     _request_ollama_structured_json,
     _request_local_parser_json,
@@ -2072,6 +2073,42 @@ def test_deepseek_system_prompt_includes_configured_prompt_analysis_and_base(mon
     assert "Do not provide medical advice" in prompt
 
 
+def test_deepseek_request_body_sends_prompt_as_system_message(monkeypatch) -> None:
+    from app.services import ai_pipeline
+
+    monkeypatch.setattr(
+        ai_pipeline,
+        "get_settings",
+        lambda: get_settings().model_copy(
+            update={
+                "deepseek_system_prompt": "SYSTEM: compact IR only",
+                "deepseek_analysis_addendum": "ANALYSIS: reject uncertain facts",
+            }
+        ),
+    )
+
+    body = _local_parser_request_body(
+        model_id="deepseek-chat",
+        llm_model_id=DEEPSEEK_LLM_MODEL_ID,
+        prompt="Atomic segments:\nseg_001: 血糖 120",
+        max_tokens=240,
+        keep_alive="30m",
+        stream=False,
+    )
+
+    messages = body["messages"]
+    assert isinstance(messages, list)
+    assert messages[0]["role"] == "system"
+    assert "SYSTEM: compact IR only" in messages[0]["content"]
+    assert "ANALYSIS: reject uncertain facts" in messages[0]["content"]
+    assert "Return compact JSON only" in messages[0]["content"]
+    assert messages[1] == {
+        "role": "user",
+        "content": "Atomic segments:\nseg_001: 血糖 120",
+    }
+    assert body["response_format"] == {"type": "json_object"}
+
+
 def test_parse_preview_accepts_static_llm_without_runtime_model_lookup(monkeypatch) -> None:
     from app.services import ai_pipeline
 
@@ -2334,9 +2371,9 @@ def test_command_proposal_create_record_does_not_save_directly() -> None:
         "create_record",
         "create_record",
     ]
-    assert all("source_text" not in action["metadata_json"] for action in proposal["actions"])
+    assert all("source_text" in action["metadata_json"] for action in proposal["actions"])
     assert all("transcript" not in action["metadata_json"] for action in proposal["actions"])
-    assert all("source_text" not in record["metadata_json"] for record in proposal["payload"]["records"])
+    assert all("source_text" in record["metadata_json"] for record in proposal["payload"]["records"])
     assert all("transcript" not in record["metadata_json"] for record in proposal["payload"]["records"])
     assert all("raw_text" not in record["metadata_json"] for record in proposal["payload"]["records"])
 

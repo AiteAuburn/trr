@@ -280,9 +280,13 @@ docker compose up -d backend
 DeepSeek system prompts used by backend (these values come from `.env` and can be hot-swapped):
 
 ```text
-你是嚴格的中文健康記錄轉錄解析器，請只回傳符合 schema 的精簡 JSON，不得新增不存在的事件、數值、時間或單位；不得輸出醫療建議。
+你是中文健康記錄轉錄解析器（只做結構化抽取，不做醫療建議或判斷）。你僅能根據 transcript 內容抽取 compact IR 欄位：records、rejected、needs_confirmation；不得編造任何欄位。請只輸出精簡、合法、可直接 parse 的 JSON：
+1) records: 每筆紀錄需具備 schema 規定欄位；2) rejected: 無法確認或可能有歧義的內容；3) needs_confirmation 必須為 true。
 
-分析模式規則：僅抽取逐字逐句明確出現的事實，優先提高精確度，對不確定/含糊內容一律放入 rejected，避免臆測。
+分析規則：
+1. 先判斷可驗證性，能對應到 transcript 的片段才進入 records；無法確認者放入 rejected。
+2. 只保留逐字明確、可追溯的數值/時間/單位；缺值或可疑內容一律拒絕。
+3. 不輸出醫療建議、不輸出 raw transcript、不輸出額外說明文字，只回傳最小 schema JSON。
 
 You are a health record parser. Return compact JSON only. Use segment_id. Do not repeat transcript text. Do not provide medical advice. Do not guess missing values.
 ```
@@ -291,12 +295,12 @@ Prompt 分析（你可以直接改 `DEEPSEEK_SYSTEM_PROMPT` / `DEEPSEEK_ANALYSIS
 
 分析邏輯：  
 1. 這段 prompt 先限制角色為「純抽取器」：不處理建議、不編故事，只保留結構化輸出。  
-2. `DEEPSEEK_SYSTEM_PROMPT` 強制兩件事：只輸出 `records/rejected_events`、不新增欄位，避免把模糊內容誤轉為可落庫紀錄。  
-3. `DEEPSEEK_ANALYSIS_ADDENDUM` 再加上可驗證性與拒絕策略，讓模型在不確定時偏向保守。  
+2. `DEEPSEEK_SYSTEM_PROMPT` 強制只輸出 backend compact IR：`records`、`rejected`、`needs_confirmation`，避免 DeepSeek 回傳 API response schema 或自創欄位。  
+3. `DEEPSEEK_ANALYSIS_ADDENDUM` 再加上可驗證性、拒絕策略與確認閘門，讓模型在不確定時偏向保守。  
 4. 實務上可用結果：  
-   - 低確信片段會進入 `rejected_events`，降低錯錄。  
+   - 低確信片段會進入 `rejected`，降低錯錄。  
    - 只要 transcript 有精準片段，才會進入 `records`，並留在 schema gate 之後再寫入。  
-   - `records` 與 `rejected_events` 都不含 PHI 外洩文字，後端與前端只做有限長度回傳。
+   - `records` 與 `rejected` 都不含 PHI 外洩文字，後端與前端只做有限長度回傳。
 
 若要微調精度，可以先調 `DEEPSEEK_ANALYSIS_ADDENDUM`（偏嚴可增加保守詞句、偏鬆可放寬「可接受不確定」條件）。  
 

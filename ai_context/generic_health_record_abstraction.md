@@ -156,7 +156,12 @@ Command proposal returns executable proposals, not DB writes:
         "value": 138,
         "unit": "mg/dL"
       },
-      "metadata_json": {}
+      "metadata_json": {
+        "source_text": "今天早餐後血糖 138",
+        "time_hint": "morning",
+        "stt_model_id": "browser-web-speech",
+        "parser_model_id": "local-llm-schema-stub"
+      }
     }
   ],
   "requires_confirmation": true

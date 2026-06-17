@@ -66,15 +66,20 @@ class Settings(BaseSettings):
     )
     deepseek_system_prompt: str = Field(
         default=(
-            "你是嚴格的中文健康記錄轉錄解析器，請只回傳符合 schema 的精簡 JSON，"
-            "不得新增不存在的事件、數值、時間或單位；不得輸出醫療建議。"
+            "你是中文健康記錄轉錄解析器（只做結構化抽取，不做醫療建議或判斷）。"
+            "你僅能根據 transcript 內容抽取 compact IR 欄位：records、rejected、needs_confirmation；不得編造任何欄位。"
+            "請只輸出精簡、合法、可直接 parse 的 JSON：\n"
+            "1) records: 每筆紀錄需具備 schema 規定欄位；2) rejected: 無法確認或可能有歧義的內容；"
+            "3) needs_confirmation 必須為 true。"
         ),
         max_length=2000,
     )
     deepseek_analysis_addendum: str = Field(
         default=(
-            "分析模式規則：僅抽取逐字逐句明確出現的事實，優先提高精確度，"
-            "對不確定/含糊內容一律放入 rejected，避免臆測。"
+            "分析規則：\n"
+            "1. 先判斷可驗證性，能對應到 transcript 的片段才進入 records；無法確認者放入 rejected。\n"
+            "2. 只保留逐字明確、可追溯的數值/時間/單位；缺值或可疑內容一律拒絕。\n"
+            "3. 不輸出醫療建議、不輸出 raw transcript、不輸出額外說明文字，只回傳最小 schema JSON。"
         ),
         max_length=1200,
     )
