@@ -549,7 +549,7 @@ const futureModuleCards: FutureModuleCard[] = [
     title: "成就榜 / 徽章",
     description: "連續記錄、運動里程碑與習慣養成徽章。",
     readiness: "成就 taxonomy、backend summary、解鎖同步與已保存徽章已接上；公開展示 opt-in 與撤回治理仍待完成。",
-    requirements: ["三大分類與動態級距", "backend summary / sync / unlocks", "公開展示 opt-in 與撤回治理"],
+    requirements: ["公開展示 opt-in 與跨使用者展示", "成就展示撤回治理", "公開徽章稽核與違規處置"],
     safety: "成就只能鼓勵紀錄習慣，不可暗示治療效果或公開健康數值。",
     icon: "徽",
     target: "achievements"
@@ -559,7 +559,7 @@ const futureModuleCards: FutureModuleCard[] = [
     title: "排行榜",
     description: "連續記錄排行榜、社群競賽與公開排名 opt-in。",
     readiness: "分享次數、貢獻度與食物測試達人榜單已接 backend；封鎖、檢舉與退出後歷史撤回仍待正式開放。",
-    requirements: ["三種公開榜單同步", "封鎖、檢舉與審核流程", "排名退出後歷史資料撤回流程"],
+    requirements: ["封鎖、檢舉與審核流程", "榜單爭議處理與公開名稱違規處置", "排名退出後歷史資料撤回流程"],
     safety: "不公開血糖數值或健康內容；排行榜只能使用使用者同意的非敏感統計。",
     icon: "榜",
     target: "ranking"
@@ -569,7 +569,7 @@ const futureModuleCards: FutureModuleCard[] = [
     title: "年度回顧",
     description: "年度血糖、飲食、運動與連續記錄摘要。",
     readiness: "年度 snapshot、隱私遮罩分享卡與原生分享已接 backend；外部平台深度整合與刪除治理仍待完成。",
-    requirements: ["每年 1 月 1 日自動產生", "privacy-masked share package", "外部平台深度整合與刪除治理"],
+    requirements: ["外部平台深度整合與權限細節", "分享 package 刪除與撤回治理", "外部分享稽核與違規處置"],
     safety: "年度回顧只能做紀錄摘要與鼓勵，不提供診療建議或療效宣稱。",
     icon: "年",
     target: "yearReview"

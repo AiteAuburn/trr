@@ -1221,7 +1221,7 @@ Dev-only visual smoke route jump：
 - MVP 第一階段徽章頁已可同步 backend 成就摘要、同步成就解鎖紀錄，並顯示本次新解鎖與已保存徽章。
 - Backend `/achievements/summary` 只讀取既有 records 進行聚合，回傳三大分類的累積型與連續型徽章進度；`/achievements/sync` 會保存 newly unlocked achievement records，`/achievements/unlocks` 會回傳已保存徽章紀錄；上述路徑不更新排行榜、不呼叫 AI。
 - Mobile 在 backend ready 時同步 summary；backend 不可用或 visual-smoke route 時保留 mobile 已載入紀錄的本機推算 fallback。
-- Future Module 的成就榜 / 徽章 card 也必須使用 backend-ready 語氣：成就 taxonomy、backend summary、解鎖同步與已保存徽章已接上；未完成項只可列公開展示 opt-in、跨使用者展示、撤回治理或類似後續公開流程。
+- Future Module 的成就榜 / 徽章 card 也必須使用 backend-ready 語氣：成就 taxonomy、backend summary、解鎖同步與已保存徽章已接上；readiness requirements 不可再把三大分類、動態級距、backend summary、sync 或 unlocks 列為未完成，只可列公開展示 opt-in、跨使用者展示、撤回治理、公開徽章稽核或類似後續公開流程。
 - 正式公開排名或跨使用者展示前仍需完成 public opt-in、隱私邊界與撤回流程。
 
 頁面內容：
@@ -1276,7 +1276,7 @@ Dev-only visual smoke route jump：
 
 - 年度回顧一般操作路徑已接 backend snapshot、privacy-masked share package 與原生分享面板；離線 fallback 仍可用已載入紀錄即時計算前一年度回顧。
 - Mobile fallback 不呼叫 AI、不寫入 snapshot；backend-ready 一般操作路徑可同步保存 snapshot、準備 privacy-masked share package，並開啟原生分享面板分享隱私遮罩文字。年度回顧文案不可再宣稱年度回顧仍是預留、分享圖片、年度素材或隱私遮罩都尚未產生。
-- Future Module 的年度回顧 card 也必須使用 backend-ready 語氣：年度 snapshot、隱私遮罩分享卡與原生分享已接 backend；未完成項只可列外部社群平台深度整合、平台分享權限細節、刪除/撤回治理或類似後續營運流程。
+- Future Module 的年度回顧 card 也必須使用 backend-ready 語氣：年度 snapshot、隱私遮罩分享卡與原生分享已接 backend；readiness requirements 不可再把每年 1 月 1 日產生、privacy-masked share package 或原生分享列為未完成，只可列外部社群平台深度整合、平台分享權限細節、刪除/撤回治理、外部分享稽核或類似後續營運流程。
 - Backend 已有 `/year-reviews/{year}` snapshot contract，可從正式 profile records 產生並保存年度統計、年度血糖成果與 bounded AI 年度觀察；同一 profile/year 會回傳已保存 snapshot，不因後續紀錄變動自動改寫。Mobile 一般操作路徑會嘗試同步此 API，visual-smoke route 必須維持本機 demo 且不呼叫 backend。
 - 年度 AI 觀察在 `DEEPSEEK_PARSER_URL` 與 `DEEPSEEK_API_KEY` 設定齊全時可呼叫 DeepSeek JSON mode；request 只能包含年度 `annual_stats`、`health_outcomes` 與固定 instructions，不可傳 raw records、food item、occurred_at、profile id、raw transcript、raw prompt 或 raw model output。DeepSeek 未設定、HTTP 失敗、回應過大或 JSON/schema 無效時必須回 deterministic fallback，不可阻斷 snapshot 產生。
 - Backend regression 必須解析 DeepSeek 年度回顧 user prompt，確認 payload keys 只包含 `year`、`annual_stats`、`health_outcomes` 與 `instructions`，且 instructions 明確限制只能使用聚合統計；測試也必須守住不包含 food item、`occurred_at`、profile id、raw transcript、raw prompt 或 raw model output。
@@ -1585,7 +1585,7 @@ AI 分析結果：
 - 食物分享紀錄欄位：食物名稱、食用時間、食用前血糖、食用後血糖、血糖上升值、備註心得；食物名稱可由使用者直接輸入，空白時才 fallback 到目前選取食物；食用時間必須提供食用日期與食用時間 input，並用既有 local date/time parser 產生 `eaten_at`，不可只用送出當下 `new Date().toISOString()` 代替使用者指定時間。上升值由系統自動計算，且表單預覽必須用 signed clamp 顯示 `after_glucose - before_glucose`，不可把血糖下降改成 `0`。Mobile navigation verifier 必須守住 share form 顯示 `食用時間` row、日期/時間 input、`血糖上升值` 自動計算 row，且送出 `/community/foods/shares` payload 只能傳 `before_glucose` / `after_glucose`，不可傳 client-side `glucose_delta`。Backend API preflight 必須拒絕 client-supplied `glucose_delta`，回結構化 `food_glucose_delta_client_supplied`，且 response 不可 echo 食物名稱、心得或完整 input；mobile navigation verifier 也必須守住 backend preflight dependency、structured error code/message、schema 不可用 raw validation error 寫法，以及 server-calculated `glucose_delta=after-before`。Backend integration test 必須證明送入 `glucose_delta` 時回 422，且不可建立 food item、food share 或點數 ledger。正常 share success path 必須由 server 使用 `after_glucose - before_glucose` 自算並回寫 share/stats，不信任 client-provided rise value。Backend schema 必須 trim food name，拒絕全空白或非字串名稱；全空白食物名稱必須回結構化 `food_name_blank`，避免 mobile 依賴 raw validation message，且不可建立 food item、food share 或點數 ledger；optional 份量/心得全空白時正規化為 `null`，避免大型食物升糖資料庫保存空白公開欄位。食用時間不可在未來且必須包含 timezone；未來 `eaten_at` 必須回結構化 `invalid_record_time` 且 message 指向 `eaten_at`，缺 timezone 必須回結構化 `invalid_datetime` 且 `field=eaten_at`；上述 invalid `eaten_at` path 不可建立 food item、food share 或點數 ledger。
 - 社群積分預留：分享資料得點數，完整前後血糖可加權，通過審核後可進排行榜。
 - 社群排行榜：backend `/community/leaderboards` 必須支援分享次數排行、貢獻度排行、食物測試達人排行，且 integration test 必須驗證 opt-in 後三種榜單都會包含公開名稱與正確分數；未 opt-in 或後續 opt-out 時不得出現在公開榜單。食物測試達人分數必須以 distinct food item 計算，同食物重複分享只增加分享次數與貢獻度，不增加 food_tester 分數。同分榜單必須用公開顯示名稱與 account id 作穩定排序，避免公開排名在同分時漂移。
-- Food Community 頁內排行榜小節標題必須是「社群排行榜」，不可再顯示「預留」或 `opt-in 尚未啟用`，因為一般操作路徑已可透過 backend 同步公開設定與三種榜單；未完成的仍是貼文治理、退出後歷史資料撤回與審核流程。
+- Food Community 頁內排行榜小節標題必須是「社群排行榜」，不可再顯示「預留」或 `opt-in 尚未啟用`，因為一般操作路徑已可透過 backend 同步公開設定與三種榜單；Ranking Future Module card 的 readiness requirements 不可再把三種公開榜單同步列為未完成，未完成的仍是封鎖、檢舉、審核、榜單爭議處理、公開名稱違規處置、退出後歷史資料撤回與 audit event。
 - 點數與商城已在一般操作路徑串接：食物分享成功後會刷新商城點數 / 兌換券，點數可兌換優惠券、商品折扣、特殊徽章與會員福利。Community 文案不可再寫「點數未來可串接商城」；Store 空兌換紀錄文案也不可只提優惠券 / 折扣碼而漏掉特殊徽章或會員福利 reservation。
 - Food Community Future Module card 的 readiness requirements 不可再把公開顯示名稱、排行榜 opt-in、食物分享、點數或排行榜同步列為未完成；requirements 只能列貼文、留言、封鎖、檢舉、審核、公開分享刪除 / 撤回治理、退出後歷史資料撤回與 audit event 等剩餘治理能力。
 - 公開顯示名稱：一般操作路徑顯示 `/community/settings` 的 public display name，未同步時 fallback 到 bounded account display name；可由使用者更新。
