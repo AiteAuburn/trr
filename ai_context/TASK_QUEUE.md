@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T969: Cover normalized food-name dedupe
+
+Status: done
+
+Summary:
+
+- Added backend regression coverage that same-category food shares with different casing and surrounding whitespace merge into one food item.
+- The test verifies the original display name is preserved and aggregate glucose-delta stats include both shares.
+- This protects the shared food blood-glucose database from avoidable duplicate food rows.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_share_merges_same_category_name_case_and_whitespace tests/test_community_store_year_review.py::test_food_share_creates_food_stats_points_and_leaderboards` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T968: Align backend report meal timing aliases
 
 Status: done

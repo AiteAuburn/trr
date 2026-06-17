@@ -559,6 +559,49 @@ def test_food_share_creates_food_stats_points_and_leaderboards() -> None:
         assert all(item["display_name"] != display_name for item in opted_out_response.json()["entries"])
 
 
+def test_food_share_merges_same_category_name_case_and_whitespace() -> None:
+    client = TestClient(app)
+    account_id, _ = create_account_and_profile(client, "community-food-normalized-name")
+    food_name = f"Case Food {uuid4()}"
+
+    first_response = client.post(
+        "/community/foods/shares",
+        headers={"X-Account-Id": account_id},
+        json={
+            "food_name": food_name,
+            "category": "starches",
+            "eaten_at": datetime(2026, 1, 2, 12, 0, tzinfo=UTC).isoformat(),
+            "before_glucose": 100,
+            "after_glucose": 140,
+        },
+    )
+    assert first_response.status_code == 201
+    first_body = first_response.json()
+
+    second_response = client.post(
+        "/community/foods/shares",
+        headers={"X-Account-Id": account_id},
+        json={
+            "food_name": f"  {food_name.upper()}  ",
+            "category": "starches",
+            "eaten_at": datetime(2026, 1, 3, 12, 0, tzinfo=UTC).isoformat(),
+            "before_glucose": 110,
+            "after_glucose": 150,
+        },
+    )
+    assert second_response.status_code == 201
+    second_body = second_response.json()
+
+    assert second_body["food"]["id"] == first_body["food"]["id"]
+    assert second_body["food"]["name"] == food_name
+    assert second_body["food"]["stats"] == {
+        "share_count": 2,
+        "average_glucose_delta": 40.0,
+        "max_glucose_delta": 40,
+        "min_glucose_delta": 40,
+    }
+
+
 def test_food_share_rejects_client_supplied_glucose_delta_without_side_effects() -> None:
     client = TestClient(app)
     account_id, _ = create_account_and_profile(client, "community-food-client-delta")

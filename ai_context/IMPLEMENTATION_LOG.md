@@ -15,6 +15,33 @@
 
 ## 2026-06-14
 
+### T969 cover normalized food-name dedupe
+
+類型：backend / test / docs / community
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that same-category food shares with casing and surrounding-whitespace differences merge into one food item.
+- The test verifies the original display name is preserved while aggregate glucose-delta stats include both shares.
+- This protects the shared food blood-glucose database from avoidable duplicate rows.
+- 未變更 food share runtime behavior、points ledger semantics、leaderboard opt-in、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_share_merges_same_category_name_case_and_whitespace tests/test_community_store_year_review.py::test_food_share_creates_food_stats_points_and_leaderboards` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If alias/synonym matching is added later, keep exact normalized-name dedupe as the deterministic base layer.
+
 ### T968 align backend report meal timing aliases
 
 類型：backend / test / verifier / docs / analysis
