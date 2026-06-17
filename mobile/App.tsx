@@ -548,8 +548,8 @@ const futureModuleCards: FutureModuleCard[] = [
     id: "achievements",
     title: "成就榜 / 徽章",
     description: "連續記錄、運動里程碑與習慣養成徽章。",
-    readiness: "需先完成 achievement definitions、後端同步與隱私邊界。",
-    requirements: ["streak days 與 badge definitions", "achievement records 同步", "公開展示需使用者 opt-in"],
+    readiness: "成就 taxonomy、backend summary、解鎖同步與已保存徽章已接上；公開展示 opt-in 與撤回治理仍待完成。",
+    requirements: ["三大分類與動態級距", "backend summary / sync / unlocks", "公開展示 opt-in 與撤回治理"],
     safety: "成就只能鼓勵紀錄習慣，不可暗示治療效果或公開健康數值。",
     icon: "徽",
     target: "achievements"

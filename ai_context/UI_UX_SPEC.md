@@ -1221,6 +1221,7 @@ Dev-only visual smoke route jump：
 - MVP 第一階段徽章頁已可同步 backend 成就摘要、同步成就解鎖紀錄，並顯示本次新解鎖與已保存徽章。
 - Backend `/achievements/summary` 只讀取既有 records 進行聚合，回傳三大分類的累積型與連續型徽章進度；`/achievements/sync` 會保存 newly unlocked achievement records，`/achievements/unlocks` 會回傳已保存徽章紀錄；上述路徑不更新排行榜、不呼叫 AI。
 - Mobile 在 backend ready 時同步 summary；backend 不可用或 visual-smoke route 時保留 mobile 已載入紀錄的本機推算 fallback。
+- Future Module 的成就榜 / 徽章 card 也必須使用 backend-ready 語氣：成就 taxonomy、backend summary、解鎖同步與已保存徽章已接上；未完成項只可列公開展示 opt-in、跨使用者展示、撤回治理或類似後續公開流程。
 - 正式公開排名或跨使用者展示前仍需完成 public opt-in、隱私邊界與撤回流程。
 
 頁面內容：

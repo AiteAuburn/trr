@@ -15,6 +15,39 @@
 
 ## 2026-06-17
 
+### T1038 align Achievement future-card readiness
+
+類型：mobile / docs / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated the Achievement Future Module card so it no longer says achievement definitions or backend sync are unfinished.
+- The card now reflects the backend-ready taxonomy, summary, sync, and persisted unlock paths.
+- Remaining future work is limited to public display opt-in, cross-user display, and withdrawal/governance flows.
+- Added UI spec and navigation verifier guards for the backend-ready Achievement future-card wording and stale-copy rejection.
+- 未變更 backend runtime、mobile network request paths、achievement sync behavior、AI/LLM calls、STT、parser、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing the remaining goal requirements against current evidence before final completion.
+
 ### T1037 align Year Review future-card readiness
 
 類型：mobile / docs / verifier
