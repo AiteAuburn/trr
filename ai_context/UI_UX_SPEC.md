@@ -1304,6 +1304,7 @@ Dev-only visual smoke route jump：
 - 年度回顧邊界說明與分享未啟用狀態也必須透過 bounded display helper 產生；不可在 JSX 或 component body 內直接寫年度素材/分享權限 fallback 文案。
 - 年度血糖平均/最高/最低提示必須先轉成 bounded display text 或 metric row；不可在 JSX 內直接把 numeric metric 插入長句。
 - 年度回顧的來源說明、hero 總記錄句、hero 資料來源提示、徽章素材 fallback 與分享整合按鈕 label 必須透過 bounded display helper 產生；不可在 JSX 中直接組紀錄次數或年度素材 fallback copy。
+- 年度回顧 hero title 必須透過 bounded display helper 顯示「前一年度 YYYY 年回顧」，不可在 JSX 內直接組 `${year} 年回顧`；排程規則 copy 必須明確包含「每年 1 月 1 日自動產生前一年度回顧」。
 
 年度總覽卡：
 

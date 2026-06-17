@@ -3003,7 +3003,7 @@ function yearReviewTargetYear(value: Date) {
 
 function nextYearReviewGenerationLabel(value: Date) {
   const nextYear = value.getMonth() === 0 && value.getDate() === 1 ? value.getFullYear() + 1 : value.getFullYear() + 1;
-  return boundDisplayText(`${nextYear} 年 1 月 1 日自動產生前一年度回顧`, maxDisplayDetailTextLength);
+  return boundDisplayText(`每年 1 月 1 日自動產生前一年度回顧；下一次為 ${nextYear} 年 1 月 1 日`, maxDisplayDetailTextLength);
 }
 
 function averageNumber(values: number[]) {
@@ -5639,6 +5639,10 @@ function yearReviewHeroRecordCountCopy(count: number) {
   return boundDisplayText(`前一年度共記錄 ${boundedCount} 次`, maxDisplayTextLength);
 }
 
+function yearReviewHeroTitleCopy(targetYear: number) {
+  return boundDisplayText(`前一年度 ${targetYear} 年回顧`, maxDisplayTextLength);
+}
+
 function yearReviewLiveCalculationCopy(targetYear: number, generationLabel: string) {
   return boundDisplayText(`${targetYear} 年資料；${generationLabel}。同步成功後會使用 backend snapshot。`, maxDisplayDetailTextLength);
 }
@@ -7225,6 +7229,7 @@ export default function App() {
   const achievementIntegrationButtonDisplayLabel = achievementIntegrationButtonLabel();
   const achievementIntegrationAccessibilityDisplayLabel = achievementIntegrationButtonAccessibilityLabel();
   const yearReviewPreviewBoundaryDisplayText = yearReviewPreviewBoundaryCopy();
+  const yearReviewHeroTitleDisplayText = yearReviewHeroTitleCopy(yearReviewTargetDisplayYear);
   const yearReviewHeroRecordCountDisplayText = yearReviewHeroRecordCountCopy(yearlyRecordDisplayCount);
   const yearReviewLiveCalculationDisplayText = yearReviewLiveCalculationCopy(
     yearReviewTargetDisplayYear,
@@ -16217,7 +16222,7 @@ export default function App() {
                 <Text style={styles.heroIconText}>✦</Text>
               </View>
               <View style={styles.timelineContent}>
-                <Text style={styles.evidence}>{yearReviewTargetDisplayYear} 年回顧</Text>
+                <Text style={styles.evidence}>{yearReviewHeroTitleDisplayText}</Text>
                 <Text style={styles.heroNumber}>{yearReviewHeroRecordCountDisplayText}</Text>
                 <Text style={styles.evidence}>{yearReviewLiveCalculationDisplayText}</Text>
               </View>

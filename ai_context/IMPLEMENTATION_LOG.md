@@ -15,6 +15,35 @@
 
 ## 2026-06-17
 
+### T1030 clarify Year Review hero schedule wording
+
+類型：mobile / docs / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated Year Review generation copy to explicitly state `每年 1 月 1 日自動產生前一年度回顧` while still showing the next January 1 date.
+- Added a bounded hero-title helper so the Year Review hero renders `前一年度 YYYY 年回顧` instead of directly composing `YYYY 年回顧` in JSX.
+- Added mobile navigation verifier guards for the fixed January 1 rule, hero title helper, display value, and render binding.
+- 未變更 backend snapshot generation、CronJob、share package、AI/LLM calls、STT、parser、network paths、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- Continue auditing Year Review copy and verifier coverage against the annual stats, health outcomes, AI observation, share-card, and scheduler requirements.
+
 ### T1029 align Store Cart evidence with active coupon backend
 
 類型：mobile / docs / verifier
