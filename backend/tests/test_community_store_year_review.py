@@ -1538,6 +1538,16 @@ def test_store_redemption_list_limits_to_latest_records() -> None:
     assert set(redemption_ids[:2]).isdisjoint({item["id"] for item in redemptions})
 
 
+def test_store_redemption_wallet_index_is_declared_on_redemption_model() -> None:
+    index = next(
+        index
+        for index in StoreRedemption.__table__.indexes
+        if index.name == "ix_store_redemptions_account_created_id"
+    )
+    assert [column.name for column in index.columns] == ["account_id", "created_at", "id"]
+    assert all(index.name != "ix_store_redemptions_account_created_id" for index in FoodItem.__table__.indexes)
+
+
 def test_year_review_summarizes_previous_year_records() -> None:
     client = TestClient(app)
     account_id, profile_id = create_account_and_profile(client, "year-review")

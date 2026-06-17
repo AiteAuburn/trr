@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T1004: Align Store redemption wallet ORM index
+
+Status: done
+
+Summary:
+
+- Moved the Store redemption wallet index declaration onto the `StoreRedemption` ORM model metadata instead of leaving it misplaced in another community model block.
+- Kept the existing Alembic migration contract unchanged and added regression coverage that verifies the index columns are attached to `store_redemptions`.
+- Tightened navigation verifier coverage so the wallet index must be declared inside the `StoreRedemption` model block, not just anywhere in the file.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_store_redemption_wallet_index_is_declared_on_redemption_model tests/test_community_store_year_review.py::test_store_redemption_list_limits_to_latest_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/models/community.py scripts/verify_mobile_navigation.py` passed.
+
 ### T1003: Preserve extended persisted achievement unlocks
 
 Status: done

@@ -15,6 +15,35 @@
 
 ## 2026-06-17
 
+### T1004 align Store redemption wallet ORM index
+
+類型：backend / bugfix / test / verifier / docs / store
+
+檔案：
+
+- `backend/app/models/community.py`
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved the Store redemption wallet index declaration onto the `StoreRedemption` ORM model metadata so it matches the existing Alembic migration for `store_redemptions`.
+- Added regression coverage that verifies `ix_store_redemptions_account_created_id` belongs to `StoreRedemption` with `account_id`, `created_at`, and `id` columns.
+- Tightened verifier coverage so the index must appear inside the `StoreRedemption` model block and cannot pass from an unrelated model block.
+- 未變更 store API response shape、point ledger math、redemption behavior、payment integration、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_store_redemption_wallet_index_is_declared_on_redemption_model tests/test_community_store_year_review.py::test_store_redemption_list_limits_to_latest_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/models/community.py scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- If Store catalog moves from constants to database rows, add matching ORM and migration indexes for reward availability and category filters.
+
 ### T1003 preserve extended persisted achievement unlocks
 
 類型：backend / bugfix / test / verifier / docs / achievements

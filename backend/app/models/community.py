@@ -20,10 +20,6 @@ class FoodItem(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
-
-    __table_args__ = (
-        Index("ix_store_redemptions_account_created_id", "account_id", "created_at", "id"),
-    )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
     )
@@ -121,4 +117,8 @@ class StoreRedemption(Base):
     used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    __table_args__ = (
+        Index("ix_store_redemptions_account_created_id", "account_id", "created_at", "id"),
     )

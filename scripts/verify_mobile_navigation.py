@@ -333,6 +333,16 @@ def _verify_food_community_category_contract(content: str) -> None:
     backend_latest_index_migration_content = COMMUNITY_FOOD_LATEST_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
     backend_leaderboard_index_migration_content = COMMUNITY_LEADERBOARD_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
     backend_store_index_migration_content = STORE_REDEMPTION_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
+    food_item_model_block = _match_block(
+        backend_model_content,
+        r"class FoodItem\(Base\):([\s\S]*?)\n\nclass FoodShare",
+        "FoodItem model block",
+    )
+    store_redemption_model_block = _match_block(
+        backend_model_content,
+        r"class StoreRedemption\(Base\):([\s\S]*?)\Z",
+        "StoreRedemption model block",
+    )
     _assert_contains(
         "food community mobile fallback categories",
         content,
@@ -385,12 +395,15 @@ def _verify_food_community_category_contract(content: str) -> None:
             "community profile leaderboard ORM index",
             'Index("ix_community_public_profiles_opt_in_display", "leaderboard_opt_in", "display_name", "account_id")',
         ),
-        (
-            "store redemption wallet ORM index",
-            'Index("ix_store_redemptions_account_created_id", "account_id", "created_at", "id")',
-        ),
     ):
         _assert_contains(label, backend_model_content, marker)
+    _assert_contains(
+        "store redemption wallet ORM index on StoreRedemption",
+        store_redemption_model_block,
+        'Index("ix_store_redemptions_account_created_id", "account_id", "created_at", "id")',
+    )
+    if 'Index("ix_store_redemptions_account_created_id", "account_id", "created_at", "id")' in food_item_model_block:
+        raise AssertionError("store redemption wallet ORM index must not be declared on FoodItem.")
     for label, marker in (
         ("food item normalized name migration index", 'op.create_index("ix_food_items_normalized_name", "food_items", ["normalized_name"])'),
     ):
