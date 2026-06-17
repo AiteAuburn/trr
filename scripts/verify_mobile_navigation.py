@@ -15,6 +15,7 @@ YEAR_REVIEW_SNAPSHOTS_PATH = REPO_ROOT / "backend" / "app" / "services" / "year_
 YEAR_REVIEWS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "year_reviews.py"
 COMMUNITY_SCHEMA_PATH = REPO_ROOT / "backend" / "app" / "schemas" / "community.py"
 COMMUNITY_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "community.py"
+STORE_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "store.py"
 COMMUNITY_MODEL_PATH = REPO_ROOT / "backend" / "app" / "models" / "community.py"
 COMMUNITY_FOOD_INDEX_MIGRATION_PATH = (
     REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0024_community_food_lookup_indexes.py"
@@ -314,6 +315,7 @@ def _verify_achievement_contract(content: str) -> None:
 def _verify_food_community_category_contract(content: str) -> None:
     backend_content = COMMUNITY_SCHEMA_PATH.read_text(encoding="utf-8")
     backend_api_content = COMMUNITY_API_PATH.read_text(encoding="utf-8")
+    backend_store_content = STORE_API_PATH.read_text(encoding="utf-8")
     backend_model_content = COMMUNITY_MODEL_PATH.read_text(encoding="utf-8")
     backend_index_migration_content = COMMUNITY_FOOD_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
     backend_latest_index_migration_content = COMMUNITY_FOOD_LATEST_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
@@ -396,6 +398,13 @@ def _verify_food_community_category_contract(content: str) -> None:
         ("community profile leaderboard migration columns", '["leaderboard_opt_in", "display_name", "account_id"]'),
     ):
         _assert_contains(label, backend_leaderboard_index_migration_content, marker)
+    for label, marker in (
+        ("store points balance conditional earned aggregate", "case((CommunityPointLedger.delta > 0, CommunityPointLedger.delta), else_=0)"),
+        ("store points balance conditional redeemed aggregate", "case((CommunityPointLedger.delta < 0, -CommunityPointLedger.delta), else_=0)"),
+        ("store points balance account scoped query", ".where(CommunityPointLedger.account_id == account_id)"),
+        ("store points balance single aggregate result", ").one()"),
+    ):
+        _assert_contains(label, backend_store_content, marker)
     for label, marker in (
         ("store redemption wallet migration index", '"ix_store_redemptions_account_created_id"'),
         ("store redemption wallet migration columns", '["account_id", "created_at", "id"]'),

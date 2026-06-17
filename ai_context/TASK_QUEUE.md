@@ -111,6 +111,23 @@ None.
 
 ## Done
 
+### T998: Batch Store points balance aggregate
+
+Status: done
+
+Summary:
+
+- Changed Store points balance calculation from two separate ledger aggregate queries into one account-scoped conditional aggregate.
+- This keeps `/store/points` lighter as community sharing and Store redemptions add more point ledger rows.
+- Extended the mobile/backend navigation verifier to guard the single-query points balance contract.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_share_creates_food_stats_points_and_leaderboards tests/test_community_store_year_review.py::test_store_redemption_deducts_points_and_reserves_fulfillment_rewards` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/api/store.py scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T997: Add Store redemption wallet index
 
 Status: done

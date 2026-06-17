@@ -2,7 +2,7 @@ from datetime import UTC, datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import func, select
+from sqlalchemy import case, func, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_account
@@ -59,26 +59,21 @@ INSTANT_FULFILLMENT_REWARD_CODES = {
 
 
 def _points_balance(account_id: UUID, db: Session) -> PointsBalanceRead:
-    earned = int(
-        db.scalar(
-            select(func.coalesce(func.sum(CommunityPointLedger.delta), 0)).where(
-                CommunityPointLedger.account_id == account_id,
-                CommunityPointLedger.delta > 0,
-            )
+    earned, redeemed = db.execute(
+        select(
+            func.coalesce(
+                func.sum(case((CommunityPointLedger.delta > 0, CommunityPointLedger.delta), else_=0)),
+                0,
+            ),
+            func.coalesce(
+                func.sum(case((CommunityPointLedger.delta < 0, -CommunityPointLedger.delta), else_=0)),
+                0,
+            ),
         )
-        or 0
-    )
-    redeemed = abs(
-        int(
-            db.scalar(
-                select(func.coalesce(func.sum(CommunityPointLedger.delta), 0)).where(
-                    CommunityPointLedger.account_id == account_id,
-                    CommunityPointLedger.delta < 0,
-                )
-            )
-            or 0
-        )
-    )
+        .where(CommunityPointLedger.account_id == account_id)
+    ).one()
+    earned = int(earned or 0)
+    redeemed = int(redeemed or 0)
     return PointsBalanceRead(
         balance=max(0, earned - redeemed),
         lifetime_earned=earned,
