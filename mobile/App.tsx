@@ -4886,6 +4886,21 @@ function analysisRangeSummaryCopy(recordCount: number, isPreviewMode: boolean) {
   );
 }
 
+function analysisCustomRangeStatusCopy(range: AnalysisRange, customStart: string, customEnd: string) {
+  if (range !== "custom") {
+    return "";
+  }
+  const start = parseDateBoundary(customStart, "start");
+  const end = parseDateBoundary(customEnd, "end");
+  if (!start || !end) {
+    return boundDisplayText("自訂日期格式無效；目前改用本月資料。", maxDisplayDetailTextLength);
+  }
+  if (start > end) {
+    return boundDisplayText("開始日期晚於結束日期；目前改用本月資料。", maxDisplayDetailTextLength);
+  }
+  return boundDisplayText("自訂日期區間已套用，結束日期包含當天完整紀錄。", maxDisplayDetailTextLength);
+}
+
 function analysisReportButtonLabel(isLoading: boolean) {
   return boundDisplayText(isLoading ? "報告載入中..." : "查看詳細報告", maxDisplayTextLength);
 }
@@ -5915,6 +5930,11 @@ export default function App() {
       ? `${analysisCustomStart} - ${analysisCustomEnd}`
       : analysisRanges.find((item) => item.id === analysisRange)?.label ?? "本月",
     maxDisplayDetailTextLength
+  );
+  const analysisCustomRangeStatusDisplayText = analysisCustomRangeStatusCopy(
+    analysisRange,
+    analysisCustomStart,
+    analysisCustomEnd
   );
   const analysisChartPoints = useMemo(() => {
     if (analysisGlucoseRecords.length > 0) {
@@ -13461,34 +13481,37 @@ export default function App() {
               ))}
             </View>
             {analysisRange === "custom" ? (
-              <View style={styles.dateTimeRow}>
-                <View style={styles.dateTimeField}>
-                  {renderFieldLabel("📅", "開始日期")}
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.analysisStartDateInputAccessibility}
-                    value={analysisCustomStart}
-                    onChangeText={updateAnalysisCustomStartInput}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    maxLength={maxDateInputLength}
-                    style={styles.input}
-                    placeholder="2026-04-01"
-                  />
+              <>
+                <View style={styles.dateTimeRow}>
+                  <View style={styles.dateTimeField}>
+                    {renderFieldLabel("📅", "開始日期")}
+                    <TextInput
+                      accessibilityLabel={auxiliaryDisplayLabels.analysisStartDateInputAccessibility}
+                      value={analysisCustomStart}
+                      onChangeText={updateAnalysisCustomStartInput}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      maxLength={maxDateInputLength}
+                      style={styles.input}
+                      placeholder="2026-04-01"
+                    />
+                  </View>
+                  <View style={styles.dateTimeField}>
+                    {renderFieldLabel("📅", "結束日期")}
+                    <TextInput
+                      accessibilityLabel={auxiliaryDisplayLabels.analysisEndDateInputAccessibility}
+                      value={analysisCustomEnd}
+                      onChangeText={updateAnalysisCustomEndInput}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      maxLength={maxDateInputLength}
+                      style={styles.input}
+                      placeholder="2026-04-30"
+                    />
+                  </View>
                 </View>
-                <View style={styles.dateTimeField}>
-                  {renderFieldLabel("📅", "結束日期")}
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.analysisEndDateInputAccessibility}
-                    value={analysisCustomEnd}
-                    onChangeText={updateAnalysisCustomEndInput}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    maxLength={maxDateInputLength}
-                    style={styles.input}
-                    placeholder="2026-04-30"
-                  />
-                </View>
-              </View>
+                <Text style={styles.evidence}>{analysisCustomRangeStatusDisplayText}</Text>
+              </>
             ) : null}
             {analysisPreviewMode ? (
               <View style={styles.inlineInfoBlock}>

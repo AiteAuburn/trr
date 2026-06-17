@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T1002: Clarify invalid custom Analysis ranges
+
+Status: done
+
+Summary:
+
+- Added a bounded status line for Analysis custom date ranges so invalid dates or reversed ranges explain that the page is temporarily using the existing month fallback.
+- Valid custom ranges now explicitly state that the end date includes the full selected day.
+- Extended navigation verification to guard the custom-range status helper, invalid-format/order messages, and render path.
+
+Verification:
+
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run typecheck` passed.
+- `rtk git diff --check` passed.
+
 ### T1001: Clarify History raw source display
 
 Status: done

@@ -15,6 +15,34 @@
 
 ## 2026-06-17
 
+### T1002 clarify invalid custom Analysis ranges
+
+類型：mobile / analysis / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a bounded status line for Analysis custom date ranges so invalid dates or reversed ranges explain that the page is temporarily using the existing month fallback.
+- Valid custom ranges now explicitly state that the end date includes the full selected day.
+- Extended navigation verification to guard the custom-range status helper, invalid-format/order messages, and render path.
+- 未變更分析資料來源、backend report query、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run typecheck` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If product wants stricter behavior later, disable report/chart actions for invalid custom ranges instead of falling back to month.
+
 ### T1001 clarify History raw source display
 
 類型：mobile / history / verifier / docs
