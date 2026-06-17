@@ -4259,7 +4259,7 @@ function storeCartUnavailableDisplayItem() {
   return {
     title: boundDisplayText("購物車尚未啟用", maxDisplayTextLength),
     copy: boundDisplayText("目前不建立訂單、不保留購物車內容，也不處理付款或折價券。", maxDisplayDetailTextLength),
-    evidence: boundDisplayText("需等商品、庫存、優惠、付款與退款規則完成後再接 backend。", maxDisplayDetailTextLength),
+    evidence: boundDisplayText("需等購物車、庫存、出貨、付款與退款規則完成後再接 backend order flow。", maxDisplayDetailTextLength),
     checkoutLabel: boundDisplayText("結帳整合尚未啟用", maxDisplayTextLength),
     legalWarning: boundDisplayText("商城商品不得宣稱醫療療效；正式交易前需完成法務、付款與商品審核。", maxDisplayDetailTextLength)
   };

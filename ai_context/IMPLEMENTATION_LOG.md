@@ -15,6 +15,35 @@
 
 ## 2026-06-17
 
+### T1029 align Store Cart evidence with active coupon backend
+
+類型：mobile / docs / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated Store Cart unavailable evidence so it waits for cart, inventory, fulfillment, payment, refund rules, and backend order flow instead of saying the whole discount/coupon path still needs backend.
+- Added UI spec guidance that cart copy must not list incentives as wholly unwired because coupon/discount-code issue and use status already have backend contracts.
+- Added navigation verifier coverage for the backend order-flow wording and a stale-copy guard against the old incentive-unwired message.
+- 未變更 backend、storage、AI/LLM calls、STT、parser、network paths、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- Continue auditing commerce surfaces for wording that should distinguish coupon/discount backend fulfillment from cart/order/payment work.
+
 ### T1028 align Store readiness row with active points ledger
 
 類型：mobile / docs / verifier

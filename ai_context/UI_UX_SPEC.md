@@ -1407,6 +1407,7 @@ AI 年度觀察與鼓勵：
 - 購物車/付款整合狀態：「查看購物車整合狀態」。
 - 進入購物車整合狀態、返回商城與返回來源頁都必須走 dedicated handler 並設定 bounded commerce / preview status；不可在 JSX 中直接呼叫 `setCurrentScreen("storeCart")`、`setCurrentScreen("store")` 或 `setCurrentScreen(storeReturnScreen)`。
 - 點數帳本、商品目錄、coupon/discount-code issue 與 coupon use status 已有 backend contract；購物車整合頁不得再宣稱點數帳本尚未接上。庫存、購物車、結帳、出貨訂單與付款完成後才可改為完整「查看購物車」或商品兌換流程。
+- 購物車整合頁不得再把「優惠」整體列為未接 backend，因為 coupon/discount-code issue 與 coupon use status 已有 backend contract；未完成項應描述為購物車、庫存、出貨、付款與退款規則或 backend order flow。
 - 購物車預覽頁若顯示結帳按鈕，必須是 disabled 狀態且文字為「結帳整合尚未啟用」，不可顯示可操作的「前往結帳」。
 - 購物車 preview 的 unavailable title/copy/evidence、法務提示與 disabled checkout label 必須透過 bounded display helper 產生；不可在 JSX 內直接寫 commerce fallback 文案。
 
