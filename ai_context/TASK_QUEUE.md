@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T970: Cover trimmed public leaderboard names
+
+Status: done
+
+Summary:
+
+- Added backend regression coverage that community public display names are trimmed before being saved and shown in leaderboard settings.
+- This keeps opt-in leaderboard display data clean while preserving the existing account-id masking behavior.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_share_creates_food_stats_points_and_leaderboards tests/test_community_store_year_review.py::test_community_leaderboard_ties_are_stably_ordered_by_public_name` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T969: Cover normalized food-name dedupe
 
 Status: done

@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T970 cover trimmed public leaderboard names
+
+類型：backend / test / docs / community
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that community public display names are trimmed before being saved and returned.
+- This keeps opt-in leaderboard display data clean while preserving account-id masking behavior.
+- 未變更 leaderboard scoring、opt-in semantics、points ledger、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_share_creates_food_stats_points_and_leaderboards tests/test_community_store_year_review.py::test_community_leaderboard_ties_are_stably_ordered_by_public_name` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If public profile fields expand, keep normalization and privacy masking tested together.
+
 ### T969 cover normalized food-name dedupe
 
 類型：backend / test / docs / community

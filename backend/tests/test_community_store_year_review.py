@@ -453,7 +453,7 @@ def test_food_share_creates_food_stats_points_and_leaderboards() -> None:
     settings_response = client.patch(
         "/community/settings",
         headers={"X-Account-Id": account_id},
-        json={"display_name": display_name, "leaderboard_opt_in": True},
+        json={"display_name": f"  {display_name}  ", "leaderboard_opt_in": True},
     )
     assert settings_response.status_code == 200
     assert settings_response.json() == {
