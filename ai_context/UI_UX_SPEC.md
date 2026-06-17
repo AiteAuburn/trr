@@ -181,7 +181,7 @@ Analysis range selection 與 chart point tooltip selection 必須走 dedicated h
 Account Security、Profile Settings、Recording Quota、Reminder Settings 與 Privacy Settings 的 preview action status 不可在 JSX handler 內即時呼叫 `boundUiMessage` 組字；應使用 render 前 derived 的 bounded status message。
 Profile Settings、Recording Quota、Reminder Settings 與 Privacy Settings 的返回、編輯整合、額度同步、通知整合與隱私整合 CTA 必須有 render 前 bounded accessibility label 與 `accessibilityRole="button"`；label 不可暗示已寫入個資、上傳錄音/逐字稿、建立通知排程、匯出刪除或公開資料。
 Settings advanced 區塊的照護對象、LLM 與 STT 選項 chip 必須在 render 前轉成 bounded display item，並提供 bounded accessibility label、`accessibilityRole="button"` 與 selected/disabled accessibility state；profile/model 名稱可來自 backend，但不可直接把 raw display name、model id 或未 bounded model label 串進 JSX 或輔助工具文字。
-Settings native debug 的下載類型 chip、native module check、model download、Whisper、Llama 與 Benchmark Pressable 必須有 render 前 bounded accessibility label、`accessibilityRole="button"` 與 disabled/selected accessibility state；label 必須說明只操作本機模型或本機檔案狀態，不可暗示會送出健康資料、呼叫雲端 AI、保留完整 raw model output 或寫入正式紀錄。
+Settings 的本機 Whisper 模型選擇區必須可在非 debug 模式顯示已下載 Whisper 模型短檔名與 checksum 前綴，供 Home / Record 錄音轉文字使用；不可顯示完整本機 URI，不可下載遠端模型，不可上傳音檔，也不可呼叫雲端 AI。Settings native debug 的下載類型 chip、native module check、model download、Whisper、Llama 與 Benchmark Pressable 必須有 render 前 bounded accessibility label、`accessibilityRole="button"` 與 disabled/selected accessibility state；label 必須說明只操作本機模型或本機檔案狀態，不可暗示會送出健康資料、呼叫雲端 AI、保留完整 raw model output 或寫入正式紀錄。
 
 Account Security 的 auth provider 與 session management preview rows 必須先轉成 bounded display item。session management Pressable handler 只可設定 `item.actionStatus`；auth provider Pressable handler 只可呼叫 bounded provider challenge helper，不可用 row title 在 JSX handler 內即時組登入或 session status 文案。JSX `onPress` 必須呼叫 row press wrapper，不直接呼叫底層 provider challenge 或 session status handler。
 Account Security 的 provider preview row、session management preview row、refresh/load/logout/logout-all CTA 必須有 render 前 bounded accessibility label 與 `accessibilityRole="button"`；label 不可顯示 raw token、raw device fingerprint、raw claims 或 provider token。
@@ -688,6 +688,7 @@ Dev-only visual smoke route jump：
 - Debug / native local model benchmark progress、missing-input 與 result status 必須透過 bounded display helper 產生；benchmark result 顯示筆數、task label、duration 與 output chars 必須先 bounded/clamped。
 - Debug / native local model 工具不可在 UI state 保留或顯示完整 raw model output；本機 Llama 測試只顯示長度與完成狀態摘要。
 - Debug / native local model 工具的下載 URL、本機模型路徑與音檔路徑 input 必須有長度上限，避免過長路徑或 URL 長期留在 mobile state。
+- App boot 必須掃描本機 downloaded model directory；若存在 Whisper 模型且尚未選定 model path，可自動選用第一個 bounded URI，讓錄音轉文字不依賴 debug advanced panel。
 - Debug / native local model downloaded model list 只能顯示 bounded 短摘要：kind、短檔名與可選 checksum 前綴；不可直接渲染完整下載 URI 或本機檔案路徑。
 - backend 模型清單同步後，預設 STT / LLM selection 必須優先選 available model；不可把 unavailable model 當成預設 parser model。
 - backend 模型清單、profile list 與 downloaded model list 寫入 mobile state 前必須有固定筆數上限；UI 不保留無上限清單。

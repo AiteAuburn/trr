@@ -1738,6 +1738,26 @@ Verification:
 
 - `npm run quality` passed in `mobile/`.
 
+### T852: Promote local Whisper model selection for recording
+
+Status: done
+
+Summary:
+
+- App boot now scans the local downloaded-model directory even outside debug tools.
+- If a downloaded Whisper model exists and no model path is selected, mobile auto-selects the first bounded Whisper URI.
+- Settings now shows a non-debug "本機 Whisper 模型" section with short model labels and selected state.
+- Selecting a model only updates local recording transcription readiness; it does not expose full local paths, download remote models, upload audio, call cloud AI, or write records.
+
+Verification:
+
+- `npm run typecheck` passed in `mobile/`.
+- `npm run verify:navigation` passed in `mobile/`.
+
+Next:
+
+- Move model download/install from debug tooling into a production-reviewed model distribution flow.
+
 ### T851: Route captured recordings through Whisper confirmation
 
 Status: done

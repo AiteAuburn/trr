@@ -26178,6 +26178,35 @@
 
 - Continue with T042 to add or polish the remaining menu destinations from the updated UI spec.
 
+### T852 promote local Whisper model selection for recording
+
+類型：mobile / settings / recording / local-models / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- App boot 現在會掃描本機 downloaded model directory，即使 debug tools 未開啟。
+- 若找到已下載 Whisper 模型且尚未選定 model path，mobile 會自動選用第一個 bounded Whisper URI。
+- Settings 新增非 debug 的「本機 Whisper 模型」選擇區，只顯示短檔名與 checksum 前綴。
+- 使用者可從 Settings 選擇錄音轉文字使用的本機 Whisper 模型；不顯示完整本機 URI、不下載遠端模型、不上傳音檔、不呼叫雲端 AI、不寫入紀錄。
+- Navigation verifier 新增本機 Whisper 模型 display item、press wrapper、boot scan、自動選用與 settings bindings markers。
+
+驗證：
+
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+
+後續：
+
+- 將模型下載 / 安裝從 debug tools 整理成 production-reviewed model distribution flow。
+
 ### T851 route captured recordings through Whisper confirmation
 
 類型：mobile / recording / stt / transcript-review / verifier

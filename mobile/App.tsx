@@ -1777,6 +1777,20 @@ function downloadedModelDisplayLabel(value: DownloadedModel) {
   return boundUiMessage(`${value.kind} · ${fileName}${checksum}`);
 }
 
+function downloadedWhisperModelDisplayItem(value: DownloadedModel) {
+  const fileName = boundDisplayText(value.fileName || "whisper model", 80);
+  const checksum = value.md5 ? ` · md5 ${boundIdentifier(value.md5).slice(0, 12)}` : "";
+  const label = boundDisplayText(fileName, maxDisplayTextLength);
+  const summary = boundDisplayText(`Whisper · ${fileName}${checksum}`, maxDisplayDetailTextLength);
+  return {
+    sourceUri: boundNativeDebugInput(value.uri),
+    label,
+    summary,
+    selectedLabel: boundDisplayText("使用中", 24),
+    accessibilityLabel: boundDisplayText(`選擇本機 Whisper 模型：${fileName}，只用於本機錄音轉文字`, maxDisplayDetailTextLength)
+  };
+}
+
 function futureModuleText(value: string | undefined, fallback: string, maxLength = maxDisplayDetailTextLength) {
   return boundDisplayText(value || fallback, maxLength);
 }
@@ -3888,6 +3902,26 @@ function nativeWhisperSuccessStatusMessage() {
 
 function nativeWhisperFailureStatusMessage(error: unknown) {
   return safeUiError(error, "Whisper failed");
+}
+
+function recordingModelRefreshStatusMessage(count: number) {
+  return boundUiMessage(`已找到 ${clampNumber(count, 0, maxMobileCountValue)} 個本機 Whisper 模型。`);
+}
+
+function recordingModelRefreshFailureStatusMessage(error: unknown) {
+  return safeUiError(error, "讀取本機 Whisper 模型失敗");
+}
+
+function recordingModelSelectedStatusMessage(label: string) {
+  return boundUiMessage(`已選擇本機 Whisper 模型：${boundDisplayText(label, 80)}。`);
+}
+
+function recordingModelRefreshButtonLabel() {
+  return boundDisplayText("重新掃描本機模型", maxDisplayTextLength);
+}
+
+function recordingModelRefreshAccessibilityLabel() {
+  return boundDisplayText("重新掃描本機已下載 Whisper 模型，不呼叫雲端或上傳音檔", maxDisplayDetailTextLength);
 }
 
 function nativeLlamaMissingInputStatusMessage() {
@@ -6910,6 +6944,11 @@ export default function App() {
   const nativeWhisperRunAccessibilityDisplayLabel = nativeWhisperRunAccessibilityLabel(isBusy);
   const nativeLlamaRunAccessibilityDisplayLabel = nativeLlamaRunAccessibilityLabel(isBusy);
   const nativeBenchmarkAccessibilityDisplayLabel = nativeBenchmarkAccessibilityLabel(isBusy);
+  const recordingModelRefreshDisplayLabel = recordingModelRefreshButtonLabel();
+  const recordingModelRefreshAccessibilityDisplayLabel = recordingModelRefreshAccessibilityLabel();
+  const downloadedWhisperModelChoiceItems = downloadedModels
+    .filter((model) => model.kind === "whisper" && model.exists)
+    .map(downloadedWhisperModelDisplayItem);
   const achievementsReturnButtonDisplayLabel = returnDestinationButtonLabel(achievementsReturnScreen);
   const yearReviewReturnButtonDisplayLabel = returnDestinationButtonLabel(yearReviewReturnScreen);
   const storeReturnButtonDisplayLabel = returnDestinationButtonLabel(storeReturnScreen);
@@ -8424,6 +8463,19 @@ export default function App() {
 
   function pressSettingsSttModelChoice(model: (typeof sttModelChoiceDisplayItems)[number]) {
     selectSettingsSttModelChoice(model.sourceId);
+  }
+
+  function selectRecordingWhisperModelChoice(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
+    setWhisperModelPath(item.sourceUri);
+    setStatus(recordingModelSelectedStatusMessage(item.label));
+  }
+
+  function pressRecordingWhisperModelChoice(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
+    selectRecordingWhisperModelChoice(item);
+  }
+
+  function refreshRecordingModelsFromSettings() {
+    void refreshDownloadedModels(true);
   }
 
   function selectWhisperNativeDownloadKind() {
@@ -10576,14 +10628,22 @@ export default function App() {
     }
   }
 
-  async function refreshDownloadedModels() {
-    if (!enableDebugTools) {
-      return;
-    }
+  async function refreshDownloadedModels(showStatus = false) {
     try {
-      setDownloadedModels(boundDownloadedModels(await listDownloadedModels()));
+      const nextModels = boundDownloadedModels(await listDownloadedModels());
+      setDownloadedModels(nextModels);
+      const whisperModels = nextModels.filter((model) => model.kind === "whisper" && model.exists);
+      if (!whisperModelPath.trim() && whisperModels[0]?.uri) {
+        setWhisperModelPath(boundNativeDebugInput(whisperModels[0].uri));
+      }
+      if (showStatus) {
+        setStatus(recordingModelRefreshStatusMessage(whisperModels.length));
+      }
     } catch (error) {
       setNativeStatus(nativeDownloadedModelsFailureStatusMessage(error));
+      if (showStatus) {
+        setStatus(recordingModelRefreshFailureStatusMessage(error));
+      }
     }
   }
 
@@ -10918,9 +10978,7 @@ export default function App() {
       return;
     }
     void boot();
-    if (enableDebugTools) {
-      void refreshDownloadedModels();
-    }
+    void refreshDownloadedModels();
   }, []);
 
   useEffect(() => {
@@ -14714,6 +14772,52 @@ export default function App() {
                 </ScrollView>
               </>
             ) : null}
+            <View style={styles.rejectedBox}>
+              <Text style={styles.label}>本機 Whisper 模型</Text>
+              <Text style={styles.evidence}>
+                選擇已下載的本機 Whisper 模型，供首頁與記錄頁錄音轉文字使用；不呼叫雲端、不上傳音檔。
+              </Text>
+              {downloadedWhisperModelChoiceItems.length > 0 ? (
+                <View style={styles.actionRow}>
+                  {downloadedWhisperModelChoiceItems.map((model) => {
+                    const modelSelected = model.sourceUri === whisperModelPath;
+                    return (
+                      <Pressable
+                        key={model.sourceUri}
+                        accessibilityLabel={model.accessibilityLabel}
+                        accessibilityRole="button"
+                        accessibilityState={{ selected: modelSelected }}
+                        style={[
+                          styles.chip,
+                          modelSelected ? styles.chipSelected : null
+                        ]}
+                        onPress={() => pressRecordingWhisperModelChoice(model)}
+                      >
+                        <Text
+                          style={[
+                            styles.chipText,
+                            modelSelected ? styles.chipTextSelected : null
+                          ]}
+                        >
+                          {model.label}
+                        </Text>
+                        {modelSelected ? <Text style={styles.previewModeBadge}>{model.selectedLabel}</Text> : null}
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              ) : (
+                <Text style={styles.evidence}>尚未找到本機 Whisper 模型；可在 Dev Client 工具下載後回來選擇。</Text>
+              )}
+              <Pressable
+                accessibilityLabel={recordingModelRefreshAccessibilityDisplayLabel}
+                accessibilityRole="button"
+                style={styles.secondaryButton}
+                onPress={refreshRecordingModelsFromSettings}
+              >
+                <Text style={styles.secondaryButtonText}>{recordingModelRefreshDisplayLabel}</Text>
+              </Pressable>
+            </View>
             {showAdvancedSettings && enableDebugTools ? (
               <View style={styles.rejectedBox}>
                 <Text style={styles.label}>{auxiliaryDisplayLabels.nativeDevClient}</Text>
