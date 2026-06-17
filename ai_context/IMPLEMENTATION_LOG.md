@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T988 bound food category sample queries
+
+類型：backend / performance / docs / community
+
+檔案：
+
+- `backend/app/api/community.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Changed `/community/foods/categories` sample-food lookup to fetch only the latest 3 food names per category instead of scanning all food items.
+- This keeps the category overview scalable for the planned large shared food blood-sugar database while preserving the existing response shape.
+- 未變更 category taxonomy、food share creation、points awards、leaderboards、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_categories_endpoint_returns_required_taxonomy tests/test_community_store_year_review.py::test_food_categories_include_individual_food_summary` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If category counts become expensive at larger scale, add cached aggregates or DB-maintained summary rows without changing the public response contract.
+
 ### T987 cover backslash literal food search
 
 類型：backend / test / docs / community

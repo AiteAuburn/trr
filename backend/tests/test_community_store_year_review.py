@@ -247,7 +247,6 @@ def test_food_categories_endpoint_returns_required_taxonomy() -> None:
 def test_food_categories_include_individual_food_summary() -> None:
     client = TestClient(app)
     account_id, _ = create_account_and_profile(client, "community-food-category-summary")
-    created_at = datetime(2099, 1, 3, 8, 0, tzinfo=UTC)
     names = [f"分類青菜 {index} {uuid4()}" for index in range(4)]
     before_response = client.get(
         "/community/foods/categories",
@@ -258,6 +257,13 @@ def test_food_categories_include_individual_food_summary() -> None:
     previous_count = before_categories["vegetables"]["food_count"]
 
     with SessionLocal() as db:
+        latest_created_at = db.scalar(
+            select(FoodItem.created_at)
+            .where(FoodItem.category == "vegetables")
+            .order_by(FoodItem.created_at.desc())
+            .limit(1)
+        )
+        created_at = (latest_created_at or datetime(2099, 1, 3, 8, 0, tzinfo=UTC)) + timedelta(minutes=1)
         db.add_all(
             FoodItem(
                 category="vegetables",

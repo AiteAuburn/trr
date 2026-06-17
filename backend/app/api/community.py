@@ -132,15 +132,18 @@ def list_food_categories(
             select(FoodItem.category, func.count(FoodItem.id)).group_by(FoodItem.category)
         )
     }
-    sample_rows = db.execute(
-        select(FoodItem.category, FoodItem.name)
-        .order_by(FoodItem.category.asc(), FoodItem.created_at.desc(), FoodItem.id.desc())
-    )
-    sample_foods_by_category: dict[str, list[str]] = {}
-    for category, name in sample_rows:
-        samples = sample_foods_by_category.setdefault(str(category), [])
-        if len(samples) < 3:
-            samples.append(str(name))
+    sample_foods_by_category = {
+        code: [
+            str(name)
+            for name in db.scalars(
+                select(FoodItem.name)
+                .where(FoodItem.category == code)
+                .order_by(FoodItem.created_at.desc(), FoodItem.id.desc())
+                .limit(3)
+            )
+        ]
+        for code in FOOD_CATEGORY_LABELS
+    }
     return [
         FoodCategoryRead(
             code=code,

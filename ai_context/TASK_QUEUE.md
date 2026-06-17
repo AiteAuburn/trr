@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T988: Bound food category sample queries
+
+Status: done
+
+Summary:
+
+- Changed `/community/foods/categories` sample-food lookup to fetch only the latest 3 food names per category instead of scanning all food items.
+- This keeps the category overview scalable for the planned large shared food blood-sugar database while preserving the existing response shape.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_categories_endpoint_returns_required_taxonomy tests/test_community_store_year_review.py::test_food_categories_include_individual_food_summary` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T987: Cover backslash literal food search
 
 Status: done
