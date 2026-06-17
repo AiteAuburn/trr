@@ -3773,9 +3773,16 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         year_reviews_api_content = YEAR_REVIEWS_API_PATH.read_text(encoding="utf-8")
+        year_review_service_content = YEAR_REVIEW_SNAPSHOTS_PATH.read_text(encoding="utf-8")
         for label, marker in (
-            ("year review completed-year validator", "def _validate_completed_review_year(year: int) -> None:"),
-            ("year review latest completed year", "latest_completed_year = datetime.now(UTC).year - 1"),
+            ("year review completed-year service validator", "def validate_completed_year_review_year(year: int, now: datetime | None = None) -> int:"),
+            ("year review latest completed year helper", "def latest_completed_year(now: datetime | None = None) -> int:"),
+            ("year review batch generation validates completed year", "validate_completed_year_review_year(year)"),
+        ):
+            _assert_contains(label, year_review_service_content, marker)
+        for label, marker in (
+            ("year review api completed-year validator", "def _validate_completed_review_year(year: int) -> None:"),
+            ("year review api uses service validator", "validate_completed_year_review_year(year)"),
             ("year review unfinished year error code", '"code": "year_review_year_not_completed"'),
             ("year review unfinished year message", '"message": "Year review can only be generated for completed calendar years."'),
         ):
@@ -3786,6 +3793,8 @@ def main() -> int:
             ("year review unfinished year asset test path", 'f"/year-reviews/{unfinished_year}/share-card/asset?profile_id={profile_id}"'),
             ("year review unfinished year confirm test path", 'f"/year-reviews/{unfinished_year}/share-card/confirm?profile_id={profile_id}"'),
             ("year review unfinished year no share packages assertion", "assert share_packages == []"),
+            ("year review batch unfinished year test", "test_year_review_batch_generation_rejects_unfinished_year_before_snapshot_creation"),
+            ("year review batch unfinished year error", 'with raises(ValueError, match="year_review_year_not_completed"):'),
         ):
             _assert_contains(label, year_review_tests_content, marker)
         if year_reviews_api_content.count("_validate_completed_review_year(year)") != 4:

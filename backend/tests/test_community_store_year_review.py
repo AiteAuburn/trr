@@ -10,13 +10,20 @@ from app.db.session import SessionLocal
 from app.jobs.generate_year_review_snapshots import default_target_year
 from app.main import app
 from app.models import AchievementUnlock, FoodItem, Record, StoreRedemption, YearReviewSharePackage, YearReviewSnapshot
-from app.services.year_review_snapshots import YEAR_REVIEW_GENERATION_BATCH_SIZE, generate_missing_year_review_snapshots
+from app.services.year_review_snapshots import (
+    YEAR_REVIEW_GENERATION_BATCH_SIZE,
+    generate_missing_year_review_snapshots,
+    validate_completed_year_review_year,
+)
 from tests.helpers import create_account_and_profile, create_record
 
 
 def test_year_review_scheduler_defaults_to_previous_calendar_year() -> None:
     assert default_target_year(datetime(2026, 1, 1, 0, 15, tzinfo=UTC)) == 2025
     assert default_target_year(datetime(2026, 12, 31, 23, 59, tzinfo=UTC)) == 2025
+    assert validate_completed_year_review_year(2025, datetime(2026, 1, 1, 0, 15, tzinfo=UTC)) == 2025
+    with raises(ValueError, match="year_review_year_not_completed"):
+        validate_completed_year_review_year(2026, datetime(2026, 1, 1, 0, 15, tzinfo=UTC))
 
 
 def test_achievement_summary_calculates_mvp_badge_progress() -> None:
@@ -2045,3 +2052,21 @@ def test_year_review_batch_generation_rejects_invalid_batch_size() -> None:
                 db=db,
                 batch_size=YEAR_REVIEW_GENERATION_BATCH_SIZE + 1,
             )
+
+
+def test_year_review_batch_generation_rejects_unfinished_year_before_snapshot_creation() -> None:
+    client = TestClient(app)
+    _, profile_id = create_account_and_profile(client, "year-review-batch-unfinished")
+    unfinished_year = datetime.now(UTC).year
+
+    with SessionLocal() as db:
+        with raises(ValueError, match="year_review_year_not_completed"):
+            generate_missing_year_review_snapshots(year=unfinished_year, db=db, batch_size=1)
+        snapshot = db.scalar(
+            select(YearReviewSnapshot).where(
+                YearReviewSnapshot.profile_id == UUID(profile_id),
+                YearReviewSnapshot.year == unfinished_year,
+            )
+        )
+
+    assert snapshot is None

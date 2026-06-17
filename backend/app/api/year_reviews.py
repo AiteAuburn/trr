@@ -24,23 +24,27 @@ from app.services.year_review_snapshots import (
     build_year_review_share_package,
     create_year_review_share_package,
     get_or_create_year_review_snapshot,
+    latest_completed_year,
     snapshot_read,
+    validate_completed_year_review_year,
 )
 
 router = APIRouter(prefix="/year-reviews", tags=["year-reviews"])
 
 
 def _validate_completed_review_year(year: int) -> None:
-    latest_completed_year = datetime.now(UTC).year - 1
-    if year < 2000 or year > latest_completed_year:
+    completed_year = latest_completed_year()
+    try:
+        validate_completed_year_review_year(year)
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail={
                 "code": "year_review_year_not_completed",
                 "message": "Year review can only be generated for completed calendar years.",
-                "latest_completed_year": latest_completed_year,
+                "latest_completed_year": completed_year,
             },
-        )
+        ) from None
 
 
 def _get_authorized_share_package(

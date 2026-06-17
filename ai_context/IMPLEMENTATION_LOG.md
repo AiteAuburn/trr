@@ -15,6 +15,37 @@
 
 ## 2026-06-17
 
+### T999 guard Year Review batch generation years
+
+類型：backend / bugfix / test / verifier / docs / year-review
+
+檔案：
+
+- `backend/app/services/year_review_snapshots.py`
+- `backend/app/api/year_reviews.py`
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared completed-year validator for Year Review generation so API endpoints and batch snapshot jobs enforce the same previous-calendar-year boundary.
+- Batch generation now rejects current/future years before scanning profiles or creating snapshots.
+- Extended verifier coverage so scheduler defaults, API validation, and batch generation stay aligned with the January 1 previous-year product rule.
+- 未變更 Year Review response shape、snapshot summary fields、share package privacy masking、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_scheduler_defaults_to_previous_calendar_year tests/test_community_store_year_review.py::test_year_review_rejects_unfinished_year_before_snapshot_creation tests/test_community_store_year_review.py::test_year_review_batch_generation_rejects_unfinished_year_before_snapshot_creation` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/services/year_review_snapshots.py backend/app/api/year_reviews.py scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Wire this batch command into production scheduling only after deployment config owns the January 1 run cadence and retry policy.
+
 ### T998 batch Store points balance aggregate
 
 類型：backend / performance / verifier / docs / store

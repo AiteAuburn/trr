@@ -23,6 +23,18 @@ YEAR_REVIEW_GENERATION_BATCH_SIZE = 500
 YearReviewSharePackageStatus = Literal["confirmed", "opened", "dismissed", "revoked"]
 
 
+def latest_completed_year(now: datetime | None = None) -> int:
+    current = now or datetime.now(UTC)
+    return current.year - 1
+
+
+def validate_completed_year_review_year(year: int, now: datetime | None = None) -> int:
+    completed_year = latest_completed_year(now)
+    if year < 2000 or year > completed_year:
+        raise ValueError("year_review_year_not_completed")
+    return completed_year
+
+
 def number_value(payload: dict[str, object], key: str) -> float | None:
     value = payload.get(key)
     if isinstance(value, bool):
@@ -329,6 +341,7 @@ def generate_missing_year_review_snapshots(
     db: Session,
     batch_size: int = YEAR_REVIEW_GENERATION_BATCH_SIZE,
 ) -> tuple[int, int]:
+    validate_completed_year_review_year(year)
     if batch_size < 1:
         raise ValueError("batch_size must be positive")
     if batch_size > YEAR_REVIEW_GENERATION_BATCH_SIZE:

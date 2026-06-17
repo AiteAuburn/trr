@@ -111,6 +111,23 @@ None.
 
 ## Done
 
+### T999: Guard Year Review batch generation years
+
+Status: done
+
+Summary:
+
+- Added a shared completed-year validator for Year Review generation so API endpoints and batch snapshot jobs enforce the same previous-calendar-year boundary.
+- Batch generation now rejects current/future years before scanning profiles or creating snapshots.
+- Extended verifier coverage so scheduler defaults, API validation, and batch generation stay aligned with the January 1 previous-year product rule.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_scheduler_defaults_to_previous_calendar_year tests/test_community_store_year_review.py::test_year_review_rejects_unfinished_year_before_snapshot_creation tests/test_community_store_year_review.py::test_year_review_batch_generation_rejects_unfinished_year_before_snapshot_creation` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/services/year_review_snapshots.py backend/app/api/year_reviews.py scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T998: Batch Store points balance aggregate
 
 Status: done
