@@ -15,6 +15,38 @@
 
 ## 2026-06-17
 
+### T1014 surface newly unlocked badges on Save Success
+
+類型：mobile / feature / verifier / docs / achievements
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a compact Save Success callout for badges newly unlocked by the post-save achievement sync.
+- Reused bounded achievement display items and capped the Save Success callout to 3 badges so the page stays compact.
+- Kept the full newly-unlocked and persisted badge history on the Achievements screen.
+- 未變更 backend achievement schema、record storage、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Consider adding a lightweight animation only if it preserves the minimal post-save workflow and does not obscure navigation actions.
+
 ### T1013 guard Home hold-to-record elapsed timer
 
 類型：mobile / verifier / docs / recording

@@ -111,6 +111,26 @@ None.
 
 ## Done
 
+### T1014: Surface newly unlocked badges on Save Success
+
+Status: done
+
+Summary:
+
+- Added a compact "新解鎖成就" section to the Save Success screen when backend achievement sync returns newly unlocked badges.
+- Reused bounded achievement display items and capped the Save Success callout to 3 badges, keeping the full list on the Achievements screen.
+- Added verifier coverage so post-save achievement feedback remains connected to the record-save loop.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1013: Guard Home hold-to-record elapsed timer
 
 Status: done

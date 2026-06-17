@@ -6368,6 +6368,7 @@ export default function App() {
     () => achievementNewlyUnlockedItems.slice(0, maxListItems).map(achievementDisplayItem),
     [achievementNewlyUnlockedItems]
   );
+  const saveSuccessNewlyUnlockedDisplayItems = achievementNewlyUnlockedDisplayItems.slice(0, 3);
   const achievementCategoryDisplaySections = useMemo(
     () =>
       achievementCategoryDefinitions.map((definition) => ({
@@ -12421,6 +12422,32 @@ export default function App() {
                 {lastSavedSummaryDisplayText}
               </Text>
             </View>
+            {saveSuccessNewlyUnlockedDisplayItems.length > 0 ? (
+              <View style={styles.openSection}>
+                <Text style={styles.label}>新解鎖成就</Text>
+                {saveSuccessNewlyUnlockedDisplayItems.map((displayItem) => (
+                  <View key={`save-success-new-unlock-${displayItem.id}`} style={styles.timelineCard}>
+                    <View
+                      style={[
+                        styles.achievementBadge,
+                        displayItem.kind === "streak" ? styles.achievementBadgeStreak : null,
+                        { backgroundColor: displayItem.badgeColor }
+                      ]}
+                    >
+                      <Text style={styles.achievementBadgeIcon}>{displayItem.icon}</Text>
+                      <Text style={styles.achievementBadgeLevel}>{displayItem.level}</Text>
+                    </View>
+                    <View style={styles.timelineContent}>
+                      <Text style={styles.recordContent}>{displayItem.title}</Text>
+                      <Text style={styles.evidence}>
+                        {displayItem.kindLabel} · {achievementUnlockDisplayDate(displayItem.unlockedAt)}
+                      </Text>
+                    </View>
+                    <Text style={styles.previewModeBadge}>新解鎖</Text>
+                  </View>
+                ))}
+              </View>
+            ) : null}
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.saveResult}</Text>
               <Text style={styles.evidence}>
