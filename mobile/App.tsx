@@ -2294,10 +2294,10 @@ function historyRawRecordDisplayItem(record: RecordItem, index: number) {
   const hasSourceText = typeof sourceText === "string" && sourceText.trim().length > 0;
   const rawText = hasSourceText
     ? boundDisplayText(sourceText, maxDisplayDetailTextLength)
-    : "尚無原始片段；此筆紀錄只保留結構化資料。";
+    : "尚無原始逐字稿；此筆紀錄只保留結構化資料。";
   return {
     ...item,
-    sourceStatusLabel: boundDisplayText(hasSourceText ? "原始片段" : "僅結構化", 40),
+    sourceStatusLabel: boundDisplayText(hasSourceText ? "原始逐字稿" : "僅結構化", 40),
     rawText
   };
 }

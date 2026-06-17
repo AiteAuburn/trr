@@ -15,6 +15,34 @@
 
 ## 2026-06-17
 
+### T1026 restore History raw transcript wording
+
+類型：mobile / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Restored History 原始紀錄 status label from `原始片段` to `原始逐字稿`.
+- Restored the no-source fallback copy to `尚無原始逐字稿；此筆紀錄只保留結構化資料。`, matching the canonical History spec and the voice-to-text raw-record requirement.
+- Updated the mobile navigation verifier to guard this exact wording so the UI cannot drift back to ambiguous copy.
+- 未變更 backend、storage、AI/LLM calls、STT、parser、network paths、PHI logging、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- Native recorder / STT 接入時仍需只保存 bounded `metadata_json.source_text`，不可保存 raw prompt 或 raw model output。
+
 ### T1025 share Year Review SVG asset through native share
 
 類型：mobile / docs / verifier / year-review
