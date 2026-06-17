@@ -20,29 +20,25 @@ REPORTS_TEST_PATH = REPO_ROOT / "backend" / "tests" / "test_reports.py"
 
 EXPECTED_MENU_DESTINATIONS = {
     "today",
-    "record",
-    "manualRecord",
     "history",
     "analysis",
-    "subscription",
-    "tutorial",
     "achievements",
     "yearReview",
     "store",
+    "community",
+    "ranking",
     "settings",
 }
 
 EXPECTED_MENU_LABELS = {
-    "today": "今日紀錄",
-    "record": "錄音預覽/文字",
-    "manualRecord": "手動新增",
+    "today": "今日錄音",
     "history": "歷史紀錄",
     "analysis": "基本分析",
-    "subscription": "會員方案",
-    "tutorial": "使用教學",
     "achievements": "成就榜",
-    "yearReview": "年度回顧",
+    "yearReview": "年度回顧（預留）",
     "store": "商城",
+    "community": "食物社群（預留）",
+    "ranking": "社群排行（預留）",
     "settings": "設定",
 }
 

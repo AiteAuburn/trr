@@ -111,6 +111,35 @@ None.
 
 ## Done
 
+### T952: Align hamburger menu verifier with phase-based destinations
+
+Status: done
+
+Summary:
+
+- Mobile navigation verifier now expects the current phase-based hamburger menu: Today recording, History, Analysis, Achievements, Year Review, Store, Food Community, Community Ranking, and Settings.
+- Canonical UI spec prompt was updated to match the same menu shortcut set.
+- Subscription, tutorial, record, and manual record screens remain available through their own flows, but are no longer required as hamburger menu cards.
+
+Verification:
+
+- `npm run quality` passed in `mobile/`.
+
+### T951: Align leaderboard tie-order regression with masked public IDs
+
+Status: done
+
+Summary:
+
+- Community leaderboard tie-order regression now verifies stable ordering by public display name while keeping `account_id` masked.
+- This matches the runtime leaderboard privacy contract and prevents the full community backend test from expecting raw account UUIDs.
+- No API response shape changed.
+
+Verification:
+
+- `pytest -q tests/test_community_store_year_review.py::test_community_leaderboard_ties_are_stably_ordered_by_public_name` passed.
+- `npm run quality` passed in `mobile/`.
+
 ### T950: Guard Year Review JSON POST body handling
 
 Status: done

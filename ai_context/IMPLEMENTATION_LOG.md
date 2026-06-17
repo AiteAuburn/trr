@@ -15,6 +15,59 @@
 
 ## 2026-06-14
 
+### T952 Align hamburger menu verifier with phase-based destinations
+
+類型：mobile-test / docs / navigation
+
+檔案：
+
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Mobile navigation verifier now expects the current phase-based hamburger menu: Today recording, History, Analysis, Achievements, Year Review, Store, Food Community, Community Ranking, and Settings.
+- Canonical UI spec prompt now lists the same menu shortcut set.
+- Subscription, tutorial, record, and manual record screens remain available through their own flows, but are no longer required as hamburger menu cards.
+- 未變更 runtime UI、backend endpoint、mobile state、AI、LLM、STT、parser、storage schema、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run quality` 通過。
+
+後續：
+
+- 繼續依 MVP/Stage 2/Stage 3 清單補齊下一個 runtime gap 與 verifier guard。
+
+### T951 Align leaderboard tie-order regression with masked public IDs
+
+類型：backend-test / docs / community / privacy
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Community leaderboard tie-order regression now validates stable ordering by public display name while asserting `account_id` remains masked.
+- This aligns the test with the public leaderboard privacy contract and avoids expecting raw account UUIDs in community ranking responses.
+- No API response shape changed.
+- 未變更 community endpoint runtime、points scoring、food share schema、mobile render path、AI、LLM、STT、parser、storage schema、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_community_leaderboard_ties_are_stably_ordered_by_public_name` 通過。
+- `cd mobile && rtk npm run quality` 通過。
+
+後續：
+
+- 繼續依 MVP/Stage 2/Stage 3 清單補齊下一個 runtime gap 與 verifier guard。
+
 ### T950 Guard Year Review JSON POST body handling
 
 類型：backend / test / docs / year-review / security

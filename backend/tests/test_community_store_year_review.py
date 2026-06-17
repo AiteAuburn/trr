@@ -638,10 +638,12 @@ def test_community_leaderboard_ties_are_stably_ordered_by_public_name() -> None:
     run_id = uuid4()
     alpha_account_id, _ = create_account_and_profile(client, "community-leaderboard-alpha")
     beta_account_id, _ = create_account_and_profile(client, "community-leaderboard-beta")
+    alpha_display_name = f"tie-a-{run_id}"
+    beta_display_name = f"tie-b-{run_id}"
 
     for account_id, display_name in (
-        (beta_account_id, f"tie-b-{run_id}"),
-        (alpha_account_id, f"tie-a-{run_id}"),
+        (beta_account_id, beta_display_name),
+        (alpha_account_id, alpha_display_name),
     ):
         settings_response = client.patch(
             "/community/settings",
@@ -671,9 +673,10 @@ def test_community_leaderboard_ties_are_stably_ordered_by_public_name() -> None:
         assert response.status_code == 200
         entries = response.json()["entries"]
         matching_entries = [
-            entry for entry in entries if entry["account_id"] in {alpha_account_id, beta_account_id}
+            entry for entry in entries if entry["display_name"] in {alpha_display_name, beta_display_name}
         ]
-        assert [entry["account_id"] for entry in matching_entries] == [alpha_account_id, beta_account_id]
+        assert all(entry["account_id"] is None for entry in matching_entries)
+        assert [entry["display_name"] for entry in matching_entries] == [alpha_display_name, beta_display_name]
 
 
 def test_store_redemption_deducts_points_and_rejects_future_rewards() -> None:

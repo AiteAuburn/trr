@@ -66,15 +66,13 @@ CANONICAL_SPEC_SCREENS = (
 
 TOP_LEVEL_MENU_SCREENS = {
     "today",
-    "record",
-    "manualRecord",
     "history",
     "analysis",
-    "subscription",
-    "tutorial",
     "achievements",
     "yearReview",
     "store",
+    "community",
+    "ranking",
     "settings",
 }
 

@@ -1966,7 +1966,7 @@ Main screens:
 2. History screen with month calendar mode, lit dates for days with records, dim dates for empty days, selected-date AI-organized records first, and an original speech-to-text view.
 3. Analytics screen with 本週／本月／自訂日期區間 tabs, bounded custom start/end date inputs, blood glucose trend line chart, summary cards for highest glucose, lowest glucose, average glucose, total glucose measurements, before-meal count, after-meal count, and bounded detailed-report view that shows data source, AI cost 0, query limit, and no-medical-advice boundary.
 4. Subscription screen with trial and yearly membership plan, feature comparison table, inline payment-disconnected boundary text, and「查看試用整合狀態」button until store payment is wired.
-5. Menu screen with grid shortcuts: 今日紀錄, 歷史紀錄, 基本分析, 會員方案, 成就榜, 年度回顧, 商城, 設定.
+5. Menu screen with grid shortcuts: 今日錄音, 歷史紀錄, 基本分析, 成就榜, 年度回顧（預留）, 商城, 食物社群（預留）, 社群排行（預留）, 設定.
 6. Settings screen with user profile, personal info, reminders, recording quota, privacy, tutorial, subscription management, and「清除本機狀態」button until production logout/token revoke is wired; keep Backend URL, model selection, and Dev Client tools collapsed under advanced settings.
 7. Record detail screen showing date, time, type, status, value, note, exercise, medication, with edit and delete buttons.
 8. Edit record form with date, time, type, glucose value, context, meal, exercise, medication, note, save and cancel.
