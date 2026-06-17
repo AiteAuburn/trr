@@ -111,6 +111,23 @@ None.
 
 ## Done
 
+### T1003: Preserve extended persisted achievement unlocks
+
+Status: done
+
+Summary:
+
+- Updated backend achievement summary and unlock-history generation so persisted unlock rows contribute their highest saved level to the generated badge catalog.
+- This prevents extended badges such as level 300 from disappearing if active records later drop below that level.
+- Added regression coverage and navigation verifier guards for persisted extended unlock levels.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_achievement_persisted_unlocks_keep_extended_levels_without_active_records tests/test_community_store_year_review.py::test_achievement_summary_extends_levels_after_base_ladder` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/api/achievements.py scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1002: Clarify invalid custom Analysis ranges
 
 Status: done

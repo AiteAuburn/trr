@@ -306,6 +306,9 @@ def _verify_achievement_contract(content: str) -> None:
         ("backend cumulative shared category icon", 'icon=str(definition["cumulative_icon"])'),
         ("backend cumulative level color", "badge_color=badge_color"),
         ("backend dynamic achievement levels", "levels = achievement_levels_for_progress(max_progress)"),
+        ("backend persisted unlock level helper", "def _max_persisted_unlock_level(unlocks: dict[str, AchievementUnlock]) -> int:"),
+        ("backend summary includes persisted unlock levels", "max_progress = max(max_progress, _max_persisted_unlock_level(unlocks_by_id))"),
+        ("backend unlock history includes persisted unlock levels", "levels = achievement_levels_for_progress(max(max_progress, _max_persisted_unlock_level(unlocks_by_id)))"),
         ("backend streak kind", 'kind="streak"'),
         ("backend streak label", 'kind_label="連續型"'),
         ("backend streak independent icon", 'icon="連"'),
@@ -313,6 +316,12 @@ def _verify_achievement_contract(content: str) -> None:
     ):
         haystack = backend_content if label.startswith("backend") else content
         _assert_contains(label, haystack, marker)
+    tests_content = COMMUNITY_STORE_YEAR_REVIEW_TEST_PATH.read_text(encoding="utf-8")
+    _assert_contains(
+        "achievement persisted extended unlock regression",
+        tests_content,
+        "test_achievement_persisted_unlocks_keep_extended_levels_without_active_records",
+    )
 
 
 def _verify_food_community_category_contract(content: str) -> None:

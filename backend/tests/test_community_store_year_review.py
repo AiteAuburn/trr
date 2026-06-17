@@ -224,6 +224,47 @@ def test_achievement_summary_extends_levels_after_base_ladder() -> None:
     assert not any(item["id"].endswith("-300") and item["unlocked_at"] for item in synced_body["items"])
 
 
+def test_achievement_persisted_unlocks_keep_extended_levels_without_active_records() -> None:
+    client = TestClient(app)
+    account_id, profile_id = create_account_and_profile(client, "achievement-persisted-extended")
+    unlocked_at = datetime(2026, 5, 1, 8, 0, tzinfo=UTC)
+    with SessionLocal() as db:
+        db.add(
+            AchievementUnlock(
+                profile_id=UUID(profile_id),
+                achievement_id="glucose-cumulative-300",
+                category="glucose",
+                kind="cumulative",
+                level=300,
+                unlocked_at=unlocked_at,
+            )
+        )
+        db.commit()
+
+    summary_response = client.get(
+        f"/achievements/summary?profile_id={profile_id}",
+        headers={"X-Account-Id": account_id},
+    )
+    assert summary_response.status_code == 200
+    summary = summary_response.json()
+    assert 300 in summary["levels"]
+    by_id = {item["id"]: item for item in summary["items"]}
+    assert by_id["glucose-cumulative-300"]["progress"] == 0
+    assert by_id["glucose-cumulative-300"]["unlocked"] is True
+    assert by_id["glucose-cumulative-300"]["unlocked_at"]
+
+    unlocks_response = client.get(
+        f"/achievements/unlocks?profile_id={profile_id}",
+        headers={"X-Account-Id": account_id},
+    )
+    assert unlocks_response.status_code == 200
+    unlocked_items = unlocks_response.json()
+    assert [item["id"] for item in unlocked_items] == ["glucose-cumulative-300"]
+    assert unlocked_items[0]["level"] == 300
+    assert unlocked_items[0]["unlocked"] is True
+    assert unlocked_items[0]["unlocked_at"]
+
+
 def test_food_categories_endpoint_returns_required_taxonomy() -> None:
     client = TestClient(app)
     account_id, _ = create_account_and_profile(client, "community-food-categories")

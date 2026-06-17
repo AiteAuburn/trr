@@ -109,6 +109,10 @@ def _achievement_unlocks_by_id(profile_id: UUID, db: Session) -> dict[str, Achie
     return {unlock.achievement_id: unlock for unlock in unlocks}
 
 
+def _max_persisted_unlock_level(unlocks: dict[str, AchievementUnlock]) -> int:
+    return max((unlock.level for unlock in unlocks.values()), default=0)
+
+
 def _achievement_unlock_items(profile_id: UUID, db: Session) -> list[AchievementRead]:
     records = list(
         db.scalars(
@@ -119,7 +123,6 @@ def _achievement_unlock_items(profile_id: UUID, db: Session) -> list[Achievement
             )
         )
     )
-    items_by_id = {item.id: item for item in _achievement_items(records)}
     unlocks = list(
         db.scalars(
             select(AchievementUnlock)
@@ -127,6 +130,14 @@ def _achievement_unlock_items(profile_id: UUID, db: Session) -> list[Achievement
             .order_by(AchievementUnlock.unlocked_at.desc(), AchievementUnlock.created_at.desc())
         )
     )
+    unlocks_by_id = {unlock.achievement_id: unlock for unlock in unlocks}
+    progress_by_definition = _achievement_progress(records)
+    max_progress = max(
+        (max(cumulative_progress, streak_progress) for _, cumulative_progress, streak_progress in progress_by_definition),
+        default=0,
+    )
+    levels = achievement_levels_for_progress(max(max_progress, _max_persisted_unlock_level(unlocks_by_id)))
+    items_by_id = {item.id: item for item in _achievement_items(records, levels)}
     unlocked_items: list[AchievementRead] = []
     for unlock in unlocks:
         item = items_by_id.get(unlock.achievement_id)
@@ -154,14 +165,15 @@ def _achievement_summary(
             )
         )
     )
+    unlocks_by_id = _achievement_unlocks_by_id(profile_id, db)
     progress_by_definition = _achievement_progress(records)
     max_progress = max(
         (max(cumulative_progress, streak_progress) for _, cumulative_progress, streak_progress in progress_by_definition),
         default=0,
     )
+    max_progress = max(max_progress, _max_persisted_unlock_level(unlocks_by_id))
     levels = achievement_levels_for_progress(max_progress)
     items = _achievement_items(records, levels)
-    unlocks_by_id = _achievement_unlocks_by_id(profile_id, db)
     newly_unlocked_ids: list[str] = []
     for item in items:
         persisted_unlock = unlocks_by_id.get(item.id)

@@ -15,6 +15,36 @@
 
 ## 2026-06-17
 
+### T1003 preserve extended persisted achievement unlocks
+
+類型：backend / bugfix / test / verifier / docs / achievements
+
+檔案：
+
+- `backend/app/api/achievements.py`
+- `backend/tests/test_community_store_year_review.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated backend achievement summary and unlock-history generation so persisted unlock rows contribute their highest saved level to the generated badge catalog.
+- This prevents extended badges such as level 300 from disappearing if active records later drop below that level.
+- Added regression coverage and navigation verifier guards for persisted extended unlock levels.
+- 未變更 achievement schema、badge taxonomy、mobile render shape、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_achievement_persisted_unlocks_keep_extended_levels_without_active_records tests/test_community_store_year_review.py::test_achievement_summary_extends_levels_after_base_ladder` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/app/api/achievements.py scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If achievement levels later become remotely configurable, persist the catalog version with each unlock row.
+
 ### T1002 clarify invalid custom Analysis ranges
 
 類型：mobile / analysis / verifier / docs
