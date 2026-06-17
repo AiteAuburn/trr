@@ -26178,6 +26178,35 @@
 
 - Continue with T042 to add or polish the remaining menu destinations from the updated UI spec.
 
+### T853 send recording duration to backend voice quota
+
+類型：mobile / recording / quota / parser / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- 新增 `transcriptVoiceSeconds` pending state，只有本機 Whisper 由錄音產生的 transcript 會帶錄音秒數。
+- 手動輸入、範例文字、重新輸入、清除 session 與儲存成功都會清掉 pending voice seconds。
+- `/ai/parse-preview` request 現在會帶 `voice_seconds: parserVoiceSeconds`，讓 backend 在 parser 成功後 commit voice quota。
+- Parser 成功後 mobile 會清掉 pending voice seconds 並刷新 backend voice quota；parser 失敗時保留 pending seconds，避免失敗也扣額度。
+- Navigation verifier 新增 voice seconds state、voice transcript source、parse request、quota refresh 與 cleanup markers。
+
+驗證：
+
+- `npm run typecheck` in `mobile/` passed.
+- `npm run verify:navigation` in `mobile/` passed.
+
+後續：
+
+- 若 backend 增加 idempotent usage request id，mobile parse request 需帶錄音 session id，避免網路重試重複扣額度。
+
 ### T852 promote local Whisper model selection for recording
 
 類型：mobile / settings / recording / local-models / verifier

@@ -204,7 +204,7 @@ Manual record create 的 backend unavailable、進行中、成功、失敗與結
 
 Parser submit 的 backend unavailable、model unavailable、範例文字阻擋、進行中、成功、失敗與 recovery UI status 必須透過 bounded display helper 產生；成功候選筆數必須先 clamp，再組成顯示文字。
 Record 流程的「填入範例」必須走 dedicated bounded handler；不可在 JSX Pressable callback 內直接呼叫 `updateTranscriptDraft(sampleText, "sample")`。範例文字只能用於查看確認 UI，仍不可送 parser 或寫入資料。
-Record 流程的重錄、使用錄音文字、填入範例、手動新增、文字記錄、下一步整理與查看分析 CTA 必須有 render 前 bounded accessibility label 與 `accessibilityRole="button"`；label 需說明不呼叫 STT/AI/LLM、不送 parser、不寫入資料或只使用已載入紀錄的邊界，下一步整理 disabled 時也必須提供 accessibility disabled state。Home 頁只保留 mic Pressable，不顯示上述 CTA。
+Record 流程的重錄、使用錄音文字、填入範例、手動新增、文字記錄、下一步整理與查看分析 CTA 必須有 render 前 bounded accessibility label 與 `accessibilityRole="button"`；label 需說明本機 Whisper、AI/LLM、parser、寫入資料或只使用已載入紀錄的邊界，下一步整理 disabled 時也必須提供 accessibility disabled state。Home 頁只保留 mic Pressable，不顯示上述 CTA。
 
 AI candidate edit/remove 的開啟編輯、移除確認、移除結果、編輯成功與編輯失敗 UI status 必須透過 bounded display helper 產生；移除後剩餘候選筆數必須先 clamp，再組成顯示文字。
 AI Review 候選卡的修改與移除按鈕必須走 dedicated action handler；不可在 JSX Pressable callback 內直接呼叫 `openPreviewRecordEdit(item.index)` 或 `openPreviewRecordRemoveConfirm(item.index)`。候選卡 JSX `onPress` 必須呼叫 action press wrapper，不直接呼叫底層 edit/remove action handler 並傳入 `item.index`。
@@ -213,6 +213,7 @@ AI 候選編輯頁的 header 返回、底部取消與套用修改 CTA 必須有 
 
 Recording 與 header busy guard 的 quota exhausted、permission denied、recording started、reset、finished、too-short、start/stop failure、Whisper progress/success/empty/failure 與 busy UI status 必須透過 bounded display helper 產生；錄音秒數只可用於狀態判斷，若進入顯示文案前必須先 clamp。Mobile hold-to-record 必須使用 `expo-av` / `Audio.Recording` 擷取本機音檔，URI 只可 bounded 後寫入 native debug audio path；Whisper 轉錄結果只可進入 bounded transcript draft 和文字確認頁，不得保存 raw prompt 或 raw model output。
 Record 錄音結果主按鈕必須走 dedicated handler；不可在 JSX Pressable callback 內直接呼叫 `handleRecordingResultPrimaryAction("today")` 或 `handleRecordingResultPrimaryAction("record")`。handler 可在已設定 Whisper model path 且有 bounded audio URI 時轉文字並進入文字確認；仍不可跳過文字確認、不可直接呼叫 AI/parser 或寫入紀錄。Home 頁 mic 放開不顯示錄音結果主按鈕；若已有 Whisper model path，可直接轉文字後進文字確認，否則只保留本機 audio URI。
+Whisper 產生的 transcript 必須保留 bounded `transcriptVoiceSeconds`，送 `/ai/parse-preview` 時以 `voice_seconds` 傳給 backend；手動輸入、範例文字、重輸入、清除 session 與儲存成功都必須清為 0。Parser 成功後立即清掉 pending voice seconds 並刷新 backend voice quota；parser 失敗時保留 pending seconds，讓重試成功時才扣 backend quota。
 
 核心記錄流程、AI 確認/儲存、手動新增/確認、儲存/更新/刪除結果、歷史、詳情、編輯、分析與詳細報告的 section/action labels 必須透過 bounded display helper 產生；不可在 JSX 中直接寫 repeated core-flow labels。
 
@@ -1630,7 +1631,7 @@ AI 分析結果：
 頁面內容：
 
 - 標題：「糖錄錄」。
-- 副標：「確認目前輸入的紀錄文字，若有錯誤可直接修改；錄音 STT 尚未接上。」。
+- 副標：「確認目前輸入或本機 Whisper 轉出的紀錄文字，若有錯誤可直接修改。」。
 - 右上角：menu 按鈕。
 
 主要輸入框：

@@ -3738,6 +3738,12 @@ function parserSuccessStatusMessage(count: number) {
   return boundUiMessage(`整理完成：${clampNumber(count, 0, maxMobileCountValue)} 筆候選紀錄`);
 }
 
+function parserVoiceQuotaSyncedStatusMessage(count: number, voiceSeconds: number) {
+  return boundUiMessage(
+    `整理完成：${clampNumber(count, 0, maxMobileCountValue)} 筆候選紀錄；已送出 ${clampNumber(voiceSeconds, 0, maxMobileCountValue)} 秒語音額度。`
+  );
+}
+
 function parserFailureStatusMessage(error: unknown) {
   return safeUiError(error, "Parser 失敗");
 }
@@ -4662,7 +4668,7 @@ function aiRemoveConfirmSourceCopy(confidencePercent: number) {
 }
 
 function transcriptReviewIntroCopy() {
-  return boundDisplayText("確認目前輸入的紀錄文字，若有錯誤可直接修改；錄音 STT 尚未接上。", maxDisplayDetailTextLength);
+  return boundDisplayText("確認目前輸入或本機 Whisper 轉出的紀錄文字，若有錯誤可直接修改。", maxDisplayDetailTextLength);
 }
 
 function transcriptReviewPreParseGuidanceCopy() {
@@ -4870,7 +4876,7 @@ function coreFlowSectionLabels() {
     recordingEnded: boundDisplayText("錄音結束", maxDisplayTextLength),
     rerecord: boundDisplayText("重新錄音", maxDisplayTextLength),
     rerecordAccessibility: boundDisplayText("重新錄音，只重置本機錄音預覽狀態", maxDisplayDetailTextLength),
-    useRecordingTextAccessibility: boundDisplayText("使用錄音結果轉文字，不呼叫 STT 或 AI", maxDisplayDetailTextLength),
+    useRecordingTextAccessibility: boundDisplayText("使用錄音結果轉文字，可呼叫本機 Whisper，不呼叫 AI 或寫入資料", maxDisplayDetailTextLength),
     fillSample: boundDisplayText("填入範例", maxDisplayTextLength),
     fillSampleAccessibility: boundDisplayText("填入範例文字，只供確認 UI 預覽，不送 parser", maxDisplayDetailTextLength),
     manualAdd: boundDisplayText("手動新增", maxDisplayTextLength),
@@ -5526,6 +5532,7 @@ export default function App() {
   const [transcript, setTranscript] = useState(
     initialVisualSmokeScreen === "transcriptReview" ? sampleText : ""
   );
+  const [transcriptVoiceSeconds, setTranscriptVoiceSeconds] = useState(0);
   const [isTranscriptSample, setIsTranscriptSample] = useState(false);
   const [preview, setPreview] = useState<ParsePreviewResponse | null>(
     visualSmokeNeedsPreview(initialVisualSmokeScreen) ? visualSmokeDemoPreview() : null
@@ -7134,6 +7141,7 @@ export default function App() {
     setRecordingStartedAt(null);
     setRecordingElapsedSeconds(0);
     setTranscript("");
+    setTranscriptVoiceSeconds(0);
     setIsTranscriptSample(false);
     setPreview(null);
     setSelectedPreviewIndex(null);
@@ -7144,10 +7152,19 @@ export default function App() {
     setStatus(transcriptClearedStatusMessage());
   }
 
-  function updateTranscriptDraft(value: string, source: "user" | "sample" = "user") {
+  function updateTranscriptDraft(
+    value: string,
+    source: "user" | "sample" | "voice" = "user",
+    voiceSeconds = 0
+  ) {
     const boundedValue = value.slice(0, maxTranscriptTextLength);
     setTranscript(boundedValue);
     setIsTranscriptSample(source === "sample" && boundedValue.trim().length > 0);
+    setTranscriptVoiceSeconds(
+      source === "voice" && boundedValue.trim().length > 0
+        ? clampNumber(voiceSeconds, 0, maxMobileCountValue)
+        : 0
+    );
     setPreview(null);
     setParserRecoveryMessage("");
   }
@@ -7464,6 +7481,7 @@ export default function App() {
     previewSaveInFlight.current = false;
     setPreview(null);
     setTranscript("");
+    setTranscriptVoiceSeconds(0);
     setIsTranscriptSample(false);
     setSelectedRecord(null);
     setBasicReport(null);
@@ -7853,7 +7871,11 @@ export default function App() {
     setStatus(recordingResetStatusMessage());
   }
 
-  async function transcribeRecordingToReview(returnScreen: AppScreen, sourceAudioPath: string) {
+  async function transcribeRecordingToReview(
+    returnScreen: AppScreen,
+    sourceAudioPath: string,
+    voiceSeconds: number
+  ) {
     const safeAudioPath = boundNativeDebugInput(sourceAudioPath.trim());
     const safeModelPath = boundNativeDebugInput(whisperModelPath.trim());
     if (!safeAudioPath) {
@@ -7876,7 +7898,7 @@ export default function App() {
         setStatus(recordingWhisperEmptyStatusMessage());
         return false;
       }
-      updateTranscriptDraft(boundedText);
+      updateTranscriptDraft(boundedText, "voice", voiceSeconds);
       setIsRecordingPreview(false);
       setRecordingStartedAt(null);
       setRecordingElapsedSeconds(0);
@@ -7899,7 +7921,7 @@ export default function App() {
       resetRecordingPreview();
       return;
     }
-    const transcribed = await transcribeRecordingToReview(returnScreen, audioPath);
+    const transcribed = await transcribeRecordingToReview(returnScreen, audioPath, boundedSeconds);
     if (transcribed) {
       return;
     }
@@ -7956,7 +7978,7 @@ export default function App() {
       recordingStopInFlight.current = false;
     }
     if (currentScreen === "today" && elapsedSeconds > 1 && capturedAudioPath && whisperModelPath.trim()) {
-      void transcribeRecordingToReview("today", capturedAudioPath);
+      void transcribeRecordingToReview("today", capturedAudioPath, elapsedSeconds);
     }
   }
 
@@ -10177,6 +10199,7 @@ export default function App() {
     setPreview(null);
     setParserRecoveryMessage("");
     setStatus(parserProgressStatusMessage());
+    const parserVoiceSeconds = clampNumber(transcriptVoiceSeconds, 0, maxMobileCountValue);
     try {
       const response = await requestJson<ParsePreviewResponse>(
         normalizedApiBaseUrl,
@@ -10189,14 +10212,23 @@ export default function App() {
             transcript,
             stt_model_id: sttModelId,
             llm_model_id: llmModelId,
-            occurred_at: new Date().toISOString()
+            occurred_at: new Date().toISOString(),
+            voice_seconds: parserVoiceSeconds
           })
         }
       );
       const boundedPreview = boundParsePreviewResponse(response);
       setPreview(boundedPreview);
+      setTranscriptVoiceSeconds(0);
       setCurrentScreen("aiReview");
-      setStatus(parserSuccessStatusMessage(boundedPreview.records.length));
+      setStatus(
+        parserVoiceSeconds > 0
+          ? parserVoiceQuotaSyncedStatusMessage(boundedPreview.records.length, parserVoiceSeconds)
+          : parserSuccessStatusMessage(boundedPreview.records.length)
+      );
+      if (parserVoiceSeconds > 0 && account) {
+        void loadVoiceQuota(account.id);
+      }
     } catch (error) {
       const message = parserFailureStatusMessage(error);
       setParserRecoveryMessage(parserFailureRecoveryMessage(message));
@@ -10253,6 +10285,7 @@ export default function App() {
       const savedCount = recordsToSave.length;
       setPreview(null);
       setTranscript("");
+      setTranscriptVoiceSeconds(0);
       setIsTranscriptSample(false);
       setRecords((current) => boundRecordsList([...createdRecords, ...current]));
       setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));

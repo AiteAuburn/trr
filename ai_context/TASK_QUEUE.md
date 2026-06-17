@@ -1738,6 +1738,26 @@ Verification:
 
 - `npm run quality` passed in `mobile/`.
 
+### T853: Send recording duration to backend voice quota
+
+Status: done
+
+Summary:
+
+- Whisper-generated transcripts now carry bounded `transcriptVoiceSeconds`.
+- `/ai/parse-preview` requests include `voice_seconds` only for recording-derived transcripts.
+- Manual text, sample text, retry/clear, session reset, and successful save clear pending voice seconds.
+- Parser success clears pending voice seconds and refreshes backend voice quota; parser failure keeps it for a later successful retry.
+
+Verification:
+
+- `npm run typecheck` passed in `mobile/`.
+- `npm run verify:navigation` passed in `mobile/`.
+
+Next:
+
+- Add retry-safe client request ids if backend adds idempotent usage increments.
+
 ### T852: Promote local Whisper model selection for recording
 
 Status: done

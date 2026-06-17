@@ -2064,12 +2064,18 @@ def main() -> int:
             ("native recording start", "await recording.startAsync();"),
             ("native recording stop unload", "await recording.stopAndUnloadAsync();"),
             ("native recording uri bounded", "capturedAudioPath = uri ? boundNativeDebugInput(uri) : \"\";"),
-            ("native recording transcribe helper", "async function transcribeRecordingToReview(returnScreen: AppScreen, sourceAudioPath: string)"),
+            ("native recording transcribe helper", "async function transcribeRecordingToReview("),
             ("native recording whisper call", "const text = await transcribeWithNativeWhisper({"),
             ("native recording bounded transcript", "const boundedText = text.slice(0, maxTranscriptTextLength);"),
+            ("native recording voice seconds state", "const [transcriptVoiceSeconds, setTranscriptVoiceSeconds] = useState(0);"),
+            ("native recording transcript source", 'source: "user" | "sample" | "voice" = "user"'),
+            ("native recording voice seconds draft", "setTranscriptVoiceSeconds("),
             ("native recording transcript confirmation", 'setCurrentScreen("transcriptReview");'),
             ("native recording no direct parser boundary", "確認後再交給 AI 整理"),
-            ("home recording whisper handoff", 'void transcribeRecordingToReview("today", capturedAudioPath);'),
+            ("home recording whisper handoff", 'void transcribeRecordingToReview("today", capturedAudioPath, elapsedSeconds);'),
+            ("parse request voice seconds", "voice_seconds: parserVoiceSeconds"),
+            ("parse success clears voice seconds", "setTranscriptVoiceSeconds(0);"),
+            ("parse success refreshes quota", "void loadVoiceQuota(account.id);"),
         ):
             _assert_contains(label, content, marker)
         today_home_block = _today_home_render_block(content)
@@ -2169,7 +2175,7 @@ def main() -> int:
         )
         for label, marker in (
             ("core rerecord accessibility label", 'rerecordAccessibility: boundDisplayText("重新錄音，只重置本機錄音預覽狀態", maxDisplayDetailTextLength)'),
-            ("core recording text accessibility label", 'useRecordingTextAccessibility: boundDisplayText("使用錄音結果轉文字，不呼叫 STT 或 AI", maxDisplayDetailTextLength)'),
+            ("core recording text accessibility label", 'useRecordingTextAccessibility: boundDisplayText("使用錄音結果轉文字，可呼叫本機 Whisper，不呼叫 AI 或寫入資料", maxDisplayDetailTextLength)'),
             ("core sample accessibility label", 'fillSampleAccessibility: boundDisplayText("填入範例文字，只供確認 UI 預覽，不送 parser", maxDisplayDetailTextLength)'),
             ("core manual accessibility label", 'manualAddAccessibility: boundDisplayText("改用手動新增，不呼叫 AI、LLM 或 STT", maxDisplayDetailTextLength)'),
             ("core next organize accessibility label", 'nextOrganizeAccessibility: boundDisplayText("前往文字確認，尚未送出 AI 整理", maxDisplayDetailTextLength)'),
