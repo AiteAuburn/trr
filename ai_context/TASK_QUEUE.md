@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T975: Cover Year Review soft-deleted record exclusion
+
+Status: done
+
+Summary:
+
+- Added backend regression coverage that annual Year Review summaries ignore soft-deleted records from the same year.
+- This protects annual stats, health outcomes, and AI observation text from including deleted user records.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T974: Cover Year Review share package account isolation
 
 Status: done

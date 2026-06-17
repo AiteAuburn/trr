@@ -15,6 +15,32 @@
 
 ## 2026-06-14
 
+### T975 cover Year Review soft-deleted record exclusion
+
+類型：backend / test / docs / year-review
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added backend regression coverage that annual Year Review summaries ignore soft-deleted records from the same year.
+- This protects annual stats, health outcomes, and AI observation text from including deleted user records.
+- 未變更 Year Review API behavior、record deletion behavior、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_year_review_summarizes_previous_year_records` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If record archival states expand, keep Year Review inclusion rules explicit and regression-tested.
+
 ### T974 cover Year Review share package account isolation
 
 類型：backend / test / docs / year-review

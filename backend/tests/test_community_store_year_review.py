@@ -1303,6 +1303,25 @@ def test_year_review_summarizes_previous_year_records() -> None:
         first_day + timedelta(days=2),
         {"activity": "散步", "minutes": 20},
     )
+    create_record(
+        client,
+        account_id,
+        profile_id,
+        "glucose",
+        first_day + timedelta(days=2, hours=1),
+        {"value": 400, "unit": "mg/dL", "meal_timing": "after_meal"},
+    )
+    with SessionLocal() as db:
+        soft_deleted_record = db.scalar(
+            select(Record).where(
+                Record.profile_id == UUID(profile_id),
+                Record.record_type == "glucose",
+                Record.payload["value"].as_integer() == 400,
+            )
+        )
+        assert soft_deleted_record is not None
+        soft_deleted_record.deleted_at = datetime.now(UTC)
+        db.commit()
 
     response = client.get(
         f"/year-reviews/2025?profile_id={profile_id}",
