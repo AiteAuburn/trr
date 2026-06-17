@@ -15,6 +15,33 @@
 
 ## 2026-06-14
 
+### T950 Guard Year Review JSON POST body handling
+
+類型：backend / test / docs / year-review / security
+
+檔案：
+
+- `backend/app/main.py`
+- `backend/tests/test_health.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Year Review POST routes now use the app-level JSON content-type and bounded body guard.
+- Added regression coverage proving Year Review share-card confirmation rejects non-JSON content before route handling.
+- This protects the annual-review share confirmation/result path with the same request-body boundary used by AI, auth, community, profiles, records, reports, and store routes.
+- 未變更 Year Review response shape、snapshot aggregation、share-card privacy mask、mobile render path、AI、LLM、STT、parser、storage schema、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_health.py::test_year_review_post_body_uses_json_guard_before_route_handling` 通過。
+- `rtk python3 scripts/verify_k8s_manifests.py` 通過。
+
+後續：
+
+- 繼續依 MVP/Stage 2/Stage 3 清單補齊下一個 runtime gap 與 verifier guard。
+
 ### T949 Show Home recording elapsed seconds in minimal hint
 
 類型：mobile / test / docs / home

@@ -33,6 +33,7 @@ JSON_BODY_PREFIXES = (
     "/records",
     "/reports",
     "/store/",
+    "/year-reviews",
 )
 CONTENT_LENGTH_PATTERN = re.compile(r"^[0-9]{1,20}$")
 REQUEST_ID_PATTERN = re.compile(r"^[A-Za-z0-9._:-]{1,80}$")

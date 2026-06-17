@@ -299,6 +299,26 @@ def test_non_json_api_body_is_rejected_before_route_handling() -> None:
     }
 
 
+def test_year_review_post_body_uses_json_guard_before_route_handling() -> None:
+    client = TestClient(app)
+
+    response = client.post(
+        "/year-reviews/2025/share-card/confirm?profile_id=00000000-0000-0000-0000-000000000001",
+        content=b"not-json",
+        headers={
+            "Content-Type": "text/plain",
+            "X-Request-ID": "year-review-non-json-request",
+        },
+    )
+
+    assert response.status_code == 415
+    assert response.headers["X-Request-ID"] == "year-review-non-json-request"
+    assert response.json()["detail"] == {
+        "code": "unsupported_media_type",
+        "message": "Request body must be JSON.",
+    }
+
+
 def test_json_content_type_with_charset_is_allowed() -> None:
     client = TestClient(app)
 

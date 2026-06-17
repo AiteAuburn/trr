@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T950: Guard Year Review JSON POST body handling
+
+Status: done
+
+Summary:
+
+- Year Review POST routes now participate in the app-level JSON content-type and bounded body guard.
+- Added regression coverage proving Year Review share-card confirmation rejects non-JSON content before route handling.
+- This keeps annual-review sharing endpoints aligned with the same request-body guard used by AI, auth, community, profiles, records, reports, and store routes.
+
+Verification:
+
+- `pytest -q tests/test_health.py::test_year_review_post_body_uses_json_guard_before_route_handling` passed.
+- `python3 scripts/verify_k8s_manifests.py` passed.
+
 ### T949: Show Home recording elapsed seconds in minimal hint
 
 Status: done
