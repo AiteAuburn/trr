@@ -15,6 +15,33 @@
 
 ## 2026-06-14
 
+### T989 show recording seconds on minimal Home
+
+類型：mobile / UX / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a minimal Home recording timer so holding the large microphone shows the bounded elapsed recording seconds below the existing hold/release hints.
+- Extended the mobile navigation verifier to lock the Home timer, hold hint, release hint, and shared elapsed-seconds display helper.
+- 未變更錄音儲存流程、STT、AI、LLM、backend API、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If a future native build adds waveform or live amplitude, keep elapsed seconds visible as the primary low-cost recording feedback.
+
 ### T988 bound food category sample queries
 
 類型：backend / performance / docs / community

@@ -11249,6 +11249,9 @@ export default function App() {
             </Pressable>
             <Text style={styles.homeHint}>按住開始說話記錄</Text>
             <Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>
+            {isRecordingPreview ? (
+              <Text style={styles.homeRecordingTimer}>{recordingElapsedSecondsDisplayText}</Text>
+            ) : null}
           </View>
         ) : null}
 
@@ -16445,6 +16448,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700",
     lineHeight: 22,
+    textAlign: "center"
+  },
+  homeRecordingTimer: {
+    color: "#0F3F37",
+    fontSize: 20,
+    fontWeight: "900",
+    lineHeight: 28,
+    minHeight: 28,
     textAlign: "center"
   },
   quickEntryRail: {

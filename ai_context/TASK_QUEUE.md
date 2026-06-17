@@ -111,6 +111,21 @@ None.
 
 ## Done
 
+### T989: Show recording seconds on minimal Home
+
+Status: done
+
+Summary:
+
+- Added a minimal Home recording timer so holding the large microphone shows the bounded elapsed recording seconds below the existing hold/release hints.
+- Extended the mobile navigation verifier to lock the Home timer, hold hint, release hint, and shared elapsed-seconds display helper.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+
 ### T988: Bound food category sample queries
 
 Status: done
