@@ -111,6 +111,23 @@ None.
 
 ## Done
 
+### T997: Add Store redemption wallet index
+
+Status: done
+
+Summary:
+
+- Added an ORM and Alembic composite index for the Store redemption wallet query path: account filter plus newest-first redemption ordering.
+- This keeps the points-to-store wallet scalable while Phase 2 Store rewards remain connected to community points.
+- Extended the mobile/backend navigation verifier to guard the Store redemption wallet index contract.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_store_redemption_list_limits_to_latest_records tests/test_community_store_year_review.py::test_store_redemption_deducts_points_and_reserves_fulfillment_rewards` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/alembic/versions/20260430_0027_store_redemption_wallet_index.py` passed.
+- `rtk git diff --check` passed.
+
 ### T996: Add community leaderboard lookup indexes
 
 Status: done

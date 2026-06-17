@@ -25,6 +25,9 @@ COMMUNITY_FOOD_LATEST_INDEX_MIGRATION_PATH = (
 COMMUNITY_LEADERBOARD_INDEX_MIGRATION_PATH = (
     REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0026_community_leaderboard_indexes.py"
 )
+STORE_REDEMPTION_INDEX_MIGRATION_PATH = (
+    REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0027_store_redemption_wallet_index.py"
+)
 REPORTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "reports.py"
 REPORTING_SERVICE_PATH = REPO_ROOT / "backend" / "app" / "services" / "reporting.py"
 REPORTS_TEST_PATH = REPO_ROOT / "backend" / "tests" / "test_reports.py"
@@ -315,6 +318,7 @@ def _verify_food_community_category_contract(content: str) -> None:
     backend_index_migration_content = COMMUNITY_FOOD_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
     backend_latest_index_migration_content = COMMUNITY_FOOD_LATEST_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
     backend_leaderboard_index_migration_content = COMMUNITY_LEADERBOARD_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
+    backend_store_index_migration_content = STORE_REDEMPTION_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
     _assert_contains(
         "food community mobile fallback categories",
         content,
@@ -367,6 +371,10 @@ def _verify_food_community_category_contract(content: str) -> None:
             "community profile leaderboard ORM index",
             'Index("ix_community_public_profiles_opt_in_display", "leaderboard_opt_in", "display_name", "account_id")',
         ),
+        (
+            "store redemption wallet ORM index",
+            'Index("ix_store_redemptions_account_created_id", "account_id", "created_at", "id")',
+        ),
     ):
         _assert_contains(label, backend_model_content, marker)
     for label, marker in (
@@ -388,6 +396,11 @@ def _verify_food_community_category_contract(content: str) -> None:
         ("community profile leaderboard migration columns", '["leaderboard_opt_in", "display_name", "account_id"]'),
     ):
         _assert_contains(label, backend_leaderboard_index_migration_content, marker)
+    for label, marker in (
+        ("store redemption wallet migration index", '"ix_store_redemptions_account_created_id"'),
+        ("store redemption wallet migration columns", '["account_id", "created_at", "id"]'),
+    ):
+        _assert_contains(label, backend_store_index_migration_content, marker)
     for label, marker in (
         ("food community API average delta signed clamp", "averageRise: clampNumber(Math.round(stats.average_glucose_delta ?? 0), -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
         ("food community API max delta signed clamp", "maximumRise: clampNumber(stats.max_glucose_delta ?? 0, -maxMobileGlucoseValue, maxMobileGlucoseValue)"),

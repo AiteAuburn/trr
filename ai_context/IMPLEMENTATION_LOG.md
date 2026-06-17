@@ -15,6 +15,36 @@
 
 ## 2026-06-17
 
+### T997 add Store redemption wallet index
+
+類型：backend / performance / migration / verifier / docs / store
+
+檔案：
+
+- `backend/app/models/community.py`
+- `backend/alembic/versions/20260430_0027_store_redemption_wallet_index.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added an ORM and Alembic composite index for the Store redemption wallet query path: account filter plus newest-first redemption ordering.
+- This keeps the points-to-store wallet scalable while Phase 2 Store rewards remain connected to community points.
+- Extended the mobile/backend navigation verifier to guard the Store redemption wallet index contract.
+- 未變更 store API response shape、points accounting、coupon/discount fulfillment code generation、redemption use behavior、community points awards、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_store_redemption_list_limits_to_latest_records tests/test_community_store_year_review.py::test_store_redemption_deducts_points_and_reserves_fulfillment_rewards` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile backend/alembic/versions/20260430_0027_store_redemption_wallet_index.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If Store wallet filtering by status is added, add status-specific query coverage before introducing a wider index.
+
 ### T996 add community leaderboard lookup indexes
 
 類型：backend / performance / migration / verifier / docs / community
