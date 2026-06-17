@@ -15,6 +15,35 @@
 
 ## 2026-06-17
 
+### T1028 align Store readiness row with active points ledger
+
+類型：mobile / docs / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated the Store boundary row from `正式啟用前：需完成點數帳本...` to `仍待完成：庫存、出貨訂單、付款與 rollback`.
+- Added a UI spec guard that Store copy must not claim the points ledger is unfinished now that catalog, points, redemption wallet, coupon issue, and coupon use contracts are wired.
+- Added navigation verifier coverage for the backend-ready remaining-work row and a regression guard against the stale points-ledger-unfinished wording.
+- 未變更 backend、storage、AI/LLM calls、STT、parser、network paths、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- Continue auditing Store and cart copy for remaining preview-era wording that conflicts with backend-ready redemption flows.
+
 ### T1027 align food item accessibility with backend-ready detail
 
 類型：mobile / docs / verifier

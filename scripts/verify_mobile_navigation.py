@@ -3591,6 +3591,7 @@ def main() -> int:
             ("food community screen chrome backend-ready subtitle", 'community: { subtitle: "同步食物升糖資料庫、分享、點數與公開排名。", backTo: "futureModules", actionLabel: "‹" }'),
             ("ranking screen chrome backend-ready subtitle", 'ranking: { subtitle: "查看 opt-in 公開社群排行與非敏感分數。", backTo: "futureModules", actionLabel: "‹" }'),
             ("store screen chrome backend-ready subtitle", 'store: { subtitle: "同步點數商城、兌換券與購物車邊界。", backTo: "menu", actionLabel: "‹" }'),
+            ("store backend-ready remaining boundary", '["仍待完成", "庫存、出貨訂單、付款與 rollback"]'),
             ("future module food community database card title", 'title: "食物社群資料庫"'),
             ("future module food community database card readiness", "資料庫、分享、點數與排行榜已接 backend；貼文留言治理仍待正式開放。"),
             ("future module store backend-ready readiness", "點數兌換與兌換券已接 backend；購物車、出貨、付款與法務仍待完成。"),
@@ -3626,6 +3627,11 @@ def main() -> int:
             "food community stale inline share accessibility label",
             content,
             'accessibilityLabel="送出食物分享，backend 會計算升糖幅度並建立社群點數"',
+        )
+        _assert_not_contains(
+            "store boundary must not claim points ledger unfinished",
+            content,
+            '["正式啟用前", "需完成點數帳本、庫存、訂單、付款與 rollback"]',
         )
         submit_food_share_block = _match_block(
             content,

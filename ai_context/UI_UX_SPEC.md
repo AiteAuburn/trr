@@ -1374,6 +1374,7 @@ AI 年度觀察與鼓勵：
 - 點數來源：食物分享、完整前後血糖、審核通過。
 - 可兌換項目：優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利。
 - 目前一般操作路徑可扣點、發出優惠券/折扣碼、顯示「我的兌換券」，並可將 unused issued coupon/discount code 標記為已使用；仍不建立出貨訂單、不處理付款。商城文案必須清楚區分優惠券 / 保健食品折扣的 immediate code issue，以及合作商品 / 會員福利仍需 reservation + 後續 fulfillment，不可再宣稱所有可兌換項目都「仍不發券」。
+- Store 邊界 rows 不可再把「點數帳本」列為正式啟用前未完成項；點數帳本、catalog、兌換券 wallet 已有 backend/mobile contract，仍待完成的只能列庫存、出貨訂單、付款、rollback 或法務/客服流程。
 
 分類 tab：
 

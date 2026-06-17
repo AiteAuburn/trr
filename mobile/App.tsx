@@ -6679,7 +6679,7 @@ export default function App() {
         : "尚未同步"
     ],
     ["可兌換項目", "優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利"],
-    ["正式啟用前", "需完成點數帳本、庫存、訂單、付款與 rollback"],
+    ["仍待完成", "庫存、出貨訂單、付款與 rollback"],
     [
       "目前狀態",
       storeBackendProducts.length > 0
