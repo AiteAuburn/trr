@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T954: Preserve bounded source text for History raw records
+
+Status: done
+
+Summary:
+
+- AI-confirmed record saves now preserve bounded `metadata_json.source_text` so History's raw-record tab can show the original speech-to-text content for saved records.
+- Backend record metadata sanitization now allows bounded `source_text` while still removing `transcript`, `raw_text`, `raw_transcript`, `original_text`, and `normalized_text`.
+- Mobile save metadata uses the existing bounded metadata helper with source-text preservation instead of stripping the source text before POSTing `/records`.
+- Canonical UI spec and mobile verifier now guard the bounded source-text preservation path and updated no-source fallback copy.
+
+Verification:
+
+- `pytest -q tests/test_records.py` passed.
+- `npm run quality` passed in `mobile/`.
+
 ### T953: Mark DeepSeek as backend API parser and document prompt
 
 Status: done

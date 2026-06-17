@@ -379,7 +379,7 @@ def test_record_update_rejects_wide_metadata_before_record_lookup(monkeypatch) -
     }
 
 
-def test_record_create_removes_raw_text_before_storage() -> None:
+def test_record_create_preserves_bounded_source_text_and_removes_other_raw_text() -> None:
     client = TestClient(app)
     account_id, profile_id = create_account_and_profile(client, "record-minimization")
 
@@ -413,6 +413,7 @@ def test_record_create_removes_raw_text_before_storage() -> None:
         "meal_type": "breakfast",
     }
     assert record["metadata_json"] == {
+        "source_text": "早餐吃蛋餅",
         "stt_model_id": "browser-web-speech",
         "parser_model_id": "ollama-qwen2.5-1.5b",
         "time_hint": "morning",
@@ -439,13 +440,17 @@ def test_record_sanitizers_bound_direct_recursive_use() -> None:
     )
     metadata = sanitize_record_metadata_for_storage(
         {
-            "source_text": "raw transcript removed",
+            "source_text": "bounded source text kept",
             "long_model": "m" * (MAX_RECORD_JSON_STRING_LENGTH + 5),
+            "transcript": "full transcript removed",
+            "raw_text": "raw text removed",
         }
     )
 
     assert "description" not in payload
-    assert "source_text" not in metadata
+    assert metadata["source_text"] == "bounded source text kept"
+    assert "transcript" not in metadata
+    assert "raw_text" not in metadata
     assert payload["tags"] == ["x" * MAX_RECORD_JSON_STRING_LENGTH]
     assert metadata["long_model"] == "m" * MAX_RECORD_JSON_STRING_LENGTH
     assert payload["wide"]["_truncated"] is True

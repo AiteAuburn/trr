@@ -2266,7 +2266,7 @@ function historyRawRecordDisplayItem(record: RecordItem, index: number) {
   const hasSourceText = typeof sourceText === "string";
   const rawText = hasSourceText
     ? boundDisplayText(sourceText, maxDisplayDetailTextLength)
-    : "尚無原始逐字稿；正式紀錄只保留結構化資料。";
+    : "尚無原始逐字稿；此筆紀錄只保留結構化資料。";
   return {
     ...item,
     sourceStatusLabel: boundDisplayText(hasSourceText ? "原始逐字稿" : "僅結構化", 40),
@@ -3089,7 +3089,7 @@ function stripRawTextMetadata(metadata?: Record<string, unknown>) {
   if (!metadata) {
     return undefined;
   }
-  const blockedKeys = new Set(["transcript", "source_text", "raw_text", "rawText", "evidence", "description"]);
+  const blockedKeys = new Set(["transcript", "raw_text", "rawText", "evidence", "description"]);
   const sanitized = Object.fromEntries(
     Object.entries(metadata).filter(([key]) => !blockedKeys.has(key))
   );
@@ -3097,7 +3097,7 @@ function stripRawTextMetadata(metadata?: Record<string, unknown>) {
 }
 
 function pendingRecordForSave(record: PendingRecord): PendingRecord {
-  const sanitizedMetadata = stripRawTextMetadata(record.metadata_json);
+  const sanitizedMetadata = boundMetadata(record.metadata_json, true);
   return {
     ...record,
     ...(sanitizedMetadata ? { metadata_json: sanitizedMetadata } : { metadata_json: undefined })

@@ -10,7 +10,6 @@ RECORD_SANITIZATION_TRUNCATED = "[TRUNCATED]"
 
 METADATA_TEXT_KEYS = {
     "transcript",
-    "source_text",
     "raw_transcript",
     "raw_text",
     "original_text",
@@ -18,6 +17,7 @@ METADATA_TEXT_KEYS = {
 }
 
 PAYLOAD_TEXT_KEYS = METADATA_TEXT_KEYS | {
+    "source_text",
     "description",
     "text",
     "note",

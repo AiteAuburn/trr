@@ -2378,6 +2378,7 @@ def main() -> int:
         for label, marker in (
             ("history calendar day display item", "function historyCalendarDayDisplayItem(date: Date, selectedDateKey: string, recordsByDate: Map<string, RecordItem[]>)"),
             ("history raw record display item", "function historyRawRecordDisplayItem(record: RecordItem, index: number)"),
+            ("history source text preserved during save", "const sanitizedMetadata = boundMetadata(record.metadata_json, true);"),
             ("history selected date state", "const [selectedHistoryDate, setSelectedHistoryDate] = useState(formatLocalDateInput(new Date()))"),
             ("history detail mode state", 'const [historyDetailMode, setHistoryDetailMode] = useState<HistoryDetailMode>("structured")'),
             ("history calendar date resets structured mode", 'setHistoryDetailMode("structured");'),
@@ -2394,7 +2395,7 @@ def main() -> int:
             ("history structured records render", "selectedHistoryRecordDisplayItems.map((item) =>"),
             ("history raw records render", "selectedHistoryRawDisplayItems.map((item) =>"),
             ("history raw source status", "sourceStatusLabel: boundDisplayText(hasSourceText ? \"原始逐字稿\" : \"僅結構化\", 40)"),
-            ("history raw fallback copy", "尚無原始逐字稿；正式紀錄只保留結構化資料。"),
+            ("history raw fallback copy", "尚無原始逐字稿；此筆紀錄只保留結構化資料。"),
         ):
             _assert_contains(label, content, marker)
         history_calendar_day_block = _function_block(content, "historyCalendarDayDisplayItem")
@@ -2435,10 +2436,22 @@ def main() -> int:
             ("history raw source metadata lookup", "const sourceText = record.metadata_json?.source_text;"),
             ("history raw source type guard", 'const hasSourceText = typeof sourceText === "string";'),
             ("history raw bounded source text", "boundDisplayText(sourceText, maxDisplayDetailTextLength)"),
-            ("history raw fallback assignment", ': "尚無原始逐字稿；正式紀錄只保留結構化資料。";'),
+            ("history raw fallback assignment", ': "尚無原始逐字稿；此筆紀錄只保留結構化資料。";'),
             ("history raw status label", 'sourceStatusLabel: boundDisplayText(hasSourceText ? "原始逐字稿" : "僅結構化", 40)'),
         ):
             _assert_contains(label, history_raw_display_block, marker)
+        pending_save_block = _function_block(content, "pendingRecordForSave")
+        _assert_contains(
+            "pending save preserves bounded source text",
+            pending_save_block,
+            "const sanitizedMetadata = boundMetadata(record.metadata_json, true);",
+        )
+        strip_metadata_block = _function_block(content, "stripRawTextMetadata")
+        _assert_not_contains(
+            "source text must not be stripped from record metadata",
+            strip_metadata_block,
+            '"source_text"',
+        )
         _assert_contains(
             "history record detail handler",
             content,

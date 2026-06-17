@@ -15,6 +15,37 @@
 
 ## 2026-06-14
 
+### T954 Preserve bounded source text for History raw records
+
+類型：backend / mobile / verifier / docs / history
+
+檔案：
+
+- `backend/app/services/record_sanitization.py`
+- `backend/tests/test_records.py`
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- AI-confirmed record saves now preserve bounded `metadata_json.source_text` so History's raw-record tab can show saved speech-to-text source content.
+- Backend record metadata sanitizer now allows bounded `source_text` while continuing to remove broader raw text keys such as `transcript`, `raw_text`, `raw_transcript`, `original_text`, and `normalized_text`.
+- Mobile save metadata now uses the existing bounded metadata helper with source-text preservation before POSTing `/records`.
+- History fallback copy now describes the per-record missing-source condition instead of implying all formal records must be structured-only.
+- 未記錄或輸出 PHI、request body、raw prompt、raw model output、secret 或 token；變更只允許 bounded app record metadata `source_text` 作為使用者可在歷史頁查看的原始紀錄來源。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_records.py` 通過。
+- `cd mobile && rtk npm run quality` 通過。
+
+後續：
+
+- 若未來加入完整錄音檔或長逐字稿保存，需另做加密儲存、保留期限、匯出/刪除與隱私設定，而不是擴大此 bounded metadata 欄位。
+
 ### T953 Mark DeepSeek as backend API parser and document prompt
 
 類型：backend / mobile / docs / test / ai
