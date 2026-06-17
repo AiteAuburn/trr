@@ -15,6 +15,36 @@
 
 ## 2026-06-17
 
+### T1025 share Year Review SVG asset through native share
+
+類型：mobile / docs / verifier / year-review
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `expo-file-system` usage in `mobile/App.tsx` for Year Review share-card assets.
+- Added a safe filename helper and cache writer for privacy-masked Year Review SVG assets.
+- Updated Year Review share flow to write the backend privacy-masked SVG card to local cache and pass the file URI to `Share.share` together with bounded `share_text`.
+- Kept raw SVG out of UI status and share text; status only reports bounded filename/checksum/share result.
+- Added navigation verifier guards for FileSystem import, cache write, UTF-8 SVG write, asset URI preparation, and `Share.share` URL binding.
+- 未變更 backend year-review schema、snapshot generation、share-package contract、AI/LLM calls、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- 真機測試可確認不同 Android share targets 對 SVG file URI 的支援；必要時再加 PNG render/export path。
+
 ### T1024 add user-selected eaten time to Food Community sharing
 
 類型：mobile / docs / verifier / community

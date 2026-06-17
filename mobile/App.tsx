@@ -15,6 +15,7 @@ import {
   View
 } from "react-native";
 import { Audio } from "expo-av";
+import * as FileSystem from "expo-file-system";
 import {
   benchmarkNativeLlama,
   benchmarkNativeWhisper,
@@ -5611,6 +5612,25 @@ function yearReviewPreviewBoundaryCopy() {
   );
 }
 
+function safeYearReviewShareAssetFileName(value: string) {
+  const fallback = "year-review-share-card.svg";
+  const bounded = boundDisplayText(value || fallback, maxDisplayTextLength);
+  const sanitized = bounded.replace(/[^a-zA-Z0-9._-]/g, "_");
+  return sanitized.endsWith(".svg") ? sanitized : `${sanitized || "year-review-share-card"}.svg`;
+}
+
+async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset) {
+  if (!FileSystem.cacheDirectory) {
+    throw new Error("year_review_share_cache_unavailable");
+  }
+  const filename = safeYearReviewShareAssetFileName(asset.filename);
+  const uri = `${FileSystem.cacheDirectory}${filename}`;
+  await FileSystem.writeAsStringAsync(uri, asset.svg_text, {
+    encoding: FileSystem.EncodingType.UTF8
+  });
+  return uri;
+}
+
 function yearReviewHeroRecordCountCopy(count: number) {
   const boundedCount = clampNumber(count, 0, maxMobileCountValue);
   return boundDisplayText(`前一年度共記錄 ${boundedCount} 次`, maxDisplayTextLength);
@@ -10031,9 +10051,11 @@ export default function App() {
       }
       const privacyCopy = sharePackage.privacy_mask_applied ? "已確認隱私遮罩" : "尚未確認隱私遮罩";
       const packageCopy = sharePackage.external_share_enabled ? "分享 package 已確認" : "分享 package 尚未啟用";
+      const shareAssetUri = await writeYearReviewShareAssetFile(shareAsset);
       const shareResult = await Share.share({
         title: shareFilename,
-        message: boundDisplayText(sharePackage.share_text, maxDisplayDetailTextLength)
+        message: boundDisplayText(sharePackage.share_text, maxDisplayDetailTextLength),
+        url: shareAssetUri
       });
       const shareResultKind = shareResult.action === Share.sharedAction ? "opened" : "dismissed";
       const shareResultCopy =
