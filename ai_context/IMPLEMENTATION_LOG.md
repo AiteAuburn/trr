@@ -15,6 +15,39 @@
 
 ## 2026-06-17
 
+### T1035 align Phase 2 points-to-store copy
+
+類型：mobile / docs / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated Food Community copy so community points are described as already connected to Store redemptions instead of future-only.
+- Updated Store empty wallet copy to mention all current redemption categories: coupons, discount codes, special badges, and member benefits.
+- Updated the Store future-module description to include special badges alongside coupons, product discounts, and member rewards.
+- Added verifier guards requiring the current points-to-store copy and rejecting stale future-only or coupon-only wording.
+- 未變更 backend runtime、mobile network request paths、store/community redemption or leaderboard behavior、AI/LLM calls、STT、parser、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-harness` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing Phase 2 and Year Review copy against the backend-ready contracts before final completion audit.
+
 ### T1034 align Phase 2 readiness copy with backend-ready contracts
 
 類型：mobile / docs / verifier

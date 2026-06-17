@@ -3496,6 +3496,7 @@ def main() -> int:
             ("food community backend-aware intro copy", "backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。"),
             ("food community backend-aware empty copy", "backend ready 時會依搜尋同步，未連線時只篩選本機預覽。"),
             ("food community backend-aware share status copy", "backend ready 時可送出食物分享、建立社群點數並刷新排行榜與商城點數；visual smoke 或 backend unavailable 時不寫入資料。"),
+            ("food community points store bridge current copy", "點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利"),
             ("food community backend share mapping", "examples: (value.shares ?? []).slice(0, 3).map((share) => ({"),
             ("food community backend-ready item accessibility", "同步已載入食物分享統計與個別紀錄"),
             ("food community metric summary", "metricSummary: boundDisplayText(\n      `${shareCount} 人分享，平均上升 ${averageRise} mg/dL`,"),
@@ -3865,6 +3866,7 @@ def main() -> int:
             ("store backend-aware local boundary copy", "商城目前可同步點數、發出優惠券 / 折扣碼並建立兌換紀錄"),
             ("store backend-aware cart intro copy", "點數帳本、兌換券與折扣碼已可同步；購物車、出貨訂單與付款仍未接上。"),
             ("store point mall badge", 'storePreview: boundDisplayText("點數商城", maxDisplayTextLength)'),
+            ("store future card special badge copy", "點數商城、優惠券、商品折扣、特殊徽章與會員獎勵入口。"),
             ("store cart integration button label", 'return boundDisplayText("查看購物車整合狀態", maxDisplayTextLength);'),
             ("store cart integration accessibility", "查看購物車、出貨訂單與付款整合狀態；不建立訂單或付款"),
             ("store cart backend order flow evidence", "需等購物車、庫存、出貨、付款與退款規則完成後再接 backend order flow。"),
@@ -3877,6 +3879,7 @@ def main() -> int:
             ("store redemption reward payload", "body: JSON.stringify({ reward_code: product.id })"),
             ("store redemption use endpoint", "`/store/redemptions/${redemption.id}/use`"),
             ("store redemption wallet label", "我的兌換券"),
+            ("store empty wallet all reward types copy", "尚未同步兌換紀錄；完成食物分享取得點數後可兌換優惠券、折扣碼、特殊徽章或會員福利。"),
             ("store redemption wallet render", "storeRedemptionDisplayItems.map((product) =>"),
             ("store redemption action binding", "onPress={() => pressStoreRedemptionStatus(product)}"),
             ("store redemption usable issued status", 'status === "issued" &&'),
@@ -4052,6 +4055,8 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("food community stale future store bridge copy", "點數未來可串接商城兌換優惠券、商品折扣、特殊徽章與會員福利。"),
+            ("store stale empty wallet coupon-only copy", "尚未同步兌換券；完成食物分享取得點數後可兌換優惠券或折扣碼。"),
             ("community readiness stale public settings incomplete copy", "公開顯示名稱與可見範圍設定"),
             ("ranking readiness stale opt-in incomplete copy", "user public ranking opt-in 與退出流程"),
             ("ranking future module stale opt-in requirement", 'requirements: ["user public ranking opt-in", "ranking stats structure", "排名退出與歷史資料撤回流程"]'),

@@ -577,7 +577,7 @@ const futureModuleCards: FutureModuleCard[] = [
   {
     id: "store",
     title: "商城",
-    description: "點數商城、優惠券、商品折扣與會員獎勵入口。",
+    description: "點數商城、優惠券、商品折扣、特殊徽章與會員獎勵入口。",
     readiness: "點數兌換與兌換券已接 backend；購物車、出貨、付款與法務仍待完成。",
     requirements: ["點數帳本與兌換券狀態", "購物車、出貨訂單與付款", "退款、履約與商品法務審核"],
     safety: "商城商品不得宣稱醫療療效；正式交易與出貨前仍需完成付款與商品審核。",
@@ -14934,7 +14934,7 @@ export default function App() {
                   <Text style={styles.evidence}>{row.value}</Text>
                 </View>
               ))}
-              <Text style={styles.evidence}>點數未來可串接商城兌換優惠券、商品折扣、特殊徽章與會員福利。</Text>
+              <Text style={styles.evidence}>點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。</Text>
             </View>
             <View style={styles.heroCardFeature}>
               <View style={styles.heroIconBubble}>
@@ -16436,7 +16436,7 @@ export default function App() {
                   </View>
                 ))
               ) : (
-                <Text style={styles.evidence}>尚未同步兌換券；完成食物分享取得點數後可兌換優惠券或折扣碼。</Text>
+                <Text style={styles.evidence}>尚未同步兌換紀錄；完成食物分享取得點數後可兌換優惠券、折扣碼、特殊徽章或會員福利。</Text>
               )}
             </View>
             {storeActionStatus ? (

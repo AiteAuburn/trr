@@ -1582,7 +1582,7 @@ AI 分析結果：
 - 社群積分預留：分享資料得點數，完整前後血糖可加權，通過審核後可進排行榜。
 - 社群排行榜：backend `/community/leaderboards` 必須支援分享次數排行、貢獻度排行、食物測試達人排行，且 integration test 必須驗證 opt-in 後三種榜單都會包含公開名稱與正確分數；未 opt-in 或後續 opt-out 時不得出現在公開榜單。食物測試達人分數必須以 distinct food item 計算，同食物重複分享只增加分享次數與貢獻度，不增加 food_tester 分數。同分榜單必須用公開顯示名稱與 account id 作穩定排序，避免公開排名在同分時漂移。
 - Food Community 頁內排行榜小節標題必須是「社群排行榜」，不可再顯示「預留」或 `opt-in 尚未啟用`，因為一般操作路徑已可透過 backend 同步公開設定與三種榜單；未完成的仍是貼文治理、退出後歷史資料撤回與審核流程。
-- 點數與商城串接預留：優惠券、商品折扣、特殊徽章、會員福利。
+- 點數與商城已在一般操作路徑串接：食物分享成功後會刷新商城點數 / 兌換券，點數可兌換優惠券、商品折扣、特殊徽章與會員福利。Community 文案不可再寫「點數未來可串接商城」；Store 空兌換紀錄文案也不可只提優惠券 / 折扣碼而漏掉特殊徽章或會員福利 reservation。
 - 公開顯示名稱：一般操作路徑顯示 `/community/settings` 的 public display name，未同步時 fallback 到 bounded account display name；可由使用者更新。
 - Future preview hero / 狀態摘要卡必須是單層淡綠卡，可 wrap；不可在卡內再包另一層白色 panel。
 - 公開顯示名稱預覽的 account display name / fallback 必須透過 bounded display helper 產生；不可在 JSX 內直接依 account 條件組 fallback copy。
