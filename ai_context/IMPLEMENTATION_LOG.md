@@ -15,6 +15,34 @@
 
 ## 2026-06-14
 
+### T963 prioritize exact food search matches
+
+類型：backend / test / docs / community
+
+檔案：
+
+- `backend/app/api/community.py`
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Updated `/community/foods?query=` to rank exact normalized food-name matches before prefix and fuzzy matches.
+- Added regression coverage where a newer fuzzy food item no longer appears before exact food entries.
+- This improves direct food search for the shared food blood-glucose database.
+- 未變更 points ledger semantics、leaderboard opt-in、store redemption、AI、LLM、STT、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search tests/test_community_store_year_review.py::test_food_share_creates_food_stats_points_and_leaderboards` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
+後續：
+
+- Consider adding aliases or localized synonym search once the food database has enough real entries.
+
 ### T962 preserve persisted achievement unlocks in summary
 
 類型：backend / test / docs / achievements

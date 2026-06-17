@@ -685,12 +685,35 @@ def test_food_detail_returns_share_records_stats_and_cross_category_search() -> 
     assert lower_after_body["food"]["id"] == food_id
     assert lower_after_body["share"]["glucose_delta"] == -20
 
+    fuzzy_name = f"{food_name} 加料"
+    fuzzy_response = client.post(
+        "/community/foods/shares",
+        headers={"X-Account-Id": account_id},
+        json={
+            "food_name": fuzzy_name,
+            "category": "drinks",
+            "eaten_at": datetime(2026, 1, 8, 12, 0, tzinfo=UTC).isoformat(),
+            "before_glucose": 100,
+            "after_glucose": 121,
+            "serving_description": "加料版本",
+            "public_note": "名稱包含原食物但不是同一項",
+        },
+    )
+    assert fuzzy_response.status_code == 201
+    fuzzy_body = fuzzy_response.json()
+
     search_response = client.get(
         f"/community/foods?query={food_name}",
         headers={"X-Account-Id": account_id},
     )
     assert search_response.status_code == 200
-    assert {item["id"] for item in search_response.json()} == {food_id, cross_category_body["food"]["id"]}
+    search_items = search_response.json()
+    assert {item["id"] for item in search_items} == {
+        food_id,
+        cross_category_body["food"]["id"],
+        fuzzy_body["food"]["id"],
+    }
+    assert search_items[-1]["id"] == fuzzy_body["food"]["id"]
 
     blank_search_response = client.get(
         "/community/foods?query=%20%20%20",
@@ -707,7 +730,8 @@ def test_food_detail_returns_share_records_stats_and_cross_category_search() -> 
         headers={"X-Account-Id": account_id},
     )
     assert category_search_response.status_code == 200
-    assert [item["id"] for item in category_search_response.json()] == [food_id]
+    category_search_items = category_search_response.json()
+    assert [item["id"] for item in category_search_items] == [food_id, fuzzy_body["food"]["id"]]
 
     detail_response = client.get(
         f"/community/foods/{food_id}",

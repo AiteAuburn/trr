@@ -111,6 +111,22 @@ None.
 
 ## Done
 
+### T963: Prioritize exact food search matches
+
+Status: done
+
+Summary:
+
+- Updated `/community/foods?query=` ordering so exact normalized food-name matches come before prefix and fuzzy matches.
+- Added backend regression coverage so a newer fuzzy match cannot appear ahead of exact food entries.
+- This keeps direct food search aligned with the food blood-glucose database requirement.
+
+Verification:
+
+- `rtk docker compose run --rm backend pytest -q tests/test_community_store_year_review.py::test_food_detail_returns_share_records_stats_and_cross_category_search tests/test_community_store_year_review.py::test_food_share_creates_food_stats_points_and_leaderboards` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+
 ### T962: Preserve persisted achievement unlocks in summary
 
 Status: done

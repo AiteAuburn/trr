@@ -2,7 +2,7 @@ from uuid import UUID
 from typing import cast
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
-from sqlalchemy import desc, func, select
+from sqlalchemy import case, desc, func, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_account
@@ -212,7 +212,8 @@ def list_foods(
     db: Session = Depends(get_db),
 ) -> list[FoodItemRead]:
     _ = account
-    statement = select(FoodItem).order_by(FoodItem.created_at.desc()).limit(limit)
+    statement = select(FoodItem)
+    order_by_clauses = [FoodItem.created_at.desc(), FoodItem.id.desc()]
     if category is not None:
         statement = statement.where(FoodItem.category == category)
     if query is not None:
@@ -227,6 +228,16 @@ def list_foods(
             )
         normalized_query = f"%{normalized_query_value}%"
         statement = statement.where(FoodItem.normalized_name.ilike(normalized_query))
+        order_by_clauses = [
+            case(
+                (FoodItem.normalized_name == normalized_query_value, 0),
+                (FoodItem.normalized_name.like(f"{normalized_query_value}%"), 1),
+                else_=2,
+            ),
+            FoodItem.created_at.desc(),
+            FoodItem.id.desc(),
+        ]
+    statement = statement.order_by(*order_by_clauses).limit(limit)
     return [_food_read(db, item) for item in db.scalars(statement)]
 
 
