@@ -13,6 +13,36 @@
 後續:
 ```
 
+## 2026-06-18
+
+### T1047 document shareable Android release APK flow
+
+類型：docs / verifier
+
+檔案：
+
+- `README.md`
+- `scripts/verify_android_apk_scripts.py`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a README runbook for creating a standalone release APK that can be shared with another Android phone.
+- Documented the difference between internal install smoke APKs and production-like distribution APKs.
+- Documented the required production/internal preflight commands, the release output path, tester install options, and why release APKs do not require Metro / Expo start.
+- Extended the Android APK script verifier so the shareable-release instructions remain present.
+- 未變更 app runtime、backend runtime、mobile network request paths、Android signing config、AI/LLM calls、STT、parser、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `rtk python3 -m py_compile scripts/verify_android_apk_scripts.py` passed.
+- `cd mobile && rtk npm run verify:android-apk-scripts` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- 若 Android release 分享流程改成 AAB / Play internal testing，需同步更新 README 與 verifier markers。
+
 ## 2026-06-17
 
 ### T1046 remove duplicate mobile dependency key

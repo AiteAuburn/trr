@@ -193,6 +193,42 @@ The APK is written to:
 mobile/android/app/build/outputs/apk/release/app-release.apk
 ```
 
+To make a release APK that can be shared with another Android phone:
+
+1. Choose the release type.
+   - Internal install smoke: allowed only for trusted testers, may use a local
+     API URL, and may temporarily use debug signing.
+   - Production-like distribution: must use an HTTPS production API URL, dev
+     auth disabled, debug tools disabled, and a real release signing config.
+2. Run the matching preflight from `mobile/` before building:
+
+```bash
+cd mobile
+npm run preflight:android-apk:internal
+# or, for production-like distribution:
+npm run preflight:android-apk:production
+```
+
+3. Build the standalone release APK from `mobile/android/`:
+
+```bash
+cd mobile/android
+./gradlew assembleRelease
+```
+
+4. Share this file with the tester:
+
+```text
+mobile/android/app/build/outputs/apk/release/app-release.apk
+```
+
+The tester can install it by opening the APK on Android and allowing installs
+from that file source when prompted, or by using `adb install app-release.apk`.
+This release APK embeds the Expo JavaScript bundle and assets, so the tester
+does not need `npm run start`, `npx expo start`, Metro, or a development
+server. Do not share `assembleDebug` APKs for standalone testing because debug
+APKs still expect Metro.
+
 Before building, check the local Android environment:
 
 ```bash
