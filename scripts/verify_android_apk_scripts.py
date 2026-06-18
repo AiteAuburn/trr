@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -34,12 +36,21 @@ FORBIDDEN_PRODUCTION_FLAGS = {
 
 
 def main() -> int:
-    package = json.loads(PACKAGE_JSON.read_text(encoding="utf-8"))
+    package_text = PACKAGE_JSON.read_text(encoding="utf-8")
+    package = json.loads(package_text)
     readme = README.read_text(encoding="utf-8")
     build_gradle = ANDROID_APP_BUILD_GRADLE.read_text(encoding="utf-8")
     prereq_script = APK_PREREQ_SCRIPT.read_text(encoding="utf-8")
     scripts = package.get("scripts", {})
     errors: list[str] = []
+
+    dependency_key_counts = Counter(
+        match.group(1)
+        for match in re.finditer(r'^\s{4}"([^"]+)":\s*"[^"]+"[,}]?$', package_text, flags=re.MULTILINE)
+    )
+    for key, count in sorted(dependency_key_counts.items()):
+        if count > 1:
+            errors.append(f"mobile/package.json dependency key {key!r} is duplicated {count} times")
 
     for name, expected in REQUIRED_SCRIPTS.items():
         actual = scripts.get(name)

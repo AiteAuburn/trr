@@ -15,6 +15,32 @@
 
 ## 2026-06-17
 
+### T1046 remove duplicate mobile dependency key
+
+類型：mobile / verifier
+
+檔案：
+
+- `mobile/package.json`
+- `scripts/verify_android_apk_scripts.py`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Removed a duplicate `expo-secure-store` dependency key from `mobile/package.json`.
+- Extended the Android/mobile script verifier to reject duplicate dependency keys in `mobile/package.json`.
+- 未變更 runtime dependency versions、backend runtime、mobile network request paths、AI/LLM calls、STT、parser、PHI logging、raw transcript、raw prompt、raw model output、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_android_apk_scripts.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing the remaining goal requirements against current evidence before final completion.
+
 ### T1045 surface food glycemic reference value
 
 類型：mobile / docs / verifier
