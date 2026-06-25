@@ -100,11 +100,24 @@ Highest priority to lowest priority:
 
 Recommended next five:
 
-1. Implement real auth boundary or auth abstraction so dev auth is fully isolated.
-2. Build the complete MVP record flow: Home -> transcript confirm -> AI confirm -> save.
-3. Add Today / History / Detail / Edit / Delete UI.
-4. Add subscription entitlement schema and voice quota counters.
-5. Add basic analytics page with MVP period selector and six required glucose stats.
+No queued implementation tasks remain in `Active` or `Next Up` as of the latest
+task audit. The older recommended items below have corresponding `Done` entries:
+`T037`, `T027`, `T028`, `T030`, `T031`, `T032`, `T033`, `T034`, `T036`, and
+`T040`.
+
+Future roadmap candidates should be promoted into `Next Up` only after product
+scope is explicitly selected:
+
+1. Complete production provider SDK callbacks, nonce/state validation, and
+   provider-driven account creation beyond the current auth/session boundary.
+2. Add production Android release signing plus Play internal testing / AAB
+   distribution flow.
+3. Build Store fulfillment: inventory reservation, order/payment/refund,
+   rollback, legal review, and customer-service audit paths.
+4. Build Community governance: posts, comments, block/report/moderation,
+   public deletion/revoke controls, opt-out cleanup, and audit events.
+5. Deepen external sharing surfaces for Year Review and doctor/caregiver
+   sharing with explicit permissions, expiration, revoke, and export controls.
 
 ## Next Up
 None.
