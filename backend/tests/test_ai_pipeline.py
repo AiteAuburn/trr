@@ -65,7 +65,13 @@ from app.services.ai_pipeline import (
     TranscriptTooDenseError,
     validate_local_parser_response_size,
 )
-from app.schemas.ai import CommandProposalRequest, ParsedRecordPreview, ParsePreviewRequest, TranscriptSegment
+from app.schemas.ai import (
+    CommandProposalRequest,
+    ParsedRecordPreview,
+    ParsePreviewRequest,
+    ParsePreviewResponse,
+    TranscriptSegment,
+)
 from app.schemas.ai import (
     AI_MODEL_DESCRIPTION_MAX_LENGTH,
     AI_MODEL_ID_MAX_LENGTH,
@@ -152,6 +158,7 @@ def test_list_ai_models() -> None:
     assert models["stt_models"][1]["available"] is True
     assert models["stt_models"][2]["available"] is True
     llm_model_ids = [model["id"] for model in models["llm_models"]]
+    assert llm_model_ids[0] == DEEPSEEK_LLM_MODEL_ID
     assert "local-llm-schema-stub" in llm_model_ids
     assert DEEPSEEK_LLM_MODEL_ID in llm_model_ids
     assert "ollama-qwen2.5-1.5b" in llm_model_ids
@@ -2106,7 +2113,7 @@ def test_deepseek_request_body_sends_prompt_as_system_message(monkeypatch) -> No
         llm_model_id=DEEPSEEK_LLM_MODEL_ID,
         prompt="Atomic segments:\nseg_001: 血糖 120",
         max_tokens=240,
-        keep_alive="30m",
+        keep_alive=None,
         stream=False,
     )
 
@@ -2121,6 +2128,20 @@ def test_deepseek_request_body_sends_prompt_as_system_message(monkeypatch) -> No
         "content": "Atomic segments:\nseg_001: 血糖 120",
     }
     assert body["response_format"] == {"type": "json_object"}
+    assert "keep_alive" not in body
+
+
+def test_local_openai_compatible_request_body_keeps_local_keep_alive() -> None:
+    body = _local_parser_request_body(
+        model_id="gemma-4-e2b-local-pending",
+        llm_model_id="gemma-4-e2b-local-pending",
+        prompt="Atomic segments:\nseg_001: 血糖 120",
+        max_tokens=240,
+        keep_alive="30m",
+        stream=False,
+    )
+
+    assert body["keep_alive"] == "30m"
 
 
 def test_parse_preview_accepts_static_llm_without_runtime_model_lookup(monkeypatch) -> None:
@@ -2397,6 +2418,53 @@ def test_command_proposal_create_record_does_not_save_directly() -> None:
     )
     assert list_response.status_code == 200
     assert list_response.json() == []
+
+
+def test_command_proposal_uses_deepseek_parser_for_record_candidates(monkeypatch) -> None:
+    from app.services import ai_pipeline
+
+    client = TestClient(app)
+    account_id, profile_id = create_account_and_profile(client, "command-deepseek-record")
+    settings = get_settings().model_copy(
+        update={
+            "deepseek_parser_url": "https://api.deepseek.com/v1/chat/completions",
+            "deepseek_api_key": "sk-command-test",
+        }
+    )
+    calls: list[dict[str, object]] = []
+
+    monkeypatch.setattr(ai_pipeline, "get_settings", lambda: settings)
+    monkeypatch.setattr(ai_pipeline, "_installed_ollama_model_ids", lambda _: set())
+
+    def fake_deepseek_parser(**kwargs: object) -> ParsePreviewResponse:
+        calls.append(dict(kwargs))
+        return ai_pipeline._build_deterministic_parse_preview(**kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(ai_pipeline, "_call_deepseek_parser", fake_deepseek_parser)
+
+    response = client.post(
+        "/ai/command-proposal",
+        headers={"X-Account-Id": account_id},
+        json={
+            "profile_id": profile_id,
+            "transcript": "今天早餐後血糖 138，早餐吃蛋餅",
+            "stt_model_id": "browser-web-speech",
+        },
+    )
+
+    assert response.status_code == 200
+    assert calls
+    assert calls[0]["llm_model_id"] == DEEPSEEK_LLM_MODEL_ID
+    body = response.json()
+    assert body["llm_model_id"] == DEEPSEEK_LLM_MODEL_ID
+    proposal = body["proposal"]
+    assert proposal["intent"] == "CREATE_RECORD"
+    assert proposal["requires_confirmation"] is True
+    assert proposal["payload"]["records"]
+    assert all(
+        record["metadata_json"]["parser_model_id"] == DEEPSEEK_LLM_MODEL_ID
+        for record in proposal["payload"]["records"]
+    )
 
 
 def test_command_proposal_response_schema_bounds_output_shape() -> None:

@@ -392,17 +392,30 @@ def command_proposal(
     db.commit()
     require_voice_quota(account, payload.voice_seconds, db)
 
-    proposal = build_command_proposal(
-        profile_id=payload.profile_id,
-        transcript=payload.transcript,
-        stt_model_id=payload.stt_model_id,
-        llm_model_id=payload.llm_model_id,
-        occurred_at=payload.occurred_at,
-    )
-    db.commit()
-    return CommandProposalResponse(
-        transcript="",
-        stt_model_id=payload.stt_model_id,
-        llm_model_id=payload.llm_model_id,
-        proposal=proposal,
-    )
+    try:
+        proposal = build_command_proposal(
+            profile_id=payload.profile_id,
+            transcript=payload.transcript,
+            stt_model_id=payload.stt_model_id,
+            llm_model_id=payload.llm_model_id,
+            occurred_at=payload.occurred_at,
+        )
+        db.commit()
+        return CommandProposalResponse(
+            transcript="",
+            stt_model_id=payload.stt_model_id,
+            llm_model_id=payload.llm_model_id,
+            proposal=proposal,
+        )
+    except LocalParserUnavailableError as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=parser_unavailable_detail(exc),
+        ) from exc
+    except LocalParserError as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=parser_failed_detail(),
+        ) from exc

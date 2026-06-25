@@ -13,6 +13,42 @@
 後續:
 ```
 
+## 2026-06-25
+
+### T1049 make DeepSeek first backend processing model
+
+類型：backend / docs / test
+
+檔案：
+
+- `backend/app/services/ai_pipeline.py`
+- `backend/app/api/ai.py`
+- `backend/tests/test_ai_pipeline.py`
+- `README.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved `deepseek-chat` to the first backend LLM model option while preserving the existing request-schema defaults.
+- Kept DeepSeek on the compact segmented parser IR path with bounded per-batch `max_tokens`, but stopped sending the Ollama-only `keep_alive` field to hosted DeepSeek requests.
+- Routed `/ai/command-proposal` create-record candidates through the configured LLM parser path for DeepSeek/Gemma/Ollama models, while keeping navigation/report command intents deterministic and cheap.
+- Added command-proposal parser error handling so LLM parser failures return the same non-PHI structured details as parse-preview.
+- Updated README DeepSeek setup notes to state that DeepSeek is the first/default processing model when configured.
+- 未變更 persistence schema、record save behavior、mobile runtime、Android signing config、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `rtk python3 -m py_compile backend/app/services/ai_pipeline.py backend/app/api/ai.py` passed.
+- `rtk docker compose exec backend pytest -q tests/test_ai_pipeline.py::test_list_ai_models tests/test_ai_pipeline.py::test_deepseek_request_body_sends_prompt_as_system_message tests/test_ai_pipeline.py::test_local_openai_compatible_request_body_keeps_local_keep_alive tests/test_ai_pipeline.py::test_command_proposal_uses_deepseek_parser_for_record_candidates tests/test_ai_pipeline.py::test_command_proposal_create_record_does_not_save_directly` passed.
+- `rtk docker compose exec backend pytest -q tests/test_ai_pipeline.py` passed.
+- `rtk docker compose exec backend pytest -q tests/test_config.py tests/test_community_store_year_review.py::test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured` passed.
+- `rtk docker compose exec backend pytest -q` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If hosted DeepSeek starts enforcing stricter response-format behavior, add a provider-specific compatibility test before changing prompt or request body fields.
+
 ## 2026-06-24
 
 ### T1048 audit remaining task queue state

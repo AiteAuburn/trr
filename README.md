@@ -315,7 +315,11 @@ DEEPSEEK_API_KEY=sk-...
 docker compose up -d backend
 ```
 
-3. In app settings, choose `DeepSeek Chat` (if not defaulted automatically).
+3. DeepSeek is the first backend LLM model option and the default
+   `/ai/parse-preview`, `/ai/parse-preview/progress-stream`, and
+   `/ai/command-proposal` processing model when it is configured. In app
+   settings, keep `DeepSeek Chat` selected unless you are intentionally testing
+   a local model.
 
 DeepSeek system prompts used by backend (these values come from `.env` and can be hot-swapped):
 
@@ -343,6 +347,9 @@ Prompt 分析（你可以直接改 `DEEPSEEK_SYSTEM_PROMPT` / `DEEPSEEK_ANALYSIS
    - `records` 與 `rejected` 都不含 PHI 外洩文字，後端與前端只做有限長度回傳。
 
 若要微調精度，可以先調 `DEEPSEEK_ANALYSIS_ADDENDUM`（偏嚴可增加保守詞句、偏鬆可放寬「可接受不確定」條件）。  
+DeepSeek requests use the same compact segmented IR prompt as local parser
+models, with per-batch `max_tokens` bounded by `LOCAL_LLM_MAX_TOKENS`; hosted
+DeepSeek calls do not send Ollama-only `keep_alive` fields.
 
 Year Review also uses DeepSeek when the same endpoint/key are configured. This prompt is fixed in backend code because it only accepts precomputed yearly aggregates, not transcripts or records:
 

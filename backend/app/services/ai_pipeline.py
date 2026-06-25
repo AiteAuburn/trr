@@ -218,6 +218,14 @@ STT_MODELS = [
 
 LLM_MODELS = [
     AiModelOption(
+        id=DEEPSEEK_LLM_MODEL_ID,
+        label="DeepSeek Chat",
+        kind="llm",
+        runtime="server_api",
+        available=True,
+        description="OpenAI-compatible DeepSeek parser. Requires DEEPSEEK_PARSER_URL and DEEPSEEK_API_KEY.",
+    ),
+    AiModelOption(
         id="local-llm-schema-stub",
         label="Local LLM Schema Stub",
         kind="llm",
@@ -264,14 +272,6 @@ LLM_MODELS = [
         runtime="local",
         available=True,
         description="Runnable local parser through Ollama. Useful for small-model benchmark comparison.",
-    ),
-    AiModelOption(
-        id=DEEPSEEK_LLM_MODEL_ID,
-        label="DeepSeek Chat",
-        kind="llm",
-        runtime="server_api",
-        available=True,
-        description="OpenAI-compatible DeepSeek parser. Requires DEEPSEEK_PARSER_URL and DEEPSEEK_API_KEY.",
     ),
     AiModelOption(
         id="openai-fallback-disabled",
@@ -1850,10 +1850,10 @@ def _local_parser_request_body(
     llm_model_id: str,
     prompt: str,
     max_tokens: int,
-    keep_alive: str,
+    keep_alive: str | None,
     stream: bool,
 ) -> dict[str, object]:
-    return {
+    body: dict[str, object] = {
         "model": model_id,
         "messages": [
             {
@@ -1865,9 +1865,11 @@ def _local_parser_request_body(
         "temperature": 0,
         "max_tokens": max_tokens,
         "response_format": {"type": "json_object"},
-        "keep_alive": keep_alive,
         "stream": stream,
     }
+    if keep_alive is not None:
+        body["keep_alive"] = keep_alive
+    return body
 
 
 def _local_parser_system_prompt(*, llm_model_id: str) -> str:
@@ -2144,7 +2146,7 @@ def _call_openai_compatible_local_parser(
                     segment_count=len(segment_batch),
                     configured_max=settings.local_llm_max_tokens,
                 ),
-                keep_alive=settings.local_llm_keep_alive,
+                keep_alive=None if llm_model_id == DEEPSEEK_LLM_MODEL_ID else settings.local_llm_keep_alive,
                 stream=False,
             )
             parsed = _request_local_parser_json(
@@ -2779,14 +2781,29 @@ def build_command_proposal(
             ),
         )
 
-    record_candidates = parse_transcript_to_records(
-        profile_id=profile_id,
-        transcript=normalized,
-        stt_model_id=stt_model_id,
-        llm_model_id=llm_model_id,
-        occurred_at=occurred_at,
-    )
-    record_candidates, _ = storage_compatible_preview_records(record_candidates)
+    if llm_model_id in {
+        GEMMA4_LLM_MODEL_ID,
+        DEEPSEEK_LLM_MODEL_ID,
+        OLLAMA_QWEN25_LLM_MODEL_ID,
+        OLLAMA_GEMMA3_LLM_MODEL_ID,
+        OLLAMA_LLAMA32_LLM_MODEL_ID,
+    }:
+        record_candidates = build_parse_preview(
+            profile_id=profile_id,
+            transcript=normalized,
+            stt_model_id=stt_model_id,
+            llm_model_id=llm_model_id,
+            occurred_at=occurred_at,
+        ).records
+    else:
+        record_candidates = parse_transcript_to_records(
+            profile_id=profile_id,
+            transcript=normalized,
+            stt_model_id=stt_model_id,
+            llm_model_id=llm_model_id,
+            occurred_at=occurred_at,
+        )
+        record_candidates, _ = storage_compatible_preview_records(record_candidates)
     if record_candidates and record_candidates[0].record_type != "note":
         record_actions = [
             ProposedAction(
