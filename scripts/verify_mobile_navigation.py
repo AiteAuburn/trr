@@ -1572,9 +1572,9 @@ def main() -> int:
             "onPress={enterAiSaveConfirm}",
         )
         _assert_contains(
-            "AI save confirm return binding",
+            "AI save confirm guarded return binding",
             content,
-            "onPress={returnFromAiSaveConfirm}",
+            "onPress={requestDailyRecordLeaveGuard}",
         )
         _assert_contains(
             "save success unsaved candidate handler",
@@ -2520,6 +2520,20 @@ def main() -> int:
             ("daily record delete confirm copy", "確定要刪除這筆紀錄嗎？"),
             ("daily record delete irreversible copy", "刪除後無法復原。"),
             ("daily record delete submit label", 'isDailyRecordRemoveConfirm ? "刪除" : "確認移除"'),
+            ("daily record leave guard title copy", "尚未儲存今天的紀錄"),
+            ("daily record leave guard body copy", "離開後，今天的修改將不會保留。"),
+            ("daily record leave guard question copy", "是否仍要離開？"),
+            ("daily record leave guard request handler", "function requestDailyRecordLeaveGuard()"),
+            ("daily record leave guard cancel handler", "function cancelDailyRecordLeaveGuard()"),
+            ("daily record leave guard confirm handler", "function confirmDailyRecordLeaveGuard()"),
+            ("daily record leave guard visible state", "const [dailyRecordLeaveGuardVisible, setDailyRecordLeaveGuardVisible] = useState(false);"),
+            ("daily record leave guard header branch", "if (hasUnsavedDailyRecordDraft)"),
+            ("daily record leave guard android back import", "BackHandler,"),
+            ("daily record leave guard android back listener", 'BackHandler.addEventListener("hardwareBackPress"'),
+            ("daily record leave guard android handled", "return true;"),
+            ("daily record leave guard render card", "styles.dailyLeaveGuardCard"),
+            ("daily record leave guard cancel binding", "onPress={cancelDailyRecordLeaveGuard}"),
+            ("daily record leave guard confirm binding", "onPress={confirmDailyRecordLeaveGuard}"),
             ("daily record fixed save bar", "styles.fixedSaveBar"),
             ("daily record save label", "? \"了解提醒並儲存今日紀錄\""),
             ("daily record category blank copy", "沒有提到的欄位保持空白"),

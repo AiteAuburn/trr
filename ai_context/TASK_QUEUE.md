@@ -144,6 +144,7 @@ Progress:
 - First UI/draft slice implemented: existing AI save-confirm route now presents a second-version daily-record page with record date, `AI今日摘要`, `今日錄音文字`, vertical category cards, category-specific field rows, per-entry `⋯` management affordance, and `儲存今日紀錄` save action.
 - This slice preserves the existing parser, preview editing/removal, backend save handler, backend validation, and audit path.
 - Second UI/action slice implemented: each daily-record entry `⋯` expands `編輯` / `刪除`; edit returns to the daily-record page, delete shows the required confirmation copy before removing the unsaved daily draft entry.
+- Third guard slice implemented: leaving the daily-record page through the header/back affordance or Android hardware back shows the shared unsaved-change prompt before returning to AI confirmation.
 
 Remaining:
 
@@ -151,7 +152,6 @@ Remaining:
 - Merge new same-day recordings into the existing daily record draft/record.
 - Keep all same-day transcript entries by timestamp beyond the current preview segments.
 - Re-run AI organization after add, edit, or delete.
-- Add unsaved-change guard for header back, Android back button, and Android back gesture.
 - Make the save action physically fixed outside the scroll area if the current visual action bar is insufficient in native QA.
 
 Implementation notes:

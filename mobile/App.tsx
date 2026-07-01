@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  BackHandler,
   KeyboardAvoidingView,
   Linking,
   Platform,
@@ -4890,6 +4891,30 @@ function aiSaveConfirmReturnStatusMessage() {
   return boundUiMessage("已返回 AI 整理確認；每日紀錄草稿保留，可繼續編輯或移除候選。");
 }
 
+function dailyRecordLeaveGuardTitleCopy() {
+  return boundDisplayText("尚未儲存今天的紀錄", maxDisplayTextLength);
+}
+
+function dailyRecordLeaveGuardBodyCopy() {
+  return boundDisplayText("離開後，今天的修改將不會保留。", maxDisplayDetailTextLength);
+}
+
+function dailyRecordLeaveGuardQuestionCopy() {
+  return boundDisplayText("是否仍要離開？", maxDisplayTextLength);
+}
+
+function dailyRecordLeaveGuardPromptStatusMessage() {
+  return boundUiMessage("尚未儲存今天的紀錄；請先選擇取消或離開。");
+}
+
+function dailyRecordLeaveGuardCancelStatusMessage() {
+  return boundUiMessage("已取消離開；每日紀錄草稿仍保留在目前畫面。");
+}
+
+function dailyRecordLeaveGuardConfirmStatusMessage() {
+  return boundUiMessage("已離開每日紀錄頁；未儲存草稿仍保留在 AI 確認流程。");
+}
+
 function aiSaveFailureBackAiReviewStatusMessage() {
   return boundUiMessage("已回到 AI 整理確認；候選紀錄保留，不會自動重試或重新呼叫 AI。");
 }
@@ -5980,6 +6005,7 @@ export default function App() {
     initialVisualSmokeScreen === "aiSaveConfirm" ? "aiSaveConfirm" : "aiReview"
   );
   const [dailyRecordMenuIndex, setDailyRecordMenuIndex] = useState<number | null>(null);
+  const [dailyRecordLeaveGuardVisible, setDailyRecordLeaveGuardVisible] = useState(false);
   const [previewEditFields, setPreviewEditFields] = useState<RecordEditFields>(() =>
     initialVisualSmokeScreen === "editPreviewRecord" ? visualSmokeDemoRecordEditFields() : emptyRecordEditFields()
   );
@@ -6379,6 +6405,18 @@ export default function App() {
     hasAiSaveConfirmWarnings
   );
   const hasUnsavedPreviewRecords = unsavedPreviewRecordCount > 0;
+  const hasUnsavedDailyRecordDraft = currentScreen === "aiSaveConfirm" && hasUnsavedPreviewRecords;
+  const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardTitleCopy();
+  const dailyRecordLeaveGuardBodyDisplayText = dailyRecordLeaveGuardBodyCopy();
+  const dailyRecordLeaveGuardQuestionDisplayText = dailyRecordLeaveGuardQuestionCopy();
+  const dailyRecordLeaveGuardCancelAccessibilityLabel = boundDisplayText(
+    "取消離開，保留每日紀錄草稿",
+    maxDisplayDetailTextLength
+  );
+  const dailyRecordLeaveGuardConfirmAccessibilityLabel = boundDisplayText(
+    "離開每日紀錄頁，今天未儲存修改不會保留",
+    maxDisplayDetailTextLength
+  );
   const hasPartialAiSave = lastSaveEntryMethod === "ai" && hasUnsavedPreviewRecords;
   const hasManualFallbackWithAiCandidates =
     lastSaveEntryMethod === "manual" && hasUnsavedPreviewRecords;
@@ -8312,6 +8350,10 @@ export default function App() {
       setStatus(busyActionStatusMessage());
       return;
     }
+    if (hasUnsavedDailyRecordDraft) {
+      requestDailyRecordLeaveGuard();
+      return;
+    }
     if (currentScreen === "aiReview") {
       returnToTranscriptEdit();
       return;
@@ -8321,6 +8363,22 @@ export default function App() {
       return;
     }
     setCurrentScreen(headerBackTarget);
+  }
+
+  function requestDailyRecordLeaveGuard() {
+    setDailyRecordLeaveGuardVisible(true);
+    setStatus(dailyRecordLeaveGuardPromptStatusMessage());
+  }
+
+  function cancelDailyRecordLeaveGuard() {
+    setDailyRecordLeaveGuardVisible(false);
+    setStatus(dailyRecordLeaveGuardCancelStatusMessage());
+  }
+
+  function confirmDailyRecordLeaveGuard() {
+    setDailyRecordLeaveGuardVisible(false);
+    returnFromAiSaveConfirm();
+    setStatus(dailyRecordLeaveGuardConfirmStatusMessage());
   }
 
   function openMenu(returnScreen: AppScreen = currentScreen) {
@@ -11690,6 +11748,17 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
+      if (hasUnsavedDailyRecordDraft) {
+        requestDailyRecordLeaveGuard();
+        return true;
+      }
+      return false;
+    });
+    return () => subscription.remove();
+  }, [hasUnsavedDailyRecordDraft]);
+
+  useEffect(() => {
     if (!isRecordingPreview || recordingStartedAt === null) {
       return;
     }
@@ -12227,11 +12296,36 @@ export default function App() {
                 accessibilityLabel={coreFlowDisplayLabels.returnConfirmAccessibility}
                 accessibilityRole="button"
                 style={styles.secondaryButton}
-                onPress={returnFromAiSaveConfirm}
+                onPress={requestDailyRecordLeaveGuard}
               >
                 <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.returnConfirm}</Text>
               </Pressable>
             </View>
+            {dailyRecordLeaveGuardVisible ? (
+              <View style={styles.dailyLeaveGuardCard}>
+                <Text style={styles.label}>{dailyRecordLeaveGuardTitleDisplayText}</Text>
+                <Text style={styles.warningText}>{dailyRecordLeaveGuardBodyDisplayText}</Text>
+                <Text style={styles.evidence}>{dailyRecordLeaveGuardQuestionDisplayText}</Text>
+                <View style={styles.actionRow}>
+                  <Pressable
+                    accessibilityLabel={dailyRecordLeaveGuardCancelAccessibilityLabel}
+                    accessibilityRole="button"
+                    style={styles.secondaryButton}
+                    onPress={cancelDailyRecordLeaveGuard}
+                  >
+                    <Text style={styles.secondaryButtonText}>取消</Text>
+                  </Pressable>
+                  <Pressable
+                    accessibilityLabel={dailyRecordLeaveGuardConfirmAccessibilityLabel}
+                    accessibilityRole="button"
+                    style={styles.dangerButton}
+                    onPress={confirmDailyRecordLeaveGuard}
+                  >
+                    <Text style={styles.dangerButtonText}>離開</Text>
+                  </Pressable>
+                </View>
+              </View>
+            ) : null}
             <View style={styles.dailyRecordDateCard}>
               <Text style={styles.confidence}>記錄日期</Text>
               <Text style={styles.dailyRecordDateText}>{dailyRecordDateDisplayText}</Text>
@@ -12372,7 +12466,7 @@ export default function App() {
                 accessibilityState={{ disabled: isBusy }}
                 style={[styles.secondaryButton, isBusy ? styles.buttonDisabled : null]}
                 disabled={isBusy}
-                onPress={returnFromAiSaveConfirm}
+                onPress={requestDailyRecordLeaveGuard}
               >
                 <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.returnConfirm}</Text>
               </Pressable>
@@ -18517,6 +18611,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     gap: 10,
     padding: 12
+  },
+  dailyLeaveGuardCard: {
+    backgroundColor: "#FFF7F1",
+    borderColor: "#F3C9BA",
+    borderRadius: 18,
+    borderWidth: 1,
+    gap: 10,
+    padding: 14
   },
   fixedSaveBar: {
     backgroundColor: "#FAFAF8",

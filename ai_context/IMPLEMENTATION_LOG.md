@@ -15,6 +15,38 @@
 
 ## 2026-07-01
 
+### T1056 add daily-record unsaved leave guard
+
+類型：mobile / ui / android / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added an unsaved-change guard for the second-version daily-record page.
+- Header back, the page return action, and Android `hardwareBackPress` now show the same in-page prompt before leaving: `尚未儲存今天的紀錄` / `離開後，今天的修改將不會保留。` / `是否仍要離開？`.
+- Added cancel and leave actions: cancel keeps the daily-record draft visible; leave returns to AI confirmation without saving or calling backend.
+- Updated verifier, UI spec, and task queue so the daily-record leave guard remains source-checked.
+- 未變更 backend runtime、database schema、Android signing config、network request paths、AI/LLM calls、STT behavior、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue T1052 with true same-day daily-record persistence, same-day transcript retention, AI reorganization after changes, and native QA for the fixed save bar.
+
 ### T1055 add daily-record entry edit delete actions
 
 類型：mobile / ui / verifier / docs
