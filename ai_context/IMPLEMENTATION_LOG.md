@@ -15,6 +15,40 @@
 
 ## 2026-07-01
 
+### T1054 add daily-record review page first slice
+
+類型：mobile / ui / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Reworked the existing AI save-confirm route into the first second-version daily-record page slice.
+- Added a bounded daily-record draft display with record date, `AI今日摘要`, `今日錄音文字`, vertical category cards, category-specific field rows, empty-category copy, per-entry `⋯` management affordance, and `儲存今日紀錄` save action.
+- Kept the existing parser preview, candidate edit/remove flow, backend save handler, backend validation, and audit path; daily-record entry management currently only updates bounded status and does not write backend.
+- Updated the mobile navigation verifier, UI spec, and task queue to reflect the new daily-record page state and remaining T1052 work.
+- 未變更 backend runtime、database schema、Android signing config、network request paths beyond the existing save handler、STT behavior、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue T1052 with true same-day daily-record persistence, same-day transcript retention, daily-record edit/delete, AI reorganization after changes, and unsaved-change/Android-back guards.
+
 ### T1053 refresh second-version app task queue
 
 類型：docs / planning / task-queue

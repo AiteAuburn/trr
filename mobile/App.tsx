@@ -1249,6 +1249,169 @@ function aiReviewDateLabel(records: PendingRecord[]) {
   return boundDisplayText(label, 80);
 }
 
+type DailyRecordSectionId = "glucose" | "meal" | "exercise" | "weight" | "medication" | "note";
+
+type DailyRecordSectionDefinition = {
+  id: DailyRecordSectionId;
+  title: string;
+  icon: string;
+  acceptedRecordTypes: string[];
+  emptyCopy: string;
+};
+
+const dailyRecordSectionDefinitions: DailyRecordSectionDefinition[] = [
+  {
+    id: "glucose",
+    title: "血糖紀錄",
+    icon: "🩸",
+    acceptedRecordTypes: ["glucose"],
+    emptyCopy: "今天尚未提到血糖；保持空白。"
+  },
+  {
+    id: "meal",
+    title: "飲食紀錄",
+    icon: "🍽️",
+    acceptedRecordTypes: ["meal"],
+    emptyCopy: "今天尚未提到飲食；保持空白。"
+  },
+  {
+    id: "exercise",
+    title: "運動紀錄",
+    icon: "🏃",
+    acceptedRecordTypes: ["exercise"],
+    emptyCopy: "今天尚未提到運動；保持空白。"
+  },
+  {
+    id: "weight",
+    title: "體重紀錄",
+    icon: "⚖️",
+    acceptedRecordTypes: ["weight"],
+    emptyCopy: "今天尚未提到體重；保持空白。"
+  },
+  {
+    id: "medication",
+    title: "用藥紀錄",
+    icon: "💊",
+    acceptedRecordTypes: ["medication"],
+    emptyCopy: "今天尚未提到用藥；保持空白。"
+  },
+  {
+    id: "note",
+    title: "其他備註",
+    icon: "😊",
+    acceptedRecordTypes: ["note"],
+    emptyCopy: "今天尚未提到其他備註；保持空白。"
+  }
+];
+
+function dailyRecordDateLabel(records: PendingRecord[]) {
+  if (records.length === 0) {
+    return "今日紀錄";
+  }
+  const firstDate = new Date(records[0].occurred_at);
+  if (Number.isNaN(firstDate.getTime())) {
+    return "今日紀錄";
+  }
+  return boundDisplayText(
+    firstDate.toLocaleDateString("zh-TW", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "short"
+    }),
+    80
+  );
+}
+
+function dailyRecordSummaryText(records: PendingRecord[]) {
+  const counts = new Map<string, number>();
+  for (const record of records) {
+    counts.set(record.record_type, (counts.get(record.record_type) ?? 0) + 1);
+  }
+  const parts = dailyRecordSectionDefinitions
+    .map((definition) => {
+      const count = definition.acceptedRecordTypes.reduce(
+        (sum, recordType) => sum + (counts.get(recordType) ?? 0),
+        0
+      );
+      return count > 0 ? `${definition.title.replace("紀錄", "")}${clampNumber(count, 0, maxMobileCountValue)} 筆` : "";
+    })
+    .filter(Boolean);
+  if (parts.length === 0) {
+    return boundDisplayText("AI 已完成整理，但今天尚未產生可儲存的分類紀錄。", maxDisplayDetailTextLength);
+  }
+  return boundDisplayText(
+    `AI 已整理今天內容：${parts.join("、")}。每次新增、編輯或刪除後，後續會重新整理今日摘要與分類內容。`,
+    maxDisplayDetailTextLength
+  );
+}
+
+function dailyRecordEntryDisplayItem(record: PendingRecord, index: number) {
+  const recordType = boundIdentifier(record.record_type);
+  const typeLabel = boundDisplayText(recordTypeLabel(recordType), 80);
+  const timeLabel = boundDisplayText(recordTimeDisplay(record.occurred_at), 40);
+  const payloadSummary = boundDisplayText(displayPayload(recordType, record.payload_json), maxDisplayDetailTextLength);
+  return {
+    key: `daily-${recordType}-${clampNumber(index, 0, maxMobilePreviewRecords)}`,
+    typeLabel,
+    timeLabel,
+    payloadSummary,
+    detailRows: recordPayloadDetailRows(recordType, record.payload_json).map((row) => ({
+      label: boundDisplayText(row.label, 40),
+      value: boundDisplayText(row.value, maxDisplayDetailTextLength)
+    })),
+    manageLabel: boundDisplayText("⋯", 4),
+    accessibilityLabel: boundDisplayText(
+      `管理第 ${clampNumber(index + 1, 1, maxMobilePreviewRecords)} 筆${typeLabel}，可編輯或刪除`,
+      maxDisplayDetailTextLength
+    )
+  };
+}
+
+function buildDailyRecordSectionDisplayItems(records: PendingRecord[]) {
+  return dailyRecordSectionDefinitions.map((definition) => {
+    const entries = records
+      .map((record, index) => ({ record, index }))
+      .filter(({ record }) => definition.acceptedRecordTypes.includes(record.record_type))
+      .map(({ record, index }) => dailyRecordEntryDisplayItem(record, index));
+    return {
+      ...definition,
+      title: boundDisplayText(definition.title, 80),
+      icon: boundDisplayText(definition.icon, 4),
+      emptyCopy: boundDisplayText(definition.emptyCopy, maxDisplayDetailTextLength),
+      countLabel: boundDisplayText(`${clampNumber(entries.length, 0, maxMobilePreviewRecords)} 筆`, 20),
+      entries
+    };
+  });
+}
+
+function dailyTranscriptDisplayItems(preview: ParsePreviewResponse | null) {
+  if (!preview) {
+    return [];
+  }
+  const fallbackText = preview.normalized_text || preview.transcript;
+  const segmentItems = preview.segments
+    .slice(0, maxListItems)
+    .map((segment, index) => ({
+      key: `daily-transcript-${boundIdentifier(segment.segment_id)}-${clampNumber(index, 0, maxListItems)}`,
+      timeLabel: boundDisplayText(`第 ${clampNumber(index + 1, 1, maxListItems)} 段`, 40),
+      sourceText: boundDisplayText(segment.source_text, maxDisplayDetailTextLength)
+    }))
+    .filter((item) => item.sourceText.length > 0);
+  if (segmentItems.length > 0) {
+    return segmentItems;
+  }
+  return fallbackText.trim().length > 0
+    ? [
+        {
+          key: "daily-transcript-current",
+          timeLabel: boundDisplayText("本次錄音", 40),
+          sourceText: boundDisplayText(fallbackText, maxDisplayDetailTextLength)
+        }
+      ]
+    : [];
+}
+
 function recordDateDisplay(value?: string) {
   if (!value) {
     return "尚無";
@@ -4711,17 +4874,17 @@ function aiReviewBackendRequiredCopy() {
 
 function aiSaveConfirmIntroCopy() {
   return boundDisplayText(
-    "這些候選紀錄已完成 AI 整理；按下確認後才會逐筆送到後端建立紀錄。",
+    "AI 已整理成今天唯一的每日紀錄草稿；按下儲存今日紀錄後才會送到後端建立紀錄。",
     maxDisplayDetailTextLength
   );
 }
 
 function aiSaveConfirmReadyStatusMessage() {
-  return boundUiMessage("請最後確認候選紀錄；按下確認儲存才會送到 backend。");
+  return boundUiMessage("已產生每日紀錄草稿；請確認分類內容後再儲存今日紀錄。");
 }
 
 function aiSaveConfirmReturnStatusMessage() {
-  return boundUiMessage("已返回 AI 整理確認；候選紀錄保留，可繼續編輯或移除。");
+  return boundUiMessage("已返回 AI 整理確認；每日紀錄草稿保留，可繼續編輯或移除候選。");
 }
 
 function aiSaveFailureBackAiReviewStatusMessage() {
@@ -4729,7 +4892,7 @@ function aiSaveFailureBackAiReviewStatusMessage() {
 }
 
 function aiSaveFailureReturnSaveConfirmStatusMessage() {
-  return boundUiMessage("已返回儲存確認；請確認後手動送出，不會自動重試 backend。");
+  return boundUiMessage("已返回每日紀錄頁；請確認後手動送出，不會自動重試 backend。");
 }
 
 function saveSuccessProcessUnsavedStatusMessage() {
@@ -4773,8 +4936,8 @@ function aiSaveConfirmSubmitLabel(isBusy: boolean, isBlockedByBackend: boolean, 
       : isBlockedByBackend
         ? "等待 backend 連線"
         : hasWarnings
-          ? "了解提醒並儲存候選"
-          : "確認儲存",
+          ? "了解提醒並儲存今日紀錄"
+          : "儲存今日紀錄",
     maxDisplayTextLength
   );
 }
@@ -5038,13 +5201,13 @@ function coreFlowSectionLabels() {
     noRecordCreated: boundDisplayText("未建立紀錄", maxDisplayTextLength),
     returnEdit: boundDisplayText("返回修改", maxDisplayTextLength),
     returnEditAccessibility: boundDisplayText("返回文字修改，保留目前輸入且不重新呼叫 AI", maxDisplayDetailTextLength),
-    enterSaveConfirm: boundDisplayText("進入儲存確認", maxDisplayTextLength),
-    enterSaveConfirmAccessibility: boundDisplayText("進入儲存確認，不儲存也不重新呼叫 AI", maxDisplayDetailTextLength),
+    enterSaveConfirm: boundDisplayText("查看每日紀錄", maxDisplayTextLength),
+    enterSaveConfirmAccessibility: boundDisplayText("進入每日紀錄頁，不儲存也不重新呼叫 AI", maxDisplayDetailTextLength),
     returnTextConfirm: boundDisplayText("回文字確認", maxDisplayTextLength),
     returnTextConfirmAccessibility: boundDisplayText("回文字確認，不送 parser 或寫入資料", maxDisplayDetailTextLength),
     returnConfirm: boundDisplayText("返回確認", maxDisplayTextLength),
-    returnConfirmAccessibility: boundDisplayText("返回確認，保留候選紀錄且不送 backend", maxDisplayDetailTextLength),
-    submitAiSaveAccessibility: boundDisplayText("確認儲存目前候選紀錄，送 backend 驗證與 audit", maxDisplayDetailTextLength),
+    returnConfirmAccessibility: boundDisplayText("返回確認，保留每日紀錄草稿且不送 backend", maxDisplayDetailTextLength),
+    submitAiSaveAccessibility: boundDisplayText("儲存今日紀錄，送 backend 驗證與 audit", maxDisplayDetailTextLength),
     saveSuccessManualContinueAccessibility: boundDisplayText("繼續手動新增，不呼叫 AI 或 parser", maxDisplayDetailTextLength),
     saveSuccessRecordEntryAccessibility: boundDisplayText("繼續語音或文字記錄，不自動呼叫 AI 或 STT", maxDisplayDetailTextLength),
     saveSuccessDetailAccessibility: boundDisplayText("查看剛儲存紀錄詳情，不重送 save request", maxDisplayDetailTextLength),
@@ -6189,6 +6352,18 @@ export default function App() {
     lowConfidencePreviewRecordCount > 0 || rejectedPreviewEventCount > 0;
   const isAiSaveConfirmBlockedByBackend = !protectedBackendReady;
   const aiSaveConfirmIntroDisplayText = aiSaveConfirmIntroCopy();
+  const dailyRecordDateDisplayText = preview ? dailyRecordDateLabel(preview.records) : "";
+  const dailyRecordSummaryDisplayText = preview ? dailyRecordSummaryText(preview.records) : "";
+  const dailyRecordSectionItems = preview ? buildDailyRecordSectionDisplayItems(preview.records) : [];
+  const todayTranscriptDisplayItems = dailyTranscriptDisplayItems(preview);
+  const todayTranscriptCountDisplayText = boundDisplayText(
+    `${clampNumber(todayTranscriptDisplayItems.length, 0, maxListItems)} 段`,
+    20
+  );
+  const todayTranscriptAccessibilityLabel = boundDisplayText(
+    `查看今日錄音文字，共 ${todayTranscriptCountDisplayText}`,
+    maxDisplayDetailTextLength
+  );
   const aiSaveConfirmSubmitDisplayLabel = aiSaveConfirmSubmitLabel(
     isBusy,
     isAiSaveConfirmBlockedByBackend,
@@ -8519,6 +8694,22 @@ export default function App() {
     setLastSaveErrorSummary("");
     setCurrentScreen("aiSaveConfirm");
     setStatus(aiSaveConfirmReadyStatusMessage());
+  }
+
+  function openTodayTranscriptText() {
+    setStatus(boundUiMessage("今日錄音文字已在下方展開；不重新呼叫 STT、AI 或 backend。"));
+  }
+
+  function openDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    setStatus(
+      boundUiMessage(
+        `已選擇${item.typeLabel}單筆管理；編輯／刪除會在下一個 T1052 slice 接上，目前不寫入 backend。`
+      )
+    );
+  }
+
+  function pressDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    openDailyRecordEntryMenu(item);
   }
 
   function returnFromAiSaveConfirm() {
@@ -11985,7 +12176,10 @@ export default function App() {
         {currentScreen === "aiSaveConfirm" && preview ? (
           <View style={styles.pageSection}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>確認儲存</Text>
+              <View style={styles.timelineContent}>
+                <Text style={styles.sectionTitle}>每日紀錄</Text>
+                <Text style={styles.evidence}>{aiSaveConfirmIntroDisplayText}</Text>
+              </View>
               <Pressable
                 accessibilityLabel={coreFlowDisplayLabels.returnConfirmAccessibility}
                 accessibilityRole="button"
@@ -11995,15 +12189,81 @@ export default function App() {
                 <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.returnConfirm}</Text>
               </Pressable>
             </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.preSaveConfirmBadge}</Text>
-              <Text style={styles.evidence}>{aiSaveConfirmIntroDisplayText}</Text>
+            <View style={styles.dailyRecordDateCard}>
+              <Text style={styles.confidence}>記錄日期</Text>
+              <Text style={styles.dailyRecordDateText}>{dailyRecordDateDisplayText}</Text>
             </View>
-            <View style={styles.reportBoundaryGrid}>
-              {aiSaveConfirmBoundaryRows.map((row) => (
-                <View key={row.label} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.recordType}>{row.value}</Text>
+            <View style={styles.dailySummaryCard}>
+              <Text style={styles.previewModeBadge}>AI今日摘要</Text>
+              <Text style={styles.recordContent}>{dailyRecordSummaryDisplayText}</Text>
+            </View>
+            <Pressable
+              accessibilityLabel={todayTranscriptAccessibilityLabel}
+              accessibilityRole="button"
+              style={styles.todayTranscriptButton}
+              onPress={openTodayTranscriptText}
+            >
+              <View style={styles.timelineContent}>
+                <Text style={styles.label}>今日錄音文字</Text>
+                <Text style={styles.evidence}>保留今天所有文字片段；目前先顯示本次整理內容。</Text>
+              </View>
+              <Text style={styles.countText}>{todayTranscriptCountDisplayText}</Text>
+            </Pressable>
+            {todayTranscriptDisplayItems.length > 0 ? (
+              <View style={styles.dailyTranscriptList}>
+                {todayTranscriptDisplayItems.map((item) => (
+                  <View key={item.key} style={styles.dailyTranscriptItem}>
+                    <Text style={styles.confidence}>{item.timeLabel}</Text>
+                    <Text style={styles.evidence}>{item.sourceText}</Text>
+                  </View>
+                ))}
+              </View>
+            ) : null}
+            <View style={styles.dailyRecordSectionList}>
+              {dailyRecordSectionItems.map((section) => (
+                <View key={section.id} style={styles.dailyRecordSectionCard}>
+                  <View style={styles.recordHeader}>
+                    <View style={styles.historyItemTitle}>
+                      <View style={styles.iconCircleSmall}>
+                        <Text>{section.icon}</Text>
+                      </View>
+                      <View style={styles.timelineContent}>
+                        <Text style={styles.label}>{section.title}</Text>
+                        <Text style={styles.evidence}>欄位依分類顯示；沒有提到的欄位保持空白。</Text>
+                      </View>
+                    </View>
+                    <Text style={styles.countText}>{section.countLabel}</Text>
+                  </View>
+                  {section.entries.length > 0 ? (
+                    section.entries.map((item) => (
+                      <View key={item.key} style={styles.dailyRecordEntryCard}>
+                        <View style={styles.recordHeader}>
+                          <View style={styles.timelineContent}>
+                            <Text style={styles.confidence}>{item.timeLabel}</Text>
+                            <Text style={styles.recordContent}>{item.payloadSummary}</Text>
+                          </View>
+                          <Pressable
+                            accessibilityLabel={item.accessibilityLabel}
+                            accessibilityRole="button"
+                            style={styles.roundActionButton}
+                            onPress={() => pressDailyRecordEntryMenu(item)}
+                          >
+                            <Text style={styles.editGlyph}>{item.manageLabel}</Text>
+                          </Pressable>
+                        </View>
+                        <View style={styles.detailRows}>
+                          {item.detailRows.map((row) => (
+                            <View key={`${item.key}-${row.label}`} style={styles.detailRow}>
+                              <Text style={styles.confidence}>{row.label}</Text>
+                              <Text style={styles.evidence}>{row.value}</Text>
+                            </View>
+                          ))}
+                        </View>
+                      </View>
+                    ))
+                  ) : (
+                    <Text style={styles.evidence}>{section.emptyCopy}</Text>
+                  )}
                 </View>
               ))}
             </View>
@@ -12034,23 +12294,15 @@ export default function App() {
                 </View>
               ))}
             </View>
-            <View style={styles.aiReviewList}>
-              {previewSaveConfirmDisplayItems.map((item) => (
-                <View key={item.key} style={styles.aiReviewCard}>
-                  <View style={styles.iconCircleSmall}>
-                    <Text>{item.icon}</Text>
-                  </View>
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.confidence}>{item.typeLabel}</Text>
-                    <Text style={styles.recordContent}>{item.payloadSummary}</Text>
-                  </View>
-                  <Text style={item.lowConfidence ? styles.warningText : styles.confidence}>
-                    {item.confidencePercent}%
-                  </Text>
+            <View style={styles.reportBoundaryGrid}>
+              {aiSaveConfirmBoundaryRows.map((row) => (
+                <View key={row.label} style={styles.reportBoundaryCard}>
+                  <Text style={styles.confidence}>{row.label}</Text>
+                  <Text style={styles.recordType}>{row.value}</Text>
                 </View>
               ))}
             </View>
-            <View style={styles.actionRow}>
+            <View style={styles.fixedSaveBar}>
               <Pressable
                 accessibilityLabel={coreFlowDisplayLabels.returnConfirmAccessibility}
                 accessibilityRole="button"
@@ -18138,6 +18390,81 @@ const styles = StyleSheet.create({
     color: "#5F666A",
     fontSize: 13,
     fontWeight: "700"
+  },
+  dailyRecordDateCard: {
+    backgroundColor: "#EAF6F1",
+    borderColor: "#D6EEE4",
+    borderRadius: 18,
+    borderWidth: 1,
+    gap: 4,
+    padding: 14
+  },
+  dailyRecordDateText: {
+    color: "#0F3F37",
+    fontSize: 22,
+    fontWeight: "900",
+    lineHeight: 28
+  },
+  dailySummaryCard: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#D6EEE4",
+    borderRadius: 20,
+    borderWidth: 1,
+    gap: 10,
+    padding: 16
+  },
+  todayTranscriptButton: {
+    alignItems: "center",
+    backgroundColor: "#F7FCFA",
+    borderColor: "#D6EEE4",
+    borderRadius: 18,
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: 12,
+    justifyContent: "space-between",
+    minHeight: 68,
+    padding: 14
+  },
+  dailyTranscriptList: {
+    gap: 8
+  },
+  dailyTranscriptItem: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E3E8E5",
+    borderRadius: 16,
+    borderWidth: 1,
+    gap: 4,
+    padding: 12
+  },
+  dailyRecordSectionList: {
+    gap: 12
+  },
+  dailyRecordSectionCard: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#D6EEE4",
+    borderRadius: 20,
+    borderWidth: 1,
+    gap: 12,
+    padding: 14
+  },
+  dailyRecordEntryCard: {
+    backgroundColor: "#F7FCFA",
+    borderColor: "#D6EEE4",
+    borderRadius: 18,
+    borderWidth: 1,
+    gap: 10,
+    padding: 12
+  },
+  fixedSaveBar: {
+    backgroundColor: "#FAFAF8",
+    borderColor: "#E3E8E5",
+    borderRadius: 22,
+    borderWidth: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    justifyContent: "flex-end",
+    padding: 12
   },
   aiReviewList: {
     gap: 10

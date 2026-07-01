@@ -118,7 +118,7 @@ selected product slice is the second-version AI-organized daily-record page.
 
 ### T1052: Build second-version AI-organized daily-record page
 
-Status: todo
+Status: in_progress
 
 Product source:
 
@@ -138,6 +138,22 @@ Scope:
 - Add unsaved-change guard for header back, Android back button, and Android back gesture with copy: `尚未儲存今天的紀錄` / `離開後，今天的修改將不會保留。` / `是否仍要離開？`.
 - Add per-entry overflow menu actions for edit and delete; delete must show confirmation copy `確定要刪除這筆紀錄嗎？` / `刪除後無法復原。`.
 - Re-run AI organization after add, edit, or delete so the full daily record stays consistent.
+
+Progress:
+
+- First UI/draft slice implemented: existing AI save-confirm route now presents a second-version daily-record page with record date, `AI今日摘要`, `今日錄音文字`, vertical category cards, category-specific field rows, per-entry `⋯` management affordance, and `儲存今日紀錄` save action.
+- This slice preserves the existing parser, preview editing/removal, backend save handler, backend validation, and audit path.
+
+Remaining:
+
+- Persist one true daily record per day instead of only saving individual preview records.
+- Merge new same-day recordings into the existing daily record draft/record.
+- Keep all same-day transcript entries by timestamp beyond the current preview segments.
+- Implement real per-entry edit/delete menus from the daily-record page.
+- Add delete confirmation copy: `確定要刪除這筆紀錄嗎？` / `刪除後無法復原。`.
+- Re-run AI organization after add, edit, or delete.
+- Add unsaved-change guard for header back, Android back button, and Android back gesture.
+- Make the save action physically fixed outside the scroll area if the current visual action bar is insufficient in native QA.
 
 Implementation notes:
 

@@ -1708,7 +1708,7 @@ AI 分析結果：
 
 - 成本邊界 inline checklist，不使用 banner card：
   - 此頁只顯示 parser 已回傳的候選紀錄。
-  - 逐筆編輯、移除或進入儲存確認都不會重新呼叫 AI。
+- 逐筆編輯、移除或查看每日紀錄都不會重新呼叫 AI。
   - 未建立片段不會自動儲存，也不會自動重跑 parser。
   - 返回修改後，只有再次按下一步整理才會產生新的 parser / AI 成本。
   - mobile 不保留 raw prompt、raw model output 或模型 debug trace。
@@ -1728,9 +1728,9 @@ AI 分析結果：
 - 運動：走路 20 分鐘，右側編輯 icon。
 - 若候選紀錄已被移除到 0 筆，不顯示日期時間確認卡，只顯示空狀態、返回修改與手動新增入口。
 
-底部主按鈕：「進入儲存確認」。
+底部主按鈕：「查看每日紀錄」。
 
-- 此按鈕只導向 AI 儲存確認頁，不直接建立紀錄、不送出 backend 儲存請求。
+- 此按鈕只導向每日紀錄頁，不直接建立紀錄、不送出 backend 儲存請求。
 - AI 整理確認頁的候選筆數顯示必須使用 display-only clamped value；是否可進入儲存確認仍依目前 preview records 實際長度判斷。
 
 底部文字按鈕：「返回修改」。
@@ -1746,8 +1746,39 @@ AI 分析結果：
 - 修改候選紀錄頁的 Header 返回與取消都必須使用 dedicated handler；handler 清除 candidate edit / pending remove 暫存 state，保留候選紀錄並回到 AI 整理確認頁，不呼叫 AI / LLM / STT / Vision、不送 backend request。
 - 點擊移除進入 AI 候選移除確認頁，不直接刪除候選紀錄。
 - 修改候選紀錄頁的返回按鈕應回到 AI 整理確認頁，不回到原始輸入頁，避免中斷確認流程。
-- 點擊確認儲存後，先進入 AI 儲存確認頁，不直接寫入紀錄。
+- 點擊查看每日紀錄後，先進入每日紀錄頁，不直接寫入紀錄。
 - 點擊返回修改回到文字確認頁。
+
+### 4.17 每日紀錄頁（AI 整理完成頁）
+
+定位：
+
+- 這是第二版核心紀錄流程的儲存前頁面：錄音 / 文字輸入 -> 文字確認 -> AI 整理 -> 每日紀錄 -> 儲存。
+- 目前 mobile route 沿用 `aiSaveConfirm`，但畫面語意必須是每日紀錄頁，而不是單純候選列表。
+
+頁面內容：
+
+- 顯示 `每日紀錄` 標題與記錄日期。
+- 顯示 `AI今日摘要`，摘要由目前 parser preview records 產生 bounded display copy；後續 add / edit / delete slice 必須重新整理摘要。
+- 顯示 `今日錄音文字` 入口與本次 transcript / segments 的 bounded display list；不可重新呼叫 STT、AI 或 backend。
+- 以下分類必須直向排列，不使用左右滑動：
+  - 血糖紀錄
+  - 飲食紀錄
+  - 運動紀錄
+  - 體重紀錄
+  - 用藥紀錄
+  - 其他備註
+- 每個分類都是獨立 card，有自己的欄位與空白說明；沒有提到的欄位保持空白，不強迫共用 schema。
+- 每筆資料右側保留 `⋯` 管理入口；目前第一片只提供 bounded status，不寫 backend。後續 edit / delete slice 必須接上編輯、刪除與刪除確認。
+- 底部顯示 `儲存今日紀錄` action bar；送出仍走 existing backend validation / audit save handler。
+
+Guardrails:
+
+- 每日紀錄頁所有日期、摘要、transcript、分類 entry、欄位 rows 與管理 action labels 必須先轉成 bounded display items。
+- `今日錄音文字` 與單筆 `⋯` 管理入口必須使用 dedicated handlers，不可在 JSX 內直接呼叫 STT、AI、backend 或 save/delete request。
+- Mobile navigation verifier 必須守住每日紀錄頁包含 `AI今日摘要`、`今日錄音文字`、分類 section renderer、單筆管理 press wrapper、`fixedSaveBar` 與 `儲存今日紀錄` 文案。
+- 後續 same-day merge slice 必須讓同一天只保留一份每日紀錄；再次錄音應更新同一天 draft / record，不建立第二份每日紀錄頁。
+- 後續 unsaved-change slice 必須讓 header back、Android back button 與 Android back gesture 顯示相同防呆 copy：`尚未儲存今天的紀錄`、`離開後，今天的修改將不會保留。`、`是否仍要離開？`。
 
 ### 4.16.0 AI 候選移除確認頁
 
@@ -1791,8 +1822,9 @@ AI 分析結果：
 
 頁面內容：
 
-- 標題：「確認儲存」。
-- Inline 說明：「儲存前確認」，不使用 banner card。
+- 目前此 route 的主要畫面語意已改為 4.17 每日紀錄頁；仍保留本 section 的 backend save boundary、warning、blocked state 與 audit guard。
+- 標題：「每日紀錄」。
+- Inline 說明：AI 已整理成今天唯一的每日紀錄草稿；不使用 banner card。
 - 摘要指標：
   - 候選紀錄筆數。
   - 低信心候選紀錄筆數。

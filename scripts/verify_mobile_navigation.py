@@ -2476,10 +2476,10 @@ def main() -> int:
             _assert_contains(label, content, marker)
         for label, marker in (
             ("confirmation return edit accessibility label", 'returnEditAccessibility: boundDisplayText("返回文字修改，保留目前輸入且不重新呼叫 AI", maxDisplayDetailTextLength)'),
-            ("confirmation save confirm accessibility label", 'enterSaveConfirmAccessibility: boundDisplayText("進入儲存確認，不儲存也不重新呼叫 AI", maxDisplayDetailTextLength)'),
+            ("confirmation save confirm accessibility label", 'enterSaveConfirmAccessibility: boundDisplayText("進入每日紀錄頁，不儲存也不重新呼叫 AI", maxDisplayDetailTextLength)'),
             ("confirmation return text accessibility label", 'returnTextConfirmAccessibility: boundDisplayText("回文字確認，不送 parser 或寫入資料", maxDisplayDetailTextLength)'),
-            ("confirmation return confirm accessibility label", 'returnConfirmAccessibility: boundDisplayText("返回確認，保留候選紀錄且不送 backend", maxDisplayDetailTextLength)'),
-            ("confirmation submit save accessibility label", 'submitAiSaveAccessibility: boundDisplayText("確認儲存目前候選紀錄，送 backend 驗證與 audit", maxDisplayDetailTextLength)'),
+            ("confirmation return confirm accessibility label", 'returnConfirmAccessibility: boundDisplayText("返回確認，保留每日紀錄草稿且不送 backend", maxDisplayDetailTextLength)'),
+            ("confirmation submit save accessibility label", 'submitAiSaveAccessibility: boundDisplayText("儲存今日紀錄，送 backend 驗證與 audit", maxDisplayDetailTextLength)'),
             ("confirmation cancel accessibility label", 'cancelAccessibility: boundDisplayText("取消並返回確認，不刪除正式紀錄", maxDisplayDetailTextLength)'),
             ("confirmation remove accessibility label", 'confirmRemoveAccessibility: boundDisplayText("確認移除未儲存候選，不呼叫刪除 API", maxDisplayDetailTextLength)'),
             ("confirmation failure return accessibility label", 'returnSaveConfirmAccessibility: boundDisplayText("返回儲存確認，不自動重試 backend save", maxDisplayDetailTextLength)'),
@@ -2499,6 +2499,20 @@ def main() -> int:
             ("confirmation manual fallback accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.switchManualAddAccessibility}"),
             ("confirmation save disabled state", "accessibilityState={{ disabled: isBusy || !account }}"),
             ("confirmation transcript parse disabled state", "accessibilityState={{\n                  disabled:\n                    Boolean(transcriptValidationError) ||"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
+            ("daily record section definitions", "const dailyRecordSectionDefinitions: DailyRecordSectionDefinition[] = ["),
+            ("daily record one-day summary copy", "AI 已整理成今天唯一的每日紀錄草稿"),
+            ("daily record summary title", "<Text style={styles.previewModeBadge}>AI今日摘要</Text>"),
+            ("daily record transcript title", "<Text style={styles.label}>今日錄音文字</Text>"),
+            ("daily record transcript handler", "function openTodayTranscriptText()"),
+            ("daily record section renderer", "dailyRecordSectionItems.map"),
+            ("daily record entry management handler", "function pressDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry management binding", "onPress={() => pressDailyRecordEntryMenu(item)}"),
+            ("daily record fixed save bar", "styles.fixedSaveBar"),
+            ("daily record save label", "? \"了解提醒並儲存今日紀錄\""),
+            ("daily record category blank copy", "沒有提到的欄位保持空白"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
