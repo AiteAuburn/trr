@@ -5709,6 +5709,36 @@ function yearReviewAiEncouragementCopy(recordCount: number) {
   );
 }
 
+const homeGuidanceDirections = [
+  [
+    { icon: "🕒", label: "時間" },
+    { icon: "🩸", label: "血糖" },
+    { icon: "🍽️", label: "飲食" }
+  ],
+  [
+    { icon: "🏃", label: "運動" },
+    { icon: "⚖️", label: "體重" },
+    { icon: "😊", label: "身體狀況" }
+  ]
+].map((row, rowIndex) =>
+  row.map((item, itemIndex) => ({
+    key: `home-guidance-${rowIndex}-${itemIndex}`,
+    icon: boundDisplayText(item.icon, 8),
+    label: boundDisplayText(item.label, 20)
+  }))
+);
+
+const homeSpeechExamples = [
+  "今天6月28號，早上起床空腹血糖105，早餐吃兩顆水煮蛋跟無糖豆漿，中午吃雞腿便當沒吃飯，下午騎腳踏車40分鐘，晚上體重77.5公斤。",
+  "6月28日。空腹血糖105。早餐兩顆蛋。無糖豆漿一杯。騎腳踏車30分鐘。體重77.5公斤。",
+  "今天血糖105，早餐吃蛋跟豆漿。對了，中午沒吃飯只有吃菜。下午有騎車，大概40分鐘吧。晚上量體重77.5公斤。",
+  "今天精神不錯，起床先量血糖105。早餐吃得很簡單，兩顆蛋配無糖豆漿。下午去騎腳踏車流了一些汗，希望血糖能慢慢降下來。"
+].map((example, index) => ({
+  key: `home-example-${index + 1}`,
+  label: boundDisplayText(`範例 ${index + 1}`, 20),
+  text: boundDisplayText(example, maxDisplayDetailTextLength)
+}));
+
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>(initialVisualSmokeScreen ?? "today");
   const [apiBaseUrl, setApiBaseUrl] = useState(defaultApiBaseUrl);
@@ -5859,6 +5889,7 @@ export default function App() {
   const [isRecordingPreview, setIsRecordingPreview] = useState(false);
   const [recordingStartedAt, setRecordingStartedAt] = useState<number | null>(null);
   const [recordingElapsedSeconds, setRecordingElapsedSeconds] = useState(0);
+  const [homeExampleIndex, setHomeExampleIndex] = useState(0);
   const [selectedHistoryDate, setSelectedHistoryDate] = useState(formatLocalDateInput(new Date()));
   const [historyDetailMode, setHistoryDetailMode] = useState<HistoryDetailMode>("structured");
   const [analysisRange, setAnalysisRange] = useState<AnalysisRange>("month");
@@ -6584,6 +6615,9 @@ export default function App() {
     isRecordingPreview,
     recordingElapsedSeconds
   );
+  const homeCurrentSpeechExample = homeSpeechExamples[
+    clampNumber(homeExampleIndex, 0, Math.max(homeSpeechExamples.length - 1, 0))
+  ];
   const homeRecordingPreviewBoundaryDisplayText = homeRecordingPreviewBoundaryCopy();
   const recordPageRecordingPreviewBoundaryDisplayText = recordPageRecordingPreviewBoundaryCopy();
   const recordingSimulatedResultDisplayText = recordingSimulatedResultCopy(recordingElapsedSeconds);
@@ -11437,6 +11471,16 @@ export default function App() {
   }, [isRecordingPreview, recordingStartedAt, voiceQuota?.remaining_seconds_today]);
 
   useEffect(() => {
+    if (currentScreen !== "today" || homeSpeechExamples.length <= 1) {
+      return;
+    }
+    const timer = setInterval(() => {
+      setHomeExampleIndex((value) => (value + 1) % homeSpeechExamples.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [currentScreen]);
+
+  useEffect(() => {
     void loadRecords();
   }, [account?.id, activeProfileId]);
 
@@ -11589,6 +11633,25 @@ export default function App() {
 
         {currentScreen === "today" ? (
           <View style={styles.homeMinimalSection}>
+            <View style={styles.homeGuidanceSection}>
+              <Text style={styles.homeTagline}>想說什麼就說什麼</Text>
+              <View style={styles.homeGuidancePanel}>
+                {homeGuidanceDirections.map((row, rowIndex) => (
+                  <View key={`home-guidance-row-${rowIndex}`} style={styles.homeGuidanceRow}>
+                    {row.map((item) => (
+                      <View key={item.key} style={styles.homeGuidanceItem}>
+                        <Text style={styles.homeGuidanceIcon}>{item.icon}</Text>
+                        <Text style={styles.homeGuidanceLabel}>{item.label}</Text>
+                      </View>
+                    ))}
+                  </View>
+                ))}
+              </View>
+              <Text style={styles.homeGuidanceCopy}>
+                上面這排不是按鈕喔{"\n"}
+                如果不知道從哪開始，可以參考這些記錄方向；想說什麼就說什麼，不用照固定格式。
+              </Text>
+            </View>
             <Pressable
               accessibilityLabel={recordingButtonDisplayAccessibilityLabel}
               accessibilityRole="button"
@@ -11603,6 +11666,11 @@ export default function App() {
             </Pressable>
             <Text style={styles.homeHint}>按住開始說話記錄</Text>
             <Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>
+            <View style={styles.homeExamplePanel}>
+              <Text style={styles.homeExampleTitle}>範例（怎麼說都可以）</Text>
+              <Text style={styles.homeExampleIndex}>{homeCurrentSpeechExample.label}</Text>
+              <Text style={styles.homeExampleText}>{homeCurrentSpeechExample.text}</Text>
+            </View>
           </View>
         ) : null}
 
@@ -16862,11 +16930,66 @@ const styles = StyleSheet.create({
   homeMinimalSection: {
     alignItems: "center",
     flex: 1,
-    gap: 14,
+    gap: 12,
     justifyContent: "center",
     minHeight: 620,
-    paddingBottom: 72,
-    paddingTop: 96
+    paddingBottom: 42,
+    paddingTop: 42
+  },
+  homeGuidanceSection: {
+    alignItems: "center",
+    gap: 8,
+    maxWidth: 360,
+    width: "100%"
+  },
+  homeTagline: {
+    color: "#0F3F37",
+    fontSize: 24,
+    fontWeight: "900",
+    lineHeight: 32,
+    textAlign: "center"
+  },
+  homeGuidancePanel: {
+    backgroundColor: "#EFF8F4",
+    borderColor: "#DCEFE7",
+    borderRadius: 18,
+    borderWidth: 1,
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    width: "100%"
+  },
+  homeGuidanceRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    justifyContent: "center"
+  },
+  homeGuidanceItem: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 5,
+    minHeight: 28,
+    minWidth: 88,
+    justifyContent: "center"
+  },
+  homeGuidanceIcon: {
+    fontSize: 17,
+    lineHeight: 22
+  },
+  homeGuidanceLabel: {
+    color: "#2F5F52",
+    fontSize: 14,
+    fontWeight: "800",
+    lineHeight: 20
+  },
+  homeGuidanceCopy: {
+    color: "#5F666A",
+    fontSize: 13,
+    fontWeight: "700",
+    lineHeight: 19,
+    maxWidth: 350,
+    textAlign: "center"
   },
   homeMicButton: {
     alignItems: "center",
@@ -16876,6 +16999,7 @@ const styles = StyleSheet.create({
     borderWidth: 8,
     height: 220,
     justifyContent: "center",
+    marginTop: 24,
     shadowColor: "#0F3F37",
     shadowOffset: { width: 0, height: 16 },
     shadowOpacity: 0.14,
@@ -16905,6 +17029,39 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 22,
     minHeight: 22,
+    textAlign: "center"
+  },
+  homeExamplePanel: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E3E8E5",
+    borderRadius: 18,
+    borderWidth: 1,
+    gap: 4,
+    marginTop: 8,
+    maxWidth: 360,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    width: "100%"
+  },
+  homeExampleTitle: {
+    color: "#0F3F37",
+    fontSize: 15,
+    fontWeight: "900",
+    lineHeight: 22,
+    textAlign: "center"
+  },
+  homeExampleIndex: {
+    color: "#3FA67F",
+    fontSize: 12,
+    fontWeight: "900",
+    lineHeight: 18,
+    textAlign: "center"
+  },
+  homeExampleText: {
+    color: "#3D4642",
+    fontSize: 14,
+    fontWeight: "700",
+    lineHeight: 21,
     textAlign: "center"
   },
   quickEntryRail: {

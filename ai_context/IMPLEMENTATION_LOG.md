@@ -13,6 +13,39 @@
 後續:
 ```
 
+## 2026-07-01
+
+### T1050 add finalized Home recording guidance
+
+類型：mobile / docs / verifier
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Implemented the finalized second-version Home guidance from the pasted product notes: headline, non-clickable record-direction hints, explanatory copy, and rotating example phrases.
+- Preserved the single primary Home action: exactly one `Pressable` microphone control, with no text input, manual-add CTA, analysis CTA, record cards, or secondary buttons on Home.
+- Added a bounded rotating example carousel below the microphone and kept hold/release recording hints in the existing `homeHint` / `homeHintSecondary` positions.
+- Updated the canonical UI spec and mobile navigation verifier so future changes keep the hint icons non-interactive and preserve the guided minimal Home layout.
+- 未變更 backend runtime、mobile network request paths、AI/LLM calls、STT behavior、record save behavior、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- The pasted second-part daily-record redesign should be handled as a separate implementation slice because it changes the post-recording/daily-record data model and save flow.
+
 ## 2026-06-25
 
 ### T1049 make DeepSeek first backend processing model

@@ -2284,6 +2284,18 @@ def main() -> int:
             ("minimal home section style", "styles.homeMinimalSection"),
             ("minimal home mic button style", "styles.homeMicButton"),
             ("minimal home active mic style", "styles.homeMicButtonActive"),
+            ("guided home tagline", "想說什麼就說什麼"),
+            ("guided home direction time", "{ icon: \"🕒\", label: \"時間\" }"),
+            ("guided home direction glucose", "{ icon: \"🩸\", label: \"血糖\" }"),
+            ("guided home direction food", "{ icon: \"🍽️\", label: \"飲食\" }"),
+            ("guided home direction exercise", "{ icon: \"🏃\", label: \"運動\" }"),
+            ("guided home direction weight", "{ icon: \"⚖️\", label: \"體重\" }"),
+            ("guided home direction body status", "{ icon: \"😊\", label: \"身體狀況\" }"),
+            ("guided home non-button copy", "上面這排不是按鈕喔"),
+            ("guided home flexible format copy", "想說什麼就說什麼，不用照固定格式"),
+            ("guided home examples title", "範例（怎麼說都可以）"),
+            ("guided home example carousel state", "const [homeExampleIndex, setHomeExampleIndex] = useState(0);"),
+            ("guided home example carousel interval", "setHomeExampleIndex((value) => (value + 1) % homeSpeechExamples.length);"),
             ("minimal home primary hint", "按住開始說話記錄"),
             ("minimal home secondary hint", "放開即結束"),
             ("minimal home recording seconds helper", "function homeRecordingSecondaryHint(isRecording: boolean, elapsedSeconds: number)"),
@@ -2333,8 +2345,14 @@ def main() -> int:
         if today_home_block.count("<Pressable") != 1:
             raise AssertionError("Today/Home render block must contain exactly one Pressable mic control.")
         for label, marker in (
+            ("guided home block tagline", "<Text style={styles.homeTagline}>想說什麼就說什麼</Text>"),
+            ("guided home block direction panel", "styles.homeGuidancePanel"),
+            ("guided home block direction items", "homeGuidanceDirections.map"),
+            ("guided home block non-button copy", "上面這排不是按鈕喔"),
             ("minimal home block primary hint", "<Text style={styles.homeHint}>按住開始說話記錄</Text>"),
             ("minimal home block secondary hint", "<Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>"),
+            ("guided home block example panel", "styles.homeExamplePanel"),
+            ("guided home block example title", "<Text style={styles.homeExampleTitle}>範例（怎麼說都可以）</Text>"),
         ):
             _assert_contains(label, today_home_block, marker)
         _assert_not_contains(
@@ -4317,7 +4335,7 @@ def main() -> int:
             f"{len(MIN_TOUCH_TARGET_STYLE_RULES)} compact touch-target styles plus "
             f"{len(MIN_TOUCH_TARGET_WIDTH_STYLE_RULES)} width checks, "
             f"{len(READABILITY_STYLE_RULES)} dense-row readability styles, "
-            "minimal Home mic entry, hold/release hints, secondary elapsed hint, and Record quick-entry affordances, "
+            "guided minimal Home mic entry, non-button record directions, rotating examples, hold/release hints, secondary elapsed hint, and Record quick-entry affordances, "
             "History and Analysis open-section styles, "
             "AI Review rejected-event open stack, "
             "detail row open-section styles, "
