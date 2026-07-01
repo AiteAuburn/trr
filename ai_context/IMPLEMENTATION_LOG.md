@@ -15,6 +15,37 @@
 
 ## 2026-07-01
 
+### T1057 add same-day daily draft merge and transcript retention
+
+類型：mobile / data-flow / ui / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added mobile in-memory same-day daily-record draft merge for parser preview results.
+- Parser success now captures a single `parseOccurredAt`, sends that timestamp to backend parser, and uses it to append a bounded `DailyTranscriptEntry`.
+- If a current preview draft and the incoming parser result are for the same local day, preview records, rejected events, and transcript segments are merged instead of replacing the daily draft.
+- `今日錄音文字` now reads bounded retained same-day transcript entries before falling back to current preview segments.
+- Updated navigation verifier, UI spec, and task queue to reflect the mobile draft-data slice and remaining durable persistence work.
+- 未變更 backend runtime、database schema、Android signing config、network request paths beyond the existing parse request、AI/LLM prompt behavior、STT behavior、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue T1052 with durable backend-backed one-daily-record persistence and AI reorganization after add/edit/delete.
+
 ### T1056 add daily-record unsaved leave guard
 
 類型：mobile / ui / android / verifier / docs

@@ -99,6 +99,13 @@ type ParsePreviewResponse = {
   records: PendingRecord[];
   rejected_events: RejectedEvent[];
 };
+
+type DailyTranscriptEntry = {
+  id: string;
+  occurred_at: string;
+  source_text: string;
+  source: "voice" | "text";
+};
 type DevResetResponse = {
   status: string;
   deleted_counts: Record<string, number>;
@@ -1324,6 +1331,31 @@ function dailyRecordDateLabel(records: PendingRecord[]) {
   );
 }
 
+function dailyRecordKeyFromRecords(records: PendingRecord[]) {
+  const firstRecord = records[0];
+  return firstRecord ? localDateKey(firstRecord.occurred_at) : "";
+}
+
+function mergeSameDayParsePreviewDraft(
+  current: ParsePreviewResponse | null,
+  incoming: ParsePreviewResponse
+) {
+  if (!current || current.records.length === 0 || incoming.records.length === 0) {
+    return incoming;
+  }
+  const currentKey = dailyRecordKeyFromRecords(current.records);
+  const incomingKey = dailyRecordKeyFromRecords(incoming.records);
+  if (!currentKey || currentKey !== incomingKey) {
+    return incoming;
+  }
+  return boundParsePreviewResponse({
+    ...incoming,
+    records: [...current.records, ...incoming.records].slice(0, maxMobilePreviewRecords),
+    rejected_events: [...current.rejected_events, ...incoming.rejected_events].slice(0, maxMobileRejectedEvents),
+    segments: [...current.segments, ...incoming.segments].slice(0, maxListItems)
+  });
+}
+
 function dailyRecordSummaryText(records: PendingRecord[]) {
   const counts = new Map<string, number>();
   for (const record of records) {
@@ -1389,9 +1421,52 @@ function buildDailyRecordSectionDisplayItems(records: PendingRecord[]) {
   });
 }
 
-function dailyTranscriptDisplayItems(preview: ParsePreviewResponse | null) {
+function createDailyTranscriptEntry(
+  occurredAt: string,
+  sourceText: string,
+  source: "voice" | "text"
+): DailyTranscriptEntry | null {
+  const boundedText = boundDisplayText(sourceText, maxTranscriptTextLength);
+  if (!boundedText.trim()) {
+    return null;
+  }
+  const safeOccurredAt = boundDisplayText(occurredAt, 40);
+  return {
+    id: boundIdentifier(`daily-transcript-${safeOccurredAt}-${source}`),
+    occurred_at: safeOccurredAt,
+    source_text: boundedText,
+    source
+  };
+}
+
+function boundDailyTranscriptEntries(entries: DailyTranscriptEntry[]): DailyTranscriptEntry[] {
+  return entries.slice(-maxListItems).map((entry, index) => ({
+    id: boundIdentifier(entry.id || `daily-transcript-${index}`),
+    occurred_at: boundDisplayText(entry.occurred_at, 40),
+    source_text: boundDisplayText(entry.source_text, maxTranscriptTextLength),
+    source: (entry.source === "voice" ? "voice" : "text") as DailyTranscriptEntry["source"]
+  }));
+}
+
+function dailyTranscriptDisplayItems(
+  preview: ParsePreviewResponse | null,
+  entries: DailyTranscriptEntry[]
+) {
   if (!preview) {
     return [];
+  }
+  const previewDayKey = dailyRecordKeyFromRecords(preview.records);
+  const retainedItems = entries
+    .filter((entry) => !previewDayKey || localDateKey(entry.occurred_at) === previewDayKey)
+    .slice(-maxListItems)
+    .map((entry, index) => ({
+      key: `daily-transcript-retained-${boundIdentifier(entry.id)}-${clampNumber(index, 0, maxListItems)}`,
+      timeLabel: boundDisplayText(recordTimeDisplay(entry.occurred_at), 40),
+      sourceText: boundDisplayText(entry.source_text, maxDisplayDetailTextLength)
+    }))
+    .filter((item) => item.sourceText.length > 0);
+  if (retainedItems.length > 0) {
+    return retainedItems;
   }
   const fallbackText = preview.normalized_text || preview.transcript;
   const segmentItems = preview.segments
@@ -6006,6 +6081,7 @@ export default function App() {
   );
   const [dailyRecordMenuIndex, setDailyRecordMenuIndex] = useState<number | null>(null);
   const [dailyRecordLeaveGuardVisible, setDailyRecordLeaveGuardVisible] = useState(false);
+  const [dailyTranscriptEntries, setDailyTranscriptEntries] = useState<DailyTranscriptEntry[]>([]);
   const [previewEditFields, setPreviewEditFields] = useState<RecordEditFields>(() =>
     initialVisualSmokeScreen === "editPreviewRecord" ? visualSmokeDemoRecordEditFields() : emptyRecordEditFields()
   );
@@ -6390,7 +6466,7 @@ export default function App() {
   const dailyRecordDateDisplayText = preview ? dailyRecordDateLabel(preview.records) : "";
   const dailyRecordSummaryDisplayText = preview ? dailyRecordSummaryText(preview.records) : "";
   const dailyRecordSectionItems = preview ? buildDailyRecordSectionDisplayItems(preview.records) : [];
-  const todayTranscriptDisplayItems = dailyTranscriptDisplayItems(preview);
+  const todayTranscriptDisplayItems = dailyTranscriptDisplayItems(preview, dailyTranscriptEntries);
   const todayTranscriptCountDisplayText = boundDisplayText(
     `${clampNumber(todayTranscriptDisplayItems.length, 0, maxListItems)} 段`,
     20
@@ -8027,6 +8103,7 @@ export default function App() {
     parsePreviewInFlight.current = false;
     previewSaveInFlight.current = false;
     setPreview(null);
+    setDailyTranscriptEntries([]);
     setTranscript("");
     setTranscriptVoiceSeconds(0);
     setIsTranscriptSample(false);
@@ -10858,10 +10935,12 @@ export default function App() {
 
     parsePreviewInFlight.current = true;
     setIsBusy(true);
+    const existingDailyPreview = preview;
     setPreview(null);
     setParserRecoveryMessage("");
     setStatus(parserProgressStatusMessage());
     const parserVoiceSeconds = clampNumber(transcriptVoiceSeconds, 0, maxMobileCountValue);
+    const parseOccurredAt = new Date().toISOString();
     try {
       const response = await requestJson<ParsePreviewResponse>(
         normalizedApiBaseUrl,
@@ -10874,19 +10953,28 @@ export default function App() {
             transcript,
             stt_model_id: sttModelId,
             llm_model_id: llmModelId,
-            occurred_at: new Date().toISOString(),
+            occurred_at: parseOccurredAt,
             voice_seconds: parserVoiceSeconds
           })
         }
       );
       const boundedPreview = boundParsePreviewResponse(response);
-      setPreview(boundedPreview);
+      const mergedDailyPreview = mergeSameDayParsePreviewDraft(existingDailyPreview, boundedPreview);
+      const transcriptEntry = createDailyTranscriptEntry(
+        parseOccurredAt,
+        transcript,
+        parserVoiceSeconds > 0 ? "voice" : "text"
+      );
+      if (transcriptEntry) {
+        setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, transcriptEntry]));
+      }
+      setPreview(mergedDailyPreview);
       setTranscriptVoiceSeconds(0);
       setCurrentScreen("aiReview");
       setStatus(
         parserVoiceSeconds > 0
-          ? parserVoiceQuotaSyncedStatusMessage(boundedPreview.records.length, parserVoiceSeconds)
-          : parserSuccessStatusMessage(boundedPreview.records.length)
+          ? parserVoiceQuotaSyncedStatusMessage(mergedDailyPreview.records.length, parserVoiceSeconds)
+          : parserSuccessStatusMessage(mergedDailyPreview.records.length)
       );
       if (parserVoiceSeconds > 0 && account) {
         void loadVoiceQuota(account.id);
