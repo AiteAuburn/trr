@@ -15,6 +15,31 @@
 
 ## 2026-07-01
 
+### T1053 refresh second-version app task queue
+
+類型：docs / planning / task-queue
+
+檔案：
+
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Refreshed the task queue against the 糖錄錄 APP 第二版修改清單.
+- Marked the finalized Home recording guidance as done in the task queue.
+- Added the second-version AI-organized daily-record page as the next todo, including post-recording flow, single daily record per day, AI daily summary, vertical category cards, transcript drawer rename, fixed save button, unsaved-leave guard, Android back guard, and per-entry edit/delete requirements.
+- 未變更 backend runtime、mobile runtime、Android signing config、network request paths、AI/LLM calls、STT behavior、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `rtk rg -n "T1052|AI-organized daily-record|今日錄音文字|尚未儲存今天的紀錄|T1050: Add finalized second-version Home" ai_context/TASK_QUEUE.md ai_context/IMPLEMENTATION_LOG.md` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Implement `T1052` as a separate product/data-model slice before changing the daily-record save flow.
+
 ### T1051 document Android release APK sharing flow
 
 類型：mobile / android / release / docs / verifier

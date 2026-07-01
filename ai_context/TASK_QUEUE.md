@@ -100,29 +100,73 @@ Highest priority to lowest priority:
 
 Recommended next five:
 
-No queued implementation tasks remain in `Active` or `Next Up` as of the latest
-task audit. The older recommended items below have corresponding `Done` entries:
-`T037`, `T027`, `T028`, `T030`, `T031`, `T032`, `T033`, `T034`, `T036`, and
-`T040`.
+The finalized second-version Home recording guidance is complete. The next
+selected product slice is the second-version AI-organized daily-record page.
 
-Future roadmap candidates should be promoted into `Next Up` only after product
-scope is explicitly selected:
-
-1. Complete production provider SDK callbacks, nonce/state validation, and
+1. Build the second-version AI-organized daily-record page.
+   - Related queue item: `T1052`.
+2. Complete production provider SDK callbacks, nonce/state validation, and
    provider-driven account creation beyond the current auth/session boundary.
-2. Add production Android release signing plus Play internal testing / AAB
+3. Add production Android release signing plus Play internal testing / AAB
    distribution flow.
-3. Build Store fulfillment: inventory reservation, order/payment/refund,
+4. Build Store fulfillment: inventory reservation, order/payment/refund,
    rollback, legal review, and customer-service audit paths.
-4. Build Community governance: posts, comments, block/report/moderation,
+5. Build Community governance: posts, comments, block/report/moderation,
    public deletion/revoke controls, opt-out cleanup, and audit events.
-5. Deepen external sharing surfaces for Year Review and doctor/caregiver
-   sharing with explicit permissions, expiration, revoke, and export controls.
 
 ## Next Up
-None.
+
+### T1052: Build second-version AI-organized daily-record page
+
+Status: todo
+
+Product source:
+
+- 糖錄錄 APP 第二版修改清單，第二部分：AI整理完成頁（每日紀錄頁）。
+
+Scope:
+
+- Redesign the post-recording flow as: recording -> text confirmation -> submit AI organization -> daily record -> save.
+- Keep exactly one daily record per day; new same-day recordings update that day's record instead of creating a second daily page.
+- Rename the transcript drawer/link from `原始錄音文字` to `今日錄音文字`, and retain all same-day transcript entries by time.
+- Add an AI daily summary section that is regenerated after every add, edit, or delete.
+- Render the daily record as a vertical scroll page: date, AI今日摘要, blood glucose, meals, exercise, weight, medication, and notes.
+- Make each category an independent card with category-specific fields instead of one forced shared schema.
+- Support unlimited entries in blood glucose, meals, exercise, weight, and medication sections.
+- Auto-fill mentioned fields from AI/parser output and leave unmentioned fields blank.
+- Replace the old bottom navigation action with a fixed bottom `儲存今日紀錄` button.
+- Add unsaved-change guard for header back, Android back button, and Android back gesture with copy: `尚未儲存今天的紀錄` / `離開後，今天的修改將不會保留。` / `是否仍要離開？`.
+- Add per-entry overflow menu actions for edit and delete; delete must show confirmation copy `確定要刪除這筆紀錄嗎？` / `刪除後無法復原。`.
+- Re-run AI organization after add, edit, or delete so the full daily record stays consistent.
+
+Implementation notes:
+
+- This is not just a UI copy change. It likely needs a daily-record draft model, same-day merge behavior, transcript grouping, unsaved draft state, Android BackHandler handling, per-entry edit/delete state, parser/AI prompt updates, verifier coverage, and UI spec updates.
+- Preserve PHI boundaries: do not log raw transcripts, raw prompt, raw model output, real health payloads, secrets, or tokens.
+- Keep the existing text confirmation boundary; recording must not skip directly to AI/parser or backend write.
 
 ## Done
+
+### T1050: Add finalized second-version Home recording guidance
+
+Status: done
+
+Summary:
+
+- Added the Home tagline `想說什麼就說什麼`.
+- Added a non-clickable record-direction hint area for time, blood glucose, meals, exercise, weight, and body condition.
+- Added the finalized explanatory copy clarifying that the icon row is not a button and users do not need a fixed speaking format.
+- Adjusted spacing so the explanation sits close to the icon hints while the microphone remains visually separated as the primary action.
+- Added the `範例（怎麼說都可以）` rotating example area below the microphone.
+- Updated UI spec and mobile navigation verifier so Home keeps exactly one primary microphone Pressable and the hint icons cannot become button-like.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
 
 ### T1017: Surface community point balance on food sharing page
 
