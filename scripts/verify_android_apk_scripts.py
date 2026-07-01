@@ -12,6 +12,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_JSON = REPO_ROOT / "mobile" / "package.json"
 README = REPO_ROOT / "README.md"
+ANDROID_RELEASE_SHARING_DOC = REPO_ROOT / "docs" / "ANDROID_RELEASE_SHARING.md"
 ANDROID_APP_BUILD_GRADLE = REPO_ROOT / "mobile" / "android" / "app" / "build.gradle"
 APK_PREREQ_SCRIPT = REPO_ROOT / "scripts" / "check_android_apk_build_prereqs.py"
 
@@ -39,6 +40,7 @@ def main() -> int:
     package_text = PACKAGE_JSON.read_text(encoding="utf-8")
     package = json.loads(package_text)
     readme = README.read_text(encoding="utf-8")
+    release_doc = ANDROID_RELEASE_SHARING_DOC.read_text(encoding="utf-8")
     build_gradle = ANDROID_APP_BUILD_GRADLE.read_text(encoding="utf-8")
     prereq_script = APK_PREREQ_SCRIPT.read_text(encoding="utf-8")
     scripts = package.get("scripts", {})
@@ -84,10 +86,28 @@ def main() -> int:
         "Windows PowerShell release command": ".\\gradlew.bat assembleRelease",
         "Windows local.properties SDK path": "sdk.dir=C:/Users/robin/AppData/Local/Android/Sdk",
         "WSL Windows SDK mismatch warning": "Do not run Linux Gradle in WSL against the Windows SDK path",
+        "release sharing runbook link": "docs/ANDROID_RELEASE_SHARING.md",
     }
     for label, marker in required_readme_markers.items():
         if marker not in readme:
             errors.append(f"README must document {label}: missing {marker!r}")
+
+    required_release_doc_markers = {
+        "release sharing title": "Android Release APK 分享手冊",
+        "debug APK needs Metro": "Debug APK 需要 Metro",
+        "release APK embeds bundle": "Expo JavaScript bundle 和 assets 內嵌進 APK",
+        "internal preflight": "rtk npm run preflight:android-apk:internal",
+        "production preflight": "rtk npm run preflight:android-apk:production",
+        "release build command": "rtk ./gradlew assembleRelease",
+        "release output path": "mobile/android/app/build/outputs/apk/release/app-release.apk",
+        "adb install guidance": "adb install app-release.apk",
+        "no development server": "測試者不需要 `npm run start`、`npx expo start`、Metro 或開發伺服器",
+        "WSL Windows SDK warning": "不要在 WSL/Linux Gradle 裡直接使用 Windows SDK path",
+        "production signing warning": "release build 仍使用 debug keystore",
+    }
+    for label, marker in required_release_doc_markers.items():
+        if marker not in release_doc:
+            errors.append(f"Android release sharing doc must keep {label}: missing {marker!r}")
 
     required_gradle_markers = {
         "Expo embedded release bundle": 'bundleCommand = "export:embed"',

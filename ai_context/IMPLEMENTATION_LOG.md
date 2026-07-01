@@ -15,6 +15,35 @@
 
 ## 2026-07-01
 
+### T1051 document Android release APK sharing flow
+
+類型：mobile / android / release / docs / verifier
+
+檔案：
+
+- `docs/ANDROID_RELEASE_SHARING.md`
+- `README.md`
+- `scripts/verify_android_apk_scripts.py`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a Chinese step-by-step Android release APK sharing runbook that distinguishes debug APKs from standalone release APKs.
+- Documented internal install smoke vs production-like distribution, required preflight commands, release APK output path, tester install options, WSL/Windows SDK pitfalls, and the current debug-signing limitation.
+- Linked the runbook from README and extended the Android APK verifier so the release sharing guidance stays present.
+- 未變更 backend runtime、mobile runtime、Android signing config、network request paths、AI/LLM calls、STT behavior、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `rtk python3 -m py_compile scripts/verify_android_apk_scripts.py` passed.
+- `cd mobile && rtk npm run verify:android-apk-scripts` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Production distribution still needs a real Android release keystore and signing config before `npm run preflight:android-apk:production` can pass.
+
 ### T1050 add finalized Home recording guidance
 
 類型：mobile / docs / verifier

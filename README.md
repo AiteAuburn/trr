@@ -172,6 +172,9 @@ After major mobile layout changes, also run the visual smoke checklist in `ai_co
 
 ### Android APK Export
 
+For a step-by-step Chinese release sharing runbook, see
+`docs/ANDROID_RELEASE_SHARING.md`.
+
 Debug APKs load JavaScript from Metro, so they still require `npm run start` /
 `npx expo start` while testing:
 
