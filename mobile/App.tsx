@@ -1353,6 +1353,7 @@ function dailyRecordEntryDisplayItem(record: PendingRecord, index: number) {
   const payloadSummary = boundDisplayText(displayPayload(recordType, record.payload_json), maxDisplayDetailTextLength);
   return {
     key: `daily-${recordType}-${clampNumber(index, 0, maxMobilePreviewRecords)}`,
+    index: clampNumber(index, 0, maxMobilePreviewRecords),
     typeLabel,
     timeLabel,
     payloadSummary,
@@ -1364,7 +1365,9 @@ function dailyRecordEntryDisplayItem(record: PendingRecord, index: number) {
     accessibilityLabel: boundDisplayText(
       `管理第 ${clampNumber(index + 1, 1, maxMobilePreviewRecords)} 筆${typeLabel}，可編輯或刪除`,
       maxDisplayDetailTextLength
-    )
+    ),
+    editAccessibilityLabel: boundDisplayText(`編輯每日紀錄中的${typeLabel}`, maxDisplayDetailTextLength),
+    removeAccessibilityLabel: boundDisplayText(`刪除每日紀錄中的${typeLabel}`, maxDisplayDetailTextLength)
   };
 }
 
@@ -4942,13 +4945,15 @@ function aiSaveConfirmSubmitLabel(isBusy: boolean, isBlockedByBackend: boolean, 
   );
 }
 
-function aiRemoveConfirmBoundaryLabel() {
-  return boundDisplayText("只會移除待確認候選", maxDisplayTextLength);
+function aiRemoveConfirmBoundaryLabel(isDailyRecordDelete = false) {
+  return boundDisplayText(isDailyRecordDelete ? "確定要刪除這筆紀錄嗎？" : "只會移除待確認候選", maxDisplayTextLength);
 }
 
-function aiRemoveConfirmBoundaryCopy() {
+function aiRemoveConfirmBoundaryCopy(isDailyRecordDelete = false) {
   return boundDisplayText(
-    "這筆 AI 整理結果尚未寫入資料庫；移除後不會送出刪除 API，也不會重新呼叫 AI。",
+    isDailyRecordDelete
+      ? "刪除後無法復原。這會先從每日紀錄草稿移除，儲存前不會送出刪除 API，也不會重新呼叫 AI。"
+      : "這筆 AI 整理結果尚未寫入資料庫；移除後不會送出刪除 API，也不會重新呼叫 AI。",
     maxDisplayDetailTextLength
   );
 }
@@ -5971,6 +5976,10 @@ export default function App() {
   const [pendingPreviewRemoveIndex, setPendingPreviewRemoveIndex] = useState<number | null>(
     initialVisualSmokeScreen === "aiRemoveConfirm" ? 0 : null
   );
+  const [previewActionReturnScreen, setPreviewActionReturnScreen] = useState<AppScreen>(
+    initialVisualSmokeScreen === "aiSaveConfirm" ? "aiSaveConfirm" : "aiReview"
+  );
+  const [dailyRecordMenuIndex, setDailyRecordMenuIndex] = useState<number | null>(null);
   const [previewEditFields, setPreviewEditFields] = useState<RecordEditFields>(() =>
     initialVisualSmokeScreen === "editPreviewRecord" ? visualSmokeDemoRecordEditFields() : emptyRecordEditFields()
   );
@@ -7356,8 +7365,17 @@ export default function App() {
     pendingPreviewRemoveRecord && pendingPreviewRemoveIndex !== null
       ? pendingRecordDisplayItem(pendingPreviewRemoveRecord, pendingPreviewRemoveIndex, "remove-preview")
       : null;
-  const aiRemoveConfirmBoundaryDisplayLabel = aiRemoveConfirmBoundaryLabel();
-  const aiRemoveConfirmBoundaryDisplayText = aiRemoveConfirmBoundaryCopy();
+  const isDailyRecordRemoveConfirm = previewActionReturnScreen === "aiSaveConfirm";
+  const aiRemoveConfirmTitleDisplayText = boundDisplayText(
+    isDailyRecordRemoveConfirm ? "刪除此筆紀錄" : "移除候選紀錄",
+    maxDisplayTextLength
+  );
+  const aiRemoveConfirmSubmitDisplayText = boundDisplayText(
+    isDailyRecordRemoveConfirm ? "刪除" : "確認移除",
+    maxDisplayTextLength
+  );
+  const aiRemoveConfirmBoundaryDisplayLabel = aiRemoveConfirmBoundaryLabel(isDailyRecordRemoveConfirm);
+  const aiRemoveConfirmBoundaryDisplayText = aiRemoveConfirmBoundaryCopy(isDailyRecordRemoveConfirm);
   const aiRemoveConfirmSourceDisplayText = pendingPreviewRemoveDisplayItem
     ? aiRemoveConfirmSourceCopy(pendingPreviewRemoveDisplayItem.confidencePercent)
     : "";
@@ -8486,11 +8504,13 @@ export default function App() {
     void finishRecordingPreview();
   }
 
-  function openPreviewRecordEdit(index: number) {
+  function openPreviewRecordEdit(index: number, returnScreen: AppScreen = "aiReview") {
     const record = preview?.records[index];
     if (!record) {
       return;
     }
+    setPreviewActionReturnScreen(returnScreen);
+    setDailyRecordMenuIndex(null);
     setPendingPreviewRemoveIndex(null);
     setSelectedPreviewIndex(index);
     setPreviewEditFields(recordPayloadToEditFields(record));
@@ -8504,20 +8524,23 @@ export default function App() {
   function returnFromPreviewRecordEdit() {
     setSelectedPreviewIndex(null);
     setPendingPreviewRemoveIndex(null);
+    setDailyRecordMenuIndex(null);
     setPreviewEditFields(emptyRecordEditFields());
     const nowInputs = localDateTimeInputs(new Date());
     setPreviewEditDate(nowInputs.date);
     setPreviewEditTime(nowInputs.time);
-    setCurrentScreen("aiReview");
+    setCurrentScreen(previewActionReturnScreen);
     setStatus(aiCandidateEditCancelStatusMessage());
   }
 
-  function openPreviewRecordRemoveConfirm(index: number) {
+  function openPreviewRecordRemoveConfirm(index: number, returnScreen: AppScreen = "aiReview") {
     const record = preview?.records[index];
     if (!record) {
-      setCurrentScreen("aiReview");
+      setCurrentScreen(returnScreen);
       return;
     }
+    setPreviewActionReturnScreen(returnScreen);
+    setDailyRecordMenuIndex(null);
     setSelectedPreviewIndex(null);
     setPendingPreviewRemoveIndex(index);
     setCurrentScreen("aiRemoveConfirm");
@@ -8543,8 +8566,9 @@ export default function App() {
   function returnFromPreviewRemoveConfirm() {
     setPendingPreviewRemoveIndex(null);
     setSelectedPreviewIndex(null);
+    setDailyRecordMenuIndex(null);
     setPreviewEditFields(emptyRecordEditFields());
-    setCurrentScreen("aiReview");
+    setCurrentScreen(previewActionReturnScreen);
     setStatus(aiCandidateRemoveCancelStatusMessage());
   }
 
@@ -8555,17 +8579,18 @@ export default function App() {
     const nextRecords = preview.records.filter((_, recordIndex) => recordIndex !== index);
     setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
     setPendingPreviewRemoveIndex(null);
+    setDailyRecordMenuIndex(null);
     setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));
   }
 
   function confirmPreviewRecordRemove() {
     if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {
       setPendingPreviewRemoveIndex(null);
-      setCurrentScreen("aiReview");
+      setCurrentScreen(previewActionReturnScreen);
       return;
     }
     removePreviewRecord(pendingPreviewRemoveIndex);
-    setCurrentScreen("aiReview");
+    setCurrentScreen(previewActionReturnScreen);
   }
 
   function updatePreviewEditField<K extends keyof RecordEditFields>(
@@ -8676,7 +8701,8 @@ export default function App() {
       setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
       setSelectedPreviewIndex(null);
       setPreviewEditFields(emptyRecordEditFields());
-      setCurrentScreen("aiReview");
+      setDailyRecordMenuIndex(null);
+      setCurrentScreen(previewActionReturnScreen);
       setStatus(aiCandidateEditSuccessStatusMessage());
     } catch (error) {
       setStatus(aiCandidateEditFailureStatusMessage(error));
@@ -8701,15 +8727,32 @@ export default function App() {
   }
 
   function openDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    setDailyRecordMenuIndex((current) => (current === item.index ? null : item.index));
     setStatus(
       boundUiMessage(
-        `已選擇${item.typeLabel}單筆管理；編輯／刪除會在下一個 T1052 slice 接上，目前不寫入 backend。`
+        `已開啟${item.typeLabel}單筆管理；可選擇編輯或刪除，尚未寫入 backend。`
       )
     );
   }
 
   function pressDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
     openDailyRecordEntryMenu(item);
+  }
+
+  function editDailyRecordEntry(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    openPreviewRecordEdit(item.index, "aiSaveConfirm");
+  }
+
+  function pressDailyRecordEntryEdit(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    editDailyRecordEntry(item);
+  }
+
+  function deleteDailyRecordEntry(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    openPreviewRecordRemoveConfirm(item.index, "aiSaveConfirm");
+  }
+
+  function pressDailyRecordEntryDelete(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    deleteDailyRecordEntry(item);
   }
 
   function returnFromAiSaveConfirm() {
@@ -12259,6 +12302,26 @@ export default function App() {
                             </View>
                           ))}
                         </View>
+                        {dailyRecordMenuIndex === item.index ? (
+                          <View style={styles.actionRow}>
+                            <Pressable
+                              accessibilityLabel={item.editAccessibilityLabel}
+                              accessibilityRole="button"
+                              style={styles.secondaryButton}
+                              onPress={() => pressDailyRecordEntryEdit(item)}
+                            >
+                              <Text style={styles.secondaryButtonText}>編輯</Text>
+                            </Pressable>
+                            <Pressable
+                              accessibilityLabel={item.removeAccessibilityLabel}
+                              accessibilityRole="button"
+                              style={styles.dangerButton}
+                              onPress={() => pressDailyRecordEntryDelete(item)}
+                            >
+                              <Text style={styles.dangerButtonText}>刪除</Text>
+                            </Pressable>
+                          </View>
+                        ) : null}
                       </View>
                     ))
                   ) : (
@@ -12337,7 +12400,7 @@ export default function App() {
         {currentScreen === "aiRemoveConfirm" && pendingPreviewRemoveRecord && pendingPreviewRemoveDisplayItem ? (
           <View style={styles.pageSection}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>移除候選紀錄</Text>
+              <Text style={styles.sectionTitle}>{aiRemoveConfirmTitleDisplayText}</Text>
               <Pressable
                 accessibilityLabel={coreFlowDisplayLabels.returnConfirmAccessibility}
                 accessibilityRole="button"
@@ -12385,7 +12448,7 @@ export default function App() {
                 style={styles.dangerButton}
                 onPress={confirmPreviewRecordRemove}
               >
-                <Text style={styles.dangerButtonText}>確認移除</Text>
+                <Text style={styles.dangerButtonText}>{aiRemoveConfirmSubmitDisplayText}</Text>
               </Pressable>
             </View>
           </View>

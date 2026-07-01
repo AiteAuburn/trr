@@ -15,6 +15,40 @@
 
 ## 2026-07-01
 
+### T1055 add daily-record entry edit delete actions
+
+類型：mobile / ui / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Connected the daily-record entry `⋯` affordance to an inline `編輯` / `刪除` action row.
+- Reused the existing preview edit page for daily-record entry edits and returns back to the daily-record page after save/cancel.
+- Reused the existing remove-confirm route for daily-record entry deletion, with the required copy `確定要刪除這筆紀錄嗎？` and `刪除後無法復原。`, plus a daily-record-specific `刪除` submit label.
+- Kept deletion scoped to the unsaved daily-record draft / parser preview; it does not call backend delete and does not re-run AI yet.
+- Updated the mobile navigation verifier, UI spec, and task queue for the new daily-record entry edit/delete slice.
+- 未變更 backend runtime、database schema、Android signing config、network request paths、STT behavior、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue T1052 with true same-day daily-record persistence, same-day transcript retention, AI reorganization after changes, and unsaved-change/Android-back guards.
+
 ### T1054 add daily-record review page first slice
 
 類型：mobile / ui / verifier / docs

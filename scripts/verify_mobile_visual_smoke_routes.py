@@ -267,7 +267,7 @@ VISUAL_SMOKE_ROUTE_IDENTITIES = {
     "transcriptReview": "確認文字內容",
     "aiReview": "AI 整理確認",
     "editPreviewRecord": "修改整理結果",
-    "aiRemoveConfirm": "移除候選紀錄",
+    "aiRemoveConfirm": "aiRemoveConfirmTitleDisplayText",
     "aiSaveConfirm": "每日紀錄",
     "aiSaveFailure": "儲存未完成",
     "saveSuccess": "coreFlowDisplayLabels.saveResult",

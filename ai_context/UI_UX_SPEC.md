@@ -1769,7 +1769,7 @@ AI 分析結果：
   - 用藥紀錄
   - 其他備註
 - 每個分類都是獨立 card，有自己的欄位與空白說明；沒有提到的欄位保持空白，不強迫共用 schema。
-- 每筆資料右側保留 `⋯` 管理入口；目前第一片只提供 bounded status，不寫 backend。後續 edit / delete slice 必須接上編輯、刪除與刪除確認。
+- 每筆資料右側保留 `⋯` 管理入口；點擊後在同一卡片展開 `編輯` / `刪除`。編輯沿用候選編輯頁並返回每日紀錄頁；刪除必須先進確認頁，不可直接移除。
 - 底部顯示 `儲存今日紀錄` action bar；送出仍走 existing backend validation / audit save handler。
 
 Guardrails:
@@ -1777,6 +1777,7 @@ Guardrails:
 - 每日紀錄頁所有日期、摘要、transcript、分類 entry、欄位 rows 與管理 action labels 必須先轉成 bounded display items。
 - `今日錄音文字` 與單筆 `⋯` 管理入口必須使用 dedicated handlers，不可在 JSX 內直接呼叫 STT、AI、backend 或 save/delete request。
 - Mobile navigation verifier 必須守住每日紀錄頁包含 `AI今日摘要`、`今日錄音文字`、分類 section renderer、單筆管理 press wrapper、`fixedSaveBar` 與 `儲存今日紀錄` 文案。
+- Mobile navigation verifier 必須守住每日紀錄 entry edit/delete handlers、`aiSaveConfirm` return target、刪除確認文案 `確定要刪除這筆紀錄嗎？` / `刪除後無法復原。`，以及每日紀錄刪除 submit label `刪除`。
 - 後續 same-day merge slice 必須讓同一天只保留一份每日紀錄；再次錄音應更新同一天 draft / record，不建立第二份每日紀錄頁。
 - 後續 unsaved-change slice 必須讓 header back、Android back button 與 Android back gesture 顯示相同防呆 copy：`尚未儲存今天的紀錄`、`離開後，今天的修改將不會保留。`、`是否仍要離開？`。
 
@@ -1785,6 +1786,7 @@ Guardrails:
 功能：
 
 - 在移除單筆 AI 候選紀錄前，提供 App 內確認。
+- 若從每日紀錄頁刪除 entry 進入，頁面語意改為刪除此筆紀錄，必須顯示 `確定要刪除這筆紀錄嗎？` 與 `刪除後無法復原。`，並以 `刪除` 作為 danger submit label。
 - 讓使用者理解這是移除尚未儲存的候選，不是刪除正式紀錄。
 - 避免使用系統 Alert 作為主要確認 UI。
 
