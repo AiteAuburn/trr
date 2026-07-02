@@ -122,6 +122,7 @@ type DailyRecordSaveResponse = {
   };
   records: RecordItem[];
 };
+type DailyRecordReorganizationReason = "add" | "edit" | "delete";
 type DevResetResponse = {
   status: string;
   deleted_counts: Record<string, number>;
@@ -1391,6 +1392,50 @@ function dailyRecordSummaryText(records: PendingRecord[]) {
   }
   return boundDisplayText(
     `AI 已整理今天內容：${parts.join("、")}。每次新增、編輯或刪除後，後續會重新整理今日摘要與分類內容。`,
+    maxDisplayDetailTextLength
+  );
+}
+
+function dailyRecordReorganizationReasonText(reason: DailyRecordReorganizationReason | null) {
+  if (reason === "add") {
+    return "新增後";
+  }
+  if (reason === "edit") {
+    return "編輯後";
+  }
+  if (reason === "delete") {
+    return "刪除後";
+  }
+  return "目前";
+}
+
+function dailyRecordReorganizationStatusMessage(
+  reason: DailyRecordReorganizationReason,
+  count: number,
+  revision: number
+) {
+  return boundUiMessage(
+    `AI今日摘要已在${dailyRecordReorganizationReasonText(reason)}重新整理；目前 ${clampNumber(
+      count,
+      0,
+      maxMobilePreviewRecords
+    )} 筆，第 ${clampNumber(revision, 0, maxMobileCountValue)} 次整理。`
+  );
+}
+
+function dailyRecordReorganizationDisplayText(
+  reason: DailyRecordReorganizationReason | null,
+  revision: number
+) {
+  if (revision <= 0) {
+    return "AI 今日摘要會依目前草稿即時整理。";
+  }
+  return boundDisplayText(
+    `AI 今日摘要已於${dailyRecordReorganizationReasonText(reason)}重新整理 ${clampNumber(
+      revision,
+      0,
+      maxMobileCountValue
+    )} 次。`,
     maxDisplayDetailTextLength
   );
 }
@@ -6123,6 +6168,9 @@ export default function App() {
   );
   const [dailyRecordMenuIndex, setDailyRecordMenuIndex] = useState<number | null>(null);
   const [dailyRecordLeaveGuardVisible, setDailyRecordLeaveGuardVisible] = useState(false);
+  const [dailyRecordOrganizationRevision, setDailyRecordOrganizationRevision] = useState(0);
+  const [dailyRecordOrganizationReason, setDailyRecordOrganizationReason] =
+    useState<DailyRecordReorganizationReason | null>(null);
   const [dailyTranscriptEntries, setDailyTranscriptEntries] = useState<DailyTranscriptEntry[]>([]);
   const [previewEditFields, setPreviewEditFields] = useState<RecordEditFields>(() =>
     initialVisualSmokeScreen === "editPreviewRecord" ? visualSmokeDemoRecordEditFields() : emptyRecordEditFields()
@@ -6507,6 +6555,10 @@ export default function App() {
   const aiSaveConfirmIntroDisplayText = aiSaveConfirmIntroCopy();
   const dailyRecordDateDisplayText = preview ? dailyRecordDateLabel(preview.records) : "";
   const dailyRecordSummaryDisplayText = preview ? dailyRecordSummaryText(preview.records) : "";
+  const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayText(
+    dailyRecordOrganizationReason,
+    dailyRecordOrganizationRevision
+  );
   const dailyRecordSectionItems = preview ? buildDailyRecordSectionDisplayItems(preview.records) : [];
   const todayTranscriptDisplayItems = dailyTranscriptDisplayItems(preview, dailyTranscriptEntries);
   const todayTranscriptCountDisplayText = boundDisplayText(
@@ -8146,6 +8198,8 @@ export default function App() {
     previewSaveInFlight.current = false;
     setPreview(null);
     setDailyTranscriptEntries([]);
+    setDailyRecordOrganizationRevision(0);
+    setDailyRecordOrganizationReason(null);
     setTranscript("");
     setTranscriptVoiceSeconds(0);
     setIsTranscriptSample(false);
@@ -8749,15 +8803,35 @@ export default function App() {
     setStatus(aiCandidateRemoveCancelStatusMessage());
   }
 
+  function reorganizeDailyRecordDraftAfterChange(
+    nextPreview: ParsePreviewResponse,
+    reason: DailyRecordReorganizationReason,
+    statusOverride?: string
+  ) {
+    const reorganizedPreview = boundParsePreviewResponse(nextPreview);
+    const nextRevision = clampNumber(dailyRecordOrganizationRevision + 1, 0, maxMobileCountValue);
+    setPreview(reorganizedPreview);
+    setDailyRecordOrganizationRevision(nextRevision);
+    setDailyRecordOrganizationReason(reason);
+    setStatus(
+      statusOverride ??
+        dailyRecordReorganizationStatusMessage(reason, reorganizedPreview.records.length, nextRevision)
+    );
+  }
+
   function removePreviewRecord(index: number) {
     if (!preview) {
       return;
     }
     const nextRecords = preview.records.filter((_, recordIndex) => recordIndex !== index);
-    setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
+    if (previewActionReturnScreen === "aiSaveConfirm") {
+      reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, "delete");
+    } else {
+      setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
+      setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));
+    }
     setPendingPreviewRemoveIndex(null);
     setDailyRecordMenuIndex(null);
-    setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));
   }
 
   function confirmPreviewRecordRemove() {
@@ -8875,12 +8949,16 @@ export default function App() {
             }
           : record
       );
-      setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
+      if (previewActionReturnScreen === "aiSaveConfirm") {
+        reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, "edit");
+      } else {
+        setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
+        setStatus(aiCandidateEditSuccessStatusMessage());
+      }
       setSelectedPreviewIndex(null);
       setPreviewEditFields(emptyRecordEditFields());
       setDailyRecordMenuIndex(null);
       setCurrentScreen(previewActionReturnScreen);
-      setStatus(aiCandidateEditSuccessStatusMessage());
     } catch (error) {
       setStatus(aiCandidateEditFailureStatusMessage(error));
     }
@@ -11010,10 +11088,11 @@ export default function App() {
       if (transcriptEntry) {
         setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, transcriptEntry]));
       }
-      setPreview(mergedDailyPreview);
       setTranscriptVoiceSeconds(0);
       setCurrentScreen("aiReview");
-      setStatus(
+      reorganizeDailyRecordDraftAfterChange(
+        mergedDailyPreview,
+        "add",
         parserVoiceSeconds > 0
           ? parserVoiceQuotaSyncedStatusMessage(mergedDailyPreview.records.length, parserVoiceSeconds)
           : parserSuccessStatusMessage(mergedDailyPreview.records.length)
@@ -11081,6 +11160,8 @@ export default function App() {
       setTranscriptVoiceSeconds(0);
       setIsTranscriptSample(false);
       setDailyTranscriptEntries([]);
+      setDailyRecordOrganizationRevision(0);
+      setDailyRecordOrganizationReason(null);
       setRecords((current) => boundRecordsList([...createdRecords, ...current]));
       setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));
       if (createdRecords[0]) {
@@ -12440,6 +12521,7 @@ export default function App() {
             <View style={styles.dailySummaryCard}>
               <Text style={styles.previewModeBadge}>AI今日摘要</Text>
               <Text style={styles.recordContent}>{dailyRecordSummaryDisplayText}</Text>
+              <Text style={styles.evidence}>{dailyRecordReorganizationDisplay}</Text>
             </View>
             <Pressable
               accessibilityLabel={todayTranscriptAccessibilityLabel}

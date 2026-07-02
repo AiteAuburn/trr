@@ -1759,7 +1759,7 @@ AI 分析結果：
 頁面內容：
 
 - 顯示 `每日紀錄` 標題與記錄日期。
-- 顯示 `AI今日摘要`，摘要由目前 parser preview records 產生 bounded display copy；後續 add / edit / delete slice 必須重新整理摘要。
+- 顯示 `AI今日摘要`，摘要由目前 parser preview records 產生 bounded display copy；新增、編輯或刪除每日紀錄草稿後必須重新整理摘要與分類 sections，並顯示 bounded reorganization revision / reason。此重整不可重新呼叫 LLM、STT 或 backend。
 - 顯示 `今日錄音文字` 入口與本次 / 同日 transcript entries 的 bounded display list；不可重新呼叫 STT、AI 或 backend。Mobile 可保留 in-memory same-day transcript entries；送出 `儲存今日紀錄` 時必須透過 backend-backed daily-record persistence 保存 bounded same-day transcript entries。
 - 以下分類必須直向排列，不使用左右滑動：
   - 血糖紀錄
@@ -1781,6 +1781,7 @@ Guardrails:
 - 後續 same-day merge slice 必須讓同一天只保留一份每日紀錄；再次錄音應更新同一天 draft / record，不建立第二份每日紀錄頁。
 - Parser 成功後若目前 mobile 已有同日 daily-record draft，必須合併 preview records / rejected events / transcript segments，而不是覆蓋同一天 draft。Navigation verifier 必須守住 merge helper、parse timestamp reuse、daily transcript retained state 與 `今日錄音文字` 使用 retained entries。
 - Backend 必須有 `daily_records` durable model / migration，並用 unique `(profile_id, record_date)` 保證同一天只有一份每日紀錄。`/daily-records/save` 必須同時建立 records、merge record ids / preview records / transcript entries、寫入 daily-record audit event；mobile navigation verifier 必須 source-check backend API、schema、model、migration、regression tests 與 mobile endpoint binding。
+- Daily-record draft add / edit / delete 必須走 dedicated reorganization helper，重新 bound preview、重新計算 `AI今日摘要` 與各分類 cards、更新 organization revision / reason，並在摘要卡顯示最新整理狀態。Mobile navigation verifier 必須守住 add / edit / delete 三條 reorganization binding，不可只改 records array 後略過摘要重整狀態。
 - Header back、頁內返回確認、Android back button 與 Android back gesture 必須先顯示相同防呆 copy：`尚未儲存今天的紀錄`、`離開後，今天的修改將不會保留。`、`是否仍要離開？`。使用者按 `取消` 時保留每日紀錄草稿，按 `離開` 才回 AI 整理確認頁。
 
 ### 4.16.0 AI 候選移除確認頁

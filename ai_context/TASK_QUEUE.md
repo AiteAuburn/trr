@@ -147,10 +147,10 @@ Progress:
 - Third guard slice implemented: leaving the daily-record page through the header/back affordance or Android hardware back shows the shared unsaved-change prompt before returning to AI confirmation.
 - Fourth draft-data slice implemented: same-day parser results now merge into the current mobile daily-record draft instead of replacing it, and `今日錄音文字` retains bounded same-day transcript entries in mobile memory by timestamp.
 - Fifth durable persistence slice implemented: backend now has a `daily_records` table with a unique `(profile_id, record_date)` constraint plus `POST /daily-records/save`, and mobile `儲存今日紀錄` uses that transactional endpoint to create records and upsert the same day's daily record with retained transcript entries.
+- Sixth reorganization slice implemented: add/edit/delete changes now pass through a daily-record reorganization helper that re-bounds the preview draft, re-computes `AI今日摘要` and category sections from the current records, tracks an organization revision/reason, and displays the latest reorganization state in the summary card without re-calling LLM/STT/backend.
 
 Remaining:
 
-- Re-run AI organization after add, edit, or delete.
 - Make the save action physically fixed outside the scroll area if the current visual action bar is insufficient in native QA.
 
 Implementation notes:

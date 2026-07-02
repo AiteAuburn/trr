@@ -15,6 +15,38 @@
 
 ## 2026-07-02
 
+### T1059 add daily-record draft reorganization markers
+
+類型：mobile / data-flow / ui / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added daily-record organization revision / reason state for the second-version daily-record draft.
+- Added a shared `reorganizeDailyRecordDraftAfterChange` helper so parser add, daily-record edit, and daily-record delete all re-bound the preview draft and re-compute `AI今日摘要` / category sections from the current structured records.
+- Added bounded reorganization status copy and summary-card display text so users can see that the daily draft was reorganized after add / edit / delete.
+- Updated mobile navigation verifier, UI spec, and task queue so the reorganization behavior is source-checked and remains no-LLM / no-STT / no-backend on local edit/delete.
+- 未變更 backend runtime、database schema、Android signing config、network request paths、AI/LLM prompt behavior、STT behavior、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue T1052 with native QA for the fixed save action.
+
 ### T1058 add durable daily-record persistence
 
 類型：backend / mobile / data-model / test / verifier / docs
