@@ -13,7 +13,20 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette.types import Message, Receive
 
-from app.api import achievements, ai, auth, community, dev, profiles, records, reports, store, subscriptions, year_reviews
+from app.api import (
+    achievements,
+    ai,
+    auth,
+    community,
+    daily_records,
+    dev,
+    profiles,
+    records,
+    reports,
+    store,
+    subscriptions,
+    year_reviews,
+)
 from app.core.config import get_settings
 from app.core.logging import configure_logging
 from app.core.metrics import http_metrics
@@ -28,6 +41,7 @@ JSON_BODY_PREFIXES = (
     "/ai/",
     "/auth/",
     "/community/",
+    "/daily-records",
     "/dev/",
     "/profiles",
     "/records",
@@ -65,6 +79,7 @@ app.include_router(ai.router)
 app.include_router(achievements.router)
 app.include_router(auth.router)
 app.include_router(community.router)
+app.include_router(daily_records.router)
 app.include_router(dev.router)
 app.include_router(profiles.router)
 app.include_router(records.router)

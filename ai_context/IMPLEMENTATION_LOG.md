@@ -13,6 +13,56 @@
 後續:
 ```
 
+## 2026-07-02
+
+### T1058 add durable daily-record persistence
+
+類型：backend / mobile / data-model / test / verifier / docs
+
+檔案：
+
+- `backend/alembic/versions/20260430_0030_daily_records.py`
+- `backend/app/api/daily_records.py`
+- `backend/app/api/dev.py`
+- `backend/app/main.py`
+- `backend/app/models/__init__.py`
+- `backend/app/models/daily_record.py`
+- `backend/app/models/user_profile.py`
+- `backend/app/schemas/daily_record.py`
+- `backend/tests/test_daily_records.py`
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added durable `daily_records` persistence with a unique `(profile_id, record_date)` constraint.
+- Added `POST /daily-records/save` to create structured records and upsert the same day's daily record in one backend transaction.
+- Daily save merges record ids, preview record snapshots, and bounded same-day transcript entries instead of creating a second daily record for the same date.
+- Mobile `儲存今日紀錄` now calls `/daily-records/save` with the current daily draft, retained transcript entries, and daily summary, then syncs the returned created records locally.
+- Added backend regression tests for first daily save, same-day update/merge, and mismatched record profile rejection.
+- Updated mobile verifier, UI spec, and task queue to make durable daily-record persistence the source-checked contract.
+- 未變更 AI/LLM prompt behavior、STT behavior、Android signing config、payment/store/community behavior、PHI logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `rtk python3 -m py_compile backend/app/api/daily_records.py backend/app/api/dev.py backend/app/main.py backend/app/models/daily_record.py backend/app/models/user_profile.py backend/app/schemas/daily_record.py backend/tests/test_daily_records.py scripts/verify_mobile_navigation.py` passed.
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk docker compose exec backend alembic upgrade head` passed.
+- `rtk docker compose exec backend pytest -q tests/test_daily_records.py tests/test_records.py` passed.
+- `rtk docker compose exec backend ruff check app tests/test_daily_records.py` passed.
+- `rtk docker compose exec backend mypy app/api/daily_records.py app/schemas/daily_record.py app/models/daily_record.py` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `rtk git diff --check` passed.
+- Full `rtk docker compose exec backend mypy app` still reports pre-existing errors in `app/api/community.py`, `app/api/achievements.py`, and `app/services/ai_pipeline.py`; no issues remain in the new daily-record files under the focused mypy command above.
+
+後續：
+
+- Continue T1052 with AI reorganization after add/edit/delete and native QA for the fixed save action.
+
 ## 2026-07-01
 
 ### T1057 add same-day daily draft merge and transcript retention

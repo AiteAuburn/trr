@@ -146,11 +146,10 @@ Progress:
 - Second UI/action slice implemented: each daily-record entry `⋯` expands `編輯` / `刪除`; edit returns to the daily-record page, delete shows the required confirmation copy before removing the unsaved daily draft entry.
 - Third guard slice implemented: leaving the daily-record page through the header/back affordance or Android hardware back shows the shared unsaved-change prompt before returning to AI confirmation.
 - Fourth draft-data slice implemented: same-day parser results now merge into the current mobile daily-record draft instead of replacing it, and `今日錄音文字` retains bounded same-day transcript entries in mobile memory by timestamp.
+- Fifth durable persistence slice implemented: backend now has a `daily_records` table with a unique `(profile_id, record_date)` constraint plus `POST /daily-records/save`, and mobile `儲存今日紀錄` uses that transactional endpoint to create records and upsert the same day's daily record with retained transcript entries.
 
 Remaining:
 
-- Persist one true daily record per day instead of only saving individual preview records.
-- Extend same-day merge and transcript retention from mobile in-memory draft behavior to durable backend-backed daily-record persistence.
 - Re-run AI organization after add, edit, or delete.
 - Make the save action physically fixed outside the scroll area if the current visual action bar is insufficient in native QA.
 

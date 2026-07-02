@@ -3,6 +3,7 @@ from app.models.achievement import AchievementUnlock
 from app.models.audit_log import AuditLog
 from app.models.auth_session import AuthSession
 from app.models.community import CommunityPointLedger, CommunityPublicProfile, FoodItem, FoodShare, StoreRedemption
+from app.models.daily_record import DailyRecord
 from app.models.profile_access_grant import ProfileAccessGrant
 from app.models.rate_limit import RateLimitCounter
 from app.models.record import Record
@@ -18,6 +19,7 @@ __all__ = [
     "AuthSession",
     "CommunityPointLedger",
     "CommunityPublicProfile",
+    "DailyRecord",
     "FoodItem",
     "FoodShare",
     "Plan",

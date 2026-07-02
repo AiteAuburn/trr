@@ -23,3 +23,4 @@ class UserProfile(Base):
 
     account = orm_relationship("Account", back_populates="profiles")
     records = orm_relationship("Record", back_populates="profile")
+    daily_records = orm_relationship("DailyRecord", back_populates="profile")

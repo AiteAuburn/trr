@@ -18,6 +18,13 @@ COMMUNITY_SCHEMA_PATH = REPO_ROOT / "backend" / "app" / "schemas" / "community.p
 COMMUNITY_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "community.py"
 STORE_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "store.py"
 DEV_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "dev.py"
+DAILY_RECORDS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "daily_records.py"
+DAILY_RECORD_SCHEMA_PATH = REPO_ROOT / "backend" / "app" / "schemas" / "daily_record.py"
+DAILY_RECORD_MODEL_PATH = REPO_ROOT / "backend" / "app" / "models" / "daily_record.py"
+DAILY_RECORD_MIGRATION_PATH = (
+    REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0030_daily_records.py"
+)
+DAILY_RECORD_TEST_PATH = REPO_ROOT / "backend" / "tests" / "test_daily_records.py"
 COMMUNITY_MODEL_PATH = REPO_ROOT / "backend" / "app" / "models" / "community.py"
 COMMUNITY_FOOD_INDEX_MIGRATION_PATH = (
     REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0024_community_food_lookup_indexes.py"
@@ -543,6 +550,39 @@ def _verify_food_community_category_contract(content: str) -> None:
                 content,
                 f'value === "{mobile_id}"',
             )
+
+
+def _verify_daily_record_contract(content: str) -> None:
+    backend_api_content = DAILY_RECORDS_API_PATH.read_text(encoding="utf-8")
+    backend_schema_content = DAILY_RECORD_SCHEMA_PATH.read_text(encoding="utf-8")
+    backend_model_content = DAILY_RECORD_MODEL_PATH.read_text(encoding="utf-8")
+    backend_migration_content = DAILY_RECORD_MIGRATION_PATH.read_text(encoding="utf-8")
+    backend_tests_content = DAILY_RECORD_TEST_PATH.read_text(encoding="utf-8")
+    for label, haystack, marker in (
+        ("daily record backend router prefix", backend_api_content, 'APIRouter(prefix="/daily-records"'),
+        ("daily record backend save endpoint", backend_api_content, '@router.post("/save", response_model=DailyRecordSaveResponse, status_code=201)'),
+        ("daily record backend transaction creates records", backend_api_content, "created_records.append(record)"),
+        ("daily record backend upsert lookup", backend_api_content, "DailyRecord.record_date == payload.record_date"),
+        ("daily record backend record id merge", backend_api_content, "daily_record.record_ids = _merge_record_ids("),
+        ("daily record backend preview merge", backend_api_content, "daily_record.preview_records_json = _merge_preview_records("),
+        ("daily record backend transcript merge", backend_api_content, "daily_record.transcript_entries_json = _merge_transcript_entries("),
+        ("daily record backend audit event", backend_api_content, 'resource_type="daily_record"'),
+        ("daily record schema save request", backend_schema_content, "class DailyRecordSaveRequest(BaseModel):"),
+        ("daily record schema save response", backend_schema_content, "class DailyRecordSaveResponse(BaseModel):"),
+        ("daily record transcript bounded source text", backend_schema_content, "source_text: str = Field(min_length=1, max_length=4000)"),
+        ("daily record model table", backend_model_content, '__tablename__ = "daily_records"'),
+        ("daily record model unique profile date", backend_model_content, 'UniqueConstraint("profile_id", "record_date", name="uq_daily_records_profile_date")'),
+        ("daily record migration revision", backend_migration_content, 'revision: str = "20260430_0030"'),
+        ("daily record migration table", backend_migration_content, '"daily_records"'),
+        ("daily record migration unique profile date", backend_migration_content, '"uq_daily_records_profile_date"'),
+        ("daily record backend create test", backend_tests_content, "test_daily_record_save_creates_records_and_one_daily_record"),
+        ("daily record backend merge test", backend_tests_content, "test_daily_record_save_updates_same_day_instead_of_creating_second_daily_record"),
+        ("daily record backend one row assertion", backend_tests_content, "assert len(daily_records) == 1"),
+        ("daily record mobile save endpoint", content, '"/daily-records/save"'),
+        ("daily record mobile save request helper", content, "function buildDailyRecordSaveRequest("),
+        ("daily record mobile transactional response", content, "const saveResponse = await requestJson<DailyRecordSaveResponse>"),
+    ):
+        _assert_contains(label, haystack, marker)
 
 
 def _verify_basic_report_contract() -> None:
@@ -1191,6 +1231,7 @@ def main() -> int:
 
         _verify_achievement_contract(content)
         _verify_food_community_category_contract(content)
+        _verify_daily_record_contract(content)
         _verify_basic_report_contract()
 
         _assert_contains(
@@ -2547,6 +2588,11 @@ def main() -> int:
             ("daily record parse merges same-day draft", "const mergedDailyPreview = mergeSameDayParsePreviewDraft(existingDailyPreview, boundedPreview);"),
             ("daily record parse appends transcript entry", "setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, transcriptEntry]));"),
             ("daily record transcript display uses retained entries", "const todayTranscriptDisplayItems = dailyTranscriptDisplayItems(preview, dailyTranscriptEntries);"),
+            ("daily record save response type", "type DailyRecordSaveResponse = {"),
+            ("daily record save payload helper", "function buildDailyRecordSaveRequest("),
+            ("daily record save endpoint", '"/daily-records/save"'),
+            ("daily record save payload binding", "body: JSON.stringify(buildDailyRecordSaveRequest(preview, recordsToSave, dailyTranscriptEntries))"),
+            ("daily record save clears retained transcripts", "setDailyTranscriptEntries([]);"),
             ("daily record fixed save bar", "styles.fixedSaveBar"),
             ("daily record save label", "? \"了解提醒並儲存今日紀錄\""),
             ("daily record category blank copy", "沒有提到的欄位保持空白"),
@@ -4042,7 +4088,7 @@ def main() -> int:
             ("achievement sync handler passes true", "void loadAchievementSummary(true);"),
             ("achievement post-save sync helper", "function syncAchievementsAfterRecordSave()"),
             ("achievement AI save success sync", "setStatus(aiSaveSuccessStatusMessage());\n      syncAchievementsAfterRecordSave();"),
-            ("achievement AI partial save sync", "setStatus(aiPartialSaveFailureStatusMessage(message));\n        syncAchievementsAfterRecordSave();"),
+            ("achievement AI daily save transactional response", "const saveResponse = await requestJson<DailyRecordSaveResponse>"),
             ("achievement manual create sync", "setStatus(manualRecordCreateSuccessStatusMessage());\n      syncAchievementsAfterRecordSave();"),
             ("achievement category sections", "achievementCategoryDisplaySections.map"),
             ("achievement section item render", "section.items.map"),

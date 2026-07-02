@@ -106,6 +106,22 @@ type DailyTranscriptEntry = {
   source_text: string;
   source: "voice" | "text";
 };
+
+type DailyRecordSaveResponse = {
+  daily_record: {
+    id: string;
+    profile_id: string;
+    record_date: string;
+    summary_text: string;
+    record_ids: string[];
+    preview_records_json: Record<string, unknown>[];
+    transcript_entries_json: DailyTranscriptEntry[];
+    source: string;
+    created_at: string;
+    updated_at: string;
+  };
+  records: RecordItem[];
+};
 type DevResetResponse = {
   status: string;
   deleted_counts: Record<string, number>;
@@ -3420,6 +3436,32 @@ function pendingRecordForSave(record: PendingRecord): PendingRecord {
   };
 }
 
+function dailyTranscriptEntriesForSave(
+  preview: ParsePreviewResponse,
+  entries: DailyTranscriptEntry[]
+) {
+  const previewDayKey = dailyRecordKeyFromRecords(preview.records);
+  return boundDailyTranscriptEntries(
+    entries.filter((entry) => !previewDayKey || localDateKey(entry.occurred_at) === previewDayKey)
+  );
+}
+
+function buildDailyRecordSaveRequest(
+  preview: ParsePreviewResponse,
+  recordsToSave: PendingRecord[],
+  transcriptEntries: DailyTranscriptEntry[]
+) {
+  const firstRecord = recordsToSave[0];
+  return {
+    profile_id: firstRecord.profile_id,
+    record_date: dailyRecordKeyFromRecords(preview.records) || localDateKey(firstRecord.occurred_at),
+    summary_text: dailyRecordSummaryText(preview.records),
+    records: recordsToSave,
+    transcript_entries: dailyTranscriptEntriesForSave(preview, transcriptEntries),
+    source: "ai_confirmation"
+  };
+}
+
 function createClientSaveBatchId() {
   const timestamp = Date.now().toString(36);
   const randomSuffix = Math.random().toString(36).slice(2, 10);
@@ -3910,7 +3952,7 @@ function aiPartialSaveFailureStatusMessage(message: string) {
 }
 
 function aiSaveProgressStatusMessage() {
-  return boundUiMessage("儲存候選紀錄...");
+  return boundUiMessage("儲存今日紀錄...");
 }
 
 function aiSaveSuccessStatusMessage() {
@@ -3922,11 +3964,11 @@ function aiSaveFailureStatusMessage(error: unknown) {
 }
 
 function aiSaveRecordsStatusMessage(count: number) {
-  return boundUiMessage(`已新增 ${clampNumber(count, 0, maxMobileCountValue)} 筆紀錄`);
+  return boundUiMessage(`已更新今日紀錄，新增 ${clampNumber(count, 0, maxMobileCountValue)} 筆紀錄`);
 }
 
 function aiSaveSuccessSummaryMessage(count: number) {
-  return boundUiMessage(`已儲存 ${clampNumber(count, 0, maxMobileCountValue)} 筆 AI 整理紀錄`);
+  return boundUiMessage(`已儲存今日紀錄，包含 ${clampNumber(count, 0, maxMobileCountValue)} 筆 AI 整理紀錄`);
 }
 
 function aiPartialSaveRecordsStatusMessage(savedCount: number, unsavedCount: number) {
@@ -11022,21 +11064,23 @@ export default function App() {
         }
       };
     });
-    const createdRecords: RecordItem[] = [];
     try {
-      for (const record of recordsToSave) {
-        const createdRecord = await requestJson<RecordItem>(normalizedApiBaseUrl, "/records", {
+      const saveResponse = await requestJson<DailyRecordSaveResponse>(
+        normalizedApiBaseUrl,
+        "/daily-records/save",
+        {
           method: "POST",
           headers: protectedRequestHeaders(account.id, accessToken),
-          body: JSON.stringify(record)
-        });
-        createdRecords.push(boundRecordItem(createdRecord));
-      }
+          body: JSON.stringify(buildDailyRecordSaveRequest(preview, recordsToSave, dailyTranscriptEntries))
+        }
+      );
+      const createdRecords = boundRecordsList(saveResponse.records, maxMobilePreviewRecords);
       const savedCount = recordsToSave.length;
       setPreview(null);
       setTranscript("");
       setTranscriptVoiceSeconds(0);
       setIsTranscriptSample(false);
+      setDailyTranscriptEntries([]);
       setRecords((current) => boundRecordsList([...createdRecords, ...current]));
       setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));
       if (createdRecords[0]) {
@@ -11052,35 +11096,10 @@ export default function App() {
       syncAchievementsAfterRecordSave();
     } catch (error) {
       const message = aiSaveFailureStatusMessage(error);
-      if (createdRecords.length > 0) {
-        const unsavedCount = recordsToSave.length - createdRecords.length;
-        setRecords((current) => boundRecordsList([...createdRecords, ...current]));
-        setRecordsStatus(aiPartialSaveRecordsStatusMessage(createdRecords.length, unsavedCount));
-        setPreview((current) =>
-          current
-            ? boundParsePreviewResponse({
-                ...current,
-                records: current.records.slice(createdRecords.length)
-              })
-            : current
-        );
-        if (createdRecords[0]) {
-          setSelectedRecord(createdRecords[0]);
-          setRecordEditFields(recordPayloadToEditFields(createdRecords[0]));
-        }
-        setLastSavedSummary(aiPartialSaveSummaryMessage(createdRecords.length, unsavedCount));
-        setLastSaveErrorSummary(message);
-        setLastSaveEntryMethod("ai");
-        setSaveSuccessReturnScreen("aiReview");
-        setCurrentScreen("saveSuccess");
-        setStatus(aiPartialSaveFailureStatusMessage(message));
-        syncAchievementsAfterRecordSave();
-      } else {
-        setLastSaveErrorSummary(message);
-        setLastSaveEntryMethod("ai");
-        setCurrentScreen("aiSaveFailure");
-        setStatus(message);
-      }
+      setLastSaveErrorSummary(message);
+      setLastSaveEntryMethod("ai");
+      setCurrentScreen("aiSaveFailure");
+      setStatus(message);
     } finally {
       previewSaveInFlight.current = false;
       setIsBusy(false);
