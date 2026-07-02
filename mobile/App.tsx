@@ -6574,6 +6574,10 @@ export default function App() {
     isAiSaveConfirmBlockedByBackend,
     hasAiSaveConfirmWarnings
   );
+  const isDailyRecordFixedSaveVisible = currentScreen === "aiSaveConfirm" && Boolean(preview);
+  const mainScrollContainerStyle = isDailyRecordFixedSaveVisible
+    ? [styles.container, styles.containerWithFixedSaveBar]
+    : styles.container;
   const hasUnsavedPreviewRecords = unsavedPreviewRecordCount > 0;
   const hasUnsavedDailyRecordDraft = currentScreen === "aiSaveConfirm" && hasUnsavedPreviewRecords;
   const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardTitleCopy();
@@ -12029,7 +12033,11 @@ export default function App() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.keyboardAvoidingRoot}
       >
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        style={styles.mainScroll}
+        contentContainerStyle={mainScrollContainerStyle}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.header}>
           <View>
             <Text style={styles.title}>糖錄錄</Text>
@@ -12647,35 +12655,6 @@ export default function App() {
                   <Text style={styles.recordType}>{row.value}</Text>
                 </View>
               ))}
-            </View>
-            <View style={styles.fixedSaveBar}>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.returnConfirmAccessibility}
-                accessibilityRole="button"
-                accessibilityState={{ disabled: isBusy }}
-                style={[styles.secondaryButton, isBusy ? styles.buttonDisabled : null]}
-                disabled={isBusy}
-                onPress={requestDailyRecordLeaveGuard}
-              >
-                <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.returnConfirm}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.submitAiSaveAccessibility}
-                accessibilityRole="button"
-                accessibilityState={{
-                  disabled: isBusy || isAiSaveConfirmBlockedByBackend || preview.records.length === 0
-                }}
-                style={[
-                  styles.primaryButton,
-                  isBusy || isAiSaveConfirmBlockedByBackend || preview.records.length === 0
-                    ? styles.buttonDisabled
-                    : null
-                ]}
-                disabled={isBusy || isAiSaveConfirmBlockedByBackend || preview.records.length === 0}
-                onPress={submitAiSaveConfirm}
-              >
-                <Text style={styles.primaryButtonText}>{aiSaveConfirmSubmitDisplayLabel}</Text>
-              </Pressable>
             </View>
           </View>
         ) : null}
@@ -17261,6 +17240,39 @@ export default function App() {
           </View>
         ) : null}
       </ScrollView>
+      {isDailyRecordFixedSaveVisible && preview ? (
+        <View style={styles.fixedSaveBarDock}>
+          <View style={styles.fixedSaveBar}>
+            <Pressable
+              accessibilityLabel={coreFlowDisplayLabels.returnConfirmAccessibility}
+              accessibilityRole="button"
+              accessibilityState={{ disabled: isBusy }}
+              style={[styles.secondaryButton, isBusy ? styles.buttonDisabled : null]}
+              disabled={isBusy}
+              onPress={requestDailyRecordLeaveGuard}
+            >
+              <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.returnConfirm}</Text>
+            </Pressable>
+            <Pressable
+              accessibilityLabel={coreFlowDisplayLabels.submitAiSaveAccessibility}
+              accessibilityRole="button"
+              accessibilityState={{
+                disabled: isBusy || isAiSaveConfirmBlockedByBackend || preview.records.length === 0
+              }}
+              style={[
+                styles.primaryButton,
+                isBusy || isAiSaveConfirmBlockedByBackend || preview.records.length === 0
+                  ? styles.buttonDisabled
+                  : null
+              ]}
+              disabled={isBusy || isAiSaveConfirmBlockedByBackend || preview.records.length === 0}
+              onPress={submitAiSaveConfirm}
+            >
+              <Text style={styles.primaryButtonText}>{aiSaveConfirmSubmitDisplayLabel}</Text>
+            </Pressable>
+          </View>
+        </View>
+      ) : null}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -17274,11 +17286,17 @@ const styles = StyleSheet.create({
   keyboardAvoidingRoot: {
     flex: 1
   },
+  mainScroll: {
+    flex: 1
+  },
   container: {
     paddingHorizontal: 24,
     paddingTop: 18,
     paddingBottom: 40,
     gap: 16
+  },
+  containerWithFixedSaveBar: {
+    paddingBottom: 148
   },
   header: {
     alignItems: "center",
@@ -18819,6 +18837,14 @@ const styles = StyleSheet.create({
     gap: 10,
     justifyContent: "flex-end",
     padding: 12
+  },
+  fixedSaveBarDock: {
+    backgroundColor: "#FAFAF8",
+    borderTopColor: "#E3E8E5",
+    borderTopWidth: 1,
+    paddingBottom: 12,
+    paddingHorizontal: 24,
+    paddingTop: 10
   },
   aiReviewList: {
     gap: 10

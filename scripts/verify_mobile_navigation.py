@@ -664,7 +664,7 @@ def _keyboard_avoiding_view_errors(content: str) -> list[str]:
         if marker not in content:
             errors.append(label)
     root_match = re.search(
-        r"<KeyboardAvoidingView\b[\s\S]*?<ScrollView\s+contentContainerStyle=\{styles\.container\}",
+        r"<KeyboardAvoidingView\b[\s\S]*?<ScrollView\b[\s\S]*?contentContainerStyle=\{mainScrollContainerStyle\}",
         content,
     )
     if root_match is None:
@@ -2604,11 +2604,21 @@ def main() -> int:
             ("daily record save endpoint", '"/daily-records/save"'),
             ("daily record save payload binding", "body: JSON.stringify(buildDailyRecordSaveRequest(preview, recordsToSave, dailyTranscriptEntries))"),
             ("daily record save clears retained transcripts", "setDailyTranscriptEntries([]);"),
+            ("daily record fixed save visible flag", 'const isDailyRecordFixedSaveVisible = currentScreen === "aiSaveConfirm" && Boolean(preview);'),
+            ("daily record fixed save scroll padding style", "const mainScrollContainerStyle = isDailyRecordFixedSaveVisible"),
+            ("daily record fixed save scroll binding", "contentContainerStyle={mainScrollContainerStyle}"),
+            ("daily record fixed save dock render", "{isDailyRecordFixedSaveVisible && preview ? ("),
+            ("daily record fixed save dock style", "styles.fixedSaveBarDock"),
             ("daily record fixed save bar", "styles.fixedSaveBar"),
             ("daily record save label", "? \"了解提醒並儲存今日紀錄\""),
             ("daily record category blank copy", "沒有提到的欄位保持空白"),
         ):
             _assert_contains(label, content, marker)
+        _assert_contains(
+            "daily record fixed save outside scroll",
+            content,
+            "</ScrollView>\n      {isDailyRecordFixedSaveVisible && preview ? (",
+        )
         for label, marker in (
             ("record delete success history accessibility label", 'deleteSuccessHistoryAccessibility: boundDisplayText("前往歷史紀錄，只查看已載入清單，不重送 delete request", maxDisplayDetailTextLength)'),
             ("record result return accessibility label", 'recordResultReturnAccessibility: boundDisplayText("返回紀錄頁面，只切換畫面，不重送 backend request", maxDisplayDetailTextLength)'),

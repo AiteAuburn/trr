@@ -1770,13 +1770,13 @@ AI 分析結果：
   - 其他備註
 - 每個分類都是獨立 card，有自己的欄位與空白說明；沒有提到的欄位保持空白，不強迫共用 schema。
 - 每筆資料右側保留 `⋯` 管理入口；點擊後在同一卡片展開 `編輯` / `刪除`。編輯沿用候選編輯頁並返回每日紀錄頁；刪除必須先進確認頁，不可直接移除。
-- 底部顯示 `儲存今日紀錄` action bar；送出必須走 `/daily-records/save` transactional backend handler，在同一個 backend transaction 建立本次 structured records 並 upsert 同一 `profile_id + record_date` 的唯一每日紀錄。
+- 底部顯示 `儲存今日紀錄` action bar；此 action bar 必須是主 `ScrollView` 外的固定 dock，主 ScrollView 需加每日紀錄頁專用 bottom padding，避免垂直內容被固定操作列遮住。送出必須走 `/daily-records/save` transactional backend handler，在同一個 backend transaction 建立本次 structured records 並 upsert 同一 `profile_id + record_date` 的唯一每日紀錄。
 
 Guardrails:
 
 - 每日紀錄頁所有日期、摘要、transcript、分類 entry、欄位 rows 與管理 action labels 必須先轉成 bounded display items。
 - `今日錄音文字` 與單筆 `⋯` 管理入口必須使用 dedicated handlers，不可在 JSX 內直接呼叫 STT、AI、backend 或 save/delete request。
-- Mobile navigation verifier 必須守住每日紀錄頁包含 `AI今日摘要`、`今日錄音文字`、分類 section renderer、單筆管理 press wrapper、`fixedSaveBar` 與 `儲存今日紀錄` 文案。
+- Mobile navigation verifier 必須守住每日紀錄頁包含 `AI今日摘要`、`今日錄音文字`、分類 section renderer、單筆管理 press wrapper、ScrollView 外的 `fixedSaveBarDock` / `fixedSaveBar` 與 `儲存今日紀錄` 文案。
 - Mobile navigation verifier 必須守住每日紀錄 entry edit/delete handlers、`aiSaveConfirm` return target、刪除確認文案 `確定要刪除這筆紀錄嗎？` / `刪除後無法復原。`，以及每日紀錄刪除 submit label `刪除`。
 - 後續 same-day merge slice 必須讓同一天只保留一份每日紀錄；再次錄音應更新同一天 draft / record，不建立第二份每日紀錄頁。
 - Parser 成功後若目前 mobile 已有同日 daily-record draft，必須合併 preview records / rejected events / transcript segments，而不是覆蓋同一天 draft。Navigation verifier 必須守住 merge helper、parse timestamp reuse、daily transcript retained state 與 `今日錄音文字` 使用 retained entries。

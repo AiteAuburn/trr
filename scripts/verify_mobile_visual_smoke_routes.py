@@ -52,7 +52,6 @@ VISUAL_SMOKE_ROUTES = {
         "dailyRecordSectionItems.map",
         "AI今日摘要",
         "今日錄音文字",
-        "onPress={submitAiSaveConfirm}",
     ],
     "aiSaveFailure": [
         'currentScreen === "aiSaveFailure"',
@@ -486,6 +485,16 @@ def verify(content: str) -> dict[str, object]:
         "future module destination press wrapper",
         content,
         "function pressFutureModuleDestination(item: ReturnType<typeof futureModuleCardDisplayItem>)",
+    )
+    _assert_contains(
+        "daily record fixed save dock outside scroll",
+        content,
+        "</ScrollView>\n      {isDailyRecordFixedSaveVisible && preview ? (",
+    )
+    _assert_contains(
+        "daily record fixed save dock submit binding",
+        content,
+        "onPress={submitAiSaveConfirm}",
     )
 
     route_jump_handler = _extract_function(content, "openVisualSmokeRoute")

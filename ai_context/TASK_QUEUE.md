@@ -116,9 +116,13 @@ selected product slice is the second-version AI-organized daily-record page.
 
 ## Next Up
 
+None.
+
+## Done
+
 ### T1052: Build second-version AI-organized daily-record page
 
-Status: in_progress
+Status: done
 
 Product source:
 
@@ -148,18 +152,17 @@ Progress:
 - Fourth draft-data slice implemented: same-day parser results now merge into the current mobile daily-record draft instead of replacing it, and `今日錄音文字` retains bounded same-day transcript entries in mobile memory by timestamp.
 - Fifth durable persistence slice implemented: backend now has a `daily_records` table with a unique `(profile_id, record_date)` constraint plus `POST /daily-records/save`, and mobile `儲存今日紀錄` uses that transactional endpoint to create records and upsert the same day's daily record with retained transcript entries.
 - Sixth reorganization slice implemented: add/edit/delete changes now pass through a daily-record reorganization helper that re-bounds the preview draft, re-computes `AI今日摘要` and category sections from the current records, tracks an organization revision/reason, and displays the latest reorganization state in the summary card without re-calling LLM/STT/backend.
+- Seventh fixed-save slice implemented: `儲存今日紀錄` is now rendered in a native fixed dock outside the main `ScrollView`, with extra daily-record scroll padding so the vertical daily-record content remains readable above the fixed action.
 
 Remaining:
 
-- Make the save action physically fixed outside the scroll area if the current visual action bar is insufficient in native QA.
+- None.
 
 Implementation notes:
 
 - This is not just a UI copy change. It likely needs a daily-record draft model, same-day merge behavior, transcript grouping, unsaved draft state, Android BackHandler handling, per-entry edit/delete state, parser/AI prompt updates, verifier coverage, and UI spec updates.
 - Preserve PHI boundaries: do not log raw transcripts, raw prompt, raw model output, real health payloads, secrets, or tokens.
 - Keep the existing text confirmation boundary; recording must not skip directly to AI/parser or backend write.
-
-## Done
 
 ### T1050: Add finalized second-version Home recording guidance
 

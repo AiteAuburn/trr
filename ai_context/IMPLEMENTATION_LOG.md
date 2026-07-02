@@ -15,6 +15,39 @@
 
 ## 2026-07-02
 
+### T1060 fix daily-record save action outside scroll
+
+類型：mobile / ui / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved the second-version daily-record `儲存今日紀錄` action bar out of the main `ScrollView`.
+- Added a fixed dock below the scrollable content so the save action remains physically present while the daily-record sections scroll.
+- Added daily-record-specific scroll bottom padding to keep the final content readable above the fixed action dock.
+- Marked `T1052` done in the task queue and left `Next Up` empty until the next task id is selected.
+- Updated the mobile navigation verifier and UI spec so the fixed save dock remains source-checked outside the scroll area.
+- 未變更 backend runtime、database schema、network request paths、AI/LLM prompt behavior、STT behavior、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Select the next explicit task from the product priority list before starting the next feature slice.
+
 ### T1059 add daily-record draft reorganization markers
 
 類型：mobile / data-flow / ui / verifier / docs
