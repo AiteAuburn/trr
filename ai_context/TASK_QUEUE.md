@@ -120,6 +120,26 @@ None.
 
 ## Done
 
+### T1061: Polish Home recording guidance and test recording handoff
+
+Status: done
+
+Summary:
+
+- Added an independent non-pressable info icon row for the Home guidance copy `上面這排不是按鈕喔`.
+- Kept Home guidance icons non-clickable and preserved the single Home mic Pressable.
+- Left-aligned the Home example carousel title, index, and example text.
+- In the test/mobile preview flow, finishing a Home recording now enters the transcript review / voice record confirmation screen even when no Whisper model is configured, so users can immediately confirm or fill in the text.
+- Updated UI spec and mobile navigation verifier coverage for the info icon, left-aligned examples, and recording-finish transcript-review fallback.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1052: Build second-version AI-organized daily-record page
 
 Status: done

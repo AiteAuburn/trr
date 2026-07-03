@@ -8730,8 +8730,15 @@ export default function App() {
       setRecordingElapsedSeconds(elapsedSeconds);
       recordingStopInFlight.current = false;
     }
-    if (currentScreen === "today" && elapsedSeconds > 1 && capturedAudioPath && whisperModelPath.trim()) {
-      void transcribeRecordingToReview("today", capturedAudioPath, elapsedSeconds);
+    if (currentScreen === "today" && elapsedSeconds > 1) {
+      if (capturedAudioPath && whisperModelPath.trim()) {
+        void transcribeRecordingToReview("today", capturedAudioPath, elapsedSeconds);
+        return;
+      }
+      setPreview(null);
+      setTranscriptReviewReturnScreen("today");
+      setCurrentScreen("transcriptReview");
+      setStatus(recordingTextFallbackStatusMessage());
     }
   }
 
@@ -12146,10 +12153,15 @@ export default function App() {
                   </View>
                 ))}
               </View>
-              <Text style={styles.homeGuidanceCopy}>
-                上面這排不是按鈕喔{"\n"}
-                如果不知道從哪開始，可以參考這些記錄方向；想說什麼就說什麼，不用照固定格式。
-              </Text>
+              <View style={styles.homeGuidanceInfoRow}>
+                <View style={styles.homeGuidanceInfoIcon}>
+                  <Text style={styles.homeGuidanceInfoIconText}>i</Text>
+                </View>
+                <Text style={styles.homeGuidanceCopy}>
+                  上面這排不是按鈕喔{"\n"}
+                  如果不知道從哪開始，可以參考這些記錄方向；想說什麼就說什麼，不用照固定格式。
+                </Text>
+              </View>
             </View>
             <Pressable
               accessibilityLabel={recordingButtonDisplayAccessibilityLabel}
@@ -17600,12 +17612,35 @@ const styles = StyleSheet.create({
     lineHeight: 20
   },
   homeGuidanceCopy: {
+    flex: 1,
     color: "#5F666A",
     fontSize: 13,
     fontWeight: "700",
     lineHeight: 19,
+    maxWidth: 300,
+    textAlign: "left"
+  },
+  homeGuidanceInfoIcon: {
+    alignItems: "center",
+    backgroundColor: "#DCEFE7",
+    borderRadius: 999,
+    height: 24,
+    justifyContent: "center",
+    marginTop: 1,
+    width: 24
+  },
+  homeGuidanceInfoIconText: {
+    color: "#0F3F37",
+    fontSize: 14,
+    fontWeight: "900",
+    lineHeight: 18
+  },
+  homeGuidanceInfoRow: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    gap: 9,
     maxWidth: 350,
-    textAlign: "center"
+    width: "100%"
   },
   homeMicButton: {
     alignItems: "center",
@@ -17664,21 +17699,21 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "900",
     lineHeight: 22,
-    textAlign: "center"
+    textAlign: "left"
   },
   homeExampleIndex: {
     color: "#3FA67F",
     fontSize: 12,
     fontWeight: "900",
     lineHeight: 18,
-    textAlign: "center"
+    textAlign: "left"
   },
   homeExampleText: {
     color: "#3D4642",
     fontSize: 14,
     fontWeight: "700",
     lineHeight: 21,
-    textAlign: "center"
+    textAlign: "left"
   },
   quickEntryRail: {
     flexDirection: "row",

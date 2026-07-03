@@ -13,6 +13,41 @@
 後續:
 ```
 
+## 2026-07-03
+
+### T1061 polish Home guidance and recording handoff
+
+類型：mobile / ui / recording-flow / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a dedicated non-pressable info icon row for the Home guidance copy `上面這排不是按鈕喔`.
+- Kept the Home guidance directions non-button-like and preserved exactly one Home Pressable: the microphone.
+- Left-aligned the Home example carousel title, index, and example text.
+- Updated the Home recording finish path so test/mobile preview recordings enter transcript review even without a configured Whisper model, allowing text confirmation/fill-in immediately after release.
+- Updated UI spec, task queue, and mobile navigation verifier to guard the new layout and recording handoff.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue with the next explicit product task when selected.
+
 ## 2026-07-02
 
 ### T1060 fix daily-record save action outside scroll

@@ -1451,9 +1451,14 @@ def main() -> int:
             _assert_contains(label, recording_result_action_block, marker)
         finish_recording_block = _function_block(content, "finishRecordingPreview")
         _assert_contains(
-            "home recording auto-transcribe requires non-trivial audio",
+            "home recording finish enters transcript review for non-trivial audio",
             finish_recording_block,
-            'if (currentScreen === "today" && elapsedSeconds > 1 && capturedAudioPath && whisperModelPath.trim()) {',
+            'if (currentScreen === "today" && elapsedSeconds > 1) {',
+        )
+        _assert_contains(
+            "home recording optional whisper handoff guard",
+            finish_recording_block,
+            "if (capturedAudioPath && whisperModelPath.trim()) {",
         )
         _assert_contains(
             "recording result home fallback action",
@@ -2332,6 +2337,9 @@ def main() -> int:
             ("guided home direction exercise", "{ icon: \"🏃\", label: \"運動\" }"),
             ("guided home direction weight", "{ icon: \"⚖️\", label: \"體重\" }"),
             ("guided home direction body status", "{ icon: \"😊\", label: \"身體狀況\" }"),
+            ("guided home info icon style", "styles.homeGuidanceInfoIcon"),
+            ("guided home info icon text", "<Text style={styles.homeGuidanceInfoIconText}>i</Text>"),
+            ("guided home info row style", "styles.homeGuidanceInfoRow"),
             ("guided home non-button copy", "上面這排不是按鈕喔"),
             ("guided home flexible format copy", "想說什麼就說什麼，不用照固定格式"),
             ("guided home examples title", "範例（怎麼說都可以）"),
@@ -2377,6 +2385,7 @@ def main() -> int:
             ("native recording transcript confirmation", 'setCurrentScreen("transcriptReview");'),
             ("native recording no direct parser boundary", "確認後再交給 AI 整理"),
             ("home recording whisper handoff", 'void transcribeRecordingToReview("today", capturedAudioPath, elapsedSeconds);'),
+            ("home recording fallback transcript review", 'setTranscriptReviewReturnScreen("today");\n      setCurrentScreen("transcriptReview");\n      setStatus(recordingTextFallbackStatusMessage());'),
             ("parse request voice seconds", "voice_seconds: parserVoiceSeconds"),
             ("parse success clears voice seconds", "setTranscriptVoiceSeconds(0);"),
             ("parse success refreshes quota", "void loadVoiceQuota(account.id);"),
@@ -2389,6 +2398,7 @@ def main() -> int:
             ("guided home block tagline", "<Text style={styles.homeTagline}>想說什麼就說什麼</Text>"),
             ("guided home block direction panel", "styles.homeGuidancePanel"),
             ("guided home block direction items", "homeGuidanceDirections.map"),
+            ("guided home block info row", "styles.homeGuidanceInfoRow"),
             ("guided home block non-button copy", "上面這排不是按鈕喔"),
             ("minimal home block primary hint", "<Text style={styles.homeHint}>按住開始說話記錄</Text>"),
             ("minimal home block secondary hint", "<Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>"),
@@ -2396,6 +2406,12 @@ def main() -> int:
             ("guided home block example title", "<Text style={styles.homeExampleTitle}>範例（怎麼說都可以）</Text>"),
         ):
             _assert_contains(label, today_home_block, marker)
+        for style_name in ("homeExampleTitle", "homeExampleIndex", "homeExampleText"):
+            _assert_contains(
+                f"{style_name} left aligned",
+                _style_block(content, style_name),
+                'textAlign: "left"',
+            )
         _assert_not_contains(
             "minimal home block no active recording timer condition",
             today_home_block,
