@@ -1211,6 +1211,15 @@ function displayPayload(recordType: string, payload: Record<string, unknown>) {
     return boundDisplayText(`用藥：${displayTextValue(payload.name, 60) || "未命名"}`);
   }
 
+  if (recordType === "weight" || recordType === "body_measurement") {
+    const kind = displayTextValue(payload.kind, 40);
+    const value = payload.value;
+    const unit = displayTextValue(payload.unit, 20) || "kg";
+    if (value !== undefined && (!kind || kind === "weight")) {
+      return boundDisplayText(`體重 ${boundDisplayText(String(value), 20)} ${unit}`);
+    }
+  }
+
   return displayJsonPayload(payload);
 }
 
@@ -1230,7 +1239,7 @@ function recordTypeLabel(recordType: string) {
   if (recordType === "note") {
     return "備註";
   }
-  if (recordType === "weight") {
+  if (recordType === "weight" || recordType === "body_measurement") {
     return "體重";
   }
   return boundDisplayText(recordType, 40);
@@ -1251,6 +1260,9 @@ function recordTypeIcon(recordType: string) {
   }
   if (recordType === "note") {
     return "📝";
+  }
+  if (recordType === "weight" || recordType === "body_measurement") {
+    return "⚖️";
   }
   return "•";
 }
@@ -1310,7 +1322,7 @@ const dailyRecordSectionDefinitions: DailyRecordSectionDefinition[] = [
     id: "weight",
     title: "體重紀錄",
     icon: "⚖️",
-    acceptedRecordTypes: ["weight"],
+    acceptedRecordTypes: ["weight", "body_measurement"],
     emptyCopy: "今天尚未提到體重；保持空白。"
   },
   {
@@ -1396,6 +1408,33 @@ function dailyRecordSummaryText(records: PendingRecord[]) {
   );
 }
 
+function pendingRecordFromRecordItem(record: RecordItem): PendingRecord {
+  return {
+    profile_id: record.profile_id,
+    record_type: record.record_type,
+    occurred_at: record.occurred_at,
+    payload_json: record.payload_json,
+    metadata_json: record.metadata_json,
+    source: record.source
+  };
+}
+
+function dailyRecordTimeDetailLabel(recordType: string) {
+  if (recordType === "glucose" || recordType === "weight" || recordType === "body_measurement") {
+    return "測量時間";
+  }
+  if (recordType === "meal") {
+    return "用餐時間";
+  }
+  if (recordType === "exercise") {
+    return "開始時間";
+  }
+  if (recordType === "medication") {
+    return "用藥時間／情境";
+  }
+  return "時間";
+}
+
 function dailyRecordReorganizationReasonText(reason: DailyRecordReorganizationReason | null) {
   if (reason === "add") {
     return "新增後";
@@ -1451,7 +1490,13 @@ function dailyRecordEntryDisplayItem(record: PendingRecord, index: number) {
     typeLabel,
     timeLabel,
     payloadSummary,
-    detailRows: recordPayloadDetailRows(recordType, record.payload_json).map((row) => ({
+    detailRows: [
+      {
+        label: dailyRecordTimeDetailLabel(recordType),
+        value: timeLabel
+      },
+      ...recordPayloadDetailRows(recordType, record.payload_json)
+    ].map((row) => ({
       label: boundDisplayText(row.label, 40),
       value: boundDisplayText(row.value, maxDisplayDetailTextLength)
     })),
@@ -1463,6 +1508,71 @@ function dailyRecordEntryDisplayItem(record: PendingRecord, index: number) {
     editAccessibilityLabel: boundDisplayText(`編輯每日紀錄中的${typeLabel}`, maxDisplayDetailTextLength),
     removeAccessibilityLabel: boundDisplayText(`刪除每日紀錄中的${typeLabel}`, maxDisplayDetailTextLength)
   };
+}
+
+function historyDailySyncSummary(records: RecordItem[], isLocalPreview: boolean) {
+  const count = clampNumber(records.length, 0, maxMobileCountValue);
+  if (count === 0) {
+    return {
+      syncLabel: boundDisplayText("沒有紀錄", 40),
+      sourceLabel: boundDisplayText("尚無來源", 40),
+      storageLabel: boundDisplayText("未同步 / 未儲存", 80)
+    };
+  }
+  if (isLocalPreview) {
+    return {
+      syncLabel: boundDisplayText("尚未同步", 40),
+      sourceLabel: boundDisplayText("本機", 40),
+      storageLabel: boundDisplayText(`本機 ${count} 筆 · 雲端 0 筆`, 80)
+    };
+  }
+  return {
+    syncLabel: boundDisplayText("已同步", 40),
+    sourceLabel: boundDisplayText("雲端", 40),
+    storageLabel: boundDisplayText(`雲端 ${count} 筆 · 本機 0 筆待同步`, 80)
+  };
+}
+
+function historyDailySummaryDisplayItem(dateKey: string, records: RecordItem[], isLocalPreview: boolean) {
+  const safeDateKey = boundDateInputText(dateKey);
+  const pendingRecords = records.map(pendingRecordFromRecordItem);
+  const syncSummary = historyDailySyncSummary(records, isLocalPreview);
+  const recordCount = clampNumber(records.length, 0, maxMobileCountValue);
+  return {
+    key: `history-daily-summary-${boundIdentifier(safeDateKey)}`,
+    value: safeDateKey,
+    dateLabel: boundDisplayText(safeDateKey, 40),
+    countLabel: boundDisplayText(`${recordCount} 筆紀錄`, 20),
+    summaryText: dailyRecordSummaryText(pendingRecords),
+    syncLabel: syncSummary.syncLabel,
+    sourceLabel: syncSummary.sourceLabel,
+    storageLabel: syncSummary.storageLabel,
+    accessibilityLabel: boundDisplayText(
+      `查看 ${safeDateKey} 每日摘要，${syncSummary.syncLabel}，${syncSummary.storageLabel}`,
+      maxDisplayDetailTextLength
+    )
+  };
+}
+
+function buildHistoryDailyRecordSectionDisplayItems(records: RecordItem[]) {
+  return dailyRecordSectionDefinitions.map((definition) => {
+    const entries = records
+      .map((record, index) => ({ record, index }))
+      .filter(({ record }) => definition.acceptedRecordTypes.includes(record.record_type))
+      .map(({ record, index }) => ({
+        ...dailyRecordEntryDisplayItem(pendingRecordFromRecordItem(record), index),
+        record,
+        accessibilityLabel: recordListDisplayItem(record, `history-daily-${index}`).accessibilityLabel
+      }));
+    return {
+      ...definition,
+      title: boundDisplayText(definition.title, 80),
+      icon: boundDisplayText(definition.icon, 4),
+      emptyCopy: boundDisplayText(definition.emptyCopy, maxDisplayDetailTextLength),
+      countLabel: boundDisplayText(`${clampNumber(entries.length, 0, maxMobilePreviewRecords)} 筆`, 20),
+      entries
+    };
+  });
 }
 
 function buildDailyRecordSectionDisplayItems(records: PendingRecord[]) {
@@ -1721,9 +1831,9 @@ function recordPayloadDetailRows(recordType: string, payload: Record<string, unk
   if (recordType === "glucose") {
     const unit = displayTextValue(payload.unit, 20) || "mg/dL";
     return [
-      { label: "狀態", value: glucoseTimingLabel(payload.meal_timing) },
+      { label: "測量情境", value: glucoseTimingLabel(payload.meal_timing) },
       {
-        label: "數值",
+        label: "血糖值",
         value: payload.value === undefined ? "未填寫" : `${boundDisplayText(String(payload.value), 20)} ${unit}`
       },
       { label: "備註", value: displayTextValue(payload.note, maxDisplayDetailTextLength) || "無" }
@@ -1740,24 +1850,37 @@ function recordPayloadDetailRows(recordType: string, payload: Record<string, unk
 
   if (recordType === "exercise") {
     return [
-      { label: "運動", value: displayTextValue(payload.activity, maxDisplayDetailTextLength) || "未填寫" },
+      { label: "運動內容", value: displayTextValue(payload.activity, maxDisplayDetailTextLength) || "未填寫" },
       {
-        label: "時長",
+        label: "運動時長",
         value: payload.minutes === undefined ? "未填寫" : `${boundDisplayText(String(payload.minutes), 20)} 分鐘`
       },
-      { label: "備註", value: displayTextValue(payload.note, maxDisplayDetailTextLength) || "無" }
+      { label: "強度／備註", value: displayTextValue(payload.note, maxDisplayDetailTextLength) || "無" }
     ];
   }
 
   if (recordType === "medication") {
     return [
-      { label: "用藥", value: displayTextValue(payload.name, maxDisplayDetailTextLength) || "未填寫" },
+      { label: "藥物名稱", value: displayTextValue(payload.name, maxDisplayDetailTextLength) || "未填寫" },
       {
         label: "劑量",
         value:
           displayTextValue(payload.dose, maxDisplayDetailTextLength) ||
           displayTextValue(payload.dose_text, maxDisplayDetailTextLength) ||
           "未填寫"
+      },
+      { label: "備註", value: displayTextValue(payload.note, maxDisplayDetailTextLength) || "無" }
+    ];
+  }
+
+  if (recordType === "weight" || recordType === "body_measurement") {
+    const kind = displayTextValue(payload.kind, maxDisplayDetailTextLength) || "weight";
+    const unit = displayTextValue(payload.unit, 20) || "kg";
+    return [
+      { label: "類型", value: kind === "weight" ? "體重" : kind },
+      {
+        label: "體重",
+        value: payload.value === undefined ? "未填寫" : `${boundDisplayText(String(payload.value), 20)} ${unit}`
       },
       { label: "備註", value: displayTextValue(payload.note, maxDisplayDetailTextLength) || "無" }
     ];
@@ -6415,8 +6538,21 @@ export default function App() {
     );
   }, [historyCalendarMonthStart, historyRecordsByDate, selectedHistoryDate]);
   const selectedHistoryRecords = historyRecordsByDate.get(selectedHistoryDate) ?? [];
-  const selectedHistoryRecordDisplayItems = useMemo(
-    () => selectedHistoryRecords.map((record) => recordListDisplayItem(record, "history-selected")),
+  const historyDailySummaryDisplayItems = useMemo(
+    () =>
+      Array.from(historyRecordsByDate.entries())
+        .sort(([left], [right]) => right.localeCompare(left))
+        .map(([dateKey, dateRecords]) =>
+          historyDailySummaryDisplayItem(dateKey, dateRecords, isVisualSmokePreviewMode)
+        ),
+    [historyRecordsByDate, isVisualSmokePreviewMode]
+  );
+  const selectedHistoryDailySummary = useMemo(
+    () => historyDailySummaryDisplayItem(selectedHistoryDate, selectedHistoryRecords, isVisualSmokePreviewMode),
+    [isVisualSmokePreviewMode, selectedHistoryDate, selectedHistoryRecords]
+  );
+  const selectedHistoryDailySectionItems = useMemo(
+    () => buildHistoryDailyRecordSectionDisplayItems(selectedHistoryRecords),
     [selectedHistoryRecords]
   );
   const selectedHistoryRawDisplayItems = useMemo(
@@ -7972,6 +8108,12 @@ export default function App() {
     openHistoryRecordDetailCard(item.record);
   }
 
+  function pressHistoryDailyEntry(
+    item: ReturnType<typeof buildHistoryDailyRecordSectionDisplayItems>[number]["entries"][number]
+  ) {
+    openHistoryRecordDetailCard(item.record);
+  }
+
   function openAnalysisManualRecord() {
     openManualRecord("analysis");
     setStatus(analysisManualEntryStatusMessage());
@@ -8016,6 +8158,10 @@ export default function App() {
   }
 
   function pressHistoryCalendarDay(item: ReturnType<typeof historyCalendarDayDisplayItem>) {
+    selectHistoryCalendarDate(item.value);
+  }
+
+  function pressHistoryDailySummary(item: ReturnType<typeof historyDailySummaryDisplayItem>) {
     selectHistoryCalendarDate(item.value);
   }
 
@@ -13941,6 +14087,52 @@ export default function App() {
                 </Pressable>
               ))}
             </View>
+            <View style={styles.historyDailySummaryTable}>
+              <View style={styles.sectionHeader}>
+                <View style={styles.timelineContent}>
+                  <Text style={styles.label}>每日摘要表</Text>
+                  <Text style={styles.evidence}>點日期查看完整每日紀錄、同步狀態與各分類內容。</Text>
+                </View>
+              </View>
+              {historyDailySummaryDisplayItems.length > 0 ? (
+                historyDailySummaryDisplayItems.map((item) => (
+                  <Pressable
+                    key={item.key}
+                    accessibilityLabel={item.accessibilityLabel}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: item.value === selectedHistoryDate }}
+                    style={[
+                      styles.historyDailySummaryCard,
+                      item.value === selectedHistoryDate ? styles.historyDailySummaryCardSelected : null
+                    ]}
+                    onPress={() => pressHistoryDailySummary(item)}
+                  >
+                    <View style={styles.historyDailySummaryHeader}>
+                      <View style={styles.timelineContent}>
+                        <Text style={styles.historyItemText}>{item.dateLabel}</Text>
+                        <Text style={styles.evidence}>{item.countLabel}</Text>
+                      </View>
+                      <View style={styles.historyStatusPillRow}>
+                        <Text style={styles.historyStatusPill}>{item.syncLabel}</Text>
+                        <Text style={styles.historyStatusPillMuted}>{item.sourceLabel}</Text>
+                      </View>
+                    </View>
+                    <Text style={styles.recordContent}>{item.summaryText}</Text>
+                    <Text style={styles.confidence}>{item.storageLabel}</Text>
+                  </Pressable>
+                ))
+              ) : (
+                <View style={styles.emptyStateCard}>
+                  <View style={styles.iconCircle}>
+                    <Text>📅</Text>
+                  </View>
+                  <View style={styles.timelineContent}>
+                    <Text style={styles.recordContent}>{historyNoRangeRecordsTitleDisplayText}</Text>
+                    <Text style={styles.evidence}>{historyNoRangeRecordsBodyDisplayText}</Text>
+                  </View>
+                </View>
+              )}
+            </View>
             {recordsForDisplay.length === 0 ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{coreFlowDisplayLabels.historyDataStatus}</Text>
@@ -13967,7 +14159,19 @@ export default function App() {
               <View style={styles.sectionHeader}>
                 <View>
                   <Text style={styles.label}>{selectedHistoryDateDisplayText}</Text>
-                  <Text style={styles.evidence}>{selectedHistoryRecordDisplayCount} 筆紀錄</Text>
+                  <Text style={styles.evidence}>{selectedHistoryDailySummary.storageLabel}</Text>
+                </View>
+              </View>
+              <View style={styles.dailySummaryCard}>
+                <View style={styles.historyDailySummaryHeader}>
+                  <View style={styles.timelineContent}>
+                    <Text style={styles.previewModeBadge}>AI今日摘要</Text>
+                    <Text style={styles.recordContent}>{selectedHistoryDailySummary.summaryText}</Text>
+                  </View>
+                  <View style={styles.historyStatusPillRow}>
+                    <Text style={styles.historyStatusPill}>{selectedHistoryDailySummary.syncLabel}</Text>
+                    <Text style={styles.historyStatusPillMuted}>{selectedHistoryDailySummary.sourceLabel}</Text>
+                  </View>
                 </View>
               </View>
               <View style={styles.segmentRow}>
@@ -14005,28 +14209,53 @@ export default function App() {
                   </View>
                 </View>
               ) : historyDetailMode === "structured" ? (
-                selectedHistoryRecordDisplayItems.map((item) => (
-                  <Pressable
-                    key={item.key}
-                    accessibilityLabel={item.accessibilityLabel}
-                    accessibilityRole="button"
-                    style={styles.historyItemButton}
-                    onPress={() => pressHistoryRecordDetailCard(item)}
-                  >
-                    <View style={styles.historyItemHeader}>
-                      <View style={styles.historyItemTitle}>
-                        <View style={styles.iconCircleSmall}>
-                          <Text>{item.icon}</Text>
+                <View style={styles.dailyRecordSectionList}>
+                  {selectedHistoryDailySectionItems.map((section) => (
+                    <View key={`history-${section.id}`} style={styles.dailyRecordSectionCard}>
+                      <View style={styles.recordHeader}>
+                        <View style={styles.historyItemTitle}>
+                          <View style={styles.iconCircleSmall}>
+                            <Text>{section.icon}</Text>
+                          </View>
+                          <View style={styles.timelineContent}>
+                            <Text style={styles.label}>{section.title}</Text>
+                            <Text style={styles.evidence}>可新增多筆；每筆可點進詳情修改。</Text>
+                          </View>
                         </View>
-                        <View style={styles.timelineContent}>
-                          <Text style={styles.historyItemText}>{item.typeLabel}</Text>
-                          <Text style={styles.recordContent}>{item.payloadSummary}</Text>
-                        </View>
+                        <Text style={styles.countText}>{section.countLabel}</Text>
                       </View>
-                      <Text style={styles.confidence}>{item.timeLabel}</Text>
+                      {section.entries.length > 0 ? (
+                        section.entries.map((item) => (
+                          <Pressable
+                            key={item.key}
+                            accessibilityLabel={item.accessibilityLabel}
+                            accessibilityRole="button"
+                            style={styles.dailyRecordEntryCard}
+                            onPress={() => pressHistoryDailyEntry(item)}
+                          >
+                            <View style={styles.recordHeader}>
+                              <View style={styles.timelineContent}>
+                                <Text style={styles.confidence}>{item.timeLabel}</Text>
+                                <Text style={styles.recordContent}>{item.payloadSummary}</Text>
+                              </View>
+                              <Text style={styles.countText}>看詳情</Text>
+                            </View>
+                            <View style={styles.detailRows}>
+                              {item.detailRows.map((row) => (
+                                <View key={`${item.key}-${row.label}`} style={styles.detailRow}>
+                                  <Text style={styles.confidence}>{row.label}</Text>
+                                  <Text style={styles.evidence}>{row.value}</Text>
+                                </View>
+                              ))}
+                            </View>
+                          </Pressable>
+                        ))
+                      ) : (
+                        <Text style={styles.evidence}>{section.emptyCopy}</Text>
+                      )}
                     </View>
-                  </Pressable>
-                ))
+                  ))}
+                </View>
               ) : (
                 selectedHistoryRawDisplayItems.map((item) => (
                   <View key={item.key} style={styles.historyRawCard}>
@@ -18144,6 +18373,56 @@ const styles = StyleSheet.create({
   },
   historySelectedDatePanel: {
     gap: 12
+  },
+  historyDailySummaryTable: {
+    gap: 10
+  },
+  historyDailySummaryCard: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E3E8E5",
+    borderRadius: 18,
+    borderWidth: 1,
+    gap: 8,
+    padding: 14
+  },
+  historyDailySummaryCardSelected: {
+    backgroundColor: "#EAF6F1",
+    borderColor: "#3FA67F"
+  },
+  historyDailySummaryHeader: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    justifyContent: "space-between"
+  },
+  historyStatusPillRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexShrink: 0,
+    flexWrap: "wrap",
+    gap: 6,
+    justifyContent: "flex-end"
+  },
+  historyStatusPill: {
+    backgroundColor: "#DCEFE7",
+    borderRadius: 999,
+    color: "#0F3F37",
+    fontSize: 12,
+    fontWeight: "900",
+    lineHeight: 16,
+    paddingHorizontal: 9,
+    paddingVertical: 5
+  },
+  historyStatusPillMuted: {
+    backgroundColor: "#F1F4F2",
+    borderRadius: 999,
+    color: "#5F666A",
+    fontSize: 12,
+    fontWeight: "900",
+    lineHeight: 16,
+    paddingHorizontal: 9,
+    paddingVertical: 5
   },
   historyRawCard: {
     backgroundColor: "#FFFFFF",

@@ -2825,16 +2825,27 @@ def main() -> int:
             "historyCalendarDaySelected",
             "historyMonthActionRow",
             "historyMonthButton",
+            "historyDailySummaryTable",
+            "historyDailySummaryCard",
+            "historyDailySummaryCardSelected",
+            "historyStatusPill",
+            "historyStatusPillMuted",
             "historyRawCard",
         ):
             _assert_contains(f"{style_name} style", content, f"{style_name}: {{")
         for label, marker in (
             ("history calendar day display item", "function historyCalendarDayDisplayItem(date: Date, selectedDateKey: string, recordsByDate: Map<string, RecordItem[]>)"),
+            ("history daily sync summary helper", "function historyDailySyncSummary(records: RecordItem[], isLocalPreview: boolean)"),
+            ("history daily summary display item", "function historyDailySummaryDisplayItem(dateKey: string, records: RecordItem[], isLocalPreview: boolean)"),
+            ("history daily section display helper", "function buildHistoryDailyRecordSectionDisplayItems(records: RecordItem[])"),
             ("history raw record display item", "function historyRawRecordDisplayItem(record: RecordItem, index: number)"),
             ("history source text preserved during save", "const sanitizedMetadata = boundMetadata(record.metadata_json, true);"),
             ("history selected date state", "const [selectedHistoryDate, setSelectedHistoryDate] = useState(formatLocalDateInput(new Date()))"),
             ("history detail mode state", 'const [historyDetailMode, setHistoryDetailMode] = useState<HistoryDetailMode>("structured")'),
             ("history calendar date resets structured mode", 'setHistoryDetailMode("structured");'),
+            ("history daily summary items", "const historyDailySummaryDisplayItems = useMemo("),
+            ("history selected daily summary", "const selectedHistoryDailySummary = useMemo("),
+            ("history selected daily sections", "const selectedHistoryDailySectionItems = useMemo("),
             ("history calendar month offset handler", "function selectHistoryCalendarMonthOffset(offset: number)"),
             ("history calendar previous month handler", "function openPreviousHistoryMonth()"),
             ("history calendar next month handler", "function openNextHistoryMonth()"),
@@ -2848,6 +2859,10 @@ def main() -> int:
             ("history calendar next month binding", "onPress={openNextHistoryMonth}"),
             ("history calendar day press handler", "function pressHistoryCalendarDay(item: ReturnType<typeof historyCalendarDayDisplayItem>)"),
             ("history calendar day binding", "onPress={() => pressHistoryCalendarDay(item)}"),
+            ("history daily summary press handler", "function pressHistoryDailySummary(item: ReturnType<typeof historyDailySummaryDisplayItem>)"),
+            ("history daily summary binding", "onPress={() => pressHistoryDailySummary(item)}"),
+            ("history daily entry press handler", "function pressHistoryDailyEntry("),
+            ("history daily entry binding", "onPress={() => pressHistoryDailyEntry(item)}"),
             ("history calendar selected state", "accessibilityState={{ selected: item.isSelected }}"),
             ("history detail mode display item", "function historyDetailModeDisplayItem(value: { id: HistoryDetailMode; label: string; accessibilityCopy: string })"),
             ("history detail mode display options", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModes.map(historyDetailModeDisplayItem), [])"),
@@ -2861,10 +2876,21 @@ def main() -> int:
             ("history load more handler", "async function loadMoreRecords()"),
             ("history load more availability", "const canLoadMoreRecords ="),
             ("history load more accessibility label", "historyLoadMoreAccessibility: boundDisplayText(\"使用 cursor 載入更早紀錄，不呼叫 AI 或修改資料\", maxDisplayDetailTextLength)"),
-            ("history structured records render", "selectedHistoryRecordDisplayItems.map((item) =>"),
+            ("history daily summary table render", "historyDailySummaryDisplayItems.map((item) =>"),
+            ("history selected daily summary render", "selectedHistoryDailySummary.summaryText"),
+            ("history structured section render", "selectedHistoryDailySectionItems.map((section) =>"),
             ("history raw records render", "selectedHistoryRawDisplayItems.map((item) =>"),
+            ("history local sync label", "本機 0 筆待同步"),
+            ("history unsynced local label", "尚未同步"),
+            ("history synced cloud label", "已同步"),
             ("history raw source status", "sourceStatusLabel: boundDisplayText(hasSourceText ? \"原始逐字稿\" : \"僅結構化\", 40)"),
             ("history raw fallback copy", "尚無原始逐字稿；此筆紀錄只保留結構化資料。"),
+            ("daily section time detail label helper", "function dailyRecordTimeDetailLabel(recordType: string)"),
+            ("daily section glucose context label", "測量情境"),
+            ("daily section glucose value label", "血糖值"),
+            ("daily section meal time label", "用餐時間"),
+            ("daily section exercise duration label", "運動時長"),
+            ("daily section body measurement support", 'acceptedRecordTypes: ["weight", "body_measurement"]'),
         ):
             _assert_contains(label, content, marker)
         history_calendar_day_block = _function_block(content, "historyCalendarDayDisplayItem")
@@ -2878,11 +2904,14 @@ def main() -> int:
             _assert_contains(label, history_calendar_day_block, marker)
         history_block = _history_render_block(content)
         history_calendar_index = history_block.find("styles.historyCalendarGrid")
+        history_summary_index = history_block.find("styles.historyDailySummaryTable")
         history_detail_index = history_block.find("styles.historySelectedDatePanel")
         history_structured_index = history_block.find('historyDetailMode === "structured"')
         history_raw_index = history_block.find("selectedHistoryRawDisplayItems.map((item) =>")
         if history_calendar_index == -1 or history_detail_index == -1 or history_calendar_index > history_detail_index:
             raise AssertionError("History calendar must render before selected-date details.")
+        if history_summary_index == -1 or history_calendar_index > history_summary_index or history_summary_index > history_detail_index:
+            raise AssertionError("History daily summary table must render between calendar and selected-date details.")
         if history_structured_index == -1 or history_raw_index == -1 or history_structured_index > history_raw_index:
             raise AssertionError("History structured AI-organized records must render before raw transcript branch.")
         for label, marker in (
@@ -2890,6 +2919,10 @@ def main() -> int:
             ("history calendar selected style binding", "item.isSelected ? styles.historyCalendarDaySelected : null"),
             ("history calendar record dot binding", "item.hasRecords ? <View style={styles.historyCalendarDot} /> : null"),
             ("history calendar lit-date legend", "亮燈日期有紀錄"),
+            ("history daily summary table title", "每日摘要表"),
+            ("history daily summary selected state", "accessibilityState={{ selected: item.value === selectedHistoryDate }}"),
+            ("history selected AI summary title", "AI今日摘要"),
+            ("history selected section detail rows", "item.detailRows.map((row) =>"),
             ("history calendar previous month button", "{historyPreviousMonthButtonLabel}"),
             ("history calendar next month button", "{historyNextMonthButtonLabel}"),
             ("history load more button binding", "onPress={loadMoreRecords}"),
@@ -2959,9 +2992,9 @@ def main() -> int:
             'accessibilityRole="button"',
         )
         _assert_contains(
-            "history record detail card style",
+            "history daily record detail card style",
             content,
-            "style={styles.historyItemButton}",
+            "style={styles.dailyRecordEntryCard}",
         )
         for label, marker in (
             ("history range option press binding", "onPress={() => pressHistoryRangeOption(item)}"),
@@ -2996,9 +3029,9 @@ def main() -> int:
         ):
             _assert_not_contains(label, content, marker)
         _assert_contains(
-            "history record detail card binding",
+            "history daily record detail card binding",
             content,
-            "onPress={() => pressHistoryRecordDetailCard(item)}",
+            "onPress={() => pressHistoryDailyEntry(item)}",
         )
         _assert_not_contains(
             "history direct record detail card binding",

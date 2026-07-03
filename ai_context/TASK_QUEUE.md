@@ -120,6 +120,27 @@ None.
 
 ## Done
 
+### T1063: Add History daily summary table and sectioned daily details
+
+Status: done
+
+Summary:
+
+- Added a clickable History `每日摘要表` where each recorded date shows record count, AI今日摘要, sync state, and 本機 / 雲端 storage source.
+- Updated selected History date details to show AI今日摘要 plus sync/source labels before the AI 整理 / 原始紀錄 mode switch.
+- Replaced the structured History single-record list with vertical daily-record sections: 血糖紀錄, 飲食紀錄, 運動紀錄, 體重紀錄, 用藥紀錄, and 其他備註.
+- Added section-specific field labels for measurement context/value/time, meal type/content/time, exercise content/start/duration, weight, medication, and notes; each entry can open existing record detail for editing.
+- Added `body_measurement` weight display support so parser-generated weight records appear in 體重紀錄.
+- Updated UI spec and mobile navigation verifier coverage for the History daily summary table, sync/source labels, selected-day AI summary, and section renderer.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1062: Refine Home tagline spacing and example pagination
 
 Status: done

@@ -15,6 +15,41 @@
 
 ## 2026-07-03
 
+### T1063 add History daily summary table and sectioned daily details
+
+類型：mobile / ui / history / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a clickable History `每日摘要表` where each date shows record count, AI今日摘要, sync state, and 本機 / 雲端 storage source.
+- Updated selected History date details to show AI今日摘要 and sync/source labels before the AI 整理 / 原始紀錄 mode switch.
+- Replaced the structured History single-record list with daily-record sections for glucose, meal, exercise, weight, medication, and notes.
+- Added section-specific field labels and `body_measurement` weight support so parser-generated weight records appear under 體重紀錄.
+- Updated UI spec, task queue, mobile navigation verifier, UI spec coverage verifier, and visual-smoke route verifier coverage for the new History summary/detail layout.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- If durable per-date daily-record metadata needs to distinguish partially synced local drafts from cloud records, add a backend-backed daily-record read endpoint and explicit per-day sync model.
+
 ### T1062 refine Home tagline spacing and example pagination
 
 類型：mobile / ui / verifier / docs
