@@ -120,6 +120,25 @@ None.
 
 ## Done
 
+### T1062: Refine Home tagline spacing and example pagination
+
+Status: done
+
+Summary:
+
+- Added small non-pressable cue icons on both sides of the Home tagline `想說什麼就說什麼`.
+- Reduced the Home minimal section top spacing so the recording guidance sits closer to the top content.
+- Added non-interactive pagination dots to the Home example carousel so the active example is visible while keeping example text left-aligned.
+- Updated UI spec and mobile navigation verifier coverage for the tagline cue row, reduced top spacing, and example pagination.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1061: Polish Home recording guidance and test recording handoff
 
 Status: done

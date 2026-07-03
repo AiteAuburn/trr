@@ -15,6 +15,38 @@
 
 ## 2026-07-03
 
+### T1062 refine Home tagline spacing and example pagination
+
+類型：mobile / ui / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added small non-pressable cue icons around the Home tagline `想說什麼就說什麼`.
+- Reduced the Home minimal section top padding and aligned the layout closer to the top content.
+- Added non-interactive pagination dots to the Home example carousel so the active example is visible.
+- Updated UI spec, task queue, and mobile navigation verifier coverage for the adjusted Home guidance layout.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue with the next explicit product task when selected.
+
 ### T1061 polish Home guidance and recording handoff
 
 類型：mobile / ui / recording-flow / verifier / docs

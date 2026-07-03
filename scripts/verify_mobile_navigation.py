@@ -2331,6 +2331,8 @@ def main() -> int:
             ("minimal home mic button style", "styles.homeMicButton"),
             ("minimal home active mic style", "styles.homeMicButtonActive"),
             ("guided home tagline", "想說什麼就說什麼"),
+            ("guided home tagline cue style", "styles.homeTaglineCue"),
+            ("guided home tagline row style", "styles.homeTaglineRow"),
             ("guided home direction time", "{ icon: \"🕒\", label: \"時間\" }"),
             ("guided home direction glucose", "{ icon: \"🩸\", label: \"血糖\" }"),
             ("guided home direction food", "{ icon: \"🍽️\", label: \"飲食\" }"),
@@ -2345,6 +2347,9 @@ def main() -> int:
             ("guided home examples title", "範例（怎麼說都可以）"),
             ("guided home example carousel state", "const [homeExampleIndex, setHomeExampleIndex] = useState(0);"),
             ("guided home example carousel interval", "setHomeExampleIndex((value) => (value + 1) % homeSpeechExamples.length);"),
+            ("guided home example meta row", "styles.homeExampleMetaRow"),
+            ("guided home example pagination", "styles.homeExamplePagination"),
+            ("guided home example active pagination dot", "styles.homeExampleDotActive"),
             ("minimal home primary hint", "按住開始說話記錄"),
             ("minimal home secondary hint", "放開即結束"),
             ("minimal home recording seconds helper", "function homeRecordingSecondaryHint(isRecording: boolean, elapsedSeconds: number)"),
@@ -2395,6 +2400,8 @@ def main() -> int:
         if today_home_block.count("<Pressable") != 1:
             raise AssertionError("Today/Home render block must contain exactly one Pressable mic control.")
         for label, marker in (
+            ("guided home block tagline row", "styles.homeTaglineRow"),
+            ("guided home block tagline cue", "styles.homeTaglineCue"),
             ("guided home block tagline", "<Text style={styles.homeTagline}>想說什麼就說什麼</Text>"),
             ("guided home block direction panel", "styles.homeGuidancePanel"),
             ("guided home block direction items", "homeGuidanceDirections.map"),
@@ -2404,8 +2411,11 @@ def main() -> int:
             ("minimal home block secondary hint", "<Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>"),
             ("guided home block example panel", "styles.homeExamplePanel"),
             ("guided home block example title", "<Text style={styles.homeExampleTitle}>範例（怎麼說都可以）</Text>"),
+            ("guided home block example pagination", "styles.homeExamplePagination"),
         ):
             _assert_contains(label, today_home_block, marker)
+        _assert_contains("minimal home starts near top", _style_block(content, "homeMinimalSection"), 'justifyContent: "flex-start"')
+        _assert_contains("minimal home reduced top padding", _style_block(content, "homeMinimalSection"), "paddingTop: 14")
         for style_name in ("homeExampleTitle", "homeExampleIndex", "homeExampleText"):
             _assert_contains(
                 f"{style_name} left aligned",

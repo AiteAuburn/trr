@@ -12140,7 +12140,11 @@ export default function App() {
         {currentScreen === "today" ? (
           <View style={styles.homeMinimalSection}>
             <View style={styles.homeGuidanceSection}>
-              <Text style={styles.homeTagline}>想說什麼就說什麼</Text>
+              <View style={styles.homeTaglineRow}>
+                <Text style={styles.homeTaglineCue}>✦</Text>
+                <Text style={styles.homeTagline}>想說什麼就說什麼</Text>
+                <Text style={styles.homeTaglineCue}>✦</Text>
+              </View>
               <View style={styles.homeGuidancePanel}>
                 {homeGuidanceDirections.map((row, rowIndex) => (
                   <View key={`home-guidance-row-${rowIndex}`} style={styles.homeGuidanceRow}>
@@ -12179,7 +12183,20 @@ export default function App() {
             <Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>
             <View style={styles.homeExamplePanel}>
               <Text style={styles.homeExampleTitle}>範例（怎麼說都可以）</Text>
-              <Text style={styles.homeExampleIndex}>{homeCurrentSpeechExample.label}</Text>
+              <View style={styles.homeExampleMetaRow}>
+                <Text style={styles.homeExampleIndex}>{homeCurrentSpeechExample.label}</Text>
+                <View style={styles.homeExamplePagination} accessibilityLabel={`目前第 ${homeExampleIndex + 1} 個範例，共 ${homeSpeechExamples.length} 個`}>
+                  {homeSpeechExamples.map((example, index) => (
+                    <View
+                      key={`${example.key}-dot`}
+                      style={[
+                        styles.homeExampleDot,
+                        index === homeExampleIndex ? styles.homeExampleDotActive : null
+                      ]}
+                    />
+                  ))}
+                </View>
+              </View>
               <Text style={styles.homeExampleText}>{homeCurrentSpeechExample.text}</Text>
             </View>
           </View>
@@ -17559,10 +17576,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     gap: 12,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     minHeight: 620,
     paddingBottom: 42,
-    paddingTop: 42
+    paddingTop: 14
   },
   homeGuidanceSection: {
     alignItems: "center",
@@ -17576,6 +17593,18 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     lineHeight: 32,
     textAlign: "center"
+  },
+  homeTaglineCue: {
+    color: "#3FA67F",
+    fontSize: 14,
+    fontWeight: "900",
+    lineHeight: 20
+  },
+  homeTaglineRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 8,
+    justifyContent: "center"
   },
   homeGuidancePanel: {
     backgroundColor: "#EFF8F4",
@@ -17703,10 +17732,35 @@ const styles = StyleSheet.create({
   },
   homeExampleIndex: {
     color: "#3FA67F",
+    flexShrink: 1,
     fontSize: 12,
     fontWeight: "900",
     lineHeight: 18,
     textAlign: "left"
+  },
+  homeExampleMetaRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 10,
+    justifyContent: "space-between",
+    minHeight: 20
+  },
+  homeExamplePagination: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 5,
+    justifyContent: "flex-end",
+    minWidth: 54
+  },
+  homeExampleDot: {
+    backgroundColor: "#D7E0DC",
+    borderRadius: 999,
+    height: 6,
+    width: 6
+  },
+  homeExampleDotActive: {
+    backgroundColor: "#3FA67F",
+    width: 16
   },
   homeExampleText: {
     color: "#3D4642",
