@@ -120,6 +120,25 @@ None.
 
 ## Done
 
+### T1065: Restrict first-version menu to core recording, history, and analysis
+
+Status: done
+
+Summary:
+
+- Reduced the normal user function menu to first-version priorities: `今日錄音`, `歷史紀錄`, `基本分析`, plus required `設定`.
+- Hid `成就榜`, `年度回顧`, `商城`, `食物社群`, `社群排行`, and the future-module entry from normal menu exposure; future routes remain available only through debug / visual-smoke paths.
+- Updated the Home recording guidance direction from `體重` to `用藥紀錄`.
+- Updated UI spec and verifier coverage for the first-version menu scope and hidden future functions.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1064: Show Home recording recognition mode
 
 Status: done

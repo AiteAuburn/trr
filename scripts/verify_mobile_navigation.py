@@ -53,11 +53,6 @@ EXPECTED_MENU_DESTINATIONS = {
     "today",
     "history",
     "analysis",
-    "achievements",
-    "yearReview",
-    "store",
-    "community",
-    "ranking",
     "settings",
 }
 
@@ -65,11 +60,6 @@ EXPECTED_MENU_LABELS = {
     "today": "今日錄音",
     "history": "歷史紀錄",
     "analysis": "基本分析",
-    "achievements": "成就榜",
-    "yearReview": "年度回顧",
-    "store": "商城",
-    "community": "食物社群",
-    "ranking": "社群排行",
     "settings": "設定",
 }
 
@@ -2160,7 +2150,7 @@ def main() -> int:
         _assert_contains(
             "more action button role",
             content,
-            'accessibilityRole="button"\n              style={styles.moreButton}',
+            'accessibilityRole="button"\n                style={styles.moreButton}',
         )
         _assert_contains(
             "dev reset accessibility",
@@ -2337,7 +2327,7 @@ def main() -> int:
             ("guided home direction glucose", "{ icon: \"🩸\", label: \"血糖\" }"),
             ("guided home direction food", "{ icon: \"🍽️\", label: \"飲食\" }"),
             ("guided home direction exercise", "{ icon: \"🏃\", label: \"運動\" }"),
-            ("guided home direction weight", "{ icon: \"⚖️\", label: \"體重\" }"),
+            ("guided home direction medication", "{ icon: \"💊\", label: \"用藥紀錄\" }"),
             ("guided home direction body status", "{ icon: \"😊\", label: \"身體狀況\" }"),
             ("guided home info icon style", "styles.homeGuidanceInfoIcon"),
             ("guided home info icon text", "<Text style={styles.homeGuidanceInfoIconText}>i</Text>"),
@@ -3806,8 +3796,6 @@ def main() -> int:
             ("health meter accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.healthMeterAccessibility}"),
             ("community post accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPostAccessibility}"),
             ("community privacy accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}"),
-            ("food community menu promoted label", '{ id: "community", label: "食物社群", icon: "🤝" }'),
-            ("ranking menu promoted label", '{ id: "ranking", label: "社群排行", icon: "🏅" }'),
             ("food community visual smoke promoted label", '{ id: "community", label: "食物社群" }'),
             ("food community screen chrome backend-ready subtitle", 'community: { subtitle: "同步食物升糖資料庫、分享、點數與公開排名。", backTo: "futureModules", actionLabel: "‹" }'),
             ("ranking screen chrome backend-ready subtitle", 'ranking: { subtitle: "查看 opt-in 公開社群排行與非敏感分數。", backTo: "futureModules", actionLabel: "‹" }'),
@@ -3846,6 +3834,38 @@ def main() -> int:
             ("future preview secondary CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
             _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "food community hidden from first-version menu",
+            _match_block(
+                content,
+                r"const menuScreens:[\s\S]*?= \[([\s\S]*?)\];",
+                "menuScreens",
+            ),
+            'id: "community"',
+        )
+        _assert_not_contains(
+            "achievements hidden from first-version menu",
+            _match_block(
+                content,
+                r"const menuScreens:[\s\S]*?= \[([\s\S]*?)\];",
+                "menuScreens",
+            ),
+            'id: "achievements"',
+        )
+        _assert_not_contains(
+            "store hidden from first-version menu",
+            _match_block(
+                content,
+                r"const menuScreens:[\s\S]*?= \[([\s\S]*?)\];",
+                "menuScreens",
+            ),
+            'id: "store"',
+        )
+        _assert_contains(
+            "future modules hidden outside debug tools",
+            content,
+            "{enableDebugTools ? (\n              <Pressable\n                accessibilityLabel={auxiliaryDisplayLabels.showMoreFeaturesAccessibility}",
+        )
         _assert_not_contains(
             "food community stale inline share accessibility label",
             content,

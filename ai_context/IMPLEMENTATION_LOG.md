@@ -15,6 +15,39 @@
 
 ## 2026-07-04
 
+### T1065 restrict first-version menu to core recording, history, and analysis
+
+類型：mobile / ui / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Reduced the normal user function menu to first-version priorities: `今日錄音`, `歷史紀錄`, `基本分析`, plus required `設定`.
+- Hid achievements, year review, store, food community, ranking, and the future-module entry from normal menu exposure while preserving debug / visual-smoke routes.
+- Changed the Home recording guidance direction from `體重` to `用藥紀錄`.
+- Updated UI spec, task queue, and verifier coverage for the first-version menu scope.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Re-enable hidden future functions in the normal menu only when each is explicitly selected for the public release scope.
+
 ### T1064 show Home recording recognition mode
 
 類型：mobile / ui / verifier / docs

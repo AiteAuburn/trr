@@ -69,11 +69,6 @@ TOP_LEVEL_MENU_SCREENS = {
     "today",
     "history",
     "analysis",
-    "achievements",
-    "yearReview",
-    "store",
-    "community",
-    "ranking",
     "settings",
 }
 

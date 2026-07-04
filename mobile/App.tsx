@@ -462,11 +462,6 @@ const menuScreens: Array<{ id: AppScreen; label: string; icon: string }> = [
   { id: "today", label: "今日錄音", icon: "🎙" },
   { id: "history", label: "歷史紀錄", icon: "🗂" },
   { id: "analysis", label: "基本分析", icon: "📊" },
-  { id: "achievements", label: "成就榜", icon: "🏆" },
-  { id: "yearReview", label: "年度回顧", icon: "🔁" },
-  { id: "store", label: "商城", icon: "🛍" },
-  { id: "community", label: "食物社群", icon: "🤝" },
-  { id: "ranking", label: "社群排行", icon: "🏅" },
   { id: "settings", label: "設定", icon: "⚙" }
 ];
 
@@ -6202,7 +6197,7 @@ const homeGuidanceDirections = [
   ],
   [
     { icon: "🏃", label: "運動" },
-    { icon: "⚖️", label: "體重" },
+    { icon: "💊", label: "用藥紀錄" },
     { icon: "😊", label: "身體狀況" }
   ]
 ].map((row, rowIndex) =>
@@ -15312,17 +15307,19 @@ export default function App() {
                 </Pressable>
               ))}
             </View>
-            <Pressable
-              accessibilityLabel={auxiliaryDisplayLabels.showMoreFeaturesAccessibility}
-              accessibilityRole="button"
-              style={styles.moreButton}
-              onPress={openFutureModulesFromMenu}
-            >
-              <View style={styles.moreActionIcon}>
-                <Text style={styles.menuIconText}>＋</Text>
-              </View>
-              <Text style={styles.secondaryButtonText}>{auxiliaryDisplayLabels.showMoreFeatures}</Text>
-            </Pressable>
+            {enableDebugTools ? (
+              <Pressable
+                accessibilityLabel={auxiliaryDisplayLabels.showMoreFeaturesAccessibility}
+                accessibilityRole="button"
+                style={styles.moreButton}
+                onPress={openFutureModulesFromMenu}
+              >
+                <View style={styles.moreActionIcon}>
+                  <Text style={styles.menuIconText}>＋</Text>
+                </View>
+                <Text style={styles.secondaryButtonText}>{auxiliaryDisplayLabels.showMoreFeatures}</Text>
+              </Pressable>
+            ) : null}
             {allowMobileDevAuth ? (
               <View style={styles.devResetInline}>
                 <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.devOnly}</Text>
