@@ -2355,6 +2355,10 @@ def main() -> int:
             ("minimal home recording seconds helper", "function homeRecordingSecondaryHint(isRecording: boolean, elapsedSeconds: number)"),
             ("minimal home recording seconds copy", "已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，放開即結束"),
             ("minimal home recording seconds display value", "const homeRecordingSecondaryHintDisplayText = homeRecordingSecondaryHint("),
+            ("minimal home recording model status helper", "function homeRecordingModelStatusCopy(hasWhisperModel: boolean)"),
+            ("minimal home recording model whisper copy", "目前語音識別：本機 Whisper"),
+            ("minimal home recording model fallback copy", "目前語音識別：內建文字確認"),
+            ("minimal home recording model status display value", "const homeRecordingModelStatusDisplayText = homeRecordingModelStatusCopy(Boolean(whisperModelPath.trim()));"),
             ("minimal home mic accessibility binding", "accessibilityLabel={recordingButtonDisplayAccessibilityLabel}"),
             ("tutorial whisper release copy", "若已選擇本機 Whisper 模型，會先轉成文字並進入確認。"),
             ("minimal home mic press in", "onPressIn={startRecordingPreview}"),
@@ -2409,6 +2413,7 @@ def main() -> int:
             ("guided home block non-button copy", "上面這排不是按鈕喔"),
             ("minimal home block primary hint", "<Text style={styles.homeHint}>按住開始說話記錄</Text>"),
             ("minimal home block secondary hint", "<Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>"),
+            ("minimal home block model status", "<Text style={styles.homeModelStatus}>{homeRecordingModelStatusDisplayText}</Text>"),
             ("guided home block example panel", "styles.homeExamplePanel"),
             ("guided home block example title", "<Text style={styles.homeExampleTitle}>範例（怎麼說都可以）</Text>"),
             ("guided home block example pagination", "styles.homeExamplePagination"),
@@ -2416,6 +2421,7 @@ def main() -> int:
             _assert_contains(label, today_home_block, marker)
         _assert_contains("minimal home starts near top", _style_block(content, "homeMinimalSection"), 'justifyContent: "flex-start"')
         _assert_contains("minimal home reduced top padding", _style_block(content, "homeMinimalSection"), "paddingTop: 14")
+        _assert_contains("minimal home model status style", _style_block(content, "homeModelStatus"), "fontSize: 12")
         for style_name in ("homeExampleTitle", "homeExampleIndex", "homeExampleText"):
             _assert_contains(
                 f"{style_name} left aligned",

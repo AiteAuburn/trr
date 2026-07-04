@@ -13,6 +13,39 @@
 後續:
 ```
 
+## 2026-07-04
+
+### T1064 show Home recording recognition mode
+
+類型：mobile / ui / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a small non-interactive Home status line under the recording hints showing whether recording uses `本機 Whisper` or the `內建文字確認` fallback.
+- Kept the existing fallback behavior: if no Whisper model path is selected, Home recording still enters transcript review for manual text confirmation before parser / DeepSeek work.
+- Updated UI spec, task queue, and mobile navigation verifier coverage for the recognition-mode status.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue with production-reviewed Whisper model distribution if automatic speech recognition must work outside dev-client builds.
+
 ## 2026-07-03
 
 ### T1063 add History daily summary table and sectioned daily details

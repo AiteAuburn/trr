@@ -5066,6 +5066,13 @@ function homeRecordingSecondaryHint(isRecording: boolean, elapsedSeconds: number
   );
 }
 
+function homeRecordingModelStatusCopy(hasWhisperModel: boolean) {
+  return boundDisplayText(
+    hasWhisperModel ? "目前語音識別：本機 Whisper" : "目前語音識別：內建文字確認",
+    80
+  );
+}
+
 function homeRecordingPreviewBoundaryCopy() {
   return boundDisplayText(
     "首頁按住會使用 expo-av 擷取本機音檔；放開只停止錄音，不自動呼叫 STT、AI、LLM 或寫入 backend。",
@@ -7147,6 +7154,7 @@ export default function App() {
     isRecordingPreview,
     recordingElapsedSeconds
   );
+  const homeRecordingModelStatusDisplayText = homeRecordingModelStatusCopy(Boolean(whisperModelPath.trim()));
   const homeCurrentSpeechExample = homeSpeechExamples[
     clampNumber(homeExampleIndex, 0, Math.max(homeSpeechExamples.length - 1, 0))
   ];
@@ -12327,6 +12335,7 @@ export default function App() {
             </Pressable>
             <Text style={styles.homeHint}>按住開始說話記錄</Text>
             <Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>
+            <Text style={styles.homeModelStatus}>{homeRecordingModelStatusDisplayText}</Text>
             <View style={styles.homeExamplePanel}>
               <Text style={styles.homeExampleTitle}>範例（怎麼說都可以）</Text>
               <View style={styles.homeExampleMetaRow}>
@@ -17938,6 +17947,14 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 22,
     minHeight: 22,
+    textAlign: "center"
+  },
+  homeModelStatus: {
+    color: "#9AA5A0",
+    fontSize: 12,
+    fontWeight: "800",
+    lineHeight: 17,
+    minHeight: 17,
     textAlign: "center"
   },
   homeExamplePanel: {

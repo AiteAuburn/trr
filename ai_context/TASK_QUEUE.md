@@ -120,6 +120,24 @@ None.
 
 ## Done
 
+### T1064: Show Home recording recognition mode
+
+Status: done
+
+Summary:
+
+- Added a small non-interactive Home status line under the recording hints showing whether recording will use `本機 Whisper` or the `內建文字確認` fallback.
+- Kept Home recording fallback behavior unchanged: when no Whisper model path is selected, recording still enters transcript review for manual text confirmation before DeepSeek / parser work.
+- Updated UI spec and mobile navigation verifier coverage for the Home recognition-mode status text.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1063: Add History daily summary table and sectioned daily details
 
 Status: done
