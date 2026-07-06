@@ -93,3 +93,72 @@ export function subscriptionMembershipStatusOpenStatusMessage() {
 export function subscriptionManagementReturnSettingsStatusMessage() {
   return boundUiMessage("已返回設定；訂閱管理頁不會建立試用、收款或改變會員權益。");
 }
+
+export function settingsSubscriptionSectionLabels() {
+  const syncQuota = boundDisplayText("同步", maxDisplayTextLength);
+  const trialIntegrationButton = boundDisplayText("查看試用整合狀態", maxDisplayTextLength);
+  const manageSubscribedPlan = boundDisplayText("已訂閱？管理方案", maxDisplayTextLength);
+  const memberStatusButton = boundDisplayText("查看會員狀態", maxDisplayTextLength);
+  const returnSettings = boundDisplayText("返回設定", maxDisplayTextLength);
+  const paymentIntegrationButton = boundDisplayText("查看付款整合狀態", maxDisplayTextLength);
+  const renewalIntegrationButton = boundDisplayText("查看續訂整合狀態", maxDisplayTextLength);
+  const managePlan = boundDisplayText("管理方案", maxDisplayTextLength);
+  return {
+    trialPaymentBoundary: boundDisplayText("試用付款邊界", maxDisplayTextLength),
+    paymentUnwired: boundDisplayText("付款未串接", maxDisplayTextLength),
+    currentStatus: boundDisplayText("目前狀態", maxDisplayTextLength),
+    todayRecordingQuota: boundDisplayText("今日錄音額度", maxDisplayTextLength),
+    trialPlan: boundDisplayText("試用版", maxDisplayTextLength),
+    annualPlan: boundDisplayText("年費會員", maxDisplayTextLength),
+    featureComparison: boundDisplayText("功能比較", maxDisplayTextLength),
+    formalReadiness: boundDisplayText("正式啟用前需要完成", maxDisplayTextLength),
+    syncQuotaAccessibility: boundDisplayText(`${syncQuota}會員額度狀態，不建立訂閱或收款`, maxDisplayDetailTextLength),
+    trialIntegrationButton,
+    trialIntegrationAccessibility: boundDisplayText(`${trialIntegrationButton}，只顯示付款與 entitlement 邊界`, maxDisplayDetailTextLength),
+    trialIntegrationStatus: boundDisplayText("試用整合狀態", maxDisplayTextLength),
+    manageSubscribedPlan,
+    manageSubscribedPlanAccessibility: boundDisplayText(`${manageSubscribedPlan}，前往訂閱管理預覽`, maxDisplayDetailTextLength),
+    memberStatusButton,
+    memberStatusAccessibility: boundDisplayText(`${memberStatusButton}，查看目前同步會員資料`, maxDisplayDetailTextLength),
+    currentMemberStatus: boundDisplayText("目前會員狀態", maxDisplayTextLength),
+    noAction: boundDisplayText("目前不做的事", maxDisplayTextLength),
+    returnSettings,
+    returnSettingsAccessibility: boundDisplayText(`${returnSettings}，不改變會員權益`, maxDisplayDetailTextLength),
+    paymentIntegrationButton,
+    paymentIntegrationAccessibility: boundDisplayText(`${paymentIntegrationButton}，只顯示付款串接狀態`, maxDisplayDetailTextLength),
+    paymentIntegrationStatus: boundDisplayText("付款整合狀態", maxDisplayTextLength),
+    memberFeatures: boundDisplayText("會員專屬功能", maxDisplayTextLength),
+    founderAnnualPrice: boundDisplayText("創始會員年費", maxDisplayTextLength),
+    renewalUnwired: boundDisplayText("續訂未串接", maxDisplayTextLength),
+    renewalIntegrationButton,
+    renewalIntegrationAccessibility: boundDisplayText(`${renewalIntegrationButton}，前往訂閱管理預覽`, maxDisplayDetailTextLength),
+    managePlan,
+    managePlanAccessibility: boundDisplayText(`${managePlan}，前往訂閱管理預覽`, maxDisplayDetailTextLength),
+    authProviderPreview: boundDisplayText("正式登入方式預覽", maxDisplayTextLength),
+    sessionPreview: boundDisplayText("裝置與 Session 管理預覽", maxDisplayTextLength),
+    authReadiness: boundDisplayText("正式 auth readiness", maxDisplayTextLength),
+    authBoundary: boundDisplayText("正式 auth 必備邊界", maxDisplayTextLength),
+    localStateResult: boundDisplayText("本機狀態結果", maxDisplayTextLength),
+    localClearButton: boundDisplayText("清除本機狀態", maxDisplayTextLength),
+    localClearAccessibility: boundDisplayText("清除本機 session 與預覽狀態，不刪除 backend 紀錄", maxDisplayDetailTextLength),
+    advancedSettingsToggleAccessibility: boundDisplayText("展開或收合進階設定，不連線 backend 或啟動模型", maxDisplayDetailTextLength),
+    backendReconnectAccessibility: boundDisplayText("重新連線 backend，會清除 stale session/model/record state", maxDisplayDetailTextLength),
+    refreshSession: boundDisplayText("刷新 session", maxDisplayTextLength),
+    refreshSessionAccessibility: boundDisplayText("刷新 session，使用 SecureStore refresh token rotation", maxDisplayDetailTextLength),
+    loadSessions: boundDisplayText("載入 sessions", maxDisplayTextLength),
+    loadSessionsAccessibility: boundDisplayText("載入 sessions，只顯示 bounded session metadata", maxDisplayDetailTextLength),
+    logoutLocal: boundDisplayText("登出本機", maxDisplayTextLength),
+    logoutLocalAccessibility: boundDisplayText("登出本機，revoke session 並清除本機安全 token", maxDisplayDetailTextLength),
+    logoutAll: boundDisplayText("登出全部", maxDisplayTextLength),
+    logoutAllAccessibility: boundDisplayText("登出全部裝置，revoke backend sessions 並清除本機 token", maxDisplayDetailTextLength),
+    profileEditReadiness: boundDisplayText("正式編輯前需要完成", maxDisplayTextLength),
+    editIntegrationButton: boundDisplayText("查看編輯整合狀態", maxDisplayTextLength),
+    editIntegrationAccessibility: boundDisplayText("查看個人資料編輯整合狀態，不寫入個資或照護對象", maxDisplayDetailTextLength),
+    editIntegrationStatus: boundDisplayText("編輯整合狀態", maxDisplayTextLength),
+    voiceUsageStatus: boundDisplayText("今日語音使用狀態", maxDisplayTextLength),
+    dataCostBoundary: boundDisplayText("資料與成本邊界", maxDisplayTextLength),
+    quotaSyncStatus: boundDisplayText("額度同步狀態", maxDisplayTextLength),
+    notificationStatus: boundDisplayText("通知整合狀態", maxDisplayTextLength),
+    privacyStatus: boundDisplayText("隱私整合狀態", maxDisplayTextLength)
+  };
+}

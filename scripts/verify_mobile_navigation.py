@@ -16,6 +16,7 @@ NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
 ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
+SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
 README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
 ACHIEVEMENT_CATALOG_PATH = REPO_ROOT / "backend" / "app" / "services" / "achievement_catalog.py"
@@ -1196,6 +1197,7 @@ def main() -> int:
     first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
     analysis_copy_content = ANALYSIS_COPY_PATH.read_text(encoding="utf-8")
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
+    subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
 
     try:
@@ -3579,14 +3581,6 @@ def main() -> int:
             ),
             ("auth provider accessibility item", "accessibilityLabel: boundDisplayText(`查看${item.title}登入整合狀態，不保存 provider token`, maxDisplayDetailTextLength)"),
             ("auth session management accessibility item", "accessibilityLabel: boundDisplayText(`查看${item.title}session 管理狀態，不顯示 raw token`, maxDisplayDetailTextLength)"),
-            ("auth refresh accessibility label", "refreshSessionAccessibility: boundDisplayText(\"刷新 session，使用 SecureStore refresh token rotation\", maxDisplayDetailTextLength)"),
-            ("auth load sessions accessibility label", "loadSessionsAccessibility: boundDisplayText(\"載入 sessions，只顯示 bounded session metadata\", maxDisplayDetailTextLength)"),
-            ("auth logout local accessibility label", "logoutLocalAccessibility: boundDisplayText(\"登出本機，revoke session 並清除本機安全 token\", maxDisplayDetailTextLength)"),
-            ("auth logout all accessibility label", "logoutAllAccessibility: boundDisplayText(\"登出全部裝置，revoke backend sessions 並清除本機 token\", maxDisplayDetailTextLength)"),
-            ("settings local clear accessibility label", "localClearAccessibility: boundDisplayText(\"清除本機 session 與預覽狀態，不刪除 backend 紀錄\", maxDisplayDetailTextLength)"),
-            ("advanced settings toggle accessibility label", "advancedSettingsToggleAccessibility: boundDisplayText(\"展開或收合進階設定，不連線 backend 或啟動模型\", maxDisplayDetailTextLength)"),
-            ("backend reconnect accessibility label", "backendReconnectAccessibility: boundDisplayText(\"重新連線 backend，會清除 stale session/model/record state\", maxDisplayDetailTextLength)"),
-            ("profile edit accessibility label", "editIntegrationAccessibility: boundDisplayText(\"查看個人資料編輯整合狀態，不寫入個資或照護對象\", maxDisplayDetailTextLength)"),
             ("profile edit integration status handler", "function showProfileEditIntegrationStatus()"),
             ("recording quota settings sync handler", "function syncRecordingQuotaSettings()"),
             ("reminder integration status handler", "function showReminderIntegrationStatus()"),
@@ -3860,6 +3854,17 @@ def main() -> int:
             ("privacy integration accessibility helper", "function privacyIntegrationAccessibilityLabel()"),
         ):
             _assert_contains(label, settings_copy_content, marker)
+        for label, marker in (
+            ("auth refresh accessibility label", "refreshSessionAccessibility: boundDisplayText(\"刷新 session，使用 SecureStore refresh token rotation\", maxDisplayDetailTextLength)"),
+            ("auth load sessions accessibility label", "loadSessionsAccessibility: boundDisplayText(\"載入 sessions，只顯示 bounded session metadata\", maxDisplayDetailTextLength)"),
+            ("auth logout local accessibility label", "logoutLocalAccessibility: boundDisplayText(\"登出本機，revoke session 並清除本機安全 token\", maxDisplayDetailTextLength)"),
+            ("auth logout all accessibility label", "logoutAllAccessibility: boundDisplayText(\"登出全部裝置，revoke backend sessions 並清除本機 token\", maxDisplayDetailTextLength)"),
+            ("settings local clear accessibility label", "localClearAccessibility: boundDisplayText(\"清除本機 session 與預覽狀態，不刪除 backend 紀錄\", maxDisplayDetailTextLength)"),
+            ("advanced settings toggle accessibility label", "advancedSettingsToggleAccessibility: boundDisplayText(\"展開或收合進階設定，不連線 backend 或啟動模型\", maxDisplayDetailTextLength)"),
+            ("backend reconnect accessibility label", "backendReconnectAccessibility: boundDisplayText(\"重新連線 backend，會清除 stale session/model/record state\", maxDisplayDetailTextLength)"),
+            ("profile edit accessibility label", "editIntegrationAccessibility: boundDisplayText(\"查看個人資料編輯整合狀態，不寫入個資或照護對象\", maxDisplayDetailTextLength)"),
+        ):
+            _assert_contains(label, subscription_copy_content, marker)
         for label, marker in (
             ("food community visual smoke promoted label", '{ id: "community", label: "食物社群" }'),
             ("food community screen chrome backend-ready subtitle", 'community: { subtitle: "同步食物升糖資料庫、分享、點數與公開排名。", backTo: "futureModules", actionLabel: "‹" }'),
@@ -4547,6 +4552,9 @@ def main() -> int:
             ("subscription payment accessibility label", "paymentIntegrationAccessibility: boundDisplayText(`${paymentIntegrationButton}，只顯示付款串接狀態`, maxDisplayDetailTextLength)"),
             ("membership renewal accessibility label", "renewalIntegrationAccessibility: boundDisplayText(`${renewalIntegrationButton}，前往訂閱管理預覽`, maxDisplayDetailTextLength)"),
             ("membership manage accessibility label", "managePlanAccessibility: boundDisplayText(`${managePlan}，前往訂閱管理預覽`, maxDisplayDetailTextLength)"),
+        ):
+            _assert_contains(label, subscription_copy_content, marker)
+        for label, marker in (
             ("subscription quota accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.syncQuotaAccessibility}"),
             ("subscription trial accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.trialIntegrationAccessibility}"),
             ("subscription management accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.manageSubscribedPlanAccessibility}"),

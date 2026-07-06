@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1079: Extract settings subscription labels
+
+Status: done
+
+Summary:
+
+- Moved `settingsSubscriptionSectionLabels()` from `mobile/App.tsx` into `mobile/subscriptionCopy.ts`.
+- Kept Settings subscription render bindings, auth/session handlers, entitlement sync behavior, UI copy, and first-version menu scope unchanged.
+- Updated the navigation verifier so subscription/auth accessibility label guards now inspect `mobile/subscriptionCopy.ts`, while render and handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 now also covers settings subscription section label extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1078: Extract subscription and account-security copy helpers
 
 Status: done

@@ -41,7 +41,7 @@
   - `historyCopy.ts`：History navigation status, empty-state, and no-real-record bounded copy.
   - `analysisCopy.ts`：Analysis / detailed-report bounded copy and custom-range status messages.
   - `settingsCopy.ts`：Settings navigation, quota/reminder/privacy bounded copy.
-  - `subscriptionCopy.ts`：Subscription, account security, and profile boundary bounded copy.
+  - `subscriptionCopy.ts`：Subscription, account security, profile boundary, and settings subscription section labels / bounded copy.
 
 ### Backend
 
@@ -105,7 +105,7 @@ Verification:
 
 ### Slice 3: Status/Copy Helpers
 
-Status: started; recording / transcript-review, parser / AI save / AI candidate, record sync / CRUD, auth / backend session, native model debug, report / voice quota, first-version flow, history, analysis, settings, and subscription/account-security copy extracted.
+Status: started; recording / transcript-review, parser / AI save / AI candidate, record sync / CRUD, auth / backend session, native model debug, report / voice quota, first-version flow, history, analysis, settings, subscription/account-security, and settings subscription section labels extracted.
 
 Scope:
 
