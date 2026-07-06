@@ -2800,6 +2800,12 @@ def main() -> int:
             ("record edit fallback json", 'fields.fallbackJson = boundRecordEditField("fallbackJson", JSON.stringify(payload, null, 2));'),
             ("record edit food item import", "const amount = textValue(candidate.amount);"),
             ("record edit note tags import", ".filter((tag): tag is string => typeof tag === \"string\")"),
+            ("record edit split list helper", "function splitListText(value: string)"),
+            ("record edit payload builder helper", "function buildPayloadFromEditFields(recordType: string, fields: RecordEditFields)"),
+            ("record edit meal payload builder", "food_items: splitListText(fields.foodItems).map((name) => ({ name }))"),
+            ("record edit exercise minutes payload builder", "minutes: fields.exerciseMinutes.trim() ? Number(fields.exerciseMinutes) : undefined"),
+            ("record edit note tags payload builder", "const tags = splitListText(fields.noteTags);"),
+            ("record edit fallback json payload builder", "return JSON.parse(fields.fallbackJson) as Record<string, unknown>;"),
         ):
             _assert_contains(label, record_edit_transforms_content, marker)
         for label, marker in (

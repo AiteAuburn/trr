@@ -52,9 +52,11 @@ import {
 } from "./recordDisplay";
 import {
   boundRecordEditField,
+  buildPayloadFromEditFields,
   emptyRecordEditFields,
   recordEditFieldMaxLength,
   recordPayloadToEditFields,
+  splitListText,
   type RecordEditFields
 } from "./recordEditTransforms";
 import {
@@ -1474,14 +1476,6 @@ function buildDailyRecordSectionDisplayItems(records: PendingRecord[]) {
   });
 }
 
-function splitListText(value: string) {
-  return value
-    .split(/[、,\n]/)
-    .map((item) => item.trim())
-    .filter(Boolean)
-    .slice(0, maxListItems);
-}
-
 function isTooLong(value: string, maxLength = maxFormTextLength) {
   return value.trim().length > maxLength;
 }
@@ -2816,47 +2810,6 @@ function validateRecordForm(
     return "payload_json 不是有效 JSON";
   }
   return null;
-}
-
-function buildPayloadFromEditFields(recordType: string, fields: RecordEditFields) {
-  if (recordType === "glucose") {
-    return {
-      value: Number(fields.glucoseValue),
-      unit: fields.glucoseUnit || "mg/dL",
-      meal_timing: fields.glucoseTiming || "unknown"
-    };
-  }
-
-  if (recordType === "meal") {
-    return {
-      meal_type: fields.mealType || "unknown",
-      food_items: splitListText(fields.foodItems).map((name) => ({ name }))
-    };
-  }
-
-  if (recordType === "exercise") {
-    return {
-      activity: fields.exerciseActivity.trim(),
-      minutes: fields.exerciseMinutes.trim() ? Number(fields.exerciseMinutes) : undefined
-    };
-  }
-
-  if (recordType === "medication") {
-    return {
-      name: fields.medicationName.trim(),
-      dose: fields.medicationDose.trim() || undefined
-    };
-  }
-
-  if (recordType === "note") {
-    const tags = splitListText(fields.noteTags);
-    return {
-      kind: fields.noteKind.trim() || undefined,
-      tags: tags.length > 0 ? tags : undefined
-    };
-  }
-
-  return JSON.parse(fields.fallbackJson) as Record<string, unknown>;
 }
 
 async function requestJson<T>(
