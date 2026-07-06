@@ -15,6 +15,39 @@
 
 ## 2026-07-06
 
+### T1072 extract native model status copy helpers
+
+類型：mobile / refactor / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/nativeStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted native debug, local model download, native module check, local Whisper, local Llama, benchmark, and recording model refresh bounded status helpers from `mobile/App.tsx` into `mobile/nativeStatusCopy.ts`.
+- Kept existing native module bridges, local model storage, settings debug controls, UI copy, and handler call sites unchanged.
+- Removed the now-unused local `safeUiError` helper from `mobile/App.tsx` after status helpers moved to dedicated modules.
+- Updated the navigation verifier so recording model refresh helper guards now inspect `mobile/nativeStatusCopy.ts`, while settings handlers and bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to record that Slice 3 now also covers native model debug status copy extraction.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 3 with remaining history/analysis/settings status copy helpers, or move to Slice 4 data transform helpers once copy extraction is sufficient.
+
 ### T1071 extract auth and backend status copy helpers
 
 類型：mobile / refactor / docs

@@ -174,6 +174,34 @@ import {
   oidcExchangeSuccessStatusMessage,
   oidcExchangeUnavailableStatusMessage
 } from "./authStatusCopy";
+import {
+  nativeBenchmarkMissingInputStatusMessage,
+  nativeBenchmarkProgressStatusMessage,
+  nativeBenchmarkResultStatusMessage,
+  nativeDebugDefaultStatusMessage,
+  nativeDebugDisabledStatusMessage,
+  nativeDownloadedModelsFailureStatusMessage,
+  nativeLlamaFailureStatusMessage,
+  nativeLlamaMissingInputStatusMessage,
+  nativeLlamaOutputSummaryMessage,
+  nativeLlamaProgressStatusMessage,
+  nativeLlamaSuccessStatusMessage,
+  nativeModelDownloadFailureStatusMessage,
+  nativeModelDownloadProgressStatusMessage,
+  nativeModelDownloadSuccessStatusMessage,
+  nativeModuleCheckFailureStatusMessage,
+  nativeModuleCheckProgressStatusMessage,
+  nativeModuleCheckResultStatusMessage,
+  nativeWhisperFailureStatusMessage,
+  nativeWhisperMissingInputStatusMessage,
+  nativeWhisperProgressStatusMessage,
+  nativeWhisperSuccessStatusMessage,
+  recordingModelRefreshAccessibilityLabel,
+  recordingModelRefreshButtonLabel,
+  recordingModelRefreshFailureStatusMessage,
+  recordingModelRefreshStatusMessage,
+  recordingModelSelectedStatusMessage
+} from "./nativeStatusCopy";
 
 type Account = {
   id: string;
@@ -3540,13 +3568,6 @@ function protectedRequestHeaders(accountId: string, accessToken: string): Record
   return {};
 }
 
-function safeUiError(error: unknown, fallback: string) {
-  if (error instanceof Error && /^\S+ failed: \d{3}$/.test(error.message)) {
-    return boundUiMessage(error.message);
-  }
-  return boundUiMessage(fallback);
-}
-
 function voiceQuotaUnavailableStatusMessage(message: string) {
   return boundUiMessage(`${message || "backend account 尚未 ready"}；目前不送出語音額度同步請求。`);
 }
@@ -3609,123 +3630,6 @@ function analysisReportFailureStatusMessage() {
 
 function busyActionStatusMessage() {
   return boundUiMessage("目前仍在處理上一個動作，請稍候");
-}
-
-function nativeDebugDefaultStatusMessage() {
-  return boundUiMessage("Expo Go 可跑 UI；whisper.rn / llama.rn 需要 Dev Client。");
-}
-
-function nativeDebugDisabledStatusMessage() {
-  return boundUiMessage("Debug tools are disabled.");
-}
-
-function nativeDownloadedModelsFailureStatusMessage(error: unknown) {
-  return safeUiError(error, "讀取模型清單失敗");
-}
-
-function nativeModelDownloadProgressStatusMessage() {
-  return boundUiMessage("下載模型中...");
-}
-
-function nativeModelDownloadSuccessStatusMessage() {
-  return boundUiMessage("模型已下載，已更新本機模型清單。");
-}
-
-function nativeModelDownloadFailureStatusMessage(error: unknown) {
-  return safeUiError(error, "模型下載失敗");
-}
-
-function nativeModuleCheckProgressStatusMessage() {
-  return boundUiMessage("檢查 native modules...");
-}
-
-function nativeModuleCheckResultStatusMessage(message: string) {
-  return boundUiMessage(message);
-}
-
-function nativeModuleCheckFailureStatusMessage(error: unknown) {
-  return safeUiError(error, "Native module check failed");
-}
-
-function nativeWhisperMissingInputStatusMessage() {
-  return boundUiMessage("請先填 whisper model path 和 audio file path");
-}
-
-function nativeWhisperProgressStatusMessage() {
-  return boundUiMessage("本機 Whisper 轉錄中...");
-}
-
-function nativeWhisperSuccessStatusMessage() {
-  return boundUiMessage("Whisper 轉錄完成，已填入文字輸入框");
-}
-
-function nativeWhisperFailureStatusMessage(error: unknown) {
-  return safeUiError(error, "Whisper failed");
-}
-
-function recordingModelRefreshStatusMessage(count: number) {
-  return boundUiMessage(`已找到 ${clampNumber(count, 0, maxMobileCountValue)} 個本機 Whisper 模型。`);
-}
-
-function recordingModelRefreshFailureStatusMessage(error: unknown) {
-  return safeUiError(error, "讀取本機 Whisper 模型失敗");
-}
-
-function recordingModelSelectedStatusMessage(label: string) {
-  return boundUiMessage(`已選擇本機 Whisper 模型：${boundDisplayText(label, 80)}。`);
-}
-
-function recordingModelRefreshButtonLabel() {
-  return boundDisplayText("重新掃描本機模型", maxDisplayTextLength);
-}
-
-function recordingModelRefreshAccessibilityLabel() {
-  return boundDisplayText("重新掃描本機已下載 Whisper 模型，不呼叫雲端或上傳音檔", maxDisplayDetailTextLength);
-}
-
-function nativeLlamaMissingInputStatusMessage() {
-  return boundUiMessage("請先填 GGUF model path 和 transcript");
-}
-
-function nativeLlamaProgressStatusMessage() {
-  return boundUiMessage("本機 llama.cpp 解析中...");
-}
-
-function nativeLlamaOutputSummaryMessage(outputLength: number) {
-  return boundUiMessage(
-    `llama.cpp 輸出已產生（${clampNumber(outputLength, 0, maxMobileCountValue)} chars）；為避免保留 raw model output，UI 不顯示完整內容。`
-  );
-}
-
-function nativeLlamaSuccessStatusMessage() {
-  return boundUiMessage("llama.cpp constrained JSON 輸出完成；完整輸出未保留在 UI。");
-}
-
-function nativeLlamaFailureStatusMessage(error: unknown) {
-  return safeUiError(error, "llama.cpp failed");
-}
-
-function nativeBenchmarkProgressStatusMessage() {
-  return boundUiMessage("本機模型 benchmark 中...");
-}
-
-function nativeBenchmarkMissingInputStatusMessage() {
-  return boundUiMessage("請先填模型與測試輸入後再 benchmark。");
-}
-
-function nativeBenchmarkResultStatusMessage(results: Array<{ task: string; ok: boolean; durationMs: number; outputChars: number }>) {
-  return boundUiMessage(
-    results
-      .slice(0, maxListItems)
-      .map((result) =>
-        [
-          `${displayTextValue(result.task, 30)}: ${result.ok ? "ok" : "failed"}`,
-          `${clampNumber(result.durationMs, 0, maxMobileCountValue)}ms`,
-          `${clampNumber(result.outputChars, 0, maxMobileCountValue)} chars`
-        ].join(" ")
-      )
-      .join("\n")
-  );
 }
 
 function historyReturnTodayStatusMessage() {

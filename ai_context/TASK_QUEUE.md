@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1072: Extract native model status copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted native debug, local model download, native module check, local Whisper, local Llama, benchmark, and recording model refresh bounded status helpers from `mobile/App.tsx` into `mobile/nativeStatusCopy.ts`.
+- Kept native module bridges, local model storage, settings debug controls, UI copy, and handler call sites unchanged.
+- Removed the now-unused local `safeUiError` helper from `mobile/App.tsx` after status helpers moved to dedicated modules.
+- Updated the navigation verifier so recording model refresh helper guards now inspect `mobile/nativeStatusCopy.ts`.
+- Updated the refactor roadmap to note that Slice 3 now also covers native model debug status copy extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1071: Extract auth and backend status copy helpers
 
 Status: done

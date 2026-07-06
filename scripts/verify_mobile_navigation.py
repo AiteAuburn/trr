@@ -12,6 +12,7 @@ APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
 RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
+NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
 ACHIEVEMENT_CATALOG_PATH = REPO_ROOT / "backend" / "app" / "services" / "achievement_catalog.py"
@@ -1188,6 +1189,7 @@ def main() -> int:
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
     recording_copy_content = RECORDING_COPY_PATH.read_text(encoding="utf-8")
+    native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
 
     try:
@@ -3595,8 +3597,6 @@ def main() -> int:
             ("native whisper run accessibility helper", "function nativeWhisperRunAccessibilityLabel(isRunning: boolean)"),
             ("native llama run accessibility helper", "function nativeLlamaRunAccessibilityLabel(isRunning: boolean)"),
             ("native benchmark accessibility helper", "function nativeBenchmarkAccessibilityLabel(isRunning: boolean)"),
-            ("recording model refresh label helper", "function recordingModelRefreshButtonLabel()"),
-            ("recording model refresh accessibility helper", "function recordingModelRefreshAccessibilityLabel()"),
             ("profile settings option handler", "function selectSettingsProfileChoice(profileId: string)"),
             ("llm model settings option handler", "function selectSettingsLlmModelChoice(modelId: string)"),
             ("stt model settings option handler", "function selectSettingsSttModelChoice(modelId: string)"),
@@ -3843,6 +3843,11 @@ def main() -> int:
             ("future preview secondary CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("recording model refresh label helper", "function recordingModelRefreshButtonLabel()"),
+            ("recording model refresh accessibility helper", "function recordingModelRefreshAccessibilityLabel()"),
+        ):
+            _assert_contains(label, native_status_copy_content, marker)
         for label, marker in (
             ("food community visual smoke promoted label", '{ id: "community", label: "食物社群" }'),
             ("food community screen chrome backend-ready subtitle", 'community: { subtitle: "同步食物升糖資料庫、分享、點數與公開排名。", backTo: "futureModules", actionLabel: "‹" }'),
