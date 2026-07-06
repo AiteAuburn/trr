@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1081: Extract record bounds transform helpers
+
+Status: done
+
+Summary:
+
+- Extracted parse-preview bounding, pending-record metadata bounding, record cache bounding, record payload sanitization, raw payload key filtering, and raw metadata stripping from `mobile/App.tsx` into `mobile/recordBounds.ts`.
+- Kept parser preview response shape, save metadata preservation, History cursor merge behavior, record cache limit behavior, UI copy, navigation, and backend request paths unchanged.
+- Updated the navigation verifier so record payload, raw key, cursor merge, and metadata stripping guards inspect `mobile/recordBounds.ts`, while render/save call-site guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now covers record bounds transform extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1080: Extract date/time transform helpers
 
 Status: done

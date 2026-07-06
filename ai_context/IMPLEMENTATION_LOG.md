@@ -15,6 +15,38 @@
 
 ## 2026-07-06
 
+### T1081 extract record bounds transform helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordBounds.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted parse-preview bounding, pending-record metadata bounding, record cache bounding, record payload sanitization, raw payload key filtering, and raw metadata stripping from `mobile/App.tsx` into `mobile/recordBounds.ts`.
+- Kept parser preview response shape, save metadata preservation, History cursor merge behavior, record cache limit behavior, UI copy, navigation, and backend request paths unchanged.
+- Updated the navigation verifier so record payload, raw key, cursor merge, and metadata stripping guards inspect `mobile/recordBounds.ts`, while render/save call-site guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now covers record bounds transform extraction.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 4 with daily transcript retention or analysis metric transforms.
+
 ### T1080 extract date/time transform helpers
 
 類型：mobile / refactor / verifier / docs

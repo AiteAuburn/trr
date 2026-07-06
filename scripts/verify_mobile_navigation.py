@@ -11,6 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
+RECORD_BOUNDS_PATH = REPO_ROOT / "mobile" / "recordBounds.ts"
 RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
 NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
@@ -1193,6 +1194,7 @@ def main() -> int:
     content = APP_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
+    record_bounds_content = RECORD_BOUNDS_PATH.read_text(encoding="utf-8")
     recording_copy_content = RECORDING_COPY_PATH.read_text(encoding="utf-8")
     native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
     first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
@@ -2759,7 +2761,7 @@ def main() -> int:
             ("record exercise minutes clamp", 'if (recordType === "exercise" && typeof result.minutes === "number")'),
             ("record item payload boundary", "payload_json: boundRecordPayload(recordType, value.payload_json)"),
         ):
-            _assert_contains(label, content, marker)
+            _assert_contains(label, record_bounds_content, marker)
         _assert_contains(
             "today analysis handler",
             content,
@@ -2888,7 +2890,6 @@ def main() -> int:
             ("history detail mode binding", "onPress={() => pressHistoryDetailModeOption(item)}"),
             ("history cursor cache limit", "const maxMobileRecordCacheLimit = 500;"),
             ("history record cursor created_at field", "created_at: string;"),
-            ("history cursor merge helper", "function mergeRecordsByCursorOrder(current: RecordItem[], incoming: RecordItem[])"),
             ("history cursor before query", "before: cursorRecord.occurred_at,"),
             ("history cursor created_at query", "before_created_at: cursorRecord.created_at"),
             ("history load more handler", "async function loadMoreRecords()"),
@@ -2907,6 +2908,11 @@ def main() -> int:
             ("daily section meal time label", "用餐時間"),
         ):
             _assert_contains(label, content, marker)
+        _assert_contains(
+            "history cursor merge helper",
+            record_bounds_content,
+            "function mergeRecordsByCursorOrder(current: RecordItem[], incoming: RecordItem[])",
+        )
         for label, marker in (
             ("daily section glucose context label", "測量情境"),
             ("daily section glucose value label", "血糖值"),
@@ -2973,7 +2979,7 @@ def main() -> int:
             pending_save_block,
             "const sanitizedMetadata = boundMetadata(record.metadata_json, true);",
         )
-        strip_metadata_block = _function_block(content, "stripRawTextMetadata")
+        strip_metadata_block = _function_block(record_bounds_content, "stripRawTextMetadata")
         _assert_not_contains(
             "source text must not be stripped from record metadata",
             strip_metadata_block,

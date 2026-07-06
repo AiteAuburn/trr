@@ -43,6 +43,7 @@
   - `settingsCopy.ts`：Settings navigation, quota/reminder/privacy bounded copy.
   - `subscriptionCopy.ts`：Subscription, account security, profile boundary, and settings subscription section labels / bounded copy.
   - `dateTimeTransforms.ts`：local date/time input formatting, local date keys, analysis date bounds, and local datetime ISO transforms.
+  - `recordBounds.ts`：parse-preview, pending-record, record-cache, payload, and metadata bounded transforms.
 
 ### Backend
 
@@ -121,7 +122,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; date/time transform helpers extracted.
+Status: started; date/time transform helpers and record bounds transforms extracted.
 
 Scope:
 
