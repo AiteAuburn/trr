@@ -41,6 +41,7 @@ import {
   dailyRecordSectionDefinitions,
   displayPayload,
   displayTextValue,
+  manualRecordConfirmDisplayItem,
   recordDateTimeDisplay,
   recordDetailDisplayItem,
   recordListDisplayItem,
@@ -1497,23 +1498,6 @@ function buildDailyRecordSectionDisplayItems(records: PendingRecord[]) {
       entries
     };
   });
-}
-
-function manualRecordConfirmDisplayItem(
-  recordType: ManualRecordType,
-  payload: Record<string, unknown> | null,
-  date: string,
-  time: string
-) {
-  return {
-    icon: boundDisplayText(recordTypeIcon(recordType), 4),
-    typeLabel: boundDisplayText(recordTypeLabel(recordType), 80),
-    payloadSummary:
-      payload === null
-        ? "尚未完成必填欄位"
-        : boundDisplayText(displayPayload(recordType, payload), maxDisplayDetailTextLength),
-    sourceLine: boundDisplayText(`${date} ${time} · source: manual`, maxDisplayDetailTextLength)
-  };
 }
 
 function emptyRecordEditFields(): RecordEditFields {

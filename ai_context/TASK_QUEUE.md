@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1091: Extract manual record confirmation display helper
+
+Status: done
+
+Summary:
+
+- Extracted manual-record confirmation icon, type label, payload summary, and source-line display shaping from `mobile/App.tsx` into `mobile/recordDisplay.ts`.
+- Kept manual-record form state, validation, confirmation render JSX, create handler, UI copy, navigation, and backend create flow unchanged.
+- Updated the navigation verifier so manual-record confirmation display helper ownership guards inspect `mobile/recordDisplay.ts`, while manual flow accessibility and submit guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the manual-record confirmation display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1090: Extract record detail display helper
 
 Status: done

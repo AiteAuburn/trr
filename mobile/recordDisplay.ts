@@ -261,6 +261,23 @@ export function recordDetailDisplayItem(record: RecordItem) {
   };
 }
 
+export function manualRecordConfirmDisplayItem(
+  recordType: string,
+  payload: Record<string, unknown> | null,
+  date: string,
+  time: string
+) {
+  return {
+    icon: boundDisplayText(recordTypeIcon(recordType), 4),
+    typeLabel: boundDisplayText(recordTypeLabel(recordType), 80),
+    payloadSummary:
+      payload === null
+        ? "尚未完成必填欄位"
+        : boundDisplayText(displayPayload(recordType, payload), maxDisplayDetailTextLength),
+    sourceLine: boundDisplayText(`${date} ${time} · source: manual`, maxDisplayDetailTextLength)
+  };
+}
+
 export function glucoseTimingLabel(value: unknown) {
   if (value === "fasting") {
     return "空腹";

@@ -2784,6 +2784,12 @@ def main() -> int:
         ):
             _assert_contains(label, record_display_content, marker)
         for label, marker in (
+            ("manual record confirm display helper", "function manualRecordConfirmDisplayItem("),
+            ("manual record confirm missing payload copy", "尚未完成必填欄位"),
+            ("manual record confirm source line", "source: manual"),
+        ):
+            _assert_contains(label, record_display_content, marker)
+        for label, marker in (
             ("record payload sanitizer", "function boundRecordPayload(recordType: string, payload: Record<string, unknown>): Record<string, unknown>"),
             ("record payload value sanitizer", "function boundRecordPayloadValue(value: unknown, depth = 0): unknown"),
             ("record payload raw key guard", "function isRawPayloadKey(key: string)"),
