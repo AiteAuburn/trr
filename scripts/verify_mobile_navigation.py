@@ -17,6 +17,7 @@ FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
 ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
+DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
 ACHIEVEMENT_CATALOG_PATH = REPO_ROOT / "backend" / "app" / "services" / "achievement_catalog.py"
@@ -1198,6 +1199,7 @@ def main() -> int:
     analysis_copy_content = ANALYSIS_COPY_PATH.read_text(encoding="utf-8")
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
+    date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
 
     try:
@@ -3143,9 +3145,6 @@ def main() -> int:
             ("analysis month range option", '{ id: "month", label: "本月" }'),
             ("analysis custom range option", '{ id: "custom", label: "自訂日期區間" }'),
             ("analysis default month range state", 'const [analysisRange, setAnalysisRange] = useState<AnalysisRange>("month");'),
-            ("analysis date bounds helper", "function analysisDateBounds(range: AnalysisRange, customStart: string, customEnd: string)"),
-            ("analysis custom start inclusive midnight", 'edge === "start" ? "00:00:00.000" : "23:59:59.999"'),
-            ("analysis custom end inclusive day", '"23:59:59.999"'),
             ("analysis custom range status display", "const analysisCustomRangeStatusDisplayText = analysisCustomRangeStatusCopy("),
             ("analysis selected date bounds", "const analysisSelectedDateBounds = useMemo("),
             ("analysis local records date bounds", "const { start, end } = analysisSelectedDateBounds;\n    return recordsForDisplay.filter((record) => {"),
@@ -3162,6 +3161,12 @@ def main() -> int:
             ("analysis report end bound", "const endAt = analysisSelectedDateBounds.end.toISOString();"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("analysis date bounds helper", "function analysisDateBounds(range: AnalysisRange, customStart: string, customEnd: string)"),
+            ("analysis custom start inclusive midnight", 'edge === "start" ? "00:00:00.000" : "23:59:59.999"'),
+            ("analysis custom end inclusive day", '"23:59:59.999"'),
+        ):
+            _assert_contains(label, date_time_transforms_content, marker)
         for label, marker in (
             ("analysis custom range status helper", "function analysisCustomRangeStatusCopy(range: AnalysisRange, customStart: string, customEnd: string)"),
             ("analysis custom invalid format status", "自訂日期格式無效；目前改用本月資料。"),

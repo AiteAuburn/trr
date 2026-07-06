@@ -42,6 +42,7 @@
   - `analysisCopy.ts`：Analysis / detailed-report bounded copy and custom-range status messages.
   - `settingsCopy.ts`：Settings navigation, quota/reminder/privacy bounded copy.
   - `subscriptionCopy.ts`：Subscription, account security, profile boundary, and settings subscription section labels / bounded copy.
+  - `dateTimeTransforms.ts`：local date/time input formatting, local date keys, analysis date bounds, and local datetime ISO transforms.
 
 ### Backend
 
@@ -119,6 +120,8 @@ Verification:
 - `cd mobile && rtk npm run quality`
 
 ### Slice 4: Data Transform Helpers
+
+Status: started; date/time transform helpers extracted.
 
 Scope:
 

@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1080: Extract date/time transform helpers
+
+Status: done
+
+Summary:
+
+- Extracted local date/time input formatting, date/time input bounds, local date keys, chart date labels, same-local-day checks, analysis date bounds, and local datetime ISO parsing helpers from `mobile/App.tsx` into `mobile/dateTimeTransforms.ts`.
+- Kept record form validation, History selected date state, Analysis date range behavior, Food Community `eaten_at` conversion, UI copy, and handler call sites unchanged.
+- Removed the now-unused `maxFutureSkewMs` constant from `mobile/App.tsx`; the equivalent parser guard lives with `parseLocalDateTimeInput()` in `mobile/dateTimeTransforms.ts`.
+- Updated the navigation verifier so Analysis date-bound logic guards now inspect `mobile/dateTimeTransforms.ts`, while render/input bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to mark Slice 4 started with date/time transform extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1079: Extract settings subscription labels
 
 Status: done

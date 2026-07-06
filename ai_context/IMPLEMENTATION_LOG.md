@@ -15,6 +15,39 @@
 
 ## 2026-07-06
 
+### T1080 extract date/time transform helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/dateTimeTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted local date/time input formatting, date/time input bounds, local date keys, chart date labels, same-local-day checks, Analysis date bounds, and local datetime ISO parsing helpers from `mobile/App.tsx` into `mobile/dateTimeTransforms.ts`.
+- Kept existing record form validation, History selected date state, Analysis date range behavior, Food Community `eaten_at` conversion, UI copy, and handler call sites unchanged.
+- Removed the now-unused `maxFutureSkewMs` constant from `mobile/App.tsx`; the equivalent parser guard lives with `parseLocalDateTimeInput()` in `mobile/dateTimeTransforms.ts`.
+- Updated the navigation verifier so Analysis date-bound logic guards now inspect `mobile/dateTimeTransforms.ts`, while render/input bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to mark Slice 4 started with date/time transform extraction.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 4 with parse-preview bounding, record cache bounding, daily transcript retention, or analysis metric transforms.
+
 ### T1079 extract settings subscription labels
 
 類型：mobile / refactor / verifier / docs
