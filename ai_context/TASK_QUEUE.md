@@ -124,6 +124,27 @@ None.
 
 ## Done
 
+### T1067: Extract static navigation config
+
+Status: done
+
+Summary:
+
+- Extracted `AppScreen`, primary tab config, MVP flow steps, `screenChrome`, first-version `menuScreens`, and debug-gated `visualSmokeRouteJumps` from `mobile/App.tsx` into `mobile/navigationConfig.ts`.
+- Kept the normal menu limited to `今日錄音`, `歷史紀錄`, `基本分析`, and `設定`.
+- Updated mobile navigation, UI spec coverage, and visual-smoke route verifiers so static route/config ownership is checked in `mobile/navigationConfig.ts` while render/handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to mark Slice 1 and Slice 2 as complete.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1066: Add refactor roadmap and extract record display helpers
 
 Status: done

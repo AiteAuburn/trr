@@ -11,6 +11,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
+NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 SPEC_PATH = REPO_ROOT / "ai_context" / "UI_UX_SPEC.md"
 HARNESS_PATH = REPO_ROOT / "scripts" / "generate_mobile_visual_smoke_harness.py"
 EXPECTED_APP_SCREEN_COUNT = 41
@@ -140,13 +141,13 @@ def _assert_contains(name: str, haystack: str, needle: str) -> None:
         raise AssertionError(f"{name} missing expected marker: {needle}")
 
 
-def verify(spec_content: str, app_content: str) -> str:
+def verify(spec_content: str, app_content: str, navigation_content: str) -> str:
     spec_headings = _spec_headings(spec_content)
-    app_screens = _screen_union(app_content)
-    chrome_keys = _screen_chrome_keys(app_content)
-    menu_destinations = _menu_destinations(app_content)
-    primary_destinations = _primary_destinations(app_content)
-    visual_smoke_destinations = _visual_smoke_destinations(app_content)
+    app_screens = _screen_union(navigation_content)
+    chrome_keys = _screen_chrome_keys(navigation_content)
+    menu_destinations = _menu_destinations(navigation_content)
+    primary_destinations = _primary_destinations(navigation_content)
+    visual_smoke_destinations = _visual_smoke_destinations(navigation_content)
     harness_destinations = _harness_destinations(HARNESS_PATH.read_text(encoding="utf-8"))
 
     if len(app_screens) != EXPECTED_APP_SCREEN_COUNT:
@@ -217,6 +218,7 @@ def main() -> int:
             verify(
                 SPEC_PATH.read_text(encoding="utf-8"),
                 APP_PATH.read_text(encoding="utf-8"),
+                NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8"),
             )
         )
     except AssertionError as exc:

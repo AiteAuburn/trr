@@ -29,6 +29,7 @@
   - `authProviderChallenge.ts`：OIDC challenge helper。
   - `modelStorage.ts`：本機模型清單與下載狀態。
   - `nativeLocalModels.ts`：native Whisper / Llama bridge。
+  - `navigationConfig.ts`：`AppScreen` route union、primary screens、MVP flow、screen chrome、first-version menu 與 visual-smoke route jump config。
   - `recordDisplay.ts`：record 顯示 helper 與每日紀錄 section config。
 
 ### Backend
@@ -60,7 +61,7 @@
 
 ### Slice 1: Record Display Helpers
 
-Status: started.
+Status: done.
 
 Scope:
 
@@ -76,6 +77,8 @@ Verification:
 - `rtk git diff --check`
 
 ### Slice 2: Static Screen/Menu Config
+
+Status: done.
 
 Scope:
 

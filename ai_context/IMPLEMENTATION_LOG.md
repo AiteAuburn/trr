@@ -15,6 +15,43 @@
 
 ## 2026-07-06
 
+### T1067 extract static navigation config
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/navigationConfig.ts`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted the `AppScreen` route union, primary tab config, MVP flow steps, `screenChrome`, first-version `menuScreens`, and debug-gated `visualSmokeRouteJumps` from `mobile/App.tsx` into `mobile/navigationConfig.ts`.
+- Kept normal user menu exposure limited to first-version priorities: `今日錄音`, `歷史紀錄`, `基本分析`, and `設定`.
+- Updated source-level verifiers so static route/config ownership is checked in `mobile/navigationConfig.ts`, while render branches, wrappers, accessibility, and side-effect guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to mark record display helper extraction and static navigation config extraction complete.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:ui-spec-coverage` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue with the next safe slice: bounded status/copy helper extraction.
+
 ### T1066 add refactor roadmap and extract record display helpers
 
 類型：mobile / refactor / docs

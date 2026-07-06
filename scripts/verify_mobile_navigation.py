@@ -9,6 +9,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
+NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
 README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
@@ -176,17 +177,10 @@ def _screen_union(content: str) -> set[str]:
 
 
 def _screen_chrome_keys(content: str) -> set[str]:
-    block = _screen_chrome_block(content)
-    return set(re.findall(r"^\s+([A-Za-z][A-Za-z0-9]*): \{", block, flags=re.MULTILINE))
-
-
-def _screen_chrome_block(content: str) -> str:
-    block = _match_block(
-        content,
-        r"const screenChrome:[\s\S]*?= \{([\s\S]*?)\};\n\nconst menuScreens",
-        "screenChrome",
-    )
-    return block
+    keys = set(re.findall(r"^\s+([A-Za-z][A-Za-z0-9]*): \{ subtitle:", content, flags=re.MULTILINE))
+    if not keys:
+        raise AssertionError("Could not find screenChrome keys.")
+    return keys
 
 
 def _menu_destinations(content: str) -> set[str]:
@@ -1190,6 +1184,7 @@ def _assert_text_input_accessibility_labels_are_bounded(content: str) -> None:
 
 def main() -> int:
     content = APP_PATH.read_text(encoding="utf-8")
+    navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
 
@@ -1201,11 +1196,11 @@ def main() -> int:
         _assert_text_input_placeholders_are_static_and_bounded(content)
         _assert_text_input_accessibility_labels_are_bounded(content)
 
-        screens = _screen_union(content)
-        chrome_keys = _screen_chrome_keys(content)
+        screens = _screen_union(navigation_content)
+        chrome_keys = _screen_chrome_keys(navigation_content)
         checked_screens = _current_screen_checks(content)
-        menu_destinations = _menu_destinations(content)
-        menu_labels = _menu_labels(content)
+        menu_destinations = _menu_destinations(navigation_content)
+        menu_labels = _menu_labels(navigation_content)
         future_targets = _future_targets(content)
 
         _assert_exact("screenChrome keys", chrome_keys, screens)
@@ -1233,7 +1228,7 @@ def main() -> int:
         )
         _assert_contains(
             "minimal home chrome keeps menu fallback",
-            content,
+            navigation_content,
             'today: { subtitle: "" }',
         )
         for label, marker in (
@@ -1273,12 +1268,12 @@ def main() -> int:
             raise AssertionError("DeepSeek must be preferred in both boot and settings reconnect model selection paths.")
         _assert_not_contains(
             "minimal home chrome must not override hamburger action",
-            _screen_chrome_block(content),
+            navigation_content,
             'today: { subtitle: "", backTo:',
         )
         _assert_not_contains(
             "minimal home chrome must not set close/back action label",
-            _screen_chrome_block(content),
+            navigation_content,
             'today: { subtitle: "", actionLabel:',
         )
         _assert_contains(
@@ -1287,7 +1282,7 @@ def main() -> int:
             '<Text style={styles.menuButtonText}>{currentChrome.actionLabel ?? "☰"}</Text>',
         )
         primary_screens_block = _match_block(
-            content,
+            navigation_content,
             r"const primaryScreens: Array<\{ id: AppScreen; label: string \}> = \[([\s\S]*?)\n\];",
             "primaryScreens block",
         )
@@ -1303,7 +1298,7 @@ def main() -> int:
             ("achievements primary tab", 'id: "achievements"'),
         ):
             _assert_not_contains(label, primary_screens_block, marker)
-        screen_chrome_block = _screen_chrome_block(content)
+        screen_chrome_block = navigation_content
         for label, marker in (
             ("history uses hamburger chrome fallback", 'history: { subtitle: "查詢過去的血糖、飲食與運動紀錄。" }'),
             ("analysis uses hamburger chrome fallback", 'analysis: { subtitle: "查看最近血糖趨勢與簡單摘要。" }'),
@@ -1318,7 +1313,7 @@ def main() -> int:
         for target in sorted(EXPECTED_MENU_BACK_TARGETS):
             _assert_contains(
                 f"{target} back-to-menu chrome",
-                content,
+                navigation_content,
                 f'{target}: {{ subtitle: ',
             )
 
@@ -2161,7 +2156,7 @@ def main() -> int:
         )
         _assert_contains(
             "visual smoke route jump list",
-            content,
+            navigation_content,
             "const visualSmokeRouteJumps",
         )
         _assert_contains(
@@ -2357,7 +2352,6 @@ def main() -> int:
             ("minimal home mic press out", "onPressOut={releaseRecordingPreview}"),
             ("recording release wrapper", "function releaseRecordingPreview()"),
             ("minimal home conditional subtitle", "{currentChrome.subtitle ? <Text style={styles.subtitle}>{currentChrome.subtitle}</Text> : null}"),
-            ("minimal home empty subtitle", 'today: { subtitle: "" }'),
             ("native audio import", 'import { Audio } from "expo-av";'),
             ("native audio recording ref", "const audioRecordingRef = useRef<Audio.Recording | null>(null);"),
             ("native recording start guard", "const recordingStartInFlight = useRef(false);"),
@@ -2685,6 +2679,7 @@ def main() -> int:
             ("record delete disabled state", "accessibilityState={{ disabled: isBusy }}"),
         ):
             _assert_contains(label, content, marker)
+        _assert_contains("minimal home empty subtitle", navigation_content, 'today: { subtitle: "" }')
         _assert_not_contains(
             "home quick-entry action",
             content,
@@ -3805,10 +3800,6 @@ def main() -> int:
             ("health meter accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.healthMeterAccessibility}"),
             ("community post accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPostAccessibility}"),
             ("community privacy accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}"),
-            ("food community visual smoke promoted label", '{ id: "community", label: "食物社群" }'),
-            ("food community screen chrome backend-ready subtitle", 'community: { subtitle: "同步食物升糖資料庫、分享、點數與公開排名。", backTo: "futureModules", actionLabel: "‹" }'),
-            ("ranking screen chrome backend-ready subtitle", 'ranking: { subtitle: "查看 opt-in 公開社群排行與非敏感分數。", backTo: "futureModules", actionLabel: "‹" }'),
-            ("store screen chrome backend-ready subtitle", 'store: { subtitle: "同步點數商城、兌換券與購物車邊界。", backTo: "menu", actionLabel: "‹" }'),
             ("store backend-ready remaining boundary", '["仍待完成", "庫存、出貨訂單、付款與 rollback"]'),
             ("future module food community database card title", 'title: "食物社群資料庫"'),
             ("future module food community database card readiness", "資料庫、分享、點數與排行榜已接 backend；貼文留言治理仍待正式開放。"),
@@ -3843,10 +3834,17 @@ def main() -> int:
             ("future preview secondary CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("food community visual smoke promoted label", '{ id: "community", label: "食物社群" }'),
+            ("food community screen chrome backend-ready subtitle", 'community: { subtitle: "同步食物升糖資料庫、分享、點數與公開排名。", backTo: "futureModules", actionLabel: "‹" }'),
+            ("ranking screen chrome backend-ready subtitle", 'ranking: { subtitle: "查看 opt-in 公開社群排行與非敏感分數。", backTo: "futureModules", actionLabel: "‹" }'),
+            ("store screen chrome backend-ready subtitle", 'store: { subtitle: "同步點數商城、兌換券與購物車邊界。", backTo: "menu", actionLabel: "‹" }'),
+        ):
+            _assert_contains(label, navigation_content, marker)
         _assert_not_contains(
             "food community hidden from first-version menu",
             _match_block(
-                content,
+                navigation_content,
                 r"const menuScreens:[\s\S]*?= \[([\s\S]*?)\];",
                 "menuScreens",
             ),
@@ -3855,7 +3853,7 @@ def main() -> int:
         _assert_not_contains(
             "achievements hidden from first-version menu",
             _match_block(
-                content,
+                navigation_content,
                 r"const menuScreens:[\s\S]*?= \[([\s\S]*?)\];",
                 "menuScreens",
             ),
@@ -3864,7 +3862,7 @@ def main() -> int:
         _assert_not_contains(
             "store hidden from first-version menu",
             _match_block(
-                content,
+                navigation_content,
                 r"const menuScreens:[\s\S]*?= \[([\s\S]*?)\];",
                 "menuScreens",
             ),
