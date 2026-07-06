@@ -124,6 +124,22 @@ None.
 
 ## Done
 
+### T1071: Extract auth and backend status copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted backend reconnect, backend URL change, dev-login disabled, dev reset, local session clear, auth refresh, OIDC exchange, logout, logout-all, and session-list bounded status helpers from `mobile/App.tsx` into `mobile/authStatusCopy.ts`.
+- Kept auth provider challenge validation, token storage, backend requests, session handling, UI copy, and handler call sites unchanged.
+- Updated the refactor roadmap to note that Slice 3 now also covers auth / backend session status copy extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
 ### T1070: Extract record status copy helpers
 
 Status: done

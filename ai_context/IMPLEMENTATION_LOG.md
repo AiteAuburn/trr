@@ -15,6 +15,35 @@
 
 ## 2026-07-06
 
+### T1071 extract auth and backend status copy helpers
+
+類型：mobile / refactor / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/authStatusCopy.ts`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted backend reconnect, backend URL change, dev-login disabled, dev reset, local session clear, auth refresh, OIDC exchange, logout, logout-all, and session-list bounded status helpers from `mobile/App.tsx` into `mobile/authStatusCopy.ts`.
+- Kept existing auth provider challenge validation, token storage, backend requests, session handling, UI copy, and handler call sites unchanged.
+- Updated the refactor roadmap to record that Slice 3 now also covers auth / backend session status copy extraction.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 3 with model/native/settings/future status copy helpers, or move to Slice 4 data transform helpers once copy extraction is sufficient.
+
 ### T1070 extract record status copy helpers
 
 類型：mobile / refactor / docs
