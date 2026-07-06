@@ -56,7 +56,7 @@ import {
   emptyRecordEditFields,
   recordEditFieldMaxLength,
   recordPayloadToEditFields,
-  splitListText,
+  validateRecordForm,
   type RecordEditFields
 } from "./recordEditTransforms";
 import {
@@ -369,7 +369,6 @@ import {
   localDateKey,
   localDateTimeInputs,
   localDateTimeToIso,
-  parseLocalDateTimeInput,
   startOfCurrentMonth
 } from "./dateTimeTransforms";
 
@@ -1189,9 +1188,6 @@ const privacyControlRows = [
 
 const maxDateInputLength = 10;
 const maxTimeInputLength = 5;
-const maxFormTextLength = 160;
-const maxFormLongTextLength = 500;
-const maxFormJsonTextLength = 4000;
 const maxListItems = 12;
 const maxIdentifierTextLength = 128;
 const maxEmailTextLength = 160;
@@ -1474,10 +1470,6 @@ function buildDailyRecordSectionDisplayItems(records: PendingRecord[]) {
       entries
     };
   });
-}
-
-function isTooLong(value: string, maxLength = maxFormTextLength) {
-  return value.trim().length > maxLength;
 }
 
 function boundNativeDebugInput(value: string) {
@@ -2729,87 +2721,6 @@ function trialDaysLeft(trialEndsAt?: string | null) {
     return null;
   }
   return Math.max(0, Math.ceil((end - Date.now()) / 86_400_000));
-}
-
-function validateRecordForm(
-  recordType: string,
-  fields: RecordEditFields,
-  dateText: string,
-  timeText: string
-) {
-  try {
-    parseLocalDateTimeInput(dateText, timeText);
-  } catch (error) {
-    return error instanceof Error ? error.message : "日期或時間格式不正確";
-  }
-
-  if (recordType === "glucose") {
-    const value = Number(fields.glucoseValue);
-    if (!fields.glucoseValue.trim() || !Number.isFinite(value) || value < 20 || value > 600) {
-      return "血糖數值需介於 20 到 600";
-    }
-    return null;
-  }
-
-  if (recordType === "meal") {
-    const foodItems = splitListText(fields.foodItems);
-    if (isTooLong(fields.foodItems, maxFormLongTextLength)) {
-      return "飲食內容過長，請縮短後再儲存";
-    }
-    if (foodItems.length === 0) {
-      return "請至少輸入一項飲食內容";
-    }
-    return null;
-  }
-
-  if (recordType === "exercise") {
-    if (isTooLong(fields.exerciseActivity)) {
-      return "運動類型過長，請縮短後再儲存";
-    }
-    if (!fields.exerciseActivity.trim()) {
-      return "請輸入運動類型";
-    }
-    if (fields.exerciseMinutes.trim()) {
-      const minutes = Number(fields.exerciseMinutes);
-      if (!Number.isFinite(minutes) || minutes < 0 || minutes > 1440) {
-        return "運動時長需介於 0 到 1440 分鐘";
-      }
-    }
-    return null;
-  }
-
-  if (recordType === "medication") {
-    if (isTooLong(fields.medicationName) || isTooLong(fields.medicationDose)) {
-      return "用藥欄位過長，請縮短後再儲存";
-    }
-    if (!fields.medicationName.trim()) {
-      return "請輸入藥名或胰島素描述";
-    }
-    return null;
-  }
-
-  if (recordType === "note") {
-    if (isTooLong(fields.noteKind) || isTooLong(fields.noteTags, maxFormLongTextLength)) {
-      return "備註欄位過長，請縮短後再儲存";
-    }
-    if (!fields.noteKind.trim() && splitListText(fields.noteTags).length === 0) {
-      return "備註需至少輸入類型或標籤";
-    }
-    return null;
-  }
-
-  try {
-    if (fields.fallbackJson.length > maxFormJsonTextLength) {
-      return "payload_json 過長，請縮短後再儲存";
-    }
-    const payload = JSON.parse(fields.fallbackJson) as unknown;
-    if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
-      return "payload_json 必須是物件";
-    }
-  } catch {
-    return "payload_json 不是有效 JSON";
-  }
-  return null;
 }
 
 async function requestJson<T>(

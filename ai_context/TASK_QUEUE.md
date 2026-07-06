@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1094: Extract record edit validation helper
+
+Status: done
+
+Summary:
+
+- Extracted record/manual edit validation and form text-length validation helper from `mobile/App.tsx` into `mobile/recordEditTransforms.ts`.
+- Kept preview edit handlers, manual-record handlers, update/create submit handlers, payload building, UI copy, navigation, and backend record flow unchanged.
+- Updated the navigation verifier so edit validation ownership guards inspect `mobile/recordEditTransforms.ts`, while record edit render and submit guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the edit validation boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1093: Extract record edit payload transforms
 
 Status: done
