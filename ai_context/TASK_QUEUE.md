@@ -124,6 +124,23 @@ None.
 
 ## Done
 
+### T1078: Extract subscription and account-security copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted account-security boundary, profile no-action boundary, subscription boundary, subscription sync label, subscription-management boundary, and subscription-management status helpers from `mobile/App.tsx` into `mobile/subscriptionCopy.ts`.
+- Kept subscription UI, account-security UI, auth/session handlers, entitlement sync behavior, UI copy, and render bindings unchanged.
+- Left `settingsSubscriptionSectionLabels()` in `mobile/App.tsx` for a smaller slice and to avoid mixing the large settings label object into this move.
+- Updated the refactor roadmap to note that Slice 3 now also covers subscription / account-security copy extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
 ### T1077: Extract settings copy helpers
 
 Status: done

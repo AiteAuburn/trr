@@ -15,6 +15,35 @@
 
 ## 2026-07-06
 
+### T1078 extract subscription and account-security copy helpers
+
+類型：mobile / refactor / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/subscriptionCopy.ts`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted account-security boundary, profile no-action boundary, subscription boundary, subscription sync label, subscription-management boundary, and subscription-management status helpers from `mobile/App.tsx` into `mobile/subscriptionCopy.ts`.
+- Kept existing subscription UI, account-security UI, auth/session handlers, entitlement sync behavior, UI copy, and render bindings unchanged.
+- Left `settingsSubscriptionSectionLabels()` in `mobile/App.tsx` for a smaller slice and to avoid mixing the large settings label object into this move.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 3 with remaining settings section label helpers, or move to Slice 4 data transform helpers once copy extraction is sufficient.
+
 ### T1077 extract settings copy helpers
 
 類型：mobile / refactor / verifier / docs
