@@ -15,6 +15,38 @@
 
 ## 2026-07-06
 
+### T1087 extract history screen detail-mode data boundary
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/historyScreenData.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted `HistoryDetailMode`, History detail-mode option config, and bounded detail-mode display item shaping from `mobile/App.tsx` into `mobile/historyScreenData.ts`.
+- Kept History render JSX, calendar behavior, detail-mode selected-state binding, detail-mode press handlers, raw/structured branch behavior, UI copy, and navigation unchanged.
+- Updated the navigation verifier so History detail-mode display helper guards inspect `mobile/historyScreenData.ts`, while History render and handler bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the History detail-mode data boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1086 extract analysis screen range data boundary
 
 類型：mobile / refactor / verifier / docs

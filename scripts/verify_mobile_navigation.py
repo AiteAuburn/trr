@@ -16,6 +16,7 @@ DAILY_TRANSCRIPT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dailyTranscriptTransf
 RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
 NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
+HISTORY_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "historyScreenData.ts"
 ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
 ANALYSIS_DATA_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisDataTransforms.ts"
 ANALYSIS_METRIC_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisMetricTransforms.ts"
@@ -1204,6 +1205,7 @@ def main() -> int:
     recording_copy_content = RECORDING_COPY_PATH.read_text(encoding="utf-8")
     native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
     first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
+    history_screen_data_content = HISTORY_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     analysis_copy_content = ANALYSIS_COPY_PATH.read_text(encoding="utf-8")
     analysis_data_content = ANALYSIS_DATA_TRANSFORMS_PATH.read_text(encoding="utf-8")
     analysis_metric_content = ANALYSIS_METRIC_TRANSFORMS_PATH.read_text(encoding="utf-8")
@@ -2897,7 +2899,6 @@ def main() -> int:
             ("history daily entry press handler", "function pressHistoryDailyEntry("),
             ("history daily entry binding", "onPress={() => pressHistoryDailyEntry(item)}"),
             ("history calendar selected state", "accessibilityState={{ selected: item.isSelected }}"),
-            ("history detail mode display item", "function historyDetailModeDisplayItem(value: { id: HistoryDetailMode; label: string; accessibilityCopy: string })"),
             ("history detail mode display options", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModes.map(historyDetailModeDisplayItem), [])"),
             ("history detail mode press handler", "function pressHistoryDetailModeOption(item: ReturnType<typeof historyDetailModeDisplayItem>)"),
             ("history detail mode binding", "onPress={() => pressHistoryDetailModeOption(item)}"),
@@ -2921,6 +2922,11 @@ def main() -> int:
             ("daily section meal time label", "用餐時間"),
         ):
             _assert_contains(label, content, marker)
+        _assert_contains(
+            "history detail mode display item",
+            history_screen_data_content,
+            "function historyDetailModeDisplayItem(value: { id: HistoryDetailMode; label: string; accessibilityCopy: string })",
+        )
         _assert_contains(
             "history cursor merge helper",
             record_bounds_content,

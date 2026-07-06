@@ -255,6 +255,11 @@ import {
   noRealRecordHealthValueCopy
 } from "./historyCopy";
 import {
+  historyDetailModeDisplayItem,
+  historyDetailModes,
+  type HistoryDetailMode
+} from "./historyScreenData";
+import {
   analysisChartEmptyCopy,
   analysisCustomApplyStatusMessage,
   analysisCustomRangeStatusCopy,
@@ -769,7 +774,6 @@ function boundRecordEditField<K extends keyof RecordEditFields>(
 }
 
 type ManualRecordType = "glucose" | "meal" | "exercise" | "medication" | "note";
-type HistoryDetailMode = "structured" | "raw";
 type AchievementCategory = "glucose" | "meal" | "exercise";
 type AchievementKind = "cumulative" | "streak";
 type FoodCommunityCategory =
@@ -891,11 +895,6 @@ const manualRecordTypes: Array<{ id: ManualRecordType; label: string }> = [
   { id: "exercise", label: "運動" },
   { id: "medication", label: "用藥" },
   { id: "note", label: "備註" }
-];
-
-const historyDetailModes: Array<{ id: HistoryDetailMode; label: string; accessibilityCopy: string }> = [
-  { id: "structured", label: "AI 整理", accessibilityCopy: "查看 AI 分析整理後的紀錄" },
-  { id: "raw", label: "原始紀錄", accessibilityCopy: "查看原始語音轉文字內容" }
 ];
 
 const achievementLevels = [10, 50, 100, 150, 200, 250];
@@ -2327,15 +2326,6 @@ function manualRecordTypeDisplayItem(value: { id: ManualRecordType; label: strin
     value: value.id,
     label,
     accessibilityLabel: boundDisplayText(`選擇${label}紀錄類型，不呼叫 AI 或 parser`, maxDisplayDetailTextLength)
-  };
-}
-
-function historyDetailModeDisplayItem(value: { id: HistoryDetailMode; label: string; accessibilityCopy: string }) {
-  const label = boundDisplayText(value.label || "紀錄模式", 60);
-  return {
-    value: value.id,
-    label,
-    accessibilityLabel: boundDisplayText(value.accessibilityCopy || `查看${label}`, maxDisplayDetailTextLength)
   };
 }
 

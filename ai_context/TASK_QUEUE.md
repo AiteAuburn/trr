@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1087: Extract history screen detail-mode data boundary
+
+Status: done
+
+Summary:
+
+- Extracted `HistoryDetailMode`, History detail-mode option config, and bounded detail-mode display item shaping from `mobile/App.tsx` into `mobile/historyScreenData.ts`.
+- Kept History render JSX, calendar behavior, detail-mode selected-state binding, detail-mode press handlers, raw/structured branch behavior, UI copy, and navigation unchanged.
+- Updated the navigation verifier so History detail-mode display helper guards inspect `mobile/historyScreenData.ts`, while History render and handler bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the History detail-mode data boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1086: Extract analysis screen range data boundary
 
 Status: done
