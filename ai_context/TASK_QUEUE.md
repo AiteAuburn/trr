@@ -124,6 +124,22 @@ None.
 
 ## Done
 
+### T1073: Extract report status copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted voice quota, detailed-report, and analysis-report bounded status helpers from `mobile/App.tsx` into `mobile/reportStatusCopy.ts`.
+- Kept voice quota sync, report loading, analysis loading, backend fallback behavior, UI copy, and handler call sites unchanged.
+- Updated the refactor roadmap to note that Slice 3 now also covers report / voice quota status copy extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
 ### T1072: Extract native model status copy helpers
 
 Status: done

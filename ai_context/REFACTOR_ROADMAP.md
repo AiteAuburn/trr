@@ -36,6 +36,7 @@
   - `recordStatusCopy.ts`：record sync / update / delete / manual-create bounded status messages.
   - `authStatusCopy.ts`：backend reconnect / dev reset / auth session bounded status messages.
   - `nativeStatusCopy.ts`：native model debug / local Whisper / local Llama / benchmark bounded status messages.
+  - `reportStatusCopy.ts`：voice quota / analysis report / detailed report bounded status messages.
 
 ### Backend
 
@@ -99,7 +100,7 @@ Verification:
 
 ### Slice 3: Status/Copy Helpers
 
-Status: started; recording / transcript-review, parser / AI save / AI candidate, record sync / CRUD, auth / backend session, and native model debug copy extracted.
+Status: started; recording / transcript-review, parser / AI save / AI candidate, record sync / CRUD, auth / backend session, native model debug, and report / voice quota copy extracted.
 
 Scope:
 
