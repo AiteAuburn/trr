@@ -15,6 +15,38 @@
 
 ## 2026-07-06
 
+### T1082 extract daily transcript transform helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/dailyTranscriptTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted daily-record date key selection, daily-record summary text, retained transcript entry bounding, transcript display item shaping, and daily-record save request building from `mobile/App.tsx` into `mobile/dailyTranscriptTransforms.ts`.
+- Kept Today recording flow, AI review save payload shape, retained transcript filtering, same-day merge behavior, UI copy, navigation, backend endpoint, and backend contract unchanged.
+- Updated the navigation verifier so daily-record transcript and save-request helper guards inspect `mobile/dailyTranscriptTransforms.ts`, while state, render, endpoint, and handler binding guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now covers daily transcript transform extraction.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 4 with analysis metric transforms or move toward first-version screen component boundaries.
+
 ### T1081 extract record bounds transform helpers
 
 類型：mobile / refactor / verifier / docs

@@ -12,6 +12,7 @@ APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
 RECORD_BOUNDS_PATH = REPO_ROOT / "mobile" / "recordBounds.ts"
+DAILY_TRANSCRIPT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dailyTranscriptTransforms.ts"
 RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
 NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
@@ -545,7 +546,7 @@ def _verify_food_community_category_contract(content: str) -> None:
             )
 
 
-def _verify_daily_record_contract(content: str) -> None:
+def _verify_daily_record_contract(content: str, daily_transcript_content: str) -> None:
     backend_api_content = DAILY_RECORDS_API_PATH.read_text(encoding="utf-8")
     backend_schema_content = DAILY_RECORD_SCHEMA_PATH.read_text(encoding="utf-8")
     backend_model_content = DAILY_RECORD_MODEL_PATH.read_text(encoding="utf-8")
@@ -572,7 +573,7 @@ def _verify_daily_record_contract(content: str) -> None:
         ("daily record backend merge test", backend_tests_content, "test_daily_record_save_updates_same_day_instead_of_creating_second_daily_record"),
         ("daily record backend one row assertion", backend_tests_content, "assert len(daily_records) == 1"),
         ("daily record mobile save endpoint", content, '"/daily-records/save"'),
-        ("daily record mobile save request helper", content, "function buildDailyRecordSaveRequest("),
+        ("daily record mobile save request helper", daily_transcript_content, "function buildDailyRecordSaveRequest("),
         ("daily record mobile transactional response", content, "const saveResponse = await requestJson<DailyRecordSaveResponse>"),
     ):
         _assert_contains(label, haystack, marker)
@@ -1195,6 +1196,7 @@ def main() -> int:
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
     record_bounds_content = RECORD_BOUNDS_PATH.read_text(encoding="utf-8")
+    daily_transcript_content = DAILY_TRANSCRIPT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     recording_copy_content = RECORDING_COPY_PATH.read_text(encoding="utf-8")
     native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
     first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
@@ -1234,7 +1236,7 @@ def main() -> int:
 
         _verify_achievement_contract(content)
         _verify_food_community_category_contract(content)
-        _verify_daily_record_contract(content)
+        _verify_daily_record_contract(content, daily_transcript_content)
         _verify_basic_report_contract()
 
         _assert_contains(
@@ -2611,11 +2613,7 @@ def main() -> int:
             ("daily record leave guard confirm binding", "onPress={confirmDailyRecordLeaveGuard}"),
             ("daily record same-day merge helper", "function mergeSameDayParsePreviewDraft("),
             ("daily record same-day merge records", "records: [...current.records, ...incoming.records].slice(0, maxMobilePreviewRecords)"),
-            ("daily record transcript entry type", "type DailyTranscriptEntry = {"),
             ("daily record transcript retained state", "const [dailyTranscriptEntries, setDailyTranscriptEntries] = useState<DailyTranscriptEntry[]>([]);"),
-            ("daily record transcript create helper", "function createDailyTranscriptEntry("),
-            ("daily record transcript bound helper", "function boundDailyTranscriptEntries(entries: DailyTranscriptEntry[]): DailyTranscriptEntry[]"),
-            ("daily record transcript display retained entries", "function dailyTranscriptDisplayItems(\n  preview: ParsePreviewResponse | null,\n  entries: DailyTranscriptEntry[]"),
             ("daily record parse existing draft capture", "const existingDailyPreview = preview;"),
             ("daily record parse occurred timestamp", "const parseOccurredAt = new Date().toISOString();"),
             ("daily record parse sends shared timestamp", "occurred_at: parseOccurredAt"),
@@ -2634,7 +2632,6 @@ def main() -> int:
             ("daily record reorganization summary display", "const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayText("),
             ("daily record reorganization summary render", "<Text style={styles.evidence}>{dailyRecordReorganizationDisplay}</Text>"),
             ("daily record save response type", "type DailyRecordSaveResponse = {"),
-            ("daily record save payload helper", "function buildDailyRecordSaveRequest("),
             ("daily record save endpoint", '"/daily-records/save"'),
             ("daily record save payload binding", "body: JSON.stringify(buildDailyRecordSaveRequest(preview, recordsToSave, dailyTranscriptEntries))"),
             ("daily record save clears retained transcripts", "setDailyTranscriptEntries([]);"),
@@ -2648,6 +2645,14 @@ def main() -> int:
             ("daily record category blank copy", "沒有提到的欄位保持空白"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("daily record transcript entry type", "type DailyTranscriptEntry = {"),
+            ("daily record transcript create helper", "function createDailyTranscriptEntry("),
+            ("daily record transcript bound helper", "function boundDailyTranscriptEntries(entries: DailyTranscriptEntry[]): DailyTranscriptEntry[]"),
+            ("daily record transcript display retained entries", "function dailyTranscriptDisplayItems(\n  preview: ParsePreviewResponse | null,\n  entries: DailyTranscriptEntry[]"),
+            ("daily record save payload helper", "function buildDailyRecordSaveRequest("),
+        ):
+            _assert_contains(label, daily_transcript_content, marker)
         _assert_contains(
             "daily record fixed save outside scroll",
             content,

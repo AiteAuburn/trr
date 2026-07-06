@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1082: Extract daily transcript transform helpers
+
+Status: done
+
+Summary:
+
+- Extracted daily-record date key selection, daily-record summary text, retained transcript entry bounding, transcript display item shaping, and daily-record save request building from `mobile/App.tsx` into `mobile/dailyTranscriptTransforms.ts`.
+- Kept Today recording flow, AI review save payload shape, retained transcript filtering, same-day merge behavior, UI copy, navigation, backend endpoint, and backend contract unchanged.
+- Updated the navigation verifier so daily-record transcript and save-request helper guards inspect `mobile/dailyTranscriptTransforms.ts`, while state, render, endpoint, and handler binding guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now covers daily transcript transform extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1081: Extract record bounds transform helpers
 
 Status: done

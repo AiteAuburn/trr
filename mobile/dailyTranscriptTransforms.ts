@@ -1,0 +1,170 @@
+import { localDateKey } from "./dateTimeTransforms";
+import { dailyRecordSectionDefinitions } from "./recordDisplay";
+import type { ParsePreviewResponse, PendingRecord } from "./recordBounds";
+
+const maxListItems = 12;
+const maxDisplayTextLength = 160;
+const maxIdentifierTextLength = 128;
+const maxDisplayDetailTextLength = 240;
+const maxMobileCountValue = 1_000_000;
+const maxTranscriptTextLength = 1200;
+
+export type DailyTranscriptEntry = {
+  id: string;
+  occurred_at: string;
+  source_text: string;
+  source: "voice" | "text";
+};
+
+function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
+  return value.slice(0, maxLength);
+}
+
+function boundIdentifier(value: string) {
+  return boundDisplayText(value, maxIdentifierTextLength);
+}
+
+function clampNumber(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function recordTimeDisplay(value?: string) {
+  if (!value) {
+    return "尚無";
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "尚無";
+  }
+  return boundDisplayText(
+    date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit"
+    }),
+    40
+  );
+}
+
+export function dailyRecordKeyFromRecords(records: PendingRecord[]) {
+  const firstRecord = records[0];
+  return firstRecord ? localDateKey(firstRecord.occurred_at) : "";
+}
+
+export function dailyRecordSummaryText(records: PendingRecord[]) {
+  const counts = new Map<string, number>();
+  for (const record of records) {
+    counts.set(record.record_type, (counts.get(record.record_type) ?? 0) + 1);
+  }
+  const parts = dailyRecordSectionDefinitions
+    .map((definition) => {
+      const count = definition.acceptedRecordTypes.reduce(
+        (sum, recordType) => sum + (counts.get(recordType) ?? 0),
+        0
+      );
+      return count > 0 ? `${definition.title.replace("紀錄", "")}${clampNumber(count, 0, maxMobileCountValue)} 筆` : "";
+    })
+    .filter(Boolean);
+  if (parts.length === 0) {
+    return boundDisplayText("AI 已完成整理，但今天尚未產生可儲存的分類紀錄。", maxDisplayDetailTextLength);
+  }
+  return boundDisplayText(
+    `AI 已整理今天內容：${parts.join("、")}。每次新增、編輯或刪除後，後續會重新整理今日摘要與分類內容。`,
+    maxDisplayDetailTextLength
+  );
+}
+
+export function createDailyTranscriptEntry(
+  occurredAt: string,
+  sourceText: string,
+  source: "voice" | "text"
+): DailyTranscriptEntry | null {
+  const boundedText = boundDisplayText(sourceText, maxTranscriptTextLength);
+  if (!boundedText.trim()) {
+    return null;
+  }
+  const safeOccurredAt = boundDisplayText(occurredAt, 40);
+  return {
+    id: boundIdentifier(`daily-transcript-${safeOccurredAt}-${source}`),
+    occurred_at: safeOccurredAt,
+    source_text: boundedText,
+    source
+  };
+}
+
+export function boundDailyTranscriptEntries(entries: DailyTranscriptEntry[]): DailyTranscriptEntry[] {
+  return entries.slice(-maxListItems).map((entry, index) => ({
+    id: boundIdentifier(entry.id || `daily-transcript-${index}`),
+    occurred_at: boundDisplayText(entry.occurred_at, 40),
+    source_text: boundDisplayText(entry.source_text, maxTranscriptTextLength),
+    source: (entry.source === "voice" ? "voice" : "text") as DailyTranscriptEntry["source"]
+  }));
+}
+
+export function dailyTranscriptDisplayItems(
+  preview: ParsePreviewResponse | null,
+  entries: DailyTranscriptEntry[]
+) {
+  if (!preview) {
+    return [];
+  }
+  const previewDayKey = dailyRecordKeyFromRecords(preview.records);
+  const retainedItems = entries
+    .filter((entry) => !previewDayKey || localDateKey(entry.occurred_at) === previewDayKey)
+    .slice(-maxListItems)
+    .map((entry, index) => ({
+      key: `daily-transcript-retained-${boundIdentifier(entry.id)}-${clampNumber(index, 0, maxListItems)}`,
+      timeLabel: boundDisplayText(recordTimeDisplay(entry.occurred_at), 40),
+      sourceText: boundDisplayText(entry.source_text, maxDisplayDetailTextLength)
+    }))
+    .filter((item) => item.sourceText.length > 0);
+  if (retainedItems.length > 0) {
+    return retainedItems;
+  }
+  const fallbackText = preview.normalized_text || preview.transcript;
+  const segmentItems = preview.segments
+    .slice(0, maxListItems)
+    .map((segment, index) => ({
+      key: `daily-transcript-${boundIdentifier(segment.segment_id)}-${clampNumber(index, 0, maxListItems)}`,
+      timeLabel: boundDisplayText(`第 ${clampNumber(index + 1, 1, maxListItems)} 段`, 40),
+      sourceText: boundDisplayText(segment.source_text, maxDisplayDetailTextLength)
+    }))
+    .filter((item) => item.sourceText.length > 0);
+  if (segmentItems.length > 0) {
+    return segmentItems;
+  }
+  return fallbackText.trim().length > 0
+    ? [
+        {
+          key: "daily-transcript-current",
+          timeLabel: boundDisplayText("本次錄音", 40),
+          sourceText: boundDisplayText(fallbackText, maxDisplayDetailTextLength)
+        }
+      ]
+    : [];
+}
+
+export function dailyTranscriptEntriesForSave(
+  preview: ParsePreviewResponse,
+  entries: DailyTranscriptEntry[]
+) {
+  const previewDayKey = dailyRecordKeyFromRecords(preview.records);
+  return boundDailyTranscriptEntries(
+    entries.filter((entry) => !previewDayKey || localDateKey(entry.occurred_at) === previewDayKey)
+  );
+}
+
+export function buildDailyRecordSaveRequest(
+  preview: ParsePreviewResponse,
+  recordsToSave: PendingRecord[],
+  transcriptEntries: DailyTranscriptEntry[]
+) {
+  const firstRecord = recordsToSave[0];
+  return {
+    profile_id: firstRecord.profile_id,
+    record_date: dailyRecordKeyFromRecords(preview.records) || localDateKey(firstRecord.occurred_at),
+    summary_text: dailyRecordSummaryText(preview.records),
+    records: recordsToSave,
+    transcript_entries: dailyTranscriptEntriesForSave(preview, transcriptEntries),
+    source: "ai_confirmation"
+  };
+}

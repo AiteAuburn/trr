@@ -44,6 +44,7 @@
   - `subscriptionCopy.ts`：Subscription, account security, profile boundary, and settings subscription section labels / bounded copy.
   - `dateTimeTransforms.ts`：local date/time input formatting, local date keys, analysis date bounds, and local datetime ISO transforms.
   - `recordBounds.ts`：parse-preview, pending-record, record-cache, payload, and metadata bounded transforms.
+  - `dailyTranscriptTransforms.ts`：daily-record key / summary, retained transcript entries, transcript display items, and daily-record save request transforms.
 
 ### Backend
 
@@ -122,7 +123,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; date/time transform helpers and record bounds transforms extracted.
+Status: started; date/time, record bounds, and daily transcript transform helpers extracted.
 
 Scope:
 
