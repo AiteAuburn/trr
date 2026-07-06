@@ -309,9 +309,11 @@ import {
   detailedReportMetricRows as buildDetailedReportMetricRows
 } from "./analysisMetricTransforms";
 import {
+  aiReviewDateLabel,
   boundDailyTranscriptEntries,
   buildDailyRecordSaveRequest,
   createDailyTranscriptEntry,
+  dailyRecordDateLabel,
   dailyRecordKeyFromRecords,
   dailyRecordReorganizationDisplayText,
   dailyRecordReorganizationStatusMessage,
@@ -1230,44 +1232,6 @@ const tutorialSteps = [
 
 function normalizeApiBaseUrl(value: string) {
   return value.trim().replace(/\/$/, "");
-}
-
-function aiReviewDateLabel(records: PendingRecord[]) {
-  if (records.length === 0) {
-    return "尚未解析日期時間";
-  }
-  const labels = records.map((record) =>
-    new Date(record.occurred_at).toLocaleString("zh-TW", {
-      month: "numeric",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    })
-  );
-  const uniqueLabels = Array.from(new Set(labels));
-  const label = uniqueLabels.length === 1
-    ? uniqueLabels[0]
-    : `${uniqueLabels[0]} 等 ${uniqueLabels.length} 個時間`;
-  return boundDisplayText(label, 80);
-}
-
-function dailyRecordDateLabel(records: PendingRecord[]) {
-  if (records.length === 0) {
-    return "今日紀錄";
-  }
-  const firstDate = new Date(records[0].occurred_at);
-  if (Number.isNaN(firstDate.getTime())) {
-    return "今日紀錄";
-  }
-  return boundDisplayText(
-    firstDate.toLocaleDateString("zh-TW", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "short"
-    }),
-    80
-  );
 }
 
 function mergeSameDayParsePreviewDraft(

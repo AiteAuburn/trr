@@ -2655,6 +2655,11 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("ai review date label helper", "function aiReviewDateLabel(records: PendingRecord[])"),
+            ("ai review date label empty copy", "尚未解析日期時間"),
+            ("ai review date label multiple times copy", "等 ${uniqueLabels.length} 個時間"),
+            ("daily record date label helper", "function dailyRecordDateLabel(records: PendingRecord[])"),
+            ("daily record date label fallback copy", "今日紀錄"),
             ("daily record reorganization reason type", 'export type DailyRecordReorganizationReason = "add" | "edit" | "delete";'),
             ("daily record reorganization reason helper", "function dailyRecordReorganizationReasonText(reason: DailyRecordReorganizationReason | null)"),
             ("daily record reorganization status helper", "function dailyRecordReorganizationStatusMessage("),

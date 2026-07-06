@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1096: Extract daily-record date label helpers
+
+Status: done
+
+Summary:
+
+- Extracted AI review date label and daily-record date label helpers from `mobile/App.tsx` into `mobile/dailyTranscriptTransforms.ts`.
+- Kept AI review render, daily-record confirmation render, preview state, UI copy text, date formatting, navigation, and backend save flow unchanged.
+- Updated the navigation verifier so date label helper ownership guards inspect `mobile/dailyTranscriptTransforms.ts`, while AI review and daily-record render guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the daily-record date label boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1095: Extract daily-record reorganization copy helpers
 
 Status: done

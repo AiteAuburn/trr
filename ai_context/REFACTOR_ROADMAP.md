@@ -45,7 +45,7 @@
   - `subscriptionCopy.ts`：Subscription, account security, profile boundary, and settings subscription section labels / bounded copy.
   - `dateTimeTransforms.ts`：local date/time input formatting, local date keys, analysis date bounds, and local datetime ISO transforms.
   - `recordBounds.ts`：parse-preview, pending-record, record-cache, payload, and metadata bounded transforms.
-  - `dailyTranscriptTransforms.ts`：daily-record key / summary, retained transcript entries, transcript display items, daily-record reorganization copy/status helpers, and daily-record save request transforms.
+  - `dailyTranscriptTransforms.ts`：daily-record key / summary, AI review and daily-record date labels, retained transcript entries, transcript display items, daily-record reorganization copy/status helpers, and daily-record save request transforms.
   - `analysisDataTransforms.ts`：Analysis glucose extraction, meal-timing classification, chart points/range, and numeric aggregation helpers.
   - `analysisMetricTransforms.ts`：Analysis and detailed-report metric row shaping, nullable glucose bounds, and count bounds.
   - `analysisScreenData.ts`：Analysis range option config and bounded range display item shaping.
@@ -144,7 +144,7 @@ Verification:
 
 ### Slice 5: First-Version Screen Components
 
-Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, and daily-record reorganization copy/status boundaries extracted.
+Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, and daily-record reorganization copy/status boundaries extracted.
 
 Scope:
 
