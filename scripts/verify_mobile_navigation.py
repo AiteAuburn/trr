@@ -2632,11 +2632,8 @@ def main() -> int:
             ("daily record parse merges same-day draft", "const mergedDailyPreview = mergeSameDayParsePreviewDraft(existingDailyPreview, boundedPreview);"),
             ("daily record parse appends transcript entry", "setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, transcriptEntry]));"),
             ("daily record transcript display uses retained entries", "const todayTranscriptDisplayItems = dailyTranscriptDisplayItems(preview, dailyTranscriptEntries);"),
-            ("daily record reorganization reason type", 'type DailyRecordReorganizationReason = "add" | "edit" | "delete";'),
             ("daily record reorganization revision state", "const [dailyRecordOrganizationRevision, setDailyRecordOrganizationRevision] = useState(0);"),
             ("daily record reorganization reason state", "const [dailyRecordOrganizationReason, setDailyRecordOrganizationReason] ="),
-            ("daily record reorganization status helper", "function dailyRecordReorganizationStatusMessage("),
-            ("daily record reorganization display helper", "function dailyRecordReorganizationDisplayText("),
             ("daily record reorganization apply helper", "function reorganizeDailyRecordDraftAfterChange("),
             ("daily record reorganization add binding", 'reorganizeDailyRecordDraftAfterChange(\n        mergedDailyPreview,\n        "add",'),
             ("daily record reorganization edit binding", 'reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, "edit");'),
@@ -2657,6 +2654,15 @@ def main() -> int:
             ("daily record category blank copy", "沒有提到的欄位保持空白"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("daily record reorganization reason type", 'export type DailyRecordReorganizationReason = "add" | "edit" | "delete";'),
+            ("daily record reorganization reason helper", "function dailyRecordReorganizationReasonText(reason: DailyRecordReorganizationReason | null)"),
+            ("daily record reorganization status helper", "function dailyRecordReorganizationStatusMessage("),
+            ("daily record reorganization status count bound", "maxMobilePreviewRecords"),
+            ("daily record reorganization status ui bound", "maxUiMessageLength"),
+            ("daily record reorganization display helper", "function dailyRecordReorganizationDisplayText("),
+        ):
+            _assert_contains(label, daily_transcript_content, marker)
         for label, marker in (
             ("daily record transcript entry type", "type DailyTranscriptEntry = {"),
             ("daily record transcript create helper", "function createDailyTranscriptEntry("),

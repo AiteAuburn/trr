@@ -313,8 +313,11 @@ import {
   buildDailyRecordSaveRequest,
   createDailyTranscriptEntry,
   dailyRecordKeyFromRecords,
+  dailyRecordReorganizationDisplayText,
+  dailyRecordReorganizationStatusMessage,
   dailyRecordSummaryText,
   dailyTranscriptDisplayItems,
+  type DailyRecordReorganizationReason,
   type DailyTranscriptEntry
 } from "./dailyTranscriptTransforms";
 import {
@@ -414,7 +417,6 @@ type DailyRecordSaveResponse = {
   };
   records: RecordItem[];
 };
-type DailyRecordReorganizationReason = "add" | "edit" | "delete";
 type DevResetResponse = {
   status: string;
   deleted_counts: Record<string, number>;
@@ -1313,50 +1315,6 @@ function dailyRecordTimeDetailLabel(recordType: string) {
     return "用藥時間／情境";
   }
   return "時間";
-}
-
-function dailyRecordReorganizationReasonText(reason: DailyRecordReorganizationReason | null) {
-  if (reason === "add") {
-    return "新增後";
-  }
-  if (reason === "edit") {
-    return "編輯後";
-  }
-  if (reason === "delete") {
-    return "刪除後";
-  }
-  return "目前";
-}
-
-function dailyRecordReorganizationStatusMessage(
-  reason: DailyRecordReorganizationReason,
-  count: number,
-  revision: number
-) {
-  return boundUiMessage(
-    `AI今日摘要已在${dailyRecordReorganizationReasonText(reason)}重新整理；目前 ${clampNumber(
-      count,
-      0,
-      maxMobilePreviewRecords
-    )} 筆，第 ${clampNumber(revision, 0, maxMobileCountValue)} 次整理。`
-  );
-}
-
-function dailyRecordReorganizationDisplayText(
-  reason: DailyRecordReorganizationReason | null,
-  revision: number
-) {
-  if (revision <= 0) {
-    return "AI 今日摘要會依目前草稿即時整理。";
-  }
-  return boundDisplayText(
-    `AI 今日摘要已於${dailyRecordReorganizationReasonText(reason)}重新整理 ${clampNumber(
-      revision,
-      0,
-      maxMobileCountValue
-    )} 次。`,
-    maxDisplayDetailTextLength
-  );
 }
 
 function dailyRecordEntryDisplayItem(record: PendingRecord, index: number) {

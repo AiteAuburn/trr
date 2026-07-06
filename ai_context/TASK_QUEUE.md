@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1095: Extract daily-record reorganization copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted `DailyRecordReorganizationReason`, reorganization reason text, status message, and display text helpers from `mobile/App.tsx` into `mobile/dailyTranscriptTransforms.ts`.
+- Kept daily-record reorganization state, add/edit/delete handlers, preview draft updates, UI copy text, navigation, and backend save flow unchanged.
+- Updated the navigation verifier so reorganization copy/status helper ownership guards inspect `mobile/dailyTranscriptTransforms.ts`, while reorganization state, handler, and render guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the daily-record reorganization copy/status boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1094: Extract record edit validation helper
 
 Status: done

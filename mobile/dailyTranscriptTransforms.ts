@@ -7,7 +7,9 @@ const maxDisplayTextLength = 160;
 const maxIdentifierTextLength = 128;
 const maxDisplayDetailTextLength = 240;
 const maxMobileCountValue = 1_000_000;
+const maxMobilePreviewRecords = 20;
 const maxTranscriptTextLength = 1200;
+const maxUiMessageLength = 300;
 
 export type DailyTranscriptEntry = {
   id: string;
@@ -15,6 +17,8 @@ export type DailyTranscriptEntry = {
   source_text: string;
   source: "voice" | "text";
 };
+
+export type DailyRecordReorganizationReason = "add" | "edit" | "delete";
 
 function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);
@@ -69,6 +73,51 @@ export function dailyRecordSummaryText(records: PendingRecord[]) {
   }
   return boundDisplayText(
     `AI 已整理今天內容：${parts.join("、")}。每次新增、編輯或刪除後，後續會重新整理今日摘要與分類內容。`,
+    maxDisplayDetailTextLength
+  );
+}
+
+export function dailyRecordReorganizationReasonText(reason: DailyRecordReorganizationReason | null) {
+  if (reason === "add") {
+    return "新增後";
+  }
+  if (reason === "edit") {
+    return "編輯後";
+  }
+  if (reason === "delete") {
+    return "刪除後";
+  }
+  return "目前";
+}
+
+export function dailyRecordReorganizationStatusMessage(
+  reason: DailyRecordReorganizationReason,
+  count: number,
+  revision: number
+) {
+  return boundDisplayText(
+    `AI今日摘要已在${dailyRecordReorganizationReasonText(reason)}重新整理；目前 ${clampNumber(
+      count,
+      0,
+      maxMobilePreviewRecords
+    )} 筆，第 ${clampNumber(revision, 0, maxMobileCountValue)} 次整理。`,
+    maxUiMessageLength
+  );
+}
+
+export function dailyRecordReorganizationDisplayText(
+  reason: DailyRecordReorganizationReason | null,
+  revision: number
+) {
+  if (revision <= 0) {
+    return "AI 今日摘要會依目前草稿即時整理。";
+  }
+  return boundDisplayText(
+    `AI 今日摘要已於${dailyRecordReorganizationReasonText(reason)}重新整理 ${clampNumber(
+      revision,
+      0,
+      maxMobileCountValue
+    )} 次。`,
     maxDisplayDetailTextLength
   );
 }
