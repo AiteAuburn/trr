@@ -270,6 +270,18 @@ import {
   type AnalysisRange
 } from "./analysisCopy";
 import {
+  afterMealGlucoseCount as countAfterMealGlucose,
+  analysisChartPoints as buildAnalysisChartPoints,
+  analysisChartRange,
+  analysisGlucoseRecords as buildAnalysisGlucoseRecords,
+  analysisGlucoseValues as buildAnalysisGlucoseValues,
+  averageNumber,
+  beforeMealGlucoseCount as countBeforeMealGlucose,
+  highestNumber,
+  lowestNumber,
+  selectedAnalysisChartPoint
+} from "./analysisDataTransforms";
+import {
   analysisMetricRows as buildAnalysisMetricRows,
   detailedReportMetricRows as buildDetailedReportMetricRows
 } from "./analysisMetricTransforms";
@@ -323,7 +335,6 @@ import {
   boundDateInputText,
   boundTimeInputText,
   daysAgo,
-  formatChartDateLabel,
   formatLocalDateInput,
   formatLocalTimeInput,
   isSameLocalDay,
@@ -1598,20 +1609,6 @@ function recordSourceDisplay(value?: string) {
   return boundDisplayText(value || "尚無", 40);
 }
 
-function normalizedGlucoseTiming(value: unknown) {
-  return typeof value === "string" ? value.trim().toLowerCase() : "";
-}
-
-function isBeforeMealGlucoseTiming(value: unknown) {
-  const timing = normalizedGlucoseTiming(value);
-  return timing === "fasting" || timing === "before_meal" || timing === "before-meal" || timing === "before";
-}
-
-function isAfterMealGlucoseTiming(value: unknown) {
-  const timing = normalizedGlucoseTiming(value);
-  return timing === "after_meal" || timing === "after-meal" || timing === "after";
-}
-
 function emptyRecordEditFields(): RecordEditFields {
   return {
     glucoseValue: "",
@@ -2845,13 +2842,6 @@ function yearReviewTargetYear(value: Date) {
 function nextYearReviewGenerationLabel(value: Date) {
   const nextYear = value.getMonth() === 0 && value.getDate() === 1 ? value.getFullYear() + 1 : value.getFullYear() + 1;
   return boundDisplayText(`每年 1 月 1 日自動產生前一年度回顧；下一次為 ${nextYear} 年 1 月 1 日`, maxDisplayDetailTextLength);
-}
-
-function averageNumber(values: number[]) {
-  if (values.length === 0) {
-    return null;
-  }
-  return Math.round(values.reduce((sum, value) => sum + value, 0) / values.length);
 }
 
 function formatVoiceMinutes(seconds: number) {
@@ -4798,19 +4788,10 @@ export default function App() {
     });
   }, [analysisSelectedDateBounds, recordsForDisplay]);
   const analysisGlucoseRecords = useMemo(
-    () =>
-      analysisRecords
-        .map((record) => ({
-          record,
-          value:
-            record.record_type === "glucose" && typeof record.payload_json.value === "number"
-              ? record.payload_json.value
-              : null
-        }))
-        .filter((entry): entry is { record: RecordItem; value: number } => entry.value !== null),
+    () => buildAnalysisGlucoseRecords(analysisRecords),
     [analysisRecords]
   );
-  const analysisGlucoseValues = analysisGlucoseRecords.map((entry) => entry.value);
+  const analysisGlucoseValues = buildAnalysisGlucoseValues(analysisGlucoseRecords);
   const analysisPreviewMode = recordsForDisplay.length === 0;
   const analysisRangeDisplayLabel = boundDisplayText(
     analysisRange === "custom"
@@ -4823,34 +4804,17 @@ export default function App() {
     analysisCustomStart,
     analysisCustomEnd
   );
-  const analysisChartPoints = useMemo(() => {
-    if (analysisGlucoseRecords.length > 0) {
-      return analysisGlucoseRecords.slice(-12).map(({ record, value }) => ({
-        id: record.id,
-        label: formatChartDateLabel(record.occurred_at),
-        value,
-        preview: false
-      }));
-    }
-    return [];
-  }, [analysisGlucoseRecords]);
-  const chartValues = analysisChartPoints.map((point) => point.value);
-  const chartMinimum = chartValues.length > 0 ? Math.min(...chartValues, 80) : 80;
-  const chartMaximum = chartValues.length > 0 ? Math.max(...chartValues, 220) : 220;
-  const chartRange = Math.max(1, chartMaximum - chartMinimum);
-  const selectedAnalysisPoint =
-    selectedAnalysisPointIndex === null ? null : analysisChartPoints[selectedAnalysisPointIndex] ?? null;
+  const analysisChartPoints = useMemo(
+    () => buildAnalysisChartPoints(analysisGlucoseRecords),
+    [analysisGlucoseRecords]
+  );
+  const { minimum: chartMinimum, range: chartRange } = analysisChartRange(analysisChartPoints);
+  const selectedAnalysisPoint = selectedAnalysisChartPoint(analysisChartPoints, selectedAnalysisPointIndex);
   const averageGlucose = averageNumber(analysisGlucoseValues);
-  const highestGlucose =
-    analysisGlucoseValues.length === 0 ? null : Math.max(...analysisGlucoseValues);
-  const lowestGlucose =
-    analysisGlucoseValues.length === 0 ? null : Math.min(...analysisGlucoseValues);
-  const beforeMealGlucoseCount = analysisGlucoseRecords.filter(
-    ({ record }) => isBeforeMealGlucoseTiming(record.payload_json.meal_timing)
-  ).length;
-  const afterMealGlucoseCount = analysisGlucoseRecords.filter(
-    ({ record }) => isAfterMealGlucoseTiming(record.payload_json.meal_timing)
-  ).length;
+  const highestGlucose = highestNumber(analysisGlucoseValues);
+  const lowestGlucose = lowestNumber(analysisGlucoseValues);
+  const beforeMealGlucoseCount = countBeforeMealGlucose(analysisGlucoseRecords);
+  const afterMealGlucoseCount = countAfterMealGlucose(analysisGlucoseRecords);
   const quotaUsageRatio =
     voiceQuota && voiceQuota.daily_limit_seconds > 0
       ? Math.min(1, voiceQuota.used_seconds_today / voiceQuota.daily_limit_seconds)
@@ -5657,9 +5621,7 @@ export default function App() {
   const activeAnalysisReport = basicReportKey === currentBasicReportKey ? basicReport : null;
   const reportRecordCount = activeAnalysisReport?.record_count ?? analysisRecords.length;
   const reportGlucoseAverage = activeAnalysisReport?.glucose.average ?? averageGlucose;
-  const reportGlucoseMinimum =
-    activeAnalysisReport?.glucose.minimum ??
-    (analysisGlucoseValues.length > 0 ? Math.min(...analysisGlucoseValues) : null);
+  const reportGlucoseMinimum = activeAnalysisReport?.glucose.minimum ?? lowestGlucose;
   const reportGlucoseMaximum = activeAnalysisReport?.glucose.maximum ?? highestGlucose;
   const reportBeforeMealGlucoseCount = activeAnalysisReport?.glucose.before_meal_count ?? beforeMealGlucoseCount;
   const reportAfterMealGlucoseCount = activeAnalysisReport?.glucose.after_meal_count ?? afterMealGlucoseCount;

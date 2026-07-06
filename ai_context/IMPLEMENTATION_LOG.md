@@ -15,6 +15,38 @@
 
 ## 2026-07-06
 
+### T1084 extract analysis data transform helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisDataTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted Analysis glucose-record extraction, glucose value aggregation, meal-timing classification, chart point building, chart range calculation, selected point lookup, and numeric average/min/max helpers from `mobile/App.tsx` into `mobile/analysisDataTransforms.ts`.
+- Kept Basic Analysis date filtering, chart rendering, selected chart point behavior, local/remote report fallback sources, UI labels, navigation, and backend report contract unchanged.
+- Updated the navigation verifier so analysis timing and chart helper guards inspect `mobile/analysisDataTransforms.ts`, while render and report-source guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now covers analysis data/chart transform extraction.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Move toward first-version screen component boundaries or isolate remaining future-module helpers.
+
 ### T1083 extract analysis metric transform helpers
 
 類型：mobile / refactor / verifier / docs

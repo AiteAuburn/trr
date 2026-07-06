@@ -17,6 +17,7 @@ RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
 NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
 ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
+ANALYSIS_DATA_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisDataTransforms.ts"
 ANALYSIS_METRIC_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisMetricTransforms.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
@@ -1202,6 +1203,7 @@ def main() -> int:
     native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
     first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
     analysis_copy_content = ANALYSIS_COPY_PATH.read_text(encoding="utf-8")
+    analysis_data_content = ANALYSIS_DATA_TRANSFORMS_PATH.read_text(encoding="utf-8")
     analysis_metric_content = ANALYSIS_METRIC_TRANSFORMS_PATH.read_text(encoding="utf-8")
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
@@ -3161,9 +3163,8 @@ def main() -> int:
             ("analysis custom range status display", "const analysisCustomRangeStatusDisplayText = analysisCustomRangeStatusCopy("),
             ("analysis selected date bounds", "const analysisSelectedDateBounds = useMemo("),
             ("analysis local records date bounds", "const { start, end } = analysisSelectedDateBounds;\n    return recordsForDisplay.filter((record) => {"),
-            ("analysis local glucose derives from analysis records", "const analysisGlucoseRecords = useMemo(\n    () =>\n      analysisRecords"),
-            ("analysis local glucose record mapper", ".map((record) => ({\n          record,\n          value:"),
-            ("analysis local glucose records dependency", "    [analysisRecords]\n  );\n  const analysisGlucoseValues = analysisGlucoseRecords.map((entry) => entry.value);"),
+            ("analysis local glucose derives from analysis records", "const analysisGlucoseRecords = useMemo(\n    () => buildAnalysisGlucoseRecords(analysisRecords),"),
+            ("analysis local glucose records dependency", "    [analysisRecords]\n  );\n  const analysisGlucoseValues = buildAnalysisGlucoseValues(analysisGlucoseRecords);"),
             ("analysis current report key helper", "function basicReportRequestKey("),
             ("analysis active backend report guard", "const activeAnalysisReport = basicReportKey === currentBasicReportKey ? basicReport : null;"),
             ("analysis backend report auto sync effect", 'if (currentScreen === "analysis") {\n      void loadBasicReportForCurrentRange("analysis");'),
@@ -3349,11 +3350,6 @@ def main() -> int:
             "const analysisMetricRows = buildAnalysisMetricRows({",
         )
         for label, marker in (
-            ("analysis normalized glucose timing helper", "function normalizedGlucoseTiming(value: unknown)"),
-            ("analysis before timing helper", "function isBeforeMealGlucoseTiming(value: unknown)"),
-            ("analysis after timing helper", "function isAfterMealGlucoseTiming(value: unknown)"),
-            ("analysis before timing helper usage", "isBeforeMealGlucoseTiming(record.payload_json.meal_timing)"),
-            ("analysis after timing helper usage", "isAfterMealGlucoseTiming(record.payload_json.meal_timing)"),
             ("analysis backend average source", "activeAnalysisReport?.glucose.average ?? averageGlucose"),
             ("analysis backend highest source", "activeAnalysisReport?.glucose.maximum ?? highestGlucose"),
             ("analysis backend lowest source", "activeAnalysisReport?.glucose.minimum ?? lowestGlucose"),
@@ -3363,6 +3359,17 @@ def main() -> int:
             ("detailed report backend after meal count", "activeAnalysisReport?.glucose.after_meal_count ?? afterMealGlucoseCount"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("analysis normalized glucose timing helper", "function normalizedGlucoseTiming(value: unknown)"),
+            ("analysis before timing helper", "function isBeforeMealGlucoseTiming(value: unknown)"),
+            ("analysis after timing helper", "function isAfterMealGlucoseTiming(value: unknown)"),
+            ("analysis before timing helper usage", "isBeforeMealGlucoseTiming(record.payload_json.meal_timing)"),
+            ("analysis after timing helper usage", "isAfterMealGlucoseTiming(record.payload_json.meal_timing)"),
+            ("analysis chart point builder", "function analysisChartPoints(records: AnalysisGlucoseRecord[]): AnalysisChartPoint[]"),
+            ("analysis chart bounded sample", "return records.slice(-12).map(({ record, value }) => ({"),
+            ("analysis chart range helper", "function analysisChartRange(points: AnalysisChartPoint[])"),
+        ):
+            _assert_contains(label, analysis_data_content, marker)
         for label, marker in (
             ("analysis highest metric", '["最高血糖", highest === null ? "尚無" : String(highest)]'),
             ("analysis lowest metric", '["最低血糖", lowest === null ? "尚無" : String(lowest)]'),

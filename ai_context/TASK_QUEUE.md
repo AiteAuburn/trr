@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1084: Extract analysis data transform helpers
+
+Status: done
+
+Summary:
+
+- Extracted Analysis glucose-record extraction, glucose value aggregation, meal-timing classification, chart point building, chart range calculation, selected point lookup, and numeric average/min/max helpers from `mobile/App.tsx` into `mobile/analysisDataTransforms.ts`.
+- Kept Basic Analysis date filtering, chart rendering, selected chart point behavior, local/remote report fallback sources, UI labels, navigation, and backend report contract unchanged.
+- Updated the navigation verifier so analysis timing and chart helper guards inspect `mobile/analysisDataTransforms.ts`, while render and report-source guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now covers analysis data/chart transform extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1083: Extract analysis metric transform helpers
 
 Status: done
