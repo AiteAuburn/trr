@@ -15,6 +15,38 @@
 
 ## 2026-07-06
 
+### T1090 extract record detail display helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted record date, datetime, source, and selected record-detail display item shaping from `mobile/App.tsx` into `mobile/recordDisplay.ts`.
+- Kept Today/History record detail render JSX, edit/delete handlers, record payload labels, detail rows, UI copy, navigation, and backend record flow unchanged.
+- Updated the navigation verifier so record detail display helper ownership and detail-row guards inspect `mobile/recordDisplay.ts`, while Today/History handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the record detail display boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1089 extract shared record list display helper
 
 類型：mobile / refactor / verifier / docs

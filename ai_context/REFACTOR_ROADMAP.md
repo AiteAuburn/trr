@@ -30,7 +30,7 @@
   - `modelStorage.ts`：本機模型清單與下載狀態。
   - `nativeLocalModels.ts`：native Whisper / Llama bridge。
   - `navigationConfig.ts`：`AppScreen` route union、primary screens、MVP flow、screen chrome、first-version menu 與 visual-smoke route jump config。
-  - `recordDisplay.ts`：daily section definitions, record payload labels, record time labels, and shared Today/History record-list display item shaping.
+  - `recordDisplay.ts`：daily section definitions, record payload labels, record time/date labels, shared Today/History record-list display item shaping, and record detail display item shaping.
   - `recordingCopy.ts`：recording / transcript-review bounded status messages and display copy.
   - `recordWorkflowCopy.ts`：parser / AI save / AI candidate bounded status messages.
   - `recordStatusCopy.ts`：record sync / update / delete / manual-create bounded status messages.
@@ -143,7 +143,7 @@ Verification:
 
 ### Slice 5: First-Version Screen Components
 
-Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, and shared record-list display boundaries extracted.
+Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, shared record-list display, and record detail display boundaries extracted.
 
 Scope:
 

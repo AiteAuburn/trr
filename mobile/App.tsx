@@ -41,6 +41,8 @@ import {
   dailyRecordSectionDefinitions,
   displayPayload,
   displayTextValue,
+  recordDateTimeDisplay,
+  recordDetailDisplayItem,
   recordListDisplayItem,
   recordPayloadDetailRows,
   recordTimeDisplay,
@@ -1497,39 +1499,6 @@ function buildDailyRecordSectionDisplayItems(records: PendingRecord[]) {
   });
 }
 
-function recordDateDisplay(value?: string) {
-  if (!value) {
-    return "尚無";
-  }
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return "尚無";
-  }
-  return boundDisplayText(date.toLocaleDateString(), 40);
-}
-
-function recordDetailDisplayItem(record: RecordItem) {
-  const listItem = recordListDisplayItem(record, "selected");
-  return {
-    ...listItem,
-    dateLabel: boundDisplayText(recordDateDisplay(record.occurred_at), 40),
-    dateTimeLabel: boundDisplayText(recordDateTimeDisplay(record.occurred_at), 80),
-    sourceLabel: recordSourceDisplay(record.source),
-    exerciseSummary:
-      record.record_type === "exercise"
-        ? boundDisplayText(displayPayload("exercise", record.payload_json), maxDisplayDetailTextLength)
-        : "無",
-    medicationSummary:
-      record.record_type === "medication"
-        ? boundDisplayText(displayPayload("medication", record.payload_json), maxDisplayDetailTextLength)
-        : "無",
-    detailRows: recordPayloadDetailRows(record.record_type, record.payload_json).map((row) => ({
-      label: boundDisplayText(row.label, 40),
-      value: boundDisplayText(row.value, maxDisplayDetailTextLength)
-    }))
-  };
-}
-
 function manualRecordConfirmDisplayItem(
   recordType: ManualRecordType,
   payload: Record<string, unknown> | null,
@@ -1545,21 +1514,6 @@ function manualRecordConfirmDisplayItem(
         : boundDisplayText(displayPayload(recordType, payload), maxDisplayDetailTextLength),
     sourceLine: boundDisplayText(`${date} ${time} · source: manual`, maxDisplayDetailTextLength)
   };
-}
-
-function recordDateTimeDisplay(value?: string) {
-  if (!value) {
-    return "尚未選擇紀錄";
-  }
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return "尚未選擇紀錄";
-  }
-  return boundDisplayText(date.toLocaleString(), 80);
-}
-
-function recordSourceDisplay(value?: string) {
-  return boundDisplayText(value || "尚無", 40);
 }
 
 function emptyRecordEditFields(): RecordEditFields {

@@ -2774,6 +2774,16 @@ def main() -> int:
             "function recordTimeDisplay(value?: string)",
         )
         for label, marker in (
+            ("record detail display item helper", "function recordDetailDisplayItem(record: RecordItem)"),
+            ("record detail date display helper", "function recordDateDisplay(value?: string)"),
+            ("record detail datetime display helper", "function recordDateTimeDisplay(value?: string)"),
+            ("record detail source display helper", "function recordSourceDisplay(value?: string)"),
+            ("record detail exercise summary", 'record.record_type === "exercise"'),
+            ("record detail medication summary", 'record.record_type === "medication"'),
+            ("record detail rows", "recordPayloadDetailRows(record.record_type, record.payload_json).map((row) => ({"),
+        ):
+            _assert_contains(label, record_display_content, marker)
+        for label, marker in (
             ("record payload sanitizer", "function boundRecordPayload(recordType: string, payload: Record<string, unknown>): Record<string, unknown>"),
             ("record payload value sanitizer", "function boundRecordPayloadValue(value: unknown, depth = 0): unknown"),
             ("record payload raw key guard", "function isRawPayloadKey(key: string)"),

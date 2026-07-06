@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1090: Extract record detail display helper
+
+Status: done
+
+Summary:
+
+- Extracted record date, datetime, source, and selected record-detail display item shaping from `mobile/App.tsx` into `mobile/recordDisplay.ts`.
+- Kept Today/History record detail render JSX, edit/delete handlers, record payload labels, detail rows, UI copy, navigation, and backend record flow unchanged.
+- Updated the navigation verifier so record detail display helper ownership and detail-row guards inspect `mobile/recordDisplay.ts`, while Today/History handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the record detail display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1089: Extract shared record list display helper
 
 Status: done
