@@ -9,6 +9,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
+RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
 README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
 ACHIEVEMENT_CATALOG_PATH = REPO_ROOT / "backend" / "app" / "services" / "achievement_catalog.py"
@@ -1189,6 +1190,7 @@ def _assert_text_input_accessibility_labels_are_bounded(content: str) -> None:
 
 def main() -> int:
     content = APP_PATH.read_text(encoding="utf-8")
+    record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
 
     try:
@@ -2564,8 +2566,12 @@ def main() -> int:
             ("confirmation transcript parse disabled state", "accessibilityState={{\n                  disabled:\n                    Boolean(transcriptValidationError) ||"),
         ):
             _assert_contains(label, content, marker)
+        _assert_contains(
+            "daily record section definitions",
+            record_display_content,
+            "export const dailyRecordSectionDefinitions: DailyRecordSectionDefinition[] = [",
+        )
         for label, marker in (
-            ("daily record section definitions", "const dailyRecordSectionDefinitions: DailyRecordSectionDefinition[] = ["),
             ("daily record one-day summary copy", "AI 已整理成今天唯一的每日紀錄草稿"),
             ("daily record summary title", "<Text style={styles.previewModeBadge}>AI今日摘要</Text>"),
             ("daily record transcript title", "<Text style={styles.label}>今日錄音文字</Text>"),
@@ -2882,13 +2888,16 @@ def main() -> int:
             ("history raw source status", "sourceStatusLabel: boundDisplayText(hasSourceText ? \"原始逐字稿\" : \"僅結構化\", 40)"),
             ("history raw fallback copy", "尚無原始逐字稿；此筆紀錄只保留結構化資料。"),
             ("daily section time detail label helper", "function dailyRecordTimeDetailLabel(recordType: string)"),
+            ("daily section meal time label", "用餐時間"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
             ("daily section glucose context label", "測量情境"),
             ("daily section glucose value label", "血糖值"),
-            ("daily section meal time label", "用餐時間"),
             ("daily section exercise duration label", "運動時長"),
             ("daily section body measurement support", 'acceptedRecordTypes: ["weight", "body_measurement"]'),
         ):
-            _assert_contains(label, content, marker)
+            _assert_contains(label, record_display_content, marker)
         history_calendar_day_block = _function_block(content, "historyCalendarDayDisplayItem")
         for label, marker in (
             ("history calendar date key", "const dateKey = formatLocalDateInput(date);"),

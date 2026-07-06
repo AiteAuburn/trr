@@ -16,6 +16,10 @@ Canonical UI spec:
 
 - `ai_context/UI_UX_SPEC.md`
 
+Refactor roadmap:
+
+- `ai_context/REFACTOR_ROADMAP.md`
+
 Current design baseline:
 
 - Mobile-first iPhone-style interface.
@@ -119,6 +123,22 @@ selected product slice is the second-version AI-organized daily-record page.
 None.
 
 ## Done
+
+### T1066: Add refactor roadmap and extract record display helpers
+
+Status: done
+
+Summary:
+
+- Added `ai_context/REFACTOR_ROADMAP.md` to document the current mobile/backend architecture, first-version boundaries, pain points, and safe refactor slices.
+- Extracted pure record display helpers and daily-record section config from `mobile/App.tsx` into `mobile/recordDisplay.ts`.
+- Kept user-visible UI, copy, navigation, backend calls, parser flow, save flow, and hidden/debug-only future-module boundaries unchanged.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
 
 ### T1065: Restrict first-version menu to core recording, history, and analysis
 

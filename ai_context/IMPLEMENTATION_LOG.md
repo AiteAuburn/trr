@@ -13,6 +13,37 @@
 後續:
 ```
 
+## 2026-07-06
+
+### T1066 add refactor roadmap and extract record display helpers
+
+類型：mobile / refactor / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordDisplay.ts`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a dedicated refactor roadmap documenting the current mobile/backend architecture, first-version release boundaries, mobile-heavy pain points, and safe slice order.
+- Extracted pure record display helpers, record type label/icon helpers, payload detail row builders, and daily-record section definitions from `mobile/App.tsx` into `mobile/recordDisplay.ts`.
+- Kept existing call sites, user-visible copy, UI layout, navigation behavior, backend request paths, parser behavior, save behavior, and hidden/debug-only future-module boundaries unchanged.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue with the next safe slice: static screen/menu config extraction.
+
 ## 2026-07-04
 
 ### T1065 restrict first-version menu to core recording, history, and analysis
