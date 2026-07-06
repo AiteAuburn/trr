@@ -15,6 +15,35 @@
 
 ## 2026-07-06
 
+### T1075 extract history copy helpers
+
+類型：mobile / refactor / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/historyCopy.ts`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted History navigation status, no-real-record health value, loaded-record action, and History empty-state copy helpers from `mobile/App.tsx` into `mobile/historyCopy.ts`.
+- Kept existing History filtering, grouping, record detail navigation, UI copy, and handler call sites unchanged.
+- Updated the refactor roadmap to record that Slice 3 now also covers History copy extraction.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 3 with remaining Analysis / Settings bounded copy helpers, or move to Slice 4 data transform helpers once copy extraction is sufficient.
+
 ### T1074 extract first-version flow copy helpers
 
 類型：mobile / refactor / verifier / docs

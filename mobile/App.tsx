@@ -233,6 +233,17 @@ import {
   transcriptReviewManualEntryStatusMessage,
   type QuickEntryMode
 } from "./firstVersionFlowCopy";
+import {
+  historyManualEntryStatusMessage,
+  historyNoRangeRecordsBodyCopy,
+  historyNoRangeRecordsTitleCopy,
+  historyNoRecordsBodyCopy,
+  historyNoRecordsTitleCopy,
+  historyRecordDetailStatusMessage,
+  historyReturnTodayStatusMessage,
+  loadedRecordActionCopy,
+  noRealRecordHealthValueCopy
+} from "./historyCopy";
 
 type Account = {
   id: string;
@@ -3602,18 +3613,6 @@ function busyActionStatusMessage() {
   return boundUiMessage("目前仍在處理上一個動作，請稍候");
 }
 
-function historyReturnTodayStatusMessage() {
-  return boundUiMessage("已從歷史紀錄回到今日紀錄；只使用已載入紀錄，不額外查詢 backend。");
-}
-
-function historyManualEntryStatusMessage() {
-  return boundUiMessage("已從歷史紀錄進入手動新增；此路徑不呼叫 AI、LLM 或 STT。");
-}
-
-function historyRecordDetailStatusMessage() {
-  return boundUiMessage("已從歷史紀錄查看單筆詳情；返回會回到歷史紀錄，不呼叫 AI。");
-}
-
 function previewActionClearStatusMessage() {
   return "";
 }
@@ -3715,19 +3714,6 @@ function todayRecordSummaryText(recordCount: number) {
     return boundDisplayText("今日尚未載入紀錄", 80);
   }
   return boundDisplayText(`今日已記錄 ${clampNumber(recordCount, 0, maxMobileCountValue)} 筆`, 80);
-}
-
-function noRealRecordHealthValueCopy(scope: "general" | "history") {
-  return boundDisplayText(
-    scope === "history"
-      ? "目前尚未載入真實紀錄；歷史頁不顯示固定範例健康數值。"
-      : "目前尚未載入真實紀錄；不顯示固定範例健康數值。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function loadedRecordActionCopy() {
-  return boundDisplayText("點擊真實紀錄可查看詳情並進行編輯或刪除。", maxDisplayDetailTextLength);
 }
 
 function analysisNoDataStatusLabel() {
@@ -4364,22 +4350,6 @@ function recordResultDestinationStatusMessage(kind: "delete" | "update", target:
             ? "記錄詳情"
             : "指定頁面";
   return boundUiMessage(`已從${kindLabel}前往${targetLabel}；不會重新送出 backend request 或呼叫 AI。`);
-}
-
-function historyNoRecordsTitleCopy() {
-  return boundDisplayText("還沒有可顯示的歷史紀錄", maxDisplayTextLength);
-}
-
-function historyNoRecordsBodyCopy() {
-  return boundDisplayText("建立真實紀錄後，這裡會依日期分組顯示你的資料。", maxDisplayDetailTextLength);
-}
-
-function historyNoRangeRecordsTitleCopy() {
-  return boundDisplayText("這個範圍沒有紀錄", maxDisplayTextLength);
-}
-
-function historyNoRangeRecordsBodyCopy() {
-  return boundDisplayText("可以切換時間範圍，或回到今日頁新增新的紀錄。", maxDisplayDetailTextLength);
 }
 
 function analysisSafetyIntroCopy() {

@@ -124,6 +124,22 @@ None.
 
 ## Done
 
+### T1075: Extract history copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted History navigation status, no-real-record health value, loaded-record action, and History empty-state copy helpers from `mobile/App.tsx` into `mobile/historyCopy.ts`.
+- Kept History filtering, grouping, record detail navigation, UI copy, and handler call sites unchanged.
+- Updated the refactor roadmap to note that Slice 3 now also covers History copy extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
 ### T1074: Extract first-version flow copy helpers
 
 Status: done
