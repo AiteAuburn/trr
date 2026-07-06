@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1086: Extract analysis screen range data boundary
+
+Status: done
+
+Summary:
+
+- Extracted Basic Analysis range option config and bounded range display item shaping from `mobile/App.tsx` into `mobile/analysisScreenData.ts`.
+- Kept Analysis render JSX, range press handlers, selected-state binding, custom range inputs, backend report sync behavior, UI copy, and navigation unchanged.
+- Updated the navigation verifier so Analysis range option/accessibility guards inspect `mobile/analysisScreenData.ts`, while Analysis render and handler bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the Analysis range data boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1085: Extract settings screen data boundary
 
 Status: done

@@ -19,6 +19,7 @@ FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
 ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
 ANALYSIS_DATA_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisDataTransforms.ts"
 ANALYSIS_METRIC_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisMetricTransforms.ts"
+ANALYSIS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "analysisScreenData.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
@@ -1206,6 +1207,7 @@ def main() -> int:
     analysis_copy_content = ANALYSIS_COPY_PATH.read_text(encoding="utf-8")
     analysis_data_content = ANALYSIS_DATA_TRANSFORMS_PATH.read_text(encoding="utf-8")
     analysis_metric_content = ANALYSIS_METRIC_TRANSFORMS_PATH.read_text(encoding="utf-8")
+    analysis_screen_data_content = ANALYSIS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     settings_screen_data_content = SETTINGS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
@@ -3158,9 +3160,6 @@ def main() -> int:
             "async function applyAnalysisCustomRange()",
         )
         for label, marker in (
-            ("analysis week range option", '{ id: "week", label: "本週" }'),
-            ("analysis month range option", '{ id: "month", label: "本月" }'),
-            ("analysis custom range option", '{ id: "custom", label: "自訂日期區間" }'),
             ("analysis default month range state", 'const [analysisRange, setAnalysisRange] = useState<AnalysisRange>("month");'),
             ("analysis custom range status display", "const analysisCustomRangeStatusDisplayText = analysisCustomRangeStatusCopy("),
             ("analysis selected date bounds", "const analysisSelectedDateBounds = useMemo("),
@@ -3177,6 +3176,14 @@ def main() -> int:
             ("analysis report end bound", "const endAt = analysisSelectedDateBounds.end.toISOString();"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("analysis week range option", '{ id: "week", label: "本週" }'),
+            ("analysis month range option", '{ id: "month", label: "本月" }'),
+            ("analysis custom range option", '{ id: "custom", label: "自訂日期區間" }'),
+            ("analysis range display helper", "function analysisRangeDisplayItem(value: { id: AnalysisRange; label: string })"),
+            ("analysis range accessibility label", "accessibilityLabel: boundDisplayText(`切換分析範圍：${label}，同步 backend bounded report`, maxDisplayDetailTextLength)"),
+        ):
+            _assert_contains(label, analysis_screen_data_content, marker)
         for label, marker in (
             ("analysis date bounds helper", "function analysisDateBounds(range: AnalysisRange, customStart: string, customEnd: string)"),
             ("analysis custom start inclusive midnight", 'edge === "start" ? "00:00:00.000" : "23:59:59.999"'),
@@ -3255,7 +3262,6 @@ def main() -> int:
             ("generic option accessibility item", "accessibilityLabel: boundDisplayText(`選擇${label}選項`, maxDisplayTextLength)"),
             ("manual record type accessibility item", "accessibilityLabel: boundDisplayText(`選擇${label}紀錄類型，不呼叫 AI 或 parser`, maxDisplayDetailTextLength)"),
             ("store category accessibility item", "accessibilityLabel: boundDisplayText(`切換商城分類：${label}，不建立訂單或付款`, maxDisplayDetailTextLength)"),
-            ("analysis range accessibility item", "accessibilityLabel: boundDisplayText(`切換分析範圍：${label}，同步 backend bounded report`, maxDisplayDetailTextLength)"),
             ("manual type chip accessibility binding", "accessibilityLabel={type.accessibilityLabel}"),
             ("shared option chip accessibility binding", "accessibilityLabel={option.accessibilityLabel}"),
             ("store category accessibility binding", "accessibilityLabel={category.accessibilityLabel}"),
@@ -3284,6 +3290,11 @@ def main() -> int:
             ("store category selected state", "accessibilityState={{ selected: storeCategory === category.value }}"),
         ):
             _assert_contains(label, content, marker)
+        _assert_contains(
+            "analysis range accessibility item",
+            analysis_screen_data_content,
+            "accessibilityLabel: boundDisplayText(`切換分析範圍：${label}，同步 backend bounded report`, maxDisplayDetailTextLength)",
+        )
         for label, marker in (
             ("preview edit date input handler", "function updatePreviewEditDateInput(value: string)"),
             ("preview edit time input handler", "function updatePreviewEditTimeInput(value: string)"),

@@ -270,6 +270,10 @@ import {
   type AnalysisRange
 } from "./analysisCopy";
 import {
+  analysisRangeDisplayItem,
+  analysisRanges
+} from "./analysisScreenData";
+import {
   afterMealGlucoseCount as countAfterMealGlucose,
   analysisChartPoints as buildAnalysisChartPoints,
   analysisChartRange,
@@ -892,12 +896,6 @@ const manualRecordTypes: Array<{ id: ManualRecordType; label: string }> = [
 const historyDetailModes: Array<{ id: HistoryDetailMode; label: string; accessibilityCopy: string }> = [
   { id: "structured", label: "AI 整理", accessibilityCopy: "查看 AI 分析整理後的紀錄" },
   { id: "raw", label: "原始紀錄", accessibilityCopy: "查看原始語音轉文字內容" }
-];
-
-const analysisRanges: Array<{ id: AnalysisRange; label: string }> = [
-  { id: "week", label: "本週" },
-  { id: "month", label: "本月" },
-  { id: "custom", label: "自訂日期區間" }
 ];
 
 const achievementLevels = [10, 50, 100, 150, 200, 250];
@@ -2370,15 +2368,6 @@ function historyRawRecordDisplayItem(record: RecordItem, index: number) {
     ...item,
     sourceStatusLabel: boundDisplayText(hasSourceText ? "原始逐字稿" : "僅結構化", 40),
     rawText
-  };
-}
-
-function analysisRangeDisplayItem(value: { id: AnalysisRange; label: string }) {
-  const label = boundDisplayText(value.label || "時間範圍", 60);
-  return {
-    value: value.id,
-    label,
-    accessibilityLabel: boundDisplayText(`切換分析範圍：${label}，同步 backend bounded report`, maxDisplayDetailTextLength)
   };
 }
 
