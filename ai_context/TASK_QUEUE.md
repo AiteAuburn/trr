@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1074: Extract first-version flow copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted Today / Record quick-entry display items plus Today, Record, AI Review, and Transcript Review flow status helpers from `mobile/App.tsx` into `mobile/firstVersionFlowCopy.ts`.
+- Moved the `QuickEntryMode` type with the quick-entry display data and imported it back into `mobile/App.tsx`.
+- Kept quick-entry handlers, navigation, render bindings, UI copy, and first-version menu scope unchanged.
+- Updated the navigation verifier so quick-entry helper guards now inspect `mobile/firstVersionFlowCopy.ts`, while render and press-wrapper guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 now also covers first-version flow status copy extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1073: Extract report status copy helpers
 
 Status: done

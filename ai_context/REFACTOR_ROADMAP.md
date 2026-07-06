@@ -37,6 +37,7 @@
   - `authStatusCopy.ts`：backend reconnect / dev reset / auth session bounded status messages.
   - `nativeStatusCopy.ts`：native model debug / local Whisper / local Llama / benchmark bounded status messages.
   - `reportStatusCopy.ts`：voice quota / analysis report / detailed report bounded status messages.
+  - `firstVersionFlowCopy.ts`：Today / Record quick-entry display items and first-version flow status messages.
 
 ### Backend
 
@@ -100,7 +101,7 @@ Verification:
 
 ### Slice 3: Status/Copy Helpers
 
-Status: started; recording / transcript-review, parser / AI save / AI candidate, record sync / CRUD, auth / backend session, native model debug, and report / voice quota copy extracted.
+Status: started; recording / transcript-review, parser / AI save / AI candidate, record sync / CRUD, auth / backend session, native model debug, report / voice quota, and first-version flow copy extracted.
 
 Scope:
 

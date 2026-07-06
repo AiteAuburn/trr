@@ -13,6 +13,7 @@ NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
 RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
 NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
+FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
 README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
 ACHIEVEMENT_CATALOG_PATH = REPO_ROOT / "backend" / "app" / "services" / "achievement_catalog.py"
@@ -1190,6 +1191,7 @@ def main() -> int:
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
     recording_copy_content = RECORDING_COPY_PATH.read_text(encoding="utf-8")
     native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
+    first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
 
     try:
@@ -2472,13 +2474,13 @@ def main() -> int:
         )
         _assert_contains(
             "record quick-entry helper",
-            content,
+            first_version_flow_copy_content,
             "function quickEntryModeDisplayItems()",
         )
         for label in ("語音預覽", "文字整理", "手動新增"):
             _assert_contains(
                 f"record quick-entry {label}",
-                content,
+                first_version_flow_copy_content,
                 f'label: boundDisplayText("{label}", maxDisplayTextLength)',
             )
         _assert_contains(
