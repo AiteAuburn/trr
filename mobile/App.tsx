@@ -86,6 +86,32 @@ import {
   transcriptReviewBackStatusMessage,
   transcriptReviewReadyStatusMessage
 } from "./recordingCopy";
+import {
+  aiCandidateEditCancelStatusMessage,
+  aiCandidateEditFailureStatusMessage,
+  aiCandidateEditOpenStatusMessage,
+  aiCandidateEditSuccessStatusMessage,
+  aiCandidateRemoveCancelStatusMessage,
+  aiCandidateRemoveConfirmStatusMessage,
+  aiCandidateRemoveResultStatusMessage,
+  aiPartialSaveFailureStatusMessage,
+  aiPartialSaveRecordsStatusMessage,
+  aiPartialSaveSummaryMessage,
+  aiSaveFailureStatusMessage,
+  aiSaveProgressStatusMessage,
+  aiSaveRecordsStatusMessage,
+  aiSaveSuccessStatusMessage,
+  aiSaveSuccessSummaryMessage,
+  aiSaveUnavailableStatusMessage,
+  parserBackendUnavailableStatusMessage,
+  parserFailureRecoveryMessage,
+  parserFailureStatusMessage,
+  parserModelUnavailableStatusMessage,
+  parserProgressStatusMessage,
+  parserSampleBlockedStatusMessage,
+  parserSuccessStatusMessage,
+  parserVoiceQuotaSyncedStatusMessage
+} from "./recordWorkflowCopy";
 
 type Account = {
   id: string;
@@ -3710,54 +3736,6 @@ function analysisReportFailureStatusMessage() {
   return boundUiMessage("backend 分析統計暫時無法載入，顯示 mobile 已同步紀錄摘要。");
 }
 
-function aiSaveUnavailableStatusMessage(message: string) {
-  return boundUiMessage(`${message || "backend 尚未 ready"}；目前不會送出 AI 候選儲存請求。`);
-}
-
-function aiPartialSaveFailureStatusMessage(message: string) {
-  return boundUiMessage(`${message}；已保留未儲存候選紀錄，不會自動重試。`);
-}
-
-function aiSaveProgressStatusMessage() {
-  return boundUiMessage("儲存今日紀錄...");
-}
-
-function aiSaveSuccessStatusMessage() {
-  return boundUiMessage("已儲存");
-}
-
-function aiSaveFailureStatusMessage(error: unknown) {
-  return safeUiError(error, "儲存失敗");
-}
-
-function aiSaveRecordsStatusMessage(count: number) {
-  return boundUiMessage(`已更新今日紀錄，新增 ${clampNumber(count, 0, maxMobileCountValue)} 筆紀錄`);
-}
-
-function aiSaveSuccessSummaryMessage(count: number) {
-  return boundUiMessage(`已儲存今日紀錄，包含 ${clampNumber(count, 0, maxMobileCountValue)} 筆 AI 整理紀錄`);
-}
-
-function aiPartialSaveRecordsStatusMessage(savedCount: number, unsavedCount: number) {
-  return boundUiMessage(
-    `已新增 ${clampNumber(savedCount, 0, maxMobileCountValue)} 筆；${clampNumber(
-      unsavedCount,
-      0,
-      maxMobileCountValue
-    )} 筆尚未儲存`
-  );
-}
-
-function aiPartialSaveSummaryMessage(savedCount: number, unsavedCount: number) {
-  return boundUiMessage(
-    `已儲存 ${clampNumber(savedCount, 0, maxMobileCountValue)} 筆；${clampNumber(
-      unsavedCount,
-      0,
-      maxMobileCountValue
-    )} 筆尚未儲存，請返回確認頁檢查。`
-  );
-}
-
 function recordSyncUnavailableStatusMessage(message: string) {
   return boundUiMessage(`${message || "backend 尚未 ready"}；目前不送出紀錄同步請求。`);
 }
@@ -3856,69 +3834,6 @@ function manualRecordCreateFailureStatusMessage(error: unknown) {
 
 function manualRecordCreateSummaryMessage(count: number) {
   return boundUiMessage(`已建立 ${clampNumber(count, 0, maxMobileCountValue)} 筆手動紀錄`);
-}
-
-function parserBackendUnavailableStatusMessage(message: string) {
-  return boundUiMessage(`${message || "backend 尚未 ready"}；目前不送出 parser 請求，避免無效重試與額外成本。`);
-}
-
-function parserModelUnavailableStatusMessage(message: string) {
-  return boundUiMessage(`${message}；目前不送出 parser 請求，請先在設定選擇可用模型。`);
-}
-
-function parserSampleBlockedStatusMessage() {
-  return boundUiMessage("範例文字不會送入 parser；請改成自己的紀錄內容，或使用手動新增避免 LLM 成本。");
-}
-
-function parserProgressStatusMessage() {
-  return boundUiMessage("送入 parser...");
-}
-
-function parserSuccessStatusMessage(count: number) {
-  return boundUiMessage(`整理完成：${clampNumber(count, 0, maxMobileCountValue)} 筆候選紀錄`);
-}
-
-function parserVoiceQuotaSyncedStatusMessage(count: number, voiceSeconds: number) {
-  return boundUiMessage(
-    `整理完成：${clampNumber(count, 0, maxMobileCountValue)} 筆候選紀錄；已送出 ${clampNumber(voiceSeconds, 0, maxMobileCountValue)} 秒語音額度。`
-  );
-}
-
-function parserFailureStatusMessage(error: unknown) {
-  return safeUiError(error, "Parser 失敗");
-}
-
-function parserFailureRecoveryMessage(message: string) {
-  return boundUiMessage(`${message}。可以修改文字後再整理，或改用手動新增避免再次呼叫 parser。`);
-}
-
-function aiCandidateEditOpenStatusMessage() {
-  return boundUiMessage("請確認 AI 整理的單筆紀錄");
-}
-
-function aiCandidateEditCancelStatusMessage() {
-  return boundUiMessage("已取消修改；候選紀錄保留在 AI 整理確認清單。");
-}
-
-function aiCandidateRemoveConfirmStatusMessage() {
-  return boundUiMessage("請確認是否移除這筆 AI 候選紀錄");
-}
-
-function aiCandidateRemoveCancelStatusMessage() {
-  return boundUiMessage("已取消移除；候選紀錄保留在 AI 整理確認清單。");
-}
-
-function aiCandidateRemoveResultStatusMessage(count: number) {
-  const boundedCount = clampNumber(count, 0, maxMobileCountValue);
-  return boundedCount === 0 ? boundUiMessage("已移除所有候選紀錄") : boundUiMessage(`剩餘 ${boundedCount} 筆候選紀錄`);
-}
-
-function aiCandidateEditSuccessStatusMessage() {
-  return boundUiMessage("候選紀錄已更新，請再次確認後儲存");
-}
-
-function aiCandidateEditFailureStatusMessage(error: unknown) {
-  return safeUiError(error, "候選紀錄更新失敗");
 }
 
 function busyActionStatusMessage() {

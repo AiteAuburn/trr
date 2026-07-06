@@ -15,6 +15,35 @@
 
 ## 2026-07-06
 
+### T1069 extract parser and AI save copy helpers
+
+類型：mobile / refactor / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted parser, AI save, partial-save, and AI candidate edit/remove bounded status helpers from `mobile/App.tsx` into `mobile/recordWorkflowCopy.ts`.
+- Kept existing parser requests, voice-quota handling, save requests, achievement sync hook, candidate edit/remove behavior, UI copy, and handler call sites unchanged.
+- Updated the refactor roadmap to record that Slice 3 now covers recording / transcript-review and parser / AI save / AI candidate copy extraction.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 3 with record sync / update / delete / manual-create status copy helpers, or move to Slice 4 data transform helpers once copy extraction is sufficient.
+
 ### T1068 extract recording and transcript copy helpers
 
 類型：mobile / refactor / verifier / docs

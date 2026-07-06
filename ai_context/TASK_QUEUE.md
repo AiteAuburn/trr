@@ -124,6 +124,22 @@ None.
 
 ## Done
 
+### T1069: Extract parser and AI save copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted parser, AI save, partial-save, and AI candidate edit/remove bounded status helpers from `mobile/App.tsx` into `mobile/recordWorkflowCopy.ts`.
+- Kept parser requests, voice-quota handling, save requests, achievement sync hook, candidate edit/remove behavior, UI copy, and handler call sites unchanged.
+- Updated the refactor roadmap to note that Slice 3 now also covers parser / AI save / AI candidate copy extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
 ### T1068: Extract recording and transcript copy helpers
 
 Status: done
