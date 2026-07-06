@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1068: Extract recording and transcript copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted recording and transcript-review bounded status/display copy helpers from `mobile/App.tsx` into `mobile/recordingCopy.ts`.
+- Kept recording behavior, Whisper fallback behavior, transcript review navigation, UI copy, and handler call sites unchanged.
+- Updated mobile navigation verifier so copy-helper definitions and copy markers are checked in `mobile/recordingCopy.ts`, while render and handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 has started with recording / transcript-review copy extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1067: Extract static navigation config
 
 Status: done

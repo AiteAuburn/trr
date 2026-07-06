@@ -55,6 +55,37 @@ import {
   visualSmokeRouteJumps,
   type AppScreen
 } from "./navigationConfig";
+import {
+  homeRecordingModelStatusCopy,
+  homeRecordingPreviewBoundaryCopy,
+  homeRecordingSecondaryHint,
+  recordPageRecordingPreviewBoundaryCopy,
+  recordingActivePreviewCopy,
+  recordingElapsedSecondsCopy,
+  recordingFinishedStatusMessage,
+  recordingIdlePreviewCopy,
+  recordingLimitCopy,
+  recordingLimitReachedStatusMessage,
+  recordingPermissionDeniedStatusMessage,
+  recordingQuotaExhaustedStatusMessage,
+  recordingResetStatusMessage,
+  recordingResultBodyCopy,
+  recordingResultPrimaryActionLabel,
+  recordingSimulatedResultCopy,
+  recordingStartedStatusMessage,
+  recordingStartFailureStatusMessage,
+  recordingStopFailureStatusMessage,
+  recordingTextFallbackStatusMessage,
+  recordingWhisperEmptyStatusMessage,
+  recordingWhisperFailureStatusMessage,
+  recordingWhisperMissingModelStatusMessage,
+  recordingWhisperProgressStatusMessage,
+  recordingWhisperSuccessStatusMessage,
+  transcriptClearedStatusMessage,
+  transcriptReturnEditStatusMessage,
+  transcriptReviewBackStatusMessage,
+  transcriptReviewReadyStatusMessage
+} from "./recordingCopy";
 
 type Account = {
   id: string;
@@ -3894,83 +3925,6 @@ function busyActionStatusMessage() {
   return boundUiMessage("目前仍在處理上一個動作，請稍候");
 }
 
-function recordingQuotaExhaustedStatusMessage() {
-  return boundUiMessage("今日錄音額度已用完，請改用文字或手動新增。");
-}
-
-function recordingStartedStatusMessage(isLowQuota: boolean) {
-  return boundUiMessage(isLowQuota ? "錄音中；今日錄音額度剩餘不到 2 分鐘。" : "錄音中，放開即結束。");
-}
-
-function recordingResetStatusMessage() {
-  return boundUiMessage("可重新按住錄音，或直接使用文字輸入。");
-}
-
-function recordingTextFallbackStatusMessage() {
-  return boundUiMessage("錄音已結束；尚未設定 Whisper 模型，請用文字輸入，確認後再交給 AI 整理。");
-}
-
-function recordingPermissionDeniedStatusMessage() {
-  return boundUiMessage("麥克風權限未允許，請到系統設定開啟，或改用文字/手動新增。");
-}
-
-function recordingStartFailureStatusMessage(error: unknown) {
-  return safeUiError(error, "錄音無法開始");
-}
-
-function recordingStopFailureStatusMessage(error: unknown) {
-  return safeUiError(error, "錄音停止失敗");
-}
-
-function recordingLimitReachedStatusMessage(limitSeconds: number) {
-  return boundUiMessage(`已達單次錄音上限 ${clampNumber(limitSeconds, 0, maxMobileCountValue)} 秒，已自動結束。`);
-}
-
-function recordingFinishedStatusMessage(elapsedSeconds: number) {
-  const boundedSeconds = clampNumber(elapsedSeconds, 0, maxMobileCountValue);
-  return boundUiMessage(
-    boundedSeconds <= 1
-      ? "錄音太短，請按住說完後再放開。"
-      : "錄音已結束；音檔已保留於本機，可用 Whisper 轉文字後進入確認。"
-  );
-}
-
-function recordingWhisperMissingModelStatusMessage() {
-  return boundUiMessage("錄音已保留；請先在設定填入 Whisper model path，或改用文字輸入。");
-}
-
-function recordingWhisperProgressStatusMessage() {
-  return boundUiMessage("正在將錄音轉成文字，完成後會進入文字確認。");
-}
-
-function recordingWhisperSuccessStatusMessage() {
-  return boundUiMessage("錄音已轉成文字；請確認內容後再交給 AI 整理。");
-}
-
-function recordingWhisperEmptyStatusMessage() {
-  return boundUiMessage("Whisper 沒有產生文字；請重新錄音或改用文字輸入。");
-}
-
-function recordingWhisperFailureStatusMessage(error: unknown) {
-  return safeUiError(error, "錄音轉文字失敗");
-}
-
-function transcriptReviewReadyStatusMessage() {
-  return boundUiMessage("請確認文字內容，下一步才會交給 AI 整理");
-}
-
-function transcriptReturnEditStatusMessage() {
-  return boundUiMessage("請修改文字；按下一步整理時才會重新送入 parser。");
-}
-
-function transcriptReviewBackStatusMessage() {
-  return boundUiMessage("已返回上一頁；目前文字保留，尚未送入 AI 整理。");
-}
-
-function transcriptClearedStatusMessage() {
-  return boundUiMessage("已清空目前文字，可回到記錄頁重新輸入。");
-}
-
 function nativeDebugDefaultStatusMessage() {
   return boundUiMessage("Expo Go 可跑 UI；whisper.rn / llama.rn 需要 Dev Client。");
 }
@@ -4616,56 +4570,6 @@ function transcriptReviewManualEntryStatusMessage() {
   return boundUiMessage("已從文字確認改用手動新增；不會重送 parser，也不呼叫 AI 或 STT。");
 }
 
-function recordingIdlePreviewCopy() {
-  return boundDisplayText("放開後保留本機音檔；轉文字需接 Whisper 或改用下方文字輸入", maxDisplayDetailTextLength);
-}
-
-function recordingActivePreviewCopy(elapsedSeconds: number) {
-  return boundDisplayText(`${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒 · 放開結束`, 80);
-}
-
-function homeRecordingSecondaryHint(isRecording: boolean, elapsedSeconds: number) {
-  if (!isRecording) {
-    return boundDisplayText("放開即結束", 40);
-  }
-  return boundDisplayText(
-    `已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，放開即結束`,
-    80
-  );
-}
-
-function homeRecordingModelStatusCopy(hasWhisperModel: boolean) {
-  return boundDisplayText(
-    hasWhisperModel ? "目前語音識別：本機 Whisper" : "目前語音識別：內建文字確認",
-    80
-  );
-}
-
-function homeRecordingPreviewBoundaryCopy() {
-  return boundDisplayText(
-    "首頁按住會使用 expo-av 擷取本機音檔；放開只停止錄音，不自動呼叫 STT、AI、LLM 或寫入 backend。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function recordPageRecordingPreviewBoundaryCopy() {
-  return boundDisplayText(
-    "按住會使用 expo-av 擷取本機音檔；若已設定 Whisper model path，可轉文字後進入確認，儲存前仍必須先文字確認。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function recordingSimulatedResultCopy(elapsedSeconds: number) {
-  return boundDisplayText(
-    `錄音已擷取 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒；可用 Whisper 轉文字後確認，或改用文字輸入。`,
-    maxDisplayDetailTextLength
-  );
-}
-
-function recordingElapsedSecondsCopy(elapsedSeconds: number) {
-  return boundDisplayText(`${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒`, 40);
-}
-
 function recordingEffectiveLimitSeconds(quota: VoiceQuota | null) {
   if (quota && quota.remaining_seconds_today > 0) {
     return clampNumber(
@@ -4675,25 +4579,6 @@ function recordingEffectiveLimitSeconds(quota: VoiceQuota | null) {
     );
   }
   return mobileSingleRecordingLimitSeconds;
-}
-
-function recordingLimitCopy(limitSeconds: number) {
-  return boundDisplayText(`單次最多 ${clampNumber(limitSeconds, 1, mobileSingleRecordingLimitSeconds)} 秒`, 80);
-}
-
-function recordingResultBodyCopy(elapsedSeconds: number) {
-  const boundedSeconds = clampNumber(elapsedSeconds, 0, maxMobileCountValue);
-  return boundDisplayText(
-    boundedSeconds <= 1
-      ? "錄音時間太短，建議重新按住錄音。"
-      : "錄音已結束並保留本機音檔；已設定 Whisper 時可轉文字後確認，否則請改用下方文字輸入。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function recordingResultPrimaryActionLabel(elapsedSeconds: number) {
-  const boundedSeconds = clampNumber(elapsedSeconds, 0, maxMobileCountValue);
-  return boundDisplayText(boundedSeconds <= 1 ? "再錄一次" : "使用文字輸入", maxDisplayTextLength);
 }
 
 function aiReviewNoCandidateTitleCopy() {

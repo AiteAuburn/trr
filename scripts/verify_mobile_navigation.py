@@ -11,6 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
+RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
 README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
 ACHIEVEMENT_CATALOG_PATH = REPO_ROOT / "backend" / "app" / "services" / "achievement_catalog.py"
@@ -1186,6 +1187,7 @@ def main() -> int:
     content = APP_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
+    recording_copy_content = RECORDING_COPY_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
 
     try:
@@ -1248,9 +1250,13 @@ def main() -> int:
             ("home recording timer clamp", "setRecordingElapsedSeconds(clampNumber(nextElapsedSeconds, 0, limitSeconds));"),
             ("home recording auto stop at limit", 'void finishRecordingPreview("limit");'),
             ("home recording secondary hint render", "<Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>"),
-            ("home recording secondary hint active copy", "已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，放開即結束"),
         ):
             _assert_contains(label, content, marker)
+        _assert_contains(
+            "home recording secondary hint active copy",
+            recording_copy_content,
+            "已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，放開即結束",
+        )
         _assert_not_contains(
             "home recording must not render a third timer line",
             content,
@@ -1479,7 +1485,7 @@ def main() -> int:
         )
         _assert_contains(
             "recording text fallback status",
-            content,
+            recording_copy_content,
             "function recordingTextFallbackStatusMessage()",
         )
         _assert_contains(
@@ -2338,13 +2344,7 @@ def main() -> int:
             ("guided home example pagination", "styles.homeExamplePagination"),
             ("guided home example active pagination dot", "styles.homeExampleDotActive"),
             ("minimal home primary hint", "按住開始說話記錄"),
-            ("minimal home secondary hint", "放開即結束"),
-            ("minimal home recording seconds helper", "function homeRecordingSecondaryHint(isRecording: boolean, elapsedSeconds: number)"),
-            ("minimal home recording seconds copy", "已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，放開即結束"),
             ("minimal home recording seconds display value", "const homeRecordingSecondaryHintDisplayText = homeRecordingSecondaryHint("),
-            ("minimal home recording model status helper", "function homeRecordingModelStatusCopy(hasWhisperModel: boolean)"),
-            ("minimal home recording model whisper copy", "目前語音識別：本機 Whisper"),
-            ("minimal home recording model fallback copy", "目前語音識別：內建文字確認"),
             ("minimal home recording model status display value", "const homeRecordingModelStatusDisplayText = homeRecordingModelStatusCopy(Boolean(whisperModelPath.trim()));"),
             ("minimal home mic accessibility binding", "accessibilityLabel={recordingButtonDisplayAccessibilityLabel}"),
             ("tutorial whisper release copy", "若已選擇本機 Whisper 模型，會先轉成文字並進入確認。"),
@@ -2358,7 +2358,6 @@ def main() -> int:
             ("native recording stop guard", "const recordingStopInFlight = useRef(false);"),
             ("single recording limit constant", "const mobileSingleRecordingLimitSeconds = 60;"),
             ("effective recording limit helper", "function recordingEffectiveLimitSeconds(quota: VoiceQuota | null)"),
-            ("recording limit reached status", "function recordingLimitReachedStatusMessage(limitSeconds: number)"),
             ("recording limit display copy", "const recordingLimitDisplayText = recordingLimitCopy(recordingEffectiveLimitDisplaySeconds);"),
             ("recording limit rendered in record page", "<Text style={styles.evidence}>{recordingLimitDisplayText}</Text>"),
             ("recording interval limit clamp", "setRecordingElapsedSeconds(clampNumber(nextElapsedSeconds, 0, limitSeconds));"),
@@ -2378,7 +2377,6 @@ def main() -> int:
             ("native recording transcript source", 'source: "user" | "sample" | "voice" = "user"'),
             ("native recording voice seconds draft", "setTranscriptVoiceSeconds("),
             ("native recording transcript confirmation", 'setCurrentScreen("transcriptReview");'),
-            ("native recording no direct parser boundary", "確認後再交給 AI 整理"),
             ("home recording whisper handoff", 'void transcribeRecordingToReview("today", capturedAudioPath, elapsedSeconds);'),
             ("home recording fallback transcript review", 'setTranscriptReviewReturnScreen("today");\n      setCurrentScreen("transcriptReview");\n      setStatus(recordingTextFallbackStatusMessage());'),
             ("parse request voice seconds", "voice_seconds: parserVoiceSeconds"),
@@ -2426,7 +2424,7 @@ def main() -> int:
         )
         _assert_contains(
             "recording elapsed seconds display helper",
-            content,
+            recording_copy_content,
             "function recordingElapsedSecondsCopy(elapsedSeconds: number)",
         )
         for label, marker in (
@@ -2679,6 +2677,17 @@ def main() -> int:
             ("record delete disabled state", "accessibilityState={{ disabled: isBusy }}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("minimal home recording seconds helper", "function homeRecordingSecondaryHint(isRecording: boolean, elapsedSeconds: number)"),
+            ("minimal home secondary hint", "放開即結束"),
+            ("minimal home recording seconds copy", "已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，放開即結束"),
+            ("minimal home recording model status helper", "function homeRecordingModelStatusCopy(hasWhisperModel: boolean)"),
+            ("minimal home recording model whisper copy", "目前語音識別：本機 Whisper"),
+            ("minimal home recording model fallback copy", "目前語音識別：內建文字確認"),
+            ("recording limit reached status", "function recordingLimitReachedStatusMessage(limitSeconds: number)"),
+            ("native recording no direct parser boundary", "確認後再交給 AI 整理"),
+        ):
+            _assert_contains(label, recording_copy_content, marker)
         _assert_contains("minimal home empty subtitle", navigation_content, 'today: { subtitle: "" }')
         _assert_not_contains(
             "home quick-entry action",

@@ -15,6 +15,39 @@
 
 ## 2026-07-06
 
+### T1068 extract recording and transcript copy helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordingCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted recording and transcript-review bounded status/display copy helpers from `mobile/App.tsx` into `mobile/recordingCopy.ts`.
+- Kept existing recording behavior, hold/release flow, Whisper fallback behavior, transcript-review navigation, UI copy, and handler call sites unchanged.
+- Updated the navigation verifier so recording copy helper definitions and copy markers are checked in `mobile/recordingCopy.ts`, while render, handler, accessibility, and side-effect guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to mark Slice 3 started with recording / transcript-review copy extraction.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 3 by extracting another bounded status/copy group, likely parser/save/update/delete copy helpers.
+
 ### T1067 extract static navigation config
 
 類型：mobile / refactor / verifier / docs

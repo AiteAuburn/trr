@@ -31,6 +31,7 @@
   - `nativeLocalModels.ts`：native Whisper / Llama bridge。
   - `navigationConfig.ts`：`AppScreen` route union、primary screens、MVP flow、screen chrome、first-version menu 與 visual-smoke route jump config。
   - `recordDisplay.ts`：record 顯示 helper 與每日紀錄 section config。
+  - `recordingCopy.ts`：recording / transcript-review bounded status messages and display copy.
 
 ### Backend
 
@@ -93,6 +94,8 @@ Verification:
 - `cd mobile && rtk npm run quality`
 
 ### Slice 3: Status/Copy Helpers
+
+Status: started; recording / transcript-review copy extracted.
 
 Scope:
 
