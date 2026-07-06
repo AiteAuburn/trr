@@ -1,0 +1,93 @@
+export type AnalysisRange = "week" | "month" | "custom";
+
+const maxDisplayTextLength = 120;
+const maxDisplayDetailTextLength = 240;
+const maxUiMessageLength = 300;
+const maxMobileCountValue = 1_000_000;
+
+function clampNumber(value: number, min: number, max: number) {
+  if (!Number.isFinite(value)) {
+    return min;
+  }
+  return Math.max(min, Math.min(max, value));
+}
+
+function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
+  return value.slice(0, maxLength);
+}
+
+function boundUiMessage(value: string) {
+  return value.slice(0, maxUiMessageLength);
+}
+
+function parseDateBoundary(value: string, edge: "start" | "end") {
+  const date = new Date(`${value}T${edge === "start" ? "00:00:00.000" : "23:59:59.999"}`);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+export function analysisSafetyIntroCopy() {
+  return boundDisplayText("只做趨勢摘要，不提供診療建議。", maxDisplayDetailTextLength);
+}
+
+export function analysisChartEmptyCopy() {
+  return boundDisplayText("目前範圍沒有血糖資料", maxDisplayTextLength);
+}
+
+export function analysisRangeSummaryCopy(recordCount: number, isPreviewMode: boolean) {
+  const boundedCount = clampNumber(recordCount, 0, maxMobileCountValue);
+  return boundDisplayText(
+    boundedCount > 0
+      ? `目前範圍內有 ${boundedCount} 筆血糖紀錄。`
+      : isPreviewMode
+        ? "目前沒有任何紀錄；新增紀錄後才會顯示趨勢與統計。"
+        : "目前範圍沒有血糖紀錄。",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function analysisCustomRangeStatusCopy(range: AnalysisRange, customStart: string, customEnd: string) {
+  if (range !== "custom") {
+    return "";
+  }
+  const start = parseDateBoundary(customStart, "start");
+  const end = parseDateBoundary(customEnd, "end");
+  if (!start || !end) {
+    return boundDisplayText("自訂日期格式無效；目前改用本月資料。", maxDisplayDetailTextLength);
+  }
+  if (start > end) {
+    return boundDisplayText("開始日期晚於結束日期；目前改用本月資料。", maxDisplayDetailTextLength);
+  }
+  return boundDisplayText("自訂日期區間已套用，結束日期包含當天完整紀錄。", maxDisplayDetailTextLength);
+}
+
+export function analysisReportButtonLabel(isLoading: boolean) {
+  return boundDisplayText(isLoading ? "報告載入中..." : "查看詳細報告", maxDisplayTextLength);
+}
+
+export function analysisCustomApplyStatusMessage() {
+  return boundUiMessage("已套用自訂日期區間並同步 bounded report；不呼叫 AI 或 LLM。");
+}
+
+export function analysisManualEntryStatusMessage() {
+  return boundUiMessage("已從基本分析進入手動新增；此路徑不呼叫 AI、LLM 或 STT。");
+}
+
+export function analysisReturnTodayStatusMessage() {
+  return boundUiMessage("已從基本分析回到今日紀錄；只使用已載入紀錄，不額外查詢 backend。");
+}
+
+export function analysisDetailedReportStatusMessage() {
+  return boundUiMessage("已開啟詳細報告；會使用固定查詢上限，且不呼叫 AI 或 LLM。");
+}
+
+export function detailedReportReturnAnalysisStatusMessage() {
+  return boundUiMessage("已從詳細報告返回基本分析；不重新查詢 backend 或呼叫 AI。");
+}
+
+export function detailedReportManualEntryStatusMessage() {
+  return boundUiMessage("已從詳細報告進入手動新增；此路徑不呼叫 AI、LLM 或 STT。");
+}
+
+export function detailedReportReturnTodayStatusMessage() {
+  return boundUiMessage("已從詳細報告回到今日紀錄；不重新查詢 backend 或呼叫 AI。");
+}

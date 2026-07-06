@@ -14,6 +14,7 @@ RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
 RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
 NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
+ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
 README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
 ACHIEVEMENT_CATALOG_PATH = REPO_ROOT / "backend" / "app" / "services" / "achievement_catalog.py"
@@ -1192,6 +1193,7 @@ def main() -> int:
     recording_copy_content = RECORDING_COPY_PATH.read_text(encoding="utf-8")
     native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
     first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
+    analysis_copy_content = ANALYSIS_COPY_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
 
     try:
@@ -3140,11 +3142,6 @@ def main() -> int:
             ("analysis date bounds helper", "function analysisDateBounds(range: AnalysisRange, customStart: string, customEnd: string)"),
             ("analysis custom start inclusive midnight", 'edge === "start" ? "00:00:00.000" : "23:59:59.999"'),
             ("analysis custom end inclusive day", '"23:59:59.999"'),
-            ("analysis custom range status helper", "function analysisCustomRangeStatusCopy(range: AnalysisRange, customStart: string, customEnd: string)"),
-            ("analysis custom invalid format status", "自訂日期格式無效；目前改用本月資料。"),
-            ("analysis custom invalid order status", "開始日期晚於結束日期；目前改用本月資料。"),
-            ("analysis custom valid full-day status", "自訂日期區間已套用，結束日期包含當天完整紀錄。"),
-            ("analysis custom apply status", "已套用自訂日期區間並同步 bounded report；不呼叫 AI 或 LLM。"),
             ("analysis custom range status display", "const analysisCustomRangeStatusDisplayText = analysisCustomRangeStatusCopy("),
             ("analysis selected date bounds", "const analysisSelectedDateBounds = useMemo("),
             ("analysis local records date bounds", "const { start, end } = analysisSelectedDateBounds;\n    return recordsForDisplay.filter((record) => {"),
@@ -3161,6 +3158,14 @@ def main() -> int:
             ("analysis report end bound", "const endAt = analysisSelectedDateBounds.end.toISOString();"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("analysis custom range status helper", "function analysisCustomRangeStatusCopy(range: AnalysisRange, customStart: string, customEnd: string)"),
+            ("analysis custom invalid format status", "自訂日期格式無效；目前改用本月資料。"),
+            ("analysis custom invalid order status", "開始日期晚於結束日期；目前改用本月資料。"),
+            ("analysis custom valid full-day status", "自訂日期區間已套用，結束日期包含當天完整紀錄。"),
+            ("analysis custom apply status", "已套用自訂日期區間並同步 bounded report；不呼叫 AI 或 LLM。"),
+        ):
+            _assert_contains(label, analysis_copy_content, marker)
         _assert_not_contains(
             "analysis stale independent glucose records memo",
             content,

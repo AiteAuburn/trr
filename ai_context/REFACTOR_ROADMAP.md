@@ -39,6 +39,7 @@
   - `reportStatusCopy.ts`：voice quota / analysis report / detailed report bounded status messages.
   - `firstVersionFlowCopy.ts`：Today / Record quick-entry display items and first-version flow status messages.
   - `historyCopy.ts`：History navigation status, empty-state, and no-real-record bounded copy.
+  - `analysisCopy.ts`：Analysis / detailed-report bounded copy and custom-range status messages.
 
 ### Backend
 
@@ -102,7 +103,7 @@ Verification:
 
 ### Slice 3: Status/Copy Helpers
 
-Status: started; recording / transcript-review, parser / AI save / AI candidate, record sync / CRUD, auth / backend session, native model debug, report / voice quota, first-version flow, and history copy extracted.
+Status: started; recording / transcript-review, parser / AI save / AI candidate, record sync / CRUD, auth / backend session, native model debug, report / voice quota, first-version flow, history, and analysis copy extracted.
 
 Scope:
 

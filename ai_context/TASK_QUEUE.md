@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1076: Extract analysis copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted Analysis safety, chart empty, range summary, custom-range status, report button, Analysis navigation status, and detailed-report navigation status helpers from `mobile/App.tsx` into `mobile/analysisCopy.ts`.
+- Moved the `AnalysisRange` type with the Analysis copy helpers and imported it back into `mobile/App.tsx`.
+- Kept Analysis date bounds, backend report requests, local metric calculations, UI copy, and handler call sites unchanged.
+- Updated the navigation verifier so Analysis custom-range status copy guards now inspect `mobile/analysisCopy.ts`, while date-bound and report-fetch guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 now also covers Analysis copy extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1075: Extract history copy helpers
 
 Status: done

@@ -15,6 +15,38 @@
 
 ## 2026-07-06
 
+### T1076 extract analysis copy helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted Analysis safety, chart empty, range summary, custom-range status, report button, Analysis navigation status, and detailed-report navigation status helpers from `mobile/App.tsx` into `mobile/analysisCopy.ts`.
+- Moved the `AnalysisRange` type with the Analysis copy helpers and imported it back into `mobile/App.tsx`.
+- Kept existing Analysis date bounds, backend report requests, local metric calculations, UI copy, and handler call sites unchanged.
+- Updated the navigation verifier so Analysis custom-range status copy guards now inspect `mobile/analysisCopy.ts`, while date-bound and report-fetch guards remain checked in `mobile/App.tsx`.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 3 with remaining Settings bounded copy helpers, or move to Slice 4 data transform helpers once copy extraction is sufficient.
+
 ### T1075 extract history copy helpers
 
 類型：mobile / refactor / docs
