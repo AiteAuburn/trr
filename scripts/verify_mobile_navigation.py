@@ -2869,7 +2869,6 @@ def main() -> int:
         ):
             _assert_contains(f"{style_name} style", content, f"{style_name}: {{")
         for label, marker in (
-            ("history calendar day display item", "function historyCalendarDayDisplayItem(date: Date, selectedDateKey: string, recordsByDate: Map<string, RecordItem[]>)"),
             ("history daily sync summary helper", "function historyDailySyncSummary(records: RecordItem[], isLocalPreview: boolean)"),
             ("history daily summary display item", "function historyDailySummaryDisplayItem(dateKey: string, records: RecordItem[], isLocalPreview: boolean)"),
             ("history daily section display helper", "function buildHistoryDailyRecordSectionDisplayItems(records: RecordItem[])"),
@@ -2928,6 +2927,11 @@ def main() -> int:
             "function historyDetailModeDisplayItem(value: { id: HistoryDetailMode; label: string; accessibilityCopy: string })",
         )
         _assert_contains(
+            "history calendar day display item",
+            history_screen_data_content,
+            "function historyCalendarDayDisplayItem(",
+        )
+        _assert_contains(
             "history cursor merge helper",
             record_bounds_content,
             "function mergeRecordsByCursorOrder(current: RecordItem[], incoming: RecordItem[])",
@@ -2939,7 +2943,7 @@ def main() -> int:
             ("daily section body measurement support", 'acceptedRecordTypes: ["weight", "body_measurement"]'),
         ):
             _assert_contains(label, record_display_content, marker)
-        history_calendar_day_block = _function_block(content, "historyCalendarDayDisplayItem")
+        history_calendar_day_block = _function_block(history_screen_data_content, "historyCalendarDayDisplayItem")
         for label, marker in (
             ("history calendar date key", "const dateKey = formatLocalDateInput(date);"),
             ("history calendar date record count", "const recordCount = clampNumber(recordsByDate.get(dateKey)?.length ?? 0, 0, maxMobileCountValue);"),

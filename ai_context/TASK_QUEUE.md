@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1088: Extract history calendar screen data boundary
+
+Status: done
+
+Summary:
+
+- Extracted History calendar day display item shaping from `mobile/App.tsx` into `mobile/historyScreenData.ts`.
+- Kept History calendar render JSX, selected date/month state, month navigation, day press handler, record grouping, UI copy, and navigation unchanged.
+- Updated the navigation verifier so History calendar day helper guards inspect `mobile/historyScreenData.ts`, while History render and press-handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the History calendar day data boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1087: Extract history screen detail-mode data boundary
 
 Status: done

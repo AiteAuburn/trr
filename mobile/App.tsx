@@ -255,6 +255,7 @@ import {
   noRealRecordHealthValueCopy
 } from "./historyCopy";
 import {
+  historyCalendarDayDisplayItem,
   historyDetailModeDisplayItem,
   historyDetailModes,
   type HistoryDetailMode
@@ -2326,24 +2327,6 @@ function manualRecordTypeDisplayItem(value: { id: ManualRecordType; label: strin
     value: value.id,
     label,
     accessibilityLabel: boundDisplayText(`選擇${label}紀錄類型，不呼叫 AI 或 parser`, maxDisplayDetailTextLength)
-  };
-}
-
-function historyCalendarDayDisplayItem(date: Date, selectedDateKey: string, recordsByDate: Map<string, RecordItem[]>) {
-  const dateKey = formatLocalDateInput(date);
-  const recordCount = clampNumber(recordsByDate.get(dateKey)?.length ?? 0, 0, maxMobileCountValue);
-  const dayLabel = boundDisplayText(String(date.getDate()), 4);
-  return {
-    key: `history-calendar-${boundIdentifier(dateKey)}`,
-    value: dateKey,
-    dayLabel,
-    recordCount,
-    hasRecords: recordCount > 0,
-    isSelected: dateKey === selectedDateKey,
-    accessibilityLabel: boundDisplayText(
-      `${dateKey}，${recordCount > 0 ? `有 ${recordCount} 筆紀錄` : "沒有紀錄"}，點擊查看日期`,
-      maxDisplayDetailTextLength
-    )
   };
 }
 
