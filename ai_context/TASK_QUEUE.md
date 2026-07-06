@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1083: Extract analysis metric transform helpers
+
+Status: done
+
+Summary:
+
+- Extracted Analysis and detailed-report metric row shaping from `mobile/App.tsx` into `mobile/analysisMetricTransforms.ts`.
+- Kept local/remote report fallback sources, Basic Analysis render rows, detailed-report render rows, UI labels, navigation, backend report endpoint, and bounded count/glucose behavior unchanged.
+- Updated the navigation verifier so metric label/order guards inspect `mobile/analysisMetricTransforms.ts`, while report source fallback and render guards remain checked in `mobile/App.tsx`; updated the UI spec coverage marker to verify the Analysis metric render binding after the helper extraction.
+- Updated the refactor roadmap to note that Slice 4 now covers analysis metric transform extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1082: Extract daily transcript transform helpers
 
 Status: done

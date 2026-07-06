@@ -17,6 +17,7 @@ RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
 NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
 ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
+ANALYSIS_METRIC_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisMetricTransforms.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
@@ -1201,6 +1202,7 @@ def main() -> int:
     native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
     first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
     analysis_copy_content = ANALYSIS_COPY_PATH.read_text(encoding="utf-8")
+    analysis_metric_content = ANALYSIS_METRIC_TRANSFORMS_PATH.read_text(encoding="utf-8")
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
@@ -3344,7 +3346,7 @@ def main() -> int:
         _assert_contains(
             "analysis metric rows",
             content,
-            "const analysisMetricRows = ([",
+            "const analysisMetricRows = buildAnalysisMetricRows({",
         )
         for label, marker in (
             ("analysis normalized glucose timing helper", "function normalizedGlucoseTiming(value: unknown)"),
@@ -3357,21 +3359,21 @@ def main() -> int:
             ("analysis backend lowest source", "activeAnalysisReport?.glucose.minimum ?? lowestGlucose"),
             ("analysis backend before meal source", "activeAnalysisReport?.glucose.before_meal_count ?? beforeMealGlucoseCount"),
             ("analysis backend after meal source", "activeAnalysisReport?.glucose.after_meal_count ?? afterMealGlucoseCount"),
+            ("detailed report backend before meal count", "activeAnalysisReport?.glucose.before_meal_count ?? beforeMealGlucoseCount"),
+            ("detailed report backend after meal count", "activeAnalysisReport?.glucose.after_meal_count ?? afterMealGlucoseCount"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
-            ("analysis highest metric", '["最高血糖", analysisHighestDisplayValue === null ? "尚無" : String(analysisHighestDisplayValue)]'),
-            ("analysis lowest metric", '["最低血糖", analysisLowestDisplayValue === null ? "尚無" : String(analysisLowestDisplayValue)]'),
-            ("analysis average metric", '["平均血糖", analysisAverageDisplayValue === null ? "尚無" : String(analysisAverageDisplayValue)]'),
-            ("analysis glucose record count metric", '["血糖測量總次數", String(analysisGlucoseMetricCount)]'),
-            ("analysis before meal count metric", '["飯前血糖次數", String(analysisBeforeMealGlucoseDisplayCount)]'),
-            ("analysis after meal count metric", '["飯後血糖次數", String(analysisAfterMealGlucoseDisplayCount)]'),
-            ("detailed report backend before meal count", "activeAnalysisReport?.glucose.before_meal_count ?? beforeMealGlucoseCount"),
-            ("detailed report backend after meal count", "activeAnalysisReport?.glucose.after_meal_count ?? afterMealGlucoseCount"),
-            ("detailed report before meal metric", '["飯前血糖", `${reportBeforeMealGlucoseDisplayCount} 次`]'),
-            ("detailed report after meal metric", '["飯後血糖", `${reportAfterMealGlucoseDisplayCount} 次`]'),
+            ("analysis highest metric", '["最高血糖", highest === null ? "尚無" : String(highest)]'),
+            ("analysis lowest metric", '["最低血糖", lowest === null ? "尚無" : String(lowest)]'),
+            ("analysis average metric", '["平均血糖", average === null ? "尚無" : String(average)]'),
+            ("analysis glucose record count metric", '["血糖測量總次數", String(glucoseCount)]'),
+            ("analysis before meal count metric", '["飯前血糖次數", String(beforeMealCount)]'),
+            ("analysis after meal count metric", '["飯後血糖次數", String(afterMealCount)]'),
+            ("detailed report before meal metric", '["飯前血糖", `${beforeMealCount} 次`]'),
+            ("detailed report after meal metric", '["飯後血糖", `${afterMealCount} 次`]'),
         ):
-            _assert_contains(label, content, marker)
+            _assert_contains(label, analysis_metric_content, marker)
         _assert_contains(
             "analysis metric rows render",
             content,

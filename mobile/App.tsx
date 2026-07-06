@@ -270,6 +270,10 @@ import {
   type AnalysisRange
 } from "./analysisCopy";
 import {
+  analysisMetricRows as buildAnalysisMetricRows,
+  detailedReportMetricRows as buildDetailedReportMetricRows
+} from "./analysisMetricTransforms";
+import {
   boundDailyTranscriptEntries,
   buildDailyRecordSaveRequest,
   createDailyTranscriptEntry,
@@ -5823,40 +5827,26 @@ export default function App() {
   const todayRecordSummaryDisplayText = todayRecordSummaryText(todayRecords.length);
   const historyRecordDisplayCount = clampNumber(historyRecords.length, 0, maxMobileCountValue);
   const rankingStreakDisplayDays = clampNumber(currentRecordStreakDays(records), 0, maxMobileCountValue);
-  const analysisGlucoseRecordDisplayCount = clampNumber(analysisGlucoseRecords.length, 0, maxMobileCountValue);
-  const analysisAverageDisplayValue = clampNullableNumber(activeAnalysisReport?.glucose.average ?? averageGlucose, 0, maxMobileGlucoseValue);
-  const analysisHighestDisplayValue = clampNullableNumber(activeAnalysisReport?.glucose.maximum ?? highestGlucose, 0, maxMobileGlucoseValue);
-  const analysisLowestDisplayValue = clampNullableNumber(activeAnalysisReport?.glucose.minimum ?? lowestGlucose, 0, maxMobileGlucoseValue);
-  const analysisBeforeMealGlucoseDisplayCount = clampNumber(activeAnalysisReport?.glucose.before_meal_count ?? beforeMealGlucoseCount, 0, maxMobileCountValue);
-  const analysisAfterMealGlucoseDisplayCount = clampNumber(activeAnalysisReport?.glucose.after_meal_count ?? afterMealGlucoseCount, 0, maxMobileCountValue);
   const analysisGlucoseMetricCount = clampNumber(activeAnalysisReport?.glucose.count ?? analysisGlucoseRecords.length, 0, maxMobileCountValue);
-  const analysisMetricRows = ([
-    ["最高血糖", analysisHighestDisplayValue === null ? "尚無" : String(analysisHighestDisplayValue)],
-    ["最低血糖", analysisLowestDisplayValue === null ? "尚無" : String(analysisLowestDisplayValue)],
-    ["平均血糖", analysisAverageDisplayValue === null ? "尚無" : String(analysisAverageDisplayValue)],
-    ["血糖測量總次數", String(analysisGlucoseMetricCount)],
-    ["飯前血糖次數", String(analysisBeforeMealGlucoseDisplayCount)],
-    ["飯後血糖次數", String(analysisAfterMealGlucoseDisplayCount)]
-  ] as const).map(metricDisplayItem);
+  const analysisMetricRows = buildAnalysisMetricRows({
+    average: activeAnalysisReport?.glucose.average ?? averageGlucose,
+    highest: activeAnalysisReport?.glucose.maximum ?? highestGlucose,
+    lowest: activeAnalysisReport?.glucose.minimum ?? lowestGlucose,
+    glucoseCount: analysisGlucoseMetricCount,
+    beforeMealCount: activeAnalysisReport?.glucose.before_meal_count ?? beforeMealGlucoseCount,
+    afterMealCount: activeAnalysisReport?.glucose.after_meal_count ?? afterMealGlucoseCount
+  });
   const reportRecordDisplayCount = clampNumber(reportRecordCount, 0, maxMobileCountValue);
-  const reportGlucoseAverageDisplayValue = clampNullableNumber(reportGlucoseAverage, 0, maxMobileGlucoseValue);
-  const reportGlucoseMinimumDisplayValue = clampNullableNumber(reportGlucoseMinimum, 0, maxMobileGlucoseValue);
-  const reportGlucoseMaximumDisplayValue = clampNullableNumber(reportGlucoseMaximum, 0, maxMobileGlucoseValue);
-  const reportBeforeMealGlucoseDisplayCount = clampNumber(reportBeforeMealGlucoseCount, 0, maxMobileCountValue);
-  const reportAfterMealGlucoseDisplayCount = clampNumber(reportAfterMealGlucoseCount, 0, maxMobileCountValue);
-  const reportMealDisplayCount = clampNumber(reportMealCount, 0, maxMobileCountValue);
-  const reportExerciseDisplayCount = clampNumber(reportExerciseCount, 0, maxMobileCountValue);
-  const reportMedicationDisplayCount = clampNumber(reportMedicationCount, 0, maxMobileCountValue);
-  const detailedReportMetricRows = ([
-    ["血糖平均", reportGlucoseAverageDisplayValue === null ? "尚無" : `${reportGlucoseAverageDisplayValue} mg/dL`],
-    ["最低血糖", reportGlucoseMinimumDisplayValue === null ? "尚無" : `${reportGlucoseMinimumDisplayValue} mg/dL`],
-    ["最高血糖", reportGlucoseMaximumDisplayValue === null ? "尚無" : `${reportGlucoseMaximumDisplayValue} mg/dL`],
-    ["飯前血糖", `${reportBeforeMealGlucoseDisplayCount} 次`],
-    ["飯後血糖", `${reportAfterMealGlucoseDisplayCount} 次`],
-    ["飲食紀錄", `${reportMealDisplayCount} 筆`],
-    ["運動紀錄", `${reportExerciseDisplayCount} 筆`],
-    ["用藥紀錄", `${reportMedicationDisplayCount} 筆`]
-  ] as const).map(metricDisplayItem);
+  const detailedReportMetricRows = buildDetailedReportMetricRows({
+    average: reportGlucoseAverage,
+    minimum: reportGlucoseMinimum,
+    maximum: reportGlucoseMaximum,
+    beforeMealCount: reportBeforeMealGlucoseCount,
+    afterMealCount: reportAfterMealGlucoseCount,
+    mealCount: reportMealCount,
+    exerciseCount: reportExerciseCount,
+    medicationCount: reportMedicationCount
+  });
   const aiSaveConfirmBoundaryRows = ([
     ["候選紀錄", `${unsavedPreviewRecordDisplayCount} 筆`],
     ["低信心", `${lowConfidencePreviewRecordDisplayCount} 筆`],

@@ -15,6 +15,39 @@
 
 ## 2026-07-06
 
+### T1083 extract analysis metric transform helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisMetricTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted Analysis and detailed-report metric row shaping from `mobile/App.tsx` into `mobile/analysisMetricTransforms.ts`.
+- Kept local/remote report fallback sources, Basic Analysis render rows, detailed-report render rows, UI labels, navigation, backend report endpoint, and bounded count/glucose behavior unchanged.
+- Updated the navigation verifier so metric label/order guards inspect `mobile/analysisMetricTransforms.ts`, while report source fallback and render guards remain checked in `mobile/App.tsx`; updated the UI spec coverage marker to verify the Analysis metric render binding after the helper extraction.
+- Updated the refactor roadmap to note that Slice 4 now covers analysis metric transform extraction.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue toward first-version screen component boundaries or isolate remaining future-module helpers.
+
 ### T1082 extract daily transcript transform helpers
 
 類型：mobile / refactor / verifier / docs

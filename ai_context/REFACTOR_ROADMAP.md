@@ -45,6 +45,7 @@
   - `dateTimeTransforms.ts`：local date/time input formatting, local date keys, analysis date bounds, and local datetime ISO transforms.
   - `recordBounds.ts`：parse-preview, pending-record, record-cache, payload, and metadata bounded transforms.
   - `dailyTranscriptTransforms.ts`：daily-record key / summary, retained transcript entries, transcript display items, and daily-record save request transforms.
+  - `analysisMetricTransforms.ts`：Analysis and detailed-report metric row shaping, nullable glucose bounds, and count bounds.
 
 ### Backend
 
@@ -123,7 +124,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; date/time, record bounds, and daily transcript transform helpers extracted.
+Status: started; date/time, record bounds, daily transcript, and analysis metric transform helpers extracted.
 
 Scope:
 
