@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1077: Extract settings copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted Settings advanced toggle, backend reconnect label, Settings navigation status, menu return status, recording quota, reminder, and privacy bounded copy helpers from `mobile/App.tsx` into `mobile/settingsCopy.ts`.
+- Kept Settings handlers, auth/session controls, quota sync, reminder/privacy status actions, UI copy, and render bindings unchanged.
+- Updated the navigation verifier so recording quota, reminder, and privacy accessibility helper guards now inspect `mobile/settingsCopy.ts`.
+- Updated the refactor roadmap to note that Slice 3 now also covers Settings copy extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1076: Extract analysis copy helpers
 
 Status: done

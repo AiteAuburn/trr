@@ -15,6 +15,7 @@ RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
 NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
 ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
+SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
 ACHIEVEMENT_CATALOG_PATH = REPO_ROOT / "backend" / "app" / "services" / "achievement_catalog.py"
@@ -1194,6 +1195,7 @@ def main() -> int:
     native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
     first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
     analysis_copy_content = ANALYSIS_COPY_PATH.read_text(encoding="utf-8")
+    settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
 
     try:
@@ -3585,9 +3587,6 @@ def main() -> int:
             ("advanced settings toggle accessibility label", "advancedSettingsToggleAccessibility: boundDisplayText(\"展開或收合進階設定，不連線 backend 或啟動模型\", maxDisplayDetailTextLength)"),
             ("backend reconnect accessibility label", "backendReconnectAccessibility: boundDisplayText(\"重新連線 backend，會清除 stale session/model/record state\", maxDisplayDetailTextLength)"),
             ("profile edit accessibility label", "editIntegrationAccessibility: boundDisplayText(\"查看個人資料編輯整合狀態，不寫入個資或照護對象\", maxDisplayDetailTextLength)"),
-            ("recording quota sync accessibility helper", "function recordingQuotaSyncAccessibilityLabel(isSyncing: boolean)"),
-            ("reminder integration accessibility helper", "function reminderIntegrationAccessibilityLabel()"),
-            ("privacy integration accessibility helper", "function privacyIntegrationAccessibilityLabel()"),
             ("profile edit integration status handler", "function showProfileEditIntegrationStatus()"),
             ("recording quota settings sync handler", "function syncRecordingQuotaSettings()"),
             ("reminder integration status handler", "function showReminderIntegrationStatus()"),
@@ -3855,6 +3854,12 @@ def main() -> int:
             ("recording model refresh accessibility helper", "function recordingModelRefreshAccessibilityLabel()"),
         ):
             _assert_contains(label, native_status_copy_content, marker)
+        for label, marker in (
+            ("recording quota sync accessibility helper", "function recordingQuotaSyncAccessibilityLabel(isSyncing: boolean)"),
+            ("reminder integration accessibility helper", "function reminderIntegrationAccessibilityLabel()"),
+            ("privacy integration accessibility helper", "function privacyIntegrationAccessibilityLabel()"),
+        ):
+            _assert_contains(label, settings_copy_content, marker)
         for label, marker in (
             ("food community visual smoke promoted label", '{ id: "community", label: "食物社群" }'),
             ("food community screen chrome backend-ready subtitle", 'community: { subtitle: "同步食物升糖資料庫、分享、點數與公開排名。", backTo: "futureModules", actionLabel: "‹" }'),

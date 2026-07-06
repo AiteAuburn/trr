@@ -259,6 +259,24 @@ import {
   detailedReportReturnTodayStatusMessage,
   type AnalysisRange
 } from "./analysisCopy";
+import {
+  advancedSettingsToggleLabel,
+  backendReconnectButtonLabel,
+  membershipStatusReturnSubscriptionStatusMessage,
+  menuReturnStatusMessage,
+  privacyIntegrationAccessibilityLabel,
+  privacyIntegrationButtonLabel,
+  privacySettingsIntroCopy,
+  recordingQuotaControlCopy,
+  recordingQuotaIntroCopy,
+  recordingQuotaSyncAccessibilityLabel,
+  recordingQuotaSyncButtonLabel,
+  reminderIntegrationAccessibilityLabel,
+  reminderIntegrationButtonLabel,
+  reminderSettingsIntroCopy,
+  settingsAccountSecurityOpenStatusMessage,
+  settingsSubpageReturnStatusMessage
+} from "./settingsCopy";
 
 type Account = {
   id: string;
@@ -4574,14 +4592,6 @@ function auxiliarySectionLabels() {
   };
 }
 
-function advancedSettingsToggleLabel(isExpanded: boolean) {
-  return boundDisplayText(isExpanded ? "收合進階設定" : "顯示進階設定", maxDisplayTextLength);
-}
-
-function backendReconnectButtonLabel(isConnecting: boolean) {
-  return boundDisplayText(isConnecting ? "連線中..." : "重新連線", maxDisplayTextLength);
-}
-
 function nativeModuleCheckButtonLabel(isRunning: boolean) {
   return boundDisplayText(isRunning ? "處理中..." : "檢查 native modules", maxDisplayTextLength);
 }
@@ -4709,69 +4719,6 @@ function subscriptionMembershipStatusOpenStatusMessage() {
 
 function subscriptionManagementReturnSettingsStatusMessage() {
   return boundUiMessage("已返回設定；訂閱管理頁不會建立試用、收款或改變會員權益。");
-}
-
-function settingsAccountSecurityOpenStatusMessage() {
-  return boundUiMessage("已前往帳號與登入安全；本頁不呼叫 AI，也不寫入健康紀錄。");
-}
-
-function settingsSubpageReturnStatusMessage() {
-  return boundUiMessage("已返回設定；子頁預覽不會呼叫 AI、LLM 或寫入 backend。");
-}
-
-function menuReturnStatusMessage(target: AppScreen) {
-  const targetLabel = target === "today" ? "今日紀錄" : target === "record" ? "快速記錄" : "上一頁";
-  return boundUiMessage(`已返回${targetLabel}；功能選單導覽不呼叫 AI、LLM、STT、Vision 或 backend write。`);
-}
-
-function membershipStatusReturnSubscriptionStatusMessage() {
-  return boundUiMessage("已返回會員方案；會員狀態頁只讀取目前同步資料，不會呼叫付款或 AI。");
-}
-
-function recordingQuotaIntroCopy() {
-  return boundDisplayText("顯示今日語音用量；平時不打擾，接近上限才提醒。", maxDisplayDetailTextLength);
-}
-
-function recordingQuotaControlCopy() {
-  return boundDisplayText(
-    "額度由 backend entitlement / quota API 決定；mobile 不自行信任本機計數，也不把錄音檔或逐字稿寫入此頁。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function recordingQuotaSyncButtonLabel(isSyncing: boolean) {
-  return boundDisplayText(isSyncing ? "同步中..." : "同步額度", maxDisplayTextLength);
-}
-
-function recordingQuotaSyncAccessibilityLabel(isSyncing: boolean) {
-  return boundDisplayText(
-    isSyncing ? "正在同步語音額度，不上傳錄音或逐字稿" : "同步語音額度，只讀取 backend quota metadata",
-    maxDisplayDetailTextLength
-  );
-}
-
-function reminderSettingsIntroCopy() {
-  return boundDisplayText("先規劃提醒 UI；正式通知與背景排程尚未啟用。", maxDisplayDetailTextLength);
-}
-
-function reminderIntegrationButtonLabel() {
-  return boundDisplayText("查看通知整合狀態", maxDisplayTextLength);
-}
-
-function reminderIntegrationAccessibilityLabel() {
-  return boundDisplayText("查看通知整合狀態，不建立通知或背景排程", maxDisplayDetailTextLength);
-}
-
-function privacySettingsIntroCopy() {
-  return boundDisplayText("先定義分享、匯出、刪除與通知內容邊界。", maxDisplayDetailTextLength);
-}
-
-function privacyIntegrationButtonLabel() {
-  return boundDisplayText("查看隱私整合狀態", maxDisplayTextLength);
-}
-
-function privacyIntegrationAccessibilityLabel() {
-  return boundDisplayText("查看隱私整合狀態，不匯出、刪除或公開資料", maxDisplayDetailTextLength);
 }
 
 function settingsSubscriptionSectionLabels() {
