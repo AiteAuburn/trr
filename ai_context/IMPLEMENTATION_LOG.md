@@ -15,6 +15,35 @@
 
 ## 2026-07-06
 
+### T1070 extract record status copy helpers
+
+類型：mobile / refactor / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordStatusCopy.ts`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted record sync, visual-smoke record sync, record update/delete, and manual-record create bounded status helpers from `mobile/App.tsx` into `mobile/recordStatusCopy.ts`.
+- Kept existing record sync paging, visual-smoke mode, update/delete requests, manual create requests, achievement sync hook, UI copy, and handler call sites unchanged.
+- Updated the refactor roadmap to record that Slice 3 now also covers record sync / CRUD status copy extraction.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 3 with auth/settings/native/future status copy helpers, or move to Slice 4 data transform helpers once copy extraction is sufficient.
+
 ### T1069 extract parser and AI save copy helpers
 
 類型：mobile / refactor / docs

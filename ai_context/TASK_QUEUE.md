@@ -124,6 +124,22 @@ None.
 
 ## Done
 
+### T1070: Extract record status copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted record sync, visual-smoke record sync, record update/delete, and manual-record create bounded status helpers from `mobile/App.tsx` into `mobile/recordStatusCopy.ts`.
+- Kept record sync paging, visual-smoke mode, update/delete requests, manual create requests, achievement sync hook, UI copy, and handler call sites unchanged.
+- Updated the refactor roadmap to note that Slice 3 now also covers record sync / CRUD status copy extraction.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk git diff --check` passed.
+
 ### T1069: Extract parser and AI save copy helpers
 
 Status: done

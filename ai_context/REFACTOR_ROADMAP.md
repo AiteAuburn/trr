@@ -33,6 +33,7 @@
   - `recordDisplay.ts`：record 顯示 helper 與每日紀錄 section config。
   - `recordingCopy.ts`：recording / transcript-review bounded status messages and display copy.
   - `recordWorkflowCopy.ts`：parser / AI save / AI candidate bounded status messages.
+  - `recordStatusCopy.ts`：record sync / update / delete / manual-create bounded status messages.
 
 ### Backend
 
@@ -96,7 +97,7 @@ Verification:
 
 ### Slice 3: Status/Copy Helpers
 
-Status: started; recording / transcript-review and parser / AI save / AI candidate copy extracted.
+Status: started; recording / transcript-review, parser / AI save / AI candidate, and record sync / CRUD copy extracted.
 
 Scope:
 
