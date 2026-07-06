@@ -20,6 +20,7 @@ ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
 ANALYSIS_DATA_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisDataTransforms.ts"
 ANALYSIS_METRIC_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisMetricTransforms.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
+SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1206,6 +1207,7 @@ def main() -> int:
     analysis_data_content = ANALYSIS_DATA_TRANSFORMS_PATH.read_text(encoding="utf-8")
     analysis_metric_content = ANALYSIS_METRIC_TRANSFORMS_PATH.read_text(encoding="utf-8")
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
+    settings_screen_data_content = SETTINGS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -3538,7 +3540,7 @@ def main() -> int:
         )
         _assert_contains(
             "settings row accessibility item",
-            content,
+            settings_screen_data_content,
             "accessibilityLabel: boundDisplayText(`前往${label}設定：${helper || \"查看設定狀態\"}`, maxDisplayDetailTextLength)",
         )
         _assert_contains(

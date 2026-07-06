@@ -47,6 +47,7 @@
   - `dailyTranscriptTransforms.ts`：daily-record key / summary, retained transcript entries, transcript display items, and daily-record save request transforms.
   - `analysisDataTransforms.ts`：Analysis glucose extraction, meal-timing classification, chart points/range, and numeric aggregation helpers.
   - `analysisMetricTransforms.ts`：Analysis and detailed-report metric row shaping, nullable glucose bounds, and count bounds.
+  - `settingsScreenData.ts`：Settings row config and bounded Settings row display item shaping.
 
 ### Backend
 
@@ -139,6 +140,8 @@ Verification:
 - `cd mobile && rtk npm run quality`
 
 ### Slice 5: First-Version Screen Components
+
+Status: started; Settings row config/display boundary extracted.
 
 Scope:
 

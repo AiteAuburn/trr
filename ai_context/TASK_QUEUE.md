@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1085: Extract settings screen data boundary
+
+Status: done
+
+Summary:
+
+- Extracted `SettingsRow`, first-version Settings row config, and bounded Settings row display item shaping from `mobile/App.tsx` into `mobile/settingsScreenData.ts`.
+- Kept Settings render JSX, account-security card, row press handlers, subpage routing, advanced settings visibility, UI copy, navigation, and backend/dev-tool behavior unchanged.
+- Updated the navigation verifier so Settings row accessibility-label shaping is checked in `mobile/settingsScreenData.ts`, while Settings render and handler bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to mark Slice 5 started with the Settings screen data boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1084: Extract analysis data transform helpers
 
 Status: done

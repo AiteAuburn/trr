@@ -15,6 +15,38 @@
 
 ## 2026-07-06
 
+### T1085 extract settings screen data boundary
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/settingsScreenData.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted `SettingsRow`, first-version Settings row config, and bounded Settings row display item shaping from `mobile/App.tsx` into `mobile/settingsScreenData.ts`.
+- Kept Settings render JSX, account-security card, row press handlers, subpage routing, advanced settings visibility, UI copy, navigation, and backend/dev-tool behavior unchanged.
+- Updated the navigation verifier so Settings row accessibility-label shaping is checked in `mobile/settingsScreenData.ts`, while Settings render and handler bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to mark Slice 5 started with the Settings screen data boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1084 extract analysis data transform helpers
 
 類型：mobile / refactor / verifier / docs
