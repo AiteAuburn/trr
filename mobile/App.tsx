@@ -41,7 +41,9 @@ import {
   dailyRecordSectionDefinitions,
   displayPayload,
   displayTextValue,
+  recordListDisplayItem,
   recordPayloadDetailRows,
+  recordTimeDisplay,
   recordTypeIcon,
   recordTypeLabel,
   textValue
@@ -1504,41 +1506,6 @@ function recordDateDisplay(value?: string) {
     return "尚無";
   }
   return boundDisplayText(date.toLocaleDateString(), 40);
-}
-
-function recordTimeDisplay(value?: string) {
-  if (!value) {
-    return "尚無";
-  }
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return "尚無";
-  }
-  return boundDisplayText(
-    date.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit"
-    }),
-    40
-  );
-}
-
-function recordListDisplayItem(record: RecordItem, keyPrefix = "record") {
-  const typeLabel = boundDisplayText(recordTypeLabel(record.record_type), 80);
-  const payloadSummary = boundDisplayText(
-    displayPayload(record.record_type, record.payload_json),
-    maxDisplayDetailTextLength
-  );
-  const timeLabel = boundDisplayText(recordTimeDisplay(record.occurred_at), 40);
-  return {
-    key: `${keyPrefix}-${boundIdentifier(record.id)}`,
-    record,
-    icon: boundDisplayText(recordTypeIcon(record.record_type), 4),
-    typeLabel,
-    payloadSummary,
-    timeLabel,
-    accessibilityLabel: boundDisplayText(`查看${typeLabel}紀錄：${payloadSummary}，時間 ${timeLabel}`, maxDisplayDetailTextLength)
-  };
 }
 
 function recordDetailDisplayItem(record: RecordItem) {

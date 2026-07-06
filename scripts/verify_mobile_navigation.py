@@ -2760,8 +2760,18 @@ def main() -> int:
         )
         _assert_contains(
             "record list accessibility item",
-            content,
+            record_display_content,
             "accessibilityLabel: boundDisplayText(`查看${typeLabel}紀錄：${payloadSummary}，時間 ${timeLabel}`, maxDisplayDetailTextLength)",
+        )
+        _assert_contains(
+            "record list display item helper",
+            record_display_content,
+            "function recordListDisplayItem(record: RecordItem, keyPrefix = \"record\")",
+        )
+        _assert_contains(
+            "record time display helper",
+            record_display_content,
+            "function recordTimeDisplay(value?: string)",
         )
         for label, marker in (
             ("record payload sanitizer", "function boundRecordPayload(recordType: string, payload: Record<string, unknown>): Record<string, unknown>"),

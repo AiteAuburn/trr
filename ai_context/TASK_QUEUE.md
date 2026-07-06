@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1089: Extract shared record list display helper
+
+Status: done
+
+Summary:
+
+- Extracted shared Today/History record time formatting and record-list display item shaping from `mobile/App.tsx` into `mobile/recordDisplay.ts`.
+- Kept Today and History record list render JSX, detail-card press handlers, record payload labels, record detail display, UI copy, navigation, and backend record flow unchanged.
+- Updated the navigation verifier so shared record-list accessibility and helper ownership guards inspect `mobile/recordDisplay.ts`, while Today/History handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the shared Today/History record-list display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1088: Extract history calendar screen data boundary
 
 Status: done
