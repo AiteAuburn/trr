@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1092: Extract record edit-field transforms
+
+Status: done
+
+Summary:
+
+- Extracted `RecordEditFields`, edit-field max-length bounds, bounded edit-field updates, empty edit-field defaults, and record payload-to-edit-field transforms from `mobile/App.tsx` into `mobile/recordEditTransforms.ts`.
+- Kept record edit validation, preview edit handlers, manual-record handlers, update/create submit payload building, UI copy, navigation, and backend record flow unchanged.
+- Updated the navigation verifier so record edit-field transform ownership guards inspect `mobile/recordEditTransforms.ts`, while record edit render and submit guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the record edit-field transform boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1091: Extract manual record confirmation display helper
 
 Status: done

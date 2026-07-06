@@ -11,6 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
+RECORD_EDIT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "recordEditTransforms.ts"
 RECORD_BOUNDS_PATH = REPO_ROOT / "mobile" / "recordBounds.ts"
 DAILY_TRANSCRIPT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dailyTranscriptTransforms.ts"
 RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
@@ -1200,6 +1201,7 @@ def main() -> int:
     content = APP_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
+    record_edit_transforms_content = RECORD_EDIT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     record_bounds_content = RECORD_BOUNDS_PATH.read_text(encoding="utf-8")
     daily_transcript_content = DAILY_TRANSCRIPT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     recording_copy_content = RECORDING_COPY_PATH.read_text(encoding="utf-8")
@@ -2789,6 +2791,17 @@ def main() -> int:
             ("manual record confirm source line", "source: manual"),
         ):
             _assert_contains(label, record_display_content, marker)
+        for label, marker in (
+            ("record edit fields type", "export type RecordEditFields = {"),
+            ("record edit field max length helper", "function recordEditFieldMaxLength(field: keyof RecordEditFields)"),
+            ("record edit field bound helper", "function boundRecordEditField<K extends keyof RecordEditFields>("),
+            ("empty record edit fields helper", "function emptyRecordEditFields(): RecordEditFields"),
+            ("record payload to edit fields helper", "function recordPayloadToEditFields(record: { record_type: string; payload_json: Record<string, unknown> }): RecordEditFields"),
+            ("record edit fallback json", 'fields.fallbackJson = boundRecordEditField("fallbackJson", JSON.stringify(payload, null, 2));'),
+            ("record edit food item import", "const amount = textValue(candidate.amount);"),
+            ("record edit note tags import", ".filter((tag): tag is string => typeof tag === \"string\")"),
+        ):
+            _assert_contains(label, record_edit_transforms_content, marker)
         for label, marker in (
             ("record payload sanitizer", "function boundRecordPayload(recordType: string, payload: Record<string, unknown>): Record<string, unknown>"),
             ("record payload value sanitizer", "function boundRecordPayloadValue(value: unknown, depth = 0): unknown"),

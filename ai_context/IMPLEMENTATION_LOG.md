@@ -15,6 +15,38 @@
 
 ## 2026-07-06
 
+### T1092 extract record edit-field transforms
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordEditTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted `RecordEditFields`, edit-field max-length bounds, bounded edit-field updates, empty edit-field defaults, and record payload-to-edit-field transforms from `mobile/App.tsx` into `mobile/recordEditTransforms.ts`.
+- Kept record edit validation, preview edit handlers, manual-record handlers, update/create submit payload building, UI copy, navigation, and backend record flow unchanged.
+- Updated the navigation verifier so record edit-field transform ownership guards inspect `mobile/recordEditTransforms.ts`, while record edit render and submit guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the record edit-field transform boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1091 extract manual record confirmation display helper
 
 類型：mobile / refactor / verifier / docs
