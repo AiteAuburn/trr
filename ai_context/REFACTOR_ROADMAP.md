@@ -43,6 +43,7 @@
   - `analysisCopy.ts`：Analysis no-data / boundary / detailed-report bounded copy and custom-range status messages.
   - `settingsCopy.ts`：Settings navigation, active-profile display copy, voice quota minute formatting/warning/usage/helper copy, model/quota/reminder/privacy bounded copy.
   - `subscriptionCopy.ts`：Subscription plan/status labels, plan/status summary display copy, membership trial-days display copy, account security, profile boundary, and settings subscription section labels / bounded copy.
+  - `subscriptionTransforms.ts`：Subscription trial-days date calculation.
   - `accountCopy.ts`：Account identity display, login display, public-name fallback, and doctor-share account boundary copy.
   - `sharedDisplayItems.ts`：Shared bounded tuple, metric, option, manual-record type, comparison, tutorial, reminder, session-management preview, destination-card, menu, visual-smoke route, and checklist display item builders.
   - `dateTimeTransforms.ts`：local date/time input formatting, local date keys, analysis date bounds, and local datetime ISO transforms.
@@ -132,7 +133,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; date/time, record bounds, daily transcript, analysis data/chart, and analysis metric transform helpers extracted.
+Status: started; date/time, record bounds, daily transcript, analysis data/chart, analysis metric, and subscription trial-days transform helpers extracted.
 
 Scope:
 

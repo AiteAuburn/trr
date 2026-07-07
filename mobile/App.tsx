@@ -466,6 +466,7 @@ import {
   settingsModelChoiceDisplayItem,
   settingsProfileChoiceDisplayItem
 } from "./settingsChoiceDisplay";
+import { trialDaysLeft } from "./subscriptionTransforms";
 import {
   accountSecurityNoActionBoundaryCopy,
   accountSecurityProviderBoundaryCopy,
@@ -2293,17 +2294,6 @@ function createClientSaveBatchId() {
   const timestamp = Date.now().toString(36);
   const randomSuffix = Math.random().toString(36).slice(2, 10);
   return `mobile-save-${timestamp}-${randomSuffix}`;
-}
-
-function trialDaysLeft(trialEndsAt?: string | null) {
-  if (!trialEndsAt) {
-    return null;
-  }
-  const end = new Date(trialEndsAt).getTime();
-  if (Number.isNaN(end)) {
-    return null;
-  }
-  return Math.max(0, Math.ceil((end - Date.now()) / 86_400_000));
 }
 
 async function requestJson<T>(

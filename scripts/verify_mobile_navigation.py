@@ -29,6 +29,7 @@ SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
 SETTINGS_CHOICE_DISPLAY_PATH = REPO_ROOT / "mobile" / "settingsChoiceDisplay.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
+SUBSCRIPTION_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "subscriptionTransforms.ts"
 ACCOUNT_COPY_PATH = REPO_ROOT / "mobile" / "accountCopy.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
@@ -1225,6 +1226,7 @@ def main() -> int:
     settings_screen_data_content = SETTINGS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     settings_choice_display_content = SETTINGS_CHOICE_DISPLAY_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
+    subscription_transforms_content = SUBSCRIPTION_TRANSFORMS_PATH.read_text(encoding="utf-8")
     account_copy_content = ACCOUNT_COPY_PATH.read_text(encoding="utf-8")
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
@@ -4262,6 +4264,12 @@ def main() -> int:
             ("subscription status summary trial copy", "試用剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天"),
         ):
             _assert_contains(label, subscription_copy_content, marker)
+        for label, marker in (
+            ("subscription trial days helper", "function trialDaysLeft(trialEndsAt?: string | null)"),
+            ("subscription trial days invalid date guard", "Number.isNaN(end)"),
+            ("subscription trial days ceil calculation", "Math.ceil((end - Date.now()) / 86_400_000)"),
+        ):
+            _assert_contains(label, subscription_transforms_content, marker)
         for label, marker in (
             ("food community visual smoke promoted label", '{ id: "community", label: "食物社群" }'),
             ("food community screen chrome backend-ready subtitle", 'community: { subtitle: "同步食物升糖資料庫、分享、點數與公開排名。", backTo: "futureModules", actionLabel: "‹" }'),

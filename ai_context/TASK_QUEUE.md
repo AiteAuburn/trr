@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1138: Extract subscription trial-days transform
+
+Status: done
+
+Summary:
+
+- Extracted subscription trial-days calculation helper from `mobile/App.tsx` into `mobile/subscriptionTransforms.ts`.
+- Kept `Date.now()` calculation behavior, invalid-date handling, voice quota state, subscription status rendering, membership status rows, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so subscription trial-days transform ownership guards inspect `mobile/subscriptionTransforms.ts`, while render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now also covers Subscription trial-days transforms.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1137: Extract parser model readiness copy
 
 Status: done
