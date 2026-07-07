@@ -61,7 +61,7 @@
   - `analysisMetricTransforms.ts`：Analysis and detailed-report metric row shaping, nullable glucose bounds, and count bounds.
   - `analysisScreenData.ts`：Analysis range option config, backend report request-key, and bounded range display item shaping.
   - `historyScreenData.ts`：History detail mode config, calendar day display shaping, daily summary / sync display shaping, selected-date section display shaping, raw transcript display shaping, and bounded display item shaping.
-  - `settingsScreenData.ts`：Settings row config, auth/session/subscription/privacy static preview rows, and bounded Settings row display item shaping.
+  - `settingsScreenData.ts`：Settings row config, auth provider/session/subscription/privacy static preview rows, and bounded Settings row display item shaping.
   - `settingsChoiceDisplay.ts`：Settings profile/model choice and downloaded model display shaping.
 
 ### Backend
@@ -110,13 +110,13 @@ Verification:
 
 ### Slice 2: Static Screen/Menu Config
 
-Status: done; visual-smoke route normalization helpers and Settings static preview rows are also extracted.
+Status: done; visual-smoke route normalization helpers and Settings/Auth static preview rows are also extracted.
 
 Scope:
 
 - Extract `screenChrome`, `menuScreens`, `visualSmokeRouteJumps`, and future-module display config.
 - Extract debug-only visual-smoke initial route normalization and deep-link route parsing.
-- Extract Settings / Account Security / Subscription / Privacy static preview rows.
+- Extract Settings / Auth provider / Account Security / Subscription / Privacy static preview rows.
 - Keep normal menu limited to 今日錄音、歷史紀錄、基本分析、設定.
 - Keep future functions debug / visual-smoke only.
 

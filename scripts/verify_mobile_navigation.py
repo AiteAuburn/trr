@@ -3869,6 +3869,7 @@ def main() -> int:
             "accessibilityLabel: boundDisplayText(`前往${label}設定：${helper || \"查看設定狀態\"}`, maxDisplayDetailTextLength)",
         )
         for label, marker in (
+            ("auth provider preview rows config", "export const authProviderPreviews: ReadonlyArray<AuthProviderPreview> = ["),
             ("session management preview rows config", "export const sessionManagementPreviews = ["),
             ("production auth readiness rows config", "export const productionAuthReadinessRows = ["),
             ("subscription management rows config", "export const subscriptionManagementRows = ["),

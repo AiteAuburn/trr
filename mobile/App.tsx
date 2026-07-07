@@ -478,12 +478,14 @@ import {
   settingsSubpageReturnStatusMessage
 } from "./settingsCopy";
 import {
+  authProviderPreviews,
   privacyControlRows,
   productionAuthReadinessRows,
   sessionManagementPreviews,
   settingsRowDisplayItem,
   settingsRows,
   subscriptionManagementRows,
+  type AuthProviderPreview,
   type SettingsRow
 } from "./settingsScreenData";
 import {
@@ -543,8 +545,7 @@ import {
   boundOidcNonceForRequest,
   boundOidcProviderForRequest,
   boundRefreshTokenForRequest,
-  buildProtectedRequestHeaders,
-  type OidcLoginProvider
+  buildProtectedRequestHeaders
 } from "./authTransforms";
 import { authSessionDisplayItem } from "./authSessionDisplay";
 
@@ -1278,32 +1279,6 @@ const subscriptionComparisonRows = [
   ["歷史紀錄", "最近 7 天", "✓ 完整保存"]
 ] as const;
 
-const authProviderPreviews: ReadonlyArray<{
-  provider: OidcLoginProvider;
-  title: string;
-  status: string;
-  copy: string;
-}> = [
-  {
-    provider: "apple",
-    title: "Apple",
-    status: "系統登入",
-    copy: "需完成 Sign in with Apple、token exchange、refresh token rotation 與 revoke。"
-  },
-  {
-    provider: "google",
-    title: "Google",
-    status: "OAuth/OIDC",
-    copy: "需完成 OIDC callback、nonce/state 驗證、server-side session 建立與撤銷。"
-  },
-  {
-    provider: "email",
-    title: "Email",
-    status: "密碼或 magic link",
-    copy: "需完成 email 驗證、rate limit、裝置/session 管理與安全儲存。"
-  }
-] as const;
-
 const maxDateInputLength = 10;
 const maxTimeInputLength = 5;
 const maxListItems = 12;
@@ -1658,7 +1633,7 @@ function communityLeaderboardDisplaySection(value: CommunityLeaderboardApiRespon
   };
 }
 
-function authProviderPreviewDisplayItem(value: (typeof authProviderPreviews)[number]) {
+function authProviderPreviewDisplayItem(value: AuthProviderPreview) {
   const item = previewTupleDisplayItem([value.title, value.status, value.copy]);
   const provider = boundOidcProviderForRequest(value.provider);
   return {

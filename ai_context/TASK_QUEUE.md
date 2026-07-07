@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1155: Extract auth provider preview rows
+
+Status: done
+
+Summary:
+
+- Extracted Account Security auth provider static preview row config from `mobile/App.tsx` into `mobile/settingsScreenData.ts`.
+- Kept provider labels, status copy, action-status display helper, provider challenge handler, first-version menu destinations, UI copy, navigation, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so auth provider preview row ownership guards inspect `mobile/settingsScreenData.ts`, while render and press bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Auth provider static preview row boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1154: Extract settings preview rows
 
 Status: done

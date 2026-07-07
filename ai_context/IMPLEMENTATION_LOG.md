@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1155 extract auth provider preview rows
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/settingsScreenData.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted Account Security auth provider static preview row config from `mobile/App.tsx` into `mobile/settingsScreenData.ts`.
+- Kept provider labels, status copy, action-status display helper, provider challenge handler, first-version menu destinations, UI copy, navigation, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so auth provider preview row ownership guards inspect `mobile/settingsScreenData.ts`, while render and press bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Auth provider static preview row boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting static config and display helpers before moving Settings / Account Security JSX renderers.
+
 ### T1154 extract settings preview rows
 
 類型：mobile / refactor / verifier / docs

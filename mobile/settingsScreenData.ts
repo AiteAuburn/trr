@@ -1,4 +1,5 @@
 import type { AppScreen } from "./navigationConfig";
+import type { OidcLoginProvider } from "./authTransforms";
 
 const maxDisplayTextLength = 160;
 const maxIdentifierTextLength = 128;
@@ -10,6 +11,13 @@ export type SettingsRow = {
   icon: string;
   helper?: string;
   target?: AppScreen;
+};
+
+export type AuthProviderPreview = {
+  provider: OidcLoginProvider;
+  title: string;
+  status: string;
+  copy: string;
 };
 
 function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
@@ -29,6 +37,27 @@ export const settingsRows: SettingsRow[] = [
   { id: "tutorial", label: "使用教學", icon: "書", helper: "重新查看 4 步驟教學", target: "tutorial" },
   { id: "subscription", label: "訂閱管理", icon: "卡", helper: "試用、年費與方案管理" }
 ];
+
+export const authProviderPreviews: ReadonlyArray<AuthProviderPreview> = [
+  {
+    provider: "apple",
+    title: "Apple",
+    status: "系統登入",
+    copy: "需完成 Sign in with Apple、token exchange、refresh token rotation 與 revoke。"
+  },
+  {
+    provider: "google",
+    title: "Google",
+    status: "OAuth/OIDC",
+    copy: "需完成 OIDC callback、nonce/state 驗證、server-side session 建立與撤銷。"
+  },
+  {
+    provider: "email",
+    title: "Email",
+    status: "密碼或 magic link",
+    copy: "需完成 email 驗證、rate limit、裝置/session 管理與安全儲存。"
+  }
+] as const;
 
 export const sessionManagementPreviews = [
   ["目前裝置", "本機預覽", "正式版需顯示裝置名稱、最後使用時間、IP / 地區粗略資訊與 session id。"],
