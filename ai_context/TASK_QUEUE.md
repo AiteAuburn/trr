@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1108: Extract manual-record and return status helpers
+
+Status: done
+
+Summary:
+
+- Extracted preview-record edit boundary copy, manual-record confirm copy/status helpers, manual-record return status, record-detail return status, and tutorial quick-entry status helpers from `mobile/App.tsx` into `mobile/recordWorkflowCopy.ts`.
+- Kept manual-record render, record-detail render, tutorial entry handlers, edit/confirm navigation, backend create/update/delete requests, UI copy text, and first-version navigation unchanged.
+- Updated the navigation verifier so manual-record and return status helper ownership guards inspect `mobile/recordWorkflowCopy.ts`, while render and handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover manual-record confirmation and record-detail return copy/status boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1107: Extract AI remove-confirm copy helpers
 
 Status: done

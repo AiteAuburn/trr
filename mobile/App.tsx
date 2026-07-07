@@ -153,6 +153,11 @@ import {
   dailyRecordLeaveGuardPromptStatusMessage,
   dailyRecordLeaveGuardQuestionCopy,
   dailyRecordLeaveGuardTitleCopy,
+  manualRecordConfirmIntroCopy,
+  manualRecordConfirmReadyStatusMessage,
+  manualRecordConfirmReturnStatusMessage,
+  manualRecordConfirmSubmitLabel,
+  manualRecordReturnStatusMessage,
   parserBackendUnavailableStatusMessage,
   parserFailureRecoveryMessage,
   parserFailureStatusMessage,
@@ -160,7 +165,11 @@ import {
   parserProgressStatusMessage,
   parserSampleBlockedStatusMessage,
   parserSuccessStatusMessage,
-  parserVoiceQuotaSyncedStatusMessage
+  parserVoiceQuotaSyncedStatusMessage,
+  previewRecordEditBoundaryCopy,
+  recordDetailReturnStatusMessage,
+  tutorialManualEntryStatusMessage,
+  tutorialRecordEntryStatusMessage
 } from "./recordWorkflowCopy";
 import {
   manualRecordCreateFailureStatusMessage,
@@ -2907,67 +2916,6 @@ function recordingEffectiveLimitSeconds(quota: VoiceQuota | null) {
     );
   }
   return mobileSingleRecordingLimitSeconds;
-}
-
-function previewRecordEditBoundaryCopy() {
-  return boundDisplayText("這裡只修改待確認候選紀錄；按下確認儲存前不會寫入資料庫。", maxDisplayDetailTextLength);
-}
-
-function manualRecordConfirmIntroCopy() {
-  return boundDisplayText(
-    "這筆紀錄不經 AI parser，送出後會透過後端驗證、權限與 audit 路徑建立。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function manualRecordConfirmSubmitLabel(isBusy: boolean) {
-  return boundDisplayText(isBusy ? "建立中..." : "確認建立", maxDisplayTextLength);
-}
-
-function manualRecordConfirmReadyStatusMessage() {
-  return boundUiMessage("請確認手動紀錄；送出前不會呼叫 AI 或 LLM。");
-}
-
-function manualRecordConfirmReturnStatusMessage() {
-  return boundUiMessage("已返回手動新增；目前輸入已保留，可繼續修改。");
-}
-
-function manualRecordReturnStatusMessage(target: AppScreen) {
-  const targetLabel =
-    target === "today"
-      ? "今日紀錄"
-      : target === "history"
-        ? "歷史紀錄"
-        : target === "analysis"
-          ? "基本分析"
-          : target === "tutorial"
-            ? "使用教學"
-            : target === "aiReview"
-              ? "AI 整理確認"
-              : target === "record"
-                ? "快速記錄"
-                : "上一頁";
-  return boundUiMessage(`已從手動新增返回${targetLabel}；未送出 create request，也未呼叫 AI。`);
-}
-
-function recordDetailReturnStatusMessage(target: AppScreen) {
-  const targetLabel =
-    target === "history"
-      ? "歷史紀錄"
-      : target === "saveSuccess"
-        ? "儲存完成"
-        : target === "updateSuccess"
-          ? "更新完成"
-          : "今日紀錄";
-  return boundUiMessage(`已從記錄詳情返回${targetLabel}；只使用已載入紀錄，不呼叫 AI。`);
-}
-
-function tutorialRecordEntryStatusMessage() {
-  return boundUiMessage("已從使用教學前往快速記錄；送出文字前不會呼叫 parser 或 LLM。");
-}
-
-function tutorialManualEntryStatusMessage() {
-  return boundUiMessage("已從使用教學進入手動新增；此路徑不呼叫 AI、LLM 或 STT。");
 }
 
 function deleteConfirmIntroCopy() {

@@ -15,6 +15,38 @@
 
 ## 2026-07-07
 
+### T1108 extract manual-record and return status helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted preview-record edit boundary copy, manual-record confirm copy/status helpers, manual-record return status, record-detail return status, and tutorial quick-entry status helpers from `mobile/App.tsx` into `mobile/recordWorkflowCopy.ts`.
+- Kept manual-record render, record-detail render, tutorial entry handlers, edit/confirm navigation, backend create/update/delete requests, UI copy text, and first-version navigation unchanged.
+- Updated the navigation verifier so manual-record and return status helper ownership guards inspect `mobile/recordWorkflowCopy.ts`, while render and handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover manual-record confirmation and record-detail return copy/status boundaries.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1107 extract AI remove-confirm copy helpers
 
 類型：mobile / refactor / verifier / docs
