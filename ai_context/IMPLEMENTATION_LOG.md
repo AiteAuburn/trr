@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1141 extract basic report bounding transform
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisDataTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted basic report response bounding helper from `mobile/App.tsx` into `mobile/analysisDataTransforms.ts`.
+- Kept `/reports/basic` request path, report-key matching, Analysis/Detailed Report render sources, visual-smoke report demo, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so basic report bounding helper ownership guards inspect `mobile/analysisDataTransforms.ts`, while fetch and render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now also covers Analysis basic report response bounding.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 4/Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1140 extract voice quota bounding transform
 
 類型：mobile / refactor / verifier / docs

@@ -3637,6 +3637,10 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("analysis basic report bound helper", "function boundBasicReport<T extends BasicReportTransformSource>(value: T): T"),
+            ("analysis basic report generated-at bound", "generated_at: boundDisplayText(value.generated_at, 40)"),
+            ("analysis basic report latest glucose bound", "latest_value: clampNullableNumber(value.glucose.latest_value, 0, maxMobileGlucoseValue)"),
+            ("analysis basic report lifestyle count bound", "note_count: clampNumber(value.lifestyle.note_count, 0, maxMobileCountValue)"),
             ("analysis normalized glucose timing helper", "function normalizedGlucoseTiming(value: unknown)"),
             ("analysis before timing helper", "function isBeforeMealGlucoseTiming(value: unknown)"),
             ("analysis after timing helper", "function isAfterMealGlucoseTiming(value: unknown)"),

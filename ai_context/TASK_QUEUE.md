@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1141: Extract basic report bounding transform
+
+Status: done
+
+Summary:
+
+- Extracted basic report response bounding helper from `mobile/App.tsx` into `mobile/analysisDataTransforms.ts`.
+- Kept `/reports/basic` request path, report-key matching, Analysis/Detailed Report render sources, visual-smoke report demo, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so basic report bounding helper ownership guards inspect `mobile/analysisDataTransforms.ts`, while fetch and render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now also covers Analysis basic report response bounding.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1140: Extract voice quota bounding transform
 
 Status: done

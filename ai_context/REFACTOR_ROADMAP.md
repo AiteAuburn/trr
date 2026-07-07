@@ -49,7 +49,7 @@
   - `dateTimeTransforms.ts`：local date/time input formatting, local date keys, analysis date bounds, and local datetime ISO transforms.
   - `recordBounds.ts`：parse-preview, pending-record, record-cache, payload, and metadata bounded transforms.
   - `dailyTranscriptTransforms.ts`：daily-record key / summary, AI review and daily-record date labels, same-day preview merge transforms, retained transcript entries, transcript display items, daily-record reorganization copy/status helpers, and daily-record save request transforms.
-  - `analysisDataTransforms.ts`：Analysis glucose extraction, meal-timing classification, chart points/range, and numeric aggregation helpers.
+  - `analysisDataTransforms.ts`：Analysis basic report response bounding, glucose extraction, meal-timing classification, chart points/range, and numeric aggregation helpers.
   - `analysisMetricTransforms.ts`：Analysis and detailed-report metric row shaping, nullable glucose bounds, and count bounds.
   - `analysisScreenData.ts`：Analysis range option config, backend report request-key, and bounded range display item shaping.
   - `historyScreenData.ts`：History detail mode config, calendar day display shaping, daily summary / sync display shaping, selected-date section display shaping, raw transcript display shaping, and bounded display item shaping.
@@ -133,7 +133,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; date/time, record bounds, daily transcript, analysis data/chart, analysis metric, subscription trial-days, and subscription voice quota response bounding transform helpers extracted.
+Status: started; date/time, record bounds, daily transcript, analysis basic report response bounding, analysis data/chart, analysis metric, subscription trial-days, and subscription voice quota response bounding transform helpers extracted.
 
 Scope:
 

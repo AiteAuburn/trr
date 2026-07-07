@@ -403,6 +403,7 @@ import {
   analysisGlucoseValues as buildAnalysisGlucoseValues,
   averageNumber,
   beforeMealGlucoseCount as countBeforeMealGlucose,
+  boundBasicReport,
   highestNumber,
   lowestNumber,
   selectedAnalysisChartPoint
@@ -2143,37 +2144,6 @@ function clampNullableNumber(value: number | null | undefined, min: number, max:
     return null;
   }
   return clampNumber(value, min, max);
-}
-
-function boundOptionalDateTime(value?: string | null) {
-  return typeof value === "string" ? boundDisplayText(value, 40) : null;
-}
-
-function boundBasicReport(value: BasicReport): BasicReport {
-  return {
-    profile_id: boundIdentifier(value.profile_id),
-    generated_at: boundDisplayText(value.generated_at, 40),
-    record_count: clampNumber(value.record_count, 0, maxMobileCountValue),
-    glucose: {
-      count: clampNumber(value.glucose.count, 0, maxMobileCountValue),
-      before_meal_count: clampNumber(value.glucose.before_meal_count, 0, maxMobileCountValue),
-      after_meal_count: clampNumber(value.glucose.after_meal_count, 0, maxMobileCountValue),
-      average: clampNullableNumber(value.glucose.average, 0, maxMobileGlucoseValue),
-      minimum: clampNullableNumber(value.glucose.minimum, 0, maxMobileGlucoseValue),
-      maximum: clampNullableNumber(value.glucose.maximum, 0, maxMobileGlucoseValue),
-      latest_value: clampNullableNumber(value.glucose.latest_value, 0, maxMobileGlucoseValue),
-      latest_recorded_at: boundOptionalDateTime(value.glucose.latest_recorded_at)
-    },
-    meals: {
-      count: clampNumber(value.meals.count, 0, maxMobileCountValue)
-    },
-    lifestyle: {
-      exercise_count: clampNumber(value.lifestyle.exercise_count, 0, maxMobileCountValue),
-      medication_count: clampNumber(value.lifestyle.medication_count, 0, maxMobileCountValue),
-      lifestyle_count: clampNumber(value.lifestyle.lifestyle_count, 0, maxMobileCountValue),
-      note_count: clampNumber(value.lifestyle.note_count, 0, maxMobileCountValue)
-    }
-  };
 }
 
 function boundDevResetResponse(value: DevResetResponse): DevResetResponse {
