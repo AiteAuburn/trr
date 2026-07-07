@@ -440,6 +440,7 @@ import {
   accountSecurityProviderBoundaryCopy,
   accountSecurityReadinessBoundaryCopy,
   accountSecuritySessionBoundaryCopy,
+  membershipTrialDaysText,
   planDisplayName,
   profileNoActionBoundaryCopy,
   quotaPlanDisplayText,
@@ -2503,13 +2504,6 @@ function subscriptionStatusSummaryText(quota: VoiceQuota | null, trialDays: numb
   }
   const trialCopy = trialDays === null ? "" : ` · 試用剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天`;
   return boundDisplayText(`${subscriptionStatusLabel(quota.status)}${trialCopy}`, maxDisplayDetailTextLength);
-}
-
-function membershipTrialDaysText(trialDays: number | null) {
-  return boundDisplayText(
-    trialDays === null ? "試用天數尚未載入" : `還剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天`,
-    80
-  );
 }
 
 function parserModelUnavailableText(llmModel: AiModelOption | null, sttModel: AiModelOption | null) {

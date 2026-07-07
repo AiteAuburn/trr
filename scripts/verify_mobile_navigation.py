@@ -4188,6 +4188,9 @@ def main() -> int:
             ("subscription expired status copy", "已到期"),
             ("subscription quota plan helper", "function quotaPlanDisplayText(quota: SubscriptionPlanDisplaySource | null, fallback = \"額度尚未載入\")"),
             ("subscription quota fallback copy", "額度尚未載入"),
+            ("membership trial-days helper", "function membershipTrialDaysText(trialDays: number | null)"),
+            ("membership trial-days fallback copy", "試用天數尚未載入"),
+            ("membership trial-days remaining copy", "還剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天"),
         ):
             _assert_contains(label, subscription_copy_content, marker)
         for label, marker in (

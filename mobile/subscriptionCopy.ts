@@ -1,6 +1,7 @@
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
 const maxUiMessageLength = 300;
+const maxMobileCountValue = 1_000_000;
 
 function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);
@@ -8,6 +9,13 @@ function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
 
 function boundUiMessage(value: string) {
   return value.slice(0, maxUiMessageLength);
+}
+
+function clampNumber(value: number, min: number, max: number) {
+  if (!Number.isFinite(value)) {
+    return min;
+  }
+  return Math.max(min, Math.min(max, value));
 }
 
 type SubscriptionPlanDisplaySource = {
@@ -42,6 +50,13 @@ export function subscriptionStatusLabel(status?: string) {
 
 export function quotaPlanDisplayText(quota: SubscriptionPlanDisplaySource | null, fallback = "額度尚未載入") {
   return boundDisplayText(quota ? planDisplayName(quota.plan_code ?? undefined) : fallback, 80);
+}
+
+export function membershipTrialDaysText(trialDays: number | null) {
+  return boundDisplayText(
+    trialDays === null ? "試用天數尚未載入" : `還剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天`,
+    80
+  );
 }
 
 export function accountSecurityProviderBoundaryCopy() {
