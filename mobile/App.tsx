@@ -83,13 +83,16 @@ import {
   comparisonDisplayItem,
   destinationCardDisplayItem,
   detailPairDisplayItem,
+  menuScreenDisplayItem,
   metricDisplayItem,
   optionDisplayItem,
   previewTupleDisplayItem,
   reminderPreviewDisplayItem,
+  resultChecklistItem,
   sessionManagementPreviewDisplayItem,
   tutorialStepDisplayItem,
-  valueLabelDisplayItem
+  valueLabelDisplayItem,
+  visualSmokeRouteJumpDisplayItem
 } from "./sharedDisplayItems";
 import {
   accountDisplayNameDisplayText,
@@ -1963,29 +1966,6 @@ function foodCommunityItemDisplayItem(value: FoodCommunityItem) {
       maxDisplayDetailTextLength
     )
   };
-}
-
-function menuScreenDisplayItem(value: { id: AppScreen; label: string; icon: string }) {
-  const label = boundDisplayText(value.label || "功能", 60);
-  return {
-    target: value.id,
-    label,
-    icon: boundDisplayText(value.icon || "•", 4),
-    accessibilityLabel: boundDisplayText(`前往${label}`, maxDisplayTextLength)
-  };
-}
-
-function visualSmokeRouteJumpDisplayItem(value: { id: AppScreen; label: string }) {
-  const label = boundDisplayText(value.label || "頁面", maxDisplayTextLength);
-  return {
-    target: value.id,
-    label,
-    accessibilityLabel: boundDisplayText(`Visual smoke 前往${label}`, maxDisplayTextLength)
-  };
-}
-
-function resultChecklistItem(value: string) {
-  return boundDisplayText(value, maxDisplayDetailTextLength);
 }
 
 function visualSmokeDemoDate(hoursAgo: number) {

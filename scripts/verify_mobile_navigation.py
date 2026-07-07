@@ -1694,7 +1694,7 @@ def main() -> int:
         )
         _assert_contains(
             "result destination accessibility item",
-            content,
+            shared_display_items_content,
             "accessibilityLabel: boundDisplayText(`前往${label}`, maxDisplayTextLength)",
         )
         _assert_contains(
@@ -2178,7 +2178,7 @@ def main() -> int:
         )
         _assert_contains(
             "menu card accessibility item",
-            content,
+            shared_display_items_content,
             "accessibilityLabel: boundDisplayText(`前往${label}`, maxDisplayTextLength)",
         )
         _assert_contains(
@@ -4205,6 +4205,11 @@ def main() -> int:
             ("value label display helper", "function valueLabelDisplayItem(value: readonly [string, string])"),
             ("comparison display helper", "function comparisonDisplayItem(value: readonly [string, string, string])"),
             ("destination card display helper", "function destinationCardDisplayItem(value: readonly string[])"),
+            ("menu screen display helper", "function menuScreenDisplayItem(value: { id: AppScreen; label: string; icon: string })"),
+            ("menu screen accessibility copy", "accessibilityLabel: boundDisplayText(`前往${label}`, maxDisplayTextLength)"),
+            ("visual smoke route jump display helper", "function visualSmokeRouteJumpDisplayItem(value: { id: AppScreen; label: string })"),
+            ("visual smoke route jump accessibility copy", "accessibilityLabel: boundDisplayText(`Visual smoke 前往${label}`, maxDisplayTextLength)"),
+            ("result checklist item helper", "function resultChecklistItem(value: string)"),
         ):
             _assert_contains(label, shared_display_items_content, marker)
         for label, marker in (
