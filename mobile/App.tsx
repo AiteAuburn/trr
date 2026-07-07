@@ -467,7 +467,7 @@ import {
   settingsModelChoiceDisplayItem,
   settingsProfileChoiceDisplayItem
 } from "./settingsChoiceDisplay";
-import { trialDaysLeft } from "./subscriptionTransforms";
+import { boundVoiceQuota, trialDaysLeft } from "./subscriptionTransforms";
 import {
   accountSecurityNoActionBoundaryCopy,
   accountSecurityProviderBoundaryCopy,
@@ -1342,7 +1342,6 @@ const maxMobilePreviewRecords = 20;
 const maxMobilePreviewSegments = 40;
 const maxMobileRejectedEvents = 40;
 const maxMobileCountValue = 1_000_000;
-const maxMobileVoiceSeconds = 86_400;
 const mobileSingleRecordingLimitSeconds = 60;
 const maxMobileGlucoseValue = 1000;
 const maxDevResetDeletedCountKeys = 20;
@@ -2148,23 +2147,6 @@ function clampNullableNumber(value: number | null | undefined, min: number, max:
 
 function boundOptionalDateTime(value?: string | null) {
   return typeof value === "string" ? boundDisplayText(value, 40) : null;
-}
-
-function boundVoiceQuota(value: VoiceQuota): VoiceQuota {
-  const dailyLimit = clampNumber(value.daily_limit_seconds, 0, maxMobileVoiceSeconds);
-  const used = clampNumber(value.used_seconds_today, 0, maxMobileVoiceSeconds);
-  const remaining = clampNumber(value.remaining_seconds_today, 0, maxMobileVoiceSeconds);
-  return {
-    plan_code: boundIdentifier(value.plan_code),
-    status: boundDisplayText(value.status, 40),
-    trial_started_at: boundOptionalDateTime(value.trial_started_at),
-    trial_ends_at: boundOptionalDateTime(value.trial_ends_at),
-    referral_code: value.referral_code ? boundDisplayText(value.referral_code, 80) : null,
-    preserves_intro_price: Boolean(value.preserves_intro_price),
-    daily_limit_seconds: dailyLimit,
-    used_seconds_today: Math.min(used, dailyLimit || used),
-    remaining_seconds_today: Math.min(remaining, dailyLimit || remaining)
-  };
 }
 
 function boundBasicReport(value: BasicReport): BasicReport {

@@ -4272,6 +4272,10 @@ def main() -> int:
             ("subscription trial days helper", "function trialDaysLeft(trialEndsAt?: string | null)"),
             ("subscription trial days invalid date guard", "Number.isNaN(end)"),
             ("subscription trial days ceil calculation", "Math.ceil((end - Date.now()) / 86_400_000)"),
+            ("subscription voice quota bound helper", "function boundVoiceQuota<T extends VoiceQuotaTransformSource>(value: T): T"),
+            ("subscription voice quota max seconds", "const maxMobileVoiceSeconds = 86_400"),
+            ("subscription voice quota trial end bound", "trial_ends_at: boundOptionalDateTime(value.trial_ends_at)"),
+            ("subscription voice quota used bound", "used_seconds_today: Math.min(used, dailyLimit || used)"),
         ):
             _assert_contains(label, subscription_transforms_content, marker)
         for label, marker in (
