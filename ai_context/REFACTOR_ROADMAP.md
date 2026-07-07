@@ -40,7 +40,7 @@
   - `reportStatusCopy.ts`：voice quota / analysis report / detailed report bounded status messages.
   - `firstVersionFlowCopy.ts`：Today / Record quick-entry display items and summary copy, core first-version flow labels/accessibility copy, shared busy/clear action status, save-success / AI-save-failure navigation status, and first-version flow status messages.
   - `historyCopy.ts`：History navigation status, empty-state, and no-real-record bounded copy.
-  - `analysisCopy.ts`：Analysis / detailed-report bounded copy and custom-range status messages.
+  - `analysisCopy.ts`：Analysis no-data / boundary / detailed-report bounded copy and custom-range status messages.
   - `settingsCopy.ts`：Settings navigation, model/quota/reminder/privacy bounded copy.
   - `subscriptionCopy.ts`：Subscription, account security, profile boundary, and settings subscription section labels / bounded copy.
   - `dateTimeTransforms.ts`：local date/time input formatting, local date keys, analysis date bounds, and local datetime ISO transforms.
@@ -114,7 +114,7 @@ Verification:
 
 ### Slice 3: Status/Copy Helpers
 
-Status: started; recording / transcript-review copy/status, parser / AI review / AI save-confirm / AI remove-confirm / manual-record confirmation / record-detail return / daily-record leave guard / AI save / AI candidate, record sync / edit / CRUD / delete-confirm / result destination, auth / backend session, native model debug, report / voice quota, first-version Today summary copy, first-version core labels/accessibility copy, shared busy/clear action status, first-version flow and save-success / AI-save-failure navigation status, history, analysis, settings model/quota/reminder/privacy, subscription/account-security, and settings subscription section labels extracted.
+Status: started; recording / transcript-review copy/status, parser / AI review / AI save-confirm / AI remove-confirm / manual-record confirmation / record-detail return / daily-record leave guard / AI save / AI candidate, record sync / edit / CRUD / delete-confirm / result destination, auth / backend session, native model debug, report / voice quota, first-version Today summary copy, first-version core labels/accessibility copy, shared busy/clear action status, first-version flow and save-success / AI-save-failure navigation status, history, analysis no-data/boundary, settings model/quota/reminder/privacy, subscription/account-security, and settings subscription section labels extracted.
 
 Scope:
 
@@ -144,7 +144,7 @@ Verification:
 
 ### Slice 5: First-Version Screen Components
 
-Status: started; Settings row, Settings model/quota copy, Analysis range, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, AI candidate/rejected-event display, first-version Today summary copy, first-version core labels/accessibility copy, shared busy/clear action status, transcript-review copy, AI review/save-confirm copy, AI remove-confirm copy, manual-record confirmation copy/status, record-detail return status, delete-confirm copy/status, record-edit copy/status, record-result destination status, daily-record leave guard copy/status, save-success / AI-save-failure navigation status, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, and daily-record section display boundaries extracted.
+Status: started; Settings row, Settings model/quota copy, Analysis range, Analysis no-data/boundary copy, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, AI candidate/rejected-event display, first-version Today summary copy, first-version core labels/accessibility copy, shared busy/clear action status, transcript-review copy, AI review/save-confirm copy, AI remove-confirm copy, manual-record confirmation copy/status, record-detail return status, delete-confirm copy/status, record-edit copy/status, record-result destination status, daily-record leave guard copy/status, save-success / AI-save-failure navigation status, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, and daily-record section display boundaries extracted.
 
 Scope:
 

@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1115: Extract Analysis no-data copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted Analysis no-data status label, no-data body copy, and data-boundary copy helpers from `mobile/App.tsx` into `mobile/analysisCopy.ts`.
+- Kept Analysis render bindings, chart/report data sources, preview-mode behavior, UI copy text, navigation, parser requests, and backend report request paths unchanged.
+- Updated the navigation verifier so Analysis no-data and boundary copy ownership guards inspect `mobile/analysisCopy.ts`, while Analysis render behavior remains checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover Analysis no-data/boundary copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1114: Extract Today record summary copy helper
 
 Status: done

@@ -335,11 +335,14 @@ import {
   type HistoryDetailMode
 } from "./historyScreenData";
 import {
+  analysisBoundaryDataCopy,
   analysisChartEmptyCopy,
   analysisCustomApplyStatusMessage,
   analysisCustomRangeStatusCopy,
   analysisDetailedReportStatusMessage,
   analysisManualEntryStatusMessage,
+  analysisNoDataCopy,
+  analysisNoDataStatusLabel,
   analysisRangeSummaryCopy,
   analysisReportButtonLabel,
   analysisReturnTodayStatusMessage,
@@ -2588,26 +2591,6 @@ function parserModelUnavailableText(llmModel: AiModelOption | null, sttModel: Ai
     return boundUiMessage(`${displayTextValue(sttModel.label, 80)} 尚未啟用`);
   }
   return "";
-}
-
-function analysisNoDataStatusLabel() {
-  return boundDisplayText("尚無資料", 24);
-}
-
-function analysisNoDataCopy() {
-  return boundDisplayText(
-    "建立真實紀錄後才會顯示趨勢與統計；目前不使用固定範例血糖數字。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function analysisBoundaryDataCopy(isPreviewMode: boolean) {
-  return boundDisplayText(
-    isPreviewMode
-      ? "目前沒有可分析的真實紀錄；不顯示固定 mock 血糖數字。"
-      : "六項統計優先使用 backend bounded report；圖表使用 mobile 已載入紀錄。",
-    maxDisplayDetailTextLength
-  );
 }
 
 function reportSourceDisplayItem(report: BasicReport | null, localRecordCount: number, queryLimit: number) {

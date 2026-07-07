@@ -33,6 +33,26 @@ export function analysisChartEmptyCopy() {
   return boundDisplayText("目前範圍沒有血糖資料", maxDisplayTextLength);
 }
 
+export function analysisNoDataStatusLabel() {
+  return boundDisplayText("尚無資料", 24);
+}
+
+export function analysisNoDataCopy() {
+  return boundDisplayText(
+    "建立真實紀錄後才會顯示趨勢與統計；目前不使用固定範例血糖數字。",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function analysisBoundaryDataCopy(isPreviewMode: boolean) {
+  return boundDisplayText(
+    isPreviewMode
+      ? "目前沒有可分析的真實紀錄；不顯示固定 mock 血糖數字。"
+      : "六項統計優先使用 backend bounded report；圖表使用 mobile 已載入紀錄。",
+    maxDisplayDetailTextLength
+  );
+}
+
 export function analysisRangeSummaryCopy(recordCount: number, isPreviewMode: boolean) {
   const boundedCount = clampNumber(recordCount, 0, maxMobileCountValue);
   return boundDisplayText(
