@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1174: Extract Store redemption display helper
+
+Status: done
+
+Summary:
+
+- Moved the Store redemption display item helper from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept redemption id/title/status/point/date/action bounds, usable-coupon detection, Store wallet render behavior, redemption handlers, backend endpoints, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so Store redemption display ownership is guarded in `mobile/futureModuleDisplay.ts`, while Store handlers, API endpoints, and render bindings remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Store redemption display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1173: Extract Store product display helper
 
 Status: done

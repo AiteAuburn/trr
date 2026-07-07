@@ -1,4 +1,5 @@
 import type { AppScreen } from "./navigationConfig";
+import { recordDateTimeDisplay } from "./recordDisplay";
 import { resultChecklistItem } from "./sharedDisplayItems";
 
 const maxDisplayTextLength = 120;
@@ -30,6 +31,17 @@ export type StoreProduct = {
   pointsCost: string;
   icon: string;
   rewardStatus?: "preview" | "redeemable";
+};
+
+export type StoreRedemptionDisplayInput = {
+  id: string;
+  reward_code: string;
+  points_cost: number;
+  status?: string | null;
+  fulfillment_type?: string | null;
+  fulfillment_code?: string | null;
+  used_at?: string | null;
+  created_at?: string | null;
 };
 
 export const storeCategories: Array<{ id: StoreCategory; label: string }> = [
@@ -305,6 +317,38 @@ export function storeProductDisplayItem(value: StoreProduct) {
         ? `${title} 可用社群點數兌換；${storeRedeemableFulfillmentCopy(value.category)}`
         : `${title} 目前只顯示點數兌換預覽；點數扣抵、庫存、結帳、訂單與 entitlement 寫入尚未啟用。`
     )
+  };
+}
+
+export function storeRedemptionDisplayItem(value: StoreRedemptionDisplayInput) {
+  const code = value.fulfillment_code ? boundIdentifier(value.fulfillment_code) : "";
+  const rewardCode = boundIdentifier(value.reward_code);
+  const status = boundDisplayText(value.status || "reserved", 24);
+  const isUsable =
+    status === "issued" &&
+    Boolean(code) &&
+    (value.fulfillment_type === "coupon" || value.fulfillment_type === "discount_code") &&
+    !value.used_at;
+  const fulfillmentLabel = value.fulfillment_type === "discount_code" ? "折扣碼" : "優惠券";
+  const title = code ? `${fulfillmentLabel} ${code}` : `兌換 ${rewardCode}`;
+  const createdAt = value.created_at ? recordDateTimeDisplay(value.created_at) : "尚未同步時間";
+  const statusLabel =
+    status === "used"
+      ? `已使用${value.used_at ? ` · ${recordDateTimeDisplay(value.used_at)}` : ""}`
+      : status === "issued"
+        ? "可使用"
+        : "處理中";
+  return {
+    id: boundIdentifier(value.id),
+    title: boundDisplayText(title, maxDisplayTextLength),
+    subtitle: boundDisplayText(`扣除 ${clampNumber(value.points_cost, 0, maxMobileCountValue)} 點 · ${createdAt}`, maxDisplayDetailTextLength),
+    statusLabel: boundDisplayText(statusLabel, maxDisplayTextLength),
+    actionLabel: isUsable ? "用" : "查",
+    actionAccessibilityLabel: boundDisplayText(
+      isUsable ? `標記${title}已使用` : `查看${title}狀態`,
+      maxDisplayTextLength
+    ),
+    isUsable
   };
 }
 

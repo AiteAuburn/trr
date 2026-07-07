@@ -137,6 +137,7 @@ import {
   storeProductDisplayItem,
   storeProducts,
   storeRedeemableFulfillmentCopy,
+  storeRedemptionDisplayItem,
   yearReviewAiEncouragementCopy,
   yearReviewAiObservationCopy,
   yearReviewBadgeMaterialCopy,
@@ -1386,38 +1387,6 @@ function storeProductFromApi(value: StoreApiReward): StoreProduct {
     pointsCost: boundDisplayText(`${clampNumber(value.points_cost, 0, maxMobileCountValue)} 點`, 40),
     icon: value.category === "coupons" ? "%" : value.category === "special_badges" ? "徽" : "兌",
     rewardStatus: value.status
-  };
-}
-
-function storeRedemptionDisplayItem(value: StoreApiRedemption) {
-  const code = value.fulfillment_code ? boundIdentifier(value.fulfillment_code) : "";
-  const rewardCode = boundIdentifier(value.reward_code);
-  const status = boundDisplayText(value.status || "reserved", 24);
-  const isUsable =
-    status === "issued" &&
-    Boolean(code) &&
-    (value.fulfillment_type === "coupon" || value.fulfillment_type === "discount_code") &&
-    !value.used_at;
-  const fulfillmentLabel = value.fulfillment_type === "discount_code" ? "折扣碼" : "優惠券";
-  const title = code ? `${fulfillmentLabel} ${code}` : `兌換 ${rewardCode}`;
-  const createdAt = value.created_at ? recordDateTimeDisplay(value.created_at) : "尚未同步時間";
-  const statusLabel =
-    status === "used"
-      ? `已使用${value.used_at ? ` · ${recordDateTimeDisplay(value.used_at)}` : ""}`
-      : status === "issued"
-        ? "可使用"
-        : "處理中";
-  return {
-    id: boundIdentifier(value.id),
-    title: boundDisplayText(title, maxDisplayTextLength),
-    subtitle: boundDisplayText(`扣除 ${clampNumber(value.points_cost, 0, maxMobileCountValue)} 點 · ${createdAt}`, maxDisplayDetailTextLength),
-    statusLabel: boundDisplayText(statusLabel, maxDisplayTextLength),
-    actionLabel: isUsable ? "用" : "查",
-    actionAccessibilityLabel: boundDisplayText(
-      isUsable ? `標記${title}已使用` : `查看${title}狀態`,
-      maxDisplayTextLength
-    ),
-    isUsable
   };
 }
 
