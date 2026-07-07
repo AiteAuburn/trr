@@ -28,6 +28,7 @@ ANALYSIS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "analysisScreenData.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
 SETTINGS_CHOICE_DISPLAY_PATH = REPO_ROOT / "mobile" / "settingsChoiceDisplay.ts"
+MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "modelTransforms.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
 SUBSCRIPTION_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "subscriptionTransforms.ts"
 ACCOUNT_COPY_PATH = REPO_ROOT / "mobile" / "accountCopy.ts"
@@ -1228,6 +1229,7 @@ def main() -> int:
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     settings_screen_data_content = SETTINGS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     settings_choice_display_content = SETTINGS_CHOICE_DISPLAY_PATH.read_text(encoding="utf-8")
+    model_transforms_content = MODEL_TRANSFORMS_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
     subscription_transforms_content = SUBSCRIPTION_TRANSFORMS_PATH.read_text(encoding="utf-8")
     account_copy_content = ACCOUNT_COPY_PATH.read_text(encoding="utf-8")
@@ -4163,6 +4165,13 @@ def main() -> int:
             ("AI model options LLM list bound", "llm_models: value.llm_models.slice(0, maxMobileModelOptions).map(boundAiModelOption)"),
         ):
             _assert_contains(label, ai_model_transforms_content, marker)
+        for label, marker in (
+            ("downloaded model state bound helper", "function boundDownloadedModel<T extends DownloadedModel>(value: T): T"),
+            ("downloaded model state uri bound", "uri: boundNativeDebugInput(value.uri)"),
+            ("downloaded model state exists boolean", "exists: Boolean(value.exists)"),
+            ("downloaded model state rows bound", "return value.slice(0, maxDownloadedModelRows).map(boundDownloadedModel)"),
+        ):
+            _assert_contains(label, model_transforms_content, marker)
         _assert_contains(
             "auth session management accessibility item",
             shared_display_items_content,

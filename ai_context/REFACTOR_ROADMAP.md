@@ -29,6 +29,7 @@
   - `authTransforms.ts`：Auth token/OIDC request and response sanitizing transforms plus protected request header construction.
   - `authProviderChallenge.ts`：OIDC challenge helper。
   - `modelStorage.ts`：本機模型清單與下載狀態。
+  - `modelTransforms.ts`：Downloaded native model state bounding transforms.
   - `nativeLocalModels.ts`：native Whisper / Llama bridge。
   - `navigationConfig.ts`：`AppScreen` route union、primary screens、MVP flow、screen chrome、first-version menu 與 visual-smoke route jump config。
   - `recordDisplay.ts`：daily section definitions, daily-record section display shaping, AI candidate and rejected-event display shaping, record payload labels, record time/date labels, shared Today/History record-list display item shaping, record detail display item shaping, and manual-record confirmation display shaping.
@@ -136,7 +137,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; date/time, record bounds, daily transcript, auth token/OIDC request transforms, protected auth request header transforms, account/profile response bounding, AI model option response bounding, analysis basic report response bounding, analysis data/chart, analysis metric, subscription trial-days, and subscription voice quota response bounding transform helpers extracted.
+Status: started; date/time, record bounds, daily transcript, auth token/OIDC request transforms, protected auth request header transforms, account/profile response bounding, AI model option response bounding, downloaded native model state bounding, analysis basic report response bounding, analysis data/chart, analysis metric, subscription trial-days, and subscription voice quota response bounding transform helpers extracted.
 
 Scope:
 

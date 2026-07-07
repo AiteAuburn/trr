@@ -506,6 +506,7 @@ import {
 } from "./dateTimeTransforms";
 import { boundAccount, boundProfiles } from "./accountTransforms";
 import { boundAiModelOptions } from "./aiModelTransforms";
+import { boundDownloadedModels } from "./modelTransforms";
 import {
   boundAuthTokenResponse,
   boundDeviceFingerprintForRequest,
@@ -1340,7 +1341,6 @@ const maxStoreSearchTextLength = 80;
 const maxBackendUrlLength = 256;
 const maxNativeDebugInputLength = 1024;
 const maxUiMessageLength = 300;
-const maxDownloadedModelRows = 20;
 const maxMobilePreviewRecords = 20;
 const maxMobilePreviewSegments = 40;
 const maxMobileRejectedEvents = 40;
@@ -1417,21 +1417,6 @@ function authSessionDisplayItem(value: AuthSessionItem, index: number) {
       maxDisplayDetailTextLength
     )
   };
-}
-
-function boundDownloadedModel(value: DownloadedModel): DownloadedModel {
-  return {
-    kind: value.kind,
-    fileName: boundDisplayText(value.fileName),
-    uri: boundNativeDebugInput(value.uri),
-    exists: Boolean(value.exists),
-    size: typeof value.size === "number" && Number.isFinite(value.size) && value.size >= 0 ? value.size : undefined,
-    md5: value.md5 ? boundIdentifier(value.md5) : undefined
-  };
-}
-
-function boundDownloadedModels(value: DownloadedModel[]) {
-  return value.slice(0, maxDownloadedModelRows).map(boundDownloadedModel);
 }
 
 function futureModuleText(value: string | undefined, fallback: string, maxLength = maxDisplayDetailTextLength) {

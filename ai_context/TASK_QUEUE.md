@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1146: Extract downloaded model state bounding transform
+
+Status: done
+
+Summary:
+
+- Extracted downloaded native model state bounding helpers from `mobile/App.tsx` into `mobile/modelTransforms.ts`.
+- Kept model download/listing storage, native Whisper/Llama bridge, downloaded model refresh handler, auto Whisper path selection, Settings model display shaping, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so downloaded model state bounding ownership guards inspect `mobile/modelTransforms.ts`, while downloaded model display helpers remain checked in `mobile/settingsChoiceDisplay.ts`.
+- Updated the refactor roadmap to note that Slice 4 now also covers downloaded native model state bounding.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1145: Extract protected request header transform
 
 Status: done
