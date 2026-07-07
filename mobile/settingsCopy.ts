@@ -32,6 +32,16 @@ export function activeProfileRelationshipText(activeProfile: ActiveProfileDispla
   return boundDisplayText(activeProfile?.relationship ?? "未載入", 40);
 }
 
+export function formatVoiceMinutes(seconds: number) {
+  const safeSeconds = Math.max(0, Math.min(3600, seconds));
+  const minutes = Math.floor(safeSeconds / 60);
+  const remainingSeconds = safeSeconds % 60;
+  if (remainingSeconds === 0) {
+    return `${minutes} 分鐘`;
+  }
+  return `${minutes} 分 ${remainingSeconds} 秒`;
+}
+
 export function advancedSettingsToggleLabel(isExpanded: boolean) {
   return boundDisplayText(isExpanded ? "收合進階設定" : "顯示進階設定", maxDisplayTextLength);
 }

@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1124: Extract voice quota minute formatting
+
+Status: done
+
+Summary:
+
+- Extracted voice quota minute formatting helper from `mobile/App.tsx` into `mobile/settingsCopy.ts`.
+- Kept voice quota state, low-quota warning logic, subscription/quota display text, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so voice-minute formatting helper ownership guards inspect `mobile/settingsCopy.ts`, while render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover Settings voice quota minute formatting boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1123: Extract subscription plan and status labels
 
 Status: done

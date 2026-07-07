@@ -4123,6 +4123,9 @@ def main() -> int:
             ("active profile inline copy", "目前對象：${activeProfileLabel}"),
             ("active profile relationship helper", "function activeProfileRelationshipText(activeProfile: ActiveProfileDisplaySource | null)"),
             ("active profile relationship fallback", "未載入"),
+            ("voice minutes formatting helper", "function formatVoiceMinutes(seconds: number)"),
+            ("voice minutes whole minute copy", "return `${minutes} 分鐘`;"),
+            ("voice minutes seconds copy", "return `${minutes} 分 ${remainingSeconds} 秒`;"),
         ):
             _assert_contains(label, settings_copy_content, marker)
         for label, marker in (

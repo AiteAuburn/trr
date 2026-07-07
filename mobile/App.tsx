@@ -406,6 +406,7 @@ import {
   activeProfileRelationshipText,
   advancedSettingsToggleLabel,
   backendReconnectButtonLabel,
+  formatVoiceMinutes,
   membershipStatusReturnSubscriptionStatusMessage,
   menuReturnStatusMessage,
   modelRuntimeLabel,
@@ -2388,16 +2389,6 @@ function yearReviewTargetYear(value: Date) {
 function nextYearReviewGenerationLabel(value: Date) {
   const nextYear = value.getMonth() === 0 && value.getDate() === 1 ? value.getFullYear() + 1 : value.getFullYear() + 1;
   return boundDisplayText(`每年 1 月 1 日自動產生前一年度回顧；下一次為 ${nextYear} 年 1 月 1 日`, maxDisplayDetailTextLength);
-}
-
-function formatVoiceMinutes(seconds: number) {
-  const safeSeconds = Math.max(0, Math.min(3600, seconds));
-  const minutes = Math.floor(safeSeconds / 60);
-  const remainingSeconds = safeSeconds % 60;
-  if (remainingSeconds === 0) {
-    return `${minutes} 分鐘`;
-  }
-  return `${minutes} 分 ${remainingSeconds} 秒`;
 }
 
 function captureVoiceQuotaCopy(quota: VoiceQuota | null) {
