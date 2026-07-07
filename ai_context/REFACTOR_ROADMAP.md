@@ -61,7 +61,7 @@
   - `analysisMetricTransforms.ts`：Analysis and detailed-report metric row shaping, nullable glucose bounds, and count bounds.
   - `analysisScreenData.ts`：Analysis range option config, backend report request-key, and bounded range display item shaping.
   - `historyScreenData.ts`：History detail mode config, calendar day display shaping, daily summary / sync display shaping, selected-date section display shaping, raw transcript display shaping, and bounded display item shaping.
-  - `settingsScreenData.ts`：Settings row config and bounded Settings row display item shaping.
+  - `settingsScreenData.ts`：Settings row config, auth/session/subscription/privacy static preview rows, and bounded Settings row display item shaping.
   - `settingsChoiceDisplay.ts`：Settings profile/model choice and downloaded model display shaping.
 
 ### Backend
@@ -110,12 +110,13 @@ Verification:
 
 ### Slice 2: Static Screen/Menu Config
 
-Status: done; visual-smoke route normalization helpers are also extracted.
+Status: done; visual-smoke route normalization helpers and Settings static preview rows are also extracted.
 
 Scope:
 
 - Extract `screenChrome`, `menuScreens`, `visualSmokeRouteJumps`, and future-module display config.
 - Extract debug-only visual-smoke initial route normalization and deep-link route parsing.
+- Extract Settings / Account Security / Subscription / Privacy static preview rows.
 - Keep normal menu limited to 今日錄音、歷史紀錄、基本分析、設定.
 - Keep future functions debug / visual-smoke only.
 
@@ -157,7 +158,7 @@ Verification:
 
 ### Slice 5: First-Version Screen Components
 
-Status: started; Settings row, Settings profile/model choice display, Settings downloaded model display, Settings active-profile display copy, Settings voice quota minute formatting/warning/usage/helper copy, Settings model/quota copy, Account Security auth session display items, Subscription plan/status labels, plan/status summary display copy, membership trial-days display copy, account identity display, shared bounded display item builders including menu/visual-smoke route/checklist/manual-record type items, native model debug labels/accessibility, Analysis range/request-key, Analysis no-data/boundary copy, Analysis report-source display, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, AI candidate/rejected-event display, first-version Today summary copy, first-version core labels/accessibility copy, destination-aware return labels, shared header/recording/primary-tab accessibility copy, shared busy/clear action status, transcript-review copy, AI review/save-confirm copy, AI remove-confirm copy, manual-record confirmation copy/status, record-detail return status, delete-confirm copy/status, record-edit copy/status, record-result destination status, daily-record leave guard copy/status, save-success / AI-save-failure navigation status, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, daily-record section display boundaries, and future-module display card boundaries extracted.
+Status: started; Settings row/static preview config, Settings profile/model choice display, Settings downloaded model display, Settings active-profile display copy, Settings voice quota minute formatting/warning/usage/helper copy, Settings model/quota copy, Account Security auth session display items, Subscription plan/status labels, plan/status summary display copy, membership trial-days display copy, account identity display, shared bounded display item builders including menu/visual-smoke route/checklist/manual-record type items, native model debug labels/accessibility, Analysis range/request-key, Analysis no-data/boundary copy, Analysis report-source display, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, AI candidate/rejected-event display, first-version Today summary copy, first-version core labels/accessibility copy, destination-aware return labels, shared header/recording/primary-tab accessibility copy, shared busy/clear action status, transcript-review copy, AI review/save-confirm copy, AI remove-confirm copy, manual-record confirmation copy/status, record-detail return status, delete-confirm copy/status, record-edit copy/status, record-result destination status, daily-record leave guard copy/status, save-success / AI-save-failure navigation status, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, daily-record section display boundaries, and future-module display card boundaries extracted.
 
 Scope:
 

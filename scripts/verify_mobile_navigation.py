@@ -3868,6 +3868,13 @@ def main() -> int:
             settings_screen_data_content,
             "accessibilityLabel: boundDisplayText(`前往${label}設定：${helper || \"查看設定狀態\"}`, maxDisplayDetailTextLength)",
         )
+        for label, marker in (
+            ("session management preview rows config", "export const sessionManagementPreviews = ["),
+            ("production auth readiness rows config", "export const productionAuthReadinessRows = ["),
+            ("subscription management rows config", "export const subscriptionManagementRows = ["),
+            ("privacy control rows config", "export const privacyControlRows = ["),
+        ):
+            _assert_contains(label, settings_screen_data_content, marker)
         _assert_contains(
             "settings row accessibility binding",
             content,

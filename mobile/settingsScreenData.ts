@@ -30,6 +30,33 @@ export const settingsRows: SettingsRow[] = [
   { id: "subscription", label: "訂閱管理", icon: "卡", helper: "試用、年費與方案管理" }
 ];
 
+export const sessionManagementPreviews = [
+  ["目前裝置", "本機預覽", "正式版需顯示裝置名稱、最後使用時間、IP / 地區粗略資訊與 session id。"],
+  ["其他裝置", "需後端列表", "需由後端提供可分頁 session list，mobile 不保存完整 token 或 session 清單。"],
+  ["登出全部裝置", "撤銷未啟用", "需完成 refresh token revoke、server-side session invalidation 與安全儲存清除。"]
+] as const;
+
+export const productionAuthReadinessRows = [
+  ["Provider", "待串接", "Apple / Google / Email token exchange 尚未接到 mobile。"],
+  ["Backend verify", "待串接", "後端需驗證 JWT、issuer、audience、profile scope 與撤銷狀態。"],
+  ["Secure storage", "待串接", "access token 只能短暫使用；refresh token 必須走 Keychain / Keystore 與 rotation。"],
+  ["Session revoke", "待串接", "logout 與登出全部裝置需呼叫 server-side revoke，不只清除本機狀態。"],
+  ["Audit", "待串接", "正式 auth 事件需 PHI-safe audit，不記錄 raw token、健康內容或 request body。"]
+] as const;
+
+export const subscriptionManagementRows = [
+  ["付款來源", "未串接", "正式版需由 App Store / Play Store 或會員後台開啟管理頁。"],
+  ["Receipt validation", "必做", "後端驗證收據並以 webhook 更新 entitlement，不信任前端狀態。"],
+  ["優惠資格", "保留欄位", "創始會員價、KOL 導流碼與續訂保價需由 server-side policy 決定。"],
+  ["取消 / 到期", "待串接", "取消、到期、退款與 grace period 都需同步到 voice quota。"]
+] as const;
+
+export const privacyControlRows = [
+  ["醫師 / 照護者分享", "尚未啟用", "需要授權碼、到期、撤銷與唯讀範圍。"],
+  ["社群公開資料", "預設關閉", "任何紀錄公開前都要逐項 opt-in。"],
+  ["資料匯出 / 刪除", "待後端流程", "需要身份驗證、批次狀態與稽核紀錄。"]
+] as const;
+
 export function settingsRowDisplayItem(value: SettingsRow) {
   const label = boundDisplayText(value.label || "設定", maxDisplayTextLength);
   const helper = value.helper ? boundDisplayText(value.helper, maxDisplayDetailTextLength) : "";
