@@ -4116,6 +4116,14 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("active profile label helper", "function activeProfileLabelText(activeProfile: ActiveProfileDisplaySource | null, profileCount: number)"),
+            ("active profile no profile copy", "尚未建立照護對象"),
+            ("active profile no selection copy", "尚未選擇照護對象"),
+            ("active profile inline helper", "function activeProfileInlineText(activeProfileLabel: string)"),
+            ("active profile inline copy", "目前對象：${activeProfileLabel}"),
+        ):
+            _assert_contains(label, settings_copy_content, marker)
+        for label, marker in (
             ("native module check button label helper", "function nativeModuleCheckButtonLabel(isRunning: boolean)"),
             ("native model download button label helper", "function nativeModelDownloadButtonLabel(isRunning: boolean, progress: number)"),
             ("native download kind accessibility helper", 'function nativeDownloadKindAccessibilityLabel(kind: "whisper" | "llama", selectedKind: "whisper" | "llama")'),

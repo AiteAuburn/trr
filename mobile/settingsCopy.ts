@@ -12,6 +12,21 @@ function boundUiMessage(value: string) {
   return value.slice(0, maxUiMessageLength);
 }
 
+type ActiveProfileDisplaySource = {
+  display_name?: string | null;
+};
+
+export function activeProfileLabelText(activeProfile: ActiveProfileDisplaySource | null, profileCount: number) {
+  if (activeProfile) {
+    return boundDisplayText(activeProfile.display_name ?? "");
+  }
+  return boundDisplayText(profileCount === 0 ? "尚未建立照護對象" : "尚未選擇照護對象");
+}
+
+export function activeProfileInlineText(activeProfileLabel: string) {
+  return boundDisplayText(`目前對象：${activeProfileLabel}`, maxDisplayDetailTextLength);
+}
+
 export function advancedSettingsToggleLabel(isExpanded: boolean) {
   return boundDisplayText(isExpanded ? "收合進階設定" : "顯示進階設定", maxDisplayTextLength);
 }

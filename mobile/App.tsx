@@ -401,6 +401,8 @@ import {
   type DailyTranscriptEntry
 } from "./dailyTranscriptTransforms";
 import {
+  activeProfileInlineText,
+  activeProfileLabelText,
   advancedSettingsToggleLabel,
   backendReconnectButtonLabel,
   membershipStatusReturnSubscriptionStatusMessage,
@@ -2530,17 +2532,6 @@ function doctorShareAccountBoundaryText(account: Account | null) {
       : "尚未連線帳號；不可建立任何外部分享。",
     maxDisplayDetailTextLength
   );
-}
-
-function activeProfileLabelText(activeProfile: Profile | null, profileCount: number) {
-  if (activeProfile) {
-    return boundDisplayText(activeProfile.display_name);
-  }
-  return boundDisplayText(profileCount === 0 ? "尚未建立照護對象" : "尚未選擇照護對象");
-}
-
-function activeProfileInlineText(activeProfileLabel: string) {
-  return boundDisplayText(`目前對象：${activeProfileLabel}`, maxDisplayDetailTextLength);
 }
 
 function activeProfileRelationshipText(activeProfile: Profile | null) {

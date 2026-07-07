@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1121: Extract active profile display copy
+
+Status: done
+
+Summary:
+
+- Extracted active-profile label and inline display helpers from `mobile/App.tsx` into `mobile/settingsCopy.ts`.
+- Kept active-profile state, relationship display, profile selection handlers, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so active-profile display helper ownership guards inspect `mobile/settingsCopy.ts`, while profile selection bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover Settings active-profile display copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1120: Extract destination-aware return labels
 
 Status: done
