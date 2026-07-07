@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1149 extract record save transforms
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordSaveTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted pending-record save metadata sanitizing and client save batch-id generation from `mobile/App.tsx` into `mobile/recordSaveTransforms.ts`.
+- Kept AI save flow, manual record create flow, daily-record save request builder, bounded metadata behavior, source-text preservation, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so pending-record save transform ownership guards inspect `mobile/recordSaveTransforms.ts`, while save request bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now also covers record save transforms.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 4/Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1148 extract recording effective limit transform
 
 類型：mobile / refactor / verifier / docs

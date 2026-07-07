@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1149: Extract record save transforms
+
+Status: done
+
+Summary:
+
+- Extracted pending-record save metadata sanitizing and client save batch-id generation from `mobile/App.tsx` into `mobile/recordSaveTransforms.ts`.
+- Kept AI save flow, manual record create flow, daily-record save request builder, bounded metadata behavior, source-text preservation, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so pending-record save transform ownership guards inspect `mobile/recordSaveTransforms.ts`, while save request bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now also covers record save transforms.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1148: Extract recording effective limit transform
 
 Status: done

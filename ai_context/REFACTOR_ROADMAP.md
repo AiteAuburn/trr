@@ -35,6 +35,7 @@
   - `navigationConfig.ts`：`AppScreen` route union、primary screens、MVP flow、screen chrome、first-version menu 與 visual-smoke route jump config。
   - `recordDisplay.ts`：daily section definitions, daily-record section display shaping, AI candidate and rejected-event display shaping, record payload labels, record time/date labels, shared Today/History record-list display item shaping, record detail display item shaping, and manual-record confirmation display shaping.
   - `recordEditTransforms.ts`：record edit field type, max-length bounds, empty edit fields, validation, record payload-to-edit-field transforms, and edit-field-to-payload transforms.
+  - `recordSaveTransforms.ts`：pending-record save metadata sanitizing and client save batch-id generation.
   - `recordingCopy.ts`：recording / transcript-review bounded status messages and display copy.
   - `recordWorkflowCopy.ts`：parser model readiness, parser / AI review / AI save-confirm / AI remove-confirm / manual-record confirmation / record-detail return / daily-record leave guard / AI save / AI candidate bounded copy and status messages.
   - `recordStatusCopy.ts`：record sync / edit / update / delete-confirm / delete / record-result destination / manual-create bounded copy and status messages.
@@ -138,7 +139,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; date/time, record bounds, daily transcript, auth token/OIDC request transforms, protected auth request header transforms, account/profile response bounding, AI model option response bounding, downloaded native model state bounding, analysis basic report response bounding, analysis data/chart, analysis metric, subscription trial-days, subscription voice quota response bounding, and recording effective-limit transform helpers extracted.
+Status: started; date/time, record bounds, record save transforms, daily transcript, auth token/OIDC request transforms, protected auth request header transforms, account/profile response bounding, AI model option response bounding, downloaded native model state bounding, analysis basic report response bounding, analysis data/chart, analysis metric, subscription trial-days, subscription voice quota response bounding, and recording effective-limit transform helpers extracted.
 
 Scope:
 

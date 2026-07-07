@@ -60,7 +60,6 @@ import {
   type RecordEditFields
 } from "./recordEditTransforms";
 import {
-  boundMetadata,
   boundParsePreviewResponse,
   boundRecordItem,
   boundRecordsList,
@@ -69,6 +68,10 @@ import {
   type PendingRecord,
   type RecordItem
 } from "./recordBounds";
+import {
+  createClientSaveBatchId,
+  pendingRecordForSave
+} from "./recordSaveTransforms";
 import {
   menuScreens,
   mvpFlowSteps,
@@ -2107,20 +2110,6 @@ function yearReviewTargetYear(value: Date) {
 function nextYearReviewGenerationLabel(value: Date) {
   const nextYear = value.getMonth() === 0 && value.getDate() === 1 ? value.getFullYear() + 1 : value.getFullYear() + 1;
   return boundDisplayText(`每年 1 月 1 日自動產生前一年度回顧；下一次為 ${nextYear} 年 1 月 1 日`, maxDisplayDetailTextLength);
-}
-
-function pendingRecordForSave(record: PendingRecord): PendingRecord {
-  const sanitizedMetadata = boundMetadata(record.metadata_json, true);
-  return {
-    ...record,
-    ...(sanitizedMetadata ? { metadata_json: sanitizedMetadata } : { metadata_json: undefined })
-  };
-}
-
-function createClientSaveBatchId() {
-  const timestamp = Date.now().toString(36);
-  const randomSuffix = Math.random().toString(36).slice(2, 10);
-  return `mobile-save-${timestamp}-${randomSuffix}`;
 }
 
 async function requestJson<T>(

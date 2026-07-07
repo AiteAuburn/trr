@@ -13,6 +13,7 @@ NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
 RECORD_EDIT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "recordEditTransforms.ts"
 RECORD_BOUNDS_PATH = REPO_ROOT / "mobile" / "recordBounds.ts"
+RECORD_SAVE_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "recordSaveTransforms.ts"
 DAILY_TRANSCRIPT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dailyTranscriptTransforms.ts"
 RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
 RECORD_WORKFLOW_COPY_PATH = REPO_ROOT / "mobile" / "recordWorkflowCopy.ts"
@@ -1215,6 +1216,7 @@ def main() -> int:
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
     record_edit_transforms_content = RECORD_EDIT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     record_bounds_content = RECORD_BOUNDS_PATH.read_text(encoding="utf-8")
+    record_save_transforms_content = RECORD_SAVE_TRANSFORMS_PATH.read_text(encoding="utf-8")
     daily_transcript_content = DAILY_TRANSCRIPT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     recording_copy_content = RECORDING_COPY_PATH.read_text(encoding="utf-8")
     record_workflow_copy_content = RECORD_WORKFLOW_COPY_PATH.read_text(encoding="utf-8")
@@ -3102,8 +3104,12 @@ def main() -> int:
             "historyRawCard",
         ):
             _assert_contains(f"{style_name} style", content, f"{style_name}: {{")
+        _assert_contains(
+            "history source text preserved during save",
+            record_save_transforms_content,
+            "const sanitizedMetadata = boundMetadata(record.metadata_json, true);",
+        )
         for label, marker in (
-            ("history source text preserved during save", "const sanitizedMetadata = boundMetadata(record.metadata_json, true);"),
             ("history selected date state", "const [selectedHistoryDate, setSelectedHistoryDate] = useState(formatLocalDateInput(new Date()))"),
             ("history detail mode state", 'const [historyDetailMode, setHistoryDetailMode] = useState<HistoryDetailMode>("structured")'),
             ("history calendar date resets structured mode", 'setHistoryDetailMode("structured");'),
@@ -3237,12 +3243,18 @@ def main() -> int:
         ):
             if marker in history_block:
                 raise AssertionError(f"History calendar-first render block must not contain {label}.")
-        pending_save_block = _function_block(content, "pendingRecordForSave")
+        pending_save_block = _function_block(record_save_transforms_content, "pendingRecordForSave")
         _assert_contains(
             "pending save preserves bounded source text",
             pending_save_block,
             "const sanitizedMetadata = boundMetadata(record.metadata_json, true);",
         )
+        for label, marker in (
+            ("client save batch id helper", "function createClientSaveBatchId()"),
+            ("client save batch id timestamp", "const timestamp = Date.now().toString(36);"),
+            ("client save batch id prefix", "return `mobile-save-${timestamp}-${randomSuffix}`;"),
+        ):
+            _assert_contains(label, record_save_transforms_content, marker)
         strip_metadata_block = _function_block(record_bounds_content, "stripRawTextMetadata")
         _assert_not_contains(
             "source text must not be stripped from record metadata",
