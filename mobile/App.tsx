@@ -416,6 +416,8 @@ import {
   privacyIntegrationAccessibilityLabel,
   privacyIntegrationButtonLabel,
   privacySettingsIntroCopy,
+  quotaRemainingDisplayValue,
+  quotaUsedDisplayValue,
   recordingQuotaControlCopy,
   recordingQuotaDataBoundaryCopy,
   recordingQuotaIntroCopy,
@@ -2510,14 +2512,6 @@ function membershipTrialDaysText(trialDays: number | null) {
     trialDays === null ? "試用天數尚未載入" : `還剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天`,
     80
   );
-}
-
-function quotaUsedDisplayValue(quota: VoiceQuota | null) {
-  return boundDisplayText(quota ? `已用 ${formatVoiceMinutes(quota.used_seconds_today)}` : "已用 尚未載入", 80);
-}
-
-function quotaRemainingDisplayValue(quota: VoiceQuota | null) {
-  return boundDisplayText(quota ? `剩餘 ${formatVoiceMinutes(quota.remaining_seconds_today)}` : "剩餘 尚未載入", 80);
 }
 
 function settingsQuotaHelperText(quota: VoiceQuota | null) {

@@ -4132,6 +4132,10 @@ def main() -> int:
             ("voice quota unloaded copy", "語音額度載入後，只有接近上限時才會提醒。"),
             ("voice quota low copy", "請分段記錄或改用文字輸入"),
             ("voice quota normal copy", "今日錄音額度正常；接近上限 2 分鐘內才會顯示剩餘時間。"),
+            ("quota used display helper", "function quotaUsedDisplayValue(quota: VoiceQuotaUsageDisplaySource | null)"),
+            ("quota used pending copy", "已用 尚未載入"),
+            ("quota remaining display helper", "function quotaRemainingDisplayValue(quota: VoiceQuotaUsageDisplaySource | null)"),
+            ("quota remaining pending copy", "剩餘 尚未載入"),
         ):
             _assert_contains(label, settings_copy_content, marker)
         for label, marker in (

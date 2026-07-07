@@ -22,6 +22,10 @@ type VoiceQuotaDisplaySource = {
   remaining_seconds_today: number;
 };
 
+type VoiceQuotaUsageDisplaySource = VoiceQuotaDisplaySource & {
+  used_seconds_today: number;
+};
+
 export function activeProfileLabelText(activeProfile: ActiveProfileDisplaySource | null, profileCount: number) {
   if (activeProfile) {
     return boundDisplayText(activeProfile.display_name ?? "");
@@ -62,6 +66,14 @@ export function captureVoiceQuotaCopy(quota: VoiceQuotaDisplaySource | null) {
     return `今日錄音剩餘 ${formatVoiceMinutes(quota.remaining_seconds_today)}，請分段記錄或改用文字輸入。`;
   }
   return "今日錄音額度正常；接近上限 2 分鐘內才會顯示剩餘時間。";
+}
+
+export function quotaUsedDisplayValue(quota: VoiceQuotaUsageDisplaySource | null) {
+  return boundDisplayText(quota ? `已用 ${formatVoiceMinutes(quota.used_seconds_today)}` : "已用 尚未載入", 80);
+}
+
+export function quotaRemainingDisplayValue(quota: VoiceQuotaUsageDisplaySource | null) {
+  return boundDisplayText(quota ? `剩餘 ${formatVoiceMinutes(quota.remaining_seconds_today)}` : "剩餘 尚未載入", 80);
 }
 
 export function advancedSettingsToggleLabel(isExpanded: boolean) {
