@@ -107,9 +107,11 @@ import {
   foodPhotoRetakeButtonLabel,
   foodPhotoUploadBoxLabel,
   foodPhotoVisionBoundaryDisplayItem,
+  apiFoodCategoryFromMobile,
   communityLeaderboardDisplaySection,
   foodCommunityCategoryDisplayItem,
   foodCommunityItemDisplayItem,
+  foodCommunityItemFromApi,
   futureModuleCards,
   futureModuleCardDisplayItem,
   futureModuleDetailBoundaryCopy,
@@ -121,6 +123,7 @@ import {
   futurePreviewSectionLabels,
   healthIntegrationExternalDataBoundaryCopy,
   healthIntegrationPreviewBoundaryDisplayItem,
+  mobileFoodCategoryFromApi,
   privacyPreviewBoundaryDisplayItem,
   rankingLocalPreviewBoundaryCopy,
   rankingPreviewBoundaryDisplayItem,
@@ -155,6 +158,9 @@ import {
   type CommunityLeaderboardApiResponse,
   type CommunityLeaderboardDisplaySection,
   type CommunityLeaderboardType,
+  type FoodCommunityApiCategoryRead,
+  type FoodCommunityApiItem,
+  type FoodCommunityApiShareResponse,
   type FoodCommunityCategory,
   type FoodCommunityItem,
   type FutureModuleCard,
@@ -687,58 +693,6 @@ type VoiceQuota = {
   remaining_seconds_today: number;
 };
 
-type FoodCommunityApiCategory =
-  | "vegetables"
-  | "meat"
-  | "seafood"
-  | "eggs"
-  | "beans"
-  | "starches"
-  | "drinks"
-  | "fruit"
-  | "snacks"
-  | "supplements";
-
-type FoodCommunityApiCategoryRead = {
-  code: FoodCommunityApiCategory;
-  label: string;
-  food_count?: number;
-  sample_foods?: string[];
-};
-
-type FoodCommunityApiStats = {
-  share_count: number;
-  average_glucose_delta: number | null;
-  max_glucose_delta: number | null;
-  min_glucose_delta: number | null;
-};
-
-type FoodCommunityApiShare = {
-  id: string;
-  eaten_at: string;
-  before_glucose: number;
-  after_glucose: number;
-  glucose_delta: number;
-  serving_description?: string | null;
-  public_note?: string | null;
-  created_at: string;
-};
-
-type FoodCommunityApiItem = {
-  id: string;
-  name: string;
-  category: FoodCommunityApiCategory;
-  category_label: string;
-  stats: FoodCommunityApiStats;
-  shares?: FoodCommunityApiShare[];
-};
-
-type FoodCommunityApiShareResponse = {
-  food: FoodCommunityApiItem;
-  share: FoodCommunityApiShare;
-  awarded_points: number;
-};
-
 type CommunityPublicSettings = {
   display_name: string;
   leaderboard_opt_in: boolean;
@@ -1209,91 +1163,6 @@ function achievementUnlockDisplayDate(value?: string | null) {
     return boundDisplayText("解鎖時間格式無法顯示", maxDisplayTextLength);
   }
   return boundDisplayText(`解鎖於 ${formatLocalDateInput(parsed)}`, maxDisplayTextLength);
-}
-
-function mobileFoodCategoryFromApi(value: string): FoodCommunityCategory {
-  if (value === "vegetables") {
-    return "vegetable";
-  }
-  if (value === "eggs") {
-    return "egg";
-  }
-  if (value === "beans") {
-    return "bean";
-  }
-  if (value === "starches") {
-    return "starch";
-  }
-  if (value === "drinks") {
-    return "drink";
-  }
-  if (value === "supplements") {
-    return "supplement";
-  }
-  if (value === "snacks") {
-    return "snack";
-  }
-  if (
-    value === "meat" ||
-    value === "seafood" ||
-    value === "fruit"
-  ) {
-    return value;
-  }
-  return "vegetable";
-}
-
-function apiFoodCategoryFromMobile(value: FoodCommunityCategory): FoodCommunityApiCategory {
-  if (value === "vegetable") {
-    return "vegetables";
-  }
-  if (value === "egg") {
-    return "eggs";
-  }
-  if (value === "bean") {
-    return "beans";
-  }
-  if (value === "starch") {
-    return "starches";
-  }
-  if (value === "drink") {
-    return "drinks";
-  }
-  if (value === "supplement") {
-    return "supplements";
-  }
-  if (value === "snack") {
-    return "snacks";
-  }
-  if (value === "meat" || value === "seafood" || value === "fruit") {
-    return value;
-  }
-  return "vegetables";
-}
-
-function foodCommunityItemFromApi(value: FoodCommunityApiItem): FoodCommunityItem {
-  const stats = value.stats;
-  const title = boundDisplayText(value.name || "食物", maxDisplayTextLength);
-  return {
-    id: boundIdentifier(value.id),
-    category: mobileFoodCategoryFromApi(value.category),
-    title,
-    aliases: [value.category_label, title].filter(Boolean).map((alias) => boundDisplayText(alias, 40)),
-    shareCount: clampNumber(stats.share_count, 0, maxMobileCountValue),
-    averageRise: clampNumber(Math.round(stats.average_glucose_delta ?? 0), -maxMobileGlucoseValue, maxMobileGlucoseValue),
-    maximumRise: clampNumber(stats.max_glucose_delta ?? 0, -maxMobileGlucoseValue, maxMobileGlucoseValue),
-    minimumRise: clampNumber(stats.min_glucose_delta ?? 0, -maxMobileGlucoseValue, maxMobileGlucoseValue),
-    examples: (value.shares ?? []).slice(0, 3).map((share) => ({
-      id: boundIdentifier(share.id),
-      beforeGlucose: clampNumber(share.before_glucose, 0, maxMobileGlucoseValue),
-      afterGlucose: clampNumber(share.after_glucose, 0, maxMobileGlucoseValue),
-      glucoseDelta: clampNumber(share.glucose_delta, -maxMobileGlucoseValue, maxMobileGlucoseValue),
-      note: boundDisplayText(
-        share.public_note || share.serving_description || recordDateTimeDisplay(share.eaten_at),
-        maxDisplayDetailTextLength
-      )
-    }))
-  };
 }
 
 function emptyFoodCommunityShareFields(): FoodCommunityShareFields {

@@ -412,8 +412,8 @@ def _verify_food_community_category_contract(content: str, future_module_display
     _assert_contains("food community backend labels", backend_content, "FOOD_CATEGORY_LABELS: dict[FoodCategory, str] = {")
     _assert_contains("food community category count schema", backend_content, "food_count: int = Field(default=0, ge=0, le=1_000_000)")
     _assert_contains("food community category sample schema", backend_content, "sample_foods: list[str] = Field(default_factory=list, max_length=3)")
-    _assert_contains("food community api-to-mobile mapper", content, "function mobileFoodCategoryFromApi(value: string)")
-    _assert_contains("food community mobile-to-api mapper", content, "function apiFoodCategoryFromMobile(value: FoodCommunityCategory)")
+    _assert_contains("food community api-to-mobile mapper", future_module_display_content, "export function mobileFoodCategoryFromApi(value: string)")
+    _assert_contains("food community mobile-to-api mapper", future_module_display_content, "export function apiFoodCategoryFromMobile(value: FoodCommunityCategory)")
     _assert_contains("food community mobile individual food items", content, "const foodCommunityItems: FoodCommunityItem[] = [")
     _assert_contains("food community category count response", backend_api_content, "select(FoodItem.category, func.count(FoodItem.id)).group_by(FoodItem.category)")
     _assert_contains("food community category sample response", backend_api_content, "sample_foods=sample_foods_by_category.get(code, [])")
@@ -518,7 +518,7 @@ def _verify_food_community_category_contract(content: str, future_module_display
         ("food community API min delta signed clamp", "minimumRise: clampNumber(stats.min_glucose_delta ?? 0, -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
         ("food community API share delta signed clamp", "glucoseDelta: clampNumber(share.glucose_delta, -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
     ):
-        _assert_contains(label, content, marker)
+        _assert_contains(label, future_module_display_content, marker)
     for label, marker in (
         ("food community individual share delta signed clamp", "const rise = clampNumber(value.glucoseDelta ?? after - before, -maxMobileGlucoseValue, maxMobileGlucoseValue);"),
         ("food community individual share delta copy", "血糖變化 ${rise} mg/dL"),
@@ -553,18 +553,18 @@ def _verify_food_community_category_contract(content: str, future_module_display
         if mobile_id == api_code:
             _assert_contains(
                 f"food category direct api mapping {mobile_id}",
-                content,
+                future_module_display_content,
                 f'value === "{mobile_id}"',
             )
         else:
             _assert_contains(
                 f"food category api-to-mobile mapping {api_code}",
-                content,
+                future_module_display_content,
                 f'value === "{api_code}"',
             )
             _assert_contains(
                 f"food category mobile-to-api mapping {mobile_id}",
-                content,
+                future_module_display_content,
                 f'value === "{mobile_id}"',
             )
 
@@ -4070,7 +4070,6 @@ def main() -> int:
             ("food community backend-aware empty copy", "backend ready 時會依搜尋同步，未連線時只篩選本機預覽。"),
             ("food community backend-aware share status copy", "backend ready 時可送出食物分享、建立社群點數並刷新排行榜與商城點數；visual smoke 或 backend unavailable 時不寫入資料。"),
             ("food community points store bridge current copy", "點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利"),
-            ("food community backend share mapping", "examples: (value.shares ?? []).slice(0, 3).map((share) => ({"),
             ("food community points balance row", '"點數餘額",\n      storePointsBalance'),
             ("food community lifetime earned row", '"累積獲得",\n      storePointsBalance'),
             ("food community syncs store points on open", 'if (currentScreen === "community") {\n      void loadCommunityPublicSettings();\n      void loadFoodCommunityCategories();\n      void loadCommunityFoods();\n      void loadStoreCatalogAndPoints();'),
@@ -4089,7 +4088,7 @@ def main() -> int:
             ("food community detail list refresh", "void loadFoodCommunityDetail(nextItems[0].id);"),
             ("food community detail selected refresh", "void loadFoodCommunityDetail(boundedItemId);"),
             ("food community detail in-flight guard", "foodCommunityDetailInFlightKeys.current.has(detailKey)"),
-            ("food community category api type", "type FoodCommunityApiCategoryRead = {"),
+            ("food community category api type import", "type FoodCommunityApiCategoryRead,"),
             ("food community backend category state", "const [foodCommunityBackendCategories, setFoodCommunityBackendCategories]"),
             ("food community backend category options", "foodCommunityBackendCategories.length > 0 ? foodCommunityBackendCategories : foodCommunityCategories"),
             ("food community category sync function", "async function loadFoodCommunityCategories()"),
@@ -4826,6 +4825,10 @@ def main() -> int:
             ("ranking empty copy", "目前沒有 opt-in 的公開榜單資料。"),
             ("food community category type", "export type FoodCommunityCategory ="),
             ("food community item type", "export type FoodCommunityItem = {"),
+            ("food community api item type", "export type FoodCommunityApiItem = {"),
+            ("food community api share response type", "export type FoodCommunityApiShareResponse = {"),
+            ("food community api item transform helper", "export function foodCommunityItemFromApi(value: FoodCommunityApiItem): FoodCommunityItem"),
+            ("food community backend share mapping", "examples: (value.shares ?? []).slice(0, 3).map((share) => ({"),
             ("food community category display helper", "export function foodCommunityCategoryDisplayItem(value: { id: FoodCommunityCategory; label: string; foodCount?: number; sampleFoods?: string[] })"),
             ("food community category accessibility copy", "accessibilityLabel: boundDisplayText(`切換食物分類：${label}，${summary}`, maxDisplayDetailTextLength)"),
             ("food community share display helper", "export function foodCommunityShareDisplayItem(value: FoodCommunityShare)"),

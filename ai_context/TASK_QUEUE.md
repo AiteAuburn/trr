@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1178: Extract Food Community API transform
+
+Status: done
+
+Summary:
+
+- Moved Food Community API category/item/share response types and API-to-display transforms from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept backend `/community/foods` and `/community/foods/categories` loading, search/category query behavior, share submission payloads, fallback food categories/items, point/store bridge behavior, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so Food Community API transform ownership is guarded in `mobile/futureModuleDisplay.ts`, while backend endpoints, search state, sync state, and render bindings remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Food Community API transform boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1177: Extract Food Community display helpers
 
 Status: done
