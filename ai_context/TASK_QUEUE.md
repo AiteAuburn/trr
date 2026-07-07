@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1179: Extract Community public settings transform
+
+Status: done
+
+Summary:
+
+- Moved Community public settings response type and bounded settings transform from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept `/community/public-profile` load/save behavior, leaderboard opt-in toggle behavior, public display-name fallback copy, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so Community public settings bounds are guarded in `mobile/futureModuleDisplay.ts`, while public-profile API sync and leaderboard refresh behavior remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Community public settings transform boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1178: Extract Food Community API transform
 
 Status: done

@@ -48,6 +48,11 @@ export type CommunityLeaderboardDisplaySection = {
   emptyCopy: string;
 };
 
+export type CommunityPublicSettings = {
+  display_name: string;
+  leaderboard_opt_in: boolean;
+};
+
 export type FoodCommunityCategory =
   | "vegetable"
   | "meat"
@@ -438,6 +443,13 @@ export function communityLeaderboardDisplaySection(value: CommunityLeaderboardAp
       scoreLabel: boundDisplayText(communityLeaderboardScoreLabel(type, entry.score), 40)
     })),
     emptyCopy: boundDisplayText("目前沒有 opt-in 的公開榜單資料。", maxDisplayDetailTextLength)
+  };
+}
+
+export function boundCommunityPublicSettings(value: CommunityPublicSettings): CommunityPublicSettings {
+  return {
+    display_name: boundDisplayText(value.display_name || "糖友", maxDisplayTextLength),
+    leaderboard_opt_in: Boolean(value.leaderboard_opt_in)
   };
 }
 

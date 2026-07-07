@@ -108,6 +108,7 @@ import {
   foodPhotoUploadBoxLabel,
   foodPhotoVisionBoundaryDisplayItem,
   apiFoodCategoryFromMobile,
+  boundCommunityPublicSettings,
   communityLeaderboardDisplaySection,
   foodCommunityCategoryDisplayItem,
   foodCommunityItemDisplayItem,
@@ -158,6 +159,7 @@ import {
   type CommunityLeaderboardApiResponse,
   type CommunityLeaderboardDisplaySection,
   type CommunityLeaderboardType,
+  type CommunityPublicSettings,
   type FoodCommunityApiCategoryRead,
   type FoodCommunityApiItem,
   type FoodCommunityApiShareResponse,
@@ -693,11 +695,6 @@ type VoiceQuota = {
   remaining_seconds_today: number;
 };
 
-type CommunityPublicSettings = {
-  display_name: string;
-  leaderboard_opt_in: boolean;
-};
-
 type StoreApiPointsBalance = {
   balance: number;
   lifetime_earned: number;
@@ -1174,13 +1171,6 @@ function emptyFoodCommunityShareFields(): FoodCommunityShareFields {
     beforeGlucose: "",
     afterGlucose: "",
     note: ""
-  };
-}
-
-function boundCommunityPublicSettings(value: CommunityPublicSettings): CommunityPublicSettings {
-  return {
-    display_name: boundDisplayText(value.display_name || "糖友", maxDisplayTextLength),
-    leaderboard_opt_in: Boolean(value.leaderboard_opt_in)
   };
 }
 

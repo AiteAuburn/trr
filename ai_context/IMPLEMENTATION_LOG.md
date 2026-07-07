@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1179 extract Community public settings transform
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved Community public settings response type and bounded settings transform from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept `/community/public-profile` load/save behavior, leaderboard opt-in toggle behavior, public display-name fallback copy, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so Community public settings bounds are guarded in `mobile/futureModuleDisplay.ts`, while public-profile API sync and leaderboard refresh behavior remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Community public settings transform boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating future/debug-only display config and pure helpers before moving future preview renderers.
+
 ### T1178 extract Food Community API transform
 
 類型：mobile / refactor / verifier / docs
