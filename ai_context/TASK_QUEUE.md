@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1157: Extract subscription comparison config
+
+Status: done
+
+Summary:
+
+- Extracted Subscription feature comparison static row config from `mobile/App.tsx` into `mobile/subscriptionCopy.ts`.
+- Kept comparison row text, bounded comparison display mapping, subscription screen render, first-version menu destinations, UI copy, navigation, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so subscription comparison config ownership guards inspect `mobile/subscriptionCopy.ts`, while render and display helper bindings remain checked in `mobile/App.tsx` and `mobile/sharedDisplayItems.ts`.
+- Updated the refactor roadmap to note the Subscription comparison config boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1156: Extract tutorial step config
 
 Status: done

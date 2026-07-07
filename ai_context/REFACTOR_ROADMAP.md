@@ -48,7 +48,7 @@
   - `historyCopy.ts`：History navigation status, empty-state, and no-real-record bounded copy.
   - `analysisCopy.ts`：Analysis no-data / boundary / detailed-report bounded copy and custom-range status messages.
   - `settingsCopy.ts`：Settings navigation, active-profile display copy, voice quota minute formatting/warning/usage/helper copy, model/quota/reminder/privacy bounded copy.
-  - `subscriptionCopy.ts`：Subscription plan/status labels, plan/status summary display copy, membership trial-days display copy, account security, profile boundary, and settings subscription section labels / bounded copy.
+  - `subscriptionCopy.ts`：Subscription plan/status labels, comparison row config, plan/status summary display copy, membership trial-days display copy, account security, profile boundary, and settings subscription section labels / bounded copy.
   - `subscriptionTransforms.ts`：Subscription trial-days date calculation, voice quota response bounding, and recording effective-limit calculation.
   - `accountTransforms.ts`：Account and profile response bounding transforms.
   - `aiModelTransforms.ts`：AI model option response bounding transforms.
@@ -110,13 +110,14 @@ Verification:
 
 ### Slice 2: Static Screen/Menu Config
 
-Status: done; visual-smoke route normalization helpers and Settings/Auth/Tutorial static config are also extracted.
+Status: done; visual-smoke route normalization helpers, Settings/Auth/Tutorial static config, and Subscription comparison config are also extracted.
 
 Scope:
 
 - Extract `screenChrome`, `menuScreens`, `visualSmokeRouteJumps`, and future-module display config.
 - Extract debug-only visual-smoke initial route normalization and deep-link route parsing.
 - Extract Settings / Auth provider / Account Security / Subscription / Privacy static preview rows and Tutorial step config.
+- Extract Subscription comparison row config.
 - Keep normal menu limited to 今日錄音、歷史紀錄、基本分析、設定.
 - Keep future functions debug / visual-smoke only.
 

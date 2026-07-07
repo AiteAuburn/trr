@@ -517,6 +517,7 @@ import {
   subscriptionManagementReturnSettingsStatusMessage,
   subscriptionManagementSyncButtonLabel,
   subscriptionMembershipStatusOpenStatusMessage,
+  subscriptionComparisonRows,
   subscriptionPaymentUnwiredCopy,
   subscriptionStatusLabel,
   subscriptionStatusSummaryText,
@@ -1271,13 +1272,6 @@ const mealTypeOptions = [
   ["dinner", "晚餐"],
   ["snack", "點心"],
   ["unknown", "未指定"]
-] as const;
-
-const subscriptionComparisonRows = [
-  ["語音記錄", "每日 5 分鐘", "每日 10 分鐘"],
-  ["AI 整理", "每日 5 次", "✓ 完整使用"],
-  ["基本分析", "部分功能", "✓ 完整趨勢"],
-  ["歷史紀錄", "最近 7 天", "✓ 完整保存"]
 ] as const;
 
 const maxDateInputLength = 10;

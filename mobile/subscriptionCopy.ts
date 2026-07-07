@@ -26,6 +26,13 @@ type SubscriptionStatusSummarySource = {
   status?: string | null;
 };
 
+export const subscriptionComparisonRows = [
+  ["語音記錄", "每日 5 分鐘", "每日 10 分鐘"],
+  ["AI 整理", "每日 5 次", "✓ 完整使用"],
+  ["基本分析", "部分功能", "✓ 完整趨勢"],
+  ["歷史紀錄", "最近 7 天", "✓ 完整保存"]
+] as const;
+
 export function planDisplayName(planCode?: string) {
   if (planCode === "trial") {
     return "試用版";

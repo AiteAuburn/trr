@@ -4353,6 +4353,7 @@ def main() -> int:
             ("advanced settings toggle accessibility label", "advancedSettingsToggleAccessibility: boundDisplayText(\"展開或收合進階設定，不連線 backend 或啟動模型\", maxDisplayDetailTextLength)"),
             ("backend reconnect accessibility label", "backendReconnectAccessibility: boundDisplayText(\"重新連線 backend，會清除 stale session/model/record state\", maxDisplayDetailTextLength)"),
             ("profile edit accessibility label", "editIntegrationAccessibility: boundDisplayText(\"查看個人資料編輯整合狀態，不寫入個資或照護對象\", maxDisplayDetailTextLength)"),
+            ("subscription comparison rows config", "export const subscriptionComparisonRows = ["),
             ("subscription plan display helper", "function planDisplayName(planCode?: string)"),
             ("subscription trial plan copy", "試用版"),
             ("subscription annual plan copy", "年費會員"),
