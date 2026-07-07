@@ -264,12 +264,20 @@ import {
   voiceQuotaUnavailableStatusMessage
 } from "./reportStatusCopy";
 import {
+  aiSaveFailureBackAiReviewStatusMessage,
+  aiSaveFailureManualFallbackStatusMessage,
+  aiSaveFailureReturnSaveConfirmStatusMessage,
   aiReviewManualEntryStatusMessage,
   quickEntryModeDisplayItems,
   quickEntryTextModeStatusMessage,
   quickEntryVoicePromptStatusMessage,
   quickRecordIntroCopy,
   recordManualEntryStatusMessage,
+  saveSuccessDestinationStatusMessage,
+  saveSuccessManualContinueStatusMessage,
+  saveSuccessProcessUnsavedStatusMessage,
+  saveSuccessRecordEntryStatusMessage,
+  saveSuccessViewDetailStatusMessage,
   todayAnalysisStatusMessage,
   todayManualEntryStatusMessage,
   todayRecordDetailStatusMessage,
@@ -2892,48 +2900,6 @@ function recordingEffectiveLimitSeconds(quota: VoiceQuota | null) {
     );
   }
   return mobileSingleRecordingLimitSeconds;
-}
-
-function aiSaveFailureBackAiReviewStatusMessage() {
-  return boundUiMessage("已回到 AI 整理確認；候選紀錄保留，不會自動重試或重新呼叫 AI。");
-}
-
-function aiSaveFailureReturnSaveConfirmStatusMessage() {
-  return boundUiMessage("已返回每日紀錄頁；請確認後手動送出，不會自動重試 backend。");
-}
-
-function saveSuccessProcessUnsavedStatusMessage() {
-  return boundUiMessage("已返回 AI 整理確認；只處理未儲存候選，不會重新呼叫 AI。");
-}
-
-function aiSaveFailureManualFallbackStatusMessage() {
-  return boundUiMessage("已改用手動新增；AI 候選保留在確認流程，不會自動重試或重新呼叫 AI。");
-}
-
-function saveSuccessDestinationStatusMessage(target: AppScreen) {
-  const targetLabel =
-    target === "today"
-      ? "今日紀錄"
-      : target === "history"
-        ? "歷史紀錄"
-        : target === "analysis"
-          ? "基本分析"
-          : target === "recordDetail"
-            ? "記錄詳情"
-            : "指定頁面";
-  return boundUiMessage(`已前往${targetLabel}；成功頁不會自動新增 backend、AI 或 STT 呼叫。`);
-}
-
-function saveSuccessManualContinueStatusMessage() {
-  return boundUiMessage("已從儲存完成繼續手動新增；沿用原返回目標，不會呼叫 AI、LLM 或 STT。");
-}
-
-function saveSuccessRecordEntryStatusMessage() {
-  return boundUiMessage("已從儲存完成前往文字記錄；不會自動整理、不送 backend request。");
-}
-
-function saveSuccessViewDetailStatusMessage() {
-  return boundUiMessage("已從儲存完成查看紀錄詳情；返回會回到儲存完成頁，不會呼叫 AI。");
 }
 
 function aiRemoveConfirmBoundaryLabel(isDailyRecordDelete = false) {

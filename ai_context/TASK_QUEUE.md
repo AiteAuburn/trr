@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1105: Extract save-result navigation status helpers
+
+Status: done
+
+Summary:
+
+- Extracted save-success destination, save-success continuation, save-success detail, save-success unsaved-candidate, AI-save-failure return, and AI-save-failure manual-fallback status helpers from `mobile/App.tsx` into `mobile/firstVersionFlowCopy.ts`.
+- Kept save-success screen render, AI-save-failure render, destination handlers, manual fallback handlers, UI copy text, navigation, parser requests, and backend save flow unchanged.
+- Updated the navigation verifier so save-result navigation status helper ownership guards inspect `mobile/firstVersionFlowCopy.ts`, while save-success and AI-save-failure handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover save-success / AI-save-failure navigation status boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1104: Extract daily-record leave guard copy helpers
 
 Status: done

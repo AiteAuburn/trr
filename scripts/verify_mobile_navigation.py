@@ -2517,6 +2517,19 @@ def main() -> int:
                 first_version_flow_copy_content,
                 f'label: boundDisplayText("{label}", maxDisplayTextLength)',
             )
+        for label, marker in (
+            ("AI save failure back AI review status helper", "function aiSaveFailureBackAiReviewStatusMessage()"),
+            ("AI save failure return save confirm status helper", "function aiSaveFailureReturnSaveConfirmStatusMessage()"),
+            ("AI save failure manual fallback status helper", "function aiSaveFailureManualFallbackStatusMessage()"),
+            ("save success unsaved process status helper", "function saveSuccessProcessUnsavedStatusMessage()"),
+            ("save success destination status helper", "function saveSuccessDestinationStatusMessage(target: AppScreen)"),
+            ("save success manual continue status helper", "function saveSuccessManualContinueStatusMessage()"),
+            ("save success record entry status helper", "function saveSuccessRecordEntryStatusMessage()"),
+            ("save success view detail status helper", "function saveSuccessViewDetailStatusMessage()"),
+            ("save success no extra calls copy", "成功頁不會自動新增 backend、AI 或 STT 呼叫"),
+            ("AI save failure no retry copy", "不會自動重試或重新呼叫 AI"),
+        ):
+            _assert_contains(label, first_version_flow_copy_content, marker)
         _assert_contains(
             "record quick-entry rail render",
             content,
