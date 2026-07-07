@@ -2937,9 +2937,6 @@ def main() -> int:
         ):
             _assert_contains(f"{style_name} style", content, f"{style_name}: {{")
         for label, marker in (
-            ("history daily sync summary helper", "function historyDailySyncSummary(records: RecordItem[], isLocalPreview: boolean)"),
-            ("history daily summary display item", "function historyDailySummaryDisplayItem(dateKey: string, records: RecordItem[], isLocalPreview: boolean)"),
-            ("history daily section display helper", "function buildHistoryDailyRecordSectionDisplayItems(records: RecordItem[])"),
             ("history raw record display item", "function historyRawRecordDisplayItem(record: RecordItem, index: number)"),
             ("history source text preserved during save", "const sanitizedMetadata = boundMetadata(record.metadata_json, true);"),
             ("history selected date state", "const [selectedHistoryDate, setSelectedHistoryDate] = useState(formatLocalDateInput(new Date()))"),
@@ -2980,9 +2977,6 @@ def main() -> int:
             ("history selected daily summary render", "selectedHistoryDailySummary.summaryText"),
             ("history structured section render", "selectedHistoryDailySectionItems.map((section) =>"),
             ("history raw records render", "selectedHistoryRawDisplayItems.map((item) =>"),
-            ("history local sync label", "本機 0 筆待同步"),
-            ("history unsynced local label", "尚未同步"),
-            ("history synced cloud label", "已同步"),
             ("history raw source status", "sourceStatusLabel: boundDisplayText(hasSourceText ? \"原始逐字稿\" : \"僅結構化\", 40)"),
             ("history raw fallback copy", "尚無原始逐字稿；此筆紀錄只保留結構化資料。"),
         ):
@@ -2997,6 +2991,18 @@ def main() -> int:
             history_screen_data_content,
             "function historyCalendarDayDisplayItem(",
         )
+        for label, marker in (
+            ("history pending record adapter", "function pendingRecordFromRecordItem(record: RecordItem): PendingRecord"),
+            ("history daily sync summary helper", "function historyDailySyncSummary(records: RecordItem[], isLocalPreview: boolean)"),
+            ("history daily summary display item", "function historyDailySummaryDisplayItem(dateKey: string, records: RecordItem[], isLocalPreview: boolean)"),
+            ("history daily section display helper", "function buildHistoryDailyRecordSectionDisplayItems(records: RecordItem[])"),
+            ("history daily summary copy", "summaryText: dailyRecordSummaryText(pendingRecords)"),
+            ("history daily section record accessibility", "accessibilityLabel: recordListDisplayItem(record, `history-daily-${index}`).accessibilityLabel"),
+            ("history local sync label", "本機 0 筆待同步"),
+            ("history unsynced local label", "尚未同步"),
+            ("history synced cloud label", "已同步"),
+        ):
+            _assert_contains(label, history_screen_data_content, marker)
         _assert_contains(
             "history cursor merge helper",
             record_bounds_content,

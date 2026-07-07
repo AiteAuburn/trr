@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1099: Extract History daily summary display helpers
+
+Status: done
+
+Summary:
+
+- Extracted History daily sync labels, daily summary display item shaping, selected-date section display item shaping, and the record-to-pending adapter from `mobile/App.tsx` into `mobile/historyScreenData.ts`.
+- Kept History calendar state, selected-date state, detail-mode handlers, render structure, UI copy, navigation, and backend record loading unchanged.
+- Updated the navigation verifier so History daily summary and selected-date section display helper ownership guards inspect `mobile/historyScreenData.ts`, while History render and press-handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the History daily summary / selected-date section display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1098: Extract daily-record section display helpers
 
 Status: done

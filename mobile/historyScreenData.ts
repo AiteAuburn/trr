@@ -1,11 +1,18 @@
-import { formatLocalDateInput } from "./dateTimeTransforms";
-import type { RecordItem } from "./recordBounds";
+import { boundDateInputText, formatLocalDateInput } from "./dateTimeTransforms";
+import { dailyRecordSummaryText } from "./dailyTranscriptTransforms";
+import {
+  dailyRecordEntryDisplayItem,
+  dailyRecordSectionDefinitions,
+  recordListDisplayItem
+} from "./recordDisplay";
+import type { PendingRecord, RecordItem } from "./recordBounds";
 
 export type HistoryDetailMode = "structured" | "raw";
 
 const maxDisplayTextLength = 160;
 const maxDisplayDetailTextLength = 240;
 const maxIdentifierTextLength = 128;
+const maxMobilePreviewRecords = 20;
 const maxMobileCountValue = 1_000_000;
 
 export const historyDetailModes: Array<{ id: HistoryDetailMode; label: string; accessibilityCopy: string }> = [
@@ -53,4 +60,80 @@ export function historyDetailModeDisplayItem(value: { id: HistoryDetailMode; lab
     label,
     accessibilityLabel: boundDisplayText(value.accessibilityCopy || `查看${label}`, maxDisplayDetailTextLength)
   };
+}
+
+function pendingRecordFromRecordItem(record: RecordItem): PendingRecord {
+  return {
+    profile_id: record.profile_id,
+    record_type: record.record_type,
+    occurred_at: record.occurred_at,
+    payload_json: record.payload_json,
+    metadata_json: record.metadata_json,
+    source: record.source
+  };
+}
+
+export function historyDailySyncSummary(records: RecordItem[], isLocalPreview: boolean) {
+  const count = clampNumber(records.length, 0, maxMobileCountValue);
+  if (count === 0) {
+    return {
+      syncLabel: boundDisplayText("沒有紀錄", 40),
+      sourceLabel: boundDisplayText("尚無來源", 40),
+      storageLabel: boundDisplayText("未同步 / 未儲存", 80)
+    };
+  }
+  if (isLocalPreview) {
+    return {
+      syncLabel: boundDisplayText("尚未同步", 40),
+      sourceLabel: boundDisplayText("本機", 40),
+      storageLabel: boundDisplayText(`本機 ${count} 筆 · 雲端 0 筆`, 80)
+    };
+  }
+  return {
+    syncLabel: boundDisplayText("已同步", 40),
+    sourceLabel: boundDisplayText("雲端", 40),
+    storageLabel: boundDisplayText(`雲端 ${count} 筆 · 本機 0 筆待同步`, 80)
+  };
+}
+
+export function historyDailySummaryDisplayItem(dateKey: string, records: RecordItem[], isLocalPreview: boolean) {
+  const safeDateKey = boundDateInputText(dateKey);
+  const pendingRecords = records.map(pendingRecordFromRecordItem);
+  const syncSummary = historyDailySyncSummary(records, isLocalPreview);
+  const recordCount = clampNumber(records.length, 0, maxMobileCountValue);
+  return {
+    key: `history-daily-summary-${boundIdentifier(safeDateKey)}`,
+    value: safeDateKey,
+    dateLabel: boundDisplayText(safeDateKey, 40),
+    countLabel: boundDisplayText(`${recordCount} 筆紀錄`, 20),
+    summaryText: dailyRecordSummaryText(pendingRecords),
+    syncLabel: syncSummary.syncLabel,
+    sourceLabel: syncSummary.sourceLabel,
+    storageLabel: syncSummary.storageLabel,
+    accessibilityLabel: boundDisplayText(
+      `查看 ${safeDateKey} 每日摘要，${syncSummary.syncLabel}，${syncSummary.storageLabel}`,
+      maxDisplayDetailTextLength
+    )
+  };
+}
+
+export function buildHistoryDailyRecordSectionDisplayItems(records: RecordItem[]) {
+  return dailyRecordSectionDefinitions.map((definition) => {
+    const entries = records
+      .map((record, index) => ({ record, index }))
+      .filter(({ record }) => definition.acceptedRecordTypes.includes(record.record_type))
+      .map(({ record, index }) => ({
+        ...dailyRecordEntryDisplayItem(pendingRecordFromRecordItem(record), index),
+        record,
+        accessibilityLabel: recordListDisplayItem(record, `history-daily-${index}`).accessibilityLabel
+      }));
+    return {
+      ...definition,
+      title: boundDisplayText(definition.title, 80),
+      icon: boundDisplayText(definition.icon, 4),
+      emptyCopy: boundDisplayText(definition.emptyCopy, maxDisplayDetailTextLength),
+      countLabel: boundDisplayText(`${clampNumber(entries.length, 0, maxMobilePreviewRecords)} 筆`, 20),
+      entries
+    };
+  });
 }
