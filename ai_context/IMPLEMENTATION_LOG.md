@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1163 extract future preview boundary copy helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted future-preview supplemental boundary copy helpers for doctor share, health integration, community public name, and ranking local preview from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept boundary copy text, bounded display behavior, render bindings, hidden/debug-only future-module routing, first-version menu destinations, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so these future-preview boundary copy guards inspect `mobile/futureModuleDisplay.ts`.
+- Updated the refactor roadmap to note the future-preview boundary copy boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating future/debug-only copy and display transforms from `mobile/App.tsx`.
+
 ### T1162 extract future preview boundary display helpers
 
 類型：mobile / refactor / verifier / docs

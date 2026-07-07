@@ -88,12 +88,16 @@ import {
   type AppScreen
 } from "./navigationConfig";
 import {
+  communityPublicNameBoundaryCopy,
   communityPreviewBoundaryDisplayItem,
+  doctorShareBackendBoundaryCopy,
   doctorSharePreviewBoundaryDisplayItem,
   futureModuleCardDisplayItem,
   futurePreviewSectionLabels,
+  healthIntegrationExternalDataBoundaryCopy,
   healthIntegrationPreviewBoundaryDisplayItem,
   privacyPreviewBoundaryDisplayItem,
+  rankingLocalPreviewBoundaryCopy,
   rankingPreviewBoundaryDisplayItem,
   reminderPreviewBoundaryDisplayItem,
   selectedFutureModuleDisplayItem,
@@ -1953,31 +1957,6 @@ function yearReviewBoundaryDisplayCopy() {
     "年度回顧由 backend snapshot 保存年度統計、AI-style 觀察與鼓勵；不提供診療建議或療效宣稱。",
     maxDisplayDetailTextLength
   );
-}
-
-function doctorShareBackendBoundaryCopy() {
-  return boundDisplayText(
-    "後端已有 profile grant / shared profile / basic report 的基礎能力；mobile 正式開放前仍需完成 production auth、使用者確認 UI、撤銷入口與醫師端唯讀頁。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function healthIntegrationExternalDataBoundaryCopy() {
-  return boundDisplayText(
-    "外部資料不能覆蓋使用者手動紀錄；正式匯入後仍需保留來源、同步批次、同步狀態與去重證據。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function communityPublicNameBoundaryCopy() {
-  return boundDisplayText(
-    "公開名稱與排行榜 opt-in 已可同步 backend；健康紀錄仍預設私密，貼文與留言需另行 opt-in。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function rankingLocalPreviewBoundaryCopy() {
-  return boundDisplayText("本機連續天數僅供自己查看；公開榜單只使用 backend 已聚合的 opt-in 社群統計。", maxDisplayDetailTextLength);
 }
 
 function auxiliarySectionLabels() {

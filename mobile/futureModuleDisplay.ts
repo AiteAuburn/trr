@@ -92,10 +92,24 @@ export function doctorSharePreviewBoundaryDisplayItem() {
   );
 }
 
+export function doctorShareBackendBoundaryCopy() {
+  return boundDisplayText(
+    "後端已有 profile grant / shared profile / basic report 的基礎能力；mobile 正式開放前仍需完成 production auth、使用者確認 UI、撤銷入口與醫師端唯讀頁。",
+    maxDisplayDetailTextLength
+  );
+}
+
 export function healthIntegrationPreviewBoundaryDisplayItem() {
   return futurePreviewBoundaryDisplayItem(
     "串接未啟用",
     "目前不請求 HealthKit / Health Connect 權限、不掃描 BLE、不讀取血糖機、不寫入 records；只顯示同步資料邊界。"
+  );
+}
+
+export function healthIntegrationExternalDataBoundaryCopy() {
+  return boundDisplayText(
+    "外部資料不能覆蓋使用者手動紀錄；正式匯入後仍需保留來源、同步批次、同步狀態與去重證據。",
+    maxDisplayDetailTextLength
   );
 }
 
@@ -106,11 +120,22 @@ export function communityPreviewBoundaryDisplayItem() {
   );
 }
 
+export function communityPublicNameBoundaryCopy() {
+  return boundDisplayText(
+    "公開名稱與排行榜 opt-in 已可同步 backend；健康紀錄仍預設私密，貼文與留言需另行 opt-in。",
+    maxDisplayDetailTextLength
+  );
+}
+
 export function rankingPreviewBoundaryDisplayItem() {
   return futurePreviewBoundaryDisplayItem(
     "公開榜單",
     "一般操作路徑只讀取 opt-in 公開榜單與非敏感統計；不公開健康數值、不上傳 streak、不呼叫 AI。"
   );
+}
+
+export function rankingLocalPreviewBoundaryCopy() {
+  return boundDisplayText("本機連續天數僅供自己查看；公開榜單只使用 backend 已聚合的 opt-in 社群統計。", maxDisplayDetailTextLength);
 }
 
 export function reminderPreviewBoundaryDisplayItem() {
