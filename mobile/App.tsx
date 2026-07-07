@@ -306,6 +306,7 @@ import {
   coreFlowSectionLabels,
   headerActionAccessibilityLabel,
   previewActionClearStatusMessage,
+  primaryTabAccessibilityLabel,
   quickEntryModeDisplayItems,
   quickEntryTextModeStatusMessage,
   quickEntryVoicePromptStatusMessage,
@@ -2019,11 +2020,6 @@ function foodCommunityItemDisplayItem(value: FoodCommunityItem) {
       maxDisplayDetailTextLength
     )
   };
-}
-
-function primaryTabAccessibilityLabel(label: string) {
-  const safeLabel = boundDisplayText(label || "分頁", 60);
-  return boundDisplayText(`前往${safeLabel}分頁，只切換 App 內頁面`, maxDisplayDetailTextLength);
 }
 
 function menuScreenDisplayItem(value: { id: AppScreen; label: string; icon: string }) {

@@ -172,6 +172,11 @@ export function recordingButtonAccessibilityLabel(isRecording: boolean) {
   return boundDisplayText(isRecording ? "錄音預覽進行中，放開結束" : "按住開始錄音預覽", maxDisplayTextLength);
 }
 
+export function primaryTabAccessibilityLabel(label: string) {
+  const safeLabel = boundDisplayText(label || "分頁", 60);
+  return boundDisplayText(`前往${safeLabel}分頁，只切換 App 內頁面`, maxDisplayDetailTextLength);
+}
+
 export function quickRecordIntroCopy() {
   return boundDisplayText("首頁只保留按住錄音；文字整理與手動新增請從記錄頁進入，整理前都會先進文字確認。", maxDisplayDetailTextLength);
 }

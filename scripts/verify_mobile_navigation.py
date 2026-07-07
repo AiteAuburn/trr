@@ -1399,8 +1399,13 @@ def main() -> int:
         )
         _assert_contains(
             "primary tab accessibility helper",
-            content,
+            first_version_flow_copy_content,
             "function primaryTabAccessibilityLabel(label: string)",
+        )
+        _assert_contains(
+            "primary tab accessibility copy",
+            first_version_flow_copy_content,
+            "只切換 App 內頁面",
         )
         _assert_contains(
             "primary tab accessibility binding",
