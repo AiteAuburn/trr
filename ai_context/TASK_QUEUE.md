@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1161: Extract future preview section labels
+
+Status: done
+
+Summary:
+
+- Extracted future-preview section label and accessibility-label builder from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept future-preview labels, accessibility copy, render bindings, hidden/debug-only future-module routing, first-version menu destinations, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so future-preview label ownership guards inspect `mobile/futureModuleDisplay.ts`, while render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the future-preview label boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1160: Extract Home guidance config
 
 Status: done

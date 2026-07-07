@@ -77,3 +77,48 @@ export function selectedFutureModuleDisplayItem(value: FutureModuleCard | null) 
     }))
   };
 }
+
+export function futurePreviewSectionLabels() {
+  const doctorTokenButton = boundDisplayText("查看授權碼狀態", maxDisplayTextLength);
+  const doctorReportButton = boundDisplayText("查看報表邊界", maxDisplayTextLength);
+  const healthPermissionButton = boundDisplayText("查看平台權限狀態", maxDisplayTextLength);
+  const healthMeterButton = boundDisplayText("查看血糖機同步狀態", maxDisplayTextLength);
+  const communityPostButton = boundDisplayText("查看發文狀態", maxDisplayTextLength);
+  const communityPrivacyButton = boundDisplayText("查看隱私邊界", maxDisplayTextLength);
+  const rankingPublicButton = boundDisplayText("查看排名狀態", maxDisplayTextLength);
+  const rankingOptInButton = boundDisplayText("查看 Opt-in 邊界", maxDisplayTextLength);
+  return {
+    readiness: boundDisplayText("啟用前條件", maxDisplayTextLength),
+    formalReadiness: boundDisplayText("正式啟用前需要完成", maxDisplayTextLength),
+    integrationStatus: boundDisplayText("未來模組整合狀態", maxDisplayTextLength),
+    mvpScope: boundDisplayText("MVP 範圍邊界", maxDisplayTextLength),
+    currentStatus: boundDisplayText("目前狀態", maxDisplayTextLength),
+    implementationOrder: boundDisplayText("建議實作順序", maxDisplayTextLength),
+    backendFoundation: boundDisplayText("後端基礎邊界", maxDisplayTextLength),
+    externalDataBoundary: boundDisplayText("外部資料邊界", maxDisplayTextLength),
+    doctorStatus: boundDisplayText("醫師合作整合狀態", maxDisplayTextLength),
+    healthStatus: boundDisplayText("健康串接整合狀態", maxDisplayTextLength),
+    communityStatus: boundDisplayText("社群整合狀態", maxDisplayTextLength),
+    rankingStatus: boundDisplayText("排行榜整合狀態", maxDisplayTextLength),
+    returnFutureModules: boundDisplayText("返回未來擴充", maxDisplayTextLength),
+    viewPreview: boundDisplayText("查看預覽 ›", maxDisplayTextLength),
+    viewIntegration: boundDisplayText("查看整合狀態 ›", maxDisplayTextLength),
+    doctorTokenButton,
+    doctorTokenAccessibility: boundDisplayText(`${doctorTokenButton}，只顯示授權碼與 share token 邊界`, maxDisplayDetailTextLength),
+    doctorReportButton,
+    doctorReportAccessibility: boundDisplayText(`${doctorReportButton}，只顯示報表與醫師端唯讀邊界`, maxDisplayDetailTextLength),
+    healthPermissionButton,
+    healthPermissionAccessibility: boundDisplayText(`${healthPermissionButton}，不請求平台權限或讀取健康資料`, maxDisplayDetailTextLength),
+    healthMeterButton,
+    healthMeterAccessibility: boundDisplayText(`${healthMeterButton}，不掃描血糖機或寫入紀錄`, maxDisplayDetailTextLength),
+    communityPostButton,
+    communityPostAccessibility: boundDisplayText(`${communityPostButton}，不建立貼文或公開紀錄`, maxDisplayDetailTextLength),
+    communityPrivacyButton,
+    communityPrivacyAccessibility: boundDisplayText(`${communityPrivacyButton}，只顯示公開資料邊界`, maxDisplayDetailTextLength),
+    rankingPublicButton,
+    rankingPublicAccessibility: boundDisplayText(`${rankingPublicButton}，只讀取 opt-in 公開榜單，不公開健康數值`, maxDisplayDetailTextLength),
+    rankingOptInButton,
+    rankingOptInAccessibility: boundDisplayText(`${rankingOptInButton}，只顯示公開排名 opt-in 邊界`, maxDisplayDetailTextLength),
+    returnFutureModulesAccessibility: boundDisplayText("返回未來擴充，不建立 future module 資料或呼叫 backend", maxDisplayDetailTextLength)
+  };
+}

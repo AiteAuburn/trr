@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1161 extract future preview section labels
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted future-preview section label and accessibility-label builder from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept future-preview labels, accessibility copy, render bindings, hidden/debug-only future-module routing, first-version menu destinations, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so future-preview label ownership guards inspect `mobile/futureModuleDisplay.ts`, while render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the future-preview label boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating future/debug-only display config from `mobile/App.tsx` before moving future preview renderers.
+
 ### T1160 extract Home guidance config
 
 類型：mobile / refactor / verifier / docs
