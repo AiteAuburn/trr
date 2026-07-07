@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1152 extract future module display helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted future-module card and selected-module bounded display shaping from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept future-module static cards, debug/visual-smoke route behavior, normal first-version menu destinations, UI copy, navigation, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so future-module display ownership guards inspect `mobile/futureModuleDisplay.ts`, while future-module handlers and render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the new future-module display boundary and corrected the previous visual-smoke route helper status under Slice 2.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating future/debug display config from `mobile/App.tsx` before moving large JSX renderers.
+
 ### T1151 extract visual-smoke route helpers
 
 類型：mobile / refactor / verifier / docs

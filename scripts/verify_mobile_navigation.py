@@ -38,6 +38,7 @@ AI_MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "aiModelTransforms.ts"
 AUTH_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "authTransforms.ts"
 AUTH_SESSION_DISPLAY_PATH = REPO_ROOT / "mobile" / "authSessionDisplay.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
+FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
@@ -1241,6 +1242,7 @@ def main() -> int:
     auth_transforms_content = AUTH_TRANSFORMS_PATH.read_text(encoding="utf-8")
     auth_session_display_content = AUTH_SESSION_DISPLAY_PATH.read_text(encoding="utf-8")
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
+    future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
 
@@ -4615,7 +4617,6 @@ def main() -> int:
             ("future module detail return handler", "function returnFromFutureModuleDetail()"),
             ("future module destination handler", "function openFutureModuleDestination(target: AppScreen | undefined, module: FutureModuleCard)"),
             ("future module destination press handler", "function pressFutureModuleDestination(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
-            ("future module card accessibility item", "accessibilityLabel: boundDisplayText(`查看${futureModuleText(value.title, \"未來模組\", maxDisplayTextLength)}整合狀態`, maxDisplayTextLength)"),
             ("future module card accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
             ("future module card button role", 'accessibilityRole="button"\n                  style={styles.recordCard}'),
             ("doctor share return handler", "function returnFromDoctorSharePreview()"),
@@ -4835,6 +4836,13 @@ def main() -> int:
             ("food photo return accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodPhotoReturnAccessibility}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("future module display card helper", "export function futureModuleCardDisplayItem(value: FutureModuleCard)"),
+            ("future module selected display helper", "export function selectedFutureModuleDisplayItem(value: FutureModuleCard | null)"),
+            ("future module card accessibility item", "accessibilityLabel: boundDisplayText(`查看${futureModuleText(value.title, \"未來模組\", maxDisplayTextLength)}整合狀態`, maxDisplayTextLength)"),
+            ("future module requirements display helper", "function futureModuleRequirements(value: string[] | undefined)"),
+        ):
+            _assert_contains(label, future_module_display_content, marker)
         for label, marker in (
             ("food community stale future store bridge copy", "點數未來可串接商城兌換優惠券、商品折扣、特殊徽章與會員福利。"),
             ("store stale empty wallet coupon-only copy", "尚未同步兌換券；完成食物分享取得點數後可兌換優惠券或折扣碼。"),

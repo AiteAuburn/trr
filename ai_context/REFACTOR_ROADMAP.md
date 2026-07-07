@@ -33,6 +33,7 @@
   - `modelTransforms.ts`：Downloaded native model state bounding transforms.
   - `nativeLocalModels.ts`：native Whisper / Llama bridge。
   - `navigationConfig.ts`：`AppScreen` route union、primary screens、MVP flow、screen chrome、first-version menu、visual-smoke route jump config 與 debug-only route normalization helpers。
+  - `futureModuleDisplay.ts`：future-module bounded display card and selected-module display shaping.
   - `recordDisplay.ts`：daily section definitions, daily-record section display shaping, AI candidate and rejected-event display shaping, record payload labels, record time/date labels, shared Today/History record-list display item shaping, record detail display item shaping, and manual-record confirmation display shaping.
   - `recordEditTransforms.ts`：record edit field type, max-length bounds, empty edit fields, validation, record payload-to-edit-field transforms, and edit-field-to-payload transforms.
   - `recordSaveTransforms.ts`：pending-record save metadata sanitizing and client save batch-id generation.
@@ -91,7 +92,7 @@
 
 ### Slice 1: Record Display Helpers
 
-Status: done; visual-smoke route normalization helpers are also extracted.
+Status: done.
 
 Scope:
 
@@ -108,7 +109,7 @@ Verification:
 
 ### Slice 2: Static Screen/Menu Config
 
-Status: done.
+Status: done; visual-smoke route normalization helpers are also extracted.
 
 Scope:
 
@@ -155,7 +156,7 @@ Verification:
 
 ### Slice 5: First-Version Screen Components
 
-Status: started; Settings row, Settings profile/model choice display, Settings downloaded model display, Settings active-profile display copy, Settings voice quota minute formatting/warning/usage/helper copy, Settings model/quota copy, Account Security auth session display items, Subscription plan/status labels, plan/status summary display copy, membership trial-days display copy, account identity display, shared bounded display item builders including menu/visual-smoke route/checklist/manual-record type items, native model debug labels/accessibility, Analysis range/request-key, Analysis no-data/boundary copy, Analysis report-source display, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, AI candidate/rejected-event display, first-version Today summary copy, first-version core labels/accessibility copy, destination-aware return labels, shared header/recording/primary-tab accessibility copy, shared busy/clear action status, transcript-review copy, AI review/save-confirm copy, AI remove-confirm copy, manual-record confirmation copy/status, record-detail return status, delete-confirm copy/status, record-edit copy/status, record-result destination status, daily-record leave guard copy/status, save-success / AI-save-failure navigation status, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, and daily-record section display boundaries extracted.
+Status: started; Settings row, Settings profile/model choice display, Settings downloaded model display, Settings active-profile display copy, Settings voice quota minute formatting/warning/usage/helper copy, Settings model/quota copy, Account Security auth session display items, Subscription plan/status labels, plan/status summary display copy, membership trial-days display copy, account identity display, shared bounded display item builders including menu/visual-smoke route/checklist/manual-record type items, native model debug labels/accessibility, Analysis range/request-key, Analysis no-data/boundary copy, Analysis report-source display, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, AI candidate/rejected-event display, first-version Today summary copy, first-version core labels/accessibility copy, destination-aware return labels, shared header/recording/primary-tab accessibility copy, shared busy/clear action status, transcript-review copy, AI review/save-confirm copy, AI remove-confirm copy, manual-record confirmation copy/status, record-detail return status, delete-confirm copy/status, record-edit copy/status, record-result destination status, daily-record leave guard copy/status, save-success / AI-save-failure navigation status, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, daily-record section display boundaries, and future-module display card boundaries extracted.
 
 Scope:
 
@@ -174,6 +175,7 @@ Verification:
 Scope:
 
 - Move achievements, store, community, ranking, year review, and future-module preview render/config into isolated debug/future modules.
+- Continue moving future-module display/config helpers out of `App.tsx` while keeping normal menu unchanged.
 - Normal user navigation remains unchanged.
 
 Verification:

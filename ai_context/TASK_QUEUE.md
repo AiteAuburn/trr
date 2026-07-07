@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1152: Extract future module display helpers
+
+Status: done
+
+Summary:
+
+- Extracted future-module card and selected-module bounded display shaping from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept future-module static cards, debug/visual-smoke route behavior, normal first-version menu destinations, UI copy, navigation, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so future-module display ownership guards inspect `mobile/futureModuleDisplay.ts`, while future-module handlers and render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the new future-module display boundary and corrected the previous visual-smoke route helper status under Slice 2.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1151: Extract visual-smoke route helpers
 
 Status: done
