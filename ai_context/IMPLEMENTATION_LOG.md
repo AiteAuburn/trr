@@ -15,6 +15,40 @@
 
 ## 2026-07-07
 
+### T1144 extract auth token request transforms
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/authTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_secure_auth_storage.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted auth token response bounding, refresh-token request bounding, OIDC provider/id-token/nonce sanitizers, and device fingerprint bounding from `mobile/App.tsx` into `mobile/authTransforms.ts`.
+- Kept SecureStore storage, auth boot, refresh/logout/session handlers, OIDC challenge/callback flow, protected request header fallback, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated navigation and secure-auth verifiers so token/OIDC transform ownership guards inspect `mobile/authTransforms.ts`, while auth flow and SecureStore bindings remain checked in `mobile/App.tsx` and `mobile/authTokenStorage.ts`.
+- Updated the refactor roadmap to note that Slice 4 now also covers Auth token/OIDC request transforms.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_secure_auth_storage.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 4/Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1143 extract AI model options bounding transform
 
 類型：mobile / refactor / verifier / docs

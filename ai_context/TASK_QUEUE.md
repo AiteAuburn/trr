@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1144: Extract auth token request transforms
+
+Status: done
+
+Summary:
+
+- Extracted auth token response bounding, refresh-token request bounding, OIDC provider/id-token/nonce sanitizers, and device fingerprint bounding from `mobile/App.tsx` into `mobile/authTransforms.ts`.
+- Kept SecureStore storage, auth boot, refresh/logout/session handlers, OIDC challenge/callback flow, protected request header fallback, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated navigation and secure-auth verifiers so token/OIDC transform ownership guards inspect `mobile/authTransforms.ts`, while auth flow and SecureStore bindings remain checked in `mobile/App.tsx` and `mobile/authTokenStorage.ts`.
+- Updated the refactor roadmap to note that Slice 4 now also covers Auth token/OIDC request transforms.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_secure_auth_storage.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1143: Extract AI model options bounding transform
 
 Status: done

@@ -33,6 +33,7 @@ SUBSCRIPTION_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "subscriptionTransforms.ts
 ACCOUNT_COPY_PATH = REPO_ROOT / "mobile" / "accountCopy.ts"
 ACCOUNT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "accountTransforms.ts"
 AI_MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "aiModelTransforms.ts"
+AUTH_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "authTransforms.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1232,6 +1233,7 @@ def main() -> int:
     account_copy_content = ACCOUNT_COPY_PATH.read_text(encoding="utf-8")
     account_transforms_content = ACCOUNT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     ai_model_transforms_content = AI_MODEL_TRANSFORMS_PATH.read_text(encoding="utf-8")
+    auth_transforms_content = AUTH_TRANSFORMS_PATH.read_text(encoding="utf-8")
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -4266,6 +4268,16 @@ def main() -> int:
             ("account transform profile list bound", "return value.slice(0, maxMobileProfiles).map(boundProfile)"),
         ):
             _assert_contains(label, account_transforms_content, marker)
+        for label, marker in (
+            ("auth token response bound helper", "function boundAuthTokenResponse<T extends AuthTokenResponseTransformSource>(value: T): T | null"),
+            ("auth token response access token trim", "const accessToken = value.access_token.trim()"),
+            ("auth refresh token request bound helper", "function boundRefreshTokenForRequest(value: string)"),
+            ("auth OIDC provider request bound helper", "function boundOidcProviderForRequest(value: string): OidcLoginProvider | \"\""),
+            ("auth OIDC id token JWT shape guard", "/^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$/.test(token)"),
+            ("auth OIDC nonce shape guard", "/^[A-Za-z0-9._~+-]+$/.test(nonce)"),
+            ("auth device fingerprint bound helper", "function boundDeviceFingerprintForRequest(value: string | null | undefined)"),
+        ):
+            _assert_contains(label, auth_transforms_content, marker)
         for label, marker in (
             ("auth refresh accessibility label", "refreshSessionAccessibility: boundDisplayText(\"刷新 session，使用 SecureStore refresh token rotation\", maxDisplayDetailTextLength)"),
             ("auth load sessions accessibility label", "loadSessionsAccessibility: boundDisplayText(\"載入 sessions，只顯示 bounded session metadata\", maxDisplayDetailTextLength)"),

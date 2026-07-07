@@ -11,6 +11,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MOBILE_DIR = REPO_ROOT / "mobile"
 STORAGE_PATH = MOBILE_DIR / "authTokenStorage.ts"
+AUTH_TRANSFORMS_PATH = MOBILE_DIR / "authTransforms.ts"
 CHALLENGE_PATH = MOBILE_DIR / "authProviderChallenge.ts"
 APP_PATH = MOBILE_DIR / "App.tsx"
 PACKAGE_PATH = MOBILE_DIR / "package.json"
@@ -19,6 +20,7 @@ PACKAGE_PATH = MOBILE_DIR / "package.json"
 def main() -> int:
     errors: list[str] = []
     storage = STORAGE_PATH.read_text(encoding="utf-8") if STORAGE_PATH.exists() else ""
+    auth_transforms = AUTH_TRANSFORMS_PATH.read_text(encoding="utf-8") if AUTH_TRANSFORMS_PATH.exists() else ""
     challenge = CHALLENGE_PATH.read_text(encoding="utf-8") if CHALLENGE_PATH.exists() else ""
     app = APP_PATH.read_text(encoding="utf-8")
     package = json.loads(PACKAGE_PATH.read_text(encoding="utf-8"))
@@ -43,6 +45,23 @@ def main() -> int:
         if forbidden in storage:
             errors.append(f"mobile/authTokenStorage.ts must not use {forbidden}")
     for marker in (
+        "boundAuthTokenResponse",
+        "authAccessTokenMaxLength",
+        "authRefreshTokenMaxLength",
+        "boundRefreshTokenForRequest",
+        "boundOidcIdTokenForRequest",
+        "boundOidcNonceForRequest",
+        "boundOidcProviderForRequest",
+        "boundDeviceFingerprintForRequest",
+        "/^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$/.test(token)",
+        "/^[A-Za-z0-9._~+-]+$/.test(nonce)",
+    ):
+        if marker not in auth_transforms:
+            errors.append(f"mobile/authTransforms.ts missing marker: {marker}")
+    for forbidden in ("AsyncStorage", "expo-file-system", "FileSystem", "console.", "alert("):
+        if forbidden in auth_transforms:
+            errors.append(f"mobile/authTransforms.ts must not use {forbidden}")
+    for marker in (
         "createAuthProviderChallenge",
         "validateAuthProviderChallenge",
         "authChallengeTtlMs = 10 * 60 * 1000",
@@ -64,7 +83,6 @@ def main() -> int:
         "writeStoredAuthSession",
         "clearStoredAuthSession",
         "authAccessTokenMaxLength",
-        "authRefreshTokenMaxLength",
         "tokenStorageStatus",
         "clearMobileSessionState({ clearAuthTokens: false })",
         "SecureStore 不可用；正式 token storage fail closed。",
