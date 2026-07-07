@@ -2256,6 +2256,26 @@ def main() -> int:
             "const visualSmokeRouteJumps",
         )
         _assert_contains(
+            "visual smoke route id list helper",
+            navigation_content,
+            "const visualSmokeRouteJumpIds = visualSmokeRouteJumps.map((route) => route.id)",
+        )
+        _assert_contains(
+            "visual smoke initial route normalizer",
+            navigation_content,
+            "function normalizeVisualSmokeInitialRoute(",
+        )
+        _assert_contains(
+            "visual smoke deep link route helper",
+            navigation_content,
+            "function visualSmokeRouteFromDeepLinkUrl(",
+        )
+        _assert_contains(
+            "visual smoke route helper debug gate",
+            navigation_content,
+            "if (!enableDebugTools || !allowMobileDevAuth)",
+        )
+        _assert_contains(
             "visual smoke route jump debug gate",
             content,
             "allowMobileDevAuth && enableDebugTools",

@@ -444,13 +444,18 @@ def verify(content: str, navigation_content: str) -> dict[str, object]:
         "visualSmokeRouteFromDeepLinkUrl",
     )
     _assert_contains(
+        "visual smoke deep link parser helper",
+        navigation_content,
+        "function visualSmokeRouteFromDeepLinkUrl(",
+    )
+    _assert_contains(
         "visual smoke deep link reuses route jump handler",
         content,
         "openVisualSmokeRoute(deepLinkRoute)",
     )
     _assert_contains(
         "visual smoke deep link route marker",
-        content,
+        navigation_content,
         'value.includes("visual-smoke")',
     )
     _assert_contains(

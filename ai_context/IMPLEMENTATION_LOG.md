@@ -15,6 +15,41 @@
 
 ## 2026-07-07
 
+### T1151 extract visual-smoke route helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/navigationConfig.ts`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted visual-smoke initial route normalization and deep-link route parsing from `mobile/App.tsx` into `mobile/navigationConfig.ts`.
+- Kept `EXPO_PUBLIC_ENABLE_DEBUG_TOOLS` plus `EXPO_PUBLIC_ALLOW_DEV_AUTH` gating, visual-smoke route list, normal first-version menu destinations, UI copy, navigation behavior, backend paths, and screen layout unchanged.
+- Updated the navigation and visual-smoke route verifiers so visual-smoke route helper ownership guards inspect `mobile/navigationConfig.ts`, while App debug gating and press wrappers remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 2 now also covers visual-smoke route normalization helpers.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating debug/future helpers and first-version screen boundaries before moving large JSX renderers.
+
 ### T1150 extract transcript validation helper
 
 類型：mobile / refactor / verifier / docs

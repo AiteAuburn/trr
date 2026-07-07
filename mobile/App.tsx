@@ -75,8 +75,10 @@ import {
 import {
   menuScreens,
   mvpFlowSteps,
+  normalizeVisualSmokeInitialRoute,
   primaryScreens,
   screenChrome,
+  visualSmokeRouteFromDeepLinkUrl,
   visualSmokeRouteJumps,
   type AppScreen
 } from "./navigationConfig";
@@ -789,28 +791,11 @@ const visualSmokeInitialRoute = process.env.EXPO_PUBLIC_VISUAL_SMOKE_INITIAL_ROU
 const sampleText =
   "今天早上空腹血糖 138，早餐吃蛋餅跟無糖豆漿，下午散步 30 分鐘。";
 
-const visualSmokeRouteJumpIds = visualSmokeRouteJumps.map((route) => route.id);
-
-function normalizeVisualSmokeInitialRoute(value: string): AppScreen | null {
-  if (!enableDebugTools || !allowMobileDevAuth) {
-    return null;
-  }
-  if (!visualSmokeRouteJumpIds.includes(value as AppScreen)) {
-    return null;
-  }
-  return value as AppScreen;
-}
-
-function visualSmokeRouteFromDeepLinkUrl(value: string): AppScreen | null {
-  if (!value.includes("visual-smoke")) {
-    return null;
-  }
-  const queryText = value.includes("?") ? value.split("?")[1]?.split("#")[0] ?? "" : "";
-  const route = new URLSearchParams(queryText).get("route") ?? new URLSearchParams(queryText).get("visualSmokeRoute") ?? "";
-  return normalizeVisualSmokeInitialRoute(route);
-}
-
-const initialVisualSmokeScreen = normalizeVisualSmokeInitialRoute(visualSmokeInitialRoute);
+const initialVisualSmokeScreen = normalizeVisualSmokeInitialRoute(
+  visualSmokeInitialRoute,
+  enableDebugTools,
+  allowMobileDevAuth
+);
 
 type FutureModuleCard = {
   id: string;
@@ -6524,7 +6509,7 @@ export default function App() {
     }
 
     function openVisualSmokeRouteFromUrl(url: string) {
-      const deepLinkRoute = visualSmokeRouteFromDeepLinkUrl(url);
+      const deepLinkRoute = visualSmokeRouteFromDeepLinkUrl(url, enableDebugTools, allowMobileDevAuth);
       if (!deepLinkRoute) {
         return;
       }

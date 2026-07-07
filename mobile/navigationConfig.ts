@@ -150,4 +150,41 @@ const visualSmokeRouteJumps: Array<{ id: AppScreen; label: string }> = [
   { id: "foodPhoto", label: "食物拍照" }
 ];
 
-export { menuScreens, mvpFlowSteps, primaryScreens, screenChrome, visualSmokeRouteJumps };
+const visualSmokeRouteJumpIds = visualSmokeRouteJumps.map((route) => route.id);
+
+function normalizeVisualSmokeInitialRoute(
+  value: string,
+  enableDebugTools: boolean,
+  allowMobileDevAuth: boolean
+): AppScreen | null {
+  if (!enableDebugTools || !allowMobileDevAuth) {
+    return null;
+  }
+  if (!visualSmokeRouteJumpIds.includes(value as AppScreen)) {
+    return null;
+  }
+  return value as AppScreen;
+}
+
+function visualSmokeRouteFromDeepLinkUrl(
+  value: string,
+  enableDebugTools: boolean,
+  allowMobileDevAuth: boolean
+): AppScreen | null {
+  if (!value.includes("visual-smoke")) {
+    return null;
+  }
+  const queryText = value.includes("?") ? value.split("?")[1]?.split("#")[0] ?? "" : "";
+  const route = new URLSearchParams(queryText).get("route") ?? new URLSearchParams(queryText).get("visualSmokeRoute") ?? "";
+  return normalizeVisualSmokeInitialRoute(route, enableDebugTools, allowMobileDevAuth);
+}
+
+export {
+  menuScreens,
+  mvpFlowSteps,
+  normalizeVisualSmokeInitialRoute,
+  primaryScreens,
+  screenChrome,
+  visualSmokeRouteFromDeepLinkUrl,
+  visualSmokeRouteJumps
+};

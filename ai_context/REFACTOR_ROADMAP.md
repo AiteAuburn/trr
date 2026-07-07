@@ -32,7 +32,7 @@
   - `modelStorage.ts`：本機模型清單與下載狀態。
   - `modelTransforms.ts`：Downloaded native model state bounding transforms.
   - `nativeLocalModels.ts`：native Whisper / Llama bridge。
-  - `navigationConfig.ts`：`AppScreen` route union、primary screens、MVP flow、screen chrome、first-version menu 與 visual-smoke route jump config。
+  - `navigationConfig.ts`：`AppScreen` route union、primary screens、MVP flow、screen chrome、first-version menu、visual-smoke route jump config 與 debug-only route normalization helpers。
   - `recordDisplay.ts`：daily section definitions, daily-record section display shaping, AI candidate and rejected-event display shaping, record payload labels, record time/date labels, shared Today/History record-list display item shaping, record detail display item shaping, and manual-record confirmation display shaping.
   - `recordEditTransforms.ts`：record edit field type, max-length bounds, empty edit fields, validation, record payload-to-edit-field transforms, and edit-field-to-payload transforms.
   - `recordSaveTransforms.ts`：pending-record save metadata sanitizing and client save batch-id generation.
@@ -91,7 +91,7 @@
 
 ### Slice 1: Record Display Helpers
 
-Status: done.
+Status: done; visual-smoke route normalization helpers are also extracted.
 
 Scope:
 
@@ -113,6 +113,7 @@ Status: done.
 Scope:
 
 - Extract `screenChrome`, `menuScreens`, `visualSmokeRouteJumps`, and future-module display config.
+- Extract debug-only visual-smoke initial route normalization and deep-link route parsing.
 - Keep normal menu limited to 今日錄音、歷史紀錄、基本分析、設定.
 - Keep future functions debug / visual-smoke only.
 
