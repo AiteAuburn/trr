@@ -199,6 +199,24 @@ export function dailyRecordLeaveGuardConfirmStatusMessage() {
   return boundUiMessage("已離開每日紀錄頁；未儲存草稿仍保留在 AI 確認流程。");
 }
 
+export function aiRemoveConfirmBoundaryLabel(isDailyRecordDelete = false) {
+  return boundDisplayText(isDailyRecordDelete ? "確定要刪除這筆紀錄嗎？" : "只會移除待確認候選", maxDisplayTextLength);
+}
+
+export function aiRemoveConfirmBoundaryCopy(isDailyRecordDelete = false) {
+  return boundDisplayText(
+    isDailyRecordDelete
+      ? "刪除後無法復原。這會先從每日紀錄草稿移除，儲存前不會送出刪除 API，也不會重新呼叫 AI。"
+      : "這筆 AI 整理結果尚未寫入資料庫；移除後不會送出刪除 API，也不會重新呼叫 AI。",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function aiRemoveConfirmSourceCopy(confidencePercent: number) {
+  const boundedPercent = clampNumber(confidencePercent, 0, 100);
+  return boundDisplayText(`信心 ${boundedPercent}% · source: AI candidate`, maxDisplayDetailTextLength);
+}
+
 export function aiCandidateEditOpenStatusMessage() {
   return boundUiMessage("請確認 AI 整理的單筆紀錄");
 }

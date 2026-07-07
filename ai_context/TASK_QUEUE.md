@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1107: Extract AI remove-confirm copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted AI candidate / daily-record remove-confirm boundary label, boundary copy, and source confidence display helpers from `mobile/App.tsx` into `mobile/recordWorkflowCopy.ts`.
+- Kept AI remove-confirm render, daily-record delete wording, candidate remove handlers, daily-record draft updates, UI copy text, navigation, parser requests, and backend save flow unchanged.
+- Updated the navigation verifier so remove-confirm copy helper ownership guards inspect `mobile/recordWorkflowCopy.ts`, while remove-confirm render and handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover AI remove-confirm copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1106: Extract transcript-review copy helpers
 
 Status: done
