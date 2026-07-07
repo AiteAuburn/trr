@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1153 extract visual-smoke fixtures
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/visualSmokeFixtures.ts`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted debug-only visual-smoke demo record, preview, report, edit-field fixtures, and route seed predicates from `mobile/App.tsx` into `mobile/visualSmokeFixtures.ts`.
+- Kept visual-smoke route jumps, demo seed values, bounded transform calls, first-version menu destinations, UI copy, navigation, backend paths, and screen layout unchanged.
+- Updated the visual-smoke route verifier so fixture ownership guards inspect `mobile/visualSmokeFixtures.ts`, while visual-smoke render and side-effect guard markers remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the new visual-smoke fixture boundary under debug/future isolation.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating debug/future helpers from `mobile/App.tsx` before moving large JSX renderers.
+
 ### T1152 extract future module display helpers
 
 類型：mobile / refactor / verifier / docs

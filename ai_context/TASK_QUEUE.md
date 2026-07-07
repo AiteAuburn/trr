@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1153: Extract visual-smoke fixtures
+
+Status: done
+
+Summary:
+
+- Extracted debug-only visual-smoke demo record, preview, report, edit-field fixtures, and route seed predicates from `mobile/App.tsx` into `mobile/visualSmokeFixtures.ts`.
+- Kept visual-smoke route jumps, demo seed values, bounded transform calls, first-version menu destinations, UI copy, navigation, backend paths, and screen layout unchanged.
+- Updated the visual-smoke route verifier so fixture ownership guards inspect `mobile/visualSmokeFixtures.ts`, while visual-smoke render and side-effect guard markers remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the new visual-smoke fixture boundary under debug/future isolation.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:visual-smoke-routes` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1152: Extract future module display helpers
 
 Status: done

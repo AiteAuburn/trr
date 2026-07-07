@@ -34,6 +34,7 @@
   - `nativeLocalModels.ts`：native Whisper / Llama bridge。
   - `navigationConfig.ts`：`AppScreen` route union、primary screens、MVP flow、screen chrome、first-version menu、visual-smoke route jump config 與 debug-only route normalization helpers。
   - `futureModuleDisplay.ts`：future-module bounded display card and selected-module display shaping.
+  - `visualSmokeFixtures.ts`：debug-only visual-smoke demo record / preview / report fixtures and route seed predicates.
   - `recordDisplay.ts`：daily section definitions, daily-record section display shaping, AI candidate and rejected-event display shaping, record payload labels, record time/date labels, shared Today/History record-list display item shaping, record detail display item shaping, and manual-record confirmation display shaping.
   - `recordEditTransforms.ts`：record edit field type, max-length bounds, empty edit fields, validation, record payload-to-edit-field transforms, and edit-field-to-payload transforms.
   - `recordSaveTransforms.ts`：pending-record save metadata sanitizing and client save batch-id generation.
@@ -175,7 +176,7 @@ Verification:
 Scope:
 
 - Move achievements, store, community, ranking, year review, and future-module preview render/config into isolated debug/future modules.
-- Continue moving future-module display/config helpers out of `App.tsx` while keeping normal menu unchanged.
+- Continue moving future-module display/config helpers and visual-smoke fixtures out of `App.tsx` while keeping normal menu unchanged.
 - Normal user navigation remains unchanged.
 
 Verification:

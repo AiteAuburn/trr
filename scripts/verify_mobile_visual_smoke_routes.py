@@ -12,6 +12,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
+VISUAL_SMOKE_FIXTURES_PATH = REPO_ROOT / "mobile" / "visualSmokeFixtures.ts"
 
 VISUAL_SMOKE_ROUTES = {
     "today": [
@@ -386,7 +387,7 @@ def _assert_contains(name: str, haystack: str, needle: str) -> None:
         raise AssertionError(f"{name} missing expected marker: {needle}")
 
 
-def verify(content: str, navigation_content: str) -> dict[str, object]:
+def verify(content: str, navigation_content: str, visual_smoke_fixtures_content: str) -> dict[str, object]:
     route_ids = _visual_smoke_route_ids(navigation_content)
     expected_route_ids = set(VISUAL_SMOKE_ROUTES)
     if route_ids != expected_route_ids:
@@ -488,6 +489,14 @@ def verify(content: str, navigation_content: str) -> dict[str, object]:
         content,
         "isVisualSmokePreviewMode ? visualSmokeDemoRecords() : records",
     )
+    for label, marker in (
+        ("visual smoke demo record fixture", "export function visualSmokeDemoRecord(): RecordItem"),
+        ("visual smoke demo records fixture", "export function visualSmokeDemoRecords(): RecordItem[]"),
+        ("visual smoke demo preview fixture", "export function visualSmokeDemoPreview(): ParsePreviewResponse"),
+        ("visual smoke demo report fixture", "export function visualSmokeDemoReport(): BasicReportTransformSource"),
+        ("visual smoke selected-record predicate", "export function visualSmokeNeedsSelectedRecord(screen: AppScreen | null)"),
+    ):
+        _assert_contains(label, visual_smoke_fixtures_content, marker)
     _assert_contains(
         "future module destination press wrapper",
         content,
@@ -557,8 +566,9 @@ def main() -> int:
 
     content = APP_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
+    visual_smoke_fixtures_content = VISUAL_SMOKE_FIXTURES_PATH.read_text(encoding="utf-8")
     try:
-      evidence = verify(content, navigation_content)
+      evidence = verify(content, navigation_content, visual_smoke_fixtures_content)
     except AssertionError as exc:
         print(f"Mobile visual-smoke route verification failed: {exc}", file=sys.stderr)
         return 1
