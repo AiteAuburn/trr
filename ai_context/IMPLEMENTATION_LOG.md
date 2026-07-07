@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1143 extract AI model options bounding transform
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/aiModelTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted `/ai/models` response bounding helpers from `mobile/App.tsx` into `mobile/aiModelTransforms.ts`.
+- Kept backend model fetch paths, default STT/LLM selection priority, downloaded local model state, Settings model display shaping, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so AI model option response bounding ownership guards inspect `mobile/aiModelTransforms.ts`, while Settings display helpers remain checked in `mobile/settingsChoiceDisplay.ts`.
+- Updated the refactor roadmap to note that Slice 4 now also covers AI model option response bounding.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 4/Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1142 extract account profile bounding transforms
 
 類型：mobile / refactor / verifier / docs

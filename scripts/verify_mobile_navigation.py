@@ -32,6 +32,7 @@ SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
 SUBSCRIPTION_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "subscriptionTransforms.ts"
 ACCOUNT_COPY_PATH = REPO_ROOT / "mobile" / "accountCopy.ts"
 ACCOUNT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "accountTransforms.ts"
+AI_MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "aiModelTransforms.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1230,6 +1231,7 @@ def main() -> int:
     subscription_transforms_content = SUBSCRIPTION_TRANSFORMS_PATH.read_text(encoding="utf-8")
     account_copy_content = ACCOUNT_COPY_PATH.read_text(encoding="utf-8")
     account_transforms_content = ACCOUNT_TRANSFORMS_PATH.read_text(encoding="utf-8")
+    ai_model_transforms_content = AI_MODEL_TRANSFORMS_PATH.read_text(encoding="utf-8")
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -4151,6 +4153,14 @@ def main() -> int:
             ("downloaded whisper model accessibility label", "`選擇本機 Whisper 模型：${fileName}，只用於本機錄音轉文字`"),
         ):
             _assert_contains(label, settings_choice_display_content, marker)
+        for label, marker in (
+            ("AI model option bound helper", "function boundAiModelOption<T extends AiModelOptionTransformSource>(value: T): T"),
+            ("AI model option id bound", "id: boundIdentifier(value.id)"),
+            ("AI model option availability bool", "available: Boolean(value.available)"),
+            ("AI model options list bound", "stt_models: value.stt_models.slice(0, maxMobileModelOptions).map(boundAiModelOption)"),
+            ("AI model options LLM list bound", "llm_models: value.llm_models.slice(0, maxMobileModelOptions).map(boundAiModelOption)"),
+        ):
+            _assert_contains(label, ai_model_transforms_content, marker)
         _assert_contains(
             "auth session management accessibility item",
             shared_display_items_content,

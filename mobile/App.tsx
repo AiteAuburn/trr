@@ -506,6 +506,7 @@ import {
   startOfCurrentMonth
 } from "./dateTimeTransforms";
 import { boundAccount, boundProfiles } from "./accountTransforms";
+import { boundAiModelOptions } from "./aiModelTransforms";
 
 type Account = {
   id: string;
@@ -1336,7 +1337,6 @@ const maxOidcIdTokenLength = 4096;
 const maxOidcNonceLength = 128;
 const maxDeviceFingerprintLength = 256;
 const maxUiMessageLength = 300;
-const maxMobileModelOptions = 30;
 const maxDownloadedModelRows = 20;
 const maxMobilePreviewRecords = 20;
 const maxMobilePreviewSegments = 40;
@@ -1473,24 +1473,6 @@ function authSessionDisplayItem(value: AuthSessionItem, index: number) {
       value.last_used_at ? `最後使用 ${recordDateTimeDisplay(value.last_used_at)}` : "尚無最後使用時間",
       maxDisplayDetailTextLength
     )
-  };
-}
-
-function boundAiModelOption(value: AiModelOption): AiModelOption {
-  return {
-    id: boundIdentifier(value.id),
-    label: boundDisplayText(value.label),
-    kind: value.kind,
-    runtime: value.runtime,
-    available: Boolean(value.available),
-    description: boundDisplayText(value.description, maxDisplayDetailTextLength)
-  };
-}
-
-function boundAiModelOptions(value: AiModelOptions): AiModelOptions {
-  return {
-    stt_models: value.stt_models.slice(0, maxMobileModelOptions).map(boundAiModelOption),
-    llm_models: value.llm_models.slice(0, maxMobileModelOptions).map(boundAiModelOption)
   };
 }
 

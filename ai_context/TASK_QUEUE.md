@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1143: Extract AI model options bounding transform
+
+Status: done
+
+Summary:
+
+- Extracted `/ai/models` response bounding helpers from `mobile/App.tsx` into `mobile/aiModelTransforms.ts`.
+- Kept backend model fetch paths, default STT/LLM selection priority, downloaded local model state, Settings model display shaping, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so AI model option response bounding ownership guards inspect `mobile/aiModelTransforms.ts`, while Settings display helpers remain checked in `mobile/settingsChoiceDisplay.ts`.
+- Updated the refactor roadmap to note that Slice 4 now also covers AI model option response bounding.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1142: Extract account profile bounding transforms
 
 Status: done
