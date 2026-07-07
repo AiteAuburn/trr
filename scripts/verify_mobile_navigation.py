@@ -3837,12 +3837,6 @@ def main() -> int:
             ("llm model selection settings handler", "function selectLlmModelFromSettings(modelId: string)"),
             ("stt model selection settings handler", "function selectSttModelFromSettings(modelId: string)"),
             ("native download kind handler", 'function selectNativeDownloadKind(kind: "whisper" | "llama")'),
-            ("native download kind accessibility helper", 'function nativeDownloadKindAccessibilityLabel(kind: "whisper" | "llama", selectedKind: "whisper" | "llama")'),
-            ("native module check accessibility helper", "function nativeModuleCheckAccessibilityLabel(isRunning: boolean)"),
-            ("native model download accessibility helper", "function nativeModelDownloadAccessibilityLabel(isRunning: boolean, progress: number)"),
-            ("native whisper run accessibility helper", "function nativeWhisperRunAccessibilityLabel(isRunning: boolean)"),
-            ("native llama run accessibility helper", "function nativeLlamaRunAccessibilityLabel(isRunning: boolean)"),
-            ("native benchmark accessibility helper", "function nativeBenchmarkAccessibilityLabel(isRunning: boolean)"),
             ("profile settings option handler", "function selectSettingsProfileChoice(profileId: string)"),
             ("llm model settings option handler", "function selectSettingsLlmModelChoice(modelId: string)"),
             ("stt model settings option handler", "function selectSettingsSttModelChoice(modelId: string)"),
@@ -4089,6 +4083,19 @@ def main() -> int:
             ("future preview secondary CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("native module check button label helper", "function nativeModuleCheckButtonLabel(isRunning: boolean)"),
+            ("native model download button label helper", "function nativeModelDownloadButtonLabel(isRunning: boolean, progress: number)"),
+            ("native download kind accessibility helper", 'function nativeDownloadKindAccessibilityLabel(kind: "whisper" | "llama", selectedKind: "whisper" | "llama")'),
+            ("native module check accessibility helper", "function nativeModuleCheckAccessibilityLabel(isRunning: boolean)"),
+            ("native model download accessibility helper", "function nativeModelDownloadAccessibilityLabel(isRunning: boolean, progress: number)"),
+            ("native whisper run accessibility helper", "function nativeWhisperRunAccessibilityLabel(isRunning: boolean)"),
+            ("native llama run accessibility helper", "function nativeLlamaRunAccessibilityLabel(isRunning: boolean)"),
+            ("native benchmark accessibility helper", "function nativeBenchmarkAccessibilityLabel(isRunning: boolean)"),
+            ("native module check button copy", "檢查 native modules"),
+            ("native model no cloud AI copy", "不呼叫雲端 AI"),
+        ):
+            _assert_contains(label, native_status_copy_content, marker)
         for label, marker in (
             ("recording model refresh label helper", "function recordingModelRefreshButtonLabel()"),
             ("recording model refresh accessibility helper", "function recordingModelRefreshAccessibilityLabel()"),

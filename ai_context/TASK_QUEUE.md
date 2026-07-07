@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1116: Extract native model debug labels
+
+Status: done
+
+Summary:
+
+- Extracted native module check/download button labels and native model accessibility label helpers from `mobile/App.tsx` into `mobile/nativeStatusCopy.ts`.
+- Kept native debug render bindings, selected download kind behavior, native module checks, model downloads, local Whisper/Llama runs, benchmark handlers, UI copy text, and backend/parser behavior unchanged.
+- Updated the navigation verifier so native model debug label/accessibility helper ownership guards inspect `mobile/nativeStatusCopy.ts`, while native debug handlers and render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover native model debug label/accessibility copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1115: Extract Analysis no-data copy helpers
 
 Status: done

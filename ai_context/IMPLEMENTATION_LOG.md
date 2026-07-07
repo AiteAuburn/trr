@@ -15,6 +15,38 @@
 
 ## 2026-07-07
 
+### T1116 extract native model debug labels
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/nativeStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted native module check/download button labels and native model accessibility label helpers from `mobile/App.tsx` into `mobile/nativeStatusCopy.ts`.
+- Kept native debug render bindings, selected download kind behavior, native module checks, model downloads, local Whisper/Llama runs, benchmark handlers, UI copy text, and backend/parser behavior unchanged.
+- Updated the navigation verifier so native model debug label/accessibility helper ownership guards inspect `mobile/nativeStatusCopy.ts`, while native debug handlers and render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover native model debug label/accessibility copy boundaries.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1115 extract Analysis no-data copy helpers
 
 類型：mobile / refactor / verifier / docs

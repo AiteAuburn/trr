@@ -52,6 +52,62 @@ export function nativeModelDownloadFailureStatusMessage(error: unknown) {
   return safeUiError(error, "模型下載失敗");
 }
 
+export function nativeModuleCheckButtonLabel(isRunning: boolean) {
+  return boundDisplayText(isRunning ? "處理中..." : "檢查 native modules", maxDisplayTextLength);
+}
+
+export function nativeModelDownloadButtonLabel(isRunning: boolean, progress: number) {
+  const boundedProgress = clampNumber(Math.round(progress * 100), 0, 100);
+  return boundDisplayText(
+    `${isRunning ? "處理中 " : "下載模型 "}${boundedProgress > 0 ? `${boundedProgress}%` : ""}`,
+    maxDisplayTextLength
+  );
+}
+
+export function nativeDownloadKindAccessibilityLabel(kind: "whisper" | "llama", selectedKind: "whisper" | "llama") {
+  const label = kind === "whisper" ? "Whisper" : "Llama";
+  const selectedCopy = kind === selectedKind ? "目前選取" : "切換下載類型";
+  return boundDisplayText(`${selectedCopy} ${label} 本機模型下載；不呼叫雲端 AI`, maxDisplayDetailTextLength);
+}
+
+export function nativeModuleCheckAccessibilityLabel(isRunning: boolean) {
+  return boundDisplayText(
+    isRunning ? "正在檢查 native modules，不呼叫 backend 或 AI" : "檢查 native modules，不呼叫 backend 或 AI",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function nativeModelDownloadAccessibilityLabel(isRunning: boolean, progress: number) {
+  const boundedProgress = clampNumber(Math.round(progress * 100), 0, 100);
+  return boundDisplayText(
+    isRunning
+      ? `正在下載本機模型 ${boundedProgress}%；只更新本機檔案狀態`
+      : "下載本機模型；不送出健康資料、不呼叫 LLM",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function nativeWhisperRunAccessibilityLabel(isRunning: boolean) {
+  return boundDisplayText(
+    isRunning ? "正在執行本機 Whisper，輸出仍需使用者確認" : "執行本機 Whisper，僅讀取指定本機音檔",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function nativeLlamaRunAccessibilityLabel(isRunning: boolean) {
+  return boundDisplayText(
+    isRunning ? "正在執行本機 Llama，只顯示 bounded 摘要" : "執行本機 Llama，不顯示完整 raw model output",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function nativeBenchmarkAccessibilityLabel(isRunning: boolean) {
+  return boundDisplayText(
+    isRunning ? "正在執行本機 benchmark，不呼叫雲端模型" : "執行本機 Whisper 與 Llama benchmark，不呼叫雲端模型",
+    maxDisplayDetailTextLength
+  );
+}
+
 export function nativeModuleCheckProgressStatusMessage() {
   return boundUiMessage("檢查 native modules...");
 }
