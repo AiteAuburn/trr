@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1130: Extract subscription status summary display copy
+
+Status: done
+
+Summary:
+
+- Extracted subscription status summary display helper from `mobile/App.tsx` into `mobile/subscriptionCopy.ts`.
+- Kept trial-days calculation, voice quota state, subscription status rendering, membership status rows, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so subscription status summary helper ownership guards inspect `mobile/subscriptionCopy.ts`, while render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover Subscription status summary display copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1129: Extract membership trial-days display copy
 
 Status: done

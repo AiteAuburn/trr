@@ -454,6 +454,7 @@ import {
   subscriptionMembershipStatusOpenStatusMessage,
   subscriptionPaymentUnwiredCopy,
   subscriptionStatusLabel,
+  subscriptionStatusSummaryText,
   subscriptionSyncButtonLabel,
   subscriptionTrialBoundaryCopy
 } from "./subscriptionCopy";
@@ -2496,14 +2497,6 @@ function doctorShareAccountBoundaryText(account: Account | null) {
 
 function accountPublicDisplayNameText(account: Account | null) {
   return account ? accountDisplayNameDisplayText(account) : boundDisplayText("尚未設定");
-}
-
-function subscriptionStatusSummaryText(quota: VoiceQuota | null, trialDays: number | null, fallback: string) {
-  if (!quota) {
-    return boundDisplayText(fallback, maxDisplayDetailTextLength);
-  }
-  const trialCopy = trialDays === null ? "" : ` · 試用剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天`;
-  return boundDisplayText(`${subscriptionStatusLabel(quota.status)}${trialCopy}`, maxDisplayDetailTextLength);
 }
 
 function parserModelUnavailableText(llmModel: AiModelOption | null, sttModel: AiModelOption | null) {

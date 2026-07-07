@@ -22,6 +22,10 @@ type SubscriptionPlanDisplaySource = {
   plan_code?: string | null;
 };
 
+type SubscriptionStatusSummarySource = {
+  status?: string | null;
+};
+
 export function planDisplayName(planCode?: string) {
   if (planCode === "trial") {
     return "試用版";
@@ -57,6 +61,18 @@ export function membershipTrialDaysText(trialDays: number | null) {
     trialDays === null ? "試用天數尚未載入" : `還剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天`,
     80
   );
+}
+
+export function subscriptionStatusSummaryText(
+  quota: SubscriptionStatusSummarySource | null,
+  trialDays: number | null,
+  fallback: string
+) {
+  if (!quota) {
+    return boundDisplayText(fallback, maxDisplayDetailTextLength);
+  }
+  const trialCopy = trialDays === null ? "" : ` · 試用剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天`;
+  return boundDisplayText(`${subscriptionStatusLabel(quota.status ?? undefined)}${trialCopy}`, maxDisplayDetailTextLength);
 }
 
 export function accountSecurityProviderBoundaryCopy() {

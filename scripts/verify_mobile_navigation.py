@@ -4191,6 +4191,8 @@ def main() -> int:
             ("membership trial-days helper", "function membershipTrialDaysText(trialDays: number | null)"),
             ("membership trial-days fallback copy", "試用天數尚未載入"),
             ("membership trial-days remaining copy", "還剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天"),
+            ("subscription status summary helper", "function subscriptionStatusSummaryText("),
+            ("subscription status summary trial copy", "試用剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天"),
         ):
             _assert_contains(label, subscription_copy_content, marker)
         for label, marker in (

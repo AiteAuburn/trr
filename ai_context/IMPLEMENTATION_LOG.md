@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1130 extract subscription status summary display copy
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/subscriptionCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted subscription status summary display helper from `mobile/App.tsx` into `mobile/subscriptionCopy.ts`.
+- Kept trial-days calculation, voice quota state, subscription status rendering, membership status rows, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so subscription status summary helper ownership guards inspect `mobile/subscriptionCopy.ts`, while render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover Subscription status summary display copy boundaries.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1129 extract membership trial-days display copy
 
 類型：mobile / refactor / verifier / docs
