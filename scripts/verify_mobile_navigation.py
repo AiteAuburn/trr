@@ -3881,6 +3881,9 @@ def main() -> int:
         )
         for label, marker in (
             ("auth provider preview rows config", "export const authProviderPreviews: ReadonlyArray<AuthProviderPreview> = ["),
+            ("auth provider preview display helper", "export function authProviderPreviewDisplayItem(value: AuthProviderPreview)"),
+            ("auth provider accessibility item", "accessibilityLabel: boundDisplayText(`查看${item.title}登入整合狀態，不保存 provider token`, maxDisplayDetailTextLength)"),
+            ("auth provider callback status copy", "provider callback 尚未接入；callback 拿到 id_token 後會走 /auth/oidc-login、SecureStore 與 session revoke 流程。"),
             ("session management preview rows config", "export const sessionManagementPreviews = ["),
             ("production auth readiness rows config", "export const productionAuthReadinessRows = ["),
             ("subscription management rows config", "export const subscriptionManagementRows = ["),
@@ -3952,7 +3955,6 @@ def main() -> int:
                 "auth session management preview press handler",
                 "function pressAuthSessionManagementPreview(item: ReturnType<typeof sessionManagementPreviewDisplayItem>)",
             ),
-            ("auth provider accessibility item", "accessibilityLabel: boundDisplayText(`查看${item.title}登入整合狀態，不保存 provider token`, maxDisplayDetailTextLength)"),
             ("profile edit integration status handler", "function showProfileEditIntegrationStatus()"),
             ("recording quota settings sync handler", "function syncRecordingQuotaSettings()"),
             ("reminder integration status handler", "function showReminderIntegrationStatus()"),

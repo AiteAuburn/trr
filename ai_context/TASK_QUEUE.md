@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1181: Extract auth provider preview display helper
+
+Status: done
+
+Summary:
+
+- Moved the auth provider preview display helper from `mobile/App.tsx` into `mobile/settingsScreenData.ts`.
+- Kept auth provider preview rows, provider challenge start behavior, provider request bounds, preview press handler, disabled state, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so auth provider preview display ownership is guarded in `mobile/settingsScreenData.ts`, while provider challenge and press handling remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the auth provider preview display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1180: Extract Food Community share form defaults
 
 Status: done

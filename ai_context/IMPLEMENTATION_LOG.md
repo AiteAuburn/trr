@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1181 extract auth provider preview display helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/settingsScreenData.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved the auth provider preview display helper from `mobile/App.tsx` into `mobile/settingsScreenData.ts`.
+- Kept auth provider preview rows, provider challenge start behavior, provider request bounds, preview press handler, disabled state, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so auth provider preview display ownership is guarded in `mobile/settingsScreenData.ts`, while provider challenge and press handling remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the auth provider preview display boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating Settings/Auth display helpers before moving settings renderers.
+
 ### T1180 extract Food Community share form defaults
 
 類型：mobile / refactor / verifier / docs

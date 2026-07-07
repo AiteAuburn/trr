@@ -565,6 +565,7 @@ import {
   settingsSubpageReturnStatusMessage
 } from "./settingsCopy";
 import {
+  authProviderPreviewDisplayItem,
   authProviderPreviews,
   privacyControlRows,
   productionAuthReadinessRows,
@@ -573,7 +574,6 @@ import {
   settingsRows,
   subscriptionManagementRows,
   tutorialSteps,
-  type AuthProviderPreview,
   type SettingsRow
 } from "./settingsScreenData";
 import {
@@ -1154,19 +1154,6 @@ function achievementUnlockDisplayDate(value?: string | null) {
     return boundDisplayText("解鎖時間格式無法顯示", maxDisplayTextLength);
   }
   return boundDisplayText(`解鎖於 ${formatLocalDateInput(parsed)}`, maxDisplayTextLength);
-}
-
-function authProviderPreviewDisplayItem(value: AuthProviderPreview) {
-  const item = previewTupleDisplayItem([value.title, value.status, value.copy]);
-  const provider = boundOidcProviderForRequest(value.provider);
-  return {
-    ...item,
-    provider,
-    accessibilityLabel: boundDisplayText(`查看${item.title}登入整合狀態，不保存 provider token`, maxDisplayDetailTextLength),
-    actionStatus: boundUiMessage(
-      `${item.title} 原生 provider callback 尚未接入；callback 拿到 id_token 後會走 /auth/oidc-login、SecureStore 與 session revoke 流程。`
-    )
-  };
 }
 
 function clampNumber(value: number, min: number, max: number) {

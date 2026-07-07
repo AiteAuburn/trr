@@ -1,9 +1,11 @@
 import type { AppScreen } from "./navigationConfig";
-import type { OidcLoginProvider } from "./authTransforms";
+import { boundOidcProviderForRequest, type OidcLoginProvider } from "./authTransforms";
+import { previewTupleDisplayItem } from "./sharedDisplayItems";
 
 const maxDisplayTextLength = 160;
 const maxIdentifierTextLength = 128;
 const maxDisplayDetailTextLength = 240;
+const maxUiMessageLength = 300;
 
 export type SettingsRow = {
   id: string;
@@ -26,6 +28,10 @@ function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
 
 function boundIdentifier(value: string) {
   return boundDisplayText(value, maxIdentifierTextLength);
+}
+
+function boundUiMessage(value: string) {
+  return value.slice(0, maxUiMessageLength);
 }
 
 export const settingsRows: SettingsRow[] = [
@@ -103,5 +109,18 @@ export function settingsRowDisplayItem(value: SettingsRow) {
     icon: boundDisplayText(value.icon || "•", 4),
     helper,
     accessibilityLabel: boundDisplayText(`前往${label}設定：${helper || "查看設定狀態"}`, maxDisplayDetailTextLength)
+  };
+}
+
+export function authProviderPreviewDisplayItem(value: AuthProviderPreview) {
+  const item = previewTupleDisplayItem([value.title, value.status, value.copy]);
+  const provider = boundOidcProviderForRequest(value.provider);
+  return {
+    ...item,
+    provider,
+    accessibilityLabel: boundDisplayText(`查看${item.title}登入整合狀態，不保存 provider token`, maxDisplayDetailTextLength),
+    actionStatus: boundUiMessage(
+      `${item.title} 原生 provider callback 尚未接入；callback 拿到 id_token 後會走 /auth/oidc-login、SecureStore 與 session revoke 流程。`
+    )
   };
 }
