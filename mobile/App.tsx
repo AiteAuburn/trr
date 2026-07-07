@@ -386,10 +386,13 @@ import {
   backendReconnectButtonLabel,
   membershipStatusReturnSubscriptionStatusMessage,
   menuReturnStatusMessage,
+  modelRuntimeLabel,
+  modelSelectionBoundaryCopy,
   privacyIntegrationAccessibilityLabel,
   privacyIntegrationButtonLabel,
   privacySettingsIntroCopy,
   recordingQuotaControlCopy,
+  recordingQuotaDataBoundaryCopy,
   recordingQuotaIntroCopy,
   recordingQuotaSyncAccessibilityLabel,
   recordingQuotaSyncButtonLabel,
@@ -2418,25 +2421,6 @@ function subscriptionStatusLabel(status?: string) {
   return "尚未載入";
 }
 
-function modelRuntimeLabel(runtime?: AiModelOption["runtime"]) {
-  if (runtime === "local") {
-    return "本地模型";
-  }
-  if (runtime === "browser") {
-    return "裝置/瀏覽器";
-  }
-  if (runtime === "server_stub") {
-    return "後端測試模型";
-  }
-  if (runtime === "server_api") {
-    return "後端 API";
-  }
-  if (runtime === "cloud_disabled") {
-    return "雲端停用";
-  }
-  return "尚未載入";
-}
-
 function pendingRecordForSave(record: PendingRecord): PendingRecord {
   const sanitizedMetadata = boundMetadata(record.metadata_json, true);
   return {
@@ -2890,17 +2874,6 @@ function settingsModelChoiceDisplayItem(model: AiModelOption, kind: "LLM" | "STT
       maxDisplayDetailTextLength
     )
   };
-}
-
-function modelSelectionBoundaryCopy() {
-  return boundDisplayText("未啟用模型不可選；雲端 fallback 在 v1 預設停用。", maxDisplayDetailTextLength);
-}
-
-function recordingQuotaDataBoundaryCopy() {
-  return boundDisplayText(
-    "此頁不呼叫 parser、不呼叫 AI、不上傳音檔、不保存逐字稿；只有使用者手動同步時才讀取 backend quota 狀態。",
-    maxDisplayDetailTextLength
-  );
 }
 
 function reminderPreviewBoundaryDisplayItem() {

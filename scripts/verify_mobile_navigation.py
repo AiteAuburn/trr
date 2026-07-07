@@ -4083,6 +4083,11 @@ def main() -> int:
         ):
             _assert_contains(label, native_status_copy_content, marker)
         for label, marker in (
+            ("settings model runtime label helper", "function modelRuntimeLabel("),
+            ("settings model selection boundary helper", "function modelSelectionBoundaryCopy()"),
+            ("settings quota data boundary helper", "function recordingQuotaDataBoundaryCopy()"),
+            ("settings model local runtime copy", "本地模型"),
+            ("settings model fallback disabled copy", "雲端 fallback 在 v1 預設停用"),
             ("recording quota sync accessibility helper", "function recordingQuotaSyncAccessibilityLabel(isSyncing: boolean)"),
             ("reminder integration accessibility helper", "function reminderIntegrationAccessibilityLabel()"),
             ("privacy integration accessibility helper", "function privacyIntegrationAccessibilityLabel()"),

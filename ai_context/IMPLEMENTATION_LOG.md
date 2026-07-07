@@ -15,6 +15,38 @@
 
 ## 2026-07-07
 
+### T1112 extract Settings model and quota copy helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/settingsCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted model runtime labels, model-selection boundary copy, and recording-quota data boundary copy from `mobile/App.tsx` into `mobile/settingsCopy.ts`.
+- Kept Settings render bindings, model option display, quota sync controls, UI copy text, parser/backend behavior, and first-version navigation unchanged.
+- Updated the navigation verifier so Settings model/quota copy helper ownership guards inspect `mobile/settingsCopy.ts`, while Settings render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover Settings model/quota copy boundaries.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1111 extract core first-version flow labels
 
 類型：mobile / refactor / verifier / docs

@@ -37,6 +37,38 @@ export function membershipStatusReturnSubscriptionStatusMessage() {
   return boundUiMessage("已返回會員方案；會員狀態頁只讀取目前同步資料，不會呼叫付款或 AI。");
 }
 
+export function modelRuntimeLabel(
+  runtime?: "local" | "browser" | "server_stub" | "server_api" | "cloud_disabled"
+) {
+  if (runtime === "local") {
+    return "本地模型";
+  }
+  if (runtime === "browser") {
+    return "裝置/瀏覽器";
+  }
+  if (runtime === "server_stub") {
+    return "後端測試模型";
+  }
+  if (runtime === "server_api") {
+    return "後端 API";
+  }
+  if (runtime === "cloud_disabled") {
+    return "雲端停用";
+  }
+  return "尚未載入";
+}
+
+export function modelSelectionBoundaryCopy() {
+  return boundDisplayText("未啟用模型不可選；雲端 fallback 在 v1 預設停用。", maxDisplayDetailTextLength);
+}
+
+export function recordingQuotaDataBoundaryCopy() {
+  return boundDisplayText(
+    "此頁不呼叫 parser、不呼叫 AI、不上傳音檔、不保存逐字稿；只有使用者手動同步時才讀取 backend quota 狀態。",
+    maxDisplayDetailTextLength
+  );
+}
+
 export function recordingQuotaIntroCopy() {
   return boundDisplayText("顯示今日語音用量；平時不打擾，接近上限才提醒。", maxDisplayDetailTextLength);
 }

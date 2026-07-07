@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1112: Extract Settings model and quota copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted model runtime labels, model-selection boundary copy, and recording-quota data boundary copy from `mobile/App.tsx` into `mobile/settingsCopy.ts`.
+- Kept Settings render bindings, model option display, quota sync controls, UI copy text, parser/backend behavior, and first-version navigation unchanged.
+- Updated the navigation verifier so Settings model/quota copy helper ownership guards inspect `mobile/settingsCopy.ts`, while Settings render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover Settings model/quota copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1111: Extract core first-version flow labels
 
 Status: done
