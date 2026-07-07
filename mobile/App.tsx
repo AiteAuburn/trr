@@ -92,6 +92,16 @@ import {
   communityPreviewBoundaryDisplayItem,
   doctorShareBackendBoundaryCopy,
   doctorSharePreviewBoundaryDisplayItem,
+  foodPhotoEmptyResultChecklistDisplayItems,
+  foodPhotoIntegrationButtonAccessibilityLabel,
+  foodPhotoIntegrationButtonLabel,
+  foodPhotoIntroCopy,
+  foodPhotoReadinessTitle,
+  foodPhotoResultTitle,
+  foodPhotoRetakeButtonAccessibilityLabel,
+  foodPhotoRetakeButtonLabel,
+  foodPhotoUploadBoxLabel,
+  foodPhotoVisionBoundaryDisplayItem,
   futureModuleCardDisplayItem,
   futurePreviewSectionLabels,
   healthIntegrationExternalDataBoundaryCopy,
@@ -1886,66 +1896,6 @@ function storeCheckoutReadinessTitle() {
 
 function storeCartReturnButtonLabel() {
   return boundDisplayText("返回商城", maxDisplayTextLength);
-}
-
-function foodPhotoVisionBoundaryDisplayItem() {
-  return {
-    badge: boundDisplayText("Vision 未串接", 24),
-    copy: boundDisplayText(
-      "相機、圖片上傳、影像模型與營養估算尚未啟用；目前不會讀取照片、不會呼叫 AI，也不會寫入飲食紀錄。",
-      maxDisplayDetailTextLength
-    ),
-    uploadUnavailable: boundDisplayText("相機與圖片上傳尚未啟用。", maxDisplayDetailTextLength),
-    resultPending: boundDisplayText("尚未產生", 24),
-    futureBoundary: boundDisplayText(
-      "影像辨識是 future module；MVP 仍以手動/文字/語音紀錄為主，避免未確認估算直接寫入。",
-      maxDisplayDetailTextLength
-    )
-  };
-}
-
-function foodPhotoEmptyResultChecklistDisplayItems() {
-  return [
-    "尚未產生分析結果。",
-    "拍攝或上傳流程尚未接上，因此不顯示任何營養估算。",
-    "這裡不使用固定範例數字，避免把 mock 結果誤認為實際 AI 分析。",
-    "沒有真實分析結果時不可加入紀錄；正式啟用時必須先讓使用者確認食物與數值。"
-  ].map(resultChecklistItem);
-}
-
-function foodPhotoIntroCopy() {
-  return boundDisplayText(
-    "目前先保留拍照分析 UI 與確認流程入口；Vision 尚未串接，不會估算營養或寫入紀錄。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function foodPhotoUploadBoxLabel() {
-  return boundDisplayText("拍攝或上傳照片", maxDisplayTextLength);
-}
-
-function foodPhotoResultTitle() {
-  return boundDisplayText("AI 分析結果", maxDisplayTextLength);
-}
-
-function foodPhotoReadinessTitle() {
-  return boundDisplayText("正式啟用前需要完成", maxDisplayTextLength);
-}
-
-function foodPhotoIntegrationButtonLabel() {
-  return boundDisplayText("查看拍照整合狀態", maxDisplayTextLength);
-}
-
-function foodPhotoIntegrationButtonAccessibilityLabel() {
-  return boundDisplayText("查看拍照整合狀態，不讀取照片或呼叫 Vision", maxDisplayDetailTextLength);
-}
-
-function foodPhotoRetakeButtonLabel() {
-  return boundDisplayText("查看重新拍攝整合狀態", maxDisplayTextLength);
-}
-
-function foodPhotoRetakeButtonAccessibilityLabel() {
-  return boundDisplayText("查看重新拍攝整合狀態，目前沒有暫存圖片可清除", maxDisplayDetailTextLength);
 }
 
 function yearReviewShareUnavailableStatusMessage() {

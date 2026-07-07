@@ -1,4 +1,5 @@
 import type { AppScreen } from "./navigationConfig";
+import { resultChecklistItem } from "./sharedDisplayItems";
 
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
@@ -150,6 +151,66 @@ export function privacyPreviewBoundaryDisplayItem() {
     "隱私控制預覽",
     "目前不寫入偏好、不建立分享、不匯出資料、不呼叫 API；正式啟用前必須接權限、audit 與資料刪除流程。"
   );
+}
+
+export function foodPhotoVisionBoundaryDisplayItem() {
+  return {
+    badge: boundDisplayText("Vision 未串接", 24),
+    copy: boundDisplayText(
+      "相機、圖片上傳、影像模型與營養估算尚未啟用；目前不會讀取照片、不會呼叫 AI，也不會寫入飲食紀錄。",
+      maxDisplayDetailTextLength
+    ),
+    uploadUnavailable: boundDisplayText("相機與圖片上傳尚未啟用。", maxDisplayDetailTextLength),
+    resultPending: boundDisplayText("尚未產生", 24),
+    futureBoundary: boundDisplayText(
+      "影像辨識是 future module；MVP 仍以手動/文字/語音紀錄為主，避免未確認估算直接寫入。",
+      maxDisplayDetailTextLength
+    )
+  };
+}
+
+export function foodPhotoEmptyResultChecklistDisplayItems() {
+  return [
+    "尚未產生分析結果。",
+    "拍攝或上傳流程尚未接上，因此不顯示任何營養估算。",
+    "這裡不使用固定範例數字，避免把 mock 結果誤認為實際 AI 分析。",
+    "沒有真實分析結果時不可加入紀錄；正式啟用時必須先讓使用者確認食物與數值。"
+  ].map(resultChecklistItem);
+}
+
+export function foodPhotoIntroCopy() {
+  return boundDisplayText(
+    "目前先保留拍照分析 UI 與確認流程入口；Vision 尚未串接，不會估算營養或寫入紀錄。",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function foodPhotoUploadBoxLabel() {
+  return boundDisplayText("拍攝或上傳照片", maxDisplayTextLength);
+}
+
+export function foodPhotoResultTitle() {
+  return boundDisplayText("AI 分析結果", maxDisplayTextLength);
+}
+
+export function foodPhotoReadinessTitle() {
+  return boundDisplayText("正式啟用前需要完成", maxDisplayTextLength);
+}
+
+export function foodPhotoIntegrationButtonLabel() {
+  return boundDisplayText("查看拍照整合狀態", maxDisplayTextLength);
+}
+
+export function foodPhotoIntegrationButtonAccessibilityLabel() {
+  return boundDisplayText("查看拍照整合狀態，不讀取照片或呼叫 Vision", maxDisplayDetailTextLength);
+}
+
+export function foodPhotoRetakeButtonLabel() {
+  return boundDisplayText("查看重新拍攝整合狀態", maxDisplayTextLength);
+}
+
+export function foodPhotoRetakeButtonAccessibilityLabel() {
+  return boundDisplayText("查看重新拍攝整合狀態，目前沒有暫存圖片可清除", maxDisplayDetailTextLength);
 }
 
 export function futurePreviewSectionLabels() {

@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1164: Extract food photo future display copy
+
+Status: done
+
+Summary:
+
+- Extracted food-photo future-module boundary copy, empty-result checklist, labels, and accessibility copy from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept food-photo copy text, bounded display behavior, render bindings, hidden/debug-only routing, first-version menu destinations, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so food-photo future copy ownership guards inspect `mobile/futureModuleDisplay.ts`, while status handlers and render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the food-photo future display copy boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1163: Extract future preview boundary copy helpers
 
 Status: done
