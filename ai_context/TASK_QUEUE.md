@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1158: Extract manual record form option config
+
+Status: done
+
+Summary:
+
+- Extracted manual-record glucose unit, glucose timing, and meal-type static option config from `mobile/App.tsx` into `mobile/recordEditTransforms.ts`.
+- Kept option labels, bounded option display mapping, manual-record/edit form render, selection handlers, payload transforms, UI copy, navigation, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so manual-record form option ownership guards inspect `mobile/recordEditTransforms.ts`, while render and display helper bindings remain checked in `mobile/App.tsx` and `mobile/sharedDisplayItems.ts`.
+- Updated the refactor roadmap to note the manual-record form option config boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1157: Extract subscription comparison config
 
 Status: done

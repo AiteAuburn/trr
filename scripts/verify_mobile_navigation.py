@@ -3001,6 +3001,9 @@ def main() -> int:
             _assert_contains(label, record_display_content, marker)
         for label, marker in (
             ("record edit fields type", "export type RecordEditFields = {"),
+            ("glucose unit option config", 'export const glucoseUnitOptions = ["mg/dL", "mmol/L"] as const'),
+            ("glucose timing option config", "export const glucoseTimingOptions = ["),
+            ("meal type option config", "export const mealTypeOptions = ["),
             ("record edit field max length helper", "function recordEditFieldMaxLength(field: keyof RecordEditFields)"),
             ("record edit field bound helper", "function boundRecordEditField<K extends keyof RecordEditFields>("),
             ("empty record edit fields helper", "function emptyRecordEditFields(): RecordEditFields"),

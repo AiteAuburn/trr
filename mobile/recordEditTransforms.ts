@@ -21,6 +21,24 @@ const maxFormLongTextLength = 500;
 const maxFormJsonTextLength = 4000;
 const maxListItems = 12;
 
+export const glucoseUnitOptions = ["mg/dL", "mmol/L"] as const;
+
+export const glucoseTimingOptions = [
+  ["fasting", "空腹"],
+  ["before_meal", "飯前"],
+  ["after_meal", "飯後"],
+  ["bedtime", "睡前"],
+  ["unknown", "未指定"]
+] as const;
+
+export const mealTypeOptions = [
+  ["breakfast", "早餐"],
+  ["lunch", "午餐"],
+  ["dinner", "晚餐"],
+  ["snack", "點心"],
+  ["unknown", "未指定"]
+] as const;
+
 export function recordEditFieldMaxLength(field: keyof RecordEditFields) {
   if (field === "fallbackJson") {
     return maxFormJsonTextLength;

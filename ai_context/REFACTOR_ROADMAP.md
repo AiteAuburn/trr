@@ -36,7 +36,7 @@
   - `futureModuleDisplay.ts`：future-module bounded display card and selected-module display shaping.
   - `visualSmokeFixtures.ts`：debug-only visual-smoke demo record / preview / report fixtures and route seed predicates.
   - `recordDisplay.ts`：daily section definitions, daily-record section display shaping, AI candidate and rejected-event display shaping, record payload labels, record time/date labels, shared Today/History record-list display item shaping, record detail display item shaping, and manual-record confirmation display shaping.
-  - `recordEditTransforms.ts`：record edit field type, max-length bounds, empty edit fields, validation, record payload-to-edit-field transforms, and edit-field-to-payload transforms.
+  - `recordEditTransforms.ts`：record edit field type, form option config, max-length bounds, empty edit fields, validation, record payload-to-edit-field transforms, and edit-field-to-payload transforms.
   - `recordSaveTransforms.ts`：pending-record save metadata sanitizing and client save batch-id generation.
   - `recordingCopy.ts`：recording / transcript-review bounded status messages, transcript validation, and display copy.
   - `recordWorkflowCopy.ts`：parser model readiness, parser / AI review / AI save-confirm / AI remove-confirm / manual-record confirmation / record-detail return / daily-record leave guard / AI save / AI candidate bounded copy and status messages.
@@ -110,7 +110,7 @@ Verification:
 
 ### Slice 2: Static Screen/Menu Config
 
-Status: done; visual-smoke route normalization helpers, Settings/Auth/Tutorial static config, and Subscription comparison config are also extracted.
+Status: done; visual-smoke route normalization helpers, Settings/Auth/Tutorial static config, Subscription comparison config, and manual-record form option config are also extracted.
 
 Scope:
 
@@ -118,6 +118,7 @@ Scope:
 - Extract debug-only visual-smoke initial route normalization and deep-link route parsing.
 - Extract Settings / Auth provider / Account Security / Subscription / Privacy static preview rows and Tutorial step config.
 - Extract Subscription comparison row config.
+- Extract manual-record glucose unit/timing and meal-type option config.
 - Keep normal menu limited to 今日錄音、歷史紀錄、基本分析、設定.
 - Keep future functions debug / visual-smoke only.
 
@@ -159,7 +160,7 @@ Verification:
 
 ### Slice 5: First-Version Screen Components
 
-Status: started; Settings row/static preview config, Tutorial static config, Settings profile/model choice display, Settings downloaded model display, Settings active-profile display copy, Settings voice quota minute formatting/warning/usage/helper copy, Settings model/quota copy, Account Security auth session display items, Subscription plan/status labels, plan/status summary display copy, membership trial-days display copy, account identity display, shared bounded display item builders including menu/visual-smoke route/checklist/manual-record type items, native model debug labels/accessibility, Analysis range/request-key, Analysis no-data/boundary copy, Analysis report-source display, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, AI candidate/rejected-event display, first-version Today summary copy, first-version core labels/accessibility copy, destination-aware return labels, shared header/recording/primary-tab accessibility copy, shared busy/clear action status, transcript-review copy, AI review/save-confirm copy, AI remove-confirm copy, manual-record confirmation copy/status, record-detail return status, delete-confirm copy/status, record-edit copy/status, record-result destination status, daily-record leave guard copy/status, save-success / AI-save-failure navigation status, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, daily-record section display boundaries, and future-module display card boundaries extracted.
+Status: started; Settings row/static preview config, Tutorial static config, Settings profile/model choice display, Settings downloaded model display, Settings active-profile display copy, Settings voice quota minute formatting/warning/usage/helper copy, Settings model/quota copy, Account Security auth session display items, Subscription plan/status labels, plan/status summary display copy, membership trial-days display copy, account identity display, shared bounded display item builders including menu/visual-smoke route/checklist/manual-record type items, native model debug labels/accessibility, Analysis range/request-key, Analysis no-data/boundary copy, Analysis report-source display, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, AI candidate/rejected-event display, first-version Today summary copy, first-version core labels/accessibility copy, destination-aware return labels, shared header/recording/primary-tab accessibility copy, shared busy/clear action status, transcript-review copy, AI review/save-confirm copy, AI remove-confirm copy, manual-record confirmation copy/status, record-detail return status, delete-confirm copy/status, record-edit copy/status, record-result destination status, daily-record leave guard copy/status, save-success / AI-save-failure navigation status, shared record-list display, record detail display, manual-record confirmation display, manual-record form option config, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, daily-record section display boundaries, and future-module display card boundaries extracted.
 
 Scope:
 

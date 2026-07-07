@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1158 extract manual record form option config
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordEditTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted manual-record glucose unit, glucose timing, and meal-type static option config from `mobile/App.tsx` into `mobile/recordEditTransforms.ts`.
+- Kept option labels, bounded option display mapping, manual-record/edit form render, selection handlers, payload transforms, UI copy, navigation, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so manual-record form option ownership guards inspect `mobile/recordEditTransforms.ts`, while render and display helper bindings remain checked in `mobile/App.tsx` and `mobile/sharedDisplayItems.ts`.
+- Updated the refactor roadmap to note the manual-record form option config boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting static config and display helpers before moving manual-record/edit JSX renderers.
+
 ### T1157 extract subscription comparison config
 
 類型：mobile / refactor / verifier / docs

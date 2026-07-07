@@ -54,6 +54,9 @@ import {
   boundRecordEditField,
   buildPayloadFromEditFields,
   emptyRecordEditFields,
+  glucoseTimingOptions,
+  glucoseUnitOptions,
+  mealTypeOptions,
   recordEditFieldMaxLength,
   recordPayloadToEditFields,
   validateRecordForm,
@@ -1255,24 +1258,6 @@ const storeProducts: StoreProduct[] = [
     icon: "福"
   }
 ];
-
-const glucoseUnitOptions = ["mg/dL", "mmol/L"] as const;
-
-const glucoseTimingOptions = [
-  ["fasting", "空腹"],
-  ["before_meal", "飯前"],
-  ["after_meal", "飯後"],
-  ["bedtime", "睡前"],
-  ["unknown", "未指定"]
-] as const;
-
-const mealTypeOptions = [
-  ["breakfast", "早餐"],
-  ["lunch", "午餐"],
-  ["dinner", "晚餐"],
-  ["snack", "點心"],
-  ["unknown", "未指定"]
-] as const;
 
 const maxDateInputLength = 10;
 const maxTimeInputLength = 5;
