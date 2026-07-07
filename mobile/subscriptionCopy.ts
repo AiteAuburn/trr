@@ -10,6 +10,32 @@ function boundUiMessage(value: string) {
   return value.slice(0, maxUiMessageLength);
 }
 
+export function planDisplayName(planCode?: string) {
+  if (planCode === "trial") {
+    return "試用版";
+  }
+  if (planCode === "annual" || planCode === "founder_annual") {
+    return "年費會員";
+  }
+  return "會員方案";
+}
+
+export function subscriptionStatusLabel(status?: string) {
+  if (status === "trialing") {
+    return "試用中";
+  }
+  if (status === "active") {
+    return "有效";
+  }
+  if (status === "cancelled" || status === "canceled") {
+    return "已取消";
+  }
+  if (status === "expired") {
+    return "已到期";
+  }
+  return "尚未載入";
+}
+
 export function accountSecurityProviderBoundaryCopy() {
   return boundDisplayText(
     "原生 Apple / Google / Email provider SDK 尚未接入；provider callback 拿到 id_token 後，mobile 已有 /auth/oidc-login exchange 與 SecureStore 寫入邊界。",

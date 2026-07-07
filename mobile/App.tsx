@@ -434,6 +434,7 @@ import {
   accountSecurityProviderBoundaryCopy,
   accountSecurityReadinessBoundaryCopy,
   accountSecuritySessionBoundaryCopy,
+  planDisplayName,
   profileNoActionBoundaryCopy,
   settingsSubscriptionSectionLabels,
   subscriptionCtaBoundaryCopy,
@@ -444,6 +445,7 @@ import {
   subscriptionManagementSyncButtonLabel,
   subscriptionMembershipStatusOpenStatusMessage,
   subscriptionPaymentUnwiredCopy,
+  subscriptionStatusLabel,
   subscriptionSyncButtonLabel,
   subscriptionTrialBoundaryCopy
 } from "./subscriptionCopy";
@@ -2410,32 +2412,6 @@ function captureVoiceQuotaCopy(quota: VoiceQuota | null) {
 
 function isVoiceQuotaLow(quota: VoiceQuota | null) {
   return Boolean(quota && quota.remaining_seconds_today <= voiceQuotaLowWarningThresholdSeconds);
-}
-
-function planDisplayName(planCode?: string) {
-  if (planCode === "trial") {
-    return "試用版";
-  }
-  if (planCode === "annual" || planCode === "founder_annual") {
-    return "年費會員";
-  }
-  return "會員方案";
-}
-
-function subscriptionStatusLabel(status?: string) {
-  if (status === "trialing") {
-    return "試用中";
-  }
-  if (status === "active") {
-    return "有效";
-  }
-  if (status === "cancelled" || status === "canceled") {
-    return "已取消";
-  }
-  if (status === "expired") {
-    return "已到期";
-  }
-  return "尚未載入";
 }
 
 function pendingRecordForSave(record: PendingRecord): PendingRecord {

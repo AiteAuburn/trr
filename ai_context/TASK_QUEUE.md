@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1123: Extract subscription plan and status labels
+
+Status: done
+
+Summary:
+
+- Extracted subscription plan and subscription status label helpers from `mobile/App.tsx` into `mobile/subscriptionCopy.ts`.
+- Kept voice quota state, subscription status rendering, membership status rows, report boundary rows, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so subscription plan/status label ownership guards inspect `mobile/subscriptionCopy.ts`, while render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover Subscription plan/status label boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1122: Extract active profile relationship display copy
 
 Status: done
