@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1162: Extract future preview boundary display helpers
+
+Status: done
+
+Summary:
+
+- Extracted future-preview boundary display helpers for doctor share, health integration, food community, ranking, reminder, and privacy from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept boundary badge/copy text, bounded display behavior, render bindings, hidden/debug-only future-module routing, first-version menu destinations, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so future-preview boundary ownership and safety-copy guards inspect `mobile/futureModuleDisplay.ts`.
+- Updated the refactor roadmap to note the future-preview boundary display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1161: Extract future preview section labels
 
 Status: done

@@ -78,6 +78,55 @@ export function selectedFutureModuleDisplayItem(value: FutureModuleCard | null) 
   };
 }
 
+function futurePreviewBoundaryDisplayItem(badge: string, copy: string) {
+  return {
+    badge: boundDisplayText(badge, 40),
+    copy: boundDisplayText(copy, maxDisplayDetailTextLength)
+  };
+}
+
+export function doctorSharePreviewBoundaryDisplayItem() {
+  return futurePreviewBoundaryDisplayItem(
+    "授權未啟用",
+    "目前不產生授權碼、不建立 share token、不新增 grants、不呼叫醫師端 API；只顯示未來合作流程與安全邊界。"
+  );
+}
+
+export function healthIntegrationPreviewBoundaryDisplayItem() {
+  return futurePreviewBoundaryDisplayItem(
+    "串接未啟用",
+    "目前不請求 HealthKit / Health Connect 權限、不掃描 BLE、不讀取血糖機、不寫入 records；只顯示同步資料邊界。"
+  );
+}
+
+export function communityPreviewBoundaryDisplayItem() {
+  return futurePreviewBoundaryDisplayItem(
+    "食物社群",
+    "backend ready 時可同步食物資料庫、送出食物分享、建立點數並刷新排行榜；貼文、留言與內容治理仍未開放。"
+  );
+}
+
+export function rankingPreviewBoundaryDisplayItem() {
+  return futurePreviewBoundaryDisplayItem(
+    "公開榜單",
+    "一般操作路徑只讀取 opt-in 公開榜單與非敏感統計；不公開健康數值、不上傳 streak、不呼叫 AI。"
+  );
+}
+
+export function reminderPreviewBoundaryDisplayItem() {
+  return futurePreviewBoundaryDisplayItem(
+    "通知預覽",
+    "目前不請求系統通知權限、不建立背景工作、不寫入 reminder table；只呈現未來設定結構。"
+  );
+}
+
+export function privacyPreviewBoundaryDisplayItem() {
+  return futurePreviewBoundaryDisplayItem(
+    "隱私控制預覽",
+    "目前不寫入偏好、不建立分享、不匯出資料、不呼叫 API；正式啟用前必須接權限、audit 與資料刪除流程。"
+  );
+}
+
 export function futurePreviewSectionLabels() {
   const doctorTokenButton = boundDisplayText("查看授權碼狀態", maxDisplayTextLength);
   const doctorReportButton = boundDisplayText("查看報表邊界", maxDisplayTextLength);
