@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1160: Extract Home guidance config
+
+Status: done
+
+Summary:
+
+- Extracted Home guidance direction rows and speech example carousel config from `mobile/App.tsx` into `mobile/recordingCopy.ts`.
+- Kept guidance icons, labels, example text, bounded display mapping, carousel state/timing, Home render, UI copy, navigation, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so Home guidance copy/config ownership guards inspect `mobile/recordingCopy.ts`, while render and pagination bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Home guidance config boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1159: Extract manual record type config
 
 Status: done

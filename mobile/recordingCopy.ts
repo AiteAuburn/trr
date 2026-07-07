@@ -127,6 +127,36 @@ export function transcriptReviewSampleWarningCopy() {
   );
 }
 
+export const homeGuidanceDirections = [
+  [
+    { icon: "🕒", label: "時間" },
+    { icon: "🩸", label: "血糖" },
+    { icon: "🍽️", label: "飲食" }
+  ],
+  [
+    { icon: "🏃", label: "運動" },
+    { icon: "💊", label: "用藥紀錄" },
+    { icon: "😊", label: "身體狀況" }
+  ]
+].map((row, rowIndex) =>
+  row.map((item, itemIndex) => ({
+    key: `home-guidance-${rowIndex}-${itemIndex}`,
+    icon: boundDisplayText(item.icon, 8),
+    label: boundDisplayText(item.label, 20)
+  }))
+);
+
+export const homeSpeechExamples = [
+  "今天6月28號，早上起床空腹血糖105，早餐吃兩顆水煮蛋跟無糖豆漿，中午吃雞腿便當沒吃飯，下午騎腳踏車40分鐘，晚上體重77.5公斤。",
+  "6月28日。空腹血糖105。早餐兩顆蛋。無糖豆漿一杯。騎腳踏車30分鐘。體重77.5公斤。",
+  "今天血糖105，早餐吃蛋跟豆漿。對了，中午沒吃飯只有吃菜。下午有騎車，大概40分鐘吧。晚上量體重77.5公斤。",
+  "今天精神不錯，起床先量血糖105。早餐吃得很簡單，兩顆蛋配無糖豆漿。下午去騎腳踏車流了一些汗，希望血糖能慢慢降下來。"
+].map((example, index) => ({
+  key: `home-example-${index + 1}`,
+  label: boundDisplayText(`範例 ${index + 1}`, 20),
+  text: boundDisplayText(example, maxDisplayDetailTextLength)
+}));
+
 export function transcriptReviewPreflightPassedCopy() {
   return boundDisplayText("已通過本機長度與數字密度檢查；下一步才會送出 parser 請求。", maxDisplayDetailTextLength);
 }

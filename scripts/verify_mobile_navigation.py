@@ -2438,12 +2438,6 @@ def main() -> int:
             ("guided home tagline", "想說什麼就說什麼"),
             ("guided home tagline cue style", "styles.homeTaglineCue"),
             ("guided home tagline row style", "styles.homeTaglineRow"),
-            ("guided home direction time", "{ icon: \"🕒\", label: \"時間\" }"),
-            ("guided home direction glucose", "{ icon: \"🩸\", label: \"血糖\" }"),
-            ("guided home direction food", "{ icon: \"🍽️\", label: \"飲食\" }"),
-            ("guided home direction exercise", "{ icon: \"🏃\", label: \"運動\" }"),
-            ("guided home direction medication", "{ icon: \"💊\", label: \"用藥紀錄\" }"),
-            ("guided home direction body status", "{ icon: \"😊\", label: \"身體狀況\" }"),
             ("guided home info icon style", "styles.homeGuidanceInfoIcon"),
             ("guided home info icon text", "<Text style={styles.homeGuidanceInfoIconText}>i</Text>"),
             ("guided home info row style", "styles.homeGuidanceInfoRow"),
@@ -2493,6 +2487,17 @@ def main() -> int:
             ("parse success refreshes quota", "void loadVoiceQuota(account.id);"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("guided home direction time config", "{ icon: \"🕒\", label: \"時間\" }"),
+            ("guided home direction glucose config", "{ icon: \"🩸\", label: \"血糖\" }"),
+            ("guided home direction food config", "{ icon: \"🍽️\", label: \"飲食\" }"),
+            ("guided home direction exercise config", "{ icon: \"🏃\", label: \"運動\" }"),
+            ("guided home direction medication config", "{ icon: \"💊\", label: \"用藥紀錄\" }"),
+            ("guided home direction body status config", "{ icon: \"😊\", label: \"身體狀況\" }"),
+            ("guided home examples config", "export const homeSpeechExamples = ["),
+            ("guided home first speech example", "今天6月28號，早上起床空腹血糖105"),
+        ):
+            _assert_contains(label, recording_copy_content, marker)
         today_home_block = _today_home_render_block(content)
         if today_home_block.count("<Pressable") != 1:
             raise AssertionError("Today/Home render block must contain exactly one Pressable mic control.")

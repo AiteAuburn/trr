@@ -38,7 +38,7 @@
   - `recordDisplay.ts`：daily section definitions, daily-record section display shaping, AI candidate and rejected-event display shaping, record payload labels, record time/date labels, shared Today/History record-list display item shaping, record detail display item shaping, and manual-record confirmation display shaping.
   - `recordEditTransforms.ts`：manual-record type config, record edit field type, form option config, max-length bounds, empty edit fields, validation, record payload-to-edit-field transforms, and edit-field-to-payload transforms.
   - `recordSaveTransforms.ts`：pending-record save metadata sanitizing and client save batch-id generation.
-  - `recordingCopy.ts`：recording / transcript-review bounded status messages, transcript validation, and display copy.
+  - `recordingCopy.ts`：Home guidance static direction/example config, recording / transcript-review bounded status messages, transcript validation, and display copy.
   - `recordWorkflowCopy.ts`：parser model readiness, parser / AI review / AI save-confirm / AI remove-confirm / manual-record confirmation / record-detail return / daily-record leave guard / AI save / AI candidate bounded copy and status messages.
   - `recordStatusCopy.ts`：record sync / edit / update / delete-confirm / delete / record-result destination / manual-create bounded copy and status messages.
   - `authStatusCopy.ts`：backend reconnect / dev reset / auth session bounded status messages.
@@ -110,13 +110,14 @@ Verification:
 
 ### Slice 2: Static Screen/Menu Config
 
-Status: done; visual-smoke route normalization helpers, Settings/Auth/Tutorial static config, Subscription comparison config, and manual-record type/form option config are also extracted.
+Status: done; visual-smoke route normalization helpers, Home guidance direction/example config, Settings/Auth/Tutorial static config, Subscription comparison config, and manual-record type/form option config are also extracted.
 
 Scope:
 
 - Extract `screenChrome`, `menuScreens`, `visualSmokeRouteJumps`, and future-module display config.
 - Extract debug-only visual-smoke initial route normalization and deep-link route parsing.
 - Extract Settings / Auth provider / Account Security / Subscription / Privacy static preview rows and Tutorial step config.
+- Extract Home guidance direction/example config.
 - Extract Subscription comparison row config.
 - Extract manual-record type, glucose unit/timing, and meal-type option config.
 - Keep normal menu limited to 今日錄音、歷史紀錄、基本分析、設定.
@@ -130,7 +131,7 @@ Verification:
 
 ### Slice 3: Status/Copy Helpers
 
-Status: started; recording / transcript-review copy/status, transcript validation, parser model readiness, parser / AI review / AI save-confirm / AI remove-confirm / manual-record confirmation / record-detail return / daily-record leave guard / AI save / AI candidate, record sync / edit / CRUD / delete-confirm / result destination, auth / backend session, native model debug labels/accessibility, report / voice quota / source display, first-version Today summary copy, first-version core labels/accessibility copy, destination-aware return labels, shared header/recording/primary-tab accessibility copy, shared busy/clear action status, first-version flow and save-success / AI-save-failure navigation status, history, analysis no-data/boundary, settings active-profile display, settings voice quota minute formatting/warning/usage/helper copy, settings model/quota/reminder/privacy, subscription plan/status labels, plan/status summary display copy, membership trial-days display copy, account identity display, subscription/account-security, and settings subscription section labels extracted.
+Status: started; Home guidance direction/example copy config, recording / transcript-review copy/status, transcript validation, parser model readiness, parser / AI review / AI save-confirm / AI remove-confirm / manual-record confirmation / record-detail return / daily-record leave guard / AI save / AI candidate, record sync / edit / CRUD / delete-confirm / result destination, auth / backend session, native model debug labels/accessibility, report / voice quota / source display, first-version Today summary copy, first-version core labels/accessibility copy, destination-aware return labels, shared header/recording/primary-tab accessibility copy, shared busy/clear action status, first-version flow and save-success / AI-save-failure navigation status, history, analysis no-data/boundary, settings active-profile display, settings voice quota minute formatting/warning/usage/helper copy, settings model/quota/reminder/privacy, subscription plan/status labels, plan/status summary display copy, membership trial-days display copy, account identity display, subscription/account-security, and settings subscription section labels extracted.
 
 Scope:
 
