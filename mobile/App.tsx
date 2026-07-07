@@ -134,6 +134,7 @@ import {
   storeEmptySearchDisplayItem,
   storeLocalBoundaryCopy,
   storePreviewBoundaryCopy,
+  storeProductDisplayItem,
   storeProducts,
   storeRedeemableFulfillmentCopy,
   yearReviewAiEncouragementCopy,
@@ -1267,30 +1268,6 @@ function achievementUnlockDisplayDate(value?: string | null) {
     return boundDisplayText("解鎖時間格式無法顯示", maxDisplayTextLength);
   }
   return boundDisplayText(`解鎖於 ${formatLocalDateInput(parsed)}`, maxDisplayTextLength);
-}
-
-function storeProductDisplayItem(value: StoreProduct) {
-  const title = boundDisplayText(value.title || "商品", maxDisplayTextLength);
-  const rewardStatus = value.rewardStatus ?? "preview";
-  return {
-    id: boundIdentifier(value.id),
-    category: value.category,
-    badge: value.badge ? boundDisplayText(value.badge, 24) : "",
-    title,
-    description: boundDisplayText(value.description || "尚未設定商品說明。", maxDisplayDetailTextLength),
-    pointsCost: boundDisplayText(value.pointsCost || "點數未設定", 40),
-    icon: boundDisplayText(value.icon || "品", 4),
-    rewardStatus,
-    actionAccessibilityLabel: boundDisplayText(
-      rewardStatus === "redeemable" ? `兌換${title}` : `查看${title}兌換狀態`,
-      maxDisplayTextLength
-    ),
-    actionStatus: boundUiMessage(
-      rewardStatus === "redeemable"
-        ? `${title} 可用社群點數兌換；${storeRedeemableFulfillmentCopy(value.category)}`
-        : `${title} 目前只顯示點數兌換預覽；點數扣抵、庫存、結帳、訂單與 entitlement 寫入尚未啟用。`
-    )
-  };
 }
 
 function mobileFoodCategoryFromApi(value: string): FoodCommunityCategory {

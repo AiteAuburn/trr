@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1173: Extract Store product display helper
+
+Status: done
+
+Summary:
+
+- Moved the Store product display item helper from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept product title/description/point bounds, reward-status handling, action accessibility labels, action status copy, Store product filtering, backend reward mapping, redemption handlers, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so Store product display ownership is guarded in `mobile/futureModuleDisplay.ts`, while Store handlers, API endpoints, and render bindings remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Store product display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1172: Extract Store preview product config
 
 Status: done

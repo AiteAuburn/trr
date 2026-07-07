@@ -6,6 +6,7 @@ const maxDisplayDetailTextLength = 240;
 const maxIdentifierTextLength = 128;
 const maxMobileCountValue = 1_000_000;
 const maxListItems = 12;
+const maxUiMessageLength = 300;
 
 export type FutureModuleCard = {
   id: string;
@@ -181,6 +182,10 @@ function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);
 }
 
+function boundUiMessage(value: string) {
+  return value.slice(0, maxUiMessageLength);
+}
+
 function boundIdentifier(value: string) {
   return value.slice(0, maxIdentifierTextLength);
 }
@@ -276,6 +281,30 @@ export function storeCategoryDisplayItem(value: { id: StoreCategory; label: stri
     value: value.id,
     label,
     accessibilityLabel: boundDisplayText(`切換商城分類：${label}，不建立訂單或付款`, maxDisplayDetailTextLength)
+  };
+}
+
+export function storeProductDisplayItem(value: StoreProduct) {
+  const title = boundDisplayText(value.title || "商品", maxDisplayTextLength);
+  const rewardStatus = value.rewardStatus ?? "preview";
+  return {
+    id: boundIdentifier(value.id),
+    category: value.category,
+    badge: value.badge ? boundDisplayText(value.badge, 24) : "",
+    title,
+    description: boundDisplayText(value.description || "尚未設定商品說明。", maxDisplayDetailTextLength),
+    pointsCost: boundDisplayText(value.pointsCost || "點數未設定", 40),
+    icon: boundDisplayText(value.icon || "品", 4),
+    rewardStatus,
+    actionAccessibilityLabel: boundDisplayText(
+      rewardStatus === "redeemable" ? `兌換${title}` : `查看${title}兌換狀態`,
+      maxDisplayTextLength
+    ),
+    actionStatus: boundUiMessage(
+      rewardStatus === "redeemable"
+        ? `${title} 可用社群點數兌換；${storeRedeemableFulfillmentCopy(value.category)}`
+        : `${title} 目前只顯示點數兌換預覽；點數扣抵、庫存、結帳、訂單與 entitlement 寫入尚未啟用。`
+    )
   };
 }
 
