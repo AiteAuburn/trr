@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1128: Extract subscription plan display copy
+
+Status: done
+
+Summary:
+
+- Extracted subscription plan display helper from `mobile/App.tsx` into `mobile/subscriptionCopy.ts`.
+- Kept voice quota state, subscription status rendering, membership status rows, report boundary rows, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so subscription plan display helper ownership guards inspect `mobile/subscriptionCopy.ts`, while render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover Subscription plan display copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1127: Extract settings quota helper copy
 
 Status: done

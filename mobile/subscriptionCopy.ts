@@ -10,6 +10,10 @@ function boundUiMessage(value: string) {
   return value.slice(0, maxUiMessageLength);
 }
 
+type SubscriptionPlanDisplaySource = {
+  plan_code?: string | null;
+};
+
 export function planDisplayName(planCode?: string) {
   if (planCode === "trial") {
     return "試用版";
@@ -34,6 +38,10 @@ export function subscriptionStatusLabel(status?: string) {
     return "已到期";
   }
   return "尚未載入";
+}
+
+export function quotaPlanDisplayText(quota: SubscriptionPlanDisplaySource | null, fallback = "額度尚未載入") {
+  return boundDisplayText(quota ? planDisplayName(quota.plan_code ?? undefined) : fallback, 80);
 }
 
 export function accountSecurityProviderBoundaryCopy() {

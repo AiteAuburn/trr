@@ -4186,6 +4186,8 @@ def main() -> int:
             ("subscription active status copy", "有效"),
             ("subscription cancelled status copy", "已取消"),
             ("subscription expired status copy", "已到期"),
+            ("subscription quota plan helper", "function quotaPlanDisplayText(quota: SubscriptionPlanDisplaySource | null, fallback = \"額度尚未載入\")"),
+            ("subscription quota fallback copy", "額度尚未載入"),
         ):
             _assert_contains(label, subscription_copy_content, marker)
         for label, marker in (

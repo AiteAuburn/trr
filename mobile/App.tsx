@@ -442,6 +442,7 @@ import {
   accountSecuritySessionBoundaryCopy,
   planDisplayName,
   profileNoActionBoundaryCopy,
+  quotaPlanDisplayText,
   settingsSubscriptionSectionLabels,
   subscriptionCtaBoundaryCopy,
   subscriptionManagementIntroCopy,
@@ -2494,10 +2495,6 @@ function doctorShareAccountBoundaryText(account: Account | null) {
 
 function accountPublicDisplayNameText(account: Account | null) {
   return account ? accountDisplayNameDisplayText(account) : boundDisplayText("尚未設定");
-}
-
-function quotaPlanDisplayText(quota: VoiceQuota | null, fallback = "額度尚未載入") {
-  return boundDisplayText(quota ? planDisplayName(quota.plan_code) : fallback, 80);
 }
 
 function subscriptionStatusSummaryText(quota: VoiceQuota | null, trialDays: number | null, fallback: string) {
