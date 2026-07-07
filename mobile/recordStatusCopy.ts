@@ -1,4 +1,6 @@
 const maxUiMessageLength = 300;
+const maxDisplayTextLength = 120;
+const maxDisplayDetailTextLength = 240;
 const maxMobileCountValue = 1_000_000;
 
 function clampNumber(value: number, min: number, max: number) {
@@ -10,6 +12,10 @@ function clampNumber(value: number, min: number, max: number) {
 
 function boundUiMessage(value: string) {
   return value.slice(0, maxUiMessageLength);
+}
+
+function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
+  return value.slice(0, maxLength);
 }
 
 function safeUiError(error: unknown, fallback: string) {
@@ -97,6 +103,32 @@ export function recordDeleteFailureStatusMessage(error: unknown) {
 
 export function recordDeleteSummaryMessage(count: number) {
   return boundUiMessage(`已刪除 ${clampNumber(count, 0, maxMobileCountValue)} 筆紀錄`);
+}
+
+export function deleteConfirmIntroCopy() {
+  return boundDisplayText(
+    "刪除後會從目前清單移除；目前不保留本機復原副本。若 backend 已同步，請以後端狀態為準。",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function deleteConfirmRecordMetaCopy(dateTimeLabel: string, sourceLabel: string) {
+  return boundDisplayText(
+    `${boundDisplayText(dateTimeLabel, 80)} · ${boundDisplayText(sourceLabel, 80)}`,
+    maxDisplayDetailTextLength
+  );
+}
+
+export function deleteConfirmSubmitLabel(isBusy: boolean) {
+  return boundDisplayText(isBusy ? "刪除中..." : "確認刪除", maxDisplayTextLength);
+}
+
+export function deleteConfirmReadyStatusMessage() {
+  return boundUiMessage("請確認是否刪除這筆紀錄；按下確認刪除前不會送出 delete request。");
+}
+
+export function deleteConfirmReturnStatusMessage() {
+  return boundUiMessage("已取消刪除；紀錄保留，已返回記錄詳情。");
 }
 
 export function manualRecordCreateUnavailableStatusMessage(message: string) {

@@ -172,6 +172,11 @@ import {
   tutorialRecordEntryStatusMessage
 } from "./recordWorkflowCopy";
 import {
+  deleteConfirmIntroCopy,
+  deleteConfirmReadyStatusMessage,
+  deleteConfirmRecordMetaCopy,
+  deleteConfirmReturnStatusMessage,
+  deleteConfirmSubmitLabel,
   manualRecordCreateFailureStatusMessage,
   manualRecordCreateProgressStatusMessage,
   manualRecordCreateSuccessStatusMessage,
@@ -2916,32 +2921,6 @@ function recordingEffectiveLimitSeconds(quota: VoiceQuota | null) {
     );
   }
   return mobileSingleRecordingLimitSeconds;
-}
-
-function deleteConfirmIntroCopy() {
-  return boundDisplayText(
-    "刪除後會從目前清單移除；目前不保留本機復原副本。若 backend 已同步，請以後端狀態為準。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function deleteConfirmRecordMetaCopy(dateTimeLabel: string, sourceLabel: string) {
-  return boundDisplayText(
-    `${boundDisplayText(dateTimeLabel, 80)} · ${boundDisplayText(sourceLabel, 80)}`,
-    maxDisplayDetailTextLength
-  );
-}
-
-function deleteConfirmSubmitLabel(isBusy: boolean) {
-  return boundDisplayText(isBusy ? "刪除中..." : "確認刪除", maxDisplayTextLength);
-}
-
-function deleteConfirmReadyStatusMessage() {
-  return boundUiMessage("請確認是否刪除這筆紀錄；按下確認刪除前不會送出 delete request。");
-}
-
-function deleteConfirmReturnStatusMessage() {
-  return boundUiMessage("已取消刪除；紀錄保留，已返回記錄詳情。");
 }
 
 function recordEditIntroCopy() {

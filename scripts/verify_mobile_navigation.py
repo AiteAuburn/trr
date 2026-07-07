@@ -16,6 +16,7 @@ RECORD_BOUNDS_PATH = REPO_ROOT / "mobile" / "recordBounds.ts"
 DAILY_TRANSCRIPT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dailyTranscriptTransforms.ts"
 RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
 RECORD_WORKFLOW_COPY_PATH = REPO_ROOT / "mobile" / "recordWorkflowCopy.ts"
+RECORD_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "recordStatusCopy.ts"
 NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
 HISTORY_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "historyScreenData.ts"
@@ -1207,6 +1208,7 @@ def main() -> int:
     daily_transcript_content = DAILY_TRANSCRIPT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     recording_copy_content = RECORDING_COPY_PATH.read_text(encoding="utf-8")
     record_workflow_copy_content = RECORD_WORKFLOW_COPY_PATH.read_text(encoding="utf-8")
+    record_status_copy_content = RECORD_STATUS_COPY_PATH.read_text(encoding="utf-8")
     native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
     first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
     history_screen_data_content = HISTORY_SCREEN_DATA_PATH.read_text(encoding="utf-8")
@@ -2795,6 +2797,17 @@ def main() -> int:
             ("record delete disabled state", "accessibilityState={{ disabled: isBusy }}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("delete confirm intro copy helper", "function deleteConfirmIntroCopy()"),
+            ("delete confirm record meta copy helper", "function deleteConfirmRecordMetaCopy(dateTimeLabel: string, sourceLabel: string)"),
+            ("delete confirm submit label helper", "function deleteConfirmSubmitLabel(isBusy: boolean)"),
+            ("delete confirm ready status helper", "function deleteConfirmReadyStatusMessage()"),
+            ("delete confirm return status helper", "function deleteConfirmReturnStatusMessage()"),
+            ("delete confirm intro copy", "刪除後會從目前清單移除"),
+            ("delete confirm no request copy", "按下確認刪除前不會送出 delete request"),
+            ("delete confirm cancel status copy", "已取消刪除；紀錄保留"),
+        ):
+            _assert_contains(label, record_status_copy_content, marker)
         for label, marker in (
             ("minimal home recording seconds helper", "function homeRecordingSecondaryHint(isRecording: boolean, elapsedSeconds: number)"),
             ("minimal home secondary hint", "放開即結束"),

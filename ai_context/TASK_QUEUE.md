@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1109: Extract delete-confirm copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted formal record delete-confirm intro, record metadata, submit-label, ready status, and return status helpers from `mobile/App.tsx` into `mobile/recordStatusCopy.ts`.
+- Kept delete-confirm render, delete handlers, backend delete request path, record-detail return path, UI copy text, and first-version navigation unchanged.
+- Updated the navigation verifier to read `mobile/recordStatusCopy.ts` and guard delete-confirm helper ownership there, while delete-confirm render and handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover delete-confirm copy/status boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1108: Extract manual-record and return status helpers
 
 Status: done
