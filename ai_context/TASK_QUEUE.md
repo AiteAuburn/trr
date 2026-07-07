@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1103: Extract AI review and save-confirm copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted AI review empty-state, intro, low-confidence, rejected-event, backend-required, save-confirm intro, save-confirm ready/return status, and save-confirm submit-label helpers from `mobile/App.tsx` into `mobile/recordWorkflowCopy.ts`.
+- Kept AI review render, rejected-event display assembly, daily-record draft state, candidate edit/remove handlers, parser requests, backend save flow, UI copy text, and navigation unchanged.
+- Updated the navigation verifier so AI review/save-confirm copy ownership guards inspect `mobile/recordWorkflowCopy.ts`, while render, handler, and daily-record save-flow guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover the AI review / save-confirm copy boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1102: Extract AI rejected-event reason label helper
 
 Status: done

@@ -15,6 +15,7 @@ RECORD_EDIT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "recordEditTransforms.ts"
 RECORD_BOUNDS_PATH = REPO_ROOT / "mobile" / "recordBounds.ts"
 DAILY_TRANSCRIPT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dailyTranscriptTransforms.ts"
 RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
+RECORD_WORKFLOW_COPY_PATH = REPO_ROOT / "mobile" / "recordWorkflowCopy.ts"
 NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
 HISTORY_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "historyScreenData.ts"
@@ -1205,6 +1206,7 @@ def main() -> int:
     record_bounds_content = RECORD_BOUNDS_PATH.read_text(encoding="utf-8")
     daily_transcript_content = DAILY_TRANSCRIPT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     recording_copy_content = RECORDING_COPY_PATH.read_text(encoding="utf-8")
+    record_workflow_copy_content = RECORD_WORKFLOW_COPY_PATH.read_text(encoding="utf-8")
     native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
     first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
     history_screen_data_content = HISTORY_SCREEN_DATA_PATH.read_text(encoding="utf-8")
@@ -2600,7 +2602,6 @@ def main() -> int:
             "export const dailyRecordSectionDefinitions: DailyRecordSectionDefinition[] = [",
         )
         for label, marker in (
-            ("daily record one-day summary copy", "AI 已整理成今天唯一的每日紀錄草稿"),
             ("daily record summary title", "<Text style={styles.previewModeBadge}>AI今日摘要</Text>"),
             ("daily record transcript title", "<Text style={styles.label}>今日錄音文字</Text>"),
             ("daily record transcript handler", "function openTodayTranscriptText()"),
@@ -2656,10 +2657,28 @@ def main() -> int:
             ("daily record fixed save dock render", "{isDailyRecordFixedSaveVisible && preview ? ("),
             ("daily record fixed save dock style", "styles.fixedSaveBarDock"),
             ("daily record fixed save bar", "styles.fixedSaveBar"),
-            ("daily record save label", "? \"了解提醒並儲存今日紀錄\""),
             ("daily record category blank copy", "沒有提到的欄位保持空白"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("AI review no-candidate title helper", "function aiReviewNoCandidateTitleCopy()"),
+            ("AI review no-candidate body helper", "function aiReviewNoCandidateBodyCopy()"),
+            ("AI review no-candidate boundary helper", "function aiReviewNoCandidateBoundaryCopy()"),
+            ("AI review no-preview title helper", "function aiReviewNoPreviewTitleCopy()"),
+            ("AI review no-preview body helper", "function aiReviewNoPreviewBodyCopy()"),
+            ("AI review intro helper", "function aiReviewIntroCopy()"),
+            ("AI review low-confidence helper", "function aiReviewLowConfidenceCopy()"),
+            ("AI review rejected-events helper", "function aiReviewRejectedEventsCopy()"),
+            ("AI review rejected reason helper", "function aiReviewRejectedReasonCopy(reasonLabel: string)"),
+            ("AI review backend-required helper", "function aiReviewBackendRequiredCopy()"),
+            ("AI save confirm intro helper", "function aiSaveConfirmIntroCopy()"),
+            ("AI save confirm ready status helper", "function aiSaveConfirmReadyStatusMessage()"),
+            ("AI save confirm return status helper", "function aiSaveConfirmReturnStatusMessage()"),
+            ("AI save confirm submit label helper", "function aiSaveConfirmSubmitLabel(isBusy: boolean, isBlockedByBackend: boolean, hasWarnings: boolean)"),
+            ("daily record one-day summary copy", "AI 已整理成今天唯一的每日紀錄草稿"),
+            ("daily record save warning label", "? \"了解提醒並儲存今日紀錄\""),
+        ):
+            _assert_contains(label, record_workflow_copy_content, marker)
         for label, marker in (
             ("daily record same-day merge helper", "function mergeSameDayParsePreviewDraft("),
             ("daily record same-day merge key current", "const currentKey = dailyRecordKeyFromRecords(current.records);"),
