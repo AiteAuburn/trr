@@ -15,6 +15,38 @@
 
 ## 2026-07-07
 
+### T1111 extract core first-version flow labels
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/firstVersionFlowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted the core first-version flow label/accessibility map from `mobile/App.tsx` into `mobile/firstVersionFlowCopy.ts` as `coreFlowSectionLabels()`.
+- Kept all Today / Record / transcript review / AI review / save result / history / detail / edit / analysis / detailed-report render bindings, UI copy text, navigation, parser requests, and backend request paths unchanged.
+- Updated the navigation verifier so core flow label ownership guards inspect `mobile/firstVersionFlowCopy.ts`, while render binding and disabled-state guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover first-version core labels/accessibility copy boundaries.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1110 extract record-edit and result destination status helpers
 
 類型：mobile / refactor / verifier / docs

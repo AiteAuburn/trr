@@ -1773,6 +1773,9 @@ def main() -> int:
             ("save success detail accessibility label", 'saveSuccessDetailAccessibility: boundDisplayText("查看剛儲存紀錄詳情，不重送 save request", maxDisplayDetailTextLength)'),
             ("save success unsaved accessibility label", 'saveSuccessProcessUnsavedAccessibility: boundDisplayText("處理未儲存 AI 候選，不自動重試儲存", maxDisplayDetailTextLength)'),
             ("save success today accessibility label", 'saveSuccessReturnTodayAccessibility: boundDisplayText("回今日紀錄，只查看目前已載入清單", maxDisplayDetailTextLength)'),
+        ):
+            _assert_contains(label, first_version_flow_copy_content, marker)
+        for label, marker in (
             ("save success manual continue accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.saveSuccessManualContinueAccessibility}"),
             ("save success record entry accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.saveSuccessRecordEntryAccessibility}"),
             ("save success detail accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.saveSuccessDetailAccessibility}"),
@@ -1921,6 +1924,9 @@ def main() -> int:
         for label, marker in (
             ("AI candidate preview edit return accessibility label", 'previewEditReturnAccessibility: boundDisplayText("取消候選修改並返回 AI 確認，不寫入正式紀錄", maxDisplayDetailTextLength)'),
             ("AI candidate preview edit apply accessibility label", 'previewEditApplyAccessibility: boundDisplayText("套用未儲存候選修改，不送 backend save request", maxDisplayDetailTextLength)'),
+        ):
+            _assert_contains(label, first_version_flow_copy_content, marker)
+        for label, marker in (
             ("AI candidate preview edit return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.previewEditReturnAccessibility}"),
             ("AI candidate preview edit apply accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.previewEditApplyAccessibility}"),
             ("AI candidate preview edit disabled state", "accessibilityState={{ disabled: Boolean(previewRecordEditValidationError) }}"),
@@ -2584,6 +2590,9 @@ def main() -> int:
             ("core next organize accessibility label", 'nextOrganizeAccessibility: boundDisplayText("前往文字確認，尚未送出 AI 整理", maxDisplayDetailTextLength)'),
             ("core text record accessibility label", 'textRecordAccessibility: boundDisplayText("前往文字記錄輸入，不呼叫 AI 或寫入資料", maxDisplayDetailTextLength)'),
             ("core analysis accessibility label", 'viewAnalysisAccessibility: boundDisplayText("查看基本分析，只使用已載入紀錄", maxDisplayDetailTextLength)'),
+        ):
+            _assert_contains(label, first_version_flow_copy_content, marker)
+        for label, marker in (
             ("core rerecord accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.rerecordAccessibility}"),
             ("core recording text accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.useRecordingTextAccessibility}"),
             ("core sample accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.fillSampleAccessibility}"),
@@ -2603,6 +2612,9 @@ def main() -> int:
             ("confirmation remove accessibility label", 'confirmRemoveAccessibility: boundDisplayText("確認移除未儲存候選，不呼叫刪除 API", maxDisplayDetailTextLength)'),
             ("confirmation failure return accessibility label", 'returnSaveConfirmAccessibility: boundDisplayText("返回儲存確認，不自動重試 backend save", maxDisplayDetailTextLength)'),
             ("confirmation transcript parse accessibility label", 'submitTranscriptParseAccessibility: boundDisplayText("送出文字整理，僅在 backend 和模型 ready 時呼叫 parser", maxDisplayDetailTextLength)'),
+        ):
+            _assert_contains(label, first_version_flow_copy_content, marker)
+        for label, marker in (
             ("confirmation return edit accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.returnEditAccessibility}"),
             ("confirmation enter save accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.enterSaveConfirmAccessibility}"),
             ("confirmation return text accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.returnTextConfirmAccessibility}"),
@@ -2760,6 +2772,7 @@ def main() -> int:
             "</ScrollView>\n      {isDailyRecordFixedSaveVisible && preview ? (",
         )
         for label, marker in (
+            ("core flow section labels helper", "function coreFlowSectionLabels()"),
             ("record delete success history accessibility label", 'deleteSuccessHistoryAccessibility: boundDisplayText("前往歷史紀錄，只查看已載入清單，不重送 delete request", maxDisplayDetailTextLength)'),
             ("record result return accessibility label", 'recordResultReturnAccessibility: boundDisplayText("返回紀錄頁面，只切換畫面，不重送 backend request", maxDisplayDetailTextLength)'),
             ("record updated detail accessibility label", 'updatedRecordDetailAccessibility: boundDisplayText("查看更新後紀錄詳情，不重送 update request", maxDisplayDetailTextLength)'),
@@ -2777,6 +2790,9 @@ def main() -> int:
             ("record delete submit accessibility label", 'recordDeleteSubmitAccessibility: boundDisplayText("確認刪除正式紀錄，送 backend delete request 與 audit", maxDisplayDetailTextLength)'),
             ("record edit return accessibility label", 'recordEditReturnAccessibility: boundDisplayText("取消編輯並返回詳情，不送 update request", maxDisplayDetailTextLength)'),
             ("record update submit accessibility label", 'recordUpdateSubmitAccessibility: boundDisplayText("儲存修改，送 backend update request 與 audit", maxDisplayDetailTextLength)'),
+        ):
+            _assert_contains(label, first_version_flow_copy_content, marker)
+        for label, marker in (
             ("delete success history accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.deleteSuccessHistoryAccessibility}"),
             ("record result return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordResultReturnAccessibility}"),
             ("updated record detail accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.updatedRecordDetailAccessibility}"),
@@ -3063,13 +3079,17 @@ def main() -> int:
             ("history cursor created_at query", "before_created_at: cursorRecord.created_at"),
             ("history load more handler", "async function loadMoreRecords()"),
             ("history load more availability", "const canLoadMoreRecords ="),
-            ("history load more accessibility label", "historyLoadMoreAccessibility: boundDisplayText(\"使用 cursor 載入更早紀錄，不呼叫 AI 或修改資料\", maxDisplayDetailTextLength)"),
             ("history daily summary table render", "historyDailySummaryDisplayItems.map((item) =>"),
             ("history selected daily summary render", "selectedHistoryDailySummary.summaryText"),
             ("history structured section render", "selectedHistoryDailySectionItems.map((section) =>"),
             ("history raw records render", "selectedHistoryRawDisplayItems.map((item) =>"),
         ):
             _assert_contains(label, content, marker)
+        _assert_contains(
+            "history load more accessibility label",
+            first_version_flow_copy_content,
+            'historyLoadMoreAccessibility: boundDisplayText("使用 cursor 載入更早紀錄，不呼叫 AI 或修改資料", maxDisplayDetailTextLength)',
+        )
         _assert_contains(
             "history detail mode display item",
             history_screen_data_content,
@@ -3414,6 +3434,9 @@ def main() -> int:
             ("report return analysis accessibility label", 'reportReturnAnalysisAccessibility: boundDisplayText("返回基本分析，不重新查詢報告", maxDisplayDetailTextLength)'),
             ("report manual accessibility label", 'reportManualAccessibility: boundDisplayText("從詳細報告改用手動新增，不呼叫 AI 或寫入資料", maxDisplayDetailTextLength)'),
             ("report today accessibility label", 'reportReturnTodayAccessibility: boundDisplayText("從詳細報告回今日紀錄，不重新查詢 backend", maxDisplayDetailTextLength)'),
+        ):
+            _assert_contains(label, first_version_flow_copy_content, marker)
+        for label, marker in (
             ("analysis manual accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.analysisManualAccessibility}"),
             ("analysis today accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.analysisReturnTodayAccessibility}"),
             ("analysis detailed report accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.analysisDetailedReportAccessibility}"),

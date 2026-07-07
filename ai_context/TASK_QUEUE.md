@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1111: Extract core first-version flow labels
+
+Status: done
+
+Summary:
+
+- Extracted the core first-version flow label/accessibility map from `mobile/App.tsx` into `mobile/firstVersionFlowCopy.ts` as `coreFlowSectionLabels()`.
+- Kept all Today / Record / transcript review / AI review / save result / history / detail / edit / analysis / detailed-report render bindings, UI copy text, navigation, parser requests, and backend request paths unchanged.
+- Updated the navigation verifier so core flow label ownership guards inspect `mobile/firstVersionFlowCopy.ts`, while render binding and disabled-state guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover first-version core labels/accessibility copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1110: Extract record-edit and result destination status helpers
 
 Status: done
