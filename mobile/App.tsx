@@ -187,6 +187,10 @@ import {
   recordDeleteSuccessStatusMessage,
   recordDeleteSummaryMessage,
   recordDeleteUnavailableStatusMessage,
+  recordEditCancelStatusMessage,
+  recordEditIntroCopy,
+  recordEditOpenStatusMessage,
+  recordResultDestinationStatusMessage,
   recordSyncFailureStatusMessage,
   recordSyncInitialStatusMessage,
   recordSyncLoadingStatusMessage,
@@ -2921,36 +2925,6 @@ function recordingEffectiveLimitSeconds(quota: VoiceQuota | null) {
     );
   }
   return mobileSingleRecordingLimitSeconds;
-}
-
-function recordEditIntroCopy() {
-  return boundDisplayText(
-    "修改以下內容，然後儲存。欄位會轉成後端結構化 payload。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function recordEditOpenStatusMessage() {
-  return boundUiMessage("正在編輯這筆紀錄；按下儲存修改前不會送出 update request。");
-}
-
-function recordEditCancelStatusMessage() {
-  return boundUiMessage("已取消編輯；正式紀錄未變更，已返回記錄詳情。");
-}
-
-function recordResultDestinationStatusMessage(kind: "delete" | "update", target: AppScreen) {
-  const kindLabel = kind === "delete" ? "刪除完成" : "更新完成";
-  const targetLabel =
-    target === "today"
-      ? "今日紀錄"
-      : target === "history"
-        ? "歷史紀錄"
-        : target === "analysis"
-          ? "基本分析"
-          : target === "recordDetail"
-            ? "記錄詳情"
-            : "指定頁面";
-  return boundUiMessage(`已從${kindLabel}前往${targetLabel}；不會重新送出 backend request 或呼叫 AI。`);
 }
 
 function coreFlowSectionLabels() {

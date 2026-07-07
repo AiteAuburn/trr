@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1110: Extract record-edit and result destination status helpers
+
+Status: done
+
+Summary:
+
+- Extracted record-edit intro, open/cancel status, and delete/update result destination status helpers from `mobile/App.tsx` into `mobile/recordStatusCopy.ts`.
+- Kept record-edit render, edit field state, update/delete destination handlers, backend update/delete request paths, UI copy text, and first-version navigation unchanged.
+- Updated the navigation verifier so record-edit and result destination helper ownership guards inspect `mobile/recordStatusCopy.ts`, while record-edit render and handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover record-edit copy/status and record-result destination status boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1109: Extract delete-confirm copy helpers
 
 Status: done

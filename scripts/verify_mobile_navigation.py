@@ -2806,6 +2806,13 @@ def main() -> int:
             ("delete confirm intro copy", "刪除後會從目前清單移除"),
             ("delete confirm no request copy", "按下確認刪除前不會送出 delete request"),
             ("delete confirm cancel status copy", "已取消刪除；紀錄保留"),
+            ("record edit intro copy helper", "function recordEditIntroCopy()"),
+            ("record edit open status helper", "function recordEditOpenStatusMessage()"),
+            ("record edit cancel status helper", "function recordEditCancelStatusMessage()"),
+            ("record result destination status helper", 'function recordResultDestinationStatusMessage(kind: "delete" | "update", target: AppScreen)'),
+            ("record edit intro copy", "欄位會轉成後端結構化 payload"),
+            ("record edit no update copy", "按下儲存修改前不會送出 update request"),
+            ("record result destination no retry copy", "不會重新送出 backend request 或呼叫 AI"),
         ):
             _assert_contains(label, record_status_copy_content, marker)
         for label, marker in (
