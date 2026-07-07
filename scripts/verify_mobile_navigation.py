@@ -2985,8 +2985,6 @@ def main() -> int:
             ("history synced cloud label", "已同步"),
             ("history raw source status", "sourceStatusLabel: boundDisplayText(hasSourceText ? \"原始逐字稿\" : \"僅結構化\", 40)"),
             ("history raw fallback copy", "尚無原始逐字稿；此筆紀錄只保留結構化資料。"),
-            ("daily section time detail label helper", "function dailyRecordTimeDetailLabel(recordType: string)"),
-            ("daily section meal time label", "用餐時間"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(
@@ -3005,6 +3003,11 @@ def main() -> int:
             "function mergeRecordsByCursorOrder(current: RecordItem[], incoming: RecordItem[])",
         )
         for label, marker in (
+            ("daily section time detail label helper", "function dailyRecordTimeDetailLabel(recordType: string)"),
+            ("daily section entry display item helper", "function dailyRecordEntryDisplayItem(record: PendingRecord, index: number)"),
+            ("daily section display item builder", "function buildDailyRecordSectionDisplayItems(records: PendingRecord[])"),
+            ("daily section entry management label", "可編輯或刪除"),
+            ("daily section meal time label", "用餐時間"),
             ("daily section glucose context label", "測量情境"),
             ("daily section glucose value label", "血糖值"),
             ("daily section exercise duration label", "運動時長"),

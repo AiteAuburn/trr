@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1098: Extract daily-record section display helpers
+
+Status: done
+
+Summary:
+
+- Extracted daily-record time-detail labels, per-entry display item shaping, and daily-record section display item building from `mobile/App.tsx` into `mobile/recordDisplay.ts`.
+- Kept daily-record confirmation render, entry menu/edit/delete handlers, History section render, preview state, UI copy, navigation, and backend save flow unchanged.
+- Updated the navigation verifier so daily-record section display helper ownership guards inspect `mobile/recordDisplay.ts`, while daily-record render and History section guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the daily-record section display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1097: Extract same-day preview merge transform
 
 Status: done

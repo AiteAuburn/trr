@@ -1,6 +1,6 @@
 # 糖錄錄 Refactor Roadmap
 
-最後更新：2026-07-06
+最後更新：2026-07-07
 
 文件定位：本文件只規劃 mobile/backend 架構整理，不新增產品功能、不改 UI/UX 規格。使用者可見行為仍以 `ai_context/UI_UX_SPEC.md` 為準；任務狀態以 `ai_context/TASK_QUEUE.md` 與 `ai_context/IMPLEMENTATION_LOG.md` 追蹤。
 
@@ -30,7 +30,7 @@
   - `modelStorage.ts`：本機模型清單與下載狀態。
   - `nativeLocalModels.ts`：native Whisper / Llama bridge。
   - `navigationConfig.ts`：`AppScreen` route union、primary screens、MVP flow、screen chrome、first-version menu 與 visual-smoke route jump config。
-  - `recordDisplay.ts`：daily section definitions, record payload labels, record time/date labels, shared Today/History record-list display item shaping, record detail display item shaping, and manual-record confirmation display shaping.
+  - `recordDisplay.ts`：daily section definitions, daily-record section display shaping, record payload labels, record time/date labels, shared Today/History record-list display item shaping, record detail display item shaping, and manual-record confirmation display shaping.
   - `recordEditTransforms.ts`：record edit field type, max-length bounds, empty edit fields, validation, record payload-to-edit-field transforms, and edit-field-to-payload transforms.
   - `recordingCopy.ts`：recording / transcript-review bounded status messages and display copy.
   - `recordWorkflowCopy.ts`：parser / AI save / AI candidate bounded status messages.
@@ -144,7 +144,7 @@ Verification:
 
 ### Slice 5: First-Version Screen Components
 
-Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, and daily-record reorganization copy/status boundaries extracted.
+Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, and daily-record section display boundaries extracted.
 
 Scope:
 

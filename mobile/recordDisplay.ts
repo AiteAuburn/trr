@@ -1,9 +1,10 @@
-import type { RecordItem } from "./recordBounds";
+import type { PendingRecord, RecordItem } from "./recordBounds";
 
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
 const maxIdentifierTextLength = 128;
 const maxListItems = 12;
+const maxMobilePreviewRecords = 20;
 
 export type DailyRecordSectionId = "glucose" | "meal" | "exercise" | "weight" | "medication" | "note";
 
@@ -66,6 +67,13 @@ export function boundDisplayText(value: string, maxLength = maxDisplayTextLength
 
 export function boundIdentifier(value: string) {
   return value.slice(0, maxIdentifierTextLength);
+}
+
+function clampNumber(value: number, min: number, max: number) {
+  if (!Number.isFinite(value)) {
+    return min;
+  }
+  return Math.min(Math.max(value, min), max);
 }
 
 export function textValue(value: unknown) {
@@ -193,6 +201,70 @@ export function recordTimeDisplay(value?: string) {
     }),
     40
   );
+}
+
+export function dailyRecordTimeDetailLabel(recordType: string) {
+  if (recordType === "glucose" || recordType === "weight" || recordType === "body_measurement") {
+    return "測量時間";
+  }
+  if (recordType === "meal") {
+    return "用餐時間";
+  }
+  if (recordType === "exercise") {
+    return "開始時間";
+  }
+  if (recordType === "medication") {
+    return "用藥時間／情境";
+  }
+  return "時間";
+}
+
+export function dailyRecordEntryDisplayItem(record: PendingRecord, index: number) {
+  const recordType = boundIdentifier(record.record_type);
+  const typeLabel = boundDisplayText(recordTypeLabel(recordType), 80);
+  const timeLabel = boundDisplayText(recordTimeDisplay(record.occurred_at), 40);
+  const payloadSummary = boundDisplayText(displayPayload(recordType, record.payload_json), maxDisplayDetailTextLength);
+  return {
+    key: `daily-${recordType}-${clampNumber(index, 0, maxMobilePreviewRecords)}`,
+    index: clampNumber(index, 0, maxMobilePreviewRecords),
+    typeLabel,
+    timeLabel,
+    payloadSummary,
+    detailRows: [
+      {
+        label: dailyRecordTimeDetailLabel(recordType),
+        value: timeLabel
+      },
+      ...recordPayloadDetailRows(recordType, record.payload_json)
+    ].map((row) => ({
+      label: boundDisplayText(row.label, 40),
+      value: boundDisplayText(row.value, maxDisplayDetailTextLength)
+    })),
+    manageLabel: boundDisplayText("⋯", 4),
+    accessibilityLabel: boundDisplayText(
+      `管理第 ${clampNumber(index + 1, 1, maxMobilePreviewRecords)} 筆${typeLabel}，可編輯或刪除`,
+      maxDisplayDetailTextLength
+    ),
+    editAccessibilityLabel: boundDisplayText(`編輯每日紀錄中的${typeLabel}`, maxDisplayDetailTextLength),
+    removeAccessibilityLabel: boundDisplayText(`刪除每日紀錄中的${typeLabel}`, maxDisplayDetailTextLength)
+  };
+}
+
+export function buildDailyRecordSectionDisplayItems(records: PendingRecord[]) {
+  return dailyRecordSectionDefinitions.map((definition) => {
+    const entries = records
+      .map((record, index) => ({ record, index }))
+      .filter(({ record }) => definition.acceptedRecordTypes.includes(record.record_type))
+      .map(({ record, index }) => dailyRecordEntryDisplayItem(record, index));
+    return {
+      ...definition,
+      title: boundDisplayText(definition.title, 80),
+      icon: boundDisplayText(definition.icon, 4),
+      emptyCopy: boundDisplayText(definition.emptyCopy, maxDisplayDetailTextLength),
+      countLabel: boundDisplayText(`${clampNumber(entries.length, 0, maxMobilePreviewRecords)} 筆`, 20),
+      entries
+    };
+  });
 }
 
 export function recordListDisplayItem(record: RecordItem, keyPrefix = "record") {
