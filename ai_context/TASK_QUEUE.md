@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1106: Extract transcript-review copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted transcript-review intro, pre-parse guidance, sample warning, and preflight-passed copy helpers from `mobile/App.tsx` into `mobile/recordingCopy.ts`.
+- Kept transcript-review render, transcript draft state, parser preflight, parser submit handler, manual fallback, UI copy text, navigation, and backend parser flow unchanged.
+- Updated the navigation verifier so transcript-review copy helper ownership guards inspect `mobile/recordingCopy.ts`, while transcript-review handler and render guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover transcript-review copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1105: Extract save-result navigation status helpers
 
 Status: done

@@ -103,6 +103,28 @@ export function transcriptClearedStatusMessage() {
   return boundUiMessage("已清空目前文字，可回到記錄頁重新輸入。");
 }
 
+export function transcriptReviewIntroCopy() {
+  return boundDisplayText("確認目前輸入或本機 Whisper 轉出的紀錄文字，若有錯誤可直接修改。", maxDisplayDetailTextLength);
+}
+
+export function transcriptReviewPreParseGuidanceCopy() {
+  return boundDisplayText(
+    "確認後，AI 會幫你整理成血糖、飲食與運動紀錄；範例文字不會送 parser。",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function transcriptReviewSampleWarningCopy() {
+  return boundDisplayText(
+    "目前是範例文字；請改成自己的紀錄內容後再整理，避免不必要的 parser / LLM 成本。",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function transcriptReviewPreflightPassedCopy() {
+  return boundDisplayText("已通過本機長度與數字密度檢查；下一步才會送出 parser 請求。", maxDisplayDetailTextLength);
+}
+
 export function recordingIdlePreviewCopy() {
   return boundDisplayText("放開後保留本機音檔；轉文字需接 Whisper 或改用下方文字輸入", maxDisplayDetailTextLength);
 }

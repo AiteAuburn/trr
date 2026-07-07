@@ -114,7 +114,7 @@ Verification:
 
 ### Slice 3: Status/Copy Helpers
 
-Status: started; recording / transcript-review, parser / AI review / AI save-confirm / daily-record leave guard / AI save / AI candidate, record sync / CRUD, auth / backend session, native model debug, report / voice quota, first-version flow and save-success / AI-save-failure navigation status, history, analysis, settings, subscription/account-security, and settings subscription section labels extracted.
+Status: started; recording / transcript-review copy/status, parser / AI review / AI save-confirm / daily-record leave guard / AI save / AI candidate, record sync / CRUD, auth / backend session, native model debug, report / voice quota, first-version flow and save-success / AI-save-failure navigation status, history, analysis, settings, subscription/account-security, and settings subscription section labels extracted.
 
 Scope:
 
@@ -144,7 +144,7 @@ Verification:
 
 ### Slice 5: First-Version Screen Components
 
-Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, AI candidate/rejected-event display, AI review/save-confirm copy, daily-record leave guard copy/status, save-success / AI-save-failure navigation status, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, and daily-record section display boundaries extracted.
+Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, AI candidate/rejected-event display, transcript-review copy, AI review/save-confirm copy, daily-record leave guard copy/status, save-success / AI-save-failure navigation status, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, and daily-record section display boundaries extracted.
 
 Scope:
 

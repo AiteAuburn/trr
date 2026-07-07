@@ -2466,6 +2466,15 @@ def main() -> int:
             "function recordingElapsedSecondsCopy(elapsedSeconds: number)",
         )
         for label, marker in (
+            ("transcript review intro copy helper", "function transcriptReviewIntroCopy()"),
+            ("transcript review pre-parse guidance helper", "function transcriptReviewPreParseGuidanceCopy()"),
+            ("transcript review sample warning helper", "function transcriptReviewSampleWarningCopy()"),
+            ("transcript review preflight passed helper", "function transcriptReviewPreflightPassedCopy()"),
+            ("transcript review intro copy", "確認目前輸入或本機 Whisper 轉出的紀錄文字"),
+            ("transcript review sample warning copy", "避免不必要的 parser / LLM 成本"),
+        ):
+            _assert_contains(label, recording_copy_content, marker)
+        for label, marker in (
             ("minimal home no quick-entry rail", "styles.quickEntryRail"),
             ("minimal home no quick-entry map", "quickEntryModeDisplayItemsForRender.map"),
             ("minimal home no text input", "<TextInput"),

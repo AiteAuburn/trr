@@ -107,6 +107,10 @@ import {
   transcriptClearedStatusMessage,
   transcriptReturnEditStatusMessage,
   transcriptReviewBackStatusMessage,
+  transcriptReviewIntroCopy,
+  transcriptReviewPreflightPassedCopy,
+  transcriptReviewPreParseGuidanceCopy,
+  transcriptReviewSampleWarningCopy,
   transcriptReviewReadyStatusMessage
 } from "./recordingCopy";
 import {
@@ -2918,28 +2922,6 @@ function aiRemoveConfirmBoundaryCopy(isDailyRecordDelete = false) {
 function aiRemoveConfirmSourceCopy(confidencePercent: number) {
   const boundedPercent = clampNumber(confidencePercent, 0, 100);
   return boundDisplayText(`信心 ${boundedPercent}% · source: AI candidate`, maxDisplayDetailTextLength);
-}
-
-function transcriptReviewIntroCopy() {
-  return boundDisplayText("確認目前輸入或本機 Whisper 轉出的紀錄文字，若有錯誤可直接修改。", maxDisplayDetailTextLength);
-}
-
-function transcriptReviewPreParseGuidanceCopy() {
-  return boundDisplayText(
-    "確認後，AI 會幫你整理成血糖、飲食與運動紀錄；範例文字不會送 parser。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function transcriptReviewSampleWarningCopy() {
-  return boundDisplayText(
-    "目前是範例文字；請改成自己的紀錄內容後再整理，避免不必要的 parser / LLM 成本。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function transcriptReviewPreflightPassedCopy() {
-  return boundDisplayText("已通過本機長度與數字密度檢查；下一步才會送出 parser 請求。", maxDisplayDetailTextLength);
 }
 
 function previewRecordEditBoundaryCopy() {
