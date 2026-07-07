@@ -18,14 +18,73 @@ export type FutureModuleCard = {
   target?: AppScreen;
 };
 
-type StoreFutureCategory = "coupons" | "supplementDiscounts" | "partnerProducts" | "specialBadges" | "memberBenefits";
+export type StoreCategory = "coupons" | "supplementDiscounts" | "partnerProducts" | "specialBadges" | "memberBenefits";
 
-export const storeCategories: Array<{ id: StoreFutureCategory; label: string }> = [
+export type StoreProduct = {
+  id: string;
+  category: StoreCategory;
+  badge?: string;
+  title: string;
+  description: string;
+  pointsCost: string;
+  icon: string;
+  rewardStatus?: "preview" | "redeemable";
+};
+
+export const storeCategories: Array<{ id: StoreCategory; label: string }> = [
   { id: "coupons", label: "優惠券" },
   { id: "supplementDiscounts", label: "保健食品折扣" },
   { id: "partnerProducts", label: "合作商品" },
   { id: "specialBadges", label: "特殊徽章" },
   { id: "memberBenefits", label: "特殊會員福利" }
+];
+
+export const storeProducts: StoreProduct[] = [
+  {
+    id: "coupon_50",
+    category: "coupons",
+    badge: "可兌換",
+    title: "合作通路 50 元優惠券",
+    description: "可用社群點數兌換優惠券；backend ready 時會扣點並立即發出 bounded coupon code。",
+    pointsCost: "100 點",
+    icon: "%"
+  },
+  {
+    id: "supplement_discount_10",
+    category: "supplementDiscounts",
+    badge: "可兌換",
+    title: "保健食品 9 折折扣",
+    description: "可用社群點數兌換保健食品折扣碼；文案不得宣稱醫療療效。",
+    pointsCost: "150 點",
+    icon: "折"
+  },
+  {
+    id: "partner_product_trial",
+    category: "partnerProducts",
+    badge: "可兌換",
+    title: "合作商品體驗兌換",
+    description: "可用社群點數建立合作商品兌換 reservation；商品目錄、庫存、出貨與客服仍需後續 fulfillment。",
+    pointsCost: "300 點",
+    icon: "合"
+  },
+  {
+    id: "annual_member_badge",
+    category: "specialBadges",
+    badge: "可兌換",
+    title: "特殊會員徽章",
+    description: "可用社群點數建立特殊徽章兌換 reservation；持有紀錄與展示仍需後續 fulfillment。",
+    pointsCost: "80 點",
+    icon: "章"
+  },
+  {
+    id: "member_benefit_pack",
+    category: "memberBenefits",
+    badge: "可兌換",
+    title: "特殊會員福利包",
+    description: "可用社群點數建立會員福利兌換 reservation；entitlement、到期與 rollback 仍需後續 fulfillment。",
+    pointsCost: "500 點",
+    icon: "福"
+  }
 ];
 
 export const futureModuleCards: FutureModuleCard[] = [
@@ -204,14 +263,14 @@ export function futurePreviewReturnStatusMessage(target: AppScreen) {
   return boundDisplayText(`已返回${targetLabel}；preview 不呼叫 backend、AI、Vision 或 payment。`, maxDisplayDetailTextLength);
 }
 
-export function storeRedeemableFulfillmentCopy(category: StoreFutureCategory): string {
+export function storeRedeemableFulfillmentCopy(category: StoreCategory): string {
   if (category === "coupons" || category === "supplementDiscounts") {
     return "送出後 backend 會扣點並立即發出優惠券或折扣碼。";
   }
   return "送出後 backend 會扣點並建立兌換 reservation，後續仍需 fulfillment。";
 }
 
-export function storeCategoryDisplayItem(value: { id: StoreFutureCategory; label: string }) {
+export function storeCategoryDisplayItem(value: { id: StoreCategory; label: string }) {
   const label = boundDisplayText(value.label || "分類", 60);
   return {
     value: value.id,

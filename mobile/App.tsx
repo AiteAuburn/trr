@@ -134,6 +134,7 @@ import {
   storeEmptySearchDisplayItem,
   storeLocalBoundaryCopy,
   storePreviewBoundaryCopy,
+  storeProducts,
   storeRedeemableFulfillmentCopy,
   yearReviewAiEncouragementCopy,
   yearReviewAiObservationCopy,
@@ -146,7 +147,9 @@ import {
   yearReviewRevokeShareButtonLabel,
   yearReviewShareButtonAccessibilityLabel,
   yearReviewShareButtonLabel,
-  type FutureModuleCard
+  type FutureModuleCard,
+  type StoreCategory,
+  type StoreProduct
 } from "./futureModuleDisplay";
 import {
   visualSmokeDemoPreview,
@@ -938,7 +941,6 @@ type AchievementApiSummary = {
   items: AchievementApiItem[];
 };
 type AchievementApiUnlock = AchievementApiItem;
-type StoreCategory = "coupons" | "supplementDiscounts" | "partnerProducts" | "specialBadges" | "memberBenefits";
 type FoodCommunityShare = {
   id: string;
   beforeGlucose: number;
@@ -977,17 +979,6 @@ type CommunityLeaderboardDisplaySection = {
   entries: CommunityLeaderboardDisplayEntry[];
   emptyCopy: string;
 };
-type StoreProduct = {
-  id: string;
-  category: StoreCategory;
-  badge?: string;
-  title: string;
-  description: string;
-  pointsCost: string;
-  icon: string;
-  rewardStatus?: "preview" | "redeemable";
-};
-
 type SaveEntryMethod = "ai" | "manual" | null;
 
 const achievementLevels = [10, 50, 100, 150, 200, 250];
@@ -1161,54 +1152,6 @@ const foodCommunityItems: FoodCommunityItem[] = [
       { id: "fiber-powder-1", beforeGlucose: 115, afterGlucose: 117, note: "依標示份量沖泡，不作療效判斷。" },
       { id: "fiber-powder-2", beforeGlucose: 126, afterGlucose: 128, note: "搭配正餐前飲用，僅作個人紀錄。" }
     ]
-  }
-];
-
-const storeProducts: StoreProduct[] = [
-  {
-    id: "coupon_50",
-    category: "coupons",
-    badge: "可兌換",
-    title: "合作通路 50 元優惠券",
-    description: "可用社群點數兌換優惠券；backend ready 時會扣點並立即發出 bounded coupon code。",
-    pointsCost: "100 點",
-    icon: "%"
-  },
-  {
-    id: "supplement_discount_10",
-    category: "supplementDiscounts",
-    badge: "可兌換",
-    title: "保健食品 9 折折扣",
-    description: "可用社群點數兌換保健食品折扣碼；文案不得宣稱醫療療效。",
-    pointsCost: "150 點",
-    icon: "折"
-  },
-  {
-    id: "partner_product_trial",
-    category: "partnerProducts",
-    badge: "可兌換",
-    title: "合作商品體驗兌換",
-    description: "可用社群點數建立合作商品兌換 reservation；商品目錄、庫存、出貨與客服仍需後續 fulfillment。",
-    pointsCost: "300 點",
-    icon: "合"
-  },
-  {
-    id: "annual_member_badge",
-    category: "specialBadges",
-    badge: "可兌換",
-    title: "特殊會員徽章",
-    description: "可用社群點數建立特殊徽章兌換 reservation；持有紀錄與展示仍需後續 fulfillment。",
-    pointsCost: "80 點",
-    icon: "章"
-  },
-  {
-    id: "member_benefit_pack",
-    category: "memberBenefits",
-    badge: "可兌換",
-    title: "特殊會員福利包",
-    description: "可用社群點數建立會員福利兌換 reservation；entitlement、到期與 rollback 仍需後續 fulfillment。",
-    pointsCost: "500 點",
-    icon: "福"
   }
 ];
 

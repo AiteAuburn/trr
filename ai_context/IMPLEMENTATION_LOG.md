@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1172 extract Store preview product config
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved Store future-module preview product types and fallback catalog config from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept fallback product IDs, category values, copy, point costs, Store product display behavior, backend reward mapping, redemption handlers, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so Store fallback product config ownership is guarded in `mobile/futureModuleDisplay.ts`, while Store handlers, API endpoints, and render bindings remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Store product preview config boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating future/debug-only display config and pure helpers before moving future preview renderers.
+
 ### T1171 extract Store category display config
 
 類型：mobile / refactor / verifier / docs
