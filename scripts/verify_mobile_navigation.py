@@ -27,6 +27,7 @@ ANALYSIS_METRIC_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisMetricTransfor
 ANALYSIS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "analysisScreenData.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
+SETTINGS_CHOICE_DISPLAY_PATH = REPO_ROOT / "mobile" / "settingsChoiceDisplay.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
 ACCOUNT_COPY_PATH = REPO_ROOT / "mobile" / "accountCopy.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
@@ -1222,6 +1223,7 @@ def main() -> int:
     analysis_screen_data_content = ANALYSIS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     settings_screen_data_content = SETTINGS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
+    settings_choice_display_content = SETTINGS_CHOICE_DISPLAY_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
     account_copy_content = ACCOUNT_COPY_PATH.read_text(encoding="utf-8")
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
@@ -3880,13 +3882,9 @@ def main() -> int:
             ("llm model settings option handler", "function selectSettingsLlmModelChoice(modelId: string)"),
             ("stt model settings option handler", "function selectSettingsSttModelChoice(modelId: string)"),
             ("downloaded whisper model display helper", "function downloadedWhisperModelDisplayItem(value: DownloadedModel)"),
-            ("profile settings display item helper", "function settingsProfileChoiceDisplayItem(profile: Profile)"),
-            ("model settings display item helper", 'function settingsModelChoiceDisplayItem(model: AiModelOption, kind: "LLM" | "STT")'),
             ("llm model settings display items", "const llmModelChoiceDisplayItems = useMemo("),
             ("stt model settings display items", "const sttModelChoiceDisplayItems = useMemo("),
             ("downloaded whisper model display items", "const downloadedWhisperModelChoiceItems = downloadedModels"),
-            ("profile settings option accessibility label", "`選擇照護對象：${label}；只切換本機 active profile，不寫入個資`"),
-            ("model settings option accessibility label", "`選擇${kind}模型：${label}；未啟用模型不可選，雲端 fallback 預設停用`"),
             ("downloaded whisper model accessibility label", "`選擇本機 Whisper 模型：${fileName}，只用於本機錄音轉文字`"),
             ("profile settings option press handler", "function pressSettingsProfileChoice(profile: (typeof profileChoiceDisplayItems)[number])"),
             ("llm model settings option press handler", "function pressSettingsLlmModelChoice(model: (typeof llmModelChoiceDisplayItems)[number])"),
@@ -4122,6 +4120,15 @@ def main() -> int:
             ("future preview secondary CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("settings model display label helper", "function modelOptionDisplayLabel(model: ModelChoiceDisplaySource)"),
+            ("settings model disabled copy", "（未啟用）"),
+            ("profile settings display item helper", "function settingsProfileChoiceDisplayItem(profile: ProfileChoiceDisplaySource)"),
+            ("profile settings option accessibility label", "`選擇照護對象：${label}；只切換本機 active profile，不寫入個資`"),
+            ("model settings display item helper", 'function settingsModelChoiceDisplayItem<T extends ModelChoiceDisplaySource>(model: T, kind: "LLM" | "STT")'),
+            ("model settings option accessibility label", "`選擇${kind}模型：${label}；未啟用模型不可選，雲端 fallback 預設停用`"),
+        ):
+            _assert_contains(label, settings_choice_display_content, marker)
         _assert_contains(
             "auth session management accessibility item",
             shared_display_items_content,

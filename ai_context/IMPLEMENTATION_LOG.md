@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1133 extract settings choice display helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/settingsChoiceDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted Settings profile choice, model choice, and disabled model label display helpers from `mobile/App.tsx` into `mobile/settingsChoiceDisplay.ts`.
+- Kept Settings render rows, profile/model selection handlers, native model download state, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so Settings choice display helper ownership guards inspect `mobile/settingsChoiceDisplay.ts`, while render and press bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers Settings profile/model choice display boundaries.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1132 extract shared bounded display item builders
 
 類型：mobile / refactor / verifier / docs

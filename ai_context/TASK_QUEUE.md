@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1133: Extract settings choice display helpers
+
+Status: done
+
+Summary:
+
+- Extracted Settings profile choice, model choice, and disabled model label display helpers from `mobile/App.tsx` into `mobile/settingsChoiceDisplay.ts`.
+- Kept Settings render rows, profile/model selection handlers, native model download state, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so Settings choice display helper ownership guards inspect `mobile/settingsChoiceDisplay.ts`, while render and press bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers Settings profile/model choice display boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1132: Extract shared bounded display item builders
 
 Status: done

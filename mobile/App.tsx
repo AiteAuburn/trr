@@ -456,6 +456,10 @@ import {
   type SettingsRow
 } from "./settingsScreenData";
 import {
+  settingsModelChoiceDisplayItem,
+  settingsProfileChoiceDisplayItem
+} from "./settingsChoiceDisplay";
+import {
   accountSecurityNoActionBoundaryCopy,
   accountSecurityProviderBoundaryCopy,
   accountSecurityReadinessBoundaryCopy,
@@ -2613,38 +2617,6 @@ function rankingPreviewBoundaryDisplayItem() {
 
 function rankingLocalPreviewBoundaryCopy() {
   return boundDisplayText("本機連續天數僅供自己查看；公開榜單只使用 backend 已聚合的 opt-in 社群統計。", maxDisplayDetailTextLength);
-}
-
-function modelOptionDisplayLabel(model: AiModelOption) {
-  const label = displayTextValue(model.label, 80);
-  return boundDisplayText(model.available ? label : `${label}（未啟用）`, 100);
-}
-
-function settingsProfileChoiceDisplayItem(profile: Profile) {
-  const label = boundDisplayText(profile.display_name);
-  return {
-    id: boundIdentifier(profile.id),
-    sourceId: profile.id,
-    label,
-    accessibilityLabel: boundDisplayText(
-      `選擇照護對象：${label}；只切換本機 active profile，不寫入個資`,
-      maxDisplayDetailTextLength
-    )
-  };
-}
-
-function settingsModelChoiceDisplayItem(model: AiModelOption, kind: "LLM" | "STT") {
-  const label = modelOptionDisplayLabel(model);
-  return {
-    ...model,
-    id: boundIdentifier(model.id),
-    sourceId: model.id,
-    label,
-    accessibilityLabel: boundDisplayText(
-      `選擇${kind}模型：${label}；未啟用模型不可選，雲端 fallback 預設停用`,
-      maxDisplayDetailTextLength
-    )
-  };
 }
 
 function reminderPreviewBoundaryDisplayItem() {
