@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1137: Extract parser model readiness copy
+
+Status: done
+
+Summary:
+
+- Extracted parser model unavailable/readiness message helper from `mobile/App.tsx` into `mobile/recordWorkflowCopy.ts`.
+- Kept selected LLM/STT model state, parser readiness gating, parser request path, UI copy text, navigation, AI behavior, and backend paths unchanged.
+- Updated the navigation verifier so parser model readiness copy ownership guards inspect `mobile/recordWorkflowCopy.ts`, while parser readiness usage remains checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 now also covers parser model readiness copy.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1136: Extract manual record type display helper
 
 Status: done

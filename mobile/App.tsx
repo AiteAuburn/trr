@@ -185,6 +185,7 @@ import {
   parserBackendUnavailableStatusMessage,
   parserFailureRecoveryMessage,
   parserFailureStatusMessage,
+  parserModelUnavailableText,
   parserModelUnavailableStatusMessage,
   parserProgressStatusMessage,
   parserSampleBlockedStatusMessage,
@@ -2352,22 +2353,6 @@ function protectedRequestHeaders(accountId: string, accessToken: string): Record
     return { "X-Account-Id": devAccountId };
   }
   return {};
-}
-
-function parserModelUnavailableText(llmModel: AiModelOption | null, sttModel: AiModelOption | null) {
-  if (!llmModel) {
-    return boundUiMessage("LLM 模型尚未載入");
-  }
-  if (!llmModel.available) {
-    return boundUiMessage(`${displayTextValue(llmModel.label, 80)} 尚未啟用`);
-  }
-  if (!sttModel) {
-    return boundUiMessage("STT 模型尚未載入");
-  }
-  if (!sttModel.available) {
-    return boundUiMessage(`${displayTextValue(sttModel.label, 80)} 尚未啟用`);
-  }
-  return "";
 }
 
 function basicReportRequestKey(

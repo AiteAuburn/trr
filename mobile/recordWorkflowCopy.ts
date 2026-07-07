@@ -20,12 +20,27 @@ function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);
 }
 
+function displayTextValue(value: unknown, maxLength = maxDisplayDetailTextLength) {
+  if (value === null || value === undefined) {
+    return "";
+  }
+  if (typeof value === "string") {
+    return boundDisplayText(value, maxLength);
+  }
+  return boundDisplayText(String(value), maxLength);
+}
+
 function safeUiError(error: unknown, fallback: string) {
   if (error instanceof Error && /^\S+ failed: \d{3}$/.test(error.message)) {
     return boundUiMessage(error.message);
   }
   return boundUiMessage(fallback);
 }
+
+type ParserModelAvailabilitySource = {
+  label: string;
+  available: boolean;
+};
 
 export function aiSaveUnavailableStatusMessage(message: string) {
   return boundUiMessage(`${message || "backend 尚未 ready"}；目前不會送出 AI 候選儲存請求。`);
@@ -77,6 +92,25 @@ export function aiPartialSaveSummaryMessage(savedCount: number, unsavedCount: nu
 
 export function parserBackendUnavailableStatusMessage(message: string) {
   return boundUiMessage(`${message || "backend 尚未 ready"}；目前不送出 parser 請求，避免無效重試與額外成本。`);
+}
+
+export function parserModelUnavailableText(
+  llmModel: ParserModelAvailabilitySource | null,
+  sttModel: ParserModelAvailabilitySource | null
+) {
+  if (!llmModel) {
+    return boundUiMessage("LLM 模型尚未載入");
+  }
+  if (!llmModel.available) {
+    return boundUiMessage(`${displayTextValue(llmModel.label, 80)} 尚未啟用`);
+  }
+  if (!sttModel) {
+    return boundUiMessage("STT 模型尚未載入");
+  }
+  if (!sttModel.available) {
+    return boundUiMessage(`${displayTextValue(sttModel.label, 80)} 尚未啟用`);
+  }
+  return "";
 }
 
 export function parserModelUnavailableStatusMessage(message: string) {
