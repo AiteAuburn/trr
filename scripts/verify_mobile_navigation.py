@@ -3000,6 +3000,8 @@ def main() -> int:
         ):
             _assert_contains(label, record_display_content, marker)
         for label, marker in (
+            ("manual record type config type", 'export type ManualRecordType = "glucose" | "meal" | "exercise" | "medication" | "note"'),
+            ("manual record type options config", "export const manualRecordTypes: Array<{ id: ManualRecordType; label: string }> = ["),
             ("record edit fields type", "export type RecordEditFields = {"),
             ("glucose unit option config", 'export const glucoseUnitOptions = ["mg/dL", "mmol/L"] as const'),
             ("glucose timing option config", "export const glucoseTimingOptions = ["),

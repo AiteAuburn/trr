@@ -56,10 +56,12 @@ import {
   emptyRecordEditFields,
   glucoseTimingOptions,
   glucoseUnitOptions,
+  manualRecordTypes,
   mealTypeOptions,
   recordEditFieldMaxLength,
   recordPayloadToEditFields,
   validateRecordForm,
+  type ManualRecordType,
   type RecordEditFields
 } from "./recordEditTransforms";
 import {
@@ -905,7 +907,6 @@ const futureModuleCards: FutureModuleCard[] = [
   }
 ];
 
-type ManualRecordType = "glucose" | "meal" | "exercise" | "medication" | "note";
 type AchievementCategory = "glucose" | "meal" | "exercise";
 type AchievementKind = "cumulative" | "streak";
 type FoodCommunityCategory =
@@ -1020,14 +1021,6 @@ function storeRedeemableFulfillmentCopy(category: StoreCategory): string {
 }
 
 type SaveEntryMethod = "ai" | "manual" | null;
-
-const manualRecordTypes: Array<{ id: ManualRecordType; label: string }> = [
-  { id: "glucose", label: "血糖" },
-  { id: "meal", label: "飲食" },
-  { id: "exercise", label: "運動" },
-  { id: "medication", label: "用藥" },
-  { id: "note", label: "備註" }
-];
 
 const achievementLevels = [10, 50, 100, 150, 200, 250];
 const achievementLevelStep = 50;

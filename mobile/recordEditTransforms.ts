@@ -1,6 +1,8 @@
 import { parseLocalDateTimeInput } from "./dateTimeTransforms";
 import { textValue } from "./recordDisplay";
 
+export type ManualRecordType = "glucose" | "meal" | "exercise" | "medication" | "note";
+
 export type RecordEditFields = {
   glucoseValue: string;
   glucoseUnit: string;
@@ -20,6 +22,14 @@ const maxFormTextLength = 160;
 const maxFormLongTextLength = 500;
 const maxFormJsonTextLength = 4000;
 const maxListItems = 12;
+
+export const manualRecordTypes: Array<{ id: ManualRecordType; label: string }> = [
+  { id: "glucose", label: "血糖" },
+  { id: "meal", label: "飲食" },
+  { id: "exercise", label: "運動" },
+  { id: "medication", label: "用藥" },
+  { id: "note", label: "備註" }
+];
 
 export const glucoseUnitOptions = ["mg/dL", "mmol/L"] as const;
 

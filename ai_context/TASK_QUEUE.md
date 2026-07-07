@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1159: Extract manual record type config
+
+Status: done
+
+Summary:
+
+- Extracted manual-record type union and static type options from `mobile/App.tsx` into `mobile/recordEditTransforms.ts`.
+- Kept manual-record type labels, bounded type display mapping, manual-record form render, selection handlers, payload transforms, UI copy, navigation, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so manual-record type config ownership guards inspect `mobile/recordEditTransforms.ts`, while render and display helper bindings remain checked in `mobile/App.tsx` and `mobile/sharedDisplayItems.ts`.
+- Updated the refactor roadmap to note the manual-record type config boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1158: Extract manual record form option config
 
 Status: done
