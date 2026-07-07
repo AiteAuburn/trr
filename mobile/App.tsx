@@ -406,7 +406,9 @@ import {
   activeProfileRelationshipText,
   advancedSettingsToggleLabel,
   backendReconnectButtonLabel,
+  captureVoiceQuotaCopy,
   formatVoiceMinutes,
+  isVoiceQuotaLow,
   membershipStatusReturnSubscriptionStatusMessage,
   menuReturnStatusMessage,
   modelRuntimeLabel,
@@ -1308,7 +1310,6 @@ const maxDevResetDeletedCountKeys = 20;
 const mobileRecordSyncLimit = 100;
 const maxMobileRecordCacheLimit = 500;
 const mobileReportQueryLimit = 500;
-const voiceQuotaLowWarningThresholdSeconds = 120;
 
 const tutorialSteps = [
   ["🎙", "按住說話", "按住首頁或記錄頁的大按鈕開始錄音預覽。"],
@@ -2389,20 +2390,6 @@ function yearReviewTargetYear(value: Date) {
 function nextYearReviewGenerationLabel(value: Date) {
   const nextYear = value.getMonth() === 0 && value.getDate() === 1 ? value.getFullYear() + 1 : value.getFullYear() + 1;
   return boundDisplayText(`每年 1 月 1 日自動產生前一年度回顧；下一次為 ${nextYear} 年 1 月 1 日`, maxDisplayDetailTextLength);
-}
-
-function captureVoiceQuotaCopy(quota: VoiceQuota | null) {
-  if (!quota) {
-    return "語音額度載入後，只有接近上限時才會提醒。";
-  }
-  if (isVoiceQuotaLow(quota)) {
-    return `今日錄音剩餘 ${formatVoiceMinutes(quota.remaining_seconds_today)}，請分段記錄或改用文字輸入。`;
-  }
-  return "今日錄音額度正常；接近上限 2 分鐘內才會顯示剩餘時間。";
-}
-
-function isVoiceQuotaLow(quota: VoiceQuota | null) {
-  return Boolean(quota && quota.remaining_seconds_today <= voiceQuotaLowWarningThresholdSeconds);
 }
 
 function pendingRecordForSave(record: PendingRecord): PendingRecord {

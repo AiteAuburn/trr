@@ -3,6 +3,7 @@ import type { AppScreen } from "./navigationConfig";
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
 const maxUiMessageLength = 300;
+const voiceQuotaLowWarningThresholdSeconds = 120;
 
 function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);
@@ -15,6 +16,10 @@ function boundUiMessage(value: string) {
 type ActiveProfileDisplaySource = {
   display_name?: string | null;
   relationship?: string | null;
+};
+
+type VoiceQuotaDisplaySource = {
+  remaining_seconds_today: number;
 };
 
 export function activeProfileLabelText(activeProfile: ActiveProfileDisplaySource | null, profileCount: number) {
@@ -40,6 +45,23 @@ export function formatVoiceMinutes(seconds: number) {
     return `${minutes} 分鐘`;
   }
   return `${minutes} 分 ${remainingSeconds} 秒`;
+}
+
+export function isVoiceQuotaLow(
+  quota: VoiceQuotaDisplaySource | null,
+  thresholdSeconds = voiceQuotaLowWarningThresholdSeconds
+) {
+  return Boolean(quota && quota.remaining_seconds_today <= thresholdSeconds);
+}
+
+export function captureVoiceQuotaCopy(quota: VoiceQuotaDisplaySource | null) {
+  if (!quota) {
+    return "語音額度載入後，只有接近上限時才會提醒。";
+  }
+  if (isVoiceQuotaLow(quota)) {
+    return `今日錄音剩餘 ${formatVoiceMinutes(quota.remaining_seconds_today)}，請分段記錄或改用文字輸入。`;
+  }
+  return "今日錄音額度正常；接近上限 2 分鐘內才會顯示剩餘時間。";
 }
 
 export function advancedSettingsToggleLabel(isExpanded: boolean) {

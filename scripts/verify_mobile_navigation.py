@@ -4126,6 +4126,12 @@ def main() -> int:
             ("voice minutes formatting helper", "function formatVoiceMinutes(seconds: number)"),
             ("voice minutes whole minute copy", "return `${minutes} 分鐘`;"),
             ("voice minutes seconds copy", "return `${minutes} 分 ${remainingSeconds} 秒`;"),
+            ("voice quota low helper", "function isVoiceQuotaLow("),
+            ("voice quota low threshold", "voiceQuotaLowWarningThresholdSeconds = 120"),
+            ("voice quota capture helper", "function captureVoiceQuotaCopy(quota: VoiceQuotaDisplaySource | null)"),
+            ("voice quota unloaded copy", "語音額度載入後，只有接近上限時才會提醒。"),
+            ("voice quota low copy", "請分段記錄或改用文字輸入"),
+            ("voice quota normal copy", "今日錄音額度正常；接近上限 2 分鐘內才會顯示剩餘時間。"),
         ):
             _assert_contains(label, settings_copy_content, marker)
         for label, marker in (
