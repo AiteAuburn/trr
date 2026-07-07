@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1104: Extract daily-record leave guard copy helpers
+
+Status: done
+
+Summary:
+
+- Extracted daily-record unsaved-leave guard title/body/question copy and prompt/cancel/confirm status messages from `mobile/App.tsx` into `mobile/recordWorkflowCopy.ts`.
+- Kept leave-guard state, header-back behavior, Android hardware-back behavior, modal render, button bindings, UI copy text, navigation, parser requests, and backend save flow unchanged.
+- Updated the navigation verifier so daily-record leave-guard copy/status ownership guards inspect `mobile/recordWorkflowCopy.ts`, while leave-guard state, Android back, render, and binding guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover the daily-record leave guard copy/status boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1103: Extract AI review and save-confirm copy helpers
 
 Status: done

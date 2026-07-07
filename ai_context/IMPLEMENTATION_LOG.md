@@ -15,6 +15,38 @@
 
 ## 2026-07-07
 
+### T1104 extract daily-record leave guard copy helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted daily-record unsaved-leave guard title/body/question copy and prompt/cancel/confirm status messages from `mobile/App.tsx` into `mobile/recordWorkflowCopy.ts`.
+- Kept leave-guard state, header-back behavior, Android hardware-back behavior, modal render, button bindings, UI copy text, navigation, parser requests, and backend save flow unchanged.
+- Updated the navigation verifier so daily-record leave-guard copy/status ownership guards inspect `mobile/recordWorkflowCopy.ts`, while leave-guard state, Android back, render, and binding guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover the daily-record leave guard copy/status boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1103 extract AI review and save-confirm copy helpers
 
 類型：mobile / refactor / verifier / docs

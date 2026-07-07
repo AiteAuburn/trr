@@ -175,6 +175,30 @@ export function aiSaveConfirmSubmitLabel(isBusy: boolean, isBlockedByBackend: bo
   );
 }
 
+export function dailyRecordLeaveGuardTitleCopy() {
+  return boundDisplayText("尚未儲存今天的紀錄", maxDisplayTextLength);
+}
+
+export function dailyRecordLeaveGuardBodyCopy() {
+  return boundDisplayText("離開後，今天的修改將不會保留。", maxDisplayDetailTextLength);
+}
+
+export function dailyRecordLeaveGuardQuestionCopy() {
+  return boundDisplayText("是否仍要離開？", maxDisplayTextLength);
+}
+
+export function dailyRecordLeaveGuardPromptStatusMessage() {
+  return boundUiMessage("尚未儲存今天的紀錄；請先選擇取消或離開。");
+}
+
+export function dailyRecordLeaveGuardCancelStatusMessage() {
+  return boundUiMessage("已取消離開；每日紀錄草稿仍保留在目前畫面。");
+}
+
+export function dailyRecordLeaveGuardConfirmStatusMessage() {
+  return boundUiMessage("已離開每日紀錄頁；未儲存草稿仍保留在 AI 確認流程。");
+}
+
 export function aiCandidateEditOpenStatusMessage() {
   return boundUiMessage("請確認 AI 整理的單筆紀錄");
 }

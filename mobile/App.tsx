@@ -140,6 +140,12 @@ import {
   aiSaveSuccessStatusMessage,
   aiSaveSuccessSummaryMessage,
   aiSaveUnavailableStatusMessage,
+  dailyRecordLeaveGuardBodyCopy,
+  dailyRecordLeaveGuardCancelStatusMessage,
+  dailyRecordLeaveGuardConfirmStatusMessage,
+  dailyRecordLeaveGuardPromptStatusMessage,
+  dailyRecordLeaveGuardQuestionCopy,
+  dailyRecordLeaveGuardTitleCopy,
   parserBackendUnavailableStatusMessage,
   parserFailureRecoveryMessage,
   parserFailureStatusMessage,
@@ -2886,30 +2892,6 @@ function recordingEffectiveLimitSeconds(quota: VoiceQuota | null) {
     );
   }
   return mobileSingleRecordingLimitSeconds;
-}
-
-function dailyRecordLeaveGuardTitleCopy() {
-  return boundDisplayText("尚未儲存今天的紀錄", maxDisplayTextLength);
-}
-
-function dailyRecordLeaveGuardBodyCopy() {
-  return boundDisplayText("離開後，今天的修改將不會保留。", maxDisplayDetailTextLength);
-}
-
-function dailyRecordLeaveGuardQuestionCopy() {
-  return boundDisplayText("是否仍要離開？", maxDisplayTextLength);
-}
-
-function dailyRecordLeaveGuardPromptStatusMessage() {
-  return boundUiMessage("尚未儲存今天的紀錄；請先選擇取消或離開。");
-}
-
-function dailyRecordLeaveGuardCancelStatusMessage() {
-  return boundUiMessage("已取消離開；每日紀錄草稿仍保留在目前畫面。");
-}
-
-function dailyRecordLeaveGuardConfirmStatusMessage() {
-  return boundUiMessage("已離開每日紀錄頁；未儲存草稿仍保留在 AI 確認流程。");
 }
 
 function aiSaveFailureBackAiReviewStatusMessage() {

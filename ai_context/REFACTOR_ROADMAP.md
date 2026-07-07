@@ -33,7 +33,7 @@
   - `recordDisplay.ts`：daily section definitions, daily-record section display shaping, AI candidate and rejected-event display shaping, record payload labels, record time/date labels, shared Today/History record-list display item shaping, record detail display item shaping, and manual-record confirmation display shaping.
   - `recordEditTransforms.ts`：record edit field type, max-length bounds, empty edit fields, validation, record payload-to-edit-field transforms, and edit-field-to-payload transforms.
   - `recordingCopy.ts`：recording / transcript-review bounded status messages and display copy.
-  - `recordWorkflowCopy.ts`：parser / AI review / AI save-confirm / AI save / AI candidate bounded copy and status messages.
+  - `recordWorkflowCopy.ts`：parser / AI review / AI save-confirm / daily-record leave guard / AI save / AI candidate bounded copy and status messages.
   - `recordStatusCopy.ts`：record sync / update / delete / manual-create bounded status messages.
   - `authStatusCopy.ts`：backend reconnect / dev reset / auth session bounded status messages.
   - `nativeStatusCopy.ts`：native model debug / local Whisper / local Llama / benchmark bounded status messages.
@@ -114,7 +114,7 @@ Verification:
 
 ### Slice 3: Status/Copy Helpers
 
-Status: started; recording / transcript-review, parser / AI review / AI save-confirm / AI save / AI candidate, record sync / CRUD, auth / backend session, native model debug, report / voice quota, first-version flow, history, analysis, settings, subscription/account-security, and settings subscription section labels extracted.
+Status: started; recording / transcript-review, parser / AI review / AI save-confirm / daily-record leave guard / AI save / AI candidate, record sync / CRUD, auth / backend session, native model debug, report / voice quota, first-version flow, history, analysis, settings, subscription/account-security, and settings subscription section labels extracted.
 
 Scope:
 
@@ -144,7 +144,7 @@ Verification:
 
 ### Slice 5: First-Version Screen Components
 
-Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, AI candidate/rejected-event display, AI review/save-confirm copy, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, and daily-record section display boundaries extracted.
+Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, AI candidate/rejected-event display, AI review/save-confirm copy, daily-record leave guard copy/status, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, and daily-record section display boundaries extracted.
 
 Scope:
 
