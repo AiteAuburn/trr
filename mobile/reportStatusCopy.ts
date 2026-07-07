@@ -1,7 +1,20 @@
 const maxUiMessageLength = 300;
+const maxDisplayTextLength = 80;
+const maxMobileCountValue = 9999;
 
 function boundUiMessage(value: string) {
   return value.slice(0, maxUiMessageLength);
+}
+
+function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
+  return value.slice(0, maxLength);
+}
+
+function clampNumber(value: number, min: number, max: number) {
+  if (!Number.isFinite(value)) {
+    return min;
+  }
+  return Math.min(Math.max(Math.round(value), min), max);
 }
 
 export function voiceQuotaUnavailableStatusMessage(message: string) {
@@ -62,4 +75,23 @@ export function analysisReportSuccessStatusMessage() {
 
 export function analysisReportFailureStatusMessage() {
   return boundUiMessage("backend 分析統計暫時無法載入，顯示 mobile 已同步紀錄摘要。");
+}
+
+export function reportSourceDisplayItem(report: unknown | null, localRecordCount: number, queryLimit: number) {
+  if (report) {
+    return {
+      label: boundDisplayText("Backend 報表", 24),
+      copy: boundUiMessage(`資料來自 /reports/basic，並套用 ${clampNumber(queryLimit, 0, maxMobileCountValue)} 筆查詢上限。`)
+    };
+  }
+  if (localRecordCount > 0) {
+    return {
+      label: boundDisplayText("本機摘要", 24),
+      copy: boundUiMessage("backend 報表暫未使用；目前只根據 mobile 已載入紀錄計算。")
+    };
+  }
+  return {
+    label: boundDisplayText("尚無資料", 24),
+    copy: boundUiMessage("目前沒有可分析的已載入紀錄；此頁只顯示空摘要。")
+  };
 }

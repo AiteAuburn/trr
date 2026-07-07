@@ -17,6 +17,7 @@ DAILY_TRANSCRIPT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dailyTranscriptTransf
 RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
 RECORD_WORKFLOW_COPY_PATH = REPO_ROOT / "mobile" / "recordWorkflowCopy.ts"
 RECORD_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "recordStatusCopy.ts"
+REPORT_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "reportStatusCopy.ts"
 NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
 HISTORY_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "historyScreenData.ts"
@@ -1209,6 +1210,7 @@ def main() -> int:
     recording_copy_content = RECORDING_COPY_PATH.read_text(encoding="utf-8")
     record_workflow_copy_content = RECORD_WORKFLOW_COPY_PATH.read_text(encoding="utf-8")
     record_status_copy_content = RECORD_STATUS_COPY_PATH.read_text(encoding="utf-8")
+    report_status_copy_content = REPORT_STATUS_COPY_PATH.read_text(encoding="utf-8")
     native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
     first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
     history_screen_data_content = HISTORY_SCREEN_DATA_PATH.read_text(encoding="utf-8")
@@ -2837,6 +2839,14 @@ def main() -> int:
             ("record result destination no retry copy", "不會重新送出 backend request 或呼叫 AI"),
         ):
             _assert_contains(label, record_status_copy_content, marker)
+        for label, marker in (
+            ("report source display helper", "function reportSourceDisplayItem(report: unknown | null, localRecordCount: number, queryLimit: number)"),
+            ("report source backend label", "Backend 報表"),
+            ("report source backend copy", "資料來自 /reports/basic"),
+            ("report source local fallback", "backend 報表暫未使用"),
+            ("report source empty fallback", "此頁只顯示空摘要"),
+        ):
+            _assert_contains(label, report_status_copy_content, marker)
         for label, marker in (
             ("minimal home recording seconds helper", "function homeRecordingSecondaryHint(isRecording: boolean, elapsedSeconds: number)"),
             ("minimal home secondary hint", "放開即結束"),

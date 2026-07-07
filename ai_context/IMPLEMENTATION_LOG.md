@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1117 extract report source display helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/reportStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted Analysis / detailed-report source display helper from `mobile/App.tsx` into `mobile/reportStatusCopy.ts`.
+- Kept report render bindings, backend bounded report request keys, local-record fallback, UI copy text, navigation, parser requests, and backend report request paths unchanged.
+- Updated the navigation verifier so report-source display helper ownership guards inspect `mobile/reportStatusCopy.ts`, while report render and handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover report-source display copy boundaries.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1116 extract native model debug labels
 
 類型：mobile / refactor / verifier / docs

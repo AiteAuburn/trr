@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1117: Extract report source display helper
+
+Status: done
+
+Summary:
+
+- Extracted Analysis / detailed-report source display helper from `mobile/App.tsx` into `mobile/reportStatusCopy.ts`.
+- Kept report render bindings, backend bounded report request keys, local-record fallback, UI copy text, navigation, parser requests, and backend report request paths unchanged.
+- Updated the navigation verifier so report-source display helper ownership guards inspect `mobile/reportStatusCopy.ts`, while report render and handler guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover report-source display copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1116: Extract native model debug labels
 
 Status: done

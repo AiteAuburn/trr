@@ -291,6 +291,7 @@ import {
   detailedReportResetStatusMessage,
   detailedReportSuccessStatusMessage,
   detailedReportUnavailableStatusMessage,
+  reportSourceDisplayItem,
   voiceQuotaInitialStatusMessage,
   voiceQuotaSyncFailureStatusMessage,
   voiceQuotaSyncSuccessStatusMessage,
@@ -2599,25 +2600,6 @@ function parserModelUnavailableText(llmModel: AiModelOption | null, sttModel: Ai
     return boundUiMessage(`${displayTextValue(sttModel.label, 80)} 尚未啟用`);
   }
   return "";
-}
-
-function reportSourceDisplayItem(report: BasicReport | null, localRecordCount: number, queryLimit: number) {
-  if (report) {
-    return {
-      label: boundDisplayText("Backend 報表", 24),
-      copy: boundUiMessage(`資料來自 /reports/basic，並套用 ${clampNumber(queryLimit, 0, maxMobileCountValue)} 筆查詢上限。`)
-    };
-  }
-  if (localRecordCount > 0) {
-    return {
-      label: boundDisplayText("本機摘要", 24),
-      copy: boundUiMessage("backend 報表暫未使用；目前只根據 mobile 已載入紀錄計算。")
-    };
-  }
-  return {
-    label: boundDisplayText("尚無資料", 24),
-    copy: boundUiMessage("目前沒有可分析的已載入紀錄；此頁只顯示空摘要。")
-  };
 }
 
 function basicReportRequestKey(
