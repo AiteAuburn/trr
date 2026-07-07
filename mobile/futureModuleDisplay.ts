@@ -163,6 +163,37 @@ export function selectedFutureModuleDisplayItem(value: FutureModuleCard | null) 
   };
 }
 
+export function futureModuleDetailBoundaryCopy() {
+  return boundDisplayText(
+    "這個頁面只整理 UI 入口、工程前置條件與資料安全邊界；目前不呼叫 API、不寫入資料、不啟動背景工作，也不呼叫 AI。",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function futureModuleImplementationOrderCopy() {
+  return boundDisplayText(
+    "實作順序建議：先完成 production auth、權限模型、schema/source 欄位與 audit trail，再開啟任何外部分享、排行榜、匯入或圖片分析功能。",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function futureModulesOpenStatusMessage() {
+  return boundDisplayText("已開啟未來擴充清單；預覽入口不呼叫 backend、AI、Vision 或 payment。", maxDisplayDetailTextLength);
+}
+
+export function futureModulesReturnMenuStatusMessage() {
+  return boundDisplayText("已從未來擴充返回功能選單；未來模組預覽不會寫入資料或呼叫 AI。", maxDisplayDetailTextLength);
+}
+
+export function futureModuleDetailReturnStatusMessage() {
+  return boundDisplayText("已返回未來擴充清單；未完成模組詳情只顯示本機預覽。", maxDisplayDetailTextLength);
+}
+
+export function futurePreviewReturnStatusMessage(target: AppScreen) {
+  const targetLabel = target === "menu" ? "功能選單" : target === "futureModules" ? "未來擴充" : "上一頁";
+  return boundDisplayText(`已返回${targetLabel}；preview 不呼叫 backend、AI、Vision 或 payment。`, maxDisplayDetailTextLength);
+}
+
 function futurePreviewBoundaryDisplayItem(badge: string, copy: string) {
   return {
     badge: boundDisplayText(badge, 40),

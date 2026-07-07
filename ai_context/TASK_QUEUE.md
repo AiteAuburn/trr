@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1169: Extract future-module detail and status copy
+
+Status: done
+
+Summary:
+
+- Moved future-module detail boundary copy, implementation-order copy, future-module open/return status messages, detail-return status, and preview-return status from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept copy text, bounded display behavior, call sites, hidden/debug-only routing, first-version menu destinations, future preview handlers, and screen layout unchanged.
+- Updated the navigation verifier so future-module detail/status copy ownership is guarded in `mobile/futureModuleDisplay.ts`, while handlers and render bindings remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the future-module detail/status copy boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1168: Extract future-module static card config
 
 Status: done
