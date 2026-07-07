@@ -18,7 +18,15 @@ export type FutureModuleCard = {
   target?: AppScreen;
 };
 
-type StoreFulfillmentCategory = "coupons" | "supplementDiscounts" | "partnerProducts" | "specialBadges" | "memberBenefits";
+type StoreFutureCategory = "coupons" | "supplementDiscounts" | "partnerProducts" | "specialBadges" | "memberBenefits";
+
+export const storeCategories: Array<{ id: StoreFutureCategory; label: string }> = [
+  { id: "coupons", label: "優惠券" },
+  { id: "supplementDiscounts", label: "保健食品折扣" },
+  { id: "partnerProducts", label: "合作商品" },
+  { id: "specialBadges", label: "特殊徽章" },
+  { id: "memberBenefits", label: "特殊會員福利" }
+];
 
 export const futureModuleCards: FutureModuleCard[] = [
   {
@@ -196,11 +204,20 @@ export function futurePreviewReturnStatusMessage(target: AppScreen) {
   return boundDisplayText(`已返回${targetLabel}；preview 不呼叫 backend、AI、Vision 或 payment。`, maxDisplayDetailTextLength);
 }
 
-export function storeRedeemableFulfillmentCopy(category: StoreFulfillmentCategory): string {
+export function storeRedeemableFulfillmentCopy(category: StoreFutureCategory): string {
   if (category === "coupons" || category === "supplementDiscounts") {
     return "送出後 backend 會扣點並立即發出優惠券或折扣碼。";
   }
   return "送出後 backend 會扣點並建立兌換 reservation，後續仍需 fulfillment。";
+}
+
+export function storeCategoryDisplayItem(value: { id: StoreFutureCategory; label: string }) {
+  const label = boundDisplayText(value.label || "分類", 60);
+  return {
+    value: value.id,
+    label,
+    accessibilityLabel: boundDisplayText(`切換商城分類：${label}，不建立訂單或付款`, maxDisplayDetailTextLength)
+  };
 }
 
 function futurePreviewBoundaryDisplayItem(badge: string, copy: string) {

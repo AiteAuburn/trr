@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1171: Extract Store category display config
+
+Status: done
+
+Summary:
+
+- Moved Store future-module category static config and the Store category display item helper from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept category IDs, labels, accessibility copy, selected-state behavior, Store search/filter behavior, backend category mapping, redemption handlers, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so Store category config/display ownership is guarded in `mobile/futureModuleDisplay.ts`, while Store selection handlers and render bindings remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Store category display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1170: Extract Store fulfillment copy helper
 
 Status: done

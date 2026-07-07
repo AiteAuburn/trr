@@ -125,6 +125,8 @@ import {
   selectedFutureModuleDisplayItem,
   storeCartButtonAccessibilityLabel,
   storeCartButtonLabel,
+  storeCategories,
+  storeCategoryDisplayItem,
   storeCartIntroCopy,
   storeCartReturnButtonLabel,
   storeCartUnavailableDisplayItem,
@@ -1162,14 +1164,6 @@ const foodCommunityItems: FoodCommunityItem[] = [
   }
 ];
 
-const storeCategories: Array<{ id: StoreCategory; label: string }> = [
-  { id: "coupons", label: "優惠券" },
-  { id: "supplementDiscounts", label: "保健食品折扣" },
-  { id: "partnerProducts", label: "合作商品" },
-  { id: "specialBadges", label: "特殊徽章" },
-  { id: "memberBenefits", label: "特殊會員福利" }
-];
-
 const storeProducts: StoreProduct[] = [
   {
     id: "coupon_50",
@@ -1575,15 +1569,6 @@ function authProviderPreviewDisplayItem(value: AuthProviderPreview) {
     actionStatus: boundUiMessage(
       `${item.title} 原生 provider callback 尚未接入；callback 拿到 id_token 後會走 /auth/oidc-login、SecureStore 與 session revoke 流程。`
     )
-  };
-}
-
-function storeCategoryDisplayItem(value: { id: StoreCategory; label: string }) {
-  const label = boundDisplayText(value.label || "分類", 60);
-  return {
-    value: value.id,
-    label,
-    accessibilityLabel: boundDisplayText(`切換商城分類：${label}，不建立訂單或付款`, maxDisplayDetailTextLength)
   };
 }
 
