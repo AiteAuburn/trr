@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1131: Extract account identity display copy
+
+Status: done
+
+Summary:
+
+- Extracted account display-name, email, login, public-name fallback, and doctor-share account boundary helpers from `mobile/App.tsx` into `mobile/accountCopy.ts`.
+- Kept auth/session state, SecureStore token handling, profile/account rendering, doctor-share boundary behavior, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so account identity display helper ownership guards inspect `mobile/accountCopy.ts`, while render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover Account identity display copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1130: Extract subscription status summary display copy
 
 Status: done

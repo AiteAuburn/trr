@@ -28,6 +28,7 @@ ANALYSIS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "analysisScreenData.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
+ACCOUNT_COPY_PATH = REPO_ROOT / "mobile" / "accountCopy.ts"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
@@ -1221,6 +1222,7 @@ def main() -> int:
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     settings_screen_data_content = SETTINGS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
+    account_copy_content = ACCOUNT_COPY_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
 
@@ -4169,6 +4171,20 @@ def main() -> int:
             ("privacy integration accessibility helper", "function privacyIntegrationAccessibilityLabel()"),
         ):
             _assert_contains(label, settings_copy_content, marker)
+        for label, marker in (
+            ("account display name helper", "function accountDisplayNameDisplayText(account: AccountDisplaySource | null)"),
+            ("account display name fallback copy", "尚未連線帳號"),
+            ("account email display helper", "function accountEmailDisplayValue(account: AccountDisplaySource | null)"),
+            ("account email fallback copy", "尚未取得登入識別"),
+            ("account login display helper", "function accountLoginDisplayValue(account: AccountDisplaySource | null)"),
+            ("account login display copy", "Email 登入・${account.email}"),
+            ("account public display helper", "function accountPublicDisplayNameText(account: AccountDisplaySource | null)"),
+            ("account public display fallback copy", "尚未設定"),
+            ("doctor share account boundary helper", "function doctorShareAccountBoundaryText(account: AccountDisplaySource | null)"),
+            ("doctor share connected copy", "已連線帳號；正式分享仍需 production auth、權限與授權碼流程。"),
+            ("doctor share disconnected copy", "尚未連線帳號；不可建立任何外部分享。"),
+        ):
+            _assert_contains(label, account_copy_content, marker)
         for label, marker in (
             ("auth refresh accessibility label", "refreshSessionAccessibility: boundDisplayText(\"刷新 session，使用 SecureStore refresh token rotation\", maxDisplayDetailTextLength)"),
             ("auth load sessions accessibility label", "loadSessionsAccessibility: boundDisplayText(\"載入 sessions，只顯示 bounded session metadata\", maxDisplayDetailTextLength)"),

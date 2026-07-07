@@ -79,6 +79,13 @@ import {
   type AppScreen
 } from "./navigationConfig";
 import {
+  accountDisplayNameDisplayText,
+  accountEmailDisplayValue,
+  accountLoginDisplayValue,
+  accountPublicDisplayNameText,
+  doctorShareAccountBoundaryText
+} from "./accountCopy";
+import {
   homeRecordingModelStatusCopy,
   homeRecordingPreviewBoundaryCopy,
   homeRecordingSecondaryHint,
@@ -2470,33 +2477,6 @@ function protectedRequestHeaders(accountId: string, accessToken: string): Record
     return { "X-Account-Id": devAccountId };
   }
   return {};
-}
-
-function accountDisplayNameDisplayText(account: Account | null) {
-  return boundDisplayText(account?.display_name ?? "尚未連線帳號");
-}
-
-function accountEmailDisplayValue(account: Account | null) {
-  return boundDisplayText(account?.email ?? "尚未取得登入識別", maxEmailTextLength);
-}
-
-function accountLoginDisplayValue(account: Account | null) {
-  return account?.email
-    ? boundDisplayText(`Email 登入・${account.email}`, maxDisplayDetailTextLength)
-    : boundDisplayText("尚未連線帳號");
-}
-
-function doctorShareAccountBoundaryText(account: Account | null) {
-  return boundDisplayText(
-    account
-      ? "已連線帳號；正式分享仍需 production auth、權限與授權碼流程。"
-      : "尚未連線帳號；不可建立任何外部分享。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function accountPublicDisplayNameText(account: Account | null) {
-  return account ? accountDisplayNameDisplayText(account) : boundDisplayText("尚未設定");
 }
 
 function parserModelUnavailableText(llmModel: AiModelOption | null, sttModel: AiModelOption | null) {
