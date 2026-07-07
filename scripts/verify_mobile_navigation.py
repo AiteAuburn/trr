@@ -31,6 +31,7 @@ SETTINGS_CHOICE_DISPLAY_PATH = REPO_ROOT / "mobile" / "settingsChoiceDisplay.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
 SUBSCRIPTION_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "subscriptionTransforms.ts"
 ACCOUNT_COPY_PATH = REPO_ROOT / "mobile" / "accountCopy.ts"
+ACCOUNT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "accountTransforms.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1228,6 +1229,7 @@ def main() -> int:
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
     subscription_transforms_content = SUBSCRIPTION_TRANSFORMS_PATH.read_text(encoding="utf-8")
     account_copy_content = ACCOUNT_COPY_PATH.read_text(encoding="utf-8")
+    account_transforms_content = ACCOUNT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -4246,6 +4248,14 @@ def main() -> int:
             ("doctor share disconnected copy", "尚未連線帳號；不可建立任何外部分享。"),
         ):
             _assert_contains(label, account_copy_content, marker)
+        for label, marker in (
+            ("account transform bound account helper", "function boundAccount<T extends AccountTransformSource>(value: T): T"),
+            ("account transform email bound", "email: boundDisplayText(value.email, maxEmailTextLength)"),
+            ("account transform profile helper", "function boundProfile<T extends ProfileTransformSource>(value: T): T"),
+            ("account transform relationship bound", "relationship: boundDisplayText(value.relationship, 40)"),
+            ("account transform profile list bound", "return value.slice(0, maxMobileProfiles).map(boundProfile)"),
+        ):
+            _assert_contains(label, account_transforms_content, marker)
         for label, marker in (
             ("auth refresh accessibility label", "refreshSessionAccessibility: boundDisplayText(\"刷新 session，使用 SecureStore refresh token rotation\", maxDisplayDetailTextLength)"),
             ("auth load sessions accessibility label", "loadSessionsAccessibility: boundDisplayText(\"載入 sessions，只顯示 bounded session metadata\", maxDisplayDetailTextLength)"),

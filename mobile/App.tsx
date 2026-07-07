@@ -505,6 +505,7 @@ import {
   localDateTimeToIso,
   startOfCurrentMonth
 } from "./dateTimeTransforms";
+import { boundAccount, boundProfiles } from "./accountTransforms";
 
 type Account = {
   id: string;
@@ -1323,7 +1324,6 @@ const maxDateInputLength = 10;
 const maxTimeInputLength = 5;
 const maxListItems = 12;
 const maxIdentifierTextLength = 128;
-const maxEmailTextLength = 160;
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
 const maxTranscriptTextLength = 1200;
@@ -1336,7 +1336,6 @@ const maxOidcIdTokenLength = 4096;
 const maxOidcNonceLength = 128;
 const maxDeviceFingerprintLength = 256;
 const maxUiMessageLength = 300;
-const maxMobileProfiles = 20;
 const maxMobileModelOptions = 30;
 const maxDownloadedModelRows = 20;
 const maxMobilePreviewRecords = 20;
@@ -1397,27 +1396,6 @@ function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
 
 function boundIdentifier(value: string) {
   return value.slice(0, maxIdentifierTextLength);
-}
-
-function boundAccount(value: Account): Account {
-  return {
-    id: boundIdentifier(value.id),
-    email: boundDisplayText(value.email, maxEmailTextLength),
-    display_name: boundDisplayText(value.display_name)
-  };
-}
-
-function boundProfile(value: Profile): Profile {
-  return {
-    id: boundIdentifier(value.id),
-    account_id: boundIdentifier(value.account_id),
-    display_name: boundDisplayText(value.display_name),
-    relationship: boundDisplayText(value.relationship, 40)
-  };
-}
-
-function boundProfiles(value: Profile[]) {
-  return value.slice(0, maxMobileProfiles).map(boundProfile);
 }
 
 function boundAuthTokenResponse(value: AuthTokenResponse): AuthTokenResponse | null {

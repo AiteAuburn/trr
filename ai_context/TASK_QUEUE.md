@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1142: Extract account profile bounding transforms
+
+Status: done
+
+Summary:
+
+- Extracted account and profile response bounding helpers from `mobile/App.tsx` into `mobile/accountTransforms.ts`.
+- Kept auth boot, dev-login, production account bootstrap, profile creation/loading, active profile selection, SecureStore token handling, OIDC request sanitizers, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so account/profile response bounding ownership guards inspect `mobile/accountTransforms.ts`, while auth/profile flow handlers remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now also covers Account/Profile response bounding.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1141: Extract basic report bounding transform
 
 Status: done

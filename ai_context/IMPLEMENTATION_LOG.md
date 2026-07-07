@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1142 extract account profile bounding transforms
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/accountTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted account and profile response bounding helpers from `mobile/App.tsx` into `mobile/accountTransforms.ts`.
+- Kept auth boot, dev-login, production account bootstrap, profile creation/loading, active profile selection, SecureStore token handling, OIDC request sanitizers, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so account/profile response bounding ownership guards inspect `mobile/accountTransforms.ts`, while auth/profile flow handlers remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now also covers Account/Profile response bounding.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 4/Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1141 extract basic report bounding transform
 
 類型：mobile / refactor / verifier / docs
