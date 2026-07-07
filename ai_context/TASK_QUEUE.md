@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1165: Extract store cart future display copy
+
+Status: done
+
+Summary:
+
+- Extracted Store and Store Cart future-module boundary copy, empty-state display item, cart labels, and accessibility copy from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept Store / Store Cart copy text, bounded display behavior, render bindings, hidden/debug-only routing, first-version menu destinations, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so Store / Store Cart future copy ownership guards inspect `mobile/futureModuleDisplay.ts`, while Store handlers and render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Store / Store Cart future display copy boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1164: Extract food photo future display copy
 
 Status: done

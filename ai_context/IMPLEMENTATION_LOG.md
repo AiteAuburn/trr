@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1165 extract store cart future display copy
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted Store and Store Cart future-module boundary copy, empty-state display item, cart labels, and accessibility copy from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept Store / Store Cart copy text, bounded display behavior, render bindings, hidden/debug-only routing, first-version menu destinations, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so Store / Store Cart future copy ownership guards inspect `mobile/futureModuleDisplay.ts`, while Store handlers and render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Store / Store Cart future display copy boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating future/debug-only display copy before moving future preview renderers.
+
 ### T1164 extract food photo future display copy
 
 類型：mobile / refactor / verifier / docs

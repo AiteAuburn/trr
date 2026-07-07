@@ -111,6 +111,15 @@ import {
   rankingPreviewBoundaryDisplayItem,
   reminderPreviewBoundaryDisplayItem,
   selectedFutureModuleDisplayItem,
+  storeCartButtonAccessibilityLabel,
+  storeCartButtonLabel,
+  storeCartIntroCopy,
+  storeCartReturnButtonLabel,
+  storeCartUnavailableDisplayItem,
+  storeCheckoutReadinessTitle,
+  storeEmptySearchDisplayItem,
+  storeLocalBoundaryCopy,
+  storePreviewBoundaryCopy,
   type FutureModuleCard
 } from "./futureModuleDisplay";
 import {
@@ -1844,58 +1853,6 @@ async function requestNoContent(apiBaseUrl: string, path: string, init?: Request
 
 function protectedRequestHeaders(accountId: string, accessToken: string): Record<string, string> {
   return buildProtectedRequestHeaders(accountId, accessToken, allowMobileDevAuth);
-}
-
-function storeCartUnavailableDisplayItem() {
-  return {
-    title: boundDisplayText("購物車尚未啟用", maxDisplayTextLength),
-    copy: boundDisplayText("目前不建立訂單、不保留購物車內容，也不處理付款或折價券。", maxDisplayDetailTextLength),
-    evidence: boundDisplayText("需等購物車、庫存、出貨、付款與退款規則完成後再接 backend order flow。", maxDisplayDetailTextLength),
-    checkoutLabel: boundDisplayText("結帳整合尚未啟用", maxDisplayTextLength),
-    legalWarning: boundDisplayText("商城商品不得宣稱醫療療效；正式交易前需完成法務、付款與商品審核。", maxDisplayDetailTextLength)
-  };
-}
-
-function storePreviewBoundaryCopy() {
-  return boundDisplayText(
-    "點數商城一般操作路徑會同步 backend 目錄與點數；優惠券與保健食品折扣可立即發碼，合作商品與會員福利仍需後續 fulfillment，不建立出貨訂單，也不處理付款。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function storeEmptySearchDisplayItem() {
-  return {
-    title: boundDisplayText("找不到符合的商品", maxDisplayTextLength),
-    copy: boundDisplayText("請清除搜尋文字或切換分類。", maxDisplayDetailTextLength),
-    evidence: boundDisplayText("搜尋會篩選已同步的 backend 目錄；backend unavailable 時才使用本機預覽。", maxDisplayDetailTextLength)
-  };
-}
-
-function storeCartButtonLabel() {
-  return boundDisplayText("查看購物車整合狀態", maxDisplayTextLength);
-}
-
-function storeCartButtonAccessibilityLabel() {
-  return boundDisplayText("查看購物車、出貨訂單與付款整合狀態；不建立訂單或付款", maxDisplayDetailTextLength);
-}
-
-function storeLocalBoundaryCopy() {
-  return boundDisplayText(
-    "商城目前可同步點數、發出優惠券 / 折扣碼並建立兌換紀錄；庫存、出貨、付款與 entitlement fulfillment 尚未啟用，也不宣稱醫療療效。",
-    maxDisplayDetailTextLength
-  );
-}
-
-function storeCartIntroCopy() {
-  return boundDisplayText("點數帳本、兌換券與折扣碼已可同步；購物車、出貨訂單與付款仍未接上。", maxDisplayDetailTextLength);
-}
-
-function storeCheckoutReadinessTitle() {
-  return boundDisplayText("正式結帳前需要完成", maxDisplayTextLength);
-}
-
-function storeCartReturnButtonLabel() {
-  return boundDisplayText("返回商城", maxDisplayTextLength);
 }
 
 function yearReviewShareUnavailableStatusMessage() {
