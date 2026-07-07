@@ -49,7 +49,7 @@
   - `analysisDataTransforms.ts`：Analysis glucose extraction, meal-timing classification, chart points/range, and numeric aggregation helpers.
   - `analysisMetricTransforms.ts`：Analysis and detailed-report metric row shaping, nullable glucose bounds, and count bounds.
   - `analysisScreenData.ts`：Analysis range option config and bounded range display item shaping.
-  - `historyScreenData.ts`：History detail mode config, calendar day display shaping, daily summary / sync display shaping, selected-date section display shaping, and bounded display item shaping.
+  - `historyScreenData.ts`：History detail mode config, calendar day display shaping, daily summary / sync display shaping, selected-date section display shaping, raw transcript display shaping, and bounded display item shaping.
   - `settingsScreenData.ts`：Settings row config and bounded Settings row display item shaping.
 
 ### Backend
@@ -144,7 +144,7 @@ Verification:
 
 ### Slice 5: First-Version Screen Components
 
-Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, History daily summary/selected-date section display, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, and daily-record section display boundaries extracted.
+Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, and daily-record section display boundaries extracted.
 
 Scope:
 

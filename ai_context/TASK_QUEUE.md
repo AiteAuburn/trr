@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1100: Extract History raw transcript display helper
+
+Status: done
+
+Summary:
+
+- Extracted History raw-record display item shaping, source-text status labels, bounded raw transcript display, and fallback copy from `mobile/App.tsx` into `mobile/historyScreenData.ts`.
+- Kept History raw-record selection, render structure, UI copy, source-text metadata retention, navigation, and backend record loading unchanged.
+- Updated the navigation verifier so History raw transcript display helper ownership guards inspect `mobile/historyScreenData.ts`, while History raw render and save-metadata guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the History raw transcript display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1099: Extract History daily summary display helpers
 
 Status: done

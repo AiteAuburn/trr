@@ -2937,7 +2937,6 @@ def main() -> int:
         ):
             _assert_contains(f"{style_name} style", content, f"{style_name}: {{")
         for label, marker in (
-            ("history raw record display item", "function historyRawRecordDisplayItem(record: RecordItem, index: number)"),
             ("history source text preserved during save", "const sanitizedMetadata = boundMetadata(record.metadata_json, true);"),
             ("history selected date state", "const [selectedHistoryDate, setSelectedHistoryDate] = useState(formatLocalDateInput(new Date()))"),
             ("history detail mode state", 'const [historyDetailMode, setHistoryDetailMode] = useState<HistoryDetailMode>("structured")'),
@@ -2977,8 +2976,6 @@ def main() -> int:
             ("history selected daily summary render", "selectedHistoryDailySummary.summaryText"),
             ("history structured section render", "selectedHistoryDailySectionItems.map((section) =>"),
             ("history raw records render", "selectedHistoryRawDisplayItems.map((item) =>"),
-            ("history raw source status", "sourceStatusLabel: boundDisplayText(hasSourceText ? \"原始逐字稿\" : \"僅結構化\", 40)"),
-            ("history raw fallback copy", "尚無原始逐字稿；此筆紀錄只保留結構化資料。"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(
@@ -2998,6 +2995,12 @@ def main() -> int:
             ("history daily section display helper", "function buildHistoryDailyRecordSectionDisplayItems(records: RecordItem[])"),
             ("history daily summary copy", "summaryText: dailyRecordSummaryText(pendingRecords)"),
             ("history daily section record accessibility", "accessibilityLabel: recordListDisplayItem(record, `history-daily-${index}`).accessibilityLabel"),
+            ("history raw record display item", "function historyRawRecordDisplayItem(record: RecordItem, index: number)"),
+            ("history raw source metadata lookup", "const sourceText = record.metadata_json?.source_text;"),
+            ("history raw source type guard", 'const hasSourceText = typeof sourceText === "string" && sourceText.trim().length > 0;'),
+            ("history raw bounded source text", "boundDisplayText(sourceText, maxDisplayDetailTextLength)"),
+            ("history raw fallback assignment", ': "尚無原始逐字稿；此筆紀錄只保留結構化資料。";'),
+            ("history raw status label", 'sourceStatusLabel: boundDisplayText(hasSourceText ? "原始逐字稿" : "僅結構化", 40)'),
             ("history local sync label", "本機 0 筆待同步"),
             ("history unsynced local label", "尚未同步"),
             ("history synced cloud label", "已同步"),
@@ -3064,15 +3067,6 @@ def main() -> int:
         ):
             if marker in history_block:
                 raise AssertionError(f"History calendar-first render block must not contain {label}.")
-        history_raw_display_block = _function_block(content, "historyRawRecordDisplayItem")
-        for label, marker in (
-            ("history raw source metadata lookup", "const sourceText = record.metadata_json?.source_text;"),
-            ("history raw source type guard", 'const hasSourceText = typeof sourceText === "string" && sourceText.trim().length > 0;'),
-            ("history raw bounded source text", "boundDisplayText(sourceText, maxDisplayDetailTextLength)"),
-            ("history raw fallback assignment", ': "尚無原始逐字稿；此筆紀錄只保留結構化資料。";'),
-            ("history raw status label", 'sourceStatusLabel: boundDisplayText(hasSourceText ? "原始逐字稿" : "僅結構化", 40)'),
-        ):
-            _assert_contains(label, history_raw_display_block, marker)
         pending_save_block = _function_block(content, "pendingRecordForSave")
         _assert_contains(
             "pending save preserves bounded source text",
