@@ -467,7 +467,11 @@ import {
   settingsModelChoiceDisplayItem,
   settingsProfileChoiceDisplayItem
 } from "./settingsChoiceDisplay";
-import { boundVoiceQuota, trialDaysLeft } from "./subscriptionTransforms";
+import {
+  boundVoiceQuota,
+  recordingEffectiveLimitSeconds,
+  trialDaysLeft
+} from "./subscriptionTransforms";
 import {
   accountSecurityNoActionBoundaryCopy,
   accountSecurityProviderBoundaryCopy,
@@ -1346,7 +1350,6 @@ const maxMobilePreviewRecords = 20;
 const maxMobilePreviewSegments = 40;
 const maxMobileRejectedEvents = 40;
 const maxMobileCountValue = 1_000_000;
-const mobileSingleRecordingLimitSeconds = 60;
 const maxMobileGlucoseValue = 1000;
 const maxDevResetDeletedCountKeys = 20;
 const mobileRecordSyncLimit = 100;
@@ -2353,17 +2356,6 @@ function privacyPreviewBoundaryDisplayItem() {
     "隱私控制預覽",
     "目前不寫入偏好、不建立分享、不匯出資料、不呼叫 API；正式啟用前必須接權限、audit 與資料刪除流程。"
   );
-}
-
-function recordingEffectiveLimitSeconds(quota: VoiceQuota | null) {
-  if (quota && quota.remaining_seconds_today > 0) {
-    return clampNumber(
-      Math.min(mobileSingleRecordingLimitSeconds, quota.remaining_seconds_today),
-      1,
-      mobileSingleRecordingLimitSeconds
-    );
-  }
-  return mobileSingleRecordingLimitSeconds;
 }
 
 function auxiliarySectionLabels() {

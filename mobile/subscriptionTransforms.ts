@@ -1,4 +1,5 @@
 const maxMobileVoiceSeconds = 86_400;
+const mobileSingleRecordingLimitSeconds = 60;
 
 export type VoiceQuotaTransformSource = {
   plan_code: string;
@@ -47,6 +48,17 @@ export function boundVoiceQuota<T extends VoiceQuotaTransformSource>(value: T): 
     used_seconds_today: Math.min(used, dailyLimit || used),
     remaining_seconds_today: Math.min(remaining, dailyLimit || remaining)
   };
+}
+
+export function recordingEffectiveLimitSeconds(quota: VoiceQuotaTransformSource | null) {
+  if (quota && quota.remaining_seconds_today > 0) {
+    return clampNumber(
+      Math.min(mobileSingleRecordingLimitSeconds, quota.remaining_seconds_today),
+      1,
+      mobileSingleRecordingLimitSeconds
+    );
+  }
+  return mobileSingleRecordingLimitSeconds;
 }
 
 export function trialDaysLeft(trialEndsAt?: string | null) {

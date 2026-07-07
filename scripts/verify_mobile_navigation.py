@@ -2444,8 +2444,6 @@ def main() -> int:
             ("native audio recording ref", "const audioRecordingRef = useRef<Audio.Recording | null>(null);"),
             ("native recording start guard", "const recordingStartInFlight = useRef(false);"),
             ("native recording stop guard", "const recordingStopInFlight = useRef(false);"),
-            ("single recording limit constant", "const mobileSingleRecordingLimitSeconds = 60;"),
-            ("effective recording limit helper", "function recordingEffectiveLimitSeconds(quota: VoiceQuota | null)"),
             ("recording limit display copy", "const recordingLimitDisplayText = recordingLimitCopy(recordingEffectiveLimitDisplaySeconds);"),
             ("recording limit rendered in record page", "<Text style={styles.evidence}>{recordingLimitDisplayText}</Text>"),
             ("recording interval limit clamp", "setRecordingElapsedSeconds(clampNumber(nextElapsedSeconds, 0, limitSeconds));"),
@@ -4333,6 +4331,9 @@ def main() -> int:
             ("subscription voice quota max seconds", "const maxMobileVoiceSeconds = 86_400"),
             ("subscription voice quota trial end bound", "trial_ends_at: boundOptionalDateTime(value.trial_ends_at)"),
             ("subscription voice quota used bound", "used_seconds_today: Math.min(used, dailyLimit || used)"),
+            ("subscription single recording limit constant", "const mobileSingleRecordingLimitSeconds = 60;"),
+            ("subscription effective recording limit helper", "function recordingEffectiveLimitSeconds(quota: VoiceQuotaTransformSource | null)"),
+            ("subscription effective recording limit remaining clamp", "Math.min(mobileSingleRecordingLimitSeconds, quota.remaining_seconds_today)"),
         ):
             _assert_contains(label, subscription_transforms_content, marker)
         for label, marker in (

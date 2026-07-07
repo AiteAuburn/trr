@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1148 extract recording effective limit transform
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/subscriptionTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted effective recording limit calculation from `mobile/App.tsx` into `mobile/subscriptionTransforms.ts`.
+- Kept the 60-second single recording limit, voice-quota remaining-seconds clamp, recording timer/auto-stop behavior, limit display copy, UI layout, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so effective recording limit ownership guards inspect `mobile/subscriptionTransforms.ts`, while recording start/finish/render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now also covers recording effective-limit transforms.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 4/Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1147 extract auth session display items
 
 類型：mobile / refactor / verifier / docs

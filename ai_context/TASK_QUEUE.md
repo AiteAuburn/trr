@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1148: Extract recording effective limit transform
+
+Status: done
+
+Summary:
+
+- Extracted effective recording limit calculation from `mobile/App.tsx` into `mobile/subscriptionTransforms.ts`.
+- Kept the 60-second single recording limit, voice-quota remaining-seconds clamp, recording timer/auto-stop behavior, limit display copy, UI layout, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so effective recording limit ownership guards inspect `mobile/subscriptionTransforms.ts`, while recording start/finish/render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now also covers recording effective-limit transforms.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1147: Extract auth session display items
 
 Status: done

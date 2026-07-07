@@ -46,7 +46,7 @@
   - `analysisCopy.ts`：Analysis no-data / boundary / detailed-report bounded copy and custom-range status messages.
   - `settingsCopy.ts`：Settings navigation, active-profile display copy, voice quota minute formatting/warning/usage/helper copy, model/quota/reminder/privacy bounded copy.
   - `subscriptionCopy.ts`：Subscription plan/status labels, plan/status summary display copy, membership trial-days display copy, account security, profile boundary, and settings subscription section labels / bounded copy.
-  - `subscriptionTransforms.ts`：Subscription trial-days date calculation and voice quota response bounding.
+  - `subscriptionTransforms.ts`：Subscription trial-days date calculation, voice quota response bounding, and recording effective-limit calculation.
   - `accountTransforms.ts`：Account and profile response bounding transforms.
   - `aiModelTransforms.ts`：AI model option response bounding transforms.
   - `accountCopy.ts`：Account identity display, login display, public-name fallback, and doctor-share account boundary copy.
@@ -138,7 +138,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; date/time, record bounds, daily transcript, auth token/OIDC request transforms, protected auth request header transforms, account/profile response bounding, AI model option response bounding, downloaded native model state bounding, analysis basic report response bounding, analysis data/chart, analysis metric, subscription trial-days, and subscription voice quota response bounding transform helpers extracted.
+Status: started; date/time, record bounds, daily transcript, auth token/OIDC request transforms, protected auth request header transforms, account/profile response bounding, AI model option response bounding, downloaded native model state bounding, analysis basic report response bounding, analysis data/chart, analysis metric, subscription trial-days, subscription voice quota response bounding, and recording effective-limit transform helpers extracted.
 
 Scope:
 
