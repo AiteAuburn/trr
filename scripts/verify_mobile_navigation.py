@@ -2535,6 +2535,9 @@ def main() -> int:
                 f'label: boundDisplayText("{label}", maxDisplayTextLength)',
             )
         for label, marker in (
+            ("busy action status helper", "function busyActionStatusMessage()"),
+            ("busy action status copy", "目前仍在處理上一個動作，請稍候"),
+            ("preview action clear status helper", "function previewActionClearStatusMessage()"),
             ("AI save failure back AI review status helper", "function aiSaveFailureBackAiReviewStatusMessage()"),
             ("AI save failure return save confirm status helper", "function aiSaveFailureReturnSaveConfirmStatusMessage()"),
             ("AI save failure manual fallback status helper", "function aiSaveFailureManualFallbackStatusMessage()"),

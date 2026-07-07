@@ -293,7 +293,9 @@ import {
   aiSaveFailureManualFallbackStatusMessage,
   aiSaveFailureReturnSaveConfirmStatusMessage,
   aiReviewManualEntryStatusMessage,
+  busyActionStatusMessage,
   coreFlowSectionLabels,
+  previewActionClearStatusMessage,
   quickEntryModeDisplayItems,
   quickEntryTextModeStatusMessage,
   quickEntryVoicePromptStatusMessage,
@@ -2493,14 +2495,6 @@ function protectedRequestHeaders(accountId: string, accessToken: string): Record
     return { "X-Account-Id": devAccountId };
   }
   return {};
-}
-
-function busyActionStatusMessage() {
-  return boundUiMessage("目前仍在處理上一個動作，請稍候");
-}
-
-function previewActionClearStatusMessage() {
-  return "";
 }
 
 function accountDisplayNameDisplayText(account: Account | null) {

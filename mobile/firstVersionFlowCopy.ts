@@ -14,6 +14,14 @@ function boundUiMessage(value: string) {
   return value.slice(0, maxUiMessageLength);
 }
 
+export function busyActionStatusMessage() {
+  return boundUiMessage("目前仍在處理上一個動作，請稍候");
+}
+
+export function previewActionClearStatusMessage() {
+  return "";
+}
+
 export function coreFlowSectionLabels() {
   return {
     recordSyncStatus: boundDisplayText("紀錄同步狀態", maxDisplayTextLength),

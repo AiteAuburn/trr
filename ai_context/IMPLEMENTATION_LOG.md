@@ -15,6 +15,38 @@
 
 ## 2026-07-07
 
+### T1113 extract shared action status helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/firstVersionFlowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted shared busy-action and preview-clear status helpers from `mobile/App.tsx` into `mobile/firstVersionFlowCopy.ts`.
+- Kept all call sites, future preview status resets, busy guards, UI copy text, navigation, parser requests, and backend request paths unchanged.
+- Updated the navigation verifier so shared action status helper ownership guards inspect `mobile/firstVersionFlowCopy.ts`, while call-site behavior remains checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover shared busy/clear action status boundaries.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1112 extract Settings model and quota copy helpers
 
 類型：mobile / refactor / verifier / docs

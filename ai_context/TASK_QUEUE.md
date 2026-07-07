@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1113: Extract shared action status helpers
+
+Status: done
+
+Summary:
+
+- Extracted shared busy-action and preview-clear status helpers from `mobile/App.tsx` into `mobile/firstVersionFlowCopy.ts`.
+- Kept all call sites, future preview status resets, busy guards, UI copy text, navigation, parser requests, and backend request paths unchanged.
+- Updated the navigation verifier so shared action status helper ownership guards inspect `mobile/firstVersionFlowCopy.ts`, while call-site behavior remains checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover shared busy/clear action status boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1112: Extract Settings model and quota copy helpers
 
 Status: done
