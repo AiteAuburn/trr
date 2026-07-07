@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1175: Extract Store backend reward transform
+
+Status: done
+
+Summary:
+
+- Moved Store backend reward category and reward-to-product transforms from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept backend `/store/rewards` loading, reward category mappings, fallback title/copy, point bounds, product display behavior, redemption handlers, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so Store backend reward transform ownership is guarded in `mobile/futureModuleDisplay.ts`, while Store API endpoint loading remains guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Store backend reward transform boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1174: Extract Store redemption display helper
 
 Status: done

@@ -33,6 +33,21 @@ export type StoreProduct = {
   rewardStatus?: "preview" | "redeemable";
 };
 
+export type StoreRewardApiCategory =
+  | "coupons"
+  | "supplement_discounts"
+  | "partner_products"
+  | "member_benefits"
+  | "special_badges";
+
+export type StoreRewardApiInput = {
+  code: string;
+  title: string;
+  category: StoreRewardApiCategory;
+  points_cost: number;
+  status: "preview" | "redeemable";
+};
+
 export type StoreRedemptionDisplayInput = {
   id: string;
   reward_code: string;
@@ -317,6 +332,40 @@ export function storeProductDisplayItem(value: StoreProduct) {
         ? `${title} 可用社群點數兌換；${storeRedeemableFulfillmentCopy(value.category)}`
         : `${title} 目前只顯示點數兌換預覽；點數扣抵、庫存、結帳、訂單與 entitlement 寫入尚未啟用。`
     )
+  };
+}
+
+export function storeCategoryFromApi(value: StoreRewardApiCategory): StoreCategory {
+  if (value === "supplement_discounts") {
+    return "supplementDiscounts";
+  }
+  if (value === "partner_products") {
+    return "partnerProducts";
+  }
+  if (value === "special_badges") {
+    return "specialBadges";
+  }
+  if (value === "member_benefits") {
+    return "memberBenefits";
+  }
+  return "coupons";
+}
+
+export function storeProductFromApi(value: StoreRewardApiInput): StoreProduct {
+  return {
+    id: boundIdentifier(value.code),
+    category: storeCategoryFromApi(value.category),
+    badge: value.status === "redeemable" ? "可兌換" : "預留",
+    title: boundDisplayText(value.title || "兌換項目", maxDisplayTextLength),
+    description: boundDisplayText(
+      value.status === "redeemable"
+        ? storeRedeemableFulfillmentCopy(storeCategoryFromApi(value.category))
+        : "此項目仍保留給未來商品、庫存、法務或會員權益整合。",
+      maxDisplayDetailTextLength
+    ),
+    pointsCost: boundDisplayText(`${clampNumber(value.points_cost, 0, maxMobileCountValue)} 點`, 40),
+    icon: value.category === "coupons" ? "%" : value.category === "special_badges" ? "徽" : "兌",
+    rewardStatus: value.status
   };
 }
 
