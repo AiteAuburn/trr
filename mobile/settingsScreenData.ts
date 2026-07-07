@@ -86,6 +86,13 @@ export const privacyControlRows = [
   ["資料匯出 / 刪除", "待後端流程", "需要身份驗證、批次狀態與稽核紀錄。"]
 ] as const;
 
+export const tutorialSteps = [
+  ["🎙", "按住說話", "按住首頁或記錄頁的大按鈕開始錄音預覽。"],
+  ["✋", "放開結束", "若已選擇本機 Whisper 模型，會先轉成文字並進入確認。"],
+  ["✅", "確認內容", "檢查文字與 AI 候選紀錄，確認前不會儲存。"],
+  ["💾", "儲存完成", "確認後送出，即可加入今日紀錄。"]
+] as const;
+
 export function settingsRowDisplayItem(value: SettingsRow) {
   const label = boundDisplayText(value.label || "設定", maxDisplayTextLength);
   const helper = value.helper ? boundDisplayText(value.helper, maxDisplayDetailTextLength) : "";

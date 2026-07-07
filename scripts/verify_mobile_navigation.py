@@ -2459,7 +2459,6 @@ def main() -> int:
             ("minimal home recording seconds display value", "const homeRecordingSecondaryHintDisplayText = homeRecordingSecondaryHint("),
             ("minimal home recording model status display value", "const homeRecordingModelStatusDisplayText = homeRecordingModelStatusCopy(Boolean(whisperModelPath.trim()));"),
             ("minimal home mic accessibility binding", "accessibilityLabel={recordingButtonDisplayAccessibilityLabel}"),
-            ("tutorial whisper release copy", "若已選擇本機 Whisper 模型，會先轉成文字並進入確認。"),
             ("minimal home mic press in", "onPressIn={startRecordingPreview}"),
             ("minimal home mic press out", "onPressOut={releaseRecordingPreview}"),
             ("recording release wrapper", "function releaseRecordingPreview()"),
@@ -3874,6 +3873,8 @@ def main() -> int:
             ("production auth readiness rows config", "export const productionAuthReadinessRows = ["),
             ("subscription management rows config", "export const subscriptionManagementRows = ["),
             ("privacy control rows config", "export const privacyControlRows = ["),
+            ("tutorial steps config", "export const tutorialSteps = ["),
+            ("tutorial whisper release copy", "若已選擇本機 Whisper 模型，會先轉成文字並進入確認。"),
         ):
             _assert_contains(label, settings_screen_data_content, marker)
         _assert_contains(

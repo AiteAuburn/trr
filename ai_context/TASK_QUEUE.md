@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1156: Extract tutorial step config
+
+Status: done
+
+Summary:
+
+- Extracted Tutorial static step config from `mobile/App.tsx` into `mobile/settingsScreenData.ts`.
+- Kept tutorial step text, display item mapping, tutorial screen render, first-version menu destinations, UI copy, navigation, backend paths, and screen layout unchanged.
+- Updated the navigation verifier so tutorial step config ownership guards inspect `mobile/settingsScreenData.ts`, while render and display helper bindings remain checked in `mobile/App.tsx` and `mobile/sharedDisplayItems.ts`.
+- Updated the refactor roadmap to note the Tutorial static config boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1155: Extract auth provider preview rows
 
 Status: done

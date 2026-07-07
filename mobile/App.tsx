@@ -485,6 +485,7 @@ import {
   settingsRowDisplayItem,
   settingsRows,
   subscriptionManagementRows,
+  tutorialSteps,
   type AuthProviderPreview,
   type SettingsRow
 } from "./settingsScreenData";
@@ -1299,13 +1300,6 @@ const maxDevResetDeletedCountKeys = 20;
 const mobileRecordSyncLimit = 100;
 const maxMobileRecordCacheLimit = 500;
 const mobileReportQueryLimit = 500;
-
-const tutorialSteps = [
-  ["🎙", "按住說話", "按住首頁或記錄頁的大按鈕開始錄音預覽。"],
-  ["✋", "放開結束", "若已選擇本機 Whisper 模型，會先轉成文字並進入確認。"],
-  ["✅", "確認內容", "檢查文字與 AI 候選紀錄，確認前不會儲存。"],
-  ["💾", "儲存完成", "確認後送出，即可加入今日紀錄。"]
-];
 
 function normalizeApiBaseUrl(value: string) {
   return value.trim().replace(/\/$/, "");
