@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1097: Extract same-day preview merge transform
+
+Status: done
+
+Summary:
+
+- Extracted same-day parse-preview merge logic from `mobile/App.tsx` into `mobile/dailyTranscriptTransforms.ts`.
+- Kept parser response bounding, same-day key comparison, retained transcript handling, parse flow state updates, UI copy, navigation, and backend parser flow unchanged.
+- Updated the navigation verifier so same-day merge ownership guards inspect `mobile/dailyTranscriptTransforms.ts`, while parse-flow binding guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the same-day preview merge transform boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1096: Extract daily-record date label helpers
 
 Status: done

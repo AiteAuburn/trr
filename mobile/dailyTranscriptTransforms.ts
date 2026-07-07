@@ -1,6 +1,6 @@
 import { localDateKey } from "./dateTimeTransforms";
 import { dailyRecordSectionDefinitions } from "./recordDisplay";
-import type { ParsePreviewResponse, PendingRecord } from "./recordBounds";
+import { boundParsePreviewResponse, type ParsePreviewResponse, type PendingRecord } from "./recordBounds";
 
 const maxListItems = 12;
 const maxDisplayTextLength = 160;
@@ -8,6 +8,7 @@ const maxIdentifierTextLength = 128;
 const maxDisplayDetailTextLength = 240;
 const maxMobileCountValue = 1_000_000;
 const maxMobilePreviewRecords = 20;
+const maxMobileRejectedEvents = 40;
 const maxTranscriptTextLength = 1200;
 const maxUiMessageLength = 300;
 
@@ -52,6 +53,26 @@ function recordTimeDisplay(value?: string) {
 export function dailyRecordKeyFromRecords(records: PendingRecord[]) {
   const firstRecord = records[0];
   return firstRecord ? localDateKey(firstRecord.occurred_at) : "";
+}
+
+export function mergeSameDayParsePreviewDraft(
+  current: ParsePreviewResponse | null,
+  incoming: ParsePreviewResponse
+) {
+  if (!current || current.records.length === 0 || incoming.records.length === 0) {
+    return incoming;
+  }
+  const currentKey = dailyRecordKeyFromRecords(current.records);
+  const incomingKey = dailyRecordKeyFromRecords(incoming.records);
+  if (!currentKey || currentKey !== incomingKey) {
+    return incoming;
+  }
+  return boundParsePreviewResponse({
+    ...incoming,
+    records: [...current.records, ...incoming.records].slice(0, maxMobilePreviewRecords),
+    rejected_events: [...current.rejected_events, ...incoming.rejected_events].slice(0, maxMobileRejectedEvents),
+    segments: [...current.segments, ...incoming.segments].slice(0, maxListItems)
+  });
 }
 
 export function aiReviewDateLabel(records: PendingRecord[]) {

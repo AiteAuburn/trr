@@ -2623,8 +2623,6 @@ def main() -> int:
             ("daily record leave guard render card", "styles.dailyLeaveGuardCard"),
             ("daily record leave guard cancel binding", "onPress={cancelDailyRecordLeaveGuard}"),
             ("daily record leave guard confirm binding", "onPress={confirmDailyRecordLeaveGuard}"),
-            ("daily record same-day merge helper", "function mergeSameDayParsePreviewDraft("),
-            ("daily record same-day merge records", "records: [...current.records, ...incoming.records].slice(0, maxMobilePreviewRecords)"),
             ("daily record transcript retained state", "const [dailyTranscriptEntries, setDailyTranscriptEntries] = useState<DailyTranscriptEntry[]>([]);"),
             ("daily record parse existing draft capture", "const existingDailyPreview = preview;"),
             ("daily record parse occurred timestamp", "const parseOccurredAt = new Date().toISOString();"),
@@ -2655,6 +2653,12 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("daily record same-day merge helper", "function mergeSameDayParsePreviewDraft("),
+            ("daily record same-day merge key current", "const currentKey = dailyRecordKeyFromRecords(current.records);"),
+            ("daily record same-day merge key incoming", "const incomingKey = dailyRecordKeyFromRecords(incoming.records);"),
+            ("daily record same-day merge records", "records: [...current.records, ...incoming.records].slice(0, maxMobilePreviewRecords)"),
+            ("daily record same-day merge rejected events", "rejected_events: [...current.rejected_events, ...incoming.rejected_events].slice(0, maxMobileRejectedEvents)"),
+            ("daily record same-day merge segments", "segments: [...current.segments, ...incoming.segments].slice(0, maxListItems)"),
             ("ai review date label helper", "function aiReviewDateLabel(records: PendingRecord[])"),
             ("ai review date label empty copy", "尚未解析日期時間"),
             ("ai review date label multiple times copy", "等 ${uniqueLabels.length} 個時間"),

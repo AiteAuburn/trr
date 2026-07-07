@@ -319,6 +319,7 @@ import {
   dailyRecordReorganizationStatusMessage,
   dailyRecordSummaryText,
   dailyTranscriptDisplayItems,
+  mergeSameDayParsePreviewDraft,
   type DailyRecordReorganizationReason,
   type DailyTranscriptEntry
 } from "./dailyTranscriptTransforms";
@@ -1232,26 +1233,6 @@ const tutorialSteps = [
 
 function normalizeApiBaseUrl(value: string) {
   return value.trim().replace(/\/$/, "");
-}
-
-function mergeSameDayParsePreviewDraft(
-  current: ParsePreviewResponse | null,
-  incoming: ParsePreviewResponse
-) {
-  if (!current || current.records.length === 0 || incoming.records.length === 0) {
-    return incoming;
-  }
-  const currentKey = dailyRecordKeyFromRecords(current.records);
-  const incomingKey = dailyRecordKeyFromRecords(incoming.records);
-  if (!currentKey || currentKey !== incomingKey) {
-    return incoming;
-  }
-  return boundParsePreviewResponse({
-    ...incoming,
-    records: [...current.records, ...incoming.records].slice(0, maxMobilePreviewRecords),
-    rejected_events: [...current.rejected_events, ...incoming.rejected_events].slice(0, maxMobileRejectedEvents),
-    segments: [...current.segments, ...incoming.segments].slice(0, maxListItems)
-  });
 }
 
 function pendingRecordFromRecordItem(record: RecordItem): PendingRecord {
