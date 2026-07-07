@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1167: Extract year-review future display copy
+
+Status: done
+
+Summary:
+
+- Extracted year-review future-module display copy for preview boundary, hero title/count, live-calculation text, badge material, share/revoke buttons, and AI-style observation/encouragement from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept year-review copy text, bounded display behavior, render bindings, hidden/debug-only routing, first-version menu destinations, backend paths, source display helper, share asset filename/cache helpers, and screen layout unchanged.
+- Updated the navigation verifier so year-review future display-copy guards inspect `mobile/futureModuleDisplay.ts`, while year-review source, sharing, FileSystem, and render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the year-review future display copy boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1166: Extract achievement future display copy
 
 Status: done

@@ -296,6 +296,72 @@ export function achievementIntegrationButtonAccessibilityLabel() {
   return boundDisplayText("同步成就徽章解鎖紀錄，不更新排行榜或公開資料", maxDisplayDetailTextLength);
 }
 
+export function yearReviewPreviewBoundaryCopy() {
+  return boundDisplayText(
+    "backend ready 時同步保存年度 snapshot，並準備 privacy-masked 年度分享 package；離線時使用已載入紀錄即時計算。",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function yearReviewHeroRecordCountCopy(count: number) {
+  const boundedCount = clampNumber(count, 0, maxMobileCountValue);
+  return boundDisplayText(`前一年度共記錄 ${boundedCount} 次`, maxDisplayTextLength);
+}
+
+export function yearReviewHeroTitleCopy(targetYear: number) {
+  return boundDisplayText(`前一年度 ${targetYear} 年回顧`, maxDisplayTextLength);
+}
+
+export function yearReviewLiveCalculationCopy(targetYear: number, generationLabel: string) {
+  return boundDisplayText(`${targetYear} 年資料；${generationLabel}。同步成功後會使用 backend snapshot。`, maxDisplayDetailTextLength);
+}
+
+export function yearReviewBadgeMaterialCopy() {
+  return boundDisplayText(
+    "你的努力值得這枚徽章；正式徽章素材可後續替換，年度分享卡使用 backend 隱私遮罩摘要。",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function yearReviewShareButtonLabel() {
+  return boundDisplayText("產生年度分享卡", maxDisplayTextLength);
+}
+
+export function yearReviewShareButtonAccessibilityLabel() {
+  return boundDisplayText("產生年度回顧公開摘要分享卡，確認隱私遮罩後開啟原生分享", maxDisplayDetailTextLength);
+}
+
+export function yearReviewRevokeShareButtonLabel() {
+  return boundDisplayText("撤回年度分享", maxDisplayTextLength);
+}
+
+export function yearReviewRevokeShareButtonAccessibilityLabel() {
+  return boundDisplayText("撤回最近建立的年度回顧分享 package，停止後續分享狀態更新", maxDisplayDetailTextLength);
+}
+
+export function yearReviewAiObservationCopy(recordCount: number, averageGlucose: number | null, longestStreak: number) {
+  const boundedCount = clampNumber(recordCount, 0, maxMobileCountValue);
+  const boundedStreak = clampNumber(longestStreak, 0, maxMobileCountValue);
+  if (boundedCount <= 0) {
+    return boundDisplayText("AI 年度觀察預覽：前一年度資料不足；正式版會在有資料時整理重要變化。", maxDisplayDetailTextLength);
+  }
+  const averageCopy = averageGlucose === null ? "平均血糖尚無足夠資料" : `年平均血糖 ${averageGlucose} mg/dL`;
+  return boundDisplayText(
+    `AI 年度觀察預覽：${averageCopy}，最長連續記錄 ${boundedStreak} 天；正式版會由年度報表服務產生重點觀察。`,
+    maxDisplayDetailTextLength
+  );
+}
+
+export function yearReviewAiEncouragementCopy(recordCount: number) {
+  const boundedCount = clampNumber(recordCount, 0, maxMobileCountValue);
+  return boundDisplayText(
+    boundedCount > 0
+      ? `AI 年度鼓勵預覽：你完成了 ${boundedCount} 筆健康紀錄，這些穩定累積能幫助你更了解自己的變化。`
+      : "AI 年度鼓勵預覽：開始累積紀錄後，年度回顧會整理你的努力與下一步提醒。",
+    maxDisplayDetailTextLength
+  );
+}
+
 export function futurePreviewSectionLabels() {
   const doctorTokenButton = boundDisplayText("查看授權碼狀態", maxDisplayTextLength);
   const doctorReportButton = boundDisplayText("查看報表邊界", maxDisplayTextLength);
