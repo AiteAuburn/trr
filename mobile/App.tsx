@@ -110,6 +110,7 @@ import {
   apiFoodCategoryFromMobile,
   boundCommunityPublicSettings,
   communityLeaderboardDisplaySection,
+  emptyFoodCommunityShareFields,
   foodCommunityCategoryDisplayItem,
   foodCommunityItemDisplayItem,
   foodCommunityItemFromApi,
@@ -165,6 +166,7 @@ import {
   type FoodCommunityApiShareResponse,
   type FoodCommunityCategory,
   type FoodCommunityItem,
+  type FoodCommunityShareFields,
   type FutureModuleCard,
   type StoreCategory,
   type StoreProduct,
@@ -864,14 +866,6 @@ type AchievementApiSummary = {
   items: AchievementApiItem[];
 };
 type AchievementApiUnlock = AchievementApiItem;
-type FoodCommunityShareFields = {
-  foodName: string;
-  eatenDate: string;
-  eatenTime: string;
-  beforeGlucose: string;
-  afterGlucose: string;
-  note: string;
-};
 type SaveEntryMethod = "ai" | "manual" | null;
 
 const achievementLevels = [10, 50, 100, 150, 200, 250];
@@ -1160,18 +1154,6 @@ function achievementUnlockDisplayDate(value?: string | null) {
     return boundDisplayText("解鎖時間格式無法顯示", maxDisplayTextLength);
   }
   return boundDisplayText(`解鎖於 ${formatLocalDateInput(parsed)}`, maxDisplayTextLength);
-}
-
-function emptyFoodCommunityShareFields(): FoodCommunityShareFields {
-  const nowInputs = localDateTimeInputs(new Date());
-  return {
-    foodName: "",
-    eatenDate: nowInputs.date,
-    eatenTime: nowInputs.time,
-    beforeGlucose: "",
-    afterGlucose: "",
-    note: ""
-  };
 }
 
 function authProviderPreviewDisplayItem(value: AuthProviderPreview) {

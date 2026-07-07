@@ -1,4 +1,5 @@
 import type { AppScreen } from "./navigationConfig";
+import { localDateTimeInputs } from "./dateTimeTransforms";
 import { recordDateTimeDisplay } from "./recordDisplay";
 import { resultChecklistItem } from "./sharedDisplayItems";
 
@@ -83,6 +84,15 @@ export type FoodCommunityItem = {
   maximumRise: number;
   minimumRise: number;
   examples: FoodCommunityShare[];
+};
+
+export type FoodCommunityShareFields = {
+  foodName: string;
+  eatenDate: string;
+  eatenTime: string;
+  beforeGlucose: string;
+  afterGlucose: string;
+  note: string;
 };
 
 export type FoodCommunityApiCategory =
@@ -596,6 +606,18 @@ export function foodCommunityItemFromApi(value: FoodCommunityApiItem): FoodCommu
         maxDisplayDetailTextLength
       )
     }))
+  };
+}
+
+export function emptyFoodCommunityShareFields(): FoodCommunityShareFields {
+  const nowInputs = localDateTimeInputs(new Date());
+  return {
+    foodName: "",
+    eatenDate: nowInputs.date,
+    eatenTime: nowInputs.time,
+    beforeGlucose: "",
+    afterGlucose: "",
+    note: ""
   };
 }
 

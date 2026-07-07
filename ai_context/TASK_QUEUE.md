@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1180: Extract Food Community share form defaults
+
+Status: done
+
+Summary:
+
+- Moved Food Community share form field type and empty-field initializer from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept share form fields, current local date/time defaults, input update handlers, calculated glucose-rise preview, share submission payloads, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so Food Community share form default ownership is guarded in `mobile/futureModuleDisplay.ts`, while field rendering, input bindings, calculated preview, and payload submission remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Food Community share form defaults boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1179: Extract Community public settings transform
 
 Status: done
