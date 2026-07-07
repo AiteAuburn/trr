@@ -107,6 +107,7 @@ import {
   foodPhotoRetakeButtonLabel,
   foodPhotoUploadBoxLabel,
   foodPhotoVisionBoundaryDisplayItem,
+  communityLeaderboardDisplaySection,
   futureModuleCards,
   futureModuleCardDisplayItem,
   futureModuleDetailBoundaryCopy,
@@ -149,6 +150,9 @@ import {
   yearReviewRevokeShareButtonLabel,
   yearReviewShareButtonAccessibilityLabel,
   yearReviewShareButtonLabel,
+  type CommunityLeaderboardApiResponse,
+  type CommunityLeaderboardDisplaySection,
+  type CommunityLeaderboardType,
   type FutureModuleCard,
   type StoreCategory,
   type StoreProduct,
@@ -736,19 +740,6 @@ type CommunityPublicSettings = {
   leaderboard_opt_in: boolean;
 };
 
-type CommunityLeaderboardType = "share_count" | "contribution" | "food_tester";
-
-type CommunityLeaderboardApiEntry = {
-  account_id?: string | null;
-  display_name: string;
-  score: number;
-};
-
-type CommunityLeaderboardApiResponse = {
-  leaderboard_type: CommunityLeaderboardType;
-  entries: CommunityLeaderboardApiEntry[];
-};
-
 type StoreApiPointsBalance = {
   balance: number;
   lifetime_earned: number;
@@ -954,18 +945,6 @@ type FoodCommunityShareFields = {
   beforeGlucose: string;
   afterGlucose: string;
   note: string;
-};
-type CommunityLeaderboardDisplayEntry = {
-  id: string;
-  rankLabel: string;
-  displayName: string;
-  scoreLabel: string;
-};
-type CommunityLeaderboardDisplaySection = {
-  type: CommunityLeaderboardType;
-  label: string;
-  entries: CommunityLeaderboardDisplayEntry[];
-  emptyCopy: string;
 };
 type SaveEntryMethod = "ai" | "manual" | null;
 
@@ -1358,45 +1337,6 @@ function boundCommunityPublicSettings(value: CommunityPublicSettings): Community
   return {
     display_name: boundDisplayText(value.display_name || "糖友", maxDisplayTextLength),
     leaderboard_opt_in: Boolean(value.leaderboard_opt_in)
-  };
-}
-
-function communityLeaderboardLabel(value: CommunityLeaderboardType) {
-  if (value === "contribution") {
-    return "貢獻度排行";
-  }
-  if (value === "food_tester") {
-    return "食物測試達人排行";
-  }
-  return "分享次數排行";
-}
-
-function communityLeaderboardScoreLabel(value: CommunityLeaderboardType, score: number) {
-  const boundedScore = clampNumber(score, 0, maxMobileCountValue);
-  if (value === "contribution") {
-    return `${boundedScore} 點`;
-  }
-  if (value === "food_tester") {
-    return `${boundedScore} 種食物`;
-  }
-  return `${boundedScore} 次分享`;
-}
-
-function communityLeaderboardDisplaySection(value: CommunityLeaderboardApiResponse): CommunityLeaderboardDisplaySection {
-  const type = ["share_count", "contribution", "food_tester"].includes(value.leaderboard_type)
-    ? value.leaderboard_type
-    : "share_count";
-  const label = communityLeaderboardLabel(type);
-  return {
-    type,
-    label: boundDisplayText(label, maxDisplayTextLength),
-    entries: value.entries.slice(0, maxListItems).map((entry, index) => ({
-      id: boundIdentifier(entry.account_id || `${type}-${index}`),
-      rankLabel: boundDisplayText(`#${clampNumber(index + 1, 1, maxMobileCountValue)}`, 12),
-      displayName: boundDisplayText(entry.display_name || "公開糖友", maxDisplayTextLength),
-      scoreLabel: boundDisplayText(communityLeaderboardScoreLabel(type, entry.score), 40)
-    })),
-    emptyCopy: boundDisplayText("目前沒有 opt-in 的公開榜單資料。", maxDisplayDetailTextLength)
   };
 }
 

@@ -20,6 +20,33 @@ export type FutureModuleCard = {
   target?: AppScreen;
 };
 
+export type CommunityLeaderboardType = "share_count" | "contribution" | "food_tester";
+
+export type CommunityLeaderboardApiEntry = {
+  account_id?: string | null;
+  display_name: string;
+  score: number;
+};
+
+export type CommunityLeaderboardApiResponse = {
+  leaderboard_type: CommunityLeaderboardType;
+  entries: CommunityLeaderboardApiEntry[];
+};
+
+export type CommunityLeaderboardDisplayEntry = {
+  id: string;
+  rankLabel: string;
+  displayName: string;
+  scoreLabel: string;
+};
+
+export type CommunityLeaderboardDisplaySection = {
+  type: CommunityLeaderboardType;
+  label: string;
+  entries: CommunityLeaderboardDisplayEntry[];
+  emptyCopy: string;
+};
+
 export type StoreCategory = "coupons" | "supplementDiscounts" | "partnerProducts" | "specialBadges" | "memberBenefits";
 
 export type StoreProduct = {
@@ -288,6 +315,45 @@ export function futureModulesReturnMenuStatusMessage() {
 
 export function futureModuleDetailReturnStatusMessage() {
   return boundDisplayText("已返回未來擴充清單；未完成模組詳情只顯示本機預覽。", maxDisplayDetailTextLength);
+}
+
+export function communityLeaderboardLabel(value: CommunityLeaderboardType) {
+  if (value === "contribution") {
+    return "貢獻度排行";
+  }
+  if (value === "food_tester") {
+    return "食物測試達人排行";
+  }
+  return "分享次數排行";
+}
+
+export function communityLeaderboardScoreLabel(value: CommunityLeaderboardType, score: number) {
+  const boundedScore = clampNumber(score, 0, maxMobileCountValue);
+  if (value === "contribution") {
+    return `${boundedScore} 點`;
+  }
+  if (value === "food_tester") {
+    return `${boundedScore} 種食物`;
+  }
+  return `${boundedScore} 次分享`;
+}
+
+export function communityLeaderboardDisplaySection(value: CommunityLeaderboardApiResponse): CommunityLeaderboardDisplaySection {
+  const type = ["share_count", "contribution", "food_tester"].includes(value.leaderboard_type)
+    ? value.leaderboard_type
+    : "share_count";
+  const label = communityLeaderboardLabel(type);
+  return {
+    type,
+    label: boundDisplayText(label, maxDisplayTextLength),
+    entries: value.entries.slice(0, maxListItems).map((entry, index) => ({
+      id: boundIdentifier(entry.account_id || `${type}-${index}`),
+      rankLabel: boundDisplayText(`#${clampNumber(index + 1, 1, maxMobileCountValue)}`, 12),
+      displayName: boundDisplayText(entry.display_name || "公開糖友", maxDisplayTextLength),
+      scoreLabel: boundDisplayText(communityLeaderboardScoreLabel(type, entry.score), 40)
+    })),
+    emptyCopy: boundDisplayText("目前沒有 opt-in 的公開榜單資料。", maxDisplayDetailTextLength)
+  };
 }
 
 export function futurePreviewReturnStatusMessage(target: AppScreen) {

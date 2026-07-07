@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1176: Extract Community leaderboard display helper
+
+Status: done
+
+Summary:
+
+- Moved Community leaderboard API/display types and leaderboard display section helpers from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept backend `/community/leaderboards` loading, ranking type requests, leaderboard labels, score labels, empty copy, opt-in status behavior, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so Community leaderboard display ownership is guarded in `mobile/futureModuleDisplay.ts`, while ranking backend sync and render bindings remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Community leaderboard display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1175: Extract Store backend reward transform
 
 Status: done
