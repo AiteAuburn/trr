@@ -3,6 +3,8 @@ const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
 const maxMobileCountValue = 1_000_000;
 const mobileSingleRecordingLimitSeconds = 60;
+const maxTranscriptTextLength = 1200;
+const maxTranscriptNumericValues = 90;
 
 function clampNumber(value: number, min: number, max: number) {
   if (!Number.isFinite(value)) {
@@ -17,6 +19,10 @@ function boundUiMessage(value: string) {
 
 function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);
+}
+
+function countNumericValues(value: string) {
+  return value.match(/\d+(?:\.\d+)?/g)?.length ?? 0;
 }
 
 function safeUiError(error: unknown, fallback: string) {
@@ -123,6 +129,20 @@ export function transcriptReviewSampleWarningCopy() {
 
 export function transcriptReviewPreflightPassedCopy() {
   return boundDisplayText("已通過本機長度與數字密度檢查；下一步才會送出 parser 請求。", maxDisplayDetailTextLength);
+}
+
+export function validateTranscriptForParser(value: string) {
+  const normalized = value.trim();
+  if (!normalized) {
+    return "請先輸入文字";
+  }
+  if (normalized.length > maxTranscriptTextLength) {
+    return `文字過長，請縮短到 ${maxTranscriptTextLength} 字內，或分批整理`;
+  }
+  if (countNumericValues(normalized) > maxTranscriptNumericValues) {
+    return "數字太多，請分批整理，避免 parser 成本過高";
+  }
+  return null;
 }
 
 export function recordingIdlePreviewCopy() {

@@ -137,7 +137,8 @@ import {
   transcriptReviewPreflightPassedCopy,
   transcriptReviewPreParseGuidanceCopy,
   transcriptReviewSampleWarningCopy,
-  transcriptReviewReadyStatusMessage
+  transcriptReviewReadyStatusMessage,
+  validateTranscriptForParser
 } from "./recordingCopy";
 import {
   aiCandidateEditCancelStatusMessage,
@@ -1344,7 +1345,6 @@ const maxIdentifierTextLength = 128;
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
 const maxTranscriptTextLength = 1200;
-const maxTranscriptNumericValues = 90;
 const maxStoreSearchTextLength = 80;
 const maxBackendUrlLength = 256;
 const maxNativeDebugInputLength = 1024;
@@ -1372,24 +1372,6 @@ function normalizeApiBaseUrl(value: string) {
 
 function boundNativeDebugInput(value: string) {
   return value.slice(0, maxNativeDebugInputLength);
-}
-
-function countNumericValues(value: string) {
-  return value.match(/\d+(?:\.\d+)?/g)?.length ?? 0;
-}
-
-function validateTranscriptForParser(value: string) {
-  const normalized = value.trim();
-  if (!normalized) {
-    return "請先輸入文字";
-  }
-  if (normalized.length > maxTranscriptTextLength) {
-    return `文字過長，請縮短到 ${maxTranscriptTextLength} 字內，或分批整理`;
-  }
-  if (countNumericValues(normalized) > maxTranscriptNumericValues) {
-    return "數字太多，請分批整理，避免 parser 成本過高";
-  }
-  return null;
 }
 
 function boundStoreSearchText(value: string) {

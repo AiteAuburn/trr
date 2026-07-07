@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1150: Extract transcript validation helper
+
+Status: done
+
+Summary:
+
+- Extracted transcript parser preflight validation from `mobile/App.tsx` into `mobile/recordingCopy.ts`.
+- Kept transcript TextInput max length, sample handling, parser request body, transcript-review disabled states, validation copy text, UI layout, navigation, and backend paths unchanged.
+- Updated the navigation verifier so transcript validation ownership guards inspect `mobile/recordingCopy.ts`, while transcript-review bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 now also covers Transcript validation copy/status helpers.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1149: Extract record save transforms
 
 Status: done

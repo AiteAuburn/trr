@@ -2520,6 +2520,10 @@ def main() -> int:
             ("transcript review pre-parse guidance helper", "function transcriptReviewPreParseGuidanceCopy()"),
             ("transcript review sample warning helper", "function transcriptReviewSampleWarningCopy()"),
             ("transcript review preflight passed helper", "function transcriptReviewPreflightPassedCopy()"),
+            ("transcript validation helper", "function validateTranscriptForParser(value: string)"),
+            ("transcript validation numeric density helper", "function countNumericValues(value: string)"),
+            ("transcript validation max length copy", "文字過長，請縮短到 ${maxTranscriptTextLength} 字內，或分批整理"),
+            ("transcript validation numeric density copy", "數字太多，請分批整理，避免 parser 成本過高"),
             ("transcript review intro copy", "確認目前輸入或本機 Whisper 轉出的紀錄文字"),
             ("transcript review sample warning copy", "避免不必要的 parser / LLM 成本"),
         ):
