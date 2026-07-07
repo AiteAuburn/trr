@@ -1359,9 +1359,15 @@ def main() -> int:
 
         _assert_contains(
             "destination-aware return labels",
-            content,
+            first_version_flow_copy_content,
             "function returnDestinationButtonLabel(destination: AppScreen)",
         )
+        for label, marker in (
+            ("destination return future modules label", "返回未來擴充"),
+            ("destination return menu label", "返回功能選單"),
+            ("destination return previous label", "返回上一頁"),
+        ):
+            _assert_contains(label, first_version_flow_copy_content, marker)
         for screen in sorted(EXPECTED_PREVIEW_RETURN_CTA_SCREENS):
             label_name = f"{screen}ReturnButtonDisplayLabel"
             return_state_name = f"{screen}ReturnScreen"

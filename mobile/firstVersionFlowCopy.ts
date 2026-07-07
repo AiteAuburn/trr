@@ -177,6 +177,16 @@ export function primaryTabAccessibilityLabel(label: string) {
   return boundDisplayText(`前往${safeLabel}分頁，只切換 App 內頁面`, maxDisplayDetailTextLength);
 }
 
+export function returnDestinationButtonLabel(destination: AppScreen) {
+  if (destination === "futureModules") {
+    return boundDisplayText("返回未來擴充", maxDisplayTextLength);
+  }
+  if (destination === "menu") {
+    return boundDisplayText("返回功能選單", maxDisplayTextLength);
+  }
+  return boundDisplayText("返回上一頁", maxDisplayTextLength);
+}
+
 export function quickRecordIntroCopy() {
   return boundDisplayText("首頁只保留按住錄音；文字整理與手動新增請從記錄頁進入，整理前都會先進文字確認。", maxDisplayDetailTextLength);
 }

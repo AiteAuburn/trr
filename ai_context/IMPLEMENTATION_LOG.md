@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1120 extract destination-aware return labels
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/firstVersionFlowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted destination-aware preview return label helper from `mobile/App.tsx` into `mobile/firstVersionFlowCopy.ts`.
+- Kept preview return targets, render bindings, return handlers, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so destination-aware return label helper ownership guards inspect `mobile/firstVersionFlowCopy.ts`, while return target bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover destination-aware return label boundaries.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1119 extract primary tab accessibility copy
 
 類型：mobile / refactor / verifier / docs

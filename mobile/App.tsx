@@ -313,6 +313,7 @@ import {
   quickRecordIntroCopy,
   recordingButtonAccessibilityLabel,
   recordManualEntryStatusMessage,
+  returnDestinationButtonLabel,
   saveSuccessDestinationStatusMessage,
   saveSuccessManualContinueStatusMessage,
   saveSuccessProcessUnsavedStatusMessage,
@@ -2945,16 +2946,6 @@ function auxiliarySectionLabels() {
     aiBadge: boundDisplayText("AI", maxDisplayTextLength),
     dangerBang: boundDisplayText("!", 4)
   };
-}
-
-function returnDestinationButtonLabel(destination: AppScreen) {
-  if (destination === "futureModules") {
-    return boundDisplayText("返回未來擴充", maxDisplayTextLength);
-  }
-  if (destination === "menu") {
-    return boundDisplayText("返回功能選單", maxDisplayTextLength);
-  }
-  return boundDisplayText("返回上一頁", maxDisplayTextLength);
 }
 
 function futureModuleDetailBoundaryCopy() {

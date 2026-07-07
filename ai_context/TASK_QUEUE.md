@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1120: Extract destination-aware return labels
+
+Status: done
+
+Summary:
+
+- Extracted destination-aware preview return label helper from `mobile/App.tsx` into `mobile/firstVersionFlowCopy.ts`.
+- Kept preview return targets, render bindings, return handlers, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so destination-aware return label helper ownership guards inspect `mobile/firstVersionFlowCopy.ts`, while return target bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover destination-aware return label boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1119: Extract primary tab accessibility copy
 
 Status: done
