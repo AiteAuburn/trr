@@ -1831,16 +1831,18 @@ def main() -> int:
             content,
             "function pressAiCandidateRemoveAction(item: ReturnType<typeof pendingRecordDisplayItem>)",
         )
-        _assert_contains(
-            "AI candidate edit accessibility item",
-            content,
-            "editAccessibilityLabel: boundDisplayText(`修改${typeLabel}候選紀錄：${payloadSummary}`, maxDisplayDetailTextLength)",
-        )
-        _assert_contains(
-            "AI candidate remove accessibility item",
-            content,
-            "removeAccessibilityLabel: boundDisplayText(`移除${typeLabel}候選紀錄：${payloadSummary}`, maxDisplayDetailTextLength)",
-        )
+        for label, marker in (
+            ("AI candidate display item helper", "function pendingRecordDisplayItem(record: PendingRecord, index: number, keyPrefix = \"candidate\")"),
+            ("AI candidate source display helper", "function pendingRecordSourceDisplayText(record: PendingRecord)"),
+            ("AI candidate confidence display helper", "function confidencePercentDisplay(value: unknown)"),
+            ("AI candidate decision trace helper", "function shortDecisionTrace(trace?: string)"),
+            ("AI candidate edit accessibility item", "editAccessibilityLabel: boundDisplayText(`修改${typeLabel}候選紀錄：${payloadSummary}`, maxDisplayDetailTextLength)"),
+            ("AI candidate remove accessibility item", "removeAccessibilityLabel: boundDisplayText(`移除${typeLabel}候選紀錄：${payloadSummary}`, maxDisplayDetailTextLength)"),
+            ("AI candidate source fallback", "等待使用者確認"),
+            ("AI candidate low confidence threshold", "const lowConfidence = (record.confidence ?? 1) < 0.7;"),
+            ("AI candidate reason display", "boundDisplayText(`建立理由：${decisionTrace}`, maxDisplayDetailTextLength)"),
+        ):
+            _assert_contains(label, record_display_content, marker)
         _assert_contains(
             "AI candidate edit action binding",
             content,

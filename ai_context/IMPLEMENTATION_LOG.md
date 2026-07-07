@@ -15,6 +15,38 @@
 
 ## 2026-07-07
 
+### T1101 extract AI candidate display helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted AI candidate display item shaping, source-text fallback, confidence percentage display, low-confidence flagging, decision-trace display text, and candidate edit/remove accessibility labels from `mobile/App.tsx` into `mobile/recordDisplay.ts`.
+- Kept AI review render, candidate edit/remove handlers, parse-preview state, save-confirm flow, UI copy, navigation, parser requests, and backend save flow unchanged.
+- Updated the navigation verifier so AI candidate display helper ownership guards inspect `mobile/recordDisplay.ts`, while AI candidate handler and binding guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the AI candidate display boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1100 extract History raw transcript display helper
 
 類型：mobile / refactor / verifier / docs

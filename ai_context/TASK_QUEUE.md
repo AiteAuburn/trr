@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1101: Extract AI candidate display helper
+
+Status: done
+
+Summary:
+
+- Extracted AI candidate display item shaping, source-text fallback, confidence percentage display, low-confidence flagging, decision-trace display text, and candidate edit/remove accessibility labels from `mobile/App.tsx` into `mobile/recordDisplay.ts`.
+- Kept AI review render, candidate edit/remove handlers, parse-preview state, save-confirm flow, UI copy, navigation, parser requests, and backend save flow unchanged.
+- Updated the navigation verifier so AI candidate display helper ownership guards inspect `mobile/recordDisplay.ts`, while AI candidate handler and binding guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the AI candidate display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1100: Extract History raw transcript display helper
 
 Status: done

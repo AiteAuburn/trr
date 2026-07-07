@@ -30,7 +30,7 @@
   - `modelStorage.ts`：本機模型清單與下載狀態。
   - `nativeLocalModels.ts`：native Whisper / Llama bridge。
   - `navigationConfig.ts`：`AppScreen` route union、primary screens、MVP flow、screen chrome、first-version menu 與 visual-smoke route jump config。
-  - `recordDisplay.ts`：daily section definitions, daily-record section display shaping, record payload labels, record time/date labels, shared Today/History record-list display item shaping, record detail display item shaping, and manual-record confirmation display shaping.
+  - `recordDisplay.ts`：daily section definitions, daily-record section display shaping, AI candidate display shaping, record payload labels, record time/date labels, shared Today/History record-list display item shaping, record detail display item shaping, and manual-record confirmation display shaping.
   - `recordEditTransforms.ts`：record edit field type, max-length bounds, empty edit fields, validation, record payload-to-edit-field transforms, and edit-field-to-payload transforms.
   - `recordingCopy.ts`：recording / transcript-review bounded status messages and display copy.
   - `recordWorkflowCopy.ts`：parser / AI save / AI candidate bounded status messages.
@@ -144,7 +144,7 @@ Verification:
 
 ### Slice 5: First-Version Screen Components
 
-Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, and daily-record section display boundaries extracted.
+Status: started; Settings row, Analysis range, History detail-mode, History calendar day display, History daily summary/selected-date section display, History raw transcript display, AI candidate display, shared record-list display, record detail display, manual-record confirmation display, record edit-field transform, edit validation, edit payload transform, daily-record date label, same-day preview merge, daily-record reorganization copy/status, and daily-record section display boundaries extracted.
 
 Scope:
 

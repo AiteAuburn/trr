@@ -43,6 +43,7 @@ import {
   displayPayload,
   displayTextValue,
   manualRecordConfirmDisplayItem,
+  pendingRecordDisplayItem,
   recordDateTimeDisplay,
   recordDetailDisplayItem,
   recordListDisplayItem,
@@ -2402,51 +2403,6 @@ function rejectedReasonLabel(reason?: string) {
     return "無法判斷可儲存紀錄類型";
   }
   return boundDisplayText(normalized, 80);
-}
-
-function shortDecisionTrace(trace?: string) {
-  const trimmed = trace?.trim();
-  if (!trimmed) {
-    return "";
-  }
-  return boundDisplayText(trimmed, 80);
-}
-
-function confidencePercentDisplay(value: unknown) {
-  const numericValue = typeof value === "number" ? value : 0;
-  return clampNumber(Math.round(numericValue * 100), 0, 100);
-}
-
-function pendingRecordSourceDisplayText(record: PendingRecord) {
-  return typeof record.metadata_json?.source_text === "string"
-    ? boundDisplayText(record.metadata_json.source_text, maxDisplayDetailTextLength)
-    : "等待使用者確認";
-}
-
-function pendingRecordDisplayItem(record: PendingRecord, index: number, keyPrefix = "candidate") {
-  const decisionTrace = shortDecisionTrace(record.decision_trace);
-  const lowConfidence = (record.confidence ?? 1) < 0.7;
-  const typeLabel = boundDisplayText(recordTypeLabel(record.record_type), 80);
-  const payloadSummary = boundDisplayText(
-    displayPayload(record.record_type, record.payload_json),
-    maxDisplayDetailTextLength
-  );
-  return {
-    key: `${keyPrefix}-${boundIdentifier(record.record_type)}-${clampNumber(index, 0, maxMobilePreviewRecords)}`,
-    index,
-    record,
-    icon: boundDisplayText(recordTypeIcon(record.record_type), 4),
-    typeLabel,
-    payloadSummary,
-    editAccessibilityLabel: boundDisplayText(`修改${typeLabel}候選紀錄：${payloadSummary}`, maxDisplayDetailTextLength),
-    removeAccessibilityLabel: boundDisplayText(`移除${typeLabel}候選紀錄：${payloadSummary}`, maxDisplayDetailTextLength),
-    sourceText: pendingRecordSourceDisplayText(record),
-    confidencePercent: confidencePercentDisplay(record.confidence),
-    lowConfidence,
-    decisionTraceDisplayText: decisionTrace
-      ? boundDisplayText(`建立理由：${decisionTrace}`, maxDisplayDetailTextLength)
-      : ""
-  };
 }
 
 function pendingRecordForSave(record: PendingRecord): PendingRecord {
