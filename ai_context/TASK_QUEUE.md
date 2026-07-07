@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1170: Extract Store fulfillment copy helper
+
+Status: done
+
+Summary:
+
+- Moved the Store redeemable fulfillment copy helper from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept fulfillment copy text, Store product display behavior, backend reward mapping, redemption handlers, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so Store fulfillment copy ownership is guarded in `mobile/futureModuleDisplay.ts`, while Store handlers, API endpoints, and render bindings remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Store fulfillment copy boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1169: Extract future-module detail and status copy
 
 Status: done

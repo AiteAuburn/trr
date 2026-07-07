@@ -18,6 +18,8 @@ export type FutureModuleCard = {
   target?: AppScreen;
 };
 
+type StoreFulfillmentCategory = "coupons" | "supplementDiscounts" | "partnerProducts" | "specialBadges" | "memberBenefits";
+
 export const futureModuleCards: FutureModuleCard[] = [
   {
     id: "doctor",
@@ -192,6 +194,13 @@ export function futureModuleDetailReturnStatusMessage() {
 export function futurePreviewReturnStatusMessage(target: AppScreen) {
   const targetLabel = target === "menu" ? "功能選單" : target === "futureModules" ? "未來擴充" : "上一頁";
   return boundDisplayText(`已返回${targetLabel}；preview 不呼叫 backend、AI、Vision 或 payment。`, maxDisplayDetailTextLength);
+}
+
+export function storeRedeemableFulfillmentCopy(category: StoreFulfillmentCategory): string {
+  if (category === "coupons" || category === "supplementDiscounts") {
+    return "送出後 backend 會扣點並立即發出優惠券或折扣碼。";
+  }
+  return "送出後 backend 會扣點並建立兌換 reservation，後續仍需 fulfillment。";
 }
 
 function futurePreviewBoundaryDisplayItem(badge: string, copy: string) {

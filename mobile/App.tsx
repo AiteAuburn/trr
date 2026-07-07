@@ -132,6 +132,7 @@ import {
   storeEmptySearchDisplayItem,
   storeLocalBoundaryCopy,
   storePreviewBoundaryCopy,
+  storeRedeemableFulfillmentCopy,
   yearReviewAiEncouragementCopy,
   yearReviewAiObservationCopy,
   yearReviewBadgeMaterialCopy,
@@ -984,13 +985,6 @@ type StoreProduct = {
   icon: string;
   rewardStatus?: "preview" | "redeemable";
 };
-
-function storeRedeemableFulfillmentCopy(category: StoreCategory): string {
-  if (category === "coupons" || category === "supplementDiscounts") {
-    return "送出後 backend 會扣點並立即發出優惠券或折扣碼。";
-  }
-  return "送出後 backend 會扣點並建立兌換 reservation，後續仍需 fulfillment。";
-}
 
 type SaveEntryMethod = "ai" | "manual" | null;
 
