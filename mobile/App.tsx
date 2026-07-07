@@ -427,6 +427,7 @@ import {
   reminderIntegrationButtonLabel,
   reminderSettingsIntroCopy,
   settingsAccountSecurityOpenStatusMessage,
+  settingsQuotaHelperText,
   settingsSubpageReturnStatusMessage
 } from "./settingsCopy";
 import {
@@ -2511,13 +2512,6 @@ function membershipTrialDaysText(trialDays: number | null) {
   return boundDisplayText(
     trialDays === null ? "試用天數尚未載入" : `還剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天`,
     80
-  );
-}
-
-function settingsQuotaHelperText(quota: VoiceQuota | null) {
-  return boundDisplayText(
-    quota ? `今日錄音剩餘 ${formatVoiceMinutes(quota.remaining_seconds_today)}` : "錄音額度尚未載入",
-    maxDisplayDetailTextLength
   );
 }
 

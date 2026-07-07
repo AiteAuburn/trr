@@ -4136,6 +4136,8 @@ def main() -> int:
             ("quota used pending copy", "已用 尚未載入"),
             ("quota remaining display helper", "function quotaRemainingDisplayValue(quota: VoiceQuotaUsageDisplaySource | null)"),
             ("quota remaining pending copy", "剩餘 尚未載入"),
+            ("settings quota helper", "function settingsQuotaHelperText(quota: VoiceQuotaDisplaySource | null)"),
+            ("settings quota pending copy", "錄音額度尚未載入"),
         ):
             _assert_contains(label, settings_copy_content, marker)
         for label, marker in (

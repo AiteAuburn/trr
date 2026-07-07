@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1127: Extract settings quota helper copy
+
+Status: done
+
+Summary:
+
+- Extracted Settings voice quota helper display copy from `mobile/App.tsx` into `mobile/settingsCopy.ts`.
+- Kept voice quota state, warning style decision, subscription/quota display text, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so Settings quota helper copy ownership guards inspect `mobile/settingsCopy.ts`, while render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover Settings voice quota helper copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1126: Extract voice quota usage display copy
 
 Status: done

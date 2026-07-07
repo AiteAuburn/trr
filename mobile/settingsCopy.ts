@@ -76,6 +76,13 @@ export function quotaRemainingDisplayValue(quota: VoiceQuotaUsageDisplaySource |
   return boundDisplayText(quota ? `剩餘 ${formatVoiceMinutes(quota.remaining_seconds_today)}` : "剩餘 尚未載入", 80);
 }
 
+export function settingsQuotaHelperText(quota: VoiceQuotaDisplaySource | null) {
+  return boundDisplayText(
+    quota ? `今日錄音剩餘 ${formatVoiceMinutes(quota.remaining_seconds_today)}` : "錄音額度尚未載入",
+    maxDisplayDetailTextLength
+  );
+}
+
 export function advancedSettingsToggleLabel(isExpanded: boolean) {
   return boundDisplayText(isExpanded ? "收合進階設定" : "顯示進階設定", maxDisplayTextLength);
 }
