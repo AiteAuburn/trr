@@ -4,6 +4,7 @@ import { resultChecklistItem } from "./sharedDisplayItems";
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
 const maxIdentifierTextLength = 128;
+const maxMobileCountValue = 1_000_000;
 const maxListItems = 12;
 
 export type FutureModuleCard = {
@@ -263,6 +264,36 @@ export function storeCheckoutReadinessTitle() {
 
 export function storeCartReturnButtonLabel() {
   return boundDisplayText("返回商城", maxDisplayTextLength);
+}
+
+export function achievementPreviewBoundaryCopy() {
+  return boundDisplayText(
+    "成就可同步 backend 依記錄聚合的 MVP 徽章摘要；backend 不可用或 visual smoke 時保留本機推算。",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function achievementLocalComputationCopy() {
+  return boundDisplayText(
+    "成就摘要只讀取既有紀錄並聚合進度；按下同步才會保存已解鎖徽章，不呼叫 AI、不更新排行榜，也不提供醫療建議。",
+    maxDisplayDetailTextLength
+  );
+}
+
+export function achievementNextBadgeCopy(remainingProgress: number) {
+  const boundedProgress = clampNumber(remainingProgress, 0, maxMobileCountValue);
+  return boundDisplayText(
+    boundedProgress > 0 ? `下一個徽章還差 ${boundedProgress} 點進度` : "目前清單已全部完成",
+    maxDisplayTextLength
+  );
+}
+
+export function achievementIntegrationButtonLabel() {
+  return boundDisplayText("同步徽章解鎖", maxDisplayTextLength);
+}
+
+export function achievementIntegrationButtonAccessibilityLabel() {
+  return boundDisplayText("同步成就徽章解鎖紀錄，不更新排行榜或公開資料", maxDisplayDetailTextLength);
 }
 
 export function futurePreviewSectionLabels() {

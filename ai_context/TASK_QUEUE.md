@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1166: Extract achievement future display copy
+
+Status: done
+
+Summary:
+
+- Extracted achievement future-module boundary copy, local-computation copy, next-badge copy, and sync button/accessibility copy from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept achievement copy text, bounded display behavior, render bindings, hidden/debug-only routing, first-version menu destinations, backend paths, achievement data transforms, and screen layout unchanged.
+- Updated the navigation verifier so achievement future copy ownership guards inspect `mobile/futureModuleDisplay.ts`, while achievement handlers, backend endpoints, taxonomy, and render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the achievement future display copy boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1165: Extract store cart future display copy
 
 Status: done
