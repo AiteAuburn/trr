@@ -26,7 +26,7 @@
   - 所有主要 screen JSX。
 - 已存在少量獨立 module：
   - `authTokenStorage.ts`：SecureStore token boundary。
-  - `authTransforms.ts`：Auth token/OIDC request and response sanitizing transforms.
+  - `authTransforms.ts`：Auth token/OIDC request and response sanitizing transforms plus protected request header construction.
   - `authProviderChallenge.ts`：OIDC challenge helper。
   - `modelStorage.ts`：本機模型清單與下載狀態。
   - `nativeLocalModels.ts`：native Whisper / Llama bridge。
@@ -136,7 +136,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; date/time, record bounds, daily transcript, auth token/OIDC request transforms, account/profile response bounding, AI model option response bounding, analysis basic report response bounding, analysis data/chart, analysis metric, subscription trial-days, and subscription voice quota response bounding transform helpers extracted.
+Status: started; date/time, record bounds, daily transcript, auth token/OIDC request transforms, protected auth request header transforms, account/profile response bounding, AI model option response bounding, analysis basic report response bounding, analysis data/chart, analysis metric, subscription trial-days, and subscription voice quota response bounding transform helpers extracted.
 
 Scope:
 

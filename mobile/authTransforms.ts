@@ -7,6 +7,7 @@ const maxOidcProviderLength = 32;
 const maxOidcIdTokenLength = 4096;
 const maxOidcNonceLength = 128;
 const maxDeviceFingerprintLength = 256;
+const maxIdentifierTextLength = 128;
 
 export type AuthTokenResponseTransformSource = {
   access_token: string;
@@ -22,6 +23,10 @@ function clampNumber(value: number, min: number, max: number) {
     return min;
   }
   return Math.max(min, Math.min(max, value));
+}
+
+function boundIdentifier(value: string) {
+  return value.slice(0, maxIdentifierTextLength);
 }
 
 export function boundAuthTokenResponse<T extends AuthTokenResponseTransformSource>(value: T): T | null {
@@ -83,4 +88,23 @@ export function boundDeviceFingerprintForRequest(value: string | null | undefine
     return undefined;
   }
   return fingerprint.slice(0, maxDeviceFingerprintLength);
+}
+
+export function buildProtectedRequestHeaders(
+  accountId: string,
+  accessToken: string,
+  allowDevAuth: boolean
+): Record<string, string> {
+  const token = accessToken.trim();
+  const devAccountId = boundIdentifier(accountId.trim());
+  if (token.length > authAccessTokenMaxLength) {
+    return {};
+  }
+  if (token) {
+    return { Authorization: `Bearer ${token}` };
+  }
+  if (allowDevAuth && devAccountId) {
+    return { "X-Account-Id": devAccountId };
+  }
+  return {};
 }

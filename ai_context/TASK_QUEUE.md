@@ -124,6 +124,26 @@ None.
 
 ## Done
 
+### T1145: Extract protected request header transform
+
+Status: done
+
+Summary:
+
+- Extracted protected request header construction from `mobile/App.tsx` into `mobile/authTransforms.ts`, leaving a thin App adapter that passes the existing `allowMobileDevAuth` flag.
+- Kept all request call sites, Bearer-token priority, oversized-token rejection, dev `X-Account-Id` fallback, auth/session handlers, SecureStore storage, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated navigation and secure-auth verifiers so protected header construction ownership guards inspect `mobile/authTransforms.ts`, while the App adapter and inline-header bans remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 4 now also covers protected auth request header transforms.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run verify:secure-auth-storage` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_secure_auth_storage.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1144: Extract auth token request transforms
 
 Status: done

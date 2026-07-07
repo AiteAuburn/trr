@@ -4276,6 +4276,8 @@ def main() -> int:
             ("auth OIDC id token JWT shape guard", "/^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$/.test(token)"),
             ("auth OIDC nonce shape guard", "/^[A-Za-z0-9._~+-]+$/.test(nonce)"),
             ("auth device fingerprint bound helper", "function boundDeviceFingerprintForRequest(value: string | null | undefined)"),
+            ("auth protected headers builder", "function buildProtectedRequestHeaders("),
+            ("auth protected headers dev fallback", 'return { "X-Account-Id": devAccountId };'),
         ):
             _assert_contains(label, auth_transforms_content, marker)
         for label, marker in (

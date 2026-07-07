@@ -53,6 +53,7 @@ def main() -> int:
         "boundOidcNonceForRequest",
         "boundOidcProviderForRequest",
         "boundDeviceFingerprintForRequest",
+        "buildProtectedRequestHeaders",
         "/^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$/.test(token)",
         "/^[A-Za-z0-9._~+-]+$/.test(nonce)",
     ):
@@ -119,7 +120,7 @@ def main() -> int:
             errors.append(f"mobile/App.tsx missing secure auth marker: {marker}")
     if "4096" in app and "authAccessTokenMaxLength" not in app:
         errors.append("mobile/App.tsx must use authAccessTokenMaxLength instead of inline token limits")
-    errors.extend(verify_protected_request_header_boundary(app))
+    errors.extend(verify_protected_request_header_boundary(app, auth_transforms))
 
     if errors:
         for error in errors:
@@ -130,11 +131,17 @@ def main() -> int:
     return 0
 
 
-def verify_protected_request_header_boundary(app: str) -> list[str]:
+def verify_protected_request_header_boundary(app: str, auth_transforms: str) -> list[str]:
     errors: list[str] = []
-    helper = extract_function_body(app, "protectedRequestHeaders")
+    app_helper = extract_function_body(app, "protectedRequestHeaders")
+    if not app_helper:
+        return ["mobile/App.tsx missing protectedRequestHeaders adapter"]
+    if "buildProtectedRequestHeaders(accountId, accessToken, allowMobileDevAuth)" not in app_helper:
+        errors.append("protectedRequestHeaders adapter must delegate to buildProtectedRequestHeaders with allowMobileDevAuth")
+
+    helper = extract_function_body(auth_transforms, "buildProtectedRequestHeaders")
     if not helper:
-        return ["mobile/App.tsx missing protectedRequestHeaders helper"]
+        return errors + ["mobile/authTransforms.ts missing buildProtectedRequestHeaders helper"]
 
     required_markers = (
         "accessToken.trim()",
@@ -142,7 +149,7 @@ def verify_protected_request_header_boundary(app: str) -> list[str]:
         "token.length > authAccessTokenMaxLength",
         "return {};",
         'return { Authorization: `Bearer ${token}` };',
-        "if (allowMobileDevAuth && devAccountId)",
+        "if (allowDevAuth && devAccountId)",
         'return { "X-Account-Id": devAccountId };',
     )
     for marker in required_markers:

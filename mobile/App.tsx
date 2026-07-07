@@ -513,6 +513,7 @@ import {
   boundOidcNonceForRequest,
   boundOidcProviderForRequest,
   boundRefreshTokenForRequest,
+  buildProtectedRequestHeaders,
   type OidcLoginProvider
 } from "./authTransforms";
 
@@ -2186,18 +2187,7 @@ async function requestNoContent(apiBaseUrl: string, path: string, init?: Request
 }
 
 function protectedRequestHeaders(accountId: string, accessToken: string): Record<string, string> {
-  const token = accessToken.trim();
-  const devAccountId = boundIdentifier(accountId.trim());
-  if (token.length > authAccessTokenMaxLength) {
-    return {};
-  }
-  if (token) {
-    return { Authorization: `Bearer ${token}` };
-  }
-  if (allowMobileDevAuth && devAccountId) {
-    return { "X-Account-Id": devAccountId };
-  }
-  return {};
+  return buildProtectedRequestHeaders(accountId, accessToken, allowMobileDevAuth);
 }
 
 function storeCartUnavailableDisplayItem() {
