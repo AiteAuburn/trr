@@ -5,6 +5,14 @@ export type QuickEntryMode = "voice" | "text" | "manual";
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
 const maxUiMessageLength = 300;
+const maxMobileCountValue = 1_000_000;
+
+function clampNumber(value: number, min: number, max: number) {
+  if (!Number.isFinite(value)) {
+    return min;
+  }
+  return Math.min(Math.max(value, min), max);
+}
 
 function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);
@@ -20,6 +28,13 @@ export function busyActionStatusMessage() {
 
 export function previewActionClearStatusMessage() {
   return "";
+}
+
+export function todayRecordSummaryText(recordCount: number) {
+  if (recordCount <= 0) {
+    return boundDisplayText("今日尚未載入紀錄", 80);
+  }
+  return boundDisplayText(`今日已記錄 ${clampNumber(recordCount, 0, maxMobileCountValue)} 筆`, 80);
 }
 
 export function coreFlowSectionLabels() {

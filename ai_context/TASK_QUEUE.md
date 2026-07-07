@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1114: Extract Today record summary copy helper
+
+Status: done
+
+Summary:
+
+- Extracted Today record count summary copy from `mobile/App.tsx` into `mobile/firstVersionFlowCopy.ts`.
+- Kept Today render binding, loaded record data, record count source, UI copy text, navigation, parser requests, and backend request paths unchanged.
+- Updated the navigation verifier so Today summary copy helper ownership guards inspect `mobile/firstVersionFlowCopy.ts`, while Today render behavior remains checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover first-version Today summary copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1113: Extract shared action status helpers
 
 Status: done

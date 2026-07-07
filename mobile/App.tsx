@@ -310,6 +310,7 @@ import {
   todayManualEntryStatusMessage,
   todayRecordDetailStatusMessage,
   todayRecordEntryStatusMessage,
+  todayRecordSummaryText,
   transcriptReviewManualEntryStatusMessage,
   type QuickEntryMode
 } from "./firstVersionFlowCopy";
@@ -2587,13 +2588,6 @@ function parserModelUnavailableText(llmModel: AiModelOption | null, sttModel: Ai
     return boundUiMessage(`${displayTextValue(sttModel.label, 80)} 尚未啟用`);
   }
   return "";
-}
-
-function todayRecordSummaryText(recordCount: number) {
-  if (recordCount <= 0) {
-    return boundDisplayText("今日尚未載入紀錄", 80);
-  }
-  return boundDisplayText(`今日已記錄 ${clampNumber(recordCount, 0, maxMobileCountValue)} 筆`, 80);
 }
 
 function analysisNoDataStatusLabel() {
