@@ -83,6 +83,7 @@ import {
   comparisonDisplayItem,
   destinationCardDisplayItem,
   detailPairDisplayItem,
+  manualRecordTypeDisplayItem,
   menuScreenDisplayItem,
   metricDisplayItem,
   optionDisplayItem,
@@ -1886,15 +1887,6 @@ function authProviderPreviewDisplayItem(value: (typeof authProviderPreviews)[num
     actionStatus: boundUiMessage(
       `${item.title} 原生 provider callback 尚未接入；callback 拿到 id_token 後會走 /auth/oidc-login、SecureStore 與 session revoke 流程。`
     )
-  };
-}
-
-function manualRecordTypeDisplayItem(value: { id: ManualRecordType; label: string }) {
-  const label = boundDisplayText(value.label || "紀錄", 60);
-  return {
-    value: value.id,
-    label,
-    accessibilityLabel: boundDisplayText(`選擇${label}紀錄類型，不呼叫 AI 或 parser`, maxDisplayDetailTextLength)
   };
 }
 
@@ -4828,7 +4820,7 @@ export default function App() {
     setManualRecordType(type);
   }
 
-  function pressManualRecordTypeOption(type: ReturnType<typeof manualRecordTypeDisplayItem>) {
+  function pressManualRecordTypeOption(type: (typeof manualRecordTypeDisplayOptions)[number]) {
     selectManualRecordType(type.value);
   }
 

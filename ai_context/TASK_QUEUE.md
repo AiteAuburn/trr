@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1136: Extract manual record type display helper
+
+Status: done
+
+Summary:
+
+- Extracted manual-record type display helper from `mobile/App.tsx` into `mobile/sharedDisplayItems.ts`.
+- Kept manual-record type values, selection handler, chip render bindings, UI copy text, navigation, parser requests, AI behavior, and backend paths unchanged.
+- Updated the navigation verifier so manual-record type display helper ownership guards inspect `mobile/sharedDisplayItems.ts`, while render and press bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers shared manual-record type display item builders.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1135: Extract shared navigation display items
 
 Status: done

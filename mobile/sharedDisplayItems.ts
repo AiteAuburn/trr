@@ -88,6 +88,15 @@ export function valueLabelDisplayItem(value: readonly [string, string]) {
   };
 }
 
+export function manualRecordTypeDisplayItem<T extends string>(value: { id: T; label: string }) {
+  const label = boundDisplayText(value.label || "紀錄", 60);
+  return {
+    value: value.id,
+    label,
+    accessibilityLabel: boundDisplayText(`選擇${label}紀錄類型，不呼叫 AI 或 parser`, maxDisplayDetailTextLength)
+  };
+}
+
 export function comparisonDisplayItem(value: readonly [string, string, string]) {
   return {
     feature: boundDisplayText(value[0] || "功能", 80),

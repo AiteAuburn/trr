@@ -3369,7 +3369,7 @@ def main() -> int:
         _assert_contains(
             "manual record type option press handler",
             content,
-            "function pressManualRecordTypeOption(type: ReturnType<typeof manualRecordTypeDisplayItem>)",
+            "function pressManualRecordTypeOption(type: (typeof manualRecordTypeDisplayOptions)[number])",
         )
         _assert_contains(
             "analysis range handler",
@@ -3509,8 +3509,12 @@ def main() -> int:
             shared_display_items_content,
             "accessibilityLabel: boundDisplayText(`選擇${label}選項`, maxDisplayTextLength)",
         )
+        _assert_contains(
+            "manual record type accessibility item",
+            shared_display_items_content,
+            "accessibilityLabel: boundDisplayText(`選擇${label}紀錄類型，不呼叫 AI 或 parser`, maxDisplayDetailTextLength)",
+        )
         for label, marker in (
-            ("manual record type accessibility item", "accessibilityLabel: boundDisplayText(`選擇${label}紀錄類型，不呼叫 AI 或 parser`, maxDisplayDetailTextLength)"),
             ("store category accessibility item", "accessibilityLabel: boundDisplayText(`切換商城分類：${label}，不建立訂單或付款`, maxDisplayDetailTextLength)"),
             ("manual type chip accessibility binding", "accessibilityLabel={type.accessibilityLabel}"),
             ("shared option chip accessibility binding", "accessibilityLabel={option.accessibilityLabel}"),
@@ -4203,6 +4207,8 @@ def main() -> int:
             ("reminder preview display helper", "function reminderPreviewDisplayItem(value: readonly [string, string, string, string])"),
             ("option display helper", "function optionDisplayItem(value: string)"),
             ("value label display helper", "function valueLabelDisplayItem(value: readonly [string, string])"),
+            ("manual record type display helper", "function manualRecordTypeDisplayItem<T extends string>(value: { id: T; label: string })"),
+            ("manual record type parser boundary copy", "不呼叫 AI 或 parser"),
             ("comparison display helper", "function comparisonDisplayItem(value: readonly [string, string, string])"),
             ("destination card display helper", "function destinationCardDisplayItem(value: readonly string[])"),
             ("menu screen display helper", "function menuScreenDisplayItem(value: { id: AppScreen; label: string; icon: string })"),
