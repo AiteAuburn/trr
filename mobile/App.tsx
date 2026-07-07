@@ -108,6 +108,8 @@ import {
   foodPhotoUploadBoxLabel,
   foodPhotoVisionBoundaryDisplayItem,
   communityLeaderboardDisplaySection,
+  foodCommunityCategoryDisplayItem,
+  foodCommunityItemDisplayItem,
   futureModuleCards,
   futureModuleCardDisplayItem,
   futureModuleDetailBoundaryCopy,
@@ -153,6 +155,8 @@ import {
   type CommunityLeaderboardApiResponse,
   type CommunityLeaderboardDisplaySection,
   type CommunityLeaderboardType,
+  type FoodCommunityCategory,
+  type FoodCommunityItem,
   type FutureModuleCard,
   type StoreCategory,
   type StoreProduct,
@@ -866,17 +870,6 @@ const initialVisualSmokeScreen = normalizeVisualSmokeInitialRoute(
 
 type AchievementCategory = "glucose" | "meal" | "exercise";
 type AchievementKind = "cumulative" | "streak";
-type FoodCommunityCategory =
-  | "vegetable"
-  | "meat"
-  | "seafood"
-  | "egg"
-  | "bean"
-  | "starch"
-  | "drink"
-  | "fruit"
-  | "snack"
-  | "supplement";
 type AchievementItem = {
   id: string;
   category: AchievementCategory;
@@ -920,24 +913,6 @@ type AchievementApiSummary = {
   items: AchievementApiItem[];
 };
 type AchievementApiUnlock = AchievementApiItem;
-type FoodCommunityShare = {
-  id: string;
-  beforeGlucose: number;
-  afterGlucose: number;
-  glucoseDelta?: number;
-  note: string;
-};
-type FoodCommunityItem = {
-  id: string;
-  category: FoodCommunityCategory;
-  title: string;
-  aliases: string[];
-  shareCount: number;
-  averageRise: number;
-  maximumRise: number;
-  minimumRise: number;
-  examples: FoodCommunityShare[];
-};
 type FoodCommunityShareFields = {
   foodName: string;
   eatenDate: string;
@@ -1349,67 +1324,6 @@ function authProviderPreviewDisplayItem(value: AuthProviderPreview) {
     accessibilityLabel: boundDisplayText(`查看${item.title}登入整合狀態，不保存 provider token`, maxDisplayDetailTextLength),
     actionStatus: boundUiMessage(
       `${item.title} 原生 provider callback 尚未接入；callback 拿到 id_token 後會走 /auth/oidc-login、SecureStore 與 session revoke 流程。`
-    )
-  };
-}
-
-function foodCommunityCategoryDisplayItem(value: { id: FoodCommunityCategory; label: string; foodCount?: number; sampleFoods?: string[] }) {
-  const label = boundDisplayText(value.label || "分類", 60);
-  const foodCount = clampNumber(value.foodCount ?? 0, 0, maxMobileCountValue);
-  const sampleFoods = (value.sampleFoods ?? [])
-    .slice(0, 3)
-    .map((food) => boundDisplayText(food, 40))
-    .filter(Boolean);
-  const summary = sampleFoods.length > 0
-    ? boundDisplayText(`${foodCount} 種食物：${sampleFoods.join("、")}`, maxDisplayDetailTextLength)
-    : boundDisplayText(foodCount > 0 ? `${foodCount} 種食物` : "尚未有個別食物", maxDisplayDetailTextLength);
-  return {
-    value: value.id,
-    label,
-    foodCount,
-    sampleFoods,
-    summary,
-    accessibilityLabel: boundDisplayText(`切換食物分類：${label}，${summary}`, maxDisplayDetailTextLength)
-  };
-}
-
-function foodCommunityShareDisplayItem(value: FoodCommunityShare) {
-  const before = clampNumber(value.beforeGlucose, 0, maxMobileGlucoseValue);
-  const after = clampNumber(value.afterGlucose, 0, maxMobileGlucoseValue);
-  const rise = clampNumber(value.glucoseDelta ?? after - before, -maxMobileGlucoseValue, maxMobileGlucoseValue);
-  return {
-    id: boundIdentifier(value.id),
-    before,
-    after,
-    rise,
-    note: boundDisplayText(value.note || "尚未提供心得。", maxDisplayDetailTextLength),
-    summary: boundDisplayText(`食用前 ${before}，食用後 ${after}，血糖變化 ${rise} mg/dL`, maxDisplayDetailTextLength)
-  };
-}
-
-function foodCommunityItemDisplayItem(value: FoodCommunityItem) {
-  const title = boundDisplayText(value.title || "食物", maxDisplayTextLength);
-  const shareCount = clampNumber(value.shareCount, 0, maxMobileCountValue);
-  const averageRise = clampNumber(value.averageRise, -maxMobileGlucoseValue, maxMobileGlucoseValue);
-  const maximumRise = clampNumber(value.maximumRise, -maxMobileGlucoseValue, maxMobileGlucoseValue);
-  const minimumRise = clampNumber(value.minimumRise, -maxMobileGlucoseValue, maxMobileGlucoseValue);
-  return {
-    id: boundIdentifier(value.id),
-    category: value.category,
-    title,
-    aliases: value.aliases.map((alias) => boundDisplayText(alias, 40)).slice(0, 4),
-    shareCount,
-    averageRise,
-    maximumRise,
-    minimumRise,
-    individualShareDisplayItems: value.examples.map(foodCommunityShareDisplayItem).slice(0, 3),
-    accessibilityLabel: boundDisplayText(
-      `查看${title}食物升糖資料頁，同步已載入食物分享統計與個別紀錄`,
-      maxDisplayDetailTextLength
-    ),
-    metricSummary: boundDisplayText(
-      `${shareCount} 人分享，實際升糖參考值 ${averageRise} mg/dL`,
-      maxDisplayDetailTextLength
     )
   };
 }

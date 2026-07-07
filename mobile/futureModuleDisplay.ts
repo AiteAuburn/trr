@@ -6,6 +6,7 @@ const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
 const maxIdentifierTextLength = 128;
 const maxMobileCountValue = 1_000_000;
+const maxMobileGlucoseValue = 1000;
 const maxListItems = 12;
 const maxUiMessageLength = 300;
 
@@ -45,6 +46,38 @@ export type CommunityLeaderboardDisplaySection = {
   label: string;
   entries: CommunityLeaderboardDisplayEntry[];
   emptyCopy: string;
+};
+
+export type FoodCommunityCategory =
+  | "vegetable"
+  | "meat"
+  | "seafood"
+  | "egg"
+  | "bean"
+  | "starch"
+  | "drink"
+  | "fruit"
+  | "snack"
+  | "supplement";
+
+export type FoodCommunityShare = {
+  id: string;
+  beforeGlucose: number;
+  afterGlucose: number;
+  glucoseDelta?: number;
+  note: string;
+};
+
+export type FoodCommunityItem = {
+  id: string;
+  category: FoodCommunityCategory;
+  title: string;
+  aliases: string[];
+  shareCount: number;
+  averageRise: number;
+  maximumRise: number;
+  minimumRise: number;
+  examples: FoodCommunityShare[];
 };
 
 export type StoreCategory = "coupons" | "supplementDiscounts" | "partnerProducts" | "specialBadges" | "memberBenefits";
@@ -353,6 +386,67 @@ export function communityLeaderboardDisplaySection(value: CommunityLeaderboardAp
       scoreLabel: boundDisplayText(communityLeaderboardScoreLabel(type, entry.score), 40)
     })),
     emptyCopy: boundDisplayText("目前沒有 opt-in 的公開榜單資料。", maxDisplayDetailTextLength)
+  };
+}
+
+export function foodCommunityCategoryDisplayItem(value: { id: FoodCommunityCategory; label: string; foodCount?: number; sampleFoods?: string[] }) {
+  const label = boundDisplayText(value.label || "分類", 60);
+  const foodCount = clampNumber(value.foodCount ?? 0, 0, maxMobileCountValue);
+  const sampleFoods = (value.sampleFoods ?? [])
+    .slice(0, 3)
+    .map((food) => boundDisplayText(food, 40))
+    .filter(Boolean);
+  const summary = sampleFoods.length > 0
+    ? boundDisplayText(`${foodCount} 種食物：${sampleFoods.join("、")}`, maxDisplayDetailTextLength)
+    : boundDisplayText(foodCount > 0 ? `${foodCount} 種食物` : "尚未有個別食物", maxDisplayDetailTextLength);
+  return {
+    value: value.id,
+    label,
+    foodCount,
+    sampleFoods,
+    summary,
+    accessibilityLabel: boundDisplayText(`切換食物分類：${label}，${summary}`, maxDisplayDetailTextLength)
+  };
+}
+
+export function foodCommunityShareDisplayItem(value: FoodCommunityShare) {
+  const before = clampNumber(value.beforeGlucose, 0, maxMobileGlucoseValue);
+  const after = clampNumber(value.afterGlucose, 0, maxMobileGlucoseValue);
+  const rise = clampNumber(value.glucoseDelta ?? after - before, -maxMobileGlucoseValue, maxMobileGlucoseValue);
+  return {
+    id: boundIdentifier(value.id),
+    before,
+    after,
+    rise,
+    note: boundDisplayText(value.note || "尚未提供心得。", maxDisplayDetailTextLength),
+    summary: boundDisplayText(`食用前 ${before}，食用後 ${after}，血糖變化 ${rise} mg/dL`, maxDisplayDetailTextLength)
+  };
+}
+
+export function foodCommunityItemDisplayItem(value: FoodCommunityItem) {
+  const title = boundDisplayText(value.title || "食物", maxDisplayTextLength);
+  const shareCount = clampNumber(value.shareCount, 0, maxMobileCountValue);
+  const averageRise = clampNumber(value.averageRise, -maxMobileGlucoseValue, maxMobileGlucoseValue);
+  const maximumRise = clampNumber(value.maximumRise, -maxMobileGlucoseValue, maxMobileGlucoseValue);
+  const minimumRise = clampNumber(value.minimumRise, -maxMobileGlucoseValue, maxMobileGlucoseValue);
+  return {
+    id: boundIdentifier(value.id),
+    category: value.category,
+    title,
+    aliases: value.aliases.map((alias) => boundDisplayText(alias, 40)).slice(0, 4),
+    shareCount,
+    averageRise,
+    maximumRise,
+    minimumRise,
+    individualShareDisplayItems: value.examples.map(foodCommunityShareDisplayItem).slice(0, 3),
+    accessibilityLabel: boundDisplayText(
+      `查看${title}食物升糖資料頁，同步已載入食物分享統計與個別紀錄`,
+      maxDisplayDetailTextLength
+    ),
+    metricSummary: boundDisplayText(
+      `${shareCount} 人分享，實際升糖參考值 ${averageRise} mg/dL`,
+      maxDisplayDetailTextLength
+    )
   };
 }
 

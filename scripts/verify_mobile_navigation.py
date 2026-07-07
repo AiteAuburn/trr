@@ -384,7 +384,7 @@ def _verify_achievement_contract(content: str) -> None:
         _assert_contains(label, tests_content, marker)
 
 
-def _verify_food_community_category_contract(content: str) -> None:
+def _verify_food_community_category_contract(content: str, future_module_display_content: str) -> None:
     backend_content = COMMUNITY_SCHEMA_PATH.read_text(encoding="utf-8")
     backend_api_content = COMMUNITY_API_PATH.read_text(encoding="utf-8")
     backend_store_content = STORE_API_PATH.read_text(encoding="utf-8")
@@ -517,13 +517,16 @@ def _verify_food_community_category_contract(content: str) -> None:
         ("food community API max delta signed clamp", "maximumRise: clampNumber(stats.max_glucose_delta ?? 0, -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
         ("food community API min delta signed clamp", "minimumRise: clampNumber(stats.min_glucose_delta ?? 0, -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
         ("food community API share delta signed clamp", "glucoseDelta: clampNumber(share.glucose_delta, -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
+    ):
+        _assert_contains(label, content, marker)
+    for label, marker in (
         ("food community individual share delta signed clamp", "const rise = clampNumber(value.glucoseDelta ?? after - before, -maxMobileGlucoseValue, maxMobileGlucoseValue);"),
         ("food community individual share delta copy", "血糖變化 ${rise} mg/dL"),
         ("food community display average delta signed clamp", "const averageRise = clampNumber(value.averageRise, -maxMobileGlucoseValue, maxMobileGlucoseValue);"),
         ("food community display max delta signed clamp", "const maximumRise = clampNumber(value.maximumRise, -maxMobileGlucoseValue, maxMobileGlucoseValue);"),
         ("food community display min delta signed clamp", "const minimumRise = clampNumber(value.minimumRise, -maxMobileGlucoseValue, maxMobileGlucoseValue);"),
     ):
-        _assert_contains(label, content, marker)
+        _assert_contains(label, future_module_display_content, marker)
     _assert_not_contains(
         "community leaderboard must not expose account id",
         backend_api_content,
@@ -1275,7 +1278,7 @@ def main() -> int:
             raise AssertionError("future module targets missing: " + ", ".join(missing))
 
         _verify_achievement_contract(content)
-        _verify_food_community_category_contract(content)
+        _verify_food_community_category_contract(content, future_module_display_content)
         _verify_daily_record_contract(content, daily_transcript_content)
         _verify_basic_report_contract()
 
@@ -4068,8 +4071,6 @@ def main() -> int:
             ("food community backend-aware share status copy", "backend ready 時可送出食物分享、建立社群點數並刷新排行榜與商城點數；visual smoke 或 backend unavailable 時不寫入資料。"),
             ("food community points store bridge current copy", "點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利"),
             ("food community backend share mapping", "examples: (value.shares ?? []).slice(0, 3).map((share) => ({"),
-            ("food community backend-ready item accessibility", "同步已載入食物分享統計與個別紀錄"),
-            ("food community metric summary reference value", "metricSummary: boundDisplayText(\n      `${shareCount} 人分享，實際升糖參考值 ${averageRise} mg/dL`,"),
             ("food community points balance row", '"點數餘額",\n      storePointsBalance'),
             ("food community lifetime earned row", '"累積獲得",\n      storePointsBalance'),
             ("food community syncs store points on open", 'if (currentScreen === "community") {\n      void loadCommunityPublicSettings();\n      void loadFoodCommunityCategories();\n      void loadCommunityFoods();\n      void loadStoreCatalogAndPoints();'),
@@ -4080,7 +4081,6 @@ def main() -> int:
             ("food community average rise unit", "{selectedFoodCommunityItem.averageRise} mg/dL"),
             ("food community maximum rise unit", "{selectedFoodCommunityItem.maximumRise} mg/dL"),
             ("food community minimum rise unit", "{selectedFoodCommunityItem.minimumRise} mg/dL"),
-            ("food community individual share display items", "individualShareDisplayItems: value.examples.map(foodCommunityShareDisplayItem).slice(0, 3)"),
             ("food community individual share section label", "個別分享紀錄"),
             ("food community individual share render", "selectedFoodCommunityItem.individualShareDisplayItems.map((share) =>"),
             ("food community individual share empty state", "尚未有可顯示的個別分享紀錄。"),
@@ -4824,6 +4824,17 @@ def main() -> int:
             ("ranking share count label", "return \"分享次數排行\";"),
             ("ranking contribution score label", "return `${boundedScore} 點`;"),
             ("ranking empty copy", "目前沒有 opt-in 的公開榜單資料。"),
+            ("food community category type", "export type FoodCommunityCategory ="),
+            ("food community item type", "export type FoodCommunityItem = {"),
+            ("food community category display helper", "export function foodCommunityCategoryDisplayItem(value: { id: FoodCommunityCategory; label: string; foodCount?: number; sampleFoods?: string[] })"),
+            ("food community category accessibility copy", "accessibilityLabel: boundDisplayText(`切換食物分類：${label}，${summary}`, maxDisplayDetailTextLength)"),
+            ("food community share display helper", "export function foodCommunityShareDisplayItem(value: FoodCommunityShare)"),
+            ("food community share display summary", "summary: boundDisplayText(`食用前 ${before}，食用後 ${after}，血糖變化 ${rise} mg/dL`, maxDisplayDetailTextLength)"),
+            ("food community item display helper", "export function foodCommunityItemDisplayItem(value: FoodCommunityItem)"),
+            ("food community backend-ready item accessibility", "同步已載入食物分享統計與個別紀錄"),
+            ("food community metric summary reference value", "metricSummary: boundDisplayText(\n      `${shareCount} 人分享，實際升糖參考值 ${averageRise} mg/dL`,"),
+            ("food community individual share display items", "individualShareDisplayItems: value.examples.map(foodCommunityShareDisplayItem).slice(0, 3)"),
+            ("food community item metric summary", "`${shareCount} 人分享，實際升糖參考值 ${averageRise} mg/dL`"),
             ("store redeemable fulfillment helper", "export function storeRedeemableFulfillmentCopy(category: StoreCategory): string"),
             ("store immediate coupon discount code copy", "送出後 backend 會扣點並立即發出優惠券或折扣碼。"),
             ("store reservation fulfillment copy", "送出後 backend 會扣點並建立兌換 reservation，後續仍需 fulfillment。"),
