@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1147: Extract auth session display items
+
+Status: done
+
+Summary:
+
+- Extracted account-security auth session display item shaping from `mobile/App.tsx` into `mobile/authSessionDisplay.ts`.
+- Kept auth session loading, bounded backend session metadata, account-security screen rendering, session management preview rows, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so auth session display item ownership guards inspect `mobile/authSessionDisplay.ts`, while account-security handlers and bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers Account Security auth session display item boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1146: Extract downloaded model state bounding transform
 
 Status: done

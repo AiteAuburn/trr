@@ -517,6 +517,7 @@ import {
   buildProtectedRequestHeaders,
   type OidcLoginProvider
 } from "./authTransforms";
+import { authSessionDisplayItem } from "./authSessionDisplay";
 
 type Account = {
   id: string;
@@ -1399,24 +1400,6 @@ function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
 
 function boundIdentifier(value: string) {
   return value.slice(0, maxIdentifierTextLength);
-}
-
-function authSessionDisplayItem(value: AuthSessionItem, index: number) {
-  const id = boundIdentifier(value.id);
-  const boundedIndex = clampNumber(index + 1, 1, maxMobileCountValue);
-  return {
-    key: `auth-session-${boundedIndex}-${id.slice(0, 12)}`,
-    title: boundDisplayText(`Session ${boundedIndex}`, maxDisplayTextLength),
-    copy: boundDisplayText(
-      `建立 ${recordDateTimeDisplay(value.created_at)} · 到期 ${recordDateTimeDisplay(value.expires_at)}`,
-      maxDisplayDetailTextLength
-    ),
-    statusLabel: boundDisplayText(value.has_device_fingerprint ? "裝置已識別" : "無裝置指紋", 40),
-    lastUsed: boundDisplayText(
-      value.last_used_at ? `最後使用 ${recordDateTimeDisplay(value.last_used_at)}` : "尚無最後使用時間",
-      maxDisplayDetailTextLength
-    )
-  };
 }
 
 function futureModuleText(value: string | undefined, fallback: string, maxLength = maxDisplayDetailTextLength) {

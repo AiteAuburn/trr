@@ -35,6 +35,7 @@ ACCOUNT_COPY_PATH = REPO_ROOT / "mobile" / "accountCopy.ts"
 ACCOUNT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "accountTransforms.ts"
 AI_MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "aiModelTransforms.ts"
 AUTH_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "authTransforms.ts"
+AUTH_SESSION_DISPLAY_PATH = REPO_ROOT / "mobile" / "authSessionDisplay.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1236,6 +1237,7 @@ def main() -> int:
     account_transforms_content = ACCOUNT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     ai_model_transforms_content = AI_MODEL_TRANSFORMS_PATH.read_text(encoding="utf-8")
     auth_transforms_content = AUTH_TRANSFORMS_PATH.read_text(encoding="utf-8")
+    auth_session_display_content = AUTH_SESSION_DISPLAY_PATH.read_text(encoding="utf-8")
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -4289,6 +4291,14 @@ def main() -> int:
             ("auth protected headers dev fallback", 'return { "X-Account-Id": devAccountId };'),
         ):
             _assert_contains(label, auth_transforms_content, marker)
+        for label, marker in (
+            ("auth session display helper", "function authSessionDisplayItem(value: AuthSessionDisplaySource, index: number)"),
+            ("auth session display key", "key: `auth-session-${boundedIndex}-${id.slice(0, 12)}`"),
+            ("auth session display created/expires copy", "`建立 ${recordDateTimeDisplay(value.created_at)} · 到期 ${recordDateTimeDisplay(value.expires_at)}`"),
+            ("auth session display fingerprint label", 'value.has_device_fingerprint ? "裝置已識別" : "無裝置指紋"'),
+            ("auth session display last used fallback", '"尚無最後使用時間"'),
+        ):
+            _assert_contains(label, auth_session_display_content, marker)
         for label, marker in (
             ("auth refresh accessibility label", "refreshSessionAccessibility: boundDisplayText(\"刷新 session，使用 SecureStore refresh token rotation\", maxDisplayDetailTextLength)"),
             ("auth load sessions accessibility label", "loadSessionsAccessibility: boundDisplayText(\"載入 sessions，只顯示 bounded session metadata\", maxDisplayDetailTextLength)"),
