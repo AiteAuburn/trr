@@ -1,5 +1,6 @@
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
+const maxNativeDebugInputLength = 1024;
 
 function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);
@@ -7,6 +8,14 @@ function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
 
 function boundIdentifier(value: string, maxLength = 80) {
   return value.slice(0, maxLength);
+}
+
+function boundUiMessage(value: string) {
+  return value.slice(0, 300);
+}
+
+function boundNativeDebugInput(value: string) {
+  return value.slice(0, maxNativeDebugInputLength);
 }
 
 type ProfileChoiceDisplaySource = {
@@ -18,6 +27,13 @@ type ModelChoiceDisplaySource = {
   id: string;
   label: string;
   available: boolean;
+};
+
+type DownloadedModelDisplaySource = {
+  kind: string;
+  fileName: string;
+  uri: string;
+  md5?: string;
 };
 
 function displayTextValue(value: unknown, maxLength = maxDisplayDetailTextLength) {
@@ -59,5 +75,25 @@ export function settingsModelChoiceDisplayItem<T extends ModelChoiceDisplaySourc
       `選擇${kind}模型：${label}；未啟用模型不可選，雲端 fallback 預設停用`,
       maxDisplayDetailTextLength
     )
+  };
+}
+
+export function downloadedModelDisplayLabel(value: DownloadedModelDisplaySource) {
+  const fileName = boundDisplayText(value.fileName || "model file", 80);
+  const checksum = value.md5 ? ` · md5 ${boundIdentifier(value.md5).slice(0, 12)}` : "";
+  return boundUiMessage(`${value.kind} · ${fileName}${checksum}`);
+}
+
+export function downloadedWhisperModelDisplayItem(value: DownloadedModelDisplaySource) {
+  const fileName = boundDisplayText(value.fileName || "whisper model", 80);
+  const checksum = value.md5 ? ` · md5 ${boundIdentifier(value.md5).slice(0, 12)}` : "";
+  const label = boundDisplayText(fileName, maxDisplayTextLength);
+  const summary = boundDisplayText(`Whisper · ${fileName}${checksum}`, maxDisplayDetailTextLength);
+  return {
+    sourceUri: boundNativeDebugInput(value.uri),
+    label,
+    summary,
+    selectedLabel: boundDisplayText("使用中", 24),
+    accessibilityLabel: boundDisplayText(`選擇本機 Whisper 模型：${fileName}，只用於本機錄音轉文字`, maxDisplayDetailTextLength)
   };
 }

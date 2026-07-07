@@ -3881,11 +3881,9 @@ def main() -> int:
             ("profile settings option handler", "function selectSettingsProfileChoice(profileId: string)"),
             ("llm model settings option handler", "function selectSettingsLlmModelChoice(modelId: string)"),
             ("stt model settings option handler", "function selectSettingsSttModelChoice(modelId: string)"),
-            ("downloaded whisper model display helper", "function downloadedWhisperModelDisplayItem(value: DownloadedModel)"),
             ("llm model settings display items", "const llmModelChoiceDisplayItems = useMemo("),
             ("stt model settings display items", "const sttModelChoiceDisplayItems = useMemo("),
             ("downloaded whisper model display items", "const downloadedWhisperModelChoiceItems = downloadedModels"),
-            ("downloaded whisper model accessibility label", "`選擇本機 Whisper 模型：${fileName}，只用於本機錄音轉文字`"),
             ("profile settings option press handler", "function pressSettingsProfileChoice(profile: (typeof profileChoiceDisplayItems)[number])"),
             ("llm model settings option press handler", "function pressSettingsLlmModelChoice(model: (typeof llmModelChoiceDisplayItems)[number])"),
             ("stt model settings option press handler", "function pressSettingsSttModelChoice(model: (typeof sttModelChoiceDisplayItems)[number])"),
@@ -4127,6 +4125,10 @@ def main() -> int:
             ("profile settings option accessibility label", "`選擇照護對象：${label}；只切換本機 active profile，不寫入個資`"),
             ("model settings display item helper", 'function settingsModelChoiceDisplayItem<T extends ModelChoiceDisplaySource>(model: T, kind: "LLM" | "STT")'),
             ("model settings option accessibility label", "`選擇${kind}模型：${label}；未啟用模型不可選，雲端 fallback 預設停用`"),
+            ("downloaded model display label helper", "function downloadedModelDisplayLabel(value: DownloadedModelDisplaySource)"),
+            ("downloaded model checksum copy", "md5 ${boundIdentifier(value.md5).slice(0, 12)}"),
+            ("downloaded whisper model display helper", "function downloadedWhisperModelDisplayItem(value: DownloadedModelDisplaySource)"),
+            ("downloaded whisper model accessibility label", "`選擇本機 Whisper 模型：${fileName}，只用於本機錄音轉文字`"),
         ):
             _assert_contains(label, settings_choice_display_content, marker)
         _assert_contains(

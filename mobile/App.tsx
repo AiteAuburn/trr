@@ -456,6 +456,8 @@ import {
   type SettingsRow
 } from "./settingsScreenData";
 import {
+  downloadedModelDisplayLabel,
+  downloadedWhisperModelDisplayItem,
   settingsModelChoiceDisplayItem,
   settingsProfileChoiceDisplayItem
 } from "./settingsChoiceDisplay";
@@ -1520,26 +1522,6 @@ function boundDownloadedModel(value: DownloadedModel): DownloadedModel {
 
 function boundDownloadedModels(value: DownloadedModel[]) {
   return value.slice(0, maxDownloadedModelRows).map(boundDownloadedModel);
-}
-
-function downloadedModelDisplayLabel(value: DownloadedModel) {
-  const fileName = boundDisplayText(value.fileName || "model file", 80);
-  const checksum = value.md5 ? ` · md5 ${boundIdentifier(value.md5).slice(0, 12)}` : "";
-  return boundUiMessage(`${value.kind} · ${fileName}${checksum}`);
-}
-
-function downloadedWhisperModelDisplayItem(value: DownloadedModel) {
-  const fileName = boundDisplayText(value.fileName || "whisper model", 80);
-  const checksum = value.md5 ? ` · md5 ${boundIdentifier(value.md5).slice(0, 12)}` : "";
-  const label = boundDisplayText(fileName, maxDisplayTextLength);
-  const summary = boundDisplayText(`Whisper · ${fileName}${checksum}`, maxDisplayDetailTextLength);
-  return {
-    sourceUri: boundNativeDebugInput(value.uri),
-    label,
-    summary,
-    selectedLabel: boundDisplayText("使用中", 24),
-    accessibilityLabel: boundDisplayText(`選擇本機 Whisper 模型：${fileName}，只用於本機錄音轉文字`, maxDisplayDetailTextLength)
-  };
 }
 
 function futureModuleText(value: string | undefined, fallback: string, maxLength = maxDisplayDetailTextLength) {
