@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1139 extract analysis report request key
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisScreenData.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extracted basic report request-key helper from `mobile/App.tsx` into `mobile/analysisScreenData.ts`.
+- Kept Analysis range state, current-report cache matching, `/reports/basic` query construction, report fetch behavior, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so Analysis report request-key helper ownership guards inspect `mobile/analysisScreenData.ts`, while fetch and render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers Analysis backend report request-key boundaries.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue Slice 5 with another first-version screen data/component boundary before moving large JSX renderers.
+
 ### T1138 extract subscription trial-days transform
 
 類型：mobile / refactor / verifier / docs

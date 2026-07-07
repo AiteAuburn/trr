@@ -3409,7 +3409,6 @@ def main() -> int:
             ("analysis local records date bounds", "const { start, end } = analysisSelectedDateBounds;\n    return recordsForDisplay.filter((record) => {"),
             ("analysis local glucose derives from analysis records", "const analysisGlucoseRecords = useMemo(\n    () => buildAnalysisGlucoseRecords(analysisRecords),"),
             ("analysis local glucose records dependency", "    [analysisRecords]\n  );\n  const analysisGlucoseValues = buildAnalysisGlucoseValues(analysisGlucoseRecords);"),
-            ("analysis current report key helper", "function basicReportRequestKey("),
             ("analysis active backend report guard", "const activeAnalysisReport = basicReportKey === currentBasicReportKey ? basicReport : null;"),
             ("analysis backend report auto sync effect", 'if (currentScreen === "analysis") {\n      void loadBasicReportForCurrentRange("analysis");'),
             ("analysis shared report fetch helper", 'async function loadBasicReportForCurrentRange(mode: "analysis" | "detailed")'),
@@ -3419,6 +3418,11 @@ def main() -> int:
             ("analysis report end bound", "const endAt = analysisSelectedDateBounds.end.toISOString();"),
         ):
             _assert_contains(label, content, marker)
+        _assert_contains(
+            "analysis current report key helper",
+            analysis_screen_data_content,
+            "function basicReportRequestKey(",
+        )
         for label, marker in (
             ("analysis week range option", '{ id: "week", label: "本週" }'),
             ("analysis month range option", '{ id: "month", label: "本月" }'),

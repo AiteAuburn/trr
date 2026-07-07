@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1139: Extract analysis report request key
+
+Status: done
+
+Summary:
+
+- Extracted basic report request-key helper from `mobile/App.tsx` into `mobile/analysisScreenData.ts`.
+- Kept Analysis range state, current-report cache matching, `/reports/basic` query construction, report fetch behavior, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so Analysis report request-key helper ownership guards inspect `mobile/analysisScreenData.ts`, while fetch and render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers Analysis backend report request-key boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1138: Extract subscription trial-days transform
 
 Status: done

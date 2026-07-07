@@ -21,3 +21,23 @@ export function analysisRangeDisplayItem(value: { id: AnalysisRange; label: stri
     accessibilityLabel: boundDisplayText(`切換分析範圍：${label}，同步 backend bounded report`, maxDisplayDetailTextLength)
   };
 }
+
+export function basicReportRequestKey(
+  apiBaseUrl: string,
+  accountId: string,
+  profileId: string,
+  range: AnalysisRange,
+  customStart: string,
+  customEnd: string,
+  limit: number
+) {
+  return [
+    apiBaseUrl,
+    accountId,
+    profileId,
+    range,
+    customStart,
+    customEnd,
+    String(limit)
+  ].join(":");
+}

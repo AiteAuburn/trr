@@ -392,7 +392,8 @@ import {
 } from "./analysisCopy";
 import {
   analysisRangeDisplayItem,
-  analysisRanges
+  analysisRanges,
+  basicReportRequestKey
 } from "./analysisScreenData";
 import {
   afterMealGlucoseCount as countAfterMealGlucose,
@@ -2343,26 +2344,6 @@ function protectedRequestHeaders(accountId: string, accessToken: string): Record
     return { "X-Account-Id": devAccountId };
   }
   return {};
-}
-
-function basicReportRequestKey(
-  apiBaseUrl: string,
-  accountId: string,
-  profileId: string,
-  range: AnalysisRange,
-  customStart: string,
-  customEnd: string,
-  limit: number
-) {
-  return [
-    apiBaseUrl,
-    accountId,
-    profileId,
-    range,
-    customStart,
-    customEnd,
-    String(limit)
-  ].join(":");
 }
 
 function storeCartUnavailableDisplayItem() {
