@@ -1383,9 +1383,15 @@ def main() -> int:
 
         _assert_contains(
             "header accessibility helper",
-            content,
+            first_version_flow_copy_content,
             "function headerActionAccessibilityLabel(chrome: { actionLabel?: string })",
         )
+        for label, marker in (
+            ("header accessibility close copy", "關閉目前頁面"),
+            ("header accessibility back copy", "返回上一頁"),
+            ("header accessibility menu copy", "開啟功能選單"),
+        ):
+            _assert_contains(label, first_version_flow_copy_content, marker)
         _assert_contains(
             "header accessibility label binding",
             content,
@@ -1455,9 +1461,14 @@ def main() -> int:
             )
         _assert_contains(
             "recording accessibility helper",
-            content,
+            first_version_flow_copy_content,
             "function recordingButtonAccessibilityLabel(isRecording: boolean)",
         )
+        for label, marker in (
+            ("recording active accessibility copy", "錄音預覽進行中，放開結束"),
+            ("recording idle accessibility copy", "按住開始錄音預覽"),
+        ):
+            _assert_contains(label, first_version_flow_copy_content, marker)
         _assert_contains(
             "recording accessibility binding",
             content,

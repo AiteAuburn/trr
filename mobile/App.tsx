@@ -304,11 +304,13 @@ import {
   aiReviewManualEntryStatusMessage,
   busyActionStatusMessage,
   coreFlowSectionLabels,
+  headerActionAccessibilityLabel,
   previewActionClearStatusMessage,
   quickEntryModeDisplayItems,
   quickEntryTextModeStatusMessage,
   quickEntryVoicePromptStatusMessage,
   quickRecordIntroCopy,
+  recordingButtonAccessibilityLabel,
   recordManualEntryStatusMessage,
   saveSuccessDestinationStatusMessage,
   saveSuccessManualContinueStatusMessage,
@@ -2957,20 +2959,6 @@ function returnDestinationButtonLabel(destination: AppScreen) {
     return boundDisplayText("返回功能選單", maxDisplayTextLength);
   }
   return boundDisplayText("返回上一頁", maxDisplayTextLength);
-}
-
-function headerActionAccessibilityLabel(chrome: { actionLabel?: string }) {
-  if (chrome.actionLabel === "×") {
-    return boundDisplayText("關閉目前頁面", maxDisplayTextLength);
-  }
-  if (chrome.actionLabel === "‹") {
-    return boundDisplayText("返回上一頁", maxDisplayTextLength);
-  }
-  return boundDisplayText("開啟功能選單", maxDisplayTextLength);
-}
-
-function recordingButtonAccessibilityLabel(isRecording: boolean) {
-  return boundDisplayText(isRecording ? "錄音預覽進行中，放開結束" : "按住開始錄音預覽", maxDisplayTextLength);
 }
 
 function futureModuleDetailBoundaryCopy() {

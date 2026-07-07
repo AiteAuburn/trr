@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1118: Extract shared header and recording accessibility copy
+
+Status: done
+
+Summary:
+
+- Extracted shared header action and recording button accessibility helpers from `mobile/App.tsx` into `mobile/firstVersionFlowCopy.ts`.
+- Kept header chrome handling, recording button state, UI copy text, navigation, recording flow, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so shared header/recording accessibility helper ownership guards inspect `mobile/firstVersionFlowCopy.ts`, while render bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 3 and Slice 5 now also cover shared header/recording accessibility copy boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1117: Extract report source display helper
 
 Status: done
