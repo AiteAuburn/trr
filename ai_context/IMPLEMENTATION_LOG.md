@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1168 extract future-module static card config
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved the hidden/debug future-module card configuration from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept card IDs, copy, readiness text, requirements, safety text, targets, display mapping, render call sites, hidden/debug-only routing, first-version menu destinations, and navigation behavior unchanged.
+- Updated the navigation verifier so future-module target and card-readiness guards inspect `mobile/futureModuleDisplay.ts`, while App handlers and render bindings remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the future-module static card config boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating future/debug-only display config and pure helpers before moving future preview renderers.
+
 ### T1167 extract year-review future display copy
 
 類型：mobile / refactor / verifier / docs

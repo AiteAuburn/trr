@@ -236,7 +236,7 @@ def _menu_labels(content: str) -> dict[str, str]:
 def _future_targets(content: str) -> set[str]:
     block = _match_block(
         content,
-        r"const futureModuleCards:[\s\S]*?= \[([\s\S]*?)\];",
+        r"export const futureModuleCards:[\s\S]*?= \[([\s\S]*?)\];",
         "futureModuleCards",
     )
     return set(re.findall(r'target: "([^"]+)"', block))
@@ -1259,7 +1259,7 @@ def main() -> int:
         checked_screens = _current_screen_checks(content)
         menu_destinations = _menu_destinations(navigation_content)
         menu_labels = _menu_labels(navigation_content)
-        future_targets = _future_targets(content)
+        future_targets = _future_targets(future_module_display_content)
 
         _assert_exact("screenChrome keys", chrome_keys, screens)
         missing_checks = sorted(screens - checked_screens)
@@ -4160,11 +4160,6 @@ def main() -> int:
             ("community post accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPostAccessibility}"),
             ("community privacy accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}"),
             ("store backend-ready remaining boundary", '["仍待完成", "庫存、出貨訂單、付款與 rollback"]'),
-            ("future module food community database card title", 'title: "食物社群資料庫"'),
-            ("future module food community database card readiness", "資料庫、分享、點數與排行榜已接 backend；貼文留言治理仍待正式開放。"),
-            ("future module food community governance-only requirements", 'requirements: ["貼文、留言、封鎖、檢舉與審核流程", "公開分享刪除與撤回治理", "退出後歷史資料撤回與 audit event"]'),
-            ("future module store backend-ready readiness", "點數兌換與兌換券已接 backend；購物車、出貨、付款與法務仍待完成。"),
-            ("future module store remaining-commerce requirements", 'requirements: ["購物車、庫存 reservation 與 rollback", "出貨訂單、付款與退款流程", "商品法務、客服與履約稽核"]'),
             ("food community promoted title", '<Text style={styles.sectionTitle}>食物社群</Text>'),
             ("ranking promoted title", '<Text style={styles.sectionTitle}>社群排行</Text>'),
             ("food community search accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}"),
@@ -4651,7 +4646,6 @@ def main() -> int:
             ("store immediate coupon discount code copy", "送出後 backend 會扣點並立即發出優惠券或折扣碼。"),
             ("store reservation fulfillment copy", "送出後 backend 會扣點並建立兌換 reservation，後續仍需 fulfillment。"),
             ("store point mall badge", 'storePreview: boundDisplayText("點數商城", maxDisplayTextLength)'),
-            ("store future card special badge copy", "點數商城、優惠券、商品折扣、特殊徽章與會員獎勵入口。"),
             ("store catalog sync function", "async function loadStoreCatalogAndPoints()"),
             ("store rewards endpoint", 'requestJson<StoreApiReward[]>(normalizedApiBaseUrl, "/store/rewards"'),
             ("store points endpoint", 'requestJson<StoreApiPointsBalance>(normalizedApiBaseUrl, "/store/points"'),
@@ -4689,8 +4683,6 @@ def main() -> int:
             ("store special badge redemption boundary", "優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利"),
             ("store points cost field", "pointsCost: boundDisplayText(value.pointsCost || \"點數未設定\", 40)"),
             ("store redemption boundary rows", "storeRedemptionBoundaryRows.map"),
-            ("ranking backend-ready future module copy", "分享次數、貢獻度與食物測試達人榜單已接 backend"),
-            ("ranking future module governance-only requirements", 'requirements: ["封鎖、檢舉與審核流程", "榜單爭議處理與公開名稱違規處置", "排名退出後歷史資料撤回流程"]'),
             ("community readiness governance-only deletion", "公開分享刪除、撤回與 audit-friendly event stream"),
             ("ranking readiness governance-only disputes", "榜單爭議處理與公開名稱違規處置"),
             ("store checkout readiness inventory rollback", "購物車持久化、庫存 reservation 與 rollback 規則"),
@@ -4719,8 +4711,6 @@ def main() -> int:
             ("food photo upload status binding", "onPress={showFoodPhotoUploadStatus}"),
             ("food photo integration status binding", "onPress={showFoodPhotoIntegrationStatus}"),
             ("food photo retake status binding", "onPress={showFoodPhotoRetakeStatus}"),
-            ("achievement future module backend-ready readiness", "成就 taxonomy、backend summary、解鎖同步與已保存徽章已接上；公開展示 opt-in 與撤回治理仍待完成。"),
-            ("achievement future module governance-only requirements", 'requirements: ["公開展示 opt-in 與跨使用者展示", "成就展示撤回治理", "公開徽章稽核與違規處置"]'),
             ("achievement integration accessibility binding", "accessibilityLabel={achievementIntegrationAccessibilityDisplayLabel}"),
             ("achievement levels", "const achievementLevels = [10, 50, 100, 150, 200, 250];"),
             ("achievement categories", "const achievementCategoryDefinitions: Array<{"),
@@ -4779,8 +4769,6 @@ def main() -> int:
             ("year review backend-aware share fallback", "backend ready 時可準備隱私遮罩分享卡並開啟原生分享。"),
             ("year review share accessibility binding", "accessibilityLabel={yearReviewShareAccessibilityDisplayLabel}"),
             ("year review native share import", "Share,"),
-            ("year review future module backend-ready readiness", "年度 snapshot、隱私遮罩分享卡與原生分享已接 backend；外部平台深度整合與刪除治理仍待完成。"),
-            ("year review future module governance-only requirements", 'requirements: ["外部平台深度整合與權限細節", "分享 package 刪除與撤回治理", "外部分享稽核與違規處置"]'),
             ("year review file system import", 'import * as FileSystem from "expo-file-system";'),
             ("year review share asset filename helper", "function safeYearReviewShareAssetFileName(value: string)"),
             ("year review share asset cache helper", "async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset)"),
@@ -4829,6 +4817,19 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("future module cards static config", "export const futureModuleCards: FutureModuleCard[] = ["),
+            ("future module food community database card title", 'title: "食物社群資料庫"'),
+            ("future module food community database card readiness", "資料庫、分享、點數與排行榜已接 backend；貼文留言治理仍待正式開放。"),
+            ("future module food community governance-only requirements", 'requirements: ["貼文、留言、封鎖、檢舉與審核流程", "公開分享刪除與撤回治理", "退出後歷史資料撤回與 audit event"]'),
+            ("future module store backend-ready readiness", "點數兌換與兌換券已接 backend；購物車、出貨、付款與法務仍待完成。"),
+            ("store future card special badge copy", "點數商城、優惠券、商品折扣、特殊徽章與會員獎勵入口。"),
+            ("future module store remaining-commerce requirements", 'requirements: ["購物車、庫存 reservation 與 rollback", "出貨訂單、付款與退款流程", "商品法務、客服與履約稽核"]'),
+            ("ranking backend-ready future module copy", "分享次數、貢獻度與食物測試達人榜單已接 backend"),
+            ("ranking future module governance-only requirements", 'requirements: ["封鎖、檢舉與審核流程", "榜單爭議處理與公開名稱違規處置", "排名退出後歷史資料撤回流程"]'),
+            ("achievement future module backend-ready readiness", "成就 taxonomy、backend summary、解鎖同步與已保存徽章已接上；公開展示 opt-in 與撤回治理仍待完成。"),
+            ("achievement future module governance-only requirements", 'requirements: ["公開展示 opt-in 與跨使用者展示", "成就展示撤回治理", "公開徽章稽核與違規處置"]'),
+            ("year review future module backend-ready readiness", "年度 snapshot、隱私遮罩分享卡與原生分享已接 backend；外部平台深度整合與刪除治理仍待完成。"),
+            ("year review future module governance-only requirements", 'requirements: ["外部平台深度整合與權限細節", "分享 package 刪除與撤回治理", "外部分享稽核與違規處置"]'),
             ("future module display card helper", "export function futureModuleCardDisplayItem(value: FutureModuleCard)"),
             ("future module selected display helper", "export function selectedFutureModuleDisplayItem(value: FutureModuleCard | null)"),
             ("future module card accessibility item", "accessibilityLabel: boundDisplayText(`查看${futureModuleText(value.title, \"未來模組\", maxDisplayTextLength)}整合狀態`, maxDisplayTextLength)"),

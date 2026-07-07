@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1168: Extract future-module static card config
+
+Status: done
+
+Summary:
+
+- Moved the hidden/debug future-module card configuration from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept card IDs, copy, readiness text, requirements, safety text, targets, display mapping, render call sites, hidden/debug-only routing, first-version menu destinations, and navigation behavior unchanged.
+- Updated the navigation verifier so future-module target and card-readiness guards inspect `mobile/futureModuleDisplay.ts`, while App handlers and render bindings remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the future-module static card config boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1167: Extract year-review future display copy
 
 Status: done

@@ -107,6 +107,7 @@ import {
   foodPhotoRetakeButtonLabel,
   foodPhotoUploadBoxLabel,
   foodPhotoVisionBoundaryDisplayItem,
+  futureModuleCards,
   futureModuleCardDisplayItem,
   futurePreviewSectionLabels,
   healthIntegrationExternalDataBoundaryCopy,
@@ -871,89 +872,6 @@ const initialVisualSmokeScreen = normalizeVisualSmokeInitialRoute(
   enableDebugTools,
   allowMobileDevAuth
 );
-
-const futureModuleCards: FutureModuleCard[] = [
-  {
-    id: "doctor",
-    title: "醫師 / 醫院合作",
-    description: "授權碼、回診摘要、醫療端唯讀查看與報表匯出。",
-    readiness: "需先完成 production auth、權限模型與分享撤銷。",
-    requirements: ["授權碼產生、到期與撤銷", "醫師端唯讀權限", "回診摘要與匯出稽核"],
-    safety: "預設不分享資料；所有醫療端查看都必須由使用者主動授權。",
-    icon: "醫",
-    target: "doctorShare"
-  },
-  {
-    id: "community",
-    title: "食物社群資料庫",
-    description: "食物升糖分享、分類搜尋、社群點數與公開排行。",
-    readiness: "資料庫、分享、點數與排行榜已接 backend；貼文留言治理仍待正式開放。",
-    requirements: ["貼文、留言、封鎖、檢舉與審核流程", "公開分享刪除與撤回治理", "退出後歷史資料撤回與 audit event"],
-    safety: "預設不公開任何健康紀錄；公開榜單只使用 opt-in 使用者的非敏感統計。",
-    icon: "群",
-    target: "community"
-  },
-  {
-    id: "achievements",
-    title: "成就榜 / 徽章",
-    description: "連續記錄、運動里程碑與習慣養成徽章。",
-    readiness: "成就 taxonomy、backend summary、解鎖同步與已保存徽章已接上；公開展示 opt-in 與撤回治理仍待完成。",
-    requirements: ["公開展示 opt-in 與跨使用者展示", "成就展示撤回治理", "公開徽章稽核與違規處置"],
-    safety: "成就只能鼓勵紀錄習慣，不可暗示治療效果或公開健康數值。",
-    icon: "徽",
-    target: "achievements"
-  },
-  {
-    id: "ranking",
-    title: "排行榜",
-    description: "連續記錄排行榜、社群競賽與公開排名 opt-in。",
-    readiness: "分享次數、貢獻度與食物測試達人榜單已接 backend；封鎖、檢舉與退出後歷史撤回仍待正式開放。",
-    requirements: ["封鎖、檢舉與審核流程", "榜單爭議處理與公開名稱違規處置", "排名退出後歷史資料撤回流程"],
-    safety: "不公開血糖數值或健康內容；排行榜只能使用使用者同意的非敏感統計。",
-    icon: "榜",
-    target: "ranking"
-  },
-  {
-    id: "yearReview",
-    title: "年度回顧",
-    description: "年度血糖、飲食、運動與連續記錄摘要。",
-    readiness: "年度 snapshot、隱私遮罩分享卡與原生分享已接 backend；外部平台深度整合與刪除治理仍待完成。",
-    requirements: ["外部平台深度整合與權限細節", "分享 package 刪除與撤回治理", "外部分享稽核與違規處置"],
-    safety: "年度回顧只能做紀錄摘要與鼓勵，不提供診療建議或療效宣稱。",
-    icon: "年",
-    target: "yearReview"
-  },
-  {
-    id: "store",
-    title: "商城",
-    description: "點數商城、優惠券、商品折扣、特殊徽章與會員獎勵入口。",
-    readiness: "點數兌換與兌換券已接 backend；購物車、出貨、付款與法務仍待完成。",
-    requirements: ["購物車、庫存 reservation 與 rollback", "出貨訂單、付款與退款流程", "商品法務、客服與履約稽核"],
-    safety: "商城商品不得宣稱醫療療效；正式交易與出貨前仍需完成付款與商品審核。",
-    icon: "商",
-    target: "store"
-  },
-  {
-    id: "health",
-    title: "HealthKit / Health Connect / 血糖機",
-    description: "外部健康平台、血糖機匯入與未來 BLE 同步。",
-    readiness: "需先完成 integration source、去重與同步紀錄模型。",
-    requirements: ["external source 欄位與去重鍵", "同步狀態與錯誤復原", "使用者授權、撤權與資料刪除"],
-    safety: "外部資料不可直接覆蓋手動紀錄；匯入資料需保留來源與同步狀態。",
-    icon: "串",
-    target: "healthIntegration"
-  },
-  {
-    id: "image",
-    title: "食物拍照辨識",
-    description: "圖片上傳、營養估算、使用者確認後寫入飲食紀錄。",
-    readiness: "需先完成圖片儲存、成本控制與確認流程。",
-    requirements: ["相機/相簿權限", "圖片儲存與刪除生命週期", "Vision 成本上限與使用者確認"],
-    safety: "估算結果不能自動儲存；必須由使用者確認後才轉成飲食紀錄。",
-    icon: "照",
-    target: "foodPhoto"
-  }
-];
 
 type AchievementCategory = "glucose" | "meal" | "exercise";
 type AchievementKind = "cumulative" | "streak";
