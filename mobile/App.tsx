@@ -403,6 +403,7 @@ import {
 import {
   activeProfileInlineText,
   activeProfileLabelText,
+  activeProfileRelationshipText,
   advancedSettingsToggleLabel,
   backendReconnectButtonLabel,
   membershipStatusReturnSubscriptionStatusMessage,
@@ -2532,10 +2533,6 @@ function doctorShareAccountBoundaryText(account: Account | null) {
       : "尚未連線帳號；不可建立任何外部分享。",
     maxDisplayDetailTextLength
   );
-}
-
-function activeProfileRelationshipText(activeProfile: Profile | null) {
-  return boundDisplayText(activeProfile?.relationship ?? "未載入", 40);
 }
 
 function accountPublicDisplayNameText(account: Account | null) {

@@ -4121,6 +4121,8 @@ def main() -> int:
             ("active profile no selection copy", "尚未選擇照護對象"),
             ("active profile inline helper", "function activeProfileInlineText(activeProfileLabel: string)"),
             ("active profile inline copy", "目前對象：${activeProfileLabel}"),
+            ("active profile relationship helper", "function activeProfileRelationshipText(activeProfile: ActiveProfileDisplaySource | null)"),
+            ("active profile relationship fallback", "未載入"),
         ):
             _assert_contains(label, settings_copy_content, marker)
         for label, marker in (

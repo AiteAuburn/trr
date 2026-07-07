@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1122: Extract active profile relationship display copy
+
+Status: done
+
+Summary:
+
+- Extracted active-profile relationship display helper from `mobile/App.tsx` into `mobile/settingsCopy.ts`.
+- Kept active-profile state, label/inline display, profile selection handlers, UI copy text, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so active-profile relationship display helper ownership guards inspect `mobile/settingsCopy.ts`, while profile selection bindings remain checked in `mobile/App.tsx`.
+- Kept the refactor roadmap aligned with the existing Settings active-profile display copy boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1121: Extract active profile display copy
 
 Status: done

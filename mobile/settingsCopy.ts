@@ -14,6 +14,7 @@ function boundUiMessage(value: string) {
 
 type ActiveProfileDisplaySource = {
   display_name?: string | null;
+  relationship?: string | null;
 };
 
 export function activeProfileLabelText(activeProfile: ActiveProfileDisplaySource | null, profileCount: number) {
@@ -25,6 +26,10 @@ export function activeProfileLabelText(activeProfile: ActiveProfileDisplaySource
 
 export function activeProfileInlineText(activeProfileLabel: string) {
   return boundDisplayText(`目前對象：${activeProfileLabel}`, maxDisplayDetailTextLength);
+}
+
+export function activeProfileRelationshipText(activeProfile: ActiveProfileDisplaySource | null) {
+  return boundDisplayText(activeProfile?.relationship ?? "未載入", 40);
 }
 
 export function advancedSettingsToggleLabel(isExpanded: boolean) {
