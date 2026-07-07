@@ -1841,6 +1841,12 @@ def main() -> int:
             ("AI candidate source fallback", "等待使用者確認"),
             ("AI candidate low confidence threshold", "const lowConfidence = (record.confidence ?? 1) < 0.7;"),
             ("AI candidate reason display", "boundDisplayText(`建立理由：${decisionTrace}`, maxDisplayDetailTextLength)"),
+            ("AI rejected reason label helper", "function rejectedReasonLabel(reason?: string)"),
+            ("AI rejected reason negative label", "這句像是否定或未量測事件"),
+            ("AI rejected reason invalid label", "內容不符合可儲存紀錄格式"),
+            ("AI rejected reason duplicate label", "可能與既有候選重複"),
+            ("AI rejected reason unsupported label", "目前尚未支援這類紀錄"),
+            ("AI rejected reason unknown label", "無法判斷可儲存紀錄類型"),
         ):
             _assert_contains(label, record_display_content, marker)
         _assert_contains(

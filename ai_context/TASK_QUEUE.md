@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1102: Extract AI rejected-event reason label helper
+
+Status: done
+
+Summary:
+
+- Extracted AI rejected-event reason label normalization from `mobile/App.tsx` into `mobile/recordDisplay.ts`.
+- Kept rejected-event display item assembly, AI review render, parser rejected-event payloads, UI copy, navigation, parser requests, and backend save flow unchanged.
+- Updated the navigation verifier so rejected-event reason label ownership guards inspect `mobile/recordDisplay.ts`, while rejected-event render and parser-flow guards remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers the AI rejected-event display boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1101: Extract AI candidate display helper
 
 Status: done

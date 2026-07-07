@@ -356,6 +356,29 @@ export function pendingRecordDisplayItem(record: PendingRecord, index: number, k
   };
 }
 
+export function rejectedReasonLabel(reason?: string) {
+  const normalized = reason?.trim().toLowerCase();
+  if (!normalized) {
+    return "未建立原因尚未提供";
+  }
+  if (normalized.includes("negative")) {
+    return "這句像是否定或未量測事件";
+  }
+  if (normalized.includes("invalid")) {
+    return "內容不符合可儲存紀錄格式";
+  }
+  if (normalized.includes("duplicate")) {
+    return "可能與既有候選重複";
+  }
+  if (normalized.includes("unsupported")) {
+    return "目前尚未支援這類紀錄";
+  }
+  if (normalized.includes("unknown")) {
+    return "無法判斷可儲存紀錄類型";
+  }
+  return boundDisplayText(normalized, 80);
+}
+
 export function recordDetailDisplayItem(record: RecordItem) {
   const listItem = recordListDisplayItem(record, "selected");
   return {
