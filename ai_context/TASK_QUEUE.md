@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1132: Extract shared bounded display item builders
+
+Status: done
+
+Summary:
+
+- Extracted shared tutorial, preview tuple, session-management preview, metric, detail-pair, reminder, option, value-label, comparison, and destination-card display item builders from `mobile/App.tsx` into `mobile/sharedDisplayItems.ts`.
+- Kept UI copy text, destination targets, accessibility labels, press handlers, navigation, parser requests, and backend paths unchanged.
+- Updated the navigation verifier so shared bounded display item helper ownership guards inspect `mobile/sharedDisplayItems.ts`, while render and press bindings remain checked in `mobile/App.tsx`.
+- Updated the refactor roadmap to note that Slice 5 now also covers shared bounded display item builders.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1131: Extract account identity display copy
 
 Status: done

@@ -29,6 +29,7 @@ SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
 ACCOUNT_COPY_PATH = REPO_ROOT / "mobile" / "accountCopy.ts"
+SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
@@ -1223,6 +1224,7 @@ def main() -> int:
     settings_screen_data_content = SETTINGS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
     account_copy_content = ACCOUNT_COPY_PATH.read_text(encoding="utf-8")
+    shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
 
@@ -3500,8 +3502,12 @@ def main() -> int:
             content,
             "onPress={() => pressManualRecordTypeOption(type)}",
         )
+        _assert_contains(
+            "generic option accessibility item",
+            shared_display_items_content,
+            "accessibilityLabel: boundDisplayText(`選擇${label}選項`, maxDisplayTextLength)",
+        )
         for label, marker in (
-            ("generic option accessibility item", "accessibilityLabel: boundDisplayText(`選擇${label}選項`, maxDisplayTextLength)"),
             ("manual record type accessibility item", "accessibilityLabel: boundDisplayText(`選擇${label}紀錄類型，不呼叫 AI 或 parser`, maxDisplayDetailTextLength)"),
             ("store category accessibility item", "accessibilityLabel: boundDisplayText(`切換商城分類：${label}，不建立訂單或付款`, maxDisplayDetailTextLength)"),
             ("manual type chip accessibility binding", "accessibilityLabel={type.accessibilityLabel}"),
@@ -3860,7 +3866,6 @@ def main() -> int:
                 "function pressAuthSessionManagementPreview(item: ReturnType<typeof sessionManagementPreviewDisplayItem>)",
             ),
             ("auth provider accessibility item", "accessibilityLabel: boundDisplayText(`查看${item.title}登入整合狀態，不保存 provider token`, maxDisplayDetailTextLength)"),
-            ("auth session management accessibility item", "accessibilityLabel: boundDisplayText(`查看${item.title}session 管理狀態，不顯示 raw token`, maxDisplayDetailTextLength)"),
             ("profile edit integration status handler", "function showProfileEditIntegrationStatus()"),
             ("recording quota settings sync handler", "function syncRecordingQuotaSettings()"),
             ("reminder integration status handler", "function showReminderIntegrationStatus()"),
@@ -4117,6 +4122,11 @@ def main() -> int:
             ("future preview secondary CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
             _assert_contains(label, content, marker)
+        _assert_contains(
+            "auth session management accessibility item",
+            shared_display_items_content,
+            "accessibilityLabel: boundDisplayText(`查看${item.title}session 管理狀態，不顯示 raw token`, maxDisplayDetailTextLength)",
+        )
         for label, marker in (
             ("active profile label helper", "function activeProfileLabelText(activeProfile: ActiveProfileDisplaySource | null, profileCount: number)"),
             ("active profile no profile copy", "尚未建立照護對象"),
@@ -4171,6 +4181,23 @@ def main() -> int:
             ("privacy integration accessibility helper", "function privacyIntegrationAccessibilityLabel()"),
         ):
             _assert_contains(label, settings_copy_content, marker)
+        for label, marker in (
+            ("tutorial step display helper", "function tutorialStepDisplayItem(value: readonly string[])"),
+            ("tutorial step fallback copy", "尚未設定教學說明。"),
+            ("preview tuple display helper", "function previewTupleDisplayItem(value: readonly [string, string, string])"),
+            ("preview tuple fallback copy", "尚未設定說明。"),
+            ("session management preview helper", "function sessionManagementPreviewDisplayItem(value: readonly [string, string, string])"),
+            ("session management preview status copy", "尚未啟用；需完成 server-side session list"),
+            ("boundary metric display helper", "function boundaryMetricDisplayItem(value: readonly [string, string])"),
+            ("metric display helper", "function metricDisplayItem(value: readonly [string, string])"),
+            ("detail pair display helper", "function detailPairDisplayItem(value: readonly [string, string])"),
+            ("reminder preview display helper", "function reminderPreviewDisplayItem(value: readonly [string, string, string, string])"),
+            ("option display helper", "function optionDisplayItem(value: string)"),
+            ("value label display helper", "function valueLabelDisplayItem(value: readonly [string, string])"),
+            ("comparison display helper", "function comparisonDisplayItem(value: readonly [string, string, string])"),
+            ("destination card display helper", "function destinationCardDisplayItem(value: readonly string[])"),
+        ):
+            _assert_contains(label, shared_display_items_content, marker)
         for label, marker in (
             ("account display name helper", "function accountDisplayNameDisplayText(account: AccountDisplaySource | null)"),
             ("account display name fallback copy", "尚未連線帳號"),
