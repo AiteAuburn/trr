@@ -2455,6 +2455,11 @@ def main() -> int:
             "const storeCheckoutReadinessChecklistItems = storeCheckoutReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "food photo readiness checklist helper binding",
+            content,
+            "const foodPhotoReadinessChecklistItems = foodPhotoReadinessChecklistDisplayItems();",
+        )
+        _assert_contains(
             "quota readiness checklist helper binding",
             content,
             "const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();",
@@ -5929,6 +5934,11 @@ def main() -> int:
             ("food photo checklist helper", "export function foodPhotoEmptyResultChecklistDisplayItems()"),
             ("food photo checklist no mock result", "這裡不使用固定範例數字，避免把 mock 結果誤認為實際 AI 分析。"),
             ("food photo intro copy helper", "export function foodPhotoIntroCopy()"),
+            ("food photo readiness checklist helper", "export function foodPhotoReadinessChecklistDisplayItems()"),
+            ("food photo readiness permission copy", "相機 / 相簿權限與圖片壓縮上限"),
+            ("food photo readiness privacy copy", "圖片儲存、刪除與隱私遮罩策略"),
+            ("food photo readiness cost copy", "Vision 成本上限、rate limit 與重試規則"),
+            ("food photo readiness confirm copy", "使用者確認後才可轉成飲食紀錄"),
             ("food photo integration accessibility helper", "export function foodPhotoIntegrationButtonAccessibilityLabel()"),
             ("food photo retake accessibility helper", "export function foodPhotoRetakeButtonAccessibilityLabel()"),
             ("store cart unavailable display helper", "export function storeCartUnavailableDisplayItem()"),

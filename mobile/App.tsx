@@ -142,6 +142,7 @@ import {
   foodPhotoIntegrationButtonLabel,
   foodPhotoIntroCopy,
   foodPhotoReadinessTitle,
+  foodPhotoReadinessChecklistDisplayItems,
   foodPhotoResultTitle,
   foodPhotoRetakeButtonAccessibilityLabel,
   foodPhotoRetakeButtonLabel,
@@ -1807,12 +1808,7 @@ export default function App() {
   const storeCartUnavailableDisplay = storeCartUnavailableDisplayItem();
   const foodPhotoVisionBoundaryDisplay = foodPhotoVisionBoundaryDisplayItem();
   const foodPhotoEmptyResultChecklistItems = foodPhotoEmptyResultChecklistDisplayItems();
-  const foodPhotoReadinessChecklistItems = [
-    "相機 / 相簿權限與圖片壓縮上限",
-    "圖片儲存、刪除與隱私遮罩策略",
-    "Vision 成本上限、rate limit 與重試規則",
-    "使用者確認後才可轉成飲食紀錄"
-  ].map(resultChecklistItem);
+  const foodPhotoReadinessChecklistItems = foodPhotoReadinessChecklistDisplayItems();
   const currentBasicReportKey =
     account && activeProfile
       ? basicReportRequestKey(

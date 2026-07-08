@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1296 extract food-photo readiness checklist helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `foodPhotoReadinessChecklistDisplayItems` to `mobile/futureModuleDisplay.ts` for the Food Photo readiness checklist copy.
+- Replaced the inline Food Photo readiness checklist construction in `mobile/App.tsx` with the extracted helper.
+- Kept checklist copy, bounded display behavior, camera/album permission guidance, image privacy guidance, Vision cost/rate-limit guidance, user-confirmation guidance, Food Photo rendering, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and key Food Photo readiness copy are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、camera/photo permission behavior、Vision/AI behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk display helpers from `App.tsx`; keep Food Photo camera, album, Vision, nutrition estimation, and save-to-meal behavior outside the first-version user flow until formally scoped.
+
 ### T1295 extract store-checkout readiness checklist helper
 
 類型：mobile / refactor / verifier / docs

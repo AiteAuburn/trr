@@ -1245,6 +1245,15 @@ export function foodPhotoReadinessTitle() {
   return boundDisplayText("正式啟用前需要完成", maxDisplayTextLength);
 }
 
+export function foodPhotoReadinessChecklistDisplayItems() {
+  return [
+    "相機 / 相簿權限與圖片壓縮上限",
+    "圖片儲存、刪除與隱私遮罩策略",
+    "Vision 成本上限、rate limit 與重試規則",
+    "使用者確認後才可轉成飲食紀錄"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function foodPhotoIntegrationButtonLabel() {
   return boundDisplayText("查看拍照整合狀態", maxDisplayTextLength);
 }
