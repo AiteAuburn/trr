@@ -334,6 +334,7 @@ import {
   aiSaveConfirmReadyStatusMessage,
   aiSaveConfirmReturnStatusMessage,
   aiSaveConfirmSubmitLabel,
+  aiSaveFailureChecklistDisplayItems,
   aiSaveFailureStatusMessage,
   aiSaveProgressStatusMessage,
   aiSaveRecordsStatusMessage,
@@ -1266,12 +1267,7 @@ export default function App() {
   const recordDetailBoundaryChecklistItems = recordDetailBoundaryChecklistDisplayItems();
   const recordEntrySettingsChecklistItems = recordEntrySettingsChecklistDisplayItems(protectedBackendReady);
   const aiCandidateRemoveChecklistItems = aiCandidateRemoveChecklistDisplayItems();
-  const aiSaveFailureChecklistItems = [
-    `目前保留 ${unsavedPreviewRecordDisplayCount} 筆候選紀錄在確認流程中。`,
-    "系統不會自動重試，也不會重新呼叫 parser / AI。",
-    "你可以返回儲存確認後再送出，或回 AI 整理確認逐筆編輯。",
-    "若 backend 持續不可用，可改用手動新增單筆明確紀錄。"
-  ].map(resultChecklistItem);
+  const aiSaveFailureChecklistItems = aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordDisplayCount);
   const historyBoundaryChecklistItems = [
     "月曆選取日期只套用在 mobile 目前已載入的紀錄。",
     `每頁最多載入 ${mobileRecordSyncDisplayLimit} 筆，本機最多保留 ${maxMobileRecordCacheLimit} 筆；這不是完整歷史匯出。`,

@@ -391,6 +391,16 @@ export function aiCandidateRemoveChecklistDisplayItems() {
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
+export function aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordCount: number) {
+  const boundedCount = clampNumber(unsavedPreviewRecordCount, 0, maxMobileCountValue);
+  return [
+    `目前保留 ${boundedCount} 筆候選紀錄在確認流程中。`,
+    "系統不會自動重試，也不會重新呼叫 parser / AI。",
+    "你可以返回儲存確認後再送出，或回 AI 整理確認逐筆編輯。",
+    "若 backend 持續不可用，可改用手動新增單筆明確紀錄。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function aiCandidateRemoveResultStatusMessage(count: number) {
   const boundedCount = clampNumber(count, 0, maxMobileCountValue);
   return boundedCount === 0 ? boundUiMessage("已移除所有候選紀錄") : boundUiMessage(`剩餘 ${boundedCount} 筆候選紀錄`);
