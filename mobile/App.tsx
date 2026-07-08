@@ -263,6 +263,7 @@ import {
   accountLoginDisplayValue,
   accountPublicDisplayNameText,
   doctorShareAccountBoundaryText,
+  doctorShareReadinessChecklistDisplayItems,
   profileReadinessChecklistDisplayItems
 } from "./accountCopy";
 import {
@@ -1793,12 +1794,7 @@ export default function App() {
   const reminderReadinessChecklistItems = reminderReadinessChecklistDisplayItems();
   const privacyReadinessChecklistItems = privacyReadinessChecklistDisplayItems();
   const tutorialSafetyChecklistItems = tutorialSafetyChecklistDisplayItems();
-  const doctorShareReadinessChecklistItems = [
-    "share token / authorization grant 產生、到期與撤銷",
-    "doctor grant 僅允許 profile:read / profile:export 的明確授權範圍",
-    "回診摘要報表需使用 bounded report query，不載入無上限歷史資料",
-    "所有分享、查看、匯出與撤銷都必須寫入 audit log"
-  ].map(resultChecklistItem);
+  const doctorShareReadinessChecklistItems = doctorShareReadinessChecklistDisplayItems();
   const healthIntegrationReadinessChecklistItems = [
     "使用者授權、撤權與資料刪除流程",
     "external integration layer 與平台權限隔離",

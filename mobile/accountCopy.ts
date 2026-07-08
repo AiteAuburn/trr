@@ -46,3 +46,12 @@ export function profileReadinessChecklistDisplayItems() {
     "敏感欄位需定義最小化策略；目前不收集生日、身分證或醫療診斷資料。"
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
+
+export function doctorShareReadinessChecklistDisplayItems() {
+  return [
+    "share token / authorization grant 產生、到期與撤銷",
+    "doctor grant 僅允許 profile:read / profile:export 的明確授權範圍",
+    "回診摘要報表需使用 bounded report query，不載入無上限歷史資料",
+    "所有分享、查看、匯出與撤銷都必須寫入 audit log"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}

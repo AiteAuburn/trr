@@ -2430,6 +2430,11 @@ def main() -> int:
             "const profileReadinessChecklistItems = profileReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "doctor share readiness checklist helper binding",
+            content,
+            "const doctorShareReadinessChecklistItems = doctorShareReadinessChecklistDisplayItems();",
+        )
+        _assert_contains(
             "quota readiness checklist helper binding",
             content,
             "const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();",
@@ -5245,6 +5250,10 @@ def main() -> int:
             ("profile readiness checklist helper", "function profileReadinessChecklistDisplayItems()"),
             ("profile readiness production auth copy", "production auth / OIDC 或 JWT 邊界，避免 dev account 被當成正式個資。"),
             ("profile readiness permission copy", "帳號與照護對象權限檢查：只能編輯自己有權限的 profile。"),
+            ("doctor share readiness checklist helper", "function doctorShareReadinessChecklistDisplayItems()"),
+            ("doctor share readiness token copy", "share token / authorization grant 產生、到期與撤銷"),
+            ("doctor share readiness grant scope copy", "doctor grant 僅允許 profile:read / profile:export 的明確授權範圍"),
+            ("doctor share readiness audit copy", "所有分享、查看、匯出與撤銷都必須寫入 audit log"),
         ):
             _assert_contains(label, account_copy_content, marker)
         for label, marker in (
