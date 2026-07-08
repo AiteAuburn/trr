@@ -119,9 +119,11 @@ import {
   boundCommunityPublicSettings,
   communityLeaderboardDisplaySection,
   emptyFoodCommunityShareFields,
+  foodCommunityCategories,
   foodCommunityCategoryDisplayItem,
   foodCommunityItemDisplayItem,
   foodCommunityItemFromApi,
+  foodCommunityItems,
   futureModuleCards,
   futureModuleCardDisplayItem,
   futureModuleDetailBoundaryCopy,
@@ -830,162 +832,6 @@ const initialVisualSmokeScreen = normalizeVisualSmokeInitialRoute(
 );
 
 type SaveEntryMethod = "ai" | "manual" | null;
-
-const foodCommunityCategories: Array<{ id: FoodCommunityCategory; label: string }> = [
-  { id: "vegetable", label: "蔬菜" },
-  { id: "meat", label: "肉類" },
-  { id: "seafood", label: "海鮮" },
-  { id: "egg", label: "蛋類" },
-  { id: "bean", label: "豆類" },
-  { id: "starch", label: "澱粉類" },
-  { id: "drink", label: "飲料" },
-  { id: "fruit", label: "水果" },
-  { id: "snack", label: "零食" },
-  { id: "supplement", label: "保健食品" }
-];
-
-const foodCommunityItems: FoodCommunityItem[] = [
-  {
-    id: "leafy-greens",
-    category: "vegetable",
-    title: "燙青菜",
-    aliases: ["青菜", "葉菜"],
-    shareCount: 128,
-    averageRise: 8,
-    maximumRise: 24,
-    minimumRise: 0,
-    examples: [
-      { id: "leafy-greens-1", beforeGlucose: 102, afterGlucose: 110, note: "晚餐搭配蛋白質，升糖幅度低。" },
-      { id: "leafy-greens-2", beforeGlucose: 118, afterGlucose: 126, note: "份量增加後仍維持平穩。" }
-    ]
-  },
-  {
-    id: "chicken-breast",
-    category: "meat",
-    title: "雞胸肉",
-    aliases: ["雞肉", "舒肥雞"],
-    shareCount: 96,
-    averageRise: 5,
-    maximumRise: 18,
-    minimumRise: 0,
-    examples: [
-      { id: "chicken-breast-1", beforeGlucose: 109, afterGlucose: 114, note: "無糖醬料，單吃變化小。" },
-      { id: "chicken-breast-2", beforeGlucose: 121, afterGlucose: 128, note: "搭配沙拉，飯後走路 15 分鐘。" }
-    ]
-  },
-  {
-    id: "salmon",
-    category: "seafood",
-    title: "鮭魚",
-    aliases: ["魚", "煎鮭魚"],
-    shareCount: 74,
-    averageRise: 6,
-    maximumRise: 20,
-    minimumRise: 0,
-    examples: [
-      { id: "salmon-1", beforeGlucose: 111, afterGlucose: 118, note: "搭配蔬菜，沒有額外澱粉。" },
-      { id: "salmon-2", beforeGlucose: 132, afterGlucose: 136, note: "份量正常，升糖不明顯。" }
-    ]
-  },
-  {
-    id: "boiled-egg",
-    category: "egg",
-    title: "水煮蛋",
-    aliases: ["蛋", "雞蛋"],
-    shareCount: 156,
-    averageRise: 4,
-    maximumRise: 14,
-    minimumRise: 0,
-    examples: [
-      { id: "boiled-egg-1", beforeGlucose: 98, afterGlucose: 102, note: "早餐單顆，變化很小。" },
-      { id: "boiled-egg-2", beforeGlucose: 124, afterGlucose: 129, note: "搭配無糖豆漿。" }
-    ]
-  },
-  {
-    id: "unsweetened-soymilk",
-    category: "bean",
-    title: "無糖豆漿",
-    aliases: ["豆漿", "黃豆"],
-    shareCount: 113,
-    averageRise: 11,
-    maximumRise: 32,
-    minimumRise: 2,
-    examples: [
-      { id: "unsweetened-soymilk-1", beforeGlucose: 105, afterGlucose: 117, note: "早餐一杯，未加糖。" },
-      { id: "unsweetened-soymilk-2", beforeGlucose: 116, afterGlucose: 130, note: "搭配蛋，升糖可接受。" }
-    ]
-  },
-  {
-    id: "white-rice",
-    category: "starch",
-    title: "白飯",
-    aliases: ["米飯", "飯"],
-    shareCount: 342,
-    averageRise: 54,
-    maximumRise: 118,
-    minimumRise: 16,
-    examples: [
-      { id: "white-rice-1", beforeGlucose: 112, afterGlucose: 169, note: "半碗飯，飯後散步 20 分鐘。" },
-      { id: "white-rice-2", beforeGlucose: 128, afterGlucose: 205, note: "一碗飯，上升明顯。" }
-    ]
-  },
-  {
-    id: "black-tea",
-    category: "drink",
-    title: "無糖紅茶",
-    aliases: ["紅茶", "茶"],
-    shareCount: 88,
-    averageRise: 3,
-    maximumRise: 12,
-    minimumRise: 0,
-    examples: [
-      { id: "black-tea-1", beforeGlucose: 101, afterGlucose: 103, note: "確認為無糖。" },
-      { id: "black-tea-2", beforeGlucose: 119, afterGlucose: 123, note: "冰飲，未加配料。" }
-    ]
-  },
-  {
-    id: "banana",
-    category: "fruit",
-    title: "香蕉",
-    aliases: ["水果", "蕉"],
-    shareCount: 167,
-    averageRise: 38,
-    maximumRise: 82,
-    minimumRise: 10,
-    examples: [
-      { id: "banana-1", beforeGlucose: 108, afterGlucose: 146, note: "半根香蕉，飯後兩小時量測。" },
-      { id: "banana-2", beforeGlucose: 122, afterGlucose: 174, note: "熟香蕉一根，上升較明顯。" }
-    ]
-  },
-  {
-    id: "crackers",
-    category: "snack",
-    title: "蘇打餅乾",
-    aliases: ["餅乾", "零食"],
-    shareCount: 91,
-    averageRise: 29,
-    maximumRise: 70,
-    minimumRise: 6,
-    examples: [
-      { id: "crackers-1", beforeGlucose: 117, afterGlucose: 148, note: "三片餅乾，下午點心。" },
-      { id: "crackers-2", beforeGlucose: 130, afterGlucose: 166, note: "搭配咖啡，未加糖。" }
-    ]
-  },
-  {
-    id: "fiber-powder",
-    category: "supplement",
-    title: "膳食纖維粉",
-    aliases: ["纖維", "保健食品"],
-    shareCount: 52,
-    averageRise: 2,
-    maximumRise: 11,
-    minimumRise: 0,
-    examples: [
-      { id: "fiber-powder-1", beforeGlucose: 115, afterGlucose: 117, note: "依標示份量沖泡，不作療效判斷。" },
-      { id: "fiber-powder-2", beforeGlucose: 126, afterGlucose: 128, note: "搭配正餐前飲用，僅作個人紀錄。" }
-    ]
-  }
-];
 
 const maxDateInputLength = 10;
 const maxTimeInputLength = 5;

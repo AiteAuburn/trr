@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1184: Extract Food Community fallback data
+
+Status: done
+
+Summary:
+
+- Moved Food Community local fallback categories and sample food items from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept backend category/item loading, category fallback selection, search/filter behavior, hidden/debug-only future routing, first-version menu destinations, copy, and screen layout unchanged.
+- Updated the navigation verifier so Food Community fallback category/item ownership and category parity are guarded in `mobile/futureModuleDisplay.ts`, while App-owned state, backend loading, and rendering remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Food Community fallback data boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1183: Extract achievement display transforms
 
 Status: done

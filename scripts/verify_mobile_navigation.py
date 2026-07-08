@@ -407,15 +407,19 @@ def _verify_food_community_category_contract(content: str, future_module_display
     )
     _assert_contains(
         "food community mobile fallback categories",
-        content,
-        "const foodCommunityCategories: Array<{ id: FoodCommunityCategory; label: string }> = [",
+        future_module_display_content,
+        "export const foodCommunityCategories: Array<{ id: FoodCommunityCategory; label: string }> = [",
     )
     _assert_contains("food community backend labels", backend_content, "FOOD_CATEGORY_LABELS: dict[FoodCategory, str] = {")
     _assert_contains("food community category count schema", backend_content, "food_count: int = Field(default=0, ge=0, le=1_000_000)")
     _assert_contains("food community category sample schema", backend_content, "sample_foods: list[str] = Field(default_factory=list, max_length=3)")
     _assert_contains("food community api-to-mobile mapper", future_module_display_content, "export function mobileFoodCategoryFromApi(value: string)")
     _assert_contains("food community mobile-to-api mapper", future_module_display_content, "export function apiFoodCategoryFromMobile(value: FoodCommunityCategory)")
-    _assert_contains("food community mobile individual food items", content, "const foodCommunityItems: FoodCommunityItem[] = [")
+    _assert_contains(
+        "food community mobile individual food items",
+        future_module_display_content,
+        "export const foodCommunityItems: FoodCommunityItem[] = [",
+    )
     _assert_contains("food community category count response", backend_api_content, "select(FoodItem.category, func.count(FoodItem.id)).group_by(FoodItem.category)")
     _assert_contains("food community category sample response", backend_api_content, "sample_foods=sample_foods_by_category.get(code, [])")
     _assert_contains("food community mobile category count state", content, "foodCount: clampNumber(category.food_count ?? 0, 0, maxMobileCountValue)")
@@ -542,12 +546,12 @@ def _verify_food_community_category_contract(content: str, future_module_display
     for mobile_id, api_code, label in EXPECTED_FOOD_COMMUNITY_CATEGORIES:
         _assert_contains(
             f"mobile food category {mobile_id}",
-            content,
+            future_module_display_content,
             f'{{ id: "{mobile_id}", label: "{label}" }}',
         )
         _assert_contains(
             f"mobile individual food item category {mobile_id}",
-            content,
+            future_module_display_content,
             f'category: "{mobile_id}"',
         )
         _assert_contains(f"backend food category {api_code}", backend_content, f'"{api_code}": "{label}"')
