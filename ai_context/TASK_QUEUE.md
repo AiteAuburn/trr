@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1205: Reuse highlight bullet row in manual submit
+
+Status: done
+
+Summary:
+
+- Replaced the Manual Submit checklist rows in `mobile/App.tsx` with the shared `HighlightBulletRow` component.
+- Kept checklist text, bullet glyph, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the Manual Submit checklist map is explicitly guarded to use `HighlightBulletRow`.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1204: Reuse highlight bullet row in record update
 
 Status: done
