@@ -10,6 +10,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
 API_CLIENT_PATH = REPO_ROOT / "mobile" / "apiClient.ts"
+APP_RUNTIME_CONFIG_PATH = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
 RECORD_EDIT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "recordEditTransforms.ts"
@@ -1224,6 +1225,7 @@ def _assert_text_input_accessibility_labels_are_bounded(content: str) -> None:
 def main() -> int:
     content = APP_PATH.read_text(encoding="utf-8")
     api_client_content = API_CLIENT_PATH.read_text(encoding="utf-8")
+    app_runtime_config_content = APP_RUNTIME_CONFIG_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
     record_edit_transforms_content = RECORD_EDIT_TRANSFORMS_PATH.read_text(encoding="utf-8")
@@ -1297,6 +1299,17 @@ def main() -> int:
         ):
             _assert_contains(label, api_client_content, marker)
         for label, marker in (
+            ("app runtime default API base URL", "export const defaultApiBaseUrl ="),
+            ("app runtime debug flag", "export const enableDebugTools = process.env.EXPO_PUBLIC_ENABLE_DEBUG_TOOLS === \"true\";"),
+            ("app runtime dev auth flag", "export const allowMobileDevAuth = process.env.EXPO_PUBLIC_ALLOW_DEV_AUTH === \"true\";"),
+            ("app runtime visual smoke route", "export const initialVisualSmokeScreen = normalizeVisualSmokeInitialRoute("),
+            ("app runtime sample transcript", "export const sampleText ="),
+            ("app runtime record sync limit", "export const mobileRecordSyncLimit = 100;"),
+            ("app runtime record cache limit", "export const maxMobileRecordCacheLimit = 500;"),
+            ("app runtime report query limit", "export const mobileReportQueryLimit = 500;"),
+        ):
+            _assert_contains(label, app_runtime_config_content, marker)
+        for label, marker in (
             ("mobile bounds url normalizer", "export function normalizeApiBaseUrl(value: string)"),
             ("mobile bounds ui message", "export function boundUiMessage(value: string)"),
             ("mobile bounds display text", "export function boundDisplayText(value: string, maxLength = maxDisplayTextLength)"),
@@ -1348,6 +1361,13 @@ def main() -> int:
             ("app local basic report type block", "type BasicReport = {\n  profile_id: string;"),
             ("app local json request wrapper", "async function requestJson<T>("),
             ("app local no-content request wrapper", "async function requestNoContent(apiBaseUrl: string, path: string, init?: RequestInit)"),
+            ("app local default API base URL", "const defaultApiBaseUrl ="),
+            ("app local debug flag", "const enableDebugTools = process.env.EXPO_PUBLIC_ENABLE_DEBUG_TOOLS"),
+            ("app local dev auth flag", "const allowMobileDevAuth = process.env.EXPO_PUBLIC_ALLOW_DEV_AUTH"),
+            ("app local sample transcript", "const sampleText ="),
+            ("app local record sync limit", "const mobileRecordSyncLimit = 100;"),
+            ("app local record cache limit", "const maxMobileRecordCacheLimit = 500;"),
+            ("app local report query limit", "const mobileReportQueryLimit = 500;"),
         ):
             _assert_not_contains(label, content, marker)
         _verify_daily_record_contract(content, daily_transcript_content)
@@ -2381,7 +2401,7 @@ def main() -> int:
         )
         _assert_contains(
             "visual smoke initial route env",
-            content,
+            app_runtime_config_content,
             "EXPO_PUBLIC_VISUAL_SMOKE_INITIAL_ROUTE",
         )
         _assert_contains(
@@ -3248,7 +3268,6 @@ def main() -> int:
             ("history detail mode display options", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModes.map(historyDetailModeDisplayItem), [])"),
             ("history detail mode press handler", "function pressHistoryDetailModeOption(item: ReturnType<typeof historyDetailModeDisplayItem>)"),
             ("history detail mode binding", "onPress={() => pressHistoryDetailModeOption(item)}"),
-            ("history cursor cache limit", "const maxMobileRecordCacheLimit = 500;"),
             ("history cursor before query", "before: cursorRecord.occurred_at,"),
             ("history cursor created_at query", "before_created_at: cursorRecord.created_at"),
             ("history load more handler", "async function loadMoreRecords()"),

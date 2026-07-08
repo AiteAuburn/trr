@@ -124,6 +124,27 @@ None.
 
 ## Done
 
+### T1195: Extract App runtime config
+
+Status: done
+
+Summary:
+
+- Moved App runtime env flags, default backend URL, visual-smoke initial route calculation, sample transcript, and mobile record/report limits from `mobile/App.tsx` into `mobile/appRuntimeConfig.ts`.
+- Kept runtime values, visual-smoke gating, sample transcript behavior, record sync/report limits, protected auth header behavior, UI copy, layout, navigation, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Kept `protectedRequestHeaders` in `mobile/App.tsx` because it still closes over the App runtime dev-auth flag.
+- Updated the navigation verifier so runtime config ownership is guarded in `mobile/appRuntimeConfig.ts` and old App-local constants are rejected.
+- Updated the visual-smoke routes verifier so the visual-smoke initial-route env marker is guarded in `mobile/appRuntimeConfig.ts`.
+- Updated the refactor roadmap to note the runtime config boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1194: Extract remaining App response type ownership
 
 Status: done

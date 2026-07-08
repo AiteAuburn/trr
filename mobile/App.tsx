@@ -33,6 +33,16 @@ import {
 } from "./authTokenStorage";
 import { requestJson, requestNoContent } from "./apiClient";
 import {
+  allowMobileDevAuth,
+  defaultApiBaseUrl,
+  enableDebugTools,
+  initialVisualSmokeScreen,
+  maxMobileRecordCacheLimit,
+  mobileRecordSyncLimit,
+  mobileReportQueryLimit,
+  sampleText
+} from "./appRuntimeConfig";
+import {
   boundDisplayText,
   boundIdentifier,
   boundNativeDebugInput,
@@ -104,7 +114,6 @@ import {
 import {
   menuScreens,
   mvpFlowSteps,
-  normalizeVisualSmokeInitialRoute,
   primaryScreens,
   screenChrome,
   visualSmokeRouteFromDeepLinkUrl,
@@ -718,26 +727,7 @@ type AuthSessionItem = AuthSessionDisplaySource;
 
 type BasicReport = BasicReportTransformSource;
 
-const defaultApiBaseUrl =
-  process.env.EXPO_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
-const enableDebugTools = process.env.EXPO_PUBLIC_ENABLE_DEBUG_TOOLS === "true";
-const allowMobileDevAuth = process.env.EXPO_PUBLIC_ALLOW_DEV_AUTH === "true";
-const visualSmokeInitialRoute = process.env.EXPO_PUBLIC_VISUAL_SMOKE_INITIAL_ROUTE ?? "";
-
-const sampleText =
-  "今天早上空腹血糖 138，早餐吃蛋餅跟無糖豆漿，下午散步 30 分鐘。";
-
-const initialVisualSmokeScreen = normalizeVisualSmokeInitialRoute(
-  visualSmokeInitialRoute,
-  enableDebugTools,
-  allowMobileDevAuth
-);
-
 type SaveEntryMethod = "ai" | "manual" | null;
-
-const mobileRecordSyncLimit = 100;
-const maxMobileRecordCacheLimit = 500;
-const mobileReportQueryLimit = 500;
 
 function protectedRequestHeaders(accountId: string, accessToken: string): Record<string, string> {
   return buildProtectedRequestHeaders(accountId, accessToken, allowMobileDevAuth);

@@ -15,6 +15,42 @@
 
 ## 2026-07-07
 
+### T1195 extract App runtime config
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/appRuntimeConfig.ts`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved App runtime env flags, default backend URL, visual-smoke initial route calculation, sample transcript, and mobile record/report limits from `mobile/App.tsx` into `mobile/appRuntimeConfig.ts`.
+- Kept runtime values, visual-smoke gating, sample transcript behavior, record sync/report limits, protected auth header behavior, UI copy, layout, navigation, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Kept `protectedRequestHeaders` in `mobile/App.tsx` because it still closes over the App runtime dev-auth flag.
+- Updated the navigation verifier so runtime config ownership is guarded in `mobile/appRuntimeConfig.ts` and old App-local constants are rejected.
+- Updated the visual-smoke routes verifier so the visual-smoke initial-route env marker is guarded in `mobile/appRuntimeConfig.ts`.
+- Updated the refactor roadmap to note the runtime config boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating App-owned side-effect helpers after static config boundaries are stable.
+
 ### T1194 extract remaining App response type ownership
 
 類型：mobile / refactor / verifier / docs
