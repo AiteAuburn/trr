@@ -706,6 +706,7 @@ import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { HistoryDailySummaryCard } from "./historyDailySummaryCard";
 import { HistoryDetailModeTabs } from "./historyDetailModeTabs";
+import { HistoryRawTranscriptCard } from "./historyRawTranscriptCard";
 import { HistorySelectedSummaryCard } from "./historySelectedSummaryCard";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
@@ -8636,16 +8637,13 @@ export default function App() {
                 </View>
               ) : (
                 selectedHistoryRawDisplayItems.map((item) => (
-                  <View key={item.key} style={styles.historyRawCard}>
-                    <View style={styles.historyItemHeader}>
-                      <Text style={styles.recordType}>{item.typeLabel}</Text>
-                      <View style={styles.timelineContent}>
-                        <Text style={styles.confidence}>{item.timeLabel}</Text>
-                        <Text style={styles.previewModeBadge}>{item.sourceStatusLabel}</Text>
-                      </View>
-                    </View>
-                    <Text style={styles.evidence}>{item.rawText}</Text>
-                  </View>
+                  <HistoryRawTranscriptCard
+                    key={item.key}
+                    rawText={item.rawText}
+                    sourceStatusLabel={item.sourceStatusLabel}
+                    timeLabel={item.timeLabel}
+                    typeLabel={item.typeLabel}
+                  />
                 ))
               )}
             </View>
@@ -12672,14 +12670,6 @@ const styles = StyleSheet.create({
   historyDailySummaryTable: {
     gap: 10
   },
-  historyRawCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
-    borderRadius: 18,
-    borderWidth: 1,
-    gap: 8,
-    padding: 14
-  },
   historyItem: {
     backgroundColor: "#FFFFFF",
     borderColor: "#E3E8E5",
@@ -12699,12 +12689,6 @@ const styles = StyleSheet.create({
     gap: 4,
     minHeight: 72,
     padding: 14
-  },
-  historyItemHeader: {
-    alignItems: "flex-start",
-    flexDirection: "row",
-    gap: 10,
-    justifyContent: "space-between"
   },
   historyItemTitle: {
     alignItems: "center",

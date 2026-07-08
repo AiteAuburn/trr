@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1242: Extract history raw transcript card
+
+Status: done
+
+Summary:
+
+- Added `mobile/historyRawTranscriptCard.tsx` for the History raw transcript card renderer.
+- Replaced the inline raw transcript card map in `mobile/App.tsx` with `HistoryRawTranscriptCard`.
+- Kept record type/time/source-status/raw transcript text, fallback copy, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the History raw transcript component and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1241: Extract history detail mode tabs
 
 Status: done

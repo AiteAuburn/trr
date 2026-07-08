@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1242 extract history raw transcript card
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/historyRawTranscriptCard.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/historyRawTranscriptCard.tsx` for the History raw transcript card renderer.
+- Replaced the inline raw transcript card map in `mobile/App.tsx` with `HistoryRawTranscriptCard`.
+- Kept record type/time/source-status/raw transcript text, fallback copy, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the History raw transcript component and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version History presentation components while keeping raw transcript handling PHI-safe and display-only.
+
 ### T1241 extract history detail mode tabs
 
 類型：mobile / refactor / verifier / docs
