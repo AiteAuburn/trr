@@ -704,6 +704,7 @@ import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { HighlightBulletRow } from "./highlightBulletRow";
+import { HighlightDetailRow } from "./highlightDetailRow";
 import type {
   Account,
   AiModelOptions,
@@ -10197,10 +10198,7 @@ export default function App() {
                 autoCorrect={false}
               />
               {foodCommunityShareFieldRows.map((row) => (
-                <View key={row.label} style={styles.highlightRow}>
-                  <Text style={styles.recordType}>{row.label}</Text>
-                  <Text style={styles.evidence}>{row.value}</Text>
-                </View>
+                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />
               ))}
             </View>
             <View style={styles.reportBoundaryGrid}>

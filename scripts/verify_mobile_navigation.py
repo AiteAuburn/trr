@@ -48,6 +48,7 @@ YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 FIELD_LABEL_PATH = REPO_ROOT / "mobile" / "fieldLabel.tsx"
 DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "detailRow.tsx"
 HIGHLIGHT_BULLET_ROW_PATH = REPO_ROOT / "mobile" / "highlightBulletRow.tsx"
+HIGHLIGHT_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "highlightDetailRow.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1269,6 +1270,7 @@ def main() -> int:
     field_label_content = FIELD_LABEL_PATH.read_text(encoding="utf-8")
     detail_row_content = DETAIL_ROW_PATH.read_text(encoding="utf-8")
     highlight_bullet_row_content = HIGHLIGHT_BULLET_ROW_PATH.read_text(encoding="utf-8")
+    highlight_detail_row_content = HIGHLIGHT_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -1407,6 +1409,19 @@ def main() -> int:
         ):
             target_content = content if label.startswith(("record detail ", "delete confirm ", "record update ", "manual submit ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "history boundary ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ", "tutorial safety ", "detailed report notes ", "subscription readiness ", "subscription management readiness ", "doctor share readiness ", "health integration readiness ", "community readiness ", "ranking readiness ", "store checkout readiness ", "food photo empty result ", "food photo readiness ", "future module card requirements ", "future module detail requirements ")) else highlight_bullet_row_content
             _assert_contains(label, target_content, marker)
+        for label, marker in (
+            ("highlight detail row component", "export function HighlightDetailRow({ label, value }: HighlightDetailRowProps)"),
+            ("highlight detail row label", "<Text style={styles.recordType}>{label}</Text>"),
+            ("highlight detail row value", "<Text style={styles.evidence}>{value}</Text>"),
+            ("highlight detail row style", "highlightRow: {"),
+            ("highlight detail record type color", 'color: "#3FA67F"'),
+            ("highlight detail evidence line height", "lineHeight: 19"),
+        ):
+            _assert_contains(label, highlight_detail_row_content, marker)
+        for label, marker in (
+            ("food community share field highlight detail row", "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />"),
+        ):
+            _assert_contains(label, content, marker)
         for label, marker in (
             ("record detail date detail row component", 'label={<FieldLabel icon={"📅"} label={"日期"} />}'),
             ("record detail mapped detail row component", "<DetailRow key={row.label} label={row.label} value={row.value} />"),

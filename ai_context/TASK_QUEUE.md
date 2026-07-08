@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1235: Extract highlight detail row for food community share fields
+
+Status: done
+
+Summary:
+
+- Added `mobile/highlightDetailRow.tsx` for shared label/value highlight rows using the existing highlight row, record type, and evidence styling.
+- Replaced only the Food Community share field rows in `mobile/App.tsx` with `HighlightDetailRow`.
+- Kept label/value text, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, hidden/debug-only future routing, and food-community action behavior unchanged.
+- Updated the navigation verifier so the shared highlight detail component and Food Community share field map are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1234: Reuse highlight bullet row in future module detail requirements
 
 Status: done
