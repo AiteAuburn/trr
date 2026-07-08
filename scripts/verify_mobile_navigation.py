@@ -1380,8 +1380,9 @@ def main() -> int:
             ("ai save confirm highlight bullet row", "aiSaveConfirmChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("save success highlight bullet row", "saveSuccessBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("delete success highlight bullet row", "deleteSuccessBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("update success highlight bullet row", "updateSuccessBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
         ):
-            target_content = content if label.startswith(("record detail ", "delete confirm ", "record update ", "manual submit ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ")) else highlight_bullet_row_content
+            target_content = content if label.startswith(("record detail ", "delete confirm ", "record update ", "manual submit ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ")) else highlight_bullet_row_content
             _assert_contains(label, target_content, marker)
         for label, marker in (
             ("record detail date detail row component", 'label={<FieldLabel icon={"📅"} label={"日期"} />}'),
