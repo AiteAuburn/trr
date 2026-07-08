@@ -280,6 +280,16 @@ export function manualRecordConfirmSubmitLabel(isBusy: boolean) {
   return boundDisplayText(isBusy ? "建立中..." : "確認建立", maxDisplayTextLength);
 }
 
+export function manualSubmitChecklistDisplayItems() {
+  return [
+    "不會呼叫 AI 或 LLM，成本為 0。",
+    "只會送出 1 筆手動紀錄 payload，不會批次載入完整歷史。",
+    "不會附帶 raw transcript、raw prompt、raw model output 或模型 debug trace。",
+    "日期、時間、類型與欄位會送到後端再次驗證。",
+    "建立中按鈕會停用；失敗時不會自動重試。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function manualRecordConfirmReadyStatusMessage() {
   return boundUiMessage("請確認手動紀錄；送出前不會呼叫 AI 或 LLM。");
 }

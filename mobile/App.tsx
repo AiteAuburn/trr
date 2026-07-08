@@ -348,6 +348,7 @@ import {
   manualRecordConfirmReturnStatusMessage,
   manualRecordConfirmSubmitLabel,
   manualRecordReturnStatusMessage,
+  manualSubmitChecklistDisplayItems,
   parserBackendUnavailableStatusMessage,
   parserFailureRecoveryMessage,
   parserFailureStatusMessage,
@@ -1265,13 +1266,7 @@ export default function App() {
     deleteSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit);
   const updateSuccessBoundaryChecklistItems =
     updateSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit);
-  const manualSubmitChecklistItems = [
-    "不會呼叫 AI 或 LLM，成本為 0。",
-    "只會送出 1 筆手動紀錄 payload，不會批次載入完整歷史。",
-    "不會附帶 raw transcript、raw prompt、raw model output 或模型 debug trace。",
-    "日期、時間、類型與欄位會送到後端再次驗證。",
-    "建立中按鈕會停用；失敗時不會自動重試。"
-  ].map(resultChecklistItem);
+  const manualSubmitChecklistItems = manualSubmitChecklistDisplayItems();
   const recordDetailBoundaryChecklistItems = [
     "只顯示目前已載入的單筆紀錄，不額外查詢完整歷史。",
     "不會呼叫 parser、AI 或 LLM，成本為 0。",
