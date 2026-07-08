@@ -79,7 +79,7 @@ VISUAL_SMOKE_ROUTES = {
     "history": [
         'currentScreen === "history"',
         "HistoryCalendarMonthPicker",
-        "historyDailySummaryDisplayItems.map",
+        "HistoryDailySummaryTable",
         "selectedHistoryDailySectionItems.map",
         "selectedHistoryRawDisplayItems.map",
     ],

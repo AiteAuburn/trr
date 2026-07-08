@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1249: Extract history daily summary table
+
+Status: done
+
+Summary:
+
+- Added `mobile/historyDailySummaryTable.tsx` for the History daily-summary table header, daily-summary card list, and no-range empty state.
+- Replaced the inline History daily-summary table JSX in `mobile/App.tsx` with `HistoryDailySummaryTable`.
+- Kept table title/helper copy, selected-date comparison, summary card fields, empty-state copy, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation, UI spec coverage, and visual-smoke route verifiers so the History daily-summary table component and App summary-press binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1248: Extract history calendar month picker
 
 Status: done

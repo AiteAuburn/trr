@@ -49,6 +49,7 @@ DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 HISTORY_CALENDAR_MONTH_PICKER_PATH = REPO_ROOT / "mobile" / "historyCalendarMonthPicker.tsx"
 HISTORY_DAILY_RECORD_SECTION_CARD_PATH = REPO_ROOT / "mobile" / "historyDailyRecordSectionCard.tsx"
 HISTORY_DAILY_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historyDailySummaryCard.tsx"
+HISTORY_DAILY_SUMMARY_TABLE_PATH = REPO_ROOT / "mobile" / "historyDailySummaryTable.tsx"
 HISTORY_DETAIL_MODE_TABS_PATH = REPO_ROOT / "mobile" / "historyDetailModeTabs.tsx"
 HISTORY_NO_RANGE_RECORDS_CARD_PATH = REPO_ROOT / "mobile" / "historyNoRangeRecordsCard.tsx"
 HISTORY_NO_RECORD_STATUS_BLOCK_PATH = REPO_ROOT / "mobile" / "historyNoRecordStatusBlock.tsx"
@@ -1283,6 +1284,7 @@ def main() -> int:
     history_calendar_month_picker_content = HISTORY_CALENDAR_MONTH_PICKER_PATH.read_text(encoding="utf-8")
     history_daily_record_section_card_content = HISTORY_DAILY_RECORD_SECTION_CARD_PATH.read_text(encoding="utf-8")
     history_daily_summary_card_content = HISTORY_DAILY_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
+    history_daily_summary_table_content = HISTORY_DAILY_SUMMARY_TABLE_PATH.read_text(encoding="utf-8")
     history_detail_mode_tabs_content = HISTORY_DETAIL_MODE_TABS_PATH.read_text(encoding="utf-8")
     history_no_range_records_card_content = HISTORY_NO_RANGE_RECORDS_CARD_PATH.read_text(encoding="utf-8")
     history_no_record_status_block_content = HISTORY_NO_RECORD_STATUS_BLOCK_PATH.read_text(encoding="utf-8")
@@ -1421,6 +1423,17 @@ def main() -> int:
             ("history daily summary card storage label", "<Text style={styles.confidence}>{storageLabel}</Text>"),
         ):
             _assert_contains(label, history_daily_summary_card_content, marker)
+        for label, marker in (
+            ("history daily summary table component", "export function HistoryDailySummaryTable<TItem extends HistoryDailySummaryTableItem>({"),
+            ("history daily summary table title", "每日摘要表"),
+            ("history daily summary table helper", "點日期查看完整每日紀錄、同步狀態與各分類內容。"),
+            ("history daily summary table map", "items.map((item) => ("),
+            ("history daily summary table selected prop", "selected={item.value === selectedDate}"),
+            ("history daily summary table press binding", "onPress={() => onSummaryPress(item)}"),
+            ("history daily summary table empty card", "<HistoryNoRangeRecordsCard body={emptyBody} title={emptyTitle} />"),
+            ("history daily summary table style", "historyDailySummaryTable: {"),
+        ):
+            _assert_contains(label, history_daily_summary_table_content, marker)
         for label, marker in (
             ("history detail mode tabs component", "export function HistoryDetailModeTabs<T extends HistoryDetailModeTabItem>({"),
             ("history detail mode tabs selected state", "accessibilityState={{ selected: isSelected }}"),
@@ -3519,7 +3532,7 @@ def main() -> int:
             ("history calendar day press handler", "function pressHistoryCalendarDay(item: ReturnType<typeof historyCalendarDayDisplayItem>)"),
             ("history calendar day binding", "onDayPress={pressHistoryCalendarDay}"),
             ("history daily summary press handler", "function pressHistoryDailySummary(item: ReturnType<typeof historyDailySummaryDisplayItem>)"),
-            ("history daily summary binding", "onPress={() => pressHistoryDailySummary(item)}"),
+            ("history daily summary binding", "onSummaryPress={pressHistoryDailySummary}"),
             ("history daily entry press handler", "function pressHistoryDailyEntry("),
             ("history daily entry binding", "onEntryPress={pressHistoryDailyEntry}"),
             ("history calendar selected state", "onDayPress={pressHistoryCalendarDay}"),
@@ -3532,7 +3545,7 @@ def main() -> int:
             ("history cursor created_at query", "before_created_at: cursorRecord.created_at"),
             ("history load more handler", "async function loadMoreRecords()"),
             ("history load more availability", "const canLoadMoreRecords ="),
-            ("history daily summary table render", "historyDailySummaryDisplayItems.map((item) =>"),
+            ("history daily summary table render", "<HistoryDailySummaryTable\n              emptyBody={historyNoRangeRecordsBodyDisplayText}"),
             ("history selected daily summary render", "selectedHistoryDailySummary.summaryText"),
             ("history structured section render", "selectedHistoryDailySectionItems.map((section) =>"),
             ("history raw records render", "selectedHistoryRawDisplayItems.map((item) =>"),
@@ -3604,7 +3617,7 @@ def main() -> int:
             _assert_contains(label, history_calendar_day_block, marker)
         history_block = _history_render_block(content)
         history_calendar_index = history_block.find("<HistoryCalendarMonthPicker")
-        history_summary_index = history_block.find("styles.historyDailySummaryTable")
+        history_summary_index = history_block.find("<HistoryDailySummaryTable")
         history_detail_index = history_block.find("styles.historySelectedDatePanel")
         history_structured_index = history_block.find('historyDetailMode === "structured"')
         history_raw_index = history_block.find("selectedHistoryRawDisplayItems.map((item) =>")
@@ -3620,12 +3633,12 @@ def main() -> int:
             ("history calendar day press binding", "onDayPress={pressHistoryCalendarDay}"),
             ("history calendar previous month binding", "onPreviousMonthPress={openPreviousHistoryMonth}"),
             ("history calendar next month binding", "onNextMonthPress={openNextHistoryMonth}"),
-            ("history daily summary table title", "每日摘要表"),
-            ("history daily summary card component binding", "historyDailySummaryDisplayItems.map((item) => (\n                  <HistoryDailySummaryCard"),
-            ("history daily summary selected prop", "selected={item.value === selectedHistoryDate}"),
-            ("history daily summary press binding", "onPress={() => pressHistoryDailySummary(item)}"),
-            ("history summary no-range records binding", "<HistoryNoRangeRecordsCard\n                  body={historyNoRangeRecordsBodyDisplayText}"),
-            ("history summary no-range records title binding", "title={historyNoRangeRecordsTitleDisplayText}"),
+            ("history daily summary table binding", "<HistoryDailySummaryTable\n              emptyBody={historyNoRangeRecordsBodyDisplayText}"),
+            ("history daily summary table items binding", "items={historyDailySummaryDisplayItems}"),
+            ("history daily summary table selected binding", "selectedDate={selectedHistoryDate}"),
+            ("history daily summary press binding", "onSummaryPress={pressHistoryDailySummary}"),
+            ("history summary no-range records body binding", "emptyBody={historyNoRangeRecordsBodyDisplayText}"),
+            ("history summary no-range records title binding", "emptyTitle={historyNoRangeRecordsTitleDisplayText}"),
             ("history no-record status binding", "<HistoryNoRecordStatusBlock\n                body={historyNoRealRecordHealthValueDisplayText}"),
             ("history no-record status title binding", "title={coreFlowDisplayLabels.historyDataStatus}"),
             ("history selected date header binding", "<HistorySelectedDateHeader\n                dateLabel={selectedHistoryDateDisplayText}"),
@@ -3647,8 +3660,10 @@ def main() -> int:
             ("history sync boundary load-more handler binding", "onLoadMore={loadMoreRecords}"),
         ):
             _assert_contains(label, history_block, marker)
-        if history_block.count("<HistoryNoRangeRecordsCard") != 2:
-            raise AssertionError("History must render no-range records cards in summary and selected-date empty states.")
+        if history_block.count("<HistoryNoRangeRecordsCard") != 1:
+            raise AssertionError("History selected-date empty state must render one no-range records card in App.")
+        if history_daily_summary_table_content.count("<HistoryNoRangeRecordsCard") != 1:
+            raise AssertionError("History daily summary table must render one no-range records card in its component.")
         for label, marker in (
             ("history range tabs render", "historyRangeDisplayOptions.map"),
             ("history custom range apply button", "applyHistoryCustomRange"),

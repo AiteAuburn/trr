@@ -706,7 +706,7 @@ import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { HistoryCalendarMonthPicker } from "./historyCalendarMonthPicker";
 import { HistoryDailyRecordSectionCard } from "./historyDailyRecordSectionCard";
-import { HistoryDailySummaryCard } from "./historyDailySummaryCard";
+import { HistoryDailySummaryTable } from "./historyDailySummaryTable";
 import { HistoryDetailModeTabs } from "./historyDetailModeTabs";
 import { HistoryNoRangeRecordsCard } from "./historyNoRangeRecordsCard";
 import { HistoryNoRecordStatusBlock } from "./historyNoRecordStatusBlock";
@@ -8473,35 +8473,13 @@ export default function App() {
               onNextMonthPress={openNextHistoryMonth}
               onPreviousMonthPress={openPreviousHistoryMonth}
             />
-            <View style={styles.historyDailySummaryTable}>
-              <View style={styles.sectionHeader}>
-                <View style={styles.timelineContent}>
-                  <Text style={styles.label}>每日摘要表</Text>
-                  <Text style={styles.evidence}>點日期查看完整每日紀錄、同步狀態與各分類內容。</Text>
-                </View>
-              </View>
-              {historyDailySummaryDisplayItems.length > 0 ? (
-                historyDailySummaryDisplayItems.map((item) => (
-                  <HistoryDailySummaryCard
-                    key={item.key}
-                    accessibilityLabel={item.accessibilityLabel}
-                    countLabel={item.countLabel}
-                    dateLabel={item.dateLabel}
-                    selected={item.value === selectedHistoryDate}
-                    sourceLabel={item.sourceLabel}
-                    storageLabel={item.storageLabel}
-                    summaryText={item.summaryText}
-                    syncLabel={item.syncLabel}
-                    onPress={() => pressHistoryDailySummary(item)}
-                  />
-                ))
-              ) : (
-                <HistoryNoRangeRecordsCard
-                  body={historyNoRangeRecordsBodyDisplayText}
-                  title={historyNoRangeRecordsTitleDisplayText}
-                />
-              )}
-            </View>
+            <HistoryDailySummaryTable
+              emptyBody={historyNoRangeRecordsBodyDisplayText}
+              emptyTitle={historyNoRangeRecordsTitleDisplayText}
+              items={historyDailySummaryDisplayItems}
+              selectedDate={selectedHistoryDate}
+              onSummaryPress={pressHistoryDailySummary}
+            />
             {recordsForDisplay.length === 0 ? (
               <HistoryNoRecordStatusBlock
                 body={historyNoRealRecordHealthValueDisplayText}
