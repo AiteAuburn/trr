@@ -2525,6 +2525,11 @@ def main() -> int:
             "const detailedReportBoundaryRows = detailedReportBoundaryDisplayRows(",
         )
         _assert_contains(
+            "AI save confirm boundary rows helper binding",
+            content,
+            "const aiSaveConfirmBoundaryRows = aiSaveConfirmBoundaryDisplayRows(",
+        )
+        _assert_contains(
             "recording quota boundary rows helper binding",
             content,
             "const recordingQuotaBoundaryRows = recordingQuotaBoundaryDisplayRows(voiceQuota, quotaRemainingLow);",
@@ -3660,9 +3665,11 @@ def main() -> int:
             ("AI save confirm return status helper", "function aiSaveConfirmReturnStatusMessage()"),
             ("AI save confirm submit label helper", "function aiSaveConfirmSubmitLabel(isBusy: boolean, isBlockedByBackend: boolean, hasWarnings: boolean)"),
             ("AI save confirm checklist helper", "function aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordCount: number)"),
+            ("AI save confirm boundary rows helper", "function aiSaveConfirmBoundaryDisplayRows("),
             ("AI save confirm checklist max candidate copy", "本次最多送出 ${boundedCount} 筆候選 payload，不會批次載入完整歷史。"),
             ("AI save confirm checklist backend payload copy", "送往 backend 的內容以確認後資料為主，不會附帶整段紀錄歷史或模型 debug trace。"),
             ("AI save confirm checklist no auto parser copy", "不會儲存未建立片段，也不會自動重新呼叫 AI。"),
+            ("AI save confirm boundary rows extra AI cost copy", "額外 AI 成本"),
             ("AI save failure checklist helper", "function aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordCount: number)"),
             ("AI save failure no retry copy", "系統不會自動重試，也不會重新呼叫 parser / AI。"),
             ("AI save failure manual fallback copy", "若 backend 持續不可用，可改用手動新增單筆明確紀錄。"),

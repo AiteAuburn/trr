@@ -339,6 +339,7 @@ import {
   aiRemoveConfirmBoundaryCopy,
   aiRemoveConfirmBoundaryLabel,
   aiRemoveConfirmSourceCopy,
+  aiSaveConfirmBoundaryDisplayRows,
   aiSaveConfirmChecklistDisplayItems,
   aiSaveConfirmIntroCopy,
   aiSaveConfirmReadyStatusMessage,
@@ -2011,12 +2012,11 @@ export default function App() {
     exerciseCount: reportExerciseCount,
     medicationCount: reportMedicationCount
   });
-  const aiSaveConfirmBoundaryRows = ([
-    ["候選紀錄", `${unsavedPreviewRecordDisplayCount} 筆`],
-    ["低信心", `${lowConfidencePreviewRecordDisplayCount} 筆`],
-    ["未建立片段", `${rejectedPreviewEventDisplayCount} 筆`],
-    ["額外 AI 成本", "0 次呼叫"]
-  ] as const).map(boundaryMetricDisplayItem);
+  const aiSaveConfirmBoundaryRows = aiSaveConfirmBoundaryDisplayRows(
+    unsavedPreviewRecordDisplayCount,
+    lowConfidencePreviewRecordDisplayCount,
+    rejectedPreviewEventDisplayCount
+  );
   const detailedReportBoundaryRows = detailedReportBoundaryDisplayRows(
     reportSourceDisplayLabel,
     mobileReportQueryDisplayLimit

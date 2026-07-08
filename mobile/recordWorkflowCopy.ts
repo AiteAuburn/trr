@@ -246,6 +246,22 @@ export function aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordCount: nu
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
+export function aiSaveConfirmBoundaryDisplayRows(
+  unsavedPreviewRecordCount: number,
+  lowConfidenceRecordCount: number,
+  rejectedPreviewEventCount: number
+) {
+  return [
+    ["候選紀錄", `${clampNumber(unsavedPreviewRecordCount, 0, maxMobileCountValue)} 筆`],
+    ["低信心", `${clampNumber(lowConfidenceRecordCount, 0, maxMobileCountValue)} 筆`],
+    ["未建立片段", `${clampNumber(rejectedPreviewEventCount, 0, maxMobileCountValue)} 筆`],
+    ["額外 AI 成本", "0 次呼叫"]
+  ].map(([label, value]) => ({
+    label: boundDisplayText(label, 60),
+    value: boundDisplayText(value, 80)
+  }));
+}
+
 export function saveSuccessBoundaryChecklistDisplayItems(
   lastSaveEntryMethod: SaveEntryMethod,
   hasUnsavedPreviewRecords: boolean,
