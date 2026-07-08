@@ -3712,6 +3712,12 @@ def main() -> int:
             ("analysis chart point builder", "function analysisChartPoints(records: AnalysisGlucoseRecord[]): AnalysisChartPoint[]"),
             ("analysis chart bounded sample", "return records.slice(-12).map(({ record, value }) => ({"),
             ("analysis chart range helper", "function analysisChartRange(points: AnalysisChartPoint[])"),
+            ("record current streak helper", "export function currentRecordStreakDays(records: RecordItem[])"),
+            ("record typed streak helper", "export function currentRecordTypeStreakDays(records: RecordItem[], recordType: string)"),
+            ("record unique days helper", "export function uniqueRecordDaysInLast(records: RecordItem[], days: number, predicate: (record: RecordItem) => boolean)"),
+            ("record longest streak helper", "export function longestRecordStreakDays(records: RecordItem[])"),
+            ("record streak today bound", "for (let offset = 0; offset < 366; offset += 1)"),
+            ("record longest streak day gap", "currentTime - previousTime === 86_400_000"),
         ):
             _assert_contains(label, analysis_data_content, marker)
         for label, marker in (

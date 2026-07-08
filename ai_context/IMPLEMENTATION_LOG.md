@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1189 extract record streak aggregation helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisDataTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved current-record streak, typed-record streak, recent unique record days, and longest-record-streak helpers from `mobile/App.tsx` into `mobile/analysisDataTransforms.ts`.
+- Kept achievement progress, ranking streak display, Year Review longest-streak calculation, hidden/debug-only future routing, first-version menu destinations, copy text, and screen layout unchanged.
+- Updated the navigation verifier so record streak aggregation ownership is guarded in `mobile/analysisDataTransforms.ts`, while App-owned achievement/year-review/ranking usage remains guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the record streak aggregation helper boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating pure data aggregation helpers before moving renderers.
+
 ### T1188 extract Year Review share filename helper
 
 類型：mobile / refactor / verifier / docs

@@ -539,7 +539,10 @@ import {
   averageNumber,
   beforeMealGlucoseCount as countBeforeMealGlucose,
   boundBasicReport,
+  currentRecordStreakDays,
+  currentRecordTypeStreakDays,
   highestNumber,
+  longestRecordStreakDays,
   lowestNumber,
   selectedAnalysisChartPoint
 } from "./analysisDataTransforms";
@@ -643,7 +646,6 @@ import {
   analysisDateBounds,
   boundDateInputText,
   boundTimeInputText,
-  daysAgo,
   formatLocalDateInput,
   formatLocalTimeInput,
   isSameLocalDay,
@@ -833,72 +835,6 @@ function clampNullableNumber(value: number | null | undefined, min: number, max:
     return null;
   }
   return clampNumber(value, min, max);
-}
-
-function currentRecordStreakDays(records: RecordItem[]) {
-  const recordedDays = new Set(records.map((record) => localDateKey(record.occurred_at)).filter(Boolean));
-  let streak = 0;
-  for (let offset = 0; offset < 366; offset += 1) {
-    const day = localDateKey(daysAgo(offset));
-    if (!recordedDays.has(day)) {
-      break;
-    }
-    streak += 1;
-  }
-  return streak;
-}
-
-function currentRecordTypeStreakDays(records: RecordItem[], recordType: string) {
-  const recordedDays = new Set(
-    records
-      .filter((record) => record.record_type === recordType)
-      .map((record) => localDateKey(record.occurred_at))
-      .filter(Boolean)
-  );
-  let streak = 0;
-  for (let offset = 0; offset < 366; offset += 1) {
-    const day = localDateKey(daysAgo(offset));
-    if (!recordedDays.has(day)) {
-      break;
-    }
-    streak += 1;
-  }
-  return streak;
-}
-
-function uniqueRecordDaysInLast(records: RecordItem[], days: number, predicate: (record: RecordItem) => boolean) {
-  const start = daysAgo(days - 1);
-  const now = new Date();
-  const daysWithRecords = new Set<string>();
-  for (const record of records) {
-    const occurredAt = new Date(record.occurred_at);
-    if (occurredAt >= start && occurredAt <= now && predicate(record)) {
-      daysWithRecords.add(localDateKey(occurredAt));
-    }
-  }
-  return daysWithRecords.size;
-}
-
-function longestRecordStreakDays(records: RecordItem[]) {
-  const sortedDays = Array.from(
-    new Set(records.map((record) => localDateKey(record.occurred_at)).filter(Boolean))
-  ).sort();
-  let longest = 0;
-  let current = 0;
-  let previousTime: number | null = null;
-
-  for (const day of sortedDays) {
-    const currentTime = new Date(`${day}T00:00:00`).getTime();
-    if (previousTime === null || currentTime - previousTime === 86_400_000) {
-      current += 1;
-    } else {
-      current = 1;
-    }
-    longest = Math.max(longest, current);
-    previousTime = currentTime;
-  }
-
-  return longest;
 }
 
 async function requestJson<T>(

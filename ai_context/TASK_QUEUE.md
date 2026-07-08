@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1189: Extract record streak aggregation helpers
+
+Status: done
+
+Summary:
+
+- Moved current-record streak, typed-record streak, recent unique record days, and longest-record-streak helpers from `mobile/App.tsx` into `mobile/analysisDataTransforms.ts`.
+- Kept achievement progress, ranking streak display, Year Review longest-streak calculation, hidden/debug-only future routing, first-version menu destinations, copy text, and screen layout unchanged.
+- Updated the navigation verifier so record streak aggregation ownership is guarded in `mobile/analysisDataTransforms.ts`, while App-owned achievement/year-review/ranking usage remains guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the record streak aggregation helper boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1188: Extract Year Review share filename helper
 
 Status: done
