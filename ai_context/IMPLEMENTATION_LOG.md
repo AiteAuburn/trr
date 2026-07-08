@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1182 extract dev reset response transform
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/authStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved the dev reset response type and bounded response transform from `mobile/App.tsx` into `mobile/authStatusCopy.ts`.
+- Kept `/dev/reset-data` request behavior, dev-auth guard, busy guard, deleted-record success copy, local-state clearing, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so dev reset response bounds are guarded in `mobile/authStatusCopy.ts`, while reset submission and backend dev reset coverage remain guarded in `mobile/App.tsx` and backend tests.
+- Updated the refactor roadmap to note the dev reset response transform boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating App-level response transforms and pure helpers before moving screen renderers.
+
 ### T1181 extract auth provider preview display helper
 
 類型：mobile / refactor / verifier / docs

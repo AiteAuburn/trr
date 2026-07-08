@@ -2,7 +2,14 @@ import type { AuthProviderChallengeFailure } from "./authProviderChallenge";
 
 const maxUiMessageLength = 300;
 const maxDisplayTextLength = 120;
+const maxIdentifierTextLength = 128;
 const maxMobileCountValue = 1_000_000;
+const maxDevResetDeletedCountKeys = 20;
+
+export type DevResetResponse = {
+  status: string;
+  deleted_counts: Record<string, number>;
+};
 
 function clampNumber(value: number, min: number, max: number) {
   if (!Number.isFinite(value)) {
@@ -17,6 +24,10 @@ function boundUiMessage(value: string) {
 
 function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);
+}
+
+function boundIdentifier(value: string) {
+  return value.slice(0, maxIdentifierTextLength);
 }
 
 function safeUiError(error: unknown, fallback: string) {
@@ -92,6 +103,20 @@ export function devResetSuccessDisplayMessages(recordsCount: number) {
       `已重置 backend 測試資料；records ${clampNumber(recordsCount, 0, maxMobileCountValue)} 筆。請重新連線。`
     ),
     status: boundUiMessage("Dev reset 已完成，請重新連線 backend。")
+  };
+}
+
+export function boundDevResetResponse(value: DevResetResponse): DevResetResponse {
+  return {
+    status: boundDisplayText(value.status, 40),
+    deleted_counts: Object.fromEntries(
+      Object.entries(value.deleted_counts)
+        .slice(0, maxDevResetDeletedCountKeys)
+        .map(([key, count]) => [
+          boundIdentifier(key),
+          clampNumber(count, 0, maxMobileCountValue)
+        ])
+    )
   };
 }
 

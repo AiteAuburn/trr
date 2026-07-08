@@ -37,6 +37,7 @@ ACCOUNT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "accountTransforms.ts"
 AI_MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "aiModelTransforms.ts"
 AUTH_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "authTransforms.ts"
 AUTH_SESSION_DISPLAY_PATH = REPO_ROOT / "mobile" / "authSessionDisplay.ts"
+AUTH_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "authStatusCopy.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
@@ -1244,6 +1245,7 @@ def main() -> int:
     ai_model_transforms_content = AI_MODEL_TRANSFORMS_PATH.read_text(encoding="utf-8")
     auth_transforms_content = AUTH_TRANSFORMS_PATH.read_text(encoding="utf-8")
     auth_session_display_content = AUTH_SESSION_DISPLAY_PATH.read_text(encoding="utf-8")
+    auth_status_copy_content = AUTH_STATUS_COPY_PATH.read_text(encoding="utf-8")
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
@@ -4335,6 +4337,13 @@ def main() -> int:
             ("auth session display last used fallback", '"尚無最後使用時間"'),
         ):
             _assert_contains(label, auth_session_display_content, marker)
+        for label, marker in (
+            ("dev reset response type", "export type DevResetResponse = {"),
+            ("dev reset response bound helper", "export function boundDevResetResponse(value: DevResetResponse): DevResetResponse"),
+            ("dev reset deleted count key cap", ".slice(0, maxDevResetDeletedCountKeys)"),
+            ("dev reset deleted count clamp", "clampNumber(count, 0, maxMobileCountValue)"),
+        ):
+            _assert_contains(label, auth_status_copy_content, marker)
         for label, marker in (
             ("auth refresh accessibility label", "refreshSessionAccessibility: boundDisplayText(\"刷新 session，使用 SecureStore refresh token rotation\", maxDisplayDetailTextLength)"),
             ("auth load sessions accessibility label", "loadSessionsAccessibility: boundDisplayText(\"載入 sessions，只顯示 bounded session metadata\", maxDisplayDetailTextLength)"),

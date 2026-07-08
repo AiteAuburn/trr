@@ -360,6 +360,7 @@ import {
   backendReconnectProgressStatusMessage,
   backendReconnectSuccessStatusMessage,
   backendUrlChangedDisplayMessages,
+  boundDevResetResponse,
   bootFailureDisplayMessages,
   devLoginDisabledDisplayMessages,
   devResetBusyStatusMessage,
@@ -373,7 +374,8 @@ import {
   oidcExchangeProgressStatusMessage,
   oidcExchangeStorageFailureStatusMessage,
   oidcExchangeSuccessStatusMessage,
-  oidcExchangeUnavailableStatusMessage
+  oidcExchangeUnavailableStatusMessage,
+  type DevResetResponse
 } from "./authStatusCopy";
 import {
   nativeBenchmarkMissingInputStatusMessage,
@@ -680,11 +682,6 @@ type DailyRecordSaveResponse = {
   };
   records: RecordItem[];
 };
-type DevResetResponse = {
-  status: string;
-  deleted_counts: Record<string, number>;
-};
-
 type VoiceQuota = {
   plan_code: string;
   status: string;
@@ -1058,7 +1055,6 @@ const maxMobilePreviewSegments = 40;
 const maxMobileRejectedEvents = 40;
 const maxMobileCountValue = 1_000_000;
 const maxMobileGlucoseValue = 1000;
-const maxDevResetDeletedCountKeys = 20;
 const mobileRecordSyncLimit = 100;
 const maxMobileRecordCacheLimit = 500;
 const mobileReportQueryLimit = 500;
@@ -1168,20 +1164,6 @@ function clampNullableNumber(value: number | null | undefined, min: number, max:
     return null;
   }
   return clampNumber(value, min, max);
-}
-
-function boundDevResetResponse(value: DevResetResponse): DevResetResponse {
-  return {
-    status: boundDisplayText(value.status, 40),
-    deleted_counts: Object.fromEntries(
-      Object.entries(value.deleted_counts)
-        .slice(0, maxDevResetDeletedCountKeys)
-        .map(([key, count]) => [
-          boundIdentifier(key),
-          clampNumber(count, 0, maxMobileCountValue)
-        ])
-    )
-  };
 }
 
 function currentRecordStreakDays(records: RecordItem[]) {

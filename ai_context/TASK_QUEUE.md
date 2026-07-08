@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1182: Extract dev reset response transform
+
+Status: done
+
+Summary:
+
+- Moved the dev reset response type and bounded response transform from `mobile/App.tsx` into `mobile/authStatusCopy.ts`.
+- Kept `/dev/reset-data` request behavior, dev-auth guard, busy guard, deleted-record success copy, local-state clearing, hidden/debug-only routing, first-version menu destinations, and screen layout unchanged.
+- Updated the navigation verifier so dev reset response bounds are guarded in `mobile/authStatusCopy.ts`, while reset submission and backend dev reset coverage remain guarded in `mobile/App.tsx` and backend tests.
+- Updated the refactor roadmap to note the dev reset response transform boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1181: Extract auth provider preview display helper
 
 Status: done
