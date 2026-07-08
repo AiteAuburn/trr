@@ -64,6 +64,7 @@ FIELD_LABEL_PATH = REPO_ROOT / "mobile" / "fieldLabel.tsx"
 DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "detailRow.tsx"
 HIGHLIGHT_BULLET_ROW_PATH = REPO_ROOT / "mobile" / "highlightBulletRow.tsx"
 HIGHLIGHT_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "highlightDetailRow.tsx"
+MANUAL_RECORD_CREATE_PREVIEW_ACTION_PATH = REPO_ROOT / "mobile" / "manualRecordCreatePreviewAction.tsx"
 MANUAL_RECORD_CONFIRM_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmFooterActions.tsx"
 MANUAL_RECORD_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmPreviewBlock.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
@@ -1308,6 +1309,9 @@ def main() -> int:
     detail_row_content = DETAIL_ROW_PATH.read_text(encoding="utf-8")
     highlight_bullet_row_content = HIGHLIGHT_BULLET_ROW_PATH.read_text(encoding="utf-8")
     highlight_detail_row_content = HIGHLIGHT_DETAIL_ROW_PATH.read_text(encoding="utf-8")
+    manual_record_create_preview_action_content = MANUAL_RECORD_CREATE_PREVIEW_ACTION_PATH.read_text(
+        encoding="utf-8"
+    )
     manual_record_confirm_footer_actions_content = MANUAL_RECORD_CONFIRM_FOOTER_ACTIONS_PATH.read_text(
         encoding="utf-8"
     )
@@ -1695,6 +1699,18 @@ def main() -> int:
             ("record edit header type display", "<Text style={styles.recordContent}>{typeLabel}</Text>"),
         ):
             _assert_contains(label, record_edit_header_fields_content, marker)
+        for label, marker in (
+            ("manual record create preview action component", "export function ManualRecordCreatePreviewAction({"),
+            ("manual record create preview action accessibility", "accessibilityLabel={accessibilityLabel}"),
+            ("manual record create preview action role", 'accessibilityRole="button"'),
+            ("manual record create preview action disabled state", "accessibilityState={{ disabled }}"),
+            ("manual record create preview action disabled prop", "disabled={disabled}"),
+            ("manual record create preview action press", "onPress={onPress}"),
+            ("manual record create preview action label", "<Text style={styles.primaryButtonText}>{label}</Text>"),
+            ("manual record create preview action warning", "warningText ? <Text style={styles.warningText}>{warningText}</Text> : null"),
+            ("manual record create preview full button style", "primaryButtonFull: {"),
+        ):
+            _assert_contains(label, manual_record_create_preview_action_content, marker)
         for label, marker in (
             ("record edit footer actions component", "export function RecordEditFooterActions({"),
             ("record edit footer precheck title", "<Text style={styles.label}>{preCheckTitle}</Text>"),
@@ -3419,7 +3435,7 @@ def main() -> int:
             ("record delete submit accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordDeleteSubmitAccessibility}"),
             ("record edit return accessibility binding", "cancelAccessibilityLabel={coreFlowDisplayLabels.recordEditReturnAccessibility}"),
             ("record update submit accessibility binding", "submitAccessibilityLabel={coreFlowDisplayLabels.recordUpdateSubmitAccessibility}"),
-            ("manual create preview disabled state", "submitDisabled={Boolean(manualRecordValidationError) || isBusy || !protectedBackendReady}"),
+            ("manual create preview disabled state", "disabled={Boolean(manualRecordValidationError) || isBusy || !protectedBackendReady}"),
             ("record update submit disabled state", "disabled={Boolean(selectedRecordEditValidationError) || isBusy}"),
             ("record delete disabled state", "disabled={isBusy}"),
         ):
@@ -4193,6 +4209,9 @@ def main() -> int:
             ("manual record unit option press binding", "onPress={() => pressManualRecordGlucoseUnitOption(option)}"),
             ("manual record timing option press binding", "onPress={() => pressManualRecordGlucoseTimingOption(option)}"),
             ("manual record meal type option press binding", "onPress={() => pressManualRecordMealTypeOption(option)}"),
+            ("manual record create preview action binding", "<ManualRecordCreatePreviewAction\n              accessibilityLabel={coreFlowDisplayLabels.manualCreatePreviewAccessibility}"),
+            ("manual record create preview action label binding", "label={coreFlowDisplayLabels.createRecord}"),
+            ("manual record create preview action press binding", "onPress={enterManualRecordConfirm}"),
             ("manual record confirm preview block binding", "<ManualRecordConfirmPreviewBlock\n              badgeLabel={auxiliaryDisplayLabels.preSaveConfirmBadge}"),
             ("manual record confirm preview icon binding", "icon={manualRecordConfirmDisplay.icon}"),
             ("manual record confirm preview intro binding", "introText={manualRecordConfirmIntroDisplayText}"),

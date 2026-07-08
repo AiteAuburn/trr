@@ -15,6 +15,39 @@
 
 ## 2026-07-08
 
+### T1259 extract manual-record create preview action
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/manualRecordCreatePreviewAction.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/manualRecordCreatePreviewAction.tsx` for the Manual Record create-preview button and validation/backend warning text.
+- Replaced the inline Manual Record create-preview button and warning JSX in `mobile/App.tsx` with `ManualRecordCreatePreviewAction`.
+- Kept create label, accessibility label, disabled state, validation/backend warning behavior, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation and visual-smoke route verifiers so the Manual Record create-preview action component and App bindings are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version manual-record form presentation blocks while keeping field state and backend handlers owned by `App.tsx`.
+
 ### T1258 extract manual-record confirm preview block
 
 類型：mobile / refactor / verifier / docs

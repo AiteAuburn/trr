@@ -713,6 +713,7 @@ import { HistorySelectedDatePanel } from "./historySelectedDatePanel";
 import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
+import { ManualRecordCreatePreviewAction } from "./manualRecordCreatePreviewAction";
 import { ManualRecordConfirmFooterActions } from "./manualRecordConfirmFooterActions";
 import { ManualRecordConfirmPreviewBlock } from "./manualRecordConfirmPreviewBlock";
 import { MetricCard } from "./metricCard";
@@ -8361,26 +8362,19 @@ export default function App() {
               </>
             ) : null}
 
-            <Pressable
+            <ManualRecordCreatePreviewAction
               accessibilityLabel={coreFlowDisplayLabels.manualCreatePreviewAccessibility}
-              accessibilityRole="button"
-              accessibilityState={{
-                disabled: Boolean(manualRecordValidationError) || isBusy || !protectedBackendReady
-              }}
-              style={[
-                styles.primaryButtonFull,
-                manualRecordValidationError || isBusy || !protectedBackendReady ? styles.buttonDisabled : null
-              ]}
               disabled={Boolean(manualRecordValidationError) || isBusy || !protectedBackendReady}
+              label={coreFlowDisplayLabels.createRecord}
+              warningText={
+                manualRecordValidationError
+                  ? manualRecordValidationDisplayText
+                  : protectedBackendUnavailableMessage
+                    ? manualRecordBackendUnavailableDisplayText
+                    : null
+              }
               onPress={enterManualRecordConfirm}
-            >
-              <Text style={styles.primaryButtonText}>{coreFlowDisplayLabels.createRecord}</Text>
-            </Pressable>
-            {manualRecordValidationError ? (
-              <Text style={styles.warningText}>{manualRecordValidationDisplayText}</Text>
-            ) : protectedBackendUnavailableMessage ? (
-              <Text style={styles.warningText}>{manualRecordBackendUnavailableDisplayText}</Text>
-            ) : null}
+            />
           </View>
         ) : null}
 

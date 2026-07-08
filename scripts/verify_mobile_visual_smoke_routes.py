@@ -101,7 +101,7 @@ VISUAL_SMOKE_ROUTES = {
     "manualRecord": [
         'currentScreen === "manualRecord"',
         "manualRecordTypeDisplayOptions.map",
-        "manualRecordValidationDisplayText",
+        "ManualRecordCreatePreviewAction",
     ],
     "manualRecordConfirm": [
         'currentScreen === "manualRecordConfirm"',
