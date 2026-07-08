@@ -112,6 +112,19 @@ export function detailedReportNoteDisplayItems(queryLimit: number) {
   ].map(checklistItem);
 }
 
+export function detailedReportBoundaryDisplayRows(reportSourceLabel: string, queryLimit: number) {
+  const boundedLimit = clampNumber(queryLimit, 0, maxMobileCountValue);
+  return [
+    ["資料來源", reportSourceLabel],
+    ["AI 成本", "0 次呼叫"],
+    ["資料上限", `最多 ${boundedLimit} 筆`],
+    ["醫療建議", "不提供"]
+  ].map(([label, value]) => ({
+    label: boundDisplayText(label, 60),
+    value: boundDisplayText(value, 80)
+  }));
+}
+
 export function analysisCustomApplyStatusMessage() {
   return boundUiMessage("已套用自訂日期區間並同步 bounded report；不呼叫 AI 或 LLM。");
 }

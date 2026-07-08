@@ -2520,6 +2520,11 @@ def main() -> int:
             "const privacyBoundaryRows = privacyBoundaryDisplayRows();",
         )
         _assert_contains(
+            "detailed report boundary rows helper binding",
+            content,
+            "const detailedReportBoundaryRows = detailedReportBoundaryDisplayRows(",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -4434,6 +4439,10 @@ def main() -> int:
             ("detailed report diagnosis boundary copy", "本報告只做紀錄摘要，不提供診斷或治療建議。"),
             ("detailed report backend fallback copy", "backend 報表載入成功時使用 `/reports/basic`，否則使用本機已載入紀錄。"),
             ("detailed report query limit copy", "報表查詢限制 ${boundedLimit} 筆，避免 mobile 與 backend 一次載入過多資料。"),
+            ("detailed report boundary rows helper", "function detailedReportBoundaryDisplayRows(reportSourceLabel: string, queryLimit: number)"),
+            ("detailed report boundary source row", "資料來源"),
+            ("detailed report boundary query cap row", "最多 ${boundedLimit} 筆"),
+            ("detailed report boundary no medical advice row", "醫療建議"),
             ("analysis custom apply status", "已套用自訂日期區間並同步 bounded report；不呼叫 AI 或 LLM。"),
         ):
             _assert_contains(label, analysis_copy_content, marker)

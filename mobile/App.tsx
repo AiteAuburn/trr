@@ -577,6 +577,7 @@ import {
   analysisReportButtonLabel,
   analysisReturnTodayStatusMessage,
   analysisSafetyIntroCopy,
+  detailedReportBoundaryDisplayRows,
   detailedReportNoteDisplayItems,
   detailedReportManualEntryStatusMessage,
   detailedReportReturnAnalysisStatusMessage,
@@ -2014,12 +2015,10 @@ export default function App() {
     ["未建立片段", `${rejectedPreviewEventDisplayCount} 筆`],
     ["額外 AI 成本", "0 次呼叫"]
   ] as const).map(boundaryMetricDisplayItem);
-  const detailedReportBoundaryRows = ([
-    ["資料來源", reportSourceDisplayLabel],
-    ["AI 成本", "0 次呼叫"],
-    ["資料上限", `最多 ${mobileReportQueryDisplayLimit} 筆`],
-    ["醫療建議", "不提供"]
-  ] as const).map(boundaryMetricDisplayItem);
+  const detailedReportBoundaryRows = detailedReportBoundaryDisplayRows(
+    reportSourceDisplayLabel,
+    mobileReportQueryDisplayLimit
+  );
   const doctorShareBoundaryRows = doctorShareBoundaryDisplayRows();
   const healthIntegrationBoundaryRows = healthIntegrationBoundaryDisplayRows();
   const communityBoundaryRows = ([
