@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1231: Reuse highlight bullet row in food photo empty result
+
+Status: done
+
+Summary:
+
+- Replaced the Food Photo empty-result checklist rows in `mobile/App.tsx` with the shared `HighlightBulletRow` component.
+- Kept checklist text, bullet glyph, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, hidden/debug-only future routing, and food-photo action behavior unchanged.
+- Updated the navigation verifier so the food-photo-empty-result checklist map is explicitly guarded to use `HighlightBulletRow`.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1230: Reuse highlight bullet row in store checkout readiness
 
 Status: done
