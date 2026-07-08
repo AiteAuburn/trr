@@ -64,6 +64,7 @@ DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "detailRow.tsx"
 HIGHLIGHT_BULLET_ROW_PATH = REPO_ROOT / "mobile" / "highlightBulletRow.tsx"
 HIGHLIGHT_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "highlightDetailRow.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
+RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPanel.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1301,6 +1302,7 @@ def main() -> int:
     highlight_bullet_row_content = HIGHLIGHT_BULLET_ROW_PATH.read_text(encoding="utf-8")
     highlight_detail_row_content = HIGHLIGHT_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
+    record_detail_action_panel_content = RECORD_DETAIL_ACTION_PANEL_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -1619,6 +1621,18 @@ def main() -> int:
             ("metric card minimum width", 'minWidth: "46%"'),
         ):
             _assert_contains(label, metric_card_content, marker)
+        for label, marker in (
+            ("record detail action panel component", "export function RecordDetailActionPanel({"),
+            ("record detail action panel fallback copy", "請從今日或歷史頁選擇真實紀錄；未選擇時不可編輯或刪除。"),
+            ("record detail action panel edit accessibility", "accessibilityLabel={editAccessibilityLabel}"),
+            ("record detail action panel edit press", "onPress={onEditPress}"),
+            ("record detail action panel delete accessibility", "accessibilityLabel={deleteAccessibilityLabel}"),
+            ("record detail action panel delete disabled state", "accessibilityState={{ disabled }}"),
+            ("record detail action panel delete disabled prop", "disabled={disabled}"),
+            ("record detail action panel delete press", "onPress={onDeletePress}"),
+            ("record detail action panel delete label", "<Text style={styles.dangerButtonText}>刪除</Text>"),
+        ):
+            _assert_contains(label, record_detail_action_panel_content, marker)
         for label, marker in (
             ("analysis metric card render", "analysisMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
             ("detailed report metric card render", "detailedReportMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
@@ -2453,7 +2467,7 @@ def main() -> int:
         _assert_contains(
             "delete confirm open binding",
             content,
-            "onPress={openDeleteConfirm}",
+            "onDeletePress={openDeleteConfirm}",
         )
         _assert_contains(
             "delete confirm return binding",
@@ -2473,7 +2487,7 @@ def main() -> int:
         _assert_contains(
             "record edit open binding",
             content,
-            "onPress={openRecordEdit}",
+            "onEditPress={openRecordEdit}",
         )
         _assert_contains(
             "record edit return binding",
@@ -3296,8 +3310,8 @@ def main() -> int:
             ("manual confirm return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualConfirmReturnAccessibility}"),
             ("manual create submit accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualCreateSubmitAccessibility}"),
             ("record detail return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordDetailReturnAccessibility}"),
-            ("record edit open accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordEditOpenAccessibility}"),
-            ("record delete open accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordDeleteOpenAccessibility}"),
+            ("record edit open accessibility binding", "editAccessibilityLabel={coreFlowDisplayLabels.recordEditOpenAccessibility}"),
+            ("record delete open accessibility binding", "deleteAccessibilityLabel={coreFlowDisplayLabels.recordDeleteOpenAccessibility}"),
             ("record delete return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordDeleteReturnAccessibility}"),
             ("record delete cancel accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordDeleteCancelAccessibility}"),
             ("record delete submit accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordDeleteSubmitAccessibility}"),
@@ -3305,7 +3319,7 @@ def main() -> int:
             ("record update submit accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordUpdateSubmitAccessibility}"),
             ("manual create preview disabled state", "disabled: Boolean(manualRecordValidationError) || isBusy || !protectedBackendReady"),
             ("record update submit disabled state", "accessibilityState={{ disabled: Boolean(selectedRecordEditValidationError) || isBusy }}"),
-            ("record delete disabled state", "accessibilityState={{ disabled: isBusy }}"),
+            ("record delete disabled state", "disabled={isBusy}"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (

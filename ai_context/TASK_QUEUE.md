@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1252: Extract record detail action panel
+
+Status: done
+
+Summary:
+
+- Added `mobile/recordDetailActionPanel.tsx` for the Record Detail edit/delete action row and no-selection fallback text.
+- Replaced the inline Record Detail action-panel JSX in `mobile/App.tsx` with `RecordDetailActionPanel`.
+- Kept edit/delete labels, accessibility labels, disabled state, no-selection fallback copy, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the Record Detail action panel component and App edit/delete bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1251: Extract history selected-date panel
 
 Status: done

@@ -713,6 +713,7 @@ import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
 import { MetricCard } from "./metricCard";
+import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import type {
   Account,
   AiModelOptions,
@@ -8570,30 +8571,15 @@ export default function App() {
                 <HighlightBulletRow key={item} text={item} />
               ))}
             </View>
-            {selectedRecord ? (
-              <View style={styles.actionRow}>
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.recordEditOpenAccessibility}
-                  accessibilityRole="button"
-                  style={styles.secondaryButton}
-                  onPress={openRecordEdit}
-                >
-                  <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.edit}</Text>
-                </Pressable>
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.recordDeleteOpenAccessibility}
-                  accessibilityRole="button"
-                  accessibilityState={{ disabled: isBusy }}
-                  style={[styles.dangerButton, isBusy ? styles.buttonDisabled : null]}
-                  disabled={isBusy}
-                  onPress={openDeleteConfirm}
-                >
-                  <Text style={styles.dangerButtonText}>刪除</Text>
-                </Pressable>
-              </View>
-            ) : (
-              <Text style={styles.evidence}>請從今日或歷史頁選擇真實紀錄；未選擇時不可編輯或刪除。</Text>
-            )}
+            <RecordDetailActionPanel
+              canManageRecord={Boolean(selectedRecord)}
+              deleteAccessibilityLabel={coreFlowDisplayLabels.recordDeleteOpenAccessibility}
+              disabled={isBusy}
+              editAccessibilityLabel={coreFlowDisplayLabels.recordEditOpenAccessibility}
+              editLabel={coreFlowDisplayLabels.edit}
+              onDeletePress={openDeleteConfirm}
+              onEditPress={openRecordEdit}
+            />
           </View>
         ) : null}
 
