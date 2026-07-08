@@ -160,6 +160,16 @@ export function recordEditCancelStatusMessage() {
   return boundUiMessage("已取消編輯；正式紀錄未變更，已返回記錄詳情。");
 }
 
+export function recordUpdateChecklistDisplayItems() {
+  return [
+    "只會更新目前選取的這一筆紀錄。",
+    "只送出確認後的結構化 payload，不批次載入完整歷史。",
+    "不會呼叫 parser、AI 或 LLM，成本為 0。",
+    "不會附帶 raw transcript、raw prompt、raw model output 或模型 debug trace。",
+    "儲存中按鈕會停用；失敗時不會自動重試。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function recordResultDestinationStatusMessage(kind: "delete" | "update", target: AppScreen) {
   const kindLabel = kind === "delete" ? "刪除完成" : "更新完成";
   const targetLabel =

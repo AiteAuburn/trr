@@ -393,6 +393,7 @@ import {
   recordSyncPageSuccessStatusMessage,
   recordSyncSuccessStatusMessage,
   recordSyncUnavailableStatusMessage,
+  recordUpdateChecklistDisplayItems,
   recordUpdateFailureStatusMessage,
   recordUpdateProgressStatusMessage,
   recordUpdateSuccessStatusMessage,
@@ -1298,13 +1299,7 @@ export default function App() {
     recordsForDisplay.length === 0 ? noRealRecordHealthValueDisplayText : loadedRecordActionCopy()
   ].map(resultChecklistItem);
   const deleteConfirmChecklistItems = deleteConfirmChecklistDisplayItems();
-  const recordUpdateChecklistItems = [
-    "只會更新目前選取的這一筆紀錄。",
-    "只送出確認後的結構化 payload，不批次載入完整歷史。",
-    "不會呼叫 parser、AI 或 LLM，成本為 0。",
-    "不會附帶 raw transcript、raw prompt、raw model output 或模型 debug trace。",
-    "儲存中按鈕會停用；失敗時不會自動重試。"
-  ].map(resultChecklistItem);
+  const recordUpdateChecklistItems = recordUpdateChecklistDisplayItems();
   const analysisBoundaryChecklistItems = [
     analysisBoundaryDataDisplayCopy,
     `mobile 本機分析最多基於目前已同步的 ${maxMobileRecordCacheLimit} 筆紀錄。`,
