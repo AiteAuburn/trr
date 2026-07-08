@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1290 extract subscription-management readiness checklist helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/subscriptionCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `subscriptionManagementReadinessChecklistDisplayItems` to `mobile/subscriptionCopy.ts` for the Subscription Management readiness checklist copy.
+- Replaced the inline Subscription Management readiness checklist construction in `mobile/App.tsx` with the extracted helper.
+- Kept checklist copy, bounded display behavior, payment deep-link guidance, receipt/webhook/entitlement guidance, Subscription Management rendering, subscription sync behavior, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and key subscription-management readiness copy are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk checklist/display helpers from `App.tsx`; keep subscription management sync, payment-status messaging, and entitlement request ownership in `App.tsx` until component boundaries are stable.
+
 ### T1289 extract subscription-readiness checklist helper
 
 類型：mobile / refactor / verifier / docs

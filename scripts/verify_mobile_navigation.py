@@ -2455,6 +2455,11 @@ def main() -> int:
             "const subscriptionReadinessChecklistItems = subscriptionReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "subscription management readiness checklist helper binding",
+            content,
+            "subscriptionManagementReadinessChecklistDisplayItems();",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -5310,6 +5315,10 @@ def main() -> int:
             ("subscription readiness store backend copy", "App Store / Play Store 或正式付款後台"),
             ("subscription readiness receipt copy", "receipt validation 與訂閱狀態 webhook"),
             ("subscription readiness entitlement copy", "entitlement 與 voice quota 的 server-side enforcement"),
+            ("subscription management readiness checklist helper", "function subscriptionManagementReadinessChecklistDisplayItems()"),
+            ("subscription management readiness deep link copy", "商店付款或正式會員後台深連結，讓使用者可以管理續訂與取消。"),
+            ("subscription management readiness entitlement copy", "idempotent entitlement update"),
+            ("subscription management readiness server-side copy", "server-side entitlement"),
         ):
             _assert_contains(label, subscription_copy_content, marker)
         for label, marker in (

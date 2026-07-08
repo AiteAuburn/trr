@@ -144,6 +144,15 @@ export function subscriptionReadinessChecklistDisplayItems() {
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
+export function subscriptionManagementReadinessChecklistDisplayItems() {
+  return [
+    "商店付款或正式會員後台深連結，讓使用者可以管理續訂與取消。",
+    "receipt validation、訂閱 webhook、idempotent entitlement update。",
+    "trial start/end、grace period、退款與取消狀態需回寫 backend。",
+    "voice quota、AI 額度與歷史存取權限必須只依 server-side entitlement 判斷。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function subscriptionSyncButtonLabel(isSyncing: boolean) {
   return boundDisplayText(isSyncing ? "同步中..." : "同步", maxDisplayTextLength);
 }

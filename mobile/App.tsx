@@ -686,6 +686,7 @@ import {
   subscriptionManagementIntroCopy,
   subscriptionManagementNoActionCopy,
   subscriptionManagementOpenStatusMessage,
+  subscriptionManagementReadinessChecklistDisplayItems,
   subscriptionManagementReturnSettingsStatusMessage,
   subscriptionManagementSyncButtonLabel,
   subscriptionMembershipStatusOpenStatusMessage,
@@ -1756,12 +1757,8 @@ export default function App() {
     () => subscriptionManagementRows.map(previewTupleDisplayItem),
     []
   );
-  const subscriptionManagementReadinessChecklistItems = [
-    "商店付款或正式會員後台深連結，讓使用者可以管理續訂與取消。",
-    "receipt validation、訂閱 webhook、idempotent entitlement update。",
-    "trial start/end、grace period、退款與取消狀態需回寫 backend。",
-    "voice quota、AI 額度與歷史存取權限必須只依 server-side entitlement 判斷。"
-  ].map(resultChecklistItem);
+  const subscriptionManagementReadinessChecklistItems =
+    subscriptionManagementReadinessChecklistDisplayItems();
   const privacyControlDisplayRows = useMemo(() => privacyControlRows.map(previewTupleDisplayItem), []);
   const accountSecurityBoundaryRows = ([
     ["帳號", account ? "已載入" : "未連線"],
