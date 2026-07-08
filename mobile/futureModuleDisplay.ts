@@ -381,6 +381,24 @@ export type StoreRewardApiInput = {
   status: "preview" | "redeemable";
 };
 
+export type StoreApiPointsBalance = {
+  balance: number;
+  lifetime_earned: number;
+  lifetime_redeemed: number;
+};
+
+export type StoreApiRedemption = {
+  id: string;
+  reward_code: string;
+  points_cost: number;
+  status: string;
+  fulfillment_type?: string | null;
+  fulfillment_code?: string | null;
+  fulfilled_at?: string | null;
+  used_at?: string | null;
+  created_at: string;
+};
+
 export type StoreRedemptionDisplayInput = {
   id: string;
   reward_code: string;

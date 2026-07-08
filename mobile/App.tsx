@@ -185,6 +185,8 @@ import {
   type FoodCommunityItem,
   type FoodCommunityShareFields,
   type FutureModuleCard,
+  type StoreApiPointsBalance,
+  type StoreApiRedemption,
   type StoreCategory,
   type StoreProduct,
   type StoreRewardApiInput,
@@ -712,24 +714,6 @@ type VoiceQuota = {
   daily_limit_seconds: number;
   used_seconds_today: number;
   remaining_seconds_today: number;
-};
-
-type StoreApiPointsBalance = {
-  balance: number;
-  lifetime_earned: number;
-  lifetime_redeemed: number;
-};
-
-type StoreApiRedemption = {
-  id: string;
-  reward_code: string;
-  points_cost: number;
-  status: string;
-  fulfillment_type?: string | null;
-  fulfillment_code?: string | null;
-  fulfilled_at?: string | null;
-  used_at?: string | null;
-  created_at: string;
 };
 
 type AuthTokenResponse = {

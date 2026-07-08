@@ -4873,6 +4873,8 @@ def main() -> int:
             ("store reservation fulfillment copy", "送出後 backend 會扣點並建立兌換 reservation，後續仍需 fulfillment。"),
             ("store product type", "export type StoreProduct = {"),
             ("store reward api input type", "export type StoreRewardApiInput = {"),
+            ("store points balance api type", "export type StoreApiPointsBalance = {"),
+            ("store redemption api type", "export type StoreApiRedemption = {"),
             ("store categories static config", "export const storeCategories: Array<{ id: StoreCategory; label: string }> = ["),
             ("store coupon redemption category", '{ id: "coupons", label: "優惠券" }'),
             ("store supplement discount category", '{ id: "supplementDiscounts", label: "保健食品折扣" }'),

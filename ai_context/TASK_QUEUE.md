@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1186: Extract Store API response types
+
+Status: done
+
+Summary:
+
+- Moved Store points-balance and redemption API response types from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept Store reward/points/redemption endpoints, redeem/use handlers, hidden/debug-only future routing, first-version menu destinations, copy, and screen layout unchanged.
+- Updated the navigation verifier so Store API response type ownership is guarded in `mobile/futureModuleDisplay.ts`, while App-owned Store endpoints and handlers remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Store API type boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1185: Extract Year Review display helpers
 
 Status: done
