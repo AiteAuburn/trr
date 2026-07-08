@@ -328,6 +328,15 @@ export function recordDetailReturnStatusMessage(target: AppScreen) {
   return boundUiMessage(`已從記錄詳情返回${targetLabel}；只使用已載入紀錄，不呼叫 AI。`);
 }
 
+export function recordDetailBoundaryChecklistDisplayItems() {
+  return [
+    "只顯示目前已載入的單筆紀錄，不額外查詢完整歷史。",
+    "不會呼叫 parser、AI 或 LLM，成本為 0。",
+    "不會保留 raw transcript、raw prompt、raw model output 或模型 debug trace。",
+    "編輯與刪除必須進入各自確認流程，詳情頁本身不直接寫入資料。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function tutorialRecordEntryStatusMessage() {
   return boundUiMessage("已從使用教學前往快速記錄；送出文字前不會呼叫 parser 或 LLM。");
 }

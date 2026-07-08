@@ -359,6 +359,7 @@ import {
   parserSuccessStatusMessage,
   parserVoiceQuotaSyncedStatusMessage,
   previewRecordEditBoundaryCopy,
+  recordDetailBoundaryChecklistDisplayItems,
   recordDetailReturnStatusMessage,
   tutorialManualEntryStatusMessage,
   tutorialRecordEntryStatusMessage
@@ -1267,12 +1268,7 @@ export default function App() {
   const updateSuccessBoundaryChecklistItems =
     updateSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit);
   const manualSubmitChecklistItems = manualSubmitChecklistDisplayItems();
-  const recordDetailBoundaryChecklistItems = [
-    "只顯示目前已載入的單筆紀錄，不額外查詢完整歷史。",
-    "不會呼叫 parser、AI 或 LLM，成本為 0。",
-    "不會保留 raw transcript、raw prompt、raw model output 或模型 debug trace。",
-    "編輯與刪除必須進入各自確認流程，詳情頁本身不直接寫入資料。"
-  ].map(resultChecklistItem);
+  const recordDetailBoundaryChecklistItems = recordDetailBoundaryChecklistDisplayItems();
   const recordEntrySettingsChecklistItems = [
     "手動新增可完全避開 AI parser，適合補登明確紀錄。",
     "文字整理每次只送出目前文字一次，不批次載入歷史紀錄。",

@@ -1905,6 +1905,7 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("record detail checklist helper binding", "const recordDetailBoundaryChecklistItems = recordDetailBoundaryChecklistDisplayItems();"),
             ("record detail info panel binding", "<RecordDetailInfoPanel\n              boundaryItems={recordDetailBoundaryChecklistItems}"),
             ("record detail mapped detail row binding", "detailRows={selectedRecordDetailRows}"),
             ("record detail source detail row binding", "sourceTitle={coreFlowDisplayLabels.source}"),
@@ -3515,6 +3516,7 @@ def main() -> int:
             ("manual record confirm return status helper", "function manualRecordConfirmReturnStatusMessage()"),
             ("manual record return status helper", "function manualRecordReturnStatusMessage(target: AppScreen)"),
             ("record detail return status helper", "function recordDetailReturnStatusMessage(target: AppScreen)"),
+            ("record detail boundary checklist helper", "function recordDetailBoundaryChecklistDisplayItems()"),
             ("tutorial record entry status helper", "function tutorialRecordEntryStatusMessage()"),
             ("tutorial manual entry status helper", "function tutorialManualEntryStatusMessage()"),
             ("parser model unavailable text helper", "function parserModelUnavailableText("),
@@ -3525,6 +3527,8 @@ def main() -> int:
             ("manual record confirm no AI copy", "這筆紀錄不經 AI parser"),
             ("manual record return no create copy", "未送出 create request，也未呼叫 AI"),
             ("record detail return no AI copy", "只使用已載入紀錄，不呼叫 AI"),
+            ("record detail boundary single record copy", "只顯示目前已載入的單筆紀錄，不額外查詢完整歷史。"),
+            ("record detail boundary edit delete copy", "編輯與刪除必須進入各自確認流程，詳情頁本身不直接寫入資料。"),
             ("daily record leave guard title copy", "尚未儲存今天的紀錄"),
             ("daily record leave guard body copy", "離開後，今天的修改將不會保留。"),
             ("daily record leave guard question copy", "是否仍要離開？"),
