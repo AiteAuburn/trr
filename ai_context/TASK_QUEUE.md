@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1225: Reuse highlight bullet row in subscription management readiness
+
+Status: done
+
+Summary:
+
+- Replaced the Subscription Management readiness checklist rows in `mobile/App.tsx` with the shared `HighlightBulletRow` component.
+- Kept checklist text, bullet glyph, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the subscription-management-readiness checklist map is explicitly guarded to use `HighlightBulletRow`.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1224: Reuse highlight bullet row in subscription readiness
 
 Status: done
