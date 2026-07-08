@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1250: Extract history intro status blocks
+
+Status: done
+
+Summary:
+
+- Added `mobile/historyIntroStatusBlocks.tsx` for the History sync-status and data-boundary intro blocks.
+- Replaced the inline History intro `inlineInfoBlock` JSX in `mobile/App.tsx` with `HistoryIntroStatusBlocks`.
+- Kept sync title/body, boundary title, checklist rows, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the History intro status component and App sync/boundary bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1249: Extract history daily summary table
 
 Status: done

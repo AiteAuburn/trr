@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1250 extract history intro status blocks
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/historyIntroStatusBlocks.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/historyIntroStatusBlocks.tsx` for the History sync-status and data-boundary intro blocks.
+- Replaced the inline History intro `inlineInfoBlock` JSX in `mobile/App.tsx` with `HistoryIntroStatusBlocks`.
+- Kept sync title/body, boundary title, checklist rows, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the History intro status component and App sync/boundary bindings are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version screen presentation blocks while keeping status text and checklist data owned by `App.tsx`.
+
 ### T1249 extract history daily summary table
 
 類型：mobile / refactor / verifier / docs

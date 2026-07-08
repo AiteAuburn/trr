@@ -51,6 +51,7 @@ HISTORY_DAILY_RECORD_SECTION_CARD_PATH = REPO_ROOT / "mobile" / "historyDailyRec
 HISTORY_DAILY_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historyDailySummaryCard.tsx"
 HISTORY_DAILY_SUMMARY_TABLE_PATH = REPO_ROOT / "mobile" / "historyDailySummaryTable.tsx"
 HISTORY_DETAIL_MODE_TABS_PATH = REPO_ROOT / "mobile" / "historyDetailModeTabs.tsx"
+HISTORY_INTRO_STATUS_BLOCKS_PATH = REPO_ROOT / "mobile" / "historyIntroStatusBlocks.tsx"
 HISTORY_NO_RANGE_RECORDS_CARD_PATH = REPO_ROOT / "mobile" / "historyNoRangeRecordsCard.tsx"
 HISTORY_NO_RECORD_STATUS_BLOCK_PATH = REPO_ROOT / "mobile" / "historyNoRecordStatusBlock.tsx"
 HISTORY_RAW_TRANSCRIPT_CARD_PATH = REPO_ROOT / "mobile" / "historyRawTranscriptCard.tsx"
@@ -1286,6 +1287,7 @@ def main() -> int:
     history_daily_summary_card_content = HISTORY_DAILY_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
     history_daily_summary_table_content = HISTORY_DAILY_SUMMARY_TABLE_PATH.read_text(encoding="utf-8")
     history_detail_mode_tabs_content = HISTORY_DETAIL_MODE_TABS_PATH.read_text(encoding="utf-8")
+    history_intro_status_blocks_content = HISTORY_INTRO_STATUS_BLOCKS_PATH.read_text(encoding="utf-8")
     history_no_range_records_card_content = HISTORY_NO_RANGE_RECORDS_CARD_PATH.read_text(encoding="utf-8")
     history_no_record_status_block_content = HISTORY_NO_RECORD_STATUS_BLOCK_PATH.read_text(encoding="utf-8")
     history_raw_transcript_card_content = HISTORY_RAW_TRANSCRIPT_CARD_PATH.read_text(encoding="utf-8")
@@ -1445,6 +1447,16 @@ def main() -> int:
         ):
             _assert_contains(label, history_detail_mode_tabs_content, marker)
         for label, marker in (
+            ("history intro status blocks component", "export function HistoryIntroStatusBlocks({"),
+            ("history intro status sync title", "<Text style={styles.label}>{syncTitle}</Text>"),
+            ("history intro status sync body", "<Text style={styles.evidence}>{syncBody}</Text>"),
+            ("history intro status boundary title", "<Text style={styles.label}>{boundaryTitle}</Text>"),
+            ("history intro status boundary bullets", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
+            ("history intro status inline style", "inlineInfoBlock: {"),
+            ("history intro status evidence line height", "lineHeight: 19"),
+        ):
+            _assert_contains(label, history_intro_status_blocks_content, marker)
+        for label, marker in (
             ("history no-range records card component", "export function HistoryNoRangeRecordsCard({ body, title }: HistoryNoRangeRecordsCardProps)"),
             ("history no-range records card icon", "<Text>📅</Text>"),
             ("history no-range records card title", "<Text style={styles.recordContent}>{title}</Text>"),
@@ -1537,7 +1549,7 @@ def main() -> int:
             ("save success highlight bullet row", "saveSuccessBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("delete success highlight bullet row", "deleteSuccessBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("update success highlight bullet row", "updateSuccessBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("history boundary highlight bullet row", "historyBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("history boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("analysis boundary highlight bullet row", "analysisBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("record entry settings highlight bullet row", "recordEntrySettingsChecklistItems.map((item) => (\n                  <HighlightBulletRow key={item} text={item} />"),
             ("ai candidate remove highlight bullet row", "aiCandidateRemoveChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
@@ -1561,7 +1573,12 @@ def main() -> int:
             ("future module card requirements highlight bullet row", "item.requirements.map((requirement) => (\n                      <HighlightBulletRow key={requirement.key} text={requirement.text} />"),
             ("future module detail requirements highlight bullet row", "selectedFutureModuleDisplay.requirements.map((requirement) => (\n                <HighlightBulletRow key={requirement.key} text={requirement.text} />"),
         ):
-            target_content = content if label.startswith(("record detail ", "delete confirm ", "record update ", "manual submit ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "history boundary ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ", "tutorial safety ", "detailed report notes ", "subscription readiness ", "subscription management readiness ", "doctor share readiness ", "health integration readiness ", "community readiness ", "ranking readiness ", "store checkout readiness ", "food photo empty result ", "food photo readiness ", "future module card requirements ", "future module detail requirements ")) else highlight_bullet_row_content
+            if label.startswith("history boundary "):
+                target_content = history_intro_status_blocks_content
+            elif label.startswith(("record detail ", "delete confirm ", "record update ", "manual submit ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ", "tutorial safety ", "detailed report notes ", "subscription readiness ", "subscription management readiness ", "doctor share readiness ", "health integration readiness ", "community readiness ", "ranking readiness ", "store checkout readiness ", "food photo empty result ", "food photo readiness ", "future module card requirements ", "future module detail requirements ")):
+                target_content = content
+            else:
+                target_content = highlight_bullet_row_content
             _assert_contains(label, target_content, marker)
         for label, marker in (
             ("highlight detail row component", "export function HighlightDetailRow({ label, value }: HighlightDetailRowProps)"),
@@ -3628,6 +3645,10 @@ def main() -> int:
         if history_structured_index == -1 or history_raw_index == -1 or history_structured_index > history_raw_index:
             raise AssertionError("History structured AI-organized records must render before raw transcript branch.")
         for label, marker in (
+            ("history intro status blocks binding", "<HistoryIntroStatusBlocks\n              boundaryItems={historyBoundaryChecklistItems}"),
+            ("history intro status boundary title binding", "boundaryTitle={coreFlowDisplayLabels.historyDataBoundary}"),
+            ("history intro status sync body binding", "syncBody={recordsStatusDisplayText}"),
+            ("history intro status sync title binding", "syncTitle={coreFlowDisplayLabels.recordSyncStatus}"),
             ("history calendar component binding", "<HistoryCalendarMonthPicker\n              days={historyCalendarDisplayItems}"),
             ("history calendar title binding", "title={historyCalendarTitle}"),
             ("history calendar day press binding", "onDayPress={pressHistoryCalendarDay}"),

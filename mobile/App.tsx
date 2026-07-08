@@ -708,6 +708,7 @@ import { HistoryCalendarMonthPicker } from "./historyCalendarMonthPicker";
 import { HistoryDailyRecordSectionCard } from "./historyDailyRecordSectionCard";
 import { HistoryDailySummaryTable } from "./historyDailySummaryTable";
 import { HistoryDetailModeTabs } from "./historyDetailModeTabs";
+import { HistoryIntroStatusBlocks } from "./historyIntroStatusBlocks";
 import { HistoryNoRangeRecordsCard } from "./historyNoRangeRecordsCard";
 import { HistoryNoRecordStatusBlock } from "./historyNoRecordStatusBlock";
 import { HistoryRawTranscriptCard } from "./historyRawTranscriptCard";
@@ -8452,16 +8453,12 @@ export default function App() {
         {currentScreen === "history" ? (
           <View style={styles.pageSection}>
             <Text style={styles.sectionTitle}>歷史紀錄</Text>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{coreFlowDisplayLabels.recordSyncStatus}</Text>
-              <Text style={styles.evidence}>{recordsStatusDisplayText}</Text>
-            </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{coreFlowDisplayLabels.historyDataBoundary}</Text>
-              {historyBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
-              ))}
-            </View>
+            <HistoryIntroStatusBlocks
+              boundaryItems={historyBoundaryChecklistItems}
+              boundaryTitle={coreFlowDisplayLabels.historyDataBoundary}
+              syncBody={recordsStatusDisplayText}
+              syncTitle={coreFlowDisplayLabels.recordSyncStatus}
+            />
             <HistoryCalendarMonthPicker
               days={historyCalendarDisplayItems}
               nextMonthAccessibilityLabel={historyNextMonthAccessibilityLabel}
