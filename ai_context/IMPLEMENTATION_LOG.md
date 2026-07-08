@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1254 extract delete-confirm preview block
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/deleteConfirmPreviewBlock.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/deleteConfirmPreviewBlock.tsx` for the Delete Confirm danger intro and selected-record preview card.
+- Replaced the inline Delete Confirm intro/preview JSX in `mobile/App.tsx` with `DeleteConfirmPreviewBlock`.
+- Kept danger label, intro text, selected-record type/summary/meta display, warning icon, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the Delete Confirm preview component and App record-preview bindings are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version delete/edit confirmation presentation blocks while keeping submit/cancel handlers in `App.tsx`.
+
 ### T1253 extract record detail info panel
 
 類型：mobile / refactor / verifier / docs

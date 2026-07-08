@@ -46,6 +46,7 @@ SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
+DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreviewBlock.tsx"
 HISTORY_CALENDAR_MONTH_PICKER_PATH = REPO_ROOT / "mobile" / "historyCalendarMonthPicker.tsx"
 HISTORY_DAILY_RECORD_SECTION_CARD_PATH = REPO_ROOT / "mobile" / "historyDailyRecordSectionCard.tsx"
 HISTORY_DAILY_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historyDailySummaryCard.tsx"
@@ -1285,6 +1286,7 @@ def main() -> int:
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
+    delete_confirm_preview_block_content = DELETE_CONFIRM_PREVIEW_BLOCK_PATH.read_text(encoding="utf-8")
     history_calendar_month_picker_content = HISTORY_CALENDAR_MONTH_PICKER_PATH.read_text(encoding="utf-8")
     history_daily_record_section_card_content = HISTORY_DAILY_RECORD_SECTION_CARD_PATH.read_text(encoding="utf-8")
     history_daily_summary_card_content = HISTORY_DAILY_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
@@ -1392,6 +1394,18 @@ def main() -> int:
             ("daily record detail row evidence line height", "lineHeight: 19"),
         ):
             _assert_contains(label, daily_record_detail_row_content, marker)
+        for label, marker in (
+            ("delete confirm preview block component", "export function DeleteConfirmPreviewBlock({"),
+            ("delete confirm preview danger label", "<Text style={styles.previewModeBadge}>{dangerLabel}</Text>"),
+            ("delete confirm preview intro text", "<Text style={styles.evidence}>{introText}</Text>"),
+            ("delete confirm preview danger icon", "<Text style={styles.successIconText}>!</Text>"),
+            ("delete confirm preview record type", "<Text style={styles.recordType}>{recordTypeLabel}</Text>"),
+            ("delete confirm preview record summary", "<Text style={styles.recordContent}>{recordSummary}</Text>"),
+            ("delete confirm preview record meta", "<Text style={styles.evidence}>{recordMetaText}</Text>"),
+            ("delete confirm preview card style", "emptyStateCard: {"),
+            ("delete confirm preview danger icon style", 'backgroundColor: "#C85D5D"'),
+        ):
+            _assert_contains(label, delete_confirm_preview_block_content, marker)
         for label, marker in (
             ("history calendar month picker component", "export function HistoryCalendarMonthPicker<TDay extends HistoryCalendarDayItem>({"),
             ("history calendar month picker title", "<Text style={styles.recordContent}>{title}</Text>"),
@@ -3358,6 +3372,14 @@ def main() -> int:
             ("record result destination no retry copy", "不會重新送出 backend request 或呼叫 AI"),
         ):
             _assert_contains(label, record_status_copy_content, marker)
+        for label, marker in (
+            ("delete confirm preview block binding", "<DeleteConfirmPreviewBlock\n              dangerLabel={auxiliaryDisplayLabels.dangerOperation}"),
+            ("delete confirm preview intro binding", "introText={deleteConfirmIntroDisplayText}"),
+            ("delete confirm preview record meta binding", "recordMetaText={deleteConfirmRecordMetaDisplayText}"),
+            ("delete confirm preview record summary binding", "recordSummary={selectedRecordDisplayItem.payloadSummary}"),
+            ("delete confirm preview record type binding", "recordTypeLabel={selectedRecordDisplayItem.typeLabel}"),
+        ):
+            _assert_contains(label, content, marker)
         for label, marker in (
             ("report source display helper", "function reportSourceDisplayItem(report: unknown | null, localRecordCount: number, queryLimit: number)"),
             ("report source backend label", "Backend 報表"),

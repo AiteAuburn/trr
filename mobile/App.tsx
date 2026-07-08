@@ -702,6 +702,7 @@ import { protectedRequestHeaders } from "./authRequestHeaders";
 import { authSessionDisplayItem } from "./authSessionDisplay";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
+import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { HistoryCalendarMonthPicker } from "./historyCalendarMonthPicker";
@@ -8566,20 +8567,13 @@ export default function App() {
                 <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.back}</Text>
               </Pressable>
             </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.dangerOperation}</Text>
-              <Text style={styles.evidence}>{deleteConfirmIntroDisplayText}</Text>
-            </View>
-            <View style={styles.emptyStateCard}>
-              <View style={styles.dangerIconCircle}>
-                <Text style={styles.successIconText}>!</Text>
-              </View>
-              <View style={styles.timelineContent}>
-                <Text style={styles.recordType}>{selectedRecordDisplayItem.typeLabel}</Text>
-                <Text style={styles.recordContent}>{selectedRecordDisplayItem.payloadSummary}</Text>
-                <Text style={styles.evidence}>{deleteConfirmRecordMetaDisplayText}</Text>
-              </View>
-            </View>
+            <DeleteConfirmPreviewBlock
+              dangerLabel={auxiliaryDisplayLabels.dangerOperation}
+              introText={deleteConfirmIntroDisplayText}
+              recordMetaText={deleteConfirmRecordMetaDisplayText}
+              recordSummary={selectedRecordDisplayItem.payloadSummary}
+              recordTypeLabel={selectedRecordDisplayItem.typeLabel}
+            />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.deletePreConfirm}</Text>
               {deleteConfirmChecklistItems.map((item) => (

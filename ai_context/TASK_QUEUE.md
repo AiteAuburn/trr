@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1254: Extract delete-confirm preview block
+
+Status: done
+
+Summary:
+
+- Added `mobile/deleteConfirmPreviewBlock.tsx` for the Delete Confirm danger intro and selected-record preview card.
+- Replaced the inline Delete Confirm intro/preview JSX in `mobile/App.tsx` with `DeleteConfirmPreviewBlock`.
+- Kept danger label, intro text, selected-record type/summary/meta display, warning icon, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the Delete Confirm preview component and App record-preview bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1253: Extract record detail info panel
 
 Status: done
