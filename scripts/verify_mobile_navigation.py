@@ -2393,6 +2393,11 @@ def main() -> int:
             "const transcriptReviewCostBoundaryChecklistItems = transcriptReviewCostBoundaryChecklistDisplayItems(",
         )
         _assert_contains(
+            "record entry settings checklist helper binding",
+            content,
+            "const recordEntrySettingsChecklistItems = recordEntrySettingsChecklistDisplayItems(protectedBackendReady);",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -3506,6 +3511,9 @@ def main() -> int:
             ("AI review cost boundary checklist helper", "function aiReviewCostBoundaryChecklistDisplayItems()"),
             ("AI review cost boundary parser copy", "此頁只顯示 parser 已回傳的候選紀錄。"),
             ("AI review cost boundary no rerun copy", "逐筆編輯、移除或進入儲存確認都不會重新呼叫 AI。"),
+            ("record entry settings checklist helper", "function recordEntrySettingsChecklistDisplayItems(isBackendReady: boolean)"),
+            ("record entry settings manual parser copy", "手動新增可完全避開 AI parser，適合補登明確紀錄。"),
+            ("record entry settings no history copy", "文字整理每次只送出目前文字一次，不批次載入歷史紀錄。"),
             ("AI save confirm intro helper", "function aiSaveConfirmIntroCopy()"),
             ("AI save confirm ready status helper", "function aiSaveConfirmReadyStatusMessage()"),
             ("AI save confirm return status helper", "function aiSaveConfirmReturnStatusMessage()"),

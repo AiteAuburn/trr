@@ -364,6 +364,7 @@ import {
   previewRecordEditBoundaryCopy,
   recordDetailBoundaryChecklistDisplayItems,
   recordDetailReturnStatusMessage,
+  recordEntrySettingsChecklistDisplayItems,
   tutorialManualEntryStatusMessage,
   tutorialRecordEntryStatusMessage
 } from "./recordWorkflowCopy";
@@ -1263,15 +1264,7 @@ export default function App() {
     updateSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit);
   const manualSubmitChecklistItems = manualSubmitChecklistDisplayItems();
   const recordDetailBoundaryChecklistItems = recordDetailBoundaryChecklistDisplayItems();
-  const recordEntrySettingsChecklistItems = [
-    "手動新增可完全避開 AI parser，適合補登明確紀錄。",
-    "文字整理每次只送出目前文字一次，不批次載入歷史紀錄。",
-    "確認儲存前不會寫入資料庫；候選紀錄可先逐筆修改或移除。",
-    "mobile 不保存 raw prompt、raw model output 或模型 debug trace。",
-    protectedBackendReady
-      ? "backend ready；送出前仍會先做本機長度與數字密度檢查。"
-      : boundUiMessage("backend 尚未 ready；目前不能送 parser，避免無效重試與額外成本。")
-  ].map(resultChecklistItem);
+  const recordEntrySettingsChecklistItems = recordEntrySettingsChecklistDisplayItems(protectedBackendReady);
   const aiCandidateRemoveChecklistItems = aiCandidateRemoveChecklistDisplayItems();
   const aiSaveFailureChecklistItems = [
     `目前保留 ${unsavedPreviewRecordDisplayCount} 筆候選紀錄在確認流程中。`,
