@@ -67,6 +67,7 @@ HIGHLIGHT_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "highlightDetailRow.tsx"
 MANUAL_RECORD_CREATE_PREVIEW_ACTION_PATH = REPO_ROOT / "mobile" / "manualRecordCreatePreviewAction.tsx"
 MANUAL_RECORD_CONFIRM_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmFooterActions.tsx"
 MANUAL_RECORD_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmPreviewBlock.tsx"
+MANUAL_RECORD_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordDateTimeFields.tsx"
 MANUAL_RECORD_HEADER_INTRO_PATH = REPO_ROOT / "mobile" / "manualRecordHeaderIntro.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
 RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPanel.tsx"
@@ -1319,6 +1320,7 @@ def main() -> int:
     manual_record_confirm_preview_block_content = MANUAL_RECORD_CONFIRM_PREVIEW_BLOCK_PATH.read_text(
         encoding="utf-8"
     )
+    manual_record_date_time_fields_content = MANUAL_RECORD_DATE_TIME_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_header_intro_content = MANUAL_RECORD_HEADER_INTRO_PATH.read_text(encoding="utf-8")
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
     record_detail_action_panel_content = RECORD_DETAIL_ACTION_PANEL_PATH.read_text(encoding="utf-8")
@@ -1725,6 +1727,22 @@ def main() -> int:
             ("manual record header evidence style", "evidence: {"),
         ):
             _assert_contains(label, manual_record_header_intro_content, marker)
+        for label, marker in (
+            ("manual record date time fields component", "export function ManualRecordDateTimeFields({"),
+            ("manual record date field label", '<FieldLabel icon={"📅"} label={"日期"} />'),
+            ("manual record date accessibility", "accessibilityLabel={dateAccessibilityLabel}"),
+            ("manual record date value", "value={dateValue}"),
+            ("manual record date handler", "onChangeText={onDateChange}"),
+            ("manual record date max length", "maxLength={dateMaxLength}"),
+            ("manual record time field label", '<FieldLabel icon={"🕒"} label={"時間"} />'),
+            ("manual record time accessibility", "accessibilityLabel={timeAccessibilityLabel}"),
+            ("manual record time value", "value={timeValue}"),
+            ("manual record time handler", "onChangeText={onTimeChange}"),
+            ("manual record time max length", "maxLength={timeMaxLength}"),
+            ("manual record date time row style", "dateTimeRow: {"),
+            ("manual record date time input style", "input: {"),
+        ):
+            _assert_contains(label, manual_record_date_time_fields_content, marker)
         for label, marker in (
             ("record edit footer actions component", "export function RecordEditFooterActions({"),
             ("record edit footer precheck title", "<Text style={styles.label}>{preCheckTitle}</Text>"),
@@ -4216,6 +4234,9 @@ def main() -> int:
             ("preview edit fallback json binding", "onChangeText={updatePreviewEditFallbackJson}"),
             ("manual record date input handler", "function updateManualRecordDateInput(value: string)"),
             ("manual record time input handler", "function updateManualRecordTimeInput(value: string)"),
+            ("manual record date time fields binding", "<ManualRecordDateTimeFields\n              dateAccessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}"),
+            ("manual record date input binding", "onDateChange={updateManualRecordDateInput}"),
+            ("manual record time input binding", "onTimeChange={updateManualRecordTimeInput}"),
             ("manual record glucose input binding", "onChangeText={updateManualRecordGlucoseValue}"),
             ("manual record unit option press handler", "function pressManualRecordGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>)"),
             ("manual record timing option press handler", "function pressManualRecordGlucoseTimingOption(option: ReturnType<typeof valueLabelDisplayItem>)"),

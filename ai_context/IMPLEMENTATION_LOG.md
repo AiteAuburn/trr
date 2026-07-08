@@ -15,6 +15,39 @@
 
 ## 2026-07-08
 
+### T1261 extract manual-record date-time fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/manualRecordDateTimeFields.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/manualRecordDateTimeFields.tsx` for the Manual Record date and time input row.
+- Replaced the inline Manual Record date/time JSX in `mobile/App.tsx` with `ManualRecordDateTimeFields`.
+- Kept date/time labels, placeholders, accessibility labels, values, handlers, max-length limits, input styles, layout, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation and visual-smoke route verifiers so the Manual Record date-time component and App bindings are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version manual-record field groups while keeping field state and backend handlers owned by `App.tsx`.
+
 ### T1260 extract manual-record header intro
 
 類型：mobile / refactor / verifier / docs

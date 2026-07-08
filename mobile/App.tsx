@@ -716,6 +716,7 @@ import { HighlightDetailRow } from "./highlightDetailRow";
 import { ManualRecordCreatePreviewAction } from "./manualRecordCreatePreviewAction";
 import { ManualRecordConfirmFooterActions } from "./manualRecordConfirmFooterActions";
 import { ManualRecordConfirmPreviewBlock } from "./manualRecordConfirmPreviewBlock";
+import { ManualRecordDateTimeFields } from "./manualRecordDateTimeFields";
 import { ManualRecordHeaderIntro } from "./manualRecordHeaderIntro";
 import { MetricCard } from "./metricCard";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
@@ -8090,34 +8091,16 @@ export default function App() {
               title="手動新增紀錄"
               onBackPress={returnFromManualRecord}
             />
-            <View style={styles.dateTimeRow}>
-              <View style={styles.dateTimeField}>
-                <FieldLabel icon={"📅"} label={"日期"} />
-                <TextInput
-                  accessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}
-                  value={manualRecordDate}
-                  onChangeText={updateManualRecordDateInput}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  maxLength={maxDateInputLength}
-                  style={styles.input}
-                  placeholder="2026-04-29"
-                />
-              </View>
-              <View style={styles.dateTimeField}>
-                <FieldLabel icon={"🕒"} label={"時間"} />
-                <TextInput
-                  accessibilityLabel={auxiliaryDisplayLabels.timeInputAccessibility}
-                  value={manualRecordTime}
-                  onChangeText={updateManualRecordTimeInput}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  maxLength={maxTimeInputLength}
-                  style={styles.input}
-                  placeholder="08:10"
-                />
-              </View>
-            </View>
+            <ManualRecordDateTimeFields
+              dateAccessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}
+              dateMaxLength={maxDateInputLength}
+              dateValue={manualRecordDate}
+              timeAccessibilityLabel={auxiliaryDisplayLabels.timeInputAccessibility}
+              timeMaxLength={maxTimeInputLength}
+              timeValue={manualRecordTime}
+              onDateChange={updateManualRecordDateInput}
+              onTimeChange={updateManualRecordTimeInput}
+            />
             <View style={styles.segmentRow}>
               {manualRecordTypeDisplayOptions.map((type) => (
                 <Pressable
