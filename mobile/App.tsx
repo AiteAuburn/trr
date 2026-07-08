@@ -702,6 +702,7 @@ import { protectedRequestHeaders } from "./authRequestHeaders";
 import { authSessionDisplayItem } from "./authSessionDisplay";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { FieldLabel } from "./fieldLabel";
+import { DetailRow } from "./detailRow";
 import type {
   Account,
   AiModelOptions,
@@ -8747,39 +8748,36 @@ export default function App() {
             </View>
             <View style={styles.detailRows}>
               <Text style={styles.label}>{coreFlowDisplayLabels.mainInfo}</Text>
-              <View style={styles.detailRow}>
-                <FieldLabel icon={"📅"} label={"日期"} />
-                <Text style={styles.recordContent}>{selectedRecordDisplayItem?.dateLabel ?? "尚無"}</Text>
-              </View>
-              <View style={styles.detailRow}>
-                <FieldLabel icon={"🕒"} label={"時間"} />
-                <Text style={styles.recordContent}>{selectedRecordDisplayItem?.timeLabel ?? "尚無"}</Text>
-              </View>
-              <View style={styles.detailRow}>
-                <FieldLabel icon={"🏷"} label={"類型"} />
-                <Text style={styles.recordContent}>{selectedRecordDisplayItem?.typeLabel ?? "尚無"}</Text>
-              </View>
+              <DetailRow
+                label={<FieldLabel icon={"📅"} label={"日期"} />}
+                value={selectedRecordDisplayItem?.dateLabel ?? "尚無"}
+              />
+              <DetailRow
+                label={<FieldLabel icon={"🕒"} label={"時間"} />}
+                value={selectedRecordDisplayItem?.timeLabel ?? "尚無"}
+              />
+              <DetailRow
+                label={<FieldLabel icon={"🏷"} label={"類型"} />}
+                value={selectedRecordDisplayItem?.typeLabel ?? "尚無"}
+              />
               {selectedRecordDetailRows.map((row) => (
-                <View key={row.label} style={styles.detailRow}>
-                  <Text style={styles.label}>{row.label}</Text>
-                  <Text style={styles.recordContent}>{row.value}</Text>
-                </View>
+                <DetailRow key={row.label} label={row.label} value={row.value} />
               ))}
             </View>
             <View style={styles.detailRows}>
               <Text style={styles.label}>{coreFlowDisplayLabels.supplementalInfo}</Text>
-              <View style={styles.detailRow}>
-                <Text style={styles.label}>{coreFlowDisplayLabels.source}</Text>
-                <Text style={styles.recordContent}>{selectedRecordDisplayItem?.sourceLabel ?? "尚無"}</Text>
-              </View>
-              <View style={styles.detailRow}>
-                <FieldLabel icon={"🚶"} label={"運動"} />
-                <Text style={styles.recordContent}>{selectedRecordDisplayItem?.exerciseSummary ?? "無"}</Text>
-              </View>
-              <View style={styles.detailRow}>
-                <FieldLabel icon={"💊"} label={"用藥"} />
-                <Text style={styles.recordContent}>{selectedRecordDisplayItem?.medicationSummary ?? "無"}</Text>
-              </View>
+              <DetailRow
+                label={coreFlowDisplayLabels.source}
+                value={selectedRecordDisplayItem?.sourceLabel ?? "尚無"}
+              />
+              <DetailRow
+                label={<FieldLabel icon={"🚶"} label={"運動"} />}
+                value={selectedRecordDisplayItem?.exerciseSummary ?? "無"}
+              />
+              <DetailRow
+                label={<FieldLabel icon={"💊"} label={"用藥"} />}
+                value={selectedRecordDisplayItem?.medicationSummary ?? "無"}
+              />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.detailBoundary}</Text>

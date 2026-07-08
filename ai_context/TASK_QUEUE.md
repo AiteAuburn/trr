@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1200: Extract record detail row component
+
+Status: done
+
+Summary:
+
+- Added `mobile/detailRow.tsx` as a shared label/value row component for Record Detail display.
+- Replaced the Record Detail main/supplemental label-value rows in `mobile/App.tsx` with `DetailRow` while keeping `FieldLabel` icon labels, fallback values, row layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so `mobile/detailRow.tsx` owns the shared detail-row component/styles and Record Detail keeps using the extracted row component.
+- Updated the refactor roadmap to note the shared record-detail row component boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1199: Extract shared field label component
 
 Status: done

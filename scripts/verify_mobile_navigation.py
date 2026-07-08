@@ -46,6 +46,7 @@ SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 FIELD_LABEL_PATH = REPO_ROOT / "mobile" / "fieldLabel.tsx"
+DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "detailRow.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1265,6 +1266,7 @@ def main() -> int:
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     field_label_content = FIELD_LABEL_PATH.read_text(encoding="utf-8")
+    detail_row_content = DETAIL_ROW_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -1350,6 +1352,19 @@ def main() -> int:
             ("field label text style", "fontWeight: \"800\""),
         ):
             _assert_contains(label, field_label_content, marker)
+        for label, marker in (
+            ("detail row component", "export function DetailRow({ label, value }: DetailRowProps)"),
+            ("detail row string label fallback", 'typeof label === "string" ? <Text style={styles.label}>{label}</Text> : label'),
+            ("detail row style", "detailRow: {"),
+            ("detail row record content style", "recordContent: {"),
+        ):
+            _assert_contains(label, detail_row_content, marker)
+        for label, marker in (
+            ("record detail date detail row component", 'label={<FieldLabel icon={"📅"} label={"日期"} />}'),
+            ("record detail mapped detail row component", "<DetailRow key={row.label} label={row.label} value={row.value} />"),
+            ("record detail source detail row component", "label={coreFlowDisplayLabels.source}"),
+        ):
+            _assert_contains(label, content, marker)
         for label, marker in (
             ("app types account alias", "export type Account = AccountTransformSource;"),
             ("app types profile alias", "export type Profile = ProfileTransformSource;"),

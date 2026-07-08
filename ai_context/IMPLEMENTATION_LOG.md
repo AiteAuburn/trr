@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1200 extract record detail row component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/detailRow.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/detailRow.tsx` as a shared label/value row component for Record Detail display.
+- Replaced the Record Detail main/supplemental label-value rows in `mobile/App.tsx` with `DetailRow` while keeping `FieldLabel` icon labels, fallback values, row layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so `mobile/detailRow.tsx` owns the shared detail-row component/styles and Record Detail keeps using the extracted row component.
+- Updated the refactor roadmap to note the shared record-detail row component boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue gradually moving first-version Record/History detail surfaces to shared presentational components before extracting large renderers.
+
 ### T1199 extract shared field label component
 
 類型：mobile / refactor / verifier / docs
