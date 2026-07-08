@@ -3617,9 +3617,12 @@ def main() -> int:
             ("delete confirm submit label helper", "function deleteConfirmSubmitLabel(isBusy: boolean)"),
             ("delete confirm ready status helper", "function deleteConfirmReadyStatusMessage()"),
             ("delete confirm return status helper", "function deleteConfirmReturnStatusMessage()"),
+            ("delete confirm checklist helper", "function deleteConfirmChecklistDisplayItems()"),
             ("delete confirm intro copy", "刪除後會從目前清單移除"),
             ("delete confirm no request copy", "按下確認刪除前不會送出 delete request"),
             ("delete confirm cancel status copy", "已取消刪除；紀錄保留"),
+            ("delete confirm single record copy", "只會刪除目前選取的這一筆紀錄。"),
+            ("delete confirm no undo copy", "目前沒有本機 undo；刪除成功後會進入刪除完成頁。"),
             ("record edit intro copy helper", "function recordEditIntroCopy()"),
             ("record edit open status helper", "function recordEditOpenStatusMessage()"),
             ("record edit cancel status helper", "function recordEditCancelStatusMessage()"),
@@ -3634,6 +3637,7 @@ def main() -> int:
         ):
             _assert_contains(label, record_status_copy_content, marker)
         for label, marker in (
+            ("delete confirm checklist helper binding", "const deleteConfirmChecklistItems = deleteConfirmChecklistDisplayItems();"),
             ("delete confirm preview block binding", "<DeleteConfirmPreviewBlock\n              dangerLabel={auxiliaryDisplayLabels.dangerOperation}"),
             ("delete confirm preview intro binding", "introText={deleteConfirmIntroDisplayText}"),
             ("delete confirm preview record meta binding", "recordMetaText={deleteConfirmRecordMetaDisplayText}"),

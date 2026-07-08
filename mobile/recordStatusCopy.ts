@@ -133,6 +133,18 @@ export function deleteConfirmReturnStatusMessage() {
   return boundUiMessage("已取消刪除；紀錄保留，已返回記錄詳情。");
 }
 
+export function deleteConfirmChecklistDisplayItems() {
+  return [
+    "只會刪除目前選取的這一筆紀錄。",
+    "只送出單筆 delete request，不批次載入完整歷史。",
+    "不會自動刪除其他日期、分析統計或未儲存候選紀錄。",
+    "不會呼叫 parser、AI 或 LLM，成本為 0。",
+    "不會附帶 raw transcript、raw prompt、raw model output 或模型 debug trace。",
+    "目前沒有本機 undo；刪除成功後會進入刪除完成頁。",
+    "刪除中按鈕會停用；失敗時不會自動重試，刪除請求仍走後端權限與 audit 路徑。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function recordEditIntroCopy() {
   return boundDisplayText(
     "修改以下內容，然後儲存。欄位會轉成後端結構化 payload。",
