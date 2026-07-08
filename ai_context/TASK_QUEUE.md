@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1266: Extract manual-record medication fields
+
+Status: done
+
+Summary:
+
+- Added `mobile/manualRecordMedicationFields.tsx` for the Manual Record medication name and dose inputs.
+- Replaced the inline Manual Record medication branch JSX in `mobile/App.tsx` with `ManualRecordMedicationFields`.
+- Kept medication labels, placeholders, accessibility labels, values, max-length limits, handler bindings, layout, colors, typography, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation and visual-smoke route verifiers so the Manual Record medication fields component and App bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1265: Extract manual-record exercise fields
 
 Status: done

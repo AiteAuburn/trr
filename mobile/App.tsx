@@ -721,6 +721,7 @@ import { ManualRecordExerciseFields } from "./manualRecordExerciseFields";
 import { ManualRecordGlucoseFields } from "./manualRecordGlucoseFields";
 import { ManualRecordHeaderIntro } from "./manualRecordHeaderIntro";
 import { ManualRecordMealFields } from "./manualRecordMealFields";
+import { ManualRecordMedicationFields } from "./manualRecordMedicationFields";
 import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
 import { MetricCard } from "./metricCard";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
@@ -8152,34 +8153,16 @@ export default function App() {
             ) : null}
 
             {manualRecordType === "medication" ? (
-              <>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"💊"} label={"用藥"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.medicationNameInputAccessibility}
-                    value={manualRecordFields.medicationName}
-                    onChangeText={updateManualRecordMedicationName}
-                    maxLength={recordEditFieldMaxLength("medicationName")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    placeholder="藥名或胰島素描述"
-                  />
-                </View>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"▣"} label={"劑量"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.medicationDoseInputAccessibility}
-                    value={manualRecordFields.medicationDose}
-                    onChangeText={updateManualRecordMedicationDose}
-                    maxLength={recordEditFieldMaxLength("medicationDose")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    placeholder="例如：1 顆、8u"
-                  />
-                </View>
-              </>
+              <ManualRecordMedicationFields
+                dose={manualRecordFields.medicationDose}
+                doseAccessibilityLabel={auxiliaryDisplayLabels.medicationDoseInputAccessibility}
+                doseMaxLength={recordEditFieldMaxLength("medicationDose")}
+                name={manualRecordFields.medicationName}
+                nameAccessibilityLabel={auxiliaryDisplayLabels.medicationNameInputAccessibility}
+                nameMaxLength={recordEditFieldMaxLength("medicationName")}
+                onDoseChange={updateManualRecordMedicationDose}
+                onNameChange={updateManualRecordMedicationName}
+              />
             ) : null}
 
             {manualRecordType === "note" ? (
