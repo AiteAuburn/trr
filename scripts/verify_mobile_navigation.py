@@ -1390,8 +1390,9 @@ def main() -> int:
             ("profile readiness highlight bullet row", "profileReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("quota readiness highlight bullet row", "quotaReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("reminder readiness highlight bullet row", "reminderReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("privacy readiness highlight bullet row", "privacyReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
         ):
-            target_content = content if label.startswith(("record detail ", "delete confirm ", "record update ", "manual submit ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "history boundary ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ")) else highlight_bullet_row_content
+            target_content = content if label.startswith(("record detail ", "delete confirm ", "record update ", "manual submit ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "history boundary ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ")) else highlight_bullet_row_content
             _assert_contains(label, target_content, marker)
         for label, marker in (
             ("record detail date detail row component", 'label={<FieldLabel icon={"📅"} label={"日期"} />}'),
