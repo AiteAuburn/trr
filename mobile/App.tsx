@@ -9782,10 +9782,7 @@ export default function App() {
                   <View style={styles.inlineInfoBlock}>
                     <Text style={styles.label}>{futurePreviewDisplayLabels.readiness}</Text>
                     {item.requirements.map((requirement) => (
-                      <View key={requirement.key} style={styles.highlightRow}>
-                        <Text style={styles.recordType}>•</Text>
-                        <Text style={styles.evidence}>{requirement.text}</Text>
-                      </View>
+                      <HighlightBulletRow key={requirement.key} text={requirement.text} />
                     ))}
                     <Text style={styles.warningText}>{item.safety}</Text>
                   </View>

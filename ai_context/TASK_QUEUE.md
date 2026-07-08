@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1233: Reuse highlight bullet row in future module card requirements
+
+Status: done
+
+Summary:
+
+- Replaced the Future Modules card requirement rows in `mobile/App.tsx` with the shared `HighlightBulletRow` component.
+- Kept requirement text, bullet glyph, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, hidden/debug-only future routing, and future-module action behavior unchanged.
+- Updated the navigation verifier so the future-module card requirement map is explicitly guarded to use `HighlightBulletRow`.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1232: Reuse highlight bullet row in food photo readiness
 
 Status: done
