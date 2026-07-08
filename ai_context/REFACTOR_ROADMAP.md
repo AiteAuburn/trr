@@ -29,6 +29,7 @@
   - `authTransforms.ts`：Auth token/OIDC request and response sanitizing transforms plus protected request header construction.
   - `authSessionDisplay.ts`：Account Security auth session display item shaping.
   - `authProviderChallenge.ts`：OIDC challenge helper。
+  - `mobileBounds.ts`：App-shared text length, identifier, UI message, native debug input, store search input, API base URL, and numeric bounds helpers/constants.
   - `modelStorage.ts`：本機模型清單與下載狀態。
   - `modelTransforms.ts`：Downloaded native model state bounding transforms.
   - `nativeLocalModels.ts`：native Whisper / Llama bridge。
@@ -146,7 +147,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; date/time, record bounds, record save transforms, daily transcript, auth token/OIDC request transforms, protected auth request header transforms, account/profile response bounding, AI model option response bounding, downloaded native model state bounding, analysis basic report response bounding, analysis data/chart, analysis metric, record streak/day aggregation, subscription trial-days, subscription voice quota response bounding, and recording effective-limit transform helpers extracted.
+Status: started; app-shared mobile bounds, date/time, record bounds, record save transforms, daily transcript, auth token/OIDC request transforms, protected auth request header transforms, account/profile response bounding, AI model option response bounding, downloaded native model state bounding, analysis basic report response bounding, analysis data/chart, analysis metric, record streak/day aggregation, subscription trial-days, subscription voice quota response bounding, and recording effective-limit transform helpers extracted.
 
 Scope:
 

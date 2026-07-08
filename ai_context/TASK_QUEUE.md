@@ -124,6 +124,26 @@ None.
 
 ## Done
 
+### T1190: Extract app-shared mobile bounds helpers
+
+Status: done
+
+Summary:
+
+- Moved App-level text length, identifier, UI message, native debug input, store search input, API base URL normalization, and numeric clamp helpers/constants into `mobile/mobileBounds.ts`.
+- Kept UI copy, layout, navigation, backend request paths, auth header behavior, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Kept the dev-auth-dependent `protectedRequestHeaders` wrapper in `mobile/App.tsx` so runtime environment behavior remains App-owned.
+- Updated the navigation verifier so shared mobile bounds ownership is guarded in `mobile/mobileBounds.ts` and old App-local helper definitions are rejected.
+- Updated the refactor roadmap to note the app-shared mobile bounds helper boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1189: Extract record streak aggregation helpers
 
 Status: done

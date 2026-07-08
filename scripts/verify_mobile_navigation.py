@@ -41,6 +41,7 @@ AUTH_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "authStatusCopy.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
+MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
 ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
 ACHIEVEMENT_CATALOG_PATH = REPO_ROOT / "backend" / "app" / "services" / "achievement_catalog.py"
@@ -1253,6 +1254,7 @@ def main() -> int:
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
+    mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
 
     try:
@@ -1285,6 +1287,24 @@ def main() -> int:
 
         _verify_achievement_contract(content, future_module_display_content)
         _verify_food_community_category_contract(content, future_module_display_content)
+        for label, marker in (
+            ("mobile bounds url normalizer", "export function normalizeApiBaseUrl(value: string)"),
+            ("mobile bounds ui message", "export function boundUiMessage(value: string)"),
+            ("mobile bounds display text", "export function boundDisplayText(value: string, maxLength = maxDisplayTextLength)"),
+            ("mobile bounds identifier", "export function boundIdentifier(value: string)"),
+            ("mobile bounds clamp number", "export function clampNumber(value: number, min: number, max: number)"),
+            ("mobile bounds nullable clamp", "export function clampNullableNumber(value: number | null | undefined, min: number, max: number)"),
+            ("mobile bounds transcript length", "export const maxTranscriptTextLength = 1200"),
+            ("mobile bounds backend url length", "export const maxBackendUrlLength = 256"),
+        ):
+            _assert_contains(label, mobile_bounds_content, marker)
+        for label, marker in (
+            ("app local api url normalizer", "function normalizeApiBaseUrl(value: string)"),
+            ("app local ui message bound", "function boundUiMessage(value: string)"),
+            ("app local display bound", "function boundDisplayText(value: string, maxLength = maxDisplayTextLength)"),
+            ("app local number clamp", "function clampNumber(value: number, min: number, max: number)"),
+        ):
+            _assert_not_contains(label, content, marker)
         _verify_daily_record_contract(content, daily_transcript_content)
         _verify_basic_report_contract()
 

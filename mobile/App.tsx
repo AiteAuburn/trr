@@ -32,6 +32,29 @@ import {
   writeStoredAuthSession
 } from "./authTokenStorage";
 import {
+  boundDisplayText,
+  boundIdentifier,
+  boundNativeDebugInput,
+  boundStoreSearchText,
+  boundUiMessage,
+  clampNullableNumber,
+  clampNumber,
+  maxBackendUrlLength,
+  maxDateInputLength,
+  maxDisplayDetailTextLength,
+  maxDisplayTextLength,
+  maxListItems,
+  maxMobileCountValue,
+  maxMobileGlucoseValue,
+  maxMobilePreviewRecords,
+  maxMobileRejectedEvents,
+  maxNativeDebugInputLength,
+  maxStoreSearchTextLength,
+  maxTimeInputLength,
+  maxTranscriptTextLength,
+  normalizeApiBaseUrl
+} from "./mobileBounds";
+import {
   createAuthProviderChallenge,
   validateAuthProviderChallenge,
   type AuthProviderChallenge
@@ -779,63 +802,9 @@ const initialVisualSmokeScreen = normalizeVisualSmokeInitialRoute(
 
 type SaveEntryMethod = "ai" | "manual" | null;
 
-const maxDateInputLength = 10;
-const maxTimeInputLength = 5;
-const maxListItems = 12;
-const maxIdentifierTextLength = 128;
-const maxDisplayTextLength = 120;
-const maxDisplayDetailTextLength = 240;
-const maxTranscriptTextLength = 1200;
-const maxStoreSearchTextLength = 80;
-const maxBackendUrlLength = 256;
-const maxNativeDebugInputLength = 1024;
-const maxUiMessageLength = 300;
-const maxMobilePreviewRecords = 20;
-const maxMobilePreviewSegments = 40;
-const maxMobileRejectedEvents = 40;
-const maxMobileCountValue = 1_000_000;
-const maxMobileGlucoseValue = 1000;
 const mobileRecordSyncLimit = 100;
 const maxMobileRecordCacheLimit = 500;
 const mobileReportQueryLimit = 500;
-
-function normalizeApiBaseUrl(value: string) {
-  return value.trim().replace(/\/$/, "");
-}
-
-function boundNativeDebugInput(value: string) {
-  return value.slice(0, maxNativeDebugInputLength);
-}
-
-function boundStoreSearchText(value: string) {
-  return value.slice(0, maxStoreSearchTextLength);
-}
-
-function boundUiMessage(value: string) {
-  return value.slice(0, maxUiMessageLength);
-}
-
-function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
-  return value.slice(0, maxLength);
-}
-
-function boundIdentifier(value: string) {
-  return value.slice(0, maxIdentifierTextLength);
-}
-
-function clampNumber(value: number, min: number, max: number) {
-  if (!Number.isFinite(value)) {
-    return min;
-  }
-  return Math.max(min, Math.min(max, value));
-}
-
-function clampNullableNumber(value: number | null | undefined, min: number, max: number) {
-  if (value === null || value === undefined || !Number.isFinite(value)) {
-    return null;
-  }
-  return clampNumber(value, min, max);
-}
 
 async function requestJson<T>(
   apiBaseUrl: string,
