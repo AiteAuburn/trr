@@ -262,7 +262,8 @@ import {
   accountEmailDisplayValue,
   accountLoginDisplayValue,
   accountPublicDisplayNameText,
-  doctorShareAccountBoundaryText
+  doctorShareAccountBoundaryText,
+  profileReadinessChecklistDisplayItems
 } from "./accountCopy";
 import {
   homeGuidanceDirections,
@@ -1785,12 +1786,7 @@ export default function App() {
     ["歷史回顧", "完整保存並支援查詢"]
   ] as const).map(detailPairDisplayItem);
   const authBoundaryChecklistItems = authBoundaryChecklistDisplayItems();
-  const profileReadinessChecklistItems = [
-    "production auth / OIDC 或 JWT 邊界，避免 dev account 被當成正式個資。",
-    "profile update API、欄位驗證、錯誤狀態與 optimistic update rollback。",
-    "帳號與照護對象權限檢查：只能編輯自己有權限的 profile。",
-    "敏感欄位需定義最小化策略；目前不收集生日、身分證或醫療診斷資料。"
-  ].map(resultChecklistItem);
+  const profileReadinessChecklistItems = profileReadinessChecklistDisplayItems();
   const quotaReadinessChecklistItems = [
     "quota API 必須由 production auth 驗證 account / profile，不信任前端傳入的使用量。",
     "錄音開始時先檢查剩餘額度；parser 成功或失敗都要有一致的 usage rollback / commit 規則。",

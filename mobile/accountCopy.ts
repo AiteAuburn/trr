@@ -37,3 +37,12 @@ export function doctorShareAccountBoundaryText(account: AccountDisplaySource | n
     maxDisplayDetailTextLength
   );
 }
+
+export function profileReadinessChecklistDisplayItems() {
+  return [
+    "production auth / OIDC 或 JWT 邊界，避免 dev account 被當成正式個資。",
+    "profile update API、欄位驗證、錯誤狀態與 optimistic update rollback。",
+    "帳號與照護對象權限檢查：只能編輯自己有權限的 profile。",
+    "敏感欄位需定義最小化策略；目前不收集生日、身分證或醫療診斷資料。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}

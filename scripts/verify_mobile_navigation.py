@@ -2425,6 +2425,11 @@ def main() -> int:
             "const authBoundaryChecklistItems = authBoundaryChecklistDisplayItems();",
         )
         _assert_contains(
+            "profile readiness checklist helper binding",
+            content,
+            "const profileReadinessChecklistItems = profileReadinessChecklistDisplayItems();",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -5192,6 +5197,9 @@ def main() -> int:
             ("doctor share account boundary helper", "function doctorShareAccountBoundaryText(account: AccountDisplaySource | null)"),
             ("doctor share connected copy", "已連線帳號；正式分享仍需 production auth、權限與授權碼流程。"),
             ("doctor share disconnected copy", "尚未連線帳號；不可建立任何外部分享。"),
+            ("profile readiness checklist helper", "function profileReadinessChecklistDisplayItems()"),
+            ("profile readiness production auth copy", "production auth / OIDC 或 JWT 邊界，避免 dev account 被當成正式個資。"),
+            ("profile readiness permission copy", "帳號與照護對象權限檢查：只能編輯自己有權限的 profile。"),
         ):
             _assert_contains(label, account_copy_content, marker)
         for label, marker in (
