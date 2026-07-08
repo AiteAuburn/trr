@@ -90,8 +90,8 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "editRecord": [
         'currentScreen === "editRecord"',
-        "recordUpdateChecklistItems.map",
-        "onPress={submitRecordUpdate}",
+        "RecordEditFooterActions",
+        "onSubmitPress={submitRecordUpdate}",
     ],
     "deleteConfirm": [
         'currentScreen === "deleteConfirm"',

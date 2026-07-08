@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1256: Extract record edit footer actions
+
+Status: done
+
+Summary:
+
+- Added `mobile/recordEditFooterActions.tsx` for the Edit Record update pre-check checklist, cancel/save buttons, and validation warning.
+- Replaced the inline Edit Record footer action JSX in `mobile/App.tsx` with `RecordEditFooterActions`.
+- Kept update pre-check title, checklist rows, cancel/save labels, accessibility labels, disabled state, validation warning, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the Edit Record footer component and App cancel/save bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1255: Extract record edit header fields
 
 Status: done

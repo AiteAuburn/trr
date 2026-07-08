@@ -716,6 +716,7 @@ import { HighlightDetailRow } from "./highlightDetailRow";
 import { MetricCard } from "./metricCard";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
+import { RecordEditFooterActions } from "./recordEditFooterActions";
 import { RecordEditHeaderFields } from "./recordEditHeaderFields";
 import type {
   Account,
@@ -8852,38 +8853,18 @@ export default function App() {
                 />
               </>
             ) : null}
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{coreFlowDisplayLabels.updatePreCheck}</Text>
-              {recordUpdateChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
-              ))}
-            </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.recordEditReturnAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={returnFromRecordEdit}
-              >
-                <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.cancel}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.recordUpdateSubmitAccessibility}
-                accessibilityRole="button"
-                accessibilityState={{ disabled: Boolean(selectedRecordEditValidationError) || isBusy }}
-                style={[
-                  styles.primaryButton,
-                  selectedRecordEditValidationError || isBusy ? styles.buttonDisabled : null
-                ]}
-                disabled={Boolean(selectedRecordEditValidationError) || isBusy}
-                onPress={submitRecordUpdate}
-              >
-                <Text style={styles.primaryButtonText}>{coreFlowDisplayLabels.saveChanges}</Text>
-              </Pressable>
-            </View>
-            {selectedRecordEditValidationError ? (
-              <Text style={styles.warningText}>{selectedRecordEditValidationDisplayText}</Text>
-            ) : null}
+            <RecordEditFooterActions
+              cancelAccessibilityLabel={coreFlowDisplayLabels.recordEditReturnAccessibility}
+              cancelLabel={coreFlowDisplayLabels.cancel}
+              checklistItems={recordUpdateChecklistItems}
+              disabled={Boolean(selectedRecordEditValidationError) || isBusy}
+              preCheckTitle={coreFlowDisplayLabels.updatePreCheck}
+              saveLabel={coreFlowDisplayLabels.saveChanges}
+              submitAccessibilityLabel={coreFlowDisplayLabels.recordUpdateSubmitAccessibility}
+              validationText={selectedRecordEditValidationError ? selectedRecordEditValidationDisplayText : null}
+              onCancelPress={returnFromRecordEdit}
+              onSubmitPress={submitRecordUpdate}
+            />
           </View>
         ) : null}
 
