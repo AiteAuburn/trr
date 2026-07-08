@@ -56,6 +56,7 @@ HISTORY_NO_RANGE_RECORDS_CARD_PATH = REPO_ROOT / "mobile" / "historyNoRangeRecor
 HISTORY_NO_RECORD_STATUS_BLOCK_PATH = REPO_ROOT / "mobile" / "historyNoRecordStatusBlock.tsx"
 HISTORY_RAW_TRANSCRIPT_CARD_PATH = REPO_ROOT / "mobile" / "historyRawTranscriptCard.tsx"
 HISTORY_SELECTED_DATE_HEADER_PATH = REPO_ROOT / "mobile" / "historySelectedDateHeader.tsx"
+HISTORY_SELECTED_DATE_PANEL_PATH = REPO_ROOT / "mobile" / "historySelectedDatePanel.tsx"
 HISTORY_SELECTED_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historySelectedSummaryCard.tsx"
 HISTORY_SYNC_BOUNDARY_BLOCK_PATH = REPO_ROOT / "mobile" / "historySyncBoundaryBlock.tsx"
 FIELD_LABEL_PATH = REPO_ROOT / "mobile" / "fieldLabel.tsx"
@@ -1292,6 +1293,7 @@ def main() -> int:
     history_no_record_status_block_content = HISTORY_NO_RECORD_STATUS_BLOCK_PATH.read_text(encoding="utf-8")
     history_raw_transcript_card_content = HISTORY_RAW_TRANSCRIPT_CARD_PATH.read_text(encoding="utf-8")
     history_selected_date_header_content = HISTORY_SELECTED_DATE_HEADER_PATH.read_text(encoding="utf-8")
+    history_selected_date_panel_content = HISTORY_SELECTED_DATE_PANEL_PATH.read_text(encoding="utf-8")
     history_selected_summary_card_content = HISTORY_SELECTED_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
     history_sync_boundary_block_content = HISTORY_SYNC_BOUNDARY_BLOCK_PATH.read_text(encoding="utf-8")
     field_label_content = FIELD_LABEL_PATH.read_text(encoding="utf-8")
@@ -1494,6 +1496,20 @@ def main() -> int:
             ("history selected date header evidence line height", "lineHeight: 19"),
         ):
             _assert_contains(label, history_selected_date_header_content, marker)
+        for label, marker in (
+            ("history selected date panel component", "export function HistorySelectedDatePanel<"),
+            ("history selected date panel header", "<HistorySelectedDateHeader dateLabel={selectedDateLabel} storageLabel={selectedStorageLabel} />"),
+            ("history selected date panel summary source", "sourceLabel={selectedSourceLabel}"),
+            ("history selected date panel tabs", "<HistoryDetailModeTabs activeValue={detailMode} options={detailModeOptions} onPress={onDetailModePress} />"),
+            ("history selected date panel empty card", "<HistoryNoRangeRecordsCard body={emptyBody} title={emptyTitle} />"),
+            ("history selected date panel structured branch", 'detailMode === "structured"'),
+            ("history selected date panel section list", "sectionItems.map((section) => ("),
+            ("history selected date panel entry press", "onEntryPress={onEntryPress}"),
+            ("history selected date panel raw list", "rawItems.map((item) => ("),
+            ("history selected date panel raw card", "<HistoryRawTranscriptCard"),
+            ("history selected date panel style", "historySelectedDatePanel: {"),
+        ):
+            _assert_contains(label, history_selected_date_panel_content, marker)
         for label, marker in (
             ("history selected summary card component", "export function HistorySelectedSummaryCard({ sourceLabel, summaryText, syncLabel }: HistorySelectedSummaryCardProps)"),
             ("history selected summary card title", "<Text style={styles.previewModeBadge}>AI今日摘要</Text>"),
@@ -3555,17 +3571,17 @@ def main() -> int:
             ("history calendar selected state", "onDayPress={pressHistoryCalendarDay}"),
             ("history detail mode display options", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModes.map(historyDetailModeDisplayItem), [])"),
             ("history detail mode press handler", "function pressHistoryDetailModeOption(item: ReturnType<typeof historyDetailModeDisplayItem>)"),
-            ("history detail mode tabs binding", "<HistoryDetailModeTabs\n                activeValue={historyDetailMode}"),
-            ("history detail mode tabs options binding", "options={historyDetailModeDisplayOptions}"),
-            ("history detail mode tabs press binding", "onPress={pressHistoryDetailModeOption}"),
+            ("history selected date panel binding", "<HistorySelectedDatePanel\n              detailMode={historyDetailMode}"),
+            ("history detail mode tabs options binding", "detailModeOptions={historyDetailModeDisplayOptions}"),
+            ("history detail mode tabs press binding", "onDetailModePress={pressHistoryDetailModeOption}"),
             ("history cursor before query", "before: cursorRecord.occurred_at,"),
             ("history cursor created_at query", "before_created_at: cursorRecord.created_at"),
             ("history load more handler", "async function loadMoreRecords()"),
             ("history load more availability", "const canLoadMoreRecords ="),
             ("history daily summary table render", "<HistoryDailySummaryTable\n              emptyBody={historyNoRangeRecordsBodyDisplayText}"),
             ("history selected daily summary render", "selectedHistoryDailySummary.summaryText"),
-            ("history structured section render", "selectedHistoryDailySectionItems.map((section) =>"),
-            ("history raw records render", "selectedHistoryRawDisplayItems.map((item) =>"),
+            ("history structured section render", "sectionItems={selectedHistoryDailySectionItems}"),
+            ("history raw records render", "rawItems={selectedHistoryRawDisplayItems}"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(
@@ -3635,9 +3651,9 @@ def main() -> int:
         history_block = _history_render_block(content)
         history_calendar_index = history_block.find("<HistoryCalendarMonthPicker")
         history_summary_index = history_block.find("<HistoryDailySummaryTable")
-        history_detail_index = history_block.find("styles.historySelectedDatePanel")
-        history_structured_index = history_block.find('historyDetailMode === "structured"')
-        history_raw_index = history_block.find("selectedHistoryRawDisplayItems.map((item) =>")
+        history_detail_index = history_block.find("<HistorySelectedDatePanel")
+        history_structured_index = history_selected_date_panel_content.find('detailMode === "structured"')
+        history_raw_index = history_selected_date_panel_content.find("rawItems.map((item) =>")
         if history_calendar_index == -1 or history_detail_index == -1 or history_calendar_index > history_detail_index:
             raise AssertionError("History calendar must render before selected-date details.")
         if history_summary_index == -1 or history_calendar_index > history_summary_index or history_summary_index > history_detail_index:
@@ -3662,18 +3678,17 @@ def main() -> int:
             ("history summary no-range records title binding", "emptyTitle={historyNoRangeRecordsTitleDisplayText}"),
             ("history no-record status binding", "<HistoryNoRecordStatusBlock\n                body={historyNoRealRecordHealthValueDisplayText}"),
             ("history no-record status title binding", "title={coreFlowDisplayLabels.historyDataStatus}"),
-            ("history selected date header binding", "<HistorySelectedDateHeader\n                dateLabel={selectedHistoryDateDisplayText}"),
-            ("history selected date storage binding", "storageLabel={selectedHistoryDailySummary.storageLabel}"),
-            ("history selected summary card binding", "<HistorySelectedSummaryCard\n                sourceLabel={selectedHistoryDailySummary.sourceLabel}"),
-            ("history selected summary text binding", "summaryText={selectedHistoryDailySummary.summaryText}"),
-            ("history selected sync binding", "syncLabel={selectedHistoryDailySummary.syncLabel}"),
-            ("history selected no-range records binding", "<HistoryNoRangeRecordsCard\n                  body={historyNoRangeRecordsBodyDisplayText}"),
-            ("history selected daily section card binding", "<HistoryDailyRecordSectionCard\n                      key={`history-${section.id}`}"),
-            ("history selected daily section prop", "section={section}"),
+            ("history selected date panel binding", "<HistorySelectedDatePanel\n              detailMode={historyDetailMode}"),
+            ("history selected date label binding", "selectedDateLabel={selectedHistoryDateDisplayText}"),
+            ("history selected date storage binding", "selectedStorageLabel={selectedHistoryDailySummary.storageLabel}"),
+            ("history selected summary source binding", "selectedSourceLabel={selectedHistoryDailySummary.sourceLabel}"),
+            ("history selected summary text binding", "selectedSummaryText={selectedHistoryDailySummary.summaryText}"),
+            ("history selected sync binding", "selectedSyncLabel={selectedHistoryDailySummary.syncLabel}"),
+            ("history selected no-range body binding", "emptyBody={historyNoRangeRecordsBodyDisplayText}"),
+            ("history selected no-range title binding", "emptyTitle={historyNoRangeRecordsTitleDisplayText}"),
+            ("history selected daily sections binding", "sectionItems={selectedHistoryDailySectionItems}"),
             ("history selected daily section entry press binding", "onEntryPress={pressHistoryDailyEntry}"),
-            ("history raw transcript card binding", "selectedHistoryRawDisplayItems.map((item) => (\n                  <HistoryRawTranscriptCard"),
-            ("history raw transcript text binding", "rawText={item.rawText}"),
-            ("history raw transcript source binding", "sourceStatusLabel={item.sourceStatusLabel}"),
+            ("history raw transcript items binding", "rawItems={selectedHistoryRawDisplayItems}"),
             ("history calendar previous month button", "{historyPreviousMonthButtonLabel}"),
             ("history calendar next month button", "{historyNextMonthButtonLabel}"),
             ("history sync boundary component binding", "<HistorySyncBoundaryBlock\n                body={historySyncBoundaryDisplayText}"),
@@ -3681,8 +3696,8 @@ def main() -> int:
             ("history sync boundary load-more handler binding", "onLoadMore={loadMoreRecords}"),
         ):
             _assert_contains(label, history_block, marker)
-        if history_block.count("<HistoryNoRangeRecordsCard") != 1:
-            raise AssertionError("History selected-date empty state must render one no-range records card in App.")
+        if history_selected_date_panel_content.count("<HistoryNoRangeRecordsCard") != 1:
+            raise AssertionError("History selected-date panel must render one no-range records card in its component.")
         if history_daily_summary_table_content.count("<HistoryNoRangeRecordsCard") != 1:
             raise AssertionError("History daily summary table must render one no-range records card in its component.")
         for label, marker in (

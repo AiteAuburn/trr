@@ -705,15 +705,10 @@ import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { HistoryCalendarMonthPicker } from "./historyCalendarMonthPicker";
-import { HistoryDailyRecordSectionCard } from "./historyDailyRecordSectionCard";
 import { HistoryDailySummaryTable } from "./historyDailySummaryTable";
-import { HistoryDetailModeTabs } from "./historyDetailModeTabs";
 import { HistoryIntroStatusBlocks } from "./historyIntroStatusBlocks";
-import { HistoryNoRangeRecordsCard } from "./historyNoRangeRecordsCard";
 import { HistoryNoRecordStatusBlock } from "./historyNoRecordStatusBlock";
-import { HistoryRawTranscriptCard } from "./historyRawTranscriptCard";
-import { HistorySelectedDateHeader } from "./historySelectedDateHeader";
-import { HistorySelectedSummaryCard } from "./historySelectedSummaryCard";
+import { HistorySelectedDatePanel } from "./historySelectedDatePanel";
 import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
@@ -8493,48 +8488,22 @@ export default function App() {
                 onLoadMore={loadMoreRecords}
               />
             ) : null}
-            <View style={styles.historySelectedDatePanel}>
-              <HistorySelectedDateHeader
-                dateLabel={selectedHistoryDateDisplayText}
-                storageLabel={selectedHistoryDailySummary.storageLabel}
-              />
-              <HistorySelectedSummaryCard
-                sourceLabel={selectedHistoryDailySummary.sourceLabel}
-                summaryText={selectedHistoryDailySummary.summaryText}
-                syncLabel={selectedHistoryDailySummary.syncLabel}
-              />
-              <HistoryDetailModeTabs
-                activeValue={historyDetailMode}
-                options={historyDetailModeDisplayOptions}
-                onPress={pressHistoryDetailModeOption}
-              />
-              {selectedHistoryRecordDisplayCount === 0 ? (
-                <HistoryNoRangeRecordsCard
-                  body={historyNoRangeRecordsBodyDisplayText}
-                  title={historyNoRangeRecordsTitleDisplayText}
-                />
-              ) : historyDetailMode === "structured" ? (
-                <View style={styles.dailyRecordSectionList}>
-                  {selectedHistoryDailySectionItems.map((section) => (
-                    <HistoryDailyRecordSectionCard
-                      key={`history-${section.id}`}
-                      section={section}
-                      onEntryPress={pressHistoryDailyEntry}
-                    />
-                  ))}
-                </View>
-              ) : (
-                selectedHistoryRawDisplayItems.map((item) => (
-                  <HistoryRawTranscriptCard
-                    key={item.key}
-                    rawText={item.rawText}
-                    sourceStatusLabel={item.sourceStatusLabel}
-                    timeLabel={item.timeLabel}
-                    typeLabel={item.typeLabel}
-                  />
-                ))
-              )}
-            </View>
+            <HistorySelectedDatePanel
+              detailMode={historyDetailMode}
+              detailModeOptions={historyDetailModeDisplayOptions}
+              emptyBody={historyNoRangeRecordsBodyDisplayText}
+              emptyTitle={historyNoRangeRecordsTitleDisplayText}
+              rawItems={selectedHistoryRawDisplayItems}
+              recordCount={selectedHistoryRecordDisplayCount}
+              sectionItems={selectedHistoryDailySectionItems}
+              selectedDateLabel={selectedHistoryDateDisplayText}
+              selectedSourceLabel={selectedHistoryDailySummary.sourceLabel}
+              selectedStorageLabel={selectedHistoryDailySummary.storageLabel}
+              selectedSummaryText={selectedHistoryDailySummary.summaryText}
+              selectedSyncLabel={selectedHistoryDailySummary.syncLabel}
+              onDetailModePress={pressHistoryDetailModeOption}
+              onEntryPress={pressHistoryDailyEntry}
+            />
           </View>
         ) : null}
 

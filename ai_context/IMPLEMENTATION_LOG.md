@@ -15,6 +15,40 @@
 
 ## 2026-07-08
 
+### T1251 extract history selected-date panel
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/historySelectedDatePanel.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/historySelectedDatePanel.tsx` for the History selected-date header, AI summary, detail-mode tabs, structured sections, raw transcript list, and empty state.
+- Replaced the inline History selected-date panel JSX in `mobile/App.tsx` with `HistorySelectedDatePanel`.
+- Kept selected-date labels, AI summary fields, detail-mode behavior, structured section entries, raw transcript cards, empty-state copy, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation, UI spec coverage, and visual-smoke route verifiers so the History selected-date panel component and App data/handler bindings are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version screen presentation wrappers while keeping selected-date state and record navigation owned by `App.tsx`.
+
 ### T1250 extract history intro status blocks
 
 類型：mobile / refactor / verifier / docs

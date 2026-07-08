@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1251: Extract history selected-date panel
+
+Status: done
+
+Summary:
+
+- Added `mobile/historySelectedDatePanel.tsx` for the History selected-date header, AI summary, detail-mode tabs, structured sections, raw transcript list, and empty state.
+- Replaced the inline History selected-date panel JSX in `mobile/App.tsx` with `HistorySelectedDatePanel`.
+- Kept selected-date labels, AI summary fields, detail-mode behavior, structured section entries, raw transcript cards, empty-state copy, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation, UI spec coverage, and visual-smoke route verifiers so the History selected-date panel component and App data/handler bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1250: Extract history intro status blocks
 
 Status: done
