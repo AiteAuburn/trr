@@ -9837,10 +9837,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{futurePreviewDisplayLabels.readiness}</Text>
               {selectedFutureModuleDisplay.requirements.map((requirement) => (
-                <View key={requirement.key} style={styles.highlightRow}>
-                  <Text style={styles.recordType}>•</Text>
-                  <Text style={styles.evidence}>{requirement.text}</Text>
-                </View>
+                <HighlightBulletRow key={requirement.key} text={requirement.text} />
               ))}
             </View>
             <View style={styles.inlineInfoBlock}>
