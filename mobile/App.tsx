@@ -722,6 +722,7 @@ import { ManualRecordGlucoseFields } from "./manualRecordGlucoseFields";
 import { ManualRecordHeaderIntro } from "./manualRecordHeaderIntro";
 import { ManualRecordMealFields } from "./manualRecordMealFields";
 import { ManualRecordMedicationFields } from "./manualRecordMedicationFields";
+import { ManualRecordNoteFields } from "./manualRecordNoteFields";
 import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
 import { MetricCard } from "./metricCard";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
@@ -8166,36 +8167,16 @@ export default function App() {
             ) : null}
 
             {manualRecordType === "note" ? (
-              <>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"📝"} label={"備註類型"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.noteKindInputAccessibility}
-                    value={manualRecordFields.noteKind}
-                    onChangeText={updateManualRecordNoteKind}
-                    maxLength={recordEditFieldMaxLength("noteKind")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    placeholder="symptom"
-                  />
-                </View>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"#"} label={"標籤"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.noteTagsInputAccessibility}
-                    value={manualRecordFields.noteTags}
-                    onChangeText={updateManualRecordNoteTags}
-                    maxLength={recordEditFieldMaxLength("noteTags")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    multiline
-                    textAlignVertical="top"
-                    style={[styles.input, styles.multilineField]}
-                    placeholder="頭暈、疲倦"
-                  />
-                </View>
-              </>
+              <ManualRecordNoteFields
+                kind={manualRecordFields.noteKind}
+                kindAccessibilityLabel={auxiliaryDisplayLabels.noteKindInputAccessibility}
+                kindMaxLength={recordEditFieldMaxLength("noteKind")}
+                tags={manualRecordFields.noteTags}
+                tagsAccessibilityLabel={auxiliaryDisplayLabels.noteTagsInputAccessibility}
+                tagsMaxLength={recordEditFieldMaxLength("noteTags")}
+                onKindChange={updateManualRecordNoteKind}
+                onTagsChange={updateManualRecordNoteTags}
+              />
             ) : null}
 
             <ManualRecordCreatePreviewAction

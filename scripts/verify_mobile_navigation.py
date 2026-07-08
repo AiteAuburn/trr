@@ -73,6 +73,7 @@ MANUAL_RECORD_GLUCOSE_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordGlucoseF
 MANUAL_RECORD_HEADER_INTRO_PATH = REPO_ROOT / "mobile" / "manualRecordHeaderIntro.tsx"
 MANUAL_RECORD_MEAL_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordMealFields.tsx"
 MANUAL_RECORD_MEDICATION_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordMedicationFields.tsx"
+MANUAL_RECORD_NOTE_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordNoteFields.tsx"
 MANUAL_RECORD_TYPE_SELECTOR_PATH = REPO_ROOT / "mobile" / "manualRecordTypeSelector.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
 RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPanel.tsx"
@@ -1331,6 +1332,7 @@ def main() -> int:
     manual_record_header_intro_content = MANUAL_RECORD_HEADER_INTRO_PATH.read_text(encoding="utf-8")
     manual_record_meal_fields_content = MANUAL_RECORD_MEAL_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_medication_fields_content = MANUAL_RECORD_MEDICATION_FIELDS_PATH.read_text(encoding="utf-8")
+    manual_record_note_fields_content = MANUAL_RECORD_NOTE_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_type_selector_content = MANUAL_RECORD_TYPE_SELECTOR_PATH.read_text(encoding="utf-8")
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
     record_detail_action_panel_content = RECORD_DETAIL_ACTION_PANEL_PATH.read_text(encoding="utf-8")
@@ -1837,6 +1839,26 @@ def main() -> int:
             ("manual record medication input style", "input: {"),
         ):
             _assert_contains(label, manual_record_medication_fields_content, marker)
+        for label, marker in (
+            ("manual record note fields component", "export function ManualRecordNoteFields"),
+            ("manual record note kind label", '<FieldLabel icon={"📝"} label={"備註類型"} />'),
+            ("manual record note kind accessibility", "accessibilityLabel={kindAccessibilityLabel}"),
+            ("manual record note kind value", "value={kind}"),
+            ("manual record note kind handler", "onChangeText={onKindChange}"),
+            ("manual record note kind max length", "maxLength={kindMaxLength}"),
+            ("manual record note kind placeholder", 'placeholder="symptom"'),
+            ("manual record note tags label", '<FieldLabel icon={"#"} label={"標籤"} />'),
+            ("manual record note tags accessibility", "accessibilityLabel={tagsAccessibilityLabel}"),
+            ("manual record note tags value", "value={tags}"),
+            ("manual record note tags handler", "onChangeText={onTagsChange}"),
+            ("manual record note tags max length", "maxLength={tagsMaxLength}"),
+            ("manual record note tags multiline", "multiline"),
+            ("manual record note tags text align", 'textAlignVertical="top"'),
+            ("manual record note tags placeholder", 'placeholder="頭暈、疲倦"'),
+            ("manual record note input style", "input: {"),
+            ("manual record note multiline style", "multilineField: {"),
+        ):
+            _assert_contains(label, manual_record_note_fields_content, marker)
         for label, marker in (
             ("record edit footer actions component", "export function RecordEditFooterActions({"),
             ("record edit footer precheck title", "<Text style={styles.label}>{preCheckTitle}</Text>"),
@@ -4359,6 +4381,9 @@ def main() -> int:
             ("manual record medication fields binding", "<ManualRecordMedicationFields\n                dose={manualRecordFields.medicationDose}"),
             ("manual record medication dose binding", "onDoseChange={updateManualRecordMedicationDose}"),
             ("manual record medication name binding", "onNameChange={updateManualRecordMedicationName}"),
+            ("manual record note fields binding", "<ManualRecordNoteFields\n                kind={manualRecordFields.noteKind}"),
+            ("manual record note kind binding", "onKindChange={updateManualRecordNoteKind}"),
+            ("manual record note tags binding", "onTagsChange={updateManualRecordNoteTags}"),
             ("manual record header intro binding", "<ManualRecordHeaderIntro\n              backAccessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}"),
             ("manual record header intro title binding", 'title="手動新增紀錄"'),
             ("manual record header intro press binding", "onBackPress={returnFromManualRecord}"),

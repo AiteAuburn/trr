@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1267: Extract manual-record note fields
+
+Status: done
+
+Summary:
+
+- Added `mobile/manualRecordNoteFields.tsx` for the Manual Record note kind and tags inputs.
+- Replaced the inline Manual Record note branch JSX in `mobile/App.tsx` with `ManualRecordNoteFields`.
+- Kept note labels, placeholders, accessibility labels, values, max-length limits, multiline tag behavior, handler bindings, layout, colors, typography, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation and visual-smoke route verifiers so the Manual Record note fields component and App bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1266: Extract manual-record medication fields
 
 Status: done
