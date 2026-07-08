@@ -15,6 +15,36 @@
 
 ## 2026-07-08
 
+### T1232 reuse highlight bullet row in food photo readiness
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Replaced the Food Photo readiness checklist rows in `mobile/App.tsx` with the shared `HighlightBulletRow` component.
+- Kept checklist text, bullet glyph, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, hidden/debug-only future routing, and food-photo action behavior unchanged.
+- Updated the navigation verifier so the food-photo-readiness checklist map is explicitly guarded to use `HighlightBulletRow`.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue consolidating remaining shared checklist rows while keeping future modules hidden/debug-only.
+
 ### T1231 reuse highlight bullet row in food photo empty result
 
 類型：mobile / refactor / verifier / docs
