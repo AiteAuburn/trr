@@ -704,6 +704,7 @@ import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
+import { HistoryDailyRecordSectionCard } from "./historyDailyRecordSectionCard";
 import { HistoryDailySummaryCard } from "./historyDailySummaryCard";
 import { HistoryDetailModeTabs } from "./historyDetailModeTabs";
 import { HistoryNoRangeRecordsCard } from "./historyNoRangeRecordsCard";
@@ -8579,46 +8580,11 @@ export default function App() {
               ) : historyDetailMode === "structured" ? (
                 <View style={styles.dailyRecordSectionList}>
                   {selectedHistoryDailySectionItems.map((section) => (
-                    <View key={`history-${section.id}`} style={styles.dailyRecordSectionCard}>
-                      <View style={styles.recordHeader}>
-                        <View style={styles.historyItemTitle}>
-                          <View style={styles.iconCircleSmall}>
-                            <Text>{section.icon}</Text>
-                          </View>
-                          <View style={styles.timelineContent}>
-                            <Text style={styles.label}>{section.title}</Text>
-                            <Text style={styles.evidence}>可新增多筆；每筆可點進詳情修改。</Text>
-                          </View>
-                        </View>
-                        <Text style={styles.countText}>{section.countLabel}</Text>
-                      </View>
-                      {section.entries.length > 0 ? (
-                        section.entries.map((item) => (
-                          <Pressable
-                            key={item.key}
-                            accessibilityLabel={item.accessibilityLabel}
-                            accessibilityRole="button"
-                            style={styles.dailyRecordEntryCard}
-                            onPress={() => pressHistoryDailyEntry(item)}
-                          >
-                            <View style={styles.recordHeader}>
-                              <View style={styles.timelineContent}>
-                                <Text style={styles.confidence}>{item.timeLabel}</Text>
-                                <Text style={styles.recordContent}>{item.payloadSummary}</Text>
-                              </View>
-                              <Text style={styles.countText}>看詳情</Text>
-                            </View>
-                            <View style={styles.detailRows}>
-                              {item.detailRows.map((row) => (
-                                <DailyRecordDetailRow key={`${item.key}-${row.label}`} label={row.label} value={row.value} />
-                              ))}
-                            </View>
-                          </Pressable>
-                        ))
-                      ) : (
-                        <Text style={styles.evidence}>{section.emptyCopy}</Text>
-                      )}
-                    </View>
+                    <HistoryDailyRecordSectionCard
+                      key={`history-${section.id}`}
+                      section={section}
+                      onEntryPress={pressHistoryDailyEntry}
+                    />
                   ))}
                 </View>
               ) : (

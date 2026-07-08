@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1247: Extract history daily record section card
+
+Status: done
+
+Summary:
+
+- Added `mobile/historyDailyRecordSectionCard.tsx` for the History selected-date structured section and entry-card renderer.
+- Replaced the inline selected-date structured section/entry JSX in `mobile/App.tsx` with `HistoryDailyRecordSectionCard`.
+- Kept section title/count, helper copy, entry time/summary/detail rows, empty copy, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the History structured section component and App entry-press binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1246: Extract history no-range records card
 
 Status: done

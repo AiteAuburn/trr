@@ -46,6 +46,7 @@ SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
+HISTORY_DAILY_RECORD_SECTION_CARD_PATH = REPO_ROOT / "mobile" / "historyDailyRecordSectionCard.tsx"
 HISTORY_DAILY_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historyDailySummaryCard.tsx"
 HISTORY_DETAIL_MODE_TABS_PATH = REPO_ROOT / "mobile" / "historyDetailModeTabs.tsx"
 HISTORY_NO_RANGE_RECORDS_CARD_PATH = REPO_ROOT / "mobile" / "historyNoRangeRecordsCard.tsx"
@@ -1278,6 +1279,7 @@ def main() -> int:
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
+    history_daily_record_section_card_content = HISTORY_DAILY_RECORD_SECTION_CARD_PATH.read_text(encoding="utf-8")
     history_daily_summary_card_content = HISTORY_DAILY_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
     history_detail_mode_tabs_content = HISTORY_DETAIL_MODE_TABS_PATH.read_text(encoding="utf-8")
     history_no_range_records_card_content = HISTORY_NO_RANGE_RECORDS_CARD_PATH.read_text(encoding="utf-8")
@@ -1378,6 +1380,18 @@ def main() -> int:
             ("daily record detail row evidence line height", "lineHeight: 19"),
         ):
             _assert_contains(label, daily_record_detail_row_content, marker)
+        for label, marker in (
+            ("history daily record section card component", "export function HistoryDailyRecordSectionCard<TEntry extends HistoryDailyRecordEntryItem>({"),
+            ("history daily record section card title", "<Text style={styles.label}>{section.title}</Text>"),
+            ("history daily record section card count", "<Text style={styles.countText}>{section.countLabel}</Text>"),
+            ("history daily record section card helper copy", "可新增多筆；每筆可點進詳情修改。"),
+            ("history daily record section card entry press", "onPress={() => onEntryPress(item)}"),
+            ("history daily record section card detail row", "item.detailRows.map((row) => (\n                <DailyRecordDetailRow key={`${item.key}-${row.label}`} label={row.label} value={row.value} />"),
+            ("history daily record section card empty copy", "<Text style={styles.evidence}>{section.emptyCopy}</Text>"),
+            ("history daily record section card section style", "dailyRecordSectionCard: {"),
+            ("history daily record section card entry style", "dailyRecordEntryCard: {"),
+        ):
+            _assert_contains(label, history_daily_record_section_card_content, marker)
         for label, marker in (
             ("history daily summary card component", "export function HistoryDailySummaryCard({"),
             ("history daily summary card accessibility role", 'accessibilityRole="button"'),
@@ -3497,7 +3511,7 @@ def main() -> int:
             ("history daily summary press handler", "function pressHistoryDailySummary(item: ReturnType<typeof historyDailySummaryDisplayItem>)"),
             ("history daily summary binding", "onPress={() => pressHistoryDailySummary(item)}"),
             ("history daily entry press handler", "function pressHistoryDailyEntry("),
-            ("history daily entry binding", "onPress={() => pressHistoryDailyEntry(item)}"),
+            ("history daily entry binding", "onEntryPress={pressHistoryDailyEntry}"),
             ("history calendar selected state", "accessibilityState={{ selected: item.isSelected }}"),
             ("history detail mode display options", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModes.map(historyDetailModeDisplayItem), [])"),
             ("history detail mode press handler", "function pressHistoryDetailModeOption(item: ReturnType<typeof historyDetailModeDisplayItem>)"),
@@ -3609,8 +3623,9 @@ def main() -> int:
             ("history selected summary text binding", "summaryText={selectedHistoryDailySummary.summaryText}"),
             ("history selected sync binding", "syncLabel={selectedHistoryDailySummary.syncLabel}"),
             ("history selected no-range records binding", "<HistoryNoRangeRecordsCard\n                  body={historyNoRangeRecordsBodyDisplayText}"),
-            ("history selected section detail rows", "item.detailRows.map((row) =>"),
-            ("history selected detail row component binding", "item.detailRows.map((row) => (\n                                <DailyRecordDetailRow key={`${item.key}-${row.label}`} label={row.label} value={row.value} />"),
+            ("history selected daily section card binding", "<HistoryDailyRecordSectionCard\n                      key={`history-${section.id}`}"),
+            ("history selected daily section prop", "section={section}"),
+            ("history selected daily section entry press binding", "onEntryPress={pressHistoryDailyEntry}"),
             ("history raw transcript card binding", "selectedHistoryRawDisplayItems.map((item) => (\n                  <HistoryRawTranscriptCard"),
             ("history raw transcript text binding", "rawText={item.rawText}"),
             ("history raw transcript source binding", "sourceStatusLabel={item.sourceStatusLabel}"),
@@ -3722,7 +3737,7 @@ def main() -> int:
         _assert_contains(
             "history daily record detail card binding",
             content,
-            "onPress={() => pressHistoryDailyEntry(item)}",
+            "onEntryPress={pressHistoryDailyEntry}",
         )
         _assert_not_contains(
             "history direct record detail card binding",
