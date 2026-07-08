@@ -1387,8 +1387,9 @@ def main() -> int:
             ("ai candidate remove highlight bullet row", "aiCandidateRemoveChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("ai save failure highlight bullet row", "aiSaveFailureChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("auth boundary highlight bullet row", "authBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("profile readiness highlight bullet row", "profileReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
         ):
-            target_content = content if label.startswith(("record detail ", "delete confirm ", "record update ", "manual submit ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "history boundary ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ")) else highlight_bullet_row_content
+            target_content = content if label.startswith(("record detail ", "delete confirm ", "record update ", "manual submit ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "history boundary ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ")) else highlight_bullet_row_content
             _assert_contains(label, target_content, marker)
         for label, marker in (
             ("record detail date detail row component", 'label={<FieldLabel icon={"📅"} label={"日期"} />}'),
