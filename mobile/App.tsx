@@ -267,6 +267,7 @@ import {
   accountLoginDisplayValue,
   accountPublicDisplayNameText,
   doctorShareAccountBoundaryText,
+  doctorShareBoundaryDisplayRows,
   doctorShareReadinessChecklistDisplayItems,
   profileReadinessChecklistDisplayItems
 } from "./accountCopy";
@@ -2016,12 +2017,7 @@ export default function App() {
     ["資料上限", `最多 ${mobileReportQueryDisplayLimit} 筆`],
     ["醫療建議", "不提供"]
   ] as const).map(boundaryMetricDisplayItem);
-  const doctorShareBoundaryRows = ([
-    ["授權碼", "未產生"],
-    ["醫師權限", "唯讀預留"],
-    ["報表來源", "/reports/basic 預留"],
-    ["AI 成本", "0 次呼叫"]
-  ] as const).map(boundaryMetricDisplayItem);
+  const doctorShareBoundaryRows = doctorShareBoundaryDisplayRows();
   const healthIntegrationBoundaryRows = ([
     ["來源欄位", "meter / healthkit / health_connect"],
     ["同步批次", "import_batch_id 預留"],

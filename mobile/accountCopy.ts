@@ -38,6 +38,18 @@ export function doctorShareAccountBoundaryText(account: AccountDisplaySource | n
   );
 }
 
+export function doctorShareBoundaryDisplayRows() {
+  return [
+    ["授權碼", "未產生"],
+    ["醫師權限", "唯讀預留"],
+    ["報表來源", "/reports/basic 預留"],
+    ["AI 成本", "0 次呼叫"]
+  ].map(([label, value]) => ({
+    label: boundDisplayText(label, 60),
+    value: boundDisplayText(value, 80)
+  }));
+}
+
 export function profileReadinessChecklistDisplayItems() {
   return [
     "production auth / OIDC 或 JWT 邊界，避免 dev account 被當成正式個資。",
