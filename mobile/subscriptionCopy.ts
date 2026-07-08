@@ -135,6 +135,15 @@ export function subscriptionCtaBoundaryCopy() {
   );
 }
 
+export function subscriptionReadinessChecklistDisplayItems() {
+  return [
+    "App Store / Play Store 或正式付款後台",
+    "receipt validation 與訂閱狀態 webhook",
+    "trial start/end、取消、續訂與優惠價保留規則",
+    "entitlement 與 voice quota 的 server-side enforcement"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function subscriptionSyncButtonLabel(isSyncing: boolean) {
   return boundDisplayText(isSyncing ? "同步中..." : "同步", maxDisplayTextLength);
 }

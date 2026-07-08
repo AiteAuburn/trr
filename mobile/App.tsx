@@ -691,6 +691,7 @@ import {
   subscriptionMembershipStatusOpenStatusMessage,
   subscriptionComparisonRows,
   subscriptionPaymentUnwiredCopy,
+  subscriptionReadinessChecklistDisplayItems,
   subscriptionStatusLabel,
   subscriptionStatusSummaryText,
   subscriptionSyncButtonLabel,
@@ -1750,12 +1751,7 @@ export default function App() {
     () => subscriptionComparisonRows.map(comparisonDisplayItem),
     []
   );
-  const subscriptionReadinessChecklistItems = [
-    "App Store / Play Store 或正式付款後台",
-    "receipt validation 與訂閱狀態 webhook",
-    "trial start/end、取消、續訂與優惠價保留規則",
-    "entitlement 與 voice quota 的 server-side enforcement"
-  ].map(resultChecklistItem);
+  const subscriptionReadinessChecklistItems = subscriptionReadinessChecklistDisplayItems();
   const subscriptionManagementDisplayRows = useMemo(
     () => subscriptionManagementRows.map(previewTupleDisplayItem),
     []

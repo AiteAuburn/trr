@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1289: Extract subscription-readiness checklist helper
+
+Status: done
+
+Summary:
+
+- Added `subscriptionReadinessChecklistDisplayItems` to `mobile/subscriptionCopy.ts` for the Subscription readiness checklist copy.
+- Replaced the inline Subscription readiness checklist construction in `mobile/App.tsx` with the extracted helper.
+- Kept checklist copy, bounded display behavior, payment/receipt/entitlement guidance, Subscription rendering, subscription sync behavior, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and key subscription readiness copy are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1288: Extract tutorial-safety checklist helper
 
 Status: done
