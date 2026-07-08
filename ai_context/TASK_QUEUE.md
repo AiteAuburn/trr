@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1245: Extract history no-record status block
+
+Status: done
+
+Summary:
+
+- Added `mobile/historyNoRecordStatusBlock.tsx` for the History no-record data-status presentation block.
+- Replaced the inline no-record `inlineInfoBlock` in `mobile/App.tsx` with `HistoryNoRecordStatusBlock`.
+- Kept no-record status title/body, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the History no-record status component and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1244: Extract history sync boundary block
 
 Status: done

@@ -48,6 +48,7 @@ YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 HISTORY_DAILY_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historyDailySummaryCard.tsx"
 HISTORY_DETAIL_MODE_TABS_PATH = REPO_ROOT / "mobile" / "historyDetailModeTabs.tsx"
+HISTORY_NO_RECORD_STATUS_BLOCK_PATH = REPO_ROOT / "mobile" / "historyNoRecordStatusBlock.tsx"
 HISTORY_RAW_TRANSCRIPT_CARD_PATH = REPO_ROOT / "mobile" / "historyRawTranscriptCard.tsx"
 HISTORY_SELECTED_DATE_HEADER_PATH = REPO_ROOT / "mobile" / "historySelectedDateHeader.tsx"
 HISTORY_SELECTED_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historySelectedSummaryCard.tsx"
@@ -1278,6 +1279,7 @@ def main() -> int:
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     history_daily_summary_card_content = HISTORY_DAILY_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
     history_detail_mode_tabs_content = HISTORY_DETAIL_MODE_TABS_PATH.read_text(encoding="utf-8")
+    history_no_record_status_block_content = HISTORY_NO_RECORD_STATUS_BLOCK_PATH.read_text(encoding="utf-8")
     history_raw_transcript_card_content = HISTORY_RAW_TRANSCRIPT_CARD_PATH.read_text(encoding="utf-8")
     history_selected_date_header_content = HISTORY_SELECTED_DATE_HEADER_PATH.read_text(encoding="utf-8")
     history_selected_summary_card_content = HISTORY_SELECTED_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
@@ -1395,6 +1397,15 @@ def main() -> int:
             ("history detail mode tabs active color", 'backgroundColor: "#3FA67F"'),
         ):
             _assert_contains(label, history_detail_mode_tabs_content, marker)
+        for label, marker in (
+            ("history no-record status component", "export function HistoryNoRecordStatusBlock({ body, title }: HistoryNoRecordStatusBlockProps)"),
+            ("history no-record status title", "<Text style={styles.label}>{title}</Text>"),
+            ("history no-record status body", "<Text style={styles.evidence}>{body}</Text>"),
+            ("history no-record status style", "inlineInfoBlock: {"),
+            ("history no-record status label color", 'color: "#0F3F37"'),
+            ("history no-record status evidence line height", "lineHeight: 19"),
+        ):
+            _assert_contains(label, history_no_record_status_block_content, marker)
         for label, marker in (
             ("history raw transcript card component", "export function HistoryRawTranscriptCard({"),
             ("history raw transcript card type label", "<Text style={styles.recordType}>{typeLabel}</Text>"),
@@ -3576,6 +3587,8 @@ def main() -> int:
             ("history daily summary card component binding", "historyDailySummaryDisplayItems.map((item) => (\n                  <HistoryDailySummaryCard"),
             ("history daily summary selected prop", "selected={item.value === selectedHistoryDate}"),
             ("history daily summary press binding", "onPress={() => pressHistoryDailySummary(item)}"),
+            ("history no-record status binding", "<HistoryNoRecordStatusBlock\n                body={historyNoRealRecordHealthValueDisplayText}"),
+            ("history no-record status title binding", "title={coreFlowDisplayLabels.historyDataStatus}"),
             ("history selected date header binding", "<HistorySelectedDateHeader\n                dateLabel={selectedHistoryDateDisplayText}"),
             ("history selected date storage binding", "storageLabel={selectedHistoryDailySummary.storageLabel}"),
             ("history selected summary card binding", "<HistorySelectedSummaryCard\n                sourceLabel={selectedHistoryDailySummary.sourceLabel}"),

@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1245 extract history no-record status block
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/historyNoRecordStatusBlock.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/historyNoRecordStatusBlock.tsx` for the History no-record data-status presentation block.
+- Replaced the inline no-record `inlineInfoBlock` in `mobile/App.tsx` with `HistoryNoRecordStatusBlock`.
+- Kept no-record status title/body, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the History no-record status component and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version History presentation blocks while keeping no-record data status display-only.
+
 ### T1244 extract history sync boundary block
 
 類型：mobile / refactor / verifier / docs

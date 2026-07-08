@@ -706,6 +706,7 @@ import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { HistoryDailySummaryCard } from "./historyDailySummaryCard";
 import { HistoryDetailModeTabs } from "./historyDetailModeTabs";
+import { HistoryNoRecordStatusBlock } from "./historyNoRecordStatusBlock";
 import { HistoryRawTranscriptCard } from "./historyRawTranscriptCard";
 import { HistorySelectedDateHeader } from "./historySelectedDateHeader";
 import { HistorySelectedSummaryCard } from "./historySelectedSummaryCard";
@@ -8544,10 +8545,10 @@ export default function App() {
               )}
             </View>
             {recordsForDisplay.length === 0 ? (
-              <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{coreFlowDisplayLabels.historyDataStatus}</Text>
-                <Text style={styles.evidence}>{historyNoRealRecordHealthValueDisplayText}</Text>
-              </View>
+              <HistoryNoRecordStatusBlock
+                body={historyNoRealRecordHealthValueDisplayText}
+                title={coreFlowDisplayLabels.historyDataStatus}
+              />
             ) : null}
             {recordsForDisplay.length >= mobileRecordSyncLimit ? (
               <HistorySyncBoundaryBlock
