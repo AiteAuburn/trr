@@ -9,6 +9,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
+API_CLIENT_PATH = REPO_ROOT / "mobile" / "apiClient.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
 RECORD_EDIT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "recordEditTransforms.ts"
@@ -1222,6 +1223,7 @@ def _assert_text_input_accessibility_labels_are_bounded(content: str) -> None:
 
 def main() -> int:
     content = APP_PATH.read_text(encoding="utf-8")
+    api_client_content = API_CLIENT_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
     record_edit_transforms_content = RECORD_EDIT_TRANSFORMS_PATH.read_text(encoding="utf-8")
@@ -1288,6 +1290,13 @@ def main() -> int:
         _verify_achievement_contract(content, future_module_display_content)
         _verify_food_community_category_contract(content, future_module_display_content)
         for label, marker in (
+            ("api client json request", "export async function requestJson<T>("),
+            ("api client no-content request", "export async function requestNoContent(apiBaseUrl: string, path: string, init?: RequestInit)"),
+            ("api client content type header", '"Content-Type": "application/json"'),
+            ("api client status failure", "throw new Error(`${path} failed: ${response.status}`);"),
+        ):
+            _assert_contains(label, api_client_content, marker)
+        for label, marker in (
             ("mobile bounds url normalizer", "export function normalizeApiBaseUrl(value: string)"),
             ("mobile bounds ui message", "export function boundUiMessage(value: string)"),
             ("mobile bounds display text", "export function boundDisplayText(value: string, maxLength = maxDisplayTextLength)"),
@@ -1329,6 +1338,8 @@ def main() -> int:
             ("app local voice quota type block", "type VoiceQuota = {\n  plan_code: string;"),
             ("app local auth token type block", "type AuthTokenResponse = {\n  access_token: string;"),
             ("app local basic report type block", "type BasicReport = {\n  profile_id: string;"),
+            ("app local json request wrapper", "async function requestJson<T>("),
+            ("app local no-content request wrapper", "async function requestNoContent(apiBaseUrl: string, path: string, init?: RequestInit)"),
         ):
             _assert_not_contains(label, content, marker)
         _verify_daily_record_contract(content, daily_transcript_content)

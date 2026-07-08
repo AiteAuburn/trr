@@ -31,6 +31,7 @@ import {
   readStoredAuthSession,
   writeStoredAuthSession
 } from "./authTokenStorage";
+import { requestJson, requestNoContent } from "./apiClient";
 import {
   boundDisplayText,
   boundIdentifier,
@@ -757,40 +758,6 @@ type SaveEntryMethod = "ai" | "manual" | null;
 const mobileRecordSyncLimit = 100;
 const maxMobileRecordCacheLimit = 500;
 const mobileReportQueryLimit = 500;
-
-async function requestJson<T>(
-  apiBaseUrl: string,
-  path: string,
-  init?: RequestInit
-): Promise<T> {
-  const response = await fetch(`${apiBaseUrl}${path}`, {
-    ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...(init?.headers ?? {})
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error(`${path} failed: ${response.status}`);
-  }
-
-  return (await response.json()) as T;
-}
-
-async function requestNoContent(apiBaseUrl: string, path: string, init?: RequestInit) {
-  const response = await fetch(`${apiBaseUrl}${path}`, {
-    ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...(init?.headers ?? {})
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error(`${path} failed: ${response.status}`);
-  }
-}
 
 function protectedRequestHeaders(accountId: string, accessToken: string): Record<string, string> {
   return buildProtectedRequestHeaders(accountId, accessToken, allowMobileDevAuth);

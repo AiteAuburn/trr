@@ -124,6 +124,26 @@ None.
 
 ## Done
 
+### T1193: Extract shared API request wrappers
+
+Status: done
+
+Summary:
+
+- Moved the App-local `requestJson` and `requestNoContent` fetch wrappers into `mobile/apiClient.ts`.
+- Kept all request call sites, headers, content-type behavior, HTTP status failure behavior, backend paths, auth header behavior, UI copy, layout, navigation, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Kept `protectedRequestHeaders` in `mobile/App.tsx` because it depends on the App-owned `allowMobileDevAuth` runtime flag.
+- Updated the navigation verifier so shared API request wrapper ownership is guarded in `mobile/apiClient.ts` and App-local request wrappers are rejected.
+- Updated the refactor roadmap to note the shared API client boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1192: Align App API response types with transform sources
 
 Status: done

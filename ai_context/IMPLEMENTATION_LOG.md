@@ -15,6 +15,40 @@
 
 ## 2026-07-07
 
+### T1193 extract shared API request wrappers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/apiClient.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved the App-local `requestJson` and `requestNoContent` fetch wrappers into `mobile/apiClient.ts`.
+- Kept all request call sites, headers, content-type behavior, HTTP status failure behavior, backend paths, auth header behavior, UI copy, layout, navigation, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Kept `protectedRequestHeaders` in `mobile/App.tsx` because it depends on the App-owned `allowMobileDevAuth` runtime flag.
+- Updated the navigation verifier so shared API request wrapper ownership is guarded in `mobile/apiClient.ts` and App-local request wrappers are rejected.
+- Updated the refactor roadmap to note the shared API client boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting App-owned backend contracts only after request wrapper ownership is stable.
+
 ### T1192 align App API response types with transform sources
 
 類型：mobile / refactor / verifier / docs
