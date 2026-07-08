@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1241: Extract history detail mode tabs
+
+Status: done
+
+Summary:
+
+- Added `mobile/historyDetailModeTabs.tsx` for the History selected-date detail-mode segmented control.
+- Replaced the inline History detail-mode `Pressable` map in `mobile/App.tsx` with `HistoryDetailModeTabs`.
+- Kept AI整理/原始紀錄 labels, selected state, accessibility labels, press behavior, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the History detail-mode tab component and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1240: Extract history selected summary card
 
 Status: done

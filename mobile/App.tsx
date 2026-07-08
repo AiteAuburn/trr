@@ -705,6 +705,7 @@ import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { HistoryDailySummaryCard } from "./historyDailySummaryCard";
+import { HistoryDetailModeTabs } from "./historyDetailModeTabs";
 import { HistorySelectedSummaryCard } from "./historySelectedSummaryCard";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
@@ -8573,30 +8574,11 @@ export default function App() {
                 summaryText={selectedHistoryDailySummary.summaryText}
                 syncLabel={selectedHistoryDailySummary.syncLabel}
               />
-              <View style={styles.segmentRow}>
-                {historyDetailModeDisplayOptions.map((item) => (
-                  <Pressable
-                    key={item.value}
-                    accessibilityLabel={item.accessibilityLabel}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: historyDetailMode === item.value }}
-                    style={[
-                      styles.segmentPill,
-                      historyDetailMode === item.value ? styles.segmentActive : null
-                    ]}
-                    onPress={() => pressHistoryDetailModeOption(item)}
-                  >
-                    <Text
-                      style={[
-                        styles.segmentText,
-                        historyDetailMode === item.value ? styles.segmentTextActive : null
-                      ]}
-                    >
-                      {item.label}
-                    </Text>
-                  </Pressable>
-                ))}
-              </View>
+              <HistoryDetailModeTabs
+                activeValue={historyDetailMode}
+                options={historyDetailModeDisplayOptions}
+                onPress={pressHistoryDetailModeOption}
+              />
               {selectedHistoryRecordDisplayCount === 0 ? (
                 <View style={styles.emptyStateCard}>
                   <View style={styles.iconCircle}>
