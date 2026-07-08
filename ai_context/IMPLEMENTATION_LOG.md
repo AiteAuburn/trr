@@ -15,6 +15,40 @@
 
 ## 2026-07-08
 
+### T1248 extract history calendar month picker
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/historyCalendarMonthPicker.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/historyCalendarMonthPicker.tsx` for the History calendar month header, month navigation buttons, and day grid renderer.
+- Replaced the inline History calendar header/grid JSX in `mobile/App.tsx` with `HistoryCalendarMonthPicker`.
+- Kept month title, lit-date legend, previous/next labels, accessibility labels, selected-day state, record-dot display, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation, UI spec coverage, and visual-smoke route verifiers so the History calendar component and App month/day press bindings are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version History presentation blocks while keeping calendar state and date selection owned by `App.tsx`.
+
 ### T1247 extract history daily record section card
 
 類型：mobile / refactor / verifier / docs

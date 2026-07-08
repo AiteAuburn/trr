@@ -704,6 +704,7 @@ import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
+import { HistoryCalendarMonthPicker } from "./historyCalendarMonthPicker";
 import { HistoryDailyRecordSectionCard } from "./historyDailyRecordSectionCard";
 import { HistoryDailySummaryCard } from "./historyDailySummaryCard";
 import { HistoryDetailModeTabs } from "./historyDetailModeTabs";
@@ -8461,57 +8462,17 @@ export default function App() {
                 <HighlightBulletRow key={item} text={item} />
               ))}
             </View>
-            <View style={styles.historyCalendarHeader}>
-              <View>
-                <Text style={styles.recordContent}>{historyCalendarTitle}</Text>
-                <Text style={styles.confidence}>亮燈日期有紀錄</Text>
-              </View>
-              <View style={styles.historyMonthActionRow}>
-                <Pressable
-                  accessibilityLabel={historyPreviousMonthAccessibilityLabel}
-                  accessibilityRole="button"
-                  style={styles.historyMonthButton}
-                  onPress={openPreviousHistoryMonth}
-                >
-                  <Text style={styles.secondaryButtonText}>{historyPreviousMonthButtonLabel}</Text>
-                </Pressable>
-                <Pressable
-                  accessibilityLabel={historyNextMonthAccessibilityLabel}
-                  accessibilityRole="button"
-                  style={styles.historyMonthButton}
-                  onPress={openNextHistoryMonth}
-                >
-                  <Text style={styles.secondaryButtonText}>{historyNextMonthButtonLabel}</Text>
-                </Pressable>
-              </View>
-            </View>
-            <View style={styles.historyCalendarGrid}>
-              {historyCalendarDisplayItems.map((item) => (
-                <Pressable
-                  key={item.key}
-                  accessibilityLabel={item.accessibilityLabel}
-                  accessibilityRole="button"
-                  accessibilityState={{ selected: item.isSelected }}
-                  style={[
-                    styles.historyCalendarDay,
-                    item.hasRecords ? styles.historyCalendarDayHasRecords : styles.historyCalendarDayMuted,
-                    item.isSelected ? styles.historyCalendarDaySelected : null
-                  ]}
-                  onPress={() => pressHistoryCalendarDay(item)}
-                >
-                  <Text
-                    style={[
-                      styles.historyCalendarDayText,
-                      item.hasRecords ? styles.historyCalendarDayTextActive : null,
-                      item.isSelected ? styles.historyCalendarDayTextSelected : null
-                    ]}
-                  >
-                    {item.dayLabel}
-                  </Text>
-                  {item.hasRecords ? <View style={styles.historyCalendarDot} /> : null}
-                </Pressable>
-              ))}
-            </View>
+            <HistoryCalendarMonthPicker
+              days={historyCalendarDisplayItems}
+              nextMonthAccessibilityLabel={historyNextMonthAccessibilityLabel}
+              nextMonthLabel={historyNextMonthButtonLabel}
+              previousMonthAccessibilityLabel={historyPreviousMonthAccessibilityLabel}
+              previousMonthLabel={historyPreviousMonthButtonLabel}
+              title={historyCalendarTitle}
+              onDayPress={pressHistoryCalendarDay}
+              onNextMonthPress={openNextHistoryMonth}
+              onPreviousMonthPress={openPreviousHistoryMonth}
+            />
             <View style={styles.historyDailySummaryTable}>
               <View style={styles.sectionHeader}>
                 <View style={styles.timelineContent}>

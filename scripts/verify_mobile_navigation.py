@@ -46,6 +46,7 @@ SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
+HISTORY_CALENDAR_MONTH_PICKER_PATH = REPO_ROOT / "mobile" / "historyCalendarMonthPicker.tsx"
 HISTORY_DAILY_RECORD_SECTION_CARD_PATH = REPO_ROOT / "mobile" / "historyDailyRecordSectionCard.tsx"
 HISTORY_DAILY_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historyDailySummaryCard.tsx"
 HISTORY_DETAIL_MODE_TABS_PATH = REPO_ROOT / "mobile" / "historyDetailModeTabs.tsx"
@@ -1279,6 +1280,7 @@ def main() -> int:
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
+    history_calendar_month_picker_content = HISTORY_CALENDAR_MONTH_PICKER_PATH.read_text(encoding="utf-8")
     history_daily_record_section_card_content = HISTORY_DAILY_RECORD_SECTION_CARD_PATH.read_text(encoding="utf-8")
     history_daily_summary_card_content = HISTORY_DAILY_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
     history_detail_mode_tabs_content = HISTORY_DETAIL_MODE_TABS_PATH.read_text(encoding="utf-8")
@@ -1380,6 +1382,22 @@ def main() -> int:
             ("daily record detail row evidence line height", "lineHeight: 19"),
         ):
             _assert_contains(label, daily_record_detail_row_content, marker)
+        for label, marker in (
+            ("history calendar month picker component", "export function HistoryCalendarMonthPicker<TDay extends HistoryCalendarDayItem>({"),
+            ("history calendar month picker title", "<Text style={styles.recordContent}>{title}</Text>"),
+            ("history calendar month picker lit-date legend", "亮燈日期有紀錄"),
+            ("history calendar month picker previous accessibility", "accessibilityLabel={previousMonthAccessibilityLabel}"),
+            ("history calendar month picker previous press", "onPress={onPreviousMonthPress}"),
+            ("history calendar month picker next accessibility", "accessibilityLabel={nextMonthAccessibilityLabel}"),
+            ("history calendar month picker next press", "onPress={onNextMonthPress}"),
+            ("history calendar month picker selected state", "accessibilityState={{ selected: item.isSelected }}"),
+            ("history calendar month picker day press", "onPress={() => onDayPress(item)}"),
+            ("history calendar month picker has-records style", "item.hasRecords ? styles.historyCalendarDayHasRecords : styles.historyCalendarDayMuted"),
+            ("history calendar month picker selected style", "item.isSelected ? styles.historyCalendarDaySelected : null"),
+            ("history calendar month picker record dot", "item.hasRecords ? <View style={styles.historyCalendarDot} /> : null"),
+            ("history calendar month picker grid style", "historyCalendarGrid: {"),
+        ):
+            _assert_contains(label, history_calendar_month_picker_content, marker)
         for label, marker in (
             ("history daily record section card component", "export function HistoryDailyRecordSectionCard<TEntry extends HistoryDailyRecordEntryItem>({"),
             ("history daily record section card title", "<Text style={styles.label}>{section.title}</Text>"),
@@ -3473,13 +3491,6 @@ def main() -> int:
             'onPress={() => handleQuickEntryMode(item.key, "record")}',
         )
         for style_name in (
-            "historyCalendarGrid",
-            "historyCalendarDay",
-            "historyCalendarDayHasRecords",
-            "historyCalendarDayMuted",
-            "historyCalendarDaySelected",
-            "historyMonthActionRow",
-            "historyMonthButton",
             "historyDailySummaryTable",
         ):
             _assert_contains(f"{style_name} style", content, f"{style_name}: {{")
@@ -3502,17 +3513,16 @@ def main() -> int:
             ("history calendar next month accessibility", 'const historyNextMonthAccessibilityLabel = boundDisplayText('),
             ("history records by date map", "const historyRecordsByDate = useMemo(() => {"),
             ("history calendar display items", "const historyCalendarDisplayItems = useMemo(() => {"),
-            ("history calendar render", "historyCalendarDisplayItems.map((item) =>"),
-            ("history calendar month action row", "styles.historyMonthActionRow"),
-            ("history calendar previous month binding", "onPress={openPreviousHistoryMonth}"),
-            ("history calendar next month binding", "onPress={openNextHistoryMonth}"),
+            ("history calendar component binding", "<HistoryCalendarMonthPicker\n              days={historyCalendarDisplayItems}"),
+            ("history calendar previous month binding", "onPreviousMonthPress={openPreviousHistoryMonth}"),
+            ("history calendar next month binding", "onNextMonthPress={openNextHistoryMonth}"),
             ("history calendar day press handler", "function pressHistoryCalendarDay(item: ReturnType<typeof historyCalendarDayDisplayItem>)"),
-            ("history calendar day binding", "onPress={() => pressHistoryCalendarDay(item)}"),
+            ("history calendar day binding", "onDayPress={pressHistoryCalendarDay}"),
             ("history daily summary press handler", "function pressHistoryDailySummary(item: ReturnType<typeof historyDailySummaryDisplayItem>)"),
             ("history daily summary binding", "onPress={() => pressHistoryDailySummary(item)}"),
             ("history daily entry press handler", "function pressHistoryDailyEntry("),
             ("history daily entry binding", "onEntryPress={pressHistoryDailyEntry}"),
-            ("history calendar selected state", "accessibilityState={{ selected: item.isSelected }}"),
+            ("history calendar selected state", "onDayPress={pressHistoryCalendarDay}"),
             ("history detail mode display options", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModes.map(historyDetailModeDisplayItem), [])"),
             ("history detail mode press handler", "function pressHistoryDetailModeOption(item: ReturnType<typeof historyDetailModeDisplayItem>)"),
             ("history detail mode tabs binding", "<HistoryDetailModeTabs\n                activeValue={historyDetailMode}"),
@@ -3593,7 +3603,7 @@ def main() -> int:
         ):
             _assert_contains(label, history_calendar_day_block, marker)
         history_block = _history_render_block(content)
-        history_calendar_index = history_block.find("styles.historyCalendarGrid")
+        history_calendar_index = history_block.find("<HistoryCalendarMonthPicker")
         history_summary_index = history_block.find("styles.historyDailySummaryTable")
         history_detail_index = history_block.find("styles.historySelectedDatePanel")
         history_structured_index = history_block.find('historyDetailMode === "structured"')
@@ -3605,10 +3615,11 @@ def main() -> int:
         if history_structured_index == -1 or history_raw_index == -1 or history_structured_index > history_raw_index:
             raise AssertionError("History structured AI-organized records must render before raw transcript branch.")
         for label, marker in (
-            ("history calendar has-records style binding", "item.hasRecords ? styles.historyCalendarDayHasRecords : styles.historyCalendarDayMuted"),
-            ("history calendar selected style binding", "item.isSelected ? styles.historyCalendarDaySelected : null"),
-            ("history calendar record dot binding", "item.hasRecords ? <View style={styles.historyCalendarDot} /> : null"),
-            ("history calendar lit-date legend", "亮燈日期有紀錄"),
+            ("history calendar component binding", "<HistoryCalendarMonthPicker\n              days={historyCalendarDisplayItems}"),
+            ("history calendar title binding", "title={historyCalendarTitle}"),
+            ("history calendar day press binding", "onDayPress={pressHistoryCalendarDay}"),
+            ("history calendar previous month binding", "onPreviousMonthPress={openPreviousHistoryMonth}"),
+            ("history calendar next month binding", "onNextMonthPress={openNextHistoryMonth}"),
             ("history daily summary table title", "每日摘要表"),
             ("history daily summary card component binding", "historyDailySummaryDisplayItems.map((item) => (\n                  <HistoryDailySummaryCard"),
             ("history daily summary selected prop", "selected={item.value === selectedHistoryDate}"),
@@ -3975,7 +3986,12 @@ def main() -> int:
             ("record edit meal selected state", "accessibilityState={{ selected: recordEditFields.mealType === option.value }}"),
             ("store category selected state", "accessibilityState={{ selected: storeCategory === category.value }}"),
         ):
-            target_content = history_detail_mode_tabs_content if label == "history detail selected state" else content
+            if label == "history detail selected state":
+                target_content = history_detail_mode_tabs_content
+            elif label == "history calendar selected state":
+                target_content = history_calendar_month_picker_content
+            else:
+                target_content = content
             _assert_contains(label, target_content, marker)
         _assert_contains(
             "analysis range accessibility item",

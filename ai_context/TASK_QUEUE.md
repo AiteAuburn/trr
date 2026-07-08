@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1248: Extract history calendar month picker
+
+Status: done
+
+Summary:
+
+- Added `mobile/historyCalendarMonthPicker.tsx` for the History calendar month header, month navigation buttons, and day grid renderer.
+- Replaced the inline History calendar header/grid JSX in `mobile/App.tsx` with `HistoryCalendarMonthPicker`.
+- Kept month title, lit-date legend, previous/next labels, accessibility labels, selected-day state, record-dot display, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation, UI spec coverage, and visual-smoke route verifiers so the History calendar component and App month/day press bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1247: Extract history daily record section card
 
 Status: done
