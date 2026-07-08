@@ -183,6 +183,16 @@ export function aiReviewBackendRequiredCopy() {
   return boundDisplayText("請先連線 backend，才可儲存候選紀錄。", maxDisplayDetailTextLength);
 }
 
+export function aiReviewCostBoundaryChecklistDisplayItems() {
+  return [
+    "此頁只顯示 parser 已回傳的候選紀錄。",
+    "逐筆編輯、移除或進入儲存確認都不會重新呼叫 AI。",
+    "未建立片段不會自動儲存，也不會自動重跑 parser。",
+    "返回修改後，只有再次按下一步整理才會產生新的 parser / AI 成本。",
+    "mobile 不保留 raw prompt、raw model output 或模型 debug trace。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function aiSaveConfirmIntroCopy() {
   return boundDisplayText(
     "AI 已整理成今天唯一的每日紀錄草稿；按下儲存今日紀錄後才會送到後端建立紀錄。",

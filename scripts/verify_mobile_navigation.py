@@ -2383,6 +2383,11 @@ def main() -> int:
             "onPress={enterAiSaveConfirm}",
         )
         _assert_contains(
+            "AI review checklist helper binding",
+            content,
+            "const aiReviewCostBoundaryChecklistItems = aiReviewCostBoundaryChecklistDisplayItems();",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -3490,6 +3495,9 @@ def main() -> int:
             ("AI review rejected-events helper", "function aiReviewRejectedEventsCopy()"),
             ("AI review rejected reason helper", "function aiReviewRejectedReasonCopy(reasonLabel: string)"),
             ("AI review backend-required helper", "function aiReviewBackendRequiredCopy()"),
+            ("AI review cost boundary checklist helper", "function aiReviewCostBoundaryChecklistDisplayItems()"),
+            ("AI review cost boundary parser copy", "此頁只顯示 parser 已回傳的候選紀錄。"),
+            ("AI review cost boundary no rerun copy", "逐筆編輯、移除或進入儲存確認都不會重新呼叫 AI。"),
             ("AI save confirm intro helper", "function aiSaveConfirmIntroCopy()"),
             ("AI save confirm ready status helper", "function aiSaveConfirmReadyStatusMessage()"),
             ("AI save confirm return status helper", "function aiSaveConfirmReturnStatusMessage()"),

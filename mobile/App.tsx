@@ -315,6 +315,7 @@ import {
   aiPartialSaveRecordsStatusMessage,
   aiPartialSaveSummaryMessage,
   aiReviewBackendRequiredCopy,
+  aiReviewCostBoundaryChecklistDisplayItems,
   aiReviewIntroCopy,
   aiReviewLowConfidenceCopy,
   aiReviewNoCandidateBodyCopy,
@@ -1237,13 +1238,7 @@ export default function App() {
   const hasManualFallbackWithAiCandidates =
     lastSaveEntryMethod === "manual" && hasUnsavedPreviewRecords;
   const aiSaveConfirmChecklistItems = aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordDisplayCount);
-  const aiReviewCostBoundaryChecklistItems = [
-    "此頁只顯示 parser 已回傳的候選紀錄。",
-    "逐筆編輯、移除或進入儲存確認都不會重新呼叫 AI。",
-    "未建立片段不會自動儲存，也不會自動重跑 parser。",
-    "返回修改後，只有再次按下一步整理才會產生新的 parser / AI 成本。",
-    "mobile 不保留 raw prompt、raw model output 或模型 debug trace。"
-  ].map(resultChecklistItem);
+  const aiReviewCostBoundaryChecklistItems = aiReviewCostBoundaryChecklistDisplayItems();
   const transcriptReviewCostBoundaryChecklistItems = [
     "空文字、過長文字或範例文字不會送 parser。",
     "下一步整理只送目前這段文字一次，不會批次載入歷史紀錄。",
