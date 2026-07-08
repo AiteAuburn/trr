@@ -43,6 +43,7 @@ AUTH_SESSION_DISPLAY_PATH = REPO_ROOT / "mobile" / "authSessionDisplay.ts"
 AUTH_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "authStatusCopy.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
+YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1259,6 +1260,7 @@ def main() -> int:
     auth_status_copy_content = AUTH_STATUS_COPY_PATH.read_text(encoding="utf-8")
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
+    year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -1377,6 +1379,8 @@ def main() -> int:
             ("app local record sync limit", "const mobileRecordSyncLimit = 100;"),
             ("app local record cache limit", "const maxMobileRecordCacheLimit = 500;"),
             ("app local report query limit", "const mobileReportQueryLimit = 500;"),
+            ("app local year review share file helper", "async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset)"),
+            ("app local filesystem import", 'import * as FileSystem from "expo-file-system";'),
         ):
             _assert_not_contains(label, content, marker)
         _verify_daily_record_contract(content, daily_transcript_content)
@@ -4845,11 +4849,6 @@ def main() -> int:
             ("year review source render", "{yearReviewSourceDisplayText}"),
             ("year review share accessibility binding", "accessibilityLabel={yearReviewShareAccessibilityDisplayLabel}"),
             ("year review native share import", "Share,"),
-            ("year review file system import", 'import * as FileSystem from "expo-file-system";'),
-            ("year review share asset cache helper", "async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset)"),
-            ("year review share asset cache directory guard", "if (!FileSystem.cacheDirectory)"),
-            ("year review share asset svg write", "await FileSystem.writeAsStringAsync(uri, asset.svg_text"),
-            ("year review share asset utf8 encoding", "encoding: FileSystem.EncodingType.UTF8"),
             ("year review share asset endpoint", "`/year-reviews/${targetYear}/share-card/asset?${query.toString()}`"),
             ("year review share confirm endpoint", "`/year-reviews/${targetYear}/share-card/confirm?${query.toString()}`"),
             ("year review privacy acknowledgement payload", "body: JSON.stringify({ privacy_acknowledged: true })"),
@@ -4878,6 +4877,15 @@ def main() -> int:
             ("future commerce action row CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("year review file system import", 'import * as FileSystem from "expo-file-system";'),
+            ("year review share asset cache helper", "export async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset)"),
+            ("year review share asset cache directory guard", "if (!FileSystem.cacheDirectory)"),
+            ("year review share asset filename sanitizer", "safeYearReviewShareAssetFileName(asset.filename)"),
+            ("year review share asset svg write", "await FileSystem.writeAsStringAsync(uri, asset.svg_text"),
+            ("year review share asset utf8 encoding", "encoding: FileSystem.EncodingType.UTF8"),
+        ):
+            _assert_contains(label, year_review_share_file_content, marker)
         for label, marker in (
             ("achievements return accessibility label", 'achievementsReturnAccessibility: boundDisplayText("返回上一個功能入口，不寫入成就資料", maxDisplayDetailTextLength)'),
             ("year review return accessibility label", 'yearReviewReturnAccessibility: boundDisplayText("返回上一個功能入口，不產生分享圖或公開資料", maxDisplayDetailTextLength)'),

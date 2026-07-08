@@ -124,6 +124,26 @@ None.
 
 ## Done
 
+### T1197: Extract Year Review share file helper
+
+Status: done
+
+Summary:
+
+- Moved the Year Review share-card asset cache writer from `mobile/App.tsx` into `mobile/yearReviewShareFile.ts`.
+- Kept FileSystem cache-directory guard, filename sanitizer, SVG write, UTF-8 encoding, native Share call, backend share-card endpoints, UI copy, layout, navigation, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Kept the native `Share.share` call in `mobile/App.tsx`; only the cache file write helper moved.
+- Updated the navigation verifier so Year Review share-file ownership is guarded in `mobile/yearReviewShareFile.ts` and the App-local FileSystem helper is rejected.
+- Updated the refactor roadmap to note the Year Review share-file boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1196: Extract protected request header wrapper
 
 Status: done

@@ -38,6 +38,7 @@
   - `nativeLocalModels.ts`：native Whisper / Llama bridge。
   - `navigationConfig.ts`：`AppScreen` route union、primary screens、MVP flow、screen chrome、first-version menu、visual-smoke route jump config 與 debug-only route normalization helpers。
   - `futureModuleDisplay.ts`：future-module static card config, bounded display card, selected-module display shaping, detail/status copy, achievement taxonomy/display/API transforms, Community leaderboard display, Community public settings transform, Food Community fallback category/item data, Food Community category/share/item display, Food Community API transform, Food Community share form defaults, Store API types, Store category / product preview / product display / backend reward transform / redemption display / fulfillment / cart status copy, Year Review API/display/status/share filename helpers, achievement / food-photo / store-cart / year-review future display copy, future-preview boundary display items/copy, and future-preview section labels.
+  - `yearReviewShareFile.ts`：Year Review share-card asset cache file writing boundary.
   - `visualSmokeFixtures.ts`：debug-only visual-smoke demo record / preview / report fixtures and route seed predicates.
   - `recordDisplay.ts`：daily section definitions, daily-record section display shaping, AI candidate and rejected-event display shaping, record payload labels, record time/date labels, shared Today/History record-list display item shaping, record detail display item shaping, and manual-record confirmation display shaping.
   - `recordEditTransforms.ts`：manual-record type config, record edit field type, form option config, max-length bounds, empty edit fields, validation, record payload-to-edit-field transforms, and edit-field-to-payload transforms.
@@ -150,7 +151,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; app runtime config, shared API request wrappers, app-shared mobile bounds, date/time, record bounds, record save transforms, daily transcript, daily-record save response type, auth session source type, auth token/OIDC request transforms, protected auth request header transforms and runtime wrapper, account/profile response source types and bounding, AI model option response source types and bounding, downloaded native model state bounding, analysis basic report response source type and bounding, analysis data/chart, analysis metric, record streak/day aggregation, subscription trial-days, subscription voice quota response source type and bounding, and recording effective-limit transform helpers extracted.
+Status: started; app runtime config, shared API request wrappers, app-shared mobile bounds, date/time, record bounds, record save transforms, daily transcript, daily-record save response type, auth session source type, auth token/OIDC request transforms, protected auth request header transforms and runtime wrapper, account/profile response source types and bounding, AI model option response source types and bounding, downloaded native model state bounding, analysis basic report response source type and bounding, analysis data/chart, analysis metric, record streak/day aggregation, Year Review share-file helper, subscription trial-days, subscription voice quota response source type and bounding, and recording effective-limit transform helpers extracted.
 
 Scope:
 

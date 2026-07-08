@@ -15,6 +15,40 @@
 
 ## 2026-07-07
 
+### T1197 extract Year Review share file helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/yearReviewShareFile.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved the Year Review share-card asset cache writer from `mobile/App.tsx` into `mobile/yearReviewShareFile.ts`.
+- Kept FileSystem cache-directory guard, filename sanitizer, SVG write, UTF-8 encoding, native Share call, backend share-card endpoints, UI copy, layout, navigation, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Kept the native `Share.share` call in `mobile/App.tsx`; only the cache file write helper moved.
+- Updated the navigation verifier so Year Review share-file ownership is guarded in `mobile/yearReviewShareFile.ts` and the App-local FileSystem helper is rejected.
+- Updated the refactor roadmap to note the Year Review share-file boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- App top-level helper extraction is nearly exhausted; next slices should move carefully into renderer/component boundaries.
+
 ### T1196 extract protected request header wrapper
 
 類型：mobile / refactor / verifier / docs

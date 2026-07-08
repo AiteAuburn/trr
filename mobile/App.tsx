@@ -16,7 +16,6 @@ import {
   View
 } from "react-native";
 import { Audio } from "expo-av";
-import * as FileSystem from "expo-file-system";
 import {
   benchmarkNativeLlama,
   benchmarkNativeWhisper,
@@ -175,7 +174,6 @@ import {
   rankingLocalPreviewBoundaryCopy,
   rankingPreviewBoundaryDisplayItem,
   reminderPreviewBoundaryDisplayItem,
-  safeYearReviewShareAssetFileName,
   selectedFutureModuleDisplayItem,
   storeCartButtonAccessibilityLabel,
   storeCartButtonLabel,
@@ -714,6 +712,7 @@ import {
 } from "./authTransforms";
 import { protectedRequestHeaders } from "./authRequestHeaders";
 import { authSessionDisplayItem, type AuthSessionDisplaySource } from "./authSessionDisplay";
+import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 
 type Account = AccountTransformSource;
 type Profile = ProfileTransformSource;
@@ -728,18 +727,6 @@ type AuthSessionItem = AuthSessionDisplaySource;
 type BasicReport = BasicReportTransformSource;
 
 type SaveEntryMethod = "ai" | "manual" | null;
-
-async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset) {
-  if (!FileSystem.cacheDirectory) {
-    throw new Error("year_review_share_cache_unavailable");
-  }
-  const filename = safeYearReviewShareAssetFileName(asset.filename);
-  const uri = `${FileSystem.cacheDirectory}${filename}`;
-  await FileSystem.writeAsStringAsync(uri, asset.svg_text, {
-    encoding: FileSystem.EncodingType.UTF8
-  });
-  return uri;
-}
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>(initialVisualSmokeScreen ?? "today");
