@@ -67,6 +67,7 @@ HIGHLIGHT_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "highlightDetailRow.tsx"
 MANUAL_RECORD_CREATE_PREVIEW_ACTION_PATH = REPO_ROOT / "mobile" / "manualRecordCreatePreviewAction.tsx"
 MANUAL_RECORD_CONFIRM_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmFooterActions.tsx"
 MANUAL_RECORD_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmPreviewBlock.tsx"
+MANUAL_RECORD_HEADER_INTRO_PATH = REPO_ROOT / "mobile" / "manualRecordHeaderIntro.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
 RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPanel.tsx"
 RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.tsx"
@@ -1318,6 +1319,7 @@ def main() -> int:
     manual_record_confirm_preview_block_content = MANUAL_RECORD_CONFIRM_PREVIEW_BLOCK_PATH.read_text(
         encoding="utf-8"
     )
+    manual_record_header_intro_content = MANUAL_RECORD_HEADER_INTRO_PATH.read_text(encoding="utf-8")
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
     record_detail_action_panel_content = RECORD_DETAIL_ACTION_PANEL_PATH.read_text(encoding="utf-8")
     record_detail_info_panel_content = RECORD_DETAIL_INFO_PANEL_PATH.read_text(encoding="utf-8")
@@ -1711,6 +1713,18 @@ def main() -> int:
             ("manual record create preview full button style", "primaryButtonFull: {"),
         ):
             _assert_contains(label, manual_record_create_preview_action_content, marker)
+        for label, marker in (
+            ("manual record header intro component", "export function ManualRecordHeaderIntro({"),
+            ("manual record header title", "<Text style={styles.sectionTitle}>{title}</Text>"),
+            ("manual record header back accessibility", "accessibilityLabel={backAccessibilityLabel}"),
+            ("manual record header back role", 'accessibilityRole="button"'),
+            ("manual record header back press", "onPress={onBackPress}"),
+            ("manual record header back label", "<Text style={styles.secondaryButtonText}>{backLabel}</Text>"),
+            ("manual record header intro text", "<Text style={styles.evidence}>{introText}</Text>"),
+            ("manual record header section style", "sectionHeader: {"),
+            ("manual record header evidence style", "evidence: {"),
+        ):
+            _assert_contains(label, manual_record_header_intro_content, marker)
         for label, marker in (
             ("record edit footer actions component", "export function RecordEditFooterActions({"),
             ("record edit footer precheck title", "<Text style={styles.label}>{preCheckTitle}</Text>"),
@@ -2191,7 +2205,7 @@ def main() -> int:
         _assert_contains(
             "manual record return binding",
             content,
-            "onPress={returnFromManualRecord}",
+            "onBackPress={returnFromManualRecord}",
         )
         _assert_contains(
             "record detail return binding",
@@ -3423,7 +3437,7 @@ def main() -> int:
             ("delete success history accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.deleteSuccessHistoryAccessibility}"),
             ("record result return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordResultReturnAccessibility}"),
             ("updated record detail accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.updatedRecordDetailAccessibility}"),
-            ("manual return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}"),
+            ("manual return accessibility binding", "backAccessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}"),
             ("manual create preview accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualCreatePreviewAccessibility}"),
             ("manual confirm return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualConfirmReturnAccessibility}"),
             ("manual create submit accessibility binding", "submitAccessibilityLabel={coreFlowDisplayLabels.manualCreateSubmitAccessibility}"),
@@ -4209,6 +4223,9 @@ def main() -> int:
             ("manual record unit option press binding", "onPress={() => pressManualRecordGlucoseUnitOption(option)}"),
             ("manual record timing option press binding", "onPress={() => pressManualRecordGlucoseTimingOption(option)}"),
             ("manual record meal type option press binding", "onPress={() => pressManualRecordMealTypeOption(option)}"),
+            ("manual record header intro binding", "<ManualRecordHeaderIntro\n              backAccessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}"),
+            ("manual record header intro title binding", 'title="手動新增紀錄"'),
+            ("manual record header intro press binding", "onBackPress={returnFromManualRecord}"),
             ("manual record create preview action binding", "<ManualRecordCreatePreviewAction\n              accessibilityLabel={coreFlowDisplayLabels.manualCreatePreviewAccessibility}"),
             ("manual record create preview action label binding", "label={coreFlowDisplayLabels.createRecord}"),
             ("manual record create preview action press binding", "onPress={enterManualRecordConfirm}"),

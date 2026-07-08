@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1260: Extract manual-record header intro
+
+Status: done
+
+Summary:
+
+- Added `mobile/manualRecordHeaderIntro.tsx` for the Manual Record page title, back button, and non-AI intro copy.
+- Replaced the inline Manual Record header/intro JSX in `mobile/App.tsx` with `ManualRecordHeaderIntro`.
+- Kept title, intro text, back label, accessibility label, back handler, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation and visual-smoke route verifiers so the Manual Record header intro component and App bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1259: Extract manual-record create preview action
 
 Status: done

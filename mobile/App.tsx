@@ -716,6 +716,7 @@ import { HighlightDetailRow } from "./highlightDetailRow";
 import { ManualRecordCreatePreviewAction } from "./manualRecordCreatePreviewAction";
 import { ManualRecordConfirmFooterActions } from "./manualRecordConfirmFooterActions";
 import { ManualRecordConfirmPreviewBlock } from "./manualRecordConfirmPreviewBlock";
+import { ManualRecordHeaderIntro } from "./manualRecordHeaderIntro";
 import { MetricCard } from "./metricCard";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
@@ -8082,20 +8083,13 @@ export default function App() {
 
         {currentScreen === "manualRecord" ? (
           <View style={styles.pageSection}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>手動新增紀錄</Text>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={returnFromManualRecord}
-              >
-                <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.back}</Text>
-              </Pressable>
-            </View>
-            <Text style={styles.evidence}>
-              不經 AI parser，直接建立結構化紀錄；可節省 LLM token，仍走後端驗證與權限檢查。
-            </Text>
+            <ManualRecordHeaderIntro
+              backAccessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}
+              backLabel={coreFlowDisplayLabels.back}
+              introText="不經 AI parser，直接建立結構化紀錄；可節省 LLM token，仍走後端驗證與權限檢查。"
+              title="手動新增紀錄"
+              onBackPress={returnFromManualRecord}
+            />
             <View style={styles.dateTimeRow}>
               <View style={styles.dateTimeField}>
                 <FieldLabel icon={"📅"} label={"日期"} />
