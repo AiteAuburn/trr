@@ -2450,6 +2450,11 @@ def main() -> int:
             "const rankingReadinessChecklistItems = rankingReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "store checkout readiness checklist helper binding",
+            content,
+            "const storeCheckoutReadinessChecklistItems = storeCheckoutReadinessChecklistDisplayItems();",
+        )
+        _assert_contains(
             "quota readiness checklist helper binding",
             content,
             "const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();",
@@ -5638,7 +5643,6 @@ def main() -> int:
             ("store redemption disabled state", "accessibilityState={{ disabled: !product.isUsable }}"),
             ("store special badge redemption boundary", "優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利"),
             ("store redemption boundary rows", "storeRedemptionBoundaryRows.map"),
-            ("store checkout readiness inventory rollback", "購物車持久化、庫存 reservation 與 rollback 規則"),
             ("food photo upload status handler", "function showFoodPhotoUploadStatus()"),
             ("food photo integration status handler", "function showFoodPhotoIntegrationStatus()"),
             ("food photo retake status handler", "function showFoodPhotoRetakeStatus()"),
@@ -5930,6 +5934,11 @@ def main() -> int:
             ("store cart unavailable display helper", "export function storeCartUnavailableDisplayItem()"),
             ("store cart unavailable copy", "目前不建立訂單、不保留購物車內容，也不處理付款或折價券。"),
             ("store cart backend order flow evidence", "需等購物車、庫存、出貨、付款與退款規則完成後再接 backend order flow。"),
+            ("store checkout readiness checklist helper", "export function storeCheckoutReadinessChecklistDisplayItems()"),
+            ("store checkout readiness catalog copy", "商品目錄、庫存與價格來源"),
+            ("store checkout readiness inventory rollback copy", "購物車持久化、庫存 reservation 與 rollback 規則"),
+            ("store checkout readiness payment copy", "付款金流、receipt validation 與退款流程"),
+            ("store checkout readiness service audit copy", "訂單狀態、出貨狀態與客服稽核"),
             ("store cart open status helper", "export function commercePreviewOpenCartStatusMessage()"),
             ("store cart open status copy", "已開啟購物車整合狀態；preview 不建立 cart、order、payment 或 backend write。"),
             ("store cart return status helper", "export function commercePreviewReturnStoreStatusMessage()"),

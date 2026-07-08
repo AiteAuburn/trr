@@ -1309,6 +1309,15 @@ export function storeCheckoutReadinessTitle() {
   return boundDisplayText("正式結帳前需要完成", maxDisplayTextLength);
 }
 
+export function storeCheckoutReadinessChecklistDisplayItems() {
+  return [
+    "商品目錄、庫存與價格來源",
+    "購物車持久化、庫存 reservation 與 rollback 規則",
+    "付款金流、receipt validation 與退款流程",
+    "訂單狀態、出貨狀態與客服稽核"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function storeCartReturnButtonLabel() {
   return boundDisplayText("返回商城", maxDisplayTextLength);
 }

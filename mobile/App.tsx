@@ -186,6 +186,7 @@ import {
   storeCartReturnButtonLabel,
   storeCartUnavailableDisplayItem,
   storeCheckoutReadinessTitle,
+  storeCheckoutReadinessChecklistDisplayItems,
   storeEmptySearchDisplayItem,
   storeLocalBoundaryCopy,
   storePreviewBoundaryCopy,
@@ -1802,12 +1803,7 @@ export default function App() {
     healthIntegrationReadinessChecklistDisplayItems();
   const communityReadinessChecklistItems = communityReadinessChecklistDisplayItems();
   const rankingReadinessChecklistItems = rankingReadinessChecklistDisplayItems();
-  const storeCheckoutReadinessChecklistItems = [
-    "商品目錄、庫存與價格來源",
-    "購物車持久化、庫存 reservation 與 rollback 規則",
-    "付款金流、receipt validation 與退款流程",
-    "訂單狀態、出貨狀態與客服稽核"
-  ].map(resultChecklistItem);
+  const storeCheckoutReadinessChecklistItems = storeCheckoutReadinessChecklistDisplayItems();
   const storeCartUnavailableDisplay = storeCartUnavailableDisplayItem();
   const foodPhotoVisionBoundaryDisplay = foodPhotoVisionBoundaryDisplayItem();
   const foodPhotoEmptyResultChecklistItems = foodPhotoEmptyResultChecklistDisplayItems();
