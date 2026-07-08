@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1262: Extract manual-record type selector
+
+Status: done
+
+Summary:
+
+- Added `mobile/manualRecordTypeSelector.tsx` for the Manual Record type segmented selector.
+- Replaced the inline Manual Record type selector JSX in `mobile/App.tsx` with `ManualRecordTypeSelector`.
+- Kept type option labels, accessibility labels, selected state, selected styling, handler binding, layout, colors, typography, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation and visual-smoke route verifiers so the Manual Record type selector component and App bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1261: Extract manual-record date-time fields
 
 Status: done

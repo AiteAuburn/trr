@@ -718,6 +718,7 @@ import { ManualRecordConfirmFooterActions } from "./manualRecordConfirmFooterAct
 import { ManualRecordConfirmPreviewBlock } from "./manualRecordConfirmPreviewBlock";
 import { ManualRecordDateTimeFields } from "./manualRecordDateTimeFields";
 import { ManualRecordHeaderIntro } from "./manualRecordHeaderIntro";
+import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
 import { MetricCard } from "./metricCard";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
@@ -8101,30 +8102,11 @@ export default function App() {
               onDateChange={updateManualRecordDateInput}
               onTimeChange={updateManualRecordTimeInput}
             />
-            <View style={styles.segmentRow}>
-              {manualRecordTypeDisplayOptions.map((type) => (
-                <Pressable
-                  key={type.value}
-                  accessibilityLabel={type.accessibilityLabel}
-                  accessibilityRole="button"
-                  accessibilityState={{ selected: manualRecordType === type.value }}
-                  style={[
-                    styles.segmentPill,
-                    manualRecordType === type.value ? styles.segmentActive : null
-                  ]}
-                  onPress={() => pressManualRecordTypeOption(type)}
-                >
-                  <Text
-                    style={[
-                      styles.segmentText,
-                      manualRecordType === type.value ? styles.segmentTextActive : null
-                    ]}
-                  >
-                    {type.label}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
+            <ManualRecordTypeSelector
+              options={manualRecordTypeDisplayOptions}
+              selectedValue={manualRecordType}
+              onTypePress={pressManualRecordTypeOption}
+            />
 
             {manualRecordType === "glucose" ? (
               <>

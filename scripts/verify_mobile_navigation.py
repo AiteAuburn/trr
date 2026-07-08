@@ -69,6 +69,7 @@ MANUAL_RECORD_CONFIRM_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "manualRecord
 MANUAL_RECORD_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmPreviewBlock.tsx"
 MANUAL_RECORD_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordDateTimeFields.tsx"
 MANUAL_RECORD_HEADER_INTRO_PATH = REPO_ROOT / "mobile" / "manualRecordHeaderIntro.tsx"
+MANUAL_RECORD_TYPE_SELECTOR_PATH = REPO_ROOT / "mobile" / "manualRecordTypeSelector.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
 RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPanel.tsx"
 RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.tsx"
@@ -1322,6 +1323,7 @@ def main() -> int:
     )
     manual_record_date_time_fields_content = MANUAL_RECORD_DATE_TIME_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_header_intro_content = MANUAL_RECORD_HEADER_INTRO_PATH.read_text(encoding="utf-8")
+    manual_record_type_selector_content = MANUAL_RECORD_TYPE_SELECTOR_PATH.read_text(encoding="utf-8")
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
     record_detail_action_panel_content = RECORD_DETAIL_ACTION_PANEL_PATH.read_text(encoding="utf-8")
     record_detail_info_panel_content = RECORD_DETAIL_INFO_PANEL_PATH.read_text(encoding="utf-8")
@@ -1743,6 +1745,18 @@ def main() -> int:
             ("manual record date time input style", "input: {"),
         ):
             _assert_contains(label, manual_record_date_time_fields_content, marker)
+        for label, marker in (
+            ("manual record type selector component", "export function ManualRecordTypeSelector"),
+            ("manual record type selector options map", "options.map((type) => ("),
+            ("manual record type selector accessibility", "accessibilityLabel={type.accessibilityLabel}"),
+            ("manual record type selector role", 'accessibilityRole="button"'),
+            ("manual record type selector selected state", "accessibilityState={{ selected: selectedValue === type.value }}"),
+            ("manual record type selector press", "onPress={() => onTypePress(type)}"),
+            ("manual record type selector label", "{type.label}"),
+            ("manual record type selector segment row style", "segmentRow: {"),
+            ("manual record type selector active style", "segmentActive: {"),
+        ):
+            _assert_contains(label, manual_record_type_selector_content, marker)
         for label, marker in (
             ("record edit footer actions component", "export function RecordEditFooterActions({"),
             ("record edit footer precheck title", "<Text style={styles.label}>{preCheckTitle}</Text>"),
@@ -4169,7 +4183,7 @@ def main() -> int:
         _assert_contains(
             "manual record type binding",
             content,
-            "onPress={() => pressManualRecordTypeOption(type)}",
+            "onTypePress={pressManualRecordTypeOption}",
         )
         _assert_contains(
             "generic option accessibility item",
@@ -4187,7 +4201,8 @@ def main() -> int:
             ("store category accessibility binding", "accessibilityLabel={category.accessibilityLabel}"),
             ("history range accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
             ("analysis range accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
-            ("manual type chip button role", 'accessibilityRole="button"\n                  accessibilityState={{ selected: manualRecordType === type.value }}'),
+            ("manual type chip button role", 'accessibilityRole="button"'),
+            ("manual type chip selected state", "accessibilityState={{ selected: selectedValue === type.value }}"),
             ("history calendar selected state", "accessibilityState={{ selected: item.isSelected }}"),
             ("history detail selected state", "accessibilityState={{ selected: isSelected }}"),
             ("analysis range selected state", "accessibilityState={{ selected: analysisRange === item.value }}"),
@@ -4209,7 +4224,9 @@ def main() -> int:
             ("record edit meal selected state", "accessibilityState={{ selected: recordEditFields.mealType === option.value }}"),
             ("store category selected state", "accessibilityState={{ selected: storeCategory === category.value }}"),
         ):
-            if label == "history detail selected state":
+            if label.startswith("manual type chip "):
+                target_content = manual_record_type_selector_content
+            elif label == "history detail selected state":
                 target_content = history_detail_mode_tabs_content
             elif label == "history calendar selected state":
                 target_content = history_calendar_month_picker_content
@@ -4237,6 +4254,9 @@ def main() -> int:
             ("manual record date time fields binding", "<ManualRecordDateTimeFields\n              dateAccessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}"),
             ("manual record date input binding", "onDateChange={updateManualRecordDateInput}"),
             ("manual record time input binding", "onTimeChange={updateManualRecordTimeInput}"),
+            ("manual record type selector binding", "<ManualRecordTypeSelector\n              options={manualRecordTypeDisplayOptions}"),
+            ("manual record type selector selected binding", "selectedValue={manualRecordType}"),
+            ("manual record type selector press binding", "onTypePress={pressManualRecordTypeOption}"),
             ("manual record glucose input binding", "onChangeText={updateManualRecordGlucoseValue}"),
             ("manual record unit option press handler", "function pressManualRecordGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>)"),
             ("manual record timing option press handler", "function pressManualRecordGlucoseTimingOption(option: ReturnType<typeof valueLabelDisplayItem>)"),
@@ -4274,7 +4294,7 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
-            ("manual record direct type binding", "onPress={() => selectManualRecordType(type.value)}"),
+            ("manual record direct type binding", "onPress={() => onTypePress(type)}"),
             ("preview edit direct unit selection binding", "onPress={() => selectPreviewEditGlucoseUnit(option.value)}"),
             ("preview edit direct timing selection binding", "onPress={() => selectPreviewEditGlucoseTiming(option.value)}"),
             ("preview edit direct meal type selection binding", "onPress={() => selectPreviewEditMealType(option.value)}"),

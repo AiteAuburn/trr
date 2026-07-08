@@ -102,7 +102,7 @@ VISUAL_SMOKE_ROUTES = {
         'currentScreen === "manualRecord"',
         "ManualRecordHeaderIntro",
         "ManualRecordDateTimeFields",
-        "manualRecordTypeDisplayOptions.map",
+        "ManualRecordTypeSelector",
         "ManualRecordCreatePreviewAction",
     ],
     "manualRecordConfirm": [
