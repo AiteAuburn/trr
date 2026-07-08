@@ -707,6 +707,7 @@ import { DetailRow } from "./detailRow";
 import { HistoryDailySummaryCard } from "./historyDailySummaryCard";
 import { HistoryDetailModeTabs } from "./historyDetailModeTabs";
 import { HistoryRawTranscriptCard } from "./historyRawTranscriptCard";
+import { HistorySelectedDateHeader } from "./historySelectedDateHeader";
 import { HistorySelectedSummaryCard } from "./historySelectedSummaryCard";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
@@ -8564,12 +8565,10 @@ export default function App() {
               </View>
             ) : null}
             <View style={styles.historySelectedDatePanel}>
-              <View style={styles.sectionHeader}>
-                <View>
-                  <Text style={styles.label}>{selectedHistoryDateDisplayText}</Text>
-                  <Text style={styles.evidence}>{selectedHistoryDailySummary.storageLabel}</Text>
-                </View>
-              </View>
+              <HistorySelectedDateHeader
+                dateLabel={selectedHistoryDateDisplayText}
+                storageLabel={selectedHistoryDailySummary.storageLabel}
+              />
               <HistorySelectedSummaryCard
                 sourceLabel={selectedHistoryDailySummary.sourceLabel}
                 summaryText={selectedHistoryDailySummary.summaryText}

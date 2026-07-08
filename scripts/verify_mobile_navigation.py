@@ -49,6 +49,7 @@ DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 HISTORY_DAILY_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historyDailySummaryCard.tsx"
 HISTORY_DETAIL_MODE_TABS_PATH = REPO_ROOT / "mobile" / "historyDetailModeTabs.tsx"
 HISTORY_RAW_TRANSCRIPT_CARD_PATH = REPO_ROOT / "mobile" / "historyRawTranscriptCard.tsx"
+HISTORY_SELECTED_DATE_HEADER_PATH = REPO_ROOT / "mobile" / "historySelectedDateHeader.tsx"
 HISTORY_SELECTED_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historySelectedSummaryCard.tsx"
 FIELD_LABEL_PATH = REPO_ROOT / "mobile" / "fieldLabel.tsx"
 DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "detailRow.tsx"
@@ -1277,6 +1278,7 @@ def main() -> int:
     history_daily_summary_card_content = HISTORY_DAILY_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
     history_detail_mode_tabs_content = HISTORY_DETAIL_MODE_TABS_PATH.read_text(encoding="utf-8")
     history_raw_transcript_card_content = HISTORY_RAW_TRANSCRIPT_CARD_PATH.read_text(encoding="utf-8")
+    history_selected_date_header_content = HISTORY_SELECTED_DATE_HEADER_PATH.read_text(encoding="utf-8")
     history_selected_summary_card_content = HISTORY_SELECTED_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
     field_label_content = FIELD_LABEL_PATH.read_text(encoding="utf-8")
     detail_row_content = DETAIL_ROW_PATH.read_text(encoding="utf-8")
@@ -1401,6 +1403,15 @@ def main() -> int:
             ("history raw transcript card border", 'borderColor: "#E3E8E5"'),
         ):
             _assert_contains(label, history_raw_transcript_card_content, marker)
+        for label, marker in (
+            ("history selected date header component", "export function HistorySelectedDateHeader({ dateLabel, storageLabel }: HistorySelectedDateHeaderProps)"),
+            ("history selected date header date label", "<Text style={styles.label}>{dateLabel}</Text>"),
+            ("history selected date header storage label", "<Text style={styles.evidence}>{storageLabel}</Text>"),
+            ("history selected date header section style", "sectionHeader: {"),
+            ("history selected date header label color", 'color: "#0F3F37"'),
+            ("history selected date header evidence line height", "lineHeight: 19"),
+        ):
+            _assert_contains(label, history_selected_date_header_content, marker)
         for label, marker in (
             ("history selected summary card component", "export function HistorySelectedSummaryCard({ sourceLabel, summaryText, syncLabel }: HistorySelectedSummaryCardProps)"),
             ("history selected summary card title", "<Text style={styles.previewModeBadge}>AI今日摘要</Text>"),
@@ -3552,6 +3563,8 @@ def main() -> int:
             ("history daily summary card component binding", "historyDailySummaryDisplayItems.map((item) => (\n                  <HistoryDailySummaryCard"),
             ("history daily summary selected prop", "selected={item.value === selectedHistoryDate}"),
             ("history daily summary press binding", "onPress={() => pressHistoryDailySummary(item)}"),
+            ("history selected date header binding", "<HistorySelectedDateHeader\n                dateLabel={selectedHistoryDateDisplayText}"),
+            ("history selected date storage binding", "storageLabel={selectedHistoryDailySummary.storageLabel}"),
             ("history selected summary card binding", "<HistorySelectedSummaryCard\n                sourceLabel={selectedHistoryDailySummary.sourceLabel}"),
             ("history selected summary text binding", "summaryText={selectedHistoryDailySummary.summaryText}"),
             ("history selected sync binding", "syncLabel={selectedHistoryDailySummary.syncLabel}"),

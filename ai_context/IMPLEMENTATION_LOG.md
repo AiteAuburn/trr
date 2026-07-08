@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1243 extract history selected date header
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/historySelectedDateHeader.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/historySelectedDateHeader.tsx` for the History selected-date date/storage header.
+- Replaced the inline selected-date header in `mobile/App.tsx` with `HistorySelectedDateHeader`.
+- Kept selected date text, storage/sync summary text, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the History selected-date header component and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version History presentation components while keeping display item shaping in `historyScreenData.ts`.
+
 ### T1242 extract history raw transcript card
 
 類型：mobile / refactor / verifier / docs
