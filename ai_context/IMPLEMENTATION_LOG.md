@@ -15,6 +15,39 @@
 
 ## 2026-07-08
 
+### T1264 extract manual-record meal fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/manualRecordMealFields.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/manualRecordMealFields.tsx` for the Manual Record meal-type selector and food-items input.
+- Replaced the inline Manual Record meal branch JSX in `mobile/App.tsx` with `ManualRecordMealFields`.
+- Kept meal type label, food-items label, placeholder, accessibility labels, values, max-length limit, multiline behavior, selected states, selected styling, handler bindings, layout, colors, typography, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation and visual-smoke route verifiers so the Manual Record meal fields component and App bindings are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version manual-record exercise/medication/note field groups while keeping field state and backend handlers owned by `App.tsx`.
+
 ### T1263 extract manual-record glucose fields
 
 類型：mobile / refactor / verifier / docs

@@ -104,6 +104,7 @@ VISUAL_SMOKE_ROUTES = {
         "ManualRecordDateTimeFields",
         "ManualRecordTypeSelector",
         "ManualRecordGlucoseFields",
+        "ManualRecordMealFields",
         "ManualRecordCreatePreviewAction",
     ],
     "manualRecordConfirm": [

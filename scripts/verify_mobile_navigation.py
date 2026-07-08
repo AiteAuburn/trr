@@ -70,6 +70,7 @@ MANUAL_RECORD_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "manualRecordC
 MANUAL_RECORD_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordDateTimeFields.tsx"
 MANUAL_RECORD_GLUCOSE_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordGlucoseFields.tsx"
 MANUAL_RECORD_HEADER_INTRO_PATH = REPO_ROOT / "mobile" / "manualRecordHeaderIntro.tsx"
+MANUAL_RECORD_MEAL_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordMealFields.tsx"
 MANUAL_RECORD_TYPE_SELECTOR_PATH = REPO_ROOT / "mobile" / "manualRecordTypeSelector.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
 RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPanel.tsx"
@@ -1325,6 +1326,7 @@ def main() -> int:
     manual_record_date_time_fields_content = MANUAL_RECORD_DATE_TIME_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_glucose_fields_content = MANUAL_RECORD_GLUCOSE_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_header_intro_content = MANUAL_RECORD_HEADER_INTRO_PATH.read_text(encoding="utf-8")
+    manual_record_meal_fields_content = MANUAL_RECORD_MEAL_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_type_selector_content = MANUAL_RECORD_TYPE_SELECTOR_PATH.read_text(encoding="utf-8")
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
     record_detail_action_panel_content = RECORD_DETAIL_ACTION_PANEL_PATH.read_text(encoding="utf-8")
@@ -1777,6 +1779,25 @@ def main() -> int:
             ("manual record glucose input style", "input: {"),
         ):
             _assert_contains(label, manual_record_glucose_fields_content, marker)
+        for label, marker in (
+            ("manual record meal fields component", "export function ManualRecordMealFields"),
+            ("manual record meal type label", '<FieldLabel icon={"🥣"} label={"餐別"} />'),
+            ("manual record meal type options", "mealTypeOptions.map((option) => ("),
+            ("manual record meal type accessibility", "accessibilityLabel={option.accessibilityLabel}"),
+            ("manual record meal type role", 'accessibilityRole="button"'),
+            ("manual record meal type selected", "accessibilityState={{ selected: mealType === option.value }}"),
+            ("manual record meal type press", "onPress={() => onMealTypePress(option)}"),
+            ("manual record food items label", '<FieldLabel icon={"🍽"} label={"飲食內容"} />'),
+            ("manual record food items accessibility", "accessibilityLabel={foodItemsAccessibilityLabel}"),
+            ("manual record food items value", "value={foodItems}"),
+            ("manual record food items handler", "onChangeText={onFoodItemsChange}"),
+            ("manual record food items max length", "maxLength={foodItemsMaxLength}"),
+            ("manual record food items multiline", "multiline"),
+            ("manual record food items text align", 'textAlignVertical="top"'),
+            ("manual record meal input style", "input: {"),
+            ("manual record meal multiline style", "multilineField: {"),
+        ):
+            _assert_contains(label, manual_record_meal_fields_content, marker)
         for label, marker in (
             ("record edit footer actions component", "export function RecordEditFooterActions({"),
             ("record edit footer precheck title", "<Text style={styles.label}>{preCheckTitle}</Text>"),
@@ -4235,7 +4256,7 @@ def main() -> int:
             ("analysis custom apply label render", "{coreFlowDisplayLabels.analysisApplyCustomRange}"),
             ("manual glucose unit selected state", "accessibilityState={{ selected: glucoseUnit === option.value }}"),
             ("manual glucose timing selected state", "accessibilityState={{ selected: glucoseTiming === option.value }}"),
-            ("manual meal selected state", "accessibilityState={{ selected: manualRecordFields.mealType === option.value }}"),
+            ("manual meal selected state", "accessibilityState={{ selected: mealType === option.value }}"),
             ("preview glucose unit selected state", "accessibilityState={{ selected: previewEditFields.glucoseUnit === option.value }}"),
             ("preview glucose timing selected state", "accessibilityState={{ selected: previewEditFields.glucoseTiming === option.value }}"),
             ("preview meal selected state", "accessibilityState={{ selected: previewEditFields.mealType === option.value }}"),
@@ -4246,6 +4267,8 @@ def main() -> int:
         ):
             if label.startswith("manual glucose "):
                 target_content = manual_record_glucose_fields_content
+            elif label.startswith("manual meal "):
+                target_content = manual_record_meal_fields_content
             elif label.startswith("manual type chip "):
                 target_content = manual_record_type_selector_content
             elif label == "history detail selected state":
@@ -4288,7 +4311,9 @@ def main() -> int:
             ("manual record meal type option press handler", "function pressManualRecordMealTypeOption(option: ReturnType<typeof valueLabelDisplayItem>)"),
             ("manual record unit option press binding", "onUnitPress={pressManualRecordGlucoseUnitOption}"),
             ("manual record timing option press binding", "onTimingPress={pressManualRecordGlucoseTimingOption}"),
-            ("manual record meal type option press binding", "onPress={() => pressManualRecordMealTypeOption(option)}"),
+            ("manual record meal fields binding", "<ManualRecordMealFields\n                foodItems={manualRecordFields.foodItems}"),
+            ("manual record food items binding", "onFoodItemsChange={updateManualRecordFoodItems}"),
+            ("manual record meal type option press binding", "onMealTypePress={pressManualRecordMealTypeOption}"),
             ("manual record header intro binding", "<ManualRecordHeaderIntro\n              backAccessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}"),
             ("manual record header intro title binding", 'title="手動新增紀錄"'),
             ("manual record header intro press binding", "onBackPress={returnFromManualRecord}"),

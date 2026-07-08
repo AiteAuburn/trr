@@ -719,6 +719,7 @@ import { ManualRecordConfirmPreviewBlock } from "./manualRecordConfirmPreviewBlo
 import { ManualRecordDateTimeFields } from "./manualRecordDateTimeFields";
 import { ManualRecordGlucoseFields } from "./manualRecordGlucoseFields";
 import { ManualRecordHeaderIntro } from "./manualRecordHeaderIntro";
+import { ManualRecordMealFields } from "./manualRecordMealFields";
 import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
 import { MetricCard } from "./metricCard";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
@@ -8125,50 +8126,15 @@ export default function App() {
             ) : null}
 
             {manualRecordType === "meal" ? (
-              <>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"🥣"} label={"餐別"} />
-                  <View style={styles.segmentRow}>
-                    {mealTypeDisplayOptions.map((option) => (
-                      <Pressable
-                        key={option.value}
-                        accessibilityLabel={option.accessibilityLabel}
-                        accessibilityRole="button"
-                        accessibilityState={{ selected: manualRecordFields.mealType === option.value }}
-                        style={[
-                          styles.segmentPill,
-                          manualRecordFields.mealType === option.value ? styles.segmentActive : null
-                        ]}
-                        onPress={() => pressManualRecordMealTypeOption(option)}
-                      >
-                        <Text
-                          style={[
-                            styles.segmentText,
-                            manualRecordFields.mealType === option.value ? styles.segmentTextActive : null
-                          ]}
-                        >
-                          {option.label}
-                        </Text>
-                      </Pressable>
-                    ))}
-                  </View>
-                </View>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"🍽"} label={"飲食內容"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.foodItemsInputAccessibility}
-                    value={manualRecordFields.foodItems}
-                    onChangeText={updateManualRecordFoodItems}
-                    maxLength={recordEditFieldMaxLength("foodItems")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    multiline
-                    textAlignVertical="top"
-                    style={[styles.input, styles.multilineField]}
-                    placeholder="水煮蛋、熱狗"
-                  />
-                </View>
-              </>
+              <ManualRecordMealFields
+                foodItems={manualRecordFields.foodItems}
+                foodItemsAccessibilityLabel={auxiliaryDisplayLabels.foodItemsInputAccessibility}
+                foodItemsMaxLength={recordEditFieldMaxLength("foodItems")}
+                mealType={manualRecordFields.mealType}
+                mealTypeOptions={mealTypeDisplayOptions}
+                onFoodItemsChange={updateManualRecordFoodItems}
+                onMealTypePress={pressManualRecordMealTypeOption}
+              />
             ) : null}
 
             {manualRecordType === "exercise" ? (
