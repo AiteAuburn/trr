@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1263: Extract manual-record glucose fields
+
+Status: done
+
+Summary:
+
+- Added `mobile/manualRecordGlucoseFields.tsx` for the Manual Record glucose value input plus unit and timing segmented selectors.
+- Replaced the inline Manual Record glucose branch JSX in `mobile/App.tsx` with `ManualRecordGlucoseFields`.
+- Kept glucose value label, placeholder, accessibility label, keyboard type, max-length limit, unit/timing option labels, selected states, selected styling, handler bindings, layout, colors, typography, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation and visual-smoke route verifiers so the Manual Record glucose fields component and App bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1262: Extract manual-record type selector
 
 Status: done

@@ -717,6 +717,7 @@ import { ManualRecordCreatePreviewAction } from "./manualRecordCreatePreviewActi
 import { ManualRecordConfirmFooterActions } from "./manualRecordConfirmFooterActions";
 import { ManualRecordConfirmPreviewBlock } from "./manualRecordConfirmPreviewBlock";
 import { ManualRecordDateTimeFields } from "./manualRecordDateTimeFields";
+import { ManualRecordGlucoseFields } from "./manualRecordGlucoseFields";
 import { ManualRecordHeaderIntro } from "./manualRecordHeaderIntro";
 import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
 import { MetricCard } from "./metricCard";
@@ -8109,73 +8110,18 @@ export default function App() {
             />
 
             {manualRecordType === "glucose" ? (
-              <>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"💧"} label={"血糖數值"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.glucoseValueInputAccessibility}
-                    value={manualRecordFields.glucoseValue}
-                    onChangeText={updateManualRecordGlucoseValue}
-                    keyboardType="numeric"
-                    maxLength={recordEditFieldMaxLength("glucoseValue")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    placeholder="138"
-                  />
-                </View>
-                <View style={styles.segmentRow}>
-                  {glucoseUnitDisplayOptions.map((option) => (
-                    <Pressable
-                      key={option.value}
-                      accessibilityLabel={option.accessibilityLabel}
-                      accessibilityRole="button"
-                      accessibilityState={{ selected: manualRecordFields.glucoseUnit === option.value }}
-                      style={[
-                        styles.segmentPill,
-                        manualRecordFields.glucoseUnit === option.value ? styles.segmentActive : null
-                      ]}
-                      onPress={() => pressManualRecordGlucoseUnitOption(option)}
-                    >
-                      <Text
-                        style={[
-                          styles.segmentText,
-                          manualRecordFields.glucoseUnit === option.value ? styles.segmentTextActive : null
-                        ]}
-                      >
-                        {option.label}
-                      </Text>
-                    </Pressable>
-                  ))}
-                </View>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"◌"} label={"情境"} />
-                  <View style={styles.segmentRow}>
-                    {glucoseTimingDisplayOptions.map((option) => (
-                      <Pressable
-                        key={option.value}
-                        accessibilityLabel={option.accessibilityLabel}
-                        accessibilityRole="button"
-                        accessibilityState={{ selected: manualRecordFields.glucoseTiming === option.value }}
-                        style={[
-                          styles.segmentPill,
-                          manualRecordFields.glucoseTiming === option.value ? styles.segmentActive : null
-                        ]}
-                        onPress={() => pressManualRecordGlucoseTimingOption(option)}
-                      >
-                        <Text
-                          style={[
-                            styles.segmentText,
-                            manualRecordFields.glucoseTiming === option.value ? styles.segmentTextActive : null
-                          ]}
-                        >
-                          {option.label}
-                        </Text>
-                      </Pressable>
-                    ))}
-                  </View>
-                </View>
-              </>
+              <ManualRecordGlucoseFields
+                glucoseTiming={manualRecordFields.glucoseTiming}
+                glucoseValue={manualRecordFields.glucoseValue}
+                glucoseValueAccessibilityLabel={auxiliaryDisplayLabels.glucoseValueInputAccessibility}
+                glucoseValueMaxLength={recordEditFieldMaxLength("glucoseValue")}
+                glucoseUnit={manualRecordFields.glucoseUnit}
+                timingOptions={glucoseTimingDisplayOptions}
+                unitOptions={glucoseUnitDisplayOptions}
+                onGlucoseValueChange={updateManualRecordGlucoseValue}
+                onTimingPress={pressManualRecordGlucoseTimingOption}
+                onUnitPress={pressManualRecordGlucoseUnitOption}
+              />
             ) : null}
 
             {manualRecordType === "meal" ? (

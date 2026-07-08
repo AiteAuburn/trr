@@ -68,6 +68,7 @@ MANUAL_RECORD_CREATE_PREVIEW_ACTION_PATH = REPO_ROOT / "mobile" / "manualRecordC
 MANUAL_RECORD_CONFIRM_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmFooterActions.tsx"
 MANUAL_RECORD_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmPreviewBlock.tsx"
 MANUAL_RECORD_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordDateTimeFields.tsx"
+MANUAL_RECORD_GLUCOSE_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordGlucoseFields.tsx"
 MANUAL_RECORD_HEADER_INTRO_PATH = REPO_ROOT / "mobile" / "manualRecordHeaderIntro.tsx"
 MANUAL_RECORD_TYPE_SELECTOR_PATH = REPO_ROOT / "mobile" / "manualRecordTypeSelector.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
@@ -1322,6 +1323,7 @@ def main() -> int:
         encoding="utf-8"
     )
     manual_record_date_time_fields_content = MANUAL_RECORD_DATE_TIME_FIELDS_PATH.read_text(encoding="utf-8")
+    manual_record_glucose_fields_content = MANUAL_RECORD_GLUCOSE_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_header_intro_content = MANUAL_RECORD_HEADER_INTRO_PATH.read_text(encoding="utf-8")
     manual_record_type_selector_content = MANUAL_RECORD_TYPE_SELECTOR_PATH.read_text(encoding="utf-8")
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
@@ -1757,6 +1759,24 @@ def main() -> int:
             ("manual record type selector active style", "segmentActive: {"),
         ):
             _assert_contains(label, manual_record_type_selector_content, marker)
+        for label, marker in (
+            ("manual record glucose fields component", "export function ManualRecordGlucoseFields"),
+            ("manual record glucose value label", '<FieldLabel icon={"💧"} label={"血糖數值"} />'),
+            ("manual record glucose value accessibility", "accessibilityLabel={glucoseValueAccessibilityLabel}"),
+            ("manual record glucose value binding", "value={glucoseValue}"),
+            ("manual record glucose value handler", "onChangeText={onGlucoseValueChange}"),
+            ("manual record glucose keyboard", 'keyboardType="numeric"'),
+            ("manual record glucose max length", "maxLength={glucoseValueMaxLength}"),
+            ("manual record glucose unit options", "unitOptions.map((option) => ("),
+            ("manual record glucose unit selected", "accessibilityState={{ selected: glucoseUnit === option.value }}"),
+            ("manual record glucose unit press", "onPress={() => onUnitPress(option)}"),
+            ("manual record glucose timing label", '<FieldLabel icon={"◌"} label={"情境"} />'),
+            ("manual record glucose timing options", "timingOptions.map((option) => ("),
+            ("manual record glucose timing selected", "accessibilityState={{ selected: glucoseTiming === option.value }}"),
+            ("manual record glucose timing press", "onPress={() => onTimingPress(option)}"),
+            ("manual record glucose input style", "input: {"),
+        ):
+            _assert_contains(label, manual_record_glucose_fields_content, marker)
         for label, marker in (
             ("record edit footer actions component", "export function RecordEditFooterActions({"),
             ("record edit footer precheck title", "<Text style={styles.label}>{preCheckTitle}</Text>"),
@@ -4213,8 +4233,8 @@ def main() -> int:
             ("analysis end date input binding", "onChangeText={updateAnalysisCustomEndInput}"),
             ("analysis custom range status render", "{analysisCustomRangeStatusDisplayText}"),
             ("analysis custom apply label render", "{coreFlowDisplayLabels.analysisApplyCustomRange}"),
-            ("manual glucose unit selected state", "accessibilityState={{ selected: manualRecordFields.glucoseUnit === option.value }}"),
-            ("manual glucose timing selected state", "accessibilityState={{ selected: manualRecordFields.glucoseTiming === option.value }}"),
+            ("manual glucose unit selected state", "accessibilityState={{ selected: glucoseUnit === option.value }}"),
+            ("manual glucose timing selected state", "accessibilityState={{ selected: glucoseTiming === option.value }}"),
             ("manual meal selected state", "accessibilityState={{ selected: manualRecordFields.mealType === option.value }}"),
             ("preview glucose unit selected state", "accessibilityState={{ selected: previewEditFields.glucoseUnit === option.value }}"),
             ("preview glucose timing selected state", "accessibilityState={{ selected: previewEditFields.glucoseTiming === option.value }}"),
@@ -4224,7 +4244,9 @@ def main() -> int:
             ("record edit meal selected state", "accessibilityState={{ selected: recordEditFields.mealType === option.value }}"),
             ("store category selected state", "accessibilityState={{ selected: storeCategory === category.value }}"),
         ):
-            if label.startswith("manual type chip "):
+            if label.startswith("manual glucose "):
+                target_content = manual_record_glucose_fields_content
+            elif label.startswith("manual type chip "):
                 target_content = manual_record_type_selector_content
             elif label == "history detail selected state":
                 target_content = history_detail_mode_tabs_content
@@ -4257,12 +4279,15 @@ def main() -> int:
             ("manual record type selector binding", "<ManualRecordTypeSelector\n              options={manualRecordTypeDisplayOptions}"),
             ("manual record type selector selected binding", "selectedValue={manualRecordType}"),
             ("manual record type selector press binding", "onTypePress={pressManualRecordTypeOption}"),
-            ("manual record glucose input binding", "onChangeText={updateManualRecordGlucoseValue}"),
+            ("manual record glucose fields binding", "<ManualRecordGlucoseFields\n                glucoseTiming={manualRecordFields.glucoseTiming}"),
+            ("manual record glucose input binding", "onGlucoseValueChange={updateManualRecordGlucoseValue}"),
+            ("manual record glucose unit binding", "onUnitPress={pressManualRecordGlucoseUnitOption}"),
+            ("manual record glucose timing binding", "onTimingPress={pressManualRecordGlucoseTimingOption}"),
             ("manual record unit option press handler", "function pressManualRecordGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>)"),
             ("manual record timing option press handler", "function pressManualRecordGlucoseTimingOption(option: ReturnType<typeof valueLabelDisplayItem>)"),
             ("manual record meal type option press handler", "function pressManualRecordMealTypeOption(option: ReturnType<typeof valueLabelDisplayItem>)"),
-            ("manual record unit option press binding", "onPress={() => pressManualRecordGlucoseUnitOption(option)}"),
-            ("manual record timing option press binding", "onPress={() => pressManualRecordGlucoseTimingOption(option)}"),
+            ("manual record unit option press binding", "onUnitPress={pressManualRecordGlucoseUnitOption}"),
+            ("manual record timing option press binding", "onTimingPress={pressManualRecordGlucoseTimingOption}"),
             ("manual record meal type option press binding", "onPress={() => pressManualRecordMealTypeOption(option)}"),
             ("manual record header intro binding", "<ManualRecordHeaderIntro\n              backAccessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}"),
             ("manual record header intro title binding", 'title="手動新增紀錄"'),
@@ -4302,8 +4327,8 @@ def main() -> int:
             ("preview edit time inline setter", "onChangeText={(value) => setPreviewEditTime("),
             ("preview edit direct field updater", 'onChangeText={(value) => updatePreviewEditField("'),
             ("preview edit direct option updater", 'onPress={() => updatePreviewEditField("'),
-            ("manual record direct unit selection binding", "onPress={() => selectManualRecordGlucoseUnit(option.value)}"),
-            ("manual record direct timing selection binding", "onPress={() => selectManualRecordGlucoseTiming(option.value)}"),
+            ("manual record direct unit selection binding", "onPress={() => onUnitPress(option)}"),
+            ("manual record direct timing selection binding", "onPress={() => onTimingPress(option)}"),
             ("manual record direct meal type selection binding", "onPress={() => selectManualRecordMealType(option.value)}"),
             ("manual record date inline setter", "onChangeText={(value) => setManualRecordDate("),
             ("manual record time inline setter", "onChangeText={(value) => setManualRecordTime("),
