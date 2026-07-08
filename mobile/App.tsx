@@ -88,11 +88,19 @@ import {
   type AppScreen
 } from "./navigationConfig";
 import {
+  achievementCategoryDefinitions,
+  achievementDisplayItem,
   achievementIntegrationButtonAccessibilityLabel,
   achievementIntegrationButtonLabel,
+  achievementItemFromApi,
+  achievementLevelColors,
+  achievementLevels,
+  achievementLevelStep,
   achievementLocalComputationCopy,
   achievementNextBadgeCopy,
   achievementPreviewBoundaryCopy,
+  achievementStreakBadgeColor,
+  achievementUnlockDisplayDate,
   communityPublicNameBoundaryCopy,
   communityPreviewBoundaryDisplayItem,
   doctorShareBackendBoundaryCopy,
@@ -157,6 +165,9 @@ import {
   yearReviewRevokeShareButtonLabel,
   yearReviewShareButtonAccessibilityLabel,
   yearReviewShareButtonLabel,
+  type AchievementApiSummary,
+  type AchievementApiUnlock,
+  type AchievementItem,
   type CommunityLeaderboardApiResponse,
   type CommunityLeaderboardDisplaySection,
   type CommunityLeaderboardType,
@@ -818,70 +829,7 @@ const initialVisualSmokeScreen = normalizeVisualSmokeInitialRoute(
   allowMobileDevAuth
 );
 
-type AchievementCategory = "glucose" | "meal" | "exercise";
-type AchievementKind = "cumulative" | "streak";
-type AchievementItem = {
-  id: string;
-  category: AchievementCategory;
-  categoryLabel: string;
-  kind: AchievementKind;
-  kindLabel: string;
-  level: number;
-  title: string;
-  description: string;
-  icon: string;
-  badgeColor: string;
-  progress: number;
-  target: number;
-  unlocked: boolean;
-  unlockedAt?: string | null;
-  newlyUnlocked: boolean;
-};
-type AchievementApiItem = {
-  id: string;
-  category: AchievementCategory;
-  category_label: string;
-  kind: AchievementKind;
-  kind_label: string;
-  level: number;
-  title: string;
-  description: string;
-  icon: string;
-  badge_color: string;
-  progress: number;
-  target: number;
-  unlocked: boolean;
-  unlocked_at?: string | null;
-  newly_unlocked?: boolean;
-};
-type AchievementApiSummary = {
-  levels: number[];
-  unlocked_count: number;
-  persisted_unlocked_count: number;
-  newly_unlocked_count: number;
-  next_remaining: number;
-  items: AchievementApiItem[];
-};
-type AchievementApiUnlock = AchievementApiItem;
 type SaveEntryMethod = "ai" | "manual" | null;
-
-const achievementLevels = [10, 50, 100, 150, 200, 250];
-const achievementLevelStep = 50;
-
-const achievementCategoryDefinitions: Array<{
-  id: AchievementCategory;
-  label: string;
-  recordType: string;
-  cumulativeIcon: string;
-  cumulativeColor: string;
-}> = [
-  { id: "glucose", label: "血糖記錄", recordType: "glucose", cumulativeIcon: "血", cumulativeColor: "#2F8F72" },
-  { id: "meal", label: "飲食記錄", recordType: "meal", cumulativeIcon: "食", cumulativeColor: "#D97706" },
-  { id: "exercise", label: "運動記錄", recordType: "exercise", cumulativeIcon: "動", cumulativeColor: "#2563EB" }
-];
-
-const achievementLevelColors = ["#8DB7A5", "#3FA67F", "#2F8F72", "#D97706", "#B45309", "#2563EB"];
-const achievementStreakBadgeColor = "#8B5CF6";
 
 const foodCommunityCategories: Array<{ id: FoodCommunityCategory; label: string }> = [
   { id: "vegetable", label: "蔬菜" },
@@ -1081,75 +1029,6 @@ function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
 
 function boundIdentifier(value: string) {
   return value.slice(0, maxIdentifierTextLength);
-}
-
-function boundAchievementProgress(value: number, maxValue = maxMobileCountValue) {
-  return clampNumber(value, 0, maxValue);
-}
-
-function achievementDisplayItem(value: AchievementItem) {
-  const target = Math.max(1, boundAchievementProgress(value.target));
-  const progress = Math.min(target, boundAchievementProgress(value.progress, target));
-  const kindLabel = boundDisplayText(value.kindLabel || "成就類型", 40);
-  const categoryLabel = boundDisplayText(value.categoryLabel || "成就分類", 40);
-  return {
-    id: boundIdentifier(value.id),
-    category: value.category,
-    categoryLabel,
-    kind: value.kind,
-    kindLabel,
-    level: clampNumber(value.level, 0, maxMobileCountValue),
-    title: boundDisplayText(value.title || "成就", maxDisplayTextLength),
-    description: boundDisplayText(value.description || "尚未設定成就說明。", maxDisplayDetailTextLength),
-    icon: boundDisplayText(value.icon || "•", 4),
-    badgeColor: boundDisplayText(value.badgeColor || "#3FA67F", 20),
-    progress,
-    target,
-    unlocked: value.unlocked || progress >= target,
-    unlockedAt: value.unlockedAt || null,
-    newlyUnlocked: value.newlyUnlocked,
-    progressLabel: boundDisplayText(`${progress}/${target}`, 40),
-    statusLabel: boundDisplayText(value.unlocked || progress >= target ? "完成" : `${progress}/${target}`, 40),
-    accessibilityLabel: boundDisplayText(
-      `${categoryLabel}${kindLabel}徽章，等級 ${clampNumber(value.level, 0, maxMobileCountValue)}，進度 ${progress}/${target}`,
-      maxDisplayDetailTextLength
-    )
-  };
-}
-
-function achievementItemFromApi(value: AchievementApiItem): AchievementItem {
-  const category = achievementCategoryDefinitions.some((definition) => definition.id === value.category)
-    ? value.category
-    : "glucose";
-  const kind = value.kind === "streak" ? "streak" : "cumulative";
-  return {
-    id: boundIdentifier(value.id),
-    category,
-    categoryLabel: boundDisplayText(value.category_label || "成就分類", 40),
-    kind,
-    kindLabel: boundDisplayText(value.kind_label || (kind === "streak" ? "連續型" : "累積型"), 40),
-    level: clampNumber(value.level, 1, maxMobileCountValue),
-    title: boundDisplayText(value.title || "成就", maxDisplayTextLength),
-    description: boundDisplayText(value.description || "尚未設定成就說明。", maxDisplayDetailTextLength),
-    icon: boundDisplayText(value.icon || "•", 4),
-    badgeColor: boundDisplayText(value.badge_color || (kind === "streak" ? achievementStreakBadgeColor : "#3FA67F"), 20),
-    progress: clampNumber(value.progress, 0, maxMobileCountValue),
-    target: Math.max(1, clampNumber(value.target, 1, maxMobileCountValue)),
-    unlocked: value.unlocked,
-    unlockedAt: value.unlocked_at || null,
-    newlyUnlocked: Boolean(value.newly_unlocked)
-  };
-}
-
-function achievementUnlockDisplayDate(value?: string | null) {
-  if (!value) {
-    return boundDisplayText("尚未保存解鎖時間", maxDisplayTextLength);
-  }
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) {
-    return boundDisplayText("解鎖時間格式無法顯示", maxDisplayTextLength);
-  }
-  return boundDisplayText(`解鎖於 ${formatLocalDateInput(parsed)}`, maxDisplayTextLength);
 }
 
 function clampNumber(value: number, min: number, max: number) {

@@ -276,14 +276,14 @@ def _function_block(content: str, function_name: str) -> str:
     )
 
 
-def _verify_achievement_contract(content: str) -> None:
+def _verify_achievement_contract(content: str, future_module_display_content: str) -> None:
     readme_content = README_PATH.read_text(encoding="utf-8")
     backend_content = ACHIEVEMENTS_API_PATH.read_text(encoding="utf-8")
     catalog_content = ACHIEVEMENT_CATALOG_PATH.read_text(encoding="utf-8")
     year_review_content = YEAR_REVIEW_SNAPSHOTS_PATH.read_text(encoding="utf-8")
-    mobile_level_marker = f"const achievementLevels = [{', '.join(str(level) for level in EXPECTED_ACHIEVEMENT_LEVELS)}];"
+    mobile_level_marker = f"export const achievementLevels = [{', '.join(str(level) for level in EXPECTED_ACHIEVEMENT_LEVELS)}];"
     catalog_level_marker = f"ACHIEVEMENT_LEVELS = ({', '.join(str(level) for level in EXPECTED_ACHIEVEMENT_LEVELS)})"
-    _assert_contains("mobile achievement levels", content, mobile_level_marker)
+    _assert_contains("mobile achievement levels", future_module_display_content, mobile_level_marker)
     _assert_contains("backend shared achievement levels", catalog_content, catalog_level_marker)
     _assert_contains("backend achievement catalog import", backend_content, "from app.services.achievement_catalog import (")
     _assert_contains(
@@ -321,7 +321,7 @@ def _verify_achievement_contract(content: str) -> None:
     for category, label, record_type, icon in EXPECTED_ACHIEVEMENT_CATEGORIES:
         _assert_contains(
             f"mobile achievement category {category}",
-            content,
+            future_module_display_content,
             f'{{ id: "{category}", label: "{label}", recordType: "{record_type}", cumulativeIcon: "{icon}",',
         )
         _assert_contains(f"backend achievement category {category}", catalog_content, f'"id": "{category}"')
@@ -1279,7 +1279,7 @@ def main() -> int:
             missing = sorted(EXPECTED_FUTURE_TARGETS - future_targets)
             raise AssertionError("future module targets missing: " + ", ".join(missing))
 
-        _verify_achievement_contract(content)
+        _verify_achievement_contract(content, future_module_display_content)
         _verify_food_community_category_contract(content, future_module_display_content)
         _verify_daily_record_contract(content, daily_transcript_content)
         _verify_basic_report_contract()
@@ -4692,8 +4692,6 @@ def main() -> int:
             ("food photo integration status binding", "onPress={showFoodPhotoIntegrationStatus}"),
             ("food photo retake status binding", "onPress={showFoodPhotoRetakeStatus}"),
             ("achievement integration accessibility binding", "accessibilityLabel={achievementIntegrationAccessibilityDisplayLabel}"),
-            ("achievement levels", "const achievementLevels = [10, 50, 100, 150, 200, 250];"),
-            ("achievement categories", "const achievementCategoryDefinitions: Array<{"),
             ("achievement newly unlocked state", "const [achievementNewlyUnlockedItems, setAchievementNewlyUnlockedItems] = useState<AchievementItem[]>([])"),
             ("achievement newly unlocked display items", "const achievementNewlyUnlockedDisplayItems = useMemo("),
             ("achievement save success newly unlocked items", "const saveSuccessNewlyUnlockedDisplayItems = achievementNewlyUnlockedDisplayItems.slice(0, 3);"),
@@ -4714,8 +4712,6 @@ def main() -> int:
             ("achievement streak style", "displayItem.kind === \"streak\" ? styles.achievementBadgeStreak : null"),
             ("achievement badge level render", "{displayItem.level}"),
             ("achievement accessibility binding", "accessibilityLabel={displayItem.accessibilityLabel}"),
-            ("achievement target lower bound", "const target = Math.max(1, boundAchievementProgress(value.target));"),
-            ("achievement progress clamped to target", "const progress = Math.min(target, boundAchievementProgress(value.progress, target));"),
             ("achievement progress ratio bounded", "const progressRatio = Math.min(1, displayItem.progress / displayItem.target);"),
             ("year review target year helper", "function yearReviewTargetYear(value: Date)"),
             ("year review generation label helper", "function nextYearReviewGenerationLabel(value: Date)"),
@@ -4796,6 +4792,15 @@ def main() -> int:
             ("food photo return accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodPhotoReturnAccessibility}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("achievement levels", "export const achievementLevels = [10, 50, 100, 150, 200, 250];"),
+            ("achievement categories", "export const achievementCategoryDefinitions: Array<{"),
+            ("achievement target lower bound", "const target = Math.max(1, boundAchievementProgress(value.target));"),
+            ("achievement progress clamped to target", "const progress = Math.min(target, boundAchievementProgress(value.progress, target));"),
+            ("achievement API transform helper", "export function achievementItemFromApi(value: AchievementApiItem): AchievementItem"),
+            ("achievement unlock date helper", "export function achievementUnlockDisplayDate(value?: string | null)"),
+        ):
+            _assert_contains(label, future_module_display_content, marker)
         for label, marker in (
             ("future module cards static config", "export const futureModuleCards: FutureModuleCard[] = ["),
             ("future module food community database card title", 'title: "食物社群資料庫"'),

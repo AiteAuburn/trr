@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1183 extract achievement display transforms
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved achievement taxonomy types, level/static category config, API item transform, display item shaping, progress bounds, and unlock-date copy from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept achievement backend endpoints, post-save sync, newly-unlocked sections, hidden/debug-only future routing, first-version menu destinations, styles, copy, and screen layout unchanged.
+- Updated the navigation verifier so achievement taxonomy/display-transform ownership is guarded in `mobile/futureModuleDisplay.ts`, while App-owned state, sync handlers, and rendering remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the achievement display transform boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating hidden/future-module display helpers and static config before moving renderers.
+
 ### T1182 extract dev reset response transform
 
 類型：mobile / refactor / verifier / docs
