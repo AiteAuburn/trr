@@ -68,6 +68,7 @@ MANUAL_RECORD_CREATE_PREVIEW_ACTION_PATH = REPO_ROOT / "mobile" / "manualRecordC
 MANUAL_RECORD_CONFIRM_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmFooterActions.tsx"
 MANUAL_RECORD_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmPreviewBlock.tsx"
 MANUAL_RECORD_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordDateTimeFields.tsx"
+MANUAL_RECORD_EXERCISE_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordExerciseFields.tsx"
 MANUAL_RECORD_GLUCOSE_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordGlucoseFields.tsx"
 MANUAL_RECORD_HEADER_INTRO_PATH = REPO_ROOT / "mobile" / "manualRecordHeaderIntro.tsx"
 MANUAL_RECORD_MEAL_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordMealFields.tsx"
@@ -1324,6 +1325,7 @@ def main() -> int:
         encoding="utf-8"
     )
     manual_record_date_time_fields_content = MANUAL_RECORD_DATE_TIME_FIELDS_PATH.read_text(encoding="utf-8")
+    manual_record_exercise_fields_content = MANUAL_RECORD_EXERCISE_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_glucose_fields_content = MANUAL_RECORD_GLUCOSE_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_header_intro_content = MANUAL_RECORD_HEADER_INTRO_PATH.read_text(encoding="utf-8")
     manual_record_meal_fields_content = MANUAL_RECORD_MEAL_FIELDS_PATH.read_text(encoding="utf-8")
@@ -1798,6 +1800,24 @@ def main() -> int:
             ("manual record meal multiline style", "multilineField: {"),
         ):
             _assert_contains(label, manual_record_meal_fields_content, marker)
+        for label, marker in (
+            ("manual record exercise fields component", "export function ManualRecordExerciseFields"),
+            ("manual record exercise activity label", '<FieldLabel icon={"🚶"} label={"運動"} />'),
+            ("manual record exercise activity accessibility", "accessibilityLabel={activityAccessibilityLabel}"),
+            ("manual record exercise activity value", "value={activity}"),
+            ("manual record exercise activity handler", "onChangeText={onActivityChange}"),
+            ("manual record exercise activity max length", "maxLength={activityMaxLength}"),
+            ("manual record exercise activity placeholder", 'placeholder="走路"'),
+            ("manual record exercise minutes label", '<FieldLabel icon={"⏱"} label={"時長（分鐘）"} />'),
+            ("manual record exercise minutes accessibility", "accessibilityLabel={minutesAccessibilityLabel}"),
+            ("manual record exercise minutes value", "value={minutes}"),
+            ("manual record exercise minutes handler", "onChangeText={onMinutesChange}"),
+            ("manual record exercise minutes keyboard", 'keyboardType="numeric"'),
+            ("manual record exercise minutes max length", "maxLength={minutesMaxLength}"),
+            ("manual record exercise minutes placeholder", 'placeholder="20"'),
+            ("manual record exercise input style", "input: {"),
+        ):
+            _assert_contains(label, manual_record_exercise_fields_content, marker)
         for label, marker in (
             ("record edit footer actions component", "export function RecordEditFooterActions({"),
             ("record edit footer precheck title", "<Text style={styles.label}>{preCheckTitle}</Text>"),
@@ -4314,6 +4334,9 @@ def main() -> int:
             ("manual record meal fields binding", "<ManualRecordMealFields\n                foodItems={manualRecordFields.foodItems}"),
             ("manual record food items binding", "onFoodItemsChange={updateManualRecordFoodItems}"),
             ("manual record meal type option press binding", "onMealTypePress={pressManualRecordMealTypeOption}"),
+            ("manual record exercise fields binding", "<ManualRecordExerciseFields\n                activity={manualRecordFields.exerciseActivity}"),
+            ("manual record exercise activity binding", "onActivityChange={updateManualRecordExerciseActivity}"),
+            ("manual record exercise minutes binding", "onMinutesChange={updateManualRecordExerciseMinutes}"),
             ("manual record header intro binding", "<ManualRecordHeaderIntro\n              backAccessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}"),
             ("manual record header intro title binding", 'title="手動新增紀錄"'),
             ("manual record header intro press binding", "onBackPress={returnFromManualRecord}"),

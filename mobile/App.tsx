@@ -717,6 +717,7 @@ import { ManualRecordCreatePreviewAction } from "./manualRecordCreatePreviewActi
 import { ManualRecordConfirmFooterActions } from "./manualRecordConfirmFooterActions";
 import { ManualRecordConfirmPreviewBlock } from "./manualRecordConfirmPreviewBlock";
 import { ManualRecordDateTimeFields } from "./manualRecordDateTimeFields";
+import { ManualRecordExerciseFields } from "./manualRecordExerciseFields";
 import { ManualRecordGlucoseFields } from "./manualRecordGlucoseFields";
 import { ManualRecordHeaderIntro } from "./manualRecordHeaderIntro";
 import { ManualRecordMealFields } from "./manualRecordMealFields";
@@ -8138,35 +8139,16 @@ export default function App() {
             ) : null}
 
             {manualRecordType === "exercise" ? (
-              <>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"🚶"} label={"運動"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.exerciseActivityInputAccessibility}
-                    value={manualRecordFields.exerciseActivity}
-                    onChangeText={updateManualRecordExerciseActivity}
-                    maxLength={recordEditFieldMaxLength("exerciseActivity")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    placeholder="走路"
-                  />
-                </View>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"⏱"} label={"時長（分鐘）"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.exerciseMinutesInputAccessibility}
-                    value={manualRecordFields.exerciseMinutes}
-                    onChangeText={updateManualRecordExerciseMinutes}
-                    keyboardType="numeric"
-                    maxLength={recordEditFieldMaxLength("exerciseMinutes")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    placeholder="20"
-                  />
-                </View>
-              </>
+              <ManualRecordExerciseFields
+                activity={manualRecordFields.exerciseActivity}
+                activityAccessibilityLabel={auxiliaryDisplayLabels.exerciseActivityInputAccessibility}
+                activityMaxLength={recordEditFieldMaxLength("exerciseActivity")}
+                minutes={manualRecordFields.exerciseMinutes}
+                minutesAccessibilityLabel={auxiliaryDisplayLabels.exerciseMinutesInputAccessibility}
+                minutesMaxLength={recordEditFieldMaxLength("exerciseMinutes")}
+                onActivityChange={updateManualRecordExerciseActivity}
+                onMinutesChange={updateManualRecordExerciseMinutes}
+              />
             ) : null}
 
             {manualRecordType === "medication" ? (

@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1265: Extract manual-record exercise fields
+
+Status: done
+
+Summary:
+
+- Added `mobile/manualRecordExerciseFields.tsx` for the Manual Record exercise activity and duration inputs.
+- Replaced the inline Manual Record exercise branch JSX in `mobile/App.tsx` with `ManualRecordExerciseFields`.
+- Kept exercise labels, placeholders, accessibility labels, values, max-length limits, numeric keyboard for duration, handler bindings, layout, colors, typography, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation and visual-smoke route verifiers so the Manual Record exercise fields component and App bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1264: Extract manual-record meal fields
 
 Status: done

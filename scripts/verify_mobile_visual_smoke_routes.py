@@ -105,6 +105,7 @@ VISUAL_SMOKE_ROUTES = {
         "ManualRecordTypeSelector",
         "ManualRecordGlucoseFields",
         "ManualRecordMealFields",
+        "ManualRecordExerciseFields",
         "ManualRecordCreatePreviewAction",
     ],
     "manualRecordConfirm": [
