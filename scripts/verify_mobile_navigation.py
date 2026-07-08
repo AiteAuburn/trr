@@ -1376,8 +1376,9 @@ def main() -> int:
             ("record update highlight bullet row", "recordUpdateChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("manual submit highlight bullet row", "manualSubmitChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("transcript review highlight bullet row", "transcriptReviewCostBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("ai review highlight bullet row", "aiReviewCostBoundaryChecklistItems.map((item) => (\n                  <HighlightBulletRow key={item} text={item} />"),
         ):
-            target_content = content if label.startswith(("record detail ", "delete confirm ", "record update ", "manual submit ", "transcript review ")) else highlight_bullet_row_content
+            target_content = content if label.startswith(("record detail ", "delete confirm ", "record update ", "manual submit ", "transcript review ", "ai review ")) else highlight_bullet_row_content
             _assert_contains(label, target_content, marker)
         for label, marker in (
             ("record detail date detail row component", 'label={<FieldLabel icon={"📅"} label={"日期"} />}'),
