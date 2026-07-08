@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1192 align App API response types with transform sources
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Replaced duplicated App-local Account, Profile, AI model option/options, VoiceQuota, AuthTokenResponse, and BasicReport shape declarations with aliases to the existing transform source types.
+- Kept DailyRecordSaveResponse and AuthSessionItem local because they do not yet have a stable extracted response-type module boundary.
+- Preserved all runtime behavior, UI copy, layout, navigation, backend request paths, first-version menu destinations, and hidden/debug-only future routing.
+- Updated the navigation verifier so App type ownership is guarded by transform source aliases and old duplicated App-local type blocks are rejected.
+- Updated the refactor roadmap to note the source-type ownership boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Consider extracting remaining App-local response/request wrappers after stable type ownership is in place.
+
 ### T1191 extract auxiliary section labels
 
 類型：mobile / refactor / verifier / docs

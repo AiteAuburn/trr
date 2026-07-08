@@ -1308,11 +1308,27 @@ def main() -> int:
         ):
             _assert_contains(label, shared_display_items_content, marker)
         for label, marker in (
+            ("app account type alias", "type Account = AccountTransformSource;"),
+            ("app profile type alias", "type Profile = ProfileTransformSource;"),
+            ("app AI model option type alias", "type AiModelOption = AiModelOptionTransformSource;"),
+            ("app AI model options type alias", "type AiModelOptions = AiModelOptionsTransformSource<AiModelOption>;"),
+            ("app voice quota type alias", "type VoiceQuota = VoiceQuotaTransformSource;"),
+            ("app auth token type alias", "type AuthTokenResponse = AuthTokenResponseTransformSource;"),
+            ("app basic report type alias", "type BasicReport = BasicReportTransformSource;"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
             ("app local api url normalizer", "function normalizeApiBaseUrl(value: string)"),
             ("app local ui message bound", "function boundUiMessage(value: string)"),
             ("app local display bound", "function boundDisplayText(value: string, maxLength = maxDisplayTextLength)"),
             ("app local number clamp", "function clampNumber(value: number, min: number, max: number)"),
             ("app local auxiliary labels helper", "function auxiliarySectionLabels()"),
+            ("app local account type block", "type Account = {\n  id: string;"),
+            ("app local profile type block", "type Profile = {\n  id: string;"),
+            ("app local AI model option type block", "type AiModelOption = {\n  id: string;"),
+            ("app local voice quota type block", "type VoiceQuota = {\n  plan_code: string;"),
+            ("app local auth token type block", "type AuthTokenResponse = {\n  access_token: string;"),
+            ("app local basic report type block", "type BasicReport = {\n  profile_id: string;"),
         ):
             _assert_not_contains(label, content, marker)
         _verify_daily_record_contract(content, daily_transcript_content)

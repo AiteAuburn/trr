@@ -50,9 +50,9 @@
   - `analysisCopy.ts`：Analysis no-data / boundary / detailed-report bounded copy and custom-range status messages.
   - `settingsCopy.ts`：Settings navigation, active-profile display copy, voice quota minute formatting/warning/usage/helper copy, model/quota/reminder/privacy bounded copy.
   - `subscriptionCopy.ts`：Subscription plan/status labels, comparison row config, plan/status summary display copy, membership trial-days display copy, account security, profile boundary, and settings subscription section labels / bounded copy.
-  - `subscriptionTransforms.ts`：Subscription trial-days date calculation, voice quota response bounding, and recording effective-limit calculation.
-  - `accountTransforms.ts`：Account and profile response bounding transforms.
-  - `aiModelTransforms.ts`：AI model option response bounding transforms.
+  - `subscriptionTransforms.ts`：Subscription trial-days date calculation, voice quota response type/source, response bounding, and recording effective-limit calculation.
+  - `accountTransforms.ts`：Account/profile response source types and bounding transforms.
+  - `aiModelTransforms.ts`：AI model option response source types and bounding transforms.
   - `accountCopy.ts`：Account identity display, login display, public-name fallback, and doctor-share account boundary copy.
   - `sharedDisplayItems.ts`：Shared bounded tuple, metric, option, manual-record type, comparison, tutorial, reminder, session-management preview, destination-card, menu, visual-smoke route, auxiliary section labels, and checklist display item builders.
   - `dateTimeTransforms.ts`：local date/time input formatting, local date keys, analysis date bounds, and local datetime ISO transforms.
@@ -147,7 +147,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; app-shared mobile bounds, date/time, record bounds, record save transforms, daily transcript, auth token/OIDC request transforms, protected auth request header transforms, account/profile response bounding, AI model option response bounding, downloaded native model state bounding, analysis basic report response bounding, analysis data/chart, analysis metric, record streak/day aggregation, subscription trial-days, subscription voice quota response bounding, and recording effective-limit transform helpers extracted.
+Status: started; app-shared mobile bounds, date/time, record bounds, record save transforms, daily transcript, auth token/OIDC request transforms, protected auth request header transforms, account/profile response source types and bounding, AI model option response source types and bounding, downloaded native model state bounding, analysis basic report response source type and bounding, analysis data/chart, analysis metric, record streak/day aggregation, subscription trial-days, subscription voice quota response source type and bounding, and recording effective-limit transform helpers extracted.
 
 Scope:
 
