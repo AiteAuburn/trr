@@ -308,6 +308,7 @@ import {
   aiCandidateEditOpenStatusMessage,
   aiCandidateEditSuccessStatusMessage,
   aiCandidateRemoveCancelStatusMessage,
+  aiCandidateRemoveChecklistDisplayItems,
   aiCandidateRemoveConfirmStatusMessage,
   aiCandidateRemoveResultStatusMessage,
   aiPartialSaveFailureStatusMessage,
@@ -1280,11 +1281,7 @@ export default function App() {
       ? "backend ready；送出前仍會先做本機長度與數字密度檢查。"
       : boundUiMessage("backend 尚未 ready；目前不能送 parser，避免無效重試與額外成本。")
   ].map(resultChecklistItem);
-  const aiCandidateRemoveChecklistItems = [
-    "只影響目前 AI 整理確認清單。",
-    "已經儲存的正式紀錄不受影響。",
-    "若移除錯誤，可返回文字確認頁重新整理；這會重新產生 parser / AI 成本。"
-  ].map(resultChecklistItem);
+  const aiCandidateRemoveChecklistItems = aiCandidateRemoveChecklistDisplayItems();
   const aiSaveFailureChecklistItems = [
     `目前保留 ${unsavedPreviewRecordDisplayCount} 筆候選紀錄在確認流程中。`,
     "系統不會自動重試，也不會重新呼叫 parser / AI。",

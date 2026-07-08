@@ -361,6 +361,14 @@ export function aiCandidateRemoveCancelStatusMessage() {
   return boundUiMessage("已取消移除；候選紀錄保留在 AI 整理確認清單。");
 }
 
+export function aiCandidateRemoveChecklistDisplayItems() {
+  return [
+    "只影響目前 AI 整理確認清單。",
+    "已經儲存的正式紀錄不受影響。",
+    "若移除錯誤，可返回文字確認頁重新整理；這會重新產生 parser / AI 成本。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function aiCandidateRemoveResultStatusMessage(count: number) {
   const boundedCount = clampNumber(count, 0, maxMobileCountValue);
   return boundedCount === 0 ? boundUiMessage("已移除所有候選紀錄") : boundUiMessage(`剩餘 ${boundedCount} 筆候選紀錄`);

@@ -2652,6 +2652,11 @@ def main() -> int:
             "onPress={returnFromPreviewRemoveConfirm}",
         )
         _assert_contains(
+            "AI candidate remove checklist helper binding",
+            content,
+            "const aiCandidateRemoveChecklistItems = aiCandidateRemoveChecklistDisplayItems();",
+        )
+        _assert_contains(
             "AI candidate edit return handler",
             content,
             "function returnFromPreviewRecordEdit()",
@@ -3506,6 +3511,9 @@ def main() -> int:
             ("AI remove confirm boundary label helper", "function aiRemoveConfirmBoundaryLabel(isDailyRecordDelete = false)"),
             ("AI remove confirm boundary copy helper", "function aiRemoveConfirmBoundaryCopy(isDailyRecordDelete = false)"),
             ("AI remove confirm source copy helper", "function aiRemoveConfirmSourceCopy(confidencePercent: number)"),
+            ("AI candidate remove checklist helper", "function aiCandidateRemoveChecklistDisplayItems()"),
+            ("AI candidate remove checklist scope copy", "只影響目前 AI 整理確認清單。"),
+            ("AI candidate remove checklist saved record copy", "已經儲存的正式紀錄不受影響。"),
             ("daily record delete confirm copy", "確定要刪除這筆紀錄嗎？"),
             ("daily record delete irreversible copy", "刪除後無法復原。"),
             ("AI remove confirm source marker", "source: AI candidate"),
