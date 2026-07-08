@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1282 extract history boundary checklist helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/historyCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `historyBoundaryChecklistDisplayItems` to `mobile/historyCopy.ts` for the History boundary checklist copy.
+- Replaced the inline History boundary checklist construction in `mobile/App.tsx` with the extracted helper.
+- Kept checklist copy, bounded display behavior, loaded-record/empty-record branching, cursor pagination messaging, History rendering, load-more behavior, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and key History boundary copy are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk first-version checklist/display helpers from `App.tsx`; keep History cursor loading and backend request ownership in `App.tsx` until component boundaries are stable.
+
 ### T1281 extract analysis boundary checklist helper
 
 類型：mobile / refactor / verifier / docs

@@ -533,6 +533,7 @@ import {
   type QuickEntryMode
 } from "./firstVersionFlowCopy";
 import {
+  historyBoundaryChecklistDisplayItems,
   historyManualEntryStatusMessage,
   historyNoRangeRecordsBodyCopy,
   historyNoRangeRecordsTitleCopy,
@@ -540,7 +541,6 @@ import {
   historyNoRecordsTitleCopy,
   historyRecordDetailStatusMessage,
   historyReturnTodayStatusMessage,
-  loadedRecordActionCopy,
   noRealRecordHealthValueCopy
 } from "./historyCopy";
 import {
@@ -1167,7 +1167,6 @@ export default function App() {
   const unsavedPreviewRecordDisplayCount = clampNumber(unsavedPreviewRecordCount, 0, maxMobilePreviewRecords);
   const mobileRecordSyncDisplayLimit = clampNumber(mobileRecordSyncLimit, 0, maxMobileCountValue);
   const mobileReportQueryDisplayLimit = clampNumber(mobileReportQueryLimit, 0, maxMobileCountValue);
-  const noRealRecordHealthValueDisplayText = noRealRecordHealthValueCopy("general");
   const historyNoRealRecordHealthValueDisplayText = noRealRecordHealthValueCopy("history");
   const analysisNoDataStatusDisplayLabel = analysisNoDataStatusLabel();
   const analysisNoDataDisplayCopy = analysisNoDataCopy();
@@ -1264,13 +1263,11 @@ export default function App() {
   const recordEntrySettingsChecklistItems = recordEntrySettingsChecklistDisplayItems(protectedBackendReady);
   const aiCandidateRemoveChecklistItems = aiCandidateRemoveChecklistDisplayItems();
   const aiSaveFailureChecklistItems = aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordDisplayCount);
-  const historyBoundaryChecklistItems = [
-    "月曆選取日期只套用在 mobile 目前已載入的紀錄。",
-    `每頁最多載入 ${mobileRecordSyncDisplayLimit} 筆，本機最多保留 ${maxMobileRecordCacheLimit} 筆；這不是完整歷史匯出。`,
-    "點擊月曆日期或切換 AI 整理 / 原始紀錄不會額外查詢 backend，也不會呼叫 AI。",
-    "載入更多使用 backend cursor pagination，只追加更早紀錄並以 id 去重。",
-    recordsForDisplay.length === 0 ? noRealRecordHealthValueDisplayText : loadedRecordActionCopy()
-  ].map(resultChecklistItem);
+  const historyBoundaryChecklistItems = historyBoundaryChecklistDisplayItems(
+    mobileRecordSyncDisplayLimit,
+    maxMobileRecordCacheLimit,
+    recordsForDisplay.length > 0
+  );
   const deleteConfirmChecklistItems = deleteConfirmChecklistDisplayItems();
   const recordUpdateChecklistItems = recordUpdateChecklistDisplayItems();
   const analysisBoundaryChecklistItems = analysisBoundaryChecklistDisplayItems(

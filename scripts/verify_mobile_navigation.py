@@ -24,6 +24,7 @@ RECORD_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "recordStatusCopy.ts"
 REPORT_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "reportStatusCopy.ts"
 NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
+HISTORY_COPY_PATH = REPO_ROOT / "mobile" / "historyCopy.ts"
 HISTORY_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "historyScreenData.ts"
 ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
 ANALYSIS_DATA_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisDataTransforms.ts"
@@ -1277,6 +1278,7 @@ def main() -> int:
     report_status_copy_content = REPORT_STATUS_COPY_PATH.read_text(encoding="utf-8")
     native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
     first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
+    history_copy_content = HISTORY_COPY_PATH.read_text(encoding="utf-8")
     history_screen_data_content = HISTORY_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     analysis_copy_content = ANALYSIS_COPY_PATH.read_text(encoding="utf-8")
     analysis_data_content = ANALYSIS_DATA_TRANSFORMS_PATH.read_text(encoding="utf-8")
@@ -2411,6 +2413,11 @@ def main() -> int:
             "analysis boundary checklist helper binding",
             content,
             "const analysisBoundaryChecklistItems = analysisBoundaryChecklistDisplayItems(",
+        )
+        _assert_contains(
+            "history boundary checklist helper binding",
+            content,
+            "const historyBoundaryChecklistItems = historyBoundaryChecklistDisplayItems(",
         )
         _assert_contains(
             "AI save confirm guarded return binding",
@@ -3979,6 +3986,13 @@ def main() -> int:
             history_screen_data_content,
             "function historyCalendarDayDisplayItem(",
         )
+        for label, marker in (
+            ("history boundary checklist helper", "function historyBoundaryChecklistDisplayItems("),
+            ("history calendar loaded-only copy", "月曆選取日期只套用在 mobile 目前已載入的紀錄。"),
+            ("history cursor pagination copy", "載入更多使用 backend cursor pagination，只追加更早紀錄並以 id 去重。"),
+            ("history loaded record action copy", "點擊真實紀錄可查看詳情並進行編輯或刪除。"),
+        ):
+            _assert_contains(label, history_copy_content, marker)
         for label, marker in (
             ("history pending record adapter", "function pendingRecordFromRecordItem(record: RecordItem): PendingRecord"),
             ("history daily sync summary helper", "function historyDailySyncSummary(records: RecordItem[], isLocalPreview: boolean)"),

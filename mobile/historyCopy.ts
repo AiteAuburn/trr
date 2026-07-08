@@ -1,6 +1,14 @@
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
 const maxUiMessageLength = 300;
+const maxMobileCountValue = 1_000_000;
+
+function clampNumber(value: number, min: number, max: number) {
+  if (!Number.isFinite(value)) {
+    return min;
+  }
+  return Math.min(Math.max(value, min), max);
+}
 
 function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);
@@ -33,6 +41,22 @@ export function noRealRecordHealthValueCopy(scope: "general" | "history") {
 
 export function loadedRecordActionCopy() {
   return boundDisplayText("點擊真實紀錄可查看詳情並進行編輯或刪除。", maxDisplayDetailTextLength);
+}
+
+export function historyBoundaryChecklistDisplayItems(
+  recordSyncLimit: number,
+  recordCacheLimit: number,
+  hasLoadedRecords: boolean
+) {
+  const boundedRecordSyncLimit = clampNumber(recordSyncLimit, 0, maxMobileCountValue);
+  const boundedRecordCacheLimit = clampNumber(recordCacheLimit, 0, maxMobileCountValue);
+  return [
+    "月曆選取日期只套用在 mobile 目前已載入的紀錄。",
+    `每頁最多載入 ${boundedRecordSyncLimit} 筆，本機最多保留 ${boundedRecordCacheLimit} 筆；這不是完整歷史匯出。`,
+    "點擊月曆日期或切換 AI 整理 / 原始紀錄不會額外查詢 backend，也不會呼叫 AI。",
+    "載入更多使用 backend cursor pagination，只追加更早紀錄並以 id 去重。",
+    hasLoadedRecords ? loadedRecordActionCopy() : noRealRecordHealthValueCopy("general")
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
 export function historyNoRecordsTitleCopy() {
