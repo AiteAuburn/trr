@@ -169,6 +169,7 @@ import {
   futureModulesReturnMenuStatusMessage,
   futurePreviewReturnStatusMessage,
   futurePreviewSectionLabels,
+  healthIntegrationBoundaryDisplayRows,
   healthIntegrationExternalDataBoundaryCopy,
   healthIntegrationPreviewBoundaryDisplayItem,
   healthIntegrationReadinessChecklistDisplayItems,
@@ -2018,12 +2019,7 @@ export default function App() {
     ["醫療建議", "不提供"]
   ] as const).map(boundaryMetricDisplayItem);
   const doctorShareBoundaryRows = doctorShareBoundaryDisplayRows();
-  const healthIntegrationBoundaryRows = ([
-    ["來源欄位", "meter / healthkit / health_connect"],
-    ["同步批次", "import_batch_id 預留"],
-    ["同步狀態", "pending / synced / failed"],
-    ["AI 成本", "0 次呼叫"]
-  ] as const).map(boundaryMetricDisplayItem);
+  const healthIntegrationBoundaryRows = healthIntegrationBoundaryDisplayRows();
   const communityBoundaryRows = ([
     ["健康紀錄", "預設私密"],
     ["公開排名", communityPublicSettings?.leaderboard_opt_in ? "已 opt-in" : "預設關閉"],

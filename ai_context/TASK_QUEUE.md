@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1300: Extract health-integration boundary display rows helper
+
+Status: done
+
+Summary:
+
+- Added `healthIntegrationBoundaryDisplayRows` to `mobile/futureModuleDisplay.ts` for the Health Integration boundary metric rows.
+- Replaced the inline Health Integration boundary-row construction in `mobile/App.tsx` with the extracted helper.
+- Kept row copy, bounded display behavior, Health Integration rendering, platform permission/import/BLE behavior, records write behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and key Health Integration boundary row copy are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1299: Extract doctor-share boundary display rows helper
 
 Status: done

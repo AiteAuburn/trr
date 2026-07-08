@@ -1137,6 +1137,18 @@ export function healthIntegrationExternalDataBoundaryCopy() {
   );
 }
 
+export function healthIntegrationBoundaryDisplayRows() {
+  return [
+    ["來源欄位", "meter / healthkit / health_connect"],
+    ["同步批次", "import_batch_id 預留"],
+    ["同步狀態", "pending / synced / failed"],
+    ["AI 成本", "0 次呼叫"]
+  ].map(([label, value]) => ({
+    label: boundDisplayText(label, 60),
+    value: boundDisplayText(value, 80)
+  }));
+}
+
 export function healthIntegrationReadinessChecklistDisplayItems() {
   return [
     "使用者授權、撤權與資料刪除流程",

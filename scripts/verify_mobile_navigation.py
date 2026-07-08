@@ -2505,6 +2505,11 @@ def main() -> int:
             "const doctorShareBoundaryRows = doctorShareBoundaryDisplayRows();",
         )
         _assert_contains(
+            "health integration boundary rows helper binding",
+            content,
+            "const healthIntegrationBoundaryRows = healthIntegrationBoundaryDisplayRows();",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -5936,6 +5941,11 @@ def main() -> int:
             ("health integration preview boundary copy", "目前不請求 HealthKit / Health Connect 權限、不掃描 BLE、不讀取血糖機、不寫入 records"),
             ("health integration external boundary copy helper", "export function healthIntegrationExternalDataBoundaryCopy()"),
             ("health integration external boundary copy", "外部資料不能覆蓋使用者手動紀錄"),
+            ("health integration boundary rows helper", "export function healthIntegrationBoundaryDisplayRows()"),
+            ("health integration boundary source row", "meter / healthkit / health_connect"),
+            ("health integration boundary batch row", "import_batch_id 預留"),
+            ("health integration boundary sync row", "pending / synced / failed"),
+            ("health integration boundary ai cost row", "0 次呼叫"),
             ("health integration readiness checklist helper", "export function healthIntegrationReadinessChecklistDisplayItems()"),
             ("health integration readiness authorization copy", "使用者授權、撤權與資料刪除流程"),
             ("health integration readiness sync copy", "import batch id、sync status 與錯誤復原"),
