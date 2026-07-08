@@ -326,6 +326,7 @@ import {
   aiRemoveConfirmBoundaryCopy,
   aiRemoveConfirmBoundaryLabel,
   aiRemoveConfirmSourceCopy,
+  aiSaveConfirmChecklistDisplayItems,
   aiSaveConfirmIntroCopy,
   aiSaveConfirmReadyStatusMessage,
   aiSaveConfirmReturnStatusMessage,
@@ -1228,14 +1229,7 @@ export default function App() {
   const hasPartialAiSave = lastSaveEntryMethod === "ai" && hasUnsavedPreviewRecords;
   const hasManualFallbackWithAiCandidates =
     lastSaveEntryMethod === "manual" && hasUnsavedPreviewRecords;
-  const aiSaveConfirmChecklistItems = [
-    "只會儲存目前畫面上的候選紀錄。",
-    `本次最多送出 ${unsavedPreviewRecordDisplayCount} 筆候選 payload，不會批次載入完整歷史。`,
-    "送往 backend 的內容以確認後資料為主，不會附帶整段紀錄歷史或模型 debug trace。",
-    "不會儲存未建立片段，也不會自動重新呼叫 AI。",
-    "每筆紀錄仍會經過後端驗證、權限與 audit 路徑。",
-    "若部分儲存失敗，已成功紀錄會保留，未儲存候選會回到確認流程。"
-  ].map(resultChecklistItem);
+  const aiSaveConfirmChecklistItems = aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordDisplayCount);
   const aiReviewCostBoundaryChecklistItems = [
     "此頁只顯示 parser 已回傳的候選紀錄。",
     "逐筆編輯、移除或進入儲存確認都不會重新呼叫 AI。",

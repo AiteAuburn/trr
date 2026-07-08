@@ -211,6 +211,18 @@ export function aiSaveConfirmSubmitLabel(isBusy: boolean, isBlockedByBackend: bo
   );
 }
 
+export function aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordCount: number) {
+  const boundedCount = clampNumber(unsavedPreviewRecordCount, 0, maxMobileCountValue);
+  return [
+    "只會儲存目前畫面上的候選紀錄。",
+    `本次最多送出 ${boundedCount} 筆候選 payload，不會批次載入完整歷史。`,
+    "送往 backend 的內容以確認後資料為主，不會附帶整段紀錄歷史或模型 debug trace。",
+    "不會儲存未建立片段，也不會自動重新呼叫 AI。",
+    "每筆紀錄仍會經過後端驗證、權限與 audit 路徑。",
+    "若部分儲存失敗，已成功紀錄會保留，未儲存候選會回到確認流程。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function dailyRecordLeaveGuardTitleCopy() {
   return boundDisplayText("尚未儲存今天的紀錄", maxDisplayTextLength);
 }
