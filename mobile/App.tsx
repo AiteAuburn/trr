@@ -293,6 +293,7 @@ import {
   recordingWhisperProgressStatusMessage,
   recordingWhisperSuccessStatusMessage,
   transcriptClearedStatusMessage,
+  transcriptReviewCostBoundaryChecklistDisplayItems,
   transcriptReturnEditStatusMessage,
   transcriptReviewBackStatusMessage,
   transcriptReviewIntroCopy,
@@ -1239,16 +1240,11 @@ export default function App() {
     lastSaveEntryMethod === "manual" && hasUnsavedPreviewRecords;
   const aiSaveConfirmChecklistItems = aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordDisplayCount);
   const aiReviewCostBoundaryChecklistItems = aiReviewCostBoundaryChecklistDisplayItems();
-  const transcriptReviewCostBoundaryChecklistItems = [
-    "空文字、過長文字或範例文字不會送 parser。",
-    "下一步整理只送目前這段文字一次，不會批次載入歷史紀錄。",
-    "手動新增可完全避開 AI parser，適合補登明確紀錄。",
-    protectedBackendReady
-      ? parserModelReady
-        ? "backend ready；送出前仍會先做前端長度與數字密度檢查。"
-        : boundUiMessage(`${parserModelUnavailableDisplayMessage}；目前不能送 parser，避免無效模型請求。`)
-      : boundUiMessage("backend 尚未 ready；目前不能送 parser，避免無效重試。")
-  ].map(resultChecklistItem);
+  const transcriptReviewCostBoundaryChecklistItems = transcriptReviewCostBoundaryChecklistDisplayItems(
+    protectedBackendReady,
+    parserModelReady,
+    parserModelUnavailableDisplayMessage
+  );
   const saveSuccessBoundaryChecklistItems = [
     lastSaveEntryMethod === "manual"
       ? hasManualFallbackWithAiCandidates

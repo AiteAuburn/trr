@@ -161,6 +161,23 @@ export function transcriptReviewPreflightPassedCopy() {
   return boundDisplayText("已通過本機長度與數字密度檢查；下一步才會送出 parser 請求。", maxDisplayDetailTextLength);
 }
 
+export function transcriptReviewCostBoundaryChecklistDisplayItems(
+  isBackendReady: boolean,
+  isParserModelReady: boolean,
+  parserModelUnavailableMessage: string
+) {
+  return [
+    "空文字、過長文字或範例文字不會送 parser。",
+    "下一步整理只送目前這段文字一次，不會批次載入歷史紀錄。",
+    "手動新增可完全避開 AI parser，適合補登明確紀錄。",
+    isBackendReady
+      ? isParserModelReady
+        ? "backend ready；送出前仍會先做前端長度與數字密度檢查。"
+        : boundUiMessage(`${parserModelUnavailableMessage}；目前不能送 parser，避免無效模型請求。`)
+      : boundUiMessage("backend 尚未 ready；目前不能送 parser，避免無效重試。")
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function validateTranscriptForParser(value: string) {
   const normalized = value.trim();
   if (!normalized) {

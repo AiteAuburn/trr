@@ -2388,6 +2388,11 @@ def main() -> int:
             "const aiReviewCostBoundaryChecklistItems = aiReviewCostBoundaryChecklistDisplayItems();",
         )
         _assert_contains(
+            "transcript review checklist helper binding",
+            content,
+            "const transcriptReviewCostBoundaryChecklistItems = transcriptReviewCostBoundaryChecklistDisplayItems(",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -3260,6 +3265,9 @@ def main() -> int:
             ("transcript review pre-parse guidance helper", "function transcriptReviewPreParseGuidanceCopy()"),
             ("transcript review sample warning helper", "function transcriptReviewSampleWarningCopy()"),
             ("transcript review preflight passed helper", "function transcriptReviewPreflightPassedCopy()"),
+            ("transcript review cost boundary checklist helper", "function transcriptReviewCostBoundaryChecklistDisplayItems("),
+            ("transcript review empty parser guard copy", "空文字、過長文字或範例文字不會送 parser。"),
+            ("transcript review no batch history copy", "下一步整理只送目前這段文字一次，不會批次載入歷史紀錄。"),
             ("transcript validation helper", "function validateTranscriptForParser(value: string)"),
             ("transcript validation numeric density helper", "function countNumericValues(value: string)"),
             ("transcript validation max length copy", "文字過長，請縮短到 ${maxTranscriptTextLength} 字內，或分批整理"),
