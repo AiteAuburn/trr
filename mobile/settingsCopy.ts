@@ -203,3 +203,12 @@ export function privacyIntegrationButtonLabel() {
 export function privacyIntegrationAccessibilityLabel() {
   return boundDisplayText("查看隱私整合狀態，不匯出、刪除或公開資料", maxDisplayDetailTextLength);
 }
+
+export function privacyReadinessChecklistDisplayItems() {
+  return [
+    "通知內容最小化：推播不可包含血糖數值、完整餐點或用藥內容。",
+    "資料分享 opt-in / opt-out：醫師、照護者、社群與排行榜都必須分開授權。",
+    "資料匯出與刪除請求：需有狀態追蹤、身份驗證與 audit trail。",
+    "撤銷與到期：任何 share token、grant、公開顯示都必須可撤回。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}

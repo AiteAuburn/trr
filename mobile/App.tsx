@@ -630,6 +630,7 @@ import {
   modelSelectionBoundaryCopy,
   privacyIntegrationAccessibilityLabel,
   privacyIntegrationButtonLabel,
+  privacyReadinessChecklistDisplayItems,
   privacySettingsIntroCopy,
   quotaReadinessChecklistDisplayItems,
   quotaRemainingDisplayValue,
@@ -1796,12 +1797,7 @@ export default function App() {
     ["回診前整理", "回診前 3 天", "提醒查看歷史紀錄與基本分析。", "未啟用"]
   ] as const).map(reminderPreviewDisplayItem);
   const reminderReadinessChecklistItems = reminderReadinessChecklistDisplayItems();
-  const privacyReadinessChecklistItems = [
-    "通知內容最小化：推播不可包含血糖數值、完整餐點或用藥內容。",
-    "資料分享 opt-in / opt-out：醫師、照護者、社群與排行榜都必須分開授權。",
-    "資料匯出與刪除請求：需有狀態追蹤、身份驗證與 audit trail。",
-    "撤銷與到期：任何 share token、grant、公開顯示都必須可撤回。"
-  ].map(resultChecklistItem);
+  const privacyReadinessChecklistItems = privacyReadinessChecklistDisplayItems();
   const tutorialSafetyChecklistItems = [
     "AI 只整理成候選紀錄，確認前不會寫入資料庫。",
     "文字為空時不送 parser，避免不必要的 API 與 LLM 成本。",

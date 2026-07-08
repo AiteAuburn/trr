@@ -2440,6 +2440,11 @@ def main() -> int:
             "const reminderReadinessChecklistItems = reminderReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "privacy readiness checklist helper binding",
+            content,
+            "const privacyReadinessChecklistItems = privacyReadinessChecklistDisplayItems();",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -5176,6 +5181,10 @@ def main() -> int:
             ("reminder readiness permission copy", "系統通知權限請求與拒絕後的替代說明。"),
             ("reminder readiness PHI-safe notification copy", "通知內容不得包含敏感健康數值或完整紀錄。"),
             ("privacy integration accessibility helper", "function privacyIntegrationAccessibilityLabel()"),
+            ("privacy readiness checklist helper", "function privacyReadinessChecklistDisplayItems()"),
+            ("privacy readiness notification minimization copy", "通知內容最小化：推播不可包含血糖數值、完整餐點或用藥內容。"),
+            ("privacy readiness opt-in copy", "資料分享 opt-in / opt-out：醫師、照護者、社群與排行榜都必須分開授權。"),
+            ("privacy readiness revoke copy", "撤銷與到期：任何 share token、grant、公開顯示都必須可撤回。"),
         ):
             _assert_contains(label, settings_copy_content, marker)
         for label, marker in (
