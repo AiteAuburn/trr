@@ -57,6 +57,21 @@ export function analysisBoundaryDataCopy(isPreviewMode: boolean) {
   );
 }
 
+export function analysisBoundaryChecklistDisplayItems(
+  dataBoundaryCopy: string,
+  recordCacheLimit: number,
+  reportQueryLimit: number
+) {
+  const boundedRecordCacheLimit = clampNumber(recordCacheLimit, 0, maxMobileCountValue);
+  const boundedReportQueryLimit = clampNumber(reportQueryLimit, 0, maxMobileCountValue);
+  return [
+    dataBoundaryCopy,
+    `mobile 本機分析最多基於目前已同步的 ${boundedRecordCacheLimit} 筆紀錄。`,
+    "基本分析不呼叫 AI，不會產生診療建議。",
+    `詳細報告會使用 ${boundedReportQueryLimit} 筆上限查詢，避免一次載入過多資料。`
+  ].map(checklistItem);
+}
+
 export function analysisRangeSummaryCopy(recordCount: number, isPreviewMode: boolean) {
   const boundedCount = clampNumber(recordCount, 0, maxMobileCountValue);
   return boundDisplayText(

@@ -553,6 +553,7 @@ import {
   type HistoryDetailMode
 } from "./historyScreenData";
 import {
+  analysisBoundaryChecklistDisplayItems,
   analysisBoundaryDataCopy,
   analysisChartEmptyCopy,
   analysisCustomApplyStatusMessage,
@@ -1272,12 +1273,11 @@ export default function App() {
   ].map(resultChecklistItem);
   const deleteConfirmChecklistItems = deleteConfirmChecklistDisplayItems();
   const recordUpdateChecklistItems = recordUpdateChecklistDisplayItems();
-  const analysisBoundaryChecklistItems = [
+  const analysisBoundaryChecklistItems = analysisBoundaryChecklistDisplayItems(
     analysisBoundaryDataDisplayCopy,
-    `mobile 本機分析最多基於目前已同步的 ${maxMobileRecordCacheLimit} 筆紀錄。`,
-    "基本分析不呼叫 AI，不會產生診療建議。",
-    `詳細報告會使用 ${mobileReportQueryDisplayLimit} 筆上限查詢，避免一次載入過多資料。`
-  ].map(resultChecklistItem);
+    maxMobileRecordCacheLimit,
+    mobileReportQueryDisplayLimit
+  );
   const saveSuccessDestinationItems = [
     ...(hasUnsavedPreviewRecords
       ? [["⚠", "返回確認", "處理尚未儲存的候選紀錄", "aiReview"]]

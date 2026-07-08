@@ -2408,6 +2408,11 @@ def main() -> int:
             "const saveSuccessBoundaryChecklistItems = saveSuccessBoundaryChecklistDisplayItems(",
         )
         _assert_contains(
+            "analysis boundary checklist helper binding",
+            content,
+            "const analysisBoundaryChecklistItems = analysisBoundaryChecklistDisplayItems(",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -4296,9 +4301,12 @@ def main() -> int:
             ("analysis no-data status helper", "function analysisNoDataStatusLabel()"),
             ("analysis no-data copy helper", "function analysisNoDataCopy()"),
             ("analysis boundary data copy helper", "function analysisBoundaryDataCopy(isPreviewMode: boolean)"),
+            ("analysis boundary checklist helper", "function analysisBoundaryChecklistDisplayItems("),
             ("analysis no-data status copy", "尚無資料"),
             ("analysis no fixed mock glucose copy", "目前不使用固定範例血糖數字"),
             ("analysis backend bounded report copy", "六項統計優先使用 backend bounded report"),
+            ("analysis no AI advice copy", "基本分析不呼叫 AI，不會產生診療建議。"),
+            ("analysis detailed report query cap copy", "詳細報告會使用 ${boundedReportQueryLimit} 筆上限查詢，避免一次載入過多資料。"),
             ("analysis custom range status helper", "function analysisCustomRangeStatusCopy(range: AnalysisRange, customStart: string, customEnd: string)"),
             ("analysis custom invalid format status", "自訂日期格式無效；目前改用本月資料。"),
             ("analysis custom invalid order status", "開始日期晚於結束日期；目前改用本月資料。"),
