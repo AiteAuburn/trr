@@ -2420,6 +2420,11 @@ def main() -> int:
             "const historyBoundaryChecklistItems = historyBoundaryChecklistDisplayItems(",
         )
         _assert_contains(
+            "auth boundary checklist helper binding",
+            content,
+            "const authBoundaryChecklistItems = authBoundaryChecklistDisplayItems();",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -5222,6 +5227,10 @@ def main() -> int:
             ("dev reset response bound helper", "export function boundDevResetResponse(value: DevResetResponse): DevResetResponse"),
             ("dev reset deleted count key cap", ".slice(0, maxDevResetDeletedCountKeys)"),
             ("dev reset deleted count clamp", "clampNumber(count, 0, maxMobileCountValue)"),
+            ("auth boundary checklist helper", "function authBoundaryChecklistDisplayItems()"),
+            ("auth boundary provider control copy", "Apple / Google / Email 登入需由正式 auth provider 控制。"),
+            ("auth boundary secure storage copy", "mobile token persistence 只可走 SecureStore / Keychain / Keystore；不可 fallback 到一般 storage。"),
+            ("auth boundary protected API copy", "所有受保護 API 都要由後端驗證帳號、profile 與權限 scope。"),
         ):
             _assert_contains(label, auth_status_copy_content, marker)
         for label, marker in (

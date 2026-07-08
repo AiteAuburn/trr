@@ -415,6 +415,7 @@ import {
   authLogoutProgressStatusMessage,
   authLogoutSuccessStatusMessage,
   authOperationBusyStatusMessage,
+  authBoundaryChecklistDisplayItems,
   authProviderCallbackRejectedStatusMessage,
   authProviderChallengeCreatedStatusMessage,
   authProviderChallengeFailureStatusMessage,
@@ -1783,14 +1784,7 @@ export default function App() {
     ["基本分析", "趨勢與摘要一目了然"],
     ["歷史回顧", "完整保存並支援查詢"]
   ] as const).map(detailPairDisplayItem);
-  const authBoundaryChecklistItems = [
-    "Apple / Google / Email 登入需由正式 auth provider 控制。",
-    "access token 只能短效，refresh token 需要 rotation 與 revoke。",
-    "mobile token persistence 只可走 SecureStore / Keychain / Keystore；不可 fallback 到一般 storage。",
-    "空白或超過 4096 字元的 access token 不會組成 Authorization header。",
-    "mobile token 必須放 Keychain / Keystore，不放一般 storage。",
-    "所有受保護 API 都要由後端驗證帳號、profile 與權限 scope。"
-  ].map(resultChecklistItem);
+  const authBoundaryChecklistItems = authBoundaryChecklistDisplayItems();
   const profileReadinessChecklistItems = [
     "production auth / OIDC 或 JWT 邊界，避免 dev account 被當成正式個資。",
     "profile update API、欄位驗證、錯誤狀態與 optimistic update rollback。",

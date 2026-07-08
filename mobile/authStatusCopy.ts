@@ -2,6 +2,7 @@ import type { AuthProviderChallengeFailure } from "./authProviderChallenge";
 
 const maxUiMessageLength = 300;
 const maxDisplayTextLength = 120;
+const maxDisplayDetailTextLength = 240;
 const maxIdentifierTextLength = 128;
 const maxMobileCountValue = 1_000_000;
 const maxDevResetDeletedCountKeys = 20;
@@ -240,4 +241,15 @@ export function authSessionsUnavailableStatusMessage(message: string) {
 
 export function authSessionsFailureStatusMessage(error: unknown) {
   return safeUiError(error, "session list 載入失敗；mobile 不會保留舊 session metadata。");
+}
+
+export function authBoundaryChecklistDisplayItems() {
+  return [
+    "Apple / Google / Email 登入需由正式 auth provider 控制。",
+    "access token 只能短效，refresh token 需要 rotation 與 revoke。",
+    "mobile token persistence 只可走 SecureStore / Keychain / Keystore；不可 fallback 到一般 storage。",
+    "空白或超過 4096 字元的 access token 不會組成 Authorization header。",
+    "mobile token 必須放 Keychain / Keystore，不放一般 storage。",
+    "所有受保護 API 都要由後端驗證帳號、profile 與權限 scope。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }

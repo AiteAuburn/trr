@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1283: Extract auth-boundary checklist helper
+
+Status: done
+
+Summary:
+
+- Added `authBoundaryChecklistDisplayItems` to `mobile/authStatusCopy.ts` for the Account Security auth/token boundary checklist copy.
+- Replaced the inline Account Security auth boundary checklist construction in `mobile/App.tsx` with the extracted helper.
+- Kept checklist copy, bounded display behavior, SecureStore/Keychain/Keystore guidance, Authorization header guard messaging, Account Security rendering, auth/session behavior, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation and secure-auth-storage verifier coverage so the extracted helper, App binding, and key auth boundary copy are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py scripts/verify_mobile_secure_auth_storage.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1282: Extract history boundary checklist helper
 
 Status: done

@@ -13,6 +13,7 @@ MOBILE_DIR = REPO_ROOT / "mobile"
 STORAGE_PATH = MOBILE_DIR / "authTokenStorage.ts"
 AUTH_TRANSFORMS_PATH = MOBILE_DIR / "authTransforms.ts"
 AUTH_REQUEST_HEADERS_PATH = MOBILE_DIR / "authRequestHeaders.ts"
+AUTH_STATUS_COPY_PATH = MOBILE_DIR / "authStatusCopy.ts"
 CHALLENGE_PATH = MOBILE_DIR / "authProviderChallenge.ts"
 APP_PATH = MOBILE_DIR / "App.tsx"
 PACKAGE_PATH = MOBILE_DIR / "package.json"
@@ -23,6 +24,7 @@ def main() -> int:
     storage = STORAGE_PATH.read_text(encoding="utf-8") if STORAGE_PATH.exists() else ""
     auth_transforms = AUTH_TRANSFORMS_PATH.read_text(encoding="utf-8") if AUTH_TRANSFORMS_PATH.exists() else ""
     auth_request_headers = AUTH_REQUEST_HEADERS_PATH.read_text(encoding="utf-8") if AUTH_REQUEST_HEADERS_PATH.exists() else ""
+    auth_status_copy = AUTH_STATUS_COPY_PATH.read_text(encoding="utf-8") if AUTH_STATUS_COPY_PATH.exists() else ""
     challenge = CHALLENGE_PATH.read_text(encoding="utf-8") if CHALLENGE_PATH.exists() else ""
     app = APP_PATH.read_text(encoding="utf-8")
     package = json.loads(PACKAGE_PATH.read_text(encoding="utf-8"))
@@ -122,7 +124,7 @@ def main() -> int:
             errors.append(f"mobile/App.tsx missing secure auth marker: {marker}")
     if "4096" in app and "authAccessTokenMaxLength" not in app:
         errors.append("mobile/App.tsx must use authAccessTokenMaxLength instead of inline token limits")
-    errors.extend(verify_protected_request_header_boundary(app, auth_transforms, auth_request_headers))
+    errors.extend(verify_protected_request_header_boundary(app, auth_transforms, auth_request_headers, auth_status_copy))
 
     if errors:
         for error in errors:
@@ -133,7 +135,12 @@ def main() -> int:
     return 0
 
 
-def verify_protected_request_header_boundary(app: str, auth_transforms: str, auth_request_headers: str) -> list[str]:
+def verify_protected_request_header_boundary(
+    app: str,
+    auth_transforms: str,
+    auth_request_headers: str,
+    auth_status_copy: str,
+) -> list[str]:
     errors: list[str] = []
     request_header_helper = extract_function_body(auth_request_headers, "protectedRequestHeaders")
     if not request_header_helper:
@@ -182,10 +189,15 @@ def verify_protected_request_header_boundary(app: str, auth_transforms: str, aut
         'protectedAuthReady',
         'protectedAccountBackendReady',
         'protectedBackendReady',
-        "空白或超過 4096 字元的 access token 不會組成 Authorization header。",
     ):
         if marker not in app:
             errors.append(f"mobile/App.tsx missing protected auth readiness marker: {marker}")
+    for marker in (
+        "function authBoundaryChecklistDisplayItems()",
+        "空白或超過 4096 字元的 access token 不會組成 Authorization header。",
+    ):
+        if marker not in auth_status_copy:
+            errors.append(f"mobile/authStatusCopy.ts missing protected auth readiness marker: {marker}")
     return errors
 
 
