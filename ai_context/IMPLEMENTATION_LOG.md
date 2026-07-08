@@ -15,6 +15,40 @@
 
 ## 2026-07-08
 
+### T1258 extract manual-record confirm preview block
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/manualRecordConfirmPreviewBlock.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/manualRecordConfirmPreviewBlock.tsx` for the Manual Record Confirm pre-save badge, intro copy, and selected manual-record preview card.
+- Replaced the inline Manual Record Confirm intro/preview JSX in `mobile/App.tsx` with `ManualRecordConfirmPreviewBlock`.
+- Kept badge text, intro text, icon, type label, payload summary, source line, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation, UI spec coverage, and visual-smoke route verifiers so the Manual Record Confirm preview component and App display bindings are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version manual-record and history presentation blocks while keeping form state and backend handlers owned by `App.tsx`.
+
 ### T1257 extract manual-record confirm footer actions
 
 類型：mobile / refactor / verifier / docs

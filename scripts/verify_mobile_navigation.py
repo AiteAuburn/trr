@@ -65,6 +65,7 @@ DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "detailRow.tsx"
 HIGHLIGHT_BULLET_ROW_PATH = REPO_ROOT / "mobile" / "highlightBulletRow.tsx"
 HIGHLIGHT_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "highlightDetailRow.tsx"
 MANUAL_RECORD_CONFIRM_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmFooterActions.tsx"
+MANUAL_RECORD_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmPreviewBlock.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
 RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPanel.tsx"
 RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.tsx"
@@ -1310,6 +1311,9 @@ def main() -> int:
     manual_record_confirm_footer_actions_content = MANUAL_RECORD_CONFIRM_FOOTER_ACTIONS_PATH.read_text(
         encoding="utf-8"
     )
+    manual_record_confirm_preview_block_content = MANUAL_RECORD_CONFIRM_PREVIEW_BLOCK_PATH.read_text(
+        encoding="utf-8"
+    )
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
     record_detail_action_panel_content = RECORD_DETAIL_ACTION_PANEL_PATH.read_text(encoding="utf-8")
     record_detail_info_panel_content = RECORD_DETAIL_INFO_PANEL_PATH.read_text(encoding="utf-8")
@@ -1719,6 +1723,18 @@ def main() -> int:
             ("manual record confirm footer warning text", "warningText ? <Text style={styles.warningText}>{warningText}</Text> : null"),
         ):
             _assert_contains(label, manual_record_confirm_footer_actions_content, marker)
+        for label, marker in (
+            ("manual record confirm preview block component", "export function ManualRecordConfirmPreviewBlock({"),
+            ("manual record confirm preview badge", "<Text style={styles.previewModeBadge}>{badgeLabel}</Text>"),
+            ("manual record confirm preview intro", "<Text style={styles.evidence}>{introText}</Text>"),
+            ("manual record confirm preview icon", "<Text>{icon}</Text>"),
+            ("manual record confirm preview type label", "<Text style={styles.recordType}>{typeLabel}</Text>"),
+            ("manual record confirm preview payload summary", "<Text style={styles.recordContent}>{payloadSummary}</Text>"),
+            ("manual record confirm preview source line", "<Text style={styles.evidence}>{sourceLine}</Text>"),
+            ("manual record confirm preview card style", "emptyStateCard: {"),
+            ("manual record confirm preview badge style", "previewModeBadge: {"),
+        ):
+            _assert_contains(label, manual_record_confirm_preview_block_content, marker)
         for label, marker in (
             ("analysis metric card render", "analysisMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
             ("detailed report metric card render", "detailedReportMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
@@ -4177,6 +4193,12 @@ def main() -> int:
             ("manual record unit option press binding", "onPress={() => pressManualRecordGlucoseUnitOption(option)}"),
             ("manual record timing option press binding", "onPress={() => pressManualRecordGlucoseTimingOption(option)}"),
             ("manual record meal type option press binding", "onPress={() => pressManualRecordMealTypeOption(option)}"),
+            ("manual record confirm preview block binding", "<ManualRecordConfirmPreviewBlock\n              badgeLabel={auxiliaryDisplayLabels.preSaveConfirmBadge}"),
+            ("manual record confirm preview icon binding", "icon={manualRecordConfirmDisplay.icon}"),
+            ("manual record confirm preview intro binding", "introText={manualRecordConfirmIntroDisplayText}"),
+            ("manual record confirm preview payload binding", "payloadSummary={manualRecordConfirmDisplay.payloadSummary}"),
+            ("manual record confirm preview source binding", "sourceLine={manualRecordConfirmDisplay.sourceLine}"),
+            ("manual record confirm preview type binding", "typeLabel={manualRecordConfirmDisplay.typeLabel}"),
             ("manual record confirm footer actions binding", "<ManualRecordConfirmFooterActions\n              checklistItems={manualSubmitChecklistItems}"),
             ("record edit date input handler", "function updateRecordEditDateInput(value: string)"),
             ("record edit time input handler", "function updateRecordEditTimeInput(value: string)"),

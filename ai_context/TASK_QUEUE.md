@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1258: Extract manual-record confirm preview block
+
+Status: done
+
+Summary:
+
+- Added `mobile/manualRecordConfirmPreviewBlock.tsx` for the Manual Record Confirm pre-save badge, intro copy, and selected manual-record preview card.
+- Replaced the inline Manual Record Confirm intro/preview JSX in `mobile/App.tsx` with `ManualRecordConfirmPreviewBlock`.
+- Kept badge text, intro text, icon, type label, payload summary, source line, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation, UI spec coverage, and visual-smoke route verifiers so the Manual Record Confirm preview component and App display bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1257: Extract manual-record confirm footer actions
 
 Status: done

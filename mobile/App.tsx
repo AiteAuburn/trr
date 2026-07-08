@@ -714,6 +714,7 @@ import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
 import { ManualRecordConfirmFooterActions } from "./manualRecordConfirmFooterActions";
+import { ManualRecordConfirmPreviewBlock } from "./manualRecordConfirmPreviewBlock";
 import { MetricCard } from "./metricCard";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
@@ -8396,20 +8397,14 @@ export default function App() {
                 <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.returnEdit}</Text>
               </Pressable>
             </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.preSaveConfirmBadge}</Text>
-              <Text style={styles.evidence}>{manualRecordConfirmIntroDisplayText}</Text>
-            </View>
-            <View style={styles.emptyStateCard}>
-              <View style={styles.iconCircleSmall}>
-                <Text>{manualRecordConfirmDisplay.icon}</Text>
-              </View>
-              <View style={styles.timelineContent}>
-                <Text style={styles.recordType}>{manualRecordConfirmDisplay.typeLabel}</Text>
-                <Text style={styles.recordContent}>{manualRecordConfirmDisplay.payloadSummary}</Text>
-                <Text style={styles.evidence}>{manualRecordConfirmDisplay.sourceLine}</Text>
-              </View>
-            </View>
+            <ManualRecordConfirmPreviewBlock
+              badgeLabel={auxiliaryDisplayLabels.preSaveConfirmBadge}
+              icon={manualRecordConfirmDisplay.icon}
+              introText={manualRecordConfirmIntroDisplayText}
+              payloadSummary={manualRecordConfirmDisplay.payloadSummary}
+              sourceLine={manualRecordConfirmDisplay.sourceLine}
+              typeLabel={manualRecordConfirmDisplay.typeLabel}
+            />
             <ManualRecordConfirmFooterActions
               checklistItems={manualSubmitChecklistItems}
               preCheckTitle={coreFlowDisplayLabels.preSubmitCheck}

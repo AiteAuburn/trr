@@ -105,6 +105,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "manualRecordConfirm": [
         'currentScreen === "manualRecordConfirm"',
+        "ManualRecordConfirmPreviewBlock",
         "ManualRecordConfirmFooterActions",
         "onSubmitPress={submitManualRecordCreate}",
     ],
