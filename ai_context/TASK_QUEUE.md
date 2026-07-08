@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1268: Extract detailed-report note display helper
+
+Status: done
+
+Summary:
+
+- Added `detailedReportNoteDisplayItems` to `mobile/analysisCopy.ts` for the Detailed Report note checklist copy.
+- Replaced the inline Detailed Report note checklist construction in `mobile/App.tsx` with the extracted helper.
+- Kept the three note strings, query-limit value, bullet formatting, Detailed Report UI rendering, navigation, state flow, backend report path, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation and visual-smoke route verifiers so the extracted helper and Detailed Report note rendering are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1267: Extract manual-record note fields
 
 Status: done

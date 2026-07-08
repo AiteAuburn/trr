@@ -20,6 +20,10 @@ function boundUiMessage(value: string) {
   return value.slice(0, maxUiMessageLength);
 }
 
+function checklistItem(value: string) {
+  return boundDisplayText(value, maxDisplayDetailTextLength);
+}
+
 function parseDateBoundary(value: string, edge: "start" | "end") {
   const date = new Date(`${value}T${edge === "start" ? "00:00:00.000" : "23:59:59.999"}`);
   return Number.isNaN(date.getTime()) ? null : date;
@@ -82,6 +86,15 @@ export function analysisCustomRangeStatusCopy(range: AnalysisRange, customStart:
 
 export function analysisReportButtonLabel(isLoading: boolean) {
   return boundDisplayText(isLoading ? "報告載入中..." : "查看詳細報告", maxDisplayTextLength);
+}
+
+export function detailedReportNoteDisplayItems(queryLimit: number) {
+  const boundedLimit = clampNumber(queryLimit, 0, maxMobileCountValue);
+  return [
+    "本報告只做紀錄摘要，不提供診斷或治療建議。",
+    "backend 報表載入成功時使用 `/reports/basic`，否則使用本機已載入紀錄。",
+    `報表查詢限制 ${boundedLimit} 筆，避免 mobile 與 backend 一次載入過多資料。`
+  ].map(checklistItem);
 }
 
 export function analysisCustomApplyStatusMessage() {

@@ -1626,7 +1626,7 @@ def main() -> int:
             ("reminder readiness highlight bullet row", "reminderReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("privacy readiness highlight bullet row", "privacyReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("tutorial safety highlight bullet row", "tutorialSafetyChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("detailed report notes highlight bullet row", "detailedReportNoteDisplayItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("detailed report notes highlight bullet row", "detailedReportNoteItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("subscription readiness highlight bullet row", "subscriptionReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("subscription management readiness highlight bullet row", "subscriptionManagementReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("doctor share readiness highlight bullet row", "doctorShareReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
@@ -4221,6 +4221,11 @@ def main() -> int:
             ("analysis custom invalid format status", "自訂日期格式無效；目前改用本月資料。"),
             ("analysis custom invalid order status", "開始日期晚於結束日期；目前改用本月資料。"),
             ("analysis custom valid full-day status", "自訂日期區間已套用，結束日期包含當天完整紀錄。"),
+            ("detailed report note helper", "function detailedReportNoteDisplayItems(queryLimit: number)"),
+            ("detailed report note bounded item helper", "return boundDisplayText(value, maxDisplayDetailTextLength);"),
+            ("detailed report diagnosis boundary copy", "本報告只做紀錄摘要，不提供診斷或治療建議。"),
+            ("detailed report backend fallback copy", "backend 報表載入成功時使用 `/reports/basic`，否則使用本機已載入紀錄。"),
+            ("detailed report query limit copy", "報表查詢限制 ${boundedLimit} 筆，避免 mobile 與 backend 一次載入過多資料。"),
             ("analysis custom apply status", "已套用自訂日期區間並同步 bounded report；不呼叫 AI 或 LLM。"),
         ):
             _assert_contains(label, analysis_copy_content, marker)

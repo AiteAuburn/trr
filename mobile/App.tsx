@@ -552,6 +552,7 @@ import {
   analysisReportButtonLabel,
   analysisReturnTodayStatusMessage,
   analysisSafetyIntroCopy,
+  detailedReportNoteDisplayItems,
   detailedReportManualEntryStatusMessage,
   detailedReportReturnAnalysisStatusMessage,
   detailedReportReturnTodayStatusMessage,
@@ -2402,14 +2403,7 @@ export default function App() {
   const analysisSyncBoundaryDisplayText = resultChecklistItem(
     `本機分析使用目前已同步紀錄，最多保留 ${maxMobileRecordCacheLimit} 筆；若要固定查詢範圍，請使用詳細報告。`
   );
-  const detailedReportQueryLimitDisplayText = resultChecklistItem(
-    `報表查詢限制 ${mobileReportQueryDisplayLimit} 筆，避免 mobile 與 backend 一次載入過多資料。`
-  );
-  const detailedReportNoteDisplayItems = [
-    "本報告只做紀錄摘要，不提供診斷或治療建議。",
-    "backend 報表載入成功時使用 `/reports/basic`，否則使用本機已載入紀錄。",
-    detailedReportQueryLimitDisplayText
-  ].map(resultChecklistItem);
+  const detailedReportNoteItems = detailedReportNoteDisplayItems(mobileReportQueryDisplayLimit);
 
   function openTranscriptReview() {
     if (isBusy) {
@@ -8915,7 +8909,7 @@ export default function App() {
             ) : null}
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.reportNotes}</Text>
-              {detailedReportNoteDisplayItems.map((item) => (
+              {detailedReportNoteItems.map((item) => (
                 <HighlightBulletRow key={item} text={item} />
               ))}
             </View>

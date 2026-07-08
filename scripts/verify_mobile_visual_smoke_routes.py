@@ -127,7 +127,7 @@ VISUAL_SMOKE_ROUTES = {
         'currentScreen === "detailedReport"',
         "detailedReportBoundaryRows.map",
         "detailedReportMetricRows.map",
-        "detailedReportNoteDisplayItems.map",
+        "detailedReportNoteItems.map",
     ],
     "subscription": [
         'currentScreen === "subscription"',

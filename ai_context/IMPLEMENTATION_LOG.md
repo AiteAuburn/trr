@@ -15,6 +15,39 @@
 
 ## 2026-07-08
 
+### T1268 extract detailed-report note display helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `detailedReportNoteDisplayItems` to `mobile/analysisCopy.ts` for the Detailed Report note checklist copy.
+- Replaced the inline Detailed Report note checklist construction in `mobile/App.tsx` with the extracted helper.
+- Kept the three note strings, query-limit value, bullet formatting, Detailed Report UI rendering, navigation, state flow, backend report path, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation and visual-smoke route verifiers so the extracted helper and Detailed Report note rendering are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk first-version display/copy helpers from `App.tsx` before moving deeper state ownership or async backend handlers.
+
 ### T1267 extract manual-record note fields
 
 類型：mobile / refactor / verifier / docs
