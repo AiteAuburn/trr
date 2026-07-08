@@ -26,6 +26,8 @@ type SubscriptionStatusSummarySource = {
   status?: string | null;
 };
 
+type RecordingQuotaBoundarySource = SubscriptionPlanDisplaySource & SubscriptionStatusSummarySource;
+
 export const subscriptionComparisonRows = [
   ["語音記錄", "每日 5 分鐘", "每日 10 分鐘"],
   ["AI 整理", "每日 5 次", "✓ 完整使用"],
@@ -91,6 +93,21 @@ export function membershipFeatureDisplayRows() {
   ].map(([label, value]) => ({
     label: boundDisplayText(label, 60),
     value: boundDisplayText(value, maxDisplayDetailTextLength)
+  }));
+}
+
+export function recordingQuotaBoundaryDisplayRows(
+  quota: RecordingQuotaBoundarySource | null,
+  quotaRemainingLow: boolean
+) {
+  return [
+    ["目前方案", quotaPlanDisplayText(quota, "尚未載入")],
+    ["會員狀態", quota ? subscriptionStatusLabel(quota.status ?? undefined) : "尚未同步"],
+    ["提醒規則", quotaRemainingLow ? "立即提醒" : "低干擾"],
+    ["AI 成本", "0 次呼叫"]
+  ].map(([label, value]) => ({
+    label: boundDisplayText(label, 60),
+    value: boundDisplayText(value, 80)
   }));
 }
 

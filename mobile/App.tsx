@@ -693,6 +693,7 @@ import {
   planDisplayName,
   profileNoActionBoundaryCopy,
   quotaPlanDisplayText,
+  recordingQuotaBoundaryDisplayRows,
   settingsSubscriptionSectionLabels,
   subscriptionCtaBoundaryCopy,
   subscriptionManagementIntroCopy,
@@ -2028,12 +2029,7 @@ export default function App() {
     ["AI 成本", "0 次呼叫"]
   ] as const).map(boundaryMetricDisplayItem);
   const rankingBoundaryRows = rankingBoundaryDisplayRows();
-  const recordingQuotaBoundaryRows = ([
-    ["目前方案", quotaPlanDisplayText(voiceQuota, "尚未載入")],
-    ["會員狀態", voiceQuota ? subscriptionStatusLabel(voiceQuota.status) : "尚未同步"],
-    ["提醒規則", quotaRemainingLow ? "立即提醒" : "低干擾"],
-    ["AI 成本", "0 次呼叫"]
-  ] as const).map(boundaryMetricDisplayItem);
+  const recordingQuotaBoundaryRows = recordingQuotaBoundaryDisplayRows(voiceQuota, quotaRemainingLow);
   const privacyBoundaryRows = privacyBoundaryDisplayRows();
   const selectedPreviewRecord =
     selectedPreviewIndex === null ? null : preview?.records[selectedPreviewIndex] ?? null;

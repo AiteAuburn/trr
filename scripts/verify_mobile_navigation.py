@@ -2525,6 +2525,11 @@ def main() -> int:
             "const detailedReportBoundaryRows = detailedReportBoundaryDisplayRows(",
         )
         _assert_contains(
+            "recording quota boundary rows helper binding",
+            content,
+            "const recordingQuotaBoundaryRows = recordingQuotaBoundaryDisplayRows(voiceQuota, quotaRemainingLow);",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -5401,6 +5406,11 @@ def main() -> int:
             ("membership feature ai organize copy", "自動歸納重點，儲存前仍需確認"),
             ("membership feature analysis copy", "趨勢與摘要一目了然"),
             ("membership feature history copy", "完整保存並支援查詢"),
+            ("recording quota boundary rows helper", "function recordingQuotaBoundaryDisplayRows("),
+            ("recording quota boundary plan row", "目前方案"),
+            ("recording quota boundary status row", "會員狀態"),
+            ("recording quota boundary warning row", "提醒規則"),
+            ("recording quota boundary ai cost row", "0 次呼叫"),
             ("subscription status summary helper", "function subscriptionStatusSummaryText("),
             ("subscription status summary trial copy", "試用剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天"),
             ("subscription readiness checklist helper", "function subscriptionReadinessChecklistDisplayItems()"),
