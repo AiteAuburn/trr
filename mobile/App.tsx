@@ -704,6 +704,7 @@ import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
+import { HistoryDailySummaryCard } from "./historyDailySummaryCard";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
 import { MetricCard } from "./metricCard";
@@ -8512,30 +8513,18 @@ export default function App() {
               </View>
               {historyDailySummaryDisplayItems.length > 0 ? (
                 historyDailySummaryDisplayItems.map((item) => (
-                  <Pressable
+                  <HistoryDailySummaryCard
                     key={item.key}
                     accessibilityLabel={item.accessibilityLabel}
-                    accessibilityRole="button"
-                    accessibilityState={{ selected: item.value === selectedHistoryDate }}
-                    style={[
-                      styles.historyDailySummaryCard,
-                      item.value === selectedHistoryDate ? styles.historyDailySummaryCardSelected : null
-                    ]}
+                    countLabel={item.countLabel}
+                    dateLabel={item.dateLabel}
+                    selected={item.value === selectedHistoryDate}
+                    sourceLabel={item.sourceLabel}
+                    storageLabel={item.storageLabel}
+                    summaryText={item.summaryText}
+                    syncLabel={item.syncLabel}
                     onPress={() => pressHistoryDailySummary(item)}
-                  >
-                    <View style={styles.historyDailySummaryHeader}>
-                      <View style={styles.timelineContent}>
-                        <Text style={styles.historyItemText}>{item.dateLabel}</Text>
-                        <Text style={styles.evidence}>{item.countLabel}</Text>
-                      </View>
-                      <View style={styles.historyStatusPillRow}>
-                        <Text style={styles.historyStatusPill}>{item.syncLabel}</Text>
-                        <Text style={styles.historyStatusPillMuted}>{item.sourceLabel}</Text>
-                      </View>
-                    </View>
-                    <Text style={styles.recordContent}>{item.summaryText}</Text>
-                    <Text style={styles.confidence}>{item.storageLabel}</Text>
-                  </Pressable>
+                  />
                 ))
               ) : (
                 <View style={styles.emptyStateCard}>
@@ -12707,18 +12696,6 @@ const styles = StyleSheet.create({
   historyDailySummaryTable: {
     gap: 10
   },
-  historyDailySummaryCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
-    borderRadius: 18,
-    borderWidth: 1,
-    gap: 8,
-    padding: 14
-  },
-  historyDailySummaryCardSelected: {
-    backgroundColor: "#EAF6F1",
-    borderColor: "#3FA67F"
-  },
   historyDailySummaryHeader: {
     alignItems: "flex-start",
     flexDirection: "row",
@@ -12793,12 +12770,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     gap: 10
-  },
-  historyItemText: {
-    color: "#1E1E1E",
-    fontSize: 15,
-    fontWeight: "800",
-    lineHeight: 21
   },
   detailHero: {
     backgroundColor: "#EAF6F1",

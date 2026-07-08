@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1239: Extract history daily summary card
+
+Status: done
+
+Summary:
+
+- Added `mobile/historyDailySummaryCard.tsx` for the History daily summary table card renderer.
+- Replaced the inline History daily summary `Pressable` card in `mobile/App.tsx` with `HistoryDailySummaryCard`.
+- Kept date/count/sync/source/summary/storage text, selected state, accessibility label, press behavior, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the History daily summary component and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1238: Extract daily record detail row
 
 Status: done
