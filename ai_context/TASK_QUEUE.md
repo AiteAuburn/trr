@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1244: Extract history sync boundary block
+
+Status: done
+
+Summary:
+
+- Added `mobile/historySyncBoundaryBlock.tsx` for the History sync-boundary and load-more presentation block.
+- Replaced the inline History sync-boundary `inlineInfoBlock` in `mobile/App.tsx` with `HistorySyncBoundaryBlock`.
+- Kept sync-boundary title/body, load-more label, accessibility label, disabled state, load-more handler, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the History sync-boundary component and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1243: Extract history selected date header
 
 Status: done

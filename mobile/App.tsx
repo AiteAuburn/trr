@@ -709,6 +709,7 @@ import { HistoryDetailModeTabs } from "./historyDetailModeTabs";
 import { HistoryRawTranscriptCard } from "./historyRawTranscriptCard";
 import { HistorySelectedDateHeader } from "./historySelectedDateHeader";
 import { HistorySelectedSummaryCard } from "./historySelectedSummaryCard";
+import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
 import { MetricCard } from "./metricCard";
@@ -8549,20 +8550,14 @@ export default function App() {
               </View>
             ) : null}
             {recordsForDisplay.length >= mobileRecordSyncLimit ? (
-              <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{coreFlowDisplayLabels.historySyncBoundary}</Text>
-                <Text style={styles.evidence}>{historySyncBoundaryDisplayText}</Text>
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.historyLoadMoreAccessibility}
-                  accessibilityRole="button"
-                  accessibilityState={{ disabled: !canLoadMoreRecords }}
-                  style={[styles.secondaryButton, !canLoadMoreRecords ? styles.buttonDisabled : null]}
-                  disabled={!canLoadMoreRecords}
-                  onPress={loadMoreRecords}
-                >
-                  <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.historyLoadMore}</Text>
-                </Pressable>
-              </View>
+              <HistorySyncBoundaryBlock
+                body={historySyncBoundaryDisplayText}
+                canLoadMoreRecords={canLoadMoreRecords}
+                loadMoreAccessibilityLabel={coreFlowDisplayLabels.historyLoadMoreAccessibility}
+                loadMoreLabel={coreFlowDisplayLabels.historyLoadMore}
+                title={coreFlowDisplayLabels.historySyncBoundary}
+                onLoadMore={loadMoreRecords}
+              />
             ) : null}
             <View style={styles.historySelectedDatePanel}>
               <HistorySelectedDateHeader

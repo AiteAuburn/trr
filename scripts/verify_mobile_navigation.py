@@ -51,6 +51,7 @@ HISTORY_DETAIL_MODE_TABS_PATH = REPO_ROOT / "mobile" / "historyDetailModeTabs.ts
 HISTORY_RAW_TRANSCRIPT_CARD_PATH = REPO_ROOT / "mobile" / "historyRawTranscriptCard.tsx"
 HISTORY_SELECTED_DATE_HEADER_PATH = REPO_ROOT / "mobile" / "historySelectedDateHeader.tsx"
 HISTORY_SELECTED_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historySelectedSummaryCard.tsx"
+HISTORY_SYNC_BOUNDARY_BLOCK_PATH = REPO_ROOT / "mobile" / "historySyncBoundaryBlock.tsx"
 FIELD_LABEL_PATH = REPO_ROOT / "mobile" / "fieldLabel.tsx"
 DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "detailRow.tsx"
 HIGHLIGHT_BULLET_ROW_PATH = REPO_ROOT / "mobile" / "highlightBulletRow.tsx"
@@ -1280,6 +1281,7 @@ def main() -> int:
     history_raw_transcript_card_content = HISTORY_RAW_TRANSCRIPT_CARD_PATH.read_text(encoding="utf-8")
     history_selected_date_header_content = HISTORY_SELECTED_DATE_HEADER_PATH.read_text(encoding="utf-8")
     history_selected_summary_card_content = HISTORY_SELECTED_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
+    history_sync_boundary_block_content = HISTORY_SYNC_BOUNDARY_BLOCK_PATH.read_text(encoding="utf-8")
     field_label_content = FIELD_LABEL_PATH.read_text(encoding="utf-8")
     detail_row_content = DETAIL_ROW_PATH.read_text(encoding="utf-8")
     highlight_bullet_row_content = HIGHLIGHT_BULLET_ROW_PATH.read_text(encoding="utf-8")
@@ -1422,6 +1424,17 @@ def main() -> int:
             ("history selected summary card background", 'backgroundColor: "#FFFFFF"'),
         ):
             _assert_contains(label, history_selected_summary_card_content, marker)
+        for label, marker in (
+            ("history sync boundary component", "export function HistorySyncBoundaryBlock({"),
+            ("history sync boundary title", "<Text style={styles.label}>{title}</Text>"),
+            ("history sync boundary body", "<Text style={styles.evidence}>{body}</Text>"),
+            ("history sync boundary accessibility", "accessibilityLabel={loadMoreAccessibilityLabel}"),
+            ("history sync boundary disabled state", "accessibilityState={{ disabled: !canLoadMoreRecords }}"),
+            ("history sync boundary disabled prop", "disabled={!canLoadMoreRecords}"),
+            ("history sync boundary press handler", "onPress={onLoadMore}"),
+            ("history sync boundary button label", "<Text style={styles.secondaryButtonText}>{loadMoreLabel}</Text>"),
+        ):
+            _assert_contains(label, history_sync_boundary_block_content, marker)
         for label, marker in (
             ("field label component", "export function FieldLabel({ icon, label }: FieldLabelProps)"),
             ("field label row style", "fieldLabelRow: {"),
@@ -3575,8 +3588,9 @@ def main() -> int:
             ("history raw transcript source binding", "sourceStatusLabel={item.sourceStatusLabel}"),
             ("history calendar previous month button", "{historyPreviousMonthButtonLabel}"),
             ("history calendar next month button", "{historyNextMonthButtonLabel}"),
-            ("history load more button binding", "onPress={loadMoreRecords}"),
-            ("history load more disabled state", "accessibilityState={{ disabled: !canLoadMoreRecords }}"),
+            ("history sync boundary component binding", "<HistorySyncBoundaryBlock\n                body={historySyncBoundaryDisplayText}"),
+            ("history sync boundary load-more state binding", "canLoadMoreRecords={canLoadMoreRecords}"),
+            ("history sync boundary load-more handler binding", "onLoadMore={loadMoreRecords}"),
         ):
             _assert_contains(label, history_block, marker)
         for label, marker in (
