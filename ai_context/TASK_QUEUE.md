@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1240: Extract history selected summary card
+
+Status: done
+
+Summary:
+
+- Added `mobile/historySelectedSummaryCard.tsx` for the History selected-date AI summary card.
+- Replaced the inline selected-date AI summary card in `mobile/App.tsx` with `HistorySelectedSummaryCard`.
+- Kept AI summary title, summary text, sync/source pills, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the selected-date History summary component and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1239: Extract history daily summary card
 
 Status: done

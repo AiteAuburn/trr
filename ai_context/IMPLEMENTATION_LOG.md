@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1240 extract history selected summary card
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/historySelectedSummaryCard.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/historySelectedSummaryCard.tsx` for the History selected-date AI summary card.
+- Replaced the inline selected-date AI summary card in `mobile/App.tsx` with `HistorySelectedSummaryCard`.
+- Kept AI summary title, summary text, sync/source pills, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the selected-date History summary component and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version History display cards only where data shaping remains isolated in `historyScreenData.ts`.
+
 ### T1239 extract history daily summary card
 
 類型：mobile / refactor / verifier / docs

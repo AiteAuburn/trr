@@ -705,6 +705,7 @@ import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { HistoryDailySummaryCard } from "./historyDailySummaryCard";
+import { HistorySelectedSummaryCard } from "./historySelectedSummaryCard";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
 import { MetricCard } from "./metricCard";
@@ -8567,18 +8568,11 @@ export default function App() {
                   <Text style={styles.evidence}>{selectedHistoryDailySummary.storageLabel}</Text>
                 </View>
               </View>
-              <View style={styles.dailySummaryCard}>
-                <View style={styles.historyDailySummaryHeader}>
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.previewModeBadge}>AI今日摘要</Text>
-                    <Text style={styles.recordContent}>{selectedHistoryDailySummary.summaryText}</Text>
-                  </View>
-                  <View style={styles.historyStatusPillRow}>
-                    <Text style={styles.historyStatusPill}>{selectedHistoryDailySummary.syncLabel}</Text>
-                    <Text style={styles.historyStatusPillMuted}>{selectedHistoryDailySummary.sourceLabel}</Text>
-                  </View>
-                </View>
-              </View>
+              <HistorySelectedSummaryCard
+                sourceLabel={selectedHistoryDailySummary.sourceLabel}
+                summaryText={selectedHistoryDailySummary.summaryText}
+                syncLabel={selectedHistoryDailySummary.syncLabel}
+              />
               <View style={styles.segmentRow}>
                 {historyDetailModeDisplayOptions.map((item) => (
                   <Pressable
@@ -12695,41 +12689,6 @@ const styles = StyleSheet.create({
   },
   historyDailySummaryTable: {
     gap: 10
-  },
-  historyDailySummaryHeader: {
-    alignItems: "flex-start",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-    justifyContent: "space-between"
-  },
-  historyStatusPillRow: {
-    alignItems: "center",
-    flexDirection: "row",
-    flexShrink: 0,
-    flexWrap: "wrap",
-    gap: 6,
-    justifyContent: "flex-end"
-  },
-  historyStatusPill: {
-    backgroundColor: "#DCEFE7",
-    borderRadius: 999,
-    color: "#0F3F37",
-    fontSize: 12,
-    fontWeight: "900",
-    lineHeight: 16,
-    paddingHorizontal: 9,
-    paddingVertical: 5
-  },
-  historyStatusPillMuted: {
-    backgroundColor: "#F1F4F2",
-    borderRadius: 999,
-    color: "#5F666A",
-    fontSize: 12,
-    fontWeight: "900",
-    lineHeight: 16,
-    paddingHorizontal: 9,
-    paddingVertical: 5
   },
   historyRawCard: {
     backgroundColor: "#FFFFFF",
