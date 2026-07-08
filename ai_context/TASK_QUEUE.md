@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1198: Extract App type aliases
+
+Status: done
+
+Summary:
+
+- Moved App-level account/profile/model/auth/session/report/quota type aliases and `SaveEntryMethod` from `mobile/App.tsx` into `mobile/appTypes.ts`.
+- Kept all state shapes, save-entry method values, runtime behavior, backend paths, UI copy, layout, navigation, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so `mobile/appTypes.ts` owns these aliases and the App-local aliases are rejected.
+- Updated the refactor roadmap to note the App type alias boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1197: Extract Year Review share file helper
 
 Status: done

@@ -576,8 +576,7 @@ import {
   highestNumber,
   longestRecordStreakDays,
   lowestNumber,
-  selectedAnalysisChartPoint,
-  type BasicReportTransformSource
+  selectedAnalysisChartPoint
 } from "./analysisDataTransforms";
 import {
   analysisMetricRows as buildAnalysisMetricRows,
@@ -650,8 +649,7 @@ import {
 import {
   boundVoiceQuota,
   recordingEffectiveLimitSeconds,
-  trialDaysLeft,
-  type VoiceQuotaTransformSource
+  trialDaysLeft
 } from "./subscriptionTransforms";
 import {
   accountSecurityNoActionBoundaryCopy,
@@ -689,17 +687,8 @@ import {
   localDateTimeToIso,
   startOfCurrentMonth
 } from "./dateTimeTransforms";
-import {
-  boundAccount,
-  boundProfiles,
-  type AccountTransformSource,
-  type ProfileTransformSource
-} from "./accountTransforms";
-import {
-  boundAiModelOptions,
-  type AiModelOptionTransformSource,
-  type AiModelOptionsTransformSource
-} from "./aiModelTransforms";
+import { boundAccount, boundProfiles } from "./accountTransforms";
+import { boundAiModelOptions } from "./aiModelTransforms";
 import { boundDownloadedModels } from "./modelTransforms";
 import {
   boundAuthTokenResponse,
@@ -707,26 +696,21 @@ import {
   boundOidcIdTokenForRequest,
   boundOidcNonceForRequest,
   boundOidcProviderForRequest,
-  boundRefreshTokenForRequest,
-  type AuthTokenResponseTransformSource
+  boundRefreshTokenForRequest
 } from "./authTransforms";
 import { protectedRequestHeaders } from "./authRequestHeaders";
-import { authSessionDisplayItem, type AuthSessionDisplaySource } from "./authSessionDisplay";
+import { authSessionDisplayItem } from "./authSessionDisplay";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
-
-type Account = AccountTransformSource;
-type Profile = ProfileTransformSource;
-type AiModelOption = AiModelOptionTransformSource;
-type AiModelOptions = AiModelOptionsTransformSource<AiModelOption>;
-
-type VoiceQuota = VoiceQuotaTransformSource;
-type AuthTokenResponse = AuthTokenResponseTransformSource;
-
-type AuthSessionItem = AuthSessionDisplaySource;
-
-type BasicReport = BasicReportTransformSource;
-
-type SaveEntryMethod = "ai" | "manual" | null;
+import type {
+  Account,
+  AiModelOptions,
+  AuthSessionItem,
+  AuthTokenResponse,
+  BasicReport,
+  Profile,
+  SaveEntryMethod,
+  VoiceQuota
+} from "./appTypes";
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>(initialVisualSmokeScreen ?? "today");

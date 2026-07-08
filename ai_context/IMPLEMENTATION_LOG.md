@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1198 extract App type aliases
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/appTypes.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved App-level account/profile/model/auth/session/report/quota type aliases and `SaveEntryMethod` from `mobile/App.tsx` into `mobile/appTypes.ts`.
+- Kept all state shapes, save-entry method values, runtime behavior, backend paths, UI copy, layout, navigation, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so `mobile/appTypes.ts` owns these aliases and the App-local aliases are rejected.
+- Updated the refactor roadmap to note the App type alias boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- App top-level helper extraction is nearly exhausted; next slices should move carefully into renderer/component boundaries.
+
 ### T1197 extract Year Review share file helper
 
 類型：mobile / refactor / verifier / docs

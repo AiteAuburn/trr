@@ -10,6 +10,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
 API_CLIENT_PATH = REPO_ROOT / "mobile" / "apiClient.ts"
+APP_TYPES_PATH = REPO_ROOT / "mobile" / "appTypes.ts"
 APP_RUNTIME_CONFIG_PATH = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
@@ -1227,6 +1228,7 @@ def _assert_text_input_accessibility_labels_are_bounded(content: str) -> None:
 def main() -> int:
     content = APP_PATH.read_text(encoding="utf-8")
     api_client_content = API_CLIENT_PATH.read_text(encoding="utf-8")
+    app_types_content = APP_TYPES_PATH.read_text(encoding="utf-8")
     app_runtime_config_content = APP_RUNTIME_CONFIG_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
@@ -1340,16 +1342,16 @@ def main() -> int:
         ):
             _assert_contains(label, shared_display_items_content, marker)
         for label, marker in (
-            ("app account type alias", "type Account = AccountTransformSource;"),
-            ("app profile type alias", "type Profile = ProfileTransformSource;"),
-            ("app AI model option type alias", "type AiModelOption = AiModelOptionTransformSource;"),
-            ("app AI model options type alias", "type AiModelOptions = AiModelOptionsTransformSource<AiModelOption>;"),
-            ("app voice quota type alias", "type VoiceQuota = VoiceQuotaTransformSource;"),
-            ("app auth token type alias", "type AuthTokenResponse = AuthTokenResponseTransformSource;"),
-            ("app auth session type alias", "type AuthSessionItem = AuthSessionDisplaySource;"),
-            ("app basic report type alias", "type BasicReport = BasicReportTransformSource;"),
+            ("app types account alias", "export type Account = AccountTransformSource;"),
+            ("app types profile alias", "export type Profile = ProfileTransformSource;"),
+            ("app types AI model options alias", "export type AiModelOptions = AiModelOptionsTransformSource<AiModelOption>;"),
+            ("app types voice quota alias", "export type VoiceQuota = VoiceQuotaTransformSource;"),
+            ("app types auth token alias", "export type AuthTokenResponse = AuthTokenResponseTransformSource;"),
+            ("app types auth session alias", "export type AuthSessionItem = AuthSessionDisplaySource;"),
+            ("app types basic report alias", "export type BasicReport = BasicReportTransformSource;"),
+            ("app types save-entry method alias", 'export type SaveEntryMethod = "ai" | "manual" | null;'),
         ):
-            _assert_contains(label, content, marker)
+            _assert_contains(label, app_types_content, marker)
         _assert_contains(
             "daily record save response type",
             daily_transcript_content,
@@ -1369,6 +1371,15 @@ def main() -> int:
             ("app local daily record save response type block", "type DailyRecordSaveResponse = {\n  daily_record: {"),
             ("app local auth session type block", "type AuthSessionItem = {\n  id: string;"),
             ("app local basic report type block", "type BasicReport = {\n  profile_id: string;"),
+            ("app local account type alias", "type Account = AccountTransformSource;"),
+            ("app local profile type alias", "type Profile = ProfileTransformSource;"),
+            ("app local AI model option type alias", "type AiModelOption = AiModelOptionTransformSource;"),
+            ("app local AI model options type alias", "type AiModelOptions = AiModelOptionsTransformSource<AiModelOption>;"),
+            ("app local voice quota type alias", "type VoiceQuota = VoiceQuotaTransformSource;"),
+            ("app local auth token type alias", "type AuthTokenResponse = AuthTokenResponseTransformSource;"),
+            ("app local auth session type alias", "type AuthSessionItem = AuthSessionDisplaySource;"),
+            ("app local basic report type alias", "type BasicReport = BasicReportTransformSource;"),
+            ("app local save-entry method alias", 'type SaveEntryMethod = "ai" | "manual" | null;'),
             ("app local json request wrapper", "async function requestJson<T>("),
             ("app local no-content request wrapper", "async function requestNoContent(apiBaseUrl: string, path: string, init?: RequestInit)"),
             ("app local protected request headers wrapper", "function protectedRequestHeaders(accountId: string, accessToken: string): Record<string, string>"),
