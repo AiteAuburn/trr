@@ -6828,10 +6828,7 @@ export default function App() {
                   STT：{selectedSttModel?.label ?? sttModelId} · {modelRuntimeLabel(selectedSttModel?.runtime)}
                 </Text>
                 {recordEntrySettingsChecklistItems.map((item) => (
-                  <View key={item} style={styles.highlightRow}>
-                    <Text style={styles.recordType}>•</Text>
-                    <Text style={styles.evidence}>{item}</Text>
-                  </View>
+                  <HighlightBulletRow key={item} text={item} />
                 ))}
               </View>
               <View style={styles.voiceCaptureCard}>
