@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1236: Reuse highlight detail row in food community ranking
+
+Status: done
+
+Summary:
+
+- Replaced the Food Community ranking rows in `mobile/App.tsx` with the shared `HighlightDetailRow` component.
+- Kept ranking label/value text, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, hidden/debug-only future routing, and food-community action behavior unchanged.
+- Updated the navigation verifier so the Food Community ranking map is explicitly guarded to use `HighlightDetailRow`.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1235: Extract highlight detail row for food community share fields
 
 Status: done

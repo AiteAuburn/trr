@@ -1420,6 +1420,7 @@ def main() -> int:
             _assert_contains(label, highlight_detail_row_content, marker)
         for label, marker in (
             ("food community share field highlight detail row", "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />"),
+            ("food community ranking highlight detail row", "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (

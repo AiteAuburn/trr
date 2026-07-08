@@ -10212,10 +10212,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>社群排行榜</Text>
               {foodCommunityRankingRows.map((row) => (
-                <View key={row.label} style={styles.highlightRow}>
-                  <Text style={styles.recordType}>{row.label}</Text>
-                  <Text style={styles.evidence}>{row.value}</Text>
-                </View>
+                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />
               ))}
               <Text style={styles.evidence}>點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。</Text>
             </View>
