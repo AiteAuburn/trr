@@ -28,6 +28,7 @@
   - `authTokenStorage.ts`：SecureStore token boundary。
   - `apiClient.ts`：Shared JSON / no-content fetch wrappers with unchanged content-type and HTTP status failure behavior.
   - `appRuntimeConfig.ts`：App runtime env flags, default backend URL, visual-smoke initial route, sample transcript, and mobile record/report limits.
+  - `authRequestHeaders.ts`：Mobile protected-request header wrapper that applies the runtime dev-auth fallback flag.
   - `authTransforms.ts`：Auth token/OIDC request and response sanitizing transforms plus protected request header construction.
   - `authSessionDisplay.ts`：Account Security auth session source type and display item shaping.
   - `authProviderChallenge.ts`：OIDC challenge helper。
@@ -149,7 +150,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; app runtime config, shared API request wrappers, app-shared mobile bounds, date/time, record bounds, record save transforms, daily transcript, daily-record save response type, auth session source type, auth token/OIDC request transforms, protected auth request header transforms, account/profile response source types and bounding, AI model option response source types and bounding, downloaded native model state bounding, analysis basic report response source type and bounding, analysis data/chart, analysis metric, record streak/day aggregation, subscription trial-days, subscription voice quota response source type and bounding, and recording effective-limit transform helpers extracted.
+Status: started; app runtime config, shared API request wrappers, app-shared mobile bounds, date/time, record bounds, record save transforms, daily transcript, daily-record save response type, auth session source type, auth token/OIDC request transforms, protected auth request header transforms and runtime wrapper, account/profile response source types and bounding, AI model option response source types and bounding, downloaded native model state bounding, analysis basic report response source type and bounding, analysis data/chart, analysis metric, record streak/day aggregation, subscription trial-days, subscription voice quota response source type and bounding, and recording effective-limit transform helpers extracted.
 
 Scope:
 

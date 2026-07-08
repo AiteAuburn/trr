@@ -710,9 +710,9 @@ import {
   boundOidcNonceForRequest,
   boundOidcProviderForRequest,
   boundRefreshTokenForRequest,
-  buildProtectedRequestHeaders,
   type AuthTokenResponseTransformSource
 } from "./authTransforms";
+import { protectedRequestHeaders } from "./authRequestHeaders";
 import { authSessionDisplayItem, type AuthSessionDisplaySource } from "./authSessionDisplay";
 
 type Account = AccountTransformSource;
@@ -728,10 +728,6 @@ type AuthSessionItem = AuthSessionDisplaySource;
 type BasicReport = BasicReportTransformSource;
 
 type SaveEntryMethod = "ai" | "manual" | null;
-
-function protectedRequestHeaders(accountId: string, accessToken: string): Record<string, string> {
-  return buildProtectedRequestHeaders(accountId, accessToken, allowMobileDevAuth);
-}
 
 async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset) {
   if (!FileSystem.cacheDirectory) {

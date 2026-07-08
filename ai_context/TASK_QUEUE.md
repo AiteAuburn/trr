@@ -124,6 +124,27 @@ None.
 
 ## Done
 
+### T1196: Extract protected request header wrapper
+
+Status: done
+
+Summary:
+
+- Moved the App-local `protectedRequestHeaders` wrapper into `mobile/authRequestHeaders.ts`.
+- Kept the underlying `buildProtectedRequestHeaders` behavior, dev-auth fallback flag, all request call sites, backend paths, UI copy, layout, navigation, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Left `buildProtectedRequestHeaders` in `mobile/authTransforms.ts` as the pure account/token/header transform boundary.
+- Updated the navigation verifier so the runtime protected-header wrapper is guarded in `mobile/authRequestHeaders.ts` and the App-local wrapper is rejected.
+- Updated the secure-auth verifier so the protected-header adapter is checked in `mobile/authRequestHeaders.ts`.
+- Updated the refactor roadmap to note the protected request header wrapper boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_secure_auth_storage.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1195: Extract App runtime config
 
 Status: done

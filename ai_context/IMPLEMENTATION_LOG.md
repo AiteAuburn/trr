@@ -15,6 +15,42 @@
 
 ## 2026-07-07
 
+### T1196 extract protected request header wrapper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/authRequestHeaders.ts`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_secure_auth_storage.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved the App-local `protectedRequestHeaders` wrapper into `mobile/authRequestHeaders.ts`.
+- Kept the underlying `buildProtectedRequestHeaders` behavior, dev-auth fallback flag, all request call sites, backend paths, UI copy, layout, navigation, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Left `buildProtectedRequestHeaders` in `mobile/authTransforms.ts` as the pure account/token/header transform boundary.
+- Updated the navigation verifier so the runtime protected-header wrapper is guarded in `mobile/authRequestHeaders.ts` and the App-local wrapper is rejected.
+- Updated the secure-auth verifier so the protected-header adapter is checked in `mobile/authRequestHeaders.ts`.
+- Updated the refactor roadmap to note the protected request header wrapper boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_secure_auth_storage.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Defer FileSystem/Share side-effect helper extraction until render/module ownership is ready.
+
 ### T1195 extract App runtime config
 
 類型：mobile / refactor / verifier / docs

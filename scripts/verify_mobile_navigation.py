@@ -38,6 +38,7 @@ ACCOUNT_COPY_PATH = REPO_ROOT / "mobile" / "accountCopy.ts"
 ACCOUNT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "accountTransforms.ts"
 AI_MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "aiModelTransforms.ts"
 AUTH_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "authTransforms.ts"
+AUTH_REQUEST_HEADERS_PATH = REPO_ROOT / "mobile" / "authRequestHeaders.ts"
 AUTH_SESSION_DISPLAY_PATH = REPO_ROOT / "mobile" / "authSessionDisplay.ts"
 AUTH_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "authStatusCopy.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
@@ -1253,6 +1254,7 @@ def main() -> int:
     account_transforms_content = ACCOUNT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     ai_model_transforms_content = AI_MODEL_TRANSFORMS_PATH.read_text(encoding="utf-8")
     auth_transforms_content = AUTH_TRANSFORMS_PATH.read_text(encoding="utf-8")
+    auth_request_headers_content = AUTH_REQUEST_HEADERS_PATH.read_text(encoding="utf-8")
     auth_session_display_content = AUTH_SESSION_DISPLAY_PATH.read_text(encoding="utf-8")
     auth_status_copy_content = AUTH_STATUS_COPY_PATH.read_text(encoding="utf-8")
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
@@ -1298,6 +1300,12 @@ def main() -> int:
             ("api client status failure", "throw new Error(`${path} failed: ${response.status}`);"),
         ):
             _assert_contains(label, api_client_content, marker)
+        for label, marker in (
+            ("auth request headers wrapper", "export function protectedRequestHeaders(accountId: string, accessToken: string): Record<string, string>"),
+            ("auth request headers dev auth flag", "allowMobileDevAuth"),
+            ("auth request headers builder call", "return buildProtectedRequestHeaders(accountId, accessToken, allowMobileDevAuth);"),
+        ):
+            _assert_contains(label, auth_request_headers_content, marker)
         for label, marker in (
             ("app runtime default API base URL", "export const defaultApiBaseUrl ="),
             ("app runtime debug flag", "export const enableDebugTools = process.env.EXPO_PUBLIC_ENABLE_DEBUG_TOOLS === \"true\";"),
@@ -1361,6 +1369,7 @@ def main() -> int:
             ("app local basic report type block", "type BasicReport = {\n  profile_id: string;"),
             ("app local json request wrapper", "async function requestJson<T>("),
             ("app local no-content request wrapper", "async function requestNoContent(apiBaseUrl: string, path: string, init?: RequestInit)"),
+            ("app local protected request headers wrapper", "function protectedRequestHeaders(accountId: string, accessToken: string): Record<string, string>"),
             ("app local default API base URL", "const defaultApiBaseUrl ="),
             ("app local debug flag", "const enableDebugTools = process.env.EXPO_PUBLIC_ENABLE_DEBUG_TOOLS"),
             ("app local dev auth flag", "const allowMobileDevAuth = process.env.EXPO_PUBLIC_ALLOW_DEV_AUTH"),

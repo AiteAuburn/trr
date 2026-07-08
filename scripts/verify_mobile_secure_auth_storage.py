@@ -12,6 +12,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 MOBILE_DIR = REPO_ROOT / "mobile"
 STORAGE_PATH = MOBILE_DIR / "authTokenStorage.ts"
 AUTH_TRANSFORMS_PATH = MOBILE_DIR / "authTransforms.ts"
+AUTH_REQUEST_HEADERS_PATH = MOBILE_DIR / "authRequestHeaders.ts"
 CHALLENGE_PATH = MOBILE_DIR / "authProviderChallenge.ts"
 APP_PATH = MOBILE_DIR / "App.tsx"
 PACKAGE_PATH = MOBILE_DIR / "package.json"
@@ -21,6 +22,7 @@ def main() -> int:
     errors: list[str] = []
     storage = STORAGE_PATH.read_text(encoding="utf-8") if STORAGE_PATH.exists() else ""
     auth_transforms = AUTH_TRANSFORMS_PATH.read_text(encoding="utf-8") if AUTH_TRANSFORMS_PATH.exists() else ""
+    auth_request_headers = AUTH_REQUEST_HEADERS_PATH.read_text(encoding="utf-8") if AUTH_REQUEST_HEADERS_PATH.exists() else ""
     challenge = CHALLENGE_PATH.read_text(encoding="utf-8") if CHALLENGE_PATH.exists() else ""
     app = APP_PATH.read_text(encoding="utf-8")
     package = json.loads(PACKAGE_PATH.read_text(encoding="utf-8"))
@@ -120,7 +122,7 @@ def main() -> int:
             errors.append(f"mobile/App.tsx missing secure auth marker: {marker}")
     if "4096" in app and "authAccessTokenMaxLength" not in app:
         errors.append("mobile/App.tsx must use authAccessTokenMaxLength instead of inline token limits")
-    errors.extend(verify_protected_request_header_boundary(app, auth_transforms))
+    errors.extend(verify_protected_request_header_boundary(app, auth_transforms, auth_request_headers))
 
     if errors:
         for error in errors:
@@ -131,12 +133,12 @@ def main() -> int:
     return 0
 
 
-def verify_protected_request_header_boundary(app: str, auth_transforms: str) -> list[str]:
+def verify_protected_request_header_boundary(app: str, auth_transforms: str, auth_request_headers: str) -> list[str]:
     errors: list[str] = []
-    app_helper = extract_function_body(app, "protectedRequestHeaders")
-    if not app_helper:
-        return ["mobile/App.tsx missing protectedRequestHeaders adapter"]
-    if "buildProtectedRequestHeaders(accountId, accessToken, allowMobileDevAuth)" not in app_helper:
+    request_header_helper = extract_function_body(auth_request_headers, "protectedRequestHeaders")
+    if not request_header_helper:
+        return ["mobile/authRequestHeaders.ts missing protectedRequestHeaders adapter"]
+    if "buildProtectedRequestHeaders(accountId, accessToken, allowMobileDevAuth)" not in request_header_helper:
         errors.append("protectedRequestHeaders adapter must delegate to buildProtectedRequestHeaders with allowMobileDevAuth")
 
     helper = extract_function_body(auth_transforms, "buildProtectedRequestHeaders")
