@@ -2515,6 +2515,11 @@ def main() -> int:
             "const rankingBoundaryRows = rankingBoundaryDisplayRows();",
         )
         _assert_contains(
+            "privacy boundary rows helper binding",
+            content,
+            "const privacyBoundaryRows = privacyBoundaryDisplayRows();",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -5259,6 +5264,11 @@ def main() -> int:
             ("reminder readiness permission copy", "系統通知權限請求與拒絕後的替代說明。"),
             ("reminder readiness PHI-safe notification copy", "通知內容不得包含敏感健康數值或完整紀錄。"),
             ("privacy integration accessibility helper", "function privacyIntegrationAccessibilityLabel()"),
+            ("privacy boundary rows helper", "function privacyBoundaryDisplayRows()"),
+            ("privacy boundary records row", "健康紀錄"),
+            ("privacy boundary notification row", "通知內容"),
+            ("privacy boundary share row", "外部分享"),
+            ("privacy boundary ai cost row", "0 次呼叫"),
             ("privacy readiness checklist helper", "function privacyReadinessChecklistDisplayItems()"),
             ("privacy readiness notification minimization copy", "通知內容最小化：推播不可包含血糖數值、完整餐點或用藥內容。"),
             ("privacy readiness opt-in copy", "資料分享 opt-in / opt-out：醫師、照護者、社群與排行榜都必須分開授權。"),

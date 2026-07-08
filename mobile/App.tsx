@@ -637,6 +637,7 @@ import {
   menuReturnStatusMessage,
   modelRuntimeLabel,
   modelSelectionBoundaryCopy,
+  privacyBoundaryDisplayRows,
   privacyIntegrationAccessibilityLabel,
   privacyIntegrationButtonLabel,
   privacyReadinessChecklistDisplayItems,
@@ -2034,12 +2035,7 @@ export default function App() {
     ["提醒規則", quotaRemainingLow ? "立即提醒" : "低干擾"],
     ["AI 成本", "0 次呼叫"]
   ] as const).map(boundaryMetricDisplayItem);
-  const privacyBoundaryRows = ([
-    ["健康紀錄", "預設私密"],
-    ["通知內容", "不含數值"],
-    ["外部分享", "需明確授權"],
-    ["AI 成本", "0 次呼叫"]
-  ] as const).map(boundaryMetricDisplayItem);
+  const privacyBoundaryRows = privacyBoundaryDisplayRows();
   const selectedPreviewRecord =
     selectedPreviewIndex === null ? null : preview?.records[selectedPreviewIndex] ?? null;
   const pendingPreviewRemoveRecord =

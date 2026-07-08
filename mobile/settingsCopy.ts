@@ -217,6 +217,18 @@ export function privacyIntegrationAccessibilityLabel() {
   return boundDisplayText("查看隱私整合狀態，不匯出、刪除或公開資料", maxDisplayDetailTextLength);
 }
 
+export function privacyBoundaryDisplayRows() {
+  return [
+    ["健康紀錄", "預設私密"],
+    ["通知內容", "不含數值"],
+    ["外部分享", "需明確授權"],
+    ["AI 成本", "0 次呼叫"]
+  ].map(([label, value]) => ({
+    label: boundDisplayText(label, 60),
+    value: boundDisplayText(value, 80)
+  }));
+}
+
 export function privacyReadinessChecklistDisplayItems() {
   return [
     "通知內容最小化：推播不可包含血糖數值、完整餐點或用藥內容。",
