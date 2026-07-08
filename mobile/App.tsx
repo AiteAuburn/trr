@@ -701,6 +701,7 @@ import {
 import { protectedRequestHeaders } from "./authRequestHeaders";
 import { authSessionDisplayItem } from "./authSessionDisplay";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
+import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { HighlightBulletRow } from "./highlightBulletRow";
@@ -7207,10 +7208,7 @@ export default function App() {
                         </View>
                         <View style={styles.detailRows}>
                           {item.detailRows.map((row) => (
-                            <View key={`${item.key}-${row.label}`} style={styles.detailRow}>
-                              <Text style={styles.confidence}>{row.label}</Text>
-                              <Text style={styles.evidence}>{row.value}</Text>
-                            </View>
+                            <DailyRecordDetailRow key={`${item.key}-${row.label}`} label={row.label} value={row.value} />
                           ))}
                         </View>
                         {dailyRecordMenuIndex === item.index ? (
@@ -8660,10 +8658,7 @@ export default function App() {
                             </View>
                             <View style={styles.detailRows}>
                               {item.detailRows.map((row) => (
-                                <View key={`${item.key}-${row.label}`} style={styles.detailRow}>
-                                  <Text style={styles.confidence}>{row.label}</Text>
-                                  <Text style={styles.evidence}>{row.value}</Text>
-                                </View>
+                                <DailyRecordDetailRow key={`${item.key}-${row.label}`} label={row.label} value={row.value} />
                               ))}
                             </View>
                           </Pressable>

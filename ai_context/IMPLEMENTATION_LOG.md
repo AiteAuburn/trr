@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1238 extract daily record detail row
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/dailyRecordDetailRow.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/dailyRecordDetailRow.tsx` for shared label/value rows inside daily-record section entries.
+- Replaced the Today daily-record section detail rows and History selected-date section detail rows in `mobile/App.tsx` with `DailyRecordDetailRow`.
+- Kept daily-record labels, values, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, save/edit/delete behavior, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the daily-record detail row component and Today/History usage are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version Today/History display rows only where the render structure is duplicated and verifier-covered.
+
 ### T1237 extract metric card for analysis rows
 
 類型：mobile / refactor / verifier / docs

@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1238: Extract daily record detail row
+
+Status: done
+
+Summary:
+
+- Added `mobile/dailyRecordDetailRow.tsx` for shared label/value rows inside daily-record section entries.
+- Replaced the Today daily-record section detail rows and History selected-date section detail rows in `mobile/App.tsx` with `DailyRecordDetailRow`.
+- Kept daily-record labels, values, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, save/edit/delete behavior, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the daily-record detail row component and Today/History usage are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1237: Extract metric card for analysis rows
 
 Status: done
