@@ -124,6 +124,26 @@ None.
 
 ## Done
 
+### T1199: Extract shared field label component
+
+Status: done
+
+Summary:
+
+- Moved the App-local `renderFieldLabel` presentation helper into `mobile/fieldLabel.tsx`.
+- Kept the same icon/text layout, colors, typography, spacing, form labels, input fields, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Removed the now-unused field-label row/icon styles from `mobile/App.tsx`; the shared `label` style remains for existing App text.
+- Updated the navigation verifier so `mobile/fieldLabel.tsx` owns the field-label component/styles and App-local field-label helpers/styles are rejected.
+- Updated the refactor roadmap to note the shared form field label component boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1198: Extract App type aliases
 
 Status: done

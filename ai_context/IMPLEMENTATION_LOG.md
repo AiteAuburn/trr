@@ -15,6 +15,40 @@
 
 ## 2026-07-07
 
+### T1199 extract shared field label component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/fieldLabel.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved the App-local `renderFieldLabel` presentation helper into `mobile/fieldLabel.tsx`.
+- Kept the same icon/text layout, colors, typography, spacing, form labels, input fields, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Removed the now-unused field-label row/icon styles from `mobile/App.tsx`; the shared `label` style remains for existing App text.
+- Updated the navigation verifier so `mobile/fieldLabel.tsx` owns the field-label component/styles and App-local field-label helpers/styles are rejected.
+- Updated the refactor roadmap to note the shared form field label component boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue with small first-version screen component boundaries before moving large JSX renderers.
+
 ### T1198 extract App type aliases
 
 類型：mobile / refactor / verifier / docs

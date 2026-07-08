@@ -45,6 +45,7 @@ AUTH_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "authStatusCopy.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
+FIELD_LABEL_PATH = REPO_ROOT / "mobile" / "fieldLabel.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1263,6 +1264,7 @@ def main() -> int:
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
+    field_label_content = FIELD_LABEL_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -1342,6 +1344,13 @@ def main() -> int:
         ):
             _assert_contains(label, shared_display_items_content, marker)
         for label, marker in (
+            ("field label component", "export function FieldLabel({ icon, label }: FieldLabelProps)"),
+            ("field label row style", "fieldLabelRow: {"),
+            ("field label icon style", "fieldLabelIcon: {"),
+            ("field label text style", "fontWeight: \"800\""),
+        ):
+            _assert_contains(label, field_label_content, marker)
+        for label, marker in (
             ("app types account alias", "export type Account = AccountTransformSource;"),
             ("app types profile alias", "export type Profile = ProfileTransformSource;"),
             ("app types AI model options alias", "export type AiModelOptions = AiModelOptionsTransformSource<AiModelOption>;"),
@@ -1380,6 +1389,9 @@ def main() -> int:
             ("app local auth session type alias", "type AuthSessionItem = AuthSessionDisplaySource;"),
             ("app local basic report type alias", "type BasicReport = BasicReportTransformSource;"),
             ("app local save-entry method alias", 'type SaveEntryMethod = "ai" | "manual" | null;'),
+            ("app local field label renderer", "function renderFieldLabel(icon: string, label: string)"),
+            ("app local field label row style", "fieldLabelRow: {"),
+            ("app local field label icon style", "fieldLabelIcon: {"),
             ("app local json request wrapper", "async function requestJson<T>("),
             ("app local no-content request wrapper", "async function requestNoContent(apiBaseUrl: string, path: string, init?: RequestInit)"),
             ("app local protected request headers wrapper", "function protectedRequestHeaders(accountId: string, accessToken: string): Record<string, string>"),

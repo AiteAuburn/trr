@@ -701,6 +701,7 @@ import {
 import { protectedRequestHeaders } from "./authRequestHeaders";
 import { authSessionDisplayItem } from "./authSessionDisplay";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
+import { FieldLabel } from "./fieldLabel";
 import type {
   Account,
   AiModelOptions,
@@ -2451,15 +2452,6 @@ export default function App() {
 
   function fillTranscriptSampleDraft() {
     updateTranscriptDraft(sampleText, "sample");
-  }
-
-  function renderFieldLabel(icon: string, label: string) {
-    return (
-      <View style={styles.fieldLabelRow}>
-        <Text style={styles.fieldLabelIcon}>{icon}</Text>
-        <Text style={styles.label}>{label}</Text>
-      </View>
-    );
   }
 
   function openManualRecord(returnScreen: AppScreen = currentScreen) {
@@ -7522,7 +7514,7 @@ export default function App() {
             <Text style={styles.evidence}>{previewRecordEditBoundaryDisplayText}</Text>
             <View style={styles.dateTimeRow}>
               <View style={styles.dateTimeField}>
-                {renderFieldLabel("📅", "日期")}
+                <FieldLabel icon={"📅"} label={"日期"} />
                 <TextInput
                   accessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}
                   value={previewEditDate}
@@ -7535,7 +7527,7 @@ export default function App() {
                 />
               </View>
               <View style={styles.dateTimeField}>
-                {renderFieldLabel("🕒", "時間")}
+                <FieldLabel icon={"🕒"} label={"時間"} />
                 <TextInput
                   accessibilityLabel={auxiliaryDisplayLabels.timeInputAccessibility}
                   value={previewEditTime}
@@ -7549,13 +7541,13 @@ export default function App() {
               </View>
             </View>
             <View style={styles.detailRow}>
-              {renderFieldLabel("🏷", "類型")}
+              <FieldLabel icon={"🏷"} label={"類型"} />
               <Text style={styles.recordContent}>{selectedPreviewRecordDisplayItem?.typeLabel ?? "紀錄"}</Text>
             </View>
             {selectedPreviewRecord.record_type === "glucose" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("💧", "血糖數值")}
+                  <FieldLabel icon={"💧"} label={"血糖數值"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.glucoseValueInputAccessibility}
                     value={previewEditFields.glucoseValue}
@@ -7593,7 +7585,7 @@ export default function App() {
                   ))}
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("◌", "情境")}
+                  <FieldLabel icon={"◌"} label={"情境"} />
                   <View style={styles.segmentRow}>
                     {glucoseTimingDisplayOptions.map((option) => (
                       <Pressable
@@ -7624,7 +7616,7 @@ export default function App() {
             {selectedPreviewRecord.record_type === "meal" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("🥣", "餐別")}
+                  <FieldLabel icon={"🥣"} label={"餐別"} />
                   <View style={styles.segmentRow}>
                     {mealTypeDisplayOptions.map((option) => (
                       <Pressable
@@ -7651,7 +7643,7 @@ export default function App() {
                   </View>
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("🍽", "飲食內容")}
+                  <FieldLabel icon={"🍽"} label={"飲食內容"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.foodItemsInputAccessibility}
                     value={previewEditFields.foodItems}
@@ -7670,7 +7662,7 @@ export default function App() {
             {selectedPreviewRecord.record_type === "exercise" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("🚶", "運動")}
+                  <FieldLabel icon={"🚶"} label={"運動"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.exerciseActivityInputAccessibility}
                     value={previewEditFields.exerciseActivity}
@@ -7683,7 +7675,7 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("⏱", "時長（分鐘）")}
+                  <FieldLabel icon={"⏱"} label={"時長（分鐘）"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.exerciseMinutesInputAccessibility}
                     value={previewEditFields.exerciseMinutes}
@@ -7701,7 +7693,7 @@ export default function App() {
             {selectedPreviewRecord.record_type === "medication" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("💊", "用藥")}
+                  <FieldLabel icon={"💊"} label={"用藥"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.medicationNameInputAccessibility}
                     value={previewEditFields.medicationName}
@@ -7714,7 +7706,7 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("▣", "劑量")}
+                  <FieldLabel icon={"▣"} label={"劑量"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.medicationDoseInputAccessibility}
                     value={previewEditFields.medicationDose}
@@ -7731,7 +7723,7 @@ export default function App() {
             {selectedPreviewRecord.record_type === "note" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("📝", "備註類型")}
+                  <FieldLabel icon={"📝"} label={"備註類型"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.noteKindInputAccessibility}
                     value={previewEditFields.noteKind}
@@ -7744,7 +7736,7 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("#", "標籤")}
+                  <FieldLabel icon={"#"} label={"標籤"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.noteTagsInputAccessibility}
                     value={previewEditFields.noteTags}
@@ -7764,7 +7756,7 @@ export default function App() {
               selectedPreviewRecord.record_type
             ) ? (
               <>
-                {renderFieldLabel("{}", "payload_json")}
+                <FieldLabel icon={"{}"} label={"payload_json"} />
                 <TextInput
                   accessibilityLabel={auxiliaryDisplayLabels.fallbackJsonInputAccessibility}
                   value={previewEditFields.fallbackJson}
@@ -8117,7 +8109,7 @@ export default function App() {
             </Text>
             <View style={styles.dateTimeRow}>
               <View style={styles.dateTimeField}>
-                {renderFieldLabel("📅", "日期")}
+                <FieldLabel icon={"📅"} label={"日期"} />
                 <TextInput
                   accessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}
                   value={manualRecordDate}
@@ -8130,7 +8122,7 @@ export default function App() {
                 />
               </View>
               <View style={styles.dateTimeField}>
-                {renderFieldLabel("🕒", "時間")}
+                <FieldLabel icon={"🕒"} label={"時間"} />
                 <TextInput
                   accessibilityLabel={auxiliaryDisplayLabels.timeInputAccessibility}
                   value={manualRecordTime}
@@ -8171,7 +8163,7 @@ export default function App() {
             {manualRecordType === "glucose" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("💧", "血糖數值")}
+                  <FieldLabel icon={"💧"} label={"血糖數值"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.glucoseValueInputAccessibility}
                     value={manualRecordFields.glucoseValue}
@@ -8209,7 +8201,7 @@ export default function App() {
                   ))}
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("◌", "情境")}
+                  <FieldLabel icon={"◌"} label={"情境"} />
                   <View style={styles.segmentRow}>
                     {glucoseTimingDisplayOptions.map((option) => (
                       <Pressable
@@ -8241,7 +8233,7 @@ export default function App() {
             {manualRecordType === "meal" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("🥣", "餐別")}
+                  <FieldLabel icon={"🥣"} label={"餐別"} />
                   <View style={styles.segmentRow}>
                     {mealTypeDisplayOptions.map((option) => (
                       <Pressable
@@ -8268,7 +8260,7 @@ export default function App() {
                   </View>
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("🍽", "飲食內容")}
+                  <FieldLabel icon={"🍽"} label={"飲食內容"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.foodItemsInputAccessibility}
                     value={manualRecordFields.foodItems}
@@ -8288,7 +8280,7 @@ export default function App() {
             {manualRecordType === "exercise" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("🚶", "運動")}
+                  <FieldLabel icon={"🚶"} label={"運動"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.exerciseActivityInputAccessibility}
                     value={manualRecordFields.exerciseActivity}
@@ -8301,7 +8293,7 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("⏱", "時長（分鐘）")}
+                  <FieldLabel icon={"⏱"} label={"時長（分鐘）"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.exerciseMinutesInputAccessibility}
                     value={manualRecordFields.exerciseMinutes}
@@ -8320,7 +8312,7 @@ export default function App() {
             {manualRecordType === "medication" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("💊", "用藥")}
+                  <FieldLabel icon={"💊"} label={"用藥"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.medicationNameInputAccessibility}
                     value={manualRecordFields.medicationName}
@@ -8333,7 +8325,7 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("▣", "劑量")}
+                  <FieldLabel icon={"▣"} label={"劑量"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.medicationDoseInputAccessibility}
                     value={manualRecordFields.medicationDose}
@@ -8351,7 +8343,7 @@ export default function App() {
             {manualRecordType === "note" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("📝", "備註類型")}
+                  <FieldLabel icon={"📝"} label={"備註類型"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.noteKindInputAccessibility}
                     value={manualRecordFields.noteKind}
@@ -8364,7 +8356,7 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("#", "標籤")}
+                  <FieldLabel icon={"#"} label={"標籤"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.noteTagsInputAccessibility}
                     value={manualRecordFields.noteTags}
@@ -8756,15 +8748,15 @@ export default function App() {
             <View style={styles.detailRows}>
               <Text style={styles.label}>{coreFlowDisplayLabels.mainInfo}</Text>
               <View style={styles.detailRow}>
-                {renderFieldLabel("📅", "日期")}
+                <FieldLabel icon={"📅"} label={"日期"} />
                 <Text style={styles.recordContent}>{selectedRecordDisplayItem?.dateLabel ?? "尚無"}</Text>
               </View>
               <View style={styles.detailRow}>
-                {renderFieldLabel("🕒", "時間")}
+                <FieldLabel icon={"🕒"} label={"時間"} />
                 <Text style={styles.recordContent}>{selectedRecordDisplayItem?.timeLabel ?? "尚無"}</Text>
               </View>
               <View style={styles.detailRow}>
-                {renderFieldLabel("🏷", "類型")}
+                <FieldLabel icon={"🏷"} label={"類型"} />
                 <Text style={styles.recordContent}>{selectedRecordDisplayItem?.typeLabel ?? "尚無"}</Text>
               </View>
               {selectedRecordDetailRows.map((row) => (
@@ -8781,11 +8773,11 @@ export default function App() {
                 <Text style={styles.recordContent}>{selectedRecordDisplayItem?.sourceLabel ?? "尚無"}</Text>
               </View>
               <View style={styles.detailRow}>
-                {renderFieldLabel("🚶", "運動")}
+                <FieldLabel icon={"🚶"} label={"運動"} />
                 <Text style={styles.recordContent}>{selectedRecordDisplayItem?.exerciseSummary ?? "無"}</Text>
               </View>
               <View style={styles.detailRow}>
-                {renderFieldLabel("💊", "用藥")}
+                <FieldLabel icon={"💊"} label={"用藥"} />
                 <Text style={styles.recordContent}>{selectedRecordDisplayItem?.medicationSummary ?? "無"}</Text>
               </View>
             </View>
@@ -8893,7 +8885,7 @@ export default function App() {
             <View style={styles.detailRows}>
               <View style={styles.dateTimeRow}>
                 <View style={styles.dateTimeField}>
-                  {renderFieldLabel("📅", "日期")}
+                  <FieldLabel icon={"📅"} label={"日期"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}
                     value={recordEditDate}
@@ -8906,7 +8898,7 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.dateTimeField}>
-                  {renderFieldLabel("🕒", "時間")}
+                  <FieldLabel icon={"🕒"} label={"時間"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.timeInputAccessibility}
                     value={recordEditTime}
@@ -8920,14 +8912,14 @@ export default function App() {
                 </View>
               </View>
               <View style={styles.detailRow}>
-                {renderFieldLabel("🏷", "類型")}
+                <FieldLabel icon={"🏷"} label={"類型"} />
                 <Text style={styles.recordContent}>{selectedRecordDisplayItem?.typeLabel ?? "紀錄"}</Text>
               </View>
             </View>
             {selectedRecord.record_type === "glucose" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("💧", "血糖數值")}
+                  <FieldLabel icon={"💧"} label={"血糖數值"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.glucoseValueInputAccessibility}
                     value={recordEditFields.glucoseValue}
@@ -8965,7 +8957,7 @@ export default function App() {
                   ))}
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("◌", "情境")}
+                  <FieldLabel icon={"◌"} label={"情境"} />
                   <View style={styles.segmentRow}>
                     {glucoseTimingDisplayOptions.map((option) => (
                       <Pressable
@@ -8997,7 +8989,7 @@ export default function App() {
             {selectedRecord.record_type === "meal" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("🥣", "餐別")}
+                  <FieldLabel icon={"🥣"} label={"餐別"} />
                   <View style={styles.segmentRow}>
                     {mealTypeDisplayOptions.map((option) => (
                       <Pressable
@@ -9024,7 +9016,7 @@ export default function App() {
                   </View>
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("🍽", "飲食內容")}
+                  <FieldLabel icon={"🍽"} label={"飲食內容"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.foodItemsInputAccessibility}
                     value={recordEditFields.foodItems}
@@ -9044,7 +9036,7 @@ export default function App() {
             {selectedRecord.record_type === "exercise" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("🚶", "運動")}
+                  <FieldLabel icon={"🚶"} label={"運動"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.exerciseActivityInputAccessibility}
                     value={recordEditFields.exerciseActivity}
@@ -9057,7 +9049,7 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("⏱", "時長（分鐘）")}
+                  <FieldLabel icon={"⏱"} label={"時長（分鐘）"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.exerciseMinutesInputAccessibility}
                     value={recordEditFields.exerciseMinutes}
@@ -9076,7 +9068,7 @@ export default function App() {
             {selectedRecord.record_type === "medication" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("💊", "用藥")}
+                  <FieldLabel icon={"💊"} label={"用藥"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.medicationNameInputAccessibility}
                     value={recordEditFields.medicationName}
@@ -9089,7 +9081,7 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("▣", "劑量")}
+                  <FieldLabel icon={"▣"} label={"劑量"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.medicationDoseInputAccessibility}
                     value={recordEditFields.medicationDose}
@@ -9107,7 +9099,7 @@ export default function App() {
             {selectedRecord.record_type === "note" ? (
               <>
                 <View style={styles.formField}>
-                  {renderFieldLabel("📝", "備註類型")}
+                  <FieldLabel icon={"📝"} label={"備註類型"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.noteKindInputAccessibility}
                     value={recordEditFields.noteKind}
@@ -9120,7 +9112,7 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.formField}>
-                  {renderFieldLabel("#", "標籤")}
+                  <FieldLabel icon={"#"} label={"標籤"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.noteTagsInputAccessibility}
                     value={recordEditFields.noteTags}
@@ -9141,7 +9133,7 @@ export default function App() {
               selectedRecord.record_type
             ) ? (
               <>
-                {renderFieldLabel("{}", "payload_json")}
+                <FieldLabel icon={"{}"} label={"payload_json"} />
                 <TextInput
                   accessibilityLabel={auxiliaryDisplayLabels.fallbackJsonInputAccessibility}
                   value={recordEditFields.fallbackJson}
@@ -9233,7 +9225,7 @@ export default function App() {
               <>
                 <View style={styles.dateTimeRow}>
                   <View style={styles.dateTimeField}>
-                    {renderFieldLabel("📅", "開始日期")}
+                    <FieldLabel icon={"📅"} label={"開始日期"} />
                     <TextInput
                       accessibilityLabel={auxiliaryDisplayLabels.analysisStartDateInputAccessibility}
                       value={analysisCustomStart}
@@ -9246,7 +9238,7 @@ export default function App() {
                     />
                   </View>
                   <View style={styles.dateTimeField}>
-                    {renderFieldLabel("📅", "結束日期")}
+                    <FieldLabel icon={"📅"} label={"結束日期"} />
                     <TextInput
                       accessibilityLabel={auxiliaryDisplayLabels.analysisEndDateInputAccessibility}
                       value={analysisCustomEnd}
@@ -10211,7 +10203,7 @@ export default function App() {
               />
               <View style={styles.dateTimeRow}>
                 <View style={styles.dateTimeField}>
-                  {renderFieldLabel("📅", "食用日期")}
+                  <FieldLabel icon={"📅"} label={"食用日期"} />
                   <TextInput
                     accessibilityLabel="輸入食物分享食用日期"
                     value={foodCommunityShareFields.eatenDate}
@@ -10224,7 +10216,7 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.dateTimeField}>
-                  {renderFieldLabel("🕒", "食用時間")}
+                  <FieldLabel icon={"🕒"} label={"食用時間"} />
                   <TextInput
                     accessibilityLabel="輸入食物分享食用時間"
                     value={foodCommunityShareFields.eatenTime}
@@ -12202,18 +12194,6 @@ const styles = StyleSheet.create({
     color: "#0F3F37",
     fontSize: 14,
     fontWeight: "800"
-  },
-  fieldLabelRow: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 8
-  },
-  fieldLabelIcon: {
-    color: "#3FA67F",
-    fontSize: 15,
-    fontWeight: "900",
-    minWidth: 20,
-    textAlign: "center"
   },
   input: {
     backgroundColor: "#ffffff",
