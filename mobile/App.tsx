@@ -152,6 +152,7 @@ import {
   boundCommunityPublicSettings,
   commercePreviewOpenCartStatusMessage,
   commercePreviewReturnStoreStatusMessage,
+  communityBoundaryDisplayRows,
   communityLeaderboardDisplaySection,
   emptyFoodCommunityShareFields,
   communityReadinessChecklistDisplayItems,
@@ -2022,12 +2023,9 @@ export default function App() {
   );
   const doctorShareBoundaryRows = doctorShareBoundaryDisplayRows();
   const healthIntegrationBoundaryRows = healthIntegrationBoundaryDisplayRows();
-  const communityBoundaryRows = ([
-    ["健康紀錄", "預設私密"],
-    ["公開排名", communityPublicSettings?.leaderboard_opt_in ? "已 opt-in" : "預設關閉"],
-    ["留言治理", "封鎖/檢舉/審核"],
-    ["AI 成本", "0 次呼叫"]
-  ] as const).map(boundaryMetricDisplayItem);
+  const communityBoundaryRows = communityBoundaryDisplayRows(
+    communityPublicSettings?.leaderboard_opt_in ?? false
+  );
   const rankingBoundaryRows = rankingBoundaryDisplayRows();
   const recordingQuotaBoundaryRows = recordingQuotaBoundaryDisplayRows(voiceQuota, quotaRemainingLow);
   const privacyBoundaryRows = privacyBoundaryDisplayRows();

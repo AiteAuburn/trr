@@ -1172,6 +1172,18 @@ export function communityPublicNameBoundaryCopy() {
   );
 }
 
+export function communityBoundaryDisplayRows(isLeaderboardOptedIn: boolean) {
+  return [
+    ["健康紀錄", "預設私密"],
+    ["公開排名", isLeaderboardOptedIn ? "已 opt-in" : "預設關閉"],
+    ["留言治理", "封鎖/檢舉/審核"],
+    ["AI 成本", "0 次呼叫"]
+  ].map(([label, value]) => ({
+    label: boundDisplayText(label, 60),
+    value: boundDisplayText(value, 80)
+  }));
+}
+
 export function communityReadinessChecklistDisplayItems() {
   return [
     "社群貼文、留言、封鎖、檢舉與審核流程",

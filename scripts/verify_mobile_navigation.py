@@ -2530,6 +2530,11 @@ def main() -> int:
             "const recordingQuotaBoundaryRows = recordingQuotaBoundaryDisplayRows(voiceQuota, quotaRemainingLow);",
         )
         _assert_contains(
+            "community boundary rows helper binding",
+            content,
+            "const communityBoundaryRows = communityBoundaryDisplayRows(",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -5988,6 +5993,11 @@ def main() -> int:
             ("community preview boundary copy", "backend ready 時可同步食物資料庫、送出食物分享、建立點數並刷新排行榜"),
             ("community public name boundary copy helper", "export function communityPublicNameBoundaryCopy()"),
             ("community public name boundary copy", "公開名稱與排行榜 opt-in 已可同步 backend；健康紀錄仍預設私密"),
+            ("community boundary rows helper", "export function communityBoundaryDisplayRows(isLeaderboardOptedIn: boolean)"),
+            ("community boundary records row", "健康紀錄"),
+            ("community boundary public ranking row", "公開排名"),
+            ("community boundary moderation row", "留言治理"),
+            ("community boundary ai cost row", "0 次呼叫"),
             ("community readiness checklist helper", "export function communityReadinessChecklistDisplayItems()"),
             ("community readiness moderation copy", "社群貼文、留言、封鎖、檢舉與審核流程"),
             ("community readiness opt-in copy", "健康資料不可自動公開，分享需明確 opt-in"),

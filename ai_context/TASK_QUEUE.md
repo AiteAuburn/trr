@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1305: Extract community boundary display rows helper
+
+Status: done
+
+Summary:
+
+- Added `communityBoundaryDisplayRows` to `mobile/futureModuleDisplay.ts` for the Community boundary metric rows.
+- Replaced the inline Community boundary-row construction in `mobile/App.tsx` with the extracted helper.
+- Kept row copy, bounded display behavior, Community rendering, public settings behavior, leaderboard opt-in behavior, backend API behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and key Community boundary row copy are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1304: Extract recording-quota boundary display rows helper
 
 Status: done
