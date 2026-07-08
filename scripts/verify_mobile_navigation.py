@@ -2490,6 +2490,11 @@ def main() -> int:
             "subscriptionManagementReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "membership feature display rows helper binding",
+            content,
+            "const membershipFeatureRows = membershipFeatureDisplayRows();",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -5343,6 +5348,11 @@ def main() -> int:
             ("membership trial-days helper", "function membershipTrialDaysText(trialDays: number | null)"),
             ("membership trial-days fallback copy", "試用天數尚未載入"),
             ("membership trial-days remaining copy", "還剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天"),
+            ("membership feature display rows helper", "function membershipFeatureDisplayRows()"),
+            ("membership feature voice record copy", "輕鬆說，隨時記"),
+            ("membership feature ai organize copy", "自動歸納重點，儲存前仍需確認"),
+            ("membership feature analysis copy", "趨勢與摘要一目了然"),
+            ("membership feature history copy", "完整保存並支援查詢"),
             ("subscription status summary helper", "function subscriptionStatusSummaryText("),
             ("subscription status summary trial copy", "試用剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天"),
             ("subscription readiness checklist helper", "function subscriptionReadinessChecklistDisplayItems()"),

@@ -82,6 +82,18 @@ export function subscriptionStatusSummaryText(
   return boundDisplayText(`${subscriptionStatusLabel(quota.status ?? undefined)}${trialCopy}`, maxDisplayDetailTextLength);
 }
 
+export function membershipFeatureDisplayRows() {
+  return [
+    ["語音記錄", "輕鬆說，隨時記"],
+    ["AI 整理", "自動歸納重點，儲存前仍需確認"],
+    ["基本分析", "趨勢與摘要一目了然"],
+    ["歷史回顧", "完整保存並支援查詢"]
+  ].map(([label, value]) => ({
+    label: boundDisplayText(label, 60),
+    value: boundDisplayText(value, maxDisplayDetailTextLength)
+  }));
+}
+
 export function accountSecurityProviderBoundaryCopy() {
   return boundDisplayText(
     "原生 Apple / Google / Email provider SDK 尚未接入；provider callback 拿到 id_token 後，mobile 已有 /auth/oidc-login exchange 與 SecureStore 寫入邊界。",

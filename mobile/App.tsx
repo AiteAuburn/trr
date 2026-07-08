@@ -683,6 +683,7 @@ import {
   accountSecurityProviderBoundaryCopy,
   accountSecurityReadinessBoundaryCopy,
   accountSecuritySessionBoundaryCopy,
+  membershipFeatureDisplayRows,
   membershipTrialDaysText,
   planDisplayName,
   profileNoActionBoundaryCopy,
@@ -1782,12 +1783,7 @@ export default function App() {
     ["relationship", activeProfileRelationshipDisplayText],
     ["本機編輯", "停用"]
   ] as const).map(boundaryMetricDisplayItem);
-  const membershipFeatureRows = ([
-    ["語音記錄", "輕鬆說，隨時記"],
-    ["AI 整理", "自動歸納重點，儲存前仍需確認"],
-    ["基本分析", "趨勢與摘要一目了然"],
-    ["歷史回顧", "完整保存並支援查詢"]
-  ] as const).map(detailPairDisplayItem);
+  const membershipFeatureRows = membershipFeatureDisplayRows();
   const authBoundaryChecklistItems = authBoundaryChecklistDisplayItems();
   const profileReadinessChecklistItems = profileReadinessChecklistDisplayItems();
   const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();

@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1297: Extract membership feature display rows helper
+
+Status: done
+
+Summary:
+
+- Added `membershipFeatureDisplayRows` to `mobile/subscriptionCopy.ts` for the Membership Status feature rows.
+- Replaced the inline Membership Status feature-row construction in `mobile/App.tsx` with the extracted helper.
+- Kept row copy, bounded display behavior, Membership Status rendering, subscription state behavior, payment/entitlement behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and key membership feature copy are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1296: Extract food-photo readiness checklist helper
 
 Status: done
