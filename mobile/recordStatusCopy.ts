@@ -163,6 +163,28 @@ export function recordResultDestinationStatusMessage(kind: "delete" | "update", 
   return boundUiMessage(`已從${kindLabel}前往${targetLabel}；不會重新送出 backend request 或呼叫 AI。`);
 }
 
+export function deleteSuccessBoundaryChecklistDisplayItems(recordSyncLimit: number) {
+  const boundedLimit = clampNumber(recordSyncLimit, 0, maxMobileCountValue);
+  return [
+    "成功頁不保留被刪除紀錄的本機復原副本。",
+    "不會呼叫 parser、AI 或 LLM，成本為 0。",
+    "不會保留 raw transcript、raw prompt、raw model output 或模型 debug trace。",
+    "失敗不會自動重試；若需要確認 backend 狀態，請稍後重新同步。",
+    `回到今日 / 歷史只使用已同步紀錄；mobile 每頁載入 ${boundedLimit} 筆，可用歷史頁載入更多。`
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
+export function updateSuccessBoundaryChecklistDisplayItems(recordSyncLimit: number) {
+  const boundedLimit = clampNumber(recordSyncLimit, 0, maxMobileCountValue);
+  return [
+    "成功頁只反映目前已更新的選取紀錄與本機清單。",
+    "不會呼叫 parser、AI 或 LLM，成本為 0。",
+    "不會保留 raw transcript、raw prompt、raw model output 或模型 debug trace。",
+    "失敗不會自動重試；若需要確認其他裝置狀態，請稍後重新同步。",
+    `回到今日 / 歷史 / 分析只使用已同步紀錄；mobile 每頁載入 ${boundedLimit} 筆，可用歷史頁載入更多。`
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function manualRecordCreateUnavailableStatusMessage(message: string) {
   return boundUiMessage(`${message || "backend 尚未 ready"}；目前不會送出手動紀錄建立請求。`);
 }

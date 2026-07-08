@@ -2816,6 +2816,11 @@ def main() -> int:
             "onPress={() => pressDeleteSuccessDestinationCard(item)}",
         )
         _assert_contains(
+            "delete success checklist helper binding",
+            content,
+            "deleteSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit)",
+        )
+        _assert_contains(
             "delete success destination card accessibility binding",
             content,
             "accessibilityLabel={item.accessibilityLabel}",
@@ -2834,6 +2839,11 @@ def main() -> int:
             "update success destination card binding",
             content,
             "onPress={() => pressUpdateSuccessDestinationCard(item)}",
+        )
+        _assert_contains(
+            "update success checklist helper binding",
+            content,
+            "updateSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit)",
         )
         _assert_contains(
             "update success destination card accessibility binding",
@@ -3606,9 +3616,13 @@ def main() -> int:
             ("record edit open status helper", "function recordEditOpenStatusMessage()"),
             ("record edit cancel status helper", "function recordEditCancelStatusMessage()"),
             ("record result destination status helper", 'function recordResultDestinationStatusMessage(kind: "delete" | "update", target: AppScreen)'),
+            ("delete success boundary checklist helper", "function deleteSuccessBoundaryChecklistDisplayItems(recordSyncLimit: number)"),
+            ("update success boundary checklist helper", "function updateSuccessBoundaryChecklistDisplayItems(recordSyncLimit: number)"),
             ("record edit intro copy", "欄位會轉成後端結構化 payload"),
             ("record edit no update copy", "按下儲存修改前不會送出 update request"),
             ("record result destination no retry copy", "不會重新送出 backend request 或呼叫 AI"),
+            ("delete success no restore copy", "成功頁不保留被刪除紀錄的本機復原副本。"),
+            ("update success selected record copy", "成功頁只反映目前已更新的選取紀錄與本機清單。"),
         ):
             _assert_contains(label, record_status_copy_content, marker)
         for label, marker in (

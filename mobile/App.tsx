@@ -363,6 +363,7 @@ import {
   tutorialRecordEntryStatusMessage
 } from "./recordWorkflowCopy";
 import {
+  deleteSuccessBoundaryChecklistDisplayItems,
   deleteConfirmIntroCopy,
   deleteConfirmReadyStatusMessage,
   deleteConfirmRecordMetaCopy,
@@ -394,6 +395,7 @@ import {
   recordUpdateSuccessStatusMessage,
   recordUpdateSummaryMessage,
   recordUpdateUnavailableStatusMessage,
+  updateSuccessBoundaryChecklistDisplayItems,
   visualSmokeRecordSyncStatusMessage
 } from "./recordStatusCopy";
 import {
@@ -1259,20 +1261,10 @@ export default function App() {
     `回到今日 / 歷史 / 分析只使用已同步紀錄；mobile 每頁載入 ${mobileRecordSyncDisplayLimit} 筆，可用歷史頁載入更多。`,
     "成功頁不新增 backend request，除非使用者主動進入其他頁面觸發既有同步。"
   ].map(resultChecklistItem);
-  const deleteSuccessBoundaryChecklistItems = [
-    "成功頁不保留被刪除紀錄的本機復原副本。",
-    "不會呼叫 parser、AI 或 LLM，成本為 0。",
-    "不會保留 raw transcript、raw prompt、raw model output 或模型 debug trace。",
-    "失敗不會自動重試；若需要確認 backend 狀態，請稍後重新同步。",
-    `回到今日 / 歷史只使用已同步紀錄；mobile 每頁載入 ${mobileRecordSyncDisplayLimit} 筆，可用歷史頁載入更多。`
-  ].map(resultChecklistItem);
-  const updateSuccessBoundaryChecklistItems = [
-    "成功頁只反映目前已更新的選取紀錄與本機清單。",
-    "不會呼叫 parser、AI 或 LLM，成本為 0。",
-    "不會保留 raw transcript、raw prompt、raw model output 或模型 debug trace。",
-    "失敗不會自動重試；若需要確認其他裝置狀態，請稍後重新同步。",
-    `回到今日 / 歷史 / 分析只使用已同步紀錄；mobile 每頁載入 ${mobileRecordSyncDisplayLimit} 筆，可用歷史頁載入更多。`
-  ].map(resultChecklistItem);
+  const deleteSuccessBoundaryChecklistItems =
+    deleteSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit);
+  const updateSuccessBoundaryChecklistItems =
+    updateSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit);
   const manualSubmitChecklistItems = [
     "不會呼叫 AI 或 LLM，成本為 0。",
     "只會送出 1 筆手動紀錄 payload，不會批次載入完整歷史。",
