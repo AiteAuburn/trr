@@ -1323,9 +1323,15 @@ def main() -> int:
             ("app AI model options type alias", "type AiModelOptions = AiModelOptionsTransformSource<AiModelOption>;"),
             ("app voice quota type alias", "type VoiceQuota = VoiceQuotaTransformSource;"),
             ("app auth token type alias", "type AuthTokenResponse = AuthTokenResponseTransformSource;"),
+            ("app auth session type alias", "type AuthSessionItem = AuthSessionDisplaySource;"),
             ("app basic report type alias", "type BasicReport = BasicReportTransformSource;"),
         ):
             _assert_contains(label, content, marker)
+        _assert_contains(
+            "daily record save response type",
+            daily_transcript_content,
+            "export type DailyRecordSaveResponse = {",
+        )
         for label, marker in (
             ("app local api url normalizer", "function normalizeApiBaseUrl(value: string)"),
             ("app local ui message bound", "function boundUiMessage(value: string)"),
@@ -1337,6 +1343,8 @@ def main() -> int:
             ("app local AI model option type block", "type AiModelOption = {\n  id: string;"),
             ("app local voice quota type block", "type VoiceQuota = {\n  plan_code: string;"),
             ("app local auth token type block", "type AuthTokenResponse = {\n  access_token: string;"),
+            ("app local daily record save response type block", "type DailyRecordSaveResponse = {\n  daily_record: {"),
+            ("app local auth session type block", "type AuthSessionItem = {\n  id: string;"),
             ("app local basic report type block", "type BasicReport = {\n  profile_id: string;"),
             ("app local json request wrapper", "async function requestJson<T>("),
             ("app local no-content request wrapper", "async function requestNoContent(apiBaseUrl: string, path: string, init?: RequestInit)"),
@@ -2825,7 +2833,6 @@ def main() -> int:
             ("daily record reorganization delete binding", 'reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, "delete");'),
             ("daily record reorganization summary display", "const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayText("),
             ("daily record reorganization summary render", "<Text style={styles.evidence}>{dailyRecordReorganizationDisplay}</Text>"),
-            ("daily record save response type", "type DailyRecordSaveResponse = {"),
             ("daily record save endpoint", '"/daily-records/save"'),
             ("daily record save payload binding", "body: JSON.stringify(buildDailyRecordSaveRequest(preview, recordsToSave, dailyTranscriptEntries))"),
             ("daily record save clears retained transcripts", "setDailyTranscriptEntries([]);"),
@@ -3242,7 +3249,6 @@ def main() -> int:
             ("history detail mode press handler", "function pressHistoryDetailModeOption(item: ReturnType<typeof historyDetailModeDisplayItem>)"),
             ("history detail mode binding", "onPress={() => pressHistoryDetailModeOption(item)}"),
             ("history cursor cache limit", "const maxMobileRecordCacheLimit = 500;"),
-            ("history record cursor created_at field", "created_at: string;"),
             ("history cursor before query", "before: cursorRecord.occurred_at,"),
             ("history cursor created_at query", "before_created_at: cursorRecord.created_at"),
             ("history load more handler", "async function loadMoreRecords()"),
@@ -3253,6 +3259,11 @@ def main() -> int:
             ("history raw records render", "selectedHistoryRawDisplayItems.map((item) =>"),
         ):
             _assert_contains(label, content, marker)
+        _assert_contains(
+            "history record cursor created_at field",
+            record_bounds_content,
+            "created_at: string;",
+        )
         _assert_contains(
             "history load more accessibility label",
             first_version_flow_copy_content,

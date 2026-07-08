@@ -588,6 +588,7 @@ import {
   dailyRecordSummaryText,
   dailyTranscriptDisplayItems,
   mergeSameDayParsePreviewDraft,
+  type DailyRecordSaveResponse,
   type DailyRecordReorganizationReason,
   type DailyTranscriptEntry
 } from "./dailyTranscriptTransforms";
@@ -703,38 +704,17 @@ import {
   buildProtectedRequestHeaders,
   type AuthTokenResponseTransformSource
 } from "./authTransforms";
-import { authSessionDisplayItem } from "./authSessionDisplay";
+import { authSessionDisplayItem, type AuthSessionDisplaySource } from "./authSessionDisplay";
 
 type Account = AccountTransformSource;
 type Profile = ProfileTransformSource;
 type AiModelOption = AiModelOptionTransformSource;
 type AiModelOptions = AiModelOptionsTransformSource<AiModelOption>;
 
-type DailyRecordSaveResponse = {
-  daily_record: {
-    id: string;
-    profile_id: string;
-    record_date: string;
-    summary_text: string;
-    record_ids: string[];
-    preview_records_json: Record<string, unknown>[];
-    transcript_entries_json: DailyTranscriptEntry[];
-    source: string;
-    created_at: string;
-    updated_at: string;
-  };
-  records: RecordItem[];
-};
 type VoiceQuota = VoiceQuotaTransformSource;
 type AuthTokenResponse = AuthTokenResponseTransformSource;
 
-type AuthSessionItem = {
-  id: string;
-  created_at: string;
-  expires_at: string;
-  last_used_at?: string | null;
-  has_device_fingerprint: boolean;
-};
+type AuthSessionItem = AuthSessionDisplaySource;
 
 type BasicReport = BasicReportTransformSource;
 

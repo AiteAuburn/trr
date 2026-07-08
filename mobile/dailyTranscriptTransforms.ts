@@ -1,6 +1,6 @@
 import { localDateKey } from "./dateTimeTransforms";
 import { dailyRecordSectionDefinitions } from "./recordDisplay";
-import { boundParsePreviewResponse, type ParsePreviewResponse, type PendingRecord } from "./recordBounds";
+import { boundParsePreviewResponse, type ParsePreviewResponse, type PendingRecord, type RecordItem } from "./recordBounds";
 
 const maxListItems = 12;
 const maxDisplayTextLength = 160;
@@ -20,6 +20,22 @@ export type DailyTranscriptEntry = {
 };
 
 export type DailyRecordReorganizationReason = "add" | "edit" | "delete";
+
+export type DailyRecordSaveResponse = {
+  daily_record: {
+    id: string;
+    profile_id: string;
+    record_date: string;
+    summary_text: string;
+    record_ids: string[];
+    preview_records_json: Record<string, unknown>[];
+    transcript_entries_json: DailyTranscriptEntry[];
+    source: string;
+    created_at: string;
+    updated_at: string;
+  };
+  records: RecordItem[];
+};
 
 function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);

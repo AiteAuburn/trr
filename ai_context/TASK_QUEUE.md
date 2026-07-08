@@ -124,6 +124,26 @@ None.
 
 ## Done
 
+### T1194: Extract remaining App response type ownership
+
+Status: done
+
+Summary:
+
+- Moved `DailyRecordSaveResponse` type ownership from `mobile/App.tsx` into `mobile/dailyTranscriptTransforms.ts`.
+- Replaced the App-local `AuthSessionItem` shape with an alias to `AuthSessionDisplaySource` from `mobile/authSessionDisplay.ts`.
+- Kept daily-record save request/response usage, auth session request usage, UI copy, layout, navigation, backend request paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so daily-record response type ownership is guarded in `mobile/dailyTranscriptTransforms.ts`, auth session type ownership is guarded by alias, and old App-local blocks are rejected.
+- Updated the refactor roadmap to note the daily-record response and auth-session source-type boundaries.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1193: Extract shared API request wrappers
 
 Status: done

@@ -15,6 +15,40 @@
 
 ## 2026-07-07
 
+### T1194 extract remaining App response type ownership
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/dailyTranscriptTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved `DailyRecordSaveResponse` type ownership from `mobile/App.tsx` into `mobile/dailyTranscriptTransforms.ts`.
+- Replaced the App-local `AuthSessionItem` shape with an alias to `AuthSessionDisplaySource` from `mobile/authSessionDisplay.ts`.
+- Kept daily-record save request/response usage, auth session request usage, UI copy, layout, navigation, backend request paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so daily-record response type ownership is guarded in `mobile/dailyTranscriptTransforms.ts`, auth session type ownership is guarded by alias, and old App-local blocks are rejected.
+- Updated the refactor roadmap to note the daily-record response and auth-session source-type boundaries.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting static runtime config before moving screen renderers.
+
 ### T1193 extract shared API request wrappers
 
 類型：mobile / refactor / verifier / docs

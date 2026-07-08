@@ -28,7 +28,7 @@
   - `authTokenStorage.ts`：SecureStore token boundary。
   - `apiClient.ts`：Shared JSON / no-content fetch wrappers with unchanged content-type and HTTP status failure behavior.
   - `authTransforms.ts`：Auth token/OIDC request and response sanitizing transforms plus protected request header construction.
-  - `authSessionDisplay.ts`：Account Security auth session display item shaping.
+  - `authSessionDisplay.ts`：Account Security auth session source type and display item shaping.
   - `authProviderChallenge.ts`：OIDC challenge helper。
   - `mobileBounds.ts`：App-shared text length, identifier, UI message, native debug input, store search input, API base URL, and numeric bounds helpers/constants.
   - `modelStorage.ts`：本機模型清單與下載狀態。
@@ -58,7 +58,7 @@
   - `sharedDisplayItems.ts`：Shared bounded tuple, metric, option, manual-record type, comparison, tutorial, reminder, session-management preview, destination-card, menu, visual-smoke route, auxiliary section labels, and checklist display item builders.
   - `dateTimeTransforms.ts`：local date/time input formatting, local date keys, analysis date bounds, and local datetime ISO transforms.
   - `recordBounds.ts`：parse-preview, pending-record, record-cache, payload, and metadata bounded transforms.
-  - `dailyTranscriptTransforms.ts`：daily-record key / summary, AI review and daily-record date labels, same-day preview merge transforms, retained transcript entries, transcript display items, daily-record reorganization copy/status helpers, and daily-record save request transforms.
+  - `dailyTranscriptTransforms.ts`：daily-record key / summary, AI review and daily-record date labels, same-day preview merge transforms, retained transcript entries, transcript display items, daily-record reorganization copy/status helpers, and daily-record save request/response types/transforms.
   - `analysisDataTransforms.ts`：Analysis basic report response bounding, glucose extraction, meal-timing classification, chart points/range, numeric aggregation helpers, and record streak/day aggregation helpers.
   - `analysisMetricTransforms.ts`：Analysis and detailed-report metric row shaping, nullable glucose bounds, and count bounds.
   - `analysisScreenData.ts`：Analysis range option config, backend report request-key, and bounded range display item shaping.
@@ -148,7 +148,7 @@ Verification:
 
 ### Slice 4: Data Transform Helpers
 
-Status: started; shared API request wrappers, app-shared mobile bounds, date/time, record bounds, record save transforms, daily transcript, auth token/OIDC request transforms, protected auth request header transforms, account/profile response source types and bounding, AI model option response source types and bounding, downloaded native model state bounding, analysis basic report response source type and bounding, analysis data/chart, analysis metric, record streak/day aggregation, subscription trial-days, subscription voice quota response source type and bounding, and recording effective-limit transform helpers extracted.
+Status: started; shared API request wrappers, app-shared mobile bounds, date/time, record bounds, record save transforms, daily transcript, daily-record save response type, auth session source type, auth token/OIDC request transforms, protected auth request header transforms, account/profile response source types and bounding, AI model option response source types and bounding, downloaded native model state bounding, analysis basic report response source type and bounding, analysis data/chart, analysis metric, record streak/day aggregation, subscription trial-days, subscription voice quota response source type and bounding, and recording effective-limit transform helpers extracted.
 
 Scope:
 
