@@ -1373,8 +1373,9 @@ def main() -> int:
             ("highlight bullet evidence line height", "lineHeight: 19"),
             ("record detail boundary highlight bullet row", "recordDetailBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("delete confirm highlight bullet row", "deleteConfirmChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("record update highlight bullet row", "recordUpdateChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
         ):
-            target_content = content if label.startswith(("record detail ", "delete confirm ")) else highlight_bullet_row_content
+            target_content = content if label.startswith(("record detail ", "delete confirm ", "record update ")) else highlight_bullet_row_content
             _assert_contains(label, target_content, marker)
         for label, marker in (
             ("record detail date detail row component", 'label={<FieldLabel icon={"📅"} label={"日期"} />}'),
