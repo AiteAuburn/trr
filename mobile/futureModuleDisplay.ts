@@ -1137,6 +1137,15 @@ export function healthIntegrationExternalDataBoundaryCopy() {
   );
 }
 
+export function healthIntegrationReadinessChecklistDisplayItems() {
+  return [
+    "使用者授權、撤權與資料刪除流程",
+    "external integration layer 與平台權限隔離",
+    "import batch id、sync status 與錯誤復原",
+    "duplicate detection，避免同一筆血糖被重複匯入"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function communityPreviewBoundaryDisplayItem() {
   return futurePreviewBoundaryDisplayItem(
     "食物社群",

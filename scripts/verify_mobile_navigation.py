@@ -2435,6 +2435,11 @@ def main() -> int:
             "const doctorShareReadinessChecklistItems = doctorShareReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "health integration readiness checklist helper binding",
+            content,
+            "healthIntegrationReadinessChecklistDisplayItems();",
+        )
+        _assert_contains(
             "quota readiness checklist helper binding",
             content,
             "const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();",
@@ -5885,6 +5890,10 @@ def main() -> int:
             ("health integration preview boundary copy", "目前不請求 HealthKit / Health Connect 權限、不掃描 BLE、不讀取血糖機、不寫入 records"),
             ("health integration external boundary copy helper", "export function healthIntegrationExternalDataBoundaryCopy()"),
             ("health integration external boundary copy", "外部資料不能覆蓋使用者手動紀錄"),
+            ("health integration readiness checklist helper", "export function healthIntegrationReadinessChecklistDisplayItems()"),
+            ("health integration readiness authorization copy", "使用者授權、撤權與資料刪除流程"),
+            ("health integration readiness sync copy", "import batch id、sync status 與錯誤復原"),
+            ("health integration readiness duplicate copy", "duplicate detection，避免同一筆血糖被重複匯入"),
             ("community preview boundary helper", "export function communityPreviewBoundaryDisplayItem()"),
             ("community preview boundary copy", "backend ready 時可同步食物資料庫、送出食物分享、建立點數並刷新排行榜"),
             ("community public name boundary copy helper", "export function communityPublicNameBoundaryCopy()"),

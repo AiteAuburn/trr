@@ -169,6 +169,7 @@ import {
   futurePreviewSectionLabels,
   healthIntegrationExternalDataBoundaryCopy,
   healthIntegrationPreviewBoundaryDisplayItem,
+  healthIntegrationReadinessChecklistDisplayItems,
   mobileFoodCategoryFromApi,
   privacyPreviewBoundaryDisplayItem,
   rankingLocalPreviewBoundaryCopy,
@@ -1795,12 +1796,8 @@ export default function App() {
   const privacyReadinessChecklistItems = privacyReadinessChecklistDisplayItems();
   const tutorialSafetyChecklistItems = tutorialSafetyChecklistDisplayItems();
   const doctorShareReadinessChecklistItems = doctorShareReadinessChecklistDisplayItems();
-  const healthIntegrationReadinessChecklistItems = [
-    "使用者授權、撤權與資料刪除流程",
-    "external integration layer 與平台權限隔離",
-    "import batch id、sync status 與錯誤復原",
-    "duplicate detection，避免同一筆血糖被重複匯入"
-  ].map(resultChecklistItem);
+  const healthIntegrationReadinessChecklistItems =
+    healthIntegrationReadinessChecklistDisplayItems();
   const communityReadinessChecklistItems = [
     "社群貼文、留言、封鎖、檢舉與審核流程",
     "健康資料不可自動公開，分享需明確 opt-in",
