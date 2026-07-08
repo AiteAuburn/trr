@@ -1,7 +1,7 @@
 import type { AppScreen } from "./navigationConfig";
 import { formatLocalDateInput, localDateTimeInputs } from "./dateTimeTransforms";
 import { recordDateTimeDisplay } from "./recordDisplay";
-import { resultChecklistItem } from "./sharedDisplayItems";
+import { metricDisplayItem, resultChecklistItem } from "./sharedDisplayItems";
 
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
@@ -1458,6 +1458,38 @@ export function yearReviewSourceDisplayCopy(summary: YearReviewApiResponse | nul
     `${summary.year} 年來源：${sourceCopy}，${snapshotCopy}，${generatedCopy}；${shareCopy}。`,
     maxDisplayDetailTextLength
   );
+}
+
+export function localYearlyReviewMetricDisplayRows(
+  yearlyRecordDayDisplayCount: number,
+  yearlyGlucoseRecordDisplayCount: number,
+  yearlyMealRecordDisplayCount: number,
+  yearlyExerciseRecordDisplayCount: number,
+  yearlyLongestStreakDisplayDays: number,
+  yearlyUnlockedBadgeDisplayCount: number,
+  yearlyHighestBadgeDisplayLevel: number
+) {
+  return ([
+    ["本年度總記錄天數", `${yearlyRecordDayDisplayCount} 天`],
+    ["本年度血糖記錄次數", `${yearlyGlucoseRecordDisplayCount} 次`],
+    ["本年度飲食記錄次數", `${yearlyMealRecordDisplayCount} 次`],
+    ["本年度運動記錄次數", `${yearlyExerciseRecordDisplayCount} 次`],
+    ["最長連續記錄天數", `${yearlyLongestStreakDisplayDays} 天`],
+    ["達成徽章數量", `${yearlyUnlockedBadgeDisplayCount} 枚`],
+    ["解鎖最高等級徽章", yearlyHighestBadgeDisplayLevel > 0 ? `${yearlyHighestBadgeDisplayLevel} 級` : "尚無"]
+  ] as const).map(metricDisplayItem);
+}
+
+export function localYearlyHealthOutcomeDisplayRows(
+  yearlyGlucoseAverageDisplayValue: number | null,
+  yearlyGlucoseHighestDisplayValue: number | null,
+  yearlyGlucoseLowestDisplayValue: number | null
+) {
+  return ([
+    ["年平均血糖", yearlyGlucoseAverageDisplayValue === null ? "尚無" : `${yearlyGlucoseAverageDisplayValue} mg/dL`],
+    ["年度最高血糖", yearlyGlucoseHighestDisplayValue === null ? "尚無" : `${yearlyGlucoseHighestDisplayValue} mg/dL`],
+    ["年度最低血糖", yearlyGlucoseLowestDisplayValue === null ? "尚無" : `${yearlyGlucoseLowestDisplayValue} mg/dL`]
+  ] as const).map(metricDisplayItem);
 }
 
 export function yearReviewBadgeMaterialCopy() {

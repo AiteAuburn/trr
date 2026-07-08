@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1308 extract year-review local fallback metric rows helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `localYearlyReviewMetricDisplayRows` and `localYearlyHealthOutcomeDisplayRows` to `mobile/futureModuleDisplay.ts` for Year Review local fallback metric rows.
+- Replaced the inline Year Review local fallback row construction in `mobile/App.tsx` with the extracted helpers.
+- Kept row copy, bounded display behavior, backend-summary preference, local fallback behavior, Year Review rendering, share-card behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helpers, App bindings, and key Year Review fallback row copy are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Year Review rendering、backend-summary preference、local fallback behavior、share-card behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk display helpers from `App.tsx`; keep Year Review sync/share request ownership in `App.tsx` until component boundaries are stable.
+
 ### T1307 extract account and profile boundary display rows helpers
 
 類型：mobile / refactor / verifier / docs

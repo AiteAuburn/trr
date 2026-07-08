@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1308: Extract year-review local fallback metric rows helpers
+
+Status: done
+
+Summary:
+
+- Added `localYearlyReviewMetricDisplayRows` and `localYearlyHealthOutcomeDisplayRows` to `mobile/futureModuleDisplay.ts` for Year Review local fallback metric rows.
+- Replaced the inline Year Review local fallback row construction in `mobile/App.tsx` with the extracted helpers.
+- Kept row copy, bounded display behavior, backend-summary preference, local fallback behavior, Year Review rendering, share-card behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helpers, App bindings, and key Year Review fallback row copy are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1307: Extract account and profile boundary display rows helpers
 
 Status: done
