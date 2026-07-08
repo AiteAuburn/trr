@@ -706,6 +706,7 @@ import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { HistoryDailySummaryCard } from "./historyDailySummaryCard";
 import { HistoryDetailModeTabs } from "./historyDetailModeTabs";
+import { HistoryNoRangeRecordsCard } from "./historyNoRangeRecordsCard";
 import { HistoryNoRecordStatusBlock } from "./historyNoRecordStatusBlock";
 import { HistoryRawTranscriptCard } from "./historyRawTranscriptCard";
 import { HistorySelectedDateHeader } from "./historySelectedDateHeader";
@@ -8533,15 +8534,10 @@ export default function App() {
                   />
                 ))
               ) : (
-                <View style={styles.emptyStateCard}>
-                  <View style={styles.iconCircle}>
-                    <Text>📅</Text>
-                  </View>
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{historyNoRangeRecordsTitleDisplayText}</Text>
-                    <Text style={styles.evidence}>{historyNoRangeRecordsBodyDisplayText}</Text>
-                  </View>
-                </View>
+                <HistoryNoRangeRecordsCard
+                  body={historyNoRangeRecordsBodyDisplayText}
+                  title={historyNoRangeRecordsTitleDisplayText}
+                />
               )}
             </View>
             {recordsForDisplay.length === 0 ? (
@@ -8576,15 +8572,10 @@ export default function App() {
                 onPress={pressHistoryDetailModeOption}
               />
               {selectedHistoryRecordDisplayCount === 0 ? (
-                <View style={styles.emptyStateCard}>
-                  <View style={styles.iconCircle}>
-                    <Text>📅</Text>
-                  </View>
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{historyNoRangeRecordsTitleDisplayText}</Text>
-                    <Text style={styles.evidence}>{historyNoRangeRecordsBodyDisplayText}</Text>
-                  </View>
-                </View>
+                <HistoryNoRangeRecordsCard
+                  body={historyNoRangeRecordsBodyDisplayText}
+                  title={historyNoRangeRecordsTitleDisplayText}
+                />
               ) : historyDetailMode === "structured" ? (
                 <View style={styles.dailyRecordSectionList}>
                   {selectedHistoryDailySectionItems.map((section) => (

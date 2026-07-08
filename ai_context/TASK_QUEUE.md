@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1246: Extract history no-range records card
+
+Status: done
+
+Summary:
+
+- Added `mobile/historyNoRangeRecordsCard.tsx` for the History no-range-records empty-state card used by the daily summary table and selected-date panel.
+- Replaced two inline no-range-records empty-state cards in `mobile/App.tsx` with `HistoryNoRangeRecordsCard`.
+- Kept no-range-records title/body, calendar icon, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the History no-range-records component and both App bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1245: Extract history no-record status block
 
 Status: done
