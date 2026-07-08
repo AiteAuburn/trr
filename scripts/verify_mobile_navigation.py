@@ -4640,8 +4640,10 @@ def main() -> int:
             ("achievements return handler", "function returnFromAchievements()"),
             ("year review return handler", "function returnFromYearReview()"),
             ("store cart open handler", "function openStoreCart()"),
+            ("store cart open status call", "setStatus(commercePreviewOpenCartStatusMessage())"),
             ("store return handler", "function returnFromStore()"),
             ("store cart return store handler", "function returnFromStoreCartToStore()"),
+            ("store cart return status call", "setStatus(commercePreviewReturnStoreStatusMessage())"),
             ("food photo return handler", "function returnFromFoodPhoto()"),
             ("achievement integration status handler", "function showAchievementIntegrationStatus()"),
             ("year review share status handler", "function showYearReviewShareStatus()"),
@@ -4738,7 +4740,6 @@ def main() -> int:
             ("year review source label", 'yearReviewSource: boundDisplayText("年度回顧來源", maxDisplayTextLength)'),
             ("year review source display value", "const yearReviewSourceDisplayText = yearReviewSourceDisplayCopy("),
             ("year review source render", "{yearReviewSourceDisplayText}"),
-            ("year review backend-aware share fallback", "backend ready 時可準備隱私遮罩分享卡並開啟原生分享。"),
             ("year review share accessibility binding", "accessibilityLabel={yearReviewShareAccessibilityDisplayLabel}"),
             ("year review native share import", "Share,"),
             ("year review file system import", 'import * as FileSystem from "expo-file-system";'),
@@ -4799,6 +4800,8 @@ def main() -> int:
             ("year review source generated time", "產生時間 ${recordDateTimeDisplay(summary.generated_at)}"),
             ("year review source share package id", "最近分享 package ${boundedSharePackageId.slice(0, 8)}"),
             ("year review backend-saved boundary", "年度回顧由 backend snapshot 保存年度統計、AI-style 觀察與鼓勵；不提供診療建議或療效宣稱。"),
+            ("year review share unavailable status helper", "export function yearReviewShareUnavailableStatusMessage()"),
+            ("year review backend-aware share fallback", "backend ready 時可準備隱私遮罩分享卡並開啟原生分享。"),
         ):
             _assert_contains(label, future_module_display_content, marker)
         for label, marker in (
@@ -4938,6 +4941,10 @@ def main() -> int:
             ("store cart unavailable display helper", "export function storeCartUnavailableDisplayItem()"),
             ("store cart unavailable copy", "目前不建立訂單、不保留購物車內容，也不處理付款或折價券。"),
             ("store cart backend order flow evidence", "需等購物車、庫存、出貨、付款與退款規則完成後再接 backend order flow。"),
+            ("store cart open status helper", "export function commercePreviewOpenCartStatusMessage()"),
+            ("store cart open status copy", "已開啟購物車整合狀態；preview 不建立 cart、order、payment 或 backend write。"),
+            ("store cart return status helper", "export function commercePreviewReturnStoreStatusMessage()"),
+            ("store cart return status copy", "已返回商城；購物車整合狀態不建立訂單、不保存購物車，也不處理付款。"),
             ("store preview boundary copy helper", "export function storePreviewBoundaryCopy()"),
             ("store preview boundary copy", "點數商城一般操作路徑會同步 backend 目錄與點數"),
             ("store backend-aware boundary copy", "優惠券與保健食品折扣可立即發碼，合作商品與會員福利仍需後續 fulfillment"),

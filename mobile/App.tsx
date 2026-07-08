@@ -117,6 +117,8 @@ import {
   foodPhotoVisionBoundaryDisplayItem,
   apiFoodCategoryFromMobile,
   boundCommunityPublicSettings,
+  commercePreviewOpenCartStatusMessage,
+  commercePreviewReturnStoreStatusMessage,
   communityLeaderboardDisplaySection,
   emptyFoodCommunityShareFields,
   foodCommunityCategories,
@@ -169,6 +171,7 @@ import {
   yearReviewRevokeShareButtonLabel,
   yearReviewShareButtonAccessibilityLabel,
   yearReviewShareButtonLabel,
+  yearReviewShareUnavailableStatusMessage,
   yearReviewTargetYear,
   nextYearReviewGenerationLabel,
   type AchievementApiSummary,
@@ -935,10 +938,6 @@ function protectedRequestHeaders(accountId: string, accessToken: string): Record
   return buildProtectedRequestHeaders(accountId, accessToken, allowMobileDevAuth);
 }
 
-function yearReviewShareUnavailableStatusMessage() {
-  return boundUiMessage("visual smoke 或 backend unavailable 時不啟動外部分享；backend ready 時可準備隱私遮罩分享卡並開啟原生分享。");
-}
-
 function auxiliarySectionLabels() {
   return {
     showMoreFeatures: boundDisplayText("查看更多功能", maxDisplayTextLength),
@@ -1024,14 +1023,6 @@ function auxiliarySectionLabels() {
     aiBadge: boundDisplayText("AI", maxDisplayTextLength),
     dangerBang: boundDisplayText("!", 4)
   };
-}
-
-function commercePreviewOpenCartStatusMessage() {
-  return boundUiMessage("已開啟購物車整合狀態；preview 不建立 cart、order、payment 或 backend write。");
-}
-
-function commercePreviewReturnStoreStatusMessage() {
-  return boundUiMessage("已返回商城；購物車整合狀態不建立訂單、不保存購物車，也不處理付款。");
 }
 
 function safeYearReviewShareAssetFileName(value: string) {

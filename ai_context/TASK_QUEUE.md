@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1187: Extract future status copy helpers
+
+Status: done
+
+Summary:
+
+- Moved Year Review share-unavailable status copy and Store cart open/return status copy from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept Year Review share handlers, Store cart handlers, hidden/debug-only future routing, first-version menu destinations, copy text, and screen layout unchanged.
+- Updated the navigation verifier so future status copy helper ownership is guarded in `mobile/futureModuleDisplay.ts`, while App-owned handlers and status-call wiring remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the future status copy helper boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1186: Extract Store API response types
 
 Status: done

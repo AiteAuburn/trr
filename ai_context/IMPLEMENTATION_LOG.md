@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1187 extract future status copy helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved Year Review share-unavailable status copy and Store cart open/return status copy from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept Year Review share handlers, Store cart handlers, hidden/debug-only future routing, first-version menu destinations, copy text, and screen layout unchanged.
+- Updated the navigation verifier so future status copy helper ownership is guarded in `mobile/futureModuleDisplay.ts`, while App-owned handlers and status-call wiring remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the future status copy helper boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating hidden/future-module status copy and display helpers before moving renderers.
+
 ### T1186 extract Store API response types
 
 類型：mobile / refactor / verifier / docs

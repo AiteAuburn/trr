@@ -1094,6 +1094,14 @@ export function storeRedemptionDisplayItem(value: StoreRedemptionDisplayInput) {
   };
 }
 
+export function commercePreviewOpenCartStatusMessage() {
+  return boundUiMessage("已開啟購物車整合狀態；preview 不建立 cart、order、payment 或 backend write。");
+}
+
+export function commercePreviewReturnStoreStatusMessage() {
+  return boundUiMessage("已返回商城；購物車整合狀態不建立訂單、不保存購物車，也不處理付款。");
+}
+
 function futurePreviewBoundaryDisplayItem(badge: string, copy: string) {
   return {
     badge: boundDisplayText(badge, 40),
@@ -1331,6 +1339,10 @@ export function yearReviewBoundaryDisplayCopy() {
     "年度回顧由 backend snapshot 保存年度統計、AI-style 觀察與鼓勵；不提供診療建議或療效宣稱。",
     maxDisplayDetailTextLength
   );
+}
+
+export function yearReviewShareUnavailableStatusMessage() {
+  return boundUiMessage("visual smoke 或 backend unavailable 時不啟動外部分享；backend ready 時可準備隱私遮罩分享卡並開啟原生分享。");
 }
 
 export function yearReviewHeroRecordCountCopy(count: number) {
