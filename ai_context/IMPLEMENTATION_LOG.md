@@ -15,6 +15,40 @@
 
 ## 2026-07-08
 
+### T1257 extract manual-record confirm footer actions
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/manualRecordConfirmFooterActions.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/manualRecordConfirmFooterActions.tsx` for the Manual Record Confirm pre-submit checklist, return/create buttons, and validation/backend warning text.
+- Replaced the inline Manual Record Confirm footer action JSX in `mobile/App.tsx` with `ManualRecordConfirmFooterActions`.
+- Kept pre-submit title, checklist rows, return/create labels, accessibility labels, return disabled state, create disabled state, validation/backend warning behavior, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation, UI spec coverage, and visual-smoke route verifiers so the Manual Record Confirm footer component and App return/create bindings are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version manual-record confirmation presentation blocks while keeping state and create handlers owned by `App.tsx`.
+
 ### T1256 extract record edit footer actions
 
 類型：mobile / refactor / verifier / docs

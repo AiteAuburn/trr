@@ -105,8 +105,8 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "manualRecordConfirm": [
         'currentScreen === "manualRecordConfirm"',
-        "manualSubmitChecklistItems.map",
-        "onPress={submitManualRecordCreate}",
+        "ManualRecordConfirmFooterActions",
+        "onSubmitPress={submitManualRecordCreate}",
     ],
     "analysis": [
         'currentScreen === "analysis"',

@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1257: Extract manual-record confirm footer actions
+
+Status: done
+
+Summary:
+
+- Added `mobile/manualRecordConfirmFooterActions.tsx` for the Manual Record Confirm pre-submit checklist, return/create buttons, and validation/backend warning text.
+- Replaced the inline Manual Record Confirm footer action JSX in `mobile/App.tsx` with `ManualRecordConfirmFooterActions`.
+- Kept pre-submit title, checklist rows, return/create labels, accessibility labels, return disabled state, create disabled state, validation/backend warning behavior, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation, UI spec coverage, and visual-smoke route verifiers so the Manual Record Confirm footer component and App return/create bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1256: Extract record edit footer actions
 
 Status: done

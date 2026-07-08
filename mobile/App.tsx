@@ -713,6 +713,7 @@ import { HistorySelectedDatePanel } from "./historySelectedDatePanel";
 import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
+import { ManualRecordConfirmFooterActions } from "./manualRecordConfirmFooterActions";
 import { MetricCard } from "./metricCard";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
@@ -8409,44 +8410,25 @@ export default function App() {
                 <Text style={styles.evidence}>{manualRecordConfirmDisplay.sourceLine}</Text>
               </View>
             </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{coreFlowDisplayLabels.preSubmitCheck}</Text>
-              {manualSubmitChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
-              ))}
-            </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.manualConfirmReturnAccessibility}
-                accessibilityRole="button"
-                accessibilityState={{ disabled: isBusy }}
-                style={[styles.secondaryButton, isBusy ? styles.buttonDisabled : null]}
-                disabled={isBusy}
-                onPress={returnFromManualRecordConfirm}
-              >
-                <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.returnEdit}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.manualCreateSubmitAccessibility}
-                accessibilityRole="button"
-                accessibilityState={{
-                  disabled: Boolean(manualRecordValidationError) || isBusy || !protectedBackendReady
-                }}
-                style={[
-                  styles.primaryButton,
-                  manualRecordValidationError || isBusy || !protectedBackendReady ? styles.buttonDisabled : null
-                ]}
-                disabled={Boolean(manualRecordValidationError) || isBusy || !protectedBackendReady}
-                onPress={submitManualRecordCreate}
-              >
-                <Text style={styles.primaryButtonText}>{manualRecordConfirmSubmitDisplayLabel}</Text>
-              </Pressable>
-            </View>
-            {manualRecordValidationError ? (
-              <Text style={styles.warningText}>{manualRecordValidationDisplayText}</Text>
-            ) : protectedBackendUnavailableMessage ? (
-              <Text style={styles.warningText}>{manualRecordBackendUnavailableDisplayText}</Text>
-            ) : null}
+            <ManualRecordConfirmFooterActions
+              checklistItems={manualSubmitChecklistItems}
+              preCheckTitle={coreFlowDisplayLabels.preSubmitCheck}
+              returnAccessibilityLabel={coreFlowDisplayLabels.manualConfirmReturnAccessibility}
+              returnDisabled={isBusy}
+              returnLabel={coreFlowDisplayLabels.returnEdit}
+              submitAccessibilityLabel={coreFlowDisplayLabels.manualCreateSubmitAccessibility}
+              submitDisabled={Boolean(manualRecordValidationError) || isBusy || !protectedBackendReady}
+              submitLabel={manualRecordConfirmSubmitDisplayLabel}
+              warningText={
+                manualRecordValidationError
+                  ? manualRecordValidationDisplayText
+                  : protectedBackendUnavailableMessage
+                    ? manualRecordBackendUnavailableDisplayText
+                    : null
+              }
+              onReturnPress={returnFromManualRecordConfirm}
+              onSubmitPress={submitManualRecordCreate}
+            />
           </View>
         ) : null}
 

@@ -41,7 +41,7 @@ CANONICAL_SPEC_SCREENS = (
     SpecScreen("4.7", "記錄詳情頁", "recordDetail", ("selectedRecordDisplayItem", "RecordDetailInfoPanel")),
     SpecScreen("4.7.1", "刪除確認頁", "deleteConfirm", ("deleteConfirmChecklistItems.map", "deleteSelectedRecord")),
     SpecScreen("4.8", "編輯記錄頁", "editRecord", ("updateSelectedRecord", "RecordEditFooterActions")),
-    SpecScreen("4.8.1", "手動新增確認頁", "manualRecordConfirm", ("manualRecordConfirmDisplay", "createManualRecord")),
+    SpecScreen("4.8.1", "手動新增確認頁", "manualRecordConfirm", ("manualRecordConfirmDisplay", "ManualRecordConfirmFooterActions")),
     SpecScreen("4.9", "使用教學頁", "tutorial", ("tutorialDisplaySteps.map", "tutorialSafetyChecklistItems")),
     SpecScreen("4.10", "會員方案狀態頁", "membershipStatus", ("membershipFeatureRows.map", "membershipTrialHeroLabelDisplayText")),
     SpecScreen("4.11", "成就榜頁", "achievements", ("achievementCategoryDisplaySections.map", "achievementLevels")),

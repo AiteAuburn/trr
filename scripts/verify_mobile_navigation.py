@@ -64,6 +64,7 @@ FIELD_LABEL_PATH = REPO_ROOT / "mobile" / "fieldLabel.tsx"
 DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "detailRow.tsx"
 HIGHLIGHT_BULLET_ROW_PATH = REPO_ROOT / "mobile" / "highlightBulletRow.tsx"
 HIGHLIGHT_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "highlightDetailRow.tsx"
+MANUAL_RECORD_CONFIRM_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmFooterActions.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
 RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPanel.tsx"
 RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.tsx"
@@ -1306,6 +1307,9 @@ def main() -> int:
     detail_row_content = DETAIL_ROW_PATH.read_text(encoding="utf-8")
     highlight_bullet_row_content = HIGHLIGHT_BULLET_ROW_PATH.read_text(encoding="utf-8")
     highlight_detail_row_content = HIGHLIGHT_DETAIL_ROW_PATH.read_text(encoding="utf-8")
+    manual_record_confirm_footer_actions_content = MANUAL_RECORD_CONFIRM_FOOTER_ACTIONS_PATH.read_text(
+        encoding="utf-8"
+    )
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
     record_detail_action_panel_content = RECORD_DETAIL_ACTION_PANEL_PATH.read_text(encoding="utf-8")
     record_detail_info_panel_content = RECORD_DETAIL_INFO_PANEL_PATH.read_text(encoding="utf-8")
@@ -1580,7 +1584,7 @@ def main() -> int:
             ("record detail boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("delete confirm highlight bullet row", "deleteConfirmChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("record update highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
-            ("manual submit highlight bullet row", "manualSubmitChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("manual submit highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("transcript review highlight bullet row", "transcriptReviewCostBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("ai review highlight bullet row", "aiReviewCostBoundaryChecklistItems.map((item) => (\n                  <HighlightBulletRow key={item} text={item} />"),
             ("ai save confirm highlight bullet row", "aiSaveConfirmChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
@@ -1617,7 +1621,9 @@ def main() -> int:
                 target_content = record_detail_info_panel_content
             elif label.startswith("record update "):
                 target_content = record_edit_footer_actions_content
-            elif label.startswith(("delete confirm ", "manual submit ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ", "tutorial safety ", "detailed report notes ", "subscription readiness ", "subscription management readiness ", "doctor share readiness ", "health integration readiness ", "community readiness ", "ranking readiness ", "store checkout readiness ", "food photo empty result ", "food photo readiness ", "future module card requirements ", "future module detail requirements ")):
+            elif label.startswith("manual submit "):
+                target_content = manual_record_confirm_footer_actions_content
+            elif label.startswith(("delete confirm ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ", "tutorial safety ", "detailed report notes ", "subscription readiness ", "subscription management readiness ", "doctor share readiness ", "health integration readiness ", "community readiness ", "ranking readiness ", "store checkout readiness ", "food photo empty result ", "food photo readiness ", "future module card requirements ", "future module detail requirements ")):
                 target_content = content
             else:
                 target_content = highlight_bullet_row_content
@@ -1698,6 +1704,21 @@ def main() -> int:
             ("record edit footer validation text", "validationText ? <Text style={styles.warningText}>{validationText}</Text> : null"),
         ):
             _assert_contains(label, record_edit_footer_actions_content, marker)
+        for label, marker in (
+            ("manual record confirm footer actions component", "export function ManualRecordConfirmFooterActions({"),
+            ("manual record confirm footer precheck title", "<Text style={styles.label}>{preCheckTitle}</Text>"),
+            ("manual record confirm footer checklist", "checklistItems.map((item) => ("),
+            ("manual record confirm footer return accessibility", "accessibilityLabel={returnAccessibilityLabel}"),
+            ("manual record confirm footer return disabled state", "accessibilityState={{ disabled: returnDisabled }}"),
+            ("manual record confirm footer return disabled prop", "disabled={returnDisabled}"),
+            ("manual record confirm footer return press", "onPress={onReturnPress}"),
+            ("manual record confirm footer submit accessibility", "accessibilityLabel={submitAccessibilityLabel}"),
+            ("manual record confirm footer submit disabled state", "accessibilityState={{ disabled: submitDisabled }}"),
+            ("manual record confirm footer submit disabled prop", "disabled={submitDisabled}"),
+            ("manual record confirm footer submit press", "onPress={onSubmitPress}"),
+            ("manual record confirm footer warning text", "warningText ? <Text style={styles.warningText}>{warningText}</Text> : null"),
+        ):
+            _assert_contains(label, manual_record_confirm_footer_actions_content, marker)
         for label, marker in (
             ("analysis metric card render", "analysisMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
             ("detailed report metric card render", "detailedReportMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
@@ -2499,7 +2520,7 @@ def main() -> int:
             ("dev reset menu submit handler", "function resetDevelopmentDataFromMenu()"),
             ("transcript parse submit binding", "onPress={submitTranscriptParse}"),
             ("AI save submit binding", "onPress={submitAiSaveConfirm}"),
-            ("manual record create submit binding", "onPress={submitManualRecordCreate}"),
+            ("manual record create submit binding", "onSubmitPress={submitManualRecordCreate}"),
             ("record update submit binding", "onSubmitPress={submitRecordUpdate}"),
             ("record delete submit binding", "onPress={submitRecordDelete}"),
             ("dev reset menu submit binding", "onPress={resetDevelopmentDataFromMenu}"),
@@ -3373,7 +3394,7 @@ def main() -> int:
             ("manual return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}"),
             ("manual create preview accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualCreatePreviewAccessibility}"),
             ("manual confirm return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualConfirmReturnAccessibility}"),
-            ("manual create submit accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualCreateSubmitAccessibility}"),
+            ("manual create submit accessibility binding", "submitAccessibilityLabel={coreFlowDisplayLabels.manualCreateSubmitAccessibility}"),
             ("record detail return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordDetailReturnAccessibility}"),
             ("record edit open accessibility binding", "editAccessibilityLabel={coreFlowDisplayLabels.recordEditOpenAccessibility}"),
             ("record delete open accessibility binding", "deleteAccessibilityLabel={coreFlowDisplayLabels.recordDeleteOpenAccessibility}"),
@@ -3382,7 +3403,7 @@ def main() -> int:
             ("record delete submit accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordDeleteSubmitAccessibility}"),
             ("record edit return accessibility binding", "cancelAccessibilityLabel={coreFlowDisplayLabels.recordEditReturnAccessibility}"),
             ("record update submit accessibility binding", "submitAccessibilityLabel={coreFlowDisplayLabels.recordUpdateSubmitAccessibility}"),
-            ("manual create preview disabled state", "disabled: Boolean(manualRecordValidationError) || isBusy || !protectedBackendReady"),
+            ("manual create preview disabled state", "submitDisabled={Boolean(manualRecordValidationError) || isBusy || !protectedBackendReady}"),
             ("record update submit disabled state", "disabled={Boolean(selectedRecordEditValidationError) || isBusy}"),
             ("record delete disabled state", "disabled={isBusy}"),
         ):
@@ -4156,6 +4177,7 @@ def main() -> int:
             ("manual record unit option press binding", "onPress={() => pressManualRecordGlucoseUnitOption(option)}"),
             ("manual record timing option press binding", "onPress={() => pressManualRecordGlucoseTimingOption(option)}"),
             ("manual record meal type option press binding", "onPress={() => pressManualRecordMealTypeOption(option)}"),
+            ("manual record confirm footer actions binding", "<ManualRecordConfirmFooterActions\n              checklistItems={manualSubmitChecklistItems}"),
             ("record edit date input handler", "function updateRecordEditDateInput(value: string)"),
             ("record edit time input handler", "function updateRecordEditTimeInput(value: string)"),
             ("record edit header fields binding", "<RecordEditHeaderFields\n              dateAccessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}"),
