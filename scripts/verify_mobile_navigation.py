@@ -2435,6 +2435,11 @@ def main() -> int:
             "const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "reminder readiness checklist helper binding",
+            content,
+            "const reminderReadinessChecklistItems = reminderReadinessChecklistDisplayItems();",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -5167,6 +5172,9 @@ def main() -> int:
             ("settings quota low warning copy", "接近剩餘 2 分鐘才提醒；避免首頁長期顯示倒數造成壓力。"),
             ("recording quota sync accessibility helper", "function recordingQuotaSyncAccessibilityLabel(isSyncing: boolean)"),
             ("reminder integration accessibility helper", "function reminderIntegrationAccessibilityLabel()"),
+            ("reminder readiness checklist helper", "function reminderReadinessChecklistDisplayItems()"),
+            ("reminder readiness permission copy", "系統通知權限請求與拒絕後的替代說明。"),
+            ("reminder readiness PHI-safe notification copy", "通知內容不得包含敏感健康數值或完整紀錄。"),
             ("privacy integration accessibility helper", "function privacyIntegrationAccessibilityLabel()"),
         ):
             _assert_contains(label, settings_copy_content, marker)

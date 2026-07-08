@@ -183,6 +183,15 @@ export function reminderIntegrationAccessibilityLabel() {
   return boundDisplayText("查看通知整合狀態，不建立通知或背景排程", maxDisplayDetailTextLength);
 }
 
+export function reminderReadinessChecklistDisplayItems() {
+  return [
+    "系統通知權限請求與拒絕後的替代說明。",
+    "安靜時段、時區與語言設定。",
+    "後端 reminder schema、idempotent 排程與取消流程。",
+    "通知內容不得包含敏感健康數值或完整紀錄。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function privacySettingsIntroCopy() {
   return boundDisplayText("先定義分享、匯出、刪除與通知內容邊界。", maxDisplayDetailTextLength);
 }

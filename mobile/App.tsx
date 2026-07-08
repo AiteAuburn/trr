@@ -641,6 +641,7 @@ import {
   recordingQuotaSyncButtonLabel,
   reminderIntegrationAccessibilityLabel,
   reminderIntegrationButtonLabel,
+  reminderReadinessChecklistDisplayItems,
   reminderSettingsIntroCopy,
   settingsAccountSecurityOpenStatusMessage,
   settingsQuotaHelperText,
@@ -1794,12 +1795,7 @@ export default function App() {
     ["晚餐後兩小時", "每天 20:30", "協助建立飯後血糖紀錄習慣。", "可選"],
     ["回診前整理", "回診前 3 天", "提醒查看歷史紀錄與基本分析。", "未啟用"]
   ] as const).map(reminderPreviewDisplayItem);
-  const reminderReadinessChecklistItems = [
-    "系統通知權限請求與拒絕後的替代說明。",
-    "安靜時段、時區與語言設定。",
-    "後端 reminder schema、idempotent 排程與取消流程。",
-    "通知內容不得包含敏感健康數值或完整紀錄。"
-  ].map(resultChecklistItem);
+  const reminderReadinessChecklistItems = reminderReadinessChecklistDisplayItems();
   const privacyReadinessChecklistItems = [
     "通知內容最小化：推播不可包含血糖數值、完整餐點或用藥內容。",
     "資料分享 opt-in / opt-out：醫師、照護者、社群與排行榜都必須分開授權。",
