@@ -67,6 +67,7 @@ HIGHLIGHT_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "highlightDetailRow.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
 RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPanel.tsx"
 RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.tsx"
+RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1307,6 +1308,7 @@ def main() -> int:
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
     record_detail_action_panel_content = RECORD_DETAIL_ACTION_PANEL_PATH.read_text(encoding="utf-8")
     record_detail_info_panel_content = RECORD_DETAIL_INFO_PANEL_PATH.read_text(encoding="utf-8")
+    record_edit_header_fields_content = RECORD_EDIT_HEADER_FIELDS_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -1665,6 +1667,20 @@ def main() -> int:
             ("record detail info panel boundary bullets", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
         ):
             _assert_contains(label, record_detail_info_panel_content, marker)
+        for label, marker in (
+            ("record edit header fields component", "export function RecordEditHeaderFields({"),
+            ("record edit header date label", '<FieldLabel icon={"📅"} label={"日期"} />'),
+            ("record edit header date accessibility", "accessibilityLabel={dateAccessibilityLabel}"),
+            ("record edit header date value", "value={dateValue}"),
+            ("record edit header date handler", "onChangeText={onDateChange}"),
+            ("record edit header date max length", "maxLength={dateMaxLength}"),
+            ("record edit header time label", '<FieldLabel icon={"🕒"} label={"時間"} />'),
+            ("record edit header time accessibility", "accessibilityLabel={timeAccessibilityLabel}"),
+            ("record edit header time handler", "onChangeText={onTimeChange}"),
+            ("record edit header type label", '<FieldLabel icon={"🏷"} label={"類型"} />'),
+            ("record edit header type display", "<Text style={styles.recordContent}>{typeLabel}</Text>"),
+        ):
+            _assert_contains(label, record_edit_header_fields_content, marker)
         for label, marker in (
             ("analysis metric card render", "analysisMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
             ("detailed report metric card render", "detailedReportMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
@@ -4125,6 +4141,9 @@ def main() -> int:
             ("manual record meal type option press binding", "onPress={() => pressManualRecordMealTypeOption(option)}"),
             ("record edit date input handler", "function updateRecordEditDateInput(value: string)"),
             ("record edit time input handler", "function updateRecordEditTimeInput(value: string)"),
+            ("record edit header fields binding", "<RecordEditHeaderFields\n              dateAccessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}"),
+            ("record edit date input binding", "onDateChange={updateRecordEditDateInput}"),
+            ("record edit time input binding", "onTimeChange={updateRecordEditTimeInput}"),
             ("record edit glucose input binding", "onChangeText={updateRecordEditGlucoseValue}"),
             ("record edit unit option press handler", "function pressRecordEditGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>)"),
             ("record edit timing option press handler", "function pressRecordEditGlucoseTimingOption(option: ReturnType<typeof valueLabelDisplayItem>)"),

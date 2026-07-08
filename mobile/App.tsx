@@ -716,6 +716,7 @@ import { HighlightDetailRow } from "./highlightDetailRow";
 import { MetricCard } from "./metricCard";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
+import { RecordEditHeaderFields } from "./recordEditHeaderFields";
 import type {
   Account,
   AiModelOptions,
@@ -8609,40 +8610,17 @@ export default function App() {
           <View style={styles.pageSection}>
             <Text style={styles.sectionTitle}>編輯記錄</Text>
             <Text style={styles.evidence}>{recordEditIntroDisplayText}</Text>
-            <View style={styles.detailRows}>
-              <View style={styles.dateTimeRow}>
-                <View style={styles.dateTimeField}>
-                  <FieldLabel icon={"📅"} label={"日期"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}
-                    value={recordEditDate}
-                    onChangeText={updateRecordEditDateInput}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    maxLength={maxDateInputLength}
-                    style={styles.input}
-                    placeholder="2026-04-29"
-                  />
-                </View>
-                <View style={styles.dateTimeField}>
-                  <FieldLabel icon={"🕒"} label={"時間"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.timeInputAccessibility}
-                    value={recordEditTime}
-                    onChangeText={updateRecordEditTimeInput}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    maxLength={maxTimeInputLength}
-                    style={styles.input}
-                    placeholder="08:10"
-                  />
-                </View>
-              </View>
-              <View style={styles.detailRow}>
-                <FieldLabel icon={"🏷"} label={"類型"} />
-                <Text style={styles.recordContent}>{selectedRecordDisplayItem?.typeLabel ?? "紀錄"}</Text>
-              </View>
-            </View>
+            <RecordEditHeaderFields
+              dateAccessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}
+              dateMaxLength={maxDateInputLength}
+              dateValue={recordEditDate}
+              timeAccessibilityLabel={auxiliaryDisplayLabels.timeInputAccessibility}
+              timeMaxLength={maxTimeInputLength}
+              timeValue={recordEditTime}
+              typeLabel={selectedRecordDisplayItem?.typeLabel ?? "紀錄"}
+              onDateChange={updateRecordEditDateInput}
+              onTimeChange={updateRecordEditTimeInput}
+            />
             {selectedRecord.record_type === "glucose" ? (
               <>
                 <View style={styles.formField}>

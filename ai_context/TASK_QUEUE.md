@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1255: Extract record edit header fields
+
+Status: done
+
+Summary:
+
+- Added `mobile/recordEditHeaderFields.tsx` for the Edit Record date/time inputs and record-type display row.
+- Replaced the inline Edit Record header field JSX in `mobile/App.tsx` with `RecordEditHeaderFields`.
+- Kept date/time labels, input values, accessibility labels, max-length limits, placeholders, type label, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the Edit Record header-field component and App date/time bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1254: Extract delete-confirm preview block
 
 Status: done
