@@ -2510,6 +2510,11 @@ def main() -> int:
             "const healthIntegrationBoundaryRows = healthIntegrationBoundaryDisplayRows();",
         )
         _assert_contains(
+            "ranking boundary rows helper binding",
+            content,
+            "const rankingBoundaryRows = rankingBoundaryDisplayRows();",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -5962,6 +5967,11 @@ def main() -> int:
             ("ranking preview boundary copy", "一般操作路徑只讀取 opt-in 公開榜單與非敏感統計"),
             ("ranking local preview boundary copy helper", "export function rankingLocalPreviewBoundaryCopy()"),
             ("ranking local preview boundary copy", "本機連續天數僅供自己查看；公開榜單只使用 backend 已聚合的 opt-in 社群統計"),
+            ("ranking boundary rows helper", "export function rankingBoundaryDisplayRows()"),
+            ("ranking boundary public row", "公開排名"),
+            ("ranking boundary data row", "非敏感統計"),
+            ("ranking boundary health value row", "健康數值"),
+            ("ranking boundary ai cost row", "0 次呼叫"),
             ("ranking readiness checklist helper", "export function rankingReadinessChecklistDisplayItems()"),
             ("ranking readiness moderation copy", "封鎖、檢舉與審核流程"),
             ("ranking readiness dispute copy", "榜單爭議處理與公開名稱違規處置"),

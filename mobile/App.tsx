@@ -175,6 +175,7 @@ import {
   healthIntegrationReadinessChecklistDisplayItems,
   mobileFoodCategoryFromApi,
   privacyPreviewBoundaryDisplayItem,
+  rankingBoundaryDisplayRows,
   rankingLocalPreviewBoundaryCopy,
   rankingPreviewBoundaryDisplayItem,
   rankingReadinessChecklistDisplayItems,
@@ -2026,12 +2027,7 @@ export default function App() {
     ["留言治理", "封鎖/檢舉/審核"],
     ["AI 成本", "0 次呼叫"]
   ] as const).map(boundaryMetricDisplayItem);
-  const rankingBoundaryRows = ([
-    ["公開排名", "預設關閉"],
-    ["排名資料", "非敏感統計"],
-    ["健康數值", "不可公開"],
-    ["AI 成本", "0 次呼叫"]
-  ] as const).map(boundaryMetricDisplayItem);
+  const rankingBoundaryRows = rankingBoundaryDisplayRows();
   const recordingQuotaBoundaryRows = ([
     ["目前方案", quotaPlanDisplayText(voiceQuota, "尚未載入")],
     ["會員狀態", voiceQuota ? subscriptionStatusLabel(voiceQuota.status) : "尚未同步"],
