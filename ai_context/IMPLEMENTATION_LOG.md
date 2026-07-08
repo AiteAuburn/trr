@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1298 extract reminder preview display rows helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/settingsCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `reminderPreviewDisplayItems` to `mobile/settingsCopy.ts` for the Reminder Settings preview rows.
+- Replaced the inline Reminder Settings preview-row construction in `mobile/App.tsx` with the extracted helper.
+- Kept row copy, bounded display behavior, Reminder Settings rendering, notification-permission behavior, scheduling behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and key reminder preview copy are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、notification permission behavior、background scheduling behavior、reminder schema、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk display helpers from `App.tsx`; keep notification permission, scheduling, and backend reminder ownership in `App.tsx` until component boundaries are stable.
+
 ### T1297 extract membership feature display rows helper
 
 類型：mobile / refactor / verifier / docs

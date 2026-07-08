@@ -175,6 +175,19 @@ export function reminderSettingsIntroCopy() {
   return boundDisplayText("先規劃提醒 UI；正式通知與背景排程尚未啟用。", maxDisplayDetailTextLength);
 }
 
+export function reminderPreviewDisplayItems() {
+  return [
+    ["晨間空腹血糖", "每天 07:30", "提醒記錄起床後或早餐前血糖。", "建議"],
+    ["晚餐後兩小時", "每天 20:30", "協助建立飯後血糖紀錄習慣。", "可選"],
+    ["回診前整理", "回診前 3 天", "提醒查看歷史紀錄與基本分析。", "未啟用"]
+  ].map(([title, time, copy, statusLabel]) => ({
+    title: boundDisplayText(title, maxDisplayTextLength),
+    time: boundDisplayText(time, 60),
+    copy: boundDisplayText(copy, maxDisplayDetailTextLength),
+    statusLabel: boundDisplayText(statusLabel, 40)
+  }));
+}
+
 export function reminderIntegrationButtonLabel() {
   return boundDisplayText("查看通知整合狀態", maxDisplayTextLength);
 }

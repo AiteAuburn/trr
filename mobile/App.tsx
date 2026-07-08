@@ -255,7 +255,6 @@ import {
   metricDisplayItem,
   optionDisplayItem,
   previewTupleDisplayItem,
-  reminderPreviewDisplayItem,
   resultChecklistItem,
   sessionManagementPreviewDisplayItem,
   tutorialStepDisplayItem,
@@ -649,6 +648,7 @@ import {
   recordingQuotaSyncButtonLabel,
   reminderIntegrationAccessibilityLabel,
   reminderIntegrationButtonLabel,
+  reminderPreviewDisplayItems as buildReminderPreviewDisplayItems,
   reminderReadinessChecklistDisplayItems,
   reminderSettingsIntroCopy,
   settingsAccountSecurityOpenStatusMessage,
@@ -1787,11 +1787,7 @@ export default function App() {
   const authBoundaryChecklistItems = authBoundaryChecklistDisplayItems();
   const profileReadinessChecklistItems = profileReadinessChecklistDisplayItems();
   const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();
-  const reminderPreviewDisplayItems = ([
-    ["晨間空腹血糖", "每天 07:30", "提醒記錄起床後或早餐前血糖。", "建議"],
-    ["晚餐後兩小時", "每天 20:30", "協助建立飯後血糖紀錄習慣。", "可選"],
-    ["回診前整理", "回診前 3 天", "提醒查看歷史紀錄與基本分析。", "未啟用"]
-  ] as const).map(reminderPreviewDisplayItem);
+  const reminderPreviewDisplayItems = buildReminderPreviewDisplayItems();
   const reminderReadinessChecklistItems = reminderReadinessChecklistDisplayItems();
   const privacyReadinessChecklistItems = privacyReadinessChecklistDisplayItems();
   const tutorialSafetyChecklistItems = tutorialSafetyChecklistDisplayItems();
