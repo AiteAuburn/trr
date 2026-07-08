@@ -366,6 +366,7 @@ import {
   recordDetailBoundaryChecklistDisplayItems,
   recordDetailReturnStatusMessage,
   recordEntrySettingsChecklistDisplayItems,
+  saveSuccessBoundaryChecklistDisplayItems,
   tutorialManualEntryStatusMessage,
   tutorialRecordEntryStatusMessage
 } from "./recordWorkflowCopy";
@@ -1247,18 +1248,12 @@ export default function App() {
     parserModelReady,
     parserModelUnavailableDisplayMessage
   );
-  const saveSuccessBoundaryChecklistItems = [
-    lastSaveEntryMethod === "manual"
-      ? hasManualFallbackWithAiCandidates
-        ? "手動新增沒有 parser / LLM 成本；原本 AI 候選仍保留在確認流程，需由使用者手動處理。"
-        : "手動新增沒有 parser / LLM 成本，也沒有 AI 候選紀錄需要保留。"
-      : "AI 原始文字與目前輸入已清空；成功頁不保留 raw prompt、raw model output 或 debug trace。",
-    hasUnsavedPreviewRecords
-      ? `仍有 ${unsavedPreviewRecordDisplayCount} 筆候選紀錄留在確認流程；系統不會自動重試或重新呼叫 AI。`
-      : "沒有未儲存候選需要自動重試；下一步只做頁面導覽。",
-    `回到今日 / 歷史 / 分析只使用已同步紀錄；mobile 每頁載入 ${mobileRecordSyncDisplayLimit} 筆，可用歷史頁載入更多。`,
-    "成功頁不新增 backend request，除非使用者主動進入其他頁面觸發既有同步。"
-  ].map(resultChecklistItem);
+  const saveSuccessBoundaryChecklistItems = saveSuccessBoundaryChecklistDisplayItems(
+    lastSaveEntryMethod,
+    hasUnsavedPreviewRecords,
+    unsavedPreviewRecordDisplayCount,
+    mobileRecordSyncDisplayLimit
+  );
   const deleteSuccessBoundaryChecklistItems =
     deleteSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit);
   const updateSuccessBoundaryChecklistItems =

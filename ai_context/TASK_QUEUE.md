@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1280: Extract save-success boundary checklist helper
+
+Status: done
+
+Summary:
+
+- Added `saveSuccessBoundaryChecklistDisplayItems` to `mobile/recordWorkflowCopy.ts` for the Save Success boundary checklist copy.
+- Replaced the inline Save Success boundary checklist construction in `mobile/App.tsx` with the extracted helper.
+- Kept checklist copy, bounded display behavior, manual/AI save branching, unsaved-candidate messaging, sync-limit messaging, Save Success rendering, destination cards, backend request behavior, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1279: Extract AI-save-failure checklist helper
 
 Status: done

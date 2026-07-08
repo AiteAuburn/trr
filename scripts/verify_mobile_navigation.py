@@ -2403,6 +2403,11 @@ def main() -> int:
             "const aiSaveFailureChecklistItems = aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordDisplayCount);",
         )
         _assert_contains(
+            "save success checklist helper binding",
+            content,
+            "const saveSuccessBoundaryChecklistItems = saveSuccessBoundaryChecklistDisplayItems(",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -3530,6 +3535,9 @@ def main() -> int:
             ("AI save failure checklist helper", "function aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordCount: number)"),
             ("AI save failure no retry copy", "系統不會自動重試，也不會重新呼叫 parser / AI。"),
             ("AI save failure manual fallback copy", "若 backend 持續不可用，可改用手動新增單筆明確紀錄。"),
+            ("save success boundary checklist helper", "function saveSuccessBoundaryChecklistDisplayItems("),
+            ("save success no retry copy", "沒有未儲存候選需要自動重試；下一步只做頁面導覽。"),
+            ("save success no backend request copy", "成功頁不新增 backend request，除非使用者主動進入其他頁面觸發既有同步。"),
             ("manual submit checklist helper", "function manualSubmitChecklistDisplayItems()"),
             ("manual submit checklist no AI copy", "不會呼叫 AI 或 LLM，成本為 0。"),
             ("manual submit checklist single payload copy", "只會送出 1 筆手動紀錄 payload，不會批次載入完整歷史。"),

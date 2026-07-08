@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1280 extract save-success boundary checklist helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `saveSuccessBoundaryChecklistDisplayItems` to `mobile/recordWorkflowCopy.ts` for the Save Success boundary checklist copy.
+- Replaced the inline Save Success boundary checklist construction in `mobile/App.tsx` with the extracted helper.
+- Kept checklist copy, bounded display behavior, manual/AI save branching, unsaved-candidate messaging, sync-limit messaging, Save Success rendering, destination cards, backend request behavior, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk first-version checklist/display helpers from `App.tsx`; keep Save Success destination handlers, sync behavior, and backend request ownership in `App.tsx` until component boundaries are stable.
+
 ### T1279 extract AI-save-failure checklist helper
 
 類型：mobile / refactor / verifier / docs

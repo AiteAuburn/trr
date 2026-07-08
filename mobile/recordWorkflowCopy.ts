@@ -1,3 +1,4 @@
+import type { SaveEntryMethod } from "./appTypes";
 import type { AppScreen } from "./navigationConfig";
 
 const maxUiMessageLength = 300;
@@ -242,6 +243,29 @@ export function aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordCount: nu
     "不會儲存未建立片段，也不會自動重新呼叫 AI。",
     "每筆紀錄仍會經過後端驗證、權限與 audit 路徑。",
     "若部分儲存失敗，已成功紀錄會保留，未儲存候選會回到確認流程。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
+export function saveSuccessBoundaryChecklistDisplayItems(
+  lastSaveEntryMethod: SaveEntryMethod,
+  hasUnsavedPreviewRecords: boolean,
+  unsavedPreviewRecordCount: number,
+  recordSyncLimit: number
+) {
+  const boundedUnsavedCount = clampNumber(unsavedPreviewRecordCount, 0, maxMobileCountValue);
+  const boundedRecordSyncLimit = clampNumber(recordSyncLimit, 0, maxMobileCountValue);
+  const hasManualFallbackWithAiCandidates = lastSaveEntryMethod === "manual" && hasUnsavedPreviewRecords;
+  return [
+    lastSaveEntryMethod === "manual"
+      ? hasManualFallbackWithAiCandidates
+        ? "手動新增沒有 parser / LLM 成本；原本 AI 候選仍保留在確認流程，需由使用者手動處理。"
+        : "手動新增沒有 parser / LLM 成本，也沒有 AI 候選紀錄需要保留。"
+      : "AI 原始文字與目前輸入已清空；成功頁不保留 raw prompt、raw model output 或 debug trace。",
+    hasUnsavedPreviewRecords
+      ? `仍有 ${boundedUnsavedCount} 筆候選紀錄留在確認流程；系統不會自動重試或重新呼叫 AI。`
+      : "沒有未儲存候選需要自動重試；下一步只做頁面導覽。",
+    `回到今日 / 歷史 / 分析只使用已同步紀錄；mobile 每頁載入 ${boundedRecordSyncLimit} 筆，可用歷史頁載入更多。`,
+    "成功頁不新增 backend request，除非使用者主動進入其他頁面觸發既有同步。"
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
