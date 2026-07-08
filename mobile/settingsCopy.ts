@@ -151,6 +151,15 @@ export function recordingQuotaControlCopy() {
   );
 }
 
+export function quotaReadinessChecklistDisplayItems() {
+  return [
+    "quota API 必須由 production auth 驗證 account / profile，不信任前端傳入的使用量。",
+    "錄音開始時先檢查剩餘額度；parser 成功或失敗都要有一致的 usage rollback / commit 規則。",
+    "試用版每日 5 分鐘、付費版每日 10 分鐘；價格與優惠資格由 entitlement 決定。",
+    "接近剩餘 2 分鐘才提醒；避免首頁長期顯示倒數造成壓力。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function recordingQuotaSyncButtonLabel(isSyncing: boolean) {
   return boundDisplayText(isSyncing ? "同步中..." : "同步額度", maxDisplayTextLength);
 }

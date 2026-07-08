@@ -631,6 +631,7 @@ import {
   privacyIntegrationAccessibilityLabel,
   privacyIntegrationButtonLabel,
   privacySettingsIntroCopy,
+  quotaReadinessChecklistDisplayItems,
   quotaRemainingDisplayValue,
   quotaUsedDisplayValue,
   recordingQuotaControlCopy,
@@ -1787,12 +1788,7 @@ export default function App() {
   ] as const).map(detailPairDisplayItem);
   const authBoundaryChecklistItems = authBoundaryChecklistDisplayItems();
   const profileReadinessChecklistItems = profileReadinessChecklistDisplayItems();
-  const quotaReadinessChecklistItems = [
-    "quota API 必須由 production auth 驗證 account / profile，不信任前端傳入的使用量。",
-    "錄音開始時先檢查剩餘額度；parser 成功或失敗都要有一致的 usage rollback / commit 規則。",
-    "試用版每日 5 分鐘、付費版每日 10 分鐘；價格與優惠資格由 entitlement 決定。",
-    "接近剩餘 2 分鐘才提醒；避免首頁長期顯示倒數造成壓力。"
-  ].map(resultChecklistItem);
+  const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();
   const reminderPreviewDisplayItems = ([
     ["晨間空腹血糖", "每天 07:30", "提醒記錄起床後或早餐前血糖。", "建議"],
     ["晚餐後兩小時", "每天 20:30", "協助建立飯後血糖紀錄習慣。", "可選"],

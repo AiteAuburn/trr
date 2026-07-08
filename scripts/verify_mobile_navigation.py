@@ -2430,6 +2430,11 @@ def main() -> int:
             "const profileReadinessChecklistItems = profileReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "quota readiness checklist helper binding",
+            content,
+            "const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -5154,8 +5159,12 @@ def main() -> int:
             ("settings model runtime label helper", "function modelRuntimeLabel("),
             ("settings model selection boundary helper", "function modelSelectionBoundaryCopy()"),
             ("settings quota data boundary helper", "function recordingQuotaDataBoundaryCopy()"),
+            ("settings quota readiness checklist helper", "function quotaReadinessChecklistDisplayItems()"),
             ("settings model local runtime copy", "本地模型"),
             ("settings model fallback disabled copy", "雲端 fallback 在 v1 預設停用"),
+            ("settings quota production auth copy", "quota API 必須由 production auth 驗證 account / profile，不信任前端傳入的使用量。"),
+            ("settings quota rollback copy", "錄音開始時先檢查剩餘額度；parser 成功或失敗都要有一致的 usage rollback / commit 規則。"),
+            ("settings quota low warning copy", "接近剩餘 2 分鐘才提醒；避免首頁長期顯示倒數造成壓力。"),
             ("recording quota sync accessibility helper", "function recordingQuotaSyncAccessibilityLabel(isSyncing: boolean)"),
             ("reminder integration accessibility helper", "function reminderIntegrationAccessibilityLabel()"),
             ("privacy integration accessibility helper", "function privacyIntegrationAccessibilityLabel()"),
