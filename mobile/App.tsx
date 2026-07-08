@@ -175,6 +175,7 @@ import {
   privacyPreviewBoundaryDisplayItem,
   rankingLocalPreviewBoundaryCopy,
   rankingPreviewBoundaryDisplayItem,
+  rankingReadinessChecklistDisplayItems,
   reminderPreviewBoundaryDisplayItem,
   selectedFutureModuleDisplayItem,
   storeCartButtonAccessibilityLabel,
@@ -1800,11 +1801,7 @@ export default function App() {
   const healthIntegrationReadinessChecklistItems =
     healthIntegrationReadinessChecklistDisplayItems();
   const communityReadinessChecklistItems = communityReadinessChecklistDisplayItems();
-  const rankingReadinessChecklistItems = [
-    "封鎖、檢舉與審核流程",
-    "榜單爭議處理與公開名稱違規處置",
-    "退出排名後的歷史資料撤回與 audit event"
-  ].map(resultChecklistItem);
+  const rankingReadinessChecklistItems = rankingReadinessChecklistDisplayItems();
   const storeCheckoutReadinessChecklistItems = [
     "商品目錄、庫存與價格來源",
     "購物車持久化、庫存 reservation 與 rollback 規則",

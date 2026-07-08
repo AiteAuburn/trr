@@ -2445,6 +2445,11 @@ def main() -> int:
             "const communityReadinessChecklistItems = communityReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "ranking readiness checklist helper binding",
+            content,
+            "const rankingReadinessChecklistItems = rankingReadinessChecklistDisplayItems();",
+        )
+        _assert_contains(
             "quota readiness checklist helper binding",
             content,
             "const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();",
@@ -5633,7 +5638,6 @@ def main() -> int:
             ("store redemption disabled state", "accessibilityState={{ disabled: !product.isUsable }}"),
             ("store special badge redemption boundary", "優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利"),
             ("store redemption boundary rows", "storeRedemptionBoundaryRows.map"),
-            ("ranking readiness governance-only disputes", "榜單爭議處理與公開名稱違規處置"),
             ("store checkout readiness inventory rollback", "購物車持久化、庫存 reservation 與 rollback 規則"),
             ("food photo upload status handler", "function showFoodPhotoUploadStatus()"),
             ("food photo integration status handler", "function showFoodPhotoIntegrationStatus()"),
@@ -5910,6 +5914,10 @@ def main() -> int:
             ("ranking preview boundary copy", "一般操作路徑只讀取 opt-in 公開榜單與非敏感統計"),
             ("ranking local preview boundary copy helper", "export function rankingLocalPreviewBoundaryCopy()"),
             ("ranking local preview boundary copy", "本機連續天數僅供自己查看；公開榜單只使用 backend 已聚合的 opt-in 社群統計"),
+            ("ranking readiness checklist helper", "export function rankingReadinessChecklistDisplayItems()"),
+            ("ranking readiness moderation copy", "封鎖、檢舉與審核流程"),
+            ("ranking readiness dispute copy", "榜單爭議處理與公開名稱違規處置"),
+            ("ranking readiness audit copy", "退出排名後的歷史資料撤回與 audit event"),
             ("reminder preview boundary helper", "export function reminderPreviewBoundaryDisplayItem()"),
             ("privacy preview boundary helper", "export function privacyPreviewBoundaryDisplayItem()"),
             ("food photo vision boundary helper", "export function foodPhotoVisionBoundaryDisplayItem()"),

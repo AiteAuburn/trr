@@ -1179,6 +1179,14 @@ export function rankingLocalPreviewBoundaryCopy() {
   return boundDisplayText("本機連續天數僅供自己查看；公開榜單只使用 backend 已聚合的 opt-in 社群統計。", maxDisplayDetailTextLength);
 }
 
+export function rankingReadinessChecklistDisplayItems() {
+  return [
+    "封鎖、檢舉與審核流程",
+    "榜單爭議處理與公開名稱違規處置",
+    "退出排名後的歷史資料撤回與 audit event"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function reminderPreviewBoundaryDisplayItem() {
   return futurePreviewBoundaryDisplayItem(
     "通知預覽",
