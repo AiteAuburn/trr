@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1309: Extract food-community detail rows helpers
+
+Status: done
+
+Summary:
+
+- Added `foodCommunityShareFieldDisplayRows`, `foodCommunityPointDisplayRows`, and `foodCommunityRankingDisplayRows` to `mobile/futureModuleDisplay.ts` for Food Community detail rows.
+- Replaced the inline Food Community share-field, point, and ranking tuple construction in `mobile/App.tsx` with the extracted helpers.
+- Kept row copy, bounded display behavior, Food Community rendering, share form behavior, points display behavior, ranking display behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helpers, App bindings, and key Food Community row copy/calculation guards are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1308: Extract year-review local fallback metric rows helpers
 
 Status: done

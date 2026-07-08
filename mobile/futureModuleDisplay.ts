@@ -1,7 +1,7 @@
 import type { AppScreen } from "./navigationConfig";
 import { formatLocalDateInput, localDateTimeInputs } from "./dateTimeTransforms";
 import { recordDateTimeDisplay } from "./recordDisplay";
-import { metricDisplayItem, resultChecklistItem } from "./sharedDisplayItems";
+import { detailPairDisplayItem, metricDisplayItem, resultChecklistItem } from "./sharedDisplayItems";
 
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
@@ -884,6 +884,48 @@ export function foodCommunityItemDisplayItem(value: FoodCommunityItem) {
       maxDisplayDetailTextLength
     )
   };
+}
+
+export function foodCommunityShareFieldDisplayRows(
+  fields: FoodCommunityShareFields,
+  selectedFoodTitle: string | null | undefined
+) {
+  return ([
+    ["食物名稱", fields.foodName || selectedFoodTitle || "由使用者輸入"],
+    ["食用時間", `${fields.eatenDate} ${fields.eatenTime}`],
+    ["食用前血糖", fields.beforeGlucose || "由使用者輸入"],
+    ["食用後血糖", fields.afterGlucose || "由使用者輸入"],
+    [
+      "血糖上升值",
+      fields.beforeGlucose && fields.afterGlucose
+        ? `${clampNumber(Number(fields.afterGlucose) - Number(fields.beforeGlucose), -maxMobileGlucoseValue, maxMobileGlucoseValue)} mg/dL`
+        : "系統自動計算"
+    ],
+    ["備註心得", fields.note || "使用者可補充份量與情境"]
+  ] as const).map(detailPairDisplayItem);
+}
+
+export function foodCommunityPointDisplayRows(pointsBalance: StoreApiPointsBalance | null) {
+  return ([
+    ["本次分享", "+10 點"],
+    [
+      "點數餘額",
+      pointsBalance ? `${clampNumber(pointsBalance.balance, 0, maxMobileCountValue)} 點` : "尚未同步"
+    ],
+    [
+      "累積獲得",
+      pointsBalance ? `${clampNumber(pointsBalance.lifetime_earned, 0, maxMobileCountValue)} 點` : "分享後同步"
+    ],
+    ["點數用途", "優惠券、商品折扣、特殊徽章、會員福利"]
+  ] as const).map(detailPairDisplayItem);
+}
+
+export function foodCommunityRankingDisplayRows() {
+  return ([
+    ["分享次數排行", "統計公開分享筆數"],
+    ["貢獻度排行", "加權完整度與審核狀態"],
+    ["食物測試達人排行", "依測試食物種類計算"]
+  ] as const).map(detailPairDisplayItem);
 }
 
 export function mobileFoodCategoryFromApi(value: string): FoodCommunityCategory {

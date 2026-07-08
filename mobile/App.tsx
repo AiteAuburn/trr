@@ -161,6 +161,9 @@ import {
   foodCommunityItemDisplayItem,
   foodCommunityItemFromApi,
   foodCommunityItems,
+  foodCommunityPointDisplayRows,
+  foodCommunityRankingDisplayRows,
+  foodCommunityShareFieldDisplayRows,
   futureModuleCards,
   futureModuleCardDisplayItem,
   futureModuleDetailBoundaryCopy,
@@ -1656,43 +1659,12 @@ export default function App() {
     visibleFoodCommunityItems[0] ??
     foodCommunityDisplayItems[0] ??
     null;
-  const foodCommunityShareFieldTuples: Array<readonly [string, string]> = [
-    ["食物名稱", foodCommunityShareFields.foodName || selectedFoodCommunityItem?.title || "由使用者輸入"],
-    ["食用時間", `${foodCommunityShareFields.eatenDate} ${foodCommunityShareFields.eatenTime}`],
-    ["食用前血糖", foodCommunityShareFields.beforeGlucose || "由使用者輸入"],
-    ["食用後血糖", foodCommunityShareFields.afterGlucose || "由使用者輸入"],
-    [
-      "血糖上升值",
-      foodCommunityShareFields.beforeGlucose && foodCommunityShareFields.afterGlucose
-        ? `${clampNumber(Number(foodCommunityShareFields.afterGlucose) - Number(foodCommunityShareFields.beforeGlucose), -maxMobileGlucoseValue, maxMobileGlucoseValue)} mg/dL`
-        : "系統自動計算"
-    ],
-    ["備註心得", foodCommunityShareFields.note || "使用者可補充份量與情境"]
-  ];
-  const foodCommunityShareFieldRows = foodCommunityShareFieldTuples.map(detailPairDisplayItem);
-  const foodCommunityPointTuples: Array<readonly [string, string]> = [
-    ["本次分享", "+10 點"],
-    [
-      "點數餘額",
-      storePointsBalance
-        ? `${clampNumber(storePointsBalance.balance, 0, maxMobileCountValue)} 點`
-        : "尚未同步"
-    ],
-    [
-      "累積獲得",
-      storePointsBalance
-        ? `${clampNumber(storePointsBalance.lifetime_earned, 0, maxMobileCountValue)} 點`
-        : "分享後同步"
-    ],
-    ["點數用途", "優惠券、商品折扣、特殊徽章、會員福利"]
-  ];
-  const foodCommunityPointRows = foodCommunityPointTuples.map(detailPairDisplayItem);
-  const foodCommunityRankingTuples: Array<readonly [string, string]> = [
-    ["分享次數排行", "統計公開分享筆數"],
-    ["貢獻度排行", "加權完整度與審核狀態"],
-    ["食物測試達人排行", "依測試食物種類計算"]
-  ];
-  const foodCommunityRankingRows = foodCommunityRankingTuples.map(detailPairDisplayItem);
+  const foodCommunityShareFieldRows = foodCommunityShareFieldDisplayRows(
+    foodCommunityShareFields,
+    selectedFoodCommunityItem?.title
+  );
+  const foodCommunityPointRows = foodCommunityPointDisplayRows(storePointsBalance);
+  const foodCommunityRankingRows = foodCommunityRankingDisplayRows();
   const visibleStoreProducts = storeProductDisplayItems.filter((product) => {
     const query = storeSearchText.trim().toLowerCase();
     const matchesCategory = product.category === storeCategory;
