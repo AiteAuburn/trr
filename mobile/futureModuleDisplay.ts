@@ -392,6 +392,57 @@ export type StoreRedemptionDisplayInput = {
   created_at?: string | null;
 };
 
+export type YearReviewApiMetric = {
+  key: string;
+  label: string;
+  value: number | string;
+};
+
+export type YearReviewApiObservation = {
+  kind: "important_observation" | "encouragement";
+  text: string;
+};
+
+export type YearReviewApiResponse = {
+  snapshot_id?: string | null;
+  year: number;
+  generated_for_previous_year: boolean;
+  generated_at?: string | null;
+  source?: "snapshot" | "generated";
+  annual_stats: YearReviewApiMetric[];
+  health_outcomes: YearReviewApiMetric[];
+  ai_summary: YearReviewApiObservation[];
+};
+
+export type YearReviewApiShareAsset = {
+  snapshot_id: string;
+  year: number;
+  asset_kind: "svg_card";
+  mime_type: "image/svg+xml";
+  filename: string;
+  alt_text: string;
+  privacy_level: "public_summary";
+  privacy_mask_applied: boolean;
+  external_share_enabled: boolean;
+  svg_text: string;
+  checksum_sha256: string;
+};
+
+export type YearReviewApiSharePackage = {
+  share_package_id: string;
+  snapshot_id: string;
+  year: number;
+  privacy_level: "public_summary";
+  privacy_mask_applied: boolean;
+  external_share_enabled: boolean;
+  status: "confirmed" | "opened" | "dismissed" | "revoked";
+  confirmed_at: string;
+  shared_at?: string | null;
+  revoked_at?: string | null;
+  share_text: string;
+  asset: YearReviewApiShareAsset;
+};
+
 export const achievementLevels = [10, 50, 100, 150, 200, 250];
 export const achievementLevelStep = 50;
 
@@ -1248,6 +1299,22 @@ export function yearReviewPreviewBoundaryCopy() {
   );
 }
 
+export function yearReviewTargetYear(value: Date) {
+  return value.getFullYear() - 1;
+}
+
+export function nextYearReviewGenerationLabel(value: Date) {
+  const nextYear = value.getMonth() === 0 && value.getDate() === 1 ? value.getFullYear() + 1 : value.getFullYear() + 1;
+  return boundDisplayText(`每年 1 月 1 日自動產生前一年度回顧；下一次為 ${nextYear} 年 1 月 1 日`, maxDisplayDetailTextLength);
+}
+
+export function yearReviewBoundaryDisplayCopy() {
+  return boundDisplayText(
+    "年度回顧由 backend snapshot 保存年度統計、AI-style 觀察與鼓勵；不提供診療建議或療效宣稱。",
+    maxDisplayDetailTextLength
+  );
+}
+
 export function yearReviewHeroRecordCountCopy(count: number) {
   const boundedCount = clampNumber(count, 0, maxMobileCountValue);
   return boundDisplayText(`前一年度共記錄 ${boundedCount} 次`, maxDisplayTextLength);
@@ -1259,6 +1326,22 @@ export function yearReviewHeroTitleCopy(targetYear: number) {
 
 export function yearReviewLiveCalculationCopy(targetYear: number, generationLabel: string) {
   return boundDisplayText(`${targetYear} 年資料；${generationLabel}。同步成功後會使用 backend snapshot。`, maxDisplayDetailTextLength);
+}
+
+export function yearReviewSourceDisplayCopy(summary: YearReviewApiResponse | null, sharePackageId: string) {
+  const boundedSharePackageId = boundIdentifier(sharePackageId);
+  if (!summary) {
+    const shareCopy = boundedSharePackageId ? `最近分享 package ${boundedSharePackageId.slice(0, 8)}。` : "尚未建立分享 package。";
+    return boundDisplayText(`本機已載入紀錄預覽；backend snapshot 尚未同步。${shareCopy}`, maxDisplayDetailTextLength);
+  }
+  const sourceCopy = summary.source === "snapshot" ? "backend snapshot" : "backend 即時產生摘要";
+  const snapshotCopy = summary.snapshot_id ? `snapshot ${boundIdentifier(summary.snapshot_id).slice(0, 8)}` : "尚未保存 snapshot id";
+  const generatedCopy = summary.generated_at ? `產生時間 ${recordDateTimeDisplay(summary.generated_at)}` : "產生時間尚未回傳";
+  const shareCopy = boundedSharePackageId ? `最近分享 package ${boundedSharePackageId.slice(0, 8)}` : "尚未建立分享 package";
+  return boundDisplayText(
+    `${summary.year} 年來源：${sourceCopy}，${snapshotCopy}，${generatedCopy}；${shareCopy}。`,
+    maxDisplayDetailTextLength
+  );
 }
 
 export function yearReviewBadgeMaterialCopy() {

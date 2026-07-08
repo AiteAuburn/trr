@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1185: Extract Year Review display helpers
+
+Status: done
+
+Summary:
+
+- Moved Year Review API response/share types, target-year helper, generation label, backend boundary copy, and source display copy from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept Year Review backend summary/share endpoints, native share/FileSystem asset writing, revoke flow, hidden/debug-only future routing, first-version menu destinations, copy, and screen layout unchanged.
+- Updated the navigation verifier so Year Review pure display/type ownership is guarded in `mobile/futureModuleDisplay.ts`, while App-owned rendering, share I/O, and endpoints remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Year Review display helper boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1184: Extract Food Community fallback data
 
 Status: done

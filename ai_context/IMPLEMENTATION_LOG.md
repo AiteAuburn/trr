@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1185 extract Year Review display helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved Year Review API response/share types, target-year helper, generation label, backend boundary copy, and source display copy from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept Year Review backend summary/share endpoints, native share/FileSystem asset writing, revoke flow, hidden/debug-only future routing, first-version menu destinations, copy, and screen layout unchanged.
+- Updated the navigation verifier so Year Review pure display/type ownership is guarded in `mobile/futureModuleDisplay.ts`, while App-owned rendering, share I/O, and endpoints remain guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Year Review display helper boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating hidden/future-module display helpers before moving renderers.
+
 ### T1184 extract Food Community fallback data
 
 類型：mobile / refactor / verifier / docs

@@ -4717,9 +4717,6 @@ def main() -> int:
             ("achievement badge level render", "{displayItem.level}"),
             ("achievement accessibility binding", "accessibilityLabel={displayItem.accessibilityLabel}"),
             ("achievement progress ratio bounded", "const progressRatio = Math.min(1, displayItem.progress / displayItem.target);"),
-            ("year review target year helper", "function yearReviewTargetYear(value: Date)"),
-            ("year review generation label helper", "function nextYearReviewGenerationLabel(value: Date)"),
-            ("year review generation label copy", "return boundDisplayText(`每年 1 月 1 日自動產生前一年度回顧；下一次為 ${nextYear} 年 1 月 1 日`, maxDisplayDetailTextLength);"),
             ("year review generation display value", "const yearReviewGenerationDisplayText = nextYearReviewGenerationLabel(new Date());"),
             ("year review hero title display value", "const yearReviewHeroTitleDisplayText = yearReviewHeroTitleCopy(yearReviewTargetDisplayYear);"),
             ("year review hero title render", "{yearReviewHeroTitleDisplayText}"),
@@ -4738,14 +4735,9 @@ def main() -> int:
             ("year review lowest glucose outcome", '["年度最低血糖",'),
             ("year review AI observation", "yearlyAiObservationDisplayText"),
             ("year review AI encouragement", "yearlyAiEncouragementDisplayText"),
-            ("year review source helper", "function yearReviewSourceDisplayCopy(summary: YearReviewApiResponse | null, sharePackageId: string)"),
             ("year review source label", 'yearReviewSource: boundDisplayText("年度回顧來源", maxDisplayTextLength)'),
             ("year review source display value", "const yearReviewSourceDisplayText = yearReviewSourceDisplayCopy("),
-            ("year review source snapshot id", "snapshot ${boundIdentifier(summary.snapshot_id).slice(0, 8)}"),
-            ("year review source generated time", "產生時間 ${recordDateTimeDisplay(summary.generated_at)}"),
-            ("year review source share package id", "最近分享 package ${boundedSharePackageId.slice(0, 8)}"),
             ("year review source render", "{yearReviewSourceDisplayText}"),
-            ("year review backend-saved boundary", "年度回顧由 backend snapshot 保存年度統計、AI-style 觀察與鼓勵；不提供診療建議或療效宣稱。"),
             ("year review backend-aware share fallback", "backend ready 時可準備隱私遮罩分享卡並開啟原生分享。"),
             ("year review share accessibility binding", "accessibilityLabel={yearReviewShareAccessibilityDisplayLabel}"),
             ("year review native share import", "Share,"),
@@ -4796,6 +4788,19 @@ def main() -> int:
             ("food photo return accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodPhotoReturnAccessibility}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("year review API response type", "export type YearReviewApiResponse = {"),
+            ("year review share asset type", "export type YearReviewApiShareAsset = {"),
+            ("year review target year helper", "export function yearReviewTargetYear(value: Date)"),
+            ("year review generation label helper", "export function nextYearReviewGenerationLabel(value: Date)"),
+            ("year review generation label copy", "return boundDisplayText(`每年 1 月 1 日自動產生前一年度回顧；下一次為 ${nextYear} 年 1 月 1 日`, maxDisplayDetailTextLength);"),
+            ("year review source helper", "export function yearReviewSourceDisplayCopy(summary: YearReviewApiResponse | null, sharePackageId: string)"),
+            ("year review source snapshot id", "snapshot ${boundIdentifier(summary.snapshot_id).slice(0, 8)}"),
+            ("year review source generated time", "產生時間 ${recordDateTimeDisplay(summary.generated_at)}"),
+            ("year review source share package id", "最近分享 package ${boundedSharePackageId.slice(0, 8)}"),
+            ("year review backend-saved boundary", "年度回顧由 backend snapshot 保存年度統計、AI-style 觀察與鼓勵；不提供診療建議或療效宣稱。"),
+        ):
+            _assert_contains(label, future_module_display_content, marker)
         for label, marker in (
             ("achievement levels", "export const achievementLevels = [10, 50, 100, 150, 200, 250];"),
             ("achievement categories", "export const achievementCategoryDefinitions: Array<{"),

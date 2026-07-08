@@ -159,14 +159,18 @@ import {
   yearReviewAiEncouragementCopy,
   yearReviewAiObservationCopy,
   yearReviewBadgeMaterialCopy,
+  yearReviewBoundaryDisplayCopy,
   yearReviewHeroRecordCountCopy,
   yearReviewHeroTitleCopy,
   yearReviewLiveCalculationCopy,
+  yearReviewSourceDisplayCopy,
   yearReviewPreviewBoundaryCopy,
   yearReviewRevokeShareButtonAccessibilityLabel,
   yearReviewRevokeShareButtonLabel,
   yearReviewShareButtonAccessibilityLabel,
   yearReviewShareButtonLabel,
+  yearReviewTargetYear,
+  nextYearReviewGenerationLabel,
   type AchievementApiSummary,
   type AchievementApiUnlock,
   type AchievementItem,
@@ -183,7 +187,10 @@ import {
   type FutureModuleCard,
   type StoreCategory,
   type StoreProduct,
-  type StoreRewardApiInput
+  type StoreRewardApiInput,
+  type YearReviewApiResponse,
+  type YearReviewApiShareAsset,
+  type YearReviewApiSharePackage
 } from "./futureModuleDisplay";
 import {
   visualSmokeDemoPreview,
@@ -725,57 +732,6 @@ type StoreApiRedemption = {
   created_at: string;
 };
 
-type YearReviewApiMetric = {
-  key: string;
-  label: string;
-  value: number | string;
-};
-
-type YearReviewApiObservation = {
-  kind: "important_observation" | "encouragement";
-  text: string;
-};
-
-type YearReviewApiResponse = {
-  snapshot_id?: string | null;
-  year: number;
-  generated_for_previous_year: boolean;
-  generated_at?: string | null;
-  source?: "snapshot" | "generated";
-  annual_stats: YearReviewApiMetric[];
-  health_outcomes: YearReviewApiMetric[];
-  ai_summary: YearReviewApiObservation[];
-};
-
-type YearReviewApiShareAsset = {
-  snapshot_id: string;
-  year: number;
-  asset_kind: "svg_card";
-  mime_type: "image/svg+xml";
-  filename: string;
-  alt_text: string;
-  privacy_level: "public_summary";
-  privacy_mask_applied: boolean;
-  external_share_enabled: boolean;
-  svg_text: string;
-  checksum_sha256: string;
-};
-
-type YearReviewApiSharePackage = {
-  share_package_id: string;
-  snapshot_id: string;
-  year: number;
-  privacy_level: "public_summary";
-  privacy_mask_applied: boolean;
-  external_share_enabled: boolean;
-  status: "confirmed" | "opened" | "dismissed" | "revoked";
-  confirmed_at: string;
-  shared_at?: string | null;
-  revoked_at?: string | null;
-  share_text: string;
-  asset: YearReviewApiShareAsset;
-};
-
 type AuthTokenResponse = {
   access_token: string;
   refresh_token: string;
@@ -957,15 +913,6 @@ function longestRecordStreakDays(records: RecordItem[]) {
   return longest;
 }
 
-function yearReviewTargetYear(value: Date) {
-  return value.getFullYear() - 1;
-}
-
-function nextYearReviewGenerationLabel(value: Date) {
-  const nextYear = value.getMonth() === 0 && value.getDate() === 1 ? value.getFullYear() + 1 : value.getFullYear() + 1;
-  return boundDisplayText(`每年 1 月 1 日自動產生前一年度回顧；下一次為 ${nextYear} 年 1 月 1 日`, maxDisplayDetailTextLength);
-}
-
 async function requestJson<T>(
   apiBaseUrl: string,
   path: string,
@@ -1006,13 +953,6 @@ function protectedRequestHeaders(accountId: string, accessToken: string): Record
 
 function yearReviewShareUnavailableStatusMessage() {
   return boundUiMessage("visual smoke 或 backend unavailable 時不啟動外部分享；backend ready 時可準備隱私遮罩分享卡並開啟原生分享。");
-}
-
-function yearReviewBoundaryDisplayCopy() {
-  return boundDisplayText(
-    "年度回顧由 backend snapshot 保存年度統計、AI-style 觀察與鼓勵；不提供診療建議或療效宣稱。",
-    maxDisplayDetailTextLength
-  );
 }
 
 function auxiliarySectionLabels() {
@@ -1127,22 +1067,6 @@ async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset) {
     encoding: FileSystem.EncodingType.UTF8
   });
   return uri;
-}
-
-function yearReviewSourceDisplayCopy(summary: YearReviewApiResponse | null, sharePackageId: string) {
-  const boundedSharePackageId = boundIdentifier(sharePackageId);
-  if (!summary) {
-    const shareCopy = boundedSharePackageId ? `最近分享 package ${boundedSharePackageId.slice(0, 8)}。` : "尚未建立分享 package。";
-    return boundDisplayText(`本機已載入紀錄預覽；backend snapshot 尚未同步。${shareCopy}`, maxDisplayDetailTextLength);
-  }
-  const sourceCopy = summary.source === "snapshot" ? "backend snapshot" : "backend 即時產生摘要";
-  const snapshotCopy = summary.snapshot_id ? `snapshot ${boundIdentifier(summary.snapshot_id).slice(0, 8)}` : "尚未保存 snapshot id";
-  const generatedCopy = summary.generated_at ? `產生時間 ${recordDateTimeDisplay(summary.generated_at)}` : "產生時間尚未回傳";
-  const shareCopy = boundedSharePackageId ? `最近分享 package ${boundedSharePackageId.slice(0, 8)}` : "尚未建立分享 package";
-  return boundDisplayText(
-    `${summary.year} 年來源：${sourceCopy}，${snapshotCopy}，${generatedCopy}；${shareCopy}。`,
-    maxDisplayDetailTextLength
-  );
 }
 
 export default function App() {
