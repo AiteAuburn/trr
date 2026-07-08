@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1201: Preserve extracted detail row styling
+
+Status: done
+
+Summary:
+
+- Aligned `mobile/detailRow.tsx` with the original `mobile/App.tsx` `detailRow` and `recordContent` style values after extraction.
+- Preserved the Record Detail card background, border, radius, padding, spacing, text color, text size, line height, fallback values, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing.
+- Strengthened the navigation verifier so the extracted detail-row component guards the card background, padding, record content color, and line height.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1200: Extract record detail row component
 
 Status: done

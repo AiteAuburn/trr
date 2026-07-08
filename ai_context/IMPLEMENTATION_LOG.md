@@ -15,6 +15,36 @@
 
 ## 2026-07-07
 
+### T1201 preserve extracted detail row styling
+
+類型：mobile / refactor / bugfix / verifier / docs
+
+檔案：
+
+- `mobile/detailRow.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Aligned `mobile/detailRow.tsx` with the original `mobile/App.tsx` `detailRow` and `recordContent` style values after extraction.
+- Preserved the Record Detail card background, border, radius, padding, spacing, text color, text size, line height, fallback values, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing.
+- Strengthened the navigation verifier so the extracted detail-row component guards the card background, padding, record content color, and line height.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue only with refactor slices that preserve exact visible style values when extracting UI components.
+
 ### T1200 extract record detail row component
 
 類型：mobile / refactor / verifier / docs

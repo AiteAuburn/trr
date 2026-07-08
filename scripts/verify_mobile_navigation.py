@@ -1356,7 +1356,11 @@ def main() -> int:
             ("detail row component", "export function DetailRow({ label, value }: DetailRowProps)"),
             ("detail row string label fallback", 'typeof label === "string" ? <Text style={styles.label}>{label}</Text> : label'),
             ("detail row style", "detailRow: {"),
+            ("detail row card background", 'backgroundColor: "#F7FCFA"'),
+            ("detail row card padding", "padding: 14"),
             ("detail row record content style", "recordContent: {"),
+            ("detail row record content color", 'color: "#1E1E1E"'),
+            ("detail row record content line height", "lineHeight: 22"),
         ):
             _assert_contains(label, detail_row_content, marker)
         for label, marker in (

@@ -18,10 +18,15 @@ export function DetailRow({ label, value }: DetailRowProps) {
 const styles = StyleSheet.create({
   detailRow: {
     alignItems: "flex-start",
+    backgroundColor: "#F7FCFA",
+    borderColor: "#D6EEE4",
+    borderRadius: 18,
+    borderWidth: 1,
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
-    justifyContent: "space-between"
+    gap: 12,
+    justifyContent: "space-between",
+    padding: 14
   },
   label: {
     color: "#0F3F37",
@@ -29,10 +34,10 @@ const styles = StyleSheet.create({
     fontWeight: "800"
   },
   recordContent: {
-    color: "#29302E",
+    color: "#1E1E1E",
     flexShrink: 1,
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "700",
-    textAlign: "right"
+    lineHeight: 22
   }
 });
