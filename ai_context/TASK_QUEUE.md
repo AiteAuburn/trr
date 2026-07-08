@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1215: Reuse highlight bullet row in AI candidate removal
+
+Status: done
+
+Summary:
+
+- Replaced the AI Candidate Remove checklist rows in `mobile/App.tsx` with the shared `HighlightBulletRow` component.
+- Kept checklist text, bullet glyph, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the AI Candidate Remove checklist map is explicitly guarded to use `HighlightBulletRow`.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1214: Reuse highlight bullet row in record entry settings
 
 Status: done
