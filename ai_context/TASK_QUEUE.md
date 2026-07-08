@@ -124,6 +124,24 @@ None.
 
 ## Done
 
+### T1227: Reuse highlight bullet row in health integration readiness
+
+Status: done
+
+Summary:
+
+- Replaced the Health Integration readiness checklist rows in `mobile/App.tsx` with the shared `HighlightBulletRow` component.
+- Kept checklist text, bullet glyph, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the health-integration-readiness checklist map is explicitly guarded to use `HighlightBulletRow`.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1226: Reuse highlight bullet row in doctor share readiness
 
 Status: done
