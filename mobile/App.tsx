@@ -142,6 +142,7 @@ import {
   rankingLocalPreviewBoundaryCopy,
   rankingPreviewBoundaryDisplayItem,
   reminderPreviewBoundaryDisplayItem,
+  safeYearReviewShareAssetFileName,
   selectedFutureModuleDisplayItem,
   storeCartButtonAccessibilityLabel,
   storeCartButtonLabel,
@@ -1023,13 +1024,6 @@ function auxiliarySectionLabels() {
     aiBadge: boundDisplayText("AI", maxDisplayTextLength),
     dangerBang: boundDisplayText("!", 4)
   };
-}
-
-function safeYearReviewShareAssetFileName(value: string) {
-  const fallback = "year-review-share-card.svg";
-  const bounded = boundDisplayText(value || fallback, maxDisplayTextLength);
-  const sanitized = bounded.replace(/[^a-zA-Z0-9._-]/g, "_");
-  return sanitized.endsWith(".svg") ? sanitized : `${sanitized || "year-review-share-card"}.svg`;
 }
 
 async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset) {

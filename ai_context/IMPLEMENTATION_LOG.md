@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1188 extract Year Review share filename helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved the Year Review share-card filename sanitizer from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept native share, FileSystem cache writes, share-card asset endpoint, hidden/debug-only future routing, first-version menu destinations, copy text, and screen layout unchanged.
+- Updated the navigation verifier so share-card filename sanitizing is guarded in `mobile/futureModuleDisplay.ts`, while App-owned FileSystem cache writing remains guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Year Review share filename helper boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating hidden/future-module pure helpers while keeping native side effects in App until renderers move.
+
 ### T1187 extract future status copy helpers
 
 類型：mobile / refactor / verifier / docs

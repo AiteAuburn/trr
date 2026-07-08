@@ -1345,6 +1345,13 @@ export function yearReviewShareUnavailableStatusMessage() {
   return boundUiMessage("visual smoke 或 backend unavailable 時不啟動外部分享；backend ready 時可準備隱私遮罩分享卡並開啟原生分享。");
 }
 
+export function safeYearReviewShareAssetFileName(value: string) {
+  const fallback = "year-review-share-card.svg";
+  const bounded = boundDisplayText(value || fallback, maxDisplayTextLength);
+  const sanitized = bounded.replace(/[^a-zA-Z0-9._-]/g, "_");
+  return sanitized.endsWith(".svg") ? sanitized : `${sanitized || "year-review-share-card"}.svg`;
+}
+
 export function yearReviewHeroRecordCountCopy(count: number) {
   const boundedCount = clampNumber(count, 0, maxMobileCountValue);
   return boundDisplayText(`前一年度共記錄 ${boundedCount} 次`, maxDisplayTextLength);

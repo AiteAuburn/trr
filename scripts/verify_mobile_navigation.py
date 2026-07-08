@@ -4743,7 +4743,6 @@ def main() -> int:
             ("year review share accessibility binding", "accessibilityLabel={yearReviewShareAccessibilityDisplayLabel}"),
             ("year review native share import", "Share,"),
             ("year review file system import", 'import * as FileSystem from "expo-file-system";'),
-            ("year review share asset filename helper", "function safeYearReviewShareAssetFileName(value: string)"),
             ("year review share asset cache helper", "async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset)"),
             ("year review share asset cache directory guard", "if (!FileSystem.cacheDirectory)"),
             ("year review share asset svg write", "await FileSystem.writeAsStringAsync(uri, asset.svg_text"),
@@ -4802,6 +4801,8 @@ def main() -> int:
             ("year review backend-saved boundary", "年度回顧由 backend snapshot 保存年度統計、AI-style 觀察與鼓勵；不提供診療建議或療效宣稱。"),
             ("year review share unavailable status helper", "export function yearReviewShareUnavailableStatusMessage()"),
             ("year review backend-aware share fallback", "backend ready 時可準備隱私遮罩分享卡並開啟原生分享。"),
+            ("year review share asset filename helper", "export function safeYearReviewShareAssetFileName(value: string)"),
+            ("year review share asset filename sanitizer", "const sanitized = bounded.replace(/[^a-zA-Z0-9._-]/g, \"_\");"),
         ):
             _assert_contains(label, future_module_display_content, marker)
         for label, marker in (

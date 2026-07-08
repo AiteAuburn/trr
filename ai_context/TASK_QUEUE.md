@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1188: Extract Year Review share filename helper
+
+Status: done
+
+Summary:
+
+- Moved the Year Review share-card filename sanitizer from `mobile/App.tsx` into `mobile/futureModuleDisplay.ts`.
+- Kept native share, FileSystem cache writes, share-card asset endpoint, hidden/debug-only future routing, first-version menu destinations, copy text, and screen layout unchanged.
+- Updated the navigation verifier so share-card filename sanitizing is guarded in `mobile/futureModuleDisplay.ts`, while App-owned FileSystem cache writing remains guarded in `mobile/App.tsx`.
+- Updated the refactor roadmap to note the Year Review share filename helper boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1187: Extract future status copy helpers
 
 Status: done
