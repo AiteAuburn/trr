@@ -139,6 +139,31 @@ export function accountSecurityNoActionBoundaryCopy() {
   );
 }
 
+export function accountSecurityBoundaryDisplayRows(
+  hasAccount: boolean,
+  hasActiveProfile: boolean,
+  allowMobileDevAuth: boolean,
+  protectedHeaderMode: string,
+  tokenStorageMode: string,
+  accessTokenTooLarge: boolean,
+  authSessionCount: number,
+  protectedBackendReady: boolean
+) {
+  return [
+    ["帳號", hasAccount ? "已載入" : "未連線"],
+    ["照護對象", hasActiveProfile ? "已選擇" : "未選擇"],
+    ["dev auth", allowMobileDevAuth ? "允許" : "停用"],
+    ["API header", protectedHeaderMode],
+    ["Token storage", tokenStorageMode],
+    ["Token guard", accessTokenTooLarge ? "過長拒用" : "通過"],
+    ["Session list", authSessionCount > 0 ? `${authSessionCount} 筆` : "未載入"],
+    ["保護 API", protectedBackendReady ? "可操作" : "需登入"]
+  ].map(([label, value]) => ({
+    label: boundDisplayText(label, 60),
+    value: boundDisplayText(value, 80)
+  }));
+}
+
 export function profileNoActionBoundaryCopy() {
   return boundDisplayText(
     "此頁不寫入個人資料、不建立本機草稿、不呼叫 profile update API、不呼叫 AI，也不保存測試姓名或聯絡方式。",

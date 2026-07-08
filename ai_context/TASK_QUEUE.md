@@ -124,6 +124,26 @@ None.
 
 ## Done
 
+### T1307: Extract account and profile boundary display rows helpers
+
+Status: done
+
+Summary:
+
+- Added `accountSecurityBoundaryDisplayRows` to `mobile/subscriptionCopy.ts` for the Account Security boundary metric rows.
+- Added `profileSettingsBoundaryDisplayRows` to `mobile/accountCopy.ts` for the Profile Settings boundary metric rows.
+- Replaced the inline Account Security and Profile Settings boundary-row construction in `mobile/App.tsx` with the extracted helpers.
+- Kept row copy, bounded display behavior, Account Security rendering, Profile Settings rendering, auth/session/profile state behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helpers, App bindings, and key Account/Profile boundary row copy are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1306: Extract AI save-confirm boundary display rows helper
 
 Status: done

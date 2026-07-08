@@ -50,6 +50,23 @@ export function doctorShareBoundaryDisplayRows() {
   }));
 }
 
+export function profileSettingsBoundaryDisplayRows(
+  account: AccountDisplaySource | null,
+  activeProfile: unknown | null,
+  activeProfileLabel: string,
+  activeProfileRelationshipDisplayText: string
+) {
+  return [
+    ["帳號資料", account ? "已同步" : "未連線"],
+    ["照護對象", activeProfile ? activeProfileLabel : "未選擇"],
+    ["relationship", activeProfileRelationshipDisplayText],
+    ["本機編輯", "停用"]
+  ].map(([label, value]) => ({
+    label: boundDisplayText(label, 60),
+    value: boundDisplayText(value, 80)
+  }));
+}
+
 export function profileReadinessChecklistDisplayItems() {
   return [
     "production auth / OIDC 或 JWT 邊界，避免 dev account 被當成正式個資。",

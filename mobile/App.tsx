@@ -272,6 +272,7 @@ import {
   doctorShareAccountBoundaryText,
   doctorShareBoundaryDisplayRows,
   doctorShareReadinessChecklistDisplayItems,
+  profileSettingsBoundaryDisplayRows,
   profileReadinessChecklistDisplayItems
 } from "./accountCopy";
 import {
@@ -708,6 +709,7 @@ import {
   subscriptionComparisonRows,
   subscriptionPaymentUnwiredCopy,
   subscriptionReadinessChecklistDisplayItems,
+  accountSecurityBoundaryDisplayRows,
   subscriptionStatusLabel,
   subscriptionStatusSummaryText,
   subscriptionSyncButtonLabel,
@@ -1775,22 +1777,22 @@ export default function App() {
   const subscriptionManagementReadinessChecklistItems =
     subscriptionManagementReadinessChecklistDisplayItems();
   const privacyControlDisplayRows = useMemo(() => privacyControlRows.map(previewTupleDisplayItem), []);
-  const accountSecurityBoundaryRows = ([
-    ["帳號", account ? "已載入" : "未連線"],
-    ["照護對象", activeProfile ? "已選擇" : "未選擇"],
-    ["dev auth", allowMobileDevAuth ? "允許" : "停用"],
-    ["API header", protectedHeaderMode],
-    ["Token storage", tokenStorageMode],
-    ["Token guard", accessTokenTooLarge ? "過長拒用" : "通過"],
-    ["Session list", authSessionDisplayItems.length > 0 ? `${authSessionDisplayItems.length} 筆` : "未載入"],
-    ["保護 API", protectedBackendReady ? "可操作" : "需登入"]
-  ] as const).map(boundaryMetricDisplayItem);
-  const profileSettingsBoundaryRows = ([
-    ["帳號資料", account ? "已同步" : "未連線"],
-    ["照護對象", activeProfile ? activeProfileLabel : "未選擇"],
-    ["relationship", activeProfileRelationshipDisplayText],
-    ["本機編輯", "停用"]
-  ] as const).map(boundaryMetricDisplayItem);
+  const accountSecurityBoundaryRows = accountSecurityBoundaryDisplayRows(
+    Boolean(account),
+    Boolean(activeProfile),
+    allowMobileDevAuth,
+    protectedHeaderMode,
+    tokenStorageMode,
+    accessTokenTooLarge,
+    authSessionDisplayItems.length,
+    protectedBackendReady
+  );
+  const profileSettingsBoundaryRows = profileSettingsBoundaryDisplayRows(
+    account,
+    activeProfile,
+    activeProfileLabel,
+    activeProfileRelationshipDisplayText
+  );
   const membershipFeatureRows = membershipFeatureDisplayRows();
   const authBoundaryChecklistItems = authBoundaryChecklistDisplayItems();
   const profileReadinessChecklistItems = profileReadinessChecklistDisplayItems();

@@ -2535,6 +2535,16 @@ def main() -> int:
             "const recordingQuotaBoundaryRows = recordingQuotaBoundaryDisplayRows(voiceQuota, quotaRemainingLow);",
         )
         _assert_contains(
+            "account security boundary rows helper binding",
+            content,
+            "const accountSecurityBoundaryRows = accountSecurityBoundaryDisplayRows(",
+        )
+        _assert_contains(
+            "profile settings boundary rows helper binding",
+            content,
+            "const profileSettingsBoundaryRows = profileSettingsBoundaryDisplayRows(",
+        )
+        _assert_contains(
             "community boundary rows helper binding",
             content,
             "const communityBoundaryRows = communityBoundaryDisplayRows(",
@@ -5342,6 +5352,10 @@ def main() -> int:
             ("doctor share boundary permission row", "醫師權限"),
             ("doctor share boundary report row", "/reports/basic 預留"),
             ("doctor share boundary ai cost row", "0 次呼叫"),
+            ("profile settings boundary rows helper", "function profileSettingsBoundaryDisplayRows("),
+            ("profile settings boundary account row", "帳號資料"),
+            ("profile settings boundary active profile row", "照護對象"),
+            ("profile settings boundary local edit row", "本機編輯"),
             ("profile readiness checklist helper", "function profileReadinessChecklistDisplayItems()"),
             ("profile readiness production auth copy", "production auth / OIDC 或 JWT 邊界，避免 dev account 被當成正式個資。"),
             ("profile readiness permission copy", "帳號與照護對象權限檢查：只能編輯自己有權限的 profile。"),
@@ -5423,6 +5437,10 @@ def main() -> int:
             ("recording quota boundary status row", "會員狀態"),
             ("recording quota boundary warning row", "提醒規則"),
             ("recording quota boundary ai cost row", "0 次呼叫"),
+            ("account security boundary rows helper", "function accountSecurityBoundaryDisplayRows("),
+            ("account security boundary token guard row", "Token guard"),
+            ("account security boundary session list row", "Session list"),
+            ("account security boundary protected API row", "保護 API"),
             ("subscription status summary helper", "function subscriptionStatusSummaryText("),
             ("subscription status summary trial copy", "試用剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天"),
             ("subscription readiness checklist helper", "function subscriptionReadinessChecklistDisplayItems()"),
