@@ -15,6 +15,40 @@
 
 ## 2026-07-08
 
+### T1253 extract record detail info panel
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordDetailInfoPanel.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/recordDetailInfoPanel.tsx` for the Record Detail hero, main-detail rows, supplemental rows, and detail-boundary checklist.
+- Replaced the inline Record Detail info JSX in `mobile/App.tsx` with `RecordDetailInfoPanel`.
+- Kept date/time/type/source/exercise/medication labels, detail rows, boundary checklist, fallback copy, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation, UI spec coverage, and visual-smoke route verifiers so the Record Detail info panel component and App detail-data bindings are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version presentation wrappers while keeping selected-record data shaping in `recordDisplay.ts`.
+
 ### T1252 extract record detail action panel
 
 類型：mobile / refactor / verifier / docs

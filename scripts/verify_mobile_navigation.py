@@ -65,6 +65,7 @@ HIGHLIGHT_BULLET_ROW_PATH = REPO_ROOT / "mobile" / "highlightBulletRow.tsx"
 HIGHLIGHT_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "highlightDetailRow.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
 RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPanel.tsx"
+RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1303,6 +1304,7 @@ def main() -> int:
     highlight_detail_row_content = HIGHLIGHT_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
     record_detail_action_panel_content = RECORD_DETAIL_ACTION_PANEL_PATH.read_text(encoding="utf-8")
+    record_detail_info_panel_content = RECORD_DETAIL_INFO_PANEL_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -1557,7 +1559,7 @@ def main() -> int:
             ("highlight bullet row style", "highlightRow: {"),
             ("highlight bullet record type color", 'color: "#3FA67F"'),
             ("highlight bullet evidence line height", "lineHeight: 19"),
-            ("record detail boundary highlight bullet row", "recordDetailBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("record detail boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("delete confirm highlight bullet row", "deleteConfirmChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("record update highlight bullet row", "recordUpdateChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("manual submit highlight bullet row", "manualSubmitChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
@@ -1593,7 +1595,9 @@ def main() -> int:
         ):
             if label.startswith("history boundary "):
                 target_content = history_intro_status_blocks_content
-            elif label.startswith(("record detail ", "delete confirm ", "record update ", "manual submit ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ", "tutorial safety ", "detailed report notes ", "subscription readiness ", "subscription management readiness ", "doctor share readiness ", "health integration readiness ", "community readiness ", "ranking readiness ", "store checkout readiness ", "food photo empty result ", "food photo readiness ", "future module card requirements ", "future module detail requirements ")):
+            elif label.startswith("record detail "):
+                target_content = record_detail_info_panel_content
+            elif label.startswith(("delete confirm ", "record update ", "manual submit ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ", "tutorial safety ", "detailed report notes ", "subscription readiness ", "subscription management readiness ", "doctor share readiness ", "health integration readiness ", "community readiness ", "ranking readiness ", "store checkout readiness ", "food photo empty result ", "food photo readiness ", "future module card requirements ", "future module detail requirements ")):
                 target_content = content
             else:
                 target_content = highlight_bullet_row_content
@@ -1634,14 +1638,28 @@ def main() -> int:
         ):
             _assert_contains(label, record_detail_action_panel_content, marker)
         for label, marker in (
+            ("record detail info panel component", "export function RecordDetailInfoPanel({"),
+            ("record detail info panel hero date time", "<Text style={styles.confidence}>{dateTimeLabel}</Text>"),
+            ("record detail info panel hero summary", "<Text style={styles.detailValue}>{payloadSummary}</Text>"),
+            ("record detail info panel date row", 'label={<FieldLabel icon={"📅"} label={dateLabel} />}'),
+            ("record detail info panel time row", 'label={<FieldLabel icon={"🕒"} label={timeLabel} />}'),
+            ("record detail info panel type row", 'label={<FieldLabel icon={"🏷"} label={typeLabel} />}'),
+            ("record detail info panel mapped rows", "detailRows.map((row) => ("),
+            ("record detail info panel source row", "<DetailRow label={sourceTitle} value={sourceValue} />"),
+            ("record detail info panel exercise row", 'label={<FieldLabel icon={"🚶"} label={"運動"} />}'),
+            ("record detail info panel medication row", 'label={<FieldLabel icon={"💊"} label={"用藥"} />}'),
+            ("record detail info panel boundary bullets", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
+        ):
+            _assert_contains(label, record_detail_info_panel_content, marker)
+        for label, marker in (
             ("analysis metric card render", "analysisMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
             ("detailed report metric card render", "detailedReportMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
-            ("record detail date detail row component", 'label={<FieldLabel icon={"📅"} label={"日期"} />}'),
-            ("record detail mapped detail row component", "<DetailRow key={row.label} label={row.label} value={row.value} />"),
-            ("record detail source detail row component", "label={coreFlowDisplayLabels.source}"),
+            ("record detail info panel binding", "<RecordDetailInfoPanel\n              boundaryItems={recordDetailBoundaryChecklistItems}"),
+            ("record detail mapped detail row binding", "detailRows={selectedRecordDetailRows}"),
+            ("record detail source detail row binding", "sourceTitle={coreFlowDisplayLabels.source}"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (

@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1253: Extract record detail info panel
+
+Status: done
+
+Summary:
+
+- Added `mobile/recordDetailInfoPanel.tsx` for the Record Detail hero, main-detail rows, supplemental rows, and detail-boundary checklist.
+- Replaced the inline Record Detail info JSX in `mobile/App.tsx` with `RecordDetailInfoPanel`.
+- Kept date/time/type/source/exercise/medication labels, detail rows, boundary checklist, fallback copy, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation, UI spec coverage, and visual-smoke route verifiers so the Record Detail info panel component and App detail-data bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1252: Extract record detail action panel
 
 Status: done

@@ -38,7 +38,7 @@ CANONICAL_SPEC_SCREENS = (
     SpecScreen("4.6.3", "錄音額度頁", "recordingQuotaSettings", ("recordingQuotaBoundaryRows.map", "quotaReadinessChecklistItems")),
     SpecScreen("4.6.4", "提醒設定頁", "reminderSettings", ("reminderPreviewDisplayItems.map", "reminderReadinessChecklistItems")),
     SpecScreen("4.6.5", "通知與隱私頁", "privacySettings", ("privacyBoundaryRows.map", "privacyReadinessChecklistItems")),
-    SpecScreen("4.7", "記錄詳情頁", "recordDetail", ("selectedRecordDisplayItem", "recordDetailBoundaryChecklistItems.map")),
+    SpecScreen("4.7", "記錄詳情頁", "recordDetail", ("selectedRecordDisplayItem", "RecordDetailInfoPanel")),
     SpecScreen("4.7.1", "刪除確認頁", "deleteConfirm", ("deleteConfirmChecklistItems.map", "deleteSelectedRecord")),
     SpecScreen("4.8", "編輯記錄頁", "editRecord", ("updateSelectedRecord", "recordUpdateChecklistItems.map")),
     SpecScreen("4.8.1", "手動新增確認頁", "manualRecordConfirm", ("manualRecordConfirmDisplay", "createManualRecord")),

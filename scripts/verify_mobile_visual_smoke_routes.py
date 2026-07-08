@@ -85,8 +85,8 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "recordDetail": [
         'currentScreen === "recordDetail"',
-        "selectedRecordDetailRows.map",
-        "recordDetailBoundaryChecklistItems.map",
+        "RecordDetailInfoPanel",
+        "selectedRecordDetailRows",
     ],
     "editRecord": [
         'currentScreen === "editRecord"',

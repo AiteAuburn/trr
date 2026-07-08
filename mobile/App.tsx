@@ -714,6 +714,7 @@ import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
 import { MetricCard } from "./metricCard";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
+import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
 import type {
   Account,
   AiModelOptions,
@@ -8521,56 +8522,25 @@ export default function App() {
                 <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.back}</Text>
               </Pressable>
             </View>
-            <View style={styles.detailHero}>
-              <Text style={styles.confidence}>
-                {selectedRecordDisplayItem?.dateTimeLabel ?? "尚未選擇紀錄"}
-              </Text>
-              <Text style={styles.detailValue}>
-                {selectedRecordDisplayItem?.payloadSummary ?? "沒有資料"}
-              </Text>
-              <Text style={styles.evidence}>
-                {selectedRecordDisplayItem?.typeLabel ?? "請從今日或歷史紀錄選擇一筆真實紀錄。"}
-              </Text>
-            </View>
-            <View style={styles.detailRows}>
-              <Text style={styles.label}>{coreFlowDisplayLabels.mainInfo}</Text>
-              <DetailRow
-                label={<FieldLabel icon={"📅"} label={"日期"} />}
-                value={selectedRecordDisplayItem?.dateLabel ?? "尚無"}
-              />
-              <DetailRow
-                label={<FieldLabel icon={"🕒"} label={"時間"} />}
-                value={selectedRecordDisplayItem?.timeLabel ?? "尚無"}
-              />
-              <DetailRow
-                label={<FieldLabel icon={"🏷"} label={"類型"} />}
-                value={selectedRecordDisplayItem?.typeLabel ?? "尚無"}
-              />
-              {selectedRecordDetailRows.map((row) => (
-                <DetailRow key={row.label} label={row.label} value={row.value} />
-              ))}
-            </View>
-            <View style={styles.detailRows}>
-              <Text style={styles.label}>{coreFlowDisplayLabels.supplementalInfo}</Text>
-              <DetailRow
-                label={coreFlowDisplayLabels.source}
-                value={selectedRecordDisplayItem?.sourceLabel ?? "尚無"}
-              />
-              <DetailRow
-                label={<FieldLabel icon={"🚶"} label={"運動"} />}
-                value={selectedRecordDisplayItem?.exerciseSummary ?? "無"}
-              />
-              <DetailRow
-                label={<FieldLabel icon={"💊"} label={"用藥"} />}
-                value={selectedRecordDisplayItem?.medicationSummary ?? "無"}
-              />
-            </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{coreFlowDisplayLabels.detailBoundary}</Text>
-              {recordDetailBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
-              ))}
-            </View>
+            <RecordDetailInfoPanel
+              boundaryItems={recordDetailBoundaryChecklistItems}
+              boundaryTitle={coreFlowDisplayLabels.detailBoundary}
+              dateLabel={"日期"}
+              dateTimeLabel={selectedRecordDisplayItem?.dateTimeLabel ?? "尚未選擇紀錄"}
+              dateValue={selectedRecordDisplayItem?.dateLabel ?? "尚無"}
+              detailRows={selectedRecordDetailRows}
+              exerciseValue={selectedRecordDisplayItem?.exerciseSummary ?? "無"}
+              mainInfoTitle={coreFlowDisplayLabels.mainInfo}
+              medicationValue={selectedRecordDisplayItem?.medicationSummary ?? "無"}
+              payloadSummary={selectedRecordDisplayItem?.payloadSummary ?? "沒有資料"}
+              sourceTitle={coreFlowDisplayLabels.source}
+              sourceValue={selectedRecordDisplayItem?.sourceLabel ?? "尚無"}
+              supplementalInfoTitle={coreFlowDisplayLabels.supplementalInfo}
+              timeLabel={"時間"}
+              timeValue={selectedRecordDisplayItem?.timeLabel ?? "尚無"}
+              typeLabel={"類型"}
+              typeValue={selectedRecordDisplayItem?.typeLabel ?? "請從今日或歷史紀錄選擇一筆真實紀錄。"}
+            />
             <RecordDetailActionPanel
               canManageRecord={Boolean(selectedRecord)}
               deleteAccessibilityLabel={coreFlowDisplayLabels.recordDeleteOpenAccessibility}
