@@ -1160,6 +1160,14 @@ export function communityPublicNameBoundaryCopy() {
   );
 }
 
+export function communityReadinessChecklistDisplayItems() {
+  return [
+    "社群貼文、留言、封鎖、檢舉與審核流程",
+    "健康資料不可自動公開，分享需明確 opt-in",
+    "公開分享刪除、撤回與 audit-friendly event stream"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
+
 export function rankingPreviewBoundaryDisplayItem() {
   return futurePreviewBoundaryDisplayItem(
     "公開榜單",

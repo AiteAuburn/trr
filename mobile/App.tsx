@@ -153,6 +153,7 @@ import {
   commercePreviewReturnStoreStatusMessage,
   communityLeaderboardDisplaySection,
   emptyFoodCommunityShareFields,
+  communityReadinessChecklistDisplayItems,
   foodCommunityCategories,
   foodCommunityCategoryDisplayItem,
   foodCommunityItemDisplayItem,
@@ -1798,11 +1799,7 @@ export default function App() {
   const doctorShareReadinessChecklistItems = doctorShareReadinessChecklistDisplayItems();
   const healthIntegrationReadinessChecklistItems =
     healthIntegrationReadinessChecklistDisplayItems();
-  const communityReadinessChecklistItems = [
-    "社群貼文、留言、封鎖、檢舉與審核流程",
-    "健康資料不可自動公開，分享需明確 opt-in",
-    "公開分享刪除、撤回與 audit-friendly event stream"
-  ].map(resultChecklistItem);
+  const communityReadinessChecklistItems = communityReadinessChecklistDisplayItems();
   const rankingReadinessChecklistItems = [
     "封鎖、檢舉與審核流程",
     "榜單爭議處理與公開名稱違規處置",

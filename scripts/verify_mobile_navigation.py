@@ -2440,6 +2440,11 @@ def main() -> int:
             "healthIntegrationReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "community readiness checklist helper binding",
+            content,
+            "const communityReadinessChecklistItems = communityReadinessChecklistDisplayItems();",
+        )
+        _assert_contains(
             "quota readiness checklist helper binding",
             content,
             "const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();",
@@ -5628,7 +5633,6 @@ def main() -> int:
             ("store redemption disabled state", "accessibilityState={{ disabled: !product.isUsable }}"),
             ("store special badge redemption boundary", "優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利"),
             ("store redemption boundary rows", "storeRedemptionBoundaryRows.map"),
-            ("community readiness governance-only deletion", "公開分享刪除、撤回與 audit-friendly event stream"),
             ("ranking readiness governance-only disputes", "榜單爭議處理與公開名稱違規處置"),
             ("store checkout readiness inventory rollback", "購物車持久化、庫存 reservation 與 rollback 規則"),
             ("food photo upload status handler", "function showFoodPhotoUploadStatus()"),
@@ -5898,6 +5902,10 @@ def main() -> int:
             ("community preview boundary copy", "backend ready 時可同步食物資料庫、送出食物分享、建立點數並刷新排行榜"),
             ("community public name boundary copy helper", "export function communityPublicNameBoundaryCopy()"),
             ("community public name boundary copy", "公開名稱與排行榜 opt-in 已可同步 backend；健康紀錄仍預設私密"),
+            ("community readiness checklist helper", "export function communityReadinessChecklistDisplayItems()"),
+            ("community readiness moderation copy", "社群貼文、留言、封鎖、檢舉與審核流程"),
+            ("community readiness opt-in copy", "健康資料不可自動公開，分享需明確 opt-in"),
+            ("community readiness audit copy", "公開分享刪除、撤回與 audit-friendly event stream"),
             ("ranking preview boundary helper", "export function rankingPreviewBoundaryDisplayItem()"),
             ("ranking preview boundary copy", "一般操作路徑只讀取 opt-in 公開榜單與非敏感統計"),
             ("ranking local preview boundary copy helper", "export function rankingLocalPreviewBoundaryCopy()"),
