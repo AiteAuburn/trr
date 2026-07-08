@@ -2445,6 +2445,11 @@ def main() -> int:
             "const privacyReadinessChecklistItems = privacyReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "tutorial safety checklist helper binding",
+            content,
+            "const tutorialSafetyChecklistItems = tutorialSafetyChecklistDisplayItems();",
+        )
+        _assert_contains(
             "AI save confirm guarded return binding",
             content,
             "onPress={requestDailyRecordLeaveGuard}",
@@ -2575,6 +2580,10 @@ def main() -> int:
             ("save success detail accessibility label", 'saveSuccessDetailAccessibility: boundDisplayText("查看剛儲存紀錄詳情，不重送 save request", maxDisplayDetailTextLength)'),
             ("save success unsaved accessibility label", 'saveSuccessProcessUnsavedAccessibility: boundDisplayText("處理未儲存 AI 候選，不自動重試儲存", maxDisplayDetailTextLength)'),
             ("save success today accessibility label", 'saveSuccessReturnTodayAccessibility: boundDisplayText("回今日紀錄，只查看目前已載入清單", maxDisplayDetailTextLength)'),
+            ("tutorial safety checklist helper", "function tutorialSafetyChecklistDisplayItems()"),
+            ("tutorial safety candidate copy", "AI 只整理成候選紀錄，確認前不會寫入資料庫。"),
+            ("tutorial safety parser cost copy", "文字為空時不送 parser，避免不必要的 API 與 LLM 成本。"),
+            ("tutorial safety no diagnosis copy", "儲存後會回到今日、歷史與分析；不提供診療建議。"),
         ):
             _assert_contains(label, first_version_flow_copy_content, marker)
         for label, marker in (

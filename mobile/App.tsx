@@ -532,6 +532,7 @@ import {
   todayRecordEntryStatusMessage,
   todayRecordSummaryText,
   transcriptReviewManualEntryStatusMessage,
+  tutorialSafetyChecklistDisplayItems,
   type QuickEntryMode
 } from "./firstVersionFlowCopy";
 import {
@@ -1798,12 +1799,7 @@ export default function App() {
   ] as const).map(reminderPreviewDisplayItem);
   const reminderReadinessChecklistItems = reminderReadinessChecklistDisplayItems();
   const privacyReadinessChecklistItems = privacyReadinessChecklistDisplayItems();
-  const tutorialSafetyChecklistItems = [
-    "AI 只整理成候選紀錄，確認前不會寫入資料庫。",
-    "文字為空時不送 parser，避免不必要的 API 與 LLM 成本。",
-    "手動新增可完全避開 AI parser，適合快速補登明確資料。",
-    "儲存後會回到今日、歷史與分析；不提供診療建議。"
-  ].map(resultChecklistItem);
+  const tutorialSafetyChecklistItems = tutorialSafetyChecklistDisplayItems();
   const doctorShareReadinessChecklistItems = [
     "share token / authorization grant 產生、到期與撤銷",
     "doctor grant 僅允許 profile:read / profile:export 的明確授權範圍",

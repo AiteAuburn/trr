@@ -294,3 +294,12 @@ export function saveSuccessRecordEntryStatusMessage() {
 export function saveSuccessViewDetailStatusMessage() {
   return boundUiMessage("已從儲存完成查看紀錄詳情；返回會回到儲存完成頁，不會呼叫 AI。");
 }
+
+export function tutorialSafetyChecklistDisplayItems() {
+  return [
+    "AI 只整理成候選紀錄，確認前不會寫入資料庫。",
+    "文字為空時不送 parser，避免不必要的 API 與 LLM 成本。",
+    "手動新增可完全避開 AI parser，適合快速補登明確資料。",
+    "儲存後會回到今日、歷史與分析；不提供診療建議。"
+  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
+}
