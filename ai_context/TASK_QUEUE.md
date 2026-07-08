@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1202: Extract highlight bullet row component
+
+Status: done
+
+Summary:
+
+- Added `mobile/highlightBulletRow.tsx` as a shared bullet checklist row component using the original `highlightRow`, `recordType`, and `evidence` style values.
+- Replaced only the Record Detail boundary checklist rows in `mobile/App.tsx` with `HighlightBulletRow`, keeping text, bullet glyph, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so `mobile/highlightBulletRow.tsx` owns the shared highlight bullet row component/styles and Record Detail keeps using it for the boundary checklist.
+- Updated the refactor roadmap to note the shared highlight bullet row boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1201: Preserve extracted detail row styling
 
 Status: done

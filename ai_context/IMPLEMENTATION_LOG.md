@@ -15,6 +15,39 @@
 
 ## 2026-07-07
 
+### T1202 extract highlight bullet row component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/highlightBulletRow.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/highlightBulletRow.tsx` as a shared bullet checklist row component using the original `highlightRow`, `recordType`, and `evidence` style values.
+- Replaced only the Record Detail boundary checklist rows in `mobile/App.tsx` with `HighlightBulletRow`, keeping text, bullet glyph, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so `mobile/highlightBulletRow.tsx` owns the shared highlight bullet row component/styles and Record Detail keeps using it for the boundary checklist.
+- Updated the refactor roadmap to note the shared highlight bullet row boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue migrating repeated first-version checklist rows one small surface at a time after exact style parity is verified.
+
 ### T1201 preserve extracted detail row styling
 
 類型：mobile / refactor / bugfix / verifier / docs

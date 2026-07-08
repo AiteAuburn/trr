@@ -47,6 +47,7 @@ FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 FIELD_LABEL_PATH = REPO_ROOT / "mobile" / "fieldLabel.tsx"
 DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "detailRow.tsx"
+HIGHLIGHT_BULLET_ROW_PATH = REPO_ROOT / "mobile" / "highlightBulletRow.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1267,6 +1268,7 @@ def main() -> int:
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     field_label_content = FIELD_LABEL_PATH.read_text(encoding="utf-8")
     detail_row_content = DETAIL_ROW_PATH.read_text(encoding="utf-8")
+    highlight_bullet_row_content = HIGHLIGHT_BULLET_ROW_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -1363,6 +1365,16 @@ def main() -> int:
             ("detail row record content line height", "lineHeight: 22"),
         ):
             _assert_contains(label, detail_row_content, marker)
+        for label, marker in (
+            ("highlight bullet row component", "export function HighlightBulletRow({ text }: HighlightBulletRowProps)"),
+            ("highlight bullet row bullet", "<Text style={styles.recordType}>•</Text>"),
+            ("highlight bullet row style", "highlightRow: {"),
+            ("highlight bullet record type color", 'color: "#3FA67F"'),
+            ("highlight bullet evidence line height", "lineHeight: 19"),
+            ("record detail boundary highlight bullet row", "<HighlightBulletRow key={item} text={item} />"),
+        ):
+            target_content = content if label.startswith("record detail ") else highlight_bullet_row_content
+            _assert_contains(label, target_content, marker)
         for label, marker in (
             ("record detail date detail row component", 'label={<FieldLabel icon={"📅"} label={"日期"} />}'),
             ("record detail mapped detail row component", "<DetailRow key={row.label} label={row.label} value={row.value} />"),
