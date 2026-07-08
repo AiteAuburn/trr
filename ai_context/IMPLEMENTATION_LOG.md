@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1237 extract metric card for analysis rows
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/metricCard.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `mobile/metricCard.tsx` for the shared metric label/value card used by first-version analysis surfaces.
+- Replaced the Basic Analysis and Detailed Report metric row maps in `mobile/App.tsx` with `MetricCard`.
+- Kept metric labels, values, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, analysis calculations, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the metric component and Analysis/Detailed Report metric maps are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting first-version analysis display components only where the render structure is already duplicated and verifier-covered.
+
 ### T1236 reuse highlight detail row in food community ranking
 
 類型：mobile / refactor / verifier / docs

@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1237: Extract metric card for analysis rows
+
+Status: done
+
+Summary:
+
+- Added `mobile/metricCard.tsx` for the shared metric label/value card used by first-version analysis surfaces.
+- Replaced the Basic Analysis and Detailed Report metric row maps in `mobile/App.tsx` with `MetricCard`.
+- Kept metric labels, values, layout, colors, typography, spacing, UI copy, navigation, state flow, backend paths, analysis calculations, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated the navigation verifier so the metric component and Analysis/Detailed Report metric maps are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1236: Reuse highlight detail row in food community ranking
 
 Status: done

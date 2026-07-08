@@ -705,6 +705,7 @@ import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
+import { MetricCard } from "./metricCard";
 import type {
   Account,
   AiModelOptions,
@@ -9290,10 +9291,7 @@ export default function App() {
             </View>
             <View style={styles.metricGrid}>
               {analysisMetricRows.map((row) => (
-                <View key={row.label} style={styles.metricCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.metricValue}>{row.value}</Text>
-                </View>
+                <MetricCard key={row.label} label={row.label} value={row.value} />
               ))}
             </View>
             <Text style={styles.evidence}>{analysisRangeSummaryDisplayText}</Text>
@@ -9380,10 +9378,7 @@ export default function App() {
             </View>
             <View style={styles.metricGrid}>
               {detailedReportMetricRows.map((row) => (
-                <View key={row.label} style={styles.metricCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.metricValue}>{row.value}</Text>
-                </View>
+                <MetricCard key={row.label} label={row.label} value={row.value} />
               ))}
             </View>
             {reportRecordCount === 0 ? (

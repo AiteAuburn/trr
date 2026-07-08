@@ -49,6 +49,7 @@ FIELD_LABEL_PATH = REPO_ROOT / "mobile" / "fieldLabel.tsx"
 DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "detailRow.tsx"
 HIGHLIGHT_BULLET_ROW_PATH = REPO_ROOT / "mobile" / "highlightBulletRow.tsx"
 HIGHLIGHT_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "highlightDetailRow.tsx"
+METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1271,6 +1272,7 @@ def main() -> int:
     detail_row_content = DETAIL_ROW_PATH.read_text(encoding="utf-8")
     highlight_bullet_row_content = HIGHLIGHT_BULLET_ROW_PATH.read_text(encoding="utf-8")
     highlight_detail_row_content = HIGHLIGHT_DETAIL_ROW_PATH.read_text(encoding="utf-8")
+    metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -1421,6 +1423,20 @@ def main() -> int:
         for label, marker in (
             ("food community share field highlight detail row", "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />"),
             ("food community ranking highlight detail row", "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
+            ("metric card component", "export function MetricCard({ label, value }: MetricCardProps)"),
+            ("metric card label", "<Text style={styles.confidence}>{label}</Text>"),
+            ("metric card value", "<Text style={styles.metricValue}>{value}</Text>"),
+            ("metric card style", "metricCard: {"),
+            ("metric card value color", 'color: "#3FA67F"'),
+            ("metric card minimum width", 'minWidth: "46%"'),
+        ):
+            _assert_contains(label, metric_card_content, marker)
+        for label, marker in (
+            ("analysis metric card render", "analysisMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
+            ("detailed report metric card render", "detailedReportMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
