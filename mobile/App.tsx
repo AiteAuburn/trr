@@ -7263,10 +7263,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.preSubmitCheck}</Text>
               {aiSaveConfirmChecklistItems.map((item) => (
-                <View key={item} style={styles.highlightRow}>
-                  <Text style={styles.recordType}>•</Text>
-                  <Text style={styles.evidence}>{item}</Text>
-                </View>
+                <HighlightBulletRow key={item} text={item} />
               ))}
             </View>
             <View style={styles.reportBoundaryGrid}>
