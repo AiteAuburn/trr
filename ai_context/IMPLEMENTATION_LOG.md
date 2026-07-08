@@ -15,6 +15,40 @@
 
 ## 2026-07-07
 
+### T1191 extract auxiliary section labels
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/sharedDisplayItems.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/REFACTOR_ROADMAP.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Moved the App-level `auxiliarySectionLabels` bounded static label/accessibility helper into `mobile/sharedDisplayItems.ts`.
+- Kept all rendered labels, accessibility copy, UI layout, navigation, backend request paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Kept the `auxiliaryDisplayLabels` call site in `mobile/App.tsx` unchanged apart from importing the helper from the shared display module.
+- Updated the navigation verifier so auxiliary label ownership is guarded in `mobile/sharedDisplayItems.ts` and the old App-local helper is rejected.
+- Updated the refactor roadmap to note the shared auxiliary-label boundary.
+- 未變更 backend runtime、database schema、Android signing config、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue isolating static display/config helpers before moving screen renderers.
+
 ### T1190 extract app-shared mobile bounds helpers
 
 類型：mobile / refactor / verifier / docs

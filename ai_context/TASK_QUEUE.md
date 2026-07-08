@@ -124,6 +124,26 @@ None.
 
 ## Done
 
+### T1191: Extract auxiliary section labels
+
+Status: done
+
+Summary:
+
+- Moved the App-level `auxiliarySectionLabels` bounded static label/accessibility helper into `mobile/sharedDisplayItems.ts`.
+- Kept all rendered labels, accessibility copy, UI layout, navigation, backend request paths, first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Kept the `auxiliaryDisplayLabels` call site in `mobile/App.tsx` unchanged apart from importing the helper from the shared display module.
+- Updated the navigation verifier so auxiliary label ownership is guarded in `mobile/sharedDisplayItems.ts` and the old App-local helper is rejected.
+- Updated the refactor roadmap to note the shared auxiliary-label boundary.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1190: Extract app-shared mobile bounds helpers
 
 Status: done

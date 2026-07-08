@@ -1299,10 +1299,20 @@ def main() -> int:
         ):
             _assert_contains(label, mobile_bounds_content, marker)
         for label, marker in (
+            ("shared auxiliary labels helper", "export function auxiliarySectionLabels()"),
+            ("shared auxiliary visual smoke copy", "visualSmokeRouteCopy: boundDisplayText("),
+            ("shared auxiliary transcript input label", 'transcriptInputAccessibility: boundDisplayText("紀錄文字輸入", maxDisplayTextLength)'),
+            ("shared auxiliary store cart checkout label", 'storeCartCheckoutAccessibility: boundDisplayText("結帳尚未開放，不建立訂單或付款", maxDisplayDetailTextLength)'),
+            ("shared auxiliary store point mall badge", 'storePreview: boundDisplayText("點數商城", maxDisplayTextLength)'),
+            ("shared auxiliary year review source label", 'yearReviewSource: boundDisplayText("年度回顧來源", maxDisplayTextLength)'),
+        ):
+            _assert_contains(label, shared_display_items_content, marker)
+        for label, marker in (
             ("app local api url normalizer", "function normalizeApiBaseUrl(value: string)"),
             ("app local ui message bound", "function boundUiMessage(value: string)"),
             ("app local display bound", "function boundDisplayText(value: string, maxLength = maxDisplayTextLength)"),
             ("app local number clamp", "function clampNumber(value: number, min: number, max: number)"),
+            ("app local auxiliary labels helper", "function auxiliarySectionLabels()"),
         ):
             _assert_not_contains(label, content, marker)
         _verify_daily_record_contract(content, daily_transcript_content)
@@ -1476,7 +1486,7 @@ def main() -> int:
         )
         _assert_contains(
             "close-button accessibility label copy",
-            content,
+            shared_display_items_content,
             "closeReturn: boundDisplayText(\"關閉並返回\", maxDisplayTextLength)",
         )
         unlabeled_close_buttons = _unlabeled_close_buttons(content)
@@ -1698,6 +1708,9 @@ def main() -> int:
         for label, marker in (
             ("tutorial start accessibility label", 'tutorialStartAccessibility: boundDisplayText("開始使用並前往記錄頁，不呼叫 AI 或寫入資料", maxDisplayDetailTextLength)'),
             ("tutorial manual accessibility label", 'tutorialManualAccessibility: boundDisplayText("從教學改用手動新增，不呼叫 AI、LLM 或 STT", maxDisplayDetailTextLength)'),
+        ):
+            _assert_contains(label, shared_display_items_content, marker)
+        for label, marker in (
             ("tutorial start accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.tutorialStartAccessibility}"),
             ("tutorial manual accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.tutorialManualAccessibility}"),
         ):
@@ -4679,7 +4692,6 @@ def main() -> int:
             ("store product status handler", "function showStoreProductStatus(actionStatus: string)"),
             ("store product status press handler", "function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store redemption status press handler", "function pressStoreRedemptionStatus(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
-            ("store point mall badge", 'storePreview: boundDisplayText("點數商城", maxDisplayTextLength)'),
             ("store catalog sync function", "async function loadStoreCatalogAndPoints()"),
             ("store rewards endpoint", 'requestJson<StoreRewardApiInput[]>(normalizedApiBaseUrl, "/store/rewards"'),
             ("store points endpoint", 'requestJson<StoreApiPointsBalance>(normalizedApiBaseUrl, "/store/points"'),
@@ -4763,7 +4775,6 @@ def main() -> int:
             ("year review lowest glucose outcome", '["年度最低血糖",'),
             ("year review AI observation", "yearlyAiObservationDisplayText"),
             ("year review AI encouragement", "yearlyAiEncouragementDisplayText"),
-            ("year review source label", 'yearReviewSource: boundDisplayText("年度回顧來源", maxDisplayTextLength)'),
             ("year review source display value", "const yearReviewSourceDisplayText = yearReviewSourceDisplayCopy("),
             ("year review source render", "{yearReviewSourceDisplayText}"),
             ("year review share accessibility binding", "accessibilityLabel={yearReviewShareAccessibilityDisplayLabel}"),
@@ -4799,12 +4810,18 @@ def main() -> int:
             ("future commerce primary CTA button role", 'accessibilityRole="button"\n              style={styles.primaryButtonFull}'),
             ("future commerce secondary CTA button role", 'accessibilityRole="button"\n              style={styles.secondaryButton}'),
             ("future commerce action row CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
             ("achievements return accessibility label", 'achievementsReturnAccessibility: boundDisplayText("返回上一個功能入口，不寫入成就資料", maxDisplayDetailTextLength)'),
             ("year review return accessibility label", 'yearReviewReturnAccessibility: boundDisplayText("返回上一個功能入口，不產生分享圖或公開資料", maxDisplayDetailTextLength)'),
             ("store return accessibility label", 'storeReturnAccessibility: boundDisplayText("返回上一個功能入口，不建立訂單或付款", maxDisplayDetailTextLength)'),
             ("store cart checkout accessibility label", 'storeCartCheckoutAccessibility: boundDisplayText("結帳尚未開放，不建立訂單或付款", maxDisplayDetailTextLength)'),
             ("store cart return accessibility label", 'storeCartReturnAccessibility: boundDisplayText("返回商城，不建立訂單或付款", maxDisplayDetailTextLength)'),
             ("food photo return accessibility label", 'foodPhotoReturnAccessibility: boundDisplayText("返回上一個功能入口，不讀取照片或呼叫 Vision", maxDisplayDetailTextLength)'),
+        ):
+            _assert_contains(label, shared_display_items_content, marker)
+        for label, marker in (
             ("achievements return accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.achievementsReturnAccessibility}"),
             ("year review return accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.yearReviewReturnAccessibility}"),
             ("store return accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.storeReturnAccessibility}"),
