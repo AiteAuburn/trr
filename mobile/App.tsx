@@ -3240,8 +3240,7 @@ export default function App() {
     }
     clearPreviewSelectionState();
     setLastSaveErrorSummary("");
-    setCurrentScreen("aiSaveConfirm");
-    setStatus(aiSaveConfirmReadyStatusMessage());
+    openScreenWithStatus("aiSaveConfirm", aiSaveConfirmReadyStatusMessage());
   }
 
   function openTodayTranscriptText() {
@@ -3286,8 +3285,7 @@ export default function App() {
 
   function returnToAiReviewWithClearedPreviewStatus(statusMessage: string) {
     clearPreviewActionState();
-    setCurrentScreen("aiReview");
-    setStatus(statusMessage);
+    openScreenWithStatus("aiReview", statusMessage);
   }
 
   function returnFromAiSaveConfirm() {
@@ -3345,8 +3343,7 @@ export default function App() {
   }
 
   function openAiSaveConfirmWithStatus(statusMessage: string) {
-    setCurrentScreen("aiSaveConfirm");
-    setStatus(statusMessage);
+    openScreenWithStatus("aiSaveConfirm", statusMessage);
   }
 
   function returnFromAiSaveFailureToSaveConfirm() {

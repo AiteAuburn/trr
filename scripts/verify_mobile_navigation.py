@@ -3084,7 +3084,7 @@ def main() -> int:
         _assert_contains(
             "AI review cleared status helper fields",
             content,
-            "clearPreviewActionState();\n    setCurrentScreen(\"aiReview\");\n    setStatus(statusMessage);",
+            'clearPreviewActionState();\n    openScreenWithStatus("aiReview", statusMessage);',
         )
         _assert_contains(
             "AI save confirm return cleared status helper binding",
@@ -3094,7 +3094,7 @@ def main() -> int:
         _assert_contains(
             "AI save confirm enter clear selection helper binding",
             content,
-            "clearPreviewSelectionState();\n    setLastSaveErrorSummary(\"\");\n    setCurrentScreen(\"aiSaveConfirm\");",
+            'clearPreviewSelectionState();\n    setLastSaveErrorSummary("");\n    openScreenWithStatus("aiSaveConfirm", aiSaveConfirmReadyStatusMessage());',
         )
         _assert_contains(
             "save success unsaved candidate handler",
@@ -3284,7 +3284,7 @@ def main() -> int:
         _assert_contains(
             "AI save confirm status helper fields",
             content,
-            "setCurrentScreen(\"aiSaveConfirm\");\n    setStatus(statusMessage);",
+            'openScreenWithStatus("aiSaveConfirm", statusMessage);',
         )
         _assert_contains(
             "AI save failure return save confirm handler",
