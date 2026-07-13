@@ -687,6 +687,7 @@ import {
   profileNoActionBoundaryCopy,
   recordingQuotaBoundaryDisplayRows,
   settingsSubscriptionSectionLabels,
+  subscriptionActionStatusDisplayTexts,
   subscriptionCtaBoundaryCopy,
   subscriptionManagementIntroCopy,
   subscriptionManagementNoActionCopy,
@@ -1710,21 +1711,18 @@ export default function App() {
   const quotaDailyLimitDisplayText = quotaDisplay.dailyLimit;
   const subscriptionQuotaDailyLimitDisplayText = quotaDisplay.subscriptionDailyLimit;
   const settingsQuotaHelperDisplayText = quotaDisplay.settingsHelper;
-  const subscriptionActionStatusDisplayText = boundUiMessage(subscriptionActionStatus);
-  const subscriptionManagementActionStatusDisplayText = boundUiMessage(subscriptionManagementActionStatus);
-  const subscriptionTrialIntegrationStatusMessage = boundUiMessage(
-    "試用啟動需要正式付款/商店串接；目前不會建立訂閱，也不會變更會員狀態。"
-  );
-  const subscriptionRenewalIntegrationStatusMessage = boundUiMessage(
-    "續訂啟用需要正式付款/商店串接與 receipt validation；目前不會建立訂閱。"
-  );
-  const subscriptionManagementSyncingStatusMessage = boundUiMessage("正在同步 backend entitlement 與語音額度。");
-  const subscriptionManagementUnavailableStatusMessage = boundUiMessage(
-    `${protectedAccountBackendUnavailableMessage || "backend account 尚未 ready"}；目前不讀取訂閱或 entitlement。`
-  );
-  const subscriptionManagementPaymentStatusMessage = boundUiMessage(
-    "訂閱管理目前是 UI 預覽；正式啟用需要付款深連結、receipt validation、webhook 與 entitlement policy。"
-  );
+  const subscriptionActionStatusDisplay = subscriptionActionStatusDisplayTexts({
+    subscriptionActionStatus,
+    subscriptionManagementActionStatus,
+    backendUnavailableMessage: protectedAccountBackendUnavailableMessage
+  });
+  const subscriptionActionStatusDisplayText = subscriptionActionStatusDisplay.subscriptionAction;
+  const subscriptionManagementActionStatusDisplayText = subscriptionActionStatusDisplay.subscriptionManagementAction;
+  const subscriptionTrialIntegrationStatusMessage = subscriptionActionStatusDisplay.trialIntegration;
+  const subscriptionRenewalIntegrationStatusMessage = subscriptionActionStatusDisplay.renewalIntegration;
+  const subscriptionManagementSyncingStatusMessage = subscriptionActionStatusDisplay.managementSyncing;
+  const subscriptionManagementUnavailableStatusMessage = subscriptionActionStatusDisplay.managementUnavailable;
+  const subscriptionManagementPaymentStatusMessage = subscriptionActionStatusDisplay.managementPayment;
   const authActionStatusDisplayText = boundUiMessage(authActionStatus);
   const nativeStatusDisplayText = boundUiMessage(nativeStatus);
   const devResetStatusDisplayText = boundUiMessage(devResetStatus);

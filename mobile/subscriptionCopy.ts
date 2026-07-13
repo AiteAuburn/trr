@@ -285,6 +285,30 @@ export function subscriptionManagementReturnSettingsStatusMessage() {
   return boundUiMessage("已返回設定；訂閱管理頁不會建立試用、收款或改變會員權益。");
 }
 
+export function subscriptionActionStatusDisplayTexts(value: {
+  subscriptionActionStatus: string;
+  subscriptionManagementActionStatus: string;
+  backendUnavailableMessage: string;
+}) {
+  return {
+    subscriptionAction: boundUiMessage(value.subscriptionActionStatus),
+    subscriptionManagementAction: boundUiMessage(value.subscriptionManagementActionStatus),
+    trialIntegration: boundUiMessage(
+      "試用啟動需要正式付款/商店串接；目前不會建立訂閱，也不會變更會員狀態。"
+    ),
+    renewalIntegration: boundUiMessage(
+      "續訂啟用需要正式付款/商店串接與 receipt validation；目前不會建立訂閱。"
+    ),
+    managementSyncing: boundUiMessage("正在同步 backend entitlement 與語音額度。"),
+    managementUnavailable: boundUiMessage(
+      `${value.backendUnavailableMessage || "backend account 尚未 ready"}；目前不讀取訂閱或 entitlement。`
+    ),
+    managementPayment: boundUiMessage(
+      "訂閱管理目前是 UI 預覽；正式啟用需要付款深連結、receipt validation、webhook 與 entitlement policy。"
+    )
+  };
+}
+
 export function settingsSubscriptionSectionLabels() {
   const syncQuota = boundDisplayText("同步", maxDisplayTextLength);
   const trialIntegrationButton = boundDisplayText("查看試用整合狀態", maxDisplayTextLength);

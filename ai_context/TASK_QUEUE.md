@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1388: Extract subscription action status display texts
+
+Status: done
+
+Summary:
+
+- Added `subscriptionActionStatusDisplayTexts` to `mobile/subscriptionCopy.ts` for subscription and subscription-management action/status display text.
+- Replaced inline subscription action status display construction in `mobile/App.tsx` with the extracted helper.
+- Kept quota sync behavior, subscription management navigation, trial/renewal preview handlers, payment preview handler, and rendering unchanged.
+- Updated navigation verifier coverage so the status helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1387: Extract future preview status display texts
 
 Status: done

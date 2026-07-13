@@ -5967,6 +5967,13 @@ def main() -> int:
             ("subscription management readiness deep link copy", "商店付款或正式會員後台深連結，讓使用者可以管理續訂與取消。"),
             ("subscription management readiness entitlement copy", "idempotent entitlement update"),
             ("subscription management readiness server-side copy", "server-side entitlement"),
+            ("subscription action status display texts helper", "function subscriptionActionStatusDisplayTexts(value: {"),
+            ("subscription action status display action binding", "subscriptionAction: boundUiMessage(value.subscriptionActionStatus)"),
+            ("subscription action status display management binding", "subscriptionManagementAction: boundUiMessage(value.subscriptionManagementActionStatus)"),
+            ("subscription trial integration status copy", "試用啟動需要正式付款/商店串接；目前不會建立訂閱，也不會變更會員狀態。"),
+            ("subscription renewal integration status copy", "續訂啟用需要正式付款/商店串接與 receipt validation；目前不會建立訂閱。"),
+            ("subscription management syncing status copy", "正在同步 backend entitlement 與語音額度。"),
+            ("subscription management payment status copy", "訂閱管理目前是 UI 預覽；正式啟用需要付款深連結、receipt validation、webhook 與 entitlement policy。"),
         ):
             _assert_contains(label, subscription_copy_content, marker)
         for label, marker in (
@@ -6967,6 +6974,11 @@ def main() -> int:
             ("membership return subscription binding", "onPress={returnFromMembershipStatusToSubscription}"),
             ("membership renewal management binding", "onPress={openMembershipRenewalManagement}"),
             ("membership management binding", "onPress={openMembershipManagement}"),
+            ("subscription action status display helper binding", "const subscriptionActionStatusDisplay = subscriptionActionStatusDisplayTexts({"),
+            ("subscription action status display text binding", "const subscriptionActionStatusDisplayText = subscriptionActionStatusDisplay.subscriptionAction;"),
+            ("subscription management status display text binding", "const subscriptionManagementActionStatusDisplayText = subscriptionActionStatusDisplay.subscriptionManagementAction;"),
+            ("subscription trial integration status binding", "const subscriptionTrialIntegrationStatusMessage = subscriptionActionStatusDisplay.trialIntegration;"),
+            ("subscription management unavailable status binding", "const subscriptionManagementUnavailableStatusMessage = subscriptionActionStatusDisplay.managementUnavailable;"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
