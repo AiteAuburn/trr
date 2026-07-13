@@ -3606,6 +3606,11 @@ def main() -> int:
             "function enterManualRecordConfirm()",
         )
         _assert_contains(
+            "manual record confirm validation return helper binding",
+            content,
+            'openScreenWithStatus("manualRecord", validationError);',
+        )
+        _assert_contains(
             "manual record unavailable helper",
             content,
             "function openManualRecordUnavailable(screen: AppScreen)",

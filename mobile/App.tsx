@@ -2330,8 +2330,7 @@ export default function App() {
       manualRecordTime
     );
     if (validationError) {
-      setStatus(validationError);
-      setCurrentScreen("manualRecord");
+      openScreenWithStatus("manualRecord", validationError);
       return;
     }
     if (!protectedBackendReady) {
