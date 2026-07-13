@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1335: Extract glucose unit option display items helper
+
+Status: done
+
+Summary:
+
+- Added `optionDisplayItems` to `mobile/sharedDisplayItems.ts` for shared string-option display-list shaping.
+- Replaced the inline `glucoseUnitOptions.map(optionDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept glucose unit option copy, accessibility labels, edit/manual form option state, press handlers, and form rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and option mapping rule are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1334: Extract achievement display items helper
 
 Status: done

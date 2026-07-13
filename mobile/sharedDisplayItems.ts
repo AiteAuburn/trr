@@ -79,6 +79,10 @@ export function optionDisplayItem(value: string) {
   };
 }
 
+export function optionDisplayItems(values: readonly string[]) {
+  return values.map(optionDisplayItem);
+}
+
 export function valueLabelDisplayItem(value: readonly [string, string]) {
   const label = boundDisplayText(value[1] || "選項", 60);
   return {

@@ -275,6 +275,7 @@ import {
   manualRecordTypeDisplayItem,
   menuScreenDisplayItem,
   optionDisplayItem,
+  optionDisplayItems,
   previewTupleDisplayItem,
   resultChecklistItem,
   sessionManagementPreviewDisplayItem,
@@ -1689,7 +1690,7 @@ export default function App() {
     () => buildProductionAuthReadinessDisplayRows(),
     []
   );
-  const glucoseUnitDisplayOptions = useMemo(() => glucoseUnitOptions.map(optionDisplayItem), []);
+  const glucoseUnitDisplayOptions = useMemo(() => optionDisplayItems(glucoseUnitOptions), []);
   const glucoseTimingDisplayOptions = useMemo(() => glucoseTimingOptions.map(valueLabelDisplayItem), []);
   const mealTypeDisplayOptions = useMemo(() => mealTypeOptions.map(valueLabelDisplayItem), []);
   const manualRecordTypeDisplayOptions = useMemo(
