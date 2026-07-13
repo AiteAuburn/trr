@@ -5043,6 +5043,7 @@ def main() -> int:
             ("auth sessions load binding", "onPress={loadAuthSessionsFromSecurity}"),
             ("auth logout binding", "onPress={logoutAuthSessionFromSecurity}"),
             ("auth logout all binding", "onPress={logoutAllAuthSessionsFromSecurity}"),
+            ("auth session display list helper binding", "const authSessionDisplayItems = useMemo(\n    () => authSessionDisplayListItems(authSessions),"),
             ("auth refresh accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.refreshSessionAccessibility}"),
             ("auth load sessions accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.loadSessionsAccessibility}"),
             ("auth logout local accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.logoutLocalAccessibility}"),
@@ -5411,6 +5412,8 @@ def main() -> int:
             ("auth session display created/expires copy", "`建立 ${recordDateTimeDisplay(value.created_at)} · 到期 ${recordDateTimeDisplay(value.expires_at)}`"),
             ("auth session display fingerprint label", 'value.has_device_fingerprint ? "裝置已識別" : "無裝置指紋"'),
             ("auth session display last used fallback", '"尚無最後使用時間"'),
+            ("auth session display list helper", "function authSessionDisplayListItems(values: AuthSessionDisplaySource[])"),
+            ("auth session display list limit", "return values.slice(0, 20).map(authSessionDisplayItem);"),
         ):
             _assert_contains(label, auth_session_display_content, marker)
         for label, marker in (

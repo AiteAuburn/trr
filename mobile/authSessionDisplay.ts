@@ -40,3 +40,7 @@ export function authSessionDisplayItem(value: AuthSessionDisplaySource, index: n
     )
   };
 }
+
+export function authSessionDisplayListItems(values: AuthSessionDisplaySource[]) {
+  return values.slice(0, 20).map(authSessionDisplayItem);
+}

@@ -756,7 +756,7 @@ import {
   boundRefreshTokenForRequest
 } from "./authTransforms";
 import { protectedRequestHeaders } from "./authRequestHeaders";
-import { authSessionDisplayItem } from "./authSessionDisplay";
+import { authSessionDisplayListItems } from "./authSessionDisplay";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
@@ -1679,7 +1679,7 @@ export default function App() {
     []
   );
   const authSessionDisplayItems = useMemo(
-    () => authSessions.slice(0, 20).map(authSessionDisplayItem),
+    () => authSessionDisplayListItems(authSessions),
     [authSessions]
   );
   const productionAuthReadinessDisplayRows = useMemo(
