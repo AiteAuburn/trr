@@ -201,6 +201,7 @@ import {
   storeCartUnavailableDisplayItem,
   storeCheckoutReadinessChecklistDisplayItems,
   storeEmptySearchDisplayItem,
+  storeCatalogSyncStatusMessages,
   storePreviewDisplayTexts,
   storeDisplayBundle,
   storeProductFromApi,
@@ -4605,20 +4606,23 @@ export default function App() {
     if (visualSmokePreviewActive.current) {
       return;
     }
+    const storeSyncStatus = storeCatalogSyncStatusMessages({
+      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+      redemptionCount: 0,
+      pointsBalance: 0
+    });
     if (!protectedAccountBackendReady || !account) {
-      setStoreActionStatus(
-        boundUiMessage(`${protectedAccountBackendUnavailableMessage || "backend account 尚未 ready"}；目前只顯示本機商城目錄。`)
-      );
+      setStoreActionStatus(storeSyncStatus.unavailable);
       return;
     }
     const storeKey = [normalizedApiBaseUrl, account.id].join(":");
     latestStoreSyncKey.current = storeKey;
     if (storeSyncInFlightKeys.current.has(storeKey)) {
-      setStoreActionStatus(boundUiMessage("正在同步商城點數與兌換目錄，請稍候。"));
+      setStoreActionStatus(storeSyncStatus.inFlight);
       return;
     }
     storeSyncInFlightKeys.current.add(storeKey);
-    setStoreActionStatus(boundUiMessage("正在同步 backend 商城目錄與社群點數。"));
+    setStoreActionStatus(storeSyncStatus.loading);
     try {
       const [rewards, points, redemptions] = await Promise.all([
         requestJson<StoreRewardApiInput[]>(normalizedApiBaseUrl, "/store/rewards", {
@@ -4642,16 +4646,18 @@ export default function App() {
       });
       setStoreRedemptions(redemptions.slice(0, maxListItems * 2));
       setStoreActionStatus(
-        boundUiMessage(
-          `已同步商城目錄、點數與 ${clampNumber(redemptions.length, 0, maxMobileCountValue)} 筆兌換券，餘額 ${clampNumber(points.balance, 0, maxMobileCountValue)} 點。`
-        )
+        storeCatalogSyncStatusMessages({
+          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+          redemptionCount: redemptions.length,
+          pointsBalance: points.balance
+        }).success
       );
     } catch {
       if (latestStoreSyncKey.current === storeKey) {
         setStoreBackendProducts([]);
         setStorePointsBalance(null);
         setStoreRedemptions([]);
-        setStoreActionStatus(boundUiMessage("商城目錄、點數或兌換券同步失敗；目前保留本機預覽資料。"));
+        setStoreActionStatus(storeSyncStatus.failure);
       }
     } finally {
       storeSyncInFlightKeys.current.delete(storeKey);

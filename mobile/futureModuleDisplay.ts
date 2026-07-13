@@ -1713,6 +1713,28 @@ export function storePreviewDisplayTexts(actionStatus: string) {
   };
 }
 
+export function storeCatalogSyncStatusMessages(value: {
+  backendUnavailableMessage: string;
+  redemptionCount: number;
+  pointsBalance: number;
+}) {
+  return {
+    unavailable: boundUiMessage(
+      `${value.backendUnavailableMessage || "backend account 尚未 ready"}；目前只顯示本機商城目錄。`
+    ),
+    inFlight: boundUiMessage("正在同步商城點數與兌換目錄，請稍候。"),
+    loading: boundUiMessage("正在同步 backend 商城目錄與社群點數。"),
+    success: boundUiMessage(
+      `已同步商城目錄、點數與 ${clampNumber(value.redemptionCount, 0, maxMobileCountValue)} 筆兌換券，餘額 ${clampNumber(
+        value.pointsBalance,
+        0,
+        maxMobileCountValue
+      )} 點。`
+    ),
+    failure: boundUiMessage("商城目錄、點數或兌換券同步失敗；目前保留本機預覽資料。")
+  };
+}
+
 export function achievementPreviewBoundaryCopy() {
   return boundDisplayText(
     "成就可同步 backend 依記錄聚合的 MVP 徽章摘要；backend 不可用或 visual smoke 時保留本機推算。",

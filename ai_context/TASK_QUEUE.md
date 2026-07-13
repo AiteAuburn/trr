@@ -124,6 +124,38 @@ None.
 
 ## Done
 
+### T1402: Extract store catalog sync status messages
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `storeCatalogSyncStatusMessages` to `mobile/futureModuleDisplay.ts` for Store catalog backend unavailable, in-flight, loading, success, and failure status copy.
+- Replaced inline bounded Store catalog/points/redemptions sync status construction in `mobile/App.tsx` with the extracted helper.
+- Kept `/store/rewards`, `/store/points`, `/store/redemptions?limit=20`, in-flight guards, product/points/redemption state updates, Store rendering, and redemption actions unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No backend/schema/Android signing/token/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue auditing remaining community, achievement, year-review, and store action-local status helpers separately.
+
 ### T1401: Extract community leaderboard sync status messages
 
 Status: done
