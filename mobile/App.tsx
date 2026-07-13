@@ -2240,12 +2240,16 @@ export default function App() {
     setHistoryDetailMode("structured");
   }
 
+  function historyDateTarget(item: { value: string }) {
+    return item.value;
+  }
+
   function pressHistoryCalendarDay(item: ReturnType<typeof historyCalendarDayDisplayItem>) {
-    selectHistoryCalendarDate(item.value);
+    selectHistoryCalendarDate(historyDateTarget(item));
   }
 
   function pressHistoryDailySummary(item: ReturnType<typeof historyDailySummaryDisplayItem>) {
-    selectHistoryCalendarDate(item.value);
+    selectHistoryCalendarDate(historyDateTarget(item));
   }
 
   function selectHistoryCalendarMonthOffset(offset: number) {

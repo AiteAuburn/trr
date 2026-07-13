@@ -5960,9 +5960,13 @@ def main() -> int:
             ("history calendar component binding", "<HistoryCalendarMonthPicker\n              days={historyCalendarDisplayItems}"),
             ("history calendar previous month binding", "onPreviousMonthPress={openPreviousHistoryMonth}"),
             ("history calendar next month binding", "onNextMonthPress={openNextHistoryMonth}"),
+            ("history date target helper", "function historyDateTarget(item: { value: string })"),
+            ("history date target helper fields", "return item.value;"),
             ("history calendar day press handler", "function pressHistoryCalendarDay(item: ReturnType<typeof historyCalendarDayDisplayItem>)"),
+            ("history calendar day target helper binding", "selectHistoryCalendarDate(historyDateTarget(item));"),
             ("history calendar day binding", "onDayPress={pressHistoryCalendarDay}"),
             ("history daily summary press handler", "function pressHistoryDailySummary(item: ReturnType<typeof historyDailySummaryDisplayItem>)"),
+            ("history daily summary target helper binding", "selectHistoryCalendarDate(historyDateTarget(item));"),
             ("history daily summary binding", "onSummaryPress={pressHistoryDailySummary}"),
             ("history daily entry press handler", "function pressHistoryDailyEntry("),
             ("history daily entry binding", "onEntryPress={pressHistoryDailyEntry}"),
@@ -5982,6 +5986,11 @@ def main() -> int:
             ("history raw records render", "rawItems={selectedHistoryRawDisplayItems}"),
         ):
             _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "history direct date item value binding",
+            content,
+            "selectHistoryCalendarDate(item.value);",
+        )
         for label, marker in (
             ("history calendar display helper", "function historyCalendarDisplayTexts(monthStart: Date, selectedDate: string)"),
             ("history calendar display title", "title: boundDisplayText(`${monthStart.getFullYear()} 年 ${monthStart.getMonth() + 1} 月`, 40)"),
