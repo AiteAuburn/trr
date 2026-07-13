@@ -2105,6 +2105,11 @@ export default function App() {
     seedManualRecordDateTimeForNow();
   }
 
+  function openScreenWithStatus(screen: AppScreen, statusMessage: string) {
+    setCurrentScreen(screen);
+    setStatus(statusMessage);
+  }
+
   function openManualRecord(returnScreen: AppScreen = currentScreen) {
     seedManualRecordDateTimeForNow();
     setManualRecordReturnScreen(returnScreen);
@@ -2131,18 +2136,15 @@ export default function App() {
   }
 
   function returnFromManualRecord() {
-    setCurrentScreen(manualRecordReturnScreen);
-    setStatus(manualRecordReturnStatusMessage(manualRecordReturnScreen));
+    openScreenWithStatus(manualRecordReturnScreen, manualRecordReturnStatusMessage(manualRecordReturnScreen));
   }
 
   function returnFromRecordDetail() {
-    setCurrentScreen(recordDetailReturnScreen);
-    setStatus(recordDetailReturnStatusMessage(recordDetailReturnScreen));
+    openScreenWithStatus(recordDetailReturnScreen, recordDetailReturnStatusMessage(recordDetailReturnScreen));
   }
 
   function openTutorialRecordEntry() {
-    setCurrentScreen("record");
-    setStatus(tutorialRecordEntryStatusMessage());
+    openScreenWithStatus("record", tutorialRecordEntryStatusMessage());
   }
 
   function openTutorialManualRecord() {
@@ -2154,8 +2156,7 @@ export default function App() {
   }
 
   function openTodayRecordEntry() {
-    setCurrentScreen("record");
-    setStatus(todayRecordEntryStatusMessage());
+    openScreenWithStatus("record", todayRecordEntryStatusMessage());
   }
 
   function openTodayRecordDetail(record: RecordItem) {
@@ -2171,13 +2172,11 @@ export default function App() {
   }
 
   function openTodayAnalysis() {
-    setCurrentScreen("analysis");
-    setStatus(todayAnalysisStatusMessage());
+    openScreenWithStatus("analysis", todayAnalysisStatusMessage());
   }
 
   function returnFromHistoryToToday() {
-    setCurrentScreen("today");
-    setStatus(historyReturnTodayStatusMessage());
+    openScreenWithStatus("today", historyReturnTodayStatusMessage());
   }
 
   function openHistoryManualRecord() {
@@ -2207,8 +2206,7 @@ export default function App() {
   }
 
   function returnFromAnalysisToToday() {
-    setCurrentScreen("today");
-    setStatus(analysisReturnTodayStatusMessage());
+    openScreenWithStatus("today", analysisReturnTodayStatusMessage());
   }
 
   function openAnalysisDetailedReport() {
@@ -2217,8 +2215,7 @@ export default function App() {
   }
 
   function returnFromDetailedReportToAnalysis() {
-    setCurrentScreen("analysis");
-    setStatus(detailedReportReturnAnalysisStatusMessage());
+    openScreenWithStatus("analysis", detailedReportReturnAnalysisStatusMessage());
   }
 
   function openDetailedReportManualRecord() {
@@ -2226,8 +2223,7 @@ export default function App() {
   }
 
   function returnFromDetailedReportToToday() {
-    setCurrentScreen("today");
-    setStatus(detailedReportReturnTodayStatusMessage());
+    openScreenWithStatus("today", detailedReportReturnTodayStatusMessage());
   }
 
   function selectManualRecordType(type: ManualRecordType) {

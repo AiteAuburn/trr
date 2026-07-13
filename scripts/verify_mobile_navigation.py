@@ -2629,14 +2629,34 @@ def main() -> int:
             "function returnFromManualRecord()",
         )
         _assert_contains(
+            "core screen status opener helper",
+            content,
+            "function openScreenWithStatus(screen: AppScreen, statusMessage: string)",
+        )
+        _assert_contains(
+            "manual record return status helper binding",
+            content,
+            "openScreenWithStatus(manualRecordReturnScreen, manualRecordReturnStatusMessage(manualRecordReturnScreen));",
+        )
+        _assert_contains(
             "record detail return handler",
             content,
             "function returnFromRecordDetail()",
         )
         _assert_contains(
+            "record detail return status helper binding",
+            content,
+            "openScreenWithStatus(recordDetailReturnScreen, recordDetailReturnStatusMessage(recordDetailReturnScreen));",
+        )
+        _assert_contains(
             "tutorial record entry handler",
             content,
             "function openTutorialRecordEntry()",
+        )
+        _assert_contains(
+            "tutorial record entry status helper binding",
+            content,
+            'openScreenWithStatus("record", tutorialRecordEntryStatusMessage());',
         )
         _assert_contains(
             "tutorial manual entry handler",
@@ -5434,6 +5454,11 @@ def main() -> int:
             "function openTodayRecordEntry()",
         )
         _assert_contains(
+            "today record entry status helper binding",
+            content,
+            'openScreenWithStatus("record", todayRecordEntryStatusMessage());',
+        )
+        _assert_contains(
             "today record detail handler",
             content,
             "function openTodayRecordDetail(record: RecordItem)",
@@ -5567,6 +5592,11 @@ def main() -> int:
             "today analysis handler",
             content,
             "function openTodayAnalysis()",
+        )
+        _assert_contains(
+            "today analysis status helper binding",
+            content,
+            'openScreenWithStatus("analysis", todayAnalysisStatusMessage());',
         )
         _assert_not_contains(
             "today manual entry binding",
@@ -5984,6 +6014,11 @@ def main() -> int:
             "function returnFromAnalysisToToday()",
         )
         _assert_contains(
+            "analysis return today status helper binding",
+            content,
+            'openScreenWithStatus("today", analysisReturnTodayStatusMessage());',
+        )
+        _assert_contains(
             "analysis detailed report handler",
             content,
             "function openAnalysisDetailedReport()",
@@ -5992,6 +6027,11 @@ def main() -> int:
             "detailed report return analysis handler",
             content,
             "function returnFromDetailedReportToAnalysis()",
+        )
+        _assert_contains(
+            "detailed report return analysis status helper binding",
+            content,
+            'openScreenWithStatus("analysis", detailedReportReturnAnalysisStatusMessage());',
         )
         _assert_contains(
             "detailed report manual entry handler",
@@ -6007,6 +6047,11 @@ def main() -> int:
             "detailed report return today handler",
             content,
             "function returnFromDetailedReportToToday()",
+        )
+        _assert_contains(
+            "detailed report return today status helper binding",
+            content,
+            'openScreenWithStatus("today", detailedReportReturnTodayStatusMessage());',
         )
         _assert_contains(
             "manual record type handler",
