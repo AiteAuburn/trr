@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1353: Reuse glucose transform helpers for Year Review
+
+Status: done
+
+Summary:
+
+- Replaced the inline Year Review glucose-record filter/map in `mobile/App.tsx` with existing `buildAnalysisGlucoseRecords` and `buildAnalysisGlucoseValues` helpers.
+- Reused existing `highestNumber` and `lowestNumber` helpers for Year Review glucose high/low calculations.
+- Kept yearly glucose average, high/low values, glucose record count, local health outcome rows, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the Year Review glucose helper bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1352: Extract record-type counts helper for Year Review
 
 Status: done

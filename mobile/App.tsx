@@ -1483,12 +1483,11 @@ export default function App() {
   const yearlyMostRecordedType =
     Array.from(yearlyTypeCounts.entries()).sort((first, second) => second[1] - first[1])[0] ?? null;
   const yearlyLongestStreak = useMemo(() => longestRecordStreakDays(yearlyRecords), [yearlyRecords]);
-  const yearlyGlucoseValues = yearlyRecords
-    .filter((record) => record.record_type === "glucose" && typeof record.payload_json.value === "number")
-    .map((record) => Number(record.payload_json.value));
+  const yearlyGlucoseRecords = buildAnalysisGlucoseRecords(yearlyRecords);
+  const yearlyGlucoseValues = buildAnalysisGlucoseValues(yearlyGlucoseRecords);
   const yearlyGlucoseAverage = averageNumber(yearlyGlucoseValues);
-  const yearlyGlucoseHighest = yearlyGlucoseValues.length > 0 ? Math.max(...yearlyGlucoseValues) : null;
-  const yearlyGlucoseLowest = yearlyGlucoseValues.length > 0 ? Math.min(...yearlyGlucoseValues) : null;
+  const yearlyGlucoseHighest = highestNumber(yearlyGlucoseValues);
+  const yearlyGlucoseLowest = lowestNumber(yearlyGlucoseValues);
   const yearlyRecordDayCount = new Set(yearlyRecords.map((record) => localDateKey(record.occurred_at)).filter(Boolean)).size;
   const yearlyUnlockedBadgeCount = achievementDisplayItems.filter((item) => item.progress >= item.target).length;
   const yearlyHighestBadgeLevel =
@@ -1503,7 +1502,7 @@ export default function App() {
   const yearlyGlucoseHighestDisplayValue = clampNullableNumber(yearlyGlucoseHighest, 0, maxMobileGlucoseValue);
   const yearlyGlucoseLowestDisplayValue = clampNullableNumber(yearlyGlucoseLowest, 0, maxMobileGlucoseValue);
   const yearlyRecordDisplayCount = clampNumber(yearlyRecords.length, 0, maxMobileCountValue);
-  const yearlyGlucoseRecordDisplayCount = clampNumber(yearlyTypeCounts.get("glucose") ?? 0, 0, maxMobileCountValue);
+  const yearlyGlucoseRecordDisplayCount = clampNumber(yearlyGlucoseRecords.length, 0, maxMobileCountValue);
   const yearlyExerciseRecordDisplayCount = clampNumber(yearlyTypeCounts.get("exercise") ?? 0, 0, maxMobileCountValue);
   const yearlyMealRecordDisplayCount = clampNumber(yearlyTypeCounts.get("meal") ?? 0, 0, maxMobileCountValue);
   const yearlyLongestStreakDisplayDays = clampNumber(yearlyLongestStreak, 0, maxMobileCountValue);

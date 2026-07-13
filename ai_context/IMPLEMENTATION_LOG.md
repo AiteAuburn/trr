@@ -15,6 +15,37 @@
 
 ## 2026-07-13
 
+### T1353 reuse glucose transform helpers for Year Review
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Replaced the inline Year Review glucose-record filter/map in `mobile/App.tsx` with existing `buildAnalysisGlucoseRecords` and `buildAnalysisGlucoseValues` helpers.
+- Reused existing `highestNumber` and `lowestNumber` helpers for Year Review glucose high/low calculations.
+- Kept yearly glucose average, high/low values, glucose record count, local health outcome rows, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the Year Review glucose helper bindings are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Year Review rendering、Year Review backend fallback、achievement data、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing Year Review badge aggregation and remaining repeated achievement filters separately.
+
 ### T1352 extract record-type counts helper for Year Review
 
 類型：mobile / refactor / verifier / docs
