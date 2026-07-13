@@ -5326,8 +5326,14 @@ def main() -> int:
         _assert_contains(
             "settings account security accessibility label",
             content,
-            "const accountSecurityCardAccessibilityLabel = boundDisplayText(",
+            "const accountSecurityCardAccessibilityLabel = accountSecurityAuthModeDisplay.cardAccessibilityLabel;",
         )
+        for label, marker in (
+            ("settings account security auth mode display helper binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayTexts({"),
+            ("settings account security auth mode label binding", "const authModeDisplayLabel = accountSecurityAuthModeDisplay.label;"),
+            ("settings account security auth mode copy binding", "const authModeDisplayCopy = accountSecurityAuthModeDisplay.copy;"),
+        ):
+            _assert_contains(label, content, marker)
         _assert_contains(
             "settings account security accessibility binding",
             content,
@@ -5880,6 +5886,10 @@ def main() -> int:
             ("doctor share account boundary helper", "function doctorShareAccountBoundaryText(account: AccountDisplaySource | null)"),
             ("doctor share connected copy", "已連線帳號；正式分享仍需 production auth、權限與授權碼流程。"),
             ("doctor share disconnected copy", "尚未連線帳號；不可建立任何外部分享。"),
+            ("account security auth mode display helper", "function accountSecurityAuthModeDisplayTexts(value: {"),
+            ("account security dev auth label", 'const label = value.allowMobileDevAuth ? "Dev Auth" : "Production Auth Required";'),
+            ("account security auth mode label binding", "label: displayLabel"),
+            ("account security auth mode accessibility binding", "cardAccessibilityLabel: boundDisplayText("),
             ("doctor share boundary rows helper", "function doctorShareBoundaryDisplayRows()"),
             ("doctor share boundary token row", "授權碼"),
             ("doctor share boundary permission row", "醫師權限"),

@@ -38,6 +38,26 @@ export function doctorShareAccountBoundaryText(account: AccountDisplaySource | n
   );
 }
 
+export function accountSecurityAuthModeDisplayTexts(value: {
+  allowMobileDevAuth: boolean;
+  accountDisplayName: string;
+  accountLoginDisplayText: string;
+}) {
+  const label = value.allowMobileDevAuth ? "Dev Auth" : "Production Auth Required";
+  const copy = value.allowMobileDevAuth
+    ? "目前使用本機開發登入；正式 build 應關閉 dev auth 並接 JWT/OIDC。"
+    : "dev login 已停用；本機預覽請先複製 mobile/.env.example 到 .env，正式版需接 JWT/OIDC 與安全 token 儲存。";
+  const displayLabel = boundDisplayText(label, 40);
+  return {
+    label: displayLabel,
+    copy: boundDisplayText(copy, maxDisplayDetailTextLength),
+    cardAccessibilityLabel: boundDisplayText(
+      `前往帳號安全設定：${value.accountDisplayName}，${value.accountLoginDisplayText}，${displayLabel}`,
+      maxDisplayDetailTextLength
+    )
+  };
+}
+
 export function doctorShareBoundaryDisplayRows() {
   return [
     ["授權碼", "未產生"],

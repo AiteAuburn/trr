@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1397 extract account security auth mode display texts
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/accountCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `accountSecurityAuthModeDisplayTexts` to `mobile/accountCopy.ts` for Account Security auth mode label, explanatory copy, and card accessibility label.
+- Replaced inline Account Security auth mode display construction in `mobile/App.tsx` with the extracted helper.
+- Kept dev-auth flag behavior, production-auth requirement copy, Account Security navigation, settings rendering, auth/session flows, and token storage behavior unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、dev-auth flag behavior、production-auth requirement copy、Account Security navigation、settings rendering、auth/session flows、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining App display shaping for small helper ownership moves.
+
 ### T1396 extract records status display text
 
 類型：mobile / refactor / verifier / docs
