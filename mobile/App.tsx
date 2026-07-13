@@ -2060,6 +2060,12 @@ export default function App() {
     setParserRecoveryMessage("");
   }
 
+  function clearDailyRecordDraftOrganizationState() {
+    setDailyTranscriptEntries([]);
+    setDailyRecordOrganizationRevision(0);
+    setDailyRecordOrganizationReason(null);
+  }
+
   function updateTranscriptDraft(
     value: string,
     source: "user" | "sample" | "voice" = "user",
@@ -2435,9 +2441,7 @@ export default function App() {
     parsePreviewInFlight.current = false;
     previewSaveInFlight.current = false;
     setPreview(null);
-    setDailyTranscriptEntries([]);
-    setDailyRecordOrganizationRevision(0);
-    setDailyRecordOrganizationReason(null);
+    clearDailyRecordDraftOrganizationState();
     clearTranscriptDraftState();
     setSelectedRecord(null);
     setBasicReport(null);
@@ -5510,9 +5514,7 @@ export default function App() {
       const savedCount = recordsToSave.length;
       setPreview(null);
       clearTranscriptDraftState();
-      setDailyTranscriptEntries([]);
-      setDailyRecordOrganizationRevision(0);
-      setDailyRecordOrganizationReason(null);
+      clearDailyRecordDraftOrganizationState();
       setRecords((current) => boundRecordsList([...createdRecords, ...current]));
       setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));
       if (createdRecords[0]) {

@@ -2362,6 +2362,16 @@ def main() -> int:
             "function clearParserPreviewState() {\n    setPreview(null);\n    setParserRecoveryMessage(\"\");",
         )
         _assert_contains(
+            "daily record draft organization clear helper",
+            content,
+            "function clearDailyRecordDraftOrganizationState()",
+        )
+        _assert_contains(
+            "daily record draft organization clear helper internals",
+            content,
+            "function clearDailyRecordDraftOrganizationState() {\n    setDailyTranscriptEntries([]);\n    setDailyRecordOrganizationRevision(0);\n    setDailyRecordOrganizationReason(null);",
+        )
+        _assert_contains(
             "transcript draft update clears parser preview helper binding",
             content,
             "setTranscriptVoiceSeconds(\n      source === \"voice\" && boundedValue.trim().length > 0\n        ? clampNumber(voiceSeconds, 0, maxMobileCountValue)\n        : 0\n    );\n    clearParserPreviewState();",
@@ -2414,12 +2424,12 @@ def main() -> int:
         _assert_contains(
             "mobile session clear transcript draft helper binding",
             content,
-            "setDailyRecordOrganizationReason(null);\n    clearTranscriptDraftState();\n    setSelectedRecord(null);",
+            "clearDailyRecordDraftOrganizationState();\n    clearTranscriptDraftState();\n    setSelectedRecord(null);",
         )
         _assert_contains(
             "AI save success clears transcript draft helper binding",
             content,
-            "setPreview(null);\n      clearTranscriptDraftState();\n      setDailyTranscriptEntries([]);",
+            "setPreview(null);\n      clearTranscriptDraftState();\n      clearDailyRecordDraftOrganizationState();",
         )
         _assert_contains(
             "transcript review return clears parser preview helper binding",
@@ -4641,7 +4651,7 @@ def main() -> int:
             ("daily record save checklist helper binding", "const aiSaveConfirmChecklistItems = aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordDisplayCount);"),
             ("daily record save endpoint", '"/daily-records/save"'),
             ("daily record save payload binding", "body: JSON.stringify(buildDailyRecordSaveRequest(preview, recordsToSave, dailyTranscriptEntries))"),
-            ("daily record save clears retained transcripts", "setDailyTranscriptEntries([]);"),
+            ("daily record save clears retained transcripts", "clearDailyRecordDraftOrganizationState();"),
             ("daily record fixed save visible flag", "const isDailyRecordFixedSaveVisible = dailyRecordDraftScreen.isFixedSaveVisible;"),
             ("daily record fixed save scroll padding style", "const mainScrollContainerStyle = isDailyRecordFixedSaveVisible"),
             ("daily record fixed save scroll binding", "contentContainerStyle={mainScrollContainerStyle}"),
