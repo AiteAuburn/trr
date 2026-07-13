@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1346 extract AI rejected-event display helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `rejectedPreviewDisplayItems` to `mobile/recordDisplay.ts` for AI rejected-event display shaping.
+- Replaced the inline AI Review rejected-event `preview.rejected_events.map(...)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept rejected-event ids, source text bounds, reason labels, rejected reason copy, empty-state behavior, and AI Review rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, bounded fields, reason copy use, and removed inline mapping are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、AI Review rendering、rejected-event copy、candidate edit/remove behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining `App.tsx` analysis/chart display shaping separately.
+
 ### T1345 extract AI candidate display list helper
 
 類型：mobile / refactor / verifier / docs

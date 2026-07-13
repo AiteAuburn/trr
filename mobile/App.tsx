@@ -78,7 +78,7 @@ import {
   manualRecordConfirmDisplayItem,
   pendingRecordDisplayItem,
   pendingRecordDisplayItems,
-  rejectedReasonLabel,
+  rejectedPreviewDisplayItems as buildRejectedPreviewDisplayItems,
   recordDateTimeDisplay,
   recordDetailDisplayItem,
   recordListDisplayItem,
@@ -360,7 +360,6 @@ import {
   aiReviewNoPreviewBodyCopy,
   aiReviewNoPreviewTitleCopy,
   aiReviewRejectedEventsCopy,
-  aiReviewRejectedReasonCopy,
   aiRemoveConfirmBoundaryCopy,
   aiRemoveConfirmBoundaryLabel,
   aiRemoveConfirmSourceCopy,
@@ -1225,13 +1224,7 @@ export default function App() {
   const rejectedPreviewEventCount = preview?.rejected_events.length ?? 0;
   const lowConfidencePreviewRecordDisplayCount = clampNumber(lowConfidencePreviewRecordCount, 0, maxMobilePreviewRecords);
   const rejectedPreviewEventDisplayCount = clampNumber(rejectedPreviewEventCount, 0, maxMobileRejectedEvents);
-  const rejectedPreviewDisplayItems =
-    preview?.rejected_events.map((event) => ({
-      id: boundIdentifier(event.segment_id),
-      sourceText: boundDisplayText(event.source_text, maxDisplayDetailTextLength),
-      reasonLabel: boundDisplayText(rejectedReasonLabel(event.reason), 80),
-      reasonDisplayText: aiReviewRejectedReasonCopy(rejectedReasonLabel(event.reason))
-    })) ?? [];
+  const rejectedPreviewDisplayItems = preview ? buildRejectedPreviewDisplayItems(preview.rejected_events) : [];
   const aiReviewDateDisplayLabel = boundDisplayText(
     preview ? aiReviewDateLabel(preview.records) : "",
     maxDisplayDetailTextLength

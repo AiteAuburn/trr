@@ -1,4 +1,5 @@
-import type { PendingRecord, RecordItem } from "./recordBounds";
+import type { PendingRecord, RecordItem, RejectedEvent } from "./recordBounds";
+import { aiReviewRejectedReasonCopy } from "./recordWorkflowCopy";
 
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
@@ -394,6 +395,18 @@ export function rejectedReasonLabel(reason?: string) {
     return "無法判斷可儲存紀錄類型";
   }
   return boundDisplayText(normalized, 80);
+}
+
+export function rejectedPreviewDisplayItems(events: RejectedEvent[]) {
+  return events.map((event) => {
+    const reasonLabel = boundDisplayText(rejectedReasonLabel(event.reason), 80);
+    return {
+      id: boundIdentifier(event.segment_id),
+      sourceText: boundDisplayText(event.source_text, maxDisplayDetailTextLength),
+      reasonLabel,
+      reasonDisplayText: aiReviewRejectedReasonCopy(reasonLabel)
+    };
+  });
 }
 
 export function recordDetailDisplayItem(record: RecordItem) {

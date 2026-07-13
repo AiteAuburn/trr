@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1346: Extract AI rejected-event display helper
+
+Status: done
+
+Summary:
+
+- Added `rejectedPreviewDisplayItems` to `mobile/recordDisplay.ts` for AI rejected-event display shaping.
+- Replaced the inline AI Review rejected-event `preview.rejected_events.map(...)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept rejected-event ids, source text bounds, reason labels, rejected reason copy, empty-state behavior, and AI Review rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, bounded fields, reason copy use, and removed inline mapping are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1345: Extract AI candidate display list helper
 
 Status: done

@@ -2806,8 +2806,22 @@ def main() -> int:
             ("AI rejected reason duplicate label", "可能與既有候選重複"),
             ("AI rejected reason unsupported label", "目前尚未支援這類紀錄"),
             ("AI rejected reason unknown label", "無法判斷可儲存紀錄類型"),
+            ("AI rejected preview display items helper", "function rejectedPreviewDisplayItems(events: RejectedEvent[])"),
+            ("AI rejected preview id bound", "id: boundIdentifier(event.segment_id)"),
+            ("AI rejected preview source bound", "sourceText: boundDisplayText(event.source_text, maxDisplayDetailTextLength)"),
+            ("AI rejected preview reason copy", "reasonDisplayText: aiReviewRejectedReasonCopy(reasonLabel)"),
         ):
             _assert_contains(label, record_display_content, marker)
+        _assert_contains(
+            "AI rejected preview list helper binding",
+            content,
+            "const rejectedPreviewDisplayItems = preview ? buildRejectedPreviewDisplayItems(preview.rejected_events) : [];",
+        )
+        _assert_not_contains(
+            "AI rejected preview inline event mapping",
+            content,
+            "preview?.rejected_events.map((event) => ({",
+        )
         _assert_contains(
             "AI review candidate list helper binding",
             content,
