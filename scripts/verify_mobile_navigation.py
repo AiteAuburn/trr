@@ -3808,6 +3808,26 @@ def main() -> int:
             "function returnFromUpdateSuccess()",
         )
         _assert_contains(
+            "record action unavailable helper",
+            content,
+            "function openRecordActionUnavailable(screen: AppScreen, statusMessage: string)",
+        )
+        _assert_contains(
+            "record action unavailable helper fields",
+            content,
+            "setStatus(statusMessage);\n    setCurrentScreen(screen);",
+        )
+        _assert_contains(
+            "record update unavailable helper binding",
+            content,
+            'openRecordActionUnavailable("editRecord", recordUpdateUnavailableStatusMessage(protectedBackendUnavailableMessage));',
+        )
+        _assert_contains(
+            "record delete unavailable helper binding",
+            content,
+            'openRecordActionUnavailable("deleteConfirm", recordDeleteUnavailableStatusMessage(protectedBackendUnavailableMessage));',
+        )
+        _assert_contains(
             "delete success destination card binding",
             content,
             "onPress={() => pressDeleteSuccessDestinationCard(item)}",
