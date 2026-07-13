@@ -1580,6 +1580,14 @@ export function yearReviewSourceDisplayCopy(summary: YearReviewApiResponse | nul
   );
 }
 
+export function backendYearReviewMetricDisplayRows(summary: YearReviewApiResponse | null) {
+  return summary?.annual_stats.slice(0, 7).map((item) => metricDisplayItem([item.label, String(item.value)] as const)) ?? [];
+}
+
+export function backendYearReviewHealthOutcomeDisplayRows(summary: YearReviewApiResponse | null) {
+  return summary?.health_outcomes.slice(0, 3).map((item) => metricDisplayItem([item.label, String(item.value)] as const)) ?? [];
+}
+
 export function localYearlyReviewMetricDisplayRows(
   yearlyRecordDayDisplayCount: number,
   yearlyGlucoseRecordDisplayCount: number,

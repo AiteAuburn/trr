@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1314: Extract year review backend row helpers
+
+Status: done
+
+Summary:
+
+- Added `backendYearReviewMetricDisplayRows` and `backendYearReviewHealthOutcomeDisplayRows` to `mobile/futureModuleDisplay.ts` for backend annual-stat and health-outcome row shaping.
+- Replaced the inline backend snapshot row slicing and `metricDisplayItem` mapping in `mobile/App.tsx` with extracted helpers.
+- Kept backend-vs-local fallback behavior, annual stat row limit, health outcome row limit, row copy, rendering, share behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helpers, App bindings, and backend row limits are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1313: Extract achievement display section helpers
 
 Status: done

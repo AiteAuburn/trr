@@ -133,6 +133,8 @@ import {
   achievementPreviewBoundaryCopy,
   achievementStreakBadgeColor,
   achievementUnlockDisplayDate,
+  backendYearReviewHealthOutcomeDisplayRows,
+  backendYearReviewMetricDisplayRows,
   buildAchievementCategoryDisplaySections,
   communityPublicNameBoundaryCopy,
   communityPreviewBoundaryDisplayItem,
@@ -267,7 +269,6 @@ import {
   detailPairDisplayItem,
   manualRecordTypeDisplayItem,
   menuScreenDisplayItem,
-  metricDisplayItem,
   optionDisplayItem,
   previewTupleDisplayItem,
   resultChecklistItem,
@@ -1513,12 +1514,8 @@ export default function App() {
   const yearlyMealRecordDisplayCount = clampNumber(yearlyTypeCounts.get("meal") ?? 0, 0, maxMobileCountValue);
   const yearlyLongestStreakDisplayDays = clampNumber(yearlyLongestStreak, 0, maxMobileCountValue);
   const yearlyMostRecordedDisplayCount = clampNumber(yearlyMostRecordedType?.[1] ?? 0, 0, maxMobileCountValue);
-  const backendYearMetricRows = yearReviewBackendSummary?.annual_stats
-    .slice(0, 7)
-    .map((item) => metricDisplayItem([item.label, String(item.value)] as const)) ?? [];
-  const backendYearHealthRows = yearReviewBackendSummary?.health_outcomes
-    .slice(0, 3)
-    .map((item) => metricDisplayItem([item.label, String(item.value)] as const)) ?? [];
+  const backendYearMetricRows = backendYearReviewMetricDisplayRows(yearReviewBackendSummary);
+  const backendYearHealthRows = backendYearReviewHealthOutcomeDisplayRows(yearReviewBackendSummary);
   const backendYearAiObservation = yearReviewBackendSummary?.ai_summary.find(
     (item) => item.kind === "important_observation"
   )?.text;
