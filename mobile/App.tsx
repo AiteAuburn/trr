@@ -583,7 +583,7 @@ import {
   historyDailySummaryDisplayItem,
   historyDetailModeDisplayItem,
   historyDetailModes,
-  historyRawRecordDisplayItem,
+  historyRawRecordDisplayItems,
   type HistoryDetailMode
 } from "./historyScreenData";
 import {
@@ -1139,7 +1139,7 @@ export default function App() {
     [selectedHistoryRecords]
   );
   const selectedHistoryRawDisplayItems = useMemo(
-    () => selectedHistoryRecords.map(historyRawRecordDisplayItem),
+    () => historyRawRecordDisplayItems(selectedHistoryRecords),
     [selectedHistoryRecords]
   );
   const selectedHistoryRecordDisplayCount = clampNumber(

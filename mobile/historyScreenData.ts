@@ -151,3 +151,7 @@ export function historyRawRecordDisplayItem(record: RecordItem, index: number) {
     rawText
   };
 }
+
+export function historyRawRecordDisplayItems(records: RecordItem[]) {
+  return records.map(historyRawRecordDisplayItem);
+}
