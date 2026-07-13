@@ -124,6 +124,38 @@ None.
 
 ## Done
 
+### T1392: Extract achievement and year-review status display texts
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `achievementYearReviewStatusDisplayTexts` to `mobile/futureModuleDisplay.ts` for Achievement and Year Review action status display text.
+- Replaced inline Achievement and Year Review action status display construction in `mobile/App.tsx` with the extracted helper.
+- Kept achievement summary sync, unlock sync, year-review sync/share/revoke handlers, backend request paths, and rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No backend/schema/Android signing/token/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue auditing remaining broad status display bindings and request-local status helpers separately.
+
 ### T1391: Extract Store preview display texts
 
 Status: done

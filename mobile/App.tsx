@@ -180,6 +180,7 @@ import {
   healthIntegrationExternalDataBoundaryCopy,
   healthIntegrationPreviewBoundaryDisplayItem,
   healthIntegrationReadinessChecklistDisplayItems,
+  achievementYearReviewStatusDisplayTexts,
   limitedAchievementDisplayItems,
   localAchievementItemsForRecords,
   mobileFoodCategoryFromApi,
@@ -1348,7 +1349,11 @@ export default function App() {
     0,
     maxMobileCountValue
   );
-  const achievementActionStatusDisplayText = boundUiMessage(achievementActionStatus);
+  const achievementYearReviewStatusDisplay = achievementYearReviewStatusDisplayTexts({
+    achievementActionStatus,
+    yearReviewActionStatus
+  });
+  const achievementActionStatusDisplayText = achievementYearReviewStatusDisplay.achievementAction;
   const currentYear = new Date().getFullYear();
   const yearReviewTargetDisplayYear = yearReviewTargetYear(new Date());
   const yearReviewGenerationDisplayText = nextYearReviewGenerationLabel(new Date());
@@ -1416,7 +1421,7 @@ export default function App() {
   const yearlyGlucoseAverageDisplayText = yearlyInsightDisplayTexts.glucoseAverage;
   const yearlyAiObservationDisplayText = yearlyInsightDisplayTexts.aiObservation;
   const yearlyAiEncouragementDisplayText = yearlyInsightDisplayTexts.aiEncouragement;
-  const yearReviewActionStatusDisplayText = boundUiMessage(yearReviewActionStatus);
+  const yearReviewActionStatusDisplayText = achievementYearReviewStatusDisplay.yearReviewAction;
   const yearReviewShareStatusMessage = yearReviewShareUnavailableStatusMessage();
   const yearReviewBoundaryDisplayText = yearReviewBoundaryDisplayCopy();
   const doctorSharePreviewBoundaryDisplay = doctorSharePreviewBoundaryDisplayItem();

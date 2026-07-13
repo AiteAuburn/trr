@@ -1629,6 +1629,16 @@ export function foodPhotoStatusDisplayTexts(actionStatus: string) {
   };
 }
 
+export function achievementYearReviewStatusDisplayTexts(value: {
+  achievementActionStatus: string;
+  yearReviewActionStatus: string;
+}) {
+  return {
+    achievementAction: boundUiMessage(value.achievementActionStatus),
+    yearReviewAction: boundUiMessage(value.yearReviewActionStatus)
+  };
+}
+
 export function storeCartUnavailableDisplayItem() {
   return {
     title: boundDisplayText("購物車尚未啟用", maxDisplayTextLength),
