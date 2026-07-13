@@ -204,15 +204,11 @@ import {
   storeEmptySearchDisplayItem,
   storeLocalBoundaryCopy,
   storePreviewBoundaryCopy,
+  storeDisplayBundle,
   storeProductFromApi,
-  storeCategoryDisplayItems as buildStoreCategoryDisplayItems,
   storeProductDisplayItem,
-  storeProductDisplayItems as buildStoreProductDisplayItems,
   storeProducts,
-  storeRedemptionBoundaryDisplayRows,
   storeRedemptionDisplayItem,
-  storeRedemptionWalletDisplayItems,
-  visibleStoreProductDisplayItems,
   yearReviewBoundaryDisplayCopy,
   yearReviewHeaderDisplayTexts,
   yearReviewInsightDisplayTexts,
@@ -1505,16 +1501,23 @@ export default function App() {
   const recordingElapsedSecondsDisplayText = recordingElapsedSecondsCopy(recordingElapsedSeconds);
   const recordingResultBodyDisplayText = recordingResultBodyCopy(recordingElapsedSeconds);
   const recordingResultPrimaryActionDisplayText = recordingResultPrimaryActionLabel(recordingElapsedSeconds);
-  const storeProductsForDisplay = storeBackendProducts.length > 0 ? storeBackendProducts : storeProducts;
-  const storeProductDisplayItems = useMemo(
-    () => buildStoreProductDisplayItems(storeProductsForDisplay),
-    [storeProductsForDisplay]
+  const storeDisplay = useMemo(
+    () =>
+      storeDisplayBundle({
+        backendProducts: storeBackendProducts,
+        fallbackProducts: storeProducts,
+        categories: storeCategories,
+        selectedCategory: storeCategory,
+        searchText: storeSearchText,
+        redemptions: storeRedemptions,
+        pointsBalance: storePointsBalance
+      }),
+    [storeBackendProducts, storeCategory, storePointsBalance, storeRedemptions, storeSearchText]
   );
-  const storeRedemptionDisplayItems = useMemo(
-    () => storeRedemptionWalletDisplayItems(storeRedemptions),
-    [storeRedemptions]
-  );
-  const storeCategoryDisplayOptions = useMemo(() => buildStoreCategoryDisplayItems(storeCategories), []);
+  const storeProductsForDisplay = storeDisplay.productsForDisplay;
+  const storeProductDisplayItems = storeDisplay.productDisplayItems;
+  const storeRedemptionDisplayItems = storeDisplay.redemptionDisplayItems;
+  const storeCategoryDisplayOptions = storeDisplay.categoryDisplayOptions;
   const foodCommunityDisplay = useMemo(
     () =>
       foodCommunityDisplayBundle({
@@ -1548,16 +1551,8 @@ export default function App() {
   const foodCommunityShareFieldRows = foodCommunityDisplay.shareFieldRows;
   const foodCommunityPointRows = foodCommunityDisplay.pointRows;
   const foodCommunityRankingRows = foodCommunityDisplay.rankingRows;
-  const visibleStoreProducts = visibleStoreProductDisplayItems(
-    storeProductDisplayItems,
-    storeCategory,
-    storeSearchText
-  );
-  const storeRedemptionBoundaryRows = storeRedemptionBoundaryDisplayRows(
-    storePointsBalance,
-    storeBackendProducts.length > 0,
-    storeRedemptions.length
-  );
+  const visibleStoreProducts = storeDisplay.visibleProducts;
+  const storeRedemptionBoundaryRows = storeDisplay.redemptionBoundaryRows;
   const settingsDisplayRows = useMemo(() => buildSettingsDisplayRows(), []);
   const profileChoiceDisplayItems = useMemo(
     () => settingsProfileChoiceDisplayItems(profiles),

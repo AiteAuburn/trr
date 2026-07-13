@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1365 extract Store display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `storeDisplayBundle` to `mobile/futureModuleDisplay.ts` for Store product fallback, product display items, redemption wallet items, category options, visible products, and redemption boundary rows.
+- Replaced inline Store display aggregation in `mobile/App.tsx` with the extracted bundle while keeping existing render and handler variable names.
+- Kept backend-over-local product fallback, category filtering, search matching, redemption wallet slicing, redemption boundary rows, and rendering unchanged.
+- Updated navigation verifier coverage so the Store bundle internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Store rendering、Food Community rendering、achievement rendering、Year Review rendering、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing settings/auth display aggregation and remaining repeated App.tsx screen-local calculations separately.
+
 ### T1364 extract food community display bundle
 
 類型：mobile / refactor / verifier / docs

@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1365: Extract Store display bundle
+
+Status: done
+
+Summary:
+
+- Added `storeDisplayBundle` to `mobile/futureModuleDisplay.ts` for Store product fallback, product display items, redemption wallet items, category options, visible products, and redemption boundary rows.
+- Replaced inline Store display aggregation in `mobile/App.tsx` with the extracted bundle while keeping existing render and handler variable names.
+- Kept backend-over-local product fallback, category filtering, search matching, redemption wallet slicing, redemption boundary rows, and rendering unchanged.
+- Updated navigation verifier coverage so the Store bundle internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1364: Extract food community display bundle
 
 Status: done

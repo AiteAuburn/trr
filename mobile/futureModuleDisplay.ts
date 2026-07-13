@@ -1288,6 +1288,31 @@ export function visibleStoreProductDisplayItems(
   });
 }
 
+export function storeDisplayBundle(value: {
+  backendProducts: StoreProduct[];
+  fallbackProducts: StoreProduct[];
+  categories: Array<{ id: StoreCategory; label: string }>;
+  selectedCategory: StoreCategory;
+  searchText: string;
+  redemptions: StoreRedemptionDisplayInput[];
+  pointsBalance: StoreApiPointsBalance | null;
+}) {
+  const productsForDisplay = value.backendProducts.length > 0 ? value.backendProducts : value.fallbackProducts;
+  const productDisplayItems = storeProductDisplayItems(productsForDisplay);
+  return {
+    productsForDisplay,
+    productDisplayItems,
+    redemptionDisplayItems: storeRedemptionWalletDisplayItems(value.redemptions),
+    categoryDisplayOptions: storeCategoryDisplayItems(value.categories),
+    visibleProducts: visibleStoreProductDisplayItems(productDisplayItems, value.selectedCategory, value.searchText),
+    redemptionBoundaryRows: storeRedemptionBoundaryDisplayRows(
+      value.pointsBalance,
+      value.backendProducts.length > 0,
+      value.redemptions.length
+    )
+  };
+}
+
 export function storeCategoryFromApi(value: StoreRewardApiCategory): StoreCategory {
   if (value === "supplement_discounts") {
     return "supplementDiscounts";
