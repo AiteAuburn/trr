@@ -212,6 +212,7 @@ import {
   yearReviewBoundaryDisplayCopy,
   yearReviewHeaderDisplayTexts,
   yearReviewInsightDisplayTexts,
+  yearReviewShareCardStatusMessages,
   yearReviewShareUnavailableStatusMessage,
   yearReviewSyncStatusMessages,
   yearReviewTargetYear,
@@ -4801,14 +4802,21 @@ export default function App() {
       setYearReviewActionStatus(yearReviewShareStatusMessage);
       return;
     }
+    const shareCardStatus = yearReviewShareCardStatusMessages({
+      backendUnavailableMessage: protectedBackendUnavailableMessage,
+      shareFilename: "",
+      privacyCopy: "",
+      packageCopy: "",
+      checksumShort: "",
+      shareResultCopy: "",
+      resultReportCopy: ""
+    });
     if (!protectedBackendReady || !account || !activeProfile) {
-      setYearReviewActionStatus(
-        boundUiMessage(`${protectedBackendUnavailableMessage || "backend 尚未 ready"}；目前不產生分享卡。`)
-      );
+      setYearReviewActionStatus(shareCardStatus.unavailable);
       return;
     }
     const targetYear = String(yearReviewTargetYear(new Date()));
-    setYearReviewActionStatus(boundUiMessage("正在準備隱私遮罩後的年度分享卡。"));
+    setYearReviewActionStatus(shareCardStatus.loading);
     try {
       const query = new URLSearchParams({ profile_id: activeProfile.id });
       const shareAsset = await requestJson<YearReviewApiShareAsset>(
@@ -4859,12 +4867,18 @@ export default function App() {
         resultReportCopy = "分享狀態回報 backend 失敗";
       }
       setYearReviewActionStatus(
-        boundUiMessage(
-          `${shareFilename} SVG 分享素材已準備，${privacyCopy}，${packageCopy}，checksum ${checksumShort}；${shareResultCopy}，${resultReportCopy}。`
-        )
+        yearReviewShareCardStatusMessages({
+          backendUnavailableMessage: protectedBackendUnavailableMessage,
+          shareFilename,
+          privacyCopy,
+          packageCopy,
+          checksumShort,
+          shareResultCopy,
+          resultReportCopy
+        }).success
       );
     } catch {
-      setYearReviewActionStatus(boundUiMessage("分享卡準備或原生分享失敗；未送出外部分享。"));
+      setYearReviewActionStatus(shareCardStatus.failure);
     }
   }
 

@@ -1842,6 +1842,33 @@ export function yearReviewShareUnavailableStatusMessage() {
   return boundUiMessage("visual smoke 或 backend unavailable 時不啟動外部分享；backend ready 時可準備隱私遮罩分享卡並開啟原生分享。");
 }
 
+export function yearReviewShareCardStatusMessages(value: {
+  backendUnavailableMessage: string;
+  shareFilename: string;
+  privacyCopy: string;
+  packageCopy: string;
+  checksumShort: string;
+  shareResultCopy: string;
+  resultReportCopy: string;
+}) {
+  return {
+    unavailable: boundUiMessage(`${value.backendUnavailableMessage || "backend 尚未 ready"}；目前不產生分享卡。`),
+    loading: boundUiMessage("正在準備隱私遮罩後的年度分享卡。"),
+    success: boundUiMessage(
+      `${boundDisplayText(value.shareFilename, maxDisplayTextLength)} SVG 分享素材已準備，${boundDisplayText(
+        value.privacyCopy,
+        maxDisplayTextLength
+      )}，${boundDisplayText(value.packageCopy, maxDisplayTextLength)}，checksum ${boundIdentifier(
+        value.checksumShort
+      ).slice(0, 8)}；${boundDisplayText(value.shareResultCopy, maxDisplayTextLength)}，${boundDisplayText(
+        value.resultReportCopy,
+        maxDisplayTextLength
+      )}。`
+    ),
+    failure: boundUiMessage("分享卡準備或原生分享失敗；未送出外部分享。")
+  };
+}
+
 export function safeYearReviewShareAssetFileName(value: string) {
   const fallback = "year-review-share-card.svg";
   const bounded = boundDisplayText(value || fallback, maxDisplayTextLength);
