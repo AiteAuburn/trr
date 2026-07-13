@@ -190,6 +190,10 @@ export function afterMealGlucoseCount(records: AnalysisGlucoseRecord[]) {
   return records.filter(({ record }) => isAfterMealGlucoseTiming(record.payload_json.meal_timing)).length;
 }
 
+export function recordTypeCount(records: RecordItem[], recordType: string) {
+  return records.filter((record) => record.record_type === recordType).length;
+}
+
 export function currentRecordStreakDays(records: RecordItem[]) {
   const recordedDays = new Set(records.map((record) => localDateKey(record.occurred_at)).filter(Boolean));
   let streak = 0;

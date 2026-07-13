@@ -635,6 +635,7 @@ import {
   highestNumber,
   longestRecordStreakDays,
   lowestNumber,
+  recordTypeCount,
   selectedAnalysisChartPoint
 } from "./analysisDataTransforms";
 import {
@@ -1942,9 +1943,9 @@ export default function App() {
     localMaximum: highestGlucose,
     localBeforeMealCount: beforeMealGlucoseCount,
     localAfterMealCount: afterMealGlucoseCount,
-    localMealCount: analysisRecords.filter((record) => record.record_type === "meal").length,
-    localExerciseCount: analysisRecords.filter((record) => record.record_type === "exercise").length,
-    localMedicationCount: analysisRecords.filter((record) => record.record_type === "medication").length
+    localMealCount: recordTypeCount(analysisRecords, "meal"),
+    localExerciseCount: recordTypeCount(analysisRecords, "exercise"),
+    localMedicationCount: recordTypeCount(analysisRecords, "medication")
   });
   const detailedReportMetricRows = buildDetailedReportMetricRows(detailedReportMetricInput);
   const aiSaveConfirmBoundaryRows = aiSaveConfirmBoundaryDisplayRows(

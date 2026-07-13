@@ -4874,6 +4874,12 @@ def main() -> int:
             "const detailedReportMetricRows = buildDetailedReportMetricRows(detailedReportMetricInput);",
         )
         for label, marker in (
+            ("detailed report local meal count helper binding", 'localMealCount: recordTypeCount(analysisRecords, "meal")'),
+            ("detailed report local exercise count helper binding", 'localExerciseCount: recordTypeCount(analysisRecords, "exercise")'),
+            ("detailed report local medication count helper binding", 'localMedicationCount: recordTypeCount(analysisRecords, "medication")'),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
             ("analysis basic report bound helper", "function boundBasicReport<T extends BasicReportTransformSource>(value: T): T"),
             ("analysis basic report generated-at bound", "generated_at: boundDisplayText(value.generated_at, 40)"),
             ("analysis basic report latest glucose bound", "latest_value: clampNullableNumber(value.glucose.latest_value, 0, maxMobileGlucoseValue)"),
@@ -4886,6 +4892,8 @@ def main() -> int:
             ("analysis date range end bound", "occurredAt <= bounds.end"),
             ("analysis before timing helper usage", "isBeforeMealGlucoseTiming(record.payload_json.meal_timing)"),
             ("analysis after timing helper usage", "isAfterMealGlucoseTiming(record.payload_json.meal_timing)"),
+            ("analysis record type count helper", "function recordTypeCount(records: RecordItem[], recordType: string)"),
+            ("analysis record type count implementation", "records.filter((record) => record.record_type === recordType).length"),
             ("analysis chart point builder", "function analysisChartPoints(records: AnalysisGlucoseRecord[]): AnalysisChartPoint[]"),
             ("analysis chart bounded sample", "return records.slice(-12).map(({ record, value }) => ({"),
             ("analysis chart range helper", "function analysisChartRange(points: AnalysisChartPoint[])"),

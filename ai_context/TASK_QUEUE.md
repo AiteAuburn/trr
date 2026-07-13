@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1350: Extract record-type count helper for Detailed Report
+
+Status: done
+
+Summary:
+
+- Added `recordTypeCount` to `mobile/analysisDataTransforms.ts` for local record-type counting.
+- Replaced the inline Detailed Report local meal/exercise/medication `analysisRecords.filter(...)` counts in `mobile/App.tsx` with the extracted helper.
+- Kept local fallback counts, backend-report priority, Detailed Report metric input, report empty-state count, and Detailed Report rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, helper implementation, and App local-count bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1349: Extract Detailed Report metric input helper
 
 Status: done
