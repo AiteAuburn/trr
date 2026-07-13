@@ -2184,6 +2184,11 @@ def main() -> int:
             content,
             'setMenuReturnScreen(returnScreen === "menu" ? "today" : returnScreen);',
         )
+        _assert_contains(
+            "primary menu screen opener binding",
+            content,
+            'setMenuReturnScreen(returnScreen === "menu" ? "today" : returnScreen);\n    openScreen("menu");',
+        )
 
         for target in sorted(EXPECTED_MENU_BACK_TARGETS):
             _assert_contains(
@@ -4131,6 +4136,11 @@ def main() -> int:
             "menu target route helper binding",
             content,
             "if (openMenuTargetRoute(target)) {",
+        )
+        _assert_contains(
+            "menu destination fallback screen opener binding",
+            content,
+            "if (openMenuTargetRoute(target)) {\n      return;\n    }\n    openScreen(target);",
         )
         _assert_contains(
             "menu destination press wrapper",
@@ -6848,6 +6858,11 @@ def main() -> int:
             "function openPrimaryTab(target: AppScreen)",
         )
         _assert_contains(
+            "primary tab fallback screen opener binding",
+            content,
+            "if (target === \"menu\") {\n      openMenu(currentScreen);\n      return;\n    }\n    openScreen(target);",
+        )
+        _assert_contains(
             "primary tab press wrapper",
             content,
             "function pressPrimaryTab(target: AppScreen)",
@@ -7751,6 +7766,7 @@ def main() -> int:
             ("menu preview return screen helper", "function menuPreviewReturnScreen(returnScreen: AppScreen, selfScreen: AppScreen)"),
             ("menu preview return screen helper fields", 'return returnScreen === selfScreen ? "menu" : returnScreen;'),
             ("subscription menu preview return helper binding", 'setSubscriptionReturnScreen(menuPreviewReturnScreen(returnScreen, "subscription"));'),
+            ("subscription screen opener binding", 'setSubscriptionReturnScreen(menuPreviewReturnScreen(returnScreen, "subscription"));\n    openScreen("subscription");'),
             ("tutorial menu preview return helper binding", 'setTutorialReturnScreen(menuPreviewReturnScreen(returnScreen, "tutorial"));'),
             ("food photo menu preview return helper binding", 'setFoodPhotoReturnScreen(menuPreviewReturnScreen(returnScreen, "foodPhoto"));'),
             ("achievements menu preview return helper binding", 'setAchievementsReturnScreen(menuPreviewReturnScreen(returnScreen, "achievements"));'),

@@ -2799,7 +2799,7 @@ export default function App() {
 
   function openMenu(returnScreen: AppScreen = currentScreen) {
     setMenuReturnScreen(returnScreen === "menu" ? "today" : returnScreen);
-    setCurrentScreen("menu");
+    openScreen("menu");
   }
 
   async function startRecordingPreview() {
@@ -3589,7 +3589,7 @@ export default function App() {
 
   function openSubscription(returnScreen: AppScreen = currentScreen) {
     setSubscriptionReturnScreen(menuPreviewReturnScreen(returnScreen, "subscription"));
-    setCurrentScreen("subscription");
+    openScreen("subscription");
   }
 
   function openPrimaryTab(target: AppScreen) {
@@ -3597,7 +3597,7 @@ export default function App() {
       openMenu(currentScreen);
       return;
     }
-    setCurrentScreen(target);
+    openScreen(target);
   }
 
   function pressPrimaryTab(target: AppScreen) {
@@ -3652,7 +3652,7 @@ export default function App() {
     if (openMenuTargetRoute(target)) {
       return;
     }
-    setCurrentScreen(target);
+    openScreen(target);
   }
 
   function pressMenuDestination(item: ReturnType<typeof menuScreenDisplayItem>) {
