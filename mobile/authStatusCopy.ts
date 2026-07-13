@@ -136,6 +136,16 @@ export function localClearDisplayMessages() {
   };
 }
 
+export function authStatusDisplayTexts(value: {
+  authActionStatus: string;
+  devResetStatus: string;
+}) {
+  return {
+    authAction: boundUiMessage(value.authActionStatus),
+    devReset: boundUiMessage(value.devResetStatus)
+  };
+}
+
 export function authOperationBusyStatusMessage() {
   return boundUiMessage("Auth 操作仍在處理中，請稍後再試。");
 }

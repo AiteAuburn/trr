@@ -423,6 +423,7 @@ import {
   authSessionsProgressStatusMessage,
   authSessionsSuccessStatusMessage,
   authSessionsUnavailableStatusMessage,
+  authStatusDisplayTexts,
   backendReconnectFailureDisplayMessages,
   backendReconnectProgressStatusMessage,
   backendReconnectSuccessStatusMessage,
@@ -1725,9 +1726,13 @@ export default function App() {
   const subscriptionManagementSyncingStatusMessage = subscriptionActionStatusDisplay.managementSyncing;
   const subscriptionManagementUnavailableStatusMessage = subscriptionActionStatusDisplay.managementUnavailable;
   const subscriptionManagementPaymentStatusMessage = subscriptionActionStatusDisplay.managementPayment;
-  const authActionStatusDisplayText = boundUiMessage(authActionStatus);
+  const authStatusDisplay = authStatusDisplayTexts({
+    authActionStatus,
+    devResetStatus
+  });
+  const authActionStatusDisplayText = authStatusDisplay.authAction;
   const nativeStatusDisplayText = boundUiMessage(nativeStatus);
-  const devResetStatusDisplayText = boundUiMessage(devResetStatus);
+  const devResetStatusDisplayText = authStatusDisplay.devReset;
   const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayTexts({
     profileActionStatus,
     recordingQuotaActionStatus,

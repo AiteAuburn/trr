@@ -124,6 +124,38 @@ None.
 
 ## Done
 
+### T1394: Extract auth and dev reset status display texts
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/authStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `authStatusDisplayTexts` to `mobile/authStatusCopy.ts` for auth action and dev reset status display text.
+- Replaced inline `boundUiMessage` display construction for `authActionStatus` and `devResetStatus` in `mobile/App.tsx` with the extracted helper.
+- Kept auth session refresh/logout/session-list flows, dev reset request/response handling, local clear behavior, SecureStore token behavior, native model status, and rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No backend/schema/Android signing/token/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue auditing remaining native and records status display bindings separately.
+
 ### T1393: Extract report and quota status display texts
 
 Status: done
