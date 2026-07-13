@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1369 extract subscription membership display texts
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/subscriptionCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `subscriptionMembershipDisplayTexts` to `mobile/subscriptionCopy.ts` for subscription plan/status, management plan/status, trial hero, trial days, and membership plan status display text.
+- Replaced inline subscription membership display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept subscription plan copy, management fallback copy, trial-days copy, trialing hero label, membership plan/status copy, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、subscription rendering、quota backend calls、payment behavior、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing quota display text aggregation and remaining repeated App.tsx screen-local calculations separately.
+
 ### T1368 extract profile settings boundary state helper
 
 類型：mobile / refactor / verifier / docs

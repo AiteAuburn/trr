@@ -2555,6 +2555,21 @@ def main() -> int:
             "const membershipFeatureRows = membershipFeatureDisplayRows();",
         )
         _assert_contains(
+            "subscription membership display helper binding",
+            content,
+            "const subscriptionMembershipDisplay = subscriptionMembershipDisplayTexts(",
+        )
+        _assert_contains(
+            "subscription plan display text binding",
+            content,
+            "const subscriptionPlanDisplayText = subscriptionMembershipDisplay.subscriptionPlan;",
+        )
+        _assert_contains(
+            "membership trial days display text binding",
+            content,
+            "const membershipTrialDaysDisplayText = subscriptionMembershipDisplay.trialDays;",
+        )
+        _assert_contains(
             "reminder preview display rows helper binding",
             content,
             "const reminderPreviewDisplayItems = buildReminderPreviewDisplayItems();",
@@ -5710,6 +5725,11 @@ def main() -> int:
             ("membership trial-days helper", "function membershipTrialDaysText(trialDays: number | null)"),
             ("membership trial-days fallback copy", "試用天數尚未載入"),
             ("membership trial-days remaining copy", "還剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天"),
+            ("subscription membership display text helper", "function subscriptionMembershipDisplayTexts("),
+            ("subscription membership display subscription plan", "subscriptionPlan: quotaPlanDisplayText(quota)"),
+            ("subscription membership display management status", 'managementStatus: subscriptionStatusSummaryText(quota, trialDays, "請先同步 backend quota / entitlement。")'),
+            ("subscription membership display trial hero", 'quota?.status === "trialing" ? "7 天免費試用即將結束" : "會員狀態"'),
+            ("subscription membership display plan status", "planStatus: boundDisplayText("),
             ("membership feature display rows helper", "function membershipFeatureDisplayRows()"),
             ("membership feature voice record copy", "輕鬆說，隨時記"),
             ("membership feature ai organize copy", "自動歸納重點，儲存前仍需確認"),

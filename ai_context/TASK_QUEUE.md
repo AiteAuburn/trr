@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1369: Extract subscription membership display texts
+
+Status: done
+
+Summary:
+
+- Added `subscriptionMembershipDisplayTexts` to `mobile/subscriptionCopy.ts` for subscription plan/status, management plan/status, trial hero, trial days, and membership plan status display text.
+- Replaced inline subscription membership display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept subscription plan copy, management fallback copy, trial-days copy, trialing hero label, membership plan/status copy, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1368: Extract profile settings boundary state helper
 
 Status: done

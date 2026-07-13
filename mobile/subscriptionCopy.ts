@@ -90,6 +90,25 @@ export function subscriptionStatusSummaryText(
   return boundDisplayText(`${subscriptionStatusLabel(quota.status ?? undefined)}${trialCopy}`, maxDisplayDetailTextLength);
 }
 
+export function subscriptionMembershipDisplayTexts(
+  quota: (SubscriptionPlanDisplaySource & SubscriptionStatusSummarySource) | null,
+  trialDays: number | null,
+  quotaStatusDisplayText: string
+) {
+  return {
+    subscriptionPlan: quotaPlanDisplayText(quota),
+    subscriptionStatus: subscriptionStatusSummaryText(quota, trialDays, quotaStatusDisplayText),
+    managementPlan: quotaPlanDisplayText(quota, "尚未同步"),
+    managementStatus: subscriptionStatusSummaryText(quota, trialDays, "請先同步 backend quota / entitlement。"),
+    trialHeroLabel: boundDisplayText(quota?.status === "trialing" ? "7 天免費試用即將結束" : "會員狀態", 80),
+    trialDays: membershipTrialDaysText(trialDays),
+    planStatus: boundDisplayText(
+      quota ? `${planDisplayName(quota.plan_code ?? undefined)} · ${subscriptionStatusLabel(quota.status ?? undefined)}` : "請先同步會員與錄音額度。",
+      maxDisplayDetailTextLength
+    )
+  };
+}
+
 export function membershipFeatureDisplayRows() {
   return [
     ["語音記錄", "輕鬆說，隨時記"],

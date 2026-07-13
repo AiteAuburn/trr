@@ -700,10 +700,7 @@ import {
   accountSecurityReadinessBoundaryCopy,
   accountSecuritySessionBoundaryCopy,
   membershipFeatureDisplayRows,
-  membershipTrialDaysText,
-  planDisplayName,
   profileNoActionBoundaryCopy,
-  quotaPlanDisplayText,
   recordingQuotaBoundaryDisplayRows,
   settingsSubscriptionSectionLabels,
   subscriptionCtaBoundaryCopy,
@@ -713,13 +710,12 @@ import {
   subscriptionManagementReadinessChecklistDisplayItems,
   subscriptionManagementReturnSettingsStatusMessage,
   subscriptionManagementSyncButtonLabel,
+  subscriptionMembershipDisplayTexts,
   subscriptionMembershipStatusOpenStatusMessage,
   subscriptionComparisonDisplayRows as buildSubscriptionComparisonDisplayRows,
   subscriptionPaymentUnwiredCopy,
   subscriptionReadinessChecklistDisplayItems,
   accountSecurityBoundaryDisplayRowsForState,
-  subscriptionStatusLabel,
-  subscriptionStatusSummaryText,
   subscriptionSyncButtonLabel,
   subscriptionTrialBoundaryCopy
 } from "./subscriptionCopy";
@@ -1737,29 +1733,18 @@ export default function App() {
   const foodPhotoIntegrationAccessibilityDisplayLabel = foodPhotoIntegrationButtonAccessibilityLabel();
   const foodPhotoRetakeAccessibilityDisplayLabel = foodPhotoRetakeButtonAccessibilityLabel();
   const quotaStatusDisplayText = boundUiMessage(quotaStatus);
-  const subscriptionPlanDisplayText = quotaPlanDisplayText(voiceQuota);
-  const subscriptionManagementPlanDisplayText = quotaPlanDisplayText(voiceQuota, "尚未同步");
-  const subscriptionStatusDisplayText = subscriptionStatusSummaryText(
+  const subscriptionMembershipDisplay = subscriptionMembershipDisplayTexts(
     voiceQuota,
     quotaTrialDaysLeft,
     quotaStatusDisplayText
   );
-  const subscriptionManagementStatusDisplayText = subscriptionStatusSummaryText(
-    voiceQuota,
-    quotaTrialDaysLeft,
-    "請先同步 backend quota / entitlement。"
-  );
-  const membershipTrialHeroLabelDisplayText = boundDisplayText(
-    voiceQuota?.status === "trialing" ? "7 天免費試用即將結束" : "會員狀態",
-    80
-  );
-  const membershipTrialDaysDisplayText = membershipTrialDaysText(quotaTrialDaysLeft);
-  const membershipPlanStatusDisplayText = boundDisplayText(
-    voiceQuota
-      ? `${planDisplayName(voiceQuota.plan_code)} · ${subscriptionStatusLabel(voiceQuota.status)}`
-      : "請先同步會員與錄音額度。",
-    maxDisplayDetailTextLength
-  );
+  const subscriptionPlanDisplayText = subscriptionMembershipDisplay.subscriptionPlan;
+  const subscriptionManagementPlanDisplayText = subscriptionMembershipDisplay.managementPlan;
+  const subscriptionStatusDisplayText = subscriptionMembershipDisplay.subscriptionStatus;
+  const subscriptionManagementStatusDisplayText = subscriptionMembershipDisplay.managementStatus;
+  const membershipTrialHeroLabelDisplayText = subscriptionMembershipDisplay.trialHeroLabel;
+  const membershipTrialDaysDisplayText = subscriptionMembershipDisplay.trialDays;
+  const membershipPlanStatusDisplayText = subscriptionMembershipDisplay.planStatus;
   const quotaUsedDisplayText = quotaUsedDisplayValue(voiceQuota);
   const quotaRemainingDisplayText = quotaRemainingDisplayValue(voiceQuota);
   const quotaDailyLimitDisplayText = boundDisplayText(
