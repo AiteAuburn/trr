@@ -6219,6 +6219,11 @@ def main() -> int:
             "function openAnalysisDetailedReport()",
         )
         _assert_contains(
+            "detailed report screen opener keeps load binding",
+            content,
+            'async function openDetailedReport() {\n    openScreen("detailedReport");\n    await loadBasicReportForCurrentRange("detailed");',
+        )
+        _assert_contains(
             "detailed report return analysis handler",
             content,
             "function returnFromDetailedReportToAnalysis()",
@@ -7871,6 +7876,7 @@ def main() -> int:
             ("future module target route fallback", "return false;\n  }\n\n  function openFutureModuleDestination(target: AppScreen | undefined, module: FutureModuleCard)"),
             ("future module destination handler", "function openFutureModuleDestination(target: AppScreen | undefined, module: FutureModuleCard)"),
             ("future module target route helper binding", "if (openFutureModuleTargetRoute(target)) {"),
+            ("future module destination fallback screen opener binding", "if (openFutureModuleTargetRoute(target)) {\n      return;\n    }\n    openScreen(target);"),
             ("future module destination press handler", "function pressFutureModuleDestination(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
             ("future module display card helper binding", "const futureModuleDisplayCards = useMemo(\n    () => futureModuleCardDisplayItems(futureModuleCards),"),
             ("future preview status display helper binding", "const futurePreviewStatusDisplay = futurePreviewStatusDisplayTexts({"),

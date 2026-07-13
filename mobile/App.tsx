@@ -4309,7 +4309,7 @@ export default function App() {
     if (openFutureModuleTargetRoute(target)) {
       return;
     }
-    setCurrentScreen(target);
+    openScreen(target);
   }
 
   function pressFutureModuleDestination(item: ReturnType<typeof futureModuleCardDisplayItem>) {
@@ -4381,7 +4381,7 @@ export default function App() {
   }
 
   async function openDetailedReport() {
-    setCurrentScreen("detailedReport");
+    openScreen("detailedReport");
     await loadBasicReportForCurrentRange("detailed");
   }
 
