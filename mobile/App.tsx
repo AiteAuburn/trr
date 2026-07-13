@@ -3689,14 +3689,17 @@ export default function App() {
     setSubscriptionActionStatus(subscriptionTrialIntegrationStatusMessage);
   }
 
+  function openSubscriptionStatusScreen(screen: AppScreen, statusMessage: string) {
+    setCurrentScreen(screen);
+    setStatus(statusMessage);
+  }
+
   function openSubscriptionManagementFromSubscription() {
-    setCurrentScreen("subscriptionManagement");
-    setStatus(subscriptionManagementOpenStatusMessage());
+    openSubscriptionStatusScreen("subscriptionManagement", subscriptionManagementOpenStatusMessage());
   }
 
   function openMembershipStatusFromSubscription() {
-    setCurrentScreen("membershipStatus");
-    setStatus(subscriptionMembershipStatusOpenStatusMessage());
+    openSubscriptionStatusScreen("membershipStatus", subscriptionMembershipStatusOpenStatusMessage());
   }
 
   function syncSubscriptionManagementStatus() {

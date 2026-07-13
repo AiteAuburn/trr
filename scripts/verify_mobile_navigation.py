@@ -8258,8 +8258,12 @@ def main() -> int:
         for label, marker in (
             ("subscription quota sync handler", "function syncSubscriptionQuota()"),
             ("subscription trial integration handler", "function showSubscriptionTrialIntegrationStatus()"),
+            ("subscription status screen helper", "function openSubscriptionStatusScreen(screen: AppScreen, statusMessage: string)"),
+            ("subscription status screen helper fields", "setCurrentScreen(screen);\n    setStatus(statusMessage);"),
             ("subscription management open handler", "function openSubscriptionManagementFromSubscription()"),
+            ("subscription management status screen helper binding", 'openSubscriptionStatusScreen("subscriptionManagement", subscriptionManagementOpenStatusMessage());'),
             ("subscription membership status handler", "function openMembershipStatusFromSubscription()"),
+            ("subscription membership status screen helper binding", 'openSubscriptionStatusScreen("membershipStatus", subscriptionMembershipStatusOpenStatusMessage());'),
             ("subscription management sync handler", "function syncSubscriptionManagementStatus()"),
             ("subscription management return handler", "function returnFromSubscriptionManagementToSettings()"),
             ("subscription management payment handler", "function showSubscriptionManagementPaymentStatus()"),
