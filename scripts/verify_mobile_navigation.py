@@ -6387,6 +6387,26 @@ def main() -> int:
             "function pressAnalysisRangeOption(item: ReturnType<typeof analysisRangeDisplayItem>)",
         )
         _assert_contains(
+            "analysis range target helper",
+            content,
+            "function analysisRangeTarget(item: ReturnType<typeof analysisRangeDisplayItem>)",
+        )
+        _assert_contains(
+            "analysis range target helper fields",
+            content,
+            "return item.value;",
+        )
+        _assert_contains(
+            "analysis range target helper binding",
+            content,
+            "selectAnalysisRange(analysisRangeTarget(item));",
+        )
+        _assert_not_contains(
+            "analysis direct range item value binding",
+            content,
+            "selectAnalysisRange(item.value);",
+        )
+        _assert_contains(
             "analysis range display options helper binding",
             content,
             "const analysisRangeDisplayOptions = useMemo(() => analysisRangeDisplayItems(analysisRanges), []);",

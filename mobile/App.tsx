@@ -2295,8 +2295,12 @@ export default function App() {
     clearSelectedAnalysisPoint();
   }
 
+  function analysisRangeTarget(item: ReturnType<typeof analysisRangeDisplayItem>) {
+    return item.value;
+  }
+
   function pressAnalysisRangeOption(item: ReturnType<typeof analysisRangeDisplayItem>) {
-    selectAnalysisRange(item.value);
+    selectAnalysisRange(analysisRangeTarget(item));
   }
 
   function updateAnalysisCustomStartInput(value: string) {
