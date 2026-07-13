@@ -170,6 +170,34 @@ export function transcriptReviewDisplayTexts() {
   };
 }
 
+export function transcriptReviewStatusDisplayTexts(value: {
+  transcriptValidationError: string | null;
+  transcript: string;
+  protectedBackendUnavailableMessage: string;
+  parserModelUnavailableMessage: string;
+  parserRecoveryMessage: string;
+}) {
+  return {
+    transcriptValidation: boundUiMessage(
+      value.transcriptValidationError
+        ? value.transcript.trim()
+          ? value.transcriptValidationError
+          : "請先輸入文字，或按「填入範例」查看確認 UI；範例不會送 parser。"
+        : ""
+    ),
+    transcriptReviewValidation: boundUiMessage(
+      value.transcriptValidationError
+        ? value.transcript.trim()
+          ? value.transcriptValidationError
+          : "請先輸入文字，再進行 AI 整理。"
+        : ""
+    ),
+    parserRecovery: boundUiMessage(value.parserRecoveryMessage),
+    backendUnavailable: boundUiMessage(`${value.protectedBackendUnavailableMessage}，才可送出 parser。`),
+    modelUnavailable: boundUiMessage(`${value.parserModelUnavailableMessage}，請先在設定選擇可用模型。`)
+  };
+}
+
 export function transcriptReviewCostBoundaryChecklistDisplayItems(
   isBackendReady: boolean,
   isParserModelReady: boolean,

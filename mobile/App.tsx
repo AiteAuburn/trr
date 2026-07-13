@@ -308,6 +308,7 @@ import {
   transcriptClearedStatusMessage,
   transcriptReviewCostBoundaryChecklistDisplayItems,
   transcriptReviewDisplayTexts,
+  transcriptReviewStatusDisplayTexts,
   transcriptReturnEditStatusMessage,
   transcriptReviewBackStatusMessage,
   transcriptReviewReadyStatusMessage,
@@ -1954,26 +1955,21 @@ export default function App() {
         : null,
     [previewEditDate, previewEditFields, previewEditTime, selectedPreviewRecord]
   );
-  const transcriptValidationDisplayText = boundUiMessage(
-    transcriptValidationError
-      ? transcript.trim()
-        ? transcriptValidationError
-        : "請先輸入文字，或按「填入範例」查看確認 UI；範例不會送 parser。"
-      : ""
-  );
-  const transcriptReviewValidationDisplayText = boundUiMessage(
-    transcriptValidationError
-      ? transcript.trim()
-        ? transcriptValidationError
-        : "請先輸入文字，再進行 AI 整理。"
-      : ""
-  );
+  const transcriptStatusDisplay = transcriptReviewStatusDisplayTexts({
+    transcriptValidationError,
+    transcript,
+    protectedBackendUnavailableMessage: protectedBackendUnavailableDisplayMessage,
+    parserModelUnavailableMessage: parserModelUnavailableDisplayMessage,
+    parserRecoveryMessage
+  });
+  const transcriptValidationDisplayText = transcriptStatusDisplay.transcriptValidation;
+  const transcriptReviewValidationDisplayText = transcriptStatusDisplay.transcriptReviewValidation;
   const manualRecordValidationDisplayText = boundUiMessage(manualRecordValidationError || "");
   const recordEditDisplay = recordEditDisplayTexts(selectedRecordEditValidationError);
   const recordEditIntroDisplayText = recordEditDisplay.intro;
   const selectedRecordEditValidationDisplayText = recordEditDisplay.validation;
   const previewRecordEditValidationDisplayText = boundUiMessage(previewRecordEditValidationError || "");
-  const parserRecoveryDisplayText = boundUiMessage(parserRecoveryMessage);
+  const parserRecoveryDisplayText = transcriptStatusDisplay.parserRecovery;
   const saveResultDisplay = saveResultDisplayTexts({
     lastSavedSummary,
     lastSaveErrorSummary,
@@ -1986,12 +1982,8 @@ export default function App() {
   const lowConfidenceWarningDisplayText = saveResultDisplay.lowConfidenceWarning;
   const rejectedPreviewWarningDisplayText = saveResultDisplay.rejectedPreviewWarning;
   const aiSaveBackendBlockedDisplayText = saveResultDisplay.aiSaveBackendBlocked;
-  const transcriptBackendUnavailableDisplayText = boundUiMessage(
-    `${protectedBackendUnavailableDisplayMessage}，才可送出 parser。`
-  );
-  const transcriptModelUnavailableDisplayText = boundUiMessage(
-    `${parserModelUnavailableDisplayMessage}，請先在設定選擇可用模型。`
-  );
+  const transcriptBackendUnavailableDisplayText = transcriptStatusDisplay.backendUnavailable;
+  const transcriptModelUnavailableDisplayText = transcriptStatusDisplay.modelUnavailable;
   const manualRecordBackendUnavailableDisplayText = boundUiMessage(
     `${protectedBackendUnavailableDisplayMessage}，才可建立手動紀錄。`
   );

@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1383 extract transcript review status display texts
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordingCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `transcriptReviewStatusDisplayTexts` to `mobile/recordingCopy.ts` for transcript validation, transcript-review validation, parser recovery, backend-unavailable, and model-unavailable display text.
+- Replaced inline transcript-review status display construction in `mobile/App.tsx` with the extracted helper.
+- Kept transcript validation behavior, TextInput behavior, backend/model gating, parser submit flow, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining App.tsx manual-record backend-unavailable and sync boundary display aggregation separately.
+
 ### T1382 extract save result display texts
 
 類型：mobile / refactor / verifier / docs

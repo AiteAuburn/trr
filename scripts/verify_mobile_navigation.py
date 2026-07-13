@@ -2455,6 +2455,31 @@ def main() -> int:
             "const transcriptReviewDisplay = transcriptReviewDisplayTexts();",
         )
         _assert_contains(
+            "transcript status display helper binding",
+            content,
+            "const transcriptStatusDisplay = transcriptReviewStatusDisplayTexts({",
+        )
+        _assert_contains(
+            "transcript validation display helper binding",
+            content,
+            "const transcriptValidationDisplayText = transcriptStatusDisplay.transcriptValidation;",
+        )
+        _assert_contains(
+            "transcript review validation display helper binding",
+            content,
+            "const transcriptReviewValidationDisplayText = transcriptStatusDisplay.transcriptReviewValidation;",
+        )
+        _assert_contains(
+            "transcript backend unavailable display helper binding",
+            content,
+            "const transcriptBackendUnavailableDisplayText = transcriptStatusDisplay.backendUnavailable;",
+        )
+        _assert_contains(
+            "transcript model unavailable display helper binding",
+            content,
+            "const transcriptModelUnavailableDisplayText = transcriptStatusDisplay.modelUnavailable;",
+        )
+        _assert_contains(
             "transcript review intro display binding",
             content,
             "const transcriptReviewIntroDisplayText = transcriptReviewDisplay.intro;",
@@ -3641,6 +3666,13 @@ def main() -> int:
             ("transcript review display texts guidance binding", "preParseGuidance: transcriptReviewPreParseGuidanceCopy()"),
             ("transcript review display texts warning binding", "sampleWarning: transcriptReviewSampleWarningCopy()"),
             ("transcript review display texts preflight binding", "preflightPassed: transcriptReviewPreflightPassedCopy()"),
+            ("transcript review status display texts helper", "function transcriptReviewStatusDisplayTexts(value: {"),
+            ("transcript review status validation binding", "transcriptValidation: boundUiMessage("),
+            ("transcript review empty status copy", "請先輸入文字，或按「填入範例」查看確認 UI；範例不會送 parser。"),
+            ("transcript review status review validation binding", "transcriptReviewValidation: boundUiMessage("),
+            ("transcript review status parser recovery binding", "parserRecovery: boundUiMessage(value.parserRecoveryMessage)"),
+            ("transcript review status backend unavailable binding", "backendUnavailable: boundUiMessage(`${value.protectedBackendUnavailableMessage}，才可送出 parser。`)"),
+            ("transcript review status model unavailable binding", "modelUnavailable: boundUiMessage(`${value.parserModelUnavailableMessage}，請先在設定選擇可用模型。`)"),
             ("transcript review cost boundary checklist helper", "function transcriptReviewCostBoundaryChecklistDisplayItems("),
             ("transcript review empty parser guard copy", "空文字、過長文字或範例文字不會送 parser。"),
             ("transcript review no batch history copy", "下一步整理只送目前這段文字一次，不會批次載入歷史紀錄。"),
