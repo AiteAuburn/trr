@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1320: Extract privacy control display rows helper
+
+Status: done
+
+Summary:
+
+- Added `privacyControlDisplayRows` to `mobile/settingsScreenData.ts` for Privacy Settings preview row shaping.
+- Replaced the inline `privacyControlRows.map(previewTupleDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept privacy row copy, status labels, icon derivation, rendering, privacy boundary behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and row mapping rule are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1319: Extract subscription management display rows helper
 
 Status: done

@@ -2500,6 +2500,11 @@ def main() -> int:
             "const subscriptionManagementDisplayRows = useMemo(\n    () => buildSubscriptionManagementDisplayRows(),",
         )
         _assert_contains(
+            "privacy control display rows helper binding",
+            content,
+            "const privacyControlDisplayRows = useMemo(() => buildPrivacyControlDisplayRows(), []);",
+        )
+        _assert_contains(
             "membership feature display rows helper binding",
             content,
             "const membershipFeatureRows = membershipFeatureDisplayRows();",
@@ -4945,6 +4950,8 @@ def main() -> int:
             ("subscription management display rows helper", "export function subscriptionManagementDisplayRows()"),
             ("subscription management display rows map", "return subscriptionManagementRows.map(previewTupleDisplayItem);"),
             ("privacy control rows config", "export const privacyControlRows = ["),
+            ("privacy control display rows helper", "export function privacyControlDisplayRows()"),
+            ("privacy control display rows map", "return privacyControlRows.map(previewTupleDisplayItem);"),
             ("tutorial steps config", "export const tutorialSteps = ["),
             ("tutorial whisper release copy", "若已選擇本機 Whisper 模型，會先轉成文字並進入確認。"),
         ):

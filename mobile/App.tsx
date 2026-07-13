@@ -683,7 +683,7 @@ import {
 import {
   authProviderPreviewDisplayItem,
   authProviderPreviews,
-  privacyControlRows,
+  privacyControlDisplayRows as buildPrivacyControlDisplayRows,
   productionAuthReadinessRows,
   sessionManagementPreviews,
   settingsRowDisplayItem,
@@ -1719,7 +1719,7 @@ export default function App() {
   );
   const subscriptionManagementReadinessChecklistItems =
     subscriptionManagementReadinessChecklistDisplayItems();
-  const privacyControlDisplayRows = useMemo(() => privacyControlRows.map(previewTupleDisplayItem), []);
+  const privacyControlDisplayRows = useMemo(() => buildPrivacyControlDisplayRows(), []);
   const accountSecurityBoundaryRows = accountSecurityBoundaryDisplayRows(
     Boolean(account),
     Boolean(activeProfile),
