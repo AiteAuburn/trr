@@ -130,6 +130,7 @@ import {
   achievementNextBadgeCopy,
   achievementPreviewBoundaryCopy,
   achievementStreakBadgeColor,
+  achievementSyncStatusMessages,
   achievementUnlockDisplayDate,
   backendYearReviewHealthOutcomeDisplayRows,
   backendYearReviewMetricDisplayRows,
@@ -4668,25 +4669,30 @@ export default function App() {
     if (visualSmokePreviewActive.current) {
       return;
     }
+    const achievementSyncStatus = achievementSyncStatusMessages({
+      backendUnavailableMessage: protectedBackendUnavailableMessage,
+      syncUnlocks,
+      unlockedCount: 0,
+      persistedUnlockCount: 0,
+      newlyUnlockedCount: 0,
+      nextRemaining: 0,
+      unlockHistoryCopy: "已讀取解鎖紀錄"
+    });
     if (!protectedBackendReady || !account || !activeProfile) {
       setAchievementBackendItems([]);
       setAchievementNewlyUnlockedItems([]);
       setAchievementUnlockedItems([]);
-      setAchievementActionStatus(
-        boundUiMessage(`${protectedBackendUnavailableMessage || "backend 尚未 ready"}；目前只顯示本機成就推算。`)
-      );
+      setAchievementActionStatus(achievementSyncStatus.unavailable);
       return;
     }
     const achievementKey = [normalizedApiBaseUrl, account.id, activeProfile.id].join(":");
     latestAchievementSyncKey.current = achievementKey;
     if (achievementSyncInFlightKeys.current.has(achievementKey)) {
-      setAchievementActionStatus(boundUiMessage("正在同步 backend 成就摘要，請稍候。"));
+      setAchievementActionStatus(achievementSyncStatus.inFlight);
       return;
     }
     achievementSyncInFlightKeys.current.add(achievementKey);
-    setAchievementActionStatus(
-      boundUiMessage(syncUnlocks ? "正在同步 backend 徽章解鎖紀錄。" : "正在讀取 backend 成就摘要。")
-    );
+    setAchievementActionStatus(achievementSyncStatus.loading);
     try {
       const query = new URLSearchParams({ profile_id: activeProfile.id });
       const summary = await requestJson<AchievementApiSummary>(
@@ -4718,18 +4724,22 @@ export default function App() {
       const persistedUnlockCount = clampNumber(summary.persisted_unlocked_count, 0, maxMobileCountValue);
       const newlyUnlockedCount = clampNumber(summary.newly_unlocked_count, 0, maxMobileCountValue);
       setAchievementActionStatus(
-        boundUiMessage(
-          syncUnlocks
-            ? `已同步 backend 徽章解鎖：${newlyUnlockedCount} 項新解鎖，${persistedUnlockCount} 項已保存，${unlockHistoryCopy}；下一枚還差 ${clampNumber(summary.next_remaining, 0, maxMobileCountValue)}。`
-            : `已讀取 backend 成就摘要：${clampNumber(summary.unlocked_count, 0, maxMobileCountValue)} 項已完成，${persistedUnlockCount} 項已保存，${unlockHistoryCopy}；下一枚還差 ${clampNumber(summary.next_remaining, 0, maxMobileCountValue)}。`
-        )
+        achievementSyncStatusMessages({
+          backendUnavailableMessage: protectedBackendUnavailableMessage,
+          syncUnlocks,
+          unlockedCount: summary.unlocked_count,
+          persistedUnlockCount,
+          newlyUnlockedCount,
+          nextRemaining: summary.next_remaining,
+          unlockHistoryCopy
+        }).success
       );
     } catch {
       if (latestAchievementSyncKey.current === achievementKey) {
         setAchievementBackendItems([]);
         setAchievementNewlyUnlockedItems([]);
         setAchievementUnlockedItems([]);
-        setAchievementActionStatus(boundUiMessage("成就摘要同步失敗；目前保留本機已載入紀錄推算。"));
+        setAchievementActionStatus(achievementSyncStatus.failure);
       }
     } finally {
       achievementSyncInFlightKeys.current.delete(achievementKey);

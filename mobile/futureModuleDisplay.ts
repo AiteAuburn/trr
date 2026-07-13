@@ -1765,6 +1765,37 @@ export function achievementIntegrationButtonAccessibilityLabel() {
   return boundDisplayText("同步成就徽章解鎖紀錄，不更新排行榜或公開資料", maxDisplayDetailTextLength);
 }
 
+export function achievementSyncStatusMessages(value: {
+  backendUnavailableMessage: string;
+  syncUnlocks: boolean;
+  unlockedCount: number;
+  persistedUnlockCount: number;
+  newlyUnlockedCount: number;
+  nextRemaining: number;
+  unlockHistoryCopy: string;
+}) {
+  const persistedUnlockCount = clampNumber(value.persistedUnlockCount, 0, maxMobileCountValue);
+  const newlyUnlockedCount = clampNumber(value.newlyUnlockedCount, 0, maxMobileCountValue);
+  const nextRemaining = clampNumber(value.nextRemaining, 0, maxMobileCountValue);
+  return {
+    unavailable: boundUiMessage(
+      `${value.backendUnavailableMessage || "backend 尚未 ready"}；目前只顯示本機成就推算。`
+    ),
+    inFlight: boundUiMessage("正在同步 backend 成就摘要，請稍候。"),
+    loading: boundUiMessage(value.syncUnlocks ? "正在同步 backend 徽章解鎖紀錄。" : "正在讀取 backend 成就摘要。"),
+    success: boundUiMessage(
+      value.syncUnlocks
+        ? `已同步 backend 徽章解鎖：${newlyUnlockedCount} 項新解鎖，${persistedUnlockCount} 項已保存，${value.unlockHistoryCopy}；下一枚還差 ${nextRemaining}。`
+        : `已讀取 backend 成就摘要：${clampNumber(
+            value.unlockedCount,
+            0,
+            maxMobileCountValue
+          )} 項已完成，${persistedUnlockCount} 項已保存，${value.unlockHistoryCopy}；下一枚還差 ${nextRemaining}。`
+    ),
+    failure: boundUiMessage("成就摘要同步失敗；目前保留本機已載入紀錄推算。")
+  };
+}
+
 export function yearReviewPreviewBoundaryCopy() {
   return boundDisplayText(
     "backend ready 時同步保存年度 snapshot，並準備 privacy-masked 年度分享 package；離線時使用已載入紀錄即時計算。",
