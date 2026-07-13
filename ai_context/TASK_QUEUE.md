@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1331: Extract settings profile choice display items helper
+
+Status: done
+
+Summary:
+
+- Added `settingsProfileChoiceDisplayItems` to `mobile/settingsChoiceDisplay.ts` for Settings profile-choice display-list shaping.
+- Replaced the inline `profiles.map(settingsProfileChoiceDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept Settings profile copy, accessibility labels, active-profile selection behavior, profile state ownership, Settings rendering, and first-version menu destinations unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and profile mapping rule are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1330: Extract history raw record display items helper
 
 Status: done

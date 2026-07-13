@@ -64,6 +64,10 @@ export function settingsProfileChoiceDisplayItem(profile: ProfileChoiceDisplaySo
   };
 }
 
+export function settingsProfileChoiceDisplayItems(profiles: ProfileChoiceDisplaySource[]) {
+  return profiles.map(settingsProfileChoiceDisplayItem);
+}
+
 export function settingsModelChoiceDisplayItem<T extends ModelChoiceDisplaySource>(model: T, kind: "LLM" | "STT") {
   const label = modelOptionDisplayLabel(model);
   return {

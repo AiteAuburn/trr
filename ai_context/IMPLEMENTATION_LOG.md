@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1331 extract settings profile choice display items helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/settingsChoiceDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `settingsProfileChoiceDisplayItems` to `mobile/settingsChoiceDisplay.ts` for Settings profile-choice display-list shaping.
+- Replaced the inline `profiles.map(settingsProfileChoiceDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept Settings profile copy, accessibility labels, active-profile selection behavior, profile state ownership, Settings rendering, and first-version menu destinations unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and profile mapping rule are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Settings rendering、profile selection behavior、account/profile API behavior、auth/session behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk Settings model-choice display-list helpers from `App.tsx`; keep Settings state ownership and selection handlers in `App.tsx` until component boundaries are stable.
+
 ### T1330 extract history raw record display items helper
 
 類型：mobile / refactor / verifier / docs

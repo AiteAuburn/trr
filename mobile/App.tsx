@@ -699,7 +699,7 @@ import {
   downloadedModelDisplayLabel,
   downloadedWhisperModelDisplayItem,
   settingsModelChoiceDisplayItem,
-  settingsProfileChoiceDisplayItem
+  settingsProfileChoiceDisplayItems
 } from "./settingsChoiceDisplay";
 import {
   boundVoiceQuota,
@@ -1664,7 +1664,7 @@ export default function App() {
   );
   const settingsDisplayRows = useMemo(() => buildSettingsDisplayRows(), []);
   const profileChoiceDisplayItems = useMemo(
-    () => profiles.map(settingsProfileChoiceDisplayItem),
+    () => settingsProfileChoiceDisplayItems(profiles),
     [profiles]
   );
   const llmModelChoiceDisplayItems = useMemo(
