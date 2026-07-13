@@ -3530,6 +3530,16 @@ def main() -> int:
             'return screen === "aiReview" || screen === "aiSaveConfirm";',
         )
         _assert_contains(
+            "visual smoke subscription status route helper",
+            navigation_content,
+            "export function isVisualSmokeSubscriptionStatusScreen(screen: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke subscription status route helper condition",
+            navigation_content,
+            'return screen === "subscriptionManagement" || screen === "membershipStatus";',
+        )
+        _assert_contains(
             "visual smoke boot skipped display helper",
             navigation_content,
             "function visualSmokeBootSkippedDisplayMessages()",
@@ -3593,6 +3603,11 @@ def main() -> int:
             "visual smoke ai preview helper binding",
             content,
             "if (isVisualSmokeAiPreviewScreen(target)) {",
+        )
+        _assert_contains(
+            "visual smoke subscription status helper binding",
+            content,
+            "if (isVisualSmokeSubscriptionStatusScreen(target)) {",
         )
         _assert_contains(
             "visual smoke deep link status binding",

@@ -116,6 +116,7 @@ import {
   isSettingsSubpageScreen,
   isVisualSmokeAiPreviewScreen,
   isVisualSmokeRecordListScreen,
+  isVisualSmokeSubscriptionStatusScreen,
   menuScreens,
   mvpFlowSteps,
   mvpFlowStepperState,
@@ -4087,12 +4088,8 @@ export default function App() {
       openSubscription("menu");
       return;
     }
-    if (target === "subscriptionManagement") {
-      setCurrentScreen("subscriptionManagement");
-      return;
-    }
-    if (target === "membershipStatus") {
-      setCurrentScreen("membershipStatus");
+    if (isVisualSmokeSubscriptionStatusScreen(target)) {
+      setCurrentScreen(target);
       return;
     }
     if (target === "settings" || isSettingsSubpageScreen(target) || target === "menu") {

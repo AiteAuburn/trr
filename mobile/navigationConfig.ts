@@ -193,6 +193,10 @@ export function isVisualSmokeAiPreviewScreen(screen: AppScreen) {
   return screen === "aiReview" || screen === "aiSaveConfirm";
 }
 
+export function isVisualSmokeSubscriptionStatusScreen(screen: AppScreen) {
+  return screen === "subscriptionManagement" || screen === "membershipStatus";
+}
+
 function headerBackTargetForScreen(
   currentScreen: AppScreen,
   chrome: { backTo?: AppScreen },

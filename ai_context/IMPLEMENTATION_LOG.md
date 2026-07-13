@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1427 extract visual smoke subscription status route helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/navigationConfig.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `isVisualSmokeSubscriptionStatusScreen` to `mobile/navigationConfig.ts` for the visual-smoke subscription management / membership status route group.
+- Replaced two inline direct route branches in `openVisualSmokeRoute` with the helper.
+- Kept visual-smoke debug gating, subscription opener behavior, membership/status screens, and normal app navigation unchanged.
+- Updated navigation verifier coverage for the helper internals and App binding.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue splitting debug route groups or route-specific action handlers in small slices.
+
 ### T1426 extract visual smoke AI preview route helper
 
 類型：mobile / refactor / verifier / docs
