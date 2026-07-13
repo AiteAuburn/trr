@@ -3711,9 +3711,13 @@ export default function App() {
     setSubscriptionManagementActionStatus(subscriptionManagementUnavailableStatusMessage);
   }
 
-  function returnFromSubscriptionManagementToSettings() {
+  function returnToSettingsWithStatus(statusMessage: string) {
     setCurrentScreen("settings");
-    setStatus(subscriptionManagementReturnSettingsStatusMessage());
+    setStatus(statusMessage);
+  }
+
+  function returnFromSubscriptionManagementToSettings() {
+    returnToSettingsWithStatus(subscriptionManagementReturnSettingsStatusMessage());
   }
 
   function openAccountSecurityFromSettings() {
@@ -3722,8 +3726,7 @@ export default function App() {
   }
 
   function returnFromSettingsSubpage() {
-    setCurrentScreen("settings");
-    setStatus(settingsSubpageReturnStatusMessage());
+    returnToSettingsWithStatus(settingsSubpageReturnStatusMessage());
   }
 
   function showSubscriptionManagementPaymentStatus() {
