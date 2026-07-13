@@ -2570,6 +2570,31 @@ def main() -> int:
             "const membershipTrialDaysDisplayText = subscriptionMembershipDisplay.trialDays;",
         )
         _assert_contains(
+            "quota display texts helper binding",
+            content,
+            "const quotaDisplay = quotaDisplayTexts(voiceQuota);",
+        )
+        _assert_contains(
+            "quota used display text binding",
+            content,
+            "const quotaUsedDisplayText = quotaDisplay.used;",
+        )
+        _assert_contains(
+            "quota remaining display text binding",
+            content,
+            "const quotaRemainingDisplayText = quotaDisplay.remaining;",
+        )
+        _assert_contains(
+            "subscription quota daily limit display text binding",
+            content,
+            "const subscriptionQuotaDailyLimitDisplayText = quotaDisplay.subscriptionDailyLimit;",
+        )
+        _assert_contains(
+            "settings quota helper display text binding",
+            content,
+            "const settingsQuotaHelperDisplayText = quotaDisplay.settingsHelper;",
+        )
+        _assert_contains(
             "reminder preview display rows helper binding",
             content,
             "const reminderPreviewDisplayItems = buildReminderPreviewDisplayItems();",
@@ -5541,6 +5566,12 @@ def main() -> int:
             ("quota remaining pending copy", "剩餘 尚未載入"),
             ("settings quota helper", "function settingsQuotaHelperText(quota: VoiceQuotaDisplaySource | null)"),
             ("settings quota pending copy", "錄音額度尚未載入"),
+            ("quota display texts helper", "function quotaDisplayTexts(quota: VoiceQuotaUsageDisplaySource | null)"),
+            ("quota display texts used binding", "used: quotaUsedDisplayValue(quota)"),
+            ("quota display texts remaining binding", "remaining: quotaRemainingDisplayValue(quota)"),
+            ("quota display texts daily limit", "剩餘 2 分鐘內才提醒使用者。"),
+            ("quota display texts subscription daily limit", "剩餘 2 分鐘內才需要提醒使用者。"),
+            ("quota display texts settings helper", "settingsHelper: settingsQuotaHelperText(quota)"),
         ):
             _assert_contains(label, settings_copy_content, marker)
         for label, marker in (

@@ -644,7 +644,6 @@ import {
   advancedSettingsToggleLabel,
   backendReconnectButtonLabel,
   captureVoiceQuotaCopy,
-  formatVoiceMinutes,
   isVoiceQuotaLow,
   membershipStatusReturnSubscriptionStatusMessage,
   menuReturnStatusMessage,
@@ -655,9 +654,8 @@ import {
   privacyIntegrationButtonLabel,
   privacyReadinessChecklistDisplayItems,
   privacySettingsIntroCopy,
+  quotaDisplayTexts,
   quotaReadinessChecklistDisplayItems,
-  quotaRemainingDisplayValue,
-  quotaUsedDisplayValue,
   recordingQuotaControlCopy,
   recordingQuotaDataBoundaryCopy,
   recordingQuotaIntroCopy,
@@ -669,7 +667,6 @@ import {
   reminderReadinessChecklistDisplayItems,
   reminderSettingsIntroCopy,
   settingsAccountSecurityOpenStatusMessage,
-  settingsQuotaHelperText,
   settingsSubpageReturnStatusMessage
 } from "./settingsCopy";
 import {
@@ -1745,21 +1742,12 @@ export default function App() {
   const membershipTrialHeroLabelDisplayText = subscriptionMembershipDisplay.trialHeroLabel;
   const membershipTrialDaysDisplayText = subscriptionMembershipDisplay.trialDays;
   const membershipPlanStatusDisplayText = subscriptionMembershipDisplay.planStatus;
-  const quotaUsedDisplayText = quotaUsedDisplayValue(voiceQuota);
-  const quotaRemainingDisplayText = quotaRemainingDisplayValue(voiceQuota);
-  const quotaDailyLimitDisplayText = boundDisplayText(
-    voiceQuota
-      ? `每日上限 ${formatVoiceMinutes(voiceQuota.daily_limit_seconds)}；剩餘 2 分鐘內才提醒使用者。`
-      : "連線 backend 後會顯示試用或會員的每日上限。",
-    maxDisplayDetailTextLength
-  );
-  const subscriptionQuotaDailyLimitDisplayText = boundDisplayText(
-    voiceQuota
-      ? `每日上限 ${formatVoiceMinutes(voiceQuota.daily_limit_seconds)}；剩餘 2 分鐘內才需要提醒使用者。`
-      : "每日上限會在額度同步後顯示。",
-    maxDisplayDetailTextLength
-  );
-  const settingsQuotaHelperDisplayText = settingsQuotaHelperText(voiceQuota);
+  const quotaDisplay = quotaDisplayTexts(voiceQuota);
+  const quotaUsedDisplayText = quotaDisplay.used;
+  const quotaRemainingDisplayText = quotaDisplay.remaining;
+  const quotaDailyLimitDisplayText = quotaDisplay.dailyLimit;
+  const subscriptionQuotaDailyLimitDisplayText = quotaDisplay.subscriptionDailyLimit;
+  const settingsQuotaHelperDisplayText = quotaDisplay.settingsHelper;
   const subscriptionActionStatusDisplayText = boundUiMessage(subscriptionActionStatus);
   const subscriptionManagementActionStatusDisplayText = boundUiMessage(subscriptionManagementActionStatus);
   const subscriptionTrialIntegrationStatusMessage = boundUiMessage(

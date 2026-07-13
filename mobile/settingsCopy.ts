@@ -24,6 +24,7 @@ type VoiceQuotaDisplaySource = {
 
 type VoiceQuotaUsageDisplaySource = VoiceQuotaDisplaySource & {
   used_seconds_today: number;
+  daily_limit_seconds: number;
 };
 
 export function activeProfileLabelText(activeProfile: ActiveProfileDisplaySource | null, profileCount: number) {
@@ -81,6 +82,26 @@ export function settingsQuotaHelperText(quota: VoiceQuotaDisplaySource | null) {
     quota ? `今日錄音剩餘 ${formatVoiceMinutes(quota.remaining_seconds_today)}` : "錄音額度尚未載入",
     maxDisplayDetailTextLength
   );
+}
+
+export function quotaDisplayTexts(quota: VoiceQuotaUsageDisplaySource | null) {
+  return {
+    used: quotaUsedDisplayValue(quota),
+    remaining: quotaRemainingDisplayValue(quota),
+    dailyLimit: boundDisplayText(
+      quota
+        ? `每日上限 ${formatVoiceMinutes(quota.daily_limit_seconds)}；剩餘 2 分鐘內才提醒使用者。`
+        : "連線 backend 後會顯示試用或會員的每日上限。",
+      maxDisplayDetailTextLength
+    ),
+    subscriptionDailyLimit: boundDisplayText(
+      quota
+        ? `每日上限 ${formatVoiceMinutes(quota.daily_limit_seconds)}；剩餘 2 分鐘內才需要提醒使用者。`
+        : "每日上限會在額度同步後顯示。",
+      maxDisplayDetailTextLength
+    ),
+    settingsHelper: settingsQuotaHelperText(quota)
+  };
 }
 
 export function advancedSettingsToggleLabel(isExpanded: boolean) {

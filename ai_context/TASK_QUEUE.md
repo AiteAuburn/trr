@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1370: Extract quota display texts helper
+
+Status: done
+
+Summary:
+
+- Added `quotaDisplayTexts` to `mobile/settingsCopy.ts` for quota used/remaining, recording daily limit, subscription daily limit, and settings helper display text.
+- Replaced inline quota display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept voice minute formatting, pending copy, daily-limit copy, settings helper copy, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1369: Extract subscription membership display texts
 
 Status: done
