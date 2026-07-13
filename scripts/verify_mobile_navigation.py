@@ -2485,6 +2485,11 @@ def main() -> int:
             "const subscriptionReadinessChecklistItems = subscriptionReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "subscription comparison display rows helper binding",
+            content,
+            "const subscriptionComparisonDisplayRows = useMemo(\n    () => buildSubscriptionComparisonDisplayRows(),",
+        )
+        _assert_contains(
             "subscription management readiness checklist helper binding",
             content,
             "subscriptionManagementReadinessChecklistDisplayItems();",
@@ -5437,6 +5442,8 @@ def main() -> int:
             ("backend reconnect accessibility label", "backendReconnectAccessibility: boundDisplayText(\"重新連線 backend，會清除 stale session/model/record state\", maxDisplayDetailTextLength)"),
             ("profile edit accessibility label", "editIntegrationAccessibility: boundDisplayText(\"查看個人資料編輯整合狀態，不寫入個資或照護對象\", maxDisplayDetailTextLength)"),
             ("subscription comparison rows config", "export const subscriptionComparisonRows = ["),
+            ("subscription comparison display rows helper", "function subscriptionComparisonDisplayRows()"),
+            ("subscription comparison display rows map", "return subscriptionComparisonRows.map(comparisonDisplayItem);"),
             ("subscription plan display helper", "function planDisplayName(planCode?: string)"),
             ("subscription trial plan copy", "試用版"),
             ("subscription annual plan copy", "年費會員"),

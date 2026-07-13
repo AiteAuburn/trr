@@ -1,3 +1,5 @@
+import { comparisonDisplayItem } from "./sharedDisplayItems";
+
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
 const maxUiMessageLength = 300;
@@ -34,6 +36,10 @@ export const subscriptionComparisonRows = [
   ["基本分析", "部分功能", "✓ 完整趨勢"],
   ["歷史紀錄", "最近 7 天", "✓ 完整保存"]
 ] as const;
+
+export function subscriptionComparisonDisplayRows() {
+  return subscriptionComparisonRows.map(comparisonDisplayItem);
+}
 
 export function planDisplayName(planCode?: string) {
   if (planCode === "trial") {

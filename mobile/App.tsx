@@ -266,7 +266,6 @@ import {
 import {
   auxiliarySectionLabels,
   boundaryMetricDisplayItem,
-  comparisonDisplayItem,
   destinationCardDisplayItem,
   detailPairDisplayItem,
   manualRecordTypeDisplayItem,
@@ -724,7 +723,7 @@ import {
   subscriptionManagementReturnSettingsStatusMessage,
   subscriptionManagementSyncButtonLabel,
   subscriptionMembershipStatusOpenStatusMessage,
-  subscriptionComparisonRows,
+  subscriptionComparisonDisplayRows as buildSubscriptionComparisonDisplayRows,
   subscriptionPaymentUnwiredCopy,
   subscriptionReadinessChecklistDisplayItems,
   accountSecurityBoundaryDisplayRows,
@@ -1710,7 +1709,7 @@ export default function App() {
     [selectedFutureModule]
   );
   const subscriptionComparisonDisplayRows = useMemo(
-    () => subscriptionComparisonRows.map(comparisonDisplayItem),
+    () => buildSubscriptionComparisonDisplayRows(),
     []
   );
   const subscriptionReadinessChecklistItems = subscriptionReadinessChecklistDisplayItems();
