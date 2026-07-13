@@ -3510,6 +3510,16 @@ def main() -> int:
             "function visualSmokeRouteFromDeepLinkUrl(",
         )
         _assert_contains(
+            "visual smoke record list route helper",
+            navigation_content,
+            "export function isVisualSmokeRecordListScreen(screen: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke record list route helper condition",
+            navigation_content,
+            'return screen === "today" || screen === "history" || screen === "analysis";',
+        )
+        _assert_contains(
             "visual smoke boot skipped display helper",
             navigation_content,
             "function visualSmokeBootSkippedDisplayMessages()",
@@ -3563,6 +3573,11 @@ def main() -> int:
             "visual smoke route jump guarded handler",
             content,
             "if (!enableDebugTools || !allowMobileDevAuth)",
+        )
+        _assert_contains(
+            "visual smoke record list helper binding",
+            content,
+            "if (isVisualSmokeRecordListScreen(target)) {",
         )
         _assert_contains(
             "visual smoke deep link status binding",

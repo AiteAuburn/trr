@@ -185,6 +185,10 @@ export function isSettingsSubpageScreen(screen: AppScreen) {
   return settingsSubpageScreens.has(screen);
 }
 
+export function isVisualSmokeRecordListScreen(screen: AppScreen) {
+  return screen === "today" || screen === "history" || screen === "analysis";
+}
+
 function headerBackTargetForScreen(
   currentScreen: AppScreen,
   chrome: { backTo?: AppScreen },

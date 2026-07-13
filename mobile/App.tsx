@@ -114,6 +114,7 @@ import {
 import {
   headerBackTargetForScreen,
   isSettingsSubpageScreen,
+  isVisualSmokeRecordListScreen,
   menuScreens,
   mvpFlowSteps,
   mvpFlowStepperState,
@@ -3959,7 +3960,7 @@ export default function App() {
       return;
     }
     activateVisualSmokePreview();
-    if (target === "today" || target === "history" || target === "analysis") {
+    if (isVisualSmokeRecordListScreen(target)) {
       setRecords(visualSmokeDemoRecords());
       setCurrentScreen(target);
       return;
