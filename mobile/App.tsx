@@ -163,6 +163,7 @@ import {
   communityReadinessChecklistDisplayItems,
   foodCommunityCategories,
   foodCommunityCategoryDisplayItem,
+  foodCommunityDetailStatusMessages,
   foodCommunityDisplayBundle,
   foodCommunityItemDisplayItem,
   foodCommunityItemFromApi,
@@ -4451,13 +4452,17 @@ export default function App() {
       return;
     }
     const detailKey = [normalizedApiBaseUrl, account.id, boundedItemId].join(":");
+    const detailStatus = foodCommunityDetailStatusMessages({
+      itemTitle: "",
+      exampleCount: 0
+    });
     latestFoodCommunityDetailKey.current = detailKey;
     if (foodCommunityDetailInFlightKeys.current.has(detailKey)) {
-      setCommunityActionStatus(boundUiMessage("正在同步食物個別分享紀錄，請稍候。"));
+      setCommunityActionStatus(detailStatus.inFlight);
       return;
     }
     foodCommunityDetailInFlightKeys.current.add(detailKey);
-    setCommunityActionStatus(boundUiMessage("正在同步食物個別分享紀錄。"));
+    setCommunityActionStatus(detailStatus.loading);
     try {
       const detail = await requestJson<FoodCommunityApiItem>(
         normalizedApiBaseUrl,
@@ -4473,13 +4478,14 @@ export default function App() {
       );
       setSelectedFoodCommunityItemId(detailedItem.id);
       setCommunityActionStatus(
-        boundUiMessage(
-          `已同步 ${boundDisplayText(detailedItem.title, maxDisplayTextLength)} 的 ${clampNumber(detailedItem.examples.length, 0, maxMobileCountValue)} 筆個別分享紀錄。`
-        )
+        foodCommunityDetailStatusMessages({
+          itemTitle: detailedItem.title,
+          exampleCount: detailedItem.examples.length
+        }).success
       );
     } catch {
       if (latestFoodCommunityDetailKey.current === detailKey) {
-        setCommunityActionStatus(boundUiMessage("食物個別分享紀錄同步失敗；目前保留已載入資料。"));
+        setCommunityActionStatus(detailStatus.failure);
       }
     } finally {
       foodCommunityDetailInFlightKeys.current.delete(detailKey);

@@ -2202,6 +2202,24 @@ export function foodCommunitySyncStatusMessages(value: {
   };
 }
 
+export function foodCommunityDetailStatusMessages(value: {
+  itemTitle: string;
+  exampleCount: number;
+}) {
+  return {
+    inFlight: boundUiMessage("正在同步食物個別分享紀錄，請稍候。"),
+    loading: boundUiMessage("正在同步食物個別分享紀錄。"),
+    success: boundUiMessage(
+      `已同步 ${boundDisplayText(value.itemTitle, maxDisplayTextLength)} 的 ${clampNumber(
+        value.exampleCount,
+        0,
+        maxMobileCountValue
+      )} 筆個別分享紀錄。`
+    ),
+    failure: boundUiMessage("食物個別分享紀錄同步失敗；目前保留已載入資料。")
+  };
+}
+
 export function communityLeaderboardSyncStatusMessages(value: {
   backendUnavailableMessage: string;
   sectionCount: number;
