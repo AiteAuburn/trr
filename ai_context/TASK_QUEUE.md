@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1342: Extract visual-smoke route jump display items helper
+
+Status: done
+
+Summary:
+
+- Added `visualSmokeRouteJumpDisplayItems` to `mobile/sharedDisplayItems.ts` for debug visual-smoke route-jump display-list shaping.
+- Replaced the inline `visualSmokeRouteJumps.map(visualSmokeRouteJumpDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept visual-smoke route copy, accessibility labels, route set, debug gating, press handler, and route-jump behavior unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and visual-smoke route mapping rule are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1341: Extract menu screen display items helper
 
 Status: done

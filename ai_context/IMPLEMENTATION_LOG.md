@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1342 extract visual-smoke route jump display items helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/sharedDisplayItems.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `visualSmokeRouteJumpDisplayItems` to `mobile/sharedDisplayItems.ts` for debug visual-smoke route-jump display-list shaping.
+- Replaced the inline `visualSmokeRouteJumps.map(visualSmokeRouteJumpDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept visual-smoke route copy, accessibility labels, route set, debug gating, press handler, and route-jump behavior unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and visual-smoke route mapping rule are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、visual-smoke route set、debug gating、route-jump behavior、Menu navigation behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining `App.tsx` state/handler boundaries now that low-risk option-list mappings have been extracted.
+
 ### T1341 extract menu screen display items helper
 
 類型：mobile / refactor / verifier / docs

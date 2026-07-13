@@ -4692,6 +4692,7 @@ def main() -> int:
             ("manual record time input binding", "onTimeChange={updateManualRecordTimeInput}"),
             ("manual record type display options helper binding", "const manualRecordTypeDisplayOptions = useMemo(\n    () => manualRecordTypeDisplayItems(manualRecordTypes),"),
             ("menu display items helper binding", "const menuDisplayItems = useMemo(() => menuScreenDisplayItems(menuScreens), []);"),
+            ("visual smoke route jump display items helper binding", "const visualSmokeRouteJumpDisplayItems = useMemo(\n    () => buildVisualSmokeRouteJumpDisplayItems(visualSmokeRouteJumps),"),
             ("manual record type selector binding", "<ManualRecordTypeSelector\n              options={manualRecordTypeDisplayOptions}"),
             ("manual record type selector selected binding", "selectedValue={manualRecordType}"),
             ("manual record type selector press binding", "onTypePress={pressManualRecordTypeOption}"),
@@ -5449,6 +5450,8 @@ def main() -> int:
             ("menu screen display items map", "return values.map(menuScreenDisplayItem);"),
             ("menu screen accessibility copy", "accessibilityLabel: boundDisplayText(`前往${label}`, maxDisplayTextLength)"),
             ("visual smoke route jump display helper", "function visualSmokeRouteJumpDisplayItem(value: { id: AppScreen; label: string })"),
+            ("visual smoke route jump display items helper", "function visualSmokeRouteJumpDisplayItems(values: ReadonlyArray<{ id: AppScreen; label: string }>)"),
+            ("visual smoke route jump display items map", "return values.map(visualSmokeRouteJumpDisplayItem);"),
             ("visual smoke route jump accessibility copy", "accessibilityLabel: boundDisplayText(`Visual smoke 前往${label}`, maxDisplayTextLength)"),
             ("result checklist item helper", "function resultChecklistItem(value: string)"),
         ):

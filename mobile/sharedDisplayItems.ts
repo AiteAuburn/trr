@@ -151,6 +151,10 @@ export function visualSmokeRouteJumpDisplayItem(value: { id: AppScreen; label: s
   };
 }
 
+export function visualSmokeRouteJumpDisplayItems(values: ReadonlyArray<{ id: AppScreen; label: string }>) {
+  return values.map(visualSmokeRouteJumpDisplayItem);
+}
+
 export function resultChecklistItem(value: string) {
   return boundDisplayText(value, maxDisplayDetailTextLength);
 }

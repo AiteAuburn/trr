@@ -282,7 +282,8 @@ import {
   sessionManagementPreviewDisplayItem,
   valueLabelDisplayItem,
   valueLabelDisplayItems,
-  visualSmokeRouteJumpDisplayItem
+  visualSmokeRouteJumpDisplayItem,
+  visualSmokeRouteJumpDisplayItems as buildVisualSmokeRouteJumpDisplayItems
 } from "./sharedDisplayItems";
 import {
   accountDisplayNameDisplayText,
@@ -1705,7 +1706,7 @@ export default function App() {
   const analysisRangeDisplayOptions = useMemo(() => analysisRangeDisplayItems(analysisRanges), []);
   const menuDisplayItems = useMemo(() => menuScreenDisplayItems(menuScreens), []);
   const visualSmokeRouteJumpDisplayItems = useMemo(
-    () => visualSmokeRouteJumps.map(visualSmokeRouteJumpDisplayItem),
+    () => buildVisualSmokeRouteJumpDisplayItems(visualSmokeRouteJumps),
     []
   );
   const futureModuleDisplayCards = useMemo(
