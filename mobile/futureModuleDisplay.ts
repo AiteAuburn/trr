@@ -1807,6 +1807,25 @@ export function yearReviewTargetYear(value: Date) {
   return value.getFullYear() - 1;
 }
 
+export function yearReviewSyncStatusMessages(value: {
+  backendUnavailableMessage: string;
+  year: string | number;
+  snapshotId?: string | null;
+}) {
+  const snapshotCopy = value.snapshotId
+    ? `已保存 snapshot ${boundIdentifier(value.snapshotId).slice(0, 8)}`
+    : "已產生即時摘要";
+  return {
+    unavailable: boundUiMessage(
+      `${value.backendUnavailableMessage || "backend 尚未 ready"}；目前只顯示本機年度回顧預覽。`
+    ),
+    inFlight: boundUiMessage("正在同步 backend 年度回顧，請稍候。"),
+    loading: boundUiMessage("正在同步 backend 年度回顧。"),
+    success: boundUiMessage(`已同步 ${value.year} 年 backend 年度回顧，${snapshotCopy}。`),
+    failure: boundUiMessage("年度回顧同步失敗；目前保留本機已載入紀錄預覽。")
+  };
+}
+
 export function nextYearReviewGenerationLabel(value: Date) {
   const nextYear = value.getMonth() === 0 && value.getDate() === 1 ? value.getFullYear() + 1 : value.getFullYear() + 1;
   return boundDisplayText(`每年 1 月 1 日自動產生前一年度回顧；下一次為 ${nextYear} 年 1 月 1 日`, maxDisplayDetailTextLength);

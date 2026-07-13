@@ -213,6 +213,7 @@ import {
   yearReviewHeaderDisplayTexts,
   yearReviewInsightDisplayTexts,
   yearReviewShareUnavailableStatusMessage,
+  yearReviewSyncStatusMessages,
   yearReviewTargetYear,
   nextYearReviewGenerationLabel,
   type AchievementApiSummary,
@@ -4750,21 +4751,23 @@ export default function App() {
     if (visualSmokePreviewActive.current) {
       return;
     }
+    const targetYear = String(yearReviewTargetYear(new Date()));
+    const yearReviewSyncStatus = yearReviewSyncStatusMessages({
+      backendUnavailableMessage: protectedBackendUnavailableMessage,
+      year: targetYear
+    });
     if (!protectedBackendReady || !account || !activeProfile) {
-      setYearReviewActionStatus(
-        boundUiMessage(`${protectedBackendUnavailableMessage || "backend 尚未 ready"}；目前只顯示本機年度回顧預覽。`)
-      );
+      setYearReviewActionStatus(yearReviewSyncStatus.unavailable);
       return;
     }
-    const targetYear = String(yearReviewTargetYear(new Date()));
     const yearReviewKey = [normalizedApiBaseUrl, account.id, activeProfile.id, targetYear].join(":");
     latestYearReviewSyncKey.current = yearReviewKey;
     if (yearReviewSyncInFlightKeys.current.has(yearReviewKey)) {
-      setYearReviewActionStatus(boundUiMessage("正在同步 backend 年度回顧，請稍候。"));
+      setYearReviewActionStatus(yearReviewSyncStatus.inFlight);
       return;
     }
     yearReviewSyncInFlightKeys.current.add(yearReviewKey);
-    setYearReviewActionStatus(boundUiMessage("正在同步 backend 年度回顧。"));
+    setYearReviewActionStatus(yearReviewSyncStatus.loading);
     try {
       const query = new URLSearchParams({ profile_id: activeProfile.id });
       const summary = await requestJson<YearReviewApiResponse>(
@@ -4776,14 +4779,17 @@ export default function App() {
         return;
       }
       setYearReviewBackendSummary(summary);
-      const snapshotCopy = summary.snapshot_id
-        ? `已保存 snapshot ${boundIdentifier(summary.snapshot_id).slice(0, 8)}`
-        : "已產生即時摘要";
-      setYearReviewActionStatus(boundUiMessage(`已同步 ${summary.year} 年 backend 年度回顧，${snapshotCopy}。`));
+      setYearReviewActionStatus(
+        yearReviewSyncStatusMessages({
+          backendUnavailableMessage: protectedBackendUnavailableMessage,
+          year: summary.year,
+          snapshotId: summary.snapshot_id
+        }).success
+      );
     } catch {
       if (latestYearReviewSyncKey.current === yearReviewKey) {
         setYearReviewBackendSummary(null);
-        setYearReviewActionStatus(boundUiMessage("年度回顧同步失敗；目前保留本機已載入紀錄預覽。"));
+        setYearReviewActionStatus(yearReviewSyncStatus.failure);
       }
     } finally {
       yearReviewSyncInFlightKeys.current.delete(yearReviewKey);

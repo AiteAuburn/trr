@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1404 extract year-review sync status messages
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `yearReviewSyncStatusMessages` to `mobile/futureModuleDisplay.ts` for Year Review backend unavailable, in-flight, loading, success, and failure status copy.
+- Replaced inline bounded Year Review snapshot sync status construction in `mobile/App.tsx` with the extracted helper.
+- Kept `/year-reviews/{year}`, target-year selection, snapshot state update, share-card asset flow, share package confirmation, revoke flow, and rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、`/year-reviews/{year}` request path、target-year selection、snapshot state update、share-card asset flow、share package confirmation、revoke flow、rendering、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining year-review share/revoke, community, store redemption, and auth visual-smoke action-local status helpers separately.
+
 ### T1403 extract achievement sync status messages
 
 類型：mobile / refactor / verifier / docs
