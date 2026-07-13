@@ -2505,6 +2505,11 @@ def main() -> int:
             "const privacyControlDisplayRows = useMemo(() => buildPrivacyControlDisplayRows(), []);",
         )
         _assert_contains(
+            "production auth readiness display rows helper binding",
+            content,
+            "const productionAuthReadinessDisplayRows = useMemo(\n    () => buildProductionAuthReadinessDisplayRows(),",
+        )
+        _assert_contains(
             "membership feature display rows helper binding",
             content,
             "const membershipFeatureRows = membershipFeatureDisplayRows();",
@@ -4946,6 +4951,8 @@ def main() -> int:
             ("auth provider callback status copy", "provider callback 尚未接入；callback 拿到 id_token 後會走 /auth/oidc-login、SecureStore 與 session revoke 流程。"),
             ("session management preview rows config", "export const sessionManagementPreviews = ["),
             ("production auth readiness rows config", "export const productionAuthReadinessRows = ["),
+            ("production auth readiness display rows helper", "export function productionAuthReadinessDisplayRows()"),
+            ("production auth readiness display rows map", "return productionAuthReadinessRows.map(previewTupleDisplayItem);"),
             ("subscription management rows config", "export const subscriptionManagementRows = ["),
             ("subscription management display rows helper", "export function subscriptionManagementDisplayRows()"),
             ("subscription management display rows map", "return subscriptionManagementRows.map(previewTupleDisplayItem);"),

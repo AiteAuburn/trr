@@ -79,6 +79,10 @@ export const productionAuthReadinessRows = [
   ["Audit", "待串接", "正式 auth 事件需 PHI-safe audit，不記錄 raw token、健康內容或 request body。"]
 ] as const;
 
+export function productionAuthReadinessDisplayRows() {
+  return productionAuthReadinessRows.map(previewTupleDisplayItem);
+}
+
 export const subscriptionManagementRows = [
   ["付款來源", "未串接", "正式版需由 App Store / Play Store 或會員後台開啟管理頁。"],
   ["Receipt validation", "必做", "後端驗證收據並以 webhook 更新 entitlement，不信任前端狀態。"],

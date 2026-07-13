@@ -684,7 +684,7 @@ import {
   authProviderPreviewDisplayItem,
   authProviderPreviews,
   privacyControlDisplayRows as buildPrivacyControlDisplayRows,
-  productionAuthReadinessRows,
+  productionAuthReadinessDisplayRows as buildProductionAuthReadinessDisplayRows,
   sessionManagementPreviews,
   settingsRowDisplayItem,
   settingsRows,
@@ -1683,7 +1683,7 @@ export default function App() {
     [authSessions]
   );
   const productionAuthReadinessDisplayRows = useMemo(
-    () => productionAuthReadinessRows.map(previewTupleDisplayItem),
+    () => buildProductionAuthReadinessDisplayRows(),
     []
   );
   const glucoseUnitDisplayOptions = useMemo(() => glucoseUnitOptions.map(optionDisplayItem), []);
