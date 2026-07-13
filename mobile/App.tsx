@@ -148,6 +148,7 @@ import {
   foodPhotoResultTitle,
   foodPhotoRetakeButtonAccessibilityLabel,
   foodPhotoRetakeButtonLabel,
+  foodPhotoStatusDisplayTexts,
   foodPhotoUploadBoxLabel,
   foodPhotoVisionBoundaryDisplayItem,
   apiFoodCategoryFromMobile,
@@ -1675,16 +1676,11 @@ export default function App() {
     `${rankingOptInButtonDisplayLabel}，更新 backend 公開排名設定且不公開健康數值`,
     maxDisplayDetailTextLength
   );
-  const foodPhotoActionStatusDisplayText = boundUiMessage(foodPhotoActionStatus);
-  const foodPhotoUploadStatusMessage = boundUiMessage(
-    "相機與照片上傳尚未啟用；正式開放前需要圖片權限、壓縮上限、儲存策略與 Vision 成本控制。"
-  );
-  const foodPhotoIntegrationStatusMessage = boundUiMessage(
-    "相機與照片上傳尚未啟用；需先完成圖片儲存、權限、成本控制與使用者確認流程。"
-  );
-  const foodPhotoRetakeStatusMessage = boundUiMessage(
-    "重新拍攝需等相機/相簿流程接上；目前沒有暫存圖片或分析結果可清除。"
-  );
+  const foodPhotoStatusDisplay = foodPhotoStatusDisplayTexts(foodPhotoActionStatus);
+  const foodPhotoActionStatusDisplayText = foodPhotoStatusDisplay.action;
+  const foodPhotoUploadStatusMessage = foodPhotoStatusDisplay.upload;
+  const foodPhotoIntegrationStatusMessage = foodPhotoStatusDisplay.integration;
+  const foodPhotoRetakeStatusMessage = foodPhotoStatusDisplay.retake;
   const foodPhotoIntroDisplayText = foodPhotoIntroCopy();
   const foodPhotoUploadBoxDisplayLabel = foodPhotoUploadBoxLabel();
   const foodPhotoResultDisplayTitle = foodPhotoResultTitle();

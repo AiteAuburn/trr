@@ -1616,6 +1616,19 @@ export function foodPhotoRetakeButtonAccessibilityLabel() {
   return boundDisplayText("查看重新拍攝整合狀態，目前沒有暫存圖片可清除", maxDisplayDetailTextLength);
 }
 
+export function foodPhotoStatusDisplayTexts(actionStatus: string) {
+  return {
+    action: boundUiMessage(actionStatus),
+    upload: boundUiMessage(
+      "相機與照片上傳尚未啟用；正式開放前需要圖片權限、壓縮上限、儲存策略與 Vision 成本控制。"
+    ),
+    integration: boundUiMessage(
+      "相機與照片上傳尚未啟用；需先完成圖片儲存、權限、成本控制與使用者確認流程。"
+    ),
+    retake: boundUiMessage("重新拍攝需等相機/相簿流程接上；目前沒有暫存圖片或分析結果可清除。")
+  };
+}
+
 export function storeCartUnavailableDisplayItem() {
   return {
     title: boundDisplayText("購物車尚未啟用", maxDisplayTextLength),

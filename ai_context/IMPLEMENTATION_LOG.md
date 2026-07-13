@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1390 extract food photo status display texts
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `foodPhotoStatusDisplayTexts` to `mobile/futureModuleDisplay.ts` for food-photo action status and upload/integration/retake preview status messages.
+- Replaced inline food-photo status display construction in `mobile/App.tsx` with the extracted helper.
+- Kept Food Photo navigation, upload/integration/retake preview handlers, Vision-disabled behavior, and rendering unchanged.
+- Updated navigation verifier coverage so the status helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Food Photo navigation state、upload/integration/retake preview handlers、Vision request behavior、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining broad status display bindings and future-module display wrappers separately.
+
 ### T1389 extract settings subpage status display texts
 
 類型：mobile / refactor / verifier / docs
