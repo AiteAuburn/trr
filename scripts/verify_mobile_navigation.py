@@ -4036,6 +4036,26 @@ def main() -> int:
             "function openVisualSmokeRecordSeedRoute(target: AppScreen)",
         )
         _assert_contains(
+            "visual smoke history record selection helper",
+            content,
+            "function seedVisualSmokeHistoryRecordSelection(record: RecordItem)",
+        )
+        _assert_contains(
+            "visual smoke history record selection helper fields",
+            content,
+            "setRecords(visualSmokeDemoRecords());\n    setSelectedRecord(record);\n    setRecordDetailReturnScreen(\"history\");",
+        )
+        _assert_contains(
+            "visual smoke record detail selection helper binding",
+            content,
+            "seedVisualSmokeHistoryRecordSelection(demoRecord);\n      setCurrentScreen(\"recordDetail\");",
+        )
+        _assert_contains(
+            "visual smoke delete confirm selection helper binding",
+            content,
+            "seedVisualSmokeHistoryRecordSelection(demoRecord);\n      setCurrentScreen(\"deleteConfirm\");",
+        )
+        _assert_contains(
             "visual smoke seeded record route save summary",
             content,
             'setLastSavedSummary("Visual smoke demo save result.");',

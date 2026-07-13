@@ -4002,6 +4002,12 @@ export default function App() {
     setFoodPhotoActionStatus(foodPhotoRetakeStatusMessage);
   }
 
+  function seedVisualSmokeHistoryRecordSelection(record: RecordItem) {
+    setRecords(visualSmokeDemoRecords());
+    setSelectedRecord(record);
+    setRecordDetailReturnScreen("history");
+  }
+
   function openVisualSmokeRecordSeedRoute(target: AppScreen) {
     if (target === "saveSuccess") {
       const demoRecord = visualSmokeDemoRecord();
@@ -4029,9 +4035,7 @@ export default function App() {
     }
     if (target === "recordDetail") {
       const demoRecord = visualSmokeDemoRecord();
-      setRecords(visualSmokeDemoRecords());
-      setSelectedRecord(demoRecord);
-      setRecordDetailReturnScreen("history");
+      seedVisualSmokeHistoryRecordSelection(demoRecord);
       setCurrentScreen("recordDetail");
       return true;
     }
@@ -4045,9 +4049,7 @@ export default function App() {
     }
     if (target === "deleteConfirm") {
       const demoRecord = visualSmokeDemoRecord();
-      setRecords(visualSmokeDemoRecords());
-      setSelectedRecord(demoRecord);
-      setRecordDetailReturnScreen("history");
+      seedVisualSmokeHistoryRecordSelection(demoRecord);
       setCurrentScreen("deleteConfirm");
       return true;
     }
