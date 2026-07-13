@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1310 extract store redemption boundary rows helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `storeRedemptionBoundaryDisplayRows` to `mobile/futureModuleDisplay.ts` for Store redemption boundary rows.
+- Replaced the inline Store redemption boundary tuple construction in `mobile/App.tsx` with the extracted helper.
+- Kept row copy, bounded display behavior, Store rendering, points display behavior, redemption display behavior, catalog sync behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and key Store redemption boundary row copy are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Store rendering、points display behavior、redemption display behavior、catalog sync behavior、store API behavior、community API behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk display helpers from `App.tsx`; keep Store catalog/redemption request ownership in `App.tsx` until component boundaries are stable.
+
 ### T1309 extract food-community detail rows helpers
 
 類型：mobile / refactor / verifier / docs

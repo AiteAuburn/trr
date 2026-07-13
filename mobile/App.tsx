@@ -202,6 +202,7 @@ import {
   storeProductFromApi,
   storeProductDisplayItem,
   storeProducts,
+  storeRedemptionBoundaryDisplayRows,
   storeRedemptionDisplayItem,
   yearReviewAiEncouragementCopy,
   yearReviewAiObservationCopy,
@@ -1673,23 +1674,11 @@ export default function App() {
       `${product.title} ${product.description} ${product.pointsCost}`.toLowerCase().includes(query);
     return matchesCategory && matchesSearch;
   });
-  const storeRedemptionBoundaryTuples: Array<readonly [string, string]> = [
-    [
-      "點數餘額",
-      storePointsBalance
-        ? `${clampNumber(storePointsBalance.balance, 0, maxMobileCountValue)} 點`
-        : "尚未同步"
-    ],
-    ["可兌換項目", "優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利"],
-    ["仍待完成", "庫存、出貨訂單、付款與 rollback"],
-    [
-      "目前狀態",
-      storeBackendProducts.length > 0
-        ? `已讀取 backend catalog，已同步 ${clampNumber(storeRedemptions.length, 0, maxMobileCountValue)} 筆兌換券`
-        : "本機預覽，不扣點、不建訂單、不發券"
-    ]
-  ];
-  const storeRedemptionBoundaryRows = storeRedemptionBoundaryTuples.map(detailPairDisplayItem);
+  const storeRedemptionBoundaryRows = storeRedemptionBoundaryDisplayRows(
+    storePointsBalance,
+    storeBackendProducts.length > 0,
+    storeRedemptions.length
+  );
   const settingsDisplayRows = useMemo(() => settingsRows.map(settingsRowDisplayItem), []);
   const profileChoiceDisplayItems = useMemo(
     () => profiles.map(settingsProfileChoiceDisplayItem),

@@ -1136,6 +1136,27 @@ export function storeRedemptionDisplayItem(value: StoreRedemptionDisplayInput) {
   };
 }
 
+export function storeRedemptionBoundaryDisplayRows(
+  pointsBalance: StoreApiPointsBalance | null,
+  hasBackendProducts: boolean,
+  redemptionCount: number
+) {
+  return ([
+    [
+      "點數餘額",
+      pointsBalance ? `${clampNumber(pointsBalance.balance, 0, maxMobileCountValue)} 點` : "尚未同步"
+    ],
+    ["可兌換項目", "優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利"],
+    ["仍待完成", "庫存、出貨訂單、付款與 rollback"],
+    [
+      "目前狀態",
+      hasBackendProducts
+        ? `已讀取 backend catalog，已同步 ${clampNumber(redemptionCount, 0, maxMobileCountValue)} 筆兌換券`
+        : "本機預覽，不扣點、不建訂單、不發券"
+    ]
+  ] as const).map(detailPairDisplayItem);
+}
+
 export function commercePreviewOpenCartStatusMessage() {
   return boundUiMessage("已開啟購物車整合狀態；preview 不建立 cart、order、payment 或 backend write。");
 }
