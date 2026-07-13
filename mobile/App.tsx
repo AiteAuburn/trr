@@ -3538,8 +3538,12 @@ export default function App() {
     selectLlmModelFromSettings(modelId);
   }
 
+  function settingsModelChoiceTarget(model: { sourceId: string }) {
+    return model.sourceId;
+  }
+
   function pressSettingsLlmModelChoice(model: (typeof llmModelChoiceDisplayItems)[number]) {
-    selectSettingsLlmModelChoice(model.sourceId);
+    selectSettingsLlmModelChoice(settingsModelChoiceTarget(model));
   }
 
   function selectSettingsSttModelChoice(modelId: string) {
@@ -3547,7 +3551,7 @@ export default function App() {
   }
 
   function pressSettingsSttModelChoice(model: (typeof sttModelChoiceDisplayItems)[number]) {
-    selectSettingsSttModelChoice(model.sourceId);
+    selectSettingsSttModelChoice(settingsModelChoiceTarget(model));
   }
 
   function selectRecordingWhisperModelChoice(item: (typeof downloadedWhisperModelChoiceItems)[number]) {

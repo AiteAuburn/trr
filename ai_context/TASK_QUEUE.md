@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1526: Reuse Settings model choice target helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `settingsModelChoiceTarget` helper for Settings LLM/STT model option press handling.
+- Reused the helper in LLM and STT model press handlers while keeping model selection state behavior unchanged.
+- Updated navigation verifier coverage for the shared Settings model target helper and direct `sourceId` regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1525: Reuse History detail-mode target helper
 
 Status: done
