@@ -2220,6 +2220,26 @@ export function foodCommunityDetailStatusMessages(value: {
   };
 }
 
+export function communityPublicSettingsStatusMessages(value: {
+  backendUnavailableMessage: string;
+  leaderboardOptIn: boolean;
+}) {
+  return {
+    loadFailure: boundUiMessage("社群公開設定同步失敗；公開排名保持預設關閉。"),
+    visualSmoke: boundUiMessage("Visual smoke 預覽不更新公開名稱或排行榜 opt-in。"),
+    unavailable: boundUiMessage(
+      `${value.backendUnavailableMessage || "backend account 尚未 ready"}；目前不更新公開設定。`
+    ),
+    missingDisplayName: boundUiMessage("請輸入公開顯示名稱後再更新社群公開設定。"),
+    success: boundUiMessage(
+      value.leaderboardOptIn
+        ? "已開啟排行榜 opt-in；公開榜單只顯示公開名稱與非敏感統計。"
+        : "已關閉排行榜 opt-in；分享仍可得點，但不進公開榜單。"
+    ),
+    failure: boundUiMessage("社群公開設定更新失敗；未變更排行榜 opt-in。")
+  };
+}
+
 export function communityLeaderboardSyncStatusMessages(value: {
   backendUnavailableMessage: string;
   sectionCount: number;

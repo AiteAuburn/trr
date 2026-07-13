@@ -159,6 +159,7 @@ import {
   communityActionDisplayTexts,
   communityLeaderboardSyncStatusMessages,
   communityLeaderboardDisplaySection,
+  communityPublicSettingsStatusMessages,
   emptyFoodCommunityShareFields,
   communityReadinessChecklistDisplayItems,
   foodCommunityCategories,
@@ -4509,7 +4510,12 @@ export default function App() {
       setCommunityPublicSettings(boundedSettings);
       setCommunityPublicDisplayNameDraft(boundedSettings.display_name);
     } catch {
-      setCommunityActionStatus(boundUiMessage("社群公開設定同步失敗；公開排名保持預設關閉。"));
+      setCommunityActionStatus(
+        communityPublicSettingsStatusMessages({
+          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+          leaderboardOptIn: false
+        }).loadFailure
+      );
     }
   }
 
@@ -4518,19 +4524,21 @@ export default function App() {
   }
 
   async function saveCommunityPublicSettings(nextOptIn?: boolean) {
+    const publicSettingsStatus = communityPublicSettingsStatusMessages({
+      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+      leaderboardOptIn: nextOptIn ?? communityPublicSettings?.leaderboard_opt_in ?? false
+    });
     if (visualSmokePreviewActive.current) {
-      setCommunityActionStatus(boundUiMessage("Visual smoke 預覽不更新公開名稱或排行榜 opt-in。"));
+      setCommunityActionStatus(publicSettingsStatus.visualSmoke);
       return;
     }
     if (!protectedAccountBackendReady || !account) {
-      setCommunityActionStatus(
-        boundUiMessage(`${protectedAccountBackendUnavailableMessage || "backend account 尚未 ready"}；目前不更新公開設定。`)
-      );
+      setCommunityActionStatus(publicSettingsStatus.unavailable);
       return;
     }
     const displayName = (communityPublicDisplayNameDraft || accountPublicDisplayNameDisplayText).trim();
     if (!displayName) {
-      setCommunityActionStatus(boundUiMessage("請輸入公開顯示名稱後再更新社群公開設定。"));
+      setCommunityActionStatus(publicSettingsStatus.missingDisplayName);
       return;
     }
     try {
@@ -4550,15 +4558,14 @@ export default function App() {
       setCommunityPublicSettings(boundedSettings);
       setCommunityPublicDisplayNameDraft(boundedSettings.display_name);
       setCommunityActionStatus(
-        boundUiMessage(
-          boundedSettings.leaderboard_opt_in
-            ? "已開啟排行榜 opt-in；公開榜單只顯示公開名稱與非敏感統計。"
-            : "已關閉排行榜 opt-in；分享仍可得點，但不進公開榜單。"
-        )
+        communityPublicSettingsStatusMessages({
+          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+          leaderboardOptIn: boundedSettings.leaderboard_opt_in
+        }).success
       );
       void loadCommunityLeaderboards();
     } catch {
-      setCommunityActionStatus(boundUiMessage("社群公開設定更新失敗；未變更排行榜 opt-in。"));
+      setCommunityActionStatus(publicSettingsStatus.failure);
     }
   }
 

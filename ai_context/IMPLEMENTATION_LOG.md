@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1409 extract community public settings status messages
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `communityPublicSettingsStatusMessages` to `mobile/futureModuleDisplay.ts` for Community public settings load failure, visual-smoke, unavailable, missing display name, success, and failure status copy.
+- Replaced inline bounded Community public settings status construction in `mobile/App.tsx` with the extracted helper.
+- Kept `/community/settings` GET/PATCH, display-name trimming, leaderboard opt-in payload, settings state updates, leaderboard refresh trigger, and rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、`/community/settings` GET/PATCH request path、display-name trimming、leaderboard opt-in payload、settings state updates、leaderboard refresh trigger、rendering、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining food share, store redemption, and auth visual-smoke action-local status helpers separately.
+
 ### T1408 extract food community detail status messages
 
 類型：mobile / refactor / verifier / docs
