@@ -4172,7 +4172,7 @@ export default function App() {
     if (target === "transcriptReview") {
       setTranscriptReviewReturnScreen("record");
       updateTranscriptDraft(sampleText, "sample");
-      setCurrentScreen("transcriptReview");
+      openScreen("transcriptReview");
       return true;
     }
     return false;

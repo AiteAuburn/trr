@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1514: Reuse screen opener in visual-smoke transcript route
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `openScreen` inside the visual-smoke transcript-review route jump.
+- Kept visual-smoke debug gating, transcript return-screen setup, sample transcript draft seeding, production transcript flow, UI copy, and layout unchanged.
+- Updated navigation verifier coverage for the visual-smoke transcript route `openScreen` binding.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1513: Reuse screen opener in future destination and detailed report routes
 
 Status: done

@@ -4693,6 +4693,11 @@ def main() -> int:
             'updateTranscriptDraft(sampleText, "sample");',
         )
         _assert_contains(
+            "visual smoke transcript route screen opener",
+            content,
+            'updateTranscriptDraft(sampleText, "sample");\n      openScreen("transcriptReview");',
+        )
+        _assert_contains(
             "visual smoke transcript route fallback",
             content,
             "return false;\n  }\n\n  function openVisualSmokeRoute(target: AppScreen)",
