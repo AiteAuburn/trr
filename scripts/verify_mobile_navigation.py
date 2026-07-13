@@ -5424,6 +5424,11 @@ def main() -> int:
             "function openTodayManualRecord()",
         )
         _assert_contains(
+            "today manual entry status helper binding",
+            content,
+            'openManualRecordWithStatus("today", todayManualEntryStatusMessage());',
+        )
+        _assert_contains(
             "today record entry handler",
             content,
             "function openTodayRecordEntry()",
@@ -5922,6 +5927,11 @@ def main() -> int:
             content,
             "onEntryPress={pressHistoryDailyEntry}",
         )
+        _assert_contains(
+            "history manual entry status helper binding",
+            content,
+            'openManualRecordWithStatus("history", historyManualEntryStatusMessage());',
+        )
         _assert_not_contains(
             "history direct record detail card binding",
             content,
@@ -5949,6 +5959,11 @@ def main() -> int:
             "function openAnalysisManualRecord()",
         )
         _assert_contains(
+            "analysis manual entry status helper binding",
+            content,
+            'openManualRecordWithStatus("analysis", analysisManualEntryStatusMessage());',
+        )
+        _assert_contains(
             "analysis return today handler",
             content,
             "function returnFromAnalysisToToday()",
@@ -5967,6 +5982,11 @@ def main() -> int:
             "detailed report manual entry handler",
             content,
             "function openDetailedReportManualRecord()",
+        )
+        _assert_contains(
+            "detailed report manual entry status helper binding",
+            content,
+            'openManualRecordWithStatus("detailedReport", detailedReportManualEntryStatusMessage());',
         )
         _assert_contains(
             "detailed report return today handler",

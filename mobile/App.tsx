@@ -2150,8 +2150,7 @@ export default function App() {
   }
 
   function openTodayManualRecord() {
-    openManualRecord("today");
-    setStatus(todayManualEntryStatusMessage());
+    openManualRecordWithStatus("today", todayManualEntryStatusMessage());
   }
 
   function openTodayRecordEntry() {
@@ -2183,8 +2182,7 @@ export default function App() {
   }
 
   function openHistoryManualRecord() {
-    openManualRecord("history");
-    setStatus(historyManualEntryStatusMessage());
+    openManualRecordWithStatus("history", historyManualEntryStatusMessage());
   }
 
   function openHistoryRecordDetail(record: RecordItem) {
@@ -2207,8 +2205,7 @@ export default function App() {
   }
 
   function openAnalysisManualRecord() {
-    openManualRecord("analysis");
-    setStatus(analysisManualEntryStatusMessage());
+    openManualRecordWithStatus("analysis", analysisManualEntryStatusMessage());
   }
 
   function returnFromAnalysisToToday() {
@@ -2227,8 +2224,7 @@ export default function App() {
   }
 
   function openDetailedReportManualRecord() {
-    openManualRecord("detailedReport");
-    setStatus(detailedReportManualEntryStatusMessage());
+    openManualRecordWithStatus("detailedReport", detailedReportManualEntryStatusMessage());
   }
 
   function returnFromDetailedReportToToday() {
