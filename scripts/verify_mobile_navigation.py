@@ -4231,6 +4231,16 @@ def main() -> int:
             "return previewActionClearStatusMessage();",
         )
         _assert_contains(
+            "future modules open action helper binding",
+            content,
+            "function openFutureModulesFromMenu() {\n    setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());",
+        )
+        _assert_contains(
+            "future module destination action helper binding",
+            content,
+            "function openFutureModuleDestination(target: AppScreen | undefined, module: FutureModuleCard) {\n    setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());",
+        )
+        _assert_contains(
             "doctor share future preview return helper binding",
             content,
             'setDoctorShareReturnScreen(futurePreviewReturnScreen(returnScreen, "doctorShare"));',

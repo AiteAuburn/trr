@@ -15,6 +15,36 @@
 
 ## 2026-07-13
 
+### T1470 reuse future preview action helper in module routes
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Reused `futurePreviewActionClearStatusMessage` in `openFutureModulesFromMenu` and `openFutureModuleDestination`.
+- Kept route targets, status messages, destination branching, module detail fallback, production flows, backend requests, and UI copy unchanged.
+- Updated navigation verifier coverage for both future-module action reset bindings.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1469 extract future preview action clear helper
 
 類型：mobile / refactor / verifier / docs

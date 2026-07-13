@@ -3757,7 +3757,7 @@ export default function App() {
   }
 
   function openFutureModulesFromMenu() {
-    setFutureModuleActionStatus(previewActionClearStatusMessage());
+    setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());
     setCurrentScreen("futureModules");
     setStatus(futureModulesOpenStatusMessage());
   }
@@ -4319,7 +4319,7 @@ export default function App() {
   }
 
   function openFutureModuleDestination(target: AppScreen | undefined, module: FutureModuleCard) {
-    setFutureModuleActionStatus(previewActionClearStatusMessage());
+    setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());
     if (!target) {
       openFutureModuleDetail(module);
       return;
