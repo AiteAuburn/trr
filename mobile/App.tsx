@@ -3738,18 +3738,15 @@ export default function App() {
 
   function openFutureModulesFromMenu() {
     setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());
-    setCurrentScreen("futureModules");
-    setStatus(futureModulesOpenStatusMessage());
+    openScreenWithStatus("futureModules", futureModulesOpenStatusMessage());
   }
 
   function returnFromFutureModulesToMenu() {
-    setCurrentScreen("menu");
-    setStatus(futureModulesReturnMenuStatusMessage());
+    openScreenWithStatus("menu", futureModulesReturnMenuStatusMessage());
   }
 
   function returnFromFutureModuleDetail() {
-    setCurrentScreen("futureModules");
-    setStatus(futureModuleDetailReturnStatusMessage());
+    openScreenWithStatus("futureModules", futureModuleDetailReturnStatusMessage());
   }
 
   function openFutureModuleDetailResult(module: FutureModuleCard | null) {
@@ -3767,8 +3764,7 @@ export default function App() {
   }
 
   function returnFromFuturePreviewScreen(returnScreen: AppScreen) {
-    setCurrentScreen(returnScreen);
-    setStatus(futurePreviewReturnStatusMessage(returnScreen));
+    openScreenWithStatus(returnScreen, futurePreviewReturnStatusMessage(returnScreen));
   }
 
   function returnFromFoodPhoto() {

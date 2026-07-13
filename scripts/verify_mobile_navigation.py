@@ -4487,12 +4487,27 @@ def main() -> int:
         _assert_contains(
             "future preview return action helper fields",
             content,
-            "setCurrentScreen(returnScreen);\n    setStatus(futurePreviewReturnStatusMessage(returnScreen));",
+            "openScreenWithStatus(returnScreen, futurePreviewReturnStatusMessage(returnScreen));",
         )
         _assert_contains(
             "future modules open action helper binding",
             content,
             "function openFutureModulesFromMenu() {\n    setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());",
+        )
+        _assert_contains(
+            "future modules open status helper binding",
+            content,
+            'openScreenWithStatus("futureModules", futureModulesOpenStatusMessage());',
+        )
+        _assert_contains(
+            "future modules return menu status helper binding",
+            content,
+            'openScreenWithStatus("menu", futureModulesReturnMenuStatusMessage());',
+        )
+        _assert_contains(
+            "future module detail return status helper binding",
+            content,
+            'openScreenWithStatus("futureModules", futureModuleDetailReturnStatusMessage());',
         )
         _assert_contains(
             "future module destination action helper binding",
