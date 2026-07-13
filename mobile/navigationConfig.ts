@@ -154,6 +154,104 @@ const visualSmokeRouteJumps: Array<{ id: AppScreen; label: string }> = [
 
 const visualSmokeRouteJumpIds = visualSmokeRouteJumps.map((route) => route.id);
 
+type HeaderBackTargetState = {
+  menuReturnScreen: AppScreen;
+  recordDetailReturnScreen: AppScreen;
+  transcriptReviewReturnScreen: AppScreen;
+  manualRecordReturnScreen: AppScreen;
+  subscriptionReturnScreen: AppScreen;
+  tutorialReturnScreen: AppScreen;
+  foodPhotoReturnScreen: AppScreen;
+  doctorShareReturnScreen: AppScreen;
+  healthIntegrationReturnScreen: AppScreen;
+  communityReturnScreen: AppScreen;
+  rankingReturnScreen: AppScreen;
+  achievementsReturnScreen: AppScreen;
+  yearReviewReturnScreen: AppScreen;
+  storeReturnScreen: AppScreen;
+  saveSuccessReturnScreen: AppScreen;
+};
+
+const settingsSubpageScreens = new Set<AppScreen>([
+  "subscriptionManagement",
+  "accountSecurity",
+  "profileSettings",
+  "recordingQuotaSettings",
+  "reminderSettings",
+  "privacySettings"
+]);
+
+function headerBackTargetForScreen(
+  currentScreen: AppScreen,
+  chrome: { backTo?: AppScreen },
+  state: HeaderBackTargetState
+) {
+  if (currentScreen === "menu") {
+    return state.menuReturnScreen;
+  }
+  if (currentScreen === "recordDetail") {
+    return state.recordDetailReturnScreen;
+  }
+  if (currentScreen === "deleteConfirm") {
+    return "recordDetail";
+  }
+  if (currentScreen === "manualRecordConfirm") {
+    return "manualRecord";
+  }
+  if (currentScreen === "aiSaveConfirm") {
+    return "aiReview";
+  }
+  if (currentScreen === "aiSaveFailure") {
+    return "aiSaveConfirm";
+  }
+  if (currentScreen === "aiRemoveConfirm") {
+    return "aiReview";
+  }
+  if (currentScreen === "transcriptReview") {
+    return state.transcriptReviewReturnScreen;
+  }
+  if (currentScreen === "manualRecord") {
+    return state.manualRecordReturnScreen;
+  }
+  if (currentScreen === "subscription") {
+    return state.subscriptionReturnScreen;
+  }
+  if (settingsSubpageScreens.has(currentScreen)) {
+    return "settings";
+  }
+  if (currentScreen === "tutorial") {
+    return state.tutorialReturnScreen;
+  }
+  if (currentScreen === "foodPhoto") {
+    return state.foodPhotoReturnScreen;
+  }
+  if (currentScreen === "doctorShare") {
+    return state.doctorShareReturnScreen;
+  }
+  if (currentScreen === "healthIntegration") {
+    return state.healthIntegrationReturnScreen;
+  }
+  if (currentScreen === "community") {
+    return state.communityReturnScreen;
+  }
+  if (currentScreen === "ranking") {
+    return state.rankingReturnScreen;
+  }
+  if (currentScreen === "achievements") {
+    return state.achievementsReturnScreen;
+  }
+  if (currentScreen === "yearReview") {
+    return state.yearReviewReturnScreen;
+  }
+  if (currentScreen === "store") {
+    return state.storeReturnScreen;
+  }
+  if (currentScreen === "saveSuccess") {
+    return state.saveSuccessReturnScreen;
+  }
+  return chrome.backTo ?? "menu";
+}
+
 function normalizeVisualSmokeInitialRoute(
   value: string,
   enableDebugTools: boolean,
@@ -206,6 +304,7 @@ function visualSmokeDeepLinkStatusMessage(route: AppScreen) {
 export {
   menuScreens,
   mvpFlowSteps,
+  headerBackTargetForScreen,
   normalizeVisualSmokeInitialRoute,
   primaryScreens,
   screenChrome,

@@ -112,6 +112,7 @@ import {
   pendingRecordForSave
 } from "./recordSaveTransforms";
 import {
+  headerBackTargetForScreen,
   menuScreens,
   mvpFlowSteps,
   primaryScreens,
@@ -1285,60 +1286,23 @@ export default function App() {
   const deleteSuccessDestinationItems = deleteSuccessDestinationDisplayItems();
   const updateSuccessDestinationItems = updateSuccessDestinationDisplayItems(Boolean(selectedRecord));
   const currentChrome = screenChrome[currentScreen];
-  const headerBackTarget =
-    currentScreen === "menu"
-      ? menuReturnScreen
-      : currentScreen === "recordDetail"
-      ? recordDetailReturnScreen
-      : currentScreen === "deleteConfirm"
-        ? "recordDetail"
-      : currentScreen === "manualRecordConfirm"
-        ? "manualRecord"
-      : currentScreen === "aiSaveConfirm"
-        ? "aiReview"
-      : currentScreen === "aiSaveFailure"
-        ? "aiSaveConfirm"
-      : currentScreen === "aiRemoveConfirm"
-        ? "aiReview"
-      : currentScreen === "transcriptReview"
-        ? transcriptReviewReturnScreen
-      : currentScreen === "manualRecord"
-        ? manualRecordReturnScreen
-        : currentScreen === "subscription"
-          ? subscriptionReturnScreen
-        : currentScreen === "subscriptionManagement"
-          ? "settings"
-        : currentScreen === "accountSecurity"
-          ? "settings"
-        : currentScreen === "profileSettings"
-          ? "settings"
-        : currentScreen === "recordingQuotaSettings"
-          ? "settings"
-        : currentScreen === "reminderSettings"
-          ? "settings"
-        : currentScreen === "privacySettings"
-          ? "settings"
-        : currentScreen === "tutorial"
-          ? tutorialReturnScreen
-        : currentScreen === "foodPhoto"
-          ? foodPhotoReturnScreen
-        : currentScreen === "doctorShare"
-          ? doctorShareReturnScreen
-        : currentScreen === "healthIntegration"
-          ? healthIntegrationReturnScreen
-        : currentScreen === "community"
-          ? communityReturnScreen
-        : currentScreen === "ranking"
-          ? rankingReturnScreen
-        : currentScreen === "achievements"
-          ? achievementsReturnScreen
-        : currentScreen === "yearReview"
-          ? yearReviewReturnScreen
-        : currentScreen === "store"
-          ? storeReturnScreen
-        : currentScreen === "saveSuccess"
-          ? saveSuccessReturnScreen
-        : currentChrome.backTo ?? "menu";
+  const headerBackTarget = headerBackTargetForScreen(currentScreen, currentChrome, {
+    menuReturnScreen,
+    recordDetailReturnScreen,
+    transcriptReviewReturnScreen,
+    manualRecordReturnScreen,
+    subscriptionReturnScreen,
+    tutorialReturnScreen,
+    foodPhotoReturnScreen,
+    doctorShareReturnScreen,
+    healthIntegrationReturnScreen,
+    communityReturnScreen,
+    rankingReturnScreen,
+    achievementsReturnScreen,
+    yearReviewReturnScreen,
+    storeReturnScreen,
+    saveSuccessReturnScreen
+  });
   const showPrimaryTabs = currentScreen !== "today" && primaryScreens.some((screen) => screen.id === currentScreen);
   const mvpFlowCurrentScreen = currentScreen === "aiSaveFailure" ? "aiSaveConfirm" : currentScreen;
   const mvpFlowStepIndex = mvpFlowSteps.findIndex((step) => step.id === mvpFlowCurrentScreen);

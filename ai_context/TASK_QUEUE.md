@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T1417: Extract header back target routing helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/navigationConfig.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `headerBackTargetForScreen` to `mobile/navigationConfig.ts` to own header back-target routing for dynamic return screens and static fallbacks.
+- Replaced the long inline `headerBackTarget` conditional chain in `mobile/App.tsx` with the extracted helper call.
+- Kept header busy guard, daily-record unsaved-exit guard, AI Review transcript return, menu fallback behavior, and all return-screen state unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting screen renderers or route-specific action handlers in small slices.
+
 ### T1416: Extract token storage display status binding
 
 Status: done

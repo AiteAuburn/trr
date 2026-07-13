@@ -2003,6 +2003,36 @@ def main() -> int:
             'headerBackTarget === "menu" && currentScreen !== "menu" && !currentChrome.actionLabel',
         )
         _assert_contains(
+            "header back target helper binding",
+            content,
+            "const headerBackTarget = headerBackTargetForScreen(currentScreen, currentChrome, {",
+        )
+        _assert_contains(
+            "header back target helper",
+            navigation_content,
+            "function headerBackTargetForScreen(",
+        )
+        _assert_contains(
+            "header back target state type",
+            navigation_content,
+            "type HeaderBackTargetState = {",
+        )
+        _assert_contains(
+            "header back target settings subpage set",
+            navigation_content,
+            "const settingsSubpageScreens = new Set<AppScreen>([",
+        )
+        _assert_contains(
+            "header back target settings fallback",
+            navigation_content,
+            'if (settingsSubpageScreens.has(currentScreen)) {\n    return "settings";\n  }',
+        )
+        _assert_contains(
+            "header back target chrome fallback",
+            navigation_content,
+            'return chrome.backTo ?? "menu";',
+        )
+        _assert_contains(
             "minimal home chrome keeps menu fallback",
             navigation_content,
             'today: { subtitle: "" }',
