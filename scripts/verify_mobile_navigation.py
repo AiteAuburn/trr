@@ -3717,12 +3717,37 @@ def main() -> int:
         _assert_contains(
             "visual smoke future module route fallback",
             content,
+            "return false;\n  }\n\n  function openVisualSmokeTranscriptRoute(target: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke transcript route handler",
+            content,
+            "function openVisualSmokeTranscriptRoute(target: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke transcript route return screen",
+            content,
+            'setTranscriptReviewReturnScreen("record");',
+        )
+        _assert_contains(
+            "visual smoke transcript route sample draft",
+            content,
+            'updateTranscriptDraft(sampleText, "sample");',
+        )
+        _assert_contains(
+            "visual smoke transcript route fallback",
+            content,
             "return false;\n  }\n\n  function openVisualSmokeRoute(target: AppScreen)",
         )
         _assert_contains(
             "visual smoke record list helper binding",
             content,
             "if (isVisualSmokeRecordListScreen(target)) {",
+        )
+        _assert_contains(
+            "visual smoke transcript route helper binding",
+            content,
+            "if (openVisualSmokeTranscriptRoute(target)) {",
         )
         _assert_contains(
             "visual smoke ai preview helper binding",

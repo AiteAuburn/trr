@@ -15,6 +15,37 @@
 
 ## 2026-07-13
 
+### T1434 extract visual smoke transcript route handler
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added local `openVisualSmokeTranscriptRoute` in `mobile/App.tsx` for the visual-smoke transcript review demo route.
+- Replaced the inline transcript review route branch in `openVisualSmokeRoute`.
+- Kept transcript return target, sample transcript draft source, debug gating, and normal app navigation unchanged.
+- Updated navigation verifier coverage for the helper internals and App binding.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1433 extract visual smoke future-module route handler
 
 類型：mobile / refactor / verifier / docs

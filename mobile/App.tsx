@@ -4131,6 +4131,16 @@ export default function App() {
     return false;
   }
 
+  function openVisualSmokeTranscriptRoute(target: AppScreen) {
+    if (target === "transcriptReview") {
+      setTranscriptReviewReturnScreen("record");
+      updateTranscriptDraft(sampleText, "sample");
+      setCurrentScreen("transcriptReview");
+      return true;
+    }
+    return false;
+  }
+
   function openVisualSmokeRoute(target: AppScreen) {
     if (!enableDebugTools || !allowMobileDevAuth) {
       return;
@@ -4145,10 +4155,7 @@ export default function App() {
       setCurrentScreen("record");
       return;
     }
-    if (target === "transcriptReview") {
-      setTranscriptReviewReturnScreen("record");
-      updateTranscriptDraft(sampleText, "sample");
-      setCurrentScreen("transcriptReview");
+    if (openVisualSmokeTranscriptRoute(target)) {
       return;
     }
     if (isVisualSmokeAiPreviewScreen(target)) {
