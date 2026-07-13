@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1357: Reuse achievement badge summary on achievement page
+
+Status: done
+
+Summary:
+
+- Extended `achievementBadgeSummary` in `mobile/futureModuleDisplay.ts` with `nextRemaining` for next badge progress.
+- Replaced the inline achievement page unlocked-count and next-remaining filters/maps/sort in `mobile/App.tsx` with the shared summary helper.
+- Kept achievement page counts, next badge copy input, Year Review badge summary, and achievement rendering unchanged.
+- Updated navigation verifier coverage so the shared helper, next-remaining field, and achievement page bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1356: Extract Year Review highlight display helper
 
 Status: done

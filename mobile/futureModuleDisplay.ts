@@ -772,13 +772,19 @@ export function buildAchievementCategoryDisplaySections(items: AchievementDispla
 
 export function achievementBadgeSummary(items: AchievementDisplayItem[]) {
   const unlockedItems = items.filter((item) => item.progress >= item.target);
+  const nextRemaining =
+    items
+      .filter((item) => item.progress < item.target)
+      .map((item) => item.target - item.progress)
+      .sort((first, second) => first - second)[0] ?? 0;
   const highestLevel =
     unlockedItems
       .map((item) => item.level)
       .sort((first, second) => second - first)[0] ?? 0;
   return {
     unlockedCount: unlockedItems.length,
-    highestLevel
+    highestLevel,
+    nextRemaining
   };
 }
 

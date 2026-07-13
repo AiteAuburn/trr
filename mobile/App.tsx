@@ -1465,14 +1465,17 @@ export default function App() {
     () => buildAchievementCategoryDisplaySections(achievementDisplayItems),
     [achievementDisplayItems]
   );
-  const unlockedAchievementCount = achievementDisplayItems.filter((item) => item.progress >= item.target).length;
-  const nextAchievementDays =
-    achievementDisplayItems
-      .filter((item) => item.progress < item.target)
-      .map((item) => item.target - item.progress)
-      .sort((first, second) => first - second)[0] ?? 0;
-  const unlockedAchievementDisplayCount = clampNumber(unlockedAchievementCount, 0, maxMobileCountValue);
-  const nextAchievementDisplayDays = clampNumber(nextAchievementDays, 0, maxMobileCountValue);
+  const achievementBadgeDisplaySummary = achievementBadgeSummary(achievementDisplayItems);
+  const unlockedAchievementDisplayCount = clampNumber(
+    achievementBadgeDisplaySummary.unlockedCount,
+    0,
+    maxMobileCountValue
+  );
+  const nextAchievementDisplayDays = clampNumber(
+    achievementBadgeDisplaySummary.nextRemaining,
+    0,
+    maxMobileCountValue
+  );
   const achievementActionStatusDisplayText = boundUiMessage(achievementActionStatus);
   const currentYear = new Date().getFullYear();
   const yearReviewTargetDisplayYear = yearReviewTargetYear(new Date());

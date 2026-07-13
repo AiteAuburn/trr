@@ -5965,6 +5965,9 @@ def main() -> int:
             ("achievement integration status handler", "function showAchievementIntegrationStatus()"),
             ("year review share status handler", "function showYearReviewShareStatus()"),
             ("achievement display items helper binding", "const achievementDisplayItems = useMemo(() => buildAchievementDisplayItems(achievements), [achievements]);"),
+            ("achievement badge summary helper binding", "const achievementBadgeDisplaySummary = achievementBadgeSummary(achievementDisplayItems);"),
+            ("achievement unlocked summary binding", "achievementBadgeDisplaySummary.unlockedCount"),
+            ("achievement next remaining summary binding", "achievementBadgeDisplaySummary.nextRemaining"),
             ("store search input handler", "function updateStoreSearchInput(value: string)"),
             ("store category select handler", "function selectStoreCategory(category: StoreCategory)"),
             ("store category option press handler", "function pressStoreCategoryOption(category: ReturnType<typeof storeCategoryDisplayItem>)"),
@@ -6161,6 +6164,7 @@ def main() -> int:
             ("achievement badge summary helper", "export function achievementBadgeSummary(items: AchievementDisplayItem[])"),
             ("achievement badge summary unlocked filter", "const unlockedItems = items.filter((item) => item.progress >= item.target);"),
             ("achievement badge summary highest level", ".sort((first, second) => second - first)[0] ?? 0"),
+            ("achievement badge summary next remaining", "nextRemaining"),
             ("achievement API transform helper", "export function achievementItemFromApi(value: AchievementApiItem): AchievementItem"),
             ("achievement unlock date helper", "export function achievementUnlockDisplayDate(value?: string | null)"),
         ):
