@@ -2892,6 +2892,11 @@ def main() -> int:
             "clearPreviewActionState();\n    setCurrentScreen(\"aiReview\");\n    setStatus(aiSaveConfirmReturnStatusMessage());",
         )
         _assert_contains(
+            "AI save confirm enter clear selection helper binding",
+            content,
+            "clearPreviewSelectionState();\n    setLastSaveErrorSummary(\"\");\n    setCurrentScreen(\"aiSaveConfirm\");",
+        )
+        _assert_contains(
             "save success unsaved candidate handler",
             content,
             "function processUnsavedPreviewRecords()",

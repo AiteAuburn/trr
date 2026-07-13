@@ -3213,9 +3213,7 @@ export default function App() {
       setCurrentScreen("aiReview");
       return;
     }
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
+    clearPreviewSelectionState();
     setLastSaveErrorSummary("");
     setCurrentScreen("aiSaveConfirm");
     setStatus(aiSaveConfirmReadyStatusMessage());
