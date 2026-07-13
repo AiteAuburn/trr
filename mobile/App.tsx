@@ -3921,8 +3921,12 @@ export default function App() {
     void saveCommunityPublicSettings(!(communityPublicSettings?.leaderboard_opt_in ?? false));
   }
 
+  function menuPreviewReturnScreen(returnScreen: AppScreen, selfScreen: AppScreen) {
+    return returnScreen === selfScreen ? "menu" : returnScreen;
+  }
+
   function openAchievements(returnScreen: AppScreen = currentScreen) {
-    setAchievementsReturnScreen(returnScreen === "achievements" ? "menu" : returnScreen);
+    setAchievementsReturnScreen(menuPreviewReturnScreen(returnScreen, "achievements"));
     setCurrentScreen("achievements");
     void loadAchievementSummary();
   }
@@ -3941,7 +3945,7 @@ export default function App() {
   }
 
   function openYearReview(returnScreen: AppScreen = currentScreen) {
-    setYearReviewReturnScreen(returnScreen === "yearReview" ? "menu" : returnScreen);
+    setYearReviewReturnScreen(menuPreviewReturnScreen(returnScreen, "yearReview"));
     setCurrentScreen("yearReview");
     void loadYearReview();
   }
@@ -3960,7 +3964,7 @@ export default function App() {
   }
 
   function openStore(returnScreen: AppScreen = currentScreen) {
-    setStoreReturnScreen(returnScreen === "store" ? "menu" : returnScreen);
+    setStoreReturnScreen(menuPreviewReturnScreen(returnScreen, "store"));
     setCurrentScreen("store");
     void loadStoreCatalogAndPoints();
   }
