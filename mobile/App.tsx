@@ -3757,11 +3757,6 @@ export default function App() {
     setCurrentScreen("foodPhoto");
   }
 
-  function returnFromFoodPhoto() {
-    setCurrentScreen(foodPhotoReturnScreen);
-    setStatus(futurePreviewReturnStatusMessage(foodPhotoReturnScreen));
-  }
-
   function openFutureModulesFromMenu() {
     setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());
     setCurrentScreen("futureModules");
@@ -3792,6 +3787,15 @@ export default function App() {
     return previewActionClearStatusMessage();
   }
 
+  function returnFromFuturePreviewScreen(returnScreen: AppScreen) {
+    setCurrentScreen(returnScreen);
+    setStatus(futurePreviewReturnStatusMessage(returnScreen));
+  }
+
+  function returnFromFoodPhoto() {
+    returnFromFuturePreviewScreen(foodPhotoReturnScreen);
+  }
+
   function openDoctorShare(returnScreen: AppScreen = currentScreen) {
     setDoctorShareReturnScreen(futurePreviewReturnScreen(returnScreen, "doctorShare"));
     setDoctorShareActionStatus(futurePreviewActionClearStatusMessage());
@@ -3799,8 +3803,7 @@ export default function App() {
   }
 
   function returnFromDoctorSharePreview() {
-    setCurrentScreen(doctorShareReturnScreen);
-    setStatus(futurePreviewReturnStatusMessage(doctorShareReturnScreen));
+    returnFromFuturePreviewScreen(doctorShareReturnScreen);
   }
 
   function showDoctorShareTokenStatus() {
@@ -3818,8 +3821,7 @@ export default function App() {
   }
 
   function returnFromHealthIntegrationPreview() {
-    setCurrentScreen(healthIntegrationReturnScreen);
-    setStatus(futurePreviewReturnStatusMessage(healthIntegrationReturnScreen));
+    returnFromFuturePreviewScreen(healthIntegrationReturnScreen);
   }
 
   function showHealthIntegrationPermissionStatus() {
@@ -3840,8 +3842,7 @@ export default function App() {
   }
 
   function returnFromCommunityPreview() {
-    setCurrentScreen(communityReturnScreen);
-    setStatus(futurePreviewReturnStatusMessage(communityReturnScreen));
+    returnFromFuturePreviewScreen(communityReturnScreen);
   }
 
   function showCommunityPostingStatus() {
@@ -3915,8 +3916,7 @@ export default function App() {
   }
 
   function returnFromRankingPreview() {
-    setCurrentScreen(rankingReturnScreen);
-    setStatus(futurePreviewReturnStatusMessage(rankingReturnScreen));
+    returnFromFuturePreviewScreen(rankingReturnScreen);
   }
 
   function showRankingPublicStatus() {
@@ -3938,8 +3938,7 @@ export default function App() {
   }
 
   function returnFromAchievements() {
-    setCurrentScreen(achievementsReturnScreen);
-    setStatus(futurePreviewReturnStatusMessage(achievementsReturnScreen));
+    returnFromFuturePreviewScreen(achievementsReturnScreen);
   }
 
   function showAchievementIntegrationStatus() {
@@ -3957,8 +3956,7 @@ export default function App() {
   }
 
   function returnFromYearReview() {
-    setCurrentScreen(yearReviewReturnScreen);
-    setStatus(futurePreviewReturnStatusMessage(yearReviewReturnScreen));
+    returnFromFuturePreviewScreen(yearReviewReturnScreen);
   }
 
   function showYearReviewShareStatus() {
@@ -4005,8 +4003,7 @@ export default function App() {
   }
 
   function returnFromStore() {
-    setCurrentScreen(storeReturnScreen);
-    setStatus(futurePreviewReturnStatusMessage(storeReturnScreen));
+    returnFromFuturePreviewScreen(storeReturnScreen);
   }
 
   function returnFromStoreCartToStore() {

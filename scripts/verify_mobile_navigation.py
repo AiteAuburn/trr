@@ -2207,11 +2207,13 @@ def main() -> int:
                 content,
                 f"const {label_name} = returnDestinationButtonLabel({return_state_name});",
             )
-            _assert_contains(
-                f"{screen} return handler",
-                content,
-                f"setCurrentScreen({return_state_name})",
-            )
+            direct_return_marker = f"setCurrentScreen({return_state_name})"
+            helper_return_marker = f"returnFromFuturePreviewScreen({return_state_name})"
+            if direct_return_marker not in content and helper_return_marker not in content:
+                raise AssertionError(
+                    f"{screen} return handler missing expected guard: "
+                    f"{direct_return_marker} or {helper_return_marker}"
+                )
             _assert_contains(
                 f"{screen} return CTA render",
                 content,
@@ -4231,6 +4233,16 @@ def main() -> int:
             "return previewActionClearStatusMessage();",
         )
         _assert_contains(
+            "future preview return action helper",
+            content,
+            "function returnFromFuturePreviewScreen(returnScreen: AppScreen)",
+        )
+        _assert_contains(
+            "future preview return action helper fields",
+            content,
+            "setCurrentScreen(returnScreen);\n    setStatus(futurePreviewReturnStatusMessage(returnScreen));",
+        )
+        _assert_contains(
             "future modules open action helper binding",
             content,
             "function openFutureModulesFromMenu() {\n    setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());",
@@ -4269,6 +4281,16 @@ def main() -> int:
             "ranking future preview action helper binding",
             content,
             "setRankingActionStatus(futurePreviewActionClearStatusMessage());",
+        )
+        _assert_contains(
+            "doctor share future preview return action helper binding",
+            content,
+            "returnFromFuturePreviewScreen(doctorShareReturnScreen);",
+        )
+        _assert_contains(
+            "food photo future preview return action helper binding",
+            content,
+            "returnFromFuturePreviewScreen(foodPhotoReturnScreen);",
         )
         _assert_contains(
             "visual smoke future module route doctor binding",
