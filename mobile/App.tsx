@@ -161,6 +161,7 @@ import {
   communityReadinessChecklistDisplayItems,
   foodCommunityCategories,
   foodCommunityCategoryDisplayItem,
+  foodCommunityCategoryDisplayItems as buildFoodCommunityCategoryDisplayItems,
   foodCommunityItemDisplayItem,
   foodCommunityItemFromApi,
   foodCommunityItems,
@@ -1621,7 +1622,7 @@ export default function App() {
   const foodCommunityCategoriesForDisplay =
     foodCommunityBackendCategories.length > 0 ? foodCommunityBackendCategories : foodCommunityCategories;
   const foodCommunityCategoryDisplayOptions = useMemo(
-    () => foodCommunityCategoriesForDisplay.map(foodCommunityCategoryDisplayItem),
+    () => buildFoodCommunityCategoryDisplayItems(foodCommunityCategoriesForDisplay),
     [foodCommunityCategoriesForDisplay]
   );
   const selectedFoodCommunityCategoryDisplay =

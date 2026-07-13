@@ -867,6 +867,12 @@ export function foodCommunityCategoryDisplayItem(value: { id: FoodCommunityCateg
   };
 }
 
+export function foodCommunityCategoryDisplayItems(
+  values: Array<{ id: FoodCommunityCategory; label: string; foodCount?: number; sampleFoods?: string[] }>
+) {
+  return values.map(foodCommunityCategoryDisplayItem);
+}
+
 export function foodCommunityShareDisplayItem(value: FoodCommunityShare) {
   const before = clampNumber(value.beforeGlucose, 0, maxMobileGlucoseValue);
   const after = clampNumber(value.afterGlucose, 0, maxMobileGlucoseValue);
