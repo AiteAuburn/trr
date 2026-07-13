@@ -119,6 +119,7 @@ import {
   primaryScreens,
   primaryTabNavigationState,
   screenChrome,
+  transcriptReviewReturnTargetForScreen,
   visualSmokeBootIgnoredDisplayMessages,
   visualSmokeBootSkippedDisplayMessages,
   visualSmokeDeepLinkStatusMessage,
@@ -2011,7 +2012,7 @@ export default function App() {
       return;
     }
     setPreview(null);
-    setTranscriptReviewReturnScreen(currentScreen === "today" ? "today" : "record");
+    setTranscriptReviewReturnScreen(transcriptReviewReturnTargetForScreen(currentScreen));
     setCurrentScreen("transcriptReview");
     setStatus(transcriptReviewReadyStatusMessage());
   }

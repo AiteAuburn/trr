@@ -283,6 +283,10 @@ function primaryTabNavigationState(value: { currentScreen: AppScreen; isAnyReque
   };
 }
 
+function transcriptReviewReturnTargetForScreen(currentScreen: AppScreen) {
+  return currentScreen === "today" ? "today" : "record";
+}
+
 function normalizeVisualSmokeInitialRoute(
   value: string,
   enableDebugTools: boolean,
@@ -341,6 +345,7 @@ export {
   primaryScreens,
   primaryTabNavigationState,
   screenChrome,
+  transcriptReviewReturnTargetForScreen,
   visualSmokeBootIgnoredDisplayMessages,
   visualSmokeBootSkippedDisplayMessages,
   visualSmokeDeepLinkStatusMessage,

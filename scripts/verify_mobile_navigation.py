@@ -2073,6 +2073,16 @@ def main() -> int:
             'show: value.currentScreen !== "today" && items.some((item) => item.isCurrent)',
         )
         _assert_contains(
+            "transcript review return target helper",
+            navigation_content,
+            "function transcriptReviewReturnTargetForScreen(currentScreen: AppScreen)",
+        )
+        _assert_contains(
+            "transcript review today return helper",
+            navigation_content,
+            'return currentScreen === "today" ? "today" : "record";',
+        )
+        _assert_contains(
             "minimal home chrome keeps menu fallback",
             navigation_content,
             'today: { subtitle: "" }',
@@ -2089,6 +2099,7 @@ def main() -> int:
             ),
             ("deepseek record parse request binding", "llm_model_id: llmModelId"),
             ("deepseek selected model status render", "LLM：{selectedLlmModel?.label ?? llmModelId}"),
+            ("transcript review return target helper binding", "setTranscriptReviewReturnScreen(transcriptReviewReturnTargetForScreen(currentScreen));"),
             ("home recording timer state", "const [recordingElapsedSeconds, setRecordingElapsedSeconds] = useState(0);"),
             ("home recording timer interval", "const timer = setInterval(() => {"),
             ("home recording timer clamp", "setRecordingElapsedSeconds(clampNumber(nextElapsedSeconds, 0, limitSeconds));"),

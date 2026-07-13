@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1421 extract transcript review return target helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/navigationConfig.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `transcriptReviewReturnTargetForScreen` to `mobile/navigationConfig.ts` for the Today-vs-Record transcript review return target.
+- Replaced the inline `currentScreen === "today" ? "today" : "record"` return-target selection in `mobile/App.tsx`.
+- Kept transcript validation, preview reset, transcript review navigation, fallback recording return targets, and parser behavior unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、transcript validation、preview reset、transcript review navigation、fallback recording return targets、parser behavior、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue splitting screen renderers or route-specific action handlers in small slices.
+
 ### T1420 extract daily record draft screen state helper
 
 類型：mobile / refactor / verifier / docs
