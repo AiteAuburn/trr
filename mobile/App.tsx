@@ -383,11 +383,9 @@ import {
 } from "./recordWorkflowCopy";
 import {
   deleteSuccessBoundaryChecklistDisplayItems,
-  deleteConfirmIntroCopy,
+  deleteConfirmDisplayTexts,
   deleteConfirmReadyStatusMessage,
-  deleteConfirmRecordMetaCopy,
   deleteConfirmReturnStatusMessage,
-  deleteConfirmSubmitLabel,
   deleteConfirmChecklistDisplayItems,
   manualRecordCreateFailureStatusMessage,
   manualRecordCreateProgressStatusMessage,
@@ -1857,11 +1855,10 @@ export default function App() {
   const selectedRecordDisplayItem = selectedRecord ? recordDetailDisplayItem(selectedRecord) : null;
   const manualRecordConfirmIntroDisplayText = manualRecordConfirmIntroCopy();
   const manualRecordConfirmSubmitDisplayLabel = manualRecordConfirmSubmitLabel(isBusy);
-  const deleteConfirmIntroDisplayText = deleteConfirmIntroCopy();
-  const deleteConfirmRecordMetaDisplayText = selectedRecordDisplayItem
-    ? deleteConfirmRecordMetaCopy(selectedRecordDisplayItem.dateTimeLabel, selectedRecordDisplayItem.sourceLabel)
-    : "";
-  const deleteConfirmSubmitDisplayLabel = deleteConfirmSubmitLabel(isBusy);
+  const deleteConfirmDisplay = deleteConfirmDisplayTexts(selectedRecordDisplayItem, isBusy);
+  const deleteConfirmIntroDisplayText = deleteConfirmDisplay.intro;
+  const deleteConfirmRecordMetaDisplayText = deleteConfirmDisplay.recordMeta;
+  const deleteConfirmSubmitDisplayLabel = deleteConfirmDisplay.submit;
   const recordEditIntroDisplayText = recordEditIntroCopy();
   const historyNoRecordsTitleDisplayText = historyNoRecordsTitleCopy();
   const historyNoRecordsBodyDisplayText = historyNoRecordsBodyCopy();

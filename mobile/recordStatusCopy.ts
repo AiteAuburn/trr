@@ -125,6 +125,19 @@ export function deleteConfirmSubmitLabel(isBusy: boolean) {
   return boundDisplayText(isBusy ? "刪除中..." : "確認刪除", maxDisplayTextLength);
 }
 
+export function deleteConfirmDisplayTexts(
+  selectedRecordDisplayItem: { dateTimeLabel: string; sourceLabel: string } | null,
+  isBusy: boolean
+) {
+  return {
+    intro: deleteConfirmIntroCopy(),
+    recordMeta: selectedRecordDisplayItem
+      ? deleteConfirmRecordMetaCopy(selectedRecordDisplayItem.dateTimeLabel, selectedRecordDisplayItem.sourceLabel)
+      : "",
+    submit: deleteConfirmSubmitLabel(isBusy)
+  };
+}
+
 export function deleteConfirmReadyStatusMessage() {
   return boundUiMessage("請確認是否刪除這筆紀錄；按下確認刪除前不會送出 delete request。");
 }

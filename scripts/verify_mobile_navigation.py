@@ -3975,6 +3975,10 @@ def main() -> int:
             ("delete confirm intro copy helper", "function deleteConfirmIntroCopy()"),
             ("delete confirm record meta copy helper", "function deleteConfirmRecordMetaCopy(dateTimeLabel: string, sourceLabel: string)"),
             ("delete confirm submit label helper", "function deleteConfirmSubmitLabel(isBusy: boolean)"),
+            ("delete confirm display texts helper", "function deleteConfirmDisplayTexts("),
+            ("delete confirm display texts intro binding", "intro: deleteConfirmIntroCopy()"),
+            ("delete confirm display texts record meta binding", "deleteConfirmRecordMetaCopy(selectedRecordDisplayItem.dateTimeLabel, selectedRecordDisplayItem.sourceLabel)"),
+            ("delete confirm display texts submit binding", "submit: deleteConfirmSubmitLabel(isBusy)"),
             ("delete confirm ready status helper", "function deleteConfirmReadyStatusMessage()"),
             ("delete confirm return status helper", "function deleteConfirmReturnStatusMessage()"),
             ("delete confirm checklist helper", "function deleteConfirmChecklistDisplayItems()"),
@@ -4001,6 +4005,10 @@ def main() -> int:
             _assert_contains(label, record_status_copy_content, marker)
         for label, marker in (
             ("delete confirm checklist helper binding", "const deleteConfirmChecklistItems = deleteConfirmChecklistDisplayItems();"),
+            ("delete confirm display helper binding", "const deleteConfirmDisplay = deleteConfirmDisplayTexts(selectedRecordDisplayItem, isBusy);"),
+            ("delete confirm intro display binding", "const deleteConfirmIntroDisplayText = deleteConfirmDisplay.intro;"),
+            ("delete confirm record meta display binding", "const deleteConfirmRecordMetaDisplayText = deleteConfirmDisplay.recordMeta;"),
+            ("delete confirm submit display binding", "const deleteConfirmSubmitDisplayLabel = deleteConfirmDisplay.submit;"),
             ("delete confirm preview block binding", "<DeleteConfirmPreviewBlock\n              dangerLabel={auxiliaryDisplayLabels.dangerOperation}"),
             ("delete confirm preview intro binding", "introText={deleteConfirmIntroDisplayText}"),
             ("delete confirm preview record meta binding", "recordMetaText={deleteConfirmRecordMetaDisplayText}"),
