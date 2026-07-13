@@ -167,6 +167,7 @@ import {
   foodCommunityItemDisplayItem,
   foodCommunityItemFromApi,
   foodCommunityItems,
+  foodCommunitySyncStatusMessages,
   futureModuleCards,
   futureModuleCardDisplayItem,
   futureModuleCardDisplayItems,
@@ -4347,10 +4348,12 @@ export default function App() {
     if (visualSmokePreviewActive.current) {
       return;
     }
+    const foodCommunitySyncStatus = foodCommunitySyncStatusMessages({
+      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+      itemCount: 0
+    });
     if (!protectedAccountBackendReady || !account) {
-      setCommunityActionStatus(
-        boundUiMessage(`${protectedAccountBackendUnavailableMessage || "backend account 尚未 ready"}；目前只顯示本機食物資料預覽。`)
-      );
+      setCommunityActionStatus(foodCommunitySyncStatus.unavailable);
       return;
     }
     const searchQuery = foodCommunitySearchText.trim();
@@ -4372,11 +4375,11 @@ export default function App() {
     ].join(":");
     latestCommunitySyncKey.current = communityKey;
     if (communitySyncInFlightKeys.current.has(communityKey)) {
-      setCommunityActionStatus(boundUiMessage("正在同步食物社群資料庫，請稍候。"));
+      setCommunityActionStatus(foodCommunitySyncStatus.inFlight);
       return;
     }
     communitySyncInFlightKeys.current.add(communityKey);
-    setCommunityActionStatus(boundUiMessage("正在同步 backend 食物社群資料庫。"));
+    setCommunityActionStatus(foodCommunitySyncStatus.loading);
     try {
       const foods = await requestJson<FoodCommunityApiItem[]>(
         normalizedApiBaseUrl,
@@ -4393,12 +4396,15 @@ export default function App() {
         void loadFoodCommunityDetail(nextItems[0].id);
       }
       setCommunityActionStatus(
-        boundUiMessage(`已同步 ${clampNumber(nextItems.length, 0, maxMobileCountValue)} 筆食物資料；分享仍需使用者主動送出。`)
+        foodCommunitySyncStatusMessages({
+          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+          itemCount: nextItems.length
+        }).success
       );
     } catch {
       if (latestCommunitySyncKey.current === communityKey) {
         setFoodCommunityBackendItems([]);
-        setCommunityActionStatus(boundUiMessage("食物社群資料庫同步失敗；目前保留本機預覽資料。"));
+        setCommunityActionStatus(foodCommunitySyncStatus.failure);
       }
     } finally {
       communitySyncInFlightKeys.current.delete(communityKey);

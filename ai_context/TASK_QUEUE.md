@@ -124,6 +124,38 @@ None.
 
 ## Done
 
+### T1407: Extract food community sync status messages
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `foodCommunitySyncStatusMessages` to `mobile/futureModuleDisplay.ts` for Food Community backend unavailable, in-flight, loading, success, and failure status copy.
+- Replaced inline bounded Food Community list sync status construction in `mobile/App.tsx` with the extracted helper.
+- Kept `/community/foods`, category/search query construction, cache keying, item mapping, selected item update, detail refresh trigger, and rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No backend/schema/Android signing/token/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue auditing remaining food detail, public settings, food share, store redemption, and auth visual-smoke action-local status helpers separately.
+
 ### T1406: Extract year-review revoke status messages
 
 Status: done

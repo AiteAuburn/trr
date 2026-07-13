@@ -2185,6 +2185,23 @@ export function communityActionDisplayTexts(value: {
   };
 }
 
+export function foodCommunitySyncStatusMessages(value: {
+  backendUnavailableMessage: string;
+  itemCount: number;
+}) {
+  return {
+    unavailable: boundUiMessage(
+      `${value.backendUnavailableMessage || "backend account 尚未 ready"}；目前只顯示本機食物資料預覽。`
+    ),
+    inFlight: boundUiMessage("正在同步食物社群資料庫，請稍候。"),
+    loading: boundUiMessage("正在同步 backend 食物社群資料庫。"),
+    success: boundUiMessage(
+      `已同步 ${clampNumber(value.itemCount, 0, maxMobileCountValue)} 筆食物資料；分享仍需使用者主動送出。`
+    ),
+    failure: boundUiMessage("食物社群資料庫同步失敗；目前保留本機預覽資料。")
+  };
+}
+
 export function communityLeaderboardSyncStatusMessages(value: {
   backendUnavailableMessage: string;
   sectionCount: number;

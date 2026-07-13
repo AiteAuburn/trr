@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1407 extract food community sync status messages
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `foodCommunitySyncStatusMessages` to `mobile/futureModuleDisplay.ts` for Food Community backend unavailable, in-flight, loading, success, and failure status copy.
+- Replaced inline bounded Food Community list sync status construction in `mobile/App.tsx` with the extracted helper.
+- Kept `/community/foods`, category/search query construction, cache keying, item mapping, selected item update, detail refresh trigger, and rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、`/community/foods` request path、category/search query construction、cache keying、item mapping、selected item update、detail refresh trigger、rendering、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining food detail, public settings, food share, store redemption, and auth visual-smoke action-local status helpers separately.
+
 ### T1406 extract year-review revoke status messages
 
 類型：mobile / refactor / verifier / docs
