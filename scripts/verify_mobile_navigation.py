@@ -3586,6 +3586,11 @@ def main() -> int:
             "seedEmptyRecordEditStateForNow();\n    }\n    setCurrentScreen(\"recordDetail\");",
         )
         _assert_contains(
+            "record delete success empty edit seed helper binding",
+            content,
+            "setSelectedRecord(null);\n      seedEmptyRecordEditStateForNow();\n      setLastDeletedSummary(recordDeleteSummaryMessage(1));",
+        )
+        _assert_contains(
             "record edit return handler",
             content,
             "function returnFromRecordEdit()",

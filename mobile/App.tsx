@@ -5855,9 +5855,7 @@ export default function App() {
       });
       setRecords((current) => current.filter((record) => record.id !== selectedRecord.id));
       setSelectedRecord(null);
-      setRecordEditFields(emptyRecordEditFields());
-      setRecordEditDate(formatLocalDateInput(new Date()));
-      setRecordEditTime(formatLocalTimeInput(new Date()));
+      seedEmptyRecordEditStateForNow();
       setLastDeletedSummary(recordDeleteSummaryMessage(1));
       setCurrentScreen("deleteSuccess");
       setStatus(recordDeleteSuccessStatusMessage());
