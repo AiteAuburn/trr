@@ -3613,7 +3613,7 @@ def main() -> int:
         _assert_contains(
             "manual record unavailable helper fields",
             content,
-            "setStatus(manualRecordCreateUnavailableStatusMessage(protectedBackendUnavailableMessage));\n    setCurrentScreen(screen);",
+            "openScreenWithStatus(screen, manualRecordCreateUnavailableStatusMessage(protectedBackendUnavailableMessage));",
         )
         _assert_contains(
             "manual record confirm unavailable helper binding",
@@ -3649,6 +3649,16 @@ def main() -> int:
             "manual record confirm return handler",
             content,
             "function returnFromManualRecordConfirm()",
+        )
+        _assert_contains(
+            "manual record confirm ready status helper binding",
+            content,
+            'openScreenWithStatus("manualRecordConfirm", manualRecordConfirmReadyStatusMessage());',
+        )
+        _assert_contains(
+            "manual record confirm return status helper binding",
+            content,
+            'openScreenWithStatus("manualRecord", manualRecordConfirmReturnStatusMessage());',
         )
         _assert_contains(
             "manual record confirm enter binding",
@@ -5008,6 +5018,11 @@ def main() -> int:
             "quick-entry action helper",
             content,
             "function handleQuickEntryMode(mode: QuickEntryMode",
+        )
+        _assert_contains(
+            "quick-entry text mode status helper binding",
+            content,
+            'openScreenWithStatus("record", quickEntryTextModeStatusMessage());',
         )
         _assert_contains(
             "record quick-entry wrapper",

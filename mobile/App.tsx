@@ -2319,8 +2319,7 @@ export default function App() {
   }
 
   function openManualRecordUnavailable(screen: AppScreen) {
-    setStatus(manualRecordCreateUnavailableStatusMessage(protectedBackendUnavailableMessage));
-    setCurrentScreen(screen);
+    openScreenWithStatus(screen, manualRecordCreateUnavailableStatusMessage(protectedBackendUnavailableMessage));
   }
 
   function enterManualRecordConfirm() {
@@ -2339,13 +2338,11 @@ export default function App() {
       openManualRecordUnavailable("manualRecord");
       return;
     }
-    setCurrentScreen("manualRecordConfirm");
-    setStatus(manualRecordConfirmReadyStatusMessage());
+    openScreenWithStatus("manualRecordConfirm", manualRecordConfirmReadyStatusMessage());
   }
 
   function returnFromManualRecordConfirm() {
-    setCurrentScreen("manualRecord");
-    setStatus(manualRecordConfirmReturnStatusMessage());
+    openScreenWithStatus("manualRecord", manualRecordConfirmReturnStatusMessage());
   }
 
   function handleQuickEntryMode(mode: QuickEntryMode, returnScreen: AppScreen = currentScreen) {
@@ -2357,8 +2354,7 @@ export default function App() {
       openManualRecord(returnScreen);
       return;
     }
-    setStatus(quickEntryTextModeStatusMessage());
-    setCurrentScreen("record");
+    openScreenWithStatus("record", quickEntryTextModeStatusMessage());
   }
 
   function handleTodayQuickEntryMode(mode: QuickEntryMode) {
