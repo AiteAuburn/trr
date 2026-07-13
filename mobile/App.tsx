@@ -626,6 +626,7 @@ import {
   analysisChartRange,
   analysisGlucoseRecords as buildAnalysisGlucoseRecords,
   analysisGlucoseValues as buildAnalysisGlucoseValues,
+  analysisRecordsInDateRange,
   averageNumber,
   beforeMealGlucoseCount as countBeforeMealGlucose,
   boundBasicReport,
@@ -1165,13 +1166,10 @@ export default function App() {
     () => analysisDateBounds(analysisRange, analysisCustomStart, analysisCustomEnd),
     [analysisCustomEnd, analysisCustomStart, analysisRange]
   );
-  const analysisRecords = useMemo(() => {
-    const { start, end } = analysisSelectedDateBounds;
-    return recordsForDisplay.filter((record) => {
-      const occurredAt = new Date(record.occurred_at);
-      return occurredAt >= start && occurredAt <= end;
-    });
-  }, [analysisSelectedDateBounds, recordsForDisplay]);
+  const analysisRecords = useMemo(
+    () => analysisRecordsInDateRange(recordsForDisplay, analysisSelectedDateBounds),
+    [analysisSelectedDateBounds, recordsForDisplay]
+  );
   const analysisGlucoseRecords = useMemo(
     () => buildAnalysisGlucoseRecords(analysisRecords),
     [analysisRecords]

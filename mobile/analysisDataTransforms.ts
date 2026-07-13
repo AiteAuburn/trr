@@ -41,6 +41,11 @@ export type AnalysisChartPoint = {
   preview: boolean;
 };
 
+export type AnalysisDateBounds = {
+  start: Date;
+  end: Date;
+};
+
 function clampNumber(value: number, min: number, max: number) {
   if (!Number.isFinite(value)) {
     return min;
@@ -110,6 +115,13 @@ export function isBeforeMealGlucoseTiming(value: unknown) {
 export function isAfterMealGlucoseTiming(value: unknown) {
   const timing = normalizedGlucoseTiming(value);
   return timing === "after_meal" || timing === "after-meal" || timing === "after";
+}
+
+export function analysisRecordsInDateRange(records: RecordItem[], bounds: AnalysisDateBounds) {
+  return records.filter((record) => {
+    const occurredAt = new Date(record.occurred_at);
+    return occurredAt >= bounds.start && occurredAt <= bounds.end;
+  });
 }
 
 export function analysisGlucoseRecords(records: RecordItem[]): AnalysisGlucoseRecord[] {

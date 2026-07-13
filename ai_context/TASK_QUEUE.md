@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1347: Extract Analysis date-range record filter helper
+
+Status: done
+
+Summary:
+
+- Added `analysisRecordsInDateRange` to `mobile/analysisDataTransforms.ts` for Analysis date-bounded record filtering.
+- Replaced the inline Analysis `recordsForDisplay.filter(...)` date comparison in `mobile/App.tsx` with the extracted helper.
+- Kept Analysis selected date bounds, record filtering semantics, glucose metric inputs, chart inputs, backend report keying, and Analysis rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and start/end date comparisons are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1346: Extract AI rejected-event display helper
 
 Status: done
