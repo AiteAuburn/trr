@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1510: Reuse screen opener in future data preview routes
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `openScreen` in community, ranking, achievements, year-review, and store preview entry routes.
+- Kept return-screen normalization, action-status clearing, backend/data-load call ordering, future/menu routing, status message ownership, UI copy, and layout unchanged.
+- Updated navigation verifier coverage for those future data preview `openScreen` bindings and their follow-up sync calls.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1509: Reuse screen opener in header and settings routes
 
 Status: done

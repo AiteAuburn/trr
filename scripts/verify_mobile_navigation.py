@@ -4613,6 +4613,11 @@ def main() -> int:
             'setCommunityReturnScreen(futurePreviewReturnScreen(returnScreen, "community"));',
         )
         _assert_contains(
+            "community screen opener keeps sync calls binding",
+            content,
+            'setCommunityActionStatus(futurePreviewActionClearStatusMessage());\n    openScreen("community");\n    void loadCommunityPublicSettings();\n    void loadFoodCommunityCategories();\n    void loadCommunityFoods();',
+        )
+        _assert_contains(
             "ranking future preview return helper binding",
             content,
             'setRankingReturnScreen(futurePreviewReturnScreen(returnScreen, "ranking"));',
@@ -4621,6 +4626,11 @@ def main() -> int:
             "ranking future preview action helper binding",
             content,
             "setRankingActionStatus(futurePreviewActionClearStatusMessage());",
+        )
+        _assert_contains(
+            "ranking screen opener keeps leaderboard sync binding",
+            content,
+            'setRankingActionStatus(futurePreviewActionClearStatusMessage());\n    openScreen("ranking");\n    void loadCommunityLeaderboards();',
         )
         _assert_contains(
             "doctor share future preview return action helper binding",
@@ -7827,8 +7837,11 @@ def main() -> int:
             ("food photo menu preview return helper binding", 'setFoodPhotoReturnScreen(menuPreviewReturnScreen(returnScreen, "foodPhoto"));'),
             ("food photo screen opener binding", 'setFoodPhotoReturnScreen(menuPreviewReturnScreen(returnScreen, "foodPhoto"));\n    openScreen("foodPhoto");'),
             ("achievements menu preview return helper binding", 'setAchievementsReturnScreen(menuPreviewReturnScreen(returnScreen, "achievements"));'),
+            ("achievements screen opener keeps sync binding", 'setAchievementsReturnScreen(menuPreviewReturnScreen(returnScreen, "achievements"));\n    openScreen("achievements");\n    void loadAchievementSummary();'),
             ("year review menu preview return helper binding", 'setYearReviewReturnScreen(menuPreviewReturnScreen(returnScreen, "yearReview"));'),
+            ("year review screen opener keeps sync binding", 'setYearReviewReturnScreen(menuPreviewReturnScreen(returnScreen, "yearReview"));\n    openScreen("yearReview");\n    void loadYearReview();'),
             ("store menu preview return helper binding", 'setStoreReturnScreen(menuPreviewReturnScreen(returnScreen, "store"));'),
+            ("store screen opener keeps catalog sync binding", 'setStoreReturnScreen(menuPreviewReturnScreen(returnScreen, "store"));\n    openScreen("store");\n    void loadStoreCatalogAndPoints();'),
             ("achievement/year review status display helper binding", "const achievementYearReviewStatusDisplay = achievementYearReviewStatusDisplayTexts({"),
             ("achievement action status display binding", "const achievementActionStatusDisplayText = achievementYearReviewStatusDisplay.achievementAction;"),
             ("year review action status display binding", "const yearReviewActionStatusDisplayText = achievementYearReviewStatusDisplay.yearReviewAction;"),

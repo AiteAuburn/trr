@@ -3809,7 +3809,7 @@ export default function App() {
   function openCommunity(returnScreen: AppScreen = currentScreen) {
     setCommunityReturnScreen(futurePreviewReturnScreen(returnScreen, "community"));
     setCommunityActionStatus(futurePreviewActionClearStatusMessage());
-    setCurrentScreen("community");
+    openScreen("community");
     void loadCommunityPublicSettings();
     void loadFoodCommunityCategories();
     void loadCommunityFoods();
@@ -3885,7 +3885,7 @@ export default function App() {
   function openRanking(returnScreen: AppScreen = currentScreen) {
     setRankingReturnScreen(futurePreviewReturnScreen(returnScreen, "ranking"));
     setRankingActionStatus(futurePreviewActionClearStatusMessage());
-    setCurrentScreen("ranking");
+    openScreen("ranking");
     void loadCommunityLeaderboards();
   }
 
@@ -3907,7 +3907,7 @@ export default function App() {
 
   function openAchievements(returnScreen: AppScreen = currentScreen) {
     setAchievementsReturnScreen(menuPreviewReturnScreen(returnScreen, "achievements"));
-    setCurrentScreen("achievements");
+    openScreen("achievements");
     void loadAchievementSummary();
   }
 
@@ -3925,7 +3925,7 @@ export default function App() {
 
   function openYearReview(returnScreen: AppScreen = currentScreen) {
     setYearReviewReturnScreen(menuPreviewReturnScreen(returnScreen, "yearReview"));
-    setCurrentScreen("yearReview");
+    openScreen("yearReview");
     void loadYearReview();
   }
 
@@ -3943,7 +3943,7 @@ export default function App() {
 
   function openStore(returnScreen: AppScreen = currentScreen) {
     setStoreReturnScreen(menuPreviewReturnScreen(returnScreen, "store"));
-    setCurrentScreen("store");
+    openScreen("store");
     void loadStoreCatalogAndPoints();
   }
 
