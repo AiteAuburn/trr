@@ -2032,9 +2032,8 @@ export default function App() {
   }
 
   function returnFromTranscriptReview() {
-    setPreview(null);
+    clearParserPreviewState();
     clearPreviewSelectionState();
-    setParserRecoveryMessage("");
     setCurrentScreen(transcriptReviewReturnScreen);
     setStatus(transcriptReviewBackStatusMessage());
   }
@@ -2046,11 +2045,15 @@ export default function App() {
     setTranscript("");
     setTranscriptVoiceSeconds(0);
     setIsTranscriptSample(false);
-    setPreview(null);
+    clearParserPreviewState();
     clearPreviewSelectionState();
-    setParserRecoveryMessage("");
     setCurrentScreen(transcriptReviewReturnScreen);
     setStatus(transcriptClearedStatusMessage());
+  }
+
+  function clearParserPreviewState() {
+    setPreview(null);
+    setParserRecoveryMessage("");
   }
 
   function updateTranscriptDraft(
@@ -2066,8 +2069,7 @@ export default function App() {
         ? clampNumber(voiceSeconds, 0, maxMobileCountValue)
         : 0
     );
-    setPreview(null);
-    setParserRecoveryMessage("");
+    clearParserPreviewState();
   }
 
   function fillTranscriptSampleDraft() {
@@ -5406,8 +5408,7 @@ export default function App() {
     parsePreviewInFlight.current = true;
     setIsBusy(true);
     const existingDailyPreview = preview;
-    setPreview(null);
-    setParserRecoveryMessage("");
+    clearParserPreviewState();
     setStatus(parserProgressStatusMessage());
     const parserVoiceSeconds = clampNumber(transcriptVoiceSeconds, 0, maxMobileCountValue);
     const parseOccurredAt = new Date().toISOString();

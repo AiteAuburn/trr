@@ -2337,6 +2337,21 @@ def main() -> int:
             "function handleRecordingResultPrimaryAction(returnScreen: AppScreen)",
         )
         _assert_contains(
+            "parser preview state clear helper",
+            content,
+            "function clearParserPreviewState()",
+        )
+        _assert_contains(
+            "parser preview state clear helper internals",
+            content,
+            "function clearParserPreviewState() {\n    setPreview(null);\n    setParserRecoveryMessage(\"\");",
+        )
+        _assert_contains(
+            "transcript draft update clears parser preview helper binding",
+            content,
+            "setTranscriptVoiceSeconds(\n      source === \"voice\" && boundedValue.trim().length > 0\n        ? clampNumber(voiceSeconds, 0, maxMobileCountValue)\n        : 0\n    );\n    clearParserPreviewState();",
+        )
+        _assert_contains(
             "recording runtime clear helper",
             content,
             "function clearRecordingPreviewRuntime(elapsedSeconds = 0)",
@@ -2375,6 +2390,16 @@ def main() -> int:
             "native whisper success runtime clear helper binding",
             content,
             "updateTranscriptDraft(boundedText, \"voice\", voiceSeconds);\n      clearRecordingPreviewRuntime();",
+        )
+        _assert_contains(
+            "parse transcript progress clears parser preview helper binding",
+            content,
+            "const existingDailyPreview = preview;\n    clearParserPreviewState();\n    setStatus(parserProgressStatusMessage());",
+        )
+        _assert_contains(
+            "transcript review return clears parser preview helper binding",
+            content,
+            "function returnFromTranscriptReview() {\n    clearParserPreviewState();",
         )
         _assert_contains(
             "recording start failure runtime clear helper binding",
