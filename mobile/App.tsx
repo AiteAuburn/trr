@@ -2826,20 +2826,22 @@ export default function App() {
       setStatus(recordingStartedStatusMessage(Boolean(voiceQuota && voiceQuota.remaining_seconds_today <= 120)));
     } catch (error) {
       audioRecordingRef.current = null;
-      setIsRecordingPreview(false);
-      setRecordingStartedAt(null);
-      setRecordingElapsedSeconds(0);
+      clearRecordingPreviewRuntime();
       setStatus(recordingStartFailureStatusMessage(error));
     } finally {
       recordingStartInFlight.current = false;
     }
   }
 
-  function resetRecordingPreview() {
-    audioRecordingRef.current = null;
+  function clearRecordingPreviewRuntime(elapsedSeconds = 0) {
     setIsRecordingPreview(false);
     setRecordingStartedAt(null);
-    setRecordingElapsedSeconds(0);
+    setRecordingElapsedSeconds(elapsedSeconds);
+  }
+
+  function resetRecordingPreview() {
+    audioRecordingRef.current = null;
+    clearRecordingPreviewRuntime();
     setStatus(recordingResetStatusMessage());
   }
 
@@ -2871,9 +2873,7 @@ export default function App() {
         return false;
       }
       updateTranscriptDraft(boundedText, "voice", voiceSeconds);
-      setIsRecordingPreview(false);
-      setRecordingStartedAt(null);
-      setRecordingElapsedSeconds(0);
+      clearRecordingPreviewRuntime();
       setPreview(null);
       setTranscriptReviewReturnScreen(returnScreen);
       setCurrentScreen("transcriptReview");
@@ -2897,9 +2897,7 @@ export default function App() {
     if (transcribed) {
       return;
     }
-    setIsRecordingPreview(false);
-    setRecordingStartedAt(null);
-    setRecordingElapsedSeconds(0);
+    clearRecordingPreviewRuntime();
     setPreview(null);
     setTranscriptReviewReturnScreen(returnScreen);
     setCurrentScreen("record");
@@ -2953,9 +2951,7 @@ export default function App() {
     } catch (error) {
       setStatus(recordingStopFailureStatusMessage(error));
     } finally {
-      setIsRecordingPreview(false);
-      setRecordingStartedAt(null);
-      setRecordingElapsedSeconds(elapsedSeconds);
+      clearRecordingPreviewRuntime(elapsedSeconds);
       recordingStopInFlight.current = false;
     }
     if (shouldOpenTodayRecordingTranscriptReview(currentScreen, elapsedSeconds)) {

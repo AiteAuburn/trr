@@ -2336,19 +2336,50 @@ def main() -> int:
             content,
             "function handleRecordingResultPrimaryAction(returnScreen: AppScreen)",
         )
+        _assert_contains(
+            "recording runtime clear helper",
+            content,
+            "function clearRecordingPreviewRuntime(elapsedSeconds = 0)",
+        )
+        _assert_contains(
+            "recording runtime clear helper internals",
+            content,
+            "function clearRecordingPreviewRuntime(elapsedSeconds = 0) {\n    setIsRecordingPreview(false);\n    setRecordingStartedAt(null);\n    setRecordingElapsedSeconds(elapsedSeconds);",
+        )
+        _assert_contains(
+            "recording reset uses runtime clear helper",
+            content,
+            "function resetRecordingPreview() {\n    audioRecordingRef.current = null;\n    clearRecordingPreviewRuntime();",
+        )
         recording_result_action_block = _function_block(content, "handleRecordingResultPrimaryAction")
         for label, marker in (
             ("recording short result bound", "const boundedSeconds = clampNumber(recordingElapsedSeconds, 0, maxMobileCountValue);"),
             ("recording short result reset guard", "if (boundedSeconds <= 1) {"),
             ("recording short result reset action", "resetRecordingPreview();"),
             ("recording short result no transcription", "return;"),
+            ("recording text fallback runtime clear", "clearRecordingPreviewRuntime();"),
         ):
             _assert_contains(label, recording_result_action_block, marker)
         finish_recording_block = _function_block(content, "finishRecordingPreview")
         _assert_contains(
+            "home recording finish runtime clear with elapsed seconds",
+            finish_recording_block,
+            "clearRecordingPreviewRuntime(elapsedSeconds);",
+        )
+        _assert_contains(
             "home recording finish enters transcript review for non-trivial audio",
             finish_recording_block,
             "if (shouldOpenTodayRecordingTranscriptReview(currentScreen, elapsedSeconds)) {",
+        )
+        _assert_contains(
+            "native whisper success runtime clear helper binding",
+            content,
+            "updateTranscriptDraft(boundedText, \"voice\", voiceSeconds);\n      clearRecordingPreviewRuntime();",
+        )
+        _assert_contains(
+            "recording start failure runtime clear helper binding",
+            content,
+            "audioRecordingRef.current = null;\n      clearRecordingPreviewRuntime();\n      setStatus(recordingStartFailureStatusMessage(error));",
         )
         _assert_contains(
             "home recording finish transcript helper",
