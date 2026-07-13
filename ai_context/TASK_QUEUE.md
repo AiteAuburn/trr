@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1371: Extract AI remove confirm display texts
+
+Status: done
+
+Summary:
+
+- Added `aiRemoveConfirmDisplayTexts` to `mobile/recordWorkflowCopy.ts` for AI candidate remove and daily-record delete confirmation title, submit label, boundary label, boundary copy, and source copy.
+- Replaced inline AI remove-confirm display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept candidate removal copy, daily-record delete copy, source confidence copy, return targets, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1370: Extract quota display texts helper
 
 Status: done

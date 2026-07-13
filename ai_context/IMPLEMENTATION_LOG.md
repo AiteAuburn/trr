@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1371 extract AI remove confirm display texts
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `aiRemoveConfirmDisplayTexts` to `mobile/recordWorkflowCopy.ts` for AI candidate remove and daily-record delete confirmation title, submit label, boundary label, boundary copy, and source copy.
+- Replaced inline AI remove-confirm display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept candidate removal copy, daily-record delete copy, source confidence copy, return targets, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、record deletion API behavior、AI candidate removal behavior、daily-record save behavior、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining App.tsx workflow display aggregation and screen-local calculations separately.
+
 ### T1370 extract quota display texts helper
 
 類型：mobile / refactor / verifier / docs

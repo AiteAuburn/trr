@@ -327,6 +327,16 @@ export function aiRemoveConfirmSourceCopy(confidencePercent: number) {
   return boundDisplayText(`信心 ${boundedPercent}% · source: AI candidate`, maxDisplayDetailTextLength);
 }
 
+export function aiRemoveConfirmDisplayTexts(isDailyRecordDelete: boolean, confidencePercent: number | null) {
+  return {
+    title: boundDisplayText(isDailyRecordDelete ? "刪除此筆紀錄" : "移除候選紀錄", maxDisplayTextLength),
+    submit: boundDisplayText(isDailyRecordDelete ? "刪除" : "確認移除", maxDisplayTextLength),
+    boundaryLabel: aiRemoveConfirmBoundaryLabel(isDailyRecordDelete),
+    boundary: aiRemoveConfirmBoundaryCopy(isDailyRecordDelete),
+    source: confidencePercent === null ? "" : aiRemoveConfirmSourceCopy(confidencePercent)
+  };
+}
+
 export function previewRecordEditBoundaryCopy() {
   return boundDisplayText("這裡只修改待確認候選紀錄；按下確認儲存前不會寫入資料庫。", maxDisplayDetailTextLength);
 }

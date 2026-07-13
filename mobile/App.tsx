@@ -338,9 +338,7 @@ import {
   aiReviewNoPreviewBodyCopy,
   aiReviewNoPreviewTitleCopy,
   aiReviewRejectedEventsCopy,
-  aiRemoveConfirmBoundaryCopy,
-  aiRemoveConfirmBoundaryLabel,
-  aiRemoveConfirmSourceCopy,
+  aiRemoveConfirmDisplayTexts,
   aiSaveConfirmBoundaryDisplayRows,
   aiSaveConfirmChecklistDisplayItems,
   aiSaveConfirmIntroCopy,
@@ -1842,19 +1840,15 @@ export default function App() {
       ? pendingRecordDisplayItem(pendingPreviewRemoveRecord, pendingPreviewRemoveIndex, "remove-preview")
       : null;
   const isDailyRecordRemoveConfirm = previewActionReturnScreen === "aiSaveConfirm";
-  const aiRemoveConfirmTitleDisplayText = boundDisplayText(
-    isDailyRecordRemoveConfirm ? "刪除此筆紀錄" : "移除候選紀錄",
-    maxDisplayTextLength
+  const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayTexts(
+    isDailyRecordRemoveConfirm,
+    pendingPreviewRemoveDisplayItem?.confidencePercent ?? null
   );
-  const aiRemoveConfirmSubmitDisplayText = boundDisplayText(
-    isDailyRecordRemoveConfirm ? "刪除" : "確認移除",
-    maxDisplayTextLength
-  );
-  const aiRemoveConfirmBoundaryDisplayLabel = aiRemoveConfirmBoundaryLabel(isDailyRecordRemoveConfirm);
-  const aiRemoveConfirmBoundaryDisplayText = aiRemoveConfirmBoundaryCopy(isDailyRecordRemoveConfirm);
-  const aiRemoveConfirmSourceDisplayText = pendingPreviewRemoveDisplayItem
-    ? aiRemoveConfirmSourceCopy(pendingPreviewRemoveDisplayItem.confidencePercent)
-    : "";
+  const aiRemoveConfirmTitleDisplayText = aiRemoveConfirmDisplay.title;
+  const aiRemoveConfirmSubmitDisplayText = aiRemoveConfirmDisplay.submit;
+  const aiRemoveConfirmBoundaryDisplayLabel = aiRemoveConfirmDisplay.boundaryLabel;
+  const aiRemoveConfirmBoundaryDisplayText = aiRemoveConfirmDisplay.boundary;
+  const aiRemoveConfirmSourceDisplayText = aiRemoveConfirmDisplay.source;
   const transcriptReviewIntroDisplayText = transcriptReviewIntroCopy();
   const transcriptReviewPreParseGuidanceDisplayText = transcriptReviewPreParseGuidanceCopy();
   const transcriptReviewSampleWarningDisplayText = transcriptReviewSampleWarningCopy();
