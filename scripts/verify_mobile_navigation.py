@@ -2053,6 +2053,26 @@ def main() -> int:
             'value.currentScreen !== "saveSuccess" || value.lastSaveEntryMethod !== "manual" || value.hasUnsavedPreviewRecords',
         )
         _assert_contains(
+            "primary tab navigation state helper",
+            navigation_content,
+            "function primaryTabNavigationState(value: { currentScreen: AppScreen; isAnyRequestInFlight: boolean })",
+        )
+        _assert_contains(
+            "primary tab current state helper",
+            navigation_content,
+            "const isCurrent = value.currentScreen === screen.id;",
+        )
+        _assert_contains(
+            "primary tab locked state helper",
+            navigation_content,
+            "isLocked: value.isAnyRequestInFlight && !isCurrent",
+        )
+        _assert_contains(
+            "primary tab hide today helper",
+            navigation_content,
+            'show: value.currentScreen !== "today" && items.some((item) => item.isCurrent)',
+        )
+        _assert_contains(
             "minimal home chrome keeps menu fallback",
             navigation_content,
             'today: { subtitle: "" }',
@@ -2212,6 +2232,21 @@ def main() -> int:
             "primary tab selected accessibility state",
             content,
             "accessibilityState={{ disabled: isPrimaryTabLocked, selected: isCurrentPrimaryTab }}",
+        )
+        _assert_contains(
+            "primary tab item render helper binding",
+            content,
+            "primaryTabItems.map((screen) => {",
+        )
+        _assert_contains(
+            "primary tab current helper binding",
+            content,
+            "const isCurrentPrimaryTab = screen.isCurrent;",
+        )
+        _assert_contains(
+            "primary tab locked helper binding",
+            content,
+            "const isPrimaryTabLocked = screen.isLocked;",
         )
         _assert_contains(
             "close-button accessibility label copy",
@@ -3656,7 +3691,9 @@ def main() -> int:
                 f"{property_name}: {expected_value}",
             )
         for label, marker in (
-            ("minimal home hides primary tabs", 'const showPrimaryTabs = currentScreen !== "today" && primaryScreens.some((screen) => screen.id === currentScreen)'),
+            ("primary tab navigation state helper binding", "const primaryTabNavigation = primaryTabNavigationState({ currentScreen, isAnyRequestInFlight });"),
+            ("primary tab items binding", "const primaryTabItems = primaryTabNavigation.items;"),
+            ("primary tab show binding", "const showPrimaryTabs = primaryTabNavigation.show;"),
             ("MVP flow stepper state helper binding", "const mvpFlowStepper = mvpFlowStepperState({"),
             ("MVP flow stepper index binding", "const mvpFlowStepIndex = mvpFlowStepper.stepIndex;"),
             ("MVP flow stepper show binding", "const showMvpFlowStepper = mvpFlowStepper.show;"),

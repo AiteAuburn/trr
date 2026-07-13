@@ -117,6 +117,7 @@ import {
   mvpFlowSteps,
   mvpFlowStepperState,
   primaryScreens,
+  primaryTabNavigationState,
   screenChrome,
   visualSmokeBootIgnoredDisplayMessages,
   visualSmokeBootSkippedDisplayMessages,
@@ -1304,7 +1305,9 @@ export default function App() {
     storeReturnScreen,
     saveSuccessReturnScreen
   });
-  const showPrimaryTabs = currentScreen !== "today" && primaryScreens.some((screen) => screen.id === currentScreen);
+  const primaryTabNavigation = primaryTabNavigationState({ currentScreen, isAnyRequestInFlight });
+  const primaryTabItems = primaryTabNavigation.items;
+  const showPrimaryTabs = primaryTabNavigation.show;
   const mvpFlowStepper = mvpFlowStepperState({
     currentScreen,
     lastSaveEntryMethod,
@@ -6350,9 +6353,9 @@ export default function App() {
 
         {showPrimaryTabs ? (
           <ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false} style={styles.topTabs}>
-            {primaryScreens.map((screen) => {
-              const isCurrentPrimaryTab = currentScreen === screen.id;
-              const isPrimaryTabLocked = isAnyRequestInFlight && !isCurrentPrimaryTab;
+            {primaryTabItems.map((screen) => {
+              const isCurrentPrimaryTab = screen.isCurrent;
+              const isPrimaryTabLocked = screen.isLocked;
               const primaryTabAccessibility = primaryTabAccessibilityLabel(screen.label);
 
               return (

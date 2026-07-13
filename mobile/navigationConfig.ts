@@ -268,6 +268,21 @@ function mvpFlowStepperState(value: {
   };
 }
 
+function primaryTabNavigationState(value: { currentScreen: AppScreen; isAnyRequestInFlight: boolean }) {
+  const items = primaryScreens.map((screen) => {
+    const isCurrent = value.currentScreen === screen.id;
+    return {
+      ...screen,
+      isCurrent,
+      isLocked: value.isAnyRequestInFlight && !isCurrent
+    };
+  });
+  return {
+    items,
+    show: value.currentScreen !== "today" && items.some((item) => item.isCurrent)
+  };
+}
+
 function normalizeVisualSmokeInitialRoute(
   value: string,
   enableDebugTools: boolean,
@@ -324,6 +339,7 @@ export {
   mvpFlowStepperState,
   normalizeVisualSmokeInitialRoute,
   primaryScreens,
+  primaryTabNavigationState,
   screenChrome,
   visualSmokeBootIgnoredDisplayMessages,
   visualSmokeBootSkippedDisplayMessages,
