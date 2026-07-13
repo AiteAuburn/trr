@@ -3778,8 +3778,12 @@ export default function App() {
     setCurrentScreen("futureModuleDetail");
   }
 
+  function futurePreviewReturnScreen(returnScreen: AppScreen, selfScreen: AppScreen) {
+    return returnScreen === selfScreen ? "futureModules" : returnScreen;
+  }
+
   function openDoctorShare(returnScreen: AppScreen = currentScreen) {
-    setDoctorShareReturnScreen(returnScreen === "doctorShare" ? "futureModules" : returnScreen);
+    setDoctorShareReturnScreen(futurePreviewReturnScreen(returnScreen, "doctorShare"));
     setDoctorShareActionStatus(previewActionClearStatusMessage());
     setCurrentScreen("doctorShare");
   }
@@ -3798,7 +3802,7 @@ export default function App() {
   }
 
   function openHealthIntegration(returnScreen: AppScreen = currentScreen) {
-    setHealthIntegrationReturnScreen(returnScreen === "healthIntegration" ? "futureModules" : returnScreen);
+    setHealthIntegrationReturnScreen(futurePreviewReturnScreen(returnScreen, "healthIntegration"));
     setHealthIntegrationActionStatus(previewActionClearStatusMessage());
     setCurrentScreen("healthIntegration");
   }
@@ -3817,7 +3821,7 @@ export default function App() {
   }
 
   function openCommunity(returnScreen: AppScreen = currentScreen) {
-    setCommunityReturnScreen(returnScreen === "community" ? "futureModules" : returnScreen);
+    setCommunityReturnScreen(futurePreviewReturnScreen(returnScreen, "community"));
     setCommunityActionStatus(previewActionClearStatusMessage());
     setCurrentScreen("community");
     void loadCommunityPublicSettings();
@@ -3894,7 +3898,7 @@ export default function App() {
   }
 
   function openRanking(returnScreen: AppScreen = currentScreen) {
-    setRankingReturnScreen(returnScreen === "ranking" ? "futureModules" : returnScreen);
+    setRankingReturnScreen(futurePreviewReturnScreen(returnScreen, "ranking"));
     setRankingActionStatus(previewActionClearStatusMessage());
     setCurrentScreen("ranking");
     void loadCommunityLeaderboards();

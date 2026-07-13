@@ -4211,6 +4211,36 @@ def main() -> int:
             "function openFutureModuleDetail(module: FutureModuleCard) {\n    openFutureModuleDetailResult(module);",
         )
         _assert_contains(
+            "future preview return screen helper",
+            content,
+            "function futurePreviewReturnScreen(returnScreen: AppScreen, selfScreen: AppScreen)",
+        )
+        _assert_contains(
+            "future preview return screen helper fields",
+            content,
+            'return returnScreen === selfScreen ? "futureModules" : returnScreen;',
+        )
+        _assert_contains(
+            "doctor share future preview return helper binding",
+            content,
+            'setDoctorShareReturnScreen(futurePreviewReturnScreen(returnScreen, "doctorShare"));',
+        )
+        _assert_contains(
+            "health integration future preview return helper binding",
+            content,
+            'setHealthIntegrationReturnScreen(futurePreviewReturnScreen(returnScreen, "healthIntegration"));',
+        )
+        _assert_contains(
+            "community future preview return helper binding",
+            content,
+            'setCommunityReturnScreen(futurePreviewReturnScreen(returnScreen, "community"));',
+        )
+        _assert_contains(
+            "ranking future preview return helper binding",
+            content,
+            'setRankingReturnScreen(futurePreviewReturnScreen(returnScreen, "ranking"));',
+        )
+        _assert_contains(
             "visual smoke future module route doctor binding",
             content,
             'openDoctorShare("futureModules");',
