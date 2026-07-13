@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1381: Extract record edit display texts
+
+Status: done
+
+Summary:
+
+- Added `recordEditDisplayTexts` to `mobile/recordStatusCopy.ts` for record edit intro and validation display text.
+- Replaced inline record-edit intro and selected-record validation display construction in `mobile/App.tsx` with the extracted helper.
+- Kept record edit field state, form validation, disabled state, update checklist, and update request flow unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1380: Extract analysis range display texts
 
 Status: done

@@ -165,6 +165,13 @@ export function recordEditIntroCopy() {
   );
 }
 
+export function recordEditDisplayTexts(validationError: string | null) {
+  return {
+    intro: recordEditIntroCopy(),
+    validation: boundUiMessage(validationError || "")
+  };
+}
+
 export function recordEditOpenStatusMessage() {
   return boundUiMessage("正在編輯這筆紀錄；按下儲存修改前不會送出 update request。");
 }

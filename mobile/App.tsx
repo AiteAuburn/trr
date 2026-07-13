@@ -383,7 +383,7 @@ import {
   recordDeleteSummaryMessage,
   recordDeleteUnavailableStatusMessage,
   recordEditCancelStatusMessage,
-  recordEditIntroCopy,
+  recordEditDisplayTexts,
   recordEditOpenStatusMessage,
   recordResultDestinationStatusMessage,
   recordSyncFailureStatusMessage,
@@ -1828,7 +1828,6 @@ export default function App() {
   const deleteConfirmIntroDisplayText = deleteConfirmDisplay.intro;
   const deleteConfirmRecordMetaDisplayText = deleteConfirmDisplay.recordMeta;
   const deleteConfirmSubmitDisplayLabel = deleteConfirmDisplay.submit;
-  const recordEditIntroDisplayText = recordEditIntroCopy();
   const historyNoRecordsTitleDisplayText = historyNoRecordsTitleCopy();
   const historyNoRecordsBodyDisplayText = historyNoRecordsBodyCopy();
   const historyNoRangeRecordsTitleDisplayText = historyNoRangeRecordsTitleCopy();
@@ -1969,7 +1968,9 @@ export default function App() {
       : ""
   );
   const manualRecordValidationDisplayText = boundUiMessage(manualRecordValidationError || "");
-  const selectedRecordEditValidationDisplayText = boundUiMessage(selectedRecordEditValidationError || "");
+  const recordEditDisplay = recordEditDisplayTexts(selectedRecordEditValidationError);
+  const recordEditIntroDisplayText = recordEditDisplay.intro;
+  const selectedRecordEditValidationDisplayText = recordEditDisplay.validation;
   const previewRecordEditValidationDisplayText = boundUiMessage(previewRecordEditValidationError || "");
   const parserRecoveryDisplayText = boundUiMessage(parserRecoveryMessage);
   const lastSavedSummaryDisplayText = boundUiMessage(lastSavedSummary || "紀錄已加入今日紀錄與歷史紀錄。");

@@ -4060,6 +4060,9 @@ def main() -> int:
             ("delete confirm single record copy", "只會刪除目前選取的這一筆紀錄。"),
             ("delete confirm no undo copy", "目前沒有本機 undo；刪除成功後會進入刪除完成頁。"),
             ("record edit intro copy helper", "function recordEditIntroCopy()"),
+            ("record edit display texts helper", "function recordEditDisplayTexts(validationError: string | null)"),
+            ("record edit display texts intro binding", "intro: recordEditIntroCopy()"),
+            ("record edit display texts validation binding", 'validation: boundUiMessage(validationError || "")'),
             ("record edit open status helper", "function recordEditOpenStatusMessage()"),
             ("record edit cancel status helper", "function recordEditCancelStatusMessage()"),
             ("record update checklist helper", "function recordUpdateChecklistDisplayItems()"),
@@ -4086,6 +4089,9 @@ def main() -> int:
             ("delete confirm preview record meta binding", "recordMetaText={deleteConfirmRecordMetaDisplayText}"),
             ("delete confirm preview record summary binding", "recordSummary={selectedRecordDisplayItem.payloadSummary}"),
             ("delete confirm preview record type binding", "recordTypeLabel={selectedRecordDisplayItem.typeLabel}"),
+            ("record edit display helper binding", "const recordEditDisplay = recordEditDisplayTexts(selectedRecordEditValidationError);"),
+            ("record edit intro display binding", "const recordEditIntroDisplayText = recordEditDisplay.intro;"),
+            ("record edit validation display binding", "const selectedRecordEditValidationDisplayText = recordEditDisplay.validation;"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
