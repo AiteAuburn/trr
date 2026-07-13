@@ -470,6 +470,7 @@ import {
   nativeModuleCheckFailureStatusMessage,
   nativeModuleCheckProgressStatusMessage,
   nativeModuleCheckResultStatusMessage,
+  nativeStatusDisplayTexts,
   nativeWhisperFailureStatusMessage,
   nativeWhisperMissingInputStatusMessage,
   nativeWhisperProgressStatusMessage,
@@ -1731,7 +1732,8 @@ export default function App() {
     devResetStatus
   });
   const authActionStatusDisplayText = authStatusDisplay.authAction;
-  const nativeStatusDisplayText = boundUiMessage(nativeStatus);
+  const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);
+  const nativeStatusDisplayText = nativeStatusDisplay.native;
   const devResetStatusDisplayText = authStatusDisplay.devReset;
   const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayTexts({
     profileActionStatus,

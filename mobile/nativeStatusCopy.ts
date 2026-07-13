@@ -202,3 +202,9 @@ export function nativeBenchmarkResultStatusMessage(
       .join("\n")
   );
 }
+
+export function nativeStatusDisplayTexts(nativeStatus: string) {
+  return {
+    native: boundUiMessage(nativeStatus)
+  };
+}

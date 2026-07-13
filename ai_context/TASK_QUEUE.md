@@ -124,6 +124,38 @@ None.
 
 ## Done
 
+### T1395: Extract native status display text
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/nativeStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `nativeStatusDisplayTexts` to `mobile/nativeStatusCopy.ts` for native debug / local model status display text.
+- Replaced inline `boundUiMessage` display construction for `nativeStatus` in `mobile/App.tsx` with the extracted helper.
+- Kept native module checks, model downloads, Whisper/Llama runs, benchmark handlers, debug state, and rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No backend/schema/Android signing/token/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue auditing the remaining records status display binding separately.
+
 ### T1394: Extract auth and dev reset status display texts
 
 Status: done

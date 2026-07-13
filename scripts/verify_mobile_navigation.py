@@ -5510,6 +5510,8 @@ def main() -> int:
             ("auth status display helper binding", "const authStatusDisplay = authStatusDisplayTexts({"),
             ("auth action status display text binding", "const authActionStatusDisplayText = authStatusDisplay.authAction;"),
             ("dev reset status display text binding", "const devResetStatusDisplayText = authStatusDisplay.devReset;"),
+            ("native status display helper binding", "const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);"),
+            ("native status display text binding", "const nativeStatusDisplayText = nativeStatusDisplay.native;"),
             ("auth secondary action disabled state", "accessibilityState={{ disabled: isAuthOperationInFlight }}"),
             ("auth danger action disabled state", "accessibilityState={{ disabled: isAuthOperationInFlight }}"),
             ("auth session management preview press binding", "onPress={() => pressAuthSessionManagementPreview(item)}"),
@@ -5783,6 +5785,8 @@ def main() -> int:
             ("native whisper run accessibility helper", "function nativeWhisperRunAccessibilityLabel(isRunning: boolean)"),
             ("native llama run accessibility helper", "function nativeLlamaRunAccessibilityLabel(isRunning: boolean)"),
             ("native benchmark accessibility helper", "function nativeBenchmarkAccessibilityLabel(isRunning: boolean)"),
+            ("native status display texts helper", "function nativeStatusDisplayTexts(nativeStatus: string)"),
+            ("native status display binding", "native: boundUiMessage(nativeStatus)"),
             ("native module check button copy", "檢查 native modules"),
             ("native model no cloud AI copy", "不呼叫雲端 AI"),
         ):
