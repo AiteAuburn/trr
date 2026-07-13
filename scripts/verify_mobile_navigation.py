@@ -3571,6 +3571,31 @@ def main() -> int:
             "setRecordEditFields(recordPayloadToEditFields(record));",
         )
         _assert_contains(
+            "record result select helper",
+            content,
+            "function selectRecordForResult(record: RecordItem)",
+        )
+        _assert_contains(
+            "record result select helper fields",
+            content,
+            "setSelectedRecord(record);\n    setRecordEditFields(recordPayloadToEditFields(record));",
+        )
+        _assert_contains(
+            "ai save result selected record helper binding",
+            content,
+            "if (createdRecords[0]) {\n        selectRecordForResult(createdRecords[0]);\n      }",
+        )
+        _assert_contains(
+            "record update result selected record helper binding",
+            content,
+            "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n      selectRecordForResult(updated);",
+        )
+        _assert_contains(
+            "manual create result selected record helper binding",
+            content,
+            "setRecords((current) => boundRecordsList([created, ...current]));\n      selectRecordForResult(created);",
+        )
+        _assert_contains(
             "record edit seed empty now helper",
             content,
             "function seedEmptyRecordEditStateForNow()",

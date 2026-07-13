@@ -4023,8 +4023,7 @@ export default function App() {
     if (target === "updateSuccess") {
       const demoRecord = visualSmokeDemoRecord();
       setRecords(visualSmokeDemoRecords());
-      setSelectedRecord(demoRecord);
-      setRecordEditFields(recordPayloadToEditFields(demoRecord));
+      selectRecordForResult(demoRecord);
       setLastUpdatedSummary("Visual smoke demo update result.");
       setRecordDetailReturnScreen("history");
       setCurrentScreen("updateSuccess");
@@ -5525,8 +5524,7 @@ export default function App() {
       setRecords((current) => boundRecordsList([...createdRecords, ...current]));
       setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));
       if (createdRecords[0]) {
-        setSelectedRecord(createdRecords[0]);
-        setRecordEditFields(recordPayloadToEditFields(createdRecords[0]));
+        selectRecordForResult(createdRecords[0]);
       }
       setLastSavedSummary(aiSaveSuccessSummaryMessage(savedCount));
       setLastSaveErrorSummary("");
@@ -5662,6 +5660,11 @@ export default function App() {
     const dateTime = localDateTimeInputs(record.occurred_at);
     setRecordEditDate(dateTime.date);
     setRecordEditTime(dateTime.time);
+  }
+
+  function selectRecordForResult(record: RecordItem) {
+    setSelectedRecord(record);
+    setRecordEditFields(recordPayloadToEditFields(record));
   }
 
   function seedEmptyRecordEditStateForNow() {
@@ -5816,8 +5819,7 @@ export default function App() {
       );
       const updated = boundRecordItem(updatedResponse);
       setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));
-      setSelectedRecord(updated);
-      setRecordEditFields(recordPayloadToEditFields(updated));
+      selectRecordForResult(updated);
       setLastUpdatedSummary(recordUpdateSummaryMessage(1));
       setCurrentScreen("updateSuccess");
       setStatus(recordUpdateSuccessStatusMessage());
@@ -5917,8 +5919,7 @@ export default function App() {
       });
       const created = boundRecordItem(createdResponse);
       setRecords((current) => boundRecordsList([created, ...current]));
-      setSelectedRecord(created);
-      setRecordEditFields(recordPayloadToEditFields(created));
+      selectRecordForResult(created);
       seedEmptyManualRecordStateForNow();
       setLastSavedSummary(manualRecordCreateSummaryMessage(1));
       setLastSaveEntryMethod("manual");
