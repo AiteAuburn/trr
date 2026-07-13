@@ -156,6 +156,7 @@ import {
   commercePreviewOpenCartStatusMessage,
   commercePreviewReturnStoreStatusMessage,
   communityBoundaryDisplayRows,
+  communityActionDisplayTexts,
   communityLeaderboardDisplaySection,
   emptyFoodCommunityShareFields,
   communityReadinessChecklistDisplayItems,
@@ -1665,11 +1666,11 @@ export default function App() {
   const communityPostingStatusMessage = futurePreviewStatusDisplay.communityPosting;
   const communityPrivacyStatusMessage = futurePreviewStatusDisplay.communityPrivacy;
   const foodCommunityShareStatusMessage = futurePreviewStatusDisplay.foodCommunityShare;
-  const foodCommunityShareButtonDisplayLabel = boundDisplayText("送出食物分享", maxDisplayTextLength);
-  const foodCommunityShareAccessibilityDisplayLabel = boundDisplayText(
-    `${foodCommunityShareButtonDisplayLabel}，backend 會計算升糖幅度並建立社群點數`,
-    maxDisplayDetailTextLength
-  );
+  const communityActionDisplay = communityActionDisplayTexts({
+    leaderboardOptIn: communityPublicSettings?.leaderboard_opt_in ?? false
+  });
+  const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;
+  const foodCommunityShareAccessibilityDisplayLabel = communityActionDisplay.foodCommunityShareAccessibility;
   const storePreviewDisplay = storePreviewDisplayTexts(storeActionStatus);
   const storeActionStatusDisplayText = storePreviewDisplay.actionStatus;
   const storePreviewBoundaryDisplayText = storePreviewDisplay.previewBoundary;
@@ -1680,14 +1681,8 @@ export default function App() {
   const storeCartIntroDisplayText = storePreviewDisplay.cartIntro;
   const storeCheckoutReadinessTitleDisplayText = storePreviewDisplay.checkoutReadinessTitle;
   const storeCartReturnButtonDisplayLabel = storePreviewDisplay.cartReturnButton;
-  const rankingOptInButtonDisplayLabel = boundDisplayText(
-    communityPublicSettings?.leaderboard_opt_in ? "關閉排行榜 opt-in" : "開啟排行榜 opt-in",
-    maxDisplayTextLength
-  );
-  const rankingOptInAccessibilityDisplayLabel = boundDisplayText(
-    `${rankingOptInButtonDisplayLabel}，更新 backend 公開排名設定且不公開健康數值`,
-    maxDisplayDetailTextLength
-  );
+  const rankingOptInButtonDisplayLabel = communityActionDisplay.rankingOptInButton;
+  const rankingOptInAccessibilityDisplayLabel = communityActionDisplay.rankingOptInAccessibility;
   const foodPhotoStatusDisplay = foodPhotoStatusDisplayTexts(foodPhotoActionStatus);
   const foodPhotoActionStatusDisplayText = foodPhotoStatusDisplay.action;
   const foodPhotoUploadStatusMessage = foodPhotoStatusDisplay.upload;

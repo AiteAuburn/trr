@@ -2042,3 +2042,25 @@ export function futurePreviewStatusDisplayTexts(value: {
     )
   };
 }
+
+export function communityActionDisplayTexts(value: {
+  leaderboardOptIn: boolean;
+}) {
+  const foodCommunityShareButton = boundDisplayText("送出食物分享", maxDisplayTextLength);
+  const rankingOptInButton = boundDisplayText(
+    value.leaderboardOptIn ? "關閉排行榜 opt-in" : "開啟排行榜 opt-in",
+    maxDisplayTextLength
+  );
+  return {
+    foodCommunityShareButton,
+    foodCommunityShareAccessibility: boundDisplayText(
+      `${foodCommunityShareButton}，backend 會計算升糖幅度並建立社群點數`,
+      maxDisplayDetailTextLength
+    ),
+    rankingOptInButton,
+    rankingOptInAccessibility: boundDisplayText(
+      `${rankingOptInButton}，更新 backend 公開排名設定且不公開健康數值`,
+      maxDisplayDetailTextLength
+    )
+  };
+}

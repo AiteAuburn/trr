@@ -124,6 +124,38 @@ None.
 
 ## Done
 
+### T1399: Extract community action display texts
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `communityActionDisplayTexts` to `mobile/futureModuleDisplay.ts` for Food Community share button copy/accessibility and Ranking opt-in button copy/accessibility.
+- Replaced inline bounded Food Community share and Ranking opt-in display construction in `mobile/App.tsx` with the extracted helper.
+- Kept food share payloads, public settings updates, ranking opt-in behavior, leaderboard sync, backend request paths, and rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No backend/schema/Android signing/token/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue auditing remaining future/community request-local status helpers in separate slices.
+
 ### T1398: Extract parser availability display messages
 
 Status: done
