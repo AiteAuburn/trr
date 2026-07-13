@@ -3863,9 +3863,11 @@ def main() -> int:
             ("daily record summary title", "<Text style={styles.previewModeBadge}>AI今日摘要</Text>"),
             ("daily record transcript title", "<Text style={styles.label}>今日錄音文字</Text>"),
             ("daily record transcript handler", "function openTodayTranscriptText()"),
+            ("daily record transcript expanded status binding", "setStatus(todayTranscriptExpandedStatusMessage());"),
             ("daily record section renderer", "dailyRecordSectionItems.map"),
             ("daily record detail row component binding", "item.detailRows.map((row) => (\n                            <DailyRecordDetailRow key={`${item.key}-${row.label}`} label={row.label} value={row.value} />"),
             ("daily record entry management handler", "function pressDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry menu open status binding", "setStatus(dailyRecordEntryMenuOpenStatusMessage(item.typeLabel));"),
             ("daily record entry management binding", "onPress={() => pressDailyRecordEntryMenu(item)}"),
             ("daily record entry edit handler", "function pressDailyRecordEntryEdit(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry delete handler", "function pressDailyRecordEntryDelete(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
@@ -4043,6 +4045,11 @@ def main() -> int:
             ("daily record reorganization status count bound", "maxMobilePreviewRecords"),
             ("daily record reorganization status ui bound", "maxUiMessageLength"),
             ("daily record reorganization display helper", "function dailyRecordReorganizationDisplayText("),
+            ("daily record transcript expanded status helper", "function todayTranscriptExpandedStatusMessage()"),
+            ("daily record transcript expanded status copy", "今日錄音文字已在下方展開；不重新呼叫 STT、AI 或 backend。"),
+            ("daily record entry menu open status helper", "function dailyRecordEntryMenuOpenStatusMessage(typeLabel: string)"),
+            ("daily record entry menu type label bound", "boundDisplayText(typeLabel, maxDisplayTextLength)"),
+            ("daily record entry menu status copy", "單筆管理；可選擇編輯或刪除，尚未寫入 backend。"),
         ):
             _assert_contains(label, daily_transcript_content, marker)
         for label, marker in (

@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T1414: Extract daily record action status messages
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/dailyTranscriptTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `todayTranscriptExpandedStatusMessage` and `dailyRecordEntryMenuOpenStatusMessage` to `mobile/dailyTranscriptTransforms.ts`.
+- Replaced inline bounded daily-record transcript and entry-menu action status strings in `mobile/App.tsx` with the extracted helpers.
+- Kept transcript display, retained transcript entries, edit/delete handlers, unsaved draft state, backend save path, and AI reorganization behavior unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue auditing remaining visual-smoke route status helpers separately.
+
 ### T1413: Extract auth logout main status messages
 
 Status: done

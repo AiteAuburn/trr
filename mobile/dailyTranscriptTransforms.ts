@@ -197,6 +197,17 @@ export function dailyRecordReorganizationDisplayText(
   );
 }
 
+export function todayTranscriptExpandedStatusMessage() {
+  return boundDisplayText("今日錄音文字已在下方展開；不重新呼叫 STT、AI 或 backend。", maxUiMessageLength);
+}
+
+export function dailyRecordEntryMenuOpenStatusMessage(typeLabel: string) {
+  return boundDisplayText(
+    `已開啟${boundDisplayText(typeLabel, maxDisplayTextLength)}單筆管理；可選擇編輯或刪除，尚未寫入 backend。`,
+    maxUiMessageLength
+  );
+}
+
 export function createDailyTranscriptEntry(
   occurredAt: string,
   sourceText: string,

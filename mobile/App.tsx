@@ -632,12 +632,14 @@ import {
   buildDailyRecordSaveRequest,
   createDailyTranscriptEntry,
   dailyRecordDateLabel,
+  dailyRecordEntryMenuOpenStatusMessage,
   dailyRecordKeyFromRecords,
   dailyRecordReorganizationDisplayText,
   dailyRecordReorganizationStatusMessage,
   dailyRecordSummaryText,
   dailyTranscriptDisplayBundle,
   mergeSameDayParsePreviewDraft,
+  todayTranscriptExpandedStatusMessage,
   type DailyRecordSaveResponse,
   type DailyRecordReorganizationReason,
   type DailyTranscriptEntry
@@ -3216,16 +3218,12 @@ export default function App() {
   }
 
   function openTodayTranscriptText() {
-    setStatus(boundUiMessage("今日錄音文字已在下方展開；不重新呼叫 STT、AI 或 backend。"));
+    setStatus(todayTranscriptExpandedStatusMessage());
   }
 
   function openDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
     setDailyRecordMenuIndex((current) => (current === item.index ? null : item.index));
-    setStatus(
-      boundUiMessage(
-        `已開啟${item.typeLabel}單筆管理；可選擇編輯或刪除，尚未寫入 backend。`
-      )
-    );
+    setStatus(dailyRecordEntryMenuOpenStatusMessage(item.typeLabel));
   }
 
   function pressDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
