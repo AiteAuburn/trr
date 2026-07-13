@@ -4056,6 +4056,16 @@ def main() -> int:
             "setPreview(visualSmokeDemoPreview());",
         )
         _assert_contains(
+            "visual smoke selected record seed helper",
+            content,
+            "function seedVisualSmokeSelectedRecord(record: RecordItem)",
+        )
+        _assert_contains(
+            "visual smoke selected record seed helper fields",
+            content,
+            "seedVisualSmokeDemoRecords();\n    setSelectedRecord(record);",
+        )
+        _assert_contains(
             "visual smoke history record selection helper",
             content,
             "function seedVisualSmokeHistoryRecordSelection(record: RecordItem)",
@@ -4063,7 +4073,12 @@ def main() -> int:
         _assert_contains(
             "visual smoke history record selection helper fields",
             content,
-            "seedVisualSmokeDemoRecords();\n    setSelectedRecord(record);\n    setRecordDetailReturnScreen(\"history\");",
+            "seedVisualSmokeSelectedRecord(record);\n    setRecordDetailReturnScreen(\"history\");",
+        )
+        _assert_contains(
+            "visual smoke save success selected record helper binding",
+            content,
+            "seedVisualSmokeSelectedRecord(demoRecord);\n      setLastSavedSummary(\"Visual smoke demo save result.\");",
         )
         _assert_contains(
             "visual smoke record list demo records seed helper binding",
@@ -4088,7 +4103,7 @@ def main() -> int:
         _assert_contains(
             "visual smoke seeded record route edit seed helper",
             content,
-            "seedRecordEditStateFromRecord(demoRecord);\n      setCurrentScreen(\"editRecord\");",
+            "seedVisualSmokeSelectedRecord(demoRecord);\n      seedRecordEditStateFromRecord(demoRecord);\n      setCurrentScreen(\"editRecord\");",
         )
         _assert_contains(
             "visual smoke seeded record route fallback",

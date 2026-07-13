@@ -4010,17 +4010,20 @@ export default function App() {
     setPreview(visualSmokeDemoPreview());
   }
 
-  function seedVisualSmokeHistoryRecordSelection(record: RecordItem) {
+  function seedVisualSmokeSelectedRecord(record: RecordItem) {
     seedVisualSmokeDemoRecords();
     setSelectedRecord(record);
+  }
+
+  function seedVisualSmokeHistoryRecordSelection(record: RecordItem) {
+    seedVisualSmokeSelectedRecord(record);
     setRecordDetailReturnScreen("history");
   }
 
   function openVisualSmokeRecordSeedRoute(target: AppScreen) {
     if (target === "saveSuccess") {
       const demoRecord = visualSmokeDemoRecord();
-      seedVisualSmokeDemoRecords();
-      setSelectedRecord(demoRecord);
+      seedVisualSmokeSelectedRecord(demoRecord);
       setLastSavedSummary("Visual smoke demo save result.");
       setLastSaveEntryMethod("ai");
       setCurrentScreen("saveSuccess");
@@ -4049,8 +4052,7 @@ export default function App() {
     }
     if (target === "editRecord") {
       const demoRecord = visualSmokeDemoRecord();
-      seedVisualSmokeDemoRecords();
-      setSelectedRecord(demoRecord);
+      seedVisualSmokeSelectedRecord(demoRecord);
       seedRecordEditStateFromRecord(demoRecord);
       setCurrentScreen("editRecord");
       return true;

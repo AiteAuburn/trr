@@ -15,6 +15,37 @@
 
 ## 2026-07-13
 
+### T1466 extract visual smoke selected record seed helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added local `seedVisualSmokeSelectedRecord` helper in `mobile/App.tsx`.
+- Reused it for debug-gated visual-smoke save success, edit record, and history record selection seeding where paths already assigned demo records plus selected record.
+- Kept visual-smoke route targets, history return-screen seeding, edit field seeding, result summaries, production flows, backend requests, and statuses unchanged.
+- Updated navigation verifier coverage for helper internals and representative route bindings.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1465 extract visual smoke demo preview seed helper
 
 類型：mobile / refactor / verifier / docs
