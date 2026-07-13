@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T1422: Extract recording transcript auto-open guard
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/recordingCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `shouldOpenTodayRecordingTranscriptReview` to `mobile/recordingCopy.ts` for the Today-only recording transcript auto-open guard.
+- Replaced the inline `currentScreen === "today" && elapsedSeconds > 1` check in `mobile/App.tsx`.
+- Kept audio capture, native Whisper handoff, text fallback, transcript return target, elapsed seconds, and recording stop behavior unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting screen renderers or route-specific action handlers in small slices.
+
 ### T1421: Extract transcript review return target helper
 
 Status: done

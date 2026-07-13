@@ -1,3 +1,5 @@
+import type { AppScreen } from "./navigationConfig";
+
 const maxUiMessageLength = 300;
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
@@ -71,6 +73,10 @@ export function recordingFinishedStatusMessage(elapsedSeconds: number) {
       ? "錄音太短，請按住說完後再放開。"
       : "錄音已結束；音檔已保留於本機，可用 Whisper 轉文字後進入確認。"
   );
+}
+
+export function shouldOpenTodayRecordingTranscriptReview(currentScreen: AppScreen, elapsedSeconds: number) {
+  return currentScreen === "today" && elapsedSeconds > 1;
 }
 
 export function recordingWhisperMissingModelStatusMessage() {

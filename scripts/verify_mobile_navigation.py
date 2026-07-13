@@ -2338,7 +2338,17 @@ def main() -> int:
         _assert_contains(
             "home recording finish enters transcript review for non-trivial audio",
             finish_recording_block,
-            'if (currentScreen === "today" && elapsedSeconds > 1) {',
+            "if (shouldOpenTodayRecordingTranscriptReview(currentScreen, elapsedSeconds)) {",
+        )
+        _assert_contains(
+            "home recording finish transcript helper",
+            recording_copy_content,
+            "function shouldOpenTodayRecordingTranscriptReview(currentScreen: AppScreen, elapsedSeconds: number)",
+        )
+        _assert_contains(
+            "home recording finish transcript helper condition",
+            recording_copy_content,
+            'return currentScreen === "today" && elapsedSeconds > 1;',
         )
         _assert_contains(
             "home recording optional whisper handoff guard",

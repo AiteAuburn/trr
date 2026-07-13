@@ -321,6 +321,7 @@ import {
   recordingWhisperMissingModelStatusMessage,
   recordingWhisperProgressStatusMessage,
   recordingWhisperSuccessStatusMessage,
+  shouldOpenTodayRecordingTranscriptReview,
   transcriptClearedStatusMessage,
   transcriptReviewCostBoundaryChecklistDisplayItems,
   transcriptReviewDisplayTexts,
@@ -2940,7 +2941,7 @@ export default function App() {
       setRecordingElapsedSeconds(elapsedSeconds);
       recordingStopInFlight.current = false;
     }
-    if (currentScreen === "today" && elapsedSeconds > 1) {
+    if (shouldOpenTodayRecordingTranscriptReview(currentScreen, elapsedSeconds)) {
       if (capturedAudioPath && whisperModelPath.trim()) {
         void transcribeRecordingToReview("today", capturedAudioPath, elapsedSeconds);
         return;
