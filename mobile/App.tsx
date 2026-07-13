@@ -2277,9 +2277,13 @@ export default function App() {
     selectHistoryDetailMode("raw");
   }
 
+  function clearSelectedAnalysisPoint() {
+    setSelectedAnalysisPointIndex(null);
+  }
+
   function selectAnalysisRange(range: AnalysisRange) {
     setAnalysisRange(range);
-    setSelectedAnalysisPointIndex(null);
+    clearSelectedAnalysisPoint();
   }
 
   function pressAnalysisRangeOption(item: ReturnType<typeof analysisRangeDisplayItem>) {
@@ -2288,19 +2292,19 @@ export default function App() {
 
   function updateAnalysisCustomStartInput(value: string) {
     setAnalysisCustomStart(boundDateInputText(value));
-    setSelectedAnalysisPointIndex(null);
+    clearSelectedAnalysisPoint();
   }
 
   function updateAnalysisCustomEndInput(value: string) {
     setAnalysisCustomEnd(boundDateInputText(value));
-    setSelectedAnalysisPointIndex(null);
+    clearSelectedAnalysisPoint();
   }
 
   async function applyAnalysisCustomRange() {
     if (isReportLoading) {
       return;
     }
-    setSelectedAnalysisPointIndex(null);
+    clearSelectedAnalysisPoint();
     setStatus(analysisCustomApplyStatusMessage());
     await loadBasicReportForCurrentRange("analysis");
   }

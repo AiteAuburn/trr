@@ -5451,6 +5451,21 @@ def main() -> int:
             "function selectAnalysisRange(range: AnalysisRange)",
         )
         _assert_contains(
+            "analysis selected point clear helper",
+            content,
+            "function clearSelectedAnalysisPoint()",
+        )
+        _assert_contains(
+            "analysis selected point clear helper internals",
+            content,
+            "function clearSelectedAnalysisPoint() {\n    setSelectedAnalysisPointIndex(null);",
+        )
+        _assert_contains(
+            "analysis range clears selected point helper binding",
+            content,
+            "setAnalysisRange(range);\n    clearSelectedAnalysisPoint();",
+        )
+        _assert_contains(
             "analysis range option press handler",
             content,
             "function pressAnalysisRangeOption(item: ReturnType<typeof analysisRangeDisplayItem>)",
@@ -5474,6 +5489,21 @@ def main() -> int:
             "analysis custom apply handler",
             content,
             "async function applyAnalysisCustomRange()",
+        )
+        _assert_contains(
+            "analysis custom start clears selected point helper binding",
+            content,
+            "setAnalysisCustomStart(boundDateInputText(value));\n    clearSelectedAnalysisPoint();",
+        )
+        _assert_contains(
+            "analysis custom end clears selected point helper binding",
+            content,
+            "setAnalysisCustomEnd(boundDateInputText(value));\n    clearSelectedAnalysisPoint();",
+        )
+        _assert_contains(
+            "analysis custom apply clears selected point helper binding",
+            content,
+            "clearSelectedAnalysisPoint();\n    setStatus(analysisCustomApplyStatusMessage());",
         )
         for label, marker in (
             ("analysis default month range state", 'const [analysisRange, setAnalysisRange] = useState<AnalysisRange>("month");'),
