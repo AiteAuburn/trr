@@ -2042,13 +2042,17 @@ export default function App() {
     setIsRecordingPreview(false);
     setRecordingStartedAt(null);
     setRecordingElapsedSeconds(0);
-    setTranscript("");
-    setTranscriptVoiceSeconds(0);
-    setIsTranscriptSample(false);
+    clearTranscriptDraftState();
     clearParserPreviewState();
     clearPreviewSelectionState();
     setCurrentScreen(transcriptReviewReturnScreen);
     setStatus(transcriptClearedStatusMessage());
+  }
+
+  function clearTranscriptDraftState() {
+    setTranscript("");
+    setTranscriptVoiceSeconds(0);
+    setIsTranscriptSample(false);
   }
 
   function clearParserPreviewState() {
@@ -2434,9 +2438,7 @@ export default function App() {
     setDailyTranscriptEntries([]);
     setDailyRecordOrganizationRevision(0);
     setDailyRecordOrganizationReason(null);
-    setTranscript("");
-    setTranscriptVoiceSeconds(0);
-    setIsTranscriptSample(false);
+    clearTranscriptDraftState();
     setSelectedRecord(null);
     setBasicReport(null);
     setReportStatus(detailedReportResetStatusMessage());
@@ -5507,9 +5509,7 @@ export default function App() {
       const createdRecords = boundRecordsList(saveResponse.records, maxMobilePreviewRecords);
       const savedCount = recordsToSave.length;
       setPreview(null);
-      setTranscript("");
-      setTranscriptVoiceSeconds(0);
-      setIsTranscriptSample(false);
+      clearTranscriptDraftState();
       setDailyTranscriptEntries([]);
       setDailyRecordOrganizationRevision(0);
       setDailyRecordOrganizationReason(null);

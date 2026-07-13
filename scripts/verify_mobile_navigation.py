@@ -2342,6 +2342,21 @@ def main() -> int:
             "function clearParserPreviewState()",
         )
         _assert_contains(
+            "transcript draft state clear helper",
+            content,
+            "function clearTranscriptDraftState()",
+        )
+        _assert_contains(
+            "transcript draft state clear helper internals",
+            content,
+            "function clearTranscriptDraftState() {\n    setTranscript(\"\");\n    setTranscriptVoiceSeconds(0);\n    setIsTranscriptSample(false);",
+        )
+        _assert_contains(
+            "transcript retry clears draft helper binding",
+            content,
+            "function retryTranscriptInput() {\n    setIsRecordingPreview(false);\n    setRecordingStartedAt(null);\n    setRecordingElapsedSeconds(0);\n    clearTranscriptDraftState();",
+        )
+        _assert_contains(
             "parser preview state clear helper internals",
             content,
             "function clearParserPreviewState() {\n    setPreview(null);\n    setParserRecoveryMessage(\"\");",
@@ -2395,6 +2410,16 @@ def main() -> int:
             "parse transcript progress clears parser preview helper binding",
             content,
             "const existingDailyPreview = preview;\n    clearParserPreviewState();\n    setStatus(parserProgressStatusMessage());",
+        )
+        _assert_contains(
+            "mobile session clear transcript draft helper binding",
+            content,
+            "setDailyRecordOrganizationReason(null);\n    clearTranscriptDraftState();\n    setSelectedRecord(null);",
+        )
+        _assert_contains(
+            "AI save success clears transcript draft helper binding",
+            content,
+            "setPreview(null);\n      clearTranscriptDraftState();\n      setDailyTranscriptEntries([]);",
         )
         _assert_contains(
             "transcript review return clears parser preview helper binding",
