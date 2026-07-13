@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1472: Reuse menu preview return helper in core preview routes
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `menuPreviewReturnScreen` for subscription, tutorial, and food photo openers where each opener already redirected self-return targets to `menu`.
+- Kept opener route targets, menu/settings entry paths, future-module entry paths, production flows, backend requests, and statuses unchanged.
+- Updated navigation verifier coverage for the three additional opener bindings.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1471: Extract menu preview return-screen helper
 
 Status: done

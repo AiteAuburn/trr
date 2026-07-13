@@ -3605,7 +3605,7 @@ export default function App() {
   }
 
   function openSubscription(returnScreen: AppScreen = currentScreen) {
-    setSubscriptionReturnScreen(returnScreen === "subscription" ? "menu" : returnScreen);
+    setSubscriptionReturnScreen(menuPreviewReturnScreen(returnScreen, "subscription"));
     setCurrentScreen("subscription");
   }
 
@@ -3742,12 +3742,12 @@ export default function App() {
   }
 
   function openTutorial(returnScreen: AppScreen = currentScreen) {
-    setTutorialReturnScreen(returnScreen === "tutorial" ? "menu" : returnScreen);
+    setTutorialReturnScreen(menuPreviewReturnScreen(returnScreen, "tutorial"));
     setCurrentScreen("tutorial");
   }
 
   function openFoodPhoto(returnScreen: AppScreen = currentScreen) {
-    setFoodPhotoReturnScreen(returnScreen === "foodPhoto" ? "menu" : returnScreen);
+    setFoodPhotoReturnScreen(menuPreviewReturnScreen(returnScreen, "foodPhoto"));
     setCurrentScreen("foodPhoto");
   }
 
