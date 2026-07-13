@@ -4400,7 +4400,7 @@ def main() -> int:
         _assert_contains(
             "visual smoke record list demo records seed helper binding",
             content,
-            "if (isVisualSmokeRecordListScreen(target)) {\n      seedVisualSmokeDemoRecords();\n      setCurrentScreen(target);",
+            "if (isVisualSmokeRecordListScreen(target)) {\n      seedVisualSmokeDemoRecords();\n      openScreen(target);",
         )
         _assert_contains(
             "visual smoke record detail selection helper binding",
@@ -4475,7 +4475,7 @@ def main() -> int:
         _assert_contains(
             "visual smoke AI preview seed helper binding",
             content,
-            "if (isVisualSmokeAiPreviewScreen(target)) {\n      seedVisualSmokeDemoPreview();\n      setCurrentScreen(target);",
+            "if (isVisualSmokeAiPreviewScreen(target)) {\n      seedVisualSmokeDemoPreview();\n      openScreen(target);",
         )
         _assert_contains(
             "visual smoke ai seed route edit seed helper",
@@ -4703,6 +4703,16 @@ def main() -> int:
             "if (isVisualSmokeRecordListScreen(target)) {",
         )
         _assert_contains(
+            "visual smoke record list screen opener binding",
+            content,
+            "if (isVisualSmokeRecordListScreen(target)) {\n      seedVisualSmokeDemoRecords();\n      openScreen(target);",
+        )
+        _assert_contains(
+            "visual smoke record direct screen opener binding",
+            content,
+            'if (target === "record") {\n      openScreen("record");\n      return;',
+        )
+        _assert_contains(
             "visual smoke transcript route helper binding",
             content,
             "if (openVisualSmokeTranscriptRoute(target)) {",
@@ -4711,6 +4721,11 @@ def main() -> int:
             "visual smoke ai preview helper binding",
             content,
             "if (isVisualSmokeAiPreviewScreen(target)) {",
+        )
+        _assert_contains(
+            "visual smoke AI preview screen opener binding",
+            content,
+            "if (isVisualSmokeAiPreviewScreen(target)) {\n      seedVisualSmokeDemoPreview();\n      openScreen(target);",
         )
         _assert_contains(
             "visual smoke ai seed route helper binding",
@@ -4738,6 +4753,11 @@ def main() -> int:
             "if (isVisualSmokeSubscriptionStatusScreen(target)) {",
         )
         _assert_contains(
+            "visual smoke subscription status screen opener binding",
+            content,
+            "if (isVisualSmokeSubscriptionStatusScreen(target)) {\n      openScreen(target);\n      return;",
+        )
+        _assert_contains(
             "visual smoke deep link status binding",
             content,
             "setStatus(visualSmokeDeepLinkStatusMessage(deepLinkRoute));",
@@ -4748,9 +4768,19 @@ def main() -> int:
             "if (isVisualSmokeSettingsMenuScreen(target)) {",
         )
         _assert_contains(
+            "visual smoke settings subpage screen opener binding",
+            content,
+            "if (isVisualSmokeSettingsMenuScreen(target)) {\n      openScreen(target);\n      return;",
+        )
+        _assert_contains(
             "visual smoke future module route helper binding",
             content,
             "if (openVisualSmokeFutureModuleRoute(target)) {",
+        )
+        _assert_contains(
+            "visual smoke fallback screen opener binding",
+            content,
+            "if (openVisualSmokeFutureModuleRoute(target)) {\n      return;\n    }\n    openScreen(target);",
         )
         _assert_contains(
             "visual smoke boot skipped display binding",

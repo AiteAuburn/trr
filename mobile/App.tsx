@@ -4185,11 +4185,11 @@ export default function App() {
     activateVisualSmokePreview();
     if (isVisualSmokeRecordListScreen(target)) {
       seedVisualSmokeDemoRecords();
-      setCurrentScreen(target);
+      openScreen(target);
       return;
     }
     if (target === "record") {
-      setCurrentScreen("record");
+      openScreen("record");
       return;
     }
     if (openVisualSmokeTranscriptRoute(target)) {
@@ -4197,7 +4197,7 @@ export default function App() {
     }
     if (isVisualSmokeAiPreviewScreen(target)) {
       seedVisualSmokeDemoPreview();
-      setCurrentScreen(target);
+      openScreen(target);
       return;
     }
     if (openVisualSmokeAiSeedRoute(target)) {
@@ -4213,17 +4213,17 @@ export default function App() {
       return;
     }
     if (isVisualSmokeSubscriptionStatusScreen(target)) {
-      setCurrentScreen(target);
+      openScreen(target);
       return;
     }
     if (isVisualSmokeSettingsMenuScreen(target)) {
-      setCurrentScreen(target);
+      openScreen(target);
       return;
     }
     if (openVisualSmokeFutureModuleRoute(target)) {
       return;
     }
-    setCurrentScreen(target);
+    openScreen(target);
   }
 
   function pressVisualSmokeRoute(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>) {
