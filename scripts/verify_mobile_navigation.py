@@ -2033,6 +2033,26 @@ def main() -> int:
             'return chrome.backTo ?? "menu";',
         )
         _assert_contains(
+            "MVP flow stepper state helper",
+            navigation_content,
+            "function mvpFlowStepperState(value: {",
+        )
+        _assert_contains(
+            "MVP flow failure maps to save confirm",
+            navigation_content,
+            'const currentFlowScreen = value.currentScreen === "aiSaveFailure" ? "aiSaveConfirm" : value.currentScreen;',
+        )
+        _assert_contains(
+            "MVP flow stepper hides today",
+            navigation_content,
+            'value.currentScreen !== "today" &&',
+        )
+        _assert_contains(
+            "MVP flow manual save success condition",
+            navigation_content,
+            'value.currentScreen !== "saveSuccess" || value.lastSaveEntryMethod !== "manual" || value.hasUnsavedPreviewRecords',
+        )
+        _assert_contains(
             "minimal home chrome keeps menu fallback",
             navigation_content,
             'today: { subtitle: "" }',
@@ -3637,7 +3657,9 @@ def main() -> int:
             )
         for label, marker in (
             ("minimal home hides primary tabs", 'const showPrimaryTabs = currentScreen !== "today" && primaryScreens.some((screen) => screen.id === currentScreen)'),
-            ("minimal home hides MVP flow stepper", 'currentScreen !== "today" &&'),
+            ("MVP flow stepper state helper binding", "const mvpFlowStepper = mvpFlowStepperState({"),
+            ("MVP flow stepper index binding", "const mvpFlowStepIndex = mvpFlowStepper.stepIndex;"),
+            ("MVP flow stepper show binding", "const showMvpFlowStepper = mvpFlowStepper.show;"),
             ("minimal home section style", "styles.homeMinimalSection"),
             ("minimal home mic button style", "styles.homeMicButton"),
             ("minimal home active mic style", "styles.homeMicButtonActive"),

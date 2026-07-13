@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T1418: Extract MVP flow stepper state helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/navigationConfig.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `mvpFlowStepperState` to `mobile/navigationConfig.ts` to own MVP flow step index and visibility rules.
+- Replaced inline `mvpFlowCurrentScreen`, step index, and visibility calculation in `mobile/App.tsx` with the extracted helper.
+- Kept AI-save-failure step mapping, Today hidden stepper behavior, manual-save success hiding rule, and unsaved-preview exception unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting screen renderers or route-specific action handlers in small slices.
+
 ### T1417: Extract header back target routing helper
 
 Status: done

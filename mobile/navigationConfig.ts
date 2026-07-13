@@ -252,6 +252,22 @@ function headerBackTargetForScreen(
   return chrome.backTo ?? "menu";
 }
 
+function mvpFlowStepperState(value: {
+  currentScreen: AppScreen;
+  lastSaveEntryMethod: "ai" | "manual" | null;
+  hasUnsavedPreviewRecords: boolean;
+}) {
+  const currentFlowScreen = value.currentScreen === "aiSaveFailure" ? "aiSaveConfirm" : value.currentScreen;
+  const stepIndex = mvpFlowSteps.findIndex((step) => step.id === currentFlowScreen);
+  return {
+    stepIndex,
+    show:
+      stepIndex >= 0 &&
+      value.currentScreen !== "today" &&
+      (value.currentScreen !== "saveSuccess" || value.lastSaveEntryMethod !== "manual" || value.hasUnsavedPreviewRecords)
+  };
+}
+
 function normalizeVisualSmokeInitialRoute(
   value: string,
   enableDebugTools: boolean,
@@ -305,6 +321,7 @@ export {
   menuScreens,
   mvpFlowSteps,
   headerBackTargetForScreen,
+  mvpFlowStepperState,
   normalizeVisualSmokeInitialRoute,
   primaryScreens,
   screenChrome,

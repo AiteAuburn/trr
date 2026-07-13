@@ -115,6 +115,7 @@ import {
   headerBackTargetForScreen,
   menuScreens,
   mvpFlowSteps,
+  mvpFlowStepperState,
   primaryScreens,
   screenChrome,
   visualSmokeBootIgnoredDisplayMessages,
@@ -1304,12 +1305,13 @@ export default function App() {
     saveSuccessReturnScreen
   });
   const showPrimaryTabs = currentScreen !== "today" && primaryScreens.some((screen) => screen.id === currentScreen);
-  const mvpFlowCurrentScreen = currentScreen === "aiSaveFailure" ? "aiSaveConfirm" : currentScreen;
-  const mvpFlowStepIndex = mvpFlowSteps.findIndex((step) => step.id === mvpFlowCurrentScreen);
-  const showMvpFlowStepper =
-    mvpFlowStepIndex >= 0 &&
-    currentScreen !== "today" &&
-    (currentScreen !== "saveSuccess" || lastSaveEntryMethod !== "manual" || hasUnsavedPreviewRecords);
+  const mvpFlowStepper = mvpFlowStepperState({
+    currentScreen,
+    lastSaveEntryMethod,
+    hasUnsavedPreviewRecords
+  });
+  const mvpFlowStepIndex = mvpFlowStepper.stepIndex;
+  const showMvpFlowStepper = mvpFlowStepper.show;
   const localAchievements = useMemo<AchievementItem[]>(
     () => localAchievementItemsForRecords(recordsForDisplay),
     [recordsForDisplay]
