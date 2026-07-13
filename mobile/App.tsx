@@ -208,6 +208,7 @@ import {
   storeEmptySearchDisplayItem,
   storeCatalogSyncStatusMessages,
   storePreviewDisplayTexts,
+  storeRedeemStatusMessages,
   storeDisplayBundle,
   storeProductFromApi,
   storeProductDisplayItem,
@@ -5069,14 +5070,18 @@ export default function App() {
   }
 
   async function redeemStoreProduct(product: ReturnType<typeof storeProductDisplayItem>) {
+    const redeemStatus = storeRedeemStatusMessages({
+      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+      productTitle: product.title,
+      fulfillmentCopy: "",
+      pointsCost: 0
+    });
     if (visualSmokePreviewActive.current) {
-      setStoreActionStatus(boundUiMessage("Visual smoke 預覽不送出商城兌換，也不扣點。"));
+      setStoreActionStatus(redeemStatus.visualSmoke);
       return;
     }
     if (!protectedAccountBackendReady || !account) {
-      setStoreActionStatus(
-        boundUiMessage(`${protectedAccountBackendUnavailableMessage || "backend account 尚未 ready"}；目前不送出兌換。`)
-      );
+      setStoreActionStatus(redeemStatus.unavailable);
       return;
     }
     if (product.rewardStatus !== "redeemable") {
@@ -5084,16 +5089,16 @@ export default function App() {
       return;
     }
     if (!product.id) {
-      setStoreActionStatus(boundUiMessage("商城兌換項目識別無效；目前不送出兌換。"));
+      setStoreActionStatus(redeemStatus.invalidProduct);
       return;
     }
     if (storeRedemptionInFlight.current) {
-      setStoreActionStatus(boundUiMessage("商城兌換送出中，請稍候。"));
+      setStoreActionStatus(redeemStatus.inFlight);
       return;
     }
     storeRedemptionInFlight.current = true;
     setIsBusy(true);
-    setStoreActionStatus(boundUiMessage(`正在兌換 ${product.title}。`));
+    setStoreActionStatus(redeemStatus.loading);
     try {
       const redemption = await requestJson<StoreApiRedemption>(
         normalizedApiBaseUrl,
@@ -5109,11 +5114,16 @@ export default function App() {
           ? `已發出 ${redemption.fulfillment_type === "discount_code" ? "折扣碼" : "優惠券"}：${boundIdentifier(redemption.fulfillment_code)}`
           : `已建立兌換 reservation：${boundIdentifier(redemption.reward_code)}`;
       setStoreActionStatus(
-        boundUiMessage(`${fulfillmentCopy}，扣除 ${clampNumber(redemption.points_cost, 0, maxMobileCountValue)} 點。`)
+        storeRedeemStatusMessages({
+          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+          productTitle: product.title,
+          fulfillmentCopy,
+          pointsCost: redemption.points_cost
+        }).success
       );
       void loadStoreCatalogAndPoints();
     } catch {
-      setStoreActionStatus(boundUiMessage("兌換失敗；可能點數不足或該商品仍未開放 fulfillment。"));
+      setStoreActionStatus(redeemStatus.failure);
     } finally {
       storeRedemptionInFlight.current = false;
       setIsBusy(false);

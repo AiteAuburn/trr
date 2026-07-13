@@ -1735,6 +1735,29 @@ export function storeCatalogSyncStatusMessages(value: {
   };
 }
 
+export function storeRedeemStatusMessages(value: {
+  backendUnavailableMessage: string;
+  productTitle: string;
+  fulfillmentCopy: string;
+  pointsCost: number;
+}) {
+  return {
+    visualSmoke: boundUiMessage("Visual smoke 預覽不送出商城兌換，也不扣點。"),
+    unavailable: boundUiMessage(`${value.backendUnavailableMessage || "backend account 尚未 ready"}；目前不送出兌換。`),
+    invalidProduct: boundUiMessage("商城兌換項目識別無效；目前不送出兌換。"),
+    inFlight: boundUiMessage("商城兌換送出中，請稍候。"),
+    loading: boundUiMessage(`正在兌換 ${boundDisplayText(value.productTitle, maxDisplayTextLength)}。`),
+    success: boundUiMessage(
+      `${boundDisplayText(value.fulfillmentCopy, maxDisplayDetailTextLength)}，扣除 ${clampNumber(
+        value.pointsCost,
+        0,
+        maxMobileCountValue
+      )} 點。`
+    ),
+    failure: boundUiMessage("兌換失敗；可能點數不足或該商品仍未開放 fulfillment。")
+  };
+}
+
 export function achievementPreviewBoundaryCopy() {
   return boundDisplayText(
     "成就可同步 backend 依記錄聚合的 MVP 徽章摘要；backend 不可用或 visual smoke 時保留本機推算。",

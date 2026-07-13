@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1411 extract store redeem status messages
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `storeRedeemStatusMessages` to `mobile/futureModuleDisplay.ts` for Store product redeem visual-smoke, unavailable, invalid product, in-flight, loading, success, and failure status copy.
+- Replaced inline bounded Store product redeem status construction in `mobile/App.tsx` with the extracted helper.
+- Kept product redeemability guard, `/store/redemptions` POST, reward_code payload, fulfillment copy selection, points cost display, catalog refresh, and rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、product redeemability guard、`/store/redemptions` POST request path、reward_code payload、fulfillment copy selection、points cost display、catalog refresh、rendering、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining store redemption use and auth visual-smoke action-local status helpers separately.
+
 ### T1410 extract food community share status messages
 
 類型：mobile / refactor / verifier / docs
