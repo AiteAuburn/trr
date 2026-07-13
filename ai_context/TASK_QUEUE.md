@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1511: Reuse screen opener in visual-smoke seed routes
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `openScreen` inside visual-smoke history record, saved-record, workflow, and AI-preview seed routes.
+- Kept visual-smoke debug gating, demo data seeding, selected-record/preview state setup, return-screen setup, report/status seed values, UI copy, and production route behavior unchanged.
+- Updated navigation verifier coverage for visual-smoke seed route `openScreen` bindings.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1510: Reuse screen opener in future data preview routes
 
 Status: done

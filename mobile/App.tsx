@@ -4015,7 +4015,7 @@ export default function App() {
 
   function openVisualSmokeHistoryRecordScreen(record: RecordItem, screen: AppScreen) {
     seedVisualSmokeHistoryRecordSelection(record);
-    setCurrentScreen(screen);
+    openScreen(screen);
   }
 
   function openVisualSmokeRecordSeedRoute(target: AppScreen) {
@@ -4024,7 +4024,7 @@ export default function App() {
       seedVisualSmokeSelectedRecord(demoRecord);
       setLastSavedSummary("Visual smoke demo save result.");
       setLastSaveEntryMethod("ai");
-      setCurrentScreen("saveSuccess");
+      openScreen("saveSuccess");
       return true;
     }
     if (target === "deleteSuccess") {
@@ -4051,7 +4051,7 @@ export default function App() {
       const demoRecord = visualSmokeDemoRecord();
       seedVisualSmokeSelectedRecord(demoRecord);
       seedRecordEditStateFromRecord(demoRecord);
-      setCurrentScreen("editRecord");
+      openScreen("editRecord");
       return true;
     }
     if (target === "deleteConfirm") {
@@ -4068,14 +4068,14 @@ export default function App() {
       setManualRecordType("glucose");
       seedManualRecordStateFromRecord(demoRecord);
       setManualRecordReturnScreen("menu");
-      setCurrentScreen("manualRecordConfirm");
+      openScreen("manualRecordConfirm");
       return true;
     }
     if (target === "detailedReport") {
       seedVisualSmokeDemoRecords();
       setBasicReport(visualSmokeDemoReport());
       setReportStatus(visualSmokeRecordSyncStatusMessage());
-      setCurrentScreen("detailedReport");
+      openScreen("detailedReport");
       return true;
     }
     return false;
@@ -4094,14 +4094,14 @@ export default function App() {
       setPendingPreviewRemoveIndex(null);
       setSelectedPreviewIndex(0);
       seedPreviewEditStateFromRecord(demoRecord);
-      setCurrentScreen("editPreviewRecord");
+      openScreen("editPreviewRecord");
       return true;
     }
     if (target === "aiRemoveConfirm") {
       seedVisualSmokeDemoPreview();
       setSelectedPreviewIndex(null);
       setPendingPreviewRemoveIndex(0);
-      setCurrentScreen("aiRemoveConfirm");
+      openScreen("aiRemoveConfirm");
       return true;
     }
     return false;

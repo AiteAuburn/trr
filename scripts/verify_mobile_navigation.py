@@ -4390,7 +4390,7 @@ def main() -> int:
         _assert_contains(
             "visual smoke history record screen helper fields",
             content,
-            "seedVisualSmokeHistoryRecordSelection(record);\n    setCurrentScreen(screen);",
+            "seedVisualSmokeHistoryRecordSelection(record);\n    openScreen(screen);",
         )
         _assert_contains(
             "visual smoke save success selected record helper binding",
@@ -4418,9 +4418,14 @@ def main() -> int:
             'setLastSavedSummary("Visual smoke demo save result.");',
         )
         _assert_contains(
+            "visual smoke seeded record route save screen opener",
+            content,
+            'setLastSaveEntryMethod("ai");\n      openScreen("saveSuccess");',
+        )
+        _assert_contains(
             "visual smoke seeded record route edit seed helper",
             content,
-            "seedVisualSmokeSelectedRecord(demoRecord);\n      seedRecordEditStateFromRecord(demoRecord);\n      setCurrentScreen(\"editRecord\");",
+            'seedVisualSmokeSelectedRecord(demoRecord);\n      seedRecordEditStateFromRecord(demoRecord);\n      openScreen("editRecord");',
         )
         _assert_contains(
             "visual smoke seeded record route fallback",
@@ -4438,9 +4443,19 @@ def main() -> int:
             "seedManualRecordStateFromRecord(demoRecord);",
         )
         _assert_contains(
+            "visual smoke workflow seed route manual screen opener",
+            content,
+            'setManualRecordReturnScreen("menu");\n      openScreen("manualRecordConfirm");',
+        )
+        _assert_contains(
             "visual smoke workflow seed route report",
             content,
             "setBasicReport(visualSmokeDemoReport());",
+        )
+        _assert_contains(
+            "visual smoke workflow seed route report screen opener",
+            content,
+            'setReportStatus(visualSmokeRecordSyncStatusMessage());\n      openScreen("detailedReport");',
         )
         _assert_contains(
             "visual smoke workflow seed route fallback",
@@ -4465,12 +4480,17 @@ def main() -> int:
         _assert_contains(
             "visual smoke ai seed route edit seed helper",
             content,
-            "seedPreviewEditStateFromRecord(demoRecord);\n      setCurrentScreen(\"editPreviewRecord\");",
+            'seedPreviewEditStateFromRecord(demoRecord);\n      openScreen("editPreviewRecord");',
         )
         _assert_contains(
             "visual smoke ai seed route remove index",
             content,
             "setPendingPreviewRemoveIndex(0);",
+        )
+        _assert_contains(
+            "visual smoke ai seed route remove screen opener",
+            content,
+            'setPendingPreviewRemoveIndex(0);\n      openScreen("aiRemoveConfirm");',
         )
         _assert_contains(
             "visual smoke ai seed route fallback",
