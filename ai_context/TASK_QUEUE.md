@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1329: Extract food community item display items helper
+
+Status: done
+
+Summary:
+
+- Added `foodCommunityItemDisplayItems` to `mobile/futureModuleDisplay.ts` for Food Community item display-list shaping.
+- Replaced the inline `foodCommunityItemsForDisplay.map(foodCommunityItemDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept Food Community item copy, accessibility labels, search/filter behavior, selected-item fallback, item press behavior, Food Community rendering, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and item mapping rule are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1328: Extract food community category display items helper
 
 Status: done

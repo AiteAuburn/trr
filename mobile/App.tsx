@@ -163,6 +163,7 @@ import {
   foodCommunityCategoryDisplayItem,
   foodCommunityCategoryDisplayItems as buildFoodCommunityCategoryDisplayItems,
   foodCommunityItemDisplayItem,
+  foodCommunityItemDisplayItems as buildFoodCommunityItemDisplayItems,
   foodCommunityItemFromApi,
   foodCommunityItems,
   foodCommunityPointDisplayRows,
@@ -1632,7 +1633,7 @@ export default function App() {
   const foodCommunityItemsForDisplay =
     foodCommunityBackendItems.length > 0 ? foodCommunityBackendItems : foodCommunityItems;
   const foodCommunityDisplayItems = useMemo(
-    () => foodCommunityItemsForDisplay.map(foodCommunityItemDisplayItem),
+    () => buildFoodCommunityItemDisplayItems(foodCommunityItemsForDisplay),
     [foodCommunityItemsForDisplay]
   );
   const visibleFoodCommunityItems = visibleFoodCommunityDisplayItems(

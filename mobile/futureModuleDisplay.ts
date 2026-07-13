@@ -914,6 +914,10 @@ export function foodCommunityItemDisplayItem(value: FoodCommunityItem) {
   };
 }
 
+export function foodCommunityItemDisplayItems(items: FoodCommunityItem[]) {
+  return items.map(foodCommunityItemDisplayItem);
+}
+
 export function visibleFoodCommunityDisplayItems(
   items: Array<ReturnType<typeof foodCommunityItemDisplayItem>>,
   category: FoodCommunityCategory,
