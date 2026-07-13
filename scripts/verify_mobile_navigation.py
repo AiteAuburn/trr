@@ -2109,6 +2109,8 @@ def main() -> int:
             ),
             ("deepseek record parse request binding", "llm_model_id: llmModelId"),
             ("deepseek selected model status render", "LLM：{selectedLlmModel?.label ?? llmModelId}"),
+            ("screen opener helper", "function openScreen(screen: AppScreen) {\n    setCurrentScreen(screen);\n  }"),
+            ("screen status opener delegates to screen opener", "function openScreenWithStatus(screen: AppScreen, statusMessage: string) {\n    openScreen(screen);\n    setStatus(statusMessage);"),
             ("transcript review return target helper binding", "setTranscriptReviewReturnScreen(transcriptReviewReturnTargetForScreen(currentScreen));"),
             ("transcript review open status helper binding", 'openScreenWithStatus("transcriptReview", transcriptReviewReadyStatusMessage());'),
             ("transcript review edit return status helper binding", 'openScreenWithStatus("transcriptReview", transcriptReturnEditStatusMessage());'),
@@ -3783,7 +3785,7 @@ def main() -> int:
         _assert_contains(
             "save success result helper fields",
             content,
-            "setLastSavedSummary(summary);\n    setLastSaveEntryMethod(entryMethod);\n    setSaveSuccessReturnScreen(returnScreen);\n    setCurrentScreen(\"saveSuccess\");",
+            'setLastSavedSummary(summary);\n    setLastSaveEntryMethod(entryMethod);\n    setSaveSuccessReturnScreen(returnScreen);\n    openScreen("saveSuccess");',
         )
         _assert_contains(
             "ai save success result helper binding",
@@ -3803,7 +3805,7 @@ def main() -> int:
         _assert_contains(
             "AI save failure result helper fields",
             content,
-            "setLastSaveErrorSummary(message);\n    setLastSaveEntryMethod(\"ai\");\n    setCurrentScreen(\"aiSaveFailure\");",
+            'setLastSaveErrorSummary(message);\n    setLastSaveEntryMethod("ai");\n    openScreen("aiSaveFailure");',
         )
         _assert_contains(
             "AI save failure result helper binding",
@@ -3818,7 +3820,7 @@ def main() -> int:
         _assert_contains(
             "record update success result helper fields",
             content,
-            "setLastUpdatedSummary(summary);\n    setCurrentScreen(\"updateSuccess\");",
+            'setLastUpdatedSummary(summary);\n    openScreen("updateSuccess");',
         )
         _assert_contains(
             "record update success result helper binding",
@@ -3833,7 +3835,7 @@ def main() -> int:
         _assert_contains(
             "record delete success result helper fields",
             content,
-            "setLastDeletedSummary(summary);\n    setCurrentScreen(\"deleteSuccess\");",
+            'setLastDeletedSummary(summary);\n    openScreen("deleteSuccess");',
         )
         _assert_contains(
             "record edit seed empty now helper",
@@ -3863,7 +3865,7 @@ def main() -> int:
         _assert_contains(
             "record detail screen helper fields",
             content,
-            "setRecordDetailReturnScreen(returnScreen);\n    seedRecordEditStateFromRecord(record);\n    setCurrentScreen(\"recordDetail\");",
+            'setRecordDetailReturnScreen(returnScreen);\n    seedRecordEditStateFromRecord(record);\n    openScreen("recordDetail");',
         )
         _assert_contains(
             "record detail open helper binding",

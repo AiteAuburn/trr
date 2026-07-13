@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1504: Add screen opener helper for result and detail routes
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a minimal `openScreen` navigation helper and made `openScreenWithStatus` delegate to it.
+- Reused `openScreen` in save-success, AI-save-failure, update-success, delete-success, and record-detail route helpers.
+- Kept result/detail state seeding, return-screen setup, status message ownership, backend request behavior, parser/AI behavior, UI copy, and layout unchanged.
+- Updated navigation verifier coverage for the shared screen opener and result/detail helper bindings.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1503: Reuse screen status opener in recording result routes
 
 Status: done

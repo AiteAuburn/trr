@@ -2102,8 +2102,12 @@ export default function App() {
     seedManualRecordDateTimeForNow();
   }
 
-  function openScreenWithStatus(screen: AppScreen, statusMessage: string) {
+  function openScreen(screen: AppScreen) {
     setCurrentScreen(screen);
+  }
+
+  function openScreenWithStatus(screen: AppScreen, statusMessage: string) {
+    openScreen(screen);
     setStatus(statusMessage);
   }
 
@@ -5662,23 +5666,23 @@ export default function App() {
     setLastSavedSummary(summary);
     setLastSaveEntryMethod(entryMethod);
     setSaveSuccessReturnScreen(returnScreen);
-    setCurrentScreen("saveSuccess");
+    openScreen("saveSuccess");
   }
 
   function openAiSaveFailureResult(message: string) {
     setLastSaveErrorSummary(message);
     setLastSaveEntryMethod("ai");
-    setCurrentScreen("aiSaveFailure");
+    openScreen("aiSaveFailure");
   }
 
   function openUpdateSuccessResult(summary: string) {
     setLastUpdatedSummary(summary);
-    setCurrentScreen("updateSuccess");
+    openScreen("updateSuccess");
   }
 
   function openDeleteSuccessResult(summary: string) {
     setLastDeletedSummary(summary);
-    setCurrentScreen("deleteSuccess");
+    openScreen("deleteSuccess");
   }
 
   function seedEmptyRecordEditStateForNow() {
@@ -5691,7 +5695,7 @@ export default function App() {
   function openRecordDetailScreen(record: RecordItem, returnScreen: AppScreen) {
     setRecordDetailReturnScreen(returnScreen);
     seedRecordEditStateFromRecord(record);
-    setCurrentScreen("recordDetail");
+    openScreen("recordDetail");
   }
 
   function openRecordDetail(record: RecordItem, returnScreen: AppScreen = "today") {
