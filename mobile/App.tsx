@@ -4229,42 +4229,49 @@ export default function App() {
     setCurrentScreen("futureModuleDetail");
   }
 
+  function openFutureModuleTargetRoute(target: AppScreen) {
+    if (target === "foodPhoto") {
+      openFoodPhoto("futureModules");
+      return true;
+    }
+    if (target === "doctorShare") {
+      openDoctorShare("futureModules");
+      return true;
+    }
+    if (target === "healthIntegration") {
+      openHealthIntegration("futureModules");
+      return true;
+    }
+    if (target === "community") {
+      openCommunity("futureModules");
+      return true;
+    }
+    if (target === "ranking") {
+      openRanking("futureModules");
+      return true;
+    }
+    if (target === "achievements") {
+      openAchievements("futureModules");
+      return true;
+    }
+    if (target === "yearReview") {
+      openYearReview("futureModules");
+      return true;
+    }
+    if (target === "store") {
+      openStore("futureModules");
+      return true;
+    }
+    return false;
+  }
+
   function openFutureModuleDestination(target: AppScreen | undefined, module: FutureModuleCard) {
     setFutureModuleActionStatus(previewActionClearStatusMessage());
     if (!target) {
       openFutureModuleDetail(module);
       return;
     }
-    if (target === "foodPhoto") {
-      openFoodPhoto("futureModules");
-      return;
-    }
-    if (target === "doctorShare") {
-      openDoctorShare("futureModules");
-      return;
-    }
-    if (target === "healthIntegration") {
-      openHealthIntegration("futureModules");
-      return;
-    }
-    if (target === "community") {
-      openCommunity("futureModules");
-      return;
-    }
-    if (target === "ranking") {
-      openRanking("futureModules");
-      return;
-    }
-    if (target === "achievements") {
-      openAchievements("futureModules");
-      return;
-    }
-    if (target === "yearReview") {
-      openYearReview("futureModules");
-      return;
-    }
-    if (target === "store") {
-      openStore("futureModules");
+    if (openFutureModuleTargetRoute(target)) {
       return;
     }
     setCurrentScreen(target);
