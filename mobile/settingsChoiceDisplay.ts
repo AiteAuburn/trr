@@ -1,3 +1,5 @@
+import { authSessionDisplayListItems, type AuthSessionDisplaySource } from "./authSessionDisplay";
+
 const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
 const maxNativeDebugInputLength = 1024;
@@ -18,12 +20,12 @@ function boundNativeDebugInput(value: string) {
   return value.slice(0, maxNativeDebugInputLength);
 }
 
-type ProfileChoiceDisplaySource = {
+export type ProfileChoiceDisplaySource = {
   id: string;
   display_name: string;
 };
 
-type ModelChoiceDisplaySource = {
+export type ModelChoiceDisplaySource = {
   id: string;
   label: string;
   available: boolean;
@@ -85,6 +87,23 @@ export function settingsModelChoiceDisplayItem<T extends ModelChoiceDisplaySourc
 
 export function settingsModelChoiceDisplayItems<T extends ModelChoiceDisplaySource>(models: T[], kind: "LLM" | "STT") {
   return models.map((model) => settingsModelChoiceDisplayItem(model, kind));
+}
+
+export function settingsChoiceDisplayBundle<
+  LlmModel extends ModelChoiceDisplaySource,
+  SttModel extends ModelChoiceDisplaySource
+>(value: {
+  profiles: ProfileChoiceDisplaySource[];
+  llmModels: LlmModel[];
+  sttModels: SttModel[];
+  authSessions: AuthSessionDisplaySource[];
+}) {
+  return {
+    profileChoiceDisplayItems: settingsProfileChoiceDisplayItems(value.profiles),
+    llmModelChoiceDisplayItems: settingsModelChoiceDisplayItems(value.llmModels, "LLM"),
+    sttModelChoiceDisplayItems: settingsModelChoiceDisplayItems(value.sttModels, "STT"),
+    authSessionDisplayItems: authSessionDisplayListItems(value.authSessions)
+  };
 }
 
 export function downloadedModelDisplayLabel(value: DownloadedModelDisplaySource) {

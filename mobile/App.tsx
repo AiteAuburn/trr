@@ -687,8 +687,7 @@ import {
 import {
   downloadedModelDisplayLabel,
   downloadedWhisperModelDisplayItems,
-  settingsModelChoiceDisplayItems,
-  settingsProfileChoiceDisplayItems
+  settingsChoiceDisplayBundle
 } from "./settingsChoiceDisplay";
 import {
   boundVoiceQuota,
@@ -748,7 +747,6 @@ import {
   boundRefreshTokenForRequest
 } from "./authTransforms";
 import { protectedRequestHeaders } from "./authRequestHeaders";
-import { authSessionDisplayListItems } from "./authSessionDisplay";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
@@ -1554,28 +1552,26 @@ export default function App() {
   const visibleStoreProducts = storeDisplay.visibleProducts;
   const storeRedemptionBoundaryRows = storeDisplay.redemptionBoundaryRows;
   const settingsDisplayRows = useMemo(() => buildSettingsDisplayRows(), []);
-  const profileChoiceDisplayItems = useMemo(
-    () => settingsProfileChoiceDisplayItems(profiles),
-    [profiles]
+  const settingsChoiceDisplay = useMemo(
+    () =>
+      settingsChoiceDisplayBundle({
+        profiles,
+        llmModels: models.llm_models,
+        sttModels: models.stt_models,
+        authSessions
+      }),
+    [authSessions, models.llm_models, models.stt_models, profiles]
   );
-  const llmModelChoiceDisplayItems = useMemo(
-    () => settingsModelChoiceDisplayItems(models.llm_models, "LLM"),
-    [models.llm_models]
-  );
-  const sttModelChoiceDisplayItems = useMemo(
-    () => settingsModelChoiceDisplayItems(models.stt_models, "STT"),
-    [models.stt_models]
-  );
+  const profileChoiceDisplayItems = settingsChoiceDisplay.profileChoiceDisplayItems;
+  const llmModelChoiceDisplayItems = settingsChoiceDisplay.llmModelChoiceDisplayItems;
+  const sttModelChoiceDisplayItems = settingsChoiceDisplay.sttModelChoiceDisplayItems;
   const tutorialDisplaySteps = useMemo(() => buildTutorialDisplaySteps(), []);
   const authProviderDisplayItems = useMemo(() => buildAuthProviderDisplayItems(), []);
   const sessionManagementDisplayItems = useMemo(
     () => buildSessionManagementDisplayItems(),
     []
   );
-  const authSessionDisplayItems = useMemo(
-    () => authSessionDisplayListItems(authSessions),
-    [authSessions]
-  );
+  const authSessionDisplayItems = settingsChoiceDisplay.authSessionDisplayItems;
   const productionAuthReadinessDisplayRows = useMemo(
     () => buildProductionAuthReadinessDisplayRows(),
     []
