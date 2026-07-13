@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1326: Extract store product display items helper
+
+Status: done
+
+Summary:
+
+- Added `storeProductDisplayItems` to `mobile/futureModuleDisplay.ts` for Store catalog product display-list shaping.
+- Replaced the inline `storeProductsForDisplay.map(storeProductDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept Store product copy, redeemable/preview action status, filtering/search behavior, Store rendering, redemption handlers, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and product mapping rule are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1325: Extract settings display rows helper
 
 Status: done

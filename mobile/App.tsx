@@ -208,6 +208,7 @@ import {
   storePreviewBoundaryCopy,
   storeProductFromApi,
   storeProductDisplayItem,
+  storeProductDisplayItems as buildStoreProductDisplayItems,
   storeProducts,
   storeRedemptionBoundaryDisplayRows,
   storeRedemptionDisplayItem,
@@ -1608,7 +1609,7 @@ export default function App() {
   const recordingResultPrimaryActionDisplayText = recordingResultPrimaryActionLabel(recordingElapsedSeconds);
   const storeProductsForDisplay = storeBackendProducts.length > 0 ? storeBackendProducts : storeProducts;
   const storeProductDisplayItems = useMemo(
-    () => storeProductsForDisplay.map(storeProductDisplayItem),
+    () => buildStoreProductDisplayItems(storeProductsForDisplay),
     [storeProductsForDisplay]
   );
   const storeRedemptionDisplayItems = useMemo(

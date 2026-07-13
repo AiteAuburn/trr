@@ -1116,6 +1116,10 @@ export function storeProductDisplayItem(value: StoreProduct) {
   };
 }
 
+export function storeProductDisplayItems(products: StoreProduct[]) {
+  return products.map(storeProductDisplayItem);
+}
+
 export function visibleStoreProductDisplayItems(
   products: Array<ReturnType<typeof storeProductDisplayItem>>,
   category: StoreCategory,
