@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1327 extract store category display items helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `storeCategoryDisplayItems` to `mobile/futureModuleDisplay.ts` for Store category option display-list shaping.
+- Replaced the inline `storeCategories.map(storeCategoryDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept Store category copy, accessibility labels, category selection behavior, Store rendering, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and category mapping rule are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Store rendering、Store category selection behavior、Store search/filter behavior、redemption handlers、Store API behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk Store/Food Community display-list helpers from `App.tsx`; keep Store request handlers and category state ownership in `App.tsx` until component boundaries are stable.
+
 ### T1326 extract store product display items helper
 
 類型：mobile / refactor / verifier / docs

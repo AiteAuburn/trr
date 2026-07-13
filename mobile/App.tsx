@@ -207,6 +207,7 @@ import {
   storeLocalBoundaryCopy,
   storePreviewBoundaryCopy,
   storeProductFromApi,
+  storeCategoryDisplayItems as buildStoreCategoryDisplayItems,
   storeProductDisplayItem,
   storeProductDisplayItems as buildStoreProductDisplayItems,
   storeProducts,
@@ -1616,7 +1617,7 @@ export default function App() {
     () => storeRedemptionWalletDisplayItems(storeRedemptions),
     [storeRedemptions]
   );
-  const storeCategoryDisplayOptions = useMemo(() => storeCategories.map(storeCategoryDisplayItem), []);
+  const storeCategoryDisplayOptions = useMemo(() => buildStoreCategoryDisplayItems(storeCategories), []);
   const foodCommunityCategoriesForDisplay =
     foodCommunityBackendCategories.length > 0 ? foodCommunityBackendCategories : foodCommunityCategories;
   const foodCommunityCategoryDisplayOptions = useMemo(

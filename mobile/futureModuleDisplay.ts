@@ -1092,6 +1092,10 @@ export function storeCategoryDisplayItem(value: { id: StoreCategory; label: stri
   };
 }
 
+export function storeCategoryDisplayItems(values: Array<{ id: StoreCategory; label: string }>) {
+  return values.map(storeCategoryDisplayItem);
+}
+
 export function storeProductDisplayItem(value: StoreProduct) {
   const title = boundDisplayText(value.title || "商品", maxDisplayTextLength);
   const rewardStatus = value.rewardStatus ?? "preview";
