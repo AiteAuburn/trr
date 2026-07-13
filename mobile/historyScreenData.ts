@@ -62,6 +62,10 @@ export function historyDetailModeDisplayItem(value: { id: HistoryDetailMode; lab
   };
 }
 
+export function historyDetailModeDisplayItems(values: ReadonlyArray<{ id: HistoryDetailMode; label: string; accessibilityCopy: string }>) {
+  return values.map(historyDetailModeDisplayItem);
+}
+
 function pendingRecordFromRecordItem(record: RecordItem): PendingRecord {
   return {
     profile_id: record.profile_id,

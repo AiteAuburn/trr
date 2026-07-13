@@ -4146,7 +4146,7 @@ def main() -> int:
             ("history daily entry press handler", "function pressHistoryDailyEntry("),
             ("history daily entry binding", "onEntryPress={pressHistoryDailyEntry}"),
             ("history calendar selected state", "onDayPress={pressHistoryCalendarDay}"),
-            ("history detail mode display options", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModes.map(historyDetailModeDisplayItem), [])"),
+            ("history detail mode display options helper binding", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModeDisplayItems(historyDetailModes), []);"),
             ("history detail mode press handler", "function pressHistoryDetailModeOption(item: ReturnType<typeof historyDetailModeDisplayItem>)"),
             ("history selected date panel binding", "<HistorySelectedDatePanel\n              detailMode={historyDetailMode}"),
             ("history detail mode tabs options binding", "detailModeOptions={historyDetailModeDisplayOptions}"),
@@ -4175,6 +4175,16 @@ def main() -> int:
             "history detail mode display item",
             history_screen_data_content,
             "function historyDetailModeDisplayItem(value: { id: HistoryDetailMode; label: string; accessibilityCopy: string })",
+        )
+        _assert_contains(
+            "history detail mode display items helper",
+            history_screen_data_content,
+            "function historyDetailModeDisplayItems(values: ReadonlyArray<{ id: HistoryDetailMode; label: string; accessibilityCopy: string }>)",
+        )
+        _assert_contains(
+            "history detail mode display items map",
+            history_screen_data_content,
+            "return values.map(historyDetailModeDisplayItem);",
         )
         _assert_contains(
             "history calendar day display item",

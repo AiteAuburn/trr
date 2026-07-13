@@ -584,6 +584,7 @@ import {
   historyCalendarDayDisplayItem,
   historyDailySummaryDisplayItem,
   historyDetailModeDisplayItem,
+  historyDetailModeDisplayItems,
   historyDetailModes,
   historyRawRecordDisplayItems,
   type HistoryDetailMode
@@ -1698,7 +1699,7 @@ export default function App() {
     () => manualRecordTypeDisplayItems(manualRecordTypes),
     []
   );
-  const historyDetailModeDisplayOptions = useMemo(() => historyDetailModes.map(historyDetailModeDisplayItem), []);
+  const historyDetailModeDisplayOptions = useMemo(() => historyDetailModeDisplayItems(historyDetailModes), []);
   const analysisRangeDisplayOptions = useMemo(() => analysisRanges.map(analysisRangeDisplayItem), []);
   const menuDisplayItems = useMemo(() => menuScreens.map(menuScreenDisplayItem), []);
   const visualSmokeRouteJumpDisplayItems = useMemo(

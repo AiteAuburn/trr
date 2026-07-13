@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1339 extract history detail mode display items helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/historyScreenData.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `historyDetailModeDisplayItems` to `mobile/historyScreenData.ts` for History detail-mode display-list shaping.
+- Replaced the inline `historyDetailModes.map(historyDetailModeDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept History detail-mode copy, accessibility labels, selected mode state, press handler, tabs rendering, and History navigation unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and History detail-mode mapping rule are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、History rendering、History detail-mode selection behavior、History fetch/pagination behavior、record save/update behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk Analysis, Menu, and visual-smoke option-list helpers from `App.tsx`; keep navigation state ownership and press handlers in `App.tsx` until component boundaries are stable.
+
 ### T1338 extract manual record type display items helper
 
 類型：mobile / refactor / verifier / docs
