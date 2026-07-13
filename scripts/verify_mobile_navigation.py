@@ -5992,7 +5992,10 @@ def main() -> int:
             ("history daily entry binding", "onEntryPress={pressHistoryDailyEntry}"),
             ("history calendar selected state", "onDayPress={pressHistoryCalendarDay}"),
             ("history detail mode display options helper binding", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModeDisplayItems(historyDetailModes), []);"),
+            ("history detail mode target helper", "function historyDetailModeTarget(item: ReturnType<typeof historyDetailModeDisplayItem>)"),
+            ("history detail mode target helper fields", "return item.value;"),
             ("history detail mode press handler", "function pressHistoryDetailModeOption(item: ReturnType<typeof historyDetailModeDisplayItem>)"),
+            ("history detail mode target helper binding", "selectHistoryDetailMode(historyDetailModeTarget(item));"),
             ("history selected date panel binding", "<HistorySelectedDatePanel\n              detailMode={historyDetailMode}"),
             ("history detail mode tabs options binding", "detailModeOptions={historyDetailModeDisplayOptions}"),
             ("history detail mode tabs press binding", "onDetailModePress={pressHistoryDetailModeOption}"),
@@ -6010,6 +6013,11 @@ def main() -> int:
             "history direct date item value binding",
             content,
             "selectHistoryCalendarDate(item.value);",
+        )
+        _assert_not_contains(
+            "history direct detail-mode item value binding",
+            content,
+            "selectHistoryDetailMode(item.value);",
         )
         for label, marker in (
             ("history calendar display helper", "function historyCalendarDisplayTexts(monthStart: Date, selectedDate: string)"),

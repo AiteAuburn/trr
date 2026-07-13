@@ -2274,8 +2274,12 @@ export default function App() {
     setHistoryDetailMode(mode);
   }
 
+  function historyDetailModeTarget(item: ReturnType<typeof historyDetailModeDisplayItem>) {
+    return item.value;
+  }
+
   function pressHistoryDetailModeOption(item: ReturnType<typeof historyDetailModeDisplayItem>) {
-    selectHistoryDetailMode(item.value);
+    selectHistoryDetailMode(historyDetailModeTarget(item));
   }
 
   function showHistoryStructuredRecords() {
