@@ -3234,11 +3234,15 @@ export default function App() {
     deleteDailyRecordEntry(item);
   }
 
-  function returnFromAiSaveConfirm() {
+  function clearPreviewActionState() {
     setSelectedPreviewIndex(null);
     setPendingPreviewRemoveIndex(null);
     setPreviewEditFields(emptyRecordEditFields());
     setLastSaveErrorSummary("");
+  }
+
+  function returnFromAiSaveConfirm() {
+    clearPreviewActionState();
     setCurrentScreen("aiReview");
     setStatus(aiSaveConfirmReturnStatusMessage());
   }
@@ -3248,10 +3252,7 @@ export default function App() {
       setCurrentScreen("today");
       return;
     }
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
-    setLastSaveErrorSummary("");
+    clearPreviewActionState();
     setCurrentScreen("aiReview");
     setStatus(saveSuccessProcessUnsavedStatusMessage());
   }
@@ -3261,10 +3262,7 @@ export default function App() {
       processUnsavedPreviewRecords();
       return;
     }
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
-    setLastSaveErrorSummary("");
+    clearPreviewActionState();
     setCurrentScreen(target);
     setStatus(saveSuccessDestinationStatusMessage(target));
   }
@@ -3278,28 +3276,19 @@ export default function App() {
   }
 
   function openSaveSuccessManualContinue() {
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
-    setLastSaveErrorSummary("");
+    clearPreviewActionState();
     openManualRecord(manualRecordReturnScreen);
     setStatus(saveSuccessManualContinueStatusMessage());
   }
 
   function openSaveSuccessRecordEntry() {
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
-    setLastSaveErrorSummary("");
+    clearPreviewActionState();
     setCurrentScreen("record");
     setStatus(saveSuccessRecordEntryStatusMessage());
   }
 
   function openSaveSuccessRecordDetail() {
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
-    setLastSaveErrorSummary("");
+    clearPreviewActionState();
     openSelectedRecordDetail("saveSuccess");
     setStatus(saveSuccessViewDetailStatusMessage());
   }

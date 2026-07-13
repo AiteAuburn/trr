@@ -2862,14 +2862,44 @@ def main() -> int:
             "onPress={requestDailyRecordLeaveGuard}",
         )
         _assert_contains(
+            "preview action state clear helper",
+            content,
+            "function clearPreviewActionState()",
+        )
+        _assert_contains(
+            "preview action state clear selected index",
+            content,
+            "setSelectedPreviewIndex(null);",
+        )
+        _assert_contains(
+            "preview action state clear edit fields",
+            content,
+            "setPreviewEditFields(emptyRecordEditFields());",
+        )
+        _assert_contains(
+            "AI save confirm return clear helper binding",
+            content,
+            "clearPreviewActionState();\n    setCurrentScreen(\"aiReview\");\n    setStatus(aiSaveConfirmReturnStatusMessage());",
+        )
+        _assert_contains(
             "save success unsaved candidate handler",
             content,
             "function processUnsavedPreviewRecords()",
         )
         _assert_contains(
+            "save success process clear helper binding",
+            content,
+            "clearPreviewActionState();\n    setCurrentScreen(\"aiReview\");\n    setStatus(saveSuccessProcessUnsavedStatusMessage());",
+        )
+        _assert_contains(
             "save success destination handler",
             content,
             "function openSaveSuccessDestination(target: AppScreen)",
+        )
+        _assert_contains(
+            "save success destination clear helper binding",
+            content,
+            "clearPreviewActionState();\n    setCurrentScreen(target);\n    setStatus(saveSuccessDestinationStatusMessage(target));",
         )
         _assert_contains(
             "save success destination card handler",
