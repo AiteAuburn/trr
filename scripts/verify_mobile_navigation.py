@@ -4036,6 +4036,9 @@ def main() -> int:
             ("daily record leave guard display helper binding", "const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayTexts();"),
             ("daily record leave guard title display binding", "const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardDisplay.title;"),
             ("daily record leave guard cancel accessibility binding", "const dailyRecordLeaveGuardCancelAccessibilityLabel = dailyRecordLeaveGuardDisplay.cancelAccessibility;"),
+            ("daily record draft screen helper binding", "const dailyRecordDraftScreen = dailyRecordDraftScreenState({"),
+            ("daily record fixed save visible helper binding", "const isDailyRecordFixedSaveVisible = dailyRecordDraftScreen.isFixedSaveVisible;"),
+            ("daily record unsaved draft helper binding", "const hasUnsavedDailyRecordDraft = dailyRecordDraftScreen.hasUnsavedDraft;"),
             ("daily record transcript retained state", "const [dailyTranscriptEntries, setDailyTranscriptEntries] = useState<DailyTranscriptEntry[]>([]);"),
             ("daily record parse existing draft capture", "const existingDailyPreview = preview;"),
             ("daily record parse occurred timestamp", "const parseOccurredAt = new Date().toISOString();"),
@@ -4057,7 +4060,7 @@ def main() -> int:
             ("daily record save endpoint", '"/daily-records/save"'),
             ("daily record save payload binding", "body: JSON.stringify(buildDailyRecordSaveRequest(preview, recordsToSave, dailyTranscriptEntries))"),
             ("daily record save clears retained transcripts", "setDailyTranscriptEntries([]);"),
-            ("daily record fixed save visible flag", 'const isDailyRecordFixedSaveVisible = currentScreen === "aiSaveConfirm" && Boolean(preview);'),
+            ("daily record fixed save visible flag", "const isDailyRecordFixedSaveVisible = dailyRecordDraftScreen.isFixedSaveVisible;"),
             ("daily record fixed save scroll padding style", "const mainScrollContainerStyle = isDailyRecordFixedSaveVisible"),
             ("daily record fixed save scroll binding", "contentContainerStyle={mainScrollContainerStyle}"),
             ("daily record fixed save dock render", "{isDailyRecordFixedSaveVisible && preview ? ("),
@@ -4173,6 +4176,9 @@ def main() -> int:
             _assert_contains(label, record_workflow_copy_content, marker)
         for label, marker in (
             ("daily record same-day merge helper", "function mergeSameDayParsePreviewDraft("),
+            ("daily record draft screen state helper", "function dailyRecordDraftScreenState(value: {"),
+            ("daily record draft fixed save condition", 'isFixedSaveVisible: value.currentScreen === "aiSaveConfirm" && value.hasPreview'),
+            ("daily record draft unsaved condition", 'hasUnsavedDraft: value.currentScreen === "aiSaveConfirm" && value.hasUnsavedPreviewRecords'),
             ("daily record same-day merge key current", "const currentKey = dailyRecordKeyFromRecords(current.records);"),
             ("daily record same-day merge key incoming", "const incomingKey = dailyRecordKeyFromRecords(incoming.records);"),
             ("daily record same-day merge records", "records: [...current.records, ...incoming.records].slice(0, maxMobilePreviewRecords)"),

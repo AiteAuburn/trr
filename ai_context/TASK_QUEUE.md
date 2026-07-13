@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T1420: Extract daily record draft screen state helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/dailyTranscriptTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `dailyRecordDraftScreenState` to `mobile/dailyTranscriptTransforms.ts` for fixed-save visibility and unsaved daily-record draft state.
+- Replaced inline `aiSaveConfirm` fixed-save and unsaved-draft boolean checks in `mobile/App.tsx` with the extracted helper output.
+- Kept fixed save bar rendering, scroll padding selection, daily-record leave guard, Android back handling, and save behavior unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting screen renderers or route-specific action handlers in small slices.
+
 ### T1419: Extract primary tab navigation state helper
 
 Status: done

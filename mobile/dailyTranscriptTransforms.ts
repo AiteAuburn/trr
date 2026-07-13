@@ -1,4 +1,5 @@
 import { localDateKey } from "./dateTimeTransforms";
+import type { AppScreen } from "./navigationConfig";
 import { dailyRecordSectionDefinitions } from "./recordDisplay";
 import { boundParsePreviewResponse, type ParsePreviewResponse, type PendingRecord, type RecordItem } from "./recordBounds";
 
@@ -36,6 +37,17 @@ export type DailyRecordSaveResponse = {
   };
   records: RecordItem[];
 };
+
+export function dailyRecordDraftScreenState(value: {
+  currentScreen: AppScreen;
+  hasPreview: boolean;
+  hasUnsavedPreviewRecords: boolean;
+}) {
+  return {
+    isFixedSaveVisible: value.currentScreen === "aiSaveConfirm" && value.hasPreview,
+    hasUnsavedDraft: value.currentScreen === "aiSaveConfirm" && value.hasUnsavedPreviewRecords
+  };
+}
 
 function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);

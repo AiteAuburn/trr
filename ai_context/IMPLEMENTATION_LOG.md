@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1420 extract daily record draft screen state helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/dailyTranscriptTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `dailyRecordDraftScreenState` to `mobile/dailyTranscriptTransforms.ts` for fixed-save visibility and unsaved daily-record draft state.
+- Replaced inline `aiSaveConfirm` fixed-save and unsaved-draft boolean checks in `mobile/App.tsx` with the extracted helper output.
+- Kept fixed save bar rendering, scroll padding selection, daily-record leave guard, Android back handling, and save behavior unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、fixed save bar rendering、scroll padding selection、daily-record leave guard、Android back handling、save behavior、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue splitting screen renderers or route-specific action handlers in small slices.
+
 ### T1419 extract primary tab navigation state helper
 
 類型：mobile / refactor / verifier / docs

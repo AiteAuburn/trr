@@ -638,6 +638,7 @@ import {
   buildDailyRecordSaveRequest,
   createDailyTranscriptEntry,
   dailyRecordDateLabel,
+  dailyRecordDraftScreenState,
   dailyRecordEntryMenuOpenStatusMessage,
   dailyRecordKeyFromRecords,
   dailyRecordReorganizationDisplayText,
@@ -1235,12 +1236,17 @@ export default function App() {
   const todayTranscriptCountDisplayText = todayTranscriptDisplay.countText;
   const todayTranscriptAccessibilityLabel = todayTranscriptDisplay.accessibilityLabel;
   const aiSaveConfirmSubmitDisplayLabel = aiSaveConfirmDisplay.submit;
-  const isDailyRecordFixedSaveVisible = currentScreen === "aiSaveConfirm" && Boolean(preview);
+  const hasUnsavedPreviewRecords = unsavedPreviewRecordCount > 0;
+  const dailyRecordDraftScreen = dailyRecordDraftScreenState({
+    currentScreen,
+    hasPreview: Boolean(preview),
+    hasUnsavedPreviewRecords
+  });
+  const isDailyRecordFixedSaveVisible = dailyRecordDraftScreen.isFixedSaveVisible;
   const mainScrollContainerStyle = isDailyRecordFixedSaveVisible
     ? [styles.container, styles.containerWithFixedSaveBar]
     : styles.container;
-  const hasUnsavedPreviewRecords = unsavedPreviewRecordCount > 0;
-  const hasUnsavedDailyRecordDraft = currentScreen === "aiSaveConfirm" && hasUnsavedPreviewRecords;
+  const hasUnsavedDailyRecordDraft = dailyRecordDraftScreen.hasUnsavedDraft;
   const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayTexts();
   const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardDisplay.title;
   const dailyRecordLeaveGuardBodyDisplayText = dailyRecordLeaveGuardDisplay.body;
