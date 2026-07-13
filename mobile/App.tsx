@@ -654,6 +654,7 @@ import {
   reminderReadinessChecklistDisplayItems,
   reminderSettingsIntroCopy,
   settingsAccountSecurityOpenStatusMessage,
+  settingsSubpageStatusDisplayTexts,
   settingsSubpageReturnStatusMessage
 } from "./settingsCopy";
 import {
@@ -1726,23 +1727,22 @@ export default function App() {
   const authActionStatusDisplayText = boundUiMessage(authActionStatus);
   const nativeStatusDisplayText = boundUiMessage(nativeStatus);
   const devResetStatusDisplayText = boundUiMessage(devResetStatus);
-  const profileActionStatusDisplayText = boundUiMessage(profileActionStatus);
-  const recordingQuotaActionStatusDisplayText = boundUiMessage(recordingQuotaActionStatus);
-  const reminderActionStatusDisplayText = boundUiMessage(reminderActionStatus);
-  const privacyActionStatusDisplayText = boundUiMessage(privacyActionStatus);
-  const profileEditIntegrationStatusMessage = boundUiMessage(
-    "個人資料編輯尚未啟用；需完成 production auth、profile update API、權限檢查與 rollback 流程。"
-  );
-  const recordingQuotaSyncingStatusMessage = boundUiMessage("正在同步 backend 語音額度。");
-  const recordingQuotaUnavailableStatusMessage = boundUiMessage(
-    `${protectedAccountBackendUnavailableMessage || "backend account 尚未 ready"}；目前不讀取語音額度。`
-  );
-  const reminderIntegrationStatusMessage = boundUiMessage(
-    "提醒設定目前是 UI 預覽；需完成通知權限、背景排程、時區與後端 reminder schema 後才會啟用。"
-  );
-  const privacyIntegrationStatusMessage = boundUiMessage(
-    "隱私控制目前是 UI 預覽；正式啟用需要 permission service、export/delete workflow、share revoke 與 PHI-safe audit。"
-  );
+  const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayTexts({
+    profileActionStatus,
+    recordingQuotaActionStatus,
+    reminderActionStatus,
+    privacyActionStatus,
+    backendUnavailableMessage: protectedAccountBackendUnavailableMessage
+  });
+  const profileActionStatusDisplayText = settingsSubpageStatusDisplay.profileAction;
+  const recordingQuotaActionStatusDisplayText = settingsSubpageStatusDisplay.recordingQuotaAction;
+  const reminderActionStatusDisplayText = settingsSubpageStatusDisplay.reminderAction;
+  const privacyActionStatusDisplayText = settingsSubpageStatusDisplay.privacyAction;
+  const profileEditIntegrationStatusMessage = settingsSubpageStatusDisplay.profileEditIntegration;
+  const recordingQuotaSyncingStatusMessage = settingsSubpageStatusDisplay.recordingQuotaSyncing;
+  const recordingQuotaUnavailableStatusMessage = settingsSubpageStatusDisplay.recordingQuotaUnavailable;
+  const reminderIntegrationStatusMessage = settingsSubpageStatusDisplay.reminderIntegration;
+  const privacyIntegrationStatusMessage = settingsSubpageStatusDisplay.privacyIntegration;
   const recordsStatusDisplayText = boundUiMessage(recordsStatus);
   const todayRecordSummaryDisplayText = todayRecordSummaryText(todayRecords.length);
   const historyRecordDisplayCount = clampNumber(historyRecords.length, 0, maxMobileCountValue);

@@ -129,6 +129,34 @@ export function membershipStatusReturnSubscriptionStatusMessage() {
   return boundUiMessage("已返回會員方案；會員狀態頁只讀取目前同步資料，不會呼叫付款或 AI。");
 }
 
+export function settingsSubpageStatusDisplayTexts(value: {
+  profileActionStatus: string;
+  recordingQuotaActionStatus: string;
+  reminderActionStatus: string;
+  privacyActionStatus: string;
+  backendUnavailableMessage: string;
+}) {
+  return {
+    profileAction: boundUiMessage(value.profileActionStatus),
+    recordingQuotaAction: boundUiMessage(value.recordingQuotaActionStatus),
+    reminderAction: boundUiMessage(value.reminderActionStatus),
+    privacyAction: boundUiMessage(value.privacyActionStatus),
+    profileEditIntegration: boundUiMessage(
+      "個人資料編輯尚未啟用；需完成 production auth、profile update API、權限檢查與 rollback 流程。"
+    ),
+    recordingQuotaSyncing: boundUiMessage("正在同步 backend 語音額度。"),
+    recordingQuotaUnavailable: boundUiMessage(
+      `${value.backendUnavailableMessage || "backend account 尚未 ready"}；目前不讀取語音額度。`
+    ),
+    reminderIntegration: boundUiMessage(
+      "提醒設定目前是 UI 預覽；需完成通知權限、背景排程、時區與後端 reminder schema 後才會啟用。"
+    ),
+    privacyIntegration: boundUiMessage(
+      "隱私控制目前是 UI 預覽；正式啟用需要 permission service、export/delete workflow、share revoke 與 PHI-safe audit。"
+    )
+  };
+}
+
 export function modelRuntimeLabel(
   runtime?: "local" | "browser" | "server_stub" | "server_api" | "cloud_disabled"
 ) {

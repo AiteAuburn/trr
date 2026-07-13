@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1389: Extract settings subpage status display texts
+
+Status: done
+
+Summary:
+
+- Added `settingsSubpageStatusDisplayTexts` to `mobile/settingsCopy.ts` for profile, recording quota, reminder, and privacy settings status display text.
+- Replaced inline settings subpage status display construction in `mobile/App.tsx` with the extracted helper.
+- Kept settings navigation, quota sync behavior, profile/reminder/privacy preview handlers, backend-unavailable behavior, and rendering unchanged.
+- Updated navigation verifier coverage so the status helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1388: Extract subscription action status display texts
 
 Status: done
