@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1438: Extract record edit state seed helpers
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added local `seedRecordEditStateFromRecord` and `seedEmptyRecordEditStateForNow` helpers in `mobile/App.tsx`.
+- Reused them in record detail, selected-record detail, record edit open, and record edit cancel flows.
+- Kept selected record state, return screen state, navigation targets, status messages, and backend update/delete behavior unchanged.
+- Updated navigation verifier coverage for helper internals and representative bindings.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1437: Extract preview action state clear helper
 
 Status: done

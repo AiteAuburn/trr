@@ -5626,13 +5626,24 @@ export default function App() {
     }
   }
 
-  function openRecordDetail(record: RecordItem, returnScreen: AppScreen = "today") {
-    setSelectedRecord(record);
-    setRecordDetailReturnScreen(returnScreen);
+  function seedRecordEditStateFromRecord(record: RecordItem) {
     setRecordEditFields(recordPayloadToEditFields(record));
     const dateTime = localDateTimeInputs(record.occurred_at);
     setRecordEditDate(dateTime.date);
     setRecordEditTime(dateTime.time);
+  }
+
+  function seedEmptyRecordEditStateForNow() {
+    setRecordEditFields(emptyRecordEditFields());
+    const nowInputs = localDateTimeInputs(new Date());
+    setRecordEditDate(nowInputs.date);
+    setRecordEditTime(nowInputs.time);
+  }
+
+  function openRecordDetail(record: RecordItem, returnScreen: AppScreen = "today") {
+    setSelectedRecord(record);
+    setRecordDetailReturnScreen(returnScreen);
+    seedRecordEditStateFromRecord(record);
     setCurrentScreen("recordDetail");
   }
 
@@ -5641,10 +5652,7 @@ export default function App() {
       return;
     }
     setRecordDetailReturnScreen(returnScreen);
-    setRecordEditFields(recordPayloadToEditFields(selectedRecord));
-    const dateTime = localDateTimeInputs(selectedRecord.occurred_at);
-    setRecordEditDate(dateTime.date);
-    setRecordEditTime(dateTime.time);
+    seedRecordEditStateFromRecord(selectedRecord);
     setCurrentScreen("recordDetail");
   }
 
@@ -5667,25 +5675,16 @@ export default function App() {
       setCurrentScreen("recordDetail");
       return;
     }
-    setRecordEditFields(recordPayloadToEditFields(selectedRecord));
-    const dateTime = localDateTimeInputs(selectedRecord.occurred_at);
-    setRecordEditDate(dateTime.date);
-    setRecordEditTime(dateTime.time);
+    seedRecordEditStateFromRecord(selectedRecord);
     setCurrentScreen("editRecord");
     setStatus(recordEditOpenStatusMessage());
   }
 
   function returnFromRecordEdit() {
     if (selectedRecord) {
-      setRecordEditFields(recordPayloadToEditFields(selectedRecord));
-      const dateTime = localDateTimeInputs(selectedRecord.occurred_at);
-      setRecordEditDate(dateTime.date);
-      setRecordEditTime(dateTime.time);
+      seedRecordEditStateFromRecord(selectedRecord);
     } else {
-      setRecordEditFields(emptyRecordEditFields());
-      const nowInputs = localDateTimeInputs(new Date());
-      setRecordEditDate(nowInputs.date);
-      setRecordEditTime(nowInputs.time);
+      seedEmptyRecordEditStateForNow();
     }
     setCurrentScreen("recordDetail");
     setStatus(recordEditCancelStatusMessage());

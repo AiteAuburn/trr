@@ -3300,6 +3300,31 @@ def main() -> int:
             "function openRecordEdit()",
         )
         _assert_contains(
+            "record edit seed from record helper",
+            content,
+            "function seedRecordEditStateFromRecord(record: RecordItem)",
+        )
+        _assert_contains(
+            "record edit seed from record fields",
+            content,
+            "setRecordEditFields(recordPayloadToEditFields(record));",
+        )
+        _assert_contains(
+            "record edit seed empty now helper",
+            content,
+            "function seedEmptyRecordEditStateForNow()",
+        )
+        _assert_contains(
+            "record edit open seed helper binding",
+            content,
+            "seedRecordEditStateFromRecord(selectedRecord);\n    setCurrentScreen(\"editRecord\");",
+        )
+        _assert_contains(
+            "record edit return empty seed helper binding",
+            content,
+            "seedEmptyRecordEditStateForNow();\n    }\n    setCurrentScreen(\"recordDetail\");",
+        )
+        _assert_contains(
             "record edit return handler",
             content,
             "function returnFromRecordEdit()",
