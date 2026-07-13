@@ -3175,6 +3175,16 @@ def main() -> int:
             "returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());",
         )
         _assert_contains(
+            "AI save confirm status helper",
+            content,
+            "function openAiSaveConfirmWithStatus(statusMessage: string)",
+        )
+        _assert_contains(
+            "AI save confirm status helper fields",
+            content,
+            "setCurrentScreen(\"aiSaveConfirm\");\n    setStatus(statusMessage);",
+        )
+        _assert_contains(
             "AI save failure return save confirm handler",
             content,
             "function returnFromAiSaveFailureToSaveConfirm()",
@@ -3182,7 +3192,7 @@ def main() -> int:
         _assert_contains(
             "AI save failure return save confirm clear action binding",
             content,
-            "returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());\n      return;\n    }\n    clearPreviewActionState();",
+            "returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());\n      return;\n    }\n    clearPreviewActionState();\n    openAiSaveConfirmWithStatus(aiSaveFailureReturnSaveConfirmStatusMessage());",
         )
         _assert_contains(
             "AI save failure back AI review binding",
@@ -4921,6 +4931,7 @@ def main() -> int:
             ("daily record reorganization summary display", "const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayText("),
             ("daily record reorganization summary render", "<Text style={styles.evidence}>{dailyRecordReorganizationDisplay}</Text>"),
             ("daily record save checklist helper binding", "const aiSaveConfirmChecklistItems = aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordDisplayCount);"),
+            ("daily record save unavailable confirm helper binding", "openAiSaveConfirmWithStatus(aiSaveUnavailableStatusMessage(protectedBackendUnavailableMessage));"),
             ("daily record save endpoint", '"/daily-records/save"'),
             ("daily record save payload binding", "body: JSON.stringify(buildDailyRecordSaveRequest(preview, recordsToSave, dailyTranscriptEntries))"),
             ("daily record save clears retained transcripts", "clearDailyRecordDraftOrganizationState();"),

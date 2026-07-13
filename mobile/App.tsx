@@ -3361,14 +3361,18 @@ export default function App() {
     returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());
   }
 
+  function openAiSaveConfirmWithStatus(statusMessage: string) {
+    setCurrentScreen("aiSaveConfirm");
+    setStatus(statusMessage);
+  }
+
   function returnFromAiSaveFailureToSaveConfirm() {
     if (!preview || preview.records.length === 0) {
       returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());
       return;
     }
     clearPreviewActionState();
-    setCurrentScreen("aiSaveConfirm");
-    setStatus(aiSaveFailureReturnSaveConfirmStatusMessage());
+    openAiSaveConfirmWithStatus(aiSaveFailureReturnSaveConfirmStatusMessage());
   }
 
   function openAiSaveFailureManualFallback() {
@@ -5508,8 +5512,7 @@ export default function App() {
       return;
     }
     if (!protectedBackendReady) {
-      setStatus(aiSaveUnavailableStatusMessage(protectedBackendUnavailableMessage));
-      setCurrentScreen("aiSaveConfirm");
+      openAiSaveConfirmWithStatus(aiSaveUnavailableStatusMessage(protectedBackendUnavailableMessage));
       return;
     }
     if (!account) {
