@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1507: Reuse screen opener in manual entry and save-success fallback
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `openScreen` in the manual-record opener after keeping date/time seeding and return-screen setup unchanged.
+- Reused `openScreen` for the save-success unsaved-candidate empty-preview fallback back to Today.
+- Kept manual entry status ownership, save-success candidate processing, AI review return handling, parser/AI behavior, backend request behavior, UI copy, and layout unchanged.
+- Updated navigation verifier coverage for manual-record opener and save-success fallback `openScreen` bindings.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1506: Reuse screen opener in preview action returns
 
 Status: done

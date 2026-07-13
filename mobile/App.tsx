@@ -2114,7 +2114,7 @@ export default function App() {
   function openManualRecord(returnScreen: AppScreen = currentScreen) {
     seedManualRecordDateTimeForNow();
     setManualRecordReturnScreen(returnScreen);
-    setCurrentScreen("manualRecord");
+    openScreen("manualRecord");
   }
 
   function openManualRecordWithStatus(returnScreen: AppScreen, statusMessage: string) {
@@ -3294,7 +3294,7 @@ export default function App() {
 
   function processUnsavedPreviewRecords() {
     if (!preview || preview.records.length === 0) {
-      setCurrentScreen("today");
+      openScreen("today");
       return;
     }
     returnToAiReviewWithClearedPreviewStatus(saveSuccessProcessUnsavedStatusMessage());

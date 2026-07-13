@@ -2639,6 +2639,11 @@ def main() -> int:
             "function returnFromManualRecord()",
         )
         _assert_contains(
+            "manual record open screen opener binding",
+            content,
+            'seedManualRecordDateTimeForNow();\n    setManualRecordReturnScreen(returnScreen);\n    openScreen("manualRecord");',
+        )
+        _assert_contains(
             "core screen status opener helper",
             content,
             "function openScreenWithStatus(screen: AppScreen, statusMessage: string)",
@@ -3113,6 +3118,11 @@ def main() -> int:
             "save success unsaved candidate handler",
             content,
             "function processUnsavedPreviewRecords()",
+        )
+        _assert_contains(
+            "save success unsaved empty preview screen opener fallback",
+            content,
+            'if (!preview || preview.records.length === 0) {\n      openScreen("today");\n      return;',
         )
         _assert_contains(
             "save success process clear helper binding",
