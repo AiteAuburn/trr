@@ -274,7 +274,6 @@ import {
   previewTupleDisplayItem,
   resultChecklistItem,
   sessionManagementPreviewDisplayItem,
-  tutorialStepDisplayItem,
   valueLabelDisplayItem,
   visualSmokeRouteJumpDisplayItem
 } from "./sharedDisplayItems";
@@ -689,7 +688,7 @@ import {
   settingsRowDisplayItem,
   settingsRows,
   subscriptionManagementDisplayRows as buildSubscriptionManagementDisplayRows,
-  tutorialSteps,
+  tutorialDisplaySteps as buildTutorialDisplaySteps,
   type SettingsRow
 } from "./settingsScreenData";
 import {
@@ -1672,7 +1671,7 @@ export default function App() {
     () => models.stt_models.map((model) => settingsModelChoiceDisplayItem(model, "STT")),
     [models.stt_models]
   );
-  const tutorialDisplaySteps = useMemo(() => tutorialSteps.map(tutorialStepDisplayItem), []);
+  const tutorialDisplaySteps = useMemo(() => buildTutorialDisplaySteps(), []);
   const authProviderDisplayItems = useMemo(() => buildAuthProviderDisplayItems(), []);
   const sessionManagementDisplayItems = useMemo(
     () => buildSessionManagementDisplayItems(),

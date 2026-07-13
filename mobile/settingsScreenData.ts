@@ -1,6 +1,6 @@
 import type { AppScreen } from "./navigationConfig";
 import { boundOidcProviderForRequest, type OidcLoginProvider } from "./authTransforms";
-import { previewTupleDisplayItem, sessionManagementPreviewDisplayItem } from "./sharedDisplayItems";
+import { previewTupleDisplayItem, sessionManagementPreviewDisplayItem, tutorialStepDisplayItem } from "./sharedDisplayItems";
 
 const maxDisplayTextLength = 160;
 const maxIdentifierTextLength = 128;
@@ -114,6 +114,10 @@ export const tutorialSteps = [
   ["✅", "確認內容", "檢查文字與 AI 候選紀錄，確認前不會儲存。"],
   ["💾", "儲存完成", "確認後送出，即可加入今日紀錄。"]
 ] as const;
+
+export function tutorialDisplaySteps() {
+  return tutorialSteps.map(tutorialStepDisplayItem);
+}
 
 export function settingsRowDisplayItem(value: SettingsRow) {
   const label = boundDisplayText(value.label || "設定", maxDisplayTextLength);

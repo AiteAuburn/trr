@@ -2480,6 +2480,11 @@ def main() -> int:
             "const tutorialSafetyChecklistItems = tutorialSafetyChecklistDisplayItems();",
         )
         _assert_contains(
+            "tutorial display steps helper binding",
+            content,
+            "const tutorialDisplaySteps = useMemo(() => buildTutorialDisplaySteps(), []);",
+        )
+        _assert_contains(
             "subscription readiness checklist helper binding",
             content,
             "const subscriptionReadinessChecklistItems = subscriptionReadinessChecklistDisplayItems();",
@@ -4974,6 +4979,8 @@ def main() -> int:
             ("privacy control display rows helper", "export function privacyControlDisplayRows()"),
             ("privacy control display rows map", "return privacyControlRows.map(previewTupleDisplayItem);"),
             ("tutorial steps config", "export const tutorialSteps = ["),
+            ("tutorial display steps helper", "export function tutorialDisplaySteps()"),
+            ("tutorial display steps map", "return tutorialSteps.map(tutorialStepDisplayItem);"),
             ("tutorial whisper release copy", "若已選擇本機 Whisper 模型，會先轉成文字並進入確認。"),
         ):
             _assert_contains(label, settings_screen_data_content, marker)
