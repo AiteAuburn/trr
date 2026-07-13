@@ -278,3 +278,24 @@ export function longestRecordStreakDays(records: RecordItem[]) {
 
   return longest;
 }
+
+export function yearlyReviewRecordStats(records: RecordItem[], targetYear: number) {
+  const yearlyRecords = recordsInYear(records, targetYear);
+  const yearlyTypeCounts = recordTypeCounts(yearlyRecords);
+  const yearlyGlucoseRecords = analysisGlucoseRecords(yearlyRecords);
+  const yearlyGlucoseValues = analysisGlucoseValues(yearlyGlucoseRecords);
+
+  return {
+    records: yearlyRecords,
+    typeCounts: yearlyTypeCounts,
+    mostRecordedType:
+      Array.from(yearlyTypeCounts.entries()).sort((first, second) => second[1] - first[1])[0] ?? null,
+    longestStreak: longestRecordStreakDays(yearlyRecords),
+    glucoseRecords: yearlyGlucoseRecords,
+    glucoseValues: yearlyGlucoseValues,
+    glucoseAverage: averageNumber(yearlyGlucoseValues),
+    glucoseHighest: highestNumber(yearlyGlucoseValues),
+    glucoseLowest: lowestNumber(yearlyGlucoseValues),
+    recordDayCount: recordDayCount(yearlyRecords)
+  };
+}

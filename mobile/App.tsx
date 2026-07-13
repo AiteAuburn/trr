@@ -630,13 +630,10 @@ import {
   boundBasicReport,
   currentRecordStreakDays,
   highestNumber,
-  longestRecordStreakDays,
   lowestNumber,
-  recordDayCount,
-  recordsInYear,
   recordTypeCount,
-  recordTypeCounts,
-  selectedAnalysisChartPoint
+  selectedAnalysisChartPoint,
+  yearlyReviewRecordStats
 } from "./analysisDataTransforms";
 import {
   analysisMetricInput as buildAnalysisMetricInput,
@@ -1419,20 +1416,10 @@ export default function App() {
   const currentYear = new Date().getFullYear();
   const yearReviewTargetDisplayYear = yearReviewTargetYear(new Date());
   const yearReviewGenerationDisplayText = nextYearReviewGenerationLabel(new Date());
-  const yearlyRecords = useMemo(
-    () => recordsInYear(records, yearReviewTargetDisplayYear),
+  const yearlyRecordStats = useMemo(
+    () => yearlyReviewRecordStats(records, yearReviewTargetDisplayYear),
     [records, yearReviewTargetDisplayYear]
   );
-  const yearlyTypeCounts = useMemo(() => recordTypeCounts(yearlyRecords), [yearlyRecords]);
-  const yearlyMostRecordedType =
-    Array.from(yearlyTypeCounts.entries()).sort((first, second) => second[1] - first[1])[0] ?? null;
-  const yearlyLongestStreak = useMemo(() => longestRecordStreakDays(yearlyRecords), [yearlyRecords]);
-  const yearlyGlucoseRecords = buildAnalysisGlucoseRecords(yearlyRecords);
-  const yearlyGlucoseValues = buildAnalysisGlucoseValues(yearlyGlucoseRecords);
-  const yearlyGlucoseAverage = averageNumber(yearlyGlucoseValues);
-  const yearlyGlucoseHighest = highestNumber(yearlyGlucoseValues);
-  const yearlyGlucoseLowest = lowestNumber(yearlyGlucoseValues);
-  const yearlyRecordDayCount = recordDayCount(yearlyRecords);
   const yearlyAchievementBadgeSummary = achievementBadgeSummary(achievementDisplayItems);
   const yearlyUnlockedBadgeDisplayCount = clampNumber(
     yearlyAchievementBadgeSummary.unlockedCount,
@@ -1444,15 +1431,15 @@ export default function App() {
     0,
     maxMobileCountValue
   );
-  const yearlyRecordDayDisplayCount = clampNumber(yearlyRecordDayCount, 0, maxMobileCountValue);
-  const yearlyGlucoseAverageDisplayValue = clampNullableNumber(yearlyGlucoseAverage, 0, maxMobileGlucoseValue);
-  const yearlyGlucoseHighestDisplayValue = clampNullableNumber(yearlyGlucoseHighest, 0, maxMobileGlucoseValue);
-  const yearlyGlucoseLowestDisplayValue = clampNullableNumber(yearlyGlucoseLowest, 0, maxMobileGlucoseValue);
-  const yearlyRecordDisplayCount = clampNumber(yearlyRecords.length, 0, maxMobileCountValue);
-  const yearlyGlucoseRecordDisplayCount = clampNumber(yearlyGlucoseRecords.length, 0, maxMobileCountValue);
-  const yearlyExerciseRecordDisplayCount = clampNumber(yearlyTypeCounts.get("exercise") ?? 0, 0, maxMobileCountValue);
-  const yearlyMealRecordDisplayCount = clampNumber(yearlyTypeCounts.get("meal") ?? 0, 0, maxMobileCountValue);
-  const yearlyLongestStreakDisplayDays = clampNumber(yearlyLongestStreak, 0, maxMobileCountValue);
+  const yearlyRecordDayDisplayCount = clampNumber(yearlyRecordStats.recordDayCount, 0, maxMobileCountValue);
+  const yearlyGlucoseAverageDisplayValue = clampNullableNumber(yearlyRecordStats.glucoseAverage, 0, maxMobileGlucoseValue);
+  const yearlyGlucoseHighestDisplayValue = clampNullableNumber(yearlyRecordStats.glucoseHighest, 0, maxMobileGlucoseValue);
+  const yearlyGlucoseLowestDisplayValue = clampNullableNumber(yearlyRecordStats.glucoseLowest, 0, maxMobileGlucoseValue);
+  const yearlyRecordDisplayCount = clampNumber(yearlyRecordStats.records.length, 0, maxMobileCountValue);
+  const yearlyGlucoseRecordDisplayCount = clampNumber(yearlyRecordStats.glucoseRecords.length, 0, maxMobileCountValue);
+  const yearlyExerciseRecordDisplayCount = clampNumber(yearlyRecordStats.typeCounts.get("exercise") ?? 0, 0, maxMobileCountValue);
+  const yearlyMealRecordDisplayCount = clampNumber(yearlyRecordStats.typeCounts.get("meal") ?? 0, 0, maxMobileCountValue);
+  const yearlyLongestStreakDisplayDays = clampNumber(yearlyRecordStats.longestStreak, 0, maxMobileCountValue);
   const backendYearMetricRows = backendYearReviewMetricDisplayRows(yearReviewBackendSummary);
   const backendYearHealthRows = backendYearReviewHealthOutcomeDisplayRows(yearReviewBackendSummary);
   const backendYearAiObservation = yearReviewBackendSummary?.ai_summary.find(
@@ -1484,7 +1471,7 @@ export default function App() {
   const yearlyHighlightDisplayTexts = localYearlyHighlightDisplayItems(
     yearlyRecordDisplayCount,
     yearReviewTargetDisplayYear,
-    yearlyMostRecordedType,
+    yearlyRecordStats.mostRecordedType,
     yearlyLongestStreakDisplayDays
   );
   const yearlyAiObservationDisplayText = backendYearAiObservation

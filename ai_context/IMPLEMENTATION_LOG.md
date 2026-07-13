@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1361 extract Year Review record stats helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisDataTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `yearlyReviewRecordStats` to `mobile/analysisDataTransforms.ts` for Year Review annual record filtering and aggregate statistics.
+- Replaced inline Year Review yearly records, type counts, most-recorded type, streak, glucose values, glucose average/high/low, and record-day calculations in `mobile/App.tsx` with the extracted helper.
+- Kept yearly metric rows, health outcome rows, highlight copy, AI observation fallback, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the data helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Year Review rendering、Year Review backend fallback、achievement data、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining Year Review display text fallbacks and repeated App.tsx screen-local display calculations separately.
+
 ### T1360 extract local achievement records helper
 
 類型：mobile / refactor / verifier / docs

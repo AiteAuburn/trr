@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1361: Extract Year Review record stats helper
+
+Status: done
+
+Summary:
+
+- Added `yearlyReviewRecordStats` to `mobile/analysisDataTransforms.ts` for Year Review annual record filtering and aggregate statistics.
+- Replaced inline Year Review yearly records, type counts, most-recorded type, streak, glucose values, glucose average/high/low, and record-day calculations in `mobile/App.tsx` with the extracted helper.
+- Kept yearly metric rows, health outcome rows, highlight copy, AI observation fallback, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the data helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1360: Extract local achievement records helper
 
 Status: done
