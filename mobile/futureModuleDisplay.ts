@@ -886,6 +886,30 @@ export function foodCommunityItemDisplayItem(value: FoodCommunityItem) {
   };
 }
 
+export function visibleFoodCommunityDisplayItems(
+  items: Array<ReturnType<typeof foodCommunityItemDisplayItem>>,
+  category: FoodCommunityCategory,
+  searchText: string
+) {
+  const query = searchText.trim().toLowerCase();
+  return items.filter((item) => {
+    const matchesCategory = query.length > 0 || item.category === category;
+    const matchesSearch =
+      query.length === 0 ||
+      item.title.toLowerCase().includes(query) ||
+      item.aliases.some((alias) => alias.toLowerCase().includes(query));
+    return matchesCategory && matchesSearch;
+  });
+}
+
+export function selectedFoodCommunityDisplayItem(
+  items: Array<ReturnType<typeof foodCommunityItemDisplayItem>>,
+  visibleItems: Array<ReturnType<typeof foodCommunityItemDisplayItem>>,
+  selectedItemId: string
+) {
+  return items.find((item) => item.id === selectedItemId) ?? visibleItems[0] ?? items[0] ?? null;
+}
+
 export function foodCommunityShareFieldDisplayRows(
   fields: FoodCommunityShareFields,
   selectedFoodTitle: string | null | undefined
@@ -1068,6 +1092,21 @@ export function storeProductDisplayItem(value: StoreProduct) {
         : `${title} 目前只顯示點數兌換預覽；點數扣抵、庫存、結帳、訂單與 entitlement 寫入尚未啟用。`
     )
   };
+}
+
+export function visibleStoreProductDisplayItems(
+  products: Array<ReturnType<typeof storeProductDisplayItem>>,
+  category: StoreCategory,
+  searchText: string
+) {
+  const query = searchText.trim().toLowerCase();
+  return products.filter((product) => {
+    const matchesCategory = product.category === category;
+    const matchesSearch =
+      query.length === 0 ||
+      `${product.title} ${product.description} ${product.pointsCost}`.toLowerCase().includes(query);
+    return matchesCategory && matchesSearch;
+  });
 }
 
 export function storeCategoryFromApi(value: StoreRewardApiCategory): StoreCategory {

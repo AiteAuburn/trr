@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1312: Extract future commerce/community visibility helpers
+
+Status: done
+
+Summary:
+
+- Added `visibleFoodCommunityDisplayItems`, `selectedFoodCommunityDisplayItem`, and `visibleStoreProductDisplayItems` to `mobile/futureModuleDisplay.ts` for Food Community and Store visible item shaping.
+- Replaced the inline Food Community visible-item filtering, selected-item fallback, and Store visible-product filtering in `mobile/App.tsx` with the extracted helpers.
+- Kept search behavior, category behavior, selected-item fallback order, Store filtering behavior, rendering, API behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helpers, App bindings, and key search/fallback rules are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1311: Extract result destination card helpers
 
 Status: done

@@ -15,6 +15,38 @@
 
 ## 2026-07-08
 
+### T1312 extract future commerce/community visibility helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `visibleFoodCommunityDisplayItems`, `selectedFoodCommunityDisplayItem`, and `visibleStoreProductDisplayItems` to `mobile/futureModuleDisplay.ts` for Food Community and Store visible item shaping.
+- Replaced the inline Food Community visible-item filtering, selected-item fallback, and Store visible-product filtering in `mobile/App.tsx` with the extracted helpers.
+- Kept search behavior, category behavior, selected-item fallback order, Store filtering behavior, rendering, API behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helpers, App bindings, and key search/fallback rules are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Food Community rendering、Store rendering、search behavior、category behavior、selected-item fallback order、community/store API behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk display helpers from `App.tsx`; keep Food Community and Store request ownership in `App.tsx` until component boundaries are stable.
+
 ### T1311 extract result destination card helpers
 
 類型：mobile / refactor / verifier / docs

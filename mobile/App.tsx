@@ -185,6 +185,7 @@ import {
   rankingReadinessChecklistDisplayItems,
   reminderPreviewBoundaryDisplayItem,
   selectedFutureModuleDisplayItem,
+  selectedFoodCommunityDisplayItem,
   localYearlyHealthOutcomeDisplayRows,
   localYearlyReviewMetricDisplayRows,
   storeCartButtonAccessibilityLabel,
@@ -204,6 +205,8 @@ import {
   storeProducts,
   storeRedemptionBoundaryDisplayRows,
   storeRedemptionDisplayItem,
+  visibleFoodCommunityDisplayItems,
+  visibleStoreProductDisplayItems,
   yearReviewAiEncouragementCopy,
   yearReviewAiObservationCopy,
   yearReviewBadgeMaterialCopy,
@@ -1632,34 +1635,27 @@ export default function App() {
     () => foodCommunityItemsForDisplay.map(foodCommunityItemDisplayItem),
     [foodCommunityItemsForDisplay]
   );
-  const visibleFoodCommunityItems = foodCommunityDisplayItems.filter((item) => {
-    const query = foodCommunitySearchText.trim().toLowerCase();
-    const matchesCategory = query.length > 0 || item.category === foodCommunityCategory;
-    const matchesSearch =
-      query.length === 0 ||
-      item.title.toLowerCase().includes(query) ||
-      item.aliases.some((alias) => alias.toLowerCase().includes(query));
-    return matchesCategory && matchesSearch;
-  });
-  const selectedFoodCommunityItem =
-    foodCommunityDisplayItems.find((item) => item.id === selectedFoodCommunityItemId) ??
-    visibleFoodCommunityItems[0] ??
-    foodCommunityDisplayItems[0] ??
-    null;
+  const visibleFoodCommunityItems = visibleFoodCommunityDisplayItems(
+    foodCommunityDisplayItems,
+    foodCommunityCategory,
+    foodCommunitySearchText
+  );
+  const selectedFoodCommunityItem = selectedFoodCommunityDisplayItem(
+    foodCommunityDisplayItems,
+    visibleFoodCommunityItems,
+    selectedFoodCommunityItemId
+  );
   const foodCommunityShareFieldRows = foodCommunityShareFieldDisplayRows(
     foodCommunityShareFields,
     selectedFoodCommunityItem?.title
   );
   const foodCommunityPointRows = foodCommunityPointDisplayRows(storePointsBalance);
   const foodCommunityRankingRows = foodCommunityRankingDisplayRows();
-  const visibleStoreProducts = storeProductDisplayItems.filter((product) => {
-    const query = storeSearchText.trim().toLowerCase();
-    const matchesCategory = product.category === storeCategory;
-    const matchesSearch =
-      query.length === 0 ||
-      `${product.title} ${product.description} ${product.pointsCost}`.toLowerCase().includes(query);
-    return matchesCategory && matchesSearch;
-  });
+  const visibleStoreProducts = visibleStoreProductDisplayItems(
+    storeProductDisplayItems,
+    storeCategory,
+    storeSearchText
+  );
   const storeRedemptionBoundaryRows = storeRedemptionBoundaryDisplayRows(
     storePointsBalance,
     storeBackendProducts.length > 0,
