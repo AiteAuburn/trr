@@ -558,11 +558,11 @@ import {
   analysisBoundaryDataCopy,
   analysisChartEmptyCopy,
   analysisCustomApplyStatusMessage,
-  analysisCustomRangeStatusCopy,
   analysisDetailedReportStatusMessage,
   analysisManualEntryStatusMessage,
   analysisNoDataCopy,
   analysisNoDataStatusLabel,
+  analysisRangeDisplayTexts,
   analysisRangeSummaryCopy,
   analysisReportButtonLabel,
   analysisReturnTodayStatusMessage,
@@ -1121,17 +1121,14 @@ export default function App() {
   );
   const analysisGlucoseValues = buildAnalysisGlucoseValues(analysisGlucoseRecords);
   const analysisPreviewMode = recordsForDisplay.length === 0;
-  const analysisRangeDisplayLabel = boundDisplayText(
-    analysisRange === "custom"
-      ? `${analysisCustomStart} - ${analysisCustomEnd}`
-      : analysisRanges.find((item) => item.id === analysisRange)?.label ?? "本月",
-    maxDisplayDetailTextLength
-  );
-  const analysisCustomRangeStatusDisplayText = analysisCustomRangeStatusCopy(
+  const analysisRangeDisplay = analysisRangeDisplayTexts(
     analysisRange,
     analysisCustomStart,
-    analysisCustomEnd
+    analysisCustomEnd,
+    analysisRanges
   );
+  const analysisRangeDisplayLabel = analysisRangeDisplay.label;
+  const analysisCustomRangeStatusDisplayText = analysisRangeDisplay.customRangeStatus;
   const analysisChartPoints = useMemo(
     () => buildAnalysisChartPoints(analysisGlucoseRecords),
     [analysisGlucoseRecords]

@@ -4720,7 +4720,9 @@ def main() -> int:
         )
         for label, marker in (
             ("analysis default month range state", 'const [analysisRange, setAnalysisRange] = useState<AnalysisRange>("month");'),
-            ("analysis custom range status display", "const analysisCustomRangeStatusDisplayText = analysisCustomRangeStatusCopy("),
+            ("analysis range display helper binding", "const analysisRangeDisplay = analysisRangeDisplayTexts("),
+            ("analysis range display label binding", "const analysisRangeDisplayLabel = analysisRangeDisplay.label;"),
+            ("analysis custom range status display binding", "const analysisCustomRangeStatusDisplayText = analysisRangeDisplay.customRangeStatus;"),
             ("analysis selected date bounds", "const analysisSelectedDateBounds = useMemo("),
             ("analysis local records date bounds helper binding", "const analysisRecords = useMemo(\n    () => analysisRecordsInDateRange(recordsForDisplay, analysisSelectedDateBounds),"),
             ("analysis local glucose derives from analysis records", "const analysisGlucoseRecords = useMemo(\n    () => buildAnalysisGlucoseRecords(analysisRecords),"),
@@ -4766,6 +4768,10 @@ def main() -> int:
             ("analysis no AI advice copy", "基本分析不呼叫 AI，不會產生診療建議。"),
             ("analysis detailed report query cap copy", "詳細報告會使用 ${boundedReportQueryLimit} 筆上限查詢，避免一次載入過多資料。"),
             ("analysis custom range status helper", "function analysisCustomRangeStatusCopy(range: AnalysisRange, customStart: string, customEnd: string)"),
+            ("analysis range display texts helper", "function analysisRangeDisplayTexts("),
+            ("analysis range display texts custom label", "range === \"custom\""),
+            ("analysis range display texts fallback label", 'ranges.find((item) => item.id === range)?.label ?? "本月"'),
+            ("analysis range display texts custom status", "customRangeStatus: analysisCustomRangeStatusCopy(range, customStart, customEnd)"),
             ("analysis custom invalid format status", "自訂日期格式無效；目前改用本月資料。"),
             ("analysis custom invalid order status", "開始日期晚於結束日期；目前改用本月資料。"),
             ("analysis custom valid full-day status", "自訂日期區間已套用，結束日期包含當天完整紀錄。"),

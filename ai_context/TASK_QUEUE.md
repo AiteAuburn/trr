@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1380: Extract analysis range display texts
+
+Status: done
+
+Summary:
+
+- Added `analysisRangeDisplayTexts` to `mobile/analysisCopy.ts` for analysis range label and custom-range status display text.
+- Replaced inline analysis range display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept analysis date bounds, local record filtering, backend report request key, custom range validation, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1379: Extract history calendar display texts
 
 Status: done

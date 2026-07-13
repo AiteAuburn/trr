@@ -99,6 +99,23 @@ export function analysisCustomRangeStatusCopy(range: AnalysisRange, customStart:
   return boundDisplayText("自訂日期區間已套用，結束日期包含當天完整紀錄。", maxDisplayDetailTextLength);
 }
 
+export function analysisRangeDisplayTexts(
+  range: AnalysisRange,
+  customStart: string,
+  customEnd: string,
+  ranges: ReadonlyArray<{ id: AnalysisRange; label: string }>
+) {
+  return {
+    label: boundDisplayText(
+      range === "custom"
+        ? `${customStart} - ${customEnd}`
+        : ranges.find((item) => item.id === range)?.label ?? "本月",
+      maxDisplayDetailTextLength
+    ),
+    customRangeStatus: analysisCustomRangeStatusCopy(range, customStart, customEnd)
+  };
+}
+
 export function analysisReportButtonLabel(isLoading: boolean) {
   return boundDisplayText(isLoading ? "報告載入中..." : "查看詳細報告", maxDisplayTextLength);
 }
