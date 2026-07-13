@@ -2240,6 +2240,28 @@ export function communityPublicSettingsStatusMessages(value: {
   };
 }
 
+export function foodCommunityShareStatusMessages(value: {
+  backendUnavailableMessage: string;
+  awardedPoints: number;
+  timeErrorMessage: string;
+}) {
+  return {
+    visualSmoke: boundUiMessage("Visual smoke 預覽不送出食物分享，也不寫入點數或排行榜。"),
+    unavailable: boundUiMessage(
+      `${value.backendUnavailableMessage || "請先選擇食物"}；目前不送出食物分享。`
+    ),
+    inFlight: boundUiMessage("食物分享送出中，請稍候。"),
+    missingFoodName: boundUiMessage("請輸入食物名稱後再送出分享。"),
+    invalidGlucose: boundUiMessage("請輸入 20-600 mg/dL 之間的食用前與食用後血糖。"),
+    invalidTime: boundUiMessage(value.timeErrorMessage || "食用時間格式不正確。"),
+    loading: boundUiMessage("正在送出食物分享並建立社群點數。"),
+    success: boundUiMessage(
+      `已分享食物升糖資料，獲得 ${clampNumber(value.awardedPoints, 0, maxMobileCountValue)} 點。`
+    ),
+    failure: boundUiMessage("食物分享送出失敗；沒有建立點數、排行榜或商城兌換。")
+  };
+}
+
 export function communityLeaderboardSyncStatusMessages(value: {
   backendUnavailableMessage: string;
   sectionCount: number;

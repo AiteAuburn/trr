@@ -169,6 +169,7 @@ import {
   foodCommunityItemDisplayItem,
   foodCommunityItemFromApi,
   foodCommunityItems,
+  foodCommunityShareStatusMessages,
   foodCommunitySyncStatusMessages,
   futureModuleCards,
   futureModuleCardDisplayItem,
@@ -4972,18 +4973,21 @@ export default function App() {
   }
 
   async function submitFoodCommunityShare() {
+    const shareStatus = foodCommunityShareStatusMessages({
+      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+      awardedPoints: 0,
+      timeErrorMessage: ""
+    });
     if (visualSmokePreviewActive.current) {
-      setCommunityActionStatus(boundUiMessage("Visual smoke 預覽不送出食物分享，也不寫入點數或排行榜。"));
+      setCommunityActionStatus(shareStatus.visualSmoke);
       return;
     }
     if (!protectedAccountBackendReady || !account || !selectedFoodCommunityItem) {
-      setCommunityActionStatus(
-        boundUiMessage(`${protectedAccountBackendUnavailableMessage || "請先選擇食物"}；目前不送出食物分享。`)
-      );
+      setCommunityActionStatus(shareStatus.unavailable);
       return;
     }
     if (foodShareInFlight.current) {
-      setCommunityActionStatus(boundUiMessage("食物分享送出中，請稍候。"));
+      setCommunityActionStatus(shareStatus.inFlight);
       return;
     }
     const beforeGlucose = Number(foodCommunityShareFields.beforeGlucose);
@@ -4993,7 +4997,7 @@ export default function App() {
       maxDisplayTextLength
     ).trim();
     if (!foodName) {
-      setCommunityActionStatus(boundUiMessage("請輸入食物名稱後再送出分享。"));
+      setCommunityActionStatus(shareStatus.missingFoodName);
       return;
     }
     if (
@@ -5004,19 +5008,25 @@ export default function App() {
       afterGlucose < 20 ||
       afterGlucose > maxMobileGlucoseValue
     ) {
-      setCommunityActionStatus(boundUiMessage("請輸入 20-600 mg/dL 之間的食用前與食用後血糖。"));
+      setCommunityActionStatus(shareStatus.invalidGlucose);
       return;
     }
     let eatenAt = "";
     try {
       eatenAt = localDateTimeToIso(foodCommunityShareFields.eatenDate, foodCommunityShareFields.eatenTime);
     } catch (error) {
-      setCommunityActionStatus(boundUiMessage(error instanceof Error ? error.message : "食用時間格式不正確。"));
+      setCommunityActionStatus(
+        foodCommunityShareStatusMessages({
+          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+          awardedPoints: 0,
+          timeErrorMessage: error instanceof Error ? error.message : "食用時間格式不正確。"
+        }).invalidTime
+      );
       return;
     }
     foodShareInFlight.current = true;
     setIsBusy(true);
-    setCommunityActionStatus(boundUiMessage("正在送出食物分享並建立社群點數。"));
+    setCommunityActionStatus(shareStatus.loading);
     try {
       const response = await requestJson<FoodCommunityApiShareResponse>(
         normalizedApiBaseUrl,
@@ -5042,12 +5052,16 @@ export default function App() {
       setSelectedFoodCommunityItemId(updatedFood.id);
       setFoodCommunityShareFields(emptyFoodCommunityShareFields());
       setCommunityActionStatus(
-        boundUiMessage(`已分享食物升糖資料，獲得 ${clampNumber(response.awarded_points, 0, maxMobileCountValue)} 點。`)
+        foodCommunityShareStatusMessages({
+          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+          awardedPoints: response.awarded_points,
+          timeErrorMessage: ""
+        }).success
       );
       void loadStoreCatalogAndPoints();
       void loadCommunityLeaderboards();
     } catch {
-      setCommunityActionStatus(boundUiMessage("食物分享送出失敗；沒有建立點數、排行榜或商城兌換。"));
+      setCommunityActionStatus(shareStatus.failure);
     } finally {
       foodShareInFlight.current = false;
       setIsBusy(false);

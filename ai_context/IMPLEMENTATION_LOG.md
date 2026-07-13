@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1410 extract food community share status messages
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `foodCommunityShareStatusMessages` to `mobile/futureModuleDisplay.ts` for Food Community share visual-smoke, unavailable, in-flight, validation, loading, success, and failure status copy.
+- Replaced inline bounded Food Community share status construction in `mobile/App.tsx` with the extracted helper.
+- Kept `/community/foods/shares`, food-name fallback, glucose bounds, eaten-at parsing, request payload, backend item update, field reset, store points refresh, leaderboard refresh, and rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、`/community/foods/shares` request path、food-name fallback、glucose bounds、eaten-at parsing、request payload、backend item update、field reset、store points refresh、leaderboard refresh、rendering、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining store redemption and auth visual-smoke action-local status helpers separately.
+
 ### T1409 extract community public settings status messages
 
 類型：mobile / refactor / verifier / docs
