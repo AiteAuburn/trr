@@ -698,7 +698,7 @@ import {
 import {
   downloadedModelDisplayLabel,
   downloadedWhisperModelDisplayItem,
-  settingsModelChoiceDisplayItem,
+  settingsModelChoiceDisplayItems,
   settingsProfileChoiceDisplayItems
 } from "./settingsChoiceDisplay";
 import {
@@ -1668,11 +1668,11 @@ export default function App() {
     [profiles]
   );
   const llmModelChoiceDisplayItems = useMemo(
-    () => models.llm_models.map((model) => settingsModelChoiceDisplayItem(model, "LLM")),
+    () => settingsModelChoiceDisplayItems(models.llm_models, "LLM"),
     [models.llm_models]
   );
   const sttModelChoiceDisplayItems = useMemo(
-    () => models.stt_models.map((model) => settingsModelChoiceDisplayItem(model, "STT")),
+    () => settingsModelChoiceDisplayItems(models.stt_models, "STT"),
     [models.stt_models]
   );
   const tutorialDisplaySteps = useMemo(() => buildTutorialDisplaySteps(), []);

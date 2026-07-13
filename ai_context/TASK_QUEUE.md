@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1332: Extract settings model choice display items helper
+
+Status: done
+
+Summary:
+
+- Added `settingsModelChoiceDisplayItems` to `mobile/settingsChoiceDisplay.ts` for shared LLM/STT model-choice display-list shaping.
+- Replaced the inline `models.llm_models.map(...)` and `models.stt_models.map(...)` constructions in `mobile/App.tsx` with the extracted helper.
+- Kept Settings model copy, disabled-model labeling, accessibility labels, model selection behavior, Settings rendering, and first-version menu destinations unchanged.
+- Updated navigation verifier coverage so the extracted helper, LLM/STT App bindings, and model mapping rule are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1331: Extract settings profile choice display items helper
 
 Status: done

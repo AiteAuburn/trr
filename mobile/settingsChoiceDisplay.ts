@@ -82,6 +82,10 @@ export function settingsModelChoiceDisplayItem<T extends ModelChoiceDisplaySourc
   };
 }
 
+export function settingsModelChoiceDisplayItems<T extends ModelChoiceDisplaySource>(models: T[], kind: "LLM" | "STT") {
+  return models.map((model) => settingsModelChoiceDisplayItem(model, kind));
+}
+
 export function downloadedModelDisplayLabel(value: DownloadedModelDisplaySource) {
   const fileName = boundDisplayText(value.fileName || "model file", 80);
   const checksum = value.md5 ? ` · md5 ${boundIdentifier(value.md5).slice(0, 12)}` : "";
