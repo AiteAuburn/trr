@@ -3183,6 +3183,21 @@ def main() -> int:
             "function pressSaveSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>)",
         )
         _assert_contains(
+            "destination card target helper",
+            content,
+            "function destinationCardTarget(item: ReturnType<typeof destinationCardDisplayItem>)",
+        )
+        _assert_contains(
+            "destination card target helper fields",
+            content,
+            "return item.target;",
+        )
+        _assert_contains(
+            "save success destination card target helper binding",
+            content,
+            "openSaveSuccessDestinationCard(destinationCardTarget(item));",
+        )
+        _assert_contains(
             "save success destination card binding",
             content,
             "onPress={() => pressSaveSuccessDestinationCard(item)}",
@@ -4036,6 +4051,11 @@ def main() -> int:
             "function pressDeleteSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>)",
         )
         _assert_contains(
+            "delete success destination card target helper binding",
+            content,
+            "openDeleteSuccessDestinationCard(destinationCardTarget(item));",
+        )
+        _assert_contains(
             "delete success history destination handler",
             content,
             "function openDeleteSuccessHistoryDestination()",
@@ -4049,6 +4069,11 @@ def main() -> int:
             "update success destination card press handler",
             content,
             "function pressUpdateSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>)",
+        )
+        _assert_contains(
+            "update success destination card target helper binding",
+            content,
+            "openUpdateSuccessDestinationCard(destinationCardTarget(item));",
         )
         _assert_contains(
             "updated record detail handler",

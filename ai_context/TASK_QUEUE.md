@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1521: Reuse destination card target helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `destinationCardTarget` helper for post-save, post-delete, and post-update destination-card press handlers.
+- Reused the helper in save-success, delete-success, and update-success destination-card handlers while keeping destination behavior unchanged.
+- Updated navigation verifier coverage for the shared destination-card target helper and all three result-card bindings.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1520: Reuse record action missing-selection fallback
 
 Status: done

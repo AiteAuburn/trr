@@ -3313,8 +3313,12 @@ export default function App() {
     openSaveSuccessDestination(target);
   }
 
+  function destinationCardTarget(item: ReturnType<typeof destinationCardDisplayItem>) {
+    return item.target;
+  }
+
   function pressSaveSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>) {
-    openSaveSuccessDestinationCard(item.target);
+    openSaveSuccessDestinationCard(destinationCardTarget(item));
   }
 
   function openSaveSuccessManualContinue() {
@@ -5781,7 +5785,7 @@ export default function App() {
   }
 
   function pressDeleteSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>) {
-    openDeleteSuccessDestinationCard(item.target);
+    openDeleteSuccessDestinationCard(destinationCardTarget(item));
   }
 
   function openDeleteSuccessHistoryDestination() {
@@ -5802,7 +5806,7 @@ export default function App() {
   }
 
   function pressUpdateSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>) {
-    openUpdateSuccessDestinationCard(item.target);
+    openUpdateSuccessDestinationCard(destinationCardTarget(item));
   }
 
   function openUpdatedRecordDetail() {
