@@ -2430,6 +2430,21 @@ def main() -> int:
             "const aiReviewBackendRequiredDisplayText = aiReviewDisplay.backendRequired;",
         )
         _assert_contains(
+            "AI save confirm display helper binding",
+            content,
+            "const aiSaveConfirmDisplay = aiSaveConfirmDisplayTexts(",
+        )
+        _assert_contains(
+            "AI save confirm intro display binding",
+            content,
+            "const aiSaveConfirmIntroDisplayText = aiSaveConfirmDisplay.intro;",
+        )
+        _assert_contains(
+            "AI save confirm submit display binding",
+            content,
+            "const aiSaveConfirmSubmitDisplayLabel = aiSaveConfirmDisplay.submit;",
+        )
+        _assert_contains(
             "transcript review checklist helper binding",
             content,
             "const transcriptReviewCostBoundaryChecklistItems = transcriptReviewCostBoundaryChecklistDisplayItems(",
@@ -3878,6 +3893,9 @@ def main() -> int:
             ("AI save confirm ready status helper", "function aiSaveConfirmReadyStatusMessage()"),
             ("AI save confirm return status helper", "function aiSaveConfirmReturnStatusMessage()"),
             ("AI save confirm submit label helper", "function aiSaveConfirmSubmitLabel(isBusy: boolean, isBlockedByBackend: boolean, hasWarnings: boolean)"),
+            ("AI save confirm display texts helper", "function aiSaveConfirmDisplayTexts(isBusy: boolean, isBlockedByBackend: boolean, hasWarnings: boolean)"),
+            ("AI save confirm display texts intro binding", "intro: aiSaveConfirmIntroCopy()"),
+            ("AI save confirm display texts submit binding", "submit: aiSaveConfirmSubmitLabel(isBusy, isBlockedByBackend, hasWarnings)"),
             ("AI save confirm checklist helper", "function aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordCount: number)"),
             ("AI save confirm boundary rows helper", "function aiSaveConfirmBoundaryDisplayRows("),
             ("AI save confirm checklist max candidate copy", "本次最多送出 ${boundedCount} 筆候選 payload，不會批次載入完整歷史。"),

@@ -248,6 +248,13 @@ export function aiSaveConfirmSubmitLabel(isBusy: boolean, isBlockedByBackend: bo
   );
 }
 
+export function aiSaveConfirmDisplayTexts(isBusy: boolean, isBlockedByBackend: boolean, hasWarnings: boolean) {
+  return {
+    intro: aiSaveConfirmIntroCopy(),
+    submit: aiSaveConfirmSubmitLabel(isBusy, isBlockedByBackend, hasWarnings)
+  };
+}
+
 export function aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordCount: number) {
   const boundedCount = clampNumber(unsavedPreviewRecordCount, 0, maxMobileCountValue);
   return [

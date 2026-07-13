@@ -330,10 +330,9 @@ import {
   aiRemoveConfirmDisplayTexts,
   aiSaveConfirmBoundaryDisplayRows,
   aiSaveConfirmChecklistDisplayItems,
-  aiSaveConfirmIntroCopy,
+  aiSaveConfirmDisplayTexts,
   aiSaveConfirmReadyStatusMessage,
   aiSaveConfirmReturnStatusMessage,
-  aiSaveConfirmSubmitLabel,
   aiSaveFailureChecklistDisplayItems,
   aiSaveFailureStatusMessage,
   aiSaveProgressStatusMessage,
@@ -1193,7 +1192,12 @@ export default function App() {
   const hasAiSaveConfirmWarnings =
     lowConfidencePreviewRecordCount > 0 || rejectedPreviewEventCount > 0;
   const isAiSaveConfirmBlockedByBackend = !protectedBackendReady;
-  const aiSaveConfirmIntroDisplayText = aiSaveConfirmIntroCopy();
+  const aiSaveConfirmDisplay = aiSaveConfirmDisplayTexts(
+    isBusy,
+    isAiSaveConfirmBlockedByBackend,
+    hasAiSaveConfirmWarnings
+  );
+  const aiSaveConfirmIntroDisplayText = aiSaveConfirmDisplay.intro;
   const dailyRecordDateDisplayText = preview ? dailyRecordDateLabel(preview.records) : "";
   const dailyRecordSummaryDisplayText = preview ? dailyRecordSummaryText(preview.records) : "";
   const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayText(
@@ -1205,11 +1209,7 @@ export default function App() {
   const todayTranscriptDisplayItems = todayTranscriptDisplay.items;
   const todayTranscriptCountDisplayText = todayTranscriptDisplay.countText;
   const todayTranscriptAccessibilityLabel = todayTranscriptDisplay.accessibilityLabel;
-  const aiSaveConfirmSubmitDisplayLabel = aiSaveConfirmSubmitLabel(
-    isBusy,
-    isAiSaveConfirmBlockedByBackend,
-    hasAiSaveConfirmWarnings
-  );
+  const aiSaveConfirmSubmitDisplayLabel = aiSaveConfirmDisplay.submit;
   const isDailyRecordFixedSaveVisible = currentScreen === "aiSaveConfirm" && Boolean(preview);
   const mainScrollContainerStyle = isDailyRecordFixedSaveVisible
     ? [styles.container, styles.containerWithFixedSaveBar]

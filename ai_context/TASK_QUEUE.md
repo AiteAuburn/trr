@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1378: Extract AI save confirm display texts
+
+Status: done
+
+Summary:
+
+- Added `aiSaveConfirmDisplayTexts` to `mobile/recordWorkflowCopy.ts` for AI save-confirm intro and submit label display text.
+- Replaced inline AI save-confirm display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept backend-blocked state, warning-state submit copy, disabled state, fixed save button, checklist, and save request flow unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1377: Extract daily transcript display bundle
 
 Status: done
