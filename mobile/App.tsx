@@ -3762,6 +3762,17 @@ export default function App() {
     return previewActionClearStatusMessage();
   }
 
+  function openFuturePreviewScreen(
+    screen: AppScreen,
+    returnScreen: AppScreen,
+    setReturnScreen: (screen: AppScreen) => void,
+    setActionStatus: (statusMessage: string) => void
+  ) {
+    setReturnScreen(futurePreviewReturnScreen(returnScreen, screen));
+    setActionStatus(futurePreviewActionClearStatusMessage());
+    openScreen(screen);
+  }
+
   function returnFromFuturePreviewScreen(returnScreen: AppScreen) {
     openScreenWithStatus(returnScreen, futurePreviewReturnStatusMessage(returnScreen));
   }
@@ -3771,9 +3782,7 @@ export default function App() {
   }
 
   function openDoctorShare(returnScreen: AppScreen = currentScreen) {
-    setDoctorShareReturnScreen(futurePreviewReturnScreen(returnScreen, "doctorShare"));
-    setDoctorShareActionStatus(futurePreviewActionClearStatusMessage());
-    openScreen("doctorShare");
+    openFuturePreviewScreen("doctorShare", returnScreen, setDoctorShareReturnScreen, setDoctorShareActionStatus);
   }
 
   function returnFromDoctorSharePreview() {
@@ -3789,9 +3798,12 @@ export default function App() {
   }
 
   function openHealthIntegration(returnScreen: AppScreen = currentScreen) {
-    setHealthIntegrationReturnScreen(futurePreviewReturnScreen(returnScreen, "healthIntegration"));
-    setHealthIntegrationActionStatus(futurePreviewActionClearStatusMessage());
-    openScreen("healthIntegration");
+    openFuturePreviewScreen(
+      "healthIntegration",
+      returnScreen,
+      setHealthIntegrationReturnScreen,
+      setHealthIntegrationActionStatus
+    );
   }
 
   function returnFromHealthIntegrationPreview() {
@@ -3807,9 +3819,7 @@ export default function App() {
   }
 
   function openCommunity(returnScreen: AppScreen = currentScreen) {
-    setCommunityReturnScreen(futurePreviewReturnScreen(returnScreen, "community"));
-    setCommunityActionStatus(futurePreviewActionClearStatusMessage());
-    openScreen("community");
+    openFuturePreviewScreen("community", returnScreen, setCommunityReturnScreen, setCommunityActionStatus);
     void loadCommunityPublicSettings();
     void loadFoodCommunityCategories();
     void loadCommunityFoods();
@@ -3883,9 +3893,7 @@ export default function App() {
   }
 
   function openRanking(returnScreen: AppScreen = currentScreen) {
-    setRankingReturnScreen(futurePreviewReturnScreen(returnScreen, "ranking"));
-    setRankingActionStatus(futurePreviewActionClearStatusMessage());
-    openScreen("ranking");
+    openFuturePreviewScreen("ranking", returnScreen, setRankingReturnScreen, setRankingActionStatus);
     void loadCommunityLeaderboards();
   }
 

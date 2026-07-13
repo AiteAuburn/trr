@@ -4596,6 +4596,16 @@ def main() -> int:
             "return previewActionClearStatusMessage();",
         )
         _assert_contains(
+            "future preview screen opener helper",
+            content,
+            "function openFuturePreviewScreen(\n    screen: AppScreen,\n    returnScreen: AppScreen,",
+        )
+        _assert_contains(
+            "future preview screen opener helper fields",
+            content,
+            "setReturnScreen(futurePreviewReturnScreen(returnScreen, screen));\n    setActionStatus(futurePreviewActionClearStatusMessage());\n    openScreen(screen);",
+        )
+        _assert_contains(
             "future preview return action helper",
             content,
             "function returnFromFuturePreviewScreen(returnScreen: AppScreen)",
@@ -4631,54 +4641,34 @@ def main() -> int:
             "function openFutureModuleDestination(target: AppScreen | undefined, module: FutureModuleCard) {\n    setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());",
         )
         _assert_contains(
-            "doctor share future preview return helper binding",
+            "doctor share future preview opener helper binding",
             content,
-            'setDoctorShareReturnScreen(futurePreviewReturnScreen(returnScreen, "doctorShare"));',
+            'openFuturePreviewScreen("doctorShare", returnScreen, setDoctorShareReturnScreen, setDoctorShareActionStatus);',
         )
         _assert_contains(
-            "doctor share future preview action helper binding",
+            "health integration future preview opener helper binding",
             content,
-            "setDoctorShareActionStatus(futurePreviewActionClearStatusMessage());",
+            'openFuturePreviewScreen(\n      "healthIntegration",\n      returnScreen,\n      setHealthIntegrationReturnScreen,\n      setHealthIntegrationActionStatus\n    );',
         )
         _assert_contains(
-            "doctor share screen opener binding",
+            "community future preview opener helper binding",
             content,
-            'setDoctorShareActionStatus(futurePreviewActionClearStatusMessage());\n    openScreen("doctorShare");',
-        )
-        _assert_contains(
-            "health integration future preview return helper binding",
-            content,
-            'setHealthIntegrationReturnScreen(futurePreviewReturnScreen(returnScreen, "healthIntegration"));',
-        )
-        _assert_contains(
-            "health integration screen opener binding",
-            content,
-            'setHealthIntegrationActionStatus(futurePreviewActionClearStatusMessage());\n    openScreen("healthIntegration");',
-        )
-        _assert_contains(
-            "community future preview return helper binding",
-            content,
-            'setCommunityReturnScreen(futurePreviewReturnScreen(returnScreen, "community"));',
+            'openFuturePreviewScreen("community", returnScreen, setCommunityReturnScreen, setCommunityActionStatus);',
         )
         _assert_contains(
             "community screen opener keeps sync calls binding",
             content,
-            'setCommunityActionStatus(futurePreviewActionClearStatusMessage());\n    openScreen("community");\n    void loadCommunityPublicSettings();\n    void loadFoodCommunityCategories();\n    void loadCommunityFoods();',
+            'openFuturePreviewScreen("community", returnScreen, setCommunityReturnScreen, setCommunityActionStatus);\n    void loadCommunityPublicSettings();\n    void loadFoodCommunityCategories();\n    void loadCommunityFoods();',
         )
         _assert_contains(
-            "ranking future preview return helper binding",
+            "ranking future preview opener helper binding",
             content,
-            'setRankingReturnScreen(futurePreviewReturnScreen(returnScreen, "ranking"));',
-        )
-        _assert_contains(
-            "ranking future preview action helper binding",
-            content,
-            "setRankingActionStatus(futurePreviewActionClearStatusMessage());",
+            'openFuturePreviewScreen("ranking", returnScreen, setRankingReturnScreen, setRankingActionStatus);',
         )
         _assert_contains(
             "ranking screen opener keeps leaderboard sync binding",
             content,
-            'setRankingActionStatus(futurePreviewActionClearStatusMessage());\n    openScreen("ranking");\n    void loadCommunityLeaderboards();',
+            'openFuturePreviewScreen("ranking", returnScreen, setRankingReturnScreen, setRankingActionStatus);\n    void loadCommunityLeaderboards();',
         )
         _assert_contains(
             "doctor share future preview return action helper binding",
