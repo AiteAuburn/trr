@@ -15,6 +15,37 @@
 
 ## 2026-07-13
 
+### T1515 reuse screen opener in parser success and record fallbacks
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Reused `openScreen` when parser success opens AI review after clearing transcript voice seconds.
+- Reused `openScreen` for delete-confirm and record-edit missing-selection fallbacks back to record detail.
+- Kept parser response bounding, same-day merge, retained transcript entry handling, daily-record reorganization/status logic, record delete/edit selected-record guards, UI copy, layout, backend request behavior, and AI/parser request behavior unchanged.
+- Updated navigation verifier coverage for parser success and record fallback `openScreen` bindings.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1514 reuse screen opener in visual-smoke transcript route
 
 類型：mobile / refactor / verifier / docs

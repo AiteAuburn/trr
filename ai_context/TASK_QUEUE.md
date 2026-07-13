@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1515: Reuse screen opener in parser success and record fallbacks
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `openScreen` when parser success opens AI review after clearing transcript voice seconds.
+- Reused `openScreen` for delete-confirm and record-edit missing-selection fallbacks back to record detail.
+- Kept parser response bounding, same-day merge, retained transcript entry handling, daily-record reorganization/status logic, record delete/edit selected-record guards, UI copy, layout, backend request behavior, and AI/parser request behavior unchanged.
+- Updated navigation verifier coverage for parser success and record fallback `openScreen` bindings.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1514: Reuse screen opener in visual-smoke transcript route
 
 Status: done

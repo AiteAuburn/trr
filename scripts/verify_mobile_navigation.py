@@ -3768,6 +3768,11 @@ def main() -> int:
             'openScreenWithStatus("deleteConfirm", deleteConfirmReadyStatusMessage());',
         )
         _assert_contains(
+            "delete confirm missing selection screen opener fallback",
+            content,
+            'if (!selectedRecord) {\n      openScreen("recordDetail");\n      return;\n    }\n    openScreenWithStatus("deleteConfirm", deleteConfirmReadyStatusMessage());',
+        )
+        _assert_contains(
             "delete confirm return handler",
             content,
             "function returnFromDeleteConfirm()",
@@ -3896,6 +3901,11 @@ def main() -> int:
             "record edit open seed helper binding",
             content,
             'seedRecordEditStateFromRecord(selectedRecord);\n    openScreenWithStatus("editRecord", recordEditOpenStatusMessage());',
+        )
+        _assert_contains(
+            "record edit missing selection screen opener fallback",
+            content,
+            'if (!selectedRecord) {\n      openScreen("recordDetail");\n      return;\n    }\n    seedRecordEditStateFromRecord(selectedRecord);',
         )
         _assert_contains(
             "record edit return empty seed helper binding",
@@ -4998,6 +5008,7 @@ def main() -> int:
             ("home recording fallback transcript review", 'setTranscriptReviewReturnScreen("today");\n      openScreenWithStatus("transcriptReview", recordingTextFallbackStatusMessage());'),
             ("parse request voice seconds", "voice_seconds: parserVoiceSeconds"),
             ("parse success clears voice seconds", "setTranscriptVoiceSeconds(0);"),
+            ("parse success screen opener binding", 'setTranscriptVoiceSeconds(0);\n      openScreen("aiReview");'),
             ("parse success refreshes quota", "void loadVoiceQuota(account.id);"),
         ):
             _assert_contains(label, content, marker)

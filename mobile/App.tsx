@@ -5453,7 +5453,7 @@ export default function App() {
         setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, transcriptEntry]));
       }
       setTranscriptVoiceSeconds(0);
-      setCurrentScreen("aiReview");
+      openScreen("aiReview");
       reorganizeDailyRecordDraftAfterChange(
         mergedDailyPreview,
         "add",
@@ -5717,7 +5717,7 @@ export default function App() {
 
   function openDeleteConfirm() {
     if (!selectedRecord) {
-      setCurrentScreen("recordDetail");
+      openScreen("recordDetail");
       return;
     }
     openScreenWithStatus("deleteConfirm", deleteConfirmReadyStatusMessage());
@@ -5729,7 +5729,7 @@ export default function App() {
 
   function openRecordEdit() {
     if (!selectedRecord) {
-      setCurrentScreen("recordDetail");
+      openScreen("recordDetail");
       return;
     }
     seedRecordEditStateFromRecord(selectedRecord);
