@@ -4078,9 +4078,7 @@ export default function App() {
   function openVisualSmokeAiSeedRoute(target: AppScreen) {
     if (target === "aiSaveFailure") {
       setPreview(visualSmokeDemoPreview());
-      setLastSaveErrorSummary("Visual smoke demo save failure.");
-      setLastSaveEntryMethod("ai");
-      setCurrentScreen("aiSaveFailure");
+      openAiSaveFailureResult("Visual smoke demo save failure.");
       return true;
     }
     if (target === "editPreviewRecord") {
@@ -5532,9 +5530,7 @@ export default function App() {
       syncAchievementsAfterRecordSave();
     } catch (error) {
       const message = aiSaveFailureStatusMessage(error);
-      setLastSaveErrorSummary(message);
-      setLastSaveEntryMethod("ai");
-      setCurrentScreen("aiSaveFailure");
+      openAiSaveFailureResult(message);
       setStatus(message);
     } finally {
       previewSaveInFlight.current = false;
@@ -5669,6 +5665,12 @@ export default function App() {
     setLastSaveEntryMethod(entryMethod);
     setSaveSuccessReturnScreen(returnScreen);
     setCurrentScreen("saveSuccess");
+  }
+
+  function openAiSaveFailureResult(message: string) {
+    setLastSaveErrorSummary(message);
+    setLastSaveEntryMethod("ai");
+    setCurrentScreen("aiSaveFailure");
   }
 
   function seedEmptyRecordEditStateForNow() {

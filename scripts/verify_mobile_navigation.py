@@ -3616,6 +3616,21 @@ def main() -> int:
             "seedEmptyManualRecordStateForNow();\n      openSaveSuccessResult(manualRecordCreateSummaryMessage(1), \"manual\", manualRecordReturnScreen);",
         )
         _assert_contains(
+            "AI save failure result helper",
+            content,
+            "function openAiSaveFailureResult(message: string)",
+        )
+        _assert_contains(
+            "AI save failure result helper fields",
+            content,
+            "setLastSaveErrorSummary(message);\n    setLastSaveEntryMethod(\"ai\");\n    setCurrentScreen(\"aiSaveFailure\");",
+        )
+        _assert_contains(
+            "AI save failure result helper binding",
+            content,
+            "const message = aiSaveFailureStatusMessage(error);\n      openAiSaveFailureResult(message);\n      setStatus(message);",
+        )
+        _assert_contains(
             "record edit seed empty now helper",
             content,
             "function seedEmptyRecordEditStateForNow()",
@@ -4036,9 +4051,9 @@ def main() -> int:
             "function openVisualSmokeAiSeedRoute(target: AppScreen)",
         )
         _assert_contains(
-            "visual smoke ai seed route failure summary",
+            "visual smoke ai seed route failure result helper binding",
             content,
-            'setLastSaveErrorSummary("Visual smoke demo save failure.");',
+            'openAiSaveFailureResult("Visual smoke demo save failure.");',
         )
         _assert_contains(
             "visual smoke ai seed route edit seed helper",
