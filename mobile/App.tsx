@@ -2401,6 +2401,11 @@ export default function App() {
     setBasicReportKey("");
   }
 
+  function clearVoiceQuotaStatus(statusMessage: string) {
+    setVoiceQuota(null);
+    setQuotaStatus(statusMessage);
+  }
+
   function clearMobileSessionState(options: { clearAuthTokens?: boolean } = {}) {
     const clearAuthTokens = options.clearAuthTokens ?? true;
     visualSmokePreviewActive.current = false;
@@ -2415,8 +2420,7 @@ export default function App() {
     setAuthSessions([]);
     setProfiles([]);
     setActiveProfileId("");
-    setVoiceQuota(null);
-    setQuotaStatus(voiceQuotaInitialStatusMessage());
+    clearVoiceQuotaStatus(voiceQuotaInitialStatusMessage());
     setModels({ stt_models: [], llm_models: [] });
     setSttModelId("browser-web-speech");
     setLlmModelId("deepseek-chat");
@@ -3374,8 +3378,7 @@ export default function App() {
   async function loadVoiceQuota(accountId: string, tokenOverride = accessToken) {
     const tokenForHeaders = tokenOverride.trim();
     if ((!protectedAuthReady && !tokenForHeaders) || accountId.trim().length === 0) {
-      setVoiceQuota(null);
-      setQuotaStatus(voiceQuotaUnavailableStatusMessage(protectedAccountBackendUnavailableMessage));
+      clearVoiceQuotaStatus(voiceQuotaUnavailableStatusMessage(protectedAccountBackendUnavailableMessage));
       setIsQuotaSyncing(false);
       return;
     }
@@ -3399,8 +3402,7 @@ export default function App() {
       setQuotaStatus(voiceQuotaSyncSuccessStatusMessage());
     } catch {
       if (latestQuotaSyncKey.current === quotaKey) {
-        setVoiceQuota(null);
-        setQuotaStatus(voiceQuotaSyncFailureStatusMessage());
+        clearVoiceQuotaStatus(voiceQuotaSyncFailureStatusMessage());
       }
     } finally {
       quotaSyncInFlightKeys.current.delete(quotaKey);
