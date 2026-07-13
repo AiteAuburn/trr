@@ -3589,41 +3589,48 @@ export default function App() {
     setStatus(menuReturnStatusMessage(menuReturnScreen));
   }
 
-  function openMenuDestination(target: AppScreen) {
+  function openMenuTargetRoute(target: AppScreen) {
     if (target === "community") {
       openCommunity("menu");
-      return;
+      return true;
     }
     if (target === "ranking") {
       openRanking("menu");
-      return;
+      return true;
     }
     if (target === "manualRecord") {
       openManualRecord("menu");
-      return;
+      return true;
     }
     if (target === "subscription") {
       openSubscription("menu");
-      return;
+      return true;
     }
     if (target === "tutorial") {
       openTutorial("menu");
-      return;
+      return true;
     }
     if (target === "foodPhoto") {
       openFoodPhoto("menu");
-      return;
+      return true;
     }
     if (target === "achievements") {
       openAchievements("menu");
-      return;
+      return true;
     }
     if (target === "yearReview") {
       openYearReview("menu");
-      return;
+      return true;
     }
     if (target === "store") {
       openStore("menu");
+      return true;
+    }
+    return false;
+  }
+
+  function openMenuDestination(target: AppScreen) {
+    if (openMenuTargetRoute(target)) {
       return;
     }
     setCurrentScreen(target);

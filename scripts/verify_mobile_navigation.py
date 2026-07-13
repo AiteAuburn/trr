@@ -3455,6 +3455,26 @@ def main() -> int:
             "function openMenuDestination(target: AppScreen)",
         )
         _assert_contains(
+            "menu target route handler",
+            content,
+            "function openMenuTargetRoute(target: AppScreen)",
+        )
+        _assert_contains(
+            "menu target route community binding",
+            content,
+            'openCommunity("menu");',
+        )
+        _assert_contains(
+            "menu target route fallback",
+            content,
+            "return false;\n  }\n\n  function openMenuDestination(target: AppScreen)",
+        )
+        _assert_contains(
+            "menu target route helper binding",
+            content,
+            "if (openMenuTargetRoute(target)) {",
+        )
+        _assert_contains(
             "menu destination press wrapper",
             content,
             "function pressMenuDestination(item: ReturnType<typeof menuScreenDisplayItem>)",
