@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1498: Reuse screen status opener in store cart routes
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `openScreenWithStatus` for Store Cart open and return-to-store routes.
+- Kept store return-screen state, commerce preview status sources, route availability, backend request behavior, order/payment disabled behavior, and UI copy unchanged.
+- Updated navigation verifier coverage for the store cart route helper bindings.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1497: Reuse screen status opener in future module routes
 
 Status: done

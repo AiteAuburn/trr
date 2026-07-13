@@ -3973,8 +3973,7 @@ export default function App() {
   }
 
   function openStoreCart() {
-    setCurrentScreen("storeCart");
-    setStatus(commercePreviewOpenCartStatusMessage());
+    openScreenWithStatus("storeCart", commercePreviewOpenCartStatusMessage());
   }
 
   function returnFromStore() {
@@ -3982,8 +3981,7 @@ export default function App() {
   }
 
   function returnFromStoreCartToStore() {
-    setCurrentScreen("store");
-    setStatus(commercePreviewReturnStoreStatusMessage());
+    openScreenWithStatus("store", commercePreviewReturnStoreStatusMessage());
   }
 
   function showFoodPhotoUploadStatus() {
