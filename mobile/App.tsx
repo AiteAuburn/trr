@@ -2031,11 +2031,15 @@ export default function App() {
     setStatus(transcriptReturnEditStatusMessage());
   }
 
-  function returnFromTranscriptReview() {
+  function returnFromTranscriptReviewWithStatus(statusMessage: string) {
     clearParserPreviewState();
     clearPreviewSelectionState();
     setCurrentScreen(transcriptReviewReturnScreen);
-    setStatus(transcriptReviewBackStatusMessage());
+    setStatus(statusMessage);
+  }
+
+  function returnFromTranscriptReview() {
+    returnFromTranscriptReviewWithStatus(transcriptReviewBackStatusMessage());
   }
 
   function retryTranscriptInput() {
@@ -2043,10 +2047,7 @@ export default function App() {
     setRecordingStartedAt(null);
     setRecordingElapsedSeconds(0);
     clearTranscriptDraftState();
-    clearParserPreviewState();
-    clearPreviewSelectionState();
-    setCurrentScreen(transcriptReviewReturnScreen);
-    setStatus(transcriptClearedStatusMessage());
+    returnFromTranscriptReviewWithStatus(transcriptClearedStatusMessage());
   }
 
   function clearTranscriptDraftState() {

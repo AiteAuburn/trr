@@ -2456,7 +2456,22 @@ def main() -> int:
         _assert_contains(
             "transcript review return clears parser preview helper binding",
             content,
-            "function returnFromTranscriptReview() {\n    clearParserPreviewState();",
+            "function returnFromTranscriptReviewWithStatus(statusMessage: string) {\n    clearParserPreviewState();",
+        )
+        _assert_contains(
+            "transcript review return status helper fields",
+            content,
+            "clearPreviewSelectionState();\n    setCurrentScreen(transcriptReviewReturnScreen);\n    setStatus(statusMessage);",
+        )
+        _assert_contains(
+            "transcript review back status helper binding",
+            content,
+            "returnFromTranscriptReviewWithStatus(transcriptReviewBackStatusMessage());",
+        )
+        _assert_contains(
+            "transcript retry status helper binding",
+            content,
+            "clearTranscriptDraftState();\n    returnFromTranscriptReviewWithStatus(transcriptClearedStatusMessage());",
         )
         _assert_contains(
             "recording start failure runtime clear helper binding",
