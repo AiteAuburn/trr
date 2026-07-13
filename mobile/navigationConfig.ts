@@ -189,6 +189,10 @@ export function isVisualSmokeRecordListScreen(screen: AppScreen) {
   return screen === "today" || screen === "history" || screen === "analysis";
 }
 
+export function isVisualSmokeAiPreviewScreen(screen: AppScreen) {
+  return screen === "aiReview" || screen === "aiSaveConfirm";
+}
+
 function headerBackTargetForScreen(
   currentScreen: AppScreen,
   chrome: { backTo?: AppScreen },

@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T1426: Extract visual smoke AI preview route helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/navigationConfig.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `isVisualSmokeAiPreviewScreen` to `mobile/navigationConfig.ts` for the visual-smoke AI review / save-confirm route group.
+- Replaced the inline `target === "aiReview" || target === "aiSaveConfirm"` branch in `openVisualSmokeRoute`.
+- Kept visual-smoke debug gating, demo preview seeding, route jumps, AI review/save-confirm screens, and normal app navigation unchanged.
+- Updated navigation verifier coverage for the helper internals and App binding.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting debug route groups or route-specific action handlers in small slices.
+
 ### T1425: Extract visual smoke record-list route helper
 
 Status: done

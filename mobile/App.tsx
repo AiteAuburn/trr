@@ -114,6 +114,7 @@ import {
 import {
   headerBackTargetForScreen,
   isSettingsSubpageScreen,
+  isVisualSmokeAiPreviewScreen,
   isVisualSmokeRecordListScreen,
   menuScreens,
   mvpFlowSteps,
@@ -3975,7 +3976,7 @@ export default function App() {
       setCurrentScreen("transcriptReview");
       return;
     }
-    if (target === "aiReview" || target === "aiSaveConfirm") {
+    if (isVisualSmokeAiPreviewScreen(target)) {
       setPreview(visualSmokeDemoPreview());
       setCurrentScreen(target);
       return;
