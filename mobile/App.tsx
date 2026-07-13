@@ -2991,15 +2991,25 @@ export default function App() {
     setDailyRecordMenuIndex(null);
   }
 
+  function selectPreviewEditIndex(index: number) {
+    setDailyRecordMenuIndex(null);
+    setPendingPreviewRemoveIndex(null);
+    setSelectedPreviewIndex(index);
+  }
+
+  function selectPreviewRemoveIndex(index: number) {
+    setDailyRecordMenuIndex(null);
+    setSelectedPreviewIndex(null);
+    setPendingPreviewRemoveIndex(index);
+  }
+
   function openPreviewRecordEdit(index: number, returnScreen: AppScreen = "aiReview") {
     const record = preview?.records[index];
     if (!record) {
       return;
     }
     setPreviewActionReturnScreen(returnScreen);
-    setDailyRecordMenuIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setSelectedPreviewIndex(index);
+    selectPreviewEditIndex(index);
     seedPreviewEditStateFromRecord(record);
     setCurrentScreen("editPreviewRecord");
     setStatus(aiCandidateEditOpenStatusMessage());
@@ -3019,9 +3029,7 @@ export default function App() {
       return;
     }
     setPreviewActionReturnScreen(returnScreen);
-    setDailyRecordMenuIndex(null);
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(index);
+    selectPreviewRemoveIndex(index);
     setCurrentScreen("aiRemoveConfirm");
     setStatus(aiCandidateRemoveConfirmStatusMessage());
   }

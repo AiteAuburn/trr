@@ -3265,9 +3265,34 @@ def main() -> int:
             "function clearPreviewMenuSelectionIndexes() {\n    setSelectedPreviewIndex(null);\n    setPendingPreviewRemoveIndex(null);\n    setDailyRecordMenuIndex(null);",
         )
         _assert_contains(
+            "AI candidate edit index selection helper",
+            content,
+            "function selectPreviewEditIndex(index: number)",
+        )
+        _assert_contains(
+            "AI candidate edit index selection helper internals",
+            content,
+            "function selectPreviewEditIndex(index: number) {\n    setDailyRecordMenuIndex(null);\n    setPendingPreviewRemoveIndex(null);\n    setSelectedPreviewIndex(index);",
+        )
+        _assert_contains(
+            "AI candidate remove index selection helper",
+            content,
+            "function selectPreviewRemoveIndex(index: number)",
+        )
+        _assert_contains(
+            "AI candidate remove index selection helper internals",
+            content,
+            "function selectPreviewRemoveIndex(index: number) {\n    setDailyRecordMenuIndex(null);\n    setSelectedPreviewIndex(null);\n    setPendingPreviewRemoveIndex(index);",
+        )
+        _assert_contains(
             "AI candidate edit open seed helper binding",
             content,
-            "seedPreviewEditStateFromRecord(record);\n    setCurrentScreen(\"editPreviewRecord\");",
+            "selectPreviewEditIndex(index);\n    seedPreviewEditStateFromRecord(record);",
+        )
+        _assert_contains(
+            "AI candidate remove confirm selection helper binding",
+            content,
+            "selectPreviewRemoveIndex(index);\n    setCurrentScreen(\"aiRemoveConfirm\");",
         )
         _assert_contains(
             "AI candidate edit return index clear helper binding",
