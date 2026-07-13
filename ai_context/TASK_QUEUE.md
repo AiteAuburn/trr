@@ -124,6 +124,38 @@ None.
 
 ## Done
 
+### T1398: Extract parser availability display messages
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `parserAvailabilityDisplayMessages` to `mobile/recordWorkflowCopy.ts` for parser model and protected-backend unavailable display messages.
+- Replaced inline `boundUiMessage` display construction for parser/backend availability in `mobile/App.tsx` with the extracted helper.
+- Kept parser readiness checks, backend/profile/auth guards, transcript review display, manual record backend guard display, parser request gating, and AI/LLM behavior unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No backend/schema/Android signing/token/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue auditing remaining App display shaping and request-local status helpers in separate slices.
+
 ### T1397: Extract account security auth mode display texts
 
 Status: done

@@ -347,6 +347,7 @@ import {
   manualRecordConfirmReturnStatusMessage,
   manualRecordReturnStatusMessage,
   manualSubmitChecklistDisplayItems,
+  parserAvailabilityDisplayMessages,
   parserBackendUnavailableStatusMessage,
   parserFailureRecoveryMessage,
   parserFailureStatusMessage,
@@ -1019,8 +1020,12 @@ export default function App() {
   const protectedBackendUnavailableMessage =
     protectedAccountBackendUnavailableMessage ||
     (!activeProfile ? "請先選擇照護對象" : "");
-  const parserModelUnavailableDisplayMessage = boundUiMessage(parserModelUnavailableMessage);
-  const protectedBackendUnavailableDisplayMessage = boundUiMessage(protectedBackendUnavailableMessage);
+  const parserAvailabilityDisplay = parserAvailabilityDisplayMessages({
+    parserModelUnavailableMessage,
+    protectedBackendUnavailableMessage
+  });
+  const parserModelUnavailableDisplayMessage = parserAvailabilityDisplay.parserModelUnavailable;
+  const protectedBackendUnavailableDisplayMessage = parserAvailabilityDisplay.protectedBackendUnavailable;
   const recordsForDisplay = useMemo(
     () => (isVisualSmokePreviewMode ? visualSmokeDemoRecords() : records),
     [isVisualSmokePreviewMode, records]

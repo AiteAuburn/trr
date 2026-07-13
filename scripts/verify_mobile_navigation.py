@@ -2459,6 +2459,12 @@ def main() -> int:
             content,
             "const transcriptStatusDisplay = transcriptReviewStatusDisplayTexts({",
         )
+        for label, marker in (
+            ("parser availability display helper binding", "const parserAvailabilityDisplay = parserAvailabilityDisplayMessages({"),
+            ("parser model unavailable display binding", "const parserModelUnavailableDisplayMessage = parserAvailabilityDisplay.parserModelUnavailable;"),
+            ("protected backend unavailable display binding", "const protectedBackendUnavailableDisplayMessage = parserAvailabilityDisplay.protectedBackendUnavailable;"),
+        ):
+            _assert_contains(label, content, marker)
         _assert_contains(
             "transcript validation display helper binding",
             content,
@@ -4003,6 +4009,9 @@ def main() -> int:
             ("parser model unavailable llm missing copy", "LLM 模型尚未載入"),
             ("parser model unavailable stt missing copy", "STT 模型尚未載入"),
             ("parser model unavailable disabled copy", "尚未啟用"),
+            ("parser availability display helper", "function parserAvailabilityDisplayMessages(value: {"),
+            ("parser availability parser binding", "parserModelUnavailable: boundUiMessage(value.parserModelUnavailableMessage)"),
+            ("parser availability backend binding", "protectedBackendUnavailable: boundUiMessage(value.protectedBackendUnavailableMessage)"),
             ("preview record edit boundary copy", "這裡只修改待確認候選紀錄"),
             ("manual record confirm no AI copy", "這筆紀錄不經 AI parser"),
             ("manual record return no create copy", "未送出 create request，也未呼叫 AI"),

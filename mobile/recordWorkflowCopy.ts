@@ -138,6 +138,16 @@ export function parserModelUnavailableText(
   return "";
 }
 
+export function parserAvailabilityDisplayMessages(value: {
+  parserModelUnavailableMessage: string;
+  protectedBackendUnavailableMessage: string;
+}) {
+  return {
+    parserModelUnavailable: boundUiMessage(value.parserModelUnavailableMessage),
+    protectedBackendUnavailable: boundUiMessage(value.protectedBackendUnavailableMessage)
+  };
+}
+
 export function parserModelUnavailableStatusMessage(message: string) {
   return boundUiMessage(`${message}；目前不送出 parser 請求，請先在設定選擇可用模型。`);
 }
