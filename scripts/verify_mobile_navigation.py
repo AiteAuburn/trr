@@ -387,8 +387,14 @@ def _verify_achievement_contract(content: str, future_module_display_content: st
         ("mobile cumulative label", 'kindLabel: "累積型"'),
         ("mobile cumulative shared category icon", "icon: definition.cumulativeIcon"),
         ("mobile cumulative level color", "const badgeColor = achievementLevelColors[levelIndex] ?? definition.cumulativeColor"),
-        ("mobile dynamic achievement helper binding", "const dynamicLevels = achievementDynamicLevels(maxObservedRecords, maxObservedStreak);"),
+        ("mobile local achievement records helper", "export function localAchievementItemsForRecords(records: RecordItem[]): AchievementItem[]"),
+        ("mobile local achievement max record count", "const maxObservedRecords = records.length;"),
+        ("mobile local achievement max streak", "const maxObservedStreak = Math.max("),
+        ("mobile local achievement dynamic levels binding", "const dynamicLevels = achievementDynamicLevels(maxObservedRecords, maxObservedStreak);"),
+        ("mobile local achievement cumulative progress", "const cumulativeProgress = records.filter((record) => record.record_type === definition.recordType).length;"),
+        ("mobile local achievement streak progress", "const streakProgress = currentRecordTypeStreakDays(records, definition.recordType);"),
         ("mobile local achievement item helper binding", "localAchievementItemsForDefinition(definition, dynamicLevels, cumulativeProgress, streakProgress)"),
+        ("mobile local achievement records helper binding", "localAchievementItemsForRecords(recordsForDisplay)"),
         ("mobile streak kind", 'kind: "streak"'),
         ("mobile streak label", 'kindLabel: "連續型"'),
         ("mobile streak independent icon", 'icon: "連"'),
@@ -410,8 +416,7 @@ def _verify_achievement_contract(content: str, future_module_display_content: st
         if label.startswith("backend"):
             haystack = backend_content
         elif label in {
-            "mobile dynamic achievement helper binding",
-            "mobile local achievement item helper binding",
+            "mobile local achievement records helper binding",
             "mobile streak independent style",
             "mobile badge level number",
         }:
@@ -6170,6 +6175,7 @@ def main() -> int:
         for label, marker in (
             ("achievement levels", "export const achievementLevels = [10, 50, 100, 150, 200, 250];"),
             ("achievement dynamic levels helper", "export function achievementDynamicLevels(maxObservedRecords: number, maxObservedStreak: number)"),
+            ("achievement records helper", "export function localAchievementItemsForRecords(records: RecordItem[]): AchievementItem[]"),
             ("achievement dynamic levels next level", "nextLevel <= maxObservedLevel + achievementLevelStep"),
             ("achievement categories", "export const achievementCategoryDefinitions: Array<{"),
             ("achievement target lower bound", "const target = Math.max(1, boundAchievementProgress(value.target));"),

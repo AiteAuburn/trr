@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1360: Extract local achievement records helper
+
+Status: done
+
+Summary:
+
+- Added `localAchievementItemsForRecords` to `mobile/futureModuleDisplay.ts` so local achievement fallback generation is driven by a single records-level helper.
+- Replaced the remaining inline local achievement progress and dynamic-level calculation in `mobile/App.tsx` with the extracted helper.
+- Kept max observed record count, max observed streak, cumulative progress, streak progress, dynamic levels, and local achievement item generation unchanged.
+- Updated navigation verifier coverage so records-level helper internals and the App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1359: Extract local achievement item helper
 
 Status: done

@@ -122,10 +122,8 @@ import {
   type AppScreen
 } from "./navigationConfig";
 import {
-  achievementCategoryDefinitions,
   achievementBadgeSummary,
   achievementDisplayItems as buildAchievementDisplayItems,
-  achievementDynamicLevels,
   achievementIntegrationButtonAccessibilityLabel,
   achievementIntegrationButtonLabel,
   achievementItemFromApi,
@@ -185,7 +183,7 @@ import {
   healthIntegrationPreviewBoundaryDisplayItem,
   healthIntegrationReadinessChecklistDisplayItems,
   limitedAchievementDisplayItems,
-  localAchievementItemsForDefinition,
+  localAchievementItemsForRecords,
   mobileFoodCategoryFromApi,
   privacyPreviewBoundaryDisplayItem,
   rankingBoundaryDisplayRows,
@@ -631,7 +629,6 @@ import {
   beforeMealGlucoseCount as countBeforeMealGlucose,
   boundBasicReport,
   currentRecordStreakDays,
-  currentRecordTypeStreakDays,
   highestNumber,
   longestRecordStreakDays,
   lowestNumber,
@@ -1386,22 +1383,10 @@ export default function App() {
     mvpFlowStepIndex >= 0 &&
     currentScreen !== "today" &&
     (currentScreen !== "saveSuccess" || lastSaveEntryMethod !== "manual" || hasUnsavedPreviewRecords);
-  const localAchievements = useMemo<AchievementItem[]>(() => {
-    const maxObservedRecords = recordsForDisplay.length;
-    const maxObservedStreak = Math.max(
-      ...achievementCategoryDefinitions.map((definition) => currentRecordTypeStreakDays(recordsForDisplay, definition.recordType)),
-      0
-    );
-    const dynamicLevels = achievementDynamicLevels(maxObservedRecords, maxObservedStreak);
-
-    return achievementCategoryDefinitions.flatMap((definition) => {
-      const cumulativeProgress = recordsForDisplay.filter(
-        (record) => record.record_type === definition.recordType
-      ).length;
-      const streakProgress = currentRecordTypeStreakDays(recordsForDisplay, definition.recordType);
-      return localAchievementItemsForDefinition(definition, dynamicLevels, cumulativeProgress, streakProgress);
-    });
-  }, [recordsForDisplay]);
+  const localAchievements = useMemo<AchievementItem[]>(
+    () => localAchievementItemsForRecords(recordsForDisplay),
+    [recordsForDisplay]
+  );
   const achievements = achievementBackendItems.length > 0 ? achievementBackendItems : localAchievements;
   const achievementDisplayItems = useMemo(() => buildAchievementDisplayItems(achievements), [achievements]);
   const achievementUnlockedDisplayItems = useMemo(

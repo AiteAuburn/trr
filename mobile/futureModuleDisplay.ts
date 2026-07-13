@@ -1,6 +1,8 @@
 import type { AppScreen } from "./navigationConfig";
+import { currentRecordTypeStreakDays } from "./analysisDataTransforms";
 import { formatLocalDateInput, localDateTimeInputs } from "./dateTimeTransforms";
 import { recordDateTimeDisplay, recordTypeLabel } from "./recordDisplay";
+import type { RecordItem } from "./recordBounds";
 import { detailPairDisplayItem, metricDisplayItem, resultChecklistItem } from "./sharedDisplayItems";
 
 const maxDisplayTextLength = 120;
@@ -539,6 +541,21 @@ export function localAchievementItemsForDefinition(
         newlyUnlocked: false
       }
     ];
+  });
+}
+
+export function localAchievementItemsForRecords(records: RecordItem[]): AchievementItem[] {
+  const maxObservedRecords = records.length;
+  const maxObservedStreak = Math.max(
+    ...achievementCategoryDefinitions.map((definition) => currentRecordTypeStreakDays(records, definition.recordType)),
+    0
+  );
+  const dynamicLevels = achievementDynamicLevels(maxObservedRecords, maxObservedStreak);
+
+  return achievementCategoryDefinitions.flatMap((definition) => {
+    const cumulativeProgress = records.filter((record) => record.record_type === definition.recordType).length;
+    const streakProgress = currentRecordTypeStreakDays(records, definition.recordType);
+    return localAchievementItemsForDefinition(definition, dynamicLevels, cumulativeProgress, streakProgress);
   });
 }
 
