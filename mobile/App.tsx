@@ -2329,6 +2329,11 @@ export default function App() {
     toggleAnalysisPoint(index);
   }
 
+  function openManualRecordUnavailable(screen: AppScreen) {
+    setStatus(manualRecordCreateUnavailableStatusMessage(protectedBackendUnavailableMessage));
+    setCurrentScreen(screen);
+  }
+
   function enterManualRecordConfirm() {
     const validationError = validateRecordForm(
       manualRecordType,
@@ -2342,8 +2347,7 @@ export default function App() {
       return;
     }
     if (!protectedBackendReady) {
-      setStatus(manualRecordCreateUnavailableStatusMessage(protectedBackendUnavailableMessage));
-      setCurrentScreen("manualRecord");
+      openManualRecordUnavailable("manualRecord");
       return;
     }
     setCurrentScreen("manualRecordConfirm");
@@ -5928,8 +5932,7 @@ export default function App() {
       return;
     }
     if (!protectedBackendReady) {
-      setStatus(manualRecordCreateUnavailableStatusMessage(protectedBackendUnavailableMessage));
-      setCurrentScreen("manualRecordConfirm");
+      openManualRecordUnavailable("manualRecordConfirm");
       return;
     }
     if (!account || !activeProfile) {

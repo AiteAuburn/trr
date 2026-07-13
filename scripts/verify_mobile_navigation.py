@@ -3494,6 +3494,26 @@ def main() -> int:
             "function enterManualRecordConfirm()",
         )
         _assert_contains(
+            "manual record unavailable helper",
+            content,
+            "function openManualRecordUnavailable(screen: AppScreen)",
+        )
+        _assert_contains(
+            "manual record unavailable helper fields",
+            content,
+            "setStatus(manualRecordCreateUnavailableStatusMessage(protectedBackendUnavailableMessage));\n    setCurrentScreen(screen);",
+        )
+        _assert_contains(
+            "manual record confirm unavailable helper binding",
+            content,
+            'openManualRecordUnavailable("manualRecord");',
+        )
+        _assert_contains(
+            "manual record create unavailable helper binding",
+            content,
+            'openManualRecordUnavailable("manualRecordConfirm");',
+        )
+        _assert_contains(
             "manual record date-time now seed helper",
             content,
             "function seedManualRecordDateTimeForNow()",
