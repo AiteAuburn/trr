@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1386: Extract preview record edit validation display text
+
+Status: done
+
+Summary:
+
+- Added `previewRecordEditValidationDisplayText` to `mobile/recordStatusCopy.ts` for preview-record edit validation display text.
+- Replaced inline preview-record edit validation display construction in `mobile/App.tsx` with the extracted helper.
+- Kept preview edit field state, validation behavior, AI review return flow, save-disabled state, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1385: Extract manual record create display texts
 
 Status: done

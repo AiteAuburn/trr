@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1386 extract preview record edit validation display text
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `previewRecordEditValidationDisplayText` to `mobile/recordStatusCopy.ts` for preview-record edit validation display text.
+- Replaced inline preview-record edit validation display construction in `mobile/App.tsx` with the extracted helper.
+- Kept preview edit field state, validation behavior, AI review return flow, save-disabled state, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、preview edit field state、AI review return flow、candidate save behavior、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing future-module backend-unavailable display aggregation and broad status display wrappers separately.
+
 ### T1385 extract manual record create display texts
 
 類型：mobile / refactor / verifier / docs

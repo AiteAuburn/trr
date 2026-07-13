@@ -379,6 +379,7 @@ import {
   manualRecordCreateSuccessStatusMessage,
   manualRecordCreateSummaryMessage,
   manualRecordCreateUnavailableStatusMessage,
+  previewRecordEditValidationDisplayText,
   recordDeleteFailureStatusMessage,
   recordDeleteProgressStatusMessage,
   recordDeleteSuccessStatusMessage,
@@ -1973,7 +1974,7 @@ export default function App() {
   const recordEditDisplay = recordEditDisplayTexts(selectedRecordEditValidationError);
   const recordEditIntroDisplayText = recordEditDisplay.intro;
   const selectedRecordEditValidationDisplayText = recordEditDisplay.validation;
-  const previewRecordEditValidationDisplayText = boundUiMessage(previewRecordEditValidationError || "");
+  const previewRecordEditValidationDisplay = previewRecordEditValidationDisplayText(previewRecordEditValidationError);
   const parserRecoveryDisplayText = transcriptStatusDisplay.parserRecovery;
   const saveResultDisplay = saveResultDisplayTexts({
     lastSavedSummary,
@@ -7392,7 +7393,7 @@ export default function App() {
               </Pressable>
             </View>
             {previewRecordEditValidationError ? (
-              <Text style={styles.warningText}>{previewRecordEditValidationDisplayText}</Text>
+              <Text style={styles.warningText}>{previewRecordEditValidationDisplay}</Text>
             ) : null}
           </View>
         ) : null}
