@@ -2027,7 +2027,7 @@ export default function App() {
   function returnToTranscriptEdit() {
     setPreview(null);
     setSelectedPreviewIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
+    clearPreviewEditDraftFields();
     setCurrentScreen("transcriptReview");
     setStatus(transcriptReturnEditStatusMessage());
   }
@@ -2978,8 +2978,12 @@ export default function App() {
     setPreviewEditTime(dateTime.time);
   }
 
-  function seedEmptyPreviewEditStateForNow() {
+  function clearPreviewEditDraftFields() {
     setPreviewEditFields(emptyRecordEditFields());
+  }
+
+  function seedEmptyPreviewEditStateForNow() {
+    clearPreviewEditDraftFields();
     const nowInputs = localDateTimeInputs(new Date());
     setPreviewEditDate(nowInputs.date);
     setPreviewEditTime(nowInputs.time);
@@ -3052,7 +3056,7 @@ export default function App() {
 
   function returnFromPreviewRemoveConfirm() {
     clearPreviewMenuSelectionIndexes();
-    setPreviewEditFields(emptyRecordEditFields());
+    clearPreviewEditDraftFields();
     setCurrentScreen(previewActionReturnScreen);
     setStatus(aiCandidateRemoveCancelStatusMessage());
   }
@@ -3210,7 +3214,7 @@ export default function App() {
         setStatus(aiCandidateEditSuccessStatusMessage());
       }
       setSelectedPreviewIndex(null);
-      setPreviewEditFields(emptyRecordEditFields());
+      clearPreviewEditDraftFields();
       setDailyRecordMenuIndex(null);
       setCurrentScreen(previewActionReturnScreen);
     } catch (error) {

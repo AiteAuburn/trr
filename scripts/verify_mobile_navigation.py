@@ -3250,9 +3250,24 @@ def main() -> int:
             "setPreviewEditFields(recordPayloadToEditFields(record));",
         )
         _assert_contains(
+            "AI candidate edit draft field clear helper",
+            content,
+            "function clearPreviewEditDraftFields()",
+        )
+        _assert_contains(
+            "AI candidate edit draft field clear helper internals",
+            content,
+            "function clearPreviewEditDraftFields() {\n    setPreviewEditFields(emptyRecordEditFields());",
+        )
+        _assert_contains(
             "AI candidate edit seed empty now helper",
             content,
             "function seedEmptyPreviewEditStateForNow()",
+        )
+        _assert_contains(
+            "AI candidate edit seed empty uses field clear helper",
+            content,
+            "function seedEmptyPreviewEditStateForNow() {\n    clearPreviewEditDraftFields();",
         )
         _assert_contains(
             "AI candidate menu selection index clear helper",
@@ -3308,6 +3323,16 @@ def main() -> int:
             "AI candidate remove return index clear helper binding",
             content,
             "function returnFromPreviewRemoveConfirm() {\n    clearPreviewMenuSelectionIndexes();",
+        )
+        _assert_contains(
+            "AI candidate remove return field clear helper binding",
+            content,
+            "clearPreviewMenuSelectionIndexes();\n    clearPreviewEditDraftFields();",
+        )
+        _assert_contains(
+            "AI candidate edit save success field clear helper binding",
+            content,
+            "setSelectedPreviewIndex(null);\n      clearPreviewEditDraftFields();\n      setDailyRecordMenuIndex(null);",
         )
         _assert_contains(
             "AI candidate edit return binding",
