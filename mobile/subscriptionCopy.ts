@@ -170,6 +170,28 @@ export function accountSecurityBoundaryDisplayRows(
   }));
 }
 
+export function accountSecurityBoundaryDisplayRowsForState(value: {
+  account: unknown | null;
+  activeProfile: unknown | null;
+  allowMobileDevAuth: boolean;
+  protectedHeaderMode: string;
+  tokenStorageMode: string;
+  accessTokenTooLarge: boolean;
+  authSessionCount: number;
+  protectedBackendReady: boolean;
+}) {
+  return accountSecurityBoundaryDisplayRows(
+    Boolean(value.account),
+    Boolean(value.activeProfile),
+    value.allowMobileDevAuth,
+    value.protectedHeaderMode,
+    value.tokenStorageMode,
+    value.accessTokenTooLarge,
+    value.authSessionCount,
+    value.protectedBackendReady
+  );
+}
+
 export function profileNoActionBoundaryCopy() {
   return boundDisplayText(
     "此頁不寫入個人資料、不建立本機草稿、不呼叫 profile update API、不呼叫 AI，也不保存測試姓名或聯絡方式。",

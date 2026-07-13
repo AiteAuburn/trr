@@ -717,7 +717,7 @@ import {
   subscriptionComparisonDisplayRows as buildSubscriptionComparisonDisplayRows,
   subscriptionPaymentUnwiredCopy,
   subscriptionReadinessChecklistDisplayItems,
-  accountSecurityBoundaryDisplayRows,
+  accountSecurityBoundaryDisplayRowsForState,
   subscriptionStatusLabel,
   subscriptionStatusSummaryText,
   subscriptionSyncButtonLabel,
@@ -1610,16 +1610,16 @@ export default function App() {
   const subscriptionManagementReadinessChecklistItems =
     subscriptionManagementReadinessChecklistDisplayItems();
   const privacyControlDisplayRows = useMemo(() => buildPrivacyControlDisplayRows(), []);
-  const accountSecurityBoundaryRows = accountSecurityBoundaryDisplayRows(
-    Boolean(account),
-    Boolean(activeProfile),
+  const accountSecurityBoundaryRows = accountSecurityBoundaryDisplayRowsForState({
+    account,
+    activeProfile,
     allowMobileDevAuth,
     protectedHeaderMode,
     tokenStorageMode,
     accessTokenTooLarge,
-    authSessionDisplayItems.length,
+    authSessionCount: authSessionDisplayItems.length,
     protectedBackendReady
-  );
+  });
   const profileSettingsBoundaryRows = profileSettingsBoundaryDisplayRows(
     account,
     activeProfile,

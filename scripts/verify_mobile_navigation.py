@@ -2597,7 +2597,7 @@ def main() -> int:
         _assert_contains(
             "account security boundary rows helper binding",
             content,
-            "const accountSecurityBoundaryRows = accountSecurityBoundaryDisplayRows(",
+            "const accountSecurityBoundaryRows = accountSecurityBoundaryDisplayRowsForState({",
         )
         _assert_contains(
             "profile settings boundary rows helper binding",
@@ -5718,6 +5718,9 @@ def main() -> int:
             ("recording quota boundary warning row", "提醒規則"),
             ("recording quota boundary ai cost row", "0 次呼叫"),
             ("account security boundary rows helper", "function accountSecurityBoundaryDisplayRows("),
+            ("account security boundary rows state helper", "function accountSecurityBoundaryDisplayRowsForState(value: {"),
+            ("account security boundary rows state boolean account", "Boolean(value.account)"),
+            ("account security boundary rows state session count", "value.authSessionCount"),
             ("account security boundary token guard row", "Token guard"),
             ("account security boundary session list row", "Session list"),
             ("account security boundary protected API row", "保護 API"),
