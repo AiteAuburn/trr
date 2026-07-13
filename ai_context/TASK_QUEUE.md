@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1344: Extract History grouped record section display helper
+
+Status: done
+
+Summary:
+
+- Added `groupedRecordListDisplaySections` to `mobile/recordDisplay.ts` for History grouped record-section display shaping.
+- Replaced the inline grouped History section object construction in `mobile/App.tsx` with the extracted helper.
+- Kept History section key format, date labels, record display items, detail card behavior, and History grouping input unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, section key, and history record-list prefix are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1343: Extract Today record list display items helper
 
 Status: done

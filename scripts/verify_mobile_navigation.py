@@ -3988,6 +3988,26 @@ def main() -> int:
             "return records.map((record) => recordListDisplayItem(record, keyPrefix));",
         )
         _assert_contains(
+            "grouped history record display sections helper binding",
+            content,
+            "const groupedHistoryRecordDisplaySections = useMemo(\n    () => groupedRecordListDisplaySections(groupedHistoryRecords),",
+        )
+        _assert_contains(
+            "grouped record list display sections helper",
+            record_display_content,
+            "function groupedRecordListDisplaySections(groupedRecords: Array<readonly [string, RecordItem[]]>)",
+        )
+        _assert_contains(
+            "grouped record list section key",
+            record_display_content,
+            "key: `history-section-${boundIdentifier(date)}-${clampNumber(sectionIndex, 0, maxMobileCountValue)}`",
+        )
+        _assert_contains(
+            "grouped record list section history records",
+            record_display_content,
+            'records: recordListDisplayItems(sectionRecords, "history")',
+        )
+        _assert_contains(
             "record time display helper",
             record_display_content,
             "function recordTimeDisplay(value?: string)",

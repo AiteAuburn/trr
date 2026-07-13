@@ -74,6 +74,7 @@ import {
   dailyRecordEntryDisplayItem,
   displayPayload,
   displayTextValue,
+  groupedRecordListDisplaySections,
   manualRecordConfirmDisplayItem,
   pendingRecordDisplayItem,
   rejectedReasonLabel,
@@ -1091,12 +1092,7 @@ export default function App() {
     [todayRecords]
   );
   const groupedHistoryRecordDisplaySections = useMemo(
-    () =>
-      groupedHistoryRecords.map(([date, sectionRecords], sectionIndex) => ({
-        key: `history-section-${boundIdentifier(date)}-${clampNumber(sectionIndex, 0, maxMobileCountValue)}`,
-        dateLabel: boundDisplayText(date, 40),
-        records: sectionRecords.map((record) => recordListDisplayItem(record, "history"))
-      })),
+    () => groupedRecordListDisplaySections(groupedHistoryRecords),
     [groupedHistoryRecords]
   );
   const historyRecordsByDate = useMemo(() => {

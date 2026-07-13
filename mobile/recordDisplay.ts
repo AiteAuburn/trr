@@ -4,6 +4,7 @@ const maxDisplayTextLength = 120;
 const maxDisplayDetailTextLength = 240;
 const maxIdentifierTextLength = 128;
 const maxListItems = 12;
+const maxMobileCountValue = 1_000_000;
 const maxMobilePreviewRecords = 20;
 
 export type DailyRecordSectionId = "glucose" | "meal" | "exercise" | "weight" | "medication" | "note";
@@ -287,6 +288,14 @@ export function recordListDisplayItem(record: RecordItem, keyPrefix = "record") 
 
 export function recordListDisplayItems(records: RecordItem[], keyPrefix = "record") {
   return records.map((record) => recordListDisplayItem(record, keyPrefix));
+}
+
+export function groupedRecordListDisplaySections(groupedRecords: Array<readonly [string, RecordItem[]]>) {
+  return groupedRecords.map(([date, sectionRecords], sectionIndex) => ({
+    key: `history-section-${boundIdentifier(date)}-${clampNumber(sectionIndex, 0, maxMobileCountValue)}`,
+    dateLabel: boundDisplayText(date, 40),
+    records: recordListDisplayItems(sectionRecords, "history")
+  }));
 }
 
 export function recordDateDisplay(value?: string) {
