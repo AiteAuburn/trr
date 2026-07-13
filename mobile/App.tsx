@@ -5686,14 +5686,21 @@ export default function App() {
     openScreen("aiSaveFailure");
   }
 
+  function openRecordSummaryResult(
+    summary: string,
+    screen: "updateSuccess" | "deleteSuccess",
+    setSummary: (summary: string) => void
+  ) {
+    setSummary(summary);
+    openScreen(screen);
+  }
+
   function openUpdateSuccessResult(summary: string) {
-    setLastUpdatedSummary(summary);
-    openScreen("updateSuccess");
+    openRecordSummaryResult(summary, "updateSuccess", setLastUpdatedSummary);
   }
 
   function openDeleteSuccessResult(summary: string) {
-    setLastDeletedSummary(summary);
-    openScreen("deleteSuccess");
+    openRecordSummaryResult(summary, "deleteSuccess", setLastDeletedSummary);
   }
 
   function seedEmptyRecordEditStateForNow() {

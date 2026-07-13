@@ -3886,6 +3886,16 @@ def main() -> int:
             "const message = aiSaveFailureStatusMessage(error);\n      openAiSaveFailureResult(message);\n      setStatus(message);",
         )
         _assert_contains(
+            "record summary result helper",
+            content,
+            'function openRecordSummaryResult(\n    summary: string,\n    screen: "updateSuccess" | "deleteSuccess",',
+        )
+        _assert_contains(
+            "record summary result helper fields",
+            content,
+            "setSummary(summary);\n    openScreen(screen);",
+        )
+        _assert_contains(
             "record update success result helper",
             content,
             "function openUpdateSuccessResult(summary: string)",
@@ -3893,7 +3903,7 @@ def main() -> int:
         _assert_contains(
             "record update success result helper fields",
             content,
-            'setLastUpdatedSummary(summary);\n    openScreen("updateSuccess");',
+            'openRecordSummaryResult(summary, "updateSuccess", setLastUpdatedSummary);',
         )
         _assert_contains(
             "record update success result helper binding",
@@ -3908,7 +3918,7 @@ def main() -> int:
         _assert_contains(
             "record delete success result helper fields",
             content,
-            'setLastDeletedSummary(summary);\n    openScreen("deleteSuccess");',
+            'openRecordSummaryResult(summary, "deleteSuccess", setLastDeletedSummary);',
         )
         _assert_contains(
             "record edit seed empty now helper",
