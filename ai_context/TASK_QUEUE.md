@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1373: Extract manual record confirm display texts
+
+Status: done
+
+Summary:
+
+- Added `manualRecordConfirmDisplayTexts` to `mobile/recordWorkflowCopy.ts` for manual-record confirmation intro and busy-state submit label display text.
+- Replaced inline manual-record confirmation display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept manual-record confirmation copy, busy-state submit label, checklist, create request flow, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1372: Extract delete confirm display texts
 
 Status: done

@@ -352,6 +352,13 @@ export function manualRecordConfirmSubmitLabel(isBusy: boolean) {
   return boundDisplayText(isBusy ? "建立中..." : "確認建立", maxDisplayTextLength);
 }
 
+export function manualRecordConfirmDisplayTexts(isBusy: boolean) {
+  return {
+    intro: manualRecordConfirmIntroCopy(),
+    submit: manualRecordConfirmSubmitLabel(isBusy)
+  };
+}
+
 export function manualSubmitChecklistDisplayItems() {
   return [
     "不會呼叫 AI 或 LLM，成本為 0。",

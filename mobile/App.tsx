@@ -358,10 +358,9 @@ import {
   dailyRecordLeaveGuardPromptStatusMessage,
   dailyRecordLeaveGuardQuestionCopy,
   dailyRecordLeaveGuardTitleCopy,
-  manualRecordConfirmIntroCopy,
+  manualRecordConfirmDisplayTexts,
   manualRecordConfirmReadyStatusMessage,
   manualRecordConfirmReturnStatusMessage,
-  manualRecordConfirmSubmitLabel,
   manualRecordReturnStatusMessage,
   manualSubmitChecklistDisplayItems,
   parserBackendUnavailableStatusMessage,
@@ -1853,8 +1852,9 @@ export default function App() {
   const transcriptReviewPreflightPassedDisplayText = transcriptReviewPreflightPassedCopy();
   const previewRecordEditBoundaryDisplayText = previewRecordEditBoundaryCopy();
   const selectedRecordDisplayItem = selectedRecord ? recordDetailDisplayItem(selectedRecord) : null;
-  const manualRecordConfirmIntroDisplayText = manualRecordConfirmIntroCopy();
-  const manualRecordConfirmSubmitDisplayLabel = manualRecordConfirmSubmitLabel(isBusy);
+  const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayTexts(isBusy);
+  const manualRecordConfirmIntroDisplayText = manualRecordConfirmDisplayTextsForState.intro;
+  const manualRecordConfirmSubmitDisplayLabel = manualRecordConfirmDisplayTextsForState.submit;
   const deleteConfirmDisplay = deleteConfirmDisplayTexts(selectedRecordDisplayItem, isBusy);
   const deleteConfirmIntroDisplayText = deleteConfirmDisplay.intro;
   const deleteConfirmRecordMetaDisplayText = deleteConfirmDisplay.recordMeta;

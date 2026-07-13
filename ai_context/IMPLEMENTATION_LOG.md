@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1373 extract manual record confirm display texts
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `manualRecordConfirmDisplayTexts` to `mobile/recordWorkflowCopy.ts` for manual-record confirmation intro and busy-state submit label display text.
+- Replaced inline manual-record confirmation display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept manual-record confirmation copy, busy-state submit label, checklist, create request flow, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、manual record create API behavior、manual record validation behavior、record rendering、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining App.tsx workflow display aggregation and screen-local calculations separately.
+
 ### T1372 extract delete confirm display texts
 
 類型：mobile / refactor / verifier / docs
