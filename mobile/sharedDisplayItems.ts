@@ -92,6 +92,10 @@ export function valueLabelDisplayItem(value: readonly [string, string]) {
   };
 }
 
+export function valueLabelDisplayItems(values: ReadonlyArray<readonly [string, string]>) {
+  return values.map(valueLabelDisplayItem);
+}
+
 export function manualRecordTypeDisplayItem<T extends string>(value: { id: T; label: string }) {
   const label = boundDisplayText(value.label || "紀錄", 60);
   return {

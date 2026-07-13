@@ -280,6 +280,7 @@ import {
   resultChecklistItem,
   sessionManagementPreviewDisplayItem,
   valueLabelDisplayItem,
+  valueLabelDisplayItems,
   visualSmokeRouteJumpDisplayItem
 } from "./sharedDisplayItems";
 import {
@@ -1691,7 +1692,7 @@ export default function App() {
     []
   );
   const glucoseUnitDisplayOptions = useMemo(() => optionDisplayItems(glucoseUnitOptions), []);
-  const glucoseTimingDisplayOptions = useMemo(() => glucoseTimingOptions.map(valueLabelDisplayItem), []);
+  const glucoseTimingDisplayOptions = useMemo(() => valueLabelDisplayItems(glucoseTimingOptions), []);
   const mealTypeDisplayOptions = useMemo(() => mealTypeOptions.map(valueLabelDisplayItem), []);
   const manualRecordTypeDisplayOptions = useMemo(
     () => manualRecordTypes.map(manualRecordTypeDisplayItem),
