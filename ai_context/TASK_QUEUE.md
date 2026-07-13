@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T1413: Extract auth logout main status messages
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/authStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `authLogoutMainStatusMessage`, `authLogoutLocalClearStatusMessage`, and `authLogoutAllMainStatusMessage` to `mobile/authStatusCopy.ts`.
+- Replaced inline bounded auth logout main status strings in `mobile/App.tsx` with the extracted helpers.
+- Kept `/auth/logout`, `/auth/logout-all`, refresh-token revoke, protected headers, clear-local-session behavior, auth action status handling, and session loading unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue auditing remaining visual-smoke and record action-local status helpers separately.
+
 ### T1412: Extract store redemption use status messages
 
 Status: done

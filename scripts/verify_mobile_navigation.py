@@ -5473,6 +5473,9 @@ def main() -> int:
             ("auth sessions load handler", "function loadAuthSessionsFromSecurity()"),
             ("auth logout handler", "function logoutAuthSessionFromSecurity()"),
             ("auth logout all handler", "function logoutAllAuthSessionsFromSecurity()"),
+            ("auth logout main status binding", "setStatus(authLogoutMainStatusMessage());"),
+            ("auth logout local clear status binding", "setStatus(authLogoutLocalClearStatusMessage());"),
+            ("auth logout all main status binding", "setStatus(authLogoutAllMainStatusMessage());"),
             ("auth session management status handler", "function showAuthSessionManagementStatus(actionStatus: string)"),
             (
                 "auth session management preview press handler",
@@ -5999,6 +6002,12 @@ def main() -> int:
             ("auth boundary provider control copy", "Apple / Google / Email 登入需由正式 auth provider 控制。"),
             ("auth boundary secure storage copy", "mobile token persistence 只可走 SecureStore / Keychain / Keystore；不可 fallback 到一般 storage。"),
             ("auth boundary protected API copy", "所有受保護 API 都要由後端驗證帳號、profile 與權限 scope。"),
+            ("auth logout main status helper", "function authLogoutMainStatusMessage()"),
+            ("auth logout main status copy", 'return boundUiMessage("已登出");'),
+            ("auth logout local clear status helper", "function authLogoutLocalClearStatusMessage()"),
+            ("auth logout local clear status copy", 'return boundUiMessage("已清除本機 token");'),
+            ("auth logout all main status helper", "function authLogoutAllMainStatusMessage()"),
+            ("auth logout all main status copy", 'return boundUiMessage("已登出全部裝置");'),
         ):
             _assert_contains(label, auth_status_copy_content, marker)
         for label, marker in (

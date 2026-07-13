@@ -420,8 +420,11 @@ import {
 } from "./recordStatusCopy";
 import {
   authLogoutAllProgressStatusMessage,
+  authLogoutAllMainStatusMessage,
   authLogoutAllSuccessStatusMessage,
   authLogoutFailureStatusMessage,
+  authLogoutLocalClearStatusMessage,
+  authLogoutMainStatusMessage,
   authLogoutProgressStatusMessage,
   authLogoutSuccessStatusMessage,
   authOperationBusyStatusMessage,
@@ -2500,11 +2503,11 @@ export default function App() {
       });
       clearMobileSessionState();
       setAuthActionStatus(authLogoutSuccessStatusMessage());
-      setStatus(boundUiMessage("已登出"));
+      setStatus(authLogoutMainStatusMessage());
     } catch (error) {
       clearMobileSessionState();
       setAuthActionStatus(authLogoutFailureStatusMessage(error));
-      setStatus(boundUiMessage("已清除本機 token"));
+      setStatus(authLogoutLocalClearStatusMessage());
     } finally {
       setIsAuthOperationInFlight(false);
     }
@@ -2533,11 +2536,11 @@ export default function App() {
       });
       clearMobileSessionState();
       setAuthActionStatus(authLogoutAllSuccessStatusMessage(response.revoked_sessions));
-      setStatus(boundUiMessage("已登出全部裝置"));
+      setStatus(authLogoutAllMainStatusMessage());
     } catch (error) {
       clearMobileSessionState();
       setAuthActionStatus(authLogoutFailureStatusMessage(error));
-      setStatus(boundUiMessage("已清除本機 token"));
+      setStatus(authLogoutLocalClearStatusMessage());
     } finally {
       setIsAuthOperationInFlight(false);
     }

@@ -227,6 +227,14 @@ export function authLogoutFailureStatusMessage(error: unknown) {
   return safeUiError(error, "logout revoke 失敗；已保守清除本機 token，請稍後重新確認 session。");
 }
 
+export function authLogoutMainStatusMessage() {
+  return boundUiMessage("已登出");
+}
+
+export function authLogoutLocalClearStatusMessage() {
+  return boundUiMessage("已清除本機 token");
+}
+
 export function authLogoutAllProgressStatusMessage() {
   return boundUiMessage("正在撤銷全部 session...");
 }
@@ -235,6 +243,10 @@ export function authLogoutAllSuccessStatusMessage(revokedSessions: number) {
   return boundUiMessage(
     `已送出全部裝置登出；backend 回報撤銷 ${clampNumber(revokedSessions, 0, maxMobileCountValue)} 個 session。`
   );
+}
+
+export function authLogoutAllMainStatusMessage() {
+  return boundUiMessage("已登出全部裝置");
 }
 
 export function authSessionsProgressStatusMessage() {

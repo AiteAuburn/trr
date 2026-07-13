@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1413 extract auth logout main status messages
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/authStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `authLogoutMainStatusMessage`, `authLogoutLocalClearStatusMessage`, and `authLogoutAllMainStatusMessage` to `mobile/authStatusCopy.ts`.
+- Replaced inline bounded auth logout main status strings in `mobile/App.tsx` with the extracted helpers.
+- Kept `/auth/logout`, `/auth/logout-all`, refresh-token revoke, protected headers, clear-local-session behavior, auth action status handling, and session loading unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、`/auth/logout` request path、`/auth/logout-all` request path、refresh-token revoke、protected headers、clear-local-session behavior、auth action status handling、session loading、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining visual-smoke and record action-local status helpers separately.
+
 ### T1412 extract store redemption use status messages
 
 類型：mobile / refactor / verifier / docs
