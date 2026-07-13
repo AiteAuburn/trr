@@ -5546,6 +5546,16 @@ def main() -> int:
             "function openSettingsRow(row: SettingsRow)",
         )
         _assert_contains(
+            "settings row destination helper binding",
+            content,
+            "const subpageTarget = settingsRowSubpageTarget(row);",
+        )
+        _assert_contains(
+            "settings row destination helper screen set",
+            content,
+            "setCurrentScreen(subpageTarget);",
+        )
+        _assert_contains(
             "settings row press wrapper",
             content,
             "function pressSettingsRow(row: ReturnType<typeof settingsRowDisplayItem>)",
@@ -5569,6 +5579,9 @@ def main() -> int:
             ("settings rows config", "export const settingsRows: SettingsRow[] = ["),
             ("settings display rows helper", "export function settingsDisplayRows()"),
             ("settings display rows map", "return settingsRows.map(settingsRowDisplayItem);"),
+            ("settings subpage target helper", 'export function settingsRowSubpageTarget(row: Pick<SettingsRow, "id">): AppScreen | null'),
+            ("settings auth subpage target", 'return "accountSecurity";'),
+            ("settings subscription management subpage target", 'return "subscriptionManagement";'),
             ("auth provider preview rows config", "export const authProviderPreviews: ReadonlyArray<AuthProviderPreview> = ["),
             ("auth provider preview display helper", "export function authProviderPreviewDisplayItem(value: AuthProviderPreview)"),
             ("auth provider display items helper", "export function authProviderDisplayItems()"),

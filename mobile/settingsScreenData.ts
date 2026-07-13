@@ -136,6 +136,28 @@ export function settingsDisplayRows() {
   return settingsRows.map(settingsRowDisplayItem);
 }
 
+export function settingsRowSubpageTarget(row: Pick<SettingsRow, "id">): AppScreen | null {
+  if (row.id === "auth") {
+    return "accountSecurity";
+  }
+  if (row.id === "profile") {
+    return "profileSettings";
+  }
+  if (row.id === "reminders") {
+    return "reminderSettings";
+  }
+  if (row.id === "quota") {
+    return "recordingQuotaSettings";
+  }
+  if (row.id === "privacy") {
+    return "privacySettings";
+  }
+  if (row.id === "subscription") {
+    return "subscriptionManagement";
+  }
+  return null;
+}
+
 export function authProviderPreviewDisplayItem(value: AuthProviderPreview) {
   const item = previewTupleDisplayItem([value.title, value.status, value.copy]);
   const provider = boundOidcProviderForRequest(value.provider);

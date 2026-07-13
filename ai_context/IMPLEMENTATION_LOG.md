@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1423 extract settings row subpage target helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/settingsScreenData.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `settingsRowSubpageTarget` to `mobile/settingsScreenData.ts` for settings row id to subpage routing.
+- Replaced the inline settings row id chain in `mobile/App.tsx` with the helper while keeping subscription/tutorial target handling in App.
+- Kept UI copy/layout, settings rows, auth/session behavior, backend calls, model settings, and screen return behavior unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1422 extract recording transcript auto-open guard
 
 類型：mobile / refactor / verifier / docs

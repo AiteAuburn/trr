@@ -694,6 +694,7 @@ import {
   sessionManagementDisplayItems as buildSessionManagementDisplayItems,
   settingsDisplayRows as buildSettingsDisplayRows,
   settingsRowDisplayItem,
+  settingsRowSubpageTarget,
   subscriptionManagementDisplayRows as buildSubscriptionManagementDisplayRows,
   tutorialDisplaySteps as buildTutorialDisplaySteps,
   type SettingsRow
@@ -3377,28 +3378,9 @@ export default function App() {
   }
 
   function openSettingsRow(row: SettingsRow) {
-    if (row.id === "auth") {
-      setCurrentScreen("accountSecurity");
-      return;
-    }
-    if (row.id === "profile") {
-      setCurrentScreen("profileSettings");
-      return;
-    }
-    if (row.id === "reminders") {
-      setCurrentScreen("reminderSettings");
-      return;
-    }
-    if (row.id === "quota") {
-      setCurrentScreen("recordingQuotaSettings");
-      return;
-    }
-    if (row.id === "privacy") {
-      setCurrentScreen("privacySettings");
-      return;
-    }
-    if (row.id === "subscription") {
-      setCurrentScreen("subscriptionManagement");
+    const subpageTarget = settingsRowSubpageTarget(row);
+    if (subpageTarget) {
+      setCurrentScreen(subpageTarget);
       return;
     }
     if (row.target === "subscription") {
