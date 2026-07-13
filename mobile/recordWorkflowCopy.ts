@@ -184,6 +184,20 @@ export function aiReviewBackendRequiredCopy() {
   return boundDisplayText("請先連線 backend，才可儲存候選紀錄。", maxDisplayDetailTextLength);
 }
 
+export function aiReviewDisplayTexts() {
+  return {
+    noCandidateTitle: aiReviewNoCandidateTitleCopy(),
+    noCandidateBody: aiReviewNoCandidateBodyCopy(),
+    noCandidateBoundary: aiReviewNoCandidateBoundaryCopy(),
+    noPreviewTitle: aiReviewNoPreviewTitleCopy(),
+    noPreviewBody: aiReviewNoPreviewBodyCopy(),
+    intro: aiReviewIntroCopy(),
+    lowConfidence: aiReviewLowConfidenceCopy(),
+    rejectedEvents: aiReviewRejectedEventsCopy(),
+    backendRequired: aiReviewBackendRequiredCopy()
+  };
+}
+
 export function aiReviewCostBoundaryChecklistDisplayItems() {
   return [
     "此頁只顯示 parser 已回傳的候選紀錄。",

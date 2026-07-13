@@ -2415,6 +2415,21 @@ def main() -> int:
             "const aiReviewCostBoundaryChecklistItems = aiReviewCostBoundaryChecklistDisplayItems();",
         )
         _assert_contains(
+            "AI review display helper binding",
+            content,
+            "const aiReviewDisplay = aiReviewDisplayTexts();",
+        )
+        _assert_contains(
+            "AI review no candidate title display binding",
+            content,
+            "const aiReviewNoCandidateTitleDisplayText = aiReviewDisplay.noCandidateTitle;",
+        )
+        _assert_contains(
+            "AI review backend required display binding",
+            content,
+            "const aiReviewBackendRequiredDisplayText = aiReviewDisplay.backendRequired;",
+        )
+        _assert_contains(
             "transcript review checklist helper binding",
             content,
             "const transcriptReviewCostBoundaryChecklistItems = transcriptReviewCostBoundaryChecklistDisplayItems(",
@@ -3843,6 +3858,11 @@ def main() -> int:
             ("AI review rejected-events helper", "function aiReviewRejectedEventsCopy()"),
             ("AI review rejected reason helper", "function aiReviewRejectedReasonCopy(reasonLabel: string)"),
             ("AI review backend-required helper", "function aiReviewBackendRequiredCopy()"),
+            ("AI review display texts helper", "function aiReviewDisplayTexts()"),
+            ("AI review display texts no candidate title binding", "noCandidateTitle: aiReviewNoCandidateTitleCopy()"),
+            ("AI review display texts no preview body binding", "noPreviewBody: aiReviewNoPreviewBodyCopy()"),
+            ("AI review display texts rejected events binding", "rejectedEvents: aiReviewRejectedEventsCopy()"),
+            ("AI review display texts backend required binding", "backendRequired: aiReviewBackendRequiredCopy()"),
             ("AI review cost boundary checklist helper", "function aiReviewCostBoundaryChecklistDisplayItems()"),
             ("AI review cost boundary parser copy", "此頁只顯示 parser 已回傳的候選紀錄。"),
             ("AI review cost boundary no rerun copy", "逐筆編輯、移除或進入儲存確認都不會重新呼叫 AI。"),

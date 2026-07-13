@@ -325,16 +325,8 @@ import {
   aiPartialSaveFailureStatusMessage,
   aiPartialSaveRecordsStatusMessage,
   aiPartialSaveSummaryMessage,
-  aiReviewBackendRequiredCopy,
   aiReviewCostBoundaryChecklistDisplayItems,
-  aiReviewIntroCopy,
-  aiReviewLowConfidenceCopy,
-  aiReviewNoCandidateBodyCopy,
-  aiReviewNoCandidateBoundaryCopy,
-  aiReviewNoCandidateTitleCopy,
-  aiReviewNoPreviewBodyCopy,
-  aiReviewNoPreviewTitleCopy,
-  aiReviewRejectedEventsCopy,
+  aiReviewDisplayTexts,
   aiRemoveConfirmDisplayTexts,
   aiSaveConfirmBoundaryDisplayRows,
   aiSaveConfirmChecklistDisplayItems,
@@ -1190,15 +1182,16 @@ export default function App() {
     preview ? aiReviewDateLabel(preview.records) : "",
     maxDisplayDetailTextLength
   );
-  const aiReviewNoCandidateTitleDisplayText = aiReviewNoCandidateTitleCopy();
-  const aiReviewNoCandidateBodyDisplayText = aiReviewNoCandidateBodyCopy();
-  const aiReviewNoCandidateBoundaryDisplayText = aiReviewNoCandidateBoundaryCopy();
-  const aiReviewNoPreviewTitleDisplayText = aiReviewNoPreviewTitleCopy();
-  const aiReviewNoPreviewBodyDisplayText = aiReviewNoPreviewBodyCopy();
-  const aiReviewIntroDisplayText = aiReviewIntroCopy();
-  const aiReviewLowConfidenceDisplayText = aiReviewLowConfidenceCopy();
-  const aiReviewRejectedEventsDisplayText = aiReviewRejectedEventsCopy();
-  const aiReviewBackendRequiredDisplayText = aiReviewBackendRequiredCopy();
+  const aiReviewDisplay = aiReviewDisplayTexts();
+  const aiReviewNoCandidateTitleDisplayText = aiReviewDisplay.noCandidateTitle;
+  const aiReviewNoCandidateBodyDisplayText = aiReviewDisplay.noCandidateBody;
+  const aiReviewNoCandidateBoundaryDisplayText = aiReviewDisplay.noCandidateBoundary;
+  const aiReviewNoPreviewTitleDisplayText = aiReviewDisplay.noPreviewTitle;
+  const aiReviewNoPreviewBodyDisplayText = aiReviewDisplay.noPreviewBody;
+  const aiReviewIntroDisplayText = aiReviewDisplay.intro;
+  const aiReviewLowConfidenceDisplayText = aiReviewDisplay.lowConfidence;
+  const aiReviewRejectedEventsDisplayText = aiReviewDisplay.rejectedEvents;
+  const aiReviewBackendRequiredDisplayText = aiReviewDisplay.backendRequired;
   const hasAiSaveConfirmWarnings =
     lowConfidencePreviewRecordCount > 0 || rejectedPreviewEventCount > 0;
   const isAiSaveConfirmBlockedByBackend = !protectedBackendReady;
