@@ -2111,21 +2111,23 @@ export default function App() {
     setCurrentScreen("manualRecord");
   }
 
+  function openManualRecordWithStatus(returnScreen: AppScreen, statusMessage: string) {
+    openManualRecord(returnScreen);
+    setStatus(statusMessage);
+  }
+
   function openRecordManualRecord() {
-    openManualRecord("record");
-    setStatus(recordManualEntryStatusMessage());
+    openManualRecordWithStatus("record", recordManualEntryStatusMessage());
   }
 
   function openAiReviewManualRecord() {
     clearPreviewSelectionState();
-    openManualRecord("aiReview");
-    setStatus(aiReviewManualEntryStatusMessage());
+    openManualRecordWithStatus("aiReview", aiReviewManualEntryStatusMessage());
   }
 
   function openTranscriptReviewManualRecord() {
     clearPreviewSelectionState();
-    openManualRecord("transcriptReview");
-    setStatus(transcriptReviewManualEntryStatusMessage());
+    openManualRecordWithStatus("transcriptReview", transcriptReviewManualEntryStatusMessage());
   }
 
   function returnFromManualRecord() {
@@ -2144,8 +2146,7 @@ export default function App() {
   }
 
   function openTutorialManualRecord() {
-    openManualRecord("tutorial");
-    setStatus(tutorialManualEntryStatusMessage());
+    openManualRecordWithStatus("tutorial", tutorialManualEntryStatusMessage());
   }
 
   function openTodayManualRecord() {

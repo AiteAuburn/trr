@@ -2559,14 +2559,49 @@ def main() -> int:
             "function openRecordManualRecord()",
         )
         _assert_contains(
+            "manual record status helper",
+            content,
+            "function openManualRecordWithStatus(returnScreen: AppScreen, statusMessage: string)",
+        )
+        _assert_contains(
+            "manual record status helper fields",
+            content,
+            "openManualRecord(returnScreen);\n    setStatus(statusMessage);",
+        )
+        _assert_contains(
+            "record manual entry status helper binding",
+            content,
+            'openManualRecordWithStatus("record", recordManualEntryStatusMessage());',
+        )
+        _assert_contains(
             "AI review manual entry handler",
             content,
             "function openAiReviewManualRecord()",
         )
         _assert_contains(
+            "AI review manual entry status helper binding",
+            content,
+            'openManualRecordWithStatus("aiReview", aiReviewManualEntryStatusMessage());',
+        )
+        _assert_contains(
+            "AI review manual entry clears selection before helper",
+            content,
+            'function openAiReviewManualRecord() {\n    clearPreviewSelectionState();\n    openManualRecordWithStatus("aiReview", aiReviewManualEntryStatusMessage());',
+        )
+        _assert_contains(
             "transcript review manual entry handler",
             content,
             "function openTranscriptReviewManualRecord()",
+        )
+        _assert_contains(
+            "transcript review manual entry status helper binding",
+            content,
+            'openManualRecordWithStatus("transcriptReview", transcriptReviewManualEntryStatusMessage());',
+        )
+        _assert_contains(
+            "transcript review manual entry clears selection before helper",
+            content,
+            'function openTranscriptReviewManualRecord() {\n    clearPreviewSelectionState();\n    openManualRecordWithStatus("transcriptReview", transcriptReviewManualEntryStatusMessage());',
         )
         _assert_contains(
             "record manual entry binding",
@@ -2607,6 +2642,11 @@ def main() -> int:
             "tutorial manual entry handler",
             content,
             "function openTutorialManualRecord()",
+        )
+        _assert_contains(
+            "tutorial manual entry status helper binding",
+            content,
+            'openManualRecordWithStatus("tutorial", tutorialManualEntryStatusMessage());',
         )
         _assert_contains(
             "manual record return binding",
