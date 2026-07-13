@@ -2396,6 +2396,11 @@ export default function App() {
     setRecordsHasMore(false);
   }
 
+  function clearBasicReportCache() {
+    setBasicReport(null);
+    setBasicReportKey("");
+  }
+
   function clearMobileSessionState(options: { clearAuthTokens?: boolean } = {}) {
     const clearAuthTokens = options.clearAuthTokens ?? true;
     visualSmokePreviewActive.current = false;
@@ -2427,8 +2432,7 @@ export default function App() {
     setRecords([]);
     setRecordsStatus(recordSyncInitialStatusMessage());
     setRecordsHasMore(false);
-    setBasicReport(null);
-    setBasicReportKey("");
+    clearBasicReportCache();
     latestBootKey.current = "";
     bootInFlight.current = false;
     latestQuotaSyncKey.current = "";
@@ -2444,7 +2448,7 @@ export default function App() {
     clearDailyRecordDraftOrganizationState();
     clearTranscriptDraftState();
     setSelectedRecord(null);
-    setBasicReport(null);
+    clearBasicReportCache();
     setReportStatus(detailedReportResetStatusMessage());
   }
 
@@ -4310,8 +4314,7 @@ export default function App() {
 
   async function loadBasicReportForCurrentRange(mode: "analysis" | "detailed") {
     if (!protectedBackendReady) {
-      setBasicReport(null);
-      setBasicReportKey("");
+      clearBasicReportCache();
       setIsReportLoading(false);
       setReportStatus(detailedReportUnavailableStatusMessage(protectedBackendUnavailableMessage));
       return false;
@@ -4361,8 +4364,7 @@ export default function App() {
       return true;
     } catch {
       if (latestReportLoadKey.current === reportKey) {
-        setBasicReport(null);
-        setBasicReportKey("");
+        clearBasicReportCache();
         setReportStatus(mode === "analysis" ? analysisReportFailureStatusMessage() : detailedReportFailureStatusMessage());
       }
       return false;
