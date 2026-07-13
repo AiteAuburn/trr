@@ -80,6 +80,7 @@ import {
   recordDateTimeDisplay,
   recordDetailDisplayItem,
   recordListDisplayItem,
+  recordListDisplayItems,
   recordTypeIcon,
   recordTypeLabel
 } from "./recordDisplay";
@@ -1086,7 +1087,7 @@ export default function App() {
     return Array.from(groups.entries());
   }, [historyRecords]);
   const todayRecordDisplayItems = useMemo(
-    () => todayRecords.map((record) => recordListDisplayItem(record, "today")),
+    () => recordListDisplayItems(todayRecords, "today"),
     [todayRecords]
   );
   const groupedHistoryRecordDisplaySections = useMemo(

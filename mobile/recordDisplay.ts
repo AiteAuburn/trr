@@ -285,6 +285,10 @@ export function recordListDisplayItem(record: RecordItem, keyPrefix = "record") 
   };
 }
 
+export function recordListDisplayItems(records: RecordItem[], keyPrefix = "record") {
+  return records.map((record) => recordListDisplayItem(record, keyPrefix));
+}
+
 export function recordDateDisplay(value?: string) {
   if (!value) {
     return "尚無";

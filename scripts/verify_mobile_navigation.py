@@ -3963,6 +3963,11 @@ def main() -> int:
             "function pressTodayRecordDetailCard(item: ReturnType<typeof recordListDisplayItem>)",
         )
         _assert_contains(
+            "today record display items helper binding",
+            content,
+            "const todayRecordDisplayItems = useMemo(\n    () => recordListDisplayItems(todayRecords, \"today\"),",
+        )
+        _assert_contains(
             "record list accessibility item",
             record_display_content,
             "accessibilityLabel: boundDisplayText(`查看${typeLabel}紀錄：${payloadSummary}，時間 ${timeLabel}`, maxDisplayDetailTextLength)",
@@ -3971,6 +3976,16 @@ def main() -> int:
             "record list display item helper",
             record_display_content,
             "function recordListDisplayItem(record: RecordItem, keyPrefix = \"record\")",
+        )
+        _assert_contains(
+            "record list display items helper",
+            record_display_content,
+            "function recordListDisplayItems(records: RecordItem[], keyPrefix = \"record\")",
+        )
+        _assert_contains(
+            "record list display items map",
+            record_display_content,
+            "return records.map((record) => recordListDisplayItem(record, keyPrefix));",
         )
         _assert_contains(
             "record time display helper",
