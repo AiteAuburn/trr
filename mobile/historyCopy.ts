@@ -43,6 +43,17 @@ export function loadedRecordActionCopy() {
   return boundDisplayText("點擊真實紀錄可查看詳情並進行編輯或刪除。", maxDisplayDetailTextLength);
 }
 
+export function historyCalendarDisplayTexts(monthStart: Date, selectedDate: string) {
+  return {
+    title: boundDisplayText(`${monthStart.getFullYear()} 年 ${monthStart.getMonth() + 1} 月`, 40),
+    selectedDate: boundDisplayText(selectedDate, 40),
+    previousMonthLabel: boundDisplayText("上一月", 20),
+    nextMonthLabel: boundDisplayText("下一月", 20),
+    previousMonthAccessibility: boundDisplayText("查看上一個月份月曆，不呼叫 AI 或寫入資料", maxDisplayDetailTextLength),
+    nextMonthAccessibility: boundDisplayText("查看下一個月份月曆，不呼叫 AI 或寫入資料", maxDisplayDetailTextLength)
+  };
+}
+
 export function historyBoundaryChecklistDisplayItems(
   recordSyncLimit: number,
   recordCacheLimit: number,

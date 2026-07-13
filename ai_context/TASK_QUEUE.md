@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1379: Extract history calendar display texts
+
+Status: done
+
+Summary:
+
+- Added `historyCalendarDisplayTexts` to `mobile/historyCopy.ts` for history calendar title, selected-date label, month button labels, and month navigation accessibility labels.
+- Replaced inline history calendar display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept history records-by-date grouping, month day generation, selected date behavior, month navigation handlers, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1378: Extract AI save confirm display texts
 
 Status: done

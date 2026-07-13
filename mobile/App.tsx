@@ -533,6 +533,7 @@ import {
 } from "./firstVersionFlowCopy";
 import {
   historyBoundaryChecklistDisplayItems,
+  historyCalendarDisplayTexts,
   historyManualEntryStatusMessage,
   historyNoRangeRecordsBodyCopy,
   historyNoRangeRecordsTitleCopy,
@@ -1064,10 +1065,8 @@ export default function App() {
     const base = Number.isNaN(selected.getTime()) ? new Date() : selected;
     return new Date(base.getFullYear(), base.getMonth(), 1);
   }, [selectedHistoryDate]);
-  const historyCalendarTitle = boundDisplayText(
-    `${historyCalendarMonthStart.getFullYear()} 年 ${historyCalendarMonthStart.getMonth() + 1} 月`,
-    40
-  );
+  const historyCalendarDisplay = historyCalendarDisplayTexts(historyCalendarMonthStart, selectedHistoryDate);
+  const historyCalendarTitle = historyCalendarDisplay.title;
   const historyCalendarDisplayItems = useMemo(() => {
     const year = historyCalendarMonthStart.getFullYear();
     const month = historyCalendarMonthStart.getMonth();
@@ -1103,17 +1102,11 @@ export default function App() {
     0,
     maxMobileCountValue
   );
-  const selectedHistoryDateDisplayText = boundDisplayText(selectedHistoryDate, 40);
-  const historyPreviousMonthButtonLabel = boundDisplayText("上一月", 20);
-  const historyNextMonthButtonLabel = boundDisplayText("下一月", 20);
-  const historyPreviousMonthAccessibilityLabel = boundDisplayText(
-    "查看上一個月份月曆，不呼叫 AI 或寫入資料",
-    maxDisplayDetailTextLength
-  );
-  const historyNextMonthAccessibilityLabel = boundDisplayText(
-    "查看下一個月份月曆，不呼叫 AI 或寫入資料",
-    maxDisplayDetailTextLength
-  );
+  const selectedHistoryDateDisplayText = historyCalendarDisplay.selectedDate;
+  const historyPreviousMonthButtonLabel = historyCalendarDisplay.previousMonthLabel;
+  const historyNextMonthButtonLabel = historyCalendarDisplay.nextMonthLabel;
+  const historyPreviousMonthAccessibilityLabel = historyCalendarDisplay.previousMonthAccessibility;
+  const historyNextMonthAccessibilityLabel = historyCalendarDisplay.nextMonthAccessibility;
   const analysisSelectedDateBounds = useMemo(
     () => analysisDateBounds(analysisRange, analysisCustomStart, analysisCustomEnd),
     [analysisCustomEnd, analysisCustomStart, analysisRange]

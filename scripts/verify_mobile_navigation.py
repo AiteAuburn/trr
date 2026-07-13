@@ -4353,8 +4353,9 @@ def main() -> int:
             ("history calendar month offset handler", "function selectHistoryCalendarMonthOffset(offset: number)"),
             ("history calendar previous month handler", "function openPreviousHistoryMonth()"),
             ("history calendar next month handler", "function openNextHistoryMonth()"),
-            ("history calendar previous month accessibility", 'const historyPreviousMonthAccessibilityLabel = boundDisplayText('),
-            ("history calendar next month accessibility", 'const historyNextMonthAccessibilityLabel = boundDisplayText('),
+            ("history calendar display helper binding", "const historyCalendarDisplay = historyCalendarDisplayTexts(historyCalendarMonthStart, selectedHistoryDate);"),
+            ("history calendar title display binding", "const historyCalendarTitle = historyCalendarDisplay.title;"),
+            ("history calendar previous month accessibility binding", "const historyPreviousMonthAccessibilityLabel = historyCalendarDisplay.previousMonthAccessibility;"),
             ("history records by date map", "const historyRecordsByDate = useMemo(() => {"),
             ("history calendar display items", "const historyCalendarDisplayItems = useMemo(() => {"),
             ("history calendar component binding", "<HistoryCalendarMonthPicker\n              days={historyCalendarDisplayItems}"),
@@ -4382,6 +4383,14 @@ def main() -> int:
             ("history raw records render", "rawItems={selectedHistoryRawDisplayItems}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("history calendar display helper", "function historyCalendarDisplayTexts(monthStart: Date, selectedDate: string)"),
+            ("history calendar display title", "title: boundDisplayText(`${monthStart.getFullYear()} 年 ${monthStart.getMonth() + 1} 月`, 40)"),
+            ("history calendar display selected date", "selectedDate: boundDisplayText(selectedDate, 40)"),
+            ("history calendar previous month label", 'previousMonthLabel: boundDisplayText("上一月", 20)'),
+            ("history calendar next month accessibility", 'nextMonthAccessibility: boundDisplayText("查看下一個月份月曆，不呼叫 AI 或寫入資料", maxDisplayDetailTextLength)'),
+        ):
+            _assert_contains(label, history_copy_content, marker)
         _assert_contains(
             "history record cursor created_at field",
             record_bounds_content,

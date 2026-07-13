@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1379 extract history calendar display texts
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/historyCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `historyCalendarDisplayTexts` to `mobile/historyCopy.ts` for history calendar title, selected-date label, month button labels, and month navigation accessibility labels.
+- Replaced inline history calendar display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept history records-by-date grouping, month day generation, selected date behavior, month navigation handlers, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、history record grouping behavior、month navigation behavior、history query behavior、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining App.tsx history / analysis display aggregation and screen-local calculations separately.
+
 ### T1378 extract AI save confirm display texts
 
 類型：mobile / refactor / verifier / docs
