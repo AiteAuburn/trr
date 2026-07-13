@@ -3319,8 +3319,7 @@ export default function App() {
       return;
     }
     clearPreviewActionState();
-    setCurrentScreen(target);
-    setStatus(saveSuccessDestinationStatusMessage(target));
+    openScreenWithStatus(target, saveSuccessDestinationStatusMessage(target));
   }
 
   function openSaveSuccessDestinationCard(target: AppScreen) {
@@ -3339,8 +3338,7 @@ export default function App() {
 
   function openSaveSuccessRecordEntry() {
     clearPreviewActionState();
-    setCurrentScreen("record");
-    setStatus(saveSuccessRecordEntryStatusMessage());
+    openScreenWithStatus("record", saveSuccessRecordEntryStatusMessage());
   }
 
   function openSaveSuccessRecordDetail() {

@@ -3112,7 +3112,7 @@ def main() -> int:
         _assert_contains(
             "save success destination clear helper binding",
             content,
-            "clearPreviewActionState();\n    setCurrentScreen(target);\n    setStatus(saveSuccessDestinationStatusMessage(target));",
+            "clearPreviewActionState();\n    openScreenWithStatus(target, saveSuccessDestinationStatusMessage(target));",
         )
         _assert_contains(
             "save success destination card handler",
@@ -3168,6 +3168,11 @@ def main() -> int:
             "save success record entry handler",
             content,
             "function openSaveSuccessRecordEntry()",
+        )
+        _assert_contains(
+            "save success record entry status helper binding",
+            content,
+            'openScreenWithStatus("record", saveSuccessRecordEntryStatusMessage());',
         )
         _assert_contains(
             "save success detail handler",
