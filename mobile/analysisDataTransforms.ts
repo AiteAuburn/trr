@@ -194,6 +194,13 @@ export function recordTypeCount(records: RecordItem[], recordType: string) {
   return records.filter((record) => record.record_type === recordType).length;
 }
 
+export function recordsInYear(records: RecordItem[], targetYear: number) {
+  return records.filter((record) => {
+    const occurredAt = new Date(record.occurred_at);
+    return !Number.isNaN(occurredAt.getTime()) && occurredAt.getFullYear() === targetYear;
+  });
+}
+
 export function currentRecordStreakDays(records: RecordItem[]) {
   const recordedDays = new Set(records.map((record) => localDateKey(record.occurred_at)).filter(Boolean));
   let streak = 0;

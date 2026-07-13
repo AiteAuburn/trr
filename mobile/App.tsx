@@ -635,6 +635,7 @@ import {
   highestNumber,
   longestRecordStreakDays,
   lowestNumber,
+  recordsInYear,
   recordTypeCount,
   selectedAnalysisChartPoint
 } from "./analysisDataTransforms";
@@ -1474,11 +1475,7 @@ export default function App() {
   const yearReviewTargetDisplayYear = yearReviewTargetYear(new Date());
   const yearReviewGenerationDisplayText = nextYearReviewGenerationLabel(new Date());
   const yearlyRecords = useMemo(
-    () =>
-      records.filter((record) => {
-        const occurredAt = new Date(record.occurred_at);
-        return !Number.isNaN(occurredAt.getTime()) && occurredAt.getFullYear() === yearReviewTargetDisplayYear;
-      }),
+    () => recordsInYear(records, yearReviewTargetDisplayYear),
     [records, yearReviewTargetDisplayYear]
   );
   const yearlyTypeCounts = useMemo(() => {

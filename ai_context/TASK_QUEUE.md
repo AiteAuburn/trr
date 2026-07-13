@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1351: Extract Year Review records-in-year helper
+
+Status: done
+
+Summary:
+
+- Added `recordsInYear` to `mobile/analysisDataTransforms.ts` for Year Review yearly record filtering.
+- Replaced the inline Year Review `records.filter(...)` year/date validity check in `mobile/App.tsx` with the extracted helper.
+- Kept target-year selection, invalid-date exclusion, yearly aggregation inputs, backend/local Year Review fallback, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, helper validity guard, and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1350: Extract record-type count helper for Detailed Report
 
 Status: done
