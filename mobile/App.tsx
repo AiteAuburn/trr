@@ -638,6 +638,7 @@ import {
   selectedAnalysisChartPoint
 } from "./analysisDataTransforms";
 import {
+  analysisMetricInput as buildAnalysisMetricInput,
   analysisMetricRows as buildAnalysisMetricRows,
   detailedReportMetricRows as buildDetailedReportMetricRows
 } from "./analysisMetricTransforms";
@@ -1935,15 +1936,16 @@ export default function App() {
   const todayRecordSummaryDisplayText = todayRecordSummaryText(todayRecords.length);
   const historyRecordDisplayCount = clampNumber(historyRecords.length, 0, maxMobileCountValue);
   const rankingStreakDisplayDays = clampNumber(currentRecordStreakDays(records), 0, maxMobileCountValue);
-  const analysisGlucoseMetricCount = clampNumber(activeAnalysisReport?.glucose.count ?? analysisGlucoseRecords.length, 0, maxMobileCountValue);
-  const analysisMetricRows = buildAnalysisMetricRows({
-    average: activeAnalysisReport?.glucose.average ?? averageGlucose,
-    highest: activeAnalysisReport?.glucose.maximum ?? highestGlucose,
-    lowest: activeAnalysisReport?.glucose.minimum ?? lowestGlucose,
-    glucoseCount: analysisGlucoseMetricCount,
-    beforeMealCount: activeAnalysisReport?.glucose.before_meal_count ?? beforeMealGlucoseCount,
-    afterMealCount: activeAnalysisReport?.glucose.after_meal_count ?? afterMealGlucoseCount
+  const analysisMetricInput = buildAnalysisMetricInput({
+    report: activeAnalysisReport,
+    localAverage: averageGlucose,
+    localHighest: highestGlucose,
+    localLowest: lowestGlucose,
+    localGlucoseCount: analysisGlucoseRecords.length,
+    localBeforeMealCount: beforeMealGlucoseCount,
+    localAfterMealCount: afterMealGlucoseCount
   });
+  const analysisMetricRows = buildAnalysisMetricRows(analysisMetricInput);
   const reportRecordDisplayCount = clampNumber(reportRecordCount, 0, maxMobileCountValue);
   const detailedReportMetricRows = buildDetailedReportMetricRows({
     average: reportGlucoseAverage,
@@ -2021,7 +2023,7 @@ export default function App() {
   const analysisSafetyIntroDisplayText = analysisSafetyIntroCopy();
   const analysisChartEmptyDisplayText = analysisChartEmptyCopy();
   const analysisRangeSummaryDisplayText = analysisRangeSummaryCopy(
-    analysisGlucoseMetricCount,
+    analysisMetricInput.glucoseCount,
     analysisPreviewMode
   );
   const analysisReportButtonDisplayLabel = analysisReportButtonLabel(isReportLoading);

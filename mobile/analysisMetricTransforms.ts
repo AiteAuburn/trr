@@ -1,3 +1,5 @@
+import type { BasicReportTransformSource } from "./analysisDataTransforms";
+
 const maxDisplayTextLength = 160;
 const maxMobileCountValue = 1_000_000;
 const maxMobileGlucoseValue = 1000;
@@ -16,6 +18,16 @@ type AnalysisMetricInput = {
   glucoseCount: number;
   beforeMealCount: number;
   afterMealCount: number;
+};
+
+type AnalysisMetricSourceInput = {
+  report: BasicReportTransformSource | null;
+  localAverage: NullableNumber;
+  localHighest: NullableNumber;
+  localLowest: NullableNumber;
+  localGlucoseCount: number;
+  localBeforeMealCount: number;
+  localAfterMealCount: number;
 };
 
 type DetailedReportMetricInput = {
@@ -69,6 +81,17 @@ export function analysisMetricRows(value: AnalysisMetricInput) {
     ["飯前血糖次數", String(beforeMealCount)],
     ["飯後血糖次數", String(afterMealCount)]
   ] as const).map(metricDisplayItem);
+}
+
+export function analysisMetricInput(value: AnalysisMetricSourceInput): AnalysisMetricInput {
+  return {
+    average: value.report?.glucose.average ?? value.localAverage,
+    highest: value.report?.glucose.maximum ?? value.localHighest,
+    lowest: value.report?.glucose.minimum ?? value.localLowest,
+    glucoseCount: value.report?.glucose.count ?? value.localGlucoseCount,
+    beforeMealCount: value.report?.glucose.before_meal_count ?? value.localBeforeMealCount,
+    afterMealCount: value.report?.glucose.after_meal_count ?? value.localAfterMealCount
+  };
 }
 
 export function detailedReportMetricRows(value: DetailedReportMetricInput) {
