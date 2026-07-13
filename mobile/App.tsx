@@ -2883,8 +2883,7 @@ export default function App() {
       clearRecordingPreviewRuntime();
       setPreview(null);
       setTranscriptReviewReturnScreen(returnScreen);
-      setCurrentScreen("transcriptReview");
-      setStatus(recordingWhisperSuccessStatusMessage());
+      openScreenWithStatus("transcriptReview", recordingWhisperSuccessStatusMessage());
       return true;
     } catch (error) {
       setStatus(recordingWhisperFailureStatusMessage(error));
@@ -2907,8 +2906,7 @@ export default function App() {
     clearRecordingPreviewRuntime();
     setPreview(null);
     setTranscriptReviewReturnScreen(returnScreen);
-    setCurrentScreen("record");
-    setStatus(recordingTextFallbackStatusMessage());
+    openScreenWithStatus("record", recordingTextFallbackStatusMessage());
   }
 
   function useTodayRecordingResultTextFallback() {
@@ -2968,8 +2966,7 @@ export default function App() {
       }
       setPreview(null);
       setTranscriptReviewReturnScreen("today");
-      setCurrentScreen("transcriptReview");
-      setStatus(recordingTextFallbackStatusMessage());
+      openScreenWithStatus("transcriptReview", recordingTextFallbackStatusMessage());
     }
   }
 

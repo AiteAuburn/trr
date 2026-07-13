@@ -2402,6 +2402,7 @@ def main() -> int:
             ("recording short result reset action", "resetRecordingPreview();"),
             ("recording short result no transcription", "return;"),
             ("recording text fallback runtime clear", "clearRecordingPreviewRuntime();"),
+            ("recording text fallback open status helper binding", 'openScreenWithStatus("record", recordingTextFallbackStatusMessage());'),
         ):
             _assert_contains(label, recording_result_action_block, marker)
         finish_recording_block = _function_block(content, "finishRecordingPreview")
@@ -2418,7 +2419,7 @@ def main() -> int:
         _assert_contains(
             "native whisper success runtime clear helper binding",
             content,
-            "updateTranscriptDraft(boundedText, \"voice\", voiceSeconds);\n      clearRecordingPreviewRuntime();",
+            'updateTranscriptDraft(boundedText, "voice", voiceSeconds);\n      clearRecordingPreviewRuntime();\n      setPreview(null);\n      setTranscriptReviewReturnScreen(returnScreen);\n      openScreenWithStatus("transcriptReview", recordingWhisperSuccessStatusMessage());',
         )
         _assert_contains(
             "parse transcript progress clears parser preview helper binding",
@@ -4860,9 +4861,9 @@ def main() -> int:
             ("native recording voice seconds state", "const [transcriptVoiceSeconds, setTranscriptVoiceSeconds] = useState(0);"),
             ("native recording transcript source", 'source: "user" | "sample" | "voice" = "user"'),
             ("native recording voice seconds draft", "setTranscriptVoiceSeconds("),
-            ("native recording transcript confirmation", 'setCurrentScreen("transcriptReview");'),
+            ("native recording transcript confirmation", 'openScreenWithStatus("transcriptReview", recordingWhisperSuccessStatusMessage());'),
             ("home recording whisper handoff", 'void transcribeRecordingToReview("today", capturedAudioPath, elapsedSeconds);'),
-            ("home recording fallback transcript review", 'setTranscriptReviewReturnScreen("today");\n      setCurrentScreen("transcriptReview");\n      setStatus(recordingTextFallbackStatusMessage());'),
+            ("home recording fallback transcript review", 'setTranscriptReviewReturnScreen("today");\n      openScreenWithStatus("transcriptReview", recordingTextFallbackStatusMessage());'),
             ("parse request voice seconds", "voice_seconds: parserVoiceSeconds"),
             ("parse success clears voice seconds", "setTranscriptVoiceSeconds(0);"),
             ("parse success refreshes quota", "void loadVoiceQuota(account.id);"),
