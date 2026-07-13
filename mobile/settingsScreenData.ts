@@ -140,3 +140,7 @@ export function authProviderPreviewDisplayItem(value: AuthProviderPreview) {
     )
   };
 }
+
+export function authProviderDisplayItems() {
+  return authProviderPreviews.map(authProviderPreviewDisplayItem);
+}

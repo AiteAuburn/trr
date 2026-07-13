@@ -681,8 +681,8 @@ import {
   settingsSubpageReturnStatusMessage
 } from "./settingsCopy";
 import {
+  authProviderDisplayItems as buildAuthProviderDisplayItems,
   authProviderPreviewDisplayItem,
-  authProviderPreviews,
   privacyControlDisplayRows as buildPrivacyControlDisplayRows,
   productionAuthReadinessDisplayRows as buildProductionAuthReadinessDisplayRows,
   sessionManagementDisplayItems as buildSessionManagementDisplayItems,
@@ -1673,7 +1673,7 @@ export default function App() {
     [models.stt_models]
   );
   const tutorialDisplaySteps = useMemo(() => tutorialSteps.map(tutorialStepDisplayItem), []);
-  const authProviderDisplayItems = useMemo(() => authProviderPreviews.map(authProviderPreviewDisplayItem), []);
+  const authProviderDisplayItems = useMemo(() => buildAuthProviderDisplayItems(), []);
   const sessionManagementDisplayItems = useMemo(
     () => buildSessionManagementDisplayItems(),
     []

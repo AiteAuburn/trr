@@ -2515,6 +2515,11 @@ def main() -> int:
             "const sessionManagementDisplayItems = useMemo(\n    () => buildSessionManagementDisplayItems(),",
         )
         _assert_contains(
+            "auth provider display items helper binding",
+            content,
+            "const authProviderDisplayItems = useMemo(() => buildAuthProviderDisplayItems(), []);",
+        )
+        _assert_contains(
             "membership feature display rows helper binding",
             content,
             "const membershipFeatureRows = membershipFeatureDisplayRows();",
@@ -4952,6 +4957,8 @@ def main() -> int:
         for label, marker in (
             ("auth provider preview rows config", "export const authProviderPreviews: ReadonlyArray<AuthProviderPreview> = ["),
             ("auth provider preview display helper", "export function authProviderPreviewDisplayItem(value: AuthProviderPreview)"),
+            ("auth provider display items helper", "export function authProviderDisplayItems()"),
+            ("auth provider display items map", "return authProviderPreviews.map(authProviderPreviewDisplayItem);"),
             ("auth provider accessibility item", "accessibilityLabel: boundDisplayText(`查看${item.title}登入整合狀態，不保存 provider token`, maxDisplayDetailTextLength)"),
             ("auth provider callback status copy", "provider callback 尚未接入；callback 拿到 id_token 後會走 /auth/oidc-login、SecureStore 與 session revoke 流程。"),
             ("session management preview rows config", "export const sessionManagementPreviews = ["),
