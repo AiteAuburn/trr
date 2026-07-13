@@ -3678,9 +3678,19 @@ def main() -> int:
             "function openDeleteConfirm()",
         )
         _assert_contains(
+            "delete confirm open status helper binding",
+            content,
+            'openScreenWithStatus("deleteConfirm", deleteConfirmReadyStatusMessage());',
+        )
+        _assert_contains(
             "delete confirm return handler",
             content,
             "function returnFromDeleteConfirm()",
+        )
+        _assert_contains(
+            "delete confirm return status helper binding",
+            content,
+            'openScreenWithStatus("recordDetail", deleteConfirmReturnStatusMessage());',
         )
         _assert_contains(
             "delete confirm open binding",
@@ -3800,12 +3810,12 @@ def main() -> int:
         _assert_contains(
             "record edit open seed helper binding",
             content,
-            "seedRecordEditStateFromRecord(selectedRecord);\n    setCurrentScreen(\"editRecord\");",
+            'seedRecordEditStateFromRecord(selectedRecord);\n    openScreenWithStatus("editRecord", recordEditOpenStatusMessage());',
         )
         _assert_contains(
             "record edit return empty seed helper binding",
             content,
-            "seedEmptyRecordEditStateForNow();\n    }\n    setCurrentScreen(\"recordDetail\");",
+            'seedEmptyRecordEditStateForNow();\n    }\n    openScreenWithStatus("recordDetail", recordEditCancelStatusMessage());',
         )
         _assert_contains(
             "record delete success empty edit seed helper binding",

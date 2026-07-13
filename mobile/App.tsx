@@ -5748,13 +5748,11 @@ export default function App() {
       setCurrentScreen("recordDetail");
       return;
     }
-    setCurrentScreen("deleteConfirm");
-    setStatus(deleteConfirmReadyStatusMessage());
+    openScreenWithStatus("deleteConfirm", deleteConfirmReadyStatusMessage());
   }
 
   function returnFromDeleteConfirm() {
-    setCurrentScreen("recordDetail");
-    setStatus(deleteConfirmReturnStatusMessage());
+    openScreenWithStatus("recordDetail", deleteConfirmReturnStatusMessage());
   }
 
   function openRecordEdit() {
@@ -5763,8 +5761,7 @@ export default function App() {
       return;
     }
     seedRecordEditStateFromRecord(selectedRecord);
-    setCurrentScreen("editRecord");
-    setStatus(recordEditOpenStatusMessage());
+    openScreenWithStatus("editRecord", recordEditOpenStatusMessage());
   }
 
   function returnFromRecordEdit() {
@@ -5773,8 +5770,7 @@ export default function App() {
     } else {
       seedEmptyRecordEditStateForNow();
     }
-    setCurrentScreen("recordDetail");
-    setStatus(recordEditCancelStatusMessage());
+    openScreenWithStatus("recordDetail", recordEditCancelStatusMessage());
   }
 
   function openRecordResultDestination(kind: "delete" | "update", target: AppScreen) {
