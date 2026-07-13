@@ -2963,6 +2963,20 @@ export default function App() {
     void finishRecordingPreview();
   }
 
+  function seedPreviewEditStateFromRecord(record: PendingRecord) {
+    setPreviewEditFields(recordPayloadToEditFields(record));
+    const dateTime = localDateTimeInputs(record.occurred_at);
+    setPreviewEditDate(dateTime.date);
+    setPreviewEditTime(dateTime.time);
+  }
+
+  function seedEmptyPreviewEditStateForNow() {
+    setPreviewEditFields(emptyRecordEditFields());
+    const nowInputs = localDateTimeInputs(new Date());
+    setPreviewEditDate(nowInputs.date);
+    setPreviewEditTime(nowInputs.time);
+  }
+
   function openPreviewRecordEdit(index: number, returnScreen: AppScreen = "aiReview") {
     const record = preview?.records[index];
     if (!record) {
@@ -2972,10 +2986,7 @@ export default function App() {
     setDailyRecordMenuIndex(null);
     setPendingPreviewRemoveIndex(null);
     setSelectedPreviewIndex(index);
-    setPreviewEditFields(recordPayloadToEditFields(record));
-    const dateTime = localDateTimeInputs(record.occurred_at);
-    setPreviewEditDate(dateTime.date);
-    setPreviewEditTime(dateTime.time);
+    seedPreviewEditStateFromRecord(record);
     setCurrentScreen("editPreviewRecord");
     setStatus(aiCandidateEditOpenStatusMessage());
   }
@@ -2984,10 +2995,7 @@ export default function App() {
     setSelectedPreviewIndex(null);
     setPendingPreviewRemoveIndex(null);
     setDailyRecordMenuIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
-    const nowInputs = localDateTimeInputs(new Date());
-    setPreviewEditDate(nowInputs.date);
-    setPreviewEditTime(nowInputs.time);
+    seedEmptyPreviewEditStateForNow();
     setCurrentScreen(previewActionReturnScreen);
     setStatus(aiCandidateEditCancelStatusMessage());
   }

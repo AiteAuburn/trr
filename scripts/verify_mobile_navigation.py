@@ -3210,6 +3210,31 @@ def main() -> int:
             "function returnFromPreviewRecordEdit()",
         )
         _assert_contains(
+            "AI candidate edit seed from record helper",
+            content,
+            "function seedPreviewEditStateFromRecord(record: PendingRecord)",
+        )
+        _assert_contains(
+            "AI candidate edit seed from record fields",
+            content,
+            "setPreviewEditFields(recordPayloadToEditFields(record));",
+        )
+        _assert_contains(
+            "AI candidate edit seed empty now helper",
+            content,
+            "function seedEmptyPreviewEditStateForNow()",
+        )
+        _assert_contains(
+            "AI candidate edit open seed helper binding",
+            content,
+            "seedPreviewEditStateFromRecord(record);\n    setCurrentScreen(\"editPreviewRecord\");",
+        )
+        _assert_contains(
+            "AI candidate edit return empty seed helper binding",
+            content,
+            "seedEmptyPreviewEditStateForNow();\n    setCurrentScreen(previewActionReturnScreen);",
+        )
+        _assert_contains(
             "AI candidate edit return binding",
             content,
             "onPress={returnFromPreviewRecordEdit}",
