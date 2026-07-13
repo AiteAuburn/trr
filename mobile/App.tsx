@@ -5387,8 +5387,7 @@ export default function App() {
 
   function openParserRecoveryMessage(message: string) {
     setParserRecoveryMessage(message);
-    setStatus(message);
-    setCurrentScreen("transcriptReview");
+    openScreenWithStatus("transcriptReview", message);
   }
 
   async function parseTranscript() {

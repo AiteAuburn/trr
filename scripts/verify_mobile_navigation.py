@@ -2433,7 +2433,7 @@ def main() -> int:
         _assert_contains(
             "parser recovery message helper fields",
             content,
-            "setParserRecoveryMessage(message);\n    setStatus(message);\n    setCurrentScreen(\"transcriptReview\");",
+            'setParserRecoveryMessage(message);\n    openScreenWithStatus("transcriptReview", message);',
         )
         _assert_contains(
             "parser backend unavailable recovery helper binding",
