@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1424 share settings subpage screen helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/navigationConfig.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `isSettingsSubpageScreen` to `mobile/navigationConfig.ts` so settings subpage route classification is centralized.
+- Reused the helper in `headerBackTargetForScreen` and the debug-gated visual smoke route opener.
+- Kept screen list, header return behavior, debug gating, visual smoke route side effects, and settings UI unchanged.
+- Updated navigation verifier coverage for the shared helper and both bindings.
+- 未變更 backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1423 extract settings row subpage target helper
 
 類型：mobile / refactor / verifier / docs

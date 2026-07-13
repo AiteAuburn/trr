@@ -2023,9 +2023,19 @@ def main() -> int:
             "const settingsSubpageScreens = new Set<AppScreen>([",
         )
         _assert_contains(
+            "settings subpage screen helper",
+            navigation_content,
+            "export function isSettingsSubpageScreen(screen: AppScreen)",
+        )
+        _assert_contains(
+            "settings subpage screen helper set binding",
+            navigation_content,
+            "return settingsSubpageScreens.has(screen);",
+        )
+        _assert_contains(
             "header back target settings fallback",
             navigation_content,
-            'if (settingsSubpageScreens.has(currentScreen)) {\n    return "settings";\n  }',
+            'if (isSettingsSubpageScreen(currentScreen)) {\n    return "settings";\n  }',
         )
         _assert_contains(
             "header back target chrome fallback",
@@ -3558,6 +3568,11 @@ def main() -> int:
             "visual smoke deep link status binding",
             content,
             "setStatus(visualSmokeDeepLinkStatusMessage(deepLinkRoute));",
+        )
+        _assert_contains(
+            "visual smoke settings subpage helper binding",
+            content,
+            'if (target === "settings" || isSettingsSubpageScreen(target) || target === "menu") {',
         )
         _assert_contains(
             "visual smoke boot skipped display binding",

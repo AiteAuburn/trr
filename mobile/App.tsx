@@ -113,6 +113,7 @@ import {
 } from "./recordSaveTransforms";
 import {
   headerBackTargetForScreen,
+  isSettingsSubpageScreen,
   menuScreens,
   mvpFlowSteps,
   mvpFlowStepperState,
@@ -4092,15 +4093,7 @@ export default function App() {
       setCurrentScreen("membershipStatus");
       return;
     }
-    if (
-      target === "settings" ||
-      target === "accountSecurity" ||
-      target === "profileSettings" ||
-      target === "recordingQuotaSettings" ||
-      target === "reminderSettings" ||
-      target === "privacySettings" ||
-      target === "menu"
-    ) {
+    if (target === "settings" || isSettingsSubpageScreen(target) || target === "menu") {
       setCurrentScreen(target);
       return;
     }

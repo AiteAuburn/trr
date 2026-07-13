@@ -181,6 +181,10 @@ const settingsSubpageScreens = new Set<AppScreen>([
   "privacySettings"
 ]);
 
+export function isSettingsSubpageScreen(screen: AppScreen) {
+  return settingsSubpageScreens.has(screen);
+}
+
 function headerBackTargetForScreen(
   currentScreen: AppScreen,
   chrome: { backTo?: AppScreen },
@@ -216,7 +220,7 @@ function headerBackTargetForScreen(
   if (currentScreen === "subscription") {
     return state.subscriptionReturnScreen;
   }
-  if (settingsSubpageScreens.has(currentScreen)) {
+  if (isSettingsSubpageScreen(currentScreen)) {
     return "settings";
   }
   if (currentScreen === "tutorial") {
