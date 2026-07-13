@@ -4046,6 +4046,16 @@ def main() -> int:
             "setRecords(visualSmokeDemoRecords());",
         )
         _assert_contains(
+            "visual smoke demo preview seed helper",
+            content,
+            "function seedVisualSmokeDemoPreview()",
+        )
+        _assert_contains(
+            "visual smoke demo preview seed helper fields",
+            content,
+            "setPreview(visualSmokeDemoPreview());",
+        )
+        _assert_contains(
             "visual smoke history record selection helper",
             content,
             "function seedVisualSmokeHistoryRecordSelection(record: RecordItem)",
@@ -4113,7 +4123,12 @@ def main() -> int:
         _assert_contains(
             "visual smoke ai seed route failure result helper binding",
             content,
-            'openAiSaveFailureResult("Visual smoke demo save failure.");',
+            'seedVisualSmokeDemoPreview();\n      openAiSaveFailureResult("Visual smoke demo save failure.");',
+        )
+        _assert_contains(
+            "visual smoke AI preview seed helper binding",
+            content,
+            "if (isVisualSmokeAiPreviewScreen(target)) {\n      seedVisualSmokeDemoPreview();\n      setCurrentScreen(target);",
         )
         _assert_contains(
             "visual smoke ai seed route edit seed helper",

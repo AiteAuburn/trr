@@ -4006,6 +4006,10 @@ export default function App() {
     setRecords(visualSmokeDemoRecords());
   }
 
+  function seedVisualSmokeDemoPreview() {
+    setPreview(visualSmokeDemoPreview());
+  }
+
   function seedVisualSmokeHistoryRecordSelection(record: RecordItem) {
     seedVisualSmokeDemoRecords();
     setSelectedRecord(record);
@@ -4081,7 +4085,7 @@ export default function App() {
 
   function openVisualSmokeAiSeedRoute(target: AppScreen) {
     if (target === "aiSaveFailure") {
-      setPreview(visualSmokeDemoPreview());
+      seedVisualSmokeDemoPreview();
       openAiSaveFailureResult("Visual smoke demo save failure.");
       return true;
     }
@@ -4096,7 +4100,7 @@ export default function App() {
       return true;
     }
     if (target === "aiRemoveConfirm") {
-      setPreview(visualSmokeDemoPreview());
+      seedVisualSmokeDemoPreview();
       setSelectedPreviewIndex(null);
       setPendingPreviewRemoveIndex(0);
       setCurrentScreen("aiRemoveConfirm");
@@ -4196,7 +4200,7 @@ export default function App() {
       return;
     }
     if (isVisualSmokeAiPreviewScreen(target)) {
-      setPreview(visualSmokeDemoPreview());
+      seedVisualSmokeDemoPreview();
       setCurrentScreen(target);
       return;
     }
