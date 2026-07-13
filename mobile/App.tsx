@@ -4015,9 +4015,8 @@ export default function App() {
     if (target === "deleteSuccess") {
       setRecords(visualSmokeDemoRecords());
       setSelectedRecord(null);
-      setLastDeletedSummary("Visual smoke demo delete result.");
       setRecordDetailReturnScreen("history");
-      setCurrentScreen("deleteSuccess");
+      openDeleteSuccessResult("Visual smoke demo delete result.");
       return true;
     }
     if (target === "updateSuccess") {
@@ -5677,6 +5676,11 @@ export default function App() {
     setCurrentScreen("updateSuccess");
   }
 
+  function openDeleteSuccessResult(summary: string) {
+    setLastDeletedSummary(summary);
+    setCurrentScreen("deleteSuccess");
+  }
+
   function seedEmptyRecordEditStateForNow() {
     setRecordEditFields(emptyRecordEditFields());
     const nowInputs = localDateTimeInputs(new Date());
@@ -5867,8 +5871,7 @@ export default function App() {
       setRecords((current) => current.filter((record) => record.id !== selectedRecord.id));
       setSelectedRecord(null);
       seedEmptyRecordEditStateForNow();
-      setLastDeletedSummary(recordDeleteSummaryMessage(1));
-      setCurrentScreen("deleteSuccess");
+      openDeleteSuccessResult(recordDeleteSummaryMessage(1));
       setStatus(recordDeleteSuccessStatusMessage());
     } catch (error) {
       setStatus(recordDeleteFailureStatusMessage(error));

@@ -3646,6 +3646,16 @@ def main() -> int:
             "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n      selectRecordForResult(updated);\n      openUpdateSuccessResult(recordUpdateSummaryMessage(1));",
         )
         _assert_contains(
+            "record delete success result helper",
+            content,
+            "function openDeleteSuccessResult(summary: string)",
+        )
+        _assert_contains(
+            "record delete success result helper fields",
+            content,
+            "setLastDeletedSummary(summary);\n    setCurrentScreen(\"deleteSuccess\");",
+        )
+        _assert_contains(
             "record edit seed empty now helper",
             content,
             "function seedEmptyRecordEditStateForNow()",
@@ -3663,7 +3673,7 @@ def main() -> int:
         _assert_contains(
             "record delete success empty edit seed helper binding",
             content,
-            "setSelectedRecord(null);\n      seedEmptyRecordEditStateForNow();\n      setLastDeletedSummary(recordDeleteSummaryMessage(1));",
+            "setSelectedRecord(null);\n      seedEmptyRecordEditStateForNow();\n      openDeleteSuccessResult(recordDeleteSummaryMessage(1));",
         )
         _assert_contains(
             "record edit return handler",
