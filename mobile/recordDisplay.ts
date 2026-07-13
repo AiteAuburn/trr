@@ -369,6 +369,10 @@ export function pendingRecordDisplayItem(record: PendingRecord, index: number, k
   };
 }
 
+export function pendingRecordDisplayItems(records: PendingRecord[], keyPrefix = "candidate") {
+  return records.map((record, index) => pendingRecordDisplayItem(record, index, keyPrefix));
+}
+
 export function rejectedReasonLabel(reason?: string) {
   const normalized = reason?.trim().toLowerCase();
   if (!normalized) {

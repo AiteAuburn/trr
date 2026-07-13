@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1345: Extract AI candidate display list helper
+
+Status: done
+
+Summary:
+
+- Added `pendingRecordDisplayItems` to `mobile/recordDisplay.ts` for AI candidate display-list shaping.
+- Replaced the inline AI Review and AI Save Confirm candidate `preview.records.map(...)` constructions in `mobile/App.tsx` with the extracted helper.
+- Kept candidate item keys, key prefixes, edit/remove actions, accessibility labels, low-confidence display, decision trace display, and selected candidate edit/remove shaping unchanged.
+- Updated navigation verifier coverage so the extracted helper, App bindings, and removed inline mappings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1344: Extract History grouped record section display helper
 
 Status: done

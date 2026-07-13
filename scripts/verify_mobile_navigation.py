@@ -2791,6 +2791,7 @@ def main() -> int:
         )
         for label, marker in (
             ("AI candidate display item helper", "function pendingRecordDisplayItem(record: PendingRecord, index: number, keyPrefix = \"candidate\")"),
+            ("AI candidate display items helper", "function pendingRecordDisplayItems(records: PendingRecord[], keyPrefix = \"candidate\")"),
             ("AI candidate source display helper", "function pendingRecordSourceDisplayText(record: PendingRecord)"),
             ("AI candidate confidence display helper", "function confidencePercentDisplay(value: unknown)"),
             ("AI candidate decision trace helper", "function shortDecisionTrace(trace?: string)"),
@@ -2807,6 +2808,26 @@ def main() -> int:
             ("AI rejected reason unknown label", "無法判斷可儲存紀錄類型"),
         ):
             _assert_contains(label, record_display_content, marker)
+        _assert_contains(
+            "AI review candidate list helper binding",
+            content,
+            'const previewRecordDisplayItems = preview ? pendingRecordDisplayItems(preview.records, "review") : [];',
+        )
+        _assert_contains(
+            "AI save-confirm candidate list helper binding",
+            content,
+            'const previewSaveConfirmDisplayItems = preview ? pendingRecordDisplayItems(preview.records, "save-confirm") : [];',
+        )
+        _assert_not_contains(
+            "AI review inline candidate mapping",
+            content,
+            'preview?.records.map((record, index) => pendingRecordDisplayItem(record, index, "review"))',
+        )
+        _assert_not_contains(
+            "AI save-confirm inline candidate mapping",
+            content,
+            'preview?.records.map((record, index) => pendingRecordDisplayItem(record, index, "save-confirm"))',
+        )
         _assert_contains(
             "AI candidate edit action binding",
             content,

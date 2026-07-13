@@ -77,6 +77,7 @@ import {
   groupedRecordListDisplaySections,
   manualRecordConfirmDisplayItem,
   pendingRecordDisplayItem,
+  pendingRecordDisplayItems,
   rejectedReasonLabel,
   recordDateTimeDisplay,
   recordDetailDisplayItem,
@@ -1984,10 +1985,8 @@ export default function App() {
     selectedPreviewIndex === null ? null : preview?.records[selectedPreviewIndex] ?? null;
   const pendingPreviewRemoveRecord =
     pendingPreviewRemoveIndex === null ? null : preview?.records[pendingPreviewRemoveIndex] ?? null;
-  const previewRecordDisplayItems =
-    preview?.records.map((record, index) => pendingRecordDisplayItem(record, index, "review")) ?? [];
-  const previewSaveConfirmDisplayItems =
-    preview?.records.map((record, index) => pendingRecordDisplayItem(record, index, "save-confirm")) ?? [];
+  const previewRecordDisplayItems = preview ? pendingRecordDisplayItems(preview.records, "review") : [];
+  const previewSaveConfirmDisplayItems = preview ? pendingRecordDisplayItems(preview.records, "save-confirm") : [];
   const selectedPreviewRecordDisplayItem =
     selectedPreviewRecord && selectedPreviewIndex !== null
       ? pendingRecordDisplayItem(selectedPreviewRecord, selectedPreviewIndex, "edit-preview")
