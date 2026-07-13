@@ -3786,9 +3786,19 @@ def main() -> int:
             'openScreenWithStatus("deleteConfirm", deleteConfirmReadyStatusMessage());',
         )
         _assert_contains(
+            "record action missing selection return helper",
+            content,
+            "function returnToRecordDetailForMissingSelection()",
+        )
+        _assert_contains(
+            "record action missing selection return helper fields",
+            content,
+            'openScreen("recordDetail");',
+        )
+        _assert_contains(
             "delete confirm missing selection screen opener fallback",
             content,
-            'if (!selectedRecord) {\n      openScreen("recordDetail");\n      return;\n    }\n    openScreenWithStatus("deleteConfirm", deleteConfirmReadyStatusMessage());',
+            'if (!selectedRecord) {\n      returnToRecordDetailForMissingSelection();\n      return;\n    }\n    openScreenWithStatus("deleteConfirm", deleteConfirmReadyStatusMessage());',
         )
         _assert_contains(
             "delete confirm return handler",
@@ -3928,12 +3938,12 @@ def main() -> int:
         _assert_contains(
             "record edit open seed helper binding",
             content,
-            'seedRecordEditStateFromRecord(selectedRecord);\n    openScreenWithStatus("editRecord", recordEditOpenStatusMessage());',
+            'seedRecordEditStateFromRecord(record);\n    openScreenWithStatus("editRecord", recordEditOpenStatusMessage());',
         )
         _assert_contains(
             "record edit missing selection screen opener fallback",
             content,
-            'if (!selectedRecord) {\n      openScreen("recordDetail");\n      return;\n    }\n    seedRecordEditStateFromRecord(selectedRecord);',
+            'const record = selectedRecord;\n    if (!record) {\n      returnToRecordDetailForMissingSelection();\n      return;\n    }\n    seedRecordEditStateFromRecord(record);',
         )
         _assert_contains(
             "record edit return empty seed helper binding",

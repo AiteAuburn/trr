@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1520: Reuse record action missing-selection fallback
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `returnToRecordDetailForMissingSelection` helper for record actions that need to fall back to Record Detail when no record is selected.
+- Reused the helper in delete-confirm and record-edit openers while keeping their status messages and selected-record behavior unchanged.
+- Updated navigation verifier coverage for the shared missing-selection fallback and the delete/edit route bindings.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1519: Reuse record summary result opener helper
 
 Status: done

@@ -5733,9 +5733,13 @@ export default function App() {
     openRecordDetailScreen(selectedRecord, returnScreen);
   }
 
+  function returnToRecordDetailForMissingSelection() {
+    openScreen("recordDetail");
+  }
+
   function openDeleteConfirm() {
     if (!selectedRecord) {
-      openScreen("recordDetail");
+      returnToRecordDetailForMissingSelection();
       return;
     }
     openScreenWithStatus("deleteConfirm", deleteConfirmReadyStatusMessage());
@@ -5746,11 +5750,12 @@ export default function App() {
   }
 
   function openRecordEdit() {
-    if (!selectedRecord) {
-      openScreen("recordDetail");
+    const record = selectedRecord;
+    if (!record) {
+      returnToRecordDetailForMissingSelection();
       return;
     }
-    seedRecordEditStateFromRecord(selectedRecord);
+    seedRecordEditStateFromRecord(record);
     openScreenWithStatus("editRecord", recordEditOpenStatusMessage());
   }
 
