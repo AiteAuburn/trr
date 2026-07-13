@@ -209,6 +209,10 @@ export function recordsInYear(records: RecordItem[], targetYear: number) {
   });
 }
 
+export function recordDayCount(records: RecordItem[]) {
+  return new Set(records.map((record) => localDateKey(record.occurred_at)).filter(Boolean)).size;
+}
+
 export function currentRecordStreakDays(records: RecordItem[]) {
   const recordedDays = new Set(records.map((record) => localDateKey(record.occurred_at)).filter(Boolean));
   let streak = 0;

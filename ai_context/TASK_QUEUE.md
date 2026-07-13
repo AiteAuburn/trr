@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1354: Extract record-day count helper for Year Review
+
+Status: done
+
+Summary:
+
+- Added `recordDayCount` to `mobile/analysisDataTransforms.ts` for unique local record-day counting.
+- Replaced the inline Year Review `Set(...localDateKey...)` record-day count in `mobile/App.tsx` with the extracted helper.
+- Kept yearly record-day count, local Year Review metric inputs, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, helper implementation, and Year Review binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1353: Reuse glucose transform helpers for Year Review
 
 Status: done

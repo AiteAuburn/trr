@@ -635,6 +635,7 @@ import {
   highestNumber,
   longestRecordStreakDays,
   lowestNumber,
+  recordDayCount,
   recordsInYear,
   recordTypeCount,
   recordTypeCounts,
@@ -1488,7 +1489,7 @@ export default function App() {
   const yearlyGlucoseAverage = averageNumber(yearlyGlucoseValues);
   const yearlyGlucoseHighest = highestNumber(yearlyGlucoseValues);
   const yearlyGlucoseLowest = lowestNumber(yearlyGlucoseValues);
-  const yearlyRecordDayCount = new Set(yearlyRecords.map((record) => localDateKey(record.occurred_at)).filter(Boolean)).size;
+  const yearlyRecordDayCount = recordDayCount(yearlyRecords);
   const yearlyUnlockedBadgeCount = achievementDisplayItems.filter((item) => item.progress >= item.target).length;
   const yearlyHighestBadgeLevel =
     achievementDisplayItems

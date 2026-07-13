@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1354 extract record-day count helper for Year Review
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisDataTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `recordDayCount` to `mobile/analysisDataTransforms.ts` for unique local record-day counting.
+- Replaced the inline Year Review `Set(...localDateKey...)` record-day count in `mobile/App.tsx` with the extracted helper.
+- Kept yearly record-day count, local Year Review metric inputs, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, helper implementation, and Year Review binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Year Review rendering、Year Review backend fallback、achievement data、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing Year Review badge aggregation and remaining achievement filters separately.
+
 ### T1353 reuse glucose transform helpers for Year Review
 
 類型：mobile / refactor / verifier / docs
