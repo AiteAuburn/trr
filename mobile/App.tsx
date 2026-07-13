@@ -4002,8 +4002,12 @@ export default function App() {
     setFoodPhotoActionStatus(foodPhotoRetakeStatusMessage);
   }
 
-  function seedVisualSmokeHistoryRecordSelection(record: RecordItem) {
+  function seedVisualSmokeDemoRecords() {
     setRecords(visualSmokeDemoRecords());
+  }
+
+  function seedVisualSmokeHistoryRecordSelection(record: RecordItem) {
+    seedVisualSmokeDemoRecords();
     setSelectedRecord(record);
     setRecordDetailReturnScreen("history");
   }
@@ -4011,7 +4015,7 @@ export default function App() {
   function openVisualSmokeRecordSeedRoute(target: AppScreen) {
     if (target === "saveSuccess") {
       const demoRecord = visualSmokeDemoRecord();
-      setRecords(visualSmokeDemoRecords());
+      seedVisualSmokeDemoRecords();
       setSelectedRecord(demoRecord);
       setLastSavedSummary("Visual smoke demo save result.");
       setLastSaveEntryMethod("ai");
@@ -4019,7 +4023,7 @@ export default function App() {
       return true;
     }
     if (target === "deleteSuccess") {
-      setRecords(visualSmokeDemoRecords());
+      seedVisualSmokeDemoRecords();
       setSelectedRecord(null);
       setRecordDetailReturnScreen("history");
       openDeleteSuccessResult("Visual smoke demo delete result.");
@@ -4027,7 +4031,7 @@ export default function App() {
     }
     if (target === "updateSuccess") {
       const demoRecord = visualSmokeDemoRecord();
-      setRecords(visualSmokeDemoRecords());
+      seedVisualSmokeDemoRecords();
       selectRecordForResult(demoRecord);
       setRecordDetailReturnScreen("history");
       openUpdateSuccessResult("Visual smoke demo update result.");
@@ -4041,7 +4045,7 @@ export default function App() {
     }
     if (target === "editRecord") {
       const demoRecord = visualSmokeDemoRecord();
-      setRecords(visualSmokeDemoRecords());
+      seedVisualSmokeDemoRecords();
       setSelectedRecord(demoRecord);
       seedRecordEditStateFromRecord(demoRecord);
       setCurrentScreen("editRecord");
@@ -4066,7 +4070,7 @@ export default function App() {
       return true;
     }
     if (target === "detailedReport") {
-      setRecords(visualSmokeDemoRecords());
+      seedVisualSmokeDemoRecords();
       setBasicReport(visualSmokeDemoReport());
       setReportStatus(visualSmokeRecordSyncStatusMessage());
       setCurrentScreen("detailedReport");
@@ -4180,7 +4184,7 @@ export default function App() {
     }
     activateVisualSmokePreview();
     if (isVisualSmokeRecordListScreen(target)) {
-      setRecords(visualSmokeDemoRecords());
+      seedVisualSmokeDemoRecords();
       setCurrentScreen(target);
       return;
     }

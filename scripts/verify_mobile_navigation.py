@@ -4036,6 +4036,16 @@ def main() -> int:
             "function openVisualSmokeRecordSeedRoute(target: AppScreen)",
         )
         _assert_contains(
+            "visual smoke demo records seed helper",
+            content,
+            "function seedVisualSmokeDemoRecords()",
+        )
+        _assert_contains(
+            "visual smoke demo records seed helper fields",
+            content,
+            "setRecords(visualSmokeDemoRecords());",
+        )
+        _assert_contains(
             "visual smoke history record selection helper",
             content,
             "function seedVisualSmokeHistoryRecordSelection(record: RecordItem)",
@@ -4043,7 +4053,12 @@ def main() -> int:
         _assert_contains(
             "visual smoke history record selection helper fields",
             content,
-            "setRecords(visualSmokeDemoRecords());\n    setSelectedRecord(record);\n    setRecordDetailReturnScreen(\"history\");",
+            "seedVisualSmokeDemoRecords();\n    setSelectedRecord(record);\n    setRecordDetailReturnScreen(\"history\");",
+        )
+        _assert_contains(
+            "visual smoke record list demo records seed helper binding",
+            content,
+            "if (isVisualSmokeRecordListScreen(target)) {\n      seedVisualSmokeDemoRecords();\n      setCurrentScreen(target);",
         )
         _assert_contains(
             "visual smoke record detail selection helper binding",
