@@ -4041,6 +4041,11 @@ export default function App() {
     setRecordDetailReturnScreen("history");
   }
 
+  function openVisualSmokeHistoryRecordScreen(record: RecordItem, screen: AppScreen) {
+    seedVisualSmokeHistoryRecordSelection(record);
+    setCurrentScreen(screen);
+  }
+
   function openVisualSmokeRecordSeedRoute(target: AppScreen) {
     if (target === "saveSuccess") {
       const demoRecord = visualSmokeDemoRecord();
@@ -4067,8 +4072,7 @@ export default function App() {
     }
     if (target === "recordDetail") {
       const demoRecord = visualSmokeDemoRecord();
-      seedVisualSmokeHistoryRecordSelection(demoRecord);
-      setCurrentScreen("recordDetail");
+      openVisualSmokeHistoryRecordScreen(demoRecord, "recordDetail");
       return true;
     }
     if (target === "editRecord") {
@@ -4080,8 +4084,7 @@ export default function App() {
     }
     if (target === "deleteConfirm") {
       const demoRecord = visualSmokeDemoRecord();
-      seedVisualSmokeHistoryRecordSelection(demoRecord);
-      setCurrentScreen("deleteConfirm");
+      openVisualSmokeHistoryRecordScreen(demoRecord, "deleteConfirm");
       return true;
     }
     return false;
