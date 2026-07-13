@@ -1044,6 +1044,43 @@ export function selectedFoodCommunityDisplayItem(
   return items.find((item) => item.id === selectedItemId) ?? visibleItems[0] ?? items[0] ?? null;
 }
 
+export function foodCommunityDisplayBundle(value: {
+  backendCategories: Array<{ id: FoodCommunityCategory; label: string; foodCount?: number; sampleFoods?: string[] }>;
+  fallbackCategories: Array<{ id: FoodCommunityCategory; label: string; foodCount?: number; sampleFoods?: string[] }>;
+  backendItems: FoodCommunityItem[];
+  fallbackItems: FoodCommunityItem[];
+  selectedCategory: FoodCommunityCategory;
+  searchText: string;
+  selectedItemId: string;
+  shareFields: FoodCommunityShareFields;
+  pointsBalance: StoreApiPointsBalance | null;
+}) {
+  const categoriesForDisplay =
+    value.backendCategories.length > 0 ? value.backendCategories : value.fallbackCategories;
+  const categoryDisplayOptions = foodCommunityCategoryDisplayItems(categoriesForDisplay);
+  const selectedCategoryDisplay =
+    categoryDisplayOptions.find((category) => category.value === value.selectedCategory) ??
+    categoryDisplayOptions[0] ??
+    null;
+  const itemsForDisplay = value.backendItems.length > 0 ? value.backendItems : value.fallbackItems;
+  const itemDisplayItems = foodCommunityItemDisplayItems(itemsForDisplay);
+  const visibleItems = visibleFoodCommunityDisplayItems(itemDisplayItems, value.selectedCategory, value.searchText);
+  const selectedItem = selectedFoodCommunityDisplayItem(itemDisplayItems, visibleItems, value.selectedItemId);
+
+  return {
+    categoriesForDisplay,
+    categoryDisplayOptions,
+    selectedCategoryDisplay,
+    itemsForDisplay,
+    itemDisplayItems,
+    visibleItems,
+    selectedItem,
+    shareFieldRows: foodCommunityShareFieldDisplayRows(value.shareFields, selectedItem?.title),
+    pointRows: foodCommunityPointDisplayRows(value.pointsBalance),
+    rankingRows: foodCommunityRankingDisplayRows()
+  };
+}
+
 export function foodCommunityShareFieldDisplayRows(
   fields: FoodCommunityShareFields,
   selectedFoodTitle: string | null | undefined

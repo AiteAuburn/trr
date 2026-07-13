@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1364: Extract food community display bundle
+
+Status: done
+
+Summary:
+
+- Added `foodCommunityDisplayBundle` to `mobile/futureModuleDisplay.ts` for food community category/item fallback, display items, visible results, selected item, share rows, point rows, and ranking rows.
+- Replaced inline food community display aggregation in `mobile/App.tsx` with the extracted bundle while keeping existing render and handler variable names.
+- Kept backend-over-local fallback order, category filtering, search matching, selected-item fallback order, share-field rows, point rows, ranking rows, and rendering unchanged.
+- Updated navigation verifier coverage so the bundle internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1363: Extract Year Review header display helper
 
 Status: done

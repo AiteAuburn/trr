@@ -160,14 +160,10 @@ import {
   communityReadinessChecklistDisplayItems,
   foodCommunityCategories,
   foodCommunityCategoryDisplayItem,
-  foodCommunityCategoryDisplayItems as buildFoodCommunityCategoryDisplayItems,
+  foodCommunityDisplayBundle,
   foodCommunityItemDisplayItem,
-  foodCommunityItemDisplayItems as buildFoodCommunityItemDisplayItems,
   foodCommunityItemFromApi,
   foodCommunityItems,
-  foodCommunityPointDisplayRows,
-  foodCommunityRankingDisplayRows,
-  foodCommunityShareFieldDisplayRows,
   futureModuleCards,
   futureModuleCardDisplayItem,
   futureModuleCardDisplayItems,
@@ -192,7 +188,6 @@ import {
   rankingReadinessChecklistDisplayItems,
   reminderPreviewBoundaryDisplayItem,
   selectedFutureModuleDisplayItem,
-  selectedFoodCommunityDisplayItem,
   localYearlyHealthOutcomeDisplayRows,
   localYearlyHighlightDisplayItems,
   localYearlyReviewMetricDisplayRows,
@@ -217,7 +212,6 @@ import {
   storeRedemptionBoundaryDisplayRows,
   storeRedemptionDisplayItem,
   storeRedemptionWalletDisplayItems,
-  visibleFoodCommunityDisplayItems,
   visibleStoreProductDisplayItems,
   yearReviewBoundaryDisplayCopy,
   yearReviewHeaderDisplayTexts,
@@ -1521,38 +1515,39 @@ export default function App() {
     [storeRedemptions]
   );
   const storeCategoryDisplayOptions = useMemo(() => buildStoreCategoryDisplayItems(storeCategories), []);
-  const foodCommunityCategoriesForDisplay =
-    foodCommunityBackendCategories.length > 0 ? foodCommunityBackendCategories : foodCommunityCategories;
-  const foodCommunityCategoryDisplayOptions = useMemo(
-    () => buildFoodCommunityCategoryDisplayItems(foodCommunityCategoriesForDisplay),
-    [foodCommunityCategoriesForDisplay]
+  const foodCommunityDisplay = useMemo(
+    () =>
+      foodCommunityDisplayBundle({
+        backendCategories: foodCommunityBackendCategories,
+        fallbackCategories: foodCommunityCategories,
+        backendItems: foodCommunityBackendItems,
+        fallbackItems: foodCommunityItems,
+        selectedCategory: foodCommunityCategory,
+        searchText: foodCommunitySearchText,
+        selectedItemId: selectedFoodCommunityItemId,
+        shareFields: foodCommunityShareFields,
+        pointsBalance: storePointsBalance
+      }),
+    [
+      foodCommunityBackendCategories,
+      foodCommunityBackendItems,
+      foodCommunityCategory,
+      foodCommunitySearchText,
+      foodCommunityShareFields,
+      selectedFoodCommunityItemId,
+      storePointsBalance
+    ]
   );
-  const selectedFoodCommunityCategoryDisplay =
-    foodCommunityCategoryDisplayOptions.find((category) => category.value === foodCommunityCategory) ??
-    foodCommunityCategoryDisplayOptions[0] ??
-    null;
-  const foodCommunityItemsForDisplay =
-    foodCommunityBackendItems.length > 0 ? foodCommunityBackendItems : foodCommunityItems;
-  const foodCommunityDisplayItems = useMemo(
-    () => buildFoodCommunityItemDisplayItems(foodCommunityItemsForDisplay),
-    [foodCommunityItemsForDisplay]
-  );
-  const visibleFoodCommunityItems = visibleFoodCommunityDisplayItems(
-    foodCommunityDisplayItems,
-    foodCommunityCategory,
-    foodCommunitySearchText
-  );
-  const selectedFoodCommunityItem = selectedFoodCommunityDisplayItem(
-    foodCommunityDisplayItems,
-    visibleFoodCommunityItems,
-    selectedFoodCommunityItemId
-  );
-  const foodCommunityShareFieldRows = foodCommunityShareFieldDisplayRows(
-    foodCommunityShareFields,
-    selectedFoodCommunityItem?.title
-  );
-  const foodCommunityPointRows = foodCommunityPointDisplayRows(storePointsBalance);
-  const foodCommunityRankingRows = foodCommunityRankingDisplayRows();
+  const foodCommunityCategoriesForDisplay = foodCommunityDisplay.categoriesForDisplay;
+  const foodCommunityCategoryDisplayOptions = foodCommunityDisplay.categoryDisplayOptions;
+  const selectedFoodCommunityCategoryDisplay = foodCommunityDisplay.selectedCategoryDisplay;
+  const foodCommunityItemsForDisplay = foodCommunityDisplay.itemsForDisplay;
+  const foodCommunityDisplayItems = foodCommunityDisplay.itemDisplayItems;
+  const visibleFoodCommunityItems = foodCommunityDisplay.visibleItems;
+  const selectedFoodCommunityItem = foodCommunityDisplay.selectedItem;
+  const foodCommunityShareFieldRows = foodCommunityDisplay.shareFieldRows;
+  const foodCommunityPointRows = foodCommunityDisplay.pointRows;
+  const foodCommunityRankingRows = foodCommunityDisplay.rankingRows;
   const visibleStoreProducts = visibleStoreProductDisplayItems(
     storeProductDisplayItems,
     storeCategory,
