@@ -3870,7 +3870,7 @@ def main() -> int:
         _assert_contains(
             "record result destination helper fields",
             content,
-            "setCurrentScreen(target);\n    setStatus(recordResultDestinationStatusMessage(kind, target));",
+            "openScreenWithStatus(target, recordResultDestinationStatusMessage(kind, target));",
         )
         _assert_contains(
             "delete success destination result helper binding",

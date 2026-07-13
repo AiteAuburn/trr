@@ -5774,8 +5774,7 @@ export default function App() {
   }
 
   function openRecordResultDestination(kind: "delete" | "update", target: AppScreen) {
-    setCurrentScreen(target);
-    setStatus(recordResultDestinationStatusMessage(kind, target));
+    openScreenWithStatus(target, recordResultDestinationStatusMessage(kind, target));
   }
 
   function openDeleteSuccessDestination(target: AppScreen) {
