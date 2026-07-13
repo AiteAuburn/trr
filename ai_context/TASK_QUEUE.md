@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1322: Extract session management display items helper
+
+Status: done
+
+Summary:
+
+- Added `sessionManagementDisplayItems` to `mobile/settingsScreenData.ts` for Account Security session-management preview item shaping.
+- Replaced the inline `sessionManagementPreviews.map(sessionManagementPreviewDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept session-management preview copy, action status, accessibility labels, Account Security rendering, auth boundary behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and item mapping rule are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1321: Extract production auth readiness display rows helper
 
 Status: done

@@ -1,6 +1,6 @@
 import type { AppScreen } from "./navigationConfig";
 import { boundOidcProviderForRequest, type OidcLoginProvider } from "./authTransforms";
-import { previewTupleDisplayItem } from "./sharedDisplayItems";
+import { previewTupleDisplayItem, sessionManagementPreviewDisplayItem } from "./sharedDisplayItems";
 
 const maxDisplayTextLength = 160;
 const maxIdentifierTextLength = 128;
@@ -70,6 +70,10 @@ export const sessionManagementPreviews = [
   ["其他裝置", "需後端列表", "需由後端提供可分頁 session list，mobile 不保存完整 token 或 session 清單。"],
   ["登出全部裝置", "撤銷未啟用", "需完成 refresh token revoke、server-side session invalidation 與安全儲存清除。"]
 ] as const;
+
+export function sessionManagementDisplayItems() {
+  return sessionManagementPreviews.map(sessionManagementPreviewDisplayItem);
+}
 
 export const productionAuthReadinessRows = [
   ["Provider", "待串接", "Apple / Google / Email token exchange 尚未接到 mobile。"],

@@ -685,7 +685,7 @@ import {
   authProviderPreviews,
   privacyControlDisplayRows as buildPrivacyControlDisplayRows,
   productionAuthReadinessDisplayRows as buildProductionAuthReadinessDisplayRows,
-  sessionManagementPreviews,
+  sessionManagementDisplayItems as buildSessionManagementDisplayItems,
   settingsRowDisplayItem,
   settingsRows,
   subscriptionManagementDisplayRows as buildSubscriptionManagementDisplayRows,
@@ -1675,7 +1675,7 @@ export default function App() {
   const tutorialDisplaySteps = useMemo(() => tutorialSteps.map(tutorialStepDisplayItem), []);
   const authProviderDisplayItems = useMemo(() => authProviderPreviews.map(authProviderPreviewDisplayItem), []);
   const sessionManagementDisplayItems = useMemo(
-    () => sessionManagementPreviews.map(sessionManagementPreviewDisplayItem),
+    () => buildSessionManagementDisplayItems(),
     []
   );
   const authSessionDisplayItems = useMemo(

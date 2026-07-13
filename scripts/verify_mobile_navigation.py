@@ -2510,6 +2510,11 @@ def main() -> int:
             "const productionAuthReadinessDisplayRows = useMemo(\n    () => buildProductionAuthReadinessDisplayRows(),",
         )
         _assert_contains(
+            "session management display items helper binding",
+            content,
+            "const sessionManagementDisplayItems = useMemo(\n    () => buildSessionManagementDisplayItems(),",
+        )
+        _assert_contains(
             "membership feature display rows helper binding",
             content,
             "const membershipFeatureRows = membershipFeatureDisplayRows();",
@@ -4950,6 +4955,8 @@ def main() -> int:
             ("auth provider accessibility item", "accessibilityLabel: boundDisplayText(`查看${item.title}登入整合狀態，不保存 provider token`, maxDisplayDetailTextLength)"),
             ("auth provider callback status copy", "provider callback 尚未接入；callback 拿到 id_token 後會走 /auth/oidc-login、SecureStore 與 session revoke 流程。"),
             ("session management preview rows config", "export const sessionManagementPreviews = ["),
+            ("session management display items helper", "export function sessionManagementDisplayItems()"),
+            ("session management display items map", "return sessionManagementPreviews.map(sessionManagementPreviewDisplayItem);"),
             ("production auth readiness rows config", "export const productionAuthReadinessRows = ["),
             ("production auth readiness display rows helper", "export function productionAuthReadinessDisplayRows()"),
             ("production auth readiness display rows map", "return productionAuthReadinessRows.map(previewTupleDisplayItem);"),
