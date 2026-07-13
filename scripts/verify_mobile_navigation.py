@@ -3622,6 +3622,26 @@ def main() -> int:
         _assert_contains(
             "visual smoke seeded record route fallback",
             content,
+            "return false;\n  }\n\n  function openVisualSmokeWorkflowSeedRoute(target: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke workflow seed route handler",
+            content,
+            "function openVisualSmokeWorkflowSeedRoute(target: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke workflow seed route manual fields",
+            content,
+            "setManualRecordFields(recordPayloadToEditFields(demoRecord));",
+        )
+        _assert_contains(
+            "visual smoke workflow seed route report",
+            content,
+            "setBasicReport(visualSmokeDemoReport());",
+        )
+        _assert_contains(
+            "visual smoke workflow seed route fallback",
+            content,
             "return false;\n  }\n\n  function openVisualSmokeRoute(target: AppScreen)",
         )
         _assert_contains(
@@ -3638,6 +3658,11 @@ def main() -> int:
             "visual smoke seeded record route helper binding",
             content,
             "if (openVisualSmokeRecordSeedRoute(target)) {",
+        )
+        _assert_contains(
+            "visual smoke workflow seed route helper binding",
+            content,
+            "if (openVisualSmokeWorkflowSeedRoute(target)) {",
         )
         _assert_contains(
             "visual smoke subscription status helper binding",

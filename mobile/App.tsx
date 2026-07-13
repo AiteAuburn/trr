@@ -4016,6 +4016,28 @@ export default function App() {
     return false;
   }
 
+  function openVisualSmokeWorkflowSeedRoute(target: AppScreen) {
+    if (target === "manualRecordConfirm") {
+      const demoRecord = visualSmokeDemoRecord();
+      setManualRecordType("glucose");
+      setManualRecordFields(recordPayloadToEditFields(demoRecord));
+      const dateTime = localDateTimeInputs(demoRecord.occurred_at);
+      setManualRecordDate(dateTime.date);
+      setManualRecordTime(dateTime.time);
+      setManualRecordReturnScreen("menu");
+      setCurrentScreen("manualRecordConfirm");
+      return true;
+    }
+    if (target === "detailedReport") {
+      setRecords(visualSmokeDemoRecords());
+      setBasicReport(visualSmokeDemoReport());
+      setReportStatus(visualSmokeRecordSyncStatusMessage());
+      setCurrentScreen("detailedReport");
+      return true;
+    }
+    return false;
+  }
+
   function openVisualSmokeRoute(target: AppScreen) {
     if (!enableDebugTools || !allowMobileDevAuth) {
       return;
@@ -4074,22 +4096,7 @@ export default function App() {
       openManualRecord("menu");
       return;
     }
-    if (target === "manualRecordConfirm") {
-      const demoRecord = visualSmokeDemoRecord();
-      setManualRecordType("glucose");
-      setManualRecordFields(recordPayloadToEditFields(demoRecord));
-      const dateTime = localDateTimeInputs(demoRecord.occurred_at);
-      setManualRecordDate(dateTime.date);
-      setManualRecordTime(dateTime.time);
-      setManualRecordReturnScreen("menu");
-      setCurrentScreen("manualRecordConfirm");
-      return;
-    }
-    if (target === "detailedReport") {
-      setRecords(visualSmokeDemoRecords());
-      setBasicReport(visualSmokeDemoReport());
-      setReportStatus(visualSmokeRecordSyncStatusMessage());
-      setCurrentScreen("detailedReport");
+    if (openVisualSmokeWorkflowSeedRoute(target)) {
       return;
     }
     if (target === "subscription") {
