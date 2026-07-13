@@ -1690,6 +1690,19 @@ export function storeCartReturnButtonLabel() {
   return boundDisplayText("返回商城", maxDisplayTextLength);
 }
 
+export function storePreviewDisplayTexts(actionStatus: string) {
+  return {
+    actionStatus: boundUiMessage(actionStatus),
+    previewBoundary: storePreviewBoundaryCopy(),
+    cartButton: storeCartButtonLabel(),
+    cartButtonAccessibility: storeCartButtonAccessibilityLabel(),
+    localBoundary: storeLocalBoundaryCopy(),
+    cartIntro: storeCartIntroCopy(),
+    checkoutReadinessTitle: storeCheckoutReadinessTitle(),
+    cartReturnButton: storeCartReturnButtonLabel()
+  };
+}
+
 export function achievementPreviewBoundaryCopy() {
   return boundDisplayText(
     "成就可同步 backend 依記錄聚合的 MVP 徽章摘要；backend 不可用或 visual smoke 時保留本機推算。",

@@ -194,18 +194,12 @@ import {
   localYearlyHighlightDisplayItems,
   localYearlyReviewMetricDisplayRows,
   saveSuccessNewlyUnlockedAchievementDisplayItems,
-  storeCartButtonAccessibilityLabel,
-  storeCartButtonLabel,
   storeCategories,
   storeCategoryDisplayItem,
-  storeCartIntroCopy,
-  storeCartReturnButtonLabel,
   storeCartUnavailableDisplayItem,
-  storeCheckoutReadinessTitle,
   storeCheckoutReadinessChecklistDisplayItems,
   storeEmptySearchDisplayItem,
-  storeLocalBoundaryCopy,
-  storePreviewBoundaryCopy,
+  storePreviewDisplayTexts,
   storeDisplayBundle,
   storeProductFromApi,
   storeProductDisplayItem,
@@ -1659,15 +1653,16 @@ export default function App() {
     `${foodCommunityShareButtonDisplayLabel}，backend 會計算升糖幅度並建立社群點數`,
     maxDisplayDetailTextLength
   );
-  const storeActionStatusDisplayText = boundUiMessage(storeActionStatus);
-  const storePreviewBoundaryDisplayText = storePreviewBoundaryCopy();
+  const storePreviewDisplay = storePreviewDisplayTexts(storeActionStatus);
+  const storeActionStatusDisplayText = storePreviewDisplay.actionStatus;
+  const storePreviewBoundaryDisplayText = storePreviewDisplay.previewBoundary;
   const storeEmptySearchDisplay = storeEmptySearchDisplayItem();
-  const storeCartButtonDisplayLabel = storeCartButtonLabel();
-  const storeCartButtonAccessibilityDisplayLabel = storeCartButtonAccessibilityLabel();
-  const storeLocalBoundaryDisplayText = storeLocalBoundaryCopy();
-  const storeCartIntroDisplayText = storeCartIntroCopy();
-  const storeCheckoutReadinessTitleDisplayText = storeCheckoutReadinessTitle();
-  const storeCartReturnButtonDisplayLabel = storeCartReturnButtonLabel();
+  const storeCartButtonDisplayLabel = storePreviewDisplay.cartButton;
+  const storeCartButtonAccessibilityDisplayLabel = storePreviewDisplay.cartButtonAccessibility;
+  const storeLocalBoundaryDisplayText = storePreviewDisplay.localBoundary;
+  const storeCartIntroDisplayText = storePreviewDisplay.cartIntro;
+  const storeCheckoutReadinessTitleDisplayText = storePreviewDisplay.checkoutReadinessTitle;
+  const storeCartReturnButtonDisplayLabel = storePreviewDisplay.cartReturnButton;
   const rankingOptInButtonDisplayLabel = boundDisplayText(
     communityPublicSettings?.leaderboard_opt_in ? "關閉排行榜 opt-in" : "開啟排行榜 opt-in",
     maxDisplayTextLength

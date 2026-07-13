@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1391: Extract Store preview display texts
+
+Status: done
+
+Summary:
+
+- Added `storePreviewDisplayTexts` to `mobile/futureModuleDisplay.ts` to bundle Store action status and existing Store preview/cart/checkout display copy.
+- Replaced repeated Store preview helper calls in `mobile/App.tsx` with the extracted display bundle.
+- Kept Store catalog sync, cart preview navigation, redemption handlers, backend request paths, and rendering unchanged.
+- Updated navigation verifier coverage so the display bundle internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1390: Extract food photo status display texts
 
 Status: done
