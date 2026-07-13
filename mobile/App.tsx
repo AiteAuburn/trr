@@ -3772,6 +3772,12 @@ export default function App() {
     setStatus(futureModuleDetailReturnStatusMessage());
   }
 
+  function openFutureModuleDetailResult(module: FutureModuleCard | null) {
+    setSelectedFutureModule(module);
+    setFutureModuleActionStatus(previewActionClearStatusMessage());
+    setCurrentScreen("futureModuleDetail");
+  }
+
   function openDoctorShare(returnScreen: AppScreen = currentScreen) {
     setDoctorShareReturnScreen(returnScreen === "doctorShare" ? "futureModules" : returnScreen);
     setDoctorShareActionStatus(previewActionClearStatusMessage());
@@ -4150,9 +4156,7 @@ export default function App() {
 
   function openVisualSmokeFutureModuleRoute(target: AppScreen) {
     if (target === "futureModuleDetail") {
-      setSelectedFutureModule(futureModuleCards[0] ?? null);
-      setFutureModuleActionStatus(previewActionClearStatusMessage());
-      setCurrentScreen("futureModuleDetail");
+      openFutureModuleDetailResult(futureModuleCards[0] ?? null);
       return true;
     }
     if (target === "doctorShare") {
@@ -4267,9 +4271,7 @@ export default function App() {
   }, []);
 
   function openFutureModuleDetail(module: FutureModuleCard) {
-    setSelectedFutureModule(module);
-    setFutureModuleActionStatus(previewActionClearStatusMessage());
-    setCurrentScreen("futureModuleDetail");
+    openFutureModuleDetailResult(module);
   }
 
   function openFutureModuleTargetRoute(target: AppScreen) {

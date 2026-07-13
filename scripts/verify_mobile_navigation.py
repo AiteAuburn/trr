@@ -4193,7 +4193,22 @@ def main() -> int:
         _assert_contains(
             "visual smoke future module route detail seed",
             content,
-            "setSelectedFutureModule(futureModuleCards[0] ?? null);",
+            "openFutureModuleDetailResult(futureModuleCards[0] ?? null);",
+        )
+        _assert_contains(
+            "future module detail result helper",
+            content,
+            "function openFutureModuleDetailResult(module: FutureModuleCard | null)",
+        )
+        _assert_contains(
+            "future module detail result helper fields",
+            content,
+            "setSelectedFutureModule(module);\n    setFutureModuleActionStatus(previewActionClearStatusMessage());\n    setCurrentScreen(\"futureModuleDetail\");",
+        )
+        _assert_contains(
+            "future module detail handler helper binding",
+            content,
+            "function openFutureModuleDetail(module: FutureModuleCard) {\n    openFutureModuleDetailResult(module);",
         )
         _assert_contains(
             "visual smoke future module route doctor binding",
