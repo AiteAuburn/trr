@@ -3605,6 +3605,26 @@ def main() -> int:
             "if (!enableDebugTools || !allowMobileDevAuth)",
         )
         _assert_contains(
+            "visual smoke seeded record route handler",
+            content,
+            "function openVisualSmokeRecordSeedRoute(target: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke seeded record route save summary",
+            content,
+            'setLastSavedSummary("Visual smoke demo save result.");',
+        )
+        _assert_contains(
+            "visual smoke seeded record route edit date",
+            content,
+            "setRecordEditDate(formatLocalDateInput(dateTime));",
+        )
+        _assert_contains(
+            "visual smoke seeded record route fallback",
+            content,
+            "return false;\n  }\n\n  function openVisualSmokeRoute(target: AppScreen)",
+        )
+        _assert_contains(
             "visual smoke record list helper binding",
             content,
             "if (isVisualSmokeRecordListScreen(target)) {",
@@ -3613,6 +3633,11 @@ def main() -> int:
             "visual smoke ai preview helper binding",
             content,
             "if (isVisualSmokeAiPreviewScreen(target)) {",
+        )
+        _assert_contains(
+            "visual smoke seeded record route helper binding",
+            content,
+            "if (openVisualSmokeRecordSeedRoute(target)) {",
         )
         _assert_contains(
             "visual smoke subscription status helper binding",

@@ -3958,6 +3958,64 @@ export default function App() {
     setFoodPhotoActionStatus(foodPhotoRetakeStatusMessage);
   }
 
+  function openVisualSmokeRecordSeedRoute(target: AppScreen) {
+    if (target === "saveSuccess") {
+      const demoRecord = visualSmokeDemoRecord();
+      setRecords(visualSmokeDemoRecords());
+      setSelectedRecord(demoRecord);
+      setLastSavedSummary("Visual smoke demo save result.");
+      setLastSaveEntryMethod("ai");
+      setCurrentScreen("saveSuccess");
+      return true;
+    }
+    if (target === "deleteSuccess") {
+      setRecords(visualSmokeDemoRecords());
+      setSelectedRecord(null);
+      setLastDeletedSummary("Visual smoke demo delete result.");
+      setRecordDetailReturnScreen("history");
+      setCurrentScreen("deleteSuccess");
+      return true;
+    }
+    if (target === "updateSuccess") {
+      const demoRecord = visualSmokeDemoRecord();
+      setRecords(visualSmokeDemoRecords());
+      setSelectedRecord(demoRecord);
+      setRecordEditFields(recordPayloadToEditFields(demoRecord));
+      setLastUpdatedSummary("Visual smoke demo update result.");
+      setRecordDetailReturnScreen("history");
+      setCurrentScreen("updateSuccess");
+      return true;
+    }
+    if (target === "recordDetail") {
+      const demoRecord = visualSmokeDemoRecord();
+      setRecords(visualSmokeDemoRecords());
+      setSelectedRecord(demoRecord);
+      setRecordDetailReturnScreen("history");
+      setCurrentScreen("recordDetail");
+      return true;
+    }
+    if (target === "editRecord") {
+      const demoRecord = visualSmokeDemoRecord();
+      const dateTime = new Date(demoRecord.occurred_at);
+      setRecords(visualSmokeDemoRecords());
+      setSelectedRecord(demoRecord);
+      setRecordEditFields(recordPayloadToEditFields(demoRecord));
+      setRecordEditDate(formatLocalDateInput(dateTime));
+      setRecordEditTime(formatLocalTimeInput(dateTime));
+      setCurrentScreen("editRecord");
+      return true;
+    }
+    if (target === "deleteConfirm") {
+      const demoRecord = visualSmokeDemoRecord();
+      setRecords(visualSmokeDemoRecords());
+      setSelectedRecord(demoRecord);
+      setRecordDetailReturnScreen("history");
+      setCurrentScreen("deleteConfirm");
+      return true;
+    }
+    return false;
+  }
+
   function openVisualSmokeRoute(target: AppScreen) {
     if (!enableDebugTools || !allowMobileDevAuth) {
       return;
@@ -4009,58 +4067,7 @@ export default function App() {
       setCurrentScreen("aiRemoveConfirm");
       return;
     }
-    if (target === "saveSuccess") {
-      const demoRecord = visualSmokeDemoRecord();
-      setRecords(visualSmokeDemoRecords());
-      setSelectedRecord(demoRecord);
-      setLastSavedSummary("Visual smoke demo save result.");
-      setLastSaveEntryMethod("ai");
-      setCurrentScreen("saveSuccess");
-      return;
-    }
-    if (target === "deleteSuccess") {
-      setRecords(visualSmokeDemoRecords());
-      setSelectedRecord(null);
-      setLastDeletedSummary("Visual smoke demo delete result.");
-      setRecordDetailReturnScreen("history");
-      setCurrentScreen("deleteSuccess");
-      return;
-    }
-    if (target === "updateSuccess") {
-      const demoRecord = visualSmokeDemoRecord();
-      setRecords(visualSmokeDemoRecords());
-      setSelectedRecord(demoRecord);
-      setRecordEditFields(recordPayloadToEditFields(demoRecord));
-      setLastUpdatedSummary("Visual smoke demo update result.");
-      setRecordDetailReturnScreen("history");
-      setCurrentScreen("updateSuccess");
-      return;
-    }
-    if (target === "recordDetail") {
-      const demoRecord = visualSmokeDemoRecord();
-      setRecords(visualSmokeDemoRecords());
-      setSelectedRecord(demoRecord);
-      setRecordDetailReturnScreen("history");
-      setCurrentScreen("recordDetail");
-      return;
-    }
-    if (target === "editRecord") {
-      const demoRecord = visualSmokeDemoRecord();
-      const dateTime = new Date(demoRecord.occurred_at);
-      setRecords(visualSmokeDemoRecords());
-      setSelectedRecord(demoRecord);
-      setRecordEditFields(recordPayloadToEditFields(demoRecord));
-      setRecordEditDate(formatLocalDateInput(dateTime));
-      setRecordEditTime(formatLocalTimeInput(dateTime));
-      setCurrentScreen("editRecord");
-      return;
-    }
-    if (target === "deleteConfirm") {
-      const demoRecord = visualSmokeDemoRecord();
-      setRecords(visualSmokeDemoRecords());
-      setSelectedRecord(demoRecord);
-      setRecordDetailReturnScreen("history");
-      setCurrentScreen("deleteConfirm");
+    if (openVisualSmokeRecordSeedRoute(target)) {
       return;
     }
     if (target === "manualRecord") {
