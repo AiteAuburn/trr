@@ -83,8 +83,7 @@ import {
   recordDetailDisplayItem,
   recordListDisplayItem,
   recordListDisplayItems,
-  recordTypeIcon,
-  recordTypeLabel
+  recordTypeIcon
 } from "./recordDisplay";
 import {
   boundRecordEditField,
@@ -198,6 +197,7 @@ import {
   selectedFutureModuleDisplayItem,
   selectedFoodCommunityDisplayItem,
   localYearlyHealthOutcomeDisplayRows,
+  localYearlyHighlightDisplayItems,
   localYearlyReviewMetricDisplayRows,
   saveSuccessNewlyUnlockedAchievementDisplayItems,
   storeCartButtonAccessibilityLabel,
@@ -1511,7 +1511,6 @@ export default function App() {
   const yearlyExerciseRecordDisplayCount = clampNumber(yearlyTypeCounts.get("exercise") ?? 0, 0, maxMobileCountValue);
   const yearlyMealRecordDisplayCount = clampNumber(yearlyTypeCounts.get("meal") ?? 0, 0, maxMobileCountValue);
   const yearlyLongestStreakDisplayDays = clampNumber(yearlyLongestStreak, 0, maxMobileCountValue);
-  const yearlyMostRecordedDisplayCount = clampNumber(yearlyMostRecordedType?.[1] ?? 0, 0, maxMobileCountValue);
   const backendYearMetricRows = backendYearReviewMetricDisplayRows(yearReviewBackendSummary);
   const backendYearHealthRows = backendYearReviewHealthOutcomeDisplayRows(yearReviewBackendSummary);
   const backendYearAiObservation = yearReviewBackendSummary?.ai_summary.find(
@@ -1540,19 +1539,12 @@ export default function App() {
     yearlyGlucoseAverageDisplayValue === null
       ? ""
       : boundDisplayText(`前一年度血糖紀錄平均值為 ${yearlyGlucoseAverageDisplayValue} mg/dL。`, maxDisplayDetailTextLength);
-  const yearlyHighlightTexts =
-    yearlyRecords.length === 0
-      ? ["目前還沒有今年紀錄，開始記錄後會自動產生年度摘要。"]
-      : [
-          `${yearReviewTargetDisplayYear} 年已有 ${yearlyRecordDisplayCount} 筆紀錄。`,
-          yearlyMostRecordedType
-            ? `最常記錄的是${recordTypeLabel(yearlyMostRecordedType[0])}，共 ${yearlyMostRecordedDisplayCount} 筆。`
-            : "今年尚未累積足夠分類資料。",
-          yearlyLongestStreak > 0
-            ? `最長連續記錄 ${yearlyLongestStreakDisplayDays} 天。`
-            : "連續記錄資料仍在累積中。"
-        ];
-  const yearlyHighlightDisplayTexts = yearlyHighlightTexts.map(resultChecklistItem);
+  const yearlyHighlightDisplayTexts = localYearlyHighlightDisplayItems(
+    yearlyRecordDisplayCount,
+    yearReviewTargetDisplayYear,
+    yearlyMostRecordedType,
+    yearlyLongestStreakDisplayDays
+  );
   const yearlyAiObservationDisplayText = backendYearAiObservation
     ? boundDisplayText(backendYearAiObservation, maxDisplayDetailTextLength)
     : yearReviewAiObservationCopy(

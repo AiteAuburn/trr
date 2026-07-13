@@ -1,6 +1,6 @@
 import type { AppScreen } from "./navigationConfig";
 import { formatLocalDateInput, localDateTimeInputs } from "./dateTimeTransforms";
-import { recordDateTimeDisplay } from "./recordDisplay";
+import { recordDateTimeDisplay, recordTypeLabel } from "./recordDisplay";
 import { detailPairDisplayItem, metricDisplayItem, resultChecklistItem } from "./sharedDisplayItems";
 
 const maxDisplayTextLength = 120;
@@ -1660,6 +1660,31 @@ export function localYearlyHealthOutcomeDisplayRows(
     ["年度最高血糖", yearlyGlucoseHighestDisplayValue === null ? "尚無" : `${yearlyGlucoseHighestDisplayValue} mg/dL`],
     ["年度最低血糖", yearlyGlucoseLowestDisplayValue === null ? "尚無" : `${yearlyGlucoseLowestDisplayValue} mg/dL`]
   ] as const).map(metricDisplayItem);
+}
+
+export function localYearlyHighlightDisplayItems(
+  recordCount: number,
+  targetYear: number,
+  mostRecordedType: readonly [string, number] | null,
+  longestStreakDays: number
+) {
+  const boundedRecordCount = clampNumber(recordCount, 0, maxMobileCountValue);
+  const boundedYear = clampNumber(targetYear, 1900, 9999);
+  const boundedMostRecordedCount = clampNumber(mostRecordedType?.[1] ?? 0, 0, maxMobileCountValue);
+  const boundedLongestStreakDays = clampNumber(longestStreakDays, 0, maxMobileCountValue);
+  const items =
+    boundedRecordCount === 0
+      ? ["目前還沒有今年紀錄，開始記錄後會自動產生年度摘要。"]
+      : [
+          `${boundedYear} 年已有 ${boundedRecordCount} 筆紀錄。`,
+          mostRecordedType
+            ? `最常記錄的是${recordTypeLabel(mostRecordedType[0])}，共 ${boundedMostRecordedCount} 筆。`
+            : "今年尚未累積足夠分類資料。",
+          boundedLongestStreakDays > 0
+            ? `最長連續記錄 ${boundedLongestStreakDays} 天。`
+            : "連續記錄資料仍在累積中。"
+        ];
+  return items.map(resultChecklistItem);
 }
 
 export function yearReviewBadgeMaterialCopy() {

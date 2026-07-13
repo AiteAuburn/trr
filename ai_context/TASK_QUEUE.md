@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1356: Extract Year Review highlight display helper
+
+Status: done
+
+Summary:
+
+- Added `localYearlyHighlightDisplayItems` to `mobile/futureModuleDisplay.ts` for Year Review local highlight display text shaping.
+- Replaced the inline Year Review highlight text array and `resultChecklistItem` mapping in `mobile/App.tsx` with the extracted helper.
+- Kept empty-state highlight copy, record-count highlight copy, most-recorded type copy, longest-streak copy, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, helper copy, and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1355: Extract achievement badge summary helper for Year Review
 
 Status: done
