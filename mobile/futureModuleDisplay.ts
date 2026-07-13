@@ -750,6 +750,10 @@ export function achievementDisplayItem(value: AchievementItem) {
 
 export type AchievementDisplayItem = ReturnType<typeof achievementDisplayItem>;
 
+export function achievementDisplayItems(items: AchievementItem[]) {
+  return items.map(achievementDisplayItem);
+}
+
 export function limitedAchievementDisplayItems(items: AchievementItem[]) {
   return items.slice(0, maxListItems).map(achievementDisplayItem);
 }

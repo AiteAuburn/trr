@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1334: Extract achievement display items helper
+
+Status: done
+
+Summary:
+
+- Added `achievementDisplayItems` to `mobile/futureModuleDisplay.ts` for Achievement display-list shaping.
+- Replaced the inline `achievements.map(achievementDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept Achievement progress bounds, unlocked counts, category sections, newly-unlocked lists, future-module visibility, and Achievement rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and achievement mapping rule are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1333: Extract downloaded Whisper model display items helper
 
 Status: done

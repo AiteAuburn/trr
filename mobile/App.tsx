@@ -121,7 +121,7 @@ import {
 } from "./navigationConfig";
 import {
   achievementCategoryDefinitions,
-  achievementDisplayItem,
+  achievementDisplayItems as buildAchievementDisplayItems,
   achievementIntegrationButtonAccessibilityLabel,
   achievementIntegrationButtonLabel,
   achievementItemFromApi,
@@ -1447,7 +1447,7 @@ export default function App() {
     });
   }, [recordsForDisplay]);
   const achievements = achievementBackendItems.length > 0 ? achievementBackendItems : localAchievements;
-  const achievementDisplayItems = useMemo(() => achievements.map(achievementDisplayItem), [achievements]);
+  const achievementDisplayItems = useMemo(() => buildAchievementDisplayItems(achievements), [achievements]);
   const achievementUnlockedDisplayItems = useMemo(
     () => limitedAchievementDisplayItems(achievementUnlockedItems),
     [achievementUnlockedItems]
