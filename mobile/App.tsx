@@ -3774,7 +3774,7 @@ export default function App() {
 
   function openFutureModuleDetailResult(module: FutureModuleCard | null) {
     setSelectedFutureModule(module);
-    setFutureModuleActionStatus(previewActionClearStatusMessage());
+    setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());
     setCurrentScreen("futureModuleDetail");
   }
 
@@ -3782,9 +3782,13 @@ export default function App() {
     return returnScreen === selfScreen ? "futureModules" : returnScreen;
   }
 
+  function futurePreviewActionClearStatusMessage() {
+    return previewActionClearStatusMessage();
+  }
+
   function openDoctorShare(returnScreen: AppScreen = currentScreen) {
     setDoctorShareReturnScreen(futurePreviewReturnScreen(returnScreen, "doctorShare"));
-    setDoctorShareActionStatus(previewActionClearStatusMessage());
+    setDoctorShareActionStatus(futurePreviewActionClearStatusMessage());
     setCurrentScreen("doctorShare");
   }
 
@@ -3803,7 +3807,7 @@ export default function App() {
 
   function openHealthIntegration(returnScreen: AppScreen = currentScreen) {
     setHealthIntegrationReturnScreen(futurePreviewReturnScreen(returnScreen, "healthIntegration"));
-    setHealthIntegrationActionStatus(previewActionClearStatusMessage());
+    setHealthIntegrationActionStatus(futurePreviewActionClearStatusMessage());
     setCurrentScreen("healthIntegration");
   }
 
@@ -3822,7 +3826,7 @@ export default function App() {
 
   function openCommunity(returnScreen: AppScreen = currentScreen) {
     setCommunityReturnScreen(futurePreviewReturnScreen(returnScreen, "community"));
-    setCommunityActionStatus(previewActionClearStatusMessage());
+    setCommunityActionStatus(futurePreviewActionClearStatusMessage());
     setCurrentScreen("community");
     void loadCommunityPublicSettings();
     void loadFoodCommunityCategories();
@@ -3899,7 +3903,7 @@ export default function App() {
 
   function openRanking(returnScreen: AppScreen = currentScreen) {
     setRankingReturnScreen(futurePreviewReturnScreen(returnScreen, "ranking"));
-    setRankingActionStatus(previewActionClearStatusMessage());
+    setRankingActionStatus(futurePreviewActionClearStatusMessage());
     setCurrentScreen("ranking");
     void loadCommunityLeaderboards();
   }

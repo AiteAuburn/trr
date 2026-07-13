@@ -4203,7 +4203,7 @@ def main() -> int:
         _assert_contains(
             "future module detail result helper fields",
             content,
-            "setSelectedFutureModule(module);\n    setFutureModuleActionStatus(previewActionClearStatusMessage());\n    setCurrentScreen(\"futureModuleDetail\");",
+            "setSelectedFutureModule(module);\n    setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());\n    setCurrentScreen(\"futureModuleDetail\");",
         )
         _assert_contains(
             "future module detail handler helper binding",
@@ -4221,9 +4221,24 @@ def main() -> int:
             'return returnScreen === selfScreen ? "futureModules" : returnScreen;',
         )
         _assert_contains(
+            "future preview action clear status helper",
+            content,
+            "function futurePreviewActionClearStatusMessage()",
+        )
+        _assert_contains(
+            "future preview action clear status helper fields",
+            content,
+            "return previewActionClearStatusMessage();",
+        )
+        _assert_contains(
             "doctor share future preview return helper binding",
             content,
             'setDoctorShareReturnScreen(futurePreviewReturnScreen(returnScreen, "doctorShare"));',
+        )
+        _assert_contains(
+            "doctor share future preview action helper binding",
+            content,
+            "setDoctorShareActionStatus(futurePreviewActionClearStatusMessage());",
         )
         _assert_contains(
             "health integration future preview return helper binding",
@@ -4239,6 +4254,11 @@ def main() -> int:
             "ranking future preview return helper binding",
             content,
             'setRankingReturnScreen(futurePreviewReturnScreen(returnScreen, "ranking"));',
+        )
+        _assert_contains(
+            "ranking future preview action helper binding",
+            content,
+            "setRankingActionStatus(futurePreviewActionClearStatusMessage());",
         )
         _assert_contains(
             "visual smoke future module route doctor binding",
