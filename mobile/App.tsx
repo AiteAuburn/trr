@@ -209,6 +209,7 @@ import {
   storeCatalogSyncStatusMessages,
   storePreviewDisplayTexts,
   storeRedeemStatusMessages,
+  storeRedemptionUseStatusMessages,
   storeDisplayBundle,
   storeProductFromApi,
   storeProductDisplayItem,
@@ -5131,31 +5132,35 @@ export default function App() {
   }
 
   async function useStoreRedemption(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
+    const redemptionUseStatus = storeRedemptionUseStatusMessages({
+      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+      redemptionTitle: redemption.title,
+      statusLabel: redemption.statusLabel,
+      usedIdentifier: ""
+    });
     if (visualSmokePreviewActive.current) {
-      setStoreActionStatus(boundUiMessage("Visual smoke 預覽不標記兌換券使用，也不更新 backend 狀態。"));
+      setStoreActionStatus(redemptionUseStatus.visualSmoke);
       return;
     }
     if (!protectedAccountBackendReady || !account) {
-      setStoreActionStatus(
-        boundUiMessage(`${protectedAccountBackendUnavailableMessage || "backend account 尚未 ready"}；目前不更新兌換券狀態。`)
-      );
+      setStoreActionStatus(redemptionUseStatus.unavailable);
       return;
     }
     if (!redemption.isUsable) {
-      setStoreActionStatus(boundUiMessage(`${redemption.title} 目前狀態為 ${redemption.statusLabel}。`));
+      setStoreActionStatus(redemptionUseStatus.unusable);
       return;
     }
     if (!redemption.id) {
-      setStoreActionStatus(boundUiMessage("兌換券識別無效；目前不更新兌換券狀態。"));
+      setStoreActionStatus(redemptionUseStatus.invalid);
       return;
     }
     if (storeRedemptionInFlight.current) {
-      setStoreActionStatus(boundUiMessage("商城兌換狀態更新中，請稍候。"));
+      setStoreActionStatus(redemptionUseStatus.inFlight);
       return;
     }
     storeRedemptionInFlight.current = true;
     setIsBusy(true);
-    setStoreActionStatus(boundUiMessage(`正在標記 ${redemption.title} 已使用。`));
+    setStoreActionStatus(redemptionUseStatus.loading);
     try {
       const usedRedemption = await requestJson<StoreApiRedemption>(
         normalizedApiBaseUrl,
@@ -5166,13 +5171,16 @@ export default function App() {
         }
       );
       setStoreActionStatus(
-        boundUiMessage(
-          `已標記 ${boundIdentifier(usedRedemption.fulfillment_code || usedRedemption.reward_code)} 為已使用。`
-        )
+        storeRedemptionUseStatusMessages({
+          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+          redemptionTitle: redemption.title,
+          statusLabel: redemption.statusLabel,
+          usedIdentifier: usedRedemption.fulfillment_code || usedRedemption.reward_code
+        }).success
       );
       void loadStoreCatalogAndPoints();
     } catch {
-      setStoreActionStatus(boundUiMessage("兌換券狀態更新失敗；可能已使用、已失效或不屬於目前帳號。"));
+      setStoreActionStatus(redemptionUseStatus.failure);
     } finally {
       storeRedemptionInFlight.current = false;
       setIsBusy(false);

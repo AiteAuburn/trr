@@ -1758,6 +1758,31 @@ export function storeRedeemStatusMessages(value: {
   };
 }
 
+export function storeRedemptionUseStatusMessages(value: {
+  backendUnavailableMessage: string;
+  redemptionTitle: string;
+  statusLabel: string;
+  usedIdentifier: string;
+}) {
+  return {
+    visualSmoke: boundUiMessage("Visual smoke 預覽不標記兌換券使用，也不更新 backend 狀態。"),
+    unavailable: boundUiMessage(
+      `${value.backendUnavailableMessage || "backend account 尚未 ready"}；目前不更新兌換券狀態。`
+    ),
+    unusable: boundUiMessage(
+      `${boundDisplayText(value.redemptionTitle, maxDisplayTextLength)} 目前狀態為 ${boundDisplayText(
+        value.statusLabel,
+        maxDisplayTextLength
+      )}。`
+    ),
+    invalid: boundUiMessage("兌換券識別無效；目前不更新兌換券狀態。"),
+    inFlight: boundUiMessage("商城兌換狀態更新中，請稍候。"),
+    loading: boundUiMessage(`正在標記 ${boundDisplayText(value.redemptionTitle, maxDisplayTextLength)} 已使用。`),
+    success: boundUiMessage(`已標記 ${boundIdentifier(value.usedIdentifier)} 為已使用。`),
+    failure: boundUiMessage("兌換券狀態更新失敗；可能已使用、已失效或不屬於目前帳號。")
+  };
+}
+
 export function achievementPreviewBoundaryCopy() {
   return boundDisplayText(
     "成就可同步 backend 依記錄聚合的 MVP 徽章摘要；backend 不可用或 visual smoke 時保留本機推算。",
