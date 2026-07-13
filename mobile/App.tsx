@@ -637,6 +637,7 @@ import {
   lowestNumber,
   recordsInYear,
   recordTypeCount,
+  recordTypeCounts,
   selectedAnalysisChartPoint
 } from "./analysisDataTransforms";
 import {
@@ -1478,13 +1479,7 @@ export default function App() {
     () => recordsInYear(records, yearReviewTargetDisplayYear),
     [records, yearReviewTargetDisplayYear]
   );
-  const yearlyTypeCounts = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const record of yearlyRecords) {
-      counts.set(record.record_type, (counts.get(record.record_type) ?? 0) + 1);
-    }
-    return counts;
-  }, [yearlyRecords]);
+  const yearlyTypeCounts = useMemo(() => recordTypeCounts(yearlyRecords), [yearlyRecords]);
   const yearlyMostRecordedType =
     Array.from(yearlyTypeCounts.entries()).sort((first, second) => second[1] - first[1])[0] ?? null;
   const yearlyLongestStreak = useMemo(() => longestRecordStreakDays(yearlyRecords), [yearlyRecords]);

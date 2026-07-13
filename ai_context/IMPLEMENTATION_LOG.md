@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1352 extract record-type counts helper for Year Review
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisDataTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `recordTypeCounts` to `mobile/analysisDataTransforms.ts` for shared record-type count map aggregation.
+- Replaced the inline Year Review `Map` construction loop in `mobile/App.tsx` with the extracted helper.
+- Kept yearly type counts, most-recorded type selection, local Year Review metric inputs, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, helper implementation, and Year Review binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Year Review rendering、Year Review backend fallback、achievement data、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing Year Review glucose-value and badge aggregation separately.
+
 ### T1351 extract Year Review records-in-year helper
 
 類型：mobile / refactor / verifier / docs

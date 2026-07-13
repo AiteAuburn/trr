@@ -194,6 +194,14 @@ export function recordTypeCount(records: RecordItem[], recordType: string) {
   return records.filter((record) => record.record_type === recordType).length;
 }
 
+export function recordTypeCounts(records: RecordItem[]) {
+  const counts = new Map<string, number>();
+  for (const record of records) {
+    counts.set(record.record_type, (counts.get(record.record_type) ?? 0) + 1);
+  }
+  return counts;
+}
+
 export function recordsInYear(records: RecordItem[], targetYear: number) {
   return records.filter((record) => {
     const occurredAt = new Date(record.occurred_at);

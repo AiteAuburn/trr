@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1352: Extract record-type counts helper for Year Review
+
+Status: done
+
+Summary:
+
+- Added `recordTypeCounts` to `mobile/analysisDataTransforms.ts` for shared record-type count map aggregation.
+- Replaced the inline Year Review `Map` construction loop in `mobile/App.tsx` with the extracted helper.
+- Kept yearly type counts, most-recorded type selection, local Year Review metric inputs, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, helper implementation, and Year Review binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1351: Extract Year Review records-in-year helper
 
 Status: done
