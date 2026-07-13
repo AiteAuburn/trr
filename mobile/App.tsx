@@ -2986,6 +2986,10 @@ export default function App() {
     clearPreviewEditDraftFields();
   }
 
+  function clearDailyRecordEntryMenu() {
+    setDailyRecordMenuIndex(null);
+  }
+
   function seedEmptyPreviewEditStateForNow() {
     clearPreviewEditDraftFields();
     const nowInputs = localDateTimeInputs(new Date());
@@ -2996,17 +3000,17 @@ export default function App() {
   function clearPreviewMenuSelectionIndexes() {
     setSelectedPreviewIndex(null);
     setPendingPreviewRemoveIndex(null);
-    setDailyRecordMenuIndex(null);
+    clearDailyRecordEntryMenu();
   }
 
   function selectPreviewEditIndex(index: number) {
-    setDailyRecordMenuIndex(null);
+    clearDailyRecordEntryMenu();
     setPendingPreviewRemoveIndex(null);
     setSelectedPreviewIndex(index);
   }
 
   function selectPreviewRemoveIndex(index: number) {
-    setDailyRecordMenuIndex(null);
+    clearDailyRecordEntryMenu();
     setSelectedPreviewIndex(null);
     setPendingPreviewRemoveIndex(index);
   }
@@ -3093,7 +3097,7 @@ export default function App() {
       setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));
     }
     setPendingPreviewRemoveIndex(null);
-    setDailyRecordMenuIndex(null);
+    clearDailyRecordEntryMenu();
   }
 
   function confirmPreviewRecordRemove() {
@@ -3218,7 +3222,7 @@ export default function App() {
         setStatus(aiCandidateEditSuccessStatusMessage());
       }
       clearSelectedPreviewEditDraft();
-      setDailyRecordMenuIndex(null);
+      clearDailyRecordEntryMenu();
       setCurrentScreen(previewActionReturnScreen);
     } catch (error) {
       setStatus(aiCandidateEditFailureStatusMessage(error));
