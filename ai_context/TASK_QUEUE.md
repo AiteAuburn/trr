@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1317: Extract future module card list helper
+
+Status: done
+
+Summary:
+
+- Added `futureModuleCardDisplayItems` to `mobile/futureModuleDisplay.ts` for Future Modules card display-list shaping.
+- Replaced the inline `futureModuleCards.map(futureModuleCardDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept future module card copy, accessibility labels, requirements shaping, selected-module behavior, future target routing, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and list mapping rule are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1316: Extract auth session display list helper
 
 Status: done

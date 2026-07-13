@@ -672,6 +672,10 @@ export function futureModuleCardDisplayItem(value: FutureModuleCard) {
   };
 }
 
+export function futureModuleCardDisplayItems(values: FutureModuleCard[]) {
+  return values.map(futureModuleCardDisplayItem);
+}
+
 export function selectedFutureModuleDisplayItem(value: FutureModuleCard | null) {
   const id = value?.id ?? "none";
   return {

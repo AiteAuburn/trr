@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1317 extract future module card list helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `futureModuleCardDisplayItems` to `mobile/futureModuleDisplay.ts` for Future Modules card display-list shaping.
+- Replaced the inline `futureModuleCards.map(futureModuleCardDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept future module card copy, accessibility labels, requirements shaping, selected-module behavior, future target routing, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and list mapping rule are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Future Modules rendering、future module routing、selected-module fallback behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk display-list helpers from `App.tsx`; keep future module route handlers and selected-state ownership in `App.tsx` until component boundaries are stable.
+
 ### T1316 extract auth session display list helper
 
 類型：mobile / refactor / verifier / docs

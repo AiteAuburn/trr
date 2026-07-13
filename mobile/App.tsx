@@ -169,6 +169,7 @@ import {
   foodCommunityShareFieldDisplayRows,
   futureModuleCards,
   futureModuleCardDisplayItem,
+  futureModuleCardDisplayItems,
   futureModuleDetailBoundaryCopy,
   futureModuleDetailReturnStatusMessage,
   futureModuleImplementationOrderCopy,
@@ -1701,7 +1702,7 @@ export default function App() {
     []
   );
   const futureModuleDisplayCards = useMemo(
-    () => futureModuleCards.map(futureModuleCardDisplayItem),
+    () => futureModuleCardDisplayItems(futureModuleCards),
     []
   );
   const selectedFutureModuleDisplay = useMemo(
