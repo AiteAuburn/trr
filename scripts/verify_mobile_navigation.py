@@ -4187,6 +4187,9 @@ def main() -> int:
             ("report source backend copy", "資料來自 /reports/basic"),
             ("report source local fallback", "backend 報表暫未使用"),
             ("report source empty fallback", "此頁只顯示空摘要"),
+            ("report generated-at display helper", "function reportGeneratedAtDisplayText(generatedAt?: string | null)"),
+            ("report generated-at record datetime binding", "recordDateTimeDisplay(generatedAt)"),
+            ("report generated-at fallback copy", "以 mobile 目前已載入資料計算。"),
             ("report status display texts helper", "function reportStatusDisplayTexts(value: {"),
             ("report status display report binding", "report: boundUiMessage(value.reportStatus)"),
             ("quota status display binding", "quota: boundUiMessage(value.quotaStatus)"),
@@ -4833,6 +4836,7 @@ def main() -> int:
             ("analysis report status display helper binding", "const reportStatusDisplay = reportStatusDisplayTexts({"),
             ("analysis report status display text binding", "const reportStatusDisplayText = reportStatusDisplay.report;"),
             ("voice quota status display text binding", "const quotaStatusDisplayText = reportStatusDisplay.quota;"),
+            ("report generated-at display helper binding", "const reportGeneratedAtDisplayText = reportGeneratedAtDisplayValue(activeAnalysisReport?.generated_at);"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(

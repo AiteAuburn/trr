@@ -79,7 +79,6 @@ import {
   pendingRecordDisplayItem,
   pendingRecordDisplayItems,
   rejectedPreviewDisplayItems as buildRejectedPreviewDisplayItems,
-  recordDateTimeDisplay,
   recordDetailDisplayItem,
   recordListDisplayItem,
   recordListDisplayItems,
@@ -498,6 +497,7 @@ import {
   detailedReportResetStatusMessage,
   detailedReportSuccessStatusMessage,
   detailedReportUnavailableStatusMessage,
+  reportGeneratedAtDisplayText as reportGeneratedAtDisplayValue,
   reportStatusDisplayTexts,
   reportSourceDisplayItem,
   voiceQuotaInitialStatusMessage,
@@ -1642,9 +1642,7 @@ export default function App() {
   const reportStatusDisplayText = reportStatusDisplay.report;
   const reportSourceDisplayLabel = reportSourceDisplay.label;
   const reportSourceDisplayCopy = reportSourceDisplay.copy;
-  const reportGeneratedAtDisplayText = activeAnalysisReport
-    ? boundDisplayText(`產生時間：${recordDateTimeDisplay(activeAnalysisReport.generated_at)}`, maxDisplayDetailTextLength)
-    : "以 mobile 目前已載入資料計算。";
+  const reportGeneratedAtDisplayText = reportGeneratedAtDisplayValue(activeAnalysisReport?.generated_at);
   const futurePreviewDisplayLabels = futurePreviewSectionLabels();
   const futurePreviewStatusDisplay = futurePreviewStatusDisplayTexts({
     futureModuleActionStatus,

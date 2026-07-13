@@ -1,5 +1,8 @@
+import { recordDateTimeDisplay } from "./recordDisplay";
+
 const maxUiMessageLength = 300;
 const maxDisplayTextLength = 80;
+const maxDisplayDetailTextLength = 240;
 const maxMobileCountValue = 9999;
 
 function boundUiMessage(value: string) {
@@ -94,6 +97,12 @@ export function reportSourceDisplayItem(report: unknown | null, localRecordCount
     label: boundDisplayText("尚無資料", 24),
     copy: boundUiMessage("目前沒有可分析的已載入紀錄；此頁只顯示空摘要。")
   };
+}
+
+export function reportGeneratedAtDisplayText(generatedAt?: string | null) {
+  return generatedAt
+    ? boundDisplayText(`產生時間：${recordDateTimeDisplay(generatedAt)}`, maxDisplayDetailTextLength)
+    : boundDisplayText("以 mobile 目前已載入資料計算。", maxDisplayDetailTextLength);
 }
 
 export function reportStatusDisplayTexts(value: {
