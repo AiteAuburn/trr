@@ -2034,9 +2034,7 @@ export default function App() {
 
   function returnFromTranscriptReview() {
     setPreview(null);
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
+    clearPreviewSelectionState();
     setParserRecoveryMessage("");
     setCurrentScreen(transcriptReviewReturnScreen);
     setStatus(transcriptReviewBackStatusMessage());
@@ -2050,9 +2048,7 @@ export default function App() {
     setTranscriptVoiceSeconds(0);
     setIsTranscriptSample(false);
     setPreview(null);
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
+    clearPreviewSelectionState();
     setParserRecoveryMessage("");
     setCurrentScreen(transcriptReviewReturnScreen);
     setStatus(transcriptClearedStatusMessage());
@@ -2109,17 +2105,13 @@ export default function App() {
   }
 
   function openAiReviewManualRecord() {
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
+    clearPreviewSelectionState();
     openManualRecord("aiReview");
     setStatus(aiReviewManualEntryStatusMessage());
   }
 
   function openTranscriptReviewManualRecord() {
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
+    clearPreviewSelectionState();
     openManualRecord("transcriptReview");
     setStatus(transcriptReviewManualEntryStatusMessage());
   }
@@ -3258,10 +3250,14 @@ export default function App() {
     deleteDailyRecordEntry(item);
   }
 
-  function clearPreviewActionState() {
+  function clearPreviewSelectionState() {
     setSelectedPreviewIndex(null);
     setPendingPreviewRemoveIndex(null);
     setPreviewEditFields(emptyRecordEditFields());
+  }
+
+  function clearPreviewActionState() {
+    clearPreviewSelectionState();
     setLastSaveErrorSummary("");
   }
 
@@ -3322,19 +3318,13 @@ export default function App() {
   }
 
   function returnFromAiSaveFailureToAiReview() {
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
-    setLastSaveErrorSummary("");
+    clearPreviewActionState();
     setCurrentScreen("aiReview");
     setStatus(aiSaveFailureBackAiReviewStatusMessage());
   }
 
   function returnFromAiSaveFailureToSaveConfirm() {
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
-    setLastSaveErrorSummary("");
+    clearPreviewActionState();
     if (!preview || preview.records.length === 0) {
       setCurrentScreen("aiReview");
       setStatus(aiSaveFailureBackAiReviewStatusMessage());
@@ -3345,9 +3335,7 @@ export default function App() {
   }
 
   function openAiSaveFailureManualFallback() {
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
+    clearPreviewSelectionState();
     openManualRecord("aiReview");
     setStatus(aiSaveFailureManualFallbackStatusMessage());
   }

@@ -2862,19 +2862,29 @@ def main() -> int:
             "onPress={requestDailyRecordLeaveGuard}",
         )
         _assert_contains(
+            "preview selection state clear helper",
+            content,
+            "function clearPreviewSelectionState()",
+        )
+        _assert_contains(
+            "preview selection state clear helper selected index",
+            content,
+            "function clearPreviewSelectionState() {\n    setSelectedPreviewIndex(null);",
+        )
+        _assert_contains(
+            "preview selection state clear helper remove index",
+            content,
+            "setPendingPreviewRemoveIndex(null);\n    setPreviewEditFields(emptyRecordEditFields());",
+        )
+        _assert_contains(
             "preview action state clear helper",
             content,
             "function clearPreviewActionState()",
         )
         _assert_contains(
-            "preview action state clear selected index",
+            "preview action state clear selection helper binding",
             content,
-            "setSelectedPreviewIndex(null);",
-        )
-        _assert_contains(
-            "preview action state clear edit fields",
-            content,
-            "setPreviewEditFields(emptyRecordEditFields());",
+            "function clearPreviewActionState() {\n    clearPreviewSelectionState();",
         )
         _assert_contains(
             "AI save confirm return clear helper binding",
@@ -3042,14 +3052,29 @@ def main() -> int:
             "function openAiSaveFailureManualFallback()",
         )
         _assert_contains(
+            "AI save failure manual fallback clear selection binding",
+            content,
+            "function openAiSaveFailureManualFallback() {\n    clearPreviewSelectionState();",
+        )
+        _assert_contains(
             "AI save failure back AI review handler",
             content,
             "function returnFromAiSaveFailureToAiReview()",
         )
         _assert_contains(
+            "AI save failure back AI review clear action binding",
+            content,
+            "function returnFromAiSaveFailureToAiReview() {\n    clearPreviewActionState();",
+        )
+        _assert_contains(
             "AI save failure return save confirm handler",
             content,
             "function returnFromAiSaveFailureToSaveConfirm()",
+        )
+        _assert_contains(
+            "AI save failure return save confirm clear action binding",
+            content,
+            "function returnFromAiSaveFailureToSaveConfirm() {\n    clearPreviewActionState();",
         )
         _assert_contains(
             "AI save failure back AI review binding",
