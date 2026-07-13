@@ -4160,11 +4160,18 @@ def main() -> int:
             ("record sync boundary load-more binding", "const canLoadMoreRecords = recordSyncBoundaryDisplay.canLoadMoreRecords;"),
             ("record sync boundary history display binding", "const historySyncBoundaryDisplayText = recordSyncBoundaryDisplay.history;"),
             ("record sync boundary analysis display binding", "const analysisSyncBoundaryDisplayText = recordSyncBoundaryDisplay.analysis;"),
+            ("records status display helper binding", "const recordsStatusDisplay = recordsStatusDisplayTexts(recordsStatus);"),
+            ("records status display text binding", "const recordsStatusDisplayText = recordsStatusDisplay.records;"),
             ("manual record create display helper binding", "const manualRecordCreateDisplay = manualRecordCreateDisplayTexts({"),
             ("manual record validation display binding", "const manualRecordValidationDisplayText = manualRecordCreateDisplay.validation;"),
             ("manual record backend unavailable display binding", "const manualRecordBackendUnavailableDisplayText = manualRecordCreateDisplay.backendUnavailable;"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("records status display texts helper", "function recordsStatusDisplayTexts(recordsStatus: string)"),
+            ("records status display binding", "records: boundUiMessage(recordsStatus)"),
+        ):
+            _assert_contains(label, record_status_copy_content, marker)
         for label, marker in (
             ("report source display helper", "function reportSourceDisplayItem(report: unknown | null, localRecordCount: number, queryLimit: number)"),
             ("report source backend label", "Backend 報表"),

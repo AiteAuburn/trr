@@ -87,6 +87,12 @@ export function recordSyncBoundaryDisplayTexts(value: {
   };
 }
 
+export function recordsStatusDisplayTexts(recordsStatus: string) {
+  return {
+    records: boundUiMessage(recordsStatus)
+  };
+}
+
 export function recordSyncFailureStatusMessage() {
   return boundUiMessage("紀錄暫時無法同步；目前只顯示已載入資料或範例。");
 }

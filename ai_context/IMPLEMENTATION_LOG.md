@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1396 extract records status display text
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `recordsStatusDisplayTexts` to `mobile/recordStatusCopy.ts` for record sync status display text.
+- Replaced inline `boundUiMessage` display construction for `recordsStatus` in `mobile/App.tsx` with the extracted helper.
+- Kept record sync state, cursor pagination, history/analysis status rendering, load-more behavior, backend request paths, and cache-limit boundary copy unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、record sync state、cursor pagination、history/analysis status rendering、load-more behavior、backend request paths、cache-limit boundary copy、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining App display/status shaping that still belongs in focused helpers.
+
 ### T1395 extract native status display text
 
 類型：mobile / refactor / verifier / docs
