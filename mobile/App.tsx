@@ -1693,7 +1693,7 @@ export default function App() {
   );
   const glucoseUnitDisplayOptions = useMemo(() => optionDisplayItems(glucoseUnitOptions), []);
   const glucoseTimingDisplayOptions = useMemo(() => valueLabelDisplayItems(glucoseTimingOptions), []);
-  const mealTypeDisplayOptions = useMemo(() => mealTypeOptions.map(valueLabelDisplayItem), []);
+  const mealTypeDisplayOptions = useMemo(() => valueLabelDisplayItems(mealTypeOptions), []);
   const manualRecordTypeDisplayOptions = useMemo(
     () => manualRecordTypes.map(manualRecordTypeDisplayItem),
     []

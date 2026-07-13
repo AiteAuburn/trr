@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1337: Reuse value-label display items helper for meal type options
+
+Status: done
+
+Summary:
+
+- Reused `valueLabelDisplayItems` for Meal Type display-list shaping in `mobile/App.tsx`.
+- Replaced the inline `mealTypeOptions.map(valueLabelDisplayItem)` construction with the shared helper.
+- Kept meal type option copy, accessibility labels, edit/manual form option state, press handlers, and form rendering unchanged.
+- Updated navigation verifier coverage so the meal-type App binding is explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1336: Extract glucose timing value-label display items helper
 
 Status: done

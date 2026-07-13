@@ -4662,6 +4662,7 @@ def main() -> int:
             ("glucose unit display options helper binding", "const glucoseUnitDisplayOptions = useMemo(() => optionDisplayItems(glucoseUnitOptions), []);"),
             ("glucose timing display options helper binding", "const glucoseTimingDisplayOptions = useMemo(() => valueLabelDisplayItems(glucoseTimingOptions), []);"),
             ("preview edit timing option press handler", "function pressPreviewEditGlucoseTimingOption(option: ReturnType<typeof valueLabelDisplayItem>)"),
+            ("meal type display options helper binding", "const mealTypeDisplayOptions = useMemo(() => valueLabelDisplayItems(mealTypeOptions), []);"),
             ("preview edit meal type option press handler", "function pressPreviewEditMealTypeOption(option: ReturnType<typeof valueLabelDisplayItem>)"),
             ("preview edit unit option press binding", "onPress={() => pressPreviewEditGlucoseUnitOption(option)}"),
             ("preview edit timing option press binding", "onPress={() => pressPreviewEditGlucoseTimingOption(option)}"),

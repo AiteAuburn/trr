@@ -15,6 +15,37 @@
 
 ## 2026-07-13
 
+### T1337 reuse value-label display items helper for meal type options
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Reused `valueLabelDisplayItems` for Meal Type display-list shaping in `mobile/App.tsx`.
+- Replaced the inline `mealTypeOptions.map(valueLabelDisplayItem)` construction with the shared helper.
+- Kept meal type option copy, accessibility labels, edit/manual form option state, press handlers, and form rendering unchanged.
+- Updated navigation verifier coverage so the meal-type App binding is explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、manual/edit form rendering、meal type selection behavior、record save/update behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk manual-record, History, Analysis, Menu, and visual-smoke option-list helpers from `App.tsx`; keep form/navigation state ownership and press handlers in `App.tsx` until component boundaries are stable.
+
 ### T1336 extract glucose timing value-label display items helper
 
 類型：mobile / refactor / verifier / docs
