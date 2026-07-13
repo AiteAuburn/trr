@@ -15,6 +15,37 @@
 
 ## 2026-07-13
 
+### T1456 extract record sync pagination status clear helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added local `clearRecordSyncPaginationStatus` helper in `mobile/App.tsx`.
+- Reused it where record sync status was already paired with `recordsHasMore=false`: visual-smoke activation, mobile session clear, first-page record sync failure, and invalid cursor failure.
+- Kept unavailable backend paths, page-load failure behavior, successful pagination writes, record lists, navigation targets, and status copy unchanged.
+- Updated navigation verifier coverage for helper internals and representative bindings.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1455 extract voice quota status clear helper
 
 類型：mobile / refactor / verifier / docs

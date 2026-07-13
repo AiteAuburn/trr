@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1456: Extract record sync pagination status clear helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added local `clearRecordSyncPaginationStatus` helper in `mobile/App.tsx`.
+- Reused it where record sync status was already paired with `recordsHasMore=false`: visual-smoke activation, mobile session clear, first-page record sync failure, and invalid cursor failure.
+- Kept unavailable backend paths, page-load failure behavior, successful pagination writes, record lists, navigation targets, and status copy unchanged.
+- Updated navigation verifier coverage for helper internals and representative bindings.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1455: Extract voice quota status clear helper
 
 Status: done

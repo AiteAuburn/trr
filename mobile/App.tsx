@@ -2392,8 +2392,7 @@ export default function App() {
     latestRecordSyncKey.current = "visual-smoke";
     recordSyncInFlightKeys.current.clear();
     setIsBusy(false);
-    setRecordsStatus(visualSmokeRecordSyncStatusMessage());
-    setRecordsHasMore(false);
+    clearRecordSyncPaginationStatus(visualSmokeRecordSyncStatusMessage());
   }
 
   function clearBasicReportCache() {
@@ -2404,6 +2403,11 @@ export default function App() {
   function clearVoiceQuotaStatus(statusMessage: string) {
     setVoiceQuota(null);
     setQuotaStatus(statusMessage);
+  }
+
+  function clearRecordSyncPaginationStatus(statusMessage: string) {
+    setRecordsStatus(statusMessage);
+    setRecordsHasMore(false);
   }
 
   function clearMobileSessionState(options: { clearAuthTokens?: boolean } = {}) {
@@ -2434,8 +2438,7 @@ export default function App() {
     setDownloadProgress(0);
     setDownloadedModels([]);
     setRecords([]);
-    setRecordsStatus(recordSyncInitialStatusMessage());
-    setRecordsHasMore(false);
+    clearRecordSyncPaginationStatus(recordSyncInitialStatusMessage());
     clearBasicReportCache();
     latestBootKey.current = "";
     bootInFlight.current = false;
@@ -5589,8 +5592,7 @@ export default function App() {
       );
     } catch {
       if (latestRecordSyncKey.current === syncKey) {
-        setRecordsStatus(recordSyncFailureStatusMessage());
-        setRecordsHasMore(false);
+        clearRecordSyncPaginationStatus(recordSyncFailureStatusMessage());
       }
     } finally {
       recordSyncInFlightKeys.current.delete(syncKey);
@@ -5611,8 +5613,7 @@ export default function App() {
     }
     const cursorRecord = recordsForDisplay[recordsForDisplay.length - 1];
     if (!cursorRecord?.occurred_at || !cursorRecord.created_at) {
-      setRecordsStatus(recordSyncFailureStatusMessage());
-      setRecordsHasMore(false);
+      clearRecordSyncPaginationStatus(recordSyncFailureStatusMessage());
       return;
     }
     const syncKey = `${normalizedApiBaseUrl}:${account.id}:${activeProfileId}:before:${cursorRecord.occurred_at}:${cursorRecord.created_at}`;
