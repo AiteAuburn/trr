@@ -5074,7 +5074,7 @@ def main() -> int:
             ("stt model settings option handler", "function selectSettingsSttModelChoice(modelId: string)"),
             ("llm model settings display items helper binding", "const llmModelChoiceDisplayItems = useMemo(\n    () => settingsModelChoiceDisplayItems(models.llm_models, \"LLM\"),"),
             ("stt model settings display items helper binding", "const sttModelChoiceDisplayItems = useMemo(\n    () => settingsModelChoiceDisplayItems(models.stt_models, \"STT\"),"),
-            ("downloaded whisper model display items", "const downloadedWhisperModelChoiceItems = downloadedModels"),
+            ("downloaded whisper model display items helper binding", "const downloadedWhisperModelChoiceItems = downloadedWhisperModelDisplayItems(downloadedModels);"),
             ("profile settings option press handler", "function pressSettingsProfileChoice(profile: (typeof profileChoiceDisplayItems)[number])"),
             ("llm model settings option press handler", "function pressSettingsLlmModelChoice(model: (typeof llmModelChoiceDisplayItems)[number])"),
             ("stt model settings option press handler", "function pressSettingsSttModelChoice(model: (typeof sttModelChoiceDisplayItems)[number])"),
@@ -5299,6 +5299,9 @@ def main() -> int:
             ("downloaded model display label helper", "function downloadedModelDisplayLabel(value: DownloadedModelDisplaySource)"),
             ("downloaded model checksum copy", "md5 ${boundIdentifier(value.md5).slice(0, 12)}"),
             ("downloaded whisper model display helper", "function downloadedWhisperModelDisplayItem(value: DownloadedModelDisplaySource)"),
+            ("downloaded whisper model display items helper", "function downloadedWhisperModelDisplayItems(values: DownloadedModelDisplaySource[])"),
+            ("downloaded whisper model display items filter", '.filter((model) => model.kind === "whisper" && model.exists)'),
+            ("downloaded whisper model display items map", ".map(downloadedWhisperModelDisplayItem);"),
             ("downloaded whisper model accessibility label", "`選擇本機 Whisper 模型：${fileName}，只用於本機錄音轉文字`"),
         ):
             _assert_contains(label, settings_choice_display_content, marker)

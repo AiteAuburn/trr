@@ -34,6 +34,7 @@ type DownloadedModelDisplaySource = {
   fileName: string;
   uri: string;
   md5?: string;
+  exists?: boolean;
 };
 
 function displayTextValue(value: unknown, maxLength = maxDisplayDetailTextLength) {
@@ -104,4 +105,10 @@ export function downloadedWhisperModelDisplayItem(value: DownloadedModelDisplayS
     selectedLabel: boundDisplayText("使用中", 24),
     accessibilityLabel: boundDisplayText(`選擇本機 Whisper 模型：${fileName}，只用於本機錄音轉文字`, maxDisplayDetailTextLength)
   };
+}
+
+export function downloadedWhisperModelDisplayItems(values: DownloadedModelDisplaySource[]) {
+  return values
+    .filter((model) => model.kind === "whisper" && model.exists)
+    .map(downloadedWhisperModelDisplayItem);
 }

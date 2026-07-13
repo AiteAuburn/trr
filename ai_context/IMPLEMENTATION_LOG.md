@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1333 extract downloaded Whisper model display items helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/settingsChoiceDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `downloadedWhisperModelDisplayItems` to `mobile/settingsChoiceDisplay.ts` for local Whisper model choice display-list shaping.
+- Replaced the inline `downloadedModels.filter(...).map(downloadedWhisperModelDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept local Whisper model filtering, model selection copy, accessibility labels, native model state ownership, recording model selection behavior, and Settings rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, Whisper filter, and model mapping rule are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Settings rendering、native model download behavior、recording model selection behavior、local Whisper bridge behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk shared option-list helpers from `App.tsx`; keep native model state ownership and selection handlers in `App.tsx` until component boundaries are stable.
+
 ### T1332 extract settings model choice display items helper
 
 類型：mobile / refactor / verifier / docs

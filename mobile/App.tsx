@@ -697,7 +697,7 @@ import {
 } from "./settingsScreenData";
 import {
   downloadedModelDisplayLabel,
-  downloadedWhisperModelDisplayItem,
+  downloadedWhisperModelDisplayItems,
   settingsModelChoiceDisplayItems,
   settingsProfileChoiceDisplayItems
 } from "./settingsChoiceDisplay";
@@ -2047,9 +2047,7 @@ export default function App() {
   const nativeBenchmarkAccessibilityDisplayLabel = nativeBenchmarkAccessibilityLabel(isBusy);
   const recordingModelRefreshDisplayLabel = recordingModelRefreshButtonLabel();
   const recordingModelRefreshAccessibilityDisplayLabel = recordingModelRefreshAccessibilityLabel();
-  const downloadedWhisperModelChoiceItems = downloadedModels
-    .filter((model) => model.kind === "whisper" && model.exists)
-    .map(downloadedWhisperModelDisplayItem);
+  const downloadedWhisperModelChoiceItems = downloadedWhisperModelDisplayItems(downloadedModels);
   const achievementsReturnButtonDisplayLabel = returnDestinationButtonLabel(achievementsReturnScreen);
   const yearReviewReturnButtonDisplayLabel = returnDestinationButtonLabel(yearReviewReturnScreen);
   const storeReturnButtonDisplayLabel = returnDestinationButtonLabel(storeReturnScreen);
