@@ -2570,6 +2570,11 @@ def main() -> int:
             "function openSaveSuccessDestinationCard(target: AppScreen)",
         )
         _assert_contains(
+            "save success destination helper binding",
+            content,
+            "const saveSuccessDestinationItems = saveSuccessDestinationDisplayItems(hasUnsavedPreviewRecords);",
+        )
+        _assert_contains(
             "result destination accessibility item",
             shared_display_items_content,
             "accessibilityLabel: boundDisplayText(`前往${label}`, maxDisplayTextLength)",
@@ -2651,8 +2656,8 @@ def main() -> int:
         )
         _assert_contains(
             "save success unsaved destination first",
-            content,
-            '...(hasUnsavedPreviewRecords\n      ? [["⚠", "返回確認", "處理尚未儲存的候選紀錄", "aiReview"]]\n      : [])',
+            first_version_flow_copy_content,
+            '...(hasUnsavedPreviewRecords\n      ? [["⚠", "返回確認", "處理尚未儲存的候選紀錄", "aiReview"] as const]\n      : [])',
         )
         _assert_contains(
             "save success manual continue hidden while unsaved",
@@ -2993,6 +2998,11 @@ def main() -> int:
             "onPress={() => pressDeleteSuccessDestinationCard(item)}",
         )
         _assert_contains(
+            "delete success destination helper binding",
+            content,
+            "const deleteSuccessDestinationItems = deleteSuccessDestinationDisplayItems();",
+        )
+        _assert_contains(
             "delete success checklist helper binding",
             content,
             "deleteSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit)",
@@ -3016,6 +3026,11 @@ def main() -> int:
             "update success destination card binding",
             content,
             "onPress={() => pressUpdateSuccessDestinationCard(item)}",
+        )
+        _assert_contains(
+            "update success destination helper binding",
+            content,
+            "const updateSuccessDestinationItems = updateSuccessDestinationDisplayItems(Boolean(selectedRecord));",
         )
         _assert_contains(
             "update success checklist helper binding",
@@ -3501,6 +3516,14 @@ def main() -> int:
             ("AI save failure manual fallback status helper", "function aiSaveFailureManualFallbackStatusMessage()"),
             ("save success unsaved process status helper", "function saveSuccessProcessUnsavedStatusMessage()"),
             ("save success destination status helper", "function saveSuccessDestinationStatusMessage(target: AppScreen)"),
+            ("save success destination display helper", "function saveSuccessDestinationDisplayItems(hasUnsavedPreviewRecords: boolean)"),
+            ("save success unsaved destination copy", "處理尚未儲存的候選紀錄"),
+            ("save success today destination copy", "查看剛剛新增的資料"),
+            ("delete success destination display helper", "function deleteSuccessDestinationDisplayItems()"),
+            ("delete success history destination copy", "確認指定日期紀錄"),
+            ("update success destination display helper", "function updateSuccessDestinationDisplayItems(hasSelectedRecord: boolean)"),
+            ("update success detail destination guard", 'target !== "recordDetail" || hasSelectedRecord'),
+            ("update success analysis destination copy", "查看摘要是否更新"),
             ("save success manual continue status helper", "function saveSuccessManualContinueStatusMessage()"),
             ("save success record entry status helper", "function saveSuccessRecordEntryStatusMessage()"),
             ("save success view detail status helper", "function saveSuccessViewDetailStatusMessage()"),

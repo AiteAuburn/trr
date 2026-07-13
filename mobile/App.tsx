@@ -528,6 +528,7 @@ import {
   aiReviewManualEntryStatusMessage,
   busyActionStatusMessage,
   coreFlowSectionLabels,
+  deleteSuccessDestinationDisplayItems,
   headerActionAccessibilityLabel,
   previewActionClearStatusMessage,
   primaryTabAccessibilityLabel,
@@ -538,6 +539,7 @@ import {
   recordingButtonAccessibilityLabel,
   recordManualEntryStatusMessage,
   returnDestinationButtonLabel,
+  saveSuccessDestinationDisplayItems,
   saveSuccessDestinationStatusMessage,
   saveSuccessManualContinueStatusMessage,
   saveSuccessProcessUnsavedStatusMessage,
@@ -550,6 +552,7 @@ import {
   todayRecordSummaryText,
   transcriptReviewManualEntryStatusMessage,
   tutorialSafetyChecklistDisplayItems,
+  updateSuccessDestinationDisplayItems,
   type QuickEntryMode
 } from "./firstVersionFlowCopy";
 import {
@@ -1306,26 +1309,9 @@ export default function App() {
     maxMobileRecordCacheLimit,
     mobileReportQueryDisplayLimit
   );
-  const saveSuccessDestinationItems = [
-    ...(hasUnsavedPreviewRecords
-      ? [["⚠", "返回確認", "處理尚未儲存的候選紀錄", "aiReview"]]
-      : []),
-    ["📅", "今日紀錄", "查看剛剛新增的資料", "today"],
-    ["🗂", "歷史紀錄", "依日期回看所有紀錄", "history"],
-    ["📊", "基本分析", "查看趨勢與摘要", "analysis"]
-  ].map(destinationCardDisplayItem);
-  const deleteSuccessDestinationItems = [
-    ["📅", "今日紀錄", "回到今日時間軸", "today"],
-    ["🗂", "歷史紀錄", "確認指定日期紀錄", "history"]
-  ].map(destinationCardDisplayItem);
-  const updateSuccessDestinationItems = [
-    ["📋", "記錄詳情", "查看更新後內容", "recordDetail"],
-    ["📅", "今日紀錄", "回到今日時間軸", "today"],
-    ["🗂", "歷史紀錄", "依日期回看紀錄", "history"],
-    ["📊", "基本分析", "查看摘要是否更新", "analysis"]
-  ]
-    .filter(([, , , target]) => target !== "recordDetail" || selectedRecord)
-    .map(destinationCardDisplayItem);
+  const saveSuccessDestinationItems = saveSuccessDestinationDisplayItems(hasUnsavedPreviewRecords);
+  const deleteSuccessDestinationItems = deleteSuccessDestinationDisplayItems();
+  const updateSuccessDestinationItems = updateSuccessDestinationDisplayItems(Boolean(selectedRecord));
   const currentChrome = screenChrome[currentScreen];
   const headerBackTarget =
     currentScreen === "menu"

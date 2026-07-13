@@ -1,4 +1,5 @@
 import type { AppScreen } from "./navigationConfig";
+import { destinationCardDisplayItem } from "./sharedDisplayItems";
 
 export type QuickEntryMode = "voice" | "text" | "manual";
 
@@ -281,6 +282,35 @@ export function saveSuccessDestinationStatusMessage(target: AppScreen) {
             ? "記錄詳情"
             : "指定頁面";
   return boundUiMessage(`已前往${targetLabel}；成功頁不會自動新增 backend、AI 或 STT 呼叫。`);
+}
+
+export function saveSuccessDestinationDisplayItems(hasUnsavedPreviewRecords: boolean) {
+  return [
+    ...(hasUnsavedPreviewRecords
+      ? [["⚠", "返回確認", "處理尚未儲存的候選紀錄", "aiReview"] as const]
+      : []),
+    ["📅", "今日紀錄", "查看剛剛新增的資料", "today"],
+    ["🗂", "歷史紀錄", "依日期回看所有紀錄", "history"],
+    ["📊", "基本分析", "查看趨勢與摘要", "analysis"]
+  ].map(destinationCardDisplayItem);
+}
+
+export function deleteSuccessDestinationDisplayItems() {
+  return [
+    ["📅", "今日紀錄", "回到今日時間軸", "today"],
+    ["🗂", "歷史紀錄", "確認指定日期紀錄", "history"]
+  ].map(destinationCardDisplayItem);
+}
+
+export function updateSuccessDestinationDisplayItems(hasSelectedRecord: boolean) {
+  return [
+    ["📋", "記錄詳情", "查看更新後內容", "recordDetail"],
+    ["📅", "今日紀錄", "回到今日時間軸", "today"],
+    ["🗂", "歷史紀錄", "依日期回看紀錄", "history"],
+    ["📊", "基本分析", "查看摘要是否更新", "analysis"]
+  ]
+    .filter(([, , , target]) => target !== "recordDetail" || hasSelectedRecord)
+    .map(destinationCardDisplayItem);
 }
 
 export function saveSuccessManualContinueStatusMessage() {
