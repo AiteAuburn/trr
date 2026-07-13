@@ -3256,6 +3256,26 @@ def main() -> int:
             "function enterManualRecordConfirm()",
         )
         _assert_contains(
+            "manual record date-time now seed helper",
+            content,
+            "function seedManualRecordDateTimeForNow()",
+        )
+        _assert_contains(
+            "manual record seed from record helper",
+            content,
+            "function seedManualRecordStateFromRecord(record: RecordItem)",
+        )
+        _assert_contains(
+            "manual record empty now seed helper",
+            content,
+            "function seedEmptyManualRecordStateForNow()",
+        )
+        _assert_contains(
+            "manual record open seed helper binding",
+            content,
+            "seedManualRecordDateTimeForNow();\n    setManualRecordReturnScreen(returnScreen);",
+        )
+        _assert_contains(
             "manual record confirm return handler",
             content,
             "function returnFromManualRecordConfirm()",
@@ -3732,7 +3752,7 @@ def main() -> int:
         _assert_contains(
             "visual smoke workflow seed route manual fields",
             content,
-            "setManualRecordFields(recordPayloadToEditFields(demoRecord));",
+            "seedManualRecordStateFromRecord(demoRecord);",
         )
         _assert_contains(
             "visual smoke workflow seed route report",

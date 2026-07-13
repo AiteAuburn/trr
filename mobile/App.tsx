@@ -2079,10 +2079,26 @@ export default function App() {
     updateTranscriptDraft(sampleText, "sample");
   }
 
-  function openManualRecord(returnScreen: AppScreen = currentScreen) {
+  function seedManualRecordDateTimeForNow() {
     const nowInputs = localDateTimeInputs(new Date());
     setManualRecordDate(nowInputs.date);
     setManualRecordTime(nowInputs.time);
+  }
+
+  function seedManualRecordStateFromRecord(record: RecordItem) {
+    setManualRecordFields(recordPayloadToEditFields(record));
+    const dateTime = localDateTimeInputs(record.occurred_at);
+    setManualRecordDate(dateTime.date);
+    setManualRecordTime(dateTime.time);
+  }
+
+  function seedEmptyManualRecordStateForNow() {
+    setManualRecordFields(emptyRecordEditFields());
+    seedManualRecordDateTimeForNow();
+  }
+
+  function openManualRecord(returnScreen: AppScreen = currentScreen) {
+    seedManualRecordDateTimeForNow();
     setManualRecordReturnScreen(returnScreen);
     setCurrentScreen("manualRecord");
   }
@@ -4021,10 +4037,7 @@ export default function App() {
     if (target === "manualRecordConfirm") {
       const demoRecord = visualSmokeDemoRecord();
       setManualRecordType("glucose");
-      setManualRecordFields(recordPayloadToEditFields(demoRecord));
-      const dateTime = localDateTimeInputs(demoRecord.occurred_at);
-      setManualRecordDate(dateTime.date);
-      setManualRecordTime(dateTime.time);
+      seedManualRecordStateFromRecord(demoRecord);
       setManualRecordReturnScreen("menu");
       setCurrentScreen("manualRecordConfirm");
       return true;
@@ -5893,10 +5906,7 @@ export default function App() {
       setRecords((current) => boundRecordsList([created, ...current]));
       setSelectedRecord(created);
       setRecordEditFields(recordPayloadToEditFields(created));
-      setManualRecordFields(emptyRecordEditFields());
-      const nowInputs = localDateTimeInputs(new Date());
-      setManualRecordDate(nowInputs.date);
-      setManualRecordTime(nowInputs.time);
+      seedEmptyManualRecordStateForNow();
       setLastSavedSummary(manualRecordCreateSummaryMessage(1));
       setLastSaveEntryMethod("manual");
       setSaveSuccessReturnScreen(manualRecordReturnScreen);
