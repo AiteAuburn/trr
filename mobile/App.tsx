@@ -210,6 +210,7 @@ import {
   storeProducts,
   storeRedemptionBoundaryDisplayRows,
   storeRedemptionDisplayItem,
+  storeRedemptionWalletDisplayItems,
   visibleFoodCommunityDisplayItems,
   visibleStoreProductDisplayItems,
   yearReviewAiEncouragementCopy,
@@ -1612,7 +1613,7 @@ export default function App() {
     [storeProductsForDisplay]
   );
   const storeRedemptionDisplayItems = useMemo(
-    () => storeRedemptions.slice(0, maxListItems).map(storeRedemptionDisplayItem),
+    () => storeRedemptionWalletDisplayItems(storeRedemptions),
     [storeRedemptions]
   );
   const storeCategoryDisplayOptions = useMemo(() => storeCategories.map(storeCategoryDisplayItem), []);

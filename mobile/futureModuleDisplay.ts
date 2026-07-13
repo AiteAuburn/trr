@@ -1193,6 +1193,10 @@ export function storeRedemptionDisplayItem(value: StoreRedemptionDisplayInput) {
   };
 }
 
+export function storeRedemptionWalletDisplayItems(items: StoreRedemptionDisplayInput[]) {
+  return items.slice(0, maxListItems).map(storeRedemptionDisplayItem);
+}
+
 export function storeRedemptionBoundaryDisplayRows(
   pointsBalance: StoreApiPointsBalance | null,
   hasBackendProducts: boolean,

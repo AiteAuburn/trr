@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1315: Extract store redemption wallet display helper
+
+Status: done
+
+Summary:
+
+- Added `storeRedemptionWalletDisplayItems` to `mobile/futureModuleDisplay.ts` for Store wallet redemption display-list shaping.
+- Replaced the inline wallet redemption list limiting and `storeRedemptionDisplayItem` mapping in `mobile/App.tsx` with the extracted helper.
+- Kept wallet row copy, usable-state rules, action labels, wallet row limit, redemption handlers, Store API behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and wallet max-list bound are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1314: Extract year review backend row helpers
 
 Status: done
