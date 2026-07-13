@@ -15,6 +15,35 @@
 
 ## 2026-07-13
 
+### T1516 enforce screen opener navigation boundary
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a navigation verifier guard that fails if `mobile/App.tsx` calls `setCurrentScreen` anywhere outside the shared `openScreen` helper.
+- Kept runtime behavior, route handlers, UI copy, layout, backend request behavior, and AI/parser behavior unchanged.
+- Preserved the existing `openScreen` and `openScreenWithStatus` helper contract while making the boundary regression-proof.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1515 reuse screen opener in parser success and record fallbacks
 
 類型：mobile / refactor / verifier / docs

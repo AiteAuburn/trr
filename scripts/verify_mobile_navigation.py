@@ -1160,6 +1160,23 @@ def _assert_not_contains(name: str, haystack: str, needle: str) -> None:
         raise AssertionError(f"{name} should not contain nested-panel style: {needle}")
 
 
+def _assert_screen_setter_boundary(content: str) -> None:
+    occurrences = [
+        content.count("\n", 0, match.start()) + 1
+        for match in re.finditer(r"\bsetCurrentScreen\(", content)
+    ]
+    if len(occurrences) != 1:
+        raise AssertionError(
+            "screen setter boundary must route through openScreen only; "
+            f"found setCurrentScreen at lines {occurrences}"
+        )
+    _assert_contains(
+        "screen setter boundary helper body",
+        content,
+        "function openScreen(screen: AppScreen) {\n    setCurrentScreen(screen);\n  }",
+    )
+
+
 def _assert_inline_press_callbacks_use_press_wrappers(content: str) -> None:
     offenders: list[str] = []
     for match in re.finditer(r'onPress=\{\(\) =>\s*([A-Za-z_][A-Za-z0-9_]*)\(', content):
@@ -1288,6 +1305,7 @@ def _assert_text_input_accessibility_labels_are_bounded(content: str) -> None:
 
 def main() -> int:
     content = APP_PATH.read_text(encoding="utf-8")
+    _assert_screen_setter_boundary(content)
     api_client_content = API_CLIENT_PATH.read_text(encoding="utf-8")
     app_types_content = APP_TYPES_PATH.read_text(encoding="utf-8")
     app_runtime_config_content = APP_RUNTIME_CONFIG_PATH.read_text(encoding="utf-8")
