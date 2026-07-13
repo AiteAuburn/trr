@@ -274,6 +274,7 @@ import {
   detailPairDisplayItem,
   manualRecordTypeDisplayItems,
   menuScreenDisplayItem,
+  menuScreenDisplayItems,
   optionDisplayItem,
   optionDisplayItems,
   previewTupleDisplayItem,
@@ -1702,7 +1703,7 @@ export default function App() {
   );
   const historyDetailModeDisplayOptions = useMemo(() => historyDetailModeDisplayItems(historyDetailModes), []);
   const analysisRangeDisplayOptions = useMemo(() => analysisRangeDisplayItems(analysisRanges), []);
-  const menuDisplayItems = useMemo(() => menuScreens.map(menuScreenDisplayItem), []);
+  const menuDisplayItems = useMemo(() => menuScreenDisplayItems(menuScreens), []);
   const visualSmokeRouteJumpDisplayItems = useMemo(
     () => visualSmokeRouteJumps.map(visualSmokeRouteJumpDisplayItem),
     []

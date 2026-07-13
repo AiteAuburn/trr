@@ -138,6 +138,10 @@ export function menuScreenDisplayItem(value: { id: AppScreen; label: string; ico
   };
 }
 
+export function menuScreenDisplayItems(values: ReadonlyArray<{ id: AppScreen; label: string; icon: string }>) {
+  return values.map(menuScreenDisplayItem);
+}
+
 export function visualSmokeRouteJumpDisplayItem(value: { id: AppScreen; label: string }) {
   const label = boundDisplayText(value.label || "頁面", maxDisplayTextLength);
   return {

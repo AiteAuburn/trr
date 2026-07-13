@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1341 extract menu screen display items helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/sharedDisplayItems.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `menuScreenDisplayItems` to `mobile/sharedDisplayItems.ts` for Menu destination display-list shaping.
+- Replaced the inline `menuScreens.map(menuScreenDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept Menu copy, icons, accessibility labels, destination set, press handler, and navigation behavior unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and Menu mapping rule are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Menu rendering、Menu destination set、Menu navigation behavior、visual-smoke routing、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting the remaining low-risk visual-smoke route-jump display-list helper from `App.tsx`; keep debug-gated route state and press handlers in `App.tsx` until component boundaries are stable.
+
 ### T1340 extract analysis range display items helper
 
 類型：mobile / refactor / verifier / docs
