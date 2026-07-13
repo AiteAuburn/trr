@@ -4000,12 +4000,9 @@ export default function App() {
     }
     if (target === "editRecord") {
       const demoRecord = visualSmokeDemoRecord();
-      const dateTime = new Date(demoRecord.occurred_at);
       setRecords(visualSmokeDemoRecords());
       setSelectedRecord(demoRecord);
-      setRecordEditFields(recordPayloadToEditFields(demoRecord));
-      setRecordEditDate(formatLocalDateInput(dateTime));
-      setRecordEditTime(formatLocalTimeInput(dateTime));
+      seedRecordEditStateFromRecord(demoRecord);
       setCurrentScreen("editRecord");
       return true;
     }
@@ -4052,13 +4049,11 @@ export default function App() {
     }
     if (target === "editPreviewRecord") {
       const demoPreview = visualSmokeDemoPreview();
+      const demoRecord = demoPreview.records[0];
       setPreview(demoPreview);
       setPendingPreviewRemoveIndex(null);
       setSelectedPreviewIndex(0);
-      setPreviewEditFields(recordPayloadToEditFields(demoPreview.records[0]));
-      const dateTime = localDateTimeInputs(demoPreview.records[0].occurred_at);
-      setPreviewEditDate(dateTime.date);
-      setPreviewEditTime(dateTime.time);
+      seedPreviewEditStateFromRecord(demoRecord);
       setCurrentScreen("editPreviewRecord");
       return true;
     }

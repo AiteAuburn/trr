@@ -3715,9 +3715,9 @@ def main() -> int:
             'setLastSavedSummary("Visual smoke demo save result.");',
         )
         _assert_contains(
-            "visual smoke seeded record route edit date",
+            "visual smoke seeded record route edit seed helper",
             content,
-            "setRecordEditDate(formatLocalDateInput(dateTime));",
+            "seedRecordEditStateFromRecord(demoRecord);\n      setCurrentScreen(\"editRecord\");",
         )
         _assert_contains(
             "visual smoke seeded record route fallback",
@@ -3755,9 +3755,9 @@ def main() -> int:
             'setLastSaveErrorSummary("Visual smoke demo save failure.");',
         )
         _assert_contains(
-            "visual smoke ai seed route edit fields",
+            "visual smoke ai seed route edit seed helper",
             content,
-            "setPreviewEditFields(recordPayloadToEditFields(demoPreview.records[0]));",
+            "seedPreviewEditStateFromRecord(demoRecord);\n      setCurrentScreen(\"editPreviewRecord\");",
         )
         _assert_contains(
             "visual smoke ai seed route remove index",

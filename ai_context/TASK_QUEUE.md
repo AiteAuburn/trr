@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1440: Reuse edit seed helpers in visual smoke routes
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `seedRecordEditStateFromRecord` in the visual-smoke `editRecord` seed route.
+- Reused `seedPreviewEditStateFromRecord` in the visual-smoke `editPreviewRecord` seed route.
+- Kept visual-smoke route targets, demo records, selected indexes, return behavior, and debug-gated route handling unchanged.
+- Updated navigation verifier coverage for the visual-smoke helper bindings.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1439: Extract preview edit state seed helpers
 
 Status: done
