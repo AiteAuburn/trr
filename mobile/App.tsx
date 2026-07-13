@@ -4105,6 +4105,32 @@ export default function App() {
     return false;
   }
 
+  function openVisualSmokeFutureModuleRoute(target: AppScreen) {
+    if (target === "futureModuleDetail") {
+      setSelectedFutureModule(futureModuleCards[0] ?? null);
+      setFutureModuleActionStatus(previewActionClearStatusMessage());
+      setCurrentScreen("futureModuleDetail");
+      return true;
+    }
+    if (target === "doctorShare") {
+      openDoctorShare("futureModules");
+      return true;
+    }
+    if (target === "healthIntegration") {
+      openHealthIntegration("futureModules");
+      return true;
+    }
+    if (target === "community") {
+      openCommunity("futureModules");
+      return true;
+    }
+    if (target === "ranking") {
+      openRanking("futureModules");
+      return true;
+    }
+    return false;
+  }
+
   function openVisualSmokeRoute(target: AppScreen) {
     if (!enableDebugTools || !allowMobileDevAuth) {
       return;
@@ -4150,26 +4176,7 @@ export default function App() {
       setCurrentScreen(target);
       return;
     }
-    if (target === "futureModuleDetail") {
-      setSelectedFutureModule(futureModuleCards[0] ?? null);
-      setFutureModuleActionStatus(previewActionClearStatusMessage());
-      setCurrentScreen("futureModuleDetail");
-      return;
-    }
-    if (target === "doctorShare") {
-      openDoctorShare("futureModules");
-      return;
-    }
-    if (target === "healthIntegration") {
-      openHealthIntegration("futureModules");
-      return;
-    }
-    if (target === "community") {
-      openCommunity("futureModules");
-      return;
-    }
-    if (target === "ranking") {
-      openRanking("futureModules");
+    if (openVisualSmokeFutureModuleRoute(target)) {
       return;
     }
     setCurrentScreen(target);

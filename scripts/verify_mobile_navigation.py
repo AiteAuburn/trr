@@ -3692,6 +3692,31 @@ def main() -> int:
         _assert_contains(
             "visual smoke menu return route fallback",
             content,
+            "return false;\n  }\n\n  function openVisualSmokeFutureModuleRoute(target: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke future module route handler",
+            content,
+            "function openVisualSmokeFutureModuleRoute(target: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke future module route detail seed",
+            content,
+            "setSelectedFutureModule(futureModuleCards[0] ?? null);",
+        )
+        _assert_contains(
+            "visual smoke future module route doctor binding",
+            content,
+            'openDoctorShare("futureModules");',
+        )
+        _assert_contains(
+            "visual smoke future module route ranking binding",
+            content,
+            'openRanking("futureModules");',
+        )
+        _assert_contains(
+            "visual smoke future module route fallback",
+            content,
             "return false;\n  }\n\n  function openVisualSmokeRoute(target: AppScreen)",
         )
         _assert_contains(
@@ -3738,6 +3763,11 @@ def main() -> int:
             "visual smoke settings subpage helper binding",
             content,
             "if (isVisualSmokeSettingsMenuScreen(target)) {",
+        )
+        _assert_contains(
+            "visual smoke future module route helper binding",
+            content,
+            "if (openVisualSmokeFutureModuleRoute(target)) {",
         )
         _assert_contains(
             "visual smoke boot skipped display binding",
