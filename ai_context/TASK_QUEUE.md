@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1362: Extract Year Review insight display helper
+
+Status: done
+
+Summary:
+
+- Added `yearReviewInsightDisplayTexts` to `mobile/futureModuleDisplay.ts` for Year Review glucose evidence, AI observation, and AI encouragement display text selection.
+- Replaced inline Year Review insight fallback text construction in `mobile/App.tsx` with the extracted helper.
+- Kept backend AI summary precedence, local AI-style fallback copy, glucose average evidence copy, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the insight helper, backend fallback inputs, and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1361: Extract Year Review record stats helper
 
 Status: done

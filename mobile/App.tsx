@@ -219,12 +219,11 @@ import {
   storeRedemptionWalletDisplayItems,
   visibleFoodCommunityDisplayItems,
   visibleStoreProductDisplayItems,
-  yearReviewAiEncouragementCopy,
-  yearReviewAiObservationCopy,
   yearReviewBadgeMaterialCopy,
   yearReviewBoundaryDisplayCopy,
   yearReviewHeroRecordCountCopy,
   yearReviewHeroTitleCopy,
+  yearReviewInsightDisplayTexts,
   yearReviewLiveCalculationCopy,
   yearReviewSourceDisplayCopy,
   yearReviewPreviewBoundaryCopy,
@@ -1464,26 +1463,22 @@ export default function App() {
     yearlyGlucoseLowestDisplayValue
   );
   const yearlyHealthOutcomeRows = backendYearHealthRows.length > 0 ? backendYearHealthRows : localYearlyHealthOutcomeRows;
-  const yearlyGlucoseAverageDisplayText =
-    yearlyGlucoseAverageDisplayValue === null
-      ? ""
-      : boundDisplayText(`前一年度血糖紀錄平均值為 ${yearlyGlucoseAverageDisplayValue} mg/dL。`, maxDisplayDetailTextLength);
   const yearlyHighlightDisplayTexts = localYearlyHighlightDisplayItems(
     yearlyRecordDisplayCount,
     yearReviewTargetDisplayYear,
     yearlyRecordStats.mostRecordedType,
     yearlyLongestStreakDisplayDays
   );
-  const yearlyAiObservationDisplayText = backendYearAiObservation
-    ? boundDisplayText(backendYearAiObservation, maxDisplayDetailTextLength)
-    : yearReviewAiObservationCopy(
-        yearlyRecordDisplayCount,
-        yearlyGlucoseAverageDisplayValue,
-        yearlyLongestStreakDisplayDays
-      );
-  const yearlyAiEncouragementDisplayText = backendYearAiEncouragement
-    ? boundDisplayText(backendYearAiEncouragement, maxDisplayDetailTextLength)
-    : yearReviewAiEncouragementCopy(yearlyRecordDisplayCount);
+  const yearlyInsightDisplayTexts = yearReviewInsightDisplayTexts({
+    recordCount: yearlyRecordDisplayCount,
+    averageGlucose: yearlyGlucoseAverageDisplayValue,
+    longestStreakDays: yearlyLongestStreakDisplayDays,
+    backendObservation: backendYearAiObservation,
+    backendEncouragement: backendYearAiEncouragement
+  });
+  const yearlyGlucoseAverageDisplayText = yearlyInsightDisplayTexts.glucoseAverage;
+  const yearlyAiObservationDisplayText = yearlyInsightDisplayTexts.aiObservation;
+  const yearlyAiEncouragementDisplayText = yearlyInsightDisplayTexts.aiEncouragement;
   const yearReviewActionStatusDisplayText = boundUiMessage(yearReviewActionStatus);
   const yearReviewShareStatusMessage = yearReviewShareUnavailableStatusMessage();
   const yearReviewBoundaryDisplayText = yearReviewBoundaryDisplayCopy();

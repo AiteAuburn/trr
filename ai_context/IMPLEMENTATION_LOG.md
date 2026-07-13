@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1362 extract Year Review insight display helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `yearReviewInsightDisplayTexts` to `mobile/futureModuleDisplay.ts` for Year Review glucose evidence, AI observation, and AI encouragement display text selection.
+- Replaced inline Year Review insight fallback text construction in `mobile/App.tsx` with the extracted helper.
+- Kept backend AI summary precedence, local AI-style fallback copy, glucose average evidence copy, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the insight helper, backend fallback inputs, and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Year Review rendering、Year Review backend fallback、achievement data、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining future-module display text groups and repeated App.tsx screen-local display calculations separately.
+
 ### T1361 extract Year Review record stats helper
 
 類型：mobile / refactor / verifier / docs

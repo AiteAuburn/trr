@@ -1819,6 +1819,27 @@ export function yearReviewAiEncouragementCopy(recordCount: number) {
   );
 }
 
+export function yearReviewInsightDisplayTexts(value: {
+  recordCount: number;
+  averageGlucose: number | null;
+  longestStreakDays: number;
+  backendObservation?: string | null;
+  backendEncouragement?: string | null;
+}) {
+  return {
+    glucoseAverage:
+      value.averageGlucose === null
+        ? ""
+        : boundDisplayText(`前一年度血糖紀錄平均值為 ${value.averageGlucose} mg/dL。`, maxDisplayDetailTextLength),
+    aiObservation: value.backendObservation
+      ? boundDisplayText(value.backendObservation, maxDisplayDetailTextLength)
+      : yearReviewAiObservationCopy(value.recordCount, value.averageGlucose, value.longestStreakDays),
+    aiEncouragement: value.backendEncouragement
+      ? boundDisplayText(value.backendEncouragement, maxDisplayDetailTextLength)
+      : yearReviewAiEncouragementCopy(value.recordCount)
+  };
+}
+
 export function futurePreviewSectionLabels() {
   const doctorTokenButton = boundDisplayText("查看授權碼狀態", maxDisplayTextLength);
   const doctorReportButton = boundDisplayText("查看報表邊界", maxDisplayTextLength);
