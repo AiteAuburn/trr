@@ -124,6 +124,38 @@ None.
 
 ## Done
 
+### T1406: Extract year-review revoke status messages
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `yearReviewRevokeStatusMessages` to `mobile/futureModuleDisplay.ts` for Year Review share-package revoke visual-smoke, empty, unavailable, invalid, loading, success, and failure status copy.
+- Replaced inline bounded Year Review revoke status construction in `mobile/App.tsx` with the extracted helper.
+- Kept share package ID validation, local ID clearing, `/year-reviews/share-packages/{id}/revoke`, revoked response handling, share-card flow, and rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No backend/schema/Android signing/token/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue auditing remaining community, store redemption, and auth visual-smoke action-local status helpers separately.
+
 ### T1405: Extract year-review share-card status messages
 
 Status: done

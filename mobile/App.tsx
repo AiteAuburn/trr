@@ -214,6 +214,7 @@ import {
   yearReviewInsightDisplayTexts,
   yearReviewShareCardStatusMessages,
   yearReviewShareUnavailableStatusMessage,
+  yearReviewRevokeStatusMessages,
   yearReviewSyncStatusMessages,
   yearReviewTargetYear,
   nextYearReviewGenerationLabel,
@@ -4883,27 +4884,30 @@ export default function App() {
   }
 
   async function revokeYearReviewSharePackage() {
+    const revokeStatus = yearReviewRevokeStatusMessages({
+      backendUnavailableMessage: protectedBackendUnavailableMessage,
+      sharePackageId: yearReviewSharePackageId,
+      revokedCopy: ""
+    });
     if (visualSmokePreviewActive.current) {
-      setYearReviewActionStatus(boundUiMessage("visual smoke 預覽不撤回年度分享 package。"));
+      setYearReviewActionStatus(revokeStatus.visualSmoke);
       return;
     }
     if (!yearReviewSharePackageId) {
-      setYearReviewActionStatus(boundUiMessage("目前沒有可撤回的年度分享 package。"));
+      setYearReviewActionStatus(revokeStatus.empty);
       return;
     }
     if (!protectedBackendReady || !account) {
-      setYearReviewActionStatus(
-        boundUiMessage(`${protectedBackendUnavailableMessage || "backend 尚未 ready"}；目前無法撤回年度分享。`)
-      );
+      setYearReviewActionStatus(revokeStatus.unavailable);
       return;
     }
     const targetSharePackageId = boundIdentifier(yearReviewSharePackageId);
     if (!targetSharePackageId) {
       setYearReviewSharePackageId("");
-      setYearReviewActionStatus(boundUiMessage("年度分享 package 識別無效；已清除本機撤回狀態。"));
+      setYearReviewActionStatus(revokeStatus.invalid);
       return;
     }
-    setYearReviewActionStatus(boundUiMessage("正在撤回年度分享 package。"));
+    setYearReviewActionStatus(revokeStatus.loading);
     try {
       const revokedPackage = await requestJson<YearReviewApiSharePackage>(
         normalizedApiBaseUrl,
@@ -4916,10 +4920,14 @@ export default function App() {
       setYearReviewSharePackageId("");
       const revokedCopy = revokedPackage.revoked_at ? "已保存撤回時間" : "已標記撤回";
       setYearReviewActionStatus(
-        boundUiMessage(`年度分享 package ${boundIdentifier(targetSharePackageId).slice(0, 8)} 已撤回，${revokedCopy}。`)
+        yearReviewRevokeStatusMessages({
+          backendUnavailableMessage: protectedBackendUnavailableMessage,
+          sharePackageId: targetSharePackageId,
+          revokedCopy
+        }).success
       );
     } catch {
-      setYearReviewActionStatus(boundUiMessage("年度分享撤回失敗；請稍後重試。"));
+      setYearReviewActionStatus(revokeStatus.failure);
     }
   }
 

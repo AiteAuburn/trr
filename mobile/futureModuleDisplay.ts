@@ -1869,6 +1869,27 @@ export function yearReviewShareCardStatusMessages(value: {
   };
 }
 
+export function yearReviewRevokeStatusMessages(value: {
+  backendUnavailableMessage: string;
+  sharePackageId: string;
+  revokedCopy: string;
+}) {
+  return {
+    visualSmoke: boundUiMessage("visual smoke 預覽不撤回年度分享 package。"),
+    empty: boundUiMessage("目前沒有可撤回的年度分享 package。"),
+    unavailable: boundUiMessage(`${value.backendUnavailableMessage || "backend 尚未 ready"}；目前無法撤回年度分享。`),
+    invalid: boundUiMessage("年度分享 package 識別無效；已清除本機撤回狀態。"),
+    loading: boundUiMessage("正在撤回年度分享 package。"),
+    success: boundUiMessage(
+      `年度分享 package ${boundIdentifier(value.sharePackageId).slice(0, 8)} 已撤回，${boundDisplayText(
+        value.revokedCopy,
+        maxDisplayTextLength
+      )}。`
+    ),
+    failure: boundUiMessage("年度分享撤回失敗；請稍後重試。")
+  };
+}
+
 export function safeYearReviewShareAssetFileName(value: string) {
   const fallback = "year-review-share-card.svg";
   const bounded = boundDisplayText(value || fallback, maxDisplayTextLength);

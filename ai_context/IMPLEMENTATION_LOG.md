@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1406 extract year-review revoke status messages
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `yearReviewRevokeStatusMessages` to `mobile/futureModuleDisplay.ts` for Year Review share-package revoke visual-smoke, empty, unavailable, invalid, loading, success, and failure status copy.
+- Replaced inline bounded Year Review revoke status construction in `mobile/App.tsx` with the extracted helper.
+- Kept share package ID validation, local ID clearing, `/year-reviews/share-packages/{id}/revoke`, revoked response handling, share-card flow, and rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、share package ID validation、local ID clearing、`/year-reviews/share-packages/{id}/revoke` request path、revoked response handling、share-card flow、rendering、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining community, store redemption, and auth visual-smoke action-local status helpers separately.
+
 ### T1405 extract year-review share-card status messages
 
 類型：mobile / refactor / verifier / docs
