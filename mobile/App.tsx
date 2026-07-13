@@ -125,12 +125,11 @@ import {
   achievementCategoryDefinitions,
   achievementBadgeSummary,
   achievementDisplayItems as buildAchievementDisplayItems,
+  achievementDynamicLevels,
   achievementIntegrationButtonAccessibilityLabel,
   achievementIntegrationButtonLabel,
   achievementItemFromApi,
   achievementLevelColors,
-  achievementLevels,
-  achievementLevelStep,
   achievementLocalComputationCopy,
   achievementNextBadgeCopy,
   achievementPreviewBoundaryCopy,
@@ -1393,14 +1392,7 @@ export default function App() {
       ...achievementCategoryDefinitions.map((definition) => currentRecordTypeStreakDays(recordsForDisplay, definition.recordType)),
       0
     );
-    const maxBaseLevel = achievementLevels[achievementLevels.length - 1] ?? 250;
-    const maxObservedLevel = Math.max(maxObservedRecords, maxObservedStreak, maxBaseLevel);
-    const dynamicLevels: number[] = [...achievementLevels];
-    let nextLevel = maxBaseLevel + achievementLevelStep;
-    while (maxObservedLevel >= maxBaseLevel && dynamicLevels.length < 16 && nextLevel <= maxObservedLevel + achievementLevelStep) {
-      dynamicLevels.push(nextLevel);
-      nextLevel += achievementLevelStep;
-    }
+    const dynamicLevels = achievementDynamicLevels(maxObservedRecords, maxObservedStreak);
 
     return achievementCategoryDefinitions.flatMap((definition) => {
       const cumulativeProgress = recordsForDisplay.filter(

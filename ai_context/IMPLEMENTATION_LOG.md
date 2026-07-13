@@ -15,6 +15,39 @@
 
 ## 2026-07-13
 
+### T1358 extract dynamic achievement levels helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `achievementDynamicLevels` to `mobile/futureModuleDisplay.ts` for dynamic local achievement level generation.
+- Replaced the inline dynamic level construction loop in `mobile/App.tsx` with the extracted helper.
+- Kept local achievement levels, expansion cap, level step behavior, badge generation, and achievement rendering unchanged.
+- Updated navigation and UI spec coverage verifiers so the extracted helper, next-level rule, achievement screen marker, and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、achievement rendering、Year Review rendering、achievement backend sync、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing local achievement item construction and remaining future-module display summaries separately.
+
 ### T1357 reuse achievement badge summary on achievement page
 
 類型：mobile / refactor / verifier / docs

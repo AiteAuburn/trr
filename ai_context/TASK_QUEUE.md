@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1358: Extract dynamic achievement levels helper
+
+Status: done
+
+Summary:
+
+- Added `achievementDynamicLevels` to `mobile/futureModuleDisplay.ts` for dynamic local achievement level generation.
+- Replaced the inline dynamic level construction loop in `mobile/App.tsx` with the extracted helper.
+- Kept local achievement levels, expansion cap, level step behavior, badge generation, and achievement rendering unchanged.
+- Updated navigation and UI spec coverage verifiers so the extracted helper, next-level rule, achievement screen marker, and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1357: Reuse achievement badge summary on achievement page
 
 Status: done

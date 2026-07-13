@@ -378,7 +378,7 @@ def _verify_achievement_contract(content: str, future_module_display_content: st
         ("mobile cumulative label", 'kindLabel: "累積型"'),
         ("mobile cumulative shared category icon", "icon: definition.cumulativeIcon"),
         ("mobile cumulative level color", "const badgeColor = achievementLevelColors[levelIndex] ?? definition.cumulativeColor"),
-        ("mobile dynamic achievement next level", "nextLevel <= maxObservedLevel + achievementLevelStep"),
+        ("mobile dynamic achievement helper binding", "const dynamicLevels = achievementDynamicLevels(maxObservedRecords, maxObservedStreak);"),
         ("mobile streak kind", 'kind: "streak"'),
         ("mobile streak label", 'kindLabel: "連續型"'),
         ("mobile streak independent icon", 'icon: "連"'),
@@ -6149,6 +6149,8 @@ def main() -> int:
             _assert_contains(label, future_module_display_content, marker)
         for label, marker in (
             ("achievement levels", "export const achievementLevels = [10, 50, 100, 150, 200, 250];"),
+            ("achievement dynamic levels helper", "export function achievementDynamicLevels(maxObservedRecords: number, maxObservedStreak: number)"),
+            ("achievement dynamic levels next level", "nextLevel <= maxObservedLevel + achievementLevelStep"),
             ("achievement categories", "export const achievementCategoryDefinitions: Array<{"),
             ("achievement target lower bound", "const target = Math.max(1, boundAchievementProgress(value.target));"),
             ("achievement progress clamped to target", "const progress = Math.min(target, boundAchievementProgress(value.progress, target));"),

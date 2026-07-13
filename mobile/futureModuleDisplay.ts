@@ -479,6 +479,22 @@ export const achievementCategoryDefinitions: Array<{
 export const achievementLevelColors = ["#8DB7A5", "#3FA67F", "#2F8F72", "#D97706", "#B45309", "#2563EB"];
 export const achievementStreakBadgeColor = "#8B5CF6";
 
+export function achievementDynamicLevels(maxObservedRecords: number, maxObservedStreak: number) {
+  const maxBaseLevel = achievementLevels[achievementLevels.length - 1] ?? 250;
+  const maxObservedLevel = Math.max(
+    clampNumber(maxObservedRecords, 0, maxMobileCountValue),
+    clampNumber(maxObservedStreak, 0, maxMobileCountValue),
+    maxBaseLevel
+  );
+  const dynamicLevels: number[] = [...achievementLevels];
+  let nextLevel = maxBaseLevel + achievementLevelStep;
+  while (maxObservedLevel >= maxBaseLevel && dynamicLevels.length < 16 && nextLevel <= maxObservedLevel + achievementLevelStep) {
+    dynamicLevels.push(nextLevel);
+    nextLevel += achievementLevelStep;
+  }
+  return dynamicLevels;
+}
+
 export const storeCategories: Array<{ id: StoreCategory; label: string }> = [
   { id: "coupons", label: "優惠券" },
   { id: "supplementDiscounts", label: "保健食品折扣" },
