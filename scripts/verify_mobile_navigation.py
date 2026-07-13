@@ -3260,6 +3260,16 @@ def main() -> int:
             "function clearPreviewEditDraftFields() {\n    setPreviewEditFields(emptyRecordEditFields());",
         )
         _assert_contains(
+            "AI candidate selected edit draft clear helper",
+            content,
+            "function clearSelectedPreviewEditDraft()",
+        )
+        _assert_contains(
+            "AI candidate selected edit draft clear helper internals",
+            content,
+            "function clearSelectedPreviewEditDraft() {\n    setSelectedPreviewIndex(null);\n    clearPreviewEditDraftFields();",
+        )
+        _assert_contains(
             "AI candidate edit seed empty now helper",
             content,
             "function seedEmptyPreviewEditStateForNow()",
@@ -3332,7 +3342,12 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit save success field clear helper binding",
             content,
-            "setSelectedPreviewIndex(null);\n      clearPreviewEditDraftFields();\n      setDailyRecordMenuIndex(null);",
+            "clearSelectedPreviewEditDraft();\n      setDailyRecordMenuIndex(null);",
+        )
+        _assert_contains(
+            "transcript edit return selected draft clear helper binding",
+            content,
+            "setPreview(null);\n    clearSelectedPreviewEditDraft();\n    setCurrentScreen(\"transcriptReview\");",
         )
         _assert_contains(
             "AI candidate edit return binding",
