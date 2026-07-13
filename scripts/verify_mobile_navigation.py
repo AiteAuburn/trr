@@ -4095,6 +4095,11 @@ def main() -> int:
             "function returnFromMenu()",
         )
         _assert_contains(
+            "menu return status helper binding",
+            content,
+            "openScreenWithStatus(menuReturnScreen, menuReturnStatusMessage(menuReturnScreen));",
+        )
+        _assert_contains(
             "menu destination handler",
             content,
             "function openMenuDestination(target: AppScreen)",

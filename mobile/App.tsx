@@ -3605,8 +3605,7 @@ export default function App() {
   }
 
   function returnFromMenu() {
-    setCurrentScreen(menuReturnScreen);
-    setStatus(menuReturnStatusMessage(menuReturnScreen));
+    openScreenWithStatus(menuReturnScreen, menuReturnStatusMessage(menuReturnScreen));
   }
 
   function openMenuTargetRoute(target: AppScreen) {
