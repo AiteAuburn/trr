@@ -267,6 +267,19 @@ export function dailyTranscriptDisplayItems(
     : [];
 }
 
+export function dailyTranscriptDisplayBundle(
+  preview: ParsePreviewResponse | null,
+  entries: DailyTranscriptEntry[]
+) {
+  const items = dailyTranscriptDisplayItems(preview, entries);
+  const countText = boundDisplayText(`${clampNumber(items.length, 0, maxListItems)} 段`, 20);
+  return {
+    items,
+    countText,
+    accessibilityLabel: boundDisplayText(`查看今日錄音文字，共 ${countText}`, maxDisplayDetailTextLength)
+  };
+}
+
 export function dailyTranscriptEntriesForSave(
   preview: ParsePreviewResponse,
   entries: DailyTranscriptEntry[]

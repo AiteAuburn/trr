@@ -3828,7 +3828,9 @@ def main() -> int:
             ("daily record parse sends shared timestamp", "occurred_at: parseOccurredAt"),
             ("daily record parse merges same-day draft", "const mergedDailyPreview = mergeSameDayParsePreviewDraft(existingDailyPreview, boundedPreview);"),
             ("daily record parse appends transcript entry", "setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, transcriptEntry]));"),
-            ("daily record transcript display uses retained entries", "const todayTranscriptDisplayItems = dailyTranscriptDisplayItems(preview, dailyTranscriptEntries);"),
+            ("daily record transcript display bundle binding", "const todayTranscriptDisplay = dailyTranscriptDisplayBundle(preview, dailyTranscriptEntries);"),
+            ("daily record transcript display items binding", "const todayTranscriptDisplayItems = todayTranscriptDisplay.items;"),
+            ("daily record transcript display accessibility binding", "const todayTranscriptAccessibilityLabel = todayTranscriptDisplay.accessibilityLabel;"),
             ("daily record reorganization revision state", "const [dailyRecordOrganizationRevision, setDailyRecordOrganizationRevision] = useState(0);"),
             ("daily record reorganization reason state", "const [dailyRecordOrganizationReason, setDailyRecordOrganizationReason] ="),
             ("daily record reorganization apply helper", "function reorganizeDailyRecordDraftAfterChange("),
@@ -3970,6 +3972,9 @@ def main() -> int:
             ("daily record transcript create helper", "function createDailyTranscriptEntry("),
             ("daily record transcript bound helper", "function boundDailyTranscriptEntries(entries: DailyTranscriptEntry[]): DailyTranscriptEntry[]"),
             ("daily record transcript display retained entries", "function dailyTranscriptDisplayItems(\n  preview: ParsePreviewResponse | null,\n  entries: DailyTranscriptEntry[]"),
+            ("daily record transcript display bundle helper", "function dailyTranscriptDisplayBundle("),
+            ("daily record transcript display bundle count", "const countText = boundDisplayText(`${clampNumber(items.length, 0, maxListItems)} 段`, 20);"),
+            ("daily record transcript display bundle accessibility", "accessibilityLabel: boundDisplayText(`查看今日錄音文字，共 ${countText}`, maxDisplayDetailTextLength)"),
             ("daily record save payload helper", "function buildDailyRecordSaveRequest("),
         ):
             _assert_contains(label, daily_transcript_content, marker)

@@ -613,7 +613,7 @@ import {
   dailyRecordReorganizationDisplayText,
   dailyRecordReorganizationStatusMessage,
   dailyRecordSummaryText,
-  dailyTranscriptDisplayItems,
+  dailyTranscriptDisplayBundle,
   mergeSameDayParsePreviewDraft,
   type DailyRecordSaveResponse,
   type DailyRecordReorganizationReason,
@@ -1201,15 +1201,10 @@ export default function App() {
     dailyRecordOrganizationRevision
   );
   const dailyRecordSectionItems = preview ? buildDailyRecordSectionDisplayItems(preview.records) : [];
-  const todayTranscriptDisplayItems = dailyTranscriptDisplayItems(preview, dailyTranscriptEntries);
-  const todayTranscriptCountDisplayText = boundDisplayText(
-    `${clampNumber(todayTranscriptDisplayItems.length, 0, maxListItems)} 段`,
-    20
-  );
-  const todayTranscriptAccessibilityLabel = boundDisplayText(
-    `查看今日錄音文字，共 ${todayTranscriptCountDisplayText}`,
-    maxDisplayDetailTextLength
-  );
+  const todayTranscriptDisplay = dailyTranscriptDisplayBundle(preview, dailyTranscriptEntries);
+  const todayTranscriptDisplayItems = todayTranscriptDisplay.items;
+  const todayTranscriptCountDisplayText = todayTranscriptDisplay.countText;
+  const todayTranscriptAccessibilityLabel = todayTranscriptDisplay.accessibilityLabel;
   const aiSaveConfirmSubmitDisplayLabel = aiSaveConfirmSubmitLabel(
     isBusy,
     isAiSaveConfirmBlockedByBackend,

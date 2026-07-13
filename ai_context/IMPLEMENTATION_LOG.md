@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1377 extract daily transcript display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/dailyTranscriptTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `dailyTranscriptDisplayBundle` to `mobile/dailyTranscriptTransforms.ts` for today transcript items, count text, and accessibility label display shaping.
+- Replaced inline today-transcript display count and accessibility construction in `mobile/App.tsx` with the extracted bundle helper.
+- Kept retained transcript filtering, fallback transcript behavior, 今日錄音文字 rendering, and transcript save behavior unchanged.
+- Updated navigation verifier coverage so the display bundle internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、daily-record save behavior、transcript retention behavior、transcript save payload behavior、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining App.tsx workflow display aggregation and screen-local calculations separately.
+
 ### T1376 extract daily record leave guard display texts
 
 類型：mobile / refactor / verifier / docs

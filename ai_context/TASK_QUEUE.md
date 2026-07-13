@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1377: Extract daily transcript display bundle
+
+Status: done
+
+Summary:
+
+- Added `dailyTranscriptDisplayBundle` to `mobile/dailyTranscriptTransforms.ts` for today transcript items, count text, and accessibility label display shaping.
+- Replaced inline today-transcript display count and accessibility construction in `mobile/App.tsx` with the extracted bundle helper.
+- Kept retained transcript filtering, fallback transcript behavior, 今日錄音文字 rendering, and transcript save behavior unchanged.
+- Updated navigation verifier coverage so the display bundle internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1376: Extract daily record leave guard display texts
 
 Status: done
