@@ -272,7 +272,7 @@ import {
   boundaryMetricDisplayItem,
   destinationCardDisplayItem,
   detailPairDisplayItem,
-  manualRecordTypeDisplayItem,
+  manualRecordTypeDisplayItems,
   menuScreenDisplayItem,
   optionDisplayItem,
   optionDisplayItems,
@@ -1695,7 +1695,7 @@ export default function App() {
   const glucoseTimingDisplayOptions = useMemo(() => valueLabelDisplayItems(glucoseTimingOptions), []);
   const mealTypeDisplayOptions = useMemo(() => valueLabelDisplayItems(mealTypeOptions), []);
   const manualRecordTypeDisplayOptions = useMemo(
-    () => manualRecordTypes.map(manualRecordTypeDisplayItem),
+    () => manualRecordTypeDisplayItems(manualRecordTypes),
     []
   );
   const historyDetailModeDisplayOptions = useMemo(() => historyDetailModes.map(historyDetailModeDisplayItem), []);

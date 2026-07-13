@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1338 extract manual record type display items helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/sharedDisplayItems.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `manualRecordTypeDisplayItems` to `mobile/sharedDisplayItems.ts` for manual-record type display-list shaping.
+- Replaced the inline `manualRecordTypes.map(manualRecordTypeDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept manual-record type copy, accessibility labels, parser boundary copy, selected type state, press handler, and form rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and manual-record type mapping rule are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、manual/edit form rendering、manual-record type selection behavior、record save/update behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk History, Analysis, Menu, and visual-smoke option-list helpers from `App.tsx`; keep form/navigation state ownership and press handlers in `App.tsx` until component boundaries are stable.
+
 ### T1337 reuse value-label display items helper for meal type options
 
 類型：mobile / refactor / verifier / docs

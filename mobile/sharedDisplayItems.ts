@@ -105,6 +105,10 @@ export function manualRecordTypeDisplayItem<T extends string>(value: { id: T; la
   };
 }
 
+export function manualRecordTypeDisplayItems<T extends string>(values: ReadonlyArray<{ id: T; label: string }>) {
+  return values.map(manualRecordTypeDisplayItem);
+}
+
 export function comparisonDisplayItem(value: readonly [string, string, string]) {
   return {
     feature: boundDisplayText(value[0] || "功能", 80),
