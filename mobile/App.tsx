@@ -5420,15 +5420,19 @@ export default function App() {
     void deleteSelectedRecord();
   }
 
+  function openParserRecoveryMessage(message: string) {
+    setParserRecoveryMessage(message);
+    setStatus(message);
+    setCurrentScreen("transcriptReview");
+  }
+
   async function parseTranscript() {
     if (isBusy || parsePreviewInFlight.current) {
       return;
     }
     if (!protectedBackendReady) {
       const boundedMessage = parserBackendUnavailableStatusMessage(protectedBackendUnavailableMessage);
-      setParserRecoveryMessage(boundedMessage);
-      setStatus(boundedMessage);
-      setCurrentScreen("transcriptReview");
+      openParserRecoveryMessage(boundedMessage);
       return;
     }
     if (!account || !activeProfile) {
@@ -5436,9 +5440,7 @@ export default function App() {
     }
     if (!parserModelReady) {
       const boundedMessage = parserModelUnavailableStatusMessage(parserModelUnavailableMessage);
-      setParserRecoveryMessage(boundedMessage);
-      setStatus(boundedMessage);
-      setCurrentScreen("transcriptReview");
+      openParserRecoveryMessage(boundedMessage);
       return;
     }
     if (transcriptValidationError) {

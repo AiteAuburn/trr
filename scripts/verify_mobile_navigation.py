@@ -2424,6 +2424,26 @@ def main() -> int:
             "const existingDailyPreview = preview;\n    clearParserPreviewState();\n    setStatus(parserProgressStatusMessage());",
         )
         _assert_contains(
+            "parser recovery message helper",
+            content,
+            "function openParserRecoveryMessage(message: string)",
+        )
+        _assert_contains(
+            "parser recovery message helper fields",
+            content,
+            "setParserRecoveryMessage(message);\n    setStatus(message);\n    setCurrentScreen(\"transcriptReview\");",
+        )
+        _assert_contains(
+            "parser backend unavailable recovery helper binding",
+            content,
+            "const boundedMessage = parserBackendUnavailableStatusMessage(protectedBackendUnavailableMessage);\n      openParserRecoveryMessage(boundedMessage);",
+        )
+        _assert_contains(
+            "parser model unavailable recovery helper binding",
+            content,
+            "const boundedMessage = parserModelUnavailableStatusMessage(parserModelUnavailableMessage);\n      openParserRecoveryMessage(boundedMessage);",
+        )
+        _assert_contains(
             "mobile session clear transcript draft helper binding",
             content,
             "clearDailyRecordDraftOrganizationState();\n    clearTranscriptDraftState();\n    setSelectedRecord(null);",
