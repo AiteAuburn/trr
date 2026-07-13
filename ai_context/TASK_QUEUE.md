@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1325: Extract settings display rows helper
+
+Status: done
+
+Summary:
+
+- Added `settingsDisplayRows` to `mobile/settingsScreenData.ts` for Settings menu row display shaping.
+- Replaced the inline `settingsRows.map(settingsRowDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept settings row copy, helper text, accessibility labels, Settings rendering, settings navigation behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and row mapping rule are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1324: Extract tutorial display steps helper
 
 Status: done

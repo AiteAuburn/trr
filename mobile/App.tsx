@@ -685,8 +685,8 @@ import {
   privacyControlDisplayRows as buildPrivacyControlDisplayRows,
   productionAuthReadinessDisplayRows as buildProductionAuthReadinessDisplayRows,
   sessionManagementDisplayItems as buildSessionManagementDisplayItems,
+  settingsDisplayRows as buildSettingsDisplayRows,
   settingsRowDisplayItem,
-  settingsRows,
   subscriptionManagementDisplayRows as buildSubscriptionManagementDisplayRows,
   tutorialDisplaySteps as buildTutorialDisplaySteps,
   type SettingsRow
@@ -1658,7 +1658,7 @@ export default function App() {
     storeBackendProducts.length > 0,
     storeRedemptions.length
   );
-  const settingsDisplayRows = useMemo(() => settingsRows.map(settingsRowDisplayItem), []);
+  const settingsDisplayRows = useMemo(() => buildSettingsDisplayRows(), []);
   const profileChoiceDisplayItems = useMemo(
     () => profiles.map(settingsProfileChoiceDisplayItem),
     [profiles]

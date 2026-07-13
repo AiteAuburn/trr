@@ -132,6 +132,10 @@ export function settingsRowDisplayItem(value: SettingsRow) {
   };
 }
 
+export function settingsDisplayRows() {
+  return settingsRows.map(settingsRowDisplayItem);
+}
+
 export function authProviderPreviewDisplayItem(value: AuthProviderPreview) {
   const item = previewTupleDisplayItem([value.title, value.status, value.copy]);
   const provider = boundOidcProviderForRequest(value.provider);

@@ -4955,11 +4955,19 @@ def main() -> int:
             "onPress={() => pressSettingsRow(row)}",
         )
         _assert_contains(
+            "settings display rows helper binding",
+            content,
+            "const settingsDisplayRows = useMemo(() => buildSettingsDisplayRows(), []);",
+        )
+        _assert_contains(
             "settings row accessibility item",
             settings_screen_data_content,
             "accessibilityLabel: boundDisplayText(`前往${label}設定：${helper || \"查看設定狀態\"}`, maxDisplayDetailTextLength)",
         )
         for label, marker in (
+            ("settings rows config", "export const settingsRows: SettingsRow[] = ["),
+            ("settings display rows helper", "export function settingsDisplayRows()"),
+            ("settings display rows map", "return settingsRows.map(settingsRowDisplayItem);"),
             ("auth provider preview rows config", "export const authProviderPreviews: ReadonlyArray<AuthProviderPreview> = ["),
             ("auth provider preview display helper", "export function authProviderPreviewDisplayItem(value: AuthProviderPreview)"),
             ("auth provider display items helper", "export function authProviderDisplayItems()"),
