@@ -4024,9 +4024,8 @@ export default function App() {
       const demoRecord = visualSmokeDemoRecord();
       setRecords(visualSmokeDemoRecords());
       selectRecordForResult(demoRecord);
-      setLastUpdatedSummary("Visual smoke demo update result.");
       setRecordDetailReturnScreen("history");
-      setCurrentScreen("updateSuccess");
+      openUpdateSuccessResult("Visual smoke demo update result.");
       return true;
     }
     if (target === "recordDetail") {
@@ -5673,6 +5672,11 @@ export default function App() {
     setCurrentScreen("aiSaveFailure");
   }
 
+  function openUpdateSuccessResult(summary: string) {
+    setLastUpdatedSummary(summary);
+    setCurrentScreen("updateSuccess");
+  }
+
   function seedEmptyRecordEditStateForNow() {
     setRecordEditFields(emptyRecordEditFields());
     const nowInputs = localDateTimeInputs(new Date());
@@ -5826,8 +5830,7 @@ export default function App() {
       const updated = boundRecordItem(updatedResponse);
       setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));
       selectRecordForResult(updated);
-      setLastUpdatedSummary(recordUpdateSummaryMessage(1));
-      setCurrentScreen("updateSuccess");
+      openUpdateSuccessResult(recordUpdateSummaryMessage(1));
       setStatus(recordUpdateSuccessStatusMessage());
     } catch (error) {
       setStatus(recordUpdateFailureStatusMessage(error));

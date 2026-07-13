@@ -3631,6 +3631,21 @@ def main() -> int:
             "const message = aiSaveFailureStatusMessage(error);\n      openAiSaveFailureResult(message);\n      setStatus(message);",
         )
         _assert_contains(
+            "record update success result helper",
+            content,
+            "function openUpdateSuccessResult(summary: string)",
+        )
+        _assert_contains(
+            "record update success result helper fields",
+            content,
+            "setLastUpdatedSummary(summary);\n    setCurrentScreen(\"updateSuccess\");",
+        )
+        _assert_contains(
+            "record update success result helper binding",
+            content,
+            "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n      selectRecordForResult(updated);\n      openUpdateSuccessResult(recordUpdateSummaryMessage(1));",
+        )
+        _assert_contains(
             "record edit seed empty now helper",
             content,
             "function seedEmptyRecordEditStateForNow()",
