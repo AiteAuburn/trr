@@ -373,6 +373,7 @@ import {
   deleteConfirmReadyStatusMessage,
   deleteConfirmReturnStatusMessage,
   deleteConfirmChecklistDisplayItems,
+  manualRecordCreateDisplayTexts,
   manualRecordCreateFailureStatusMessage,
   manualRecordCreateProgressStatusMessage,
   manualRecordCreateSuccessStatusMessage,
@@ -1964,7 +1965,11 @@ export default function App() {
   });
   const transcriptValidationDisplayText = transcriptStatusDisplay.transcriptValidation;
   const transcriptReviewValidationDisplayText = transcriptStatusDisplay.transcriptReviewValidation;
-  const manualRecordValidationDisplayText = boundUiMessage(manualRecordValidationError || "");
+  const manualRecordCreateDisplay = manualRecordCreateDisplayTexts({
+    validationError: manualRecordValidationError,
+    backendUnavailableMessage: protectedBackendUnavailableDisplayMessage
+  });
+  const manualRecordValidationDisplayText = manualRecordCreateDisplay.validation;
   const recordEditDisplay = recordEditDisplayTexts(selectedRecordEditValidationError);
   const recordEditIntroDisplayText = recordEditDisplay.intro;
   const selectedRecordEditValidationDisplayText = recordEditDisplay.validation;
@@ -1984,9 +1989,7 @@ export default function App() {
   const aiSaveBackendBlockedDisplayText = saveResultDisplay.aiSaveBackendBlocked;
   const transcriptBackendUnavailableDisplayText = transcriptStatusDisplay.backendUnavailable;
   const transcriptModelUnavailableDisplayText = transcriptStatusDisplay.modelUnavailable;
-  const manualRecordBackendUnavailableDisplayText = boundUiMessage(
-    `${protectedBackendUnavailableDisplayMessage}，才可建立手動紀錄。`
-  );
+  const manualRecordBackendUnavailableDisplayText = manualRecordCreateDisplay.backendUnavailable;
   const recordSyncBoundaryDisplay = recordSyncBoundaryDisplayTexts({
     recordCount: recordsForDisplay.length,
     cacheLimit: maxMobileRecordCacheLimit,

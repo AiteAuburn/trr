@@ -4133,6 +4133,9 @@ def main() -> int:
             ("record result destination no retry copy", "不會重新送出 backend request 或呼叫 AI"),
             ("delete success no restore copy", "成功頁不保留被刪除紀錄的本機復原副本。"),
             ("update success selected record copy", "成功頁只反映目前已更新的選取紀錄與本機清單。"),
+            ("manual record create display texts helper", "function manualRecordCreateDisplayTexts(value: {"),
+            ("manual record create validation display binding", 'validation: boundUiMessage(value.validationError || "")'),
+            ("manual record create backend unavailable display binding", "backendUnavailable: boundUiMessage(`${value.backendUnavailableMessage}，才可建立手動紀錄。`)"),
         ):
             _assert_contains(label, record_status_copy_content, marker)
         for label, marker in (
@@ -4154,6 +4157,9 @@ def main() -> int:
             ("record sync boundary load-more binding", "const canLoadMoreRecords = recordSyncBoundaryDisplay.canLoadMoreRecords;"),
             ("record sync boundary history display binding", "const historySyncBoundaryDisplayText = recordSyncBoundaryDisplay.history;"),
             ("record sync boundary analysis display binding", "const analysisSyncBoundaryDisplayText = recordSyncBoundaryDisplay.analysis;"),
+            ("manual record create display helper binding", "const manualRecordCreateDisplay = manualRecordCreateDisplayTexts({"),
+            ("manual record validation display binding", "const manualRecordValidationDisplayText = manualRecordCreateDisplay.validation;"),
+            ("manual record backend unavailable display binding", "const manualRecordBackendUnavailableDisplayText = manualRecordCreateDisplay.backendUnavailable;"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (

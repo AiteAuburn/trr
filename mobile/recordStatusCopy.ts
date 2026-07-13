@@ -259,6 +259,16 @@ export function manualRecordCreateUnavailableStatusMessage(message: string) {
   return boundUiMessage(`${message || "backend 尚未 ready"}；目前不會送出手動紀錄建立請求。`);
 }
 
+export function manualRecordCreateDisplayTexts(value: {
+  validationError: string | null;
+  backendUnavailableMessage: string;
+}) {
+  return {
+    validation: boundUiMessage(value.validationError || ""),
+    backendUnavailable: boundUiMessage(`${value.backendUnavailableMessage}，才可建立手動紀錄。`)
+  };
+}
+
 export function manualRecordCreateProgressStatusMessage() {
   return boundUiMessage("建立手動紀錄...");
 }

@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1385: Extract manual record create display texts
+
+Status: done
+
+Summary:
+
+- Added `manualRecordCreateDisplayTexts` to `mobile/recordStatusCopy.ts` for manual-record validation and backend-unavailable display text.
+- Replaced inline manual-record create display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept manual record form state, validation behavior, disabled states, confirm flow, backend create request path, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1384: Extract record sync boundary display texts
 
 Status: done
