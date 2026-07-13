@@ -4863,11 +4863,16 @@ def main() -> int:
             content,
             "analysisMetricInput.glucoseCount",
         )
-        for label, marker in (
-            ("detailed report backend before meal count", "activeAnalysisReport?.glucose.before_meal_count ?? beforeMealGlucoseCount"),
-            ("detailed report backend after meal count", "activeAnalysisReport?.glucose.after_meal_count ?? afterMealGlucoseCount"),
-        ):
-            _assert_contains(label, content, marker)
+        _assert_contains(
+            "detailed report metric input helper binding",
+            content,
+            "const detailedReportMetricInput = buildDetailedReportMetricInput({",
+        )
+        _assert_contains(
+            "detailed report metric rows helper binding",
+            content,
+            "const detailedReportMetricRows = buildDetailedReportMetricRows(detailedReportMetricInput);",
+        )
         for label, marker in (
             ("analysis basic report bound helper", "function boundBasicReport<T extends BasicReportTransformSource>(value: T): T"),
             ("analysis basic report generated-at bound", "generated_at: boundDisplayText(value.generated_at, 40)"),
@@ -4900,6 +4905,15 @@ def main() -> int:
             ("analysis metric backend count source", "glucoseCount: value.report?.glucose.count ?? value.localGlucoseCount"),
             ("analysis metric backend before meal source", "beforeMealCount: value.report?.glucose.before_meal_count ?? value.localBeforeMealCount"),
             ("analysis metric backend after meal source", "afterMealCount: value.report?.glucose.after_meal_count ?? value.localAfterMealCount"),
+            ("detailed report metric input helper", "function detailedReportMetricInput(value: DetailedReportMetricSourceInput): DetailedReportMetricInput"),
+            ("detailed report backend average source", "average: value.report?.glucose.average ?? value.localAverage"),
+            ("detailed report backend minimum source", "minimum: value.report?.glucose.minimum ?? value.localMinimum"),
+            ("detailed report backend maximum source", "maximum: value.report?.glucose.maximum ?? value.localMaximum"),
+            ("detailed report backend before meal source", "beforeMealCount: value.report?.glucose.before_meal_count ?? value.localBeforeMealCount"),
+            ("detailed report backend after meal source", "afterMealCount: value.report?.glucose.after_meal_count ?? value.localAfterMealCount"),
+            ("detailed report backend meal source", "mealCount: value.report?.meals.count ?? value.localMealCount"),
+            ("detailed report backend exercise source", "exerciseCount: value.report?.lifestyle.exercise_count ?? value.localExerciseCount"),
+            ("detailed report backend medication source", "medicationCount: value.report?.lifestyle.medication_count ?? value.localMedicationCount"),
             ("analysis highest metric", '["最高血糖", highest === null ? "尚無" : String(highest)]'),
             ("analysis lowest metric", '["最低血糖", lowest === null ? "尚無" : String(lowest)]'),
             ("analysis average metric", '["平均血糖", average === null ? "尚無" : String(average)]'),

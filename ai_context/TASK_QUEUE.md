@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1349: Extract Detailed Report metric input helper
+
+Status: done
+
+Summary:
+
+- Added `detailedReportMetricInput` to `mobile/analysisMetricTransforms.ts` for Detailed Report backend/local metric source selection.
+- Replaced the inline Detailed Report metric input object construction and report metric fallback variables in `mobile/App.tsx` with the extracted helper.
+- Kept backend-report priority, local fallback values, metric row labels, metric value clamping, report empty-state count, and Detailed Report rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, row binding, and backend/local source fallback fields are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1348: Extract Analysis metric input helper
 
 Status: done

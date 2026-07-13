@@ -41,6 +41,18 @@ type DetailedReportMetricInput = {
   medicationCount: number;
 };
 
+type DetailedReportMetricSourceInput = {
+  report: BasicReportTransformSource | null;
+  localAverage: NullableNumber;
+  localMinimum: NullableNumber;
+  localMaximum: NullableNumber;
+  localBeforeMealCount: number;
+  localAfterMealCount: number;
+  localMealCount: number;
+  localExerciseCount: number;
+  localMedicationCount: number;
+};
+
 function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);
 }
@@ -91,6 +103,19 @@ export function analysisMetricInput(value: AnalysisMetricSourceInput): AnalysisM
     glucoseCount: value.report?.glucose.count ?? value.localGlucoseCount,
     beforeMealCount: value.report?.glucose.before_meal_count ?? value.localBeforeMealCount,
     afterMealCount: value.report?.glucose.after_meal_count ?? value.localAfterMealCount
+  };
+}
+
+export function detailedReportMetricInput(value: DetailedReportMetricSourceInput): DetailedReportMetricInput {
+  return {
+    average: value.report?.glucose.average ?? value.localAverage,
+    minimum: value.report?.glucose.minimum ?? value.localMinimum,
+    maximum: value.report?.glucose.maximum ?? value.localMaximum,
+    beforeMealCount: value.report?.glucose.before_meal_count ?? value.localBeforeMealCount,
+    afterMealCount: value.report?.glucose.after_meal_count ?? value.localAfterMealCount,
+    mealCount: value.report?.meals.count ?? value.localMealCount,
+    exerciseCount: value.report?.lifestyle.exercise_count ?? value.localExerciseCount,
+    medicationCount: value.report?.lifestyle.medication_count ?? value.localMedicationCount
   };
 }
 

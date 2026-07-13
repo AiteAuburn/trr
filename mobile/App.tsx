@@ -640,6 +640,7 @@ import {
 import {
   analysisMetricInput as buildAnalysisMetricInput,
   analysisMetricRows as buildAnalysisMetricRows,
+  detailedReportMetricInput as buildDetailedReportMetricInput,
   detailedReportMetricRows as buildDetailedReportMetricRows
 } from "./analysisMetricTransforms";
 import {
@@ -1767,19 +1768,6 @@ export default function App() {
       : "";
   const activeAnalysisReport = basicReportKey === currentBasicReportKey ? basicReport : null;
   const reportRecordCount = activeAnalysisReport?.record_count ?? analysisRecords.length;
-  const reportGlucoseAverage = activeAnalysisReport?.glucose.average ?? averageGlucose;
-  const reportGlucoseMinimum = activeAnalysisReport?.glucose.minimum ?? lowestGlucose;
-  const reportGlucoseMaximum = activeAnalysisReport?.glucose.maximum ?? highestGlucose;
-  const reportBeforeMealGlucoseCount = activeAnalysisReport?.glucose.before_meal_count ?? beforeMealGlucoseCount;
-  const reportAfterMealGlucoseCount = activeAnalysisReport?.glucose.after_meal_count ?? afterMealGlucoseCount;
-  const reportMealCount =
-    activeAnalysisReport?.meals.count ?? analysisRecords.filter((record) => record.record_type === "meal").length;
-  const reportExerciseCount =
-    activeAnalysisReport?.lifestyle.exercise_count ??
-    analysisRecords.filter((record) => record.record_type === "exercise").length;
-  const reportMedicationCount =
-    activeAnalysisReport?.lifestyle.medication_count ??
-    analysisRecords.filter((record) => record.record_type === "medication").length;
   const reportSourceDisplay = reportSourceDisplayItem(
     activeAnalysisReport,
     analysisRecords.length,
@@ -1947,16 +1935,18 @@ export default function App() {
   });
   const analysisMetricRows = buildAnalysisMetricRows(analysisMetricInput);
   const reportRecordDisplayCount = clampNumber(reportRecordCount, 0, maxMobileCountValue);
-  const detailedReportMetricRows = buildDetailedReportMetricRows({
-    average: reportGlucoseAverage,
-    minimum: reportGlucoseMinimum,
-    maximum: reportGlucoseMaximum,
-    beforeMealCount: reportBeforeMealGlucoseCount,
-    afterMealCount: reportAfterMealGlucoseCount,
-    mealCount: reportMealCount,
-    exerciseCount: reportExerciseCount,
-    medicationCount: reportMedicationCount
+  const detailedReportMetricInput = buildDetailedReportMetricInput({
+    report: activeAnalysisReport,
+    localAverage: averageGlucose,
+    localMinimum: lowestGlucose,
+    localMaximum: highestGlucose,
+    localBeforeMealCount: beforeMealGlucoseCount,
+    localAfterMealCount: afterMealGlucoseCount,
+    localMealCount: analysisRecords.filter((record) => record.record_type === "meal").length,
+    localExerciseCount: analysisRecords.filter((record) => record.record_type === "exercise").length,
+    localMedicationCount: analysisRecords.filter((record) => record.record_type === "medication").length
   });
+  const detailedReportMetricRows = buildDetailedReportMetricRows(detailedReportMetricInput);
   const aiSaveConfirmBoundaryRows = aiSaveConfirmBoundaryDisplayRows(
     unsavedPreviewRecordDisplayCount,
     lowConfidencePreviewRecordDisplayCount,
