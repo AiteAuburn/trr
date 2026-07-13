@@ -1,4 +1,5 @@
 import type { AppScreen } from "./navigationConfig";
+import { resultChecklistItem } from "./sharedDisplayItems";
 
 const maxUiMessageLength = 300;
 const maxDisplayTextLength = 120;
@@ -57,6 +58,33 @@ export function recordSyncPageSuccessStatusMessage(count: number, pageCount: num
   const boundedCacheLimit = clampNumber(cacheLimit, 0, maxMobileCountValue);
   const moreCopy = hasMore ? "仍可繼續載入" : "已無更多已知紀錄";
   return boundUiMessage(`已載入更早 ${boundedPageCount} 筆，目前本機共有 ${boundedCount} 筆（上限 ${boundedCacheLimit} 筆）；${moreCopy}。`);
+}
+
+export function recordSyncBoundaryDisplayTexts(value: {
+  recordCount: number;
+  cacheLimit: number;
+  hasMore: boolean;
+  isBackendReady: boolean;
+  isBusy: boolean;
+}) {
+  const boundedRecordCount = clampNumber(value.recordCount, 0, maxMobileCountValue);
+  const boundedCacheLimit = clampNumber(value.cacheLimit, 0, maxMobileCountValue);
+  const recordsAtCacheLimit = boundedRecordCount >= boundedCacheLimit;
+  return {
+    recordsAtCacheLimit,
+    canLoadMoreRecords:
+      value.isBackendReady && value.hasMore && !recordsAtCacheLimit && boundedRecordCount > 0 && !value.isBusy,
+    history: resultChecklistItem(
+      recordsAtCacheLimit
+        ? `已達本機紀錄上限 ${boundedCacheLimit} 筆；避免 mobile 一次保留過多健康紀錄。`
+        : value.hasMore
+          ? `目前已同步 ${boundedRecordCount} 筆；可用 cursor pagination 載入更早紀錄。`
+          : `目前已同步 ${boundedRecordCount} 筆；backend 未回傳更多紀錄。`
+    ),
+    analysis: resultChecklistItem(
+      `本機分析使用目前已同步紀錄，最多保留 ${boundedCacheLimit} 筆；若要固定查詢範圍，請使用詳細報告。`
+    )
+  };
 }
 
 export function recordSyncFailureStatusMessage() {

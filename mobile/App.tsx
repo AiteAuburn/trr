@@ -259,7 +259,6 @@ import {
   optionDisplayItem,
   optionDisplayItems,
   previewTupleDisplayItem,
-  resultChecklistItem,
   sessionManagementPreviewDisplayItem,
   valueLabelDisplayItem,
   valueLabelDisplayItems,
@@ -388,6 +387,7 @@ import {
   recordEditDisplayTexts,
   recordEditOpenStatusMessage,
   recordResultDestinationStatusMessage,
+  recordSyncBoundaryDisplayTexts,
   recordSyncFailureStatusMessage,
   recordSyncInitialStatusMessage,
   recordSyncLoadingStatusMessage,
@@ -1987,19 +1987,17 @@ export default function App() {
   const manualRecordBackendUnavailableDisplayText = boundUiMessage(
     `${protectedBackendUnavailableDisplayMessage}，才可建立手動紀錄。`
   );
-  const recordsAtCacheLimit = recordsForDisplay.length >= maxMobileRecordCacheLimit;
-  const canLoadMoreRecords =
-    protectedBackendReady && recordsHasMore && !recordsAtCacheLimit && recordsForDisplay.length > 0 && !isBusy;
-  const historySyncBoundaryDisplayText = resultChecklistItem(
-    recordsAtCacheLimit
-      ? `已達本機紀錄上限 ${maxMobileRecordCacheLimit} 筆；避免 mobile 一次保留過多健康紀錄。`
-      : recordsHasMore
-        ? `目前已同步 ${recordsForDisplay.length} 筆；可用 cursor pagination 載入更早紀錄。`
-        : `目前已同步 ${recordsForDisplay.length} 筆；backend 未回傳更多紀錄。`
-  );
-  const analysisSyncBoundaryDisplayText = resultChecklistItem(
-    `本機分析使用目前已同步紀錄，最多保留 ${maxMobileRecordCacheLimit} 筆；若要固定查詢範圍，請使用詳細報告。`
-  );
+  const recordSyncBoundaryDisplay = recordSyncBoundaryDisplayTexts({
+    recordCount: recordsForDisplay.length,
+    cacheLimit: maxMobileRecordCacheLimit,
+    hasMore: recordsHasMore,
+    isBackendReady: protectedBackendReady,
+    isBusy
+  });
+  const recordsAtCacheLimit = recordSyncBoundaryDisplay.recordsAtCacheLimit;
+  const canLoadMoreRecords = recordSyncBoundaryDisplay.canLoadMoreRecords;
+  const historySyncBoundaryDisplayText = recordSyncBoundaryDisplay.history;
+  const analysisSyncBoundaryDisplayText = recordSyncBoundaryDisplay.analysis;
   const detailedReportNoteItems = detailedReportNoteDisplayItems(mobileReportQueryDisplayLimit);
 
   function openTranscriptReview() {

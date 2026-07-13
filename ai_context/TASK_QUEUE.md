@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1384: Extract record sync boundary display texts
+
+Status: done
+
+Summary:
+
+- Added `recordSyncBoundaryDisplayTexts` to `mobile/recordStatusCopy.ts` for history cache-limit state, load-more availability, history sync boundary copy, and analysis sync boundary copy.
+- Replaced inline record sync boundary display construction in `mobile/App.tsx` with the extracted helper.
+- Kept history pagination state, load-more handler, backend sync request flow, analysis rendering, and record cache limits unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1383: Extract transcript review status display texts
 
 Status: done

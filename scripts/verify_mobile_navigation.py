@@ -4116,6 +4116,12 @@ def main() -> int:
             ("record edit display texts validation binding", 'validation: boundUiMessage(validationError || "")'),
             ("record edit open status helper", "function recordEditOpenStatusMessage()"),
             ("record edit cancel status helper", "function recordEditCancelStatusMessage()"),
+            ("record sync boundary display texts helper", "function recordSyncBoundaryDisplayTexts(value: {"),
+            ("record sync boundary cache limit binding", "recordsAtCacheLimit = boundedRecordCount >= boundedCacheLimit"),
+            ("record sync boundary load-more binding", "canLoadMoreRecords:"),
+            ("record sync boundary history cache-limit copy", "已達本機紀錄上限 ${boundedCacheLimit} 筆"),
+            ("record sync boundary history pagination copy", "目前已同步 ${boundedRecordCount} 筆；可用 cursor pagination 載入更早紀錄。"),
+            ("record sync boundary analysis copy", "本機分析使用目前已同步紀錄，最多保留 ${boundedCacheLimit} 筆"),
             ("record update checklist helper", "function recordUpdateChecklistDisplayItems()"),
             ("record update checklist single record copy", "只會更新目前選取的這一筆紀錄。"),
             ("record update checklist payload copy", "只送出確認後的結構化 payload，不批次載入完整歷史。"),
@@ -4143,6 +4149,11 @@ def main() -> int:
             ("record edit display helper binding", "const recordEditDisplay = recordEditDisplayTexts(selectedRecordEditValidationError);"),
             ("record edit intro display binding", "const recordEditIntroDisplayText = recordEditDisplay.intro;"),
             ("record edit validation display binding", "const selectedRecordEditValidationDisplayText = recordEditDisplay.validation;"),
+            ("record sync boundary display helper binding", "const recordSyncBoundaryDisplay = recordSyncBoundaryDisplayTexts({"),
+            ("record sync boundary records-at-limit binding", "const recordsAtCacheLimit = recordSyncBoundaryDisplay.recordsAtCacheLimit;"),
+            ("record sync boundary load-more binding", "const canLoadMoreRecords = recordSyncBoundaryDisplay.canLoadMoreRecords;"),
+            ("record sync boundary history display binding", "const historySyncBoundaryDisplayText = recordSyncBoundaryDisplay.history;"),
+            ("record sync boundary analysis display binding", "const analysisSyncBoundaryDisplayText = recordSyncBoundaryDisplay.analysis;"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
