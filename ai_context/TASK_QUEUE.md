@@ -124,6 +124,38 @@ None.
 
 ## Done
 
+### T1393: Extract report and quota status display texts
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/reportStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `reportStatusDisplayTexts` to `mobile/reportStatusCopy.ts` for Detailed Report / Analysis report status and voice quota status display text.
+- Replaced inline `boundUiMessage` status display construction for `reportStatus` and `quotaStatus` in `mobile/App.tsx` with the extracted helper.
+- Kept report loading, report key guarding, `/reports/basic` request path, quota sync, subscription display inputs, Detailed Report rendering, and Analysis rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No backend/schema/Android signing/token/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue auditing remaining auth/native/dev-reset and records status display bindings separately.
+
 ### T1392: Extract achievement and year-review status display texts
 
 Status: done

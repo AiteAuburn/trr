@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1393 extract report and quota status display texts
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/reportStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `reportStatusDisplayTexts` to `mobile/reportStatusCopy.ts` for Detailed Report / Analysis report status and voice quota status display text.
+- Replaced inline `boundUiMessage` status display construction for `reportStatus` and `quotaStatus` in `mobile/App.tsx` with the extracted helper.
+- Kept report loading, report key guarding, `/reports/basic` request path, quota sync, subscription display inputs, Detailed Report rendering, and Analysis rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、report loading、report key guarding、`/reports/basic` request path、quota sync、subscription display inputs、Detailed Report rendering、Analysis rendering、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining auth/native/dev-reset and records status display bindings separately.
+
 ### T1392 extract achievement and year-review status display texts
 
 類型：mobile / refactor / verifier / docs

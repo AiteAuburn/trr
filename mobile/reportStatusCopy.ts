@@ -95,3 +95,13 @@ export function reportSourceDisplayItem(report: unknown | null, localRecordCount
     copy: boundUiMessage("目前沒有可分析的已載入紀錄；此頁只顯示空摘要。")
   };
 }
+
+export function reportStatusDisplayTexts(value: {
+  reportStatus: string;
+  quotaStatus: string;
+}) {
+  return {
+    report: boundUiMessage(value.reportStatus),
+    quota: boundUiMessage(value.quotaStatus)
+  };
+}

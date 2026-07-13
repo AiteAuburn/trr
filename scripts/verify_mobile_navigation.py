@@ -4171,6 +4171,9 @@ def main() -> int:
             ("report source backend copy", "資料來自 /reports/basic"),
             ("report source local fallback", "backend 報表暫未使用"),
             ("report source empty fallback", "此頁只顯示空摘要"),
+            ("report status display texts helper", "function reportStatusDisplayTexts(value: {"),
+            ("report status display report binding", "report: boundUiMessage(value.reportStatus)"),
+            ("quota status display binding", "quota: boundUiMessage(value.quotaStatus)"),
         ):
             _assert_contains(label, report_status_copy_content, marker)
         for label, marker in (
@@ -4811,6 +4814,9 @@ def main() -> int:
             ("analysis report key state", "const [basicReportKey, setBasicReportKey] = useState("),
             ("analysis report start bound", "const startAt = analysisSelectedDateBounds.start.toISOString();"),
             ("analysis report end bound", "const endAt = analysisSelectedDateBounds.end.toISOString();"),
+            ("analysis report status display helper binding", "const reportStatusDisplay = reportStatusDisplayTexts({"),
+            ("analysis report status display text binding", "const reportStatusDisplayText = reportStatusDisplay.report;"),
+            ("voice quota status display text binding", "const quotaStatusDisplayText = reportStatusDisplay.quota;"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(

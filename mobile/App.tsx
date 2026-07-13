@@ -492,6 +492,7 @@ import {
   detailedReportResetStatusMessage,
   detailedReportSuccessStatusMessage,
   detailedReportUnavailableStatusMessage,
+  reportStatusDisplayTexts,
   reportSourceDisplayItem,
   voiceQuotaInitialStatusMessage,
   voiceQuotaSyncFailureStatusMessage,
@@ -1626,7 +1627,11 @@ export default function App() {
     analysisRecords.length,
     mobileReportQueryDisplayLimit
   );
-  const reportStatusDisplayText = boundUiMessage(reportStatus);
+  const reportStatusDisplay = reportStatusDisplayTexts({
+    reportStatus,
+    quotaStatus
+  });
+  const reportStatusDisplayText = reportStatusDisplay.report;
   const reportSourceDisplayLabel = reportSourceDisplay.label;
   const reportSourceDisplayCopy = reportSourceDisplay.copy;
   const reportGeneratedAtDisplayText = activeAnalysisReport
@@ -1689,7 +1694,7 @@ export default function App() {
   const foodPhotoRetakeButtonDisplayLabel = foodPhotoRetakeButtonLabel();
   const foodPhotoIntegrationAccessibilityDisplayLabel = foodPhotoIntegrationButtonAccessibilityLabel();
   const foodPhotoRetakeAccessibilityDisplayLabel = foodPhotoRetakeButtonAccessibilityLabel();
-  const quotaStatusDisplayText = boundUiMessage(quotaStatus);
+  const quotaStatusDisplayText = reportStatusDisplay.quota;
   const subscriptionMembershipDisplay = subscriptionMembershipDisplayTexts(
     voiceQuota,
     quotaTrialDaysLeft,
