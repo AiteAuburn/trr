@@ -307,12 +307,9 @@ import {
   recordingWhisperSuccessStatusMessage,
   transcriptClearedStatusMessage,
   transcriptReviewCostBoundaryChecklistDisplayItems,
+  transcriptReviewDisplayTexts,
   transcriptReturnEditStatusMessage,
   transcriptReviewBackStatusMessage,
-  transcriptReviewIntroCopy,
-  transcriptReviewPreflightPassedCopy,
-  transcriptReviewPreParseGuidanceCopy,
-  transcriptReviewSampleWarningCopy,
   transcriptReviewReadyStatusMessage,
   validateTranscriptForParser
 } from "./recordingCopy";
@@ -1846,10 +1843,11 @@ export default function App() {
   const aiRemoveConfirmBoundaryDisplayLabel = aiRemoveConfirmDisplay.boundaryLabel;
   const aiRemoveConfirmBoundaryDisplayText = aiRemoveConfirmDisplay.boundary;
   const aiRemoveConfirmSourceDisplayText = aiRemoveConfirmDisplay.source;
-  const transcriptReviewIntroDisplayText = transcriptReviewIntroCopy();
-  const transcriptReviewPreParseGuidanceDisplayText = transcriptReviewPreParseGuidanceCopy();
-  const transcriptReviewSampleWarningDisplayText = transcriptReviewSampleWarningCopy();
-  const transcriptReviewPreflightPassedDisplayText = transcriptReviewPreflightPassedCopy();
+  const transcriptReviewDisplay = transcriptReviewDisplayTexts();
+  const transcriptReviewIntroDisplayText = transcriptReviewDisplay.intro;
+  const transcriptReviewPreParseGuidanceDisplayText = transcriptReviewDisplay.preParseGuidance;
+  const transcriptReviewSampleWarningDisplayText = transcriptReviewDisplay.sampleWarning;
+  const transcriptReviewPreflightPassedDisplayText = transcriptReviewDisplay.preflightPassed;
   const previewRecordEditBoundaryDisplayText = previewRecordEditBoundaryCopy();
   const selectedRecordDisplayItem = selectedRecord ? recordDetailDisplayItem(selectedRecord) : null;
   const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayTexts(isBusy);

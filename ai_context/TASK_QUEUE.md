@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1374: Extract transcript review display texts
+
+Status: done
+
+Summary:
+
+- Added `transcriptReviewDisplayTexts` to `mobile/recordingCopy.ts` for transcript review intro, pre-parse guidance, sample warning, and preflight-passed display text.
+- Replaced inline transcript-review display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept transcript review copy, TextInput behavior, validation branches, parser submit flow, and rendering unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1373: Extract manual record confirm display texts
 
 Status: done

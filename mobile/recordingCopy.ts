@@ -161,6 +161,15 @@ export function transcriptReviewPreflightPassedCopy() {
   return boundDisplayText("已通過本機長度與數字密度檢查；下一步才會送出 parser 請求。", maxDisplayDetailTextLength);
 }
 
+export function transcriptReviewDisplayTexts() {
+  return {
+    intro: transcriptReviewIntroCopy(),
+    preParseGuidance: transcriptReviewPreParseGuidanceCopy(),
+    sampleWarning: transcriptReviewSampleWarningCopy(),
+    preflightPassed: transcriptReviewPreflightPassedCopy()
+  };
+}
+
 export function transcriptReviewCostBoundaryChecklistDisplayItems(
   isBackendReady: boolean,
   isParserModelReady: boolean,

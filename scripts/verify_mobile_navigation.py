@@ -2420,6 +2420,21 @@ def main() -> int:
             "const transcriptReviewCostBoundaryChecklistItems = transcriptReviewCostBoundaryChecklistDisplayItems(",
         )
         _assert_contains(
+            "transcript review display helper binding",
+            content,
+            "const transcriptReviewDisplay = transcriptReviewDisplayTexts();",
+        )
+        _assert_contains(
+            "transcript review intro display binding",
+            content,
+            "const transcriptReviewIntroDisplayText = transcriptReviewDisplay.intro;",
+        )
+        _assert_contains(
+            "transcript review preflight display binding",
+            content,
+            "const transcriptReviewPreflightPassedDisplayText = transcriptReviewDisplay.preflightPassed;",
+        )
+        _assert_contains(
             "record entry settings checklist helper binding",
             content,
             "const recordEntrySettingsChecklistItems = recordEntrySettingsChecklistDisplayItems(protectedBackendReady);",
@@ -3576,6 +3591,11 @@ def main() -> int:
             ("transcript review pre-parse guidance helper", "function transcriptReviewPreParseGuidanceCopy()"),
             ("transcript review sample warning helper", "function transcriptReviewSampleWarningCopy()"),
             ("transcript review preflight passed helper", "function transcriptReviewPreflightPassedCopy()"),
+            ("transcript review display texts helper", "function transcriptReviewDisplayTexts()"),
+            ("transcript review display texts intro binding", "intro: transcriptReviewIntroCopy()"),
+            ("transcript review display texts guidance binding", "preParseGuidance: transcriptReviewPreParseGuidanceCopy()"),
+            ("transcript review display texts warning binding", "sampleWarning: transcriptReviewSampleWarningCopy()"),
+            ("transcript review display texts preflight binding", "preflightPassed: transcriptReviewPreflightPassedCopy()"),
             ("transcript review cost boundary checklist helper", "function transcriptReviewCostBoundaryChecklistDisplayItems("),
             ("transcript review empty parser guard copy", "空文字、過長文字或範例文字不會送 parser。"),
             ("transcript review no batch history copy", "下一步整理只送目前這段文字一次，不會批次載入歷史紀錄。"),
