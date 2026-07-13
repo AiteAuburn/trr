@@ -2980,9 +2980,19 @@ def main() -> int:
             "function clearPreviewActionState() {\n    clearPreviewSelectionState();",
         )
         _assert_contains(
-            "AI save confirm return clear helper binding",
+            "AI review cleared status helper",
             content,
-            "clearPreviewActionState();\n    setCurrentScreen(\"aiReview\");\n    setStatus(aiSaveConfirmReturnStatusMessage());",
+            "function returnToAiReviewWithClearedPreviewStatus(statusMessage: string)",
+        )
+        _assert_contains(
+            "AI review cleared status helper fields",
+            content,
+            "clearPreviewActionState();\n    setCurrentScreen(\"aiReview\");\n    setStatus(statusMessage);",
+        )
+        _assert_contains(
+            "AI save confirm return cleared status helper binding",
+            content,
+            "returnToAiReviewWithClearedPreviewStatus(aiSaveConfirmReturnStatusMessage());",
         )
         _assert_contains(
             "AI save confirm enter clear selection helper binding",
@@ -2997,7 +3007,7 @@ def main() -> int:
         _assert_contains(
             "save success process clear helper binding",
             content,
-            "clearPreviewActionState();\n    setCurrentScreen(\"aiReview\");\n    setStatus(saveSuccessProcessUnsavedStatusMessage());",
+            "returnToAiReviewWithClearedPreviewStatus(saveSuccessProcessUnsavedStatusMessage());",
         )
         _assert_contains(
             "save success destination handler",
@@ -3162,7 +3172,7 @@ def main() -> int:
         _assert_contains(
             "AI save failure back AI review clear action binding",
             content,
-            "function returnFromAiSaveFailureToAiReview() {\n    clearPreviewActionState();",
+            "returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());",
         )
         _assert_contains(
             "AI save failure return save confirm handler",
@@ -3172,7 +3182,7 @@ def main() -> int:
         _assert_contains(
             "AI save failure return save confirm clear action binding",
             content,
-            "function returnFromAiSaveFailureToSaveConfirm() {\n    clearPreviewActionState();",
+            "returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());\n      return;\n    }\n    clearPreviewActionState();",
         )
         _assert_contains(
             "AI save failure back AI review binding",

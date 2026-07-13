@@ -3299,10 +3299,14 @@ export default function App() {
     setLastSaveErrorSummary("");
   }
 
-  function returnFromAiSaveConfirm() {
+  function returnToAiReviewWithClearedPreviewStatus(statusMessage: string) {
     clearPreviewActionState();
     setCurrentScreen("aiReview");
-    setStatus(aiSaveConfirmReturnStatusMessage());
+    setStatus(statusMessage);
+  }
+
+  function returnFromAiSaveConfirm() {
+    returnToAiReviewWithClearedPreviewStatus(aiSaveConfirmReturnStatusMessage());
   }
 
   function processUnsavedPreviewRecords() {
@@ -3310,9 +3314,7 @@ export default function App() {
       setCurrentScreen("today");
       return;
     }
-    clearPreviewActionState();
-    setCurrentScreen("aiReview");
-    setStatus(saveSuccessProcessUnsavedStatusMessage());
+    returnToAiReviewWithClearedPreviewStatus(saveSuccessProcessUnsavedStatusMessage());
   }
 
   function openSaveSuccessDestination(target: AppScreen) {
@@ -3356,18 +3358,15 @@ export default function App() {
   }
 
   function returnFromAiSaveFailureToAiReview() {
-    clearPreviewActionState();
-    setCurrentScreen("aiReview");
-    setStatus(aiSaveFailureBackAiReviewStatusMessage());
+    returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());
   }
 
   function returnFromAiSaveFailureToSaveConfirm() {
-    clearPreviewActionState();
     if (!preview || preview.records.length === 0) {
-      setCurrentScreen("aiReview");
-      setStatus(aiSaveFailureBackAiReviewStatusMessage());
+      returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());
       return;
     }
+    clearPreviewActionState();
     setCurrentScreen("aiSaveConfirm");
     setStatus(aiSaveFailureReturnSaveConfirmStatusMessage());
   }
