@@ -1967,3 +1967,42 @@ export function futurePreviewSectionLabels() {
     returnFutureModulesAccessibility: boundDisplayText("返回未來擴充，不建立 future module 資料或呼叫 backend", maxDisplayDetailTextLength)
   };
 }
+
+export function futurePreviewStatusDisplayTexts(value: {
+  futureModuleActionStatus: string;
+  doctorShareActionStatus: string;
+  healthIntegrationActionStatus: string;
+  communityActionStatus: string;
+  rankingActionStatus: string;
+  reportLimit: number;
+}) {
+  const boundedReportLimit = clampNumber(value.reportLimit, 0, maxMobileCountValue);
+  return {
+    futureModuleAction: boundUiMessage(value.futureModuleActionStatus),
+    doctorShareAction: boundUiMessage(value.doctorShareActionStatus),
+    healthIntegrationAction: boundUiMessage(value.healthIntegrationActionStatus),
+    communityAction: boundUiMessage(value.communityActionStatus),
+    rankingAction: boundUiMessage(value.rankingActionStatus),
+    doctorShareToken: boundUiMessage(
+      "授權碼尚未啟用；目前不會建立 profile grant、share token、QR code 或醫師端 session。"
+    ),
+    doctorShareReportBoundary: boundUiMessage(
+      `回診摘要可沿用 bounded detailed report 設計，最多 ${boundedReportLimit} 筆；目前不產生 PDF、不分享、不呼叫 AI。`
+    ),
+    healthIntegrationPermission: boundUiMessage(
+      "平台權限尚未啟用；目前不會請求 HealthKit / Health Connect 權限，也不讀取任何外部健康資料。"
+    ),
+    healthIntegrationMeter: boundUiMessage(
+      "血糖機同步尚未啟用；目前不掃描 BLE、不建立 import batch、不寫入 meter source 紀錄。"
+    ),
+    communityPosting: boundUiMessage(
+      "社群發文尚未啟用；目前不建立貼文、不送出留言、不公開任何健康紀錄。"
+    ),
+    communityPrivacy: boundUiMessage(
+      "公開名稱與排行榜 opt-in 已可同步 backend；社群貼文、留言、刪除撤回與審核流程仍未開放。"
+    ),
+    foodCommunityShare: boundUiMessage(
+      "backend ready 時可送出食物分享、建立社群點數並刷新排行榜與商城點數；visual smoke 或 backend unavailable 時不寫入資料。"
+    )
+  };
+}

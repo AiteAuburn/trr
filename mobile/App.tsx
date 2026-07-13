@@ -174,6 +174,7 @@ import {
   futureModulesReturnMenuStatusMessage,
   futurePreviewReturnStatusMessage,
   futurePreviewSectionLabels,
+  futurePreviewStatusDisplayTexts,
   healthIntegrationBoundaryDisplayRows,
   healthIntegrationExternalDataBoundaryCopy,
   healthIntegrationPreviewBoundaryDisplayItem,
@@ -1629,33 +1630,27 @@ export default function App() {
   const reportGeneratedAtDisplayText = activeAnalysisReport
     ? boundDisplayText(`產生時間：${recordDateTimeDisplay(activeAnalysisReport.generated_at)}`, maxDisplayDetailTextLength)
     : "以 mobile 目前已載入資料計算。";
-  const futureModuleActionStatusDisplayText = boundUiMessage(futureModuleActionStatus);
   const futurePreviewDisplayLabels = futurePreviewSectionLabels();
-  const doctorShareActionStatusDisplayText = boundUiMessage(doctorShareActionStatus);
-  const healthIntegrationActionStatusDisplayText = boundUiMessage(healthIntegrationActionStatus);
-  const communityActionStatusDisplayText = boundUiMessage(communityActionStatus);
-  const rankingActionStatusDisplayText = boundUiMessage(rankingActionStatus);
-  const doctorShareTokenStatusMessage = boundUiMessage(
-    "授權碼尚未啟用；目前不會建立 profile grant、share token、QR code 或醫師端 session。"
-  );
-  const doctorShareReportBoundaryStatusMessage = boundUiMessage(
-    `回診摘要可沿用 bounded detailed report 設計，最多 ${mobileReportQueryDisplayLimit} 筆；目前不產生 PDF、不分享、不呼叫 AI。`
-  );
-  const healthIntegrationPermissionStatusMessage = boundUiMessage(
-    "平台權限尚未啟用；目前不會請求 HealthKit / Health Connect 權限，也不讀取任何外部健康資料。"
-  );
-  const healthIntegrationMeterStatusMessage = boundUiMessage(
-    "血糖機同步尚未啟用；目前不掃描 BLE、不建立 import batch、不寫入 meter source 紀錄。"
-  );
-  const communityPostingStatusMessage = boundUiMessage(
-    "社群發文尚未啟用；目前不建立貼文、不送出留言、不公開任何健康紀錄。"
-  );
-  const communityPrivacyStatusMessage = boundUiMessage(
-    "公開名稱與排行榜 opt-in 已可同步 backend；社群貼文、留言、刪除撤回與審核流程仍未開放。"
-  );
-  const foodCommunityShareStatusMessage = boundUiMessage(
-    "backend ready 時可送出食物分享、建立社群點數並刷新排行榜與商城點數；visual smoke 或 backend unavailable 時不寫入資料。"
-  );
+  const futurePreviewStatusDisplay = futurePreviewStatusDisplayTexts({
+    futureModuleActionStatus,
+    doctorShareActionStatus,
+    healthIntegrationActionStatus,
+    communityActionStatus,
+    rankingActionStatus,
+    reportLimit: mobileReportQueryDisplayLimit
+  });
+  const futureModuleActionStatusDisplayText = futurePreviewStatusDisplay.futureModuleAction;
+  const doctorShareActionStatusDisplayText = futurePreviewStatusDisplay.doctorShareAction;
+  const healthIntegrationActionStatusDisplayText = futurePreviewStatusDisplay.healthIntegrationAction;
+  const communityActionStatusDisplayText = futurePreviewStatusDisplay.communityAction;
+  const rankingActionStatusDisplayText = futurePreviewStatusDisplay.rankingAction;
+  const doctorShareTokenStatusMessage = futurePreviewStatusDisplay.doctorShareToken;
+  const doctorShareReportBoundaryStatusMessage = futurePreviewStatusDisplay.doctorShareReportBoundary;
+  const healthIntegrationPermissionStatusMessage = futurePreviewStatusDisplay.healthIntegrationPermission;
+  const healthIntegrationMeterStatusMessage = futurePreviewStatusDisplay.healthIntegrationMeter;
+  const communityPostingStatusMessage = futurePreviewStatusDisplay.communityPosting;
+  const communityPrivacyStatusMessage = futurePreviewStatusDisplay.communityPrivacy;
+  const foodCommunityShareStatusMessage = futurePreviewStatusDisplay.foodCommunityShare;
   const foodCommunityShareButtonDisplayLabel = boundDisplayText("送出食物分享", maxDisplayTextLength);
   const foodCommunityShareAccessibilityDisplayLabel = boundDisplayText(
     `${foodCommunityShareButtonDisplayLabel}，backend 會計算升糖幅度並建立社群點數`,

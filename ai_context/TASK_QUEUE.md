@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1387: Extract future preview status display texts
+
+Status: done
+
+Summary:
+
+- Added `futurePreviewStatusDisplayTexts` to `mobile/futureModuleDisplay.ts` for future-module action status text and doctor-share / health-integration / community preview status messages.
+- Replaced inline future preview status display construction in `mobile/App.tsx` with the extracted helper.
+- Kept future-module navigation, preview action handlers, backend-unavailable behavior, community/ranking/store request paths, and rendering unchanged.
+- Updated navigation verifier coverage so the status helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1386: Extract preview record edit validation display text
 
 Status: done
