@@ -3043,7 +3043,7 @@ export default function App() {
   function openPreviewRecordRemoveConfirm(index: number, returnScreen: AppScreen = "aiReview") {
     const record = preview?.records[index];
     if (!record) {
-      setCurrentScreen(returnScreen);
+      openScreen(returnScreen);
       return;
     }
     setPreviewActionReturnScreen(returnScreen);
@@ -3107,11 +3107,11 @@ export default function App() {
   function confirmPreviewRecordRemove() {
     if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {
       setPendingPreviewRemoveIndex(null);
-      setCurrentScreen(previewActionReturnScreen);
+      openScreen(previewActionReturnScreen);
       return;
     }
     removePreviewRecord(pendingPreviewRemoveIndex);
-    setCurrentScreen(previewActionReturnScreen);
+    openScreen(previewActionReturnScreen);
   }
 
   function updatePreviewEditField<K extends keyof RecordEditFields>(
@@ -3191,7 +3191,7 @@ export default function App() {
 
   function savePreviewRecordEdit() {
     if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {
-      setCurrentScreen("aiReview");
+      openScreen("aiReview");
       return;
     }
     const validationError = validateRecordForm(
@@ -3227,7 +3227,7 @@ export default function App() {
       }
       clearSelectedPreviewEditDraft();
       clearDailyRecordEntryMenu();
-      setCurrentScreen(previewActionReturnScreen);
+      openScreen(previewActionReturnScreen);
     } catch (error) {
       setStatus(aiCandidateEditFailureStatusMessage(error));
     }
@@ -3235,7 +3235,7 @@ export default function App() {
 
   function enterAiSaveConfirm() {
     if (!preview || preview.records.length === 0) {
-      setCurrentScreen("aiReview");
+      openScreen("aiReview");
       return;
     }
     clearPreviewSelectionState();

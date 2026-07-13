@@ -3105,6 +3105,11 @@ def main() -> int:
             'clearPreviewSelectionState();\n    setLastSaveErrorSummary("");\n    openScreenWithStatus("aiSaveConfirm", aiSaveConfirmReadyStatusMessage());',
         )
         _assert_contains(
+            "AI save confirm enter empty preview screen opener fallback",
+            content,
+            'if (!preview || preview.records.length === 0) {\n      openScreen("aiReview");\n      return;',
+        )
+        _assert_contains(
             "save success unsaved candidate handler",
             content,
             "function processUnsavedPreviewRecords()",
@@ -3558,6 +3563,11 @@ def main() -> int:
             'selectPreviewRemoveIndex(index);\n    openScreenWithStatus("aiRemoveConfirm", aiCandidateRemoveConfirmStatusMessage());',
         )
         _assert_contains(
+            "AI candidate remove confirm missing record screen opener fallback",
+            content,
+            "if (!record) {\n      openScreen(returnScreen);\n      return;",
+        )
+        _assert_contains(
             "AI candidate edit return index clear helper binding",
             content,
             "clearPreviewMenuSelectionIndexes();\n    seedEmptyPreviewEditStateForNow();",
@@ -3586,6 +3596,26 @@ def main() -> int:
             "AI candidate edit save success field clear helper binding",
             content,
             "clearSelectedPreviewEditDraft();\n      clearDailyRecordEntryMenu();",
+        )
+        _assert_contains(
+            "AI candidate edit missing draft screen opener fallback",
+            content,
+            'if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {\n      openScreen("aiReview");\n      return;',
+        )
+        _assert_contains(
+            "AI candidate edit save success screen opener binding",
+            content,
+            "clearSelectedPreviewEditDraft();\n      clearDailyRecordEntryMenu();\n      openScreen(previewActionReturnScreen);",
+        )
+        _assert_contains(
+            "AI candidate remove confirm missing pending screen opener fallback",
+            content,
+            "if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {\n      setPendingPreviewRemoveIndex(null);\n      openScreen(previewActionReturnScreen);\n      return;",
+        )
+        _assert_contains(
+            "AI candidate remove confirm success screen opener binding",
+            content,
+            "removePreviewRecord(pendingPreviewRemoveIndex);\n    openScreen(previewActionReturnScreen);",
         )
         _assert_contains(
             "transcript edit return selected draft clear helper binding",
