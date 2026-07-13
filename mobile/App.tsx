@@ -5722,20 +5722,22 @@ export default function App() {
     setRecordEditTime(nowInputs.time);
   }
 
-  function openRecordDetail(record: RecordItem, returnScreen: AppScreen = "today") {
-    setSelectedRecord(record);
+  function openRecordDetailScreen(record: RecordItem, returnScreen: AppScreen) {
     setRecordDetailReturnScreen(returnScreen);
     seedRecordEditStateFromRecord(record);
     setCurrentScreen("recordDetail");
+  }
+
+  function openRecordDetail(record: RecordItem, returnScreen: AppScreen = "today") {
+    setSelectedRecord(record);
+    openRecordDetailScreen(record, returnScreen);
   }
 
   function openSelectedRecordDetail(returnScreen: AppScreen) {
     if (!selectedRecord) {
       return;
     }
-    setRecordDetailReturnScreen(returnScreen);
-    seedRecordEditStateFromRecord(selectedRecord);
-    setCurrentScreen("recordDetail");
+    openRecordDetailScreen(selectedRecord, returnScreen);
   }
 
   function openDeleteConfirm() {

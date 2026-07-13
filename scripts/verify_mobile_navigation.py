@@ -3698,6 +3698,26 @@ def main() -> int:
             "setSelectedRecord(null);\n      seedEmptyRecordEditStateForNow();\n      openDeleteSuccessResult(recordDeleteSummaryMessage(1));",
         )
         _assert_contains(
+            "record detail screen helper",
+            content,
+            "function openRecordDetailScreen(record: RecordItem, returnScreen: AppScreen)",
+        )
+        _assert_contains(
+            "record detail screen helper fields",
+            content,
+            "setRecordDetailReturnScreen(returnScreen);\n    seedRecordEditStateFromRecord(record);\n    setCurrentScreen(\"recordDetail\");",
+        )
+        _assert_contains(
+            "record detail open helper binding",
+            content,
+            "setSelectedRecord(record);\n    openRecordDetailScreen(record, returnScreen);",
+        )
+        _assert_contains(
+            "selected record detail open helper binding",
+            content,
+            "openRecordDetailScreen(selectedRecord, returnScreen);",
+        )
+        _assert_contains(
             "record edit return handler",
             content,
             "function returnFromRecordEdit()",
