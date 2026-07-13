@@ -133,6 +133,7 @@ import {
   achievementPreviewBoundaryCopy,
   achievementStreakBadgeColor,
   achievementUnlockDisplayDate,
+  buildAchievementCategoryDisplaySections,
   communityPublicNameBoundaryCopy,
   communityPreviewBoundaryDisplayItem,
   doctorShareBackendBoundaryCopy,
@@ -177,6 +178,7 @@ import {
   healthIntegrationExternalDataBoundaryCopy,
   healthIntegrationPreviewBoundaryDisplayItem,
   healthIntegrationReadinessChecklistDisplayItems,
+  limitedAchievementDisplayItems,
   mobileFoodCategoryFromApi,
   privacyPreviewBoundaryDisplayItem,
   rankingBoundaryDisplayRows,
@@ -188,6 +190,7 @@ import {
   selectedFoodCommunityDisplayItem,
   localYearlyHealthOutcomeDisplayRows,
   localYearlyReviewMetricDisplayRows,
+  saveSuccessNewlyUnlockedAchievementDisplayItems,
   storeCartButtonAccessibilityLabel,
   storeCartButtonLabel,
   storeCategories,
@@ -1441,21 +1444,18 @@ export default function App() {
   const achievements = achievementBackendItems.length > 0 ? achievementBackendItems : localAchievements;
   const achievementDisplayItems = useMemo(() => achievements.map(achievementDisplayItem), [achievements]);
   const achievementUnlockedDisplayItems = useMemo(
-    () => achievementUnlockedItems.slice(0, maxListItems).map(achievementDisplayItem),
+    () => limitedAchievementDisplayItems(achievementUnlockedItems),
     [achievementUnlockedItems]
   );
   const achievementNewlyUnlockedDisplayItems = useMemo(
-    () => achievementNewlyUnlockedItems.slice(0, maxListItems).map(achievementDisplayItem),
+    () => limitedAchievementDisplayItems(achievementNewlyUnlockedItems),
     [achievementNewlyUnlockedItems]
   );
-  const saveSuccessNewlyUnlockedDisplayItems = achievementNewlyUnlockedDisplayItems.slice(0, 3);
+  const saveSuccessNewlyUnlockedDisplayItems = saveSuccessNewlyUnlockedAchievementDisplayItems(
+    achievementNewlyUnlockedDisplayItems
+  );
   const achievementCategoryDisplaySections = useMemo(
-    () =>
-      achievementCategoryDefinitions.map((definition) => ({
-        key: boundIdentifier(`achievement-section-${definition.id}`),
-        label: boundDisplayText(definition.label, 40),
-        items: achievementDisplayItems.filter((item) => item.category === definition.id)
-      })),
+    () => buildAchievementCategoryDisplaySections(achievementDisplayItems),
     [achievementDisplayItems]
   );
   const unlockedAchievementCount = achievementDisplayItems.filter((item) => item.progress >= item.target).length;

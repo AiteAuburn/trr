@@ -744,6 +744,24 @@ export function achievementDisplayItem(value: AchievementItem) {
   };
 }
 
+export type AchievementDisplayItem = ReturnType<typeof achievementDisplayItem>;
+
+export function limitedAchievementDisplayItems(items: AchievementItem[]) {
+  return items.slice(0, maxListItems).map(achievementDisplayItem);
+}
+
+export function saveSuccessNewlyUnlockedAchievementDisplayItems(items: AchievementDisplayItem[]) {
+  return items.slice(0, 3);
+}
+
+export function buildAchievementCategoryDisplaySections(items: AchievementDisplayItem[]) {
+  return achievementCategoryDefinitions.map((definition) => ({
+    key: boundIdentifier(`achievement-section-${definition.id}`),
+    label: boundDisplayText(definition.label, 40),
+    items: items.filter((item) => item.category === definition.id)
+  }));
+}
+
 export function achievementItemFromApi(value: AchievementApiItem): AchievementItem {
   const category = achievementCategoryDefinitions.some((definition) => definition.id === value.category)
     ? value.category

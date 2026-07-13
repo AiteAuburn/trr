@@ -13,6 +13,40 @@
 後續:
 ```
 
+## 2026-07-13
+
+### T1313 extract achievement display section helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `limitedAchievementDisplayItems`, `saveSuccessNewlyUnlockedAchievementDisplayItems`, and `buildAchievementCategoryDisplaySections` to `mobile/futureModuleDisplay.ts` for achievement display shaping.
+- Replaced the inline unlocked/newly-unlocked achievement list limiting, save-success newly-unlocked limiting, and category section construction in `mobile/App.tsx` with the extracted helpers.
+- Kept achievement copy, badge progress/status behavior, category grouping order, save-success rendering, achievements rendering, sync API behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helpers, App bindings, category key/filter rules, and save-success limiting are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Achievements rendering、Save Success rendering、achievement sync API behavior、first-version menu destinations、hidden/debug-only future routing、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting low-risk future-module display helpers from `App.tsx`; keep achievement sync request ownership and render state in `App.tsx` until component boundaries are stable.
+
 ## 2026-07-08
 
 ### T1312 extract future commerce/community visibility helpers

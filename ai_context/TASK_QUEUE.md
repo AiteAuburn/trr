@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1313: Extract achievement display section helpers
+
+Status: done
+
+Summary:
+
+- Added `limitedAchievementDisplayItems`, `saveSuccessNewlyUnlockedAchievementDisplayItems`, and `buildAchievementCategoryDisplaySections` to `mobile/futureModuleDisplay.ts` for achievement display shaping.
+- Replaced the inline unlocked/newly-unlocked achievement list limiting, save-success newly-unlocked limiting, and category section construction in `mobile/App.tsx` with extracted helpers.
+- Kept achievement copy, badge progress/status behavior, category grouping order, save-success rendering, achievements rendering, sync API behavior, normal first-version menu destinations, and hidden/debug-only future routing unchanged.
+- Updated navigation verifier coverage so the extracted helpers, App bindings, category key/filter rules, and save-success limiting are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1312: Extract future commerce/community visibility helpers
 
 Status: done
