@@ -34,6 +34,39 @@ None.
 
 ## Done
 
+### T1415: Extract visual smoke route status messages
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/navigationConfig.ts`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added visual-smoke boot skipped, boot ignored, shared auth status, and deep-link status helpers to `mobile/navigationConfig.ts`.
+- Replaced inline bounded visual-smoke boot and deep-link status construction in `mobile/App.tsx` with the extracted helpers.
+- Kept debug gating, visual-smoke activation, boot early return, boot stale-key handling, backend failure behavior, and route jump behavior unchanged.
+- Updated navigation and visual-smoke route verifier coverage so helper internals and App binding are explicitly guarded.
+- No backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue auditing the remaining token-storage display binding separately.
+
 ### T1414: Extract daily record action status messages
 
 Status: done

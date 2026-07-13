@@ -445,8 +445,13 @@ def verify(
     )
     _assert_contains(
         "visual smoke initial route no boot side effect",
-        content,
+        navigation_content,
         "Visual smoke 本機路由預覽；已跳過 backend boot",
+    )
+    _assert_contains(
+        "visual smoke initial route no boot helper binding",
+        content,
+        "const display = visualSmokeBootSkippedDisplayMessages();",
     )
     _assert_contains(
         "visual smoke deep link listener",

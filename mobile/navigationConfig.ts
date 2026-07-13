@@ -1,3 +1,5 @@
+import { boundUiMessage } from "./mobileBounds";
+
 export type AppScreen =
   | "today"
   | "record"
@@ -179,12 +181,37 @@ function visualSmokeRouteFromDeepLinkUrl(
   return normalizeVisualSmokeInitialRoute(route, enableDebugTools, allowMobileDevAuth);
 }
 
+function visualSmokePreviewAuthStatusMessage() {
+  return boundUiMessage("Visual smoke demo state only; no dev-login, token, backend, AI, STT, Vision, payment, or database writes.");
+}
+
+function visualSmokeBootSkippedDisplayMessages() {
+  return {
+    status: boundUiMessage("Visual smoke 本機路由預覽；已跳過 backend boot，不會呼叫 API 或寫入資料。"),
+    authStatus: visualSmokePreviewAuthStatusMessage()
+  };
+}
+
+function visualSmokeBootIgnoredDisplayMessages() {
+  return {
+    status: boundUiMessage("Visual smoke 本機路由預覽；backend boot 結果已忽略，不清除本機 demo records。"),
+    authStatus: visualSmokePreviewAuthStatusMessage()
+  };
+}
+
+function visualSmokeDeepLinkStatusMessage(route: AppScreen) {
+  return boundUiMessage(`Visual smoke deep link opened ${route}; 本機路由預覽不呼叫 API 或寫入資料。`);
+}
+
 export {
   menuScreens,
   mvpFlowSteps,
   normalizeVisualSmokeInitialRoute,
   primaryScreens,
   screenChrome,
+  visualSmokeBootIgnoredDisplayMessages,
+  visualSmokeBootSkippedDisplayMessages,
+  visualSmokeDeepLinkStatusMessage,
   visualSmokeRouteFromDeepLinkUrl,
   visualSmokeRouteJumps
 };

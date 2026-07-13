@@ -116,6 +116,9 @@ import {
   mvpFlowSteps,
   primaryScreens,
   screenChrome,
+  visualSmokeBootIgnoredDisplayMessages,
+  visualSmokeBootSkippedDisplayMessages,
+  visualSmokeDeepLinkStatusMessage,
   visualSmokeRouteFromDeepLinkUrl,
   visualSmokeRouteJumps,
   type AppScreen
@@ -4205,11 +4208,7 @@ export default function App() {
         return;
       }
       openVisualSmokeRoute(deepLinkRoute);
-      setStatus(
-        boundUiMessage(
-          `Visual smoke deep link opened ${deepLinkRoute}; 本機路由預覽不呼叫 API 或寫入資料。`
-        )
-      );
+      setStatus(visualSmokeDeepLinkStatusMessage(deepLinkRoute));
     }
 
     const subscription = Linking.addEventListener("url", ({ url }) => {
@@ -5190,8 +5189,9 @@ export default function App() {
 
   async function boot() {
     if (visualSmokePreviewActive.current) {
-      setStatus(boundUiMessage("Visual smoke 本機路由預覽；已跳過 backend boot，不會呼叫 API 或寫入資料。"));
-      setAuthActionStatus(boundUiMessage("Visual smoke demo state only; no dev-login, token, backend, AI, STT, Vision, payment, or database writes."));
+      const display = visualSmokeBootSkippedDisplayMessages();
+      setStatus(display.status);
+      setAuthActionStatus(display.authStatus);
       return;
     }
     const bootKey = normalizeApiBaseUrl(apiBaseUrl);
@@ -5272,8 +5272,9 @@ export default function App() {
     } catch (error) {
       if (latestBootKey.current === bootKey) {
         if (visualSmokePreviewActive.current) {
-          setStatus(boundUiMessage("Visual smoke 本機路由預覽；backend boot 結果已忽略，不清除本機 demo records。"));
-          setAuthActionStatus(boundUiMessage("Visual smoke demo state only; no dev-login, token, backend, AI, STT, Vision, payment, or database writes."));
+          const display = visualSmokeBootIgnoredDisplayMessages();
+          setStatus(display.status);
+          setAuthActionStatus(display.authStatus);
           return;
         }
         const failureDisplay = backendReconnectFailureDisplayMessages(error);
@@ -6254,8 +6255,9 @@ export default function App() {
   useEffect(() => {
     if (initialVisualSmokeScreen) {
       activateVisualSmokePreview();
-      setStatus(boundUiMessage("Visual smoke 本機路由預覽；已跳過 backend boot，不會呼叫 API 或寫入資料。"));
-      setAuthActionStatus(boundUiMessage("Visual smoke demo state only; no dev-login, token, backend, AI, STT, Vision, payment, or database writes."));
+      const display = visualSmokeBootSkippedDisplayMessages();
+      setStatus(display.status);
+      setAuthActionStatus(display.authStatus);
       return;
     }
     void boot();

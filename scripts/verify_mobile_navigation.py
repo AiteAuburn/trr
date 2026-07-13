@@ -3394,6 +3394,46 @@ def main() -> int:
             "function visualSmokeRouteFromDeepLinkUrl(",
         )
         _assert_contains(
+            "visual smoke boot skipped display helper",
+            navigation_content,
+            "function visualSmokeBootSkippedDisplayMessages()",
+        )
+        _assert_contains(
+            "visual smoke boot ignored display helper",
+            navigation_content,
+            "function visualSmokeBootIgnoredDisplayMessages()",
+        )
+        _assert_contains(
+            "visual smoke deep link status helper",
+            navigation_content,
+            "function visualSmokeDeepLinkStatusMessage(route: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke shared auth status helper",
+            navigation_content,
+            "function visualSmokePreviewAuthStatusMessage()",
+        )
+        _assert_contains(
+            "visual smoke boot skipped no backend copy",
+            navigation_content,
+            "Visual smoke 本機路由預覽；已跳過 backend boot，不會呼叫 API 或寫入資料。",
+        )
+        _assert_contains(
+            "visual smoke boot ignored no clear copy",
+            navigation_content,
+            "Visual smoke 本機路由預覽；backend boot 結果已忽略，不清除本機 demo records。",
+        )
+        _assert_contains(
+            "visual smoke deep link no write copy",
+            navigation_content,
+            "Visual smoke deep link opened ${route}; 本機路由預覽不呼叫 API 或寫入資料。",
+        )
+        _assert_contains(
+            "visual smoke auth status copy",
+            navigation_content,
+            "Visual smoke demo state only; no dev-login, token, backend, AI, STT, Vision, payment, or database writes.",
+        )
+        _assert_contains(
             "visual smoke route helper debug gate",
             navigation_content,
             "if (!enableDebugTools || !allowMobileDevAuth)",
@@ -3407,6 +3447,21 @@ def main() -> int:
             "visual smoke route jump guarded handler",
             content,
             "if (!enableDebugTools || !allowMobileDevAuth)",
+        )
+        _assert_contains(
+            "visual smoke deep link status binding",
+            content,
+            "setStatus(visualSmokeDeepLinkStatusMessage(deepLinkRoute));",
+        )
+        _assert_contains(
+            "visual smoke boot skipped display binding",
+            content,
+            "const display = visualSmokeBootSkippedDisplayMessages();",
+        )
+        _assert_contains(
+            "visual smoke boot ignored display binding",
+            content,
+            "const display = visualSmokeBootIgnoredDisplayMessages();",
         )
         _assert_contains(
             "visual smoke route press wrapper",
