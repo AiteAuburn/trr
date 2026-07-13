@@ -1747,9 +1747,11 @@ export default function App() {
   const subscriptionManagementPaymentStatusMessage = subscriptionActionStatusDisplay.managementPayment;
   const authStatusDisplay = authStatusDisplayTexts({
     authActionStatus,
-    devResetStatus
+    devResetStatus,
+    tokenStorageStatus
   });
   const authActionStatusDisplayText = authStatusDisplay.authAction;
+  const tokenStorageStatusDisplayText = authStatusDisplay.tokenStorage;
   const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);
   const nativeStatusDisplayText = nativeStatusDisplay.native;
   const devResetStatusDisplayText = authStatusDisplay.devReset;
@@ -10168,7 +10170,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authReadiness}</Text>
               <Text style={styles.evidence}>{accountSecurityReadinessBoundaryDisplayText}</Text>
-              <Text style={styles.evidence}>{boundUiMessage(tokenStorageStatus)}</Text>
+              <Text style={styles.evidence}>{tokenStorageStatusDisplayText}</Text>
               {productionAuthReadinessDisplayRows.map((item) => (
                 <View key={item.title} style={styles.highlightRow}>
                   <Text style={styles.previewModeBadge}>{item.statusLabel}</Text>

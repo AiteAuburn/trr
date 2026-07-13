@@ -139,10 +139,12 @@ export function localClearDisplayMessages() {
 export function authStatusDisplayTexts(value: {
   authActionStatus: string;
   devResetStatus: string;
+  tokenStorageStatus: string;
 }) {
   return {
     authAction: boundUiMessage(value.authActionStatus),
-    devReset: boundUiMessage(value.devResetStatus)
+    devReset: boundUiMessage(value.devResetStatus),
+    tokenStorage: boundUiMessage(value.tokenStorageStatus)
   };
 }
 

@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1416 extract token storage display status binding
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/authStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extended `authStatusDisplayTexts` with a bounded `tokenStorage` display value for account-security readiness rendering.
+- Replaced the final inline `boundUiMessage(tokenStorageStatus)` render in `mobile/App.tsx` with the extracted display value.
+- Kept SecureStore reads/writes, token clearing, token status state transitions, auth request headers, and protected API readiness behavior unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、SecureStore reads/writes、token clearing、token status state transitions、auth request headers、protected API readiness behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue broader component extraction or App flow slicing separately; no inline `boundUiMessage` calls remain in `mobile/App.tsx`.
+
 ### T1415 extract visual smoke route status messages
 
 類型：mobile / refactor / verifier / docs

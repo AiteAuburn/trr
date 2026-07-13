@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T1416: Extract token storage display status binding
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/authStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Extended `authStatusDisplayTexts` with a bounded `tokenStorage` display value for account-security readiness rendering.
+- Replaced the final inline `boundUiMessage(tokenStorageStatus)` render in `mobile/App.tsx` with the extracted display value.
+- Kept SecureStore reads/writes, token clearing, token status state transitions, auth request headers, and protected API readiness behavior unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- No backend/schema/Android signing/token storage behavior/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue broader component extraction or App flow slicing separately; no inline `boundUiMessage` calls remain in `mobile/App.tsx`.
+
 ### T1415: Extract visual smoke route status messages
 
 Status: done
