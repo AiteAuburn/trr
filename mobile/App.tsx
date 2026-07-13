@@ -5796,8 +5796,7 @@ export default function App() {
   }
 
   function openRecordActionUnavailable(screen: AppScreen, statusMessage: string) {
-    setStatus(statusMessage);
-    setCurrentScreen(screen);
+    openScreenWithStatus(screen, statusMessage);
   }
 
   async function updateSelectedRecord() {

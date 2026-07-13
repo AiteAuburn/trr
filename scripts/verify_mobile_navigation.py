@@ -3967,7 +3967,7 @@ def main() -> int:
         _assert_contains(
             "record action unavailable helper fields",
             content,
-            "setStatus(statusMessage);\n    setCurrentScreen(screen);",
+            "openScreenWithStatus(screen, statusMessage);",
         )
         _assert_contains(
             "record update unavailable helper binding",
