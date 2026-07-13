@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1359 extract local achievement item helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `localAchievementItemsForDefinition` to `mobile/futureModuleDisplay.ts` for local cumulative/streak achievement item construction.
+- Replaced the inline local achievement item construction in `mobile/App.tsx` with the extracted helper.
+- Kept local achievement IDs, titles, descriptions, category labels, badge colors, icons, progress caps, unlocked rules, and rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper owns item-shape markers while `App.tsx` keeps only the dynamic-level and helper binding checks.
+- 未變更 backend runtime、database schema、Android signing config、achievement rendering、Year Review rendering、achievement backend sync、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing local achievement progress calculation and remaining future-module display summaries separately.
+
 ### T1358 extract dynamic achievement levels helper
 
 類型：mobile / refactor / verifier / docs

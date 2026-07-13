@@ -495,6 +495,53 @@ export function achievementDynamicLevels(maxObservedRecords: number, maxObserved
   return dynamicLevels;
 }
 
+export function localAchievementItemsForDefinition(
+  definition: (typeof achievementCategoryDefinitions)[number],
+  dynamicLevels: number[],
+  cumulativeProgress: number,
+  streakProgress: number
+): AchievementItem[] {
+  return dynamicLevels.flatMap((level, levelIndex) => {
+    const badgeColor = achievementLevelColors[levelIndex] ?? definition.cumulativeColor;
+    return [
+      {
+        id: `${definition.id}-cumulative-${level}`,
+        category: definition.id,
+        categoryLabel: definition.label,
+        kind: "cumulative",
+        kindLabel: "累積型",
+        level,
+        title: `${definition.label}累積 ${level}`,
+        description: `累積建立 ${level} 筆${definition.label}。`,
+        icon: definition.cumulativeIcon,
+        badgeColor,
+        progress: Math.min(cumulativeProgress, level),
+        target: level,
+        unlocked: cumulativeProgress >= level,
+        unlockedAt: null,
+        newlyUnlocked: false
+      },
+      {
+        id: `${definition.id}-streak-${level}`,
+        category: definition.id,
+        categoryLabel: definition.label,
+        kind: "streak",
+        kindLabel: "連續型",
+        level,
+        title: `${definition.label}連續 ${level}`,
+        description: `連續 ${level} 天建立${definition.label}。`,
+        icon: "連",
+        badgeColor,
+        progress: Math.min(streakProgress, level),
+        target: level,
+        unlocked: streakProgress >= level,
+        unlockedAt: null,
+        newlyUnlocked: false
+      }
+    ];
+  });
+}
+
 export const storeCategories: Array<{ id: StoreCategory; label: string }> = [
   { id: "coupons", label: "優惠券" },
   { id: "supplementDiscounts", label: "保健食品折扣" },

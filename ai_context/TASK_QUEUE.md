@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1359: Extract local achievement item helper
+
+Status: done
+
+Summary:
+
+- Added `localAchievementItemsForDefinition` to `mobile/futureModuleDisplay.ts` for local cumulative/streak achievement item construction.
+- Replaced the inline local achievement item construction in `mobile/App.tsx` with the extracted helper.
+- Kept local achievement IDs, titles, descriptions, category labels, badge colors, icons, progress caps, unlocked rules, and rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper owns item-shape markers while `App.tsx` keeps only the dynamic-level and helper binding checks.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1358: Extract dynamic achievement levels helper
 
 Status: done

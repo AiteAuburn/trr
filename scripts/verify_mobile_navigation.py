@@ -370,15 +370,25 @@ def _verify_achievement_contract(content: str, future_module_display_content: st
         _assert_contains(f"backend achievement label {category}", catalog_content, f'"label": "{label}"')
         _assert_contains(f"backend achievement record type {category}", catalog_content, f'"record_type": "{record_type}"')
         _assert_contains(f"backend achievement icon {category}", catalog_content, f'"cumulative_icon": "{icon}"')
-        _assert_contains(f"mobile cumulative id {category}", content, f'id: `${{definition.id}}-cumulative-${{level}}`')
-        _assert_contains(f"mobile streak id {category}", content, f'id: `${{definition.id}}-streak-${{level}}`')
+        _assert_contains(
+            f"mobile cumulative id {category}",
+            future_module_display_content,
+            f'id: `${{definition.id}}-cumulative-${{level}}`',
+        )
+        _assert_contains(
+            f"mobile streak id {category}",
+            future_module_display_content,
+            f'id: `${{definition.id}}-streak-${{level}}`',
+        )
 
     for label, marker in (
+        ("mobile local achievement item helper", "export function localAchievementItemsForDefinition("),
         ("mobile cumulative kind", 'kind: "cumulative"'),
         ("mobile cumulative label", 'kindLabel: "累積型"'),
         ("mobile cumulative shared category icon", "icon: definition.cumulativeIcon"),
         ("mobile cumulative level color", "const badgeColor = achievementLevelColors[levelIndex] ?? definition.cumulativeColor"),
         ("mobile dynamic achievement helper binding", "const dynamicLevels = achievementDynamicLevels(maxObservedRecords, maxObservedStreak);"),
+        ("mobile local achievement item helper binding", "localAchievementItemsForDefinition(definition, dynamicLevels, cumulativeProgress, streakProgress)"),
         ("mobile streak kind", 'kind: "streak"'),
         ("mobile streak label", 'kindLabel: "連續型"'),
         ("mobile streak independent icon", 'icon: "連"'),
@@ -397,7 +407,17 @@ def _verify_achievement_contract(content: str, future_module_display_content: st
         ("backend streak independent icon", 'icon="連"'),
         ("backend streak independent color", "badge_color=ACHIEVEMENT_STREAK_BADGE_COLOR"),
     ):
-        haystack = backend_content if label.startswith("backend") else content
+        if label.startswith("backend"):
+            haystack = backend_content
+        elif label in {
+            "mobile dynamic achievement helper binding",
+            "mobile local achievement item helper binding",
+            "mobile streak independent style",
+            "mobile badge level number",
+        }:
+            haystack = content
+        else:
+            haystack = future_module_display_content
         _assert_contains(label, haystack, marker)
     tests_content = COMMUNITY_STORE_YEAR_REVIEW_TEST_PATH.read_text(encoding="utf-8")
     _assert_contains(
