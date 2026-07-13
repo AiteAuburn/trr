@@ -311,6 +311,16 @@ export function dailyRecordLeaveGuardQuestionCopy() {
   return boundDisplayText("是否仍要離開？", maxDisplayTextLength);
 }
 
+export function dailyRecordLeaveGuardDisplayTexts() {
+  return {
+    title: dailyRecordLeaveGuardTitleCopy(),
+    body: dailyRecordLeaveGuardBodyCopy(),
+    question: dailyRecordLeaveGuardQuestionCopy(),
+    cancelAccessibility: boundDisplayText("取消離開，保留每日紀錄草稿", maxDisplayDetailTextLength),
+    confirmAccessibility: boundDisplayText("離開每日紀錄頁，今天未儲存修改不會保留", maxDisplayDetailTextLength)
+  };
+}
+
 export function dailyRecordLeaveGuardPromptStatusMessage() {
   return boundUiMessage("尚未儲存今天的紀錄；請先選擇取消或離開。");
 }

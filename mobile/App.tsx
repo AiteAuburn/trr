@@ -341,12 +341,10 @@ import {
   aiSaveSuccessStatusMessage,
   aiSaveSuccessSummaryMessage,
   aiSaveUnavailableStatusMessage,
-  dailyRecordLeaveGuardBodyCopy,
   dailyRecordLeaveGuardCancelStatusMessage,
   dailyRecordLeaveGuardConfirmStatusMessage,
+  dailyRecordLeaveGuardDisplayTexts,
   dailyRecordLeaveGuardPromptStatusMessage,
-  dailyRecordLeaveGuardQuestionCopy,
-  dailyRecordLeaveGuardTitleCopy,
   manualRecordConfirmDisplayTexts,
   manualRecordConfirmReadyStatusMessage,
   manualRecordConfirmReturnStatusMessage,
@@ -1223,17 +1221,12 @@ export default function App() {
     : styles.container;
   const hasUnsavedPreviewRecords = unsavedPreviewRecordCount > 0;
   const hasUnsavedDailyRecordDraft = currentScreen === "aiSaveConfirm" && hasUnsavedPreviewRecords;
-  const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardTitleCopy();
-  const dailyRecordLeaveGuardBodyDisplayText = dailyRecordLeaveGuardBodyCopy();
-  const dailyRecordLeaveGuardQuestionDisplayText = dailyRecordLeaveGuardQuestionCopy();
-  const dailyRecordLeaveGuardCancelAccessibilityLabel = boundDisplayText(
-    "取消離開，保留每日紀錄草稿",
-    maxDisplayDetailTextLength
-  );
-  const dailyRecordLeaveGuardConfirmAccessibilityLabel = boundDisplayText(
-    "離開每日紀錄頁，今天未儲存修改不會保留",
-    maxDisplayDetailTextLength
-  );
+  const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayTexts();
+  const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardDisplay.title;
+  const dailyRecordLeaveGuardBodyDisplayText = dailyRecordLeaveGuardDisplay.body;
+  const dailyRecordLeaveGuardQuestionDisplayText = dailyRecordLeaveGuardDisplay.question;
+  const dailyRecordLeaveGuardCancelAccessibilityLabel = dailyRecordLeaveGuardDisplay.cancelAccessibility;
+  const dailyRecordLeaveGuardConfirmAccessibilityLabel = dailyRecordLeaveGuardDisplay.confirmAccessibility;
   const hasPartialAiSave = lastSaveEntryMethod === "ai" && hasUnsavedPreviewRecords;
   const hasManualFallbackWithAiCandidates =
     lastSaveEntryMethod === "manual" && hasUnsavedPreviewRecords;

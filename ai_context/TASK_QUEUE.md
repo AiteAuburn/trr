@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1376: Extract daily record leave guard display texts
+
+Status: done
+
+Summary:
+
+- Added `dailyRecordLeaveGuardDisplayTexts` to `mobile/recordWorkflowCopy.ts` for daily-record unsaved-leave title, body, question, and accessibility labels.
+- Replaced inline daily-record leave guard display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept left-header guard, Android back handling, modal copy, cancel/leave actions, and draft retention behavior unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1375: Extract AI review display texts
 
 Status: done

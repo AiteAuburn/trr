@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1376 extract daily record leave guard display texts
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `dailyRecordLeaveGuardDisplayTexts` to `mobile/recordWorkflowCopy.ts` for daily-record unsaved-leave title, body, question, and accessibility labels.
+- Replaced inline daily-record leave guard display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept left-header guard, Android back handling, modal copy, cancel/leave actions, and draft retention behavior unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、daily-record save behavior、draft retention behavior、Android back handling behavior、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining App.tsx workflow display aggregation and screen-local calculations separately.
+
 ### T1375 extract AI review display texts
 
 類型：mobile / refactor / verifier / docs
