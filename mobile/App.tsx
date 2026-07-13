@@ -612,6 +612,7 @@ import {
 } from "./analysisCopy";
 import {
   analysisRangeDisplayItem,
+  analysisRangeDisplayItems,
   analysisRanges,
   basicReportRequestKey
 } from "./analysisScreenData";
@@ -1700,7 +1701,7 @@ export default function App() {
     []
   );
   const historyDetailModeDisplayOptions = useMemo(() => historyDetailModeDisplayItems(historyDetailModes), []);
-  const analysisRangeDisplayOptions = useMemo(() => analysisRanges.map(analysisRangeDisplayItem), []);
+  const analysisRangeDisplayOptions = useMemo(() => analysisRangeDisplayItems(analysisRanges), []);
   const menuDisplayItems = useMemo(() => menuScreens.map(menuScreenDisplayItem), []);
   const visualSmokeRouteJumpDisplayItems = useMemo(
     () => visualSmokeRouteJumps.map(visualSmokeRouteJumpDisplayItem),

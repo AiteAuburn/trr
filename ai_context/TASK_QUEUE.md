@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1340: Extract analysis range display items helper
+
+Status: done
+
+Summary:
+
+- Added `analysisRangeDisplayItems` to `mobile/analysisScreenData.ts` for Analysis range display-list shaping.
+- Replaced the inline `analysisRanges.map(analysisRangeDisplayItem)` construction in `mobile/App.tsx` with the extracted helper.
+- Kept Analysis range copy, accessibility labels, selected range state, press handler, custom date bounds, backend report key, and Analysis rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, App binding, and Analysis range mapping rule are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1339: Extract history detail mode display items helper
 
 Status: done

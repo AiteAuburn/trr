@@ -22,6 +22,10 @@ export function analysisRangeDisplayItem(value: { id: AnalysisRange; label: stri
   };
 }
 
+export function analysisRangeDisplayItems(values: ReadonlyArray<{ id: AnalysisRange; label: string }>) {
+  return values.map(analysisRangeDisplayItem);
+}
+
 export function basicReportRequestKey(
   apiBaseUrl: string,
   accountId: string,

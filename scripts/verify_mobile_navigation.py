@@ -4469,6 +4469,11 @@ def main() -> int:
             "function pressAnalysisRangeOption(item: ReturnType<typeof analysisRangeDisplayItem>)",
         )
         _assert_contains(
+            "analysis range display options helper binding",
+            content,
+            "const analysisRangeDisplayOptions = useMemo(() => analysisRangeDisplayItems(analysisRanges), []);",
+        )
+        _assert_contains(
             "analysis custom start input handler",
             content,
             "function updateAnalysisCustomStartInput(value: string)",
@@ -4509,6 +4514,8 @@ def main() -> int:
             ("analysis month range option", '{ id: "month", label: "本月" }'),
             ("analysis custom range option", '{ id: "custom", label: "自訂日期區間" }'),
             ("analysis range display helper", "function analysisRangeDisplayItem(value: { id: AnalysisRange; label: string })"),
+            ("analysis range display items helper", "function analysisRangeDisplayItems(values: ReadonlyArray<{ id: AnalysisRange; label: string }>)"),
+            ("analysis range display items map", "return values.map(analysisRangeDisplayItem);"),
             ("analysis range accessibility label", "accessibilityLabel: boundDisplayText(`切換分析範圍：${label}，同步 backend bounded report`, maxDisplayDetailTextLength)"),
         ):
             _assert_contains(label, analysis_screen_data_content, marker)
