@@ -3673,8 +3673,7 @@ export default function App() {
   }
 
   function openSubscriptionStatusScreen(screen: AppScreen, statusMessage: string) {
-    setCurrentScreen(screen);
-    setStatus(statusMessage);
+    openScreenWithStatus(screen, statusMessage);
   }
 
   function openSubscriptionManagementFromSubscription() {
@@ -3695,8 +3694,7 @@ export default function App() {
   }
 
   function returnToSettingsWithStatus(statusMessage: string) {
-    setCurrentScreen("settings");
-    setStatus(statusMessage);
+    openScreenWithStatus("settings", statusMessage);
   }
 
   function returnFromSubscriptionManagementToSettings() {
@@ -3704,8 +3702,7 @@ export default function App() {
   }
 
   function openAccountSecurityFromSettings() {
-    setCurrentScreen("accountSecurity");
-    setStatus(settingsAccountSecurityOpenStatusMessage());
+    openScreenWithStatus("accountSecurity", settingsAccountSecurityOpenStatusMessage());
   }
 
   function returnFromSettingsSubpage() {
@@ -3717,8 +3714,7 @@ export default function App() {
   }
 
   function returnFromMembershipStatusToSubscription() {
-    setCurrentScreen("subscription");
-    setStatus(membershipStatusReturnSubscriptionStatusMessage());
+    openScreenWithStatus("subscription", membershipStatusReturnSubscriptionStatusMessage());
   }
 
   function openMembershipRenewalManagement() {

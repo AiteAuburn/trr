@@ -6683,6 +6683,11 @@ def main() -> int:
             "function openAccountSecurityFromSettings()",
         )
         _assert_contains(
+            "settings account security status helper binding",
+            content,
+            'openScreenWithStatus("accountSecurity", settingsAccountSecurityOpenStatusMessage());',
+        )
+        _assert_contains(
             "settings subpage return handler",
             content,
             "function returnFromSettingsSubpage()",
@@ -8594,18 +8599,19 @@ def main() -> int:
             ("subscription quota sync handler", "function syncSubscriptionQuota()"),
             ("subscription trial integration handler", "function showSubscriptionTrialIntegrationStatus()"),
             ("subscription status screen helper", "function openSubscriptionStatusScreen(screen: AppScreen, statusMessage: string)"),
-            ("subscription status screen helper fields", "setCurrentScreen(screen);\n    setStatus(statusMessage);"),
+            ("subscription status screen helper fields", "openScreenWithStatus(screen, statusMessage);"),
             ("subscription management open handler", "function openSubscriptionManagementFromSubscription()"),
             ("subscription management status screen helper binding", 'openSubscriptionStatusScreen("subscriptionManagement", subscriptionManagementOpenStatusMessage());'),
             ("subscription membership status handler", "function openMembershipStatusFromSubscription()"),
             ("subscription membership status screen helper binding", 'openSubscriptionStatusScreen("membershipStatus", subscriptionMembershipStatusOpenStatusMessage());'),
             ("subscription management sync handler", "function syncSubscriptionManagementStatus()"),
             ("settings return status helper", "function returnToSettingsWithStatus(statusMessage: string)"),
-            ("settings return status helper fields", 'setCurrentScreen("settings");\n    setStatus(statusMessage);'),
+            ("settings return status helper fields", 'openScreenWithStatus("settings", statusMessage);'),
             ("subscription management return handler", "function returnFromSubscriptionManagementToSettings()"),
             ("subscription management return status helper binding", "returnToSettingsWithStatus(subscriptionManagementReturnSettingsStatusMessage());"),
             ("subscription management payment handler", "function showSubscriptionManagementPaymentStatus()"),
             ("membership return subscription handler", "function returnFromMembershipStatusToSubscription()"),
+            ("membership return subscription status helper binding", 'openScreenWithStatus("subscription", membershipStatusReturnSubscriptionStatusMessage());'),
             ("membership renewal management handler", "function openMembershipRenewalManagement()"),
             ("membership management handler", "function openMembershipManagement()"),
             ("subscription quota sync binding", "onPress={syncSubscriptionQuota}"),
