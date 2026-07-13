@@ -4515,7 +4515,7 @@ def main() -> int:
         _assert_contains(
             "future module detail result helper fields",
             content,
-            "setSelectedFutureModule(module);\n    setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());\n    setCurrentScreen(\"futureModuleDetail\");",
+            'setSelectedFutureModule(module);\n    setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());\n    openScreen("futureModuleDetail");',
         )
         _assert_contains(
             "future module detail handler helper binding",
@@ -4588,9 +4588,19 @@ def main() -> int:
             "setDoctorShareActionStatus(futurePreviewActionClearStatusMessage());",
         )
         _assert_contains(
+            "doctor share screen opener binding",
+            content,
+            'setDoctorShareActionStatus(futurePreviewActionClearStatusMessage());\n    openScreen("doctorShare");',
+        )
+        _assert_contains(
             "health integration future preview return helper binding",
             content,
             'setHealthIntegrationReturnScreen(futurePreviewReturnScreen(returnScreen, "healthIntegration"));',
+        )
+        _assert_contains(
+            "health integration screen opener binding",
+            content,
+            'setHealthIntegrationActionStatus(futurePreviewActionClearStatusMessage());\n    openScreen("healthIntegration");',
         )
         _assert_contains(
             "community future preview return helper binding",
@@ -7808,7 +7818,9 @@ def main() -> int:
             ("subscription menu preview return helper binding", 'setSubscriptionReturnScreen(menuPreviewReturnScreen(returnScreen, "subscription"));'),
             ("subscription screen opener binding", 'setSubscriptionReturnScreen(menuPreviewReturnScreen(returnScreen, "subscription"));\n    openScreen("subscription");'),
             ("tutorial menu preview return helper binding", 'setTutorialReturnScreen(menuPreviewReturnScreen(returnScreen, "tutorial"));'),
+            ("tutorial screen opener binding", 'setTutorialReturnScreen(menuPreviewReturnScreen(returnScreen, "tutorial"));\n    openScreen("tutorial");'),
             ("food photo menu preview return helper binding", 'setFoodPhotoReturnScreen(menuPreviewReturnScreen(returnScreen, "foodPhoto"));'),
+            ("food photo screen opener binding", 'setFoodPhotoReturnScreen(menuPreviewReturnScreen(returnScreen, "foodPhoto"));\n    openScreen("foodPhoto");'),
             ("achievements menu preview return helper binding", 'setAchievementsReturnScreen(menuPreviewReturnScreen(returnScreen, "achievements"));'),
             ("year review menu preview return helper binding", 'setYearReviewReturnScreen(menuPreviewReturnScreen(returnScreen, "yearReview"));'),
             ("store menu preview return helper binding", 'setStoreReturnScreen(menuPreviewReturnScreen(returnScreen, "store"));'),

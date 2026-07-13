@@ -3727,12 +3727,12 @@ export default function App() {
 
   function openTutorial(returnScreen: AppScreen = currentScreen) {
     setTutorialReturnScreen(menuPreviewReturnScreen(returnScreen, "tutorial"));
-    setCurrentScreen("tutorial");
+    openScreen("tutorial");
   }
 
   function openFoodPhoto(returnScreen: AppScreen = currentScreen) {
     setFoodPhotoReturnScreen(menuPreviewReturnScreen(returnScreen, "foodPhoto"));
-    setCurrentScreen("foodPhoto");
+    openScreen("foodPhoto");
   }
 
   function openFutureModulesFromMenu() {
@@ -3751,7 +3751,7 @@ export default function App() {
   function openFutureModuleDetailResult(module: FutureModuleCard | null) {
     setSelectedFutureModule(module);
     setFutureModuleActionStatus(futurePreviewActionClearStatusMessage());
-    setCurrentScreen("futureModuleDetail");
+    openScreen("futureModuleDetail");
   }
 
   function futurePreviewReturnScreen(returnScreen: AppScreen, selfScreen: AppScreen) {
@@ -3773,7 +3773,7 @@ export default function App() {
   function openDoctorShare(returnScreen: AppScreen = currentScreen) {
     setDoctorShareReturnScreen(futurePreviewReturnScreen(returnScreen, "doctorShare"));
     setDoctorShareActionStatus(futurePreviewActionClearStatusMessage());
-    setCurrentScreen("doctorShare");
+    openScreen("doctorShare");
   }
 
   function returnFromDoctorSharePreview() {
@@ -3791,7 +3791,7 @@ export default function App() {
   function openHealthIntegration(returnScreen: AppScreen = currentScreen) {
     setHealthIntegrationReturnScreen(futurePreviewReturnScreen(returnScreen, "healthIntegration"));
     setHealthIntegrationActionStatus(futurePreviewActionClearStatusMessage());
-    setCurrentScreen("healthIntegration");
+    openScreen("healthIntegration");
   }
 
   function returnFromHealthIntegrationPreview() {
