@@ -2985,6 +2985,12 @@ export default function App() {
     setPreviewEditTime(nowInputs.time);
   }
 
+  function clearPreviewMenuSelectionIndexes() {
+    setSelectedPreviewIndex(null);
+    setPendingPreviewRemoveIndex(null);
+    setDailyRecordMenuIndex(null);
+  }
+
   function openPreviewRecordEdit(index: number, returnScreen: AppScreen = "aiReview") {
     const record = preview?.records[index];
     if (!record) {
@@ -3000,9 +3006,7 @@ export default function App() {
   }
 
   function returnFromPreviewRecordEdit() {
-    setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    setDailyRecordMenuIndex(null);
+    clearPreviewMenuSelectionIndexes();
     seedEmptyPreviewEditStateForNow();
     setCurrentScreen(previewActionReturnScreen);
     setStatus(aiCandidateEditCancelStatusMessage());
@@ -3039,9 +3043,7 @@ export default function App() {
   }
 
   function returnFromPreviewRemoveConfirm() {
-    setPendingPreviewRemoveIndex(null);
-    setSelectedPreviewIndex(null);
-    setDailyRecordMenuIndex(null);
+    clearPreviewMenuSelectionIndexes();
     setPreviewEditFields(emptyRecordEditFields());
     setCurrentScreen(previewActionReturnScreen);
     setStatus(aiCandidateRemoveCancelStatusMessage());
