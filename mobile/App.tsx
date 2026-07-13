@@ -362,6 +362,7 @@ import {
   recordDetailBoundaryChecklistDisplayItems,
   recordDetailReturnStatusMessage,
   recordEntrySettingsChecklistDisplayItems,
+  saveResultDisplayTexts,
   saveSuccessBoundaryChecklistDisplayItems,
   tutorialManualEntryStatusMessage,
   tutorialRecordEntryStatusMessage
@@ -1973,19 +1974,18 @@ export default function App() {
   const selectedRecordEditValidationDisplayText = recordEditDisplay.validation;
   const previewRecordEditValidationDisplayText = boundUiMessage(previewRecordEditValidationError || "");
   const parserRecoveryDisplayText = boundUiMessage(parserRecoveryMessage);
-  const lastSavedSummaryDisplayText = boundUiMessage(lastSavedSummary || "紀錄已加入今日紀錄與歷史紀錄。");
-  const lastSaveErrorSummaryDisplayText = boundUiMessage(
-    lastSaveErrorSummary || "候選紀錄尚未儲存，請返回確認頁檢查後再送出。"
-  );
-  const lowConfidenceWarningDisplayText = boundUiMessage(
-    `仍有 ${lowConfidencePreviewRecordDisplayCount} 筆候選信心偏低；建議返回確認逐筆檢查後再儲存。返回確認不會重新呼叫 AI。`
-  );
-  const rejectedPreviewWarningDisplayText = boundUiMessage(
-    `有 ${rejectedPreviewEventDisplayCount} 段文字沒有建立候選紀錄；確認儲存只會送出目前候選，不會儲存這些片段，也不會自動重新呼叫 AI。`
-  );
-  const aiSaveBackendBlockedDisplayText = boundUiMessage(
-    `${protectedBackendUnavailableDisplayMessage || "backend 尚未 ready"}；目前不會送出儲存請求，避免無效重試與重複寫入。`
-  );
+  const saveResultDisplay = saveResultDisplayTexts({
+    lastSavedSummary,
+    lastSaveErrorSummary,
+    lowConfidenceCount: lowConfidencePreviewRecordDisplayCount,
+    rejectedEventCount: rejectedPreviewEventDisplayCount,
+    backendUnavailableMessage: protectedBackendUnavailableDisplayMessage
+  });
+  const lastSavedSummaryDisplayText = saveResultDisplay.lastSavedSummary;
+  const lastSaveErrorSummaryDisplayText = saveResultDisplay.lastSaveErrorSummary;
+  const lowConfidenceWarningDisplayText = saveResultDisplay.lowConfidenceWarning;
+  const rejectedPreviewWarningDisplayText = saveResultDisplay.rejectedPreviewWarning;
+  const aiSaveBackendBlockedDisplayText = saveResultDisplay.aiSaveBackendBlocked;
   const transcriptBackendUnavailableDisplayText = boundUiMessage(
     `${protectedBackendUnavailableDisplayMessage}，才可送出 parser。`
   );

@@ -2480,6 +2480,21 @@ def main() -> int:
             "const saveSuccessBoundaryChecklistItems = saveSuccessBoundaryChecklistDisplayItems(",
         )
         _assert_contains(
+            "save result display helper binding",
+            content,
+            "const saveResultDisplay = saveResultDisplayTexts({",
+        )
+        _assert_contains(
+            "last saved summary display binding",
+            content,
+            "const lastSavedSummaryDisplayText = saveResultDisplay.lastSavedSummary;",
+        )
+        _assert_contains(
+            "AI save backend blocked display binding",
+            content,
+            "const aiSaveBackendBlockedDisplayText = saveResultDisplay.aiSaveBackendBlocked;",
+        )
+        _assert_contains(
             "analysis boundary checklist helper binding",
             content,
             "const analysisBoundaryChecklistItems = analysisBoundaryChecklistDisplayItems(",
@@ -3905,6 +3920,10 @@ def main() -> int:
             ("AI save failure checklist helper", "function aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordCount: number)"),
             ("AI save failure no retry copy", "系統不會自動重試，也不會重新呼叫 parser / AI。"),
             ("AI save failure manual fallback copy", "若 backend 持續不可用，可改用手動新增單筆明確紀錄。"),
+            ("save result display helper", "function saveResultDisplayTexts(value: {"),
+            ("save result display default saved summary", "lastSavedSummary: boundUiMessage(value.lastSavedSummary || \"紀錄已加入今日紀錄與歷史紀錄。\")"),
+            ("save result display rejected warning", "rejectedPreviewWarning: boundUiMessage("),
+            ("save result display backend blocked", "aiSaveBackendBlocked: boundUiMessage("),
             ("save success boundary checklist helper", "function saveSuccessBoundaryChecklistDisplayItems("),
             ("save success no retry copy", "沒有未儲存候選需要自動重試；下一步只做頁面導覽。"),
             ("save success no backend request copy", "成功頁不新增 backend request，除非使用者主動進入其他頁面觸發既有同步。"),

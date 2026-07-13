@@ -91,6 +91,30 @@ export function aiPartialSaveSummaryMessage(savedCount: number, unsavedCount: nu
   );
 }
 
+export function saveResultDisplayTexts(value: {
+  lastSavedSummary: string;
+  lastSaveErrorSummary: string;
+  lowConfidenceCount: number;
+  rejectedEventCount: number;
+  backendUnavailableMessage: string;
+}) {
+  return {
+    lastSavedSummary: boundUiMessage(value.lastSavedSummary || "紀錄已加入今日紀錄與歷史紀錄。"),
+    lastSaveErrorSummary: boundUiMessage(
+      value.lastSaveErrorSummary || "候選紀錄尚未儲存，請返回確認頁檢查後再送出。"
+    ),
+    lowConfidenceWarning: boundUiMessage(
+      `仍有 ${clampNumber(value.lowConfidenceCount, 0, maxMobileCountValue)} 筆候選信心偏低；建議返回確認逐筆檢查後再儲存。返回確認不會重新呼叫 AI。`
+    ),
+    rejectedPreviewWarning: boundUiMessage(
+      `有 ${clampNumber(value.rejectedEventCount, 0, maxMobileCountValue)} 段文字沒有建立候選紀錄；確認儲存只會送出目前候選，不會儲存這些片段，也不會自動重新呼叫 AI。`
+    ),
+    aiSaveBackendBlocked: boundUiMessage(
+      `${value.backendUnavailableMessage || "backend 尚未 ready"}；目前不會送出儲存請求，避免無效重試與重複寫入。`
+    )
+  };
+}
+
 export function parserBackendUnavailableStatusMessage(message: string) {
   return boundUiMessage(`${message || "backend 尚未 ready"}；目前不送出 parser 請求，避免無效重試與額外成本。`);
 }

@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1382 extract save result display texts
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `saveResultDisplayTexts` to `mobile/recordWorkflowCopy.ts` for save success/error summaries, low-confidence warning, rejected-event warning, and backend-blocked save display text.
+- Replaced inline save-result and AI-save warning display text construction in `mobile/App.tsx` with the extracted helper.
+- Kept save result rendering, AI save failure rendering, backend-blocked warning behavior, and save request flow unchanged.
+- Updated navigation verifier coverage so the display helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、daily-record save behavior、AI save failure behavior、backend-blocked behavior、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining App.tsx save result / sync boundary display aggregation and screen-local calculations separately.
+
 ### T1381 extract record edit display texts
 
 類型：mobile / refactor / verifier / docs
