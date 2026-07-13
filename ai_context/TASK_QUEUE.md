@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1368: Extract profile settings boundary state helper
+
+Status: done
+
+Summary:
+
+- Added `profileSettingsBoundaryDisplayRowsForState` to `mobile/accountCopy.ts` for profile settings state-to-boundary-row input shaping.
+- Replaced inline profile settings boundary argument construction in `mobile/App.tsx` with the extracted state helper.
+- Kept profile settings boundary row labels, account sync status, active profile label, relationship copy, local edit status, and rendering unchanged.
+- Updated navigation verifier coverage so the state helper internals and App binding are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1367: Extract account security boundary state helper
 
 Status: done

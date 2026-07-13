@@ -6,7 +6,7 @@ function boundDisplayText(value: string, maxLength = maxDisplayTextLength) {
   return value.slice(0, maxLength);
 }
 
-type AccountDisplaySource = {
+export type AccountDisplaySource = {
   display_name?: string | null;
   email?: string | null;
 };
@@ -65,6 +65,20 @@ export function profileSettingsBoundaryDisplayRows(
     label: boundDisplayText(label, 60),
     value: boundDisplayText(value, 80)
   }));
+}
+
+export function profileSettingsBoundaryDisplayRowsForState(value: {
+  account: AccountDisplaySource | null;
+  activeProfile: unknown | null;
+  activeProfileLabel: string;
+  activeProfileRelationshipDisplayText: string;
+}) {
+  return profileSettingsBoundaryDisplayRows(
+    value.account,
+    value.activeProfile,
+    value.activeProfileLabel,
+    value.activeProfileRelationshipDisplayText
+  );
 }
 
 export function profileReadinessChecklistDisplayItems() {

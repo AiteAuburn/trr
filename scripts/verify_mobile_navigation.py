@@ -2602,7 +2602,7 @@ def main() -> int:
         _assert_contains(
             "profile settings boundary rows helper binding",
             content,
-            "const profileSettingsBoundaryRows = profileSettingsBoundaryDisplayRows(",
+            "const profileSettingsBoundaryRows = profileSettingsBoundaryDisplayRowsForState({",
         )
         _assert_contains(
             "community boundary rows helper binding",
@@ -5629,6 +5629,9 @@ def main() -> int:
             ("doctor share boundary report row", "/reports/basic 預留"),
             ("doctor share boundary ai cost row", "0 次呼叫"),
             ("profile settings boundary rows helper", "function profileSettingsBoundaryDisplayRows("),
+            ("profile settings boundary rows state helper", "function profileSettingsBoundaryDisplayRowsForState(value: {"),
+            ("profile settings boundary rows state account", "value.account"),
+            ("profile settings boundary rows state relationship", "value.activeProfileRelationshipDisplayText"),
             ("profile settings boundary account row", "帳號資料"),
             ("profile settings boundary active profile row", "照護對象"),
             ("profile settings boundary local edit row", "本機編輯"),

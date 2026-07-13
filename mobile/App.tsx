@@ -274,7 +274,7 @@ import {
   doctorShareAccountBoundaryText,
   doctorShareBoundaryDisplayRows,
   doctorShareReadinessChecklistDisplayItems,
-  profileSettingsBoundaryDisplayRows,
+  profileSettingsBoundaryDisplayRowsForState,
   profileReadinessChecklistDisplayItems
 } from "./accountCopy";
 import {
@@ -1620,12 +1620,12 @@ export default function App() {
     authSessionCount: authSessionDisplayItems.length,
     protectedBackendReady
   });
-  const profileSettingsBoundaryRows = profileSettingsBoundaryDisplayRows(
+  const profileSettingsBoundaryRows = profileSettingsBoundaryDisplayRowsForState({
     account,
     activeProfile,
     activeProfileLabel,
     activeProfileRelationshipDisplayText
-  );
+  });
   const membershipFeatureRows = membershipFeatureDisplayRows();
   const authBoundaryChecklistItems = authBoundaryChecklistDisplayItems();
   const profileReadinessChecklistItems = profileReadinessChecklistDisplayItems();
