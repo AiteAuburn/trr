@@ -156,6 +156,7 @@ import {
   commercePreviewReturnStoreStatusMessage,
   communityBoundaryDisplayRows,
   communityActionDisplayTexts,
+  communityLeaderboardSyncStatusMessages,
   communityLeaderboardDisplaySection,
   emptyFoodCommunityShareFields,
   communityReadinessChecklistDisplayItems,
@@ -4548,21 +4549,24 @@ export default function App() {
     if (visualSmokePreviewActive.current) {
       return;
     }
+    const leaderboardSyncStatus = communityLeaderboardSyncStatusMessages({
+      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+      sectionCount: 0,
+      entryCount: 0
+    });
     if (!protectedAccountBackendReady || !account) {
-      setRankingActionStatus(
-        boundUiMessage(`${protectedAccountBackendUnavailableMessage || "backend account 尚未 ready"}；目前只顯示本機連續記錄預覽。`)
-      );
+      setRankingActionStatus(leaderboardSyncStatus.unavailable);
       return;
     }
     const rankingTypes: CommunityLeaderboardType[] = ["share_count", "contribution", "food_tester"];
     const rankingKey = [normalizedApiBaseUrl, account.id, communityPublicSettings?.leaderboard_opt_in ?? false].join(":");
     latestRankingSyncKey.current = rankingKey;
     if (rankingSyncInFlightKeys.current.has(rankingKey)) {
-      setRankingActionStatus(boundUiMessage("正在同步公開排行榜，請稍候。"));
+      setRankingActionStatus(leaderboardSyncStatus.inFlight);
       return;
     }
     rankingSyncInFlightKeys.current.add(rankingKey);
-    setRankingActionStatus(boundUiMessage("正在同步 backend 公開排行榜。"));
+    setRankingActionStatus(leaderboardSyncStatus.loading);
     try {
       const sections = await Promise.all(
         rankingTypes.map((leaderboardType) => {
@@ -4581,12 +4585,16 @@ export default function App() {
       const entryCount = displaySections.reduce((total, section) => total + section.entries.length, 0);
       setRankingLeaderboardSections(displaySections);
       setRankingActionStatus(
-        boundUiMessage(`已同步 ${clampNumber(displaySections.length, 0, maxMobileCountValue)} 個公開榜單，共 ${clampNumber(entryCount, 0, maxMobileCountValue)} 筆 opt-in 排名。`)
+        communityLeaderboardSyncStatusMessages({
+          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+          sectionCount: displaySections.length,
+          entryCount
+        }).success
       );
     } catch {
       if (latestRankingSyncKey.current === rankingKey) {
         setRankingLeaderboardSections([]);
-        setRankingActionStatus(boundUiMessage("公開排行榜同步失敗；目前保留本機連續記錄預覽。"));
+        setRankingActionStatus(leaderboardSyncStatus.failure);
       }
     } finally {
       rankingSyncInFlightKeys.current.delete(rankingKey);

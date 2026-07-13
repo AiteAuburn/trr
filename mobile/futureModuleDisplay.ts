@@ -2064,3 +2064,25 @@ export function communityActionDisplayTexts(value: {
     )
   };
 }
+
+export function communityLeaderboardSyncStatusMessages(value: {
+  backendUnavailableMessage: string;
+  sectionCount: number;
+  entryCount: number;
+}) {
+  return {
+    unavailable: boundUiMessage(
+      `${value.backendUnavailableMessage || "backend account 尚未 ready"}；目前只顯示本機連續記錄預覽。`
+    ),
+    inFlight: boundUiMessage("正在同步公開排行榜，請稍候。"),
+    loading: boundUiMessage("正在同步 backend 公開排行榜。"),
+    success: boundUiMessage(
+      `已同步 ${clampNumber(value.sectionCount, 0, maxMobileCountValue)} 個公開榜單，共 ${clampNumber(
+        value.entryCount,
+        0,
+        maxMobileCountValue
+      )} 筆 opt-in 排名。`
+    ),
+    failure: boundUiMessage("公開排行榜同步失敗；目前保留本機連續記錄預覽。")
+  };
+}

@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1401 extract community leaderboard sync status messages
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `communityLeaderboardSyncStatusMessages` to `mobile/futureModuleDisplay.ts` for Ranking backend unavailable, in-flight, loading, success, and failure status copy.
+- Replaced inline bounded Ranking leaderboard sync status construction in `mobile/App.tsx` with the extracted helper.
+- Kept `/community/leaderboards` requests, leaderboard types, opt-in keying, in-flight guards, display section shaping, ranking state updates, and rendering unchanged.
+- Updated navigation verifier coverage so helper internals and App binding are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、`/community/leaderboards` request path、leaderboard types、opt-in keying、in-flight guards、display section shaping、ranking state updates、rendering、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining future/community/store request-local status helpers separately.
+
 ### T1400 extract report generated-at display text
 
 類型：mobile / refactor / verifier / docs
