@@ -2368,8 +2368,12 @@ export default function App() {
     handleQuickEntryMode(mode, "today");
   }
 
+  function quickEntryModeTarget(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
+    return item.key;
+  }
+
   function pressTodayQuickEntryItem(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
-    handleTodayQuickEntryMode(item.key);
+    handleTodayQuickEntryMode(quickEntryModeTarget(item));
   }
 
   function handleRecordQuickEntryMode(mode: QuickEntryMode) {
@@ -2377,7 +2381,7 @@ export default function App() {
   }
 
   function pressRecordQuickEntryItem(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
-    handleRecordQuickEntryMode(item.key);
+    handleRecordQuickEntryMode(quickEntryModeTarget(item));
   }
 
   function activateVisualSmokePreview() {

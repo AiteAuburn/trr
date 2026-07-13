@@ -5252,9 +5252,24 @@ def main() -> int:
             "function handleRecordQuickEntryMode(mode: QuickEntryMode)",
         )
         _assert_contains(
+            "quick-entry mode target helper",
+            content,
+            "function quickEntryModeTarget(item: ReturnType<typeof quickEntryModeDisplayItems>[number])",
+        )
+        _assert_contains(
+            "quick-entry mode target helper fields",
+            content,
+            "return item.key;",
+        )
+        _assert_contains(
             "record quick-entry item press wrapper",
             content,
             "function pressRecordQuickEntryItem(item: ReturnType<typeof quickEntryModeDisplayItems>[number])",
+        )
+        _assert_contains(
+            "record quick-entry target helper binding",
+            content,
+            "handleRecordQuickEntryMode(quickEntryModeTarget(item));",
         )
         _assert_contains(
             "quick-entry accessibility labels",
@@ -5696,6 +5711,11 @@ def main() -> int:
             "home quick-entry direct source wrapper binding",
             content,
             "onPress={() => handleTodayQuickEntryMode(item.key)}",
+        )
+        _assert_contains(
+            "today quick-entry target helper binding",
+            content,
+            "handleTodayQuickEntryMode(quickEntryModeTarget(item));",
         )
         _assert_not_contains(
             "home quick-entry direct return-screen binding",
