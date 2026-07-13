@@ -2159,8 +2159,7 @@ export default function App() {
   }
 
   function openTodayRecordDetail(record: RecordItem) {
-    openRecordDetail(record, "today");
-    setStatus(todayRecordDetailStatusMessage());
+    openRecordDetailWithStatus(record, "today", todayRecordDetailStatusMessage());
   }
 
   function openTodayRecordDetailCard(record: RecordItem) {
@@ -2186,8 +2185,7 @@ export default function App() {
   }
 
   function openHistoryRecordDetail(record: RecordItem) {
-    openRecordDetail(record, "history");
-    setStatus(historyRecordDetailStatusMessage());
+    openRecordDetailWithStatus(record, "history", historyRecordDetailStatusMessage());
   }
 
   function openHistoryRecordDetailCard(record: RecordItem) {
@@ -5735,6 +5733,11 @@ export default function App() {
   function openRecordDetail(record: RecordItem, returnScreen: AppScreen = "today") {
     setSelectedRecord(record);
     openRecordDetailScreen(record, returnScreen);
+  }
+
+  function openRecordDetailWithStatus(record: RecordItem, returnScreen: AppScreen, statusMessage: string) {
+    openRecordDetail(record, returnScreen);
+    setStatus(statusMessage);
   }
 
   function openSelectedRecordDetail(returnScreen: AppScreen) {

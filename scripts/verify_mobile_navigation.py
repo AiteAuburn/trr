@@ -5439,6 +5439,11 @@ def main() -> int:
             "function openTodayRecordDetail(record: RecordItem)",
         )
         _assert_contains(
+            "today record detail status helper binding",
+            content,
+            'openRecordDetailWithStatus(record, "today", todayRecordDetailStatusMessage());',
+        )
+        _assert_contains(
             "today record detail card handler",
             content,
             "function openTodayRecordDetailCard(record: RecordItem)",
@@ -5926,6 +5931,16 @@ def main() -> int:
             "history daily record detail card binding",
             content,
             "onEntryPress={pressHistoryDailyEntry}",
+        )
+        _assert_contains(
+            "record detail status opener helper",
+            content,
+            "function openRecordDetailWithStatus(record: RecordItem, returnScreen: AppScreen, statusMessage: string)",
+        )
+        _assert_contains(
+            "history record detail status helper binding",
+            content,
+            'openRecordDetailWithStatus(record, "history", historyRecordDetailStatusMessage());',
         )
         _assert_contains(
             "history manual entry status helper binding",

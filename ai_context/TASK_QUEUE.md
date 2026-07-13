@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1487: Extract record detail status opener helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added local `openRecordDetailWithStatus` helper in `mobile/App.tsx`.
+- Reused it for Today and History record-detail entry points where each path already opened record detail with a return screen and then set a status.
+- Kept selected-record state, record edit seeding, return-screen targets, status message sources, production routes, backend request behavior, and UI copy unchanged.
+- Updated navigation verifier coverage for the helper and Today/History record-detail opener bindings.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1486: Reuse manual record status opener in core routes
 
 Status: done
