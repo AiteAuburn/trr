@@ -116,6 +116,7 @@ import {
   isSettingsSubpageScreen,
   isVisualSmokeAiPreviewScreen,
   isVisualSmokeRecordListScreen,
+  isVisualSmokeSettingsMenuScreen,
   isVisualSmokeSubscriptionStatusScreen,
   menuScreens,
   mvpFlowSteps,
@@ -4092,7 +4093,7 @@ export default function App() {
       setCurrentScreen(target);
       return;
     }
-    if (target === "settings" || isSettingsSubpageScreen(target) || target === "menu") {
+    if (isVisualSmokeSettingsMenuScreen(target)) {
       setCurrentScreen(target);
       return;
     }

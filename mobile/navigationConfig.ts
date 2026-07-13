@@ -197,6 +197,10 @@ export function isVisualSmokeSubscriptionStatusScreen(screen: AppScreen) {
   return screen === "subscriptionManagement" || screen === "membershipStatus";
 }
 
+export function isVisualSmokeSettingsMenuScreen(screen: AppScreen) {
+  return screen === "settings" || isSettingsSubpageScreen(screen) || screen === "menu";
+}
+
 function headerBackTargetForScreen(
   currentScreen: AppScreen,
   chrome: { backTo?: AppScreen },

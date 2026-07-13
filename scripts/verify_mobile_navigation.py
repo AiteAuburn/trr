@@ -3540,6 +3540,16 @@ def main() -> int:
             'return screen === "subscriptionManagement" || screen === "membershipStatus";',
         )
         _assert_contains(
+            "visual smoke settings menu route helper",
+            navigation_content,
+            "export function isVisualSmokeSettingsMenuScreen(screen: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke settings menu route helper condition",
+            navigation_content,
+            'return screen === "settings" || isSettingsSubpageScreen(screen) || screen === "menu";',
+        )
+        _assert_contains(
             "visual smoke boot skipped display helper",
             navigation_content,
             "function visualSmokeBootSkippedDisplayMessages()",
@@ -3617,7 +3627,7 @@ def main() -> int:
         _assert_contains(
             "visual smoke settings subpage helper binding",
             content,
-            'if (target === "settings" || isSettingsSubpageScreen(target) || target === "menu") {',
+            "if (isVisualSmokeSettingsMenuScreen(target)) {",
         )
         _assert_contains(
             "visual smoke boot skipped display binding",
