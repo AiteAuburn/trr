@@ -2003,6 +2003,11 @@ def main() -> int:
             'headerBackTarget === "menu" && currentScreen !== "menu" && !currentChrome.actionLabel',
         )
         _assert_contains(
+            "header fallback screen opener binding",
+            content,
+            "openScreen(headerBackTarget);",
+        )
+        _assert_contains(
             "header back target helper binding",
             content,
             "const headerBackTarget = headerBackTargetForScreen(currentScreen, currentChrome, {",
@@ -6824,7 +6829,7 @@ def main() -> int:
         _assert_contains(
             "settings row destination helper screen set",
             content,
-            "setCurrentScreen(subpageTarget);",
+            "openScreen(subpageTarget);",
         )
         _assert_contains(
             "settings row press wrapper",

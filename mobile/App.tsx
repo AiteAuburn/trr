@@ -2778,7 +2778,7 @@ export default function App() {
       openMenu(currentScreen);
       return;
     }
-    setCurrentScreen(headerBackTarget);
+    openScreen(headerBackTarget);
   }
 
   function requestDailyRecordLeaveGuard() {
@@ -3405,7 +3405,7 @@ export default function App() {
   function openSettingsRow(row: SettingsRow) {
     const subpageTarget = settingsRowSubpageTarget(row);
     if (subpageTarget) {
-      setCurrentScreen(subpageTarget);
+      openScreen(subpageTarget);
       return;
     }
     if (row.target === "subscription") {
