@@ -3588,8 +3588,7 @@ export default function App() {
   }
 
   function openSubscription(returnScreen: AppScreen = currentScreen) {
-    setSubscriptionReturnScreen(menuPreviewReturnScreen(returnScreen, "subscription"));
-    openScreen("subscription");
+    openMenuPreviewScreen("subscription", returnScreen, setSubscriptionReturnScreen);
   }
 
   function openPrimaryTab(target: AppScreen) {
@@ -3725,14 +3724,21 @@ export default function App() {
     openSubscriptionManagementFromSubscription();
   }
 
+  function openMenuPreviewScreen(
+    screen: AppScreen,
+    returnScreen: AppScreen,
+    setReturnScreen: (screen: AppScreen) => void
+  ) {
+    setReturnScreen(menuPreviewReturnScreen(returnScreen, screen));
+    openScreen(screen);
+  }
+
   function openTutorial(returnScreen: AppScreen = currentScreen) {
-    setTutorialReturnScreen(menuPreviewReturnScreen(returnScreen, "tutorial"));
-    openScreen("tutorial");
+    openMenuPreviewScreen("tutorial", returnScreen, setTutorialReturnScreen);
   }
 
   function openFoodPhoto(returnScreen: AppScreen = currentScreen) {
-    setFoodPhotoReturnScreen(menuPreviewReturnScreen(returnScreen, "foodPhoto"));
-    openScreen("foodPhoto");
+    openMenuPreviewScreen("foodPhoto", returnScreen, setFoodPhotoReturnScreen);
   }
 
   function openFutureModulesFromMenu() {
@@ -3914,8 +3920,7 @@ export default function App() {
   }
 
   function openAchievements(returnScreen: AppScreen = currentScreen) {
-    setAchievementsReturnScreen(menuPreviewReturnScreen(returnScreen, "achievements"));
-    openScreen("achievements");
+    openMenuPreviewScreen("achievements", returnScreen, setAchievementsReturnScreen);
     void loadAchievementSummary();
   }
 
@@ -3932,8 +3937,7 @@ export default function App() {
   }
 
   function openYearReview(returnScreen: AppScreen = currentScreen) {
-    setYearReviewReturnScreen(menuPreviewReturnScreen(returnScreen, "yearReview"));
-    openScreen("yearReview");
+    openMenuPreviewScreen("yearReview", returnScreen, setYearReviewReturnScreen);
     void loadYearReview();
   }
 
@@ -3950,8 +3954,7 @@ export default function App() {
   }
 
   function openStore(returnScreen: AppScreen = currentScreen) {
-    setStoreReturnScreen(menuPreviewReturnScreen(returnScreen, "store"));
-    openScreen("store");
+    openMenuPreviewScreen("store", returnScreen, setStoreReturnScreen);
     void loadStoreCatalogAndPoints();
   }
 

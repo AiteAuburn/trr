@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1518: Reuse menu preview opener helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `openMenuPreviewScreen` helper for menu-preview route openers that normalize return screens before opening their target screen.
+- Reused the helper in Subscription, Tutorial, Food Photo, Achievements, Year Review, and Store preview openers while keeping follow-up loading calls unchanged.
+- Updated navigation verifier coverage for the shared menu-preview opener helper and its route bindings.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1517: Reuse future preview opener helper
 
 Status: done
