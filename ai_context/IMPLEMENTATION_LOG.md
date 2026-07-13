@@ -15,6 +15,37 @@
 
 ## 2026-07-13
 
+### T1479 extract record result destination helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added local `openRecordResultDestination` helper in `mobile/App.tsx`.
+- Reused it for delete-success destinations and non-detail update-success destinations where both paths already paired a target screen with `recordResultDestinationStatusMessage`.
+- Kept update-success `recordDetail` special handling, destination targets, status message sources, production flows, backend requests, and UI copy unchanged.
+- Updated navigation verifier coverage for helper internals and delete/update destination bindings.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1478 extract AI save confirm status helper
 
 類型：mobile / refactor / verifier / docs

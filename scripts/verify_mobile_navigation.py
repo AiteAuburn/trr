@@ -3718,9 +3718,34 @@ def main() -> int:
             "function openDeleteSuccessDestination(target: AppScreen)",
         )
         _assert_contains(
+            "record result destination helper",
+            content,
+            'function openRecordResultDestination(kind: "delete" | "update", target: AppScreen)',
+        )
+        _assert_contains(
+            "record result destination helper fields",
+            content,
+            "setCurrentScreen(target);\n    setStatus(recordResultDestinationStatusMessage(kind, target));",
+        )
+        _assert_contains(
+            "delete success destination result helper binding",
+            content,
+            'openRecordResultDestination("delete", target);',
+        )
+        _assert_contains(
             "update success destination handler",
             content,
             "function openUpdateSuccessDestination(target: AppScreen)",
+        )
+        _assert_contains(
+            "update success destination detail special case",
+            content,
+            "if (target === \"recordDetail\") {\n      openSelectedRecordDetail(\"updateSuccess\");\n      setStatus(recordResultDestinationStatusMessage(\"update\", target));\n      return;\n    }",
+        )
+        _assert_contains(
+            "update success destination result helper binding",
+            content,
+            'openRecordResultDestination("update", target);',
         )
         _assert_contains(
             "delete success destination card handler",

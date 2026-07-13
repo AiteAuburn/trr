@@ -5772,9 +5772,13 @@ export default function App() {
     setStatus(recordEditCancelStatusMessage());
   }
 
-  function openDeleteSuccessDestination(target: AppScreen) {
+  function openRecordResultDestination(kind: "delete" | "update", target: AppScreen) {
     setCurrentScreen(target);
-    setStatus(recordResultDestinationStatusMessage("delete", target));
+    setStatus(recordResultDestinationStatusMessage(kind, target));
+  }
+
+  function openDeleteSuccessDestination(target: AppScreen) {
+    openRecordResultDestination("delete", target);
   }
 
   function openDeleteSuccessDestinationCard(target: AppScreen) {
@@ -5795,8 +5799,7 @@ export default function App() {
       setStatus(recordResultDestinationStatusMessage("update", target));
       return;
     }
-    setCurrentScreen(target);
-    setStatus(recordResultDestinationStatusMessage("update", target));
+    openRecordResultDestination("update", target);
   }
 
   function openUpdateSuccessDestinationCard(target: AppScreen) {
