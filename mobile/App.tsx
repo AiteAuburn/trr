@@ -688,7 +688,7 @@ import {
   sessionManagementPreviews,
   settingsRowDisplayItem,
   settingsRows,
-  subscriptionManagementRows,
+  subscriptionManagementDisplayRows as buildSubscriptionManagementDisplayRows,
   tutorialSteps,
   type SettingsRow
 } from "./settingsScreenData";
@@ -1714,7 +1714,7 @@ export default function App() {
   );
   const subscriptionReadinessChecklistItems = subscriptionReadinessChecklistDisplayItems();
   const subscriptionManagementDisplayRows = useMemo(
-    () => subscriptionManagementRows.map(previewTupleDisplayItem),
+    () => buildSubscriptionManagementDisplayRows(),
     []
   );
   const subscriptionManagementReadinessChecklistItems =

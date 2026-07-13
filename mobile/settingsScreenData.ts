@@ -86,6 +86,10 @@ export const subscriptionManagementRows = [
   ["取消 / 到期", "待串接", "取消、到期、退款與 grace period 都需同步到 voice quota。"]
 ] as const;
 
+export function subscriptionManagementDisplayRows() {
+  return subscriptionManagementRows.map(previewTupleDisplayItem);
+}
+
 export const privacyControlRows = [
   ["醫師 / 照護者分享", "尚未啟用", "需要授權碼、到期、撤銷與唯讀範圍。"],
   ["社群公開資料", "預設關閉", "任何紀錄公開前都要逐項 opt-in。"],
