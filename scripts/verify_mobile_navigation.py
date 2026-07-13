@@ -3642,6 +3642,31 @@ def main() -> int:
         _assert_contains(
             "visual smoke workflow seed route fallback",
             content,
+            "return false;\n  }\n\n  function openVisualSmokeAiSeedRoute(target: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke ai seed route handler",
+            content,
+            "function openVisualSmokeAiSeedRoute(target: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke ai seed route failure summary",
+            content,
+            'setLastSaveErrorSummary("Visual smoke demo save failure.");',
+        )
+        _assert_contains(
+            "visual smoke ai seed route edit fields",
+            content,
+            "setPreviewEditFields(recordPayloadToEditFields(demoPreview.records[0]));",
+        )
+        _assert_contains(
+            "visual smoke ai seed route remove index",
+            content,
+            "setPendingPreviewRemoveIndex(0);",
+        )
+        _assert_contains(
+            "visual smoke ai seed route fallback",
+            content,
             "return false;\n  }\n\n  function openVisualSmokeRoute(target: AppScreen)",
         )
         _assert_contains(
@@ -3653,6 +3678,11 @@ def main() -> int:
             "visual smoke ai preview helper binding",
             content,
             "if (isVisualSmokeAiPreviewScreen(target)) {",
+        )
+        _assert_contains(
+            "visual smoke ai seed route helper binding",
+            content,
+            "if (openVisualSmokeAiSeedRoute(target)) {",
         )
         _assert_contains(
             "visual smoke seeded record route helper binding",

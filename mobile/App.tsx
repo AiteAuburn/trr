@@ -4038,6 +4038,36 @@ export default function App() {
     return false;
   }
 
+  function openVisualSmokeAiSeedRoute(target: AppScreen) {
+    if (target === "aiSaveFailure") {
+      setPreview(visualSmokeDemoPreview());
+      setLastSaveErrorSummary("Visual smoke demo save failure.");
+      setLastSaveEntryMethod("ai");
+      setCurrentScreen("aiSaveFailure");
+      return true;
+    }
+    if (target === "editPreviewRecord") {
+      const demoPreview = visualSmokeDemoPreview();
+      setPreview(demoPreview);
+      setPendingPreviewRemoveIndex(null);
+      setSelectedPreviewIndex(0);
+      setPreviewEditFields(recordPayloadToEditFields(demoPreview.records[0]));
+      const dateTime = localDateTimeInputs(demoPreview.records[0].occurred_at);
+      setPreviewEditDate(dateTime.date);
+      setPreviewEditTime(dateTime.time);
+      setCurrentScreen("editPreviewRecord");
+      return true;
+    }
+    if (target === "aiRemoveConfirm") {
+      setPreview(visualSmokeDemoPreview());
+      setSelectedPreviewIndex(null);
+      setPendingPreviewRemoveIndex(0);
+      setCurrentScreen("aiRemoveConfirm");
+      return true;
+    }
+    return false;
+  }
+
   function openVisualSmokeRoute(target: AppScreen) {
     if (!enableDebugTools || !allowMobileDevAuth) {
       return;
@@ -4063,30 +4093,7 @@ export default function App() {
       setCurrentScreen(target);
       return;
     }
-    if (target === "aiSaveFailure") {
-      setPreview(visualSmokeDemoPreview());
-      setLastSaveErrorSummary("Visual smoke demo save failure.");
-      setLastSaveEntryMethod("ai");
-      setCurrentScreen("aiSaveFailure");
-      return;
-    }
-    if (target === "editPreviewRecord") {
-      const demoPreview = visualSmokeDemoPreview();
-      setPreview(demoPreview);
-      setPendingPreviewRemoveIndex(null);
-      setSelectedPreviewIndex(0);
-      setPreviewEditFields(recordPayloadToEditFields(demoPreview.records[0]));
-      const dateTime = localDateTimeInputs(demoPreview.records[0].occurred_at);
-      setPreviewEditDate(dateTime.date);
-      setPreviewEditTime(dateTime.time);
-      setCurrentScreen("editPreviewRecord");
-      return;
-    }
-    if (target === "aiRemoveConfirm") {
-      setPreview(visualSmokeDemoPreview());
-      setSelectedPreviewIndex(null);
-      setPendingPreviewRemoveIndex(0);
-      setCurrentScreen("aiRemoveConfirm");
+    if (openVisualSmokeAiSeedRoute(target)) {
       return;
     }
     if (openVisualSmokeRecordSeedRoute(target)) {
