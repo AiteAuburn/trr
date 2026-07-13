@@ -1708,6 +1708,27 @@ export function yearReviewSourceDisplayCopy(summary: YearReviewApiResponse | nul
   );
 }
 
+export function yearReviewHeaderDisplayTexts(value: {
+  targetYear: number;
+  recordCount: number;
+  generationLabel: string;
+  summary: YearReviewApiResponse | null;
+  sharePackageId: string;
+}) {
+  return {
+    previewBoundary: yearReviewPreviewBoundaryCopy(),
+    heroTitle: yearReviewHeroTitleCopy(value.targetYear),
+    heroRecordCount: yearReviewHeroRecordCountCopy(value.recordCount),
+    liveCalculation: yearReviewLiveCalculationCopy(value.targetYear, value.generationLabel),
+    source: yearReviewSourceDisplayCopy(value.summary, value.sharePackageId),
+    badgeMaterial: yearReviewBadgeMaterialCopy(),
+    shareButtonLabel: yearReviewShareButtonLabel(),
+    shareAccessibilityLabel: yearReviewShareButtonAccessibilityLabel(),
+    revokeShareButtonLabel: yearReviewRevokeShareButtonLabel(),
+    revokeShareAccessibilityLabel: yearReviewRevokeShareButtonAccessibilityLabel()
+  };
+}
+
 export function backendYearReviewMetricDisplayRows(summary: YearReviewApiResponse | null) {
   return summary?.annual_stats.slice(0, 7).map((item) => metricDisplayItem([item.label, String(item.value)] as const)) ?? [];
 }

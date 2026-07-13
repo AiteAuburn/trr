@@ -219,18 +219,9 @@ import {
   storeRedemptionWalletDisplayItems,
   visibleFoodCommunityDisplayItems,
   visibleStoreProductDisplayItems,
-  yearReviewBadgeMaterialCopy,
   yearReviewBoundaryDisplayCopy,
-  yearReviewHeroRecordCountCopy,
-  yearReviewHeroTitleCopy,
+  yearReviewHeaderDisplayTexts,
   yearReviewInsightDisplayTexts,
-  yearReviewLiveCalculationCopy,
-  yearReviewSourceDisplayCopy,
-  yearReviewPreviewBoundaryCopy,
-  yearReviewRevokeShareButtonAccessibilityLabel,
-  yearReviewRevokeShareButtonLabel,
-  yearReviewShareButtonAccessibilityLabel,
-  yearReviewShareButtonLabel,
   yearReviewShareUnavailableStatusMessage,
   yearReviewTargetYear,
   nextYearReviewGenerationLabel,
@@ -1977,22 +1968,23 @@ export default function App() {
   const achievementNextBadgeDisplayText = achievementNextBadgeCopy(nextAchievementDisplayDays);
   const achievementIntegrationButtonDisplayLabel = achievementIntegrationButtonLabel();
   const achievementIntegrationAccessibilityDisplayLabel = achievementIntegrationButtonAccessibilityLabel();
-  const yearReviewPreviewBoundaryDisplayText = yearReviewPreviewBoundaryCopy();
-  const yearReviewHeroTitleDisplayText = yearReviewHeroTitleCopy(yearReviewTargetDisplayYear);
-  const yearReviewHeroRecordCountDisplayText = yearReviewHeroRecordCountCopy(yearlyRecordDisplayCount);
-  const yearReviewLiveCalculationDisplayText = yearReviewLiveCalculationCopy(
-    yearReviewTargetDisplayYear,
-    yearReviewGenerationDisplayText
-  );
-  const yearReviewSourceDisplayText = yearReviewSourceDisplayCopy(
-    yearReviewBackendSummary,
-    yearReviewSharePackageId
-  );
-  const yearReviewBadgeMaterialDisplayText = yearReviewBadgeMaterialCopy();
-  const yearReviewShareButtonDisplayLabel = yearReviewShareButtonLabel();
-  const yearReviewShareAccessibilityDisplayLabel = yearReviewShareButtonAccessibilityLabel();
-  const yearReviewRevokeShareButtonDisplayLabel = yearReviewRevokeShareButtonLabel();
-  const yearReviewRevokeShareAccessibilityDisplayLabel = yearReviewRevokeShareButtonAccessibilityLabel();
+  const yearReviewHeaderDisplay = yearReviewHeaderDisplayTexts({
+    targetYear: yearReviewTargetDisplayYear,
+    recordCount: yearlyRecordDisplayCount,
+    generationLabel: yearReviewGenerationDisplayText,
+    summary: yearReviewBackendSummary,
+    sharePackageId: yearReviewSharePackageId
+  });
+  const yearReviewPreviewBoundaryDisplayText = yearReviewHeaderDisplay.previewBoundary;
+  const yearReviewHeroTitleDisplayText = yearReviewHeaderDisplay.heroTitle;
+  const yearReviewHeroRecordCountDisplayText = yearReviewHeaderDisplay.heroRecordCount;
+  const yearReviewLiveCalculationDisplayText = yearReviewHeaderDisplay.liveCalculation;
+  const yearReviewSourceDisplayText = yearReviewHeaderDisplay.source;
+  const yearReviewBadgeMaterialDisplayText = yearReviewHeaderDisplay.badgeMaterial;
+  const yearReviewShareButtonDisplayLabel = yearReviewHeaderDisplay.shareButtonLabel;
+  const yearReviewShareAccessibilityDisplayLabel = yearReviewHeaderDisplay.shareAccessibilityLabel;
+  const yearReviewRevokeShareButtonDisplayLabel = yearReviewHeaderDisplay.revokeShareButtonLabel;
+  const yearReviewRevokeShareAccessibilityDisplayLabel = yearReviewHeaderDisplay.revokeShareAccessibilityLabel;
   const selectedRecordDetailRows = selectedRecordDisplayItem?.detailRows ?? [];
   const transcriptValidationError = useMemo(
     () => validateTranscriptForParser(transcript),
