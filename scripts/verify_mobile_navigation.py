@@ -2110,6 +2110,8 @@ def main() -> int:
             ("deepseek record parse request binding", "llm_model_id: llmModelId"),
             ("deepseek selected model status render", "LLM：{selectedLlmModel?.label ?? llmModelId}"),
             ("transcript review return target helper binding", "setTranscriptReviewReturnScreen(transcriptReviewReturnTargetForScreen(currentScreen));"),
+            ("transcript review open status helper binding", 'openScreenWithStatus("transcriptReview", transcriptReviewReadyStatusMessage());'),
+            ("transcript review edit return status helper binding", 'openScreenWithStatus("transcriptReview", transcriptReturnEditStatusMessage());'),
             ("home recording timer state", "const [recordingElapsedSeconds, setRecordingElapsedSeconds] = useState(0);"),
             ("home recording timer interval", "const timer = setInterval(() => {"),
             ("home recording timer clamp", "setRecordingElapsedSeconds(clampNumber(nextElapsedSeconds, 0, limitSeconds));"),
@@ -2461,7 +2463,7 @@ def main() -> int:
         _assert_contains(
             "transcript review return status helper fields",
             content,
-            "clearPreviewSelectionState();\n    setCurrentScreen(transcriptReviewReturnScreen);\n    setStatus(statusMessage);",
+            "clearPreviewSelectionState();\n    openScreenWithStatus(transcriptReviewReturnScreen, statusMessage);",
         )
         _assert_contains(
             "transcript review back status helper binding",
@@ -3570,7 +3572,7 @@ def main() -> int:
         _assert_contains(
             "transcript edit return selected draft clear helper binding",
             content,
-            "setPreview(null);\n    clearSelectedPreviewEditDraft();\n    setCurrentScreen(\"transcriptReview\");",
+            'setPreview(null);\n    clearSelectedPreviewEditDraft();\n    openScreenWithStatus("transcriptReview", transcriptReturnEditStatusMessage());',
         )
         _assert_contains(
             "AI candidate edit return binding",

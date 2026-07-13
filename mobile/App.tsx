@@ -2020,22 +2020,19 @@ export default function App() {
     }
     setPreview(null);
     setTranscriptReviewReturnScreen(transcriptReviewReturnTargetForScreen(currentScreen));
-    setCurrentScreen("transcriptReview");
-    setStatus(transcriptReviewReadyStatusMessage());
+    openScreenWithStatus("transcriptReview", transcriptReviewReadyStatusMessage());
   }
 
   function returnToTranscriptEdit() {
     setPreview(null);
     clearSelectedPreviewEditDraft();
-    setCurrentScreen("transcriptReview");
-    setStatus(transcriptReturnEditStatusMessage());
+    openScreenWithStatus("transcriptReview", transcriptReturnEditStatusMessage());
   }
 
   function returnFromTranscriptReviewWithStatus(statusMessage: string) {
     clearParserPreviewState();
     clearPreviewSelectionState();
-    setCurrentScreen(transcriptReviewReturnScreen);
-    setStatus(statusMessage);
+    openScreenWithStatus(transcriptReviewReturnScreen, statusMessage);
   }
 
   function returnFromTranscriptReview() {
