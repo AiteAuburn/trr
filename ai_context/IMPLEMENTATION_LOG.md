@@ -15,6 +15,38 @@
 
 ## 2026-07-13
 
+### T1355 extract achievement badge summary helper for Year Review
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `achievementBadgeSummary` to `mobile/futureModuleDisplay.ts` for unlocked badge count and highest unlocked level aggregation.
+- Replaced the inline Year Review achievement badge filters/maps/sort in `mobile/App.tsx` with the extracted helper.
+- Kept Year Review badge counts, highest badge level, achievement display items, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, helper internals, and Year Review summary bindings are explicitly guarded.
+- 未變更 backend runtime、database schema、Android signing config、Year Review rendering、achievement display items、achievement backend sync、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw prompt logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue auditing remaining achievement page summary calculations and Year Review highlight text construction separately.
+
 ### T1354 extract record-day count helper for Year Review
 
 類型：mobile / refactor / verifier / docs

@@ -124,6 +124,7 @@ import {
 } from "./navigationConfig";
 import {
   achievementCategoryDefinitions,
+  achievementBadgeSummary,
   achievementDisplayItems as buildAchievementDisplayItems,
   achievementIntegrationButtonAccessibilityLabel,
   achievementIntegrationButtonLabel,
@@ -1490,14 +1491,17 @@ export default function App() {
   const yearlyGlucoseHighest = highestNumber(yearlyGlucoseValues);
   const yearlyGlucoseLowest = lowestNumber(yearlyGlucoseValues);
   const yearlyRecordDayCount = recordDayCount(yearlyRecords);
-  const yearlyUnlockedBadgeCount = achievementDisplayItems.filter((item) => item.progress >= item.target).length;
-  const yearlyHighestBadgeLevel =
-    achievementDisplayItems
-      .filter((item) => item.progress >= item.target)
-      .map((item) => item.level)
-      .sort((first, second) => second - first)[0] ?? 0;
-  const yearlyUnlockedBadgeDisplayCount = clampNumber(yearlyUnlockedBadgeCount, 0, maxMobileCountValue);
-  const yearlyHighestBadgeDisplayLevel = clampNumber(yearlyHighestBadgeLevel, 0, maxMobileCountValue);
+  const yearlyAchievementBadgeSummary = achievementBadgeSummary(achievementDisplayItems);
+  const yearlyUnlockedBadgeDisplayCount = clampNumber(
+    yearlyAchievementBadgeSummary.unlockedCount,
+    0,
+    maxMobileCountValue
+  );
+  const yearlyHighestBadgeDisplayLevel = clampNumber(
+    yearlyAchievementBadgeSummary.highestLevel,
+    0,
+    maxMobileCountValue
+  );
   const yearlyRecordDayDisplayCount = clampNumber(yearlyRecordDayCount, 0, maxMobileCountValue);
   const yearlyGlucoseAverageDisplayValue = clampNullableNumber(yearlyGlucoseAverage, 0, maxMobileGlucoseValue);
   const yearlyGlucoseHighestDisplayValue = clampNullableNumber(yearlyGlucoseHighest, 0, maxMobileGlucoseValue);

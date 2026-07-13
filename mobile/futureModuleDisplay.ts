@@ -770,6 +770,18 @@ export function buildAchievementCategoryDisplaySections(items: AchievementDispla
   }));
 }
 
+export function achievementBadgeSummary(items: AchievementDisplayItem[]) {
+  const unlockedItems = items.filter((item) => item.progress >= item.target);
+  const highestLevel =
+    unlockedItems
+      .map((item) => item.level)
+      .sort((first, second) => second - first)[0] ?? 0;
+  return {
+    unlockedCount: unlockedItems.length,
+    highestLevel
+  };
+}
+
 export function achievementItemFromApi(value: AchievementApiItem): AchievementItem {
   const category = achievementCategoryDefinitions.some((definition) => definition.id === value.category)
     ? value.category

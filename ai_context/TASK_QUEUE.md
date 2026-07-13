@@ -124,6 +124,25 @@ None.
 
 ## Done
 
+### T1355: Extract achievement badge summary helper for Year Review
+
+Status: done
+
+Summary:
+
+- Added `achievementBadgeSummary` to `mobile/futureModuleDisplay.ts` for unlocked badge count and highest unlocked level aggregation.
+- Replaced the inline Year Review achievement badge filters/maps/sort in `mobile/App.tsx` with the extracted helper.
+- Kept Year Review badge counts, highest badge level, achievement display items, and Year Review rendering unchanged.
+- Updated navigation verifier coverage so the extracted helper, helper internals, and Year Review summary bindings are explicitly guarded.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
 ### T1354: Extract record-day count helper for Year Review
 
 Status: done
