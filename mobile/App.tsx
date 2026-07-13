@@ -4068,6 +4068,43 @@ export default function App() {
     return false;
   }
 
+  function openVisualSmokeMenuReturnRoute(target: AppScreen) {
+    if (target === "manualRecord") {
+      openManualRecord("menu");
+      return true;
+    }
+    if (target === "subscription") {
+      openSubscription("menu");
+      return true;
+    }
+    if (target === "tutorial") {
+      openTutorial("menu");
+      return true;
+    }
+    if (target === "achievements") {
+      openAchievements("menu");
+      return true;
+    }
+    if (target === "yearReview") {
+      openYearReview("menu");
+      return true;
+    }
+    if (target === "store") {
+      openStore("menu");
+      return true;
+    }
+    if (target === "storeCart") {
+      setStoreReturnScreen("menu");
+      openStoreCart();
+      return true;
+    }
+    if (target === "foodPhoto") {
+      openFoodPhoto("menu");
+      return true;
+    }
+    return false;
+  }
+
   function openVisualSmokeRoute(target: AppScreen) {
     if (!enableDebugTools || !allowMobileDevAuth) {
       return;
@@ -4099,15 +4136,10 @@ export default function App() {
     if (openVisualSmokeRecordSeedRoute(target)) {
       return;
     }
-    if (target === "manualRecord") {
-      openManualRecord("menu");
-      return;
-    }
     if (openVisualSmokeWorkflowSeedRoute(target)) {
       return;
     }
-    if (target === "subscription") {
-      openSubscription("menu");
+    if (openVisualSmokeMenuReturnRoute(target)) {
       return;
     }
     if (isVisualSmokeSubscriptionStatusScreen(target)) {
@@ -4116,10 +4148,6 @@ export default function App() {
     }
     if (isVisualSmokeSettingsMenuScreen(target)) {
       setCurrentScreen(target);
-      return;
-    }
-    if (target === "tutorial") {
-      openTutorial("menu");
       return;
     }
     if (target === "futureModuleDetail") {
@@ -4142,27 +4170,6 @@ export default function App() {
     }
     if (target === "ranking") {
       openRanking("futureModules");
-      return;
-    }
-    if (target === "achievements") {
-      openAchievements("menu");
-      return;
-    }
-    if (target === "yearReview") {
-      openYearReview("menu");
-      return;
-    }
-    if (target === "store") {
-      openStore("menu");
-      return;
-    }
-    if (target === "storeCart") {
-      setStoreReturnScreen("menu");
-      openStoreCart();
-      return;
-    }
-    if (target === "foodPhoto") {
-      openFoodPhoto("menu");
       return;
     }
     setCurrentScreen(target);

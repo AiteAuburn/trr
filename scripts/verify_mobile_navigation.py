@@ -3667,6 +3667,31 @@ def main() -> int:
         _assert_contains(
             "visual smoke ai seed route fallback",
             content,
+            "return false;\n  }\n\n  function openVisualSmokeMenuReturnRoute(target: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke menu return route handler",
+            content,
+            "function openVisualSmokeMenuReturnRoute(target: AppScreen)",
+        )
+        _assert_contains(
+            "visual smoke menu return route manual binding",
+            content,
+            'openManualRecord("menu");',
+        )
+        _assert_contains(
+            "visual smoke menu return route store cart binding",
+            content,
+            'setStoreReturnScreen("menu");\n      openStoreCart();',
+        )
+        _assert_contains(
+            "visual smoke menu return route food photo binding",
+            content,
+            'openFoodPhoto("menu");',
+        )
+        _assert_contains(
+            "visual smoke menu return route fallback",
+            content,
             "return false;\n  }\n\n  function openVisualSmokeRoute(target: AppScreen)",
         )
         _assert_contains(
@@ -3693,6 +3718,11 @@ def main() -> int:
             "visual smoke workflow seed route helper binding",
             content,
             "if (openVisualSmokeWorkflowSeedRoute(target)) {",
+        )
+        _assert_contains(
+            "visual smoke menu return route helper binding",
+            content,
+            "if (openVisualSmokeMenuReturnRoute(target)) {",
         )
         _assert_contains(
             "visual smoke subscription status helper binding",

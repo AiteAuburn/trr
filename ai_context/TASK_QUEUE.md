@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1432: Extract visual smoke menu-return route handler
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added local `openVisualSmokeMenuReturnRoute` in `mobile/App.tsx` for visual-smoke routes that open existing screens with a menu return target.
+- Replaced inline manual record, subscription, tutorial, achievements, year review, store, store cart, and food photo route branches in `openVisualSmokeRoute`.
+- Kept each opener call, store-cart return screen, visual-smoke debug gating, and normal app navigation unchanged.
+- Updated navigation verifier coverage for the helper internals and App binding.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+Follow-up:
+
+- Continue splitting debug route groups or route-specific action handlers in small slices.
+
 ### T1431: Extract visual smoke AI seed route handler
 
 Status: done
