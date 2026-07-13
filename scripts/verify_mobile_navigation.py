@@ -3540,9 +3540,14 @@ def main() -> int:
             "selectPreviewEditIndex(index);\n    seedPreviewEditStateFromRecord(record);",
         )
         _assert_contains(
+            "AI candidate edit open status helper binding",
+            content,
+            'openScreenWithStatus("editPreviewRecord", aiCandidateEditOpenStatusMessage());',
+        )
+        _assert_contains(
             "AI candidate remove confirm selection helper binding",
             content,
-            "selectPreviewRemoveIndex(index);\n    setCurrentScreen(\"aiRemoveConfirm\");",
+            'selectPreviewRemoveIndex(index);\n    openScreenWithStatus("aiRemoveConfirm", aiCandidateRemoveConfirmStatusMessage());',
         )
         _assert_contains(
             "AI candidate edit return index clear helper binding",
@@ -3552,7 +3557,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit return empty seed helper binding",
             content,
-            "seedEmptyPreviewEditStateForNow();\n    setCurrentScreen(previewActionReturnScreen);",
+            "seedEmptyPreviewEditStateForNow();\n    openScreenWithStatus(previewActionReturnScreen, aiCandidateEditCancelStatusMessage());",
         )
         _assert_contains(
             "AI candidate remove return index clear helper binding",
@@ -3563,6 +3568,11 @@ def main() -> int:
             "AI candidate remove return field clear helper binding",
             content,
             "clearPreviewMenuSelectionIndexes();\n    clearPreviewEditDraftFields();",
+        )
+        _assert_contains(
+            "AI candidate remove return status helper binding",
+            content,
+            "openScreenWithStatus(previewActionReturnScreen, aiCandidateRemoveCancelStatusMessage());",
         )
         _assert_contains(
             "AI candidate edit save success field clear helper binding",

@@ -3035,15 +3035,13 @@ export default function App() {
     setPreviewActionReturnScreen(returnScreen);
     selectPreviewEditIndex(index);
     seedPreviewEditStateFromRecord(record);
-    setCurrentScreen("editPreviewRecord");
-    setStatus(aiCandidateEditOpenStatusMessage());
+    openScreenWithStatus("editPreviewRecord", aiCandidateEditOpenStatusMessage());
   }
 
   function returnFromPreviewRecordEdit() {
     clearPreviewMenuSelectionIndexes();
     seedEmptyPreviewEditStateForNow();
-    setCurrentScreen(previewActionReturnScreen);
-    setStatus(aiCandidateEditCancelStatusMessage());
+    openScreenWithStatus(previewActionReturnScreen, aiCandidateEditCancelStatusMessage());
   }
 
   function openPreviewRecordRemoveConfirm(index: number, returnScreen: AppScreen = "aiReview") {
@@ -3054,8 +3052,7 @@ export default function App() {
     }
     setPreviewActionReturnScreen(returnScreen);
     selectPreviewRemoveIndex(index);
-    setCurrentScreen("aiRemoveConfirm");
-    setStatus(aiCandidateRemoveConfirmStatusMessage());
+    openScreenWithStatus("aiRemoveConfirm", aiCandidateRemoveConfirmStatusMessage());
   }
 
   function editAiCandidateRecord(index: number) {
@@ -3077,8 +3074,7 @@ export default function App() {
   function returnFromPreviewRemoveConfirm() {
     clearPreviewMenuSelectionIndexes();
     clearPreviewEditDraftFields();
-    setCurrentScreen(previewActionReturnScreen);
-    setStatus(aiCandidateRemoveCancelStatusMessage());
+    openScreenWithStatus(previewActionReturnScreen, aiCandidateRemoveCancelStatusMessage());
   }
 
   function reorganizeDailyRecordDraftAfterChange(
