@@ -5526,11 +5526,8 @@ export default function App() {
       if (createdRecords[0]) {
         selectRecordForResult(createdRecords[0]);
       }
-      setLastSavedSummary(aiSaveSuccessSummaryMessage(savedCount));
       setLastSaveErrorSummary("");
-      setLastSaveEntryMethod("ai");
-      setSaveSuccessReturnScreen("today");
-      setCurrentScreen("saveSuccess");
+      openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), "ai", "today");
       setStatus(aiSaveSuccessStatusMessage());
       syncAchievementsAfterRecordSave();
     } catch (error) {
@@ -5665,6 +5662,13 @@ export default function App() {
   function selectRecordForResult(record: RecordItem) {
     setSelectedRecord(record);
     setRecordEditFields(recordPayloadToEditFields(record));
+  }
+
+  function openSaveSuccessResult(summary: string, entryMethod: SaveEntryMethod, returnScreen: AppScreen) {
+    setLastSavedSummary(summary);
+    setLastSaveEntryMethod(entryMethod);
+    setSaveSuccessReturnScreen(returnScreen);
+    setCurrentScreen("saveSuccess");
   }
 
   function seedEmptyRecordEditStateForNow() {
@@ -5921,10 +5925,7 @@ export default function App() {
       setRecords((current) => boundRecordsList([created, ...current]));
       selectRecordForResult(created);
       seedEmptyManualRecordStateForNow();
-      setLastSavedSummary(manualRecordCreateSummaryMessage(1));
-      setLastSaveEntryMethod("manual");
-      setSaveSuccessReturnScreen(manualRecordReturnScreen);
-      setCurrentScreen("saveSuccess");
+      openSaveSuccessResult(manualRecordCreateSummaryMessage(1), "manual", manualRecordReturnScreen);
       setStatus(manualRecordCreateSuccessStatusMessage());
       syncAchievementsAfterRecordSave();
     } catch (error) {

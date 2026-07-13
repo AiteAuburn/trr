@@ -3596,6 +3596,26 @@ def main() -> int:
             "setRecords((current) => boundRecordsList([created, ...current]));\n      selectRecordForResult(created);",
         )
         _assert_contains(
+            "save success result helper",
+            content,
+            "function openSaveSuccessResult(summary: string, entryMethod: SaveEntryMethod, returnScreen: AppScreen)",
+        )
+        _assert_contains(
+            "save success result helper fields",
+            content,
+            "setLastSavedSummary(summary);\n    setLastSaveEntryMethod(entryMethod);\n    setSaveSuccessReturnScreen(returnScreen);\n    setCurrentScreen(\"saveSuccess\");",
+        )
+        _assert_contains(
+            "ai save success result helper binding",
+            content,
+            "setLastSaveErrorSummary(\"\");\n      openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), \"ai\", \"today\");",
+        )
+        _assert_contains(
+            "manual create save success result helper binding",
+            content,
+            "seedEmptyManualRecordStateForNow();\n      openSaveSuccessResult(manualRecordCreateSummaryMessage(1), \"manual\", manualRecordReturnScreen);",
+        )
+        _assert_contains(
             "record edit seed empty now helper",
             content,
             "function seedEmptyRecordEditStateForNow()",
