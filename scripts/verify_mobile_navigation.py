@@ -7654,6 +7654,10 @@ def main() -> int:
             ("community public profile save accessibility helper fields", 'return "儲存社群公開顯示名稱，不公開健康數值";'),
             ("community public profile save accessibility display label binding", "const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();"),
             ("community public profile save accessibility pressable binding", "accessibilityLabel={communityPublicProfileSaveAccessibilityDisplayLabel}"),
+            ("community public profile save button helper", "function communityPublicProfileSaveButtonLabel()"),
+            ("community public profile save button helper fields", 'return "儲存公開名稱";'),
+            ("community public profile save button display label binding", "const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();"),
+            ("community public profile save button text binding", "{communityPublicProfileSaveButtonDisplayLabel}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9684,6 +9688,11 @@ def main() -> int:
             "community direct public profile save accessibility binding",
             content,
             'accessibilityLabel="儲存社群公開顯示名稱，不公開健康數值"',
+        )
+        _assert_not_contains(
+            "community direct public profile save button text binding",
+            content,
+            "<Text style={styles.secondaryButtonText}>儲存公開名稱</Text>",
         )
         _assert_not_contains(
             "food community item direct handler id binding",

@@ -1673,6 +1673,7 @@ export default function App() {
   const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;
   const foodCommunityShareAccessibilityDisplayLabel = communityActionDisplay.foodCommunityShareAccessibility;
   const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();
+  const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();
   const storePreviewDisplay = storePreviewDisplayTexts(storeActionStatus);
   const storeActionStatusDisplayText = storePreviewDisplay.actionStatus;
   const storePreviewBoundaryDisplayText = storePreviewDisplay.previewBoundary;
@@ -4118,6 +4119,10 @@ export default function App() {
 
   function communityPublicProfileSaveAccessibilityLabel() {
     return "儲存社群公開顯示名稱，不公開健康數值";
+  }
+
+  function communityPublicProfileSaveButtonLabel() {
+    return "儲存公開名稱";
   }
 
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
@@ -9875,7 +9880,7 @@ export default function App() {
                   disabled={isBusy || !protectedAccountBackendReady}
                   onPress={saveCommunityPublicProfile}
                 >
-                  <Text style={styles.secondaryButtonText}>儲存公開名稱</Text>
+                  <Text style={styles.secondaryButtonText}>{communityPublicProfileSaveButtonDisplayLabel}</Text>
                 </Pressable>
               </View>
             </View>
