@@ -4144,6 +4144,10 @@ export default function App() {
     return product.rewardStatus === "redeemable" ? "兌" : auxiliaryDisplayLabels.productOpenArrow;
   }
 
+  function storeProductActionAccessibilityLabel(product: ReturnType<typeof storeProductDisplayItem>) {
+    return product.actionAccessibilityLabel;
+  }
+
   function storeRedemptionUseId(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
     return redemption.id;
   }
@@ -11126,7 +11130,7 @@ export default function App() {
                   <Text style={styles.planPriceText}>{product.pointsCost}</Text>
                 </View>
                 <Pressable
-                  accessibilityLabel={product.actionAccessibilityLabel}
+                  accessibilityLabel={storeProductActionAccessibilityLabel(product)}
                   accessibilityRole="button"
                   style={styles.roundActionButton}
                   onPress={() => pressStoreProductStatus(product)}

@@ -878,6 +878,9 @@ def _pressable_label_source_errors(content: str) -> list[str]:
         "row.accessibilityLabel",
         "type.accessibilityLabel",
     }
+    helper_label_sources = {
+        "storeProductActionAccessibilityLabel(product)",
+    }
     search_from = 0
     while True:
         start = content.find("<Pressable", search_from)
@@ -909,11 +912,12 @@ def _pressable_label_source_errors(content: str) -> list[str]:
             and re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*\.[A-Za-z][A-Za-z0-9_]*", source)
         )
         is_render_item_source = source in render_item_label_sources
+        is_helper_label_source = source in helper_label_sources
         is_prepared_label_variable = re.fullmatch(
             r"[A-Za-z][A-Za-z0-9_]*(Accessibility|AccessibilityLabel|AccessibilityDisplayLabel)",
             source,
         )
-        if not (is_bounded_display_object or is_render_item_source or is_prepared_label_variable):
+        if not (is_bounded_display_object or is_render_item_source or is_helper_label_source or is_prepared_label_variable):
             compact = " ".join(tag.split())[:180]
             errors.append(f"{line_number}: {compact}")
         search_from = end + 1
@@ -4986,7 +4990,7 @@ def main() -> int:
         _assert_contains(
             "store product action accessibility",
             content,
-            "accessibilityLabel={product.actionAccessibilityLabel}",
+            "accessibilityLabel={storeProductActionAccessibilityLabel(product)}",
         )
         _assert_contains(
             "food photo upload accessibility",
@@ -8436,6 +8440,8 @@ def main() -> int:
             ("store product redeem title helper fields", "return product.title;"),
             ("store product action label helper", "function storeProductActionLabel(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store product action label helper fields", 'return product.rewardStatus === "redeemable" ? "兌" : auxiliaryDisplayLabels.productOpenArrow;'),
+            ("store product action accessibility helper", "function storeProductActionAccessibilityLabel(product: ReturnType<typeof storeProductDisplayItem>)"),
+            ("store product action accessibility helper fields", "return product.actionAccessibilityLabel;"),
             ("store redemption use id helper", "function storeRedemptionUseId(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store redemption use id helper fields", "return redemption.id;"),
             ("store redemption use title helper", "function storeRedemptionUseTitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
@@ -9308,6 +9314,11 @@ def main() -> int:
             "store product direct action label binding",
             content,
             '{product.rewardStatus === "redeemable" ? "兌" : auxiliaryDisplayLabels.productOpenArrow}',
+        )
+        _assert_not_contains(
+            "store product direct action accessibility binding",
+            content,
+            "accessibilityLabel={product.actionAccessibilityLabel}\n                  accessibilityRole=\"button\"\n                  style={styles.roundActionButton}\n                  onPress={() => pressStoreProductStatus(product)}",
         )
         _assert_not_contains(
             "store redemption direct disabled binding",
