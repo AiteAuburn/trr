@@ -2335,6 +2335,22 @@ export default function App() {
     return item.value;
   }
 
+  function analysisRangeOptionKey(item: ReturnType<typeof analysisRangeDisplayItem>) {
+    return analysisRangeTarget(item);
+  }
+
+  function analysisRangeOptionAccessibilityLabel(item: ReturnType<typeof analysisRangeDisplayItem>) {
+    return item.accessibilityLabel;
+  }
+
+  function analysisRangeOptionLabel(item: ReturnType<typeof analysisRangeDisplayItem>) {
+    return item.label;
+  }
+
+  function analysisRangeOptionSelected(item: ReturnType<typeof analysisRangeDisplayItem>, selectedRange: AnalysisRange) {
+    return analysisRangeTarget(item) === selectedRange;
+  }
+
   function pressAnalysisRangeOption(item: ReturnType<typeof analysisRangeDisplayItem>) {
     selectAnalysisRange(analysisRangeTarget(item));
   }
@@ -9659,23 +9675,23 @@ export default function App() {
             <View style={styles.segmentRow}>
               {analysisRangeDisplayOptions.map((item) => (
                 <Pressable
-                  key={item.value}
-                  accessibilityLabel={item.accessibilityLabel}
+                  key={analysisRangeOptionKey(item)}
+                  accessibilityLabel={analysisRangeOptionAccessibilityLabel(item)}
                   accessibilityRole="button"
-                  accessibilityState={{ selected: analysisRange === item.value }}
+                  accessibilityState={{ selected: analysisRangeOptionSelected(item, analysisRange) }}
                   style={[
                     styles.segmentPill,
-                    analysisRange === item.value ? styles.segmentActive : null
+                    analysisRangeOptionSelected(item, analysisRange) ? styles.segmentActive : null
                   ]}
                   onPress={() => pressAnalysisRangeOption(item)}
                 >
                   <Text
                     style={[
                       styles.segmentText,
-                      analysisRange === item.value ? styles.segmentTextActive : null
+                      analysisRangeOptionSelected(item, analysisRange) ? styles.segmentTextActive : null
                     ]}
                   >
-                    {item.label}
+                    {analysisRangeOptionLabel(item)}
                   </Text>
                 </Pressable>
               ))}

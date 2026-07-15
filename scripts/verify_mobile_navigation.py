@@ -887,6 +887,7 @@ def _pressable_label_source_errors(content: str) -> list[str]:
         "destinationCardAccessibilityLabel(item)",
         "foodCommunityCategoryOptionAccessibilityLabel(category)",
         "futureModuleCardAccessibilityLabel(item)",
+        "analysisRangeOptionAccessibilityLabel(item)",
         "menuDestinationAccessibilityLabel(item)",
         "quickEntryModeAccessibilityLabel(item)",
         "settingsDisplayRowAccessibilityLabel(row)",
@@ -6912,6 +6913,61 @@ def main() -> int:
             "return item.value;",
         )
         _assert_contains(
+            "analysis range option key helper",
+            content,
+            "function analysisRangeOptionKey(item: ReturnType<typeof analysisRangeDisplayItem>)",
+        )
+        _assert_contains(
+            "analysis range option key helper binding",
+            content,
+            "key={analysisRangeOptionKey(item)}",
+        )
+        _assert_contains(
+            "analysis range option accessibility helper",
+            content,
+            "function analysisRangeOptionAccessibilityLabel(item: ReturnType<typeof analysisRangeDisplayItem>)",
+        )
+        _assert_contains(
+            "analysis range option accessibility helper fields",
+            content,
+            "return item.accessibilityLabel;",
+        )
+        _assert_contains(
+            "analysis range option accessibility helper binding",
+            content,
+            "accessibilityLabel={analysisRangeOptionAccessibilityLabel(item)}",
+        )
+        _assert_contains(
+            "analysis range option label helper",
+            content,
+            "function analysisRangeOptionLabel(item: ReturnType<typeof analysisRangeDisplayItem>)",
+        )
+        _assert_contains(
+            "analysis range option label helper fields",
+            content,
+            "return item.label;",
+        )
+        _assert_contains(
+            "analysis range option label helper binding",
+            content,
+            "{analysisRangeOptionLabel(item)}",
+        )
+        _assert_contains(
+            "analysis range option selected helper",
+            content,
+            "function analysisRangeOptionSelected(item: ReturnType<typeof analysisRangeDisplayItem>, selectedRange: AnalysisRange)",
+        )
+        _assert_contains(
+            "analysis range option selected helper fields",
+            content,
+            "return analysisRangeTarget(item) === selectedRange;",
+        )
+        _assert_contains(
+            "analysis range option selected helper binding",
+            content,
+            "analysisRangeOptionSelected(item, analysisRange)",
+        )
+        _assert_contains(
             "analysis range target helper binding",
             content,
             "selectAnalysisRange(analysisRangeTarget(item));",
@@ -6926,6 +6982,18 @@ def main() -> int:
             content,
             "const analysisRangeDisplayOptions = useMemo(() => analysisRangeDisplayItems(analysisRanges), []);",
         )
+        analysis_range_option_render_block = _match_block(
+            content,
+            r"analysisRangeDisplayOptions\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
+            "analysis range option render block",
+        )
+        for label, marker in (
+            ("direct analysis range key binding", "key={item.value}"),
+            ("direct analysis range accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
+            ("direct analysis range selected state binding", "analysisRange === item.value"),
+            ("direct analysis range label binding", "{item.label}"),
+        ):
+            _assert_not_contains(label, analysis_range_option_render_block, marker)
         _assert_contains(
             "analysis custom start input handler",
             content,
@@ -7115,12 +7183,12 @@ def main() -> int:
             ("shared option chip accessibility binding", "accessibilityLabel={option.accessibilityLabel}"),
             ("store category accessibility binding", "accessibilityLabel={category.accessibilityLabel}"),
             ("history range accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
-            ("analysis range accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
+            ("analysis range accessibility binding", "accessibilityLabel={analysisRangeOptionAccessibilityLabel(item)}"),
             ("manual type chip button role", 'accessibilityRole="button"'),
             ("manual type chip selected state", "accessibilityState={{ selected: selectedValue === type.value }}"),
             ("history calendar selected state", "accessibilityState={{ selected: item.isSelected }}"),
             ("history detail selected state", "accessibilityState={{ selected: isSelected }}"),
-            ("analysis range selected state", "accessibilityState={{ selected: analysisRange === item.value }}"),
+            ("analysis range selected state", "accessibilityState={{ selected: analysisRangeOptionSelected(item, analysisRange) }}"),
             ("analysis custom date conditional render", '{analysisRange === "custom" ? ('),
             ("analysis start date accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.analysisStartDateInputAccessibility}"),
             ("analysis end date accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.analysisEndDateInputAccessibility}"),
