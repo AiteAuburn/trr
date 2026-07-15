@@ -3983,6 +3983,10 @@ export default function App() {
     return items[0]?.id ?? fallbackId;
   }
 
+  function foodCommunityListItemTitle(item: { title: string }) {
+    return item.title;
+  }
+
   function foodCommunityDetailSelectedItemId(item: { id: string }) {
     return item.id;
   }
@@ -9601,7 +9605,7 @@ export default function App() {
                   onPress={() => pressFoodCommunityItem(item)}
                 >
                   <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{item.title}</Text>
+                    <Text style={styles.recordContent}>{foodCommunityListItemTitle(item)}</Text>
                     <Text style={styles.evidence}>{item.metricSummary}</Text>
                   </View>
                   <Text style={styles.recordType}>›</Text>
