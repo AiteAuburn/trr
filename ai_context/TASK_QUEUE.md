@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1616: Reuse ranking boundary row label helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `rankingBoundaryRowLabel` helper for Ranking boundary-grid row labels.
+- Reused the helper in Ranking screen rendering while keeping row label text, row values, local streak display, leaderboard sections, opt-in actions, backend sync behavior, and Community screen behavior unchanged.
+- Updated navigation verifier coverage for the shared Ranking boundary-row label helper and direct label-binding regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Ranking boundary row values and leaderboard row bindings in small behavior-preserving slices.
+
 ### T1615: Reuse ranking boundary row key helper
 
 Status: done

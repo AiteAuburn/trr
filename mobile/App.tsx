@@ -4149,6 +4149,10 @@ export default function App() {
     return row.label;
   }
 
+  function rankingBoundaryRowLabel(row: ReturnType<typeof rankingBoundaryDisplayRows>[number]) {
+    return row.label;
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -9995,7 +9999,7 @@ export default function App() {
             <View style={styles.reportBoundaryGrid}>
               {rankingBoundaryRows.map((row) => (
                 <View key={rankingBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
+                  <Text style={styles.confidence}>{rankingBoundaryRowLabel(row)}</Text>
                   <Text style={styles.recordType}>{row.value}</Text>
                 </View>
               ))}

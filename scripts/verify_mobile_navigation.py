@@ -7676,6 +7676,9 @@ def main() -> int:
             ("ranking boundary row key helper", "function rankingBoundaryRowKey(row: ReturnType<typeof rankingBoundaryDisplayRows>[number])"),
             ("ranking boundary row key helper fields", "return row.label;"),
             ("ranking boundary row key helper binding", "key={rankingBoundaryRowKey(row)}"),
+            ("ranking boundary row label helper", "function rankingBoundaryRowLabel(row: ReturnType<typeof rankingBoundaryDisplayRows>[number])"),
+            ("ranking boundary row label helper fields", "return row.label;"),
+            ("ranking boundary row label helper binding", "{rankingBoundaryRowLabel(row)}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9747,6 +9750,11 @@ def main() -> int:
             "ranking direct boundary row key binding",
             content,
             "rankingBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
+        )
+        _assert_not_contains(
+            "ranking direct boundary row label binding",
+            content,
+            "rankingBoundaryRows.map((row) => (\n                <View key={rankingBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
