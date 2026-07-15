@@ -4706,6 +4706,18 @@ export default function App() {
     returnFromFuturePreviewScreen(yearReviewReturnScreen);
   }
 
+  function yearlyReviewMetricRowKey(row: (typeof yearlyReviewMetricRows)[number]) {
+    return row.label;
+  }
+
+  function yearlyReviewMetricRowLabel(row: (typeof yearlyReviewMetricRows)[number]) {
+    return row.label;
+  }
+
+  function yearlyReviewMetricRowValue(row: (typeof yearlyReviewMetricRows)[number]) {
+    return row.value;
+  }
+
   function showYearReviewShareStatus() {
     void loadYearReviewShareCard();
   }
@@ -11608,9 +11620,9 @@ export default function App() {
             </View>
             <View style={styles.metricGrid}>
               {yearlyReviewMetricRows.map((row) => (
-                <View key={row.label} style={styles.metricCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.metricValue}>{row.value}</Text>
+                <View key={yearlyReviewMetricRowKey(row)} style={styles.metricCard}>
+                  <Text style={styles.confidence}>{yearlyReviewMetricRowLabel(row)}</Text>
+                  <Text style={styles.metricValue}>{yearlyReviewMetricRowValue(row)}</Text>
                 </View>
               ))}
             </View>
