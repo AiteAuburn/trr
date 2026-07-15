@@ -8095,6 +8095,9 @@ def main() -> int:
             ("store search input handler", "function updateStoreSearchInput(value: string)"),
             ("store category select handler", "function selectStoreCategory(category: StoreCategory)"),
             ("store category option press handler", "function pressStoreCategoryOption(category: ReturnType<typeof storeCategoryDisplayItem>)"),
+            ("store category target helper", "function storeCategoryTarget(category: ReturnType<typeof storeCategoryDisplayItem>)"),
+            ("store category target helper fields", "return category.value;"),
+            ("store category target helper binding", "selectStoreCategory(storeCategoryTarget(category));"),
             ("store display bundle helper binding", "const storeDisplay = useMemo("),
             ("store display bundle backend products", "backendProducts: storeBackendProducts"),
             ("store display bundle fallback products", "fallbackProducts: storeProducts"),
@@ -8876,6 +8879,11 @@ def main() -> int:
             "store category direct selection binding",
             content,
             "onPress={() => selectStoreCategory(category.value)}",
+        )
+        _assert_not_contains(
+            "store category direct handler value binding",
+            content,
+            "selectStoreCategory(category.value);",
         )
         _assert_not_contains(
             "food community category direct handler value binding",

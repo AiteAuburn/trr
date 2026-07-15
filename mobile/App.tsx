@@ -4002,8 +4002,12 @@ export default function App() {
     setStoreCategory(category);
   }
 
+  function storeCategoryTarget(category: ReturnType<typeof storeCategoryDisplayItem>) {
+    return category.value;
+  }
+
   function pressStoreCategoryOption(category: ReturnType<typeof storeCategoryDisplayItem>) {
-    selectStoreCategory(category.value);
+    selectStoreCategory(storeCategoryTarget(category));
   }
 
   function showStoreProductStatus(actionStatus: string) {
