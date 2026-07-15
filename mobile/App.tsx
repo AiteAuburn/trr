@@ -9802,7 +9802,7 @@ export default function App() {
                 autoCorrect={false}
               />
               <TextInput
-                accessibilityLabel="輸入食物分享備註心得"
+                accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}
                 value={foodCommunityShareFields.note}
                 onChangeText={updateFoodCommunityNote}
                 maxLength={maxDisplayDetailTextLength}

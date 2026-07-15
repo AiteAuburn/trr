@@ -15,6 +15,37 @@
 
 ## 2026-07-15
 
+### T1602 reuse food community share note accessibility auxiliary label
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/sharedDisplayItems.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility` label for the Food Community share-form note input accessibility label.
+- Reused the auxiliary label in share-form rendering while keeping the accessibility copy, placeholder copy, note value/update path, glucose labels, submit behavior, and detail panel behavior unchanged.
+- Updated navigation verifier coverage for the shared Food Community share-form note accessibility auxiliary label and direct accessibility-label regression guard.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting Food Community share-form and community summary display text in small behavior-preserving slices.
+
 ### T1601 reuse food community share after-glucose accessibility auxiliary label
 
 類型：mobile / refactor / verifier / docs
