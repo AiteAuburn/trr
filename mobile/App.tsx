@@ -6271,8 +6271,12 @@ export default function App() {
     updateManualRecordField("glucoseUnit", value);
   }
 
+  function manualRecordOptionTarget(option: { value: string }) {
+    return option.value;
+  }
+
   function pressManualRecordGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>) {
-    selectManualRecordGlucoseUnit(option.value);
+    selectManualRecordGlucoseUnit(manualRecordOptionTarget(option));
   }
 
   function selectManualRecordGlucoseTiming(value: string) {
@@ -6280,7 +6284,7 @@ export default function App() {
   }
 
   function pressManualRecordGlucoseTimingOption(option: ReturnType<typeof valueLabelDisplayItem>) {
-    selectManualRecordGlucoseTiming(option.value);
+    selectManualRecordGlucoseTiming(manualRecordOptionTarget(option));
   }
 
   function selectManualRecordMealType(value: string) {
@@ -6288,7 +6292,7 @@ export default function App() {
   }
 
   function pressManualRecordMealTypeOption(option: ReturnType<typeof valueLabelDisplayItem>) {
-    selectManualRecordMealType(option.value);
+    selectManualRecordMealType(manualRecordOptionTarget(option));
   }
 
   function updateManualRecordFoodItems(value: string) {

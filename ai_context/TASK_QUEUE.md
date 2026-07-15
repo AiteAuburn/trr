@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1529: Reuse manual-record option target helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `manualRecordOptionTarget` helper for manual-record option press handlers.
+- Reused the helper in manual-record glucose unit, glucose timing, and meal type option handlers while keeping edit-field updates unchanged.
+- Updated navigation verifier coverage for the shared manual-record option target helper and direct `option.value` regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1528: Reuse record-edit option target helper
 
 Status: done
