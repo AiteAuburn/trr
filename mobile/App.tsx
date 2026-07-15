@@ -9742,7 +9742,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{foodCommunityShareSectionLabel()}</Text>
               <TextInput
-                accessibilityLabel="輸入食物名稱"
+                accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}
                 value={foodCommunityShareFields.foodName}
                 onChangeText={updateFoodCommunityFoodName}
                 maxLength={maxDisplayTextLength}

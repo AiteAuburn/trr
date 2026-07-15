@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1597: Reuse food community share food-name accessibility auxiliary label
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/sharedDisplayItems.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility` label for the Food Community share-form food-name input accessibility label.
+- Reused the auxiliary label in share-form rendering while keeping the accessibility copy, placeholder copy, field value/update path, section label, submit behavior, and detail panel behavior unchanged.
+- Updated navigation verifier coverage for the shared Food Community share-form food-name accessibility auxiliary label and direct accessibility-label regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Food Community share-form accessibility and placeholder display text fields in small behavior-preserving slices.
+
 ### T1596: Reuse food community share section label helper
 
 Status: done

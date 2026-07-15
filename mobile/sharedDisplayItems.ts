@@ -220,6 +220,7 @@ export function auxiliarySectionLabels() {
     analysisStartDateInputAccessibility: boundDisplayText("分析開始日期輸入", maxDisplayTextLength),
     analysisEndDateInputAccessibility: boundDisplayText("分析結束日期輸入", maxDisplayTextLength),
     foodCommunitySearchInputAccessibility: boundDisplayText("食物搜尋輸入", maxDisplayTextLength),
+    foodCommunityShareFoodNameAccessibility: boundDisplayText("輸入食物名稱", maxDisplayTextLength),
     backendUrlInputAccessibility: boundDisplayText("Backend URL 輸入", maxDisplayTextLength),
     modelUrlInputAccessibility: boundDisplayText("模型下載 URL 輸入", maxDisplayTextLength),
     whisperModelPathInputAccessibility: boundDisplayText("Whisper 模型路徑輸入", maxDisplayTextLength),
