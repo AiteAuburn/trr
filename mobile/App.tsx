@@ -1685,7 +1685,7 @@ export default function App() {
   const storeCheckoutReadinessTitleDisplayText = storePreviewDisplay.checkoutReadinessTitle;
   const storeCartReturnButtonDisplayLabel = storePreviewDisplay.cartReturnButton;
   const rankingOptInButtonDisplayLabel = communityActionDisplay.rankingOptInButton;
-  const rankingOptInAccessibilityDisplayLabel = communityActionDisplay.rankingOptInAccessibility;
+  const rankingOptInAccessibilityDisplayLabel = rankingOptInActionAccessibilityLabel(communityActionDisplay.rankingOptInAccessibility);
   const rankingPublicActionButtonDisplayLabel = rankingPublicActionButtonLabel();
   const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel();
   const foodPhotoStatusDisplay = foodPhotoStatusDisplayTexts(foodPhotoActionStatus);
@@ -4201,6 +4201,10 @@ export default function App() {
 
   function rankingPublicActionButtonLabel() {
     return futurePreviewDisplayLabels.rankingPublicButton;
+  }
+
+  function rankingOptInActionAccessibilityLabel(label: string) {
+    return label;
   }
 
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {

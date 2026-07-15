@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1629: Reuse ranking opt-in action accessibility helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `rankingOptInActionAccessibilityLabel` helper for the Ranking opt-in action accessibility display label.
+- Reused the helper while keeping opt-in accessibility text, button text, toggle action, backend sync behavior, and Community screen behavior unchanged.
+- Updated navigation verifier coverage for the shared Ranking opt-in action accessibility helper.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Ranking opt-in button label and status bindings in small behavior-preserving slices.
+
 ### T1628: Reuse ranking public action button label helper
 
 Status: done
