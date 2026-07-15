@@ -3603,6 +3603,14 @@ export default function App() {
     return row.statusLabel;
   }
 
+  function previewKeyedRowKey(row: { key: string }) {
+    return row.key;
+  }
+
+  function previewLastUsedRowText(row: { lastUsed: string }) {
+    return row.lastUsed;
+  }
+
   function previewTimedRowTime(row: { time: string }) {
     return row.time;
   }
@@ -11141,16 +11149,16 @@ export default function App() {
             {authSessionDisplayItems.length > 0 ? (
               <View style={styles.aiReviewList}>
                 {authSessionDisplayItems.map((item) => (
-                  <View key={item.key} style={styles.aiReviewCard}>
+                  <View key={previewKeyedRowKey(item)} style={styles.aiReviewCard}>
                     <View style={styles.iconCircleSmall}>
                       <Text>裝</Text>
                     </View>
                     <View style={styles.timelineContent}>
-                      <Text style={styles.recordContent}>{item.title}</Text>
-                      <Text style={styles.evidence}>{item.copy}</Text>
-                      <Text style={styles.evidence}>{item.lastUsed}</Text>
+                      <Text style={styles.recordContent}>{previewStatusRowTitle(item)}</Text>
+                      <Text style={styles.evidence}>{previewStatusRowCopy(item)}</Text>
+                      <Text style={styles.evidence}>{previewLastUsedRowText(item)}</Text>
                     </View>
-                    <Text style={styles.previewModeBadge}>{item.statusLabel}</Text>
+                    <Text style={styles.previewModeBadge}>{previewStatusRowStatusLabel(item)}</Text>
                   </View>
                 ))}
               </View>
