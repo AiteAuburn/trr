@@ -7640,6 +7640,9 @@ def main() -> int:
             ("food community share section label helper", "function foodCommunityShareSectionLabel()"),
             ("food community share section label helper fields", 'return "食物分享紀錄";'),
             ("food community share section label helper binding", "{foodCommunityShareSectionLabel()}"),
+            ("food community ranking section label helper", "function foodCommunityRankingSectionLabel()"),
+            ("food community ranking section label helper fields", 'return "社群排行榜";'),
+            ("food community ranking section label helper binding", "{foodCommunityRankingSectionLabel()}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
             ("food community share eaten time accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
@@ -7672,7 +7675,7 @@ def main() -> int:
             ("community action display helper binding", "const communityActionDisplay = communityActionDisplayTexts({"),
             ("food community share bounded button label", "const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;"),
             ("food community share bounded accessibility label", "const foodCommunityShareAccessibilityDisplayLabel = communityActionDisplay.foodCommunityShareAccessibility;"),
-            ("food community backend-aware leaderboard label", "社群排行榜"),
+            ("food community backend-aware leaderboard label", "{foodCommunityRankingSectionLabel()}"),
             ("food community share food name updater", "function updateFoodCommunityFoodName(value: string)"),
             ("food community share eaten date updater", "function updateFoodCommunityEatenDate(value: string)"),
             ("food community share eaten time updater", "function updateFoodCommunityEatenTime(value: string)"),
@@ -9644,6 +9647,11 @@ def main() -> int:
             "food community direct share note accessibility binding",
             content,
             'accessibilityLabel="輸入食物分享備註心得"',
+        )
+        _assert_not_contains(
+            "food community direct ranking section label binding",
+            content,
+            "<Text style={styles.label}>社群排行榜</Text>",
         )
         _assert_not_contains(
             "food community item direct handler id binding",

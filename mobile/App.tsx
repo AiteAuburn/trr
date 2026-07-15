@@ -4103,6 +4103,10 @@ export default function App() {
     return "食物分享紀錄";
   }
 
+  function foodCommunityRankingSectionLabel() {
+    return "社群排行榜";
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -9826,7 +9830,7 @@ export default function App() {
               ))}
             </View>
             <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>社群排行榜</Text>
+              <Text style={styles.label}>{foodCommunityRankingSectionLabel()}</Text>
               {foodCommunityRankingRows.map((row) => (
                 <HighlightDetailRow key={row.label} label={row.label} value={row.value} />
               ))}
