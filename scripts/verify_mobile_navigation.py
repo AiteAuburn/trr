@@ -6370,6 +6370,21 @@ def main() -> int:
             "function pressManualRecordTypeOption(type: (typeof manualRecordTypeDisplayOptions)[number])",
         )
         _assert_contains(
+            "manual record type target helper",
+            content,
+            "function manualRecordTypeTarget(type: (typeof manualRecordTypeDisplayOptions)[number])",
+        )
+        _assert_contains(
+            "manual record type target helper fields",
+            content,
+            "return type.value;",
+        )
+        _assert_contains(
+            "manual record type target helper binding",
+            content,
+            "selectManualRecordType(manualRecordTypeTarget(type));",
+        )
+        _assert_contains(
             "analysis range handler",
             content,
             "function selectAnalysisRange(range: AnalysisRange)",
@@ -6747,6 +6762,7 @@ def main() -> int:
             _assert_contains(label, content, marker)
         for label, marker in (
             ("manual record direct type binding", "onPress={() => onTypePress(type)}"),
+            ("manual record direct type handler value binding", "selectManualRecordType(type.value);"),
             ("preview edit direct unit selection binding", "onPress={() => selectPreviewEditGlucoseUnit(option.value)}"),
             ("preview edit direct timing selection binding", "onPress={() => selectPreviewEditGlucoseTiming(option.value)}"),
             ("preview edit direct meal type selection binding", "onPress={() => selectPreviewEditMealType(option.value)}"),

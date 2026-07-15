@@ -2231,8 +2231,12 @@ export default function App() {
     setManualRecordType(type);
   }
 
+  function manualRecordTypeTarget(type: (typeof manualRecordTypeDisplayOptions)[number]) {
+    return type.value;
+  }
+
   function pressManualRecordTypeOption(type: (typeof manualRecordTypeDisplayOptions)[number]) {
-    selectManualRecordType(type.value);
+    selectManualRecordType(manualRecordTypeTarget(type));
   }
 
   function selectHistoryCalendarDate(dateKey: string) {

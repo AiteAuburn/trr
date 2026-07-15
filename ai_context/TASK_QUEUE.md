@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1530: Reuse manual-record type target helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `manualRecordTypeTarget` helper for manual-record type selector press handling.
+- Reused the helper in `pressManualRecordTypeOption` while keeping manual-record type selection behavior unchanged.
+- Updated navigation verifier coverage for the shared manual-record type target helper and direct `type.value` regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1529: Reuse manual-record option target helper
 
 Status: done
