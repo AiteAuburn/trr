@@ -1972,7 +1972,7 @@ def main() -> int:
         ):
             _assert_contains(label, manual_record_confirm_preview_block_content, marker)
         for label, marker in (
-            ("analysis metric card render", "analysisMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
+            ("analysis metric card render", "analysisMetricRows.map((row) => (\n                <MetricCard key={analysisMetricRowKey(row)} label={analysisMetricRowLabel(row)} value={analysisMetricRowValue(row)} />"),
             ("detailed report metric card render", "detailedReportMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
         ):
             _assert_contains(label, content, marker)
@@ -6976,6 +6976,18 @@ def main() -> int:
             content,
             "analysisMetricInput.glucoseCount",
         )
+        for label, marker in (
+            ("analysis metric row key helper", "function analysisMetricRowKey(row: (typeof analysisMetricRows)[number])"),
+            ("analysis metric row key helper fields", "return row.label;"),
+            ("analysis metric row key helper binding", "key={analysisMetricRowKey(row)}"),
+            ("analysis metric row label helper", "function analysisMetricRowLabel(row: (typeof analysisMetricRows)[number])"),
+            ("analysis metric row label helper fields", "return row.label;"),
+            ("analysis metric row label helper binding", "label={analysisMetricRowLabel(row)}"),
+            ("analysis metric row value helper", "function analysisMetricRowValue(row: (typeof analysisMetricRows)[number])"),
+            ("analysis metric row value helper fields", "return row.value;"),
+            ("analysis metric row value helper binding", "value={analysisMetricRowValue(row)}"),
+        ):
+            _assert_contains(label, content, marker)
         _assert_contains(
             "detailed report metric input helper binding",
             content,
@@ -9813,6 +9825,11 @@ def main() -> int:
             "detailed report direct boundary row value binding",
             content,
             "detailedReportBoundaryRows.map((row) => (\n                <View key={detailedReportBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{detailedReportBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "analysis direct metric row binding",
+            content,
+            "analysisMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />",
         )
         _assert_not_contains(
             "food community search direct handler bound input",

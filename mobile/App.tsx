@@ -2339,6 +2339,18 @@ export default function App() {
     selectAnalysisRange(analysisRangeTarget(item));
   }
 
+  function analysisMetricRowKey(row: (typeof analysisMetricRows)[number]) {
+    return row.label;
+  }
+
+  function analysisMetricRowLabel(row: (typeof analysisMetricRows)[number]) {
+    return row.label;
+  }
+
+  function analysisMetricRowValue(row: (typeof analysisMetricRows)[number]) {
+    return row.value;
+  }
+
   function detailedReportBoundaryRowKey(row: (typeof detailedReportBoundaryRows)[number]) {
     return row.label;
   }
@@ -9376,7 +9388,7 @@ export default function App() {
             </View>
             <View style={styles.metricGrid}>
               {analysisMetricRows.map((row) => (
-                <MetricCard key={row.label} label={row.label} value={row.value} />
+                <MetricCard key={analysisMetricRowKey(row)} label={analysisMetricRowLabel(row)} value={analysisMetricRowValue(row)} />
               ))}
             </View>
             <Text style={styles.evidence}>{analysisRangeSummaryDisplayText}</Text>
