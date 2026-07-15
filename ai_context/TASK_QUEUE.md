@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1623: Reuse ranking leaderboard entry score label helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `rankingLeaderboardEntryScoreLabel` helper for Ranking leaderboard entry score labels.
+- Reused the helper in Ranking screen rendering while keeping entry order, rank labels, display names, score-label text, empty states, opt-in actions, backend sync behavior, and Community screen behavior unchanged.
+- Updated navigation verifier coverage for the shared Ranking leaderboard entry score-label helper and direct score-label regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Ranking leaderboard empty-state and readiness checklist bindings in small behavior-preserving slices.
+
 ### T1622: Reuse ranking leaderboard entry display name helper
 
 Status: done

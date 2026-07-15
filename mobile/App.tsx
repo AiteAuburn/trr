@@ -4177,6 +4177,10 @@ export default function App() {
     return entry.displayName;
   }
 
+  function rankingLeaderboardEntryScoreLabel(entry: (typeof rankingLeaderboardSections)[number]["entries"][number]) {
+    return entry.scoreLabel;
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -10037,7 +10041,7 @@ export default function App() {
                       <Text style={styles.recordType}>{rankingLeaderboardEntryRankLabel(entry)}</Text>
                       <View style={styles.timelineContent}>
                         <Text style={styles.recordContent}>{rankingLeaderboardEntryDisplayName(entry)}</Text>
-                        <Text style={styles.evidence}>{entry.scoreLabel}</Text>
+                        <Text style={styles.evidence}>{rankingLeaderboardEntryScoreLabel(entry)}</Text>
                       </View>
                     </View>
                   ))
