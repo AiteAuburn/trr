@@ -3583,6 +3583,26 @@ export default function App() {
     return row.id === "quota" ? settingsQuotaHelperDisplayText : row.helper;
   }
 
+  function previewStatusRowKey(row: { title: string }) {
+    return row.title;
+  }
+
+  function previewStatusRowIcon(row: { icon: string }) {
+    return row.icon;
+  }
+
+  function previewStatusRowTitle(row: { title: string }) {
+    return row.title;
+  }
+
+  function previewStatusRowCopy(row: { copy: string }) {
+    return row.copy;
+  }
+
+  function previewStatusRowStatusLabel(row: { statusLabel: string }) {
+    return row.statusLabel;
+  }
+
   function clearLocalSessionFromSettings() {
     const display = localClearDisplayMessages();
     clearMobileSessionState();
@@ -9740,15 +9760,15 @@ export default function App() {
             </View>
             <View style={styles.aiReviewList}>
               {subscriptionManagementDisplayRows.map((row) => (
-                <View key={row.title} style={styles.aiReviewCard}>
+                <View key={previewStatusRowKey(row)} style={styles.aiReviewCard}>
                   <View style={styles.iconCircleSmall}>
-                    <Text>{row.icon}</Text>
+                    <Text>{previewStatusRowIcon(row)}</Text>
                   </View>
                   <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{row.title}</Text>
-                    <Text style={styles.evidence}>{row.copy}</Text>
+                    <Text style={styles.recordContent}>{previewStatusRowTitle(row)}</Text>
+                    <Text style={styles.evidence}>{previewStatusRowCopy(row)}</Text>
                   </View>
-                  <Text style={styles.previewModeBadge}>{row.statusLabel}</Text>
+                  <Text style={styles.previewModeBadge}>{previewStatusRowStatusLabel(row)}</Text>
                 </View>
               ))}
             </View>
@@ -11426,15 +11446,15 @@ export default function App() {
             </View>
             <View style={styles.aiReviewList}>
               {privacyControlDisplayRows.map((row) => (
-                <View key={row.title} style={styles.aiReviewCard}>
+                <View key={previewStatusRowKey(row)} style={styles.aiReviewCard}>
                   <View style={styles.iconCircleSmall}>
-                    <Text>{row.icon}</Text>
+                    <Text>{previewStatusRowIcon(row)}</Text>
                   </View>
                   <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{row.title}</Text>
-                    <Text style={styles.evidence}>{row.copy}</Text>
+                    <Text style={styles.recordContent}>{previewStatusRowTitle(row)}</Text>
+                    <Text style={styles.evidence}>{previewStatusRowCopy(row)}</Text>
                   </View>
-                  <Text style={styles.previewModeBadge}>{row.statusLabel}</Text>
+                  <Text style={styles.previewModeBadge}>{previewStatusRowStatusLabel(row)}</Text>
                 </View>
               ))}
             </View>

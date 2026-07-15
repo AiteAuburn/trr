@@ -7409,6 +7409,24 @@ def main() -> int:
             content,
             "{settingsDisplayRowHelperText(row)}",
         )
+        for label, marker in (
+            ("preview status row key helper", "function previewStatusRowKey(row: { title: string })"),
+            ("preview status row key helper fields", "return row.title;"),
+            ("preview status row icon helper", "function previewStatusRowIcon(row: { icon: string })"),
+            ("preview status row icon helper fields", "return row.icon;"),
+            ("preview status row title helper", "function previewStatusRowTitle(row: { title: string })"),
+            ("preview status row copy helper", "function previewStatusRowCopy(row: { copy: string })"),
+            ("preview status row copy helper fields", "return row.copy;"),
+            ("preview status row status helper", "function previewStatusRowStatusLabel(row: { statusLabel: string })"),
+            ("preview status row status helper fields", "return row.statusLabel;"),
+            ("subscription management preview status row key binding", "subscriptionManagementDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
+            ("privacy control preview status row key binding", "privacyControlDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
+            ("preview status row icon binding", "{previewStatusRowIcon(row)}"),
+            ("preview status row title binding", "{previewStatusRowTitle(row)}"),
+            ("preview status row copy binding", "{previewStatusRowCopy(row)}"),
+            ("preview status row status binding", "{previewStatusRowStatusLabel(row)}"),
+        ):
+            _assert_contains(label, content, marker)
         _assert_contains(
             "settings row binding",
             content,
@@ -7505,6 +7523,25 @@ def main() -> int:
             content,
             "<Text style={styles.evidence}>{row.helper}</Text>",
         )
+        for block_label, pattern in (
+            (
+                "subscription management preview status rows render block",
+                r"subscriptionManagementDisplayRows\.map\(\(row\) => \(([\s\S]*?</View>\n\s*)\)\)",
+            ),
+            (
+                "privacy control preview status rows render block",
+                r"privacyControlDisplayRows\.map\(\(row\) => \(([\s\S]*?</View>\n\s*)\)\)",
+            ),
+        ):
+            preview_status_rows_render_block = _match_block(content, pattern, block_label)
+            for label, marker in (
+                ("direct preview status row key binding", "key={row.title}"),
+                ("direct preview status row icon binding", "<Text>{row.icon}</Text>"),
+                ("direct preview status row title binding", "<Text style={styles.recordContent}>{row.title}</Text>"),
+                ("direct preview status row copy binding", "<Text style={styles.evidence}>{row.copy}</Text>"),
+                ("direct preview status row status binding", "<Text style={styles.previewModeBadge}>{row.statusLabel}</Text>"),
+            ):
+                _assert_not_contains(f"{block_label} {label}", preview_status_rows_render_block, marker)
         _assert_contains(
             "settings tutorial row uses handler",
             content,
