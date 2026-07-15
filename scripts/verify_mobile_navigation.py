@@ -1486,6 +1486,7 @@ def main() -> int:
             ("shared auxiliary food community share before glucose label", 'foodCommunityShareBeforeGlucoseAccessibility: boundDisplayText("輸入食用前血糖", maxDisplayTextLength),'),
             ("shared auxiliary food community share after glucose label", 'foodCommunityShareAfterGlucoseAccessibility: boundDisplayText("輸入食用後血糖", maxDisplayTextLength),'),
             ("shared auxiliary food community share note label", 'foodCommunityShareNoteAccessibility: boundDisplayText("輸入食物分享備註心得", maxDisplayTextLength),'),
+            ("shared auxiliary community public display name label", 'communityPublicDisplayNameAccessibility: boundDisplayText("輸入社群公開顯示名稱", maxDisplayTextLength),'),
         ):
             _assert_contains(label, shared_display_items_content, marker)
         for label, marker in (
@@ -7649,6 +7650,7 @@ def main() -> int:
             ("community public name preview label helper", "function communityPublicNamePreviewLabel()"),
             ("community public name preview label helper fields", 'return "公開顯示名稱預覽";'),
             ("community public name preview label helper binding", "{communityPublicNamePreviewLabel()}"),
+            ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
             ("food community share eaten time accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
@@ -9668,6 +9670,11 @@ def main() -> int:
             "community direct public name preview label binding",
             content,
             "<Text style={styles.evidence}>公開顯示名稱預覽</Text>",
+        )
+        _assert_not_contains(
+            "community direct public display name accessibility binding",
+            content,
+            'accessibilityLabel="輸入社群公開顯示名稱"',
         )
         _assert_not_contains(
             "food community item direct handler id binding",

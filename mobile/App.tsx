@@ -9853,7 +9853,7 @@ export default function App() {
                 <Text style={styles.heroNumber}>{accountPublicDisplayNameDisplayText}</Text>
                 <Text style={styles.evidence}>{communityPublicNameBoundaryDisplayText}</Text>
                 <TextInput
-                  accessibilityLabel="輸入社群公開顯示名稱"
+                  accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}
                   value={communityPublicDisplayNameDraft}
                   onChangeText={updateCommunityPublicDisplayNameDraft}
                   maxLength={maxDisplayTextLength}
