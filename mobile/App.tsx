@@ -3698,8 +3698,12 @@ export default function App() {
     openScreen(target);
   }
 
+  function menuDestinationTarget(item: ReturnType<typeof menuScreenDisplayItem>) {
+    return item.target;
+  }
+
   function pressMenuDestination(item: ReturnType<typeof menuScreenDisplayItem>) {
-    openMenuDestination(item.target);
+    openMenuDestination(menuDestinationTarget(item));
   }
 
   function syncSubscriptionQuota() {

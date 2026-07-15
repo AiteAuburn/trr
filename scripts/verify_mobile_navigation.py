@@ -4296,6 +4296,21 @@ def main() -> int:
             "function pressMenuDestination(item: ReturnType<typeof menuScreenDisplayItem>)",
         )
         _assert_contains(
+            "menu destination target helper",
+            content,
+            "function menuDestinationTarget(item: ReturnType<typeof menuScreenDisplayItem>)",
+        )
+        _assert_contains(
+            "menu destination target helper fields",
+            content,
+            "return item.target;",
+        )
+        _assert_contains(
+            "menu destination target helper binding",
+            content,
+            "openMenuDestination(menuDestinationTarget(item));",
+        )
+        _assert_contains(
             "menu return binding",
             content,
             "onPress={returnFromMenu}",
@@ -4309,6 +4324,11 @@ def main() -> int:
             "menu direct destination binding",
             content,
             "onPress={() => openMenuDestination(item.target)}",
+        )
+        _assert_not_contains(
+            "menu direct destination handler target binding",
+            content,
+            "openMenuDestination(item.target);",
         )
         _assert_contains(
             "more action accessibility",
