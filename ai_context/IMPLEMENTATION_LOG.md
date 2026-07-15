@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1617 reuse ranking boundary row value helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `rankingBoundaryRowValue` helper for Ranking boundary-grid row values.
+- Reused the helper in Ranking screen rendering while keeping row labels, row values, local streak display, leaderboard sections, opt-in actions, backend sync behavior, and Community screen behavior unchanged.
+- Updated navigation verifier coverage for the shared Ranking boundary-row value helper and direct value-binding regression guard.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting Ranking leaderboard section and entry bindings in small behavior-preserving slices.
+
 ### T1616 reuse ranking boundary row label helper
 
 類型：mobile / refactor / verifier / docs
