@@ -7531,6 +7531,12 @@ def main() -> int:
             ("food community detail selected item helper", "function foodCommunityDetailSelectedItemId(item: { id: string })"),
             ("food community detail selected item helper fields", "return item.id;"),
             ("food community detail selected item helper binding", "setSelectedFoodCommunityItemId(foodCommunityDetailSelectedItemId(detailedItem));"),
+            ("food community detail status title helper", "function foodCommunityDetailStatusTitle(item: { title: string })"),
+            ("food community detail status title helper fields", "return item.title;"),
+            ("food community detail status example count helper", "function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] })"),
+            ("food community detail status example count helper fields", "return item.examples.length;"),
+            ("food community detail status title helper binding", "itemTitle: foodCommunityDetailStatusTitle(detailedItem),"),
+            ("food community detail status example count helper binding", "exampleCount: foodCommunityDetailStatusExampleCount(detailedItem)"),
             ("food community detail status helper binding", "const detailStatus = foodCommunityDetailStatusMessages({"),
             ("food community detail in-flight guard", "foodCommunityDetailInFlightKeys.current.has(detailKey)"),
             ("food community detail in-flight status binding", "setCommunityActionStatus(detailStatus.inFlight);"),
@@ -9192,6 +9198,16 @@ def main() -> int:
             "food community direct detail selected item binding",
             content,
             "setSelectedFoodCommunityItemId(detailedItem.id);",
+        )
+        _assert_not_contains(
+            "food community direct detail status title binding",
+            content,
+            "itemTitle: detailedItem.title,",
+        )
+        _assert_not_contains(
+            "food community direct detail status example count binding",
+            content,
+            "exampleCount: detailedItem.examples.length",
         )
         _assert_not_contains(
             "food community direct share selected item binding",

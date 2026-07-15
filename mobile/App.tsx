@@ -3987,6 +3987,14 @@ export default function App() {
     return item.id;
   }
 
+  function foodCommunityDetailStatusTitle(item: { title: string }) {
+    return item.title;
+  }
+
+  function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
+    return item.examples.length;
+  }
+
   function foodCommunityShareSelectedItemId(item: { id: string }) {
     return item.id;
   }
@@ -4685,8 +4693,8 @@ export default function App() {
       setSelectedFoodCommunityItemId(foodCommunityDetailSelectedItemId(detailedItem));
       setCommunityActionStatus(
         foodCommunityDetailStatusMessages({
-          itemTitle: detailedItem.title,
-          exampleCount: detailedItem.examples.length
+          itemTitle: foodCommunityDetailStatusTitle(detailedItem),
+          exampleCount: foodCommunityDetailStatusExampleCount(detailedItem)
         }).success
       );
     } catch {

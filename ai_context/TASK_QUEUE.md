@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1555: Reuse food community detail status helpers
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `foodCommunityDetailStatusTitle` and `foodCommunityDetailStatusExampleCount` helpers for Food Community detail success status payloads.
+- Reused the helpers after detail sync while keeping detail success status title/count behavior unchanged.
+- Updated navigation verifier coverage for the shared Food Community detail status helpers and direct `detailedItem.title` / `detailedItem.examples.length` regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1554: Reuse food community share selected helper
 
 Status: done
