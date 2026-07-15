@@ -3276,6 +3276,18 @@ export default function App() {
     return item.removeAccessibilityLabel;
   }
 
+  function rejectedPreviewEventKey(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number]) {
+    return event.id;
+  }
+
+  function rejectedPreviewEventSourceText(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number]) {
+    return event.sourceText;
+  }
+
+  function rejectedPreviewEventReasonText(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number]) {
+    return event.reasonDisplayText;
+  }
+
   function pressAiCandidateEditAction(item: ReturnType<typeof pendingRecordDisplayItem>) {
     editAiCandidateRecord(aiCandidateActionTarget(item));
   }
@@ -8275,9 +8287,9 @@ export default function App() {
                     <Text style={styles.label}>{coreFlowDisplayLabels.noRecordCreated}</Text>
                     <Text style={styles.evidence}>{aiReviewRejectedEventsDisplayText}</Text>
                     {rejectedPreviewDisplayItems.map((event) => (
-                      <View key={event.id} style={styles.rejectedEventCard}>
-                        <Text style={styles.rejectedText}>{event.sourceText}</Text>
-                        <Text style={styles.evidence}>{event.reasonDisplayText}</Text>
+                      <View key={rejectedPreviewEventKey(event)} style={styles.rejectedEventCard}>
+                        <Text style={styles.rejectedText}>{rejectedPreviewEventSourceText(event)}</Text>
+                        <Text style={styles.evidence}>{rejectedPreviewEventReasonText(event)}</Text>
                       </View>
                     ))}
                   </View>

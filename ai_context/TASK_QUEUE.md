@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1724: Reuse rejected preview event fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared AI Review rejected-event helpers for render key, source text, and reason text.
+- Reused the helpers in rejected preview event cards while preserving rejected-event ordering, copy, warning stack styling, and AI Review behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the rejected preview render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining first-version daily-record render blocks in small behavior-preserving slices.
+
 ### T1723: Reuse home example carousel fields
 
 Status: done

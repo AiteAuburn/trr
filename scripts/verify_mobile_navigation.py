@@ -3575,6 +3575,18 @@ def main() -> int:
             ("AI rejected preview reason copy", "reasonDisplayText: aiReviewRejectedReasonCopy(reasonLabel)"),
         ):
             _assert_contains(label, record_display_content, marker)
+        for label, marker in (
+            ("AI rejected preview key helper", "function rejectedPreviewEventKey(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number])"),
+            ("AI rejected preview key helper fields", "return event.id;"),
+            ("AI rejected preview key helper binding", "key={rejectedPreviewEventKey(event)}"),
+            ("AI rejected preview source helper", "function rejectedPreviewEventSourceText(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number])"),
+            ("AI rejected preview source helper fields", "return event.sourceText;"),
+            ("AI rejected preview source helper binding", "{rejectedPreviewEventSourceText(event)}"),
+            ("AI rejected preview reason helper", "function rejectedPreviewEventReasonText(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number])"),
+            ("AI rejected preview reason helper fields", "return event.reasonDisplayText;"),
+            ("AI rejected preview reason helper binding", "{rejectedPreviewEventReasonText(event)}"),
+        ):
+            _assert_contains(label, content, marker)
         _assert_contains(
             "AI rejected preview list helper binding",
             content,
@@ -3590,6 +3602,17 @@ def main() -> int:
             content,
             'const previewRecordDisplayItems = preview ? pendingRecordDisplayItems(preview.records, "review") : [];',
         )
+        rejected_preview_render_block = _match_block(
+            content,
+            r"rejectedPreviewDisplayItems\.map\(\(event\) => \(([\s\S]*?rejectedPreviewEventReasonText\(event\)[\s\S]*?</View>)",
+            "AI rejected preview render block",
+        )
+        for label, marker in (
+            ("direct AI rejected preview key binding", "key={event.id}"),
+            ("direct AI rejected preview source binding", "{event.sourceText}"),
+            ("direct AI rejected preview reason binding", "{event.reasonDisplayText}"),
+        ):
+            _assert_not_contains(label, rejected_preview_render_block, marker)
         _assert_contains(
             "AI save-confirm candidate list helper binding",
             content,

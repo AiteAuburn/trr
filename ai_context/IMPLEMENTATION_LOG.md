@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1724 reuse rejected preview event fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared AI Review rejected-event helpers for render key, source text, and reason text.
+- Reused the helpers in rejected preview event cards while preserving rejected-event ordering, copy, warning stack styling, and AI Review behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the rejected preview render block.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining first-version daily-record render blocks in small behavior-preserving slices.
+
 ### T1723 reuse home example carousel fields
 
 類型：mobile / refactor / verifier / docs
