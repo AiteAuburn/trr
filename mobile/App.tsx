@@ -3616,20 +3616,24 @@ export default function App() {
     selectNativeDownloadKind("llama");
   }
 
+  function nativeDebugInputValue(value: string) {
+    return boundNativeDebugInput(value);
+  }
+
   function updateNativeModelUrlInput(value: string) {
-    setModelUrl(boundNativeDebugInput(value));
+    setModelUrl(nativeDebugInputValue(value));
   }
 
   function updateWhisperModelPathInput(value: string) {
-    setWhisperModelPath(boundNativeDebugInput(value));
+    setWhisperModelPath(nativeDebugInputValue(value));
   }
 
   function updateNativeAudioPathInput(value: string) {
-    setAudioPath(boundNativeDebugInput(value));
+    setAudioPath(nativeDebugInputValue(value));
   }
 
   function updateLlamaModelPathInput(value: string) {
-    setLlamaModelPath(boundNativeDebugInput(value));
+    setLlamaModelPath(nativeDebugInputValue(value));
   }
 
   function checkNativeModulesFromSettings() {
