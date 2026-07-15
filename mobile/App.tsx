@@ -3308,6 +3308,18 @@ export default function App() {
     openScreenWithStatus("aiSaveConfirm", aiSaveConfirmReadyStatusMessage());
   }
 
+  function aiSaveConfirmBoundaryRowKey(row: (typeof aiSaveConfirmBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function aiSaveConfirmBoundaryRowLabel(row: (typeof aiSaveConfirmBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function aiSaveConfirmBoundaryRowValue(row: (typeof aiSaveConfirmBoundaryRows)[number]) {
+    return row.value;
+  }
+
   function openTodayTranscriptText() {
     setStatus(todayTranscriptExpandedStatusMessage());
   }
@@ -7836,9 +7848,9 @@ export default function App() {
             </View>
             <View style={styles.reportBoundaryGrid}>
               {aiSaveConfirmBoundaryRows.map((row) => (
-                <View key={row.label} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.recordType}>{row.value}</Text>
+                <View key={aiSaveConfirmBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
+                  <Text style={styles.confidence}>{aiSaveConfirmBoundaryRowLabel(row)}</Text>
+                  <Text style={styles.recordType}>{aiSaveConfirmBoundaryRowValue(row)}</Text>
                 </View>
               ))}
             </View>

@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1675: Reuse AI save confirm boundary row fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `aiSaveConfirmBoundaryRowKey`, `aiSaveConfirmBoundaryRowLabel`, and `aiSaveConfirmBoundaryRowValue` helpers for AI Save Confirm boundary cards.
+- Reused the helpers in AI Save Confirm boundary card rendering while keeping preview review counts, warnings, backend-blocked messaging, checklist copy, and save-confirm flow unchanged.
+- Updated navigation verifier coverage for the shared AI Save Confirm boundary row helpers and direct row field regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting remaining analysis/report, membership, yearly review, and detail-row render bindings in small behavior-preserving slices.
+
 ### T1674: Reuse store redemption boundary row fields
 
 Status: done

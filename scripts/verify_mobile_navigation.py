@@ -7488,6 +7488,15 @@ def main() -> int:
             ("recording quota boundary row value helper", "function recordingQuotaBoundaryRowValue(row: (typeof recordingQuotaBoundaryRows)[number])"),
             ("recording quota boundary row value helper fields", "return row.value;"),
             ("recording quota boundary row value helper binding", "{recordingQuotaBoundaryRowValue(row)}"),
+            ("AI save confirm boundary row key helper", "function aiSaveConfirmBoundaryRowKey(row: (typeof aiSaveConfirmBoundaryRows)[number])"),
+            ("AI save confirm boundary row key helper fields", "return row.label;"),
+            ("AI save confirm boundary row key helper binding", "key={aiSaveConfirmBoundaryRowKey(row)}"),
+            ("AI save confirm boundary row label helper", "function aiSaveConfirmBoundaryRowLabel(row: (typeof aiSaveConfirmBoundaryRows)[number])"),
+            ("AI save confirm boundary row label helper fields", "return row.label;"),
+            ("AI save confirm boundary row label helper binding", "{aiSaveConfirmBoundaryRowLabel(row)}"),
+            ("AI save confirm boundary row value helper", "function aiSaveConfirmBoundaryRowValue(row: (typeof aiSaveConfirmBoundaryRows)[number])"),
+            ("AI save confirm boundary row value helper fields", "return row.value;"),
+            ("AI save confirm boundary row value helper binding", "{aiSaveConfirmBoundaryRowValue(row)}"),
             ("privacy boundary row key helper", "function privacyBoundaryRowKey(row: (typeof privacyBoundaryRows)[number])"),
             ("privacy boundary row key helper fields", "return row.label;"),
             ("privacy boundary row key helper binding", "key={privacyBoundaryRowKey(row)}"),
@@ -9762,6 +9771,21 @@ def main() -> int:
             "privacy direct boundary row value binding",
             content,
             "privacyBoundaryRows.map((row) => (\n                <View key={privacyBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{privacyBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "AI save confirm direct boundary row key binding",
+            content,
+            "aiSaveConfirmBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
+        )
+        _assert_not_contains(
+            "AI save confirm direct boundary row label binding",
+            content,
+            "aiSaveConfirmBoundaryRows.map((row) => (\n                <View key={aiSaveConfirmBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "AI save confirm direct boundary row value binding",
+            content,
+            "aiSaveConfirmBoundaryRows.map((row) => (\n                <View key={aiSaveConfirmBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{aiSaveConfirmBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
             "food community search direct handler bound input",
