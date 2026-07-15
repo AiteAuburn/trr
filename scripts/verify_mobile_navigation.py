@@ -7583,7 +7583,9 @@ def main() -> int:
             ("food community detail minimum rise helper binding", "{foodCommunityDetailMinimumRise(selectedFoodCommunityItem)} mg/dL"),
             ("food community detail individual shares helper", "function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> })"),
             ("food community detail individual shares helper fields", "return item.individualShareDisplayItems;"),
-            ("food community detail individual shares length helper binding", "foodCommunityDetailIndividualShares(selectedFoodCommunityItem).length > 0"),
+            ("food community detail has individual shares helper", "function foodCommunityDetailHasIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> })"),
+            ("food community detail has individual shares helper fields", "return foodCommunityDetailIndividualShares(item).length > 0;"),
+            ("food community detail has individual shares helper binding", "foodCommunityDetailHasIndividualShares(selectedFoodCommunityItem) ? ("),
             ("food community detail individual shares map helper binding", "foodCommunityDetailIndividualShares(selectedFoodCommunityItem).map((share) =>"),
             ("food community detail share row id helper", "function foodCommunityDetailShareRowId(share: { id: string })"),
             ("food community detail share row id helper fields", "return share.id;"),
@@ -9505,6 +9507,11 @@ def main() -> int:
             "food community direct detail individual shares binding",
             content,
             "selectedFoodCommunityItem.individualShareDisplayItems",
+        )
+        _assert_not_contains(
+            "food community direct detail individual shares length binding",
+            content,
+            "foodCommunityDetailIndividualShares(selectedFoodCommunityItem).length > 0",
         )
         _assert_not_contains(
             "food community direct detail share row id binding",

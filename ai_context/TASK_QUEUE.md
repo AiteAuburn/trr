@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1587: Reuse food community detail individual shares presence helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `foodCommunityDetailHasIndividualShares` helper for Food Community detail individual-share presence checks.
+- Reused the helper in individual-share section rendering while keeping share row mapping, row content, empty copy, selected item behavior, and detail panel layout unchanged.
+- Updated navigation verifier coverage for the shared Food Community detail individual-shares presence helper and direct `.length > 0` regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Food Community detail fields in small behavior-preserving slices.
+
 ### T1586: Reuse food community list empty helper
 
 Status: done

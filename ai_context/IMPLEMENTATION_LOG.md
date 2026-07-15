@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1587 reuse food community detail individual shares presence helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `foodCommunityDetailHasIndividualShares` helper for Food Community detail individual-share presence checks.
+- Reused the helper in individual-share section rendering while keeping share row mapping, row content, empty copy, selected item behavior, and detail panel layout unchanged.
+- Updated navigation verifier coverage for the shared Food Community detail individual-shares presence helper and direct `.length > 0` regression guard.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting Food Community detail fields in small behavior-preserving slices.
+
 ### T1586 reuse food community list empty helper
 
 類型：mobile / refactor / verifier / docs
