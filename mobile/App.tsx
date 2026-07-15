@@ -4157,6 +4157,10 @@ export default function App() {
     return row.value;
   }
 
+  function rankingLeaderboardSectionKey(section: (typeof rankingLeaderboardSections)[number]) {
+    return section.type;
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -10009,7 +10013,7 @@ export default function App() {
               ))}
             </View>
             {rankingLeaderboardSections.map((section) => (
-              <View key={section.type} style={styles.inlineInfoBlock}>
+              <View key={rankingLeaderboardSectionKey(section)} style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{section.label}</Text>
                 {section.entries.length > 0 ? (
                   section.entries.map((entry) => (

@@ -7682,6 +7682,9 @@ def main() -> int:
             ("ranking boundary row value helper", "function rankingBoundaryRowValue(row: ReturnType<typeof rankingBoundaryDisplayRows>[number])"),
             ("ranking boundary row value helper fields", "return row.value;"),
             ("ranking boundary row value helper binding", "{rankingBoundaryRowValue(row)}"),
+            ("ranking leaderboard section key helper", "function rankingLeaderboardSectionKey(section: (typeof rankingLeaderboardSections)[number])"),
+            ("ranking leaderboard section key helper fields", "return section.type;"),
+            ("ranking leaderboard section key helper binding", "key={rankingLeaderboardSectionKey(section)}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9763,6 +9766,11 @@ def main() -> int:
             "ranking direct boundary row value binding",
             content,
             "rankingBoundaryRows.map((row) => (\n                <View key={rankingBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{rankingBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "ranking direct leaderboard section key binding",
+            content,
+            "rankingLeaderboardSections.map((section) => (\n              <View key={section.type} style={styles.inlineInfoBlock}>",
         )
         _assert_not_contains(
             "food community item direct handler id binding",

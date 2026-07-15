@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1618: Reuse ranking leaderboard section key helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `rankingLeaderboardSectionKey` helper for Ranking leaderboard section keys.
+- Reused the helper in Ranking screen rendering while keeping section order, section labels, entry rendering, empty states, opt-in actions, backend sync behavior, and Community screen behavior unchanged.
+- Updated navigation verifier coverage for the shared Ranking leaderboard section key helper and direct section-key regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Ranking leaderboard section labels and entry bindings in small behavior-preserving slices.
+
 ### T1617: Reuse ranking boundary row value helper
 
 Status: done
