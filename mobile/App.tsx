@@ -4243,6 +4243,14 @@ export default function App() {
     return futurePreviewDisplayLabels.formalReadiness;
   }
 
+  function communityReadinessChecklistItemKey(item: string) {
+    return item;
+  }
+
+  function communityReadinessChecklistItemText(item: string) {
+    return item;
+  }
+
   function communityReturnFutureModulesAccessibilityLabel() {
     return futurePreviewDisplayLabels.returnFutureModulesAccessibility;
   }
@@ -10185,7 +10193,10 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{communityReadinessSectionDisplayLabel}</Text>
               {communityReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow
+                  key={communityReadinessChecklistItemKey(item)}
+                  text={communityReadinessChecklistItemText(item)}
+                />
               ))}
             </View>
             <View style={styles.actionRow}>
