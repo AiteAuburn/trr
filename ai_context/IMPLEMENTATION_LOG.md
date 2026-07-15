@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1714 reuse daily record detail row list fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared daily record entry detail rows helper for the AI save confirmation daily-record card list.
+- Reused the helper before rendering daily detail rows while preserving row key, label, value, entry menu, edit, and delete behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the daily record detail row list entry point.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining helper internals and larger extraction opportunities in small behavior-preserving slices.
+
 ### T1713 reuse preview status row accessibility labels
 
 類型：mobile / refactor / verifier / docs

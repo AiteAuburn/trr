@@ -3496,6 +3496,10 @@ export default function App() {
     return item.removeAccessibilityLabel;
   }
 
+  function dailyRecordEntryDetailRows(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    return item.detailRows;
+  }
+
   function dailyRecordDetailRowKey(
     item: ReturnType<typeof dailyRecordEntryDisplayItem>,
     row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number]
@@ -8237,7 +8241,7 @@ export default function App() {
                           </Pressable>
                         </View>
                         <View style={styles.detailRows}>
-                          {item.detailRows.map((row) => (
+                          {dailyRecordEntryDetailRows(item).map((row) => (
                             <DailyRecordDetailRow key={dailyRecordDetailRowKey(item, row)} label={dailyRecordDetailRowLabel(row)} value={dailyRecordDetailRowValue(row)} />
                           ))}
                         </View>

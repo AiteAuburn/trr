@@ -5710,7 +5710,7 @@ def main() -> int:
             ("daily record transcript handler", "function openTodayTranscriptText()"),
             ("daily record transcript expanded status binding", "setStatus(todayTranscriptExpandedStatusMessage());"),
             ("daily record section renderer", "dailyRecordSectionItems.map"),
-            ("daily record detail row component binding", "item.detailRows.map((row) => (\n                            <DailyRecordDetailRow key={dailyRecordDetailRowKey(item, row)} label={dailyRecordDetailRowLabel(row)} value={dailyRecordDetailRowValue(row)} />"),
+            ("daily record detail row component binding", "dailyRecordEntryDetailRows(item).map((row) => (\n                            <DailyRecordDetailRow key={dailyRecordDetailRowKey(item, row)} label={dailyRecordDetailRowLabel(row)} value={dailyRecordDetailRowValue(row)} />"),
             ("daily record entry management handler", "function pressDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry target helper", "function dailyRecordEntryTarget(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry target helper fields", "return item.index;"),
@@ -5737,6 +5737,9 @@ def main() -> int:
             ("daily record entry remove accessibility helper", "function dailyRecordEntryRemoveAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry remove accessibility helper fields", "return item.removeAccessibilityLabel;"),
             ("daily record entry remove accessibility binding", "accessibilityLabel={dailyRecordEntryRemoveAccessibilityLabel(item)}"),
+            ("daily record entry detail rows helper", "function dailyRecordEntryDetailRows(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry detail rows helper fields", "return item.detailRows;"),
+            ("daily record entry detail rows helper binding", "dailyRecordEntryDetailRows(item).map((row) => ("),
             ("daily record detail row key helper", "function dailyRecordDetailRowKey("),
             ("daily record detail row key helper item type", "item: ReturnType<typeof dailyRecordEntryDisplayItem>,"),
             ("daily record detail row key helper row type", 'row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number]'),
@@ -10764,6 +10767,11 @@ def main() -> int:
             "year review direct highlight item text binding",
             content,
             "yearlyHighlightDisplayTexts.map((item) => (\n                <View key={yearlyHighlightItemKey(item)} style={styles.highlightRow}>\n                  <Text style={styles.recordType}>•</Text>\n                  <Text style={styles.evidence}>{item}</Text>",
+        )
+        _assert_not_contains(
+            "daily record direct detail rows map binding",
+            content,
+            "item.detailRows.map((row) => (",
         )
         _assert_not_contains(
             "daily record direct detail row binding",
