@@ -7572,6 +7572,10 @@ def main() -> int:
             ("community return future modules button helper fields", "return futurePreviewDisplayLabels.returnFutureModules;"),
             ("community return future modules button display label binding", "const communityReturnFutureModulesButtonDisplayLabel = communityReturnFutureModulesButtonLabel();"),
             ("community return future modules button helper binding", "{communityReturnFutureModulesButtonDisplayLabel}"),
+            ("community return future modules press helper", "function communityReturnFutureModulesPressHandler()"),
+            ("community return future modules press helper fields", "return returnFromCommunityPreview;"),
+            ("community return future modules press target binding", "const communityReturnFutureModulesPressTarget = communityReturnFutureModulesPressHandler();"),
+            ("community return future modules press helper binding", "onPress={communityReturnFutureModulesPressTarget}"),
             ("community posting status handler", "function showCommunityPostingStatus()"),
             ("community privacy status handler", "function showCommunityPrivacyStatus()"),
             ("food community backend-aware intro copy", "backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。"),
@@ -10026,6 +10030,11 @@ def main() -> int:
             "community direct return future modules button binding",
             content,
             "<Pressable\n              accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}\n              accessibilityRole=\"button\"\n              style={styles.secondaryButton}\n              onPress={returnFromCommunityPreview}\n            >\n              <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.returnFutureModules}</Text>",
+        )
+        _assert_not_contains(
+            "community direct return future modules press binding",
+            content,
+            "<Pressable\n              accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}\n              accessibilityRole=\"button\"\n              style={styles.secondaryButton}\n              onPress={returnFromCommunityPreview}\n            >\n              <Text style={styles.secondaryButtonText}>{communityReturnFutureModulesButtonDisplayLabel}</Text>",
         )
         _assert_not_contains(
             "ranking direct close accessibility binding",

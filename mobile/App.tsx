@@ -1682,6 +1682,7 @@ export default function App() {
   const communityActionStatusDisplayCopy = communityActionStatusText();
   const communityReturnFutureModulesAccessibilityDisplayLabel = communityReturnFutureModulesAccessibilityLabel();
   const communityReturnFutureModulesButtonDisplayLabel = communityReturnFutureModulesButtonLabel();
+  const communityReturnFutureModulesPressTarget = communityReturnFutureModulesPressHandler();
   const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();
   const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();
   const storePreviewDisplay = storePreviewDisplayTexts(storeActionStatus);
@@ -4187,6 +4188,10 @@ export default function App() {
 
   function communityReturnFutureModulesButtonLabel() {
     return futurePreviewDisplayLabels.returnFutureModules;
+  }
+
+  function communityReturnFutureModulesPressHandler() {
+    return returnFromCommunityPreview;
   }
 
   function rankingScreenTitleLabel() {
@@ -10152,7 +10157,7 @@ export default function App() {
               accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}
               accessibilityRole="button"
               style={styles.secondaryButton}
-              onPress={returnFromCommunityPreview}
+              onPress={communityReturnFutureModulesPressTarget}
             >
               <Text style={styles.secondaryButtonText}>{communityReturnFutureModulesButtonDisplayLabel}</Text>
             </Pressable>
