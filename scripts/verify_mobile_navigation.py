@@ -7723,6 +7723,9 @@ def main() -> int:
             ("ranking preview boundary badge helper", "function rankingPreviewBoundaryBadgeLabel()"),
             ("ranking preview boundary badge helper fields", "return rankingPreviewBoundaryDisplay.badge;"),
             ("ranking preview boundary badge helper binding", "{rankingPreviewBoundaryBadgeLabel()}"),
+            ("ranking preview boundary copy helper", "function rankingPreviewBoundaryCopyText()"),
+            ("ranking preview boundary copy helper fields", "return rankingPreviewBoundaryDisplay.copy;"),
+            ("ranking preview boundary copy helper binding", "{rankingPreviewBoundaryCopyText()}"),
             ("ranking public action accessibility helper", "function rankingPublicActionAccessibilityLabel()"),
             ("ranking public action accessibility helper fields", "return futurePreviewDisplayLabels.rankingPublicAccessibility;"),
             ("ranking public action accessibility display label binding", "const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel();"),
@@ -9898,6 +9901,11 @@ def main() -> int:
             "ranking direct preview boundary badge binding",
             content,
             "<Pressable accessibilityLabel={rankingCloseAccessibilityDisplayLabel} accessibilityRole=\"button\" style={styles.closeButton} onPress={returnFromRankingPreview}>\n                <Text style={styles.closeButtonText}>{rankingCloseButtonDisplayLabel}</Text>\n              </Pressable>\n            </View>\n            <View style={styles.inlineInfoBlock}>\n              <Text style={styles.previewModeBadge}>{rankingPreviewBoundaryDisplay.badge}</Text>",
+        )
+        _assert_not_contains(
+            "ranking direct preview boundary copy binding",
+            content,
+            "<View style={styles.inlineInfoBlock}>\n              <Text style={styles.previewModeBadge}>{rankingPreviewBoundaryBadgeLabel()}</Text>\n              <Text style={styles.evidence}>{rankingPreviewBoundaryDisplay.copy}</Text>",
         )
         _assert_not_contains(
             "ranking direct action status label binding",
