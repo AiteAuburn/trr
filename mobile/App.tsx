@@ -3275,9 +3275,18 @@ export default function App() {
     setStatus(todayTranscriptExpandedStatusMessage());
   }
 
+  function dailyRecordEntryTarget(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    return item.index;
+  }
+
+  function dailyRecordEntryTypeLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    return item.typeLabel;
+  }
+
   function openDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    setDailyRecordMenuIndex((current) => (current === item.index ? null : item.index));
-    setStatus(dailyRecordEntryMenuOpenStatusMessage(item.typeLabel));
+    const target = dailyRecordEntryTarget(item);
+    setDailyRecordMenuIndex((current) => (current === target ? null : target));
+    setStatus(dailyRecordEntryMenuOpenStatusMessage(dailyRecordEntryTypeLabel(item)));
   }
 
   function pressDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
@@ -3285,7 +3294,7 @@ export default function App() {
   }
 
   function editDailyRecordEntry(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    openPreviewRecordEdit(item.index, "aiSaveConfirm");
+    openPreviewRecordEdit(dailyRecordEntryTarget(item), "aiSaveConfirm");
   }
 
   function pressDailyRecordEntryEdit(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
@@ -3293,7 +3302,7 @@ export default function App() {
   }
 
   function deleteDailyRecordEntry(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    openPreviewRecordRemoveConfirm(item.index, "aiSaveConfirm");
+    openPreviewRecordRemoveConfirm(dailyRecordEntryTarget(item), "aiSaveConfirm");
   }
 
   function pressDailyRecordEntryDelete(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {

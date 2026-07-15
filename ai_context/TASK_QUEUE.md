@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1539: Reuse daily-record entry target helpers
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `dailyRecordEntryTarget` and `dailyRecordEntryTypeLabel` helpers for daily-record entry menu/edit/delete handling.
+- Reused the helpers in daily-record entry menu, edit, and delete handlers while keeping AI save-confirm return flow unchanged.
+- Updated navigation verifier coverage for the shared daily-record entry helpers and direct `item.index` / `item.typeLabel` regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1538: Reuse visual-smoke route target helper
 
 Status: done
