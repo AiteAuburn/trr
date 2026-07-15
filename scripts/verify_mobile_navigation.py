@@ -7601,10 +7601,18 @@ def main() -> int:
             ("food community points store bridge current copy", "點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利"),
             ("food community point rows helper binding", "const foodCommunityPointRows = foodCommunityDisplay.pointRows;"),
             ("food community syncs store points on open", 'if (currentScreen === "community") {\n      void loadCommunityPublicSettings();\n      void loadFoodCommunityCategories();\n      void loadCommunityFoods();\n      void loadStoreCatalogAndPoints();'),
-            ("food community share count detail label", "分享總人數"),
-            ("food community average rise detail label", "實際升糖參考值（平均）"),
-            ("food community maximum rise detail label", "最高上升血糖"),
-            ("food community minimum rise detail label", "最低上升血糖"),
+            ("food community share count detail label helper", "function foodCommunityDetailShareCountLabel()"),
+            ("food community share count detail label helper fields", 'return "分享總人數";'),
+            ("food community share count detail label helper binding", "{foodCommunityDetailShareCountLabel()}"),
+            ("food community average rise detail label helper", "function foodCommunityDetailAverageRiseLabel()"),
+            ("food community average rise detail label helper fields", 'return "實際升糖參考值（平均）";'),
+            ("food community average rise detail label helper binding", "{foodCommunityDetailAverageRiseLabel()}"),
+            ("food community maximum rise detail label helper", "function foodCommunityDetailMaximumRiseLabel()"),
+            ("food community maximum rise detail label helper fields", 'return "最高上升血糖";'),
+            ("food community maximum rise detail label helper binding", "{foodCommunityDetailMaximumRiseLabel()}"),
+            ("food community minimum rise detail label helper", "function foodCommunityDetailMinimumRiseLabel()"),
+            ("food community minimum rise detail label helper fields", 'return "最低上升血糖";'),
+            ("food community minimum rise detail label helper binding", "{foodCommunityDetailMinimumRiseLabel()}"),
             ("food community average rise unit", "{foodCommunityDetailAverageRiseDisplayText(selectedFoodCommunityItem)}"),
             ("food community maximum rise unit", "{foodCommunityDetailMaximumRiseDisplayText(selectedFoodCommunityItem)}"),
             ("food community minimum rise unit", "{foodCommunityDetailMinimumRiseDisplayText(selectedFoodCommunityItem)}"),
@@ -10081,6 +10089,26 @@ def main() -> int:
             "food community direct list empty copy binding",
             content,
             "<Text style={styles.evidence}>可清除搜尋文字或切換分類；backend ready 時會依搜尋同步，未連線時只篩選本機預覽。</Text>",
+        )
+        _assert_not_contains(
+            "food community direct share count detail label binding",
+            content,
+            "<Text style={styles.confidence}>分享總人數</Text>",
+        )
+        _assert_not_contains(
+            "food community direct average rise detail label binding",
+            content,
+            "<Text style={styles.confidence}>實際升糖參考值（平均）</Text>",
+        )
+        _assert_not_contains(
+            "food community direct maximum rise detail label binding",
+            content,
+            "<Text style={styles.confidence}>最高上升血糖</Text>",
+        )
+        _assert_not_contains(
+            "food community direct minimum rise detail label binding",
+            content,
+            "<Text style={styles.confidence}>最低上升血糖</Text>",
         )
         _assert_not_contains(
             "ranking direct close accessibility binding",

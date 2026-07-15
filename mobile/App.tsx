@@ -4050,12 +4050,20 @@ export default function App() {
     return String(foodCommunityDetailShareCount(item));
   }
 
+  function foodCommunityDetailShareCountLabel() {
+    return "分享總人數";
+  }
+
   function foodCommunityDetailAverageRise(item: { averageRise: number }) {
     return item.averageRise;
   }
 
   function foodCommunityDetailAverageRiseDisplayText(item: { averageRise: number }) {
     return `${foodCommunityDetailAverageRise(item)} mg/dL`;
+  }
+
+  function foodCommunityDetailAverageRiseLabel() {
+    return "實際升糖參考值（平均）";
   }
 
   function foodCommunityDetailMaximumRise(item: { maximumRise: number }) {
@@ -4066,12 +4074,20 @@ export default function App() {
     return `${foodCommunityDetailMaximumRise(item)} mg/dL`;
   }
 
+  function foodCommunityDetailMaximumRiseLabel() {
+    return "最高上升血糖";
+  }
+
   function foodCommunityDetailMinimumRise(item: { minimumRise: number }) {
     return item.minimumRise;
   }
 
   function foodCommunityDetailMinimumRiseDisplayText(item: { minimumRise: number }) {
     return `${foodCommunityDetailMinimumRise(item)} mg/dL`;
+  }
+
+  function foodCommunityDetailMinimumRiseLabel() {
+    return "最低上升血糖";
   }
 
   function foodCommunityDetailIndividualShareSectionLabel() {
@@ -9973,19 +9989,19 @@ export default function App() {
                 <Text style={styles.label}>{foodCommunityDetailTitleDisplayText(selectedFoodCommunityItem)}</Text>
                 <View style={styles.reportBoundaryGrid}>
                   <View style={styles.reportBoundaryCard}>
-                    <Text style={styles.confidence}>分享總人數</Text>
+                    <Text style={styles.confidence}>{foodCommunityDetailShareCountLabel()}</Text>
                     <Text style={styles.recordType}>{foodCommunityDetailShareCountDisplayText(selectedFoodCommunityItem)}</Text>
                   </View>
                   <View style={styles.reportBoundaryCard}>
-                    <Text style={styles.confidence}>實際升糖參考值（平均）</Text>
+                    <Text style={styles.confidence}>{foodCommunityDetailAverageRiseLabel()}</Text>
                     <Text style={styles.recordType}>{foodCommunityDetailAverageRiseDisplayText(selectedFoodCommunityItem)}</Text>
                   </View>
                   <View style={styles.reportBoundaryCard}>
-                    <Text style={styles.confidence}>最高上升血糖</Text>
+                    <Text style={styles.confidence}>{foodCommunityDetailMaximumRiseLabel()}</Text>
                     <Text style={styles.recordType}>{foodCommunityDetailMaximumRiseDisplayText(selectedFoodCommunityItem)}</Text>
                   </View>
                   <View style={styles.reportBoundaryCard}>
-                    <Text style={styles.confidence}>最低上升血糖</Text>
+                    <Text style={styles.confidence}>{foodCommunityDetailMinimumRiseLabel()}</Text>
                     <Text style={styles.recordType}>{foodCommunityDetailMinimumRiseDisplayText(selectedFoodCommunityItem)}</Text>
                   </View>
                 </View>
