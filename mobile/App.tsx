@@ -3979,6 +3979,10 @@ export default function App() {
     return firstMatch?.id ?? "";
   }
 
+  function foodCommunityListDefaultItemId(items: Array<{ id: string }>, fallbackId: string) {
+    return items[0]?.id ?? fallbackId;
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -4585,9 +4589,10 @@ export default function App() {
       }
       const nextItems = foods.slice(0, maxListItems * 4).map(foodCommunityItemFromApi);
       setFoodCommunityBackendItems(nextItems);
-      setSelectedFoodCommunityItemId(nextItems[0]?.id ?? selectedFoodCommunityItemId);
-      if (nextItems[0]?.id) {
-        void loadFoodCommunityDetail(nextItems[0].id);
+      const nextSelectedItemId = foodCommunityListDefaultItemId(nextItems, selectedFoodCommunityItemId);
+      setSelectedFoodCommunityItemId(nextSelectedItemId);
+      if (nextSelectedItemId) {
+        void loadFoodCommunityDetail(nextSelectedItemId);
       }
       setCommunityActionStatus(
         foodCommunitySyncStatusMessages({

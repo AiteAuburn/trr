@@ -7523,7 +7523,10 @@ def main() -> int:
             ("food community individual share empty state", "尚未有可顯示的個別分享紀錄。"),
             ("food community detail sync function", "async function loadFoodCommunityDetail(itemId: string)"),
             ("food community detail endpoint", "`/community/foods/${boundedItemId}`"),
-            ("food community detail list refresh", "void loadFoodCommunityDetail(nextItems[0].id);"),
+            ("food community list default item helper", "function foodCommunityListDefaultItemId(items: Array<{ id: string }>, fallbackId: string)"),
+            ("food community list default item helper fields", "return items[0]?.id ?? fallbackId;"),
+            ("food community list default item helper binding", "const nextSelectedItemId = foodCommunityListDefaultItemId(nextItems, selectedFoodCommunityItemId);"),
+            ("food community detail list refresh", "void loadFoodCommunityDetail(nextSelectedItemId);"),
             ("food community detail selected refresh", "void loadFoodCommunityDetail(boundedItemId);"),
             ("food community detail status helper binding", "const detailStatus = foodCommunityDetailStatusMessages({"),
             ("food community detail in-flight guard", "foodCommunityDetailInFlightKeys.current.has(detailKey)"),
@@ -9168,6 +9171,16 @@ def main() -> int:
             "food community category direct default item selection",
             content,
             "setSelectedFoodCommunityItemId(firstMatch?.id ?? \"\");",
+        )
+        _assert_not_contains(
+            "food community direct list default item selection",
+            content,
+            "setSelectedFoodCommunityItemId(nextItems[0]?.id ?? selectedFoodCommunityItemId);",
+        )
+        _assert_not_contains(
+            "food community direct list detail refresh",
+            content,
+            "void loadFoodCommunityDetail(nextItems[0].id);",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
