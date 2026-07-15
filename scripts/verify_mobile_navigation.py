@@ -889,6 +889,7 @@ def _pressable_label_source_errors(content: str) -> list[str]:
         "futureModuleCardAccessibilityLabel(item)",
         "analysisRangeOptionAccessibilityLabel(item)",
         "menuDestinationAccessibilityLabel(item)",
+        "previewStatusRowAccessibilityLabel(item)",
         "quickEntryModeAccessibilityLabel(item)",
         "settingsDisplayRowAccessibilityLabel(row)",
         "visualSmokeRouteAccessibilityLabel(item)",
@@ -6685,11 +6686,6 @@ def main() -> int:
             "openHistoryRecordDetailCard(recordDetailCardTarget(item));",
         )
         _assert_contains(
-            "history record detail card accessibility binding",
-            content,
-            "accessibilityLabel={item.accessibilityLabel}",
-        )
-        _assert_contains(
             "history record detail card button role",
             content,
             'accessibilityRole="button"',
@@ -7182,7 +7178,6 @@ def main() -> int:
             ("manual type chip accessibility binding", "accessibilityLabel={type.accessibilityLabel}"),
             ("shared option chip accessibility binding", "accessibilityLabel={option.accessibilityLabel}"),
             ("store category accessibility binding", "accessibilityLabel={category.accessibilityLabel}"),
-            ("history range accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
             ("analysis range accessibility binding", "accessibilityLabel={analysisRangeOptionAccessibilityLabel(item)}"),
             ("manual type chip button role", 'accessibilityRole="button"'),
             ("manual type chip selected state", "accessibilityState={{ selected: selectedValue === type.value }}"),
@@ -7741,6 +7736,8 @@ def main() -> int:
         for label, marker in (
             ("preview status row key helper", "function previewStatusRowKey(row: { title: string })"),
             ("preview status row key helper fields", "return row.title;"),
+            ("preview status row accessibility helper", "function previewStatusRowAccessibilityLabel(row: { accessibilityLabel: string })"),
+            ("preview status row accessibility helper fields", "return row.accessibilityLabel;"),
             ("preview status row icon helper", "function previewStatusRowIcon(row: { icon: string })"),
             ("preview status row icon helper fields", "return row.icon;"),
             ("preview status row title helper", "function previewStatusRowTitle(row: { title: string })"),
@@ -7761,6 +7758,8 @@ def main() -> int:
             ("auth provider preview status row key binding", "authProviderDisplayItems.map((item) => (\n                <Pressable\n                  key={previewStatusRowKey(item)}"),
             ("reminder preview status row key binding", "reminderPreviewDisplayItems.map((item) => (\n                <View key={previewStatusRowKey(item)}"),
             ("auth session display row key binding", "authSessionDisplayItems.map((item) => (\n                  <View key={previewKeyedRowKey(item)}"),
+            ("auth provider preview accessibility binding", "accessibilityLabel={previewStatusRowAccessibilityLabel(item)}"),
+            ("session management preview accessibility binding", "accessibilityLabel={previewStatusRowAccessibilityLabel(item)}"),
             ("preview status row icon binding", "{previewStatusRowIcon(row)}"),
             ("preview status row title binding", "{previewStatusRowTitle(row)}"),
             ("preview status row copy binding", "{previewStatusRowCopy(row)}"),
@@ -8105,6 +8104,7 @@ def main() -> int:
                 ("direct preview status row key binding", "key={row.title}"),
                 ("direct preview status item key binding", "key={item.title}"),
                 ("direct preview keyed item key binding", "key={item.key}"),
+                ("direct preview status item accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
                 ("direct preview status row icon binding", "<Text>{row.icon}</Text>"),
                 ("direct preview status item icon binding", "<Text>{item.icon}</Text>"),
                 ("direct preview status row title binding", "<Text style={styles.recordContent}>{row.title}</Text>"),
@@ -8274,7 +8274,7 @@ def main() -> int:
             ("native benchmarks settings handler", "function runNativeBenchmarksFromSettings()"),
             ("settings local clear binding", "onPress={clearLocalSessionFromSettings}"),
             ("auth provider preview press binding", "onPress={() => pressAuthProviderPreview(item)}"),
-            ("auth provider accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
+            ("auth provider accessibility binding", "accessibilityLabel={previewStatusRowAccessibilityLabel(item)}"),
             ("auth provider disabled state", "accessibilityState={{ disabled: isAuthOperationInFlight }}"),
             ("auth refresh binding", "onPress={refreshAuthSessionFromSecurity}"),
             ("auth sessions load binding", "onPress={loadAuthSessionsFromSecurity}"),

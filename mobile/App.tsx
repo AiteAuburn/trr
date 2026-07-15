@@ -3735,6 +3735,10 @@ export default function App() {
     return row.title;
   }
 
+  function previewStatusRowAccessibilityLabel(row: { accessibilityLabel: string }) {
+    return row.accessibilityLabel;
+  }
+
   function previewStatusRowIcon(row: { icon: string }) {
     return row.icon;
   }
@@ -11374,7 +11378,7 @@ export default function App() {
               {authProviderDisplayItems.map((item) => (
                 <Pressable
                   key={previewStatusRowKey(item)}
-	                  accessibilityLabel={item.accessibilityLabel}
+	                  accessibilityLabel={previewStatusRowAccessibilityLabel(item)}
 	                  accessibilityRole="button"
 	                  accessibilityState={{ disabled: isAuthOperationInFlight }}
 	                  style={[styles.aiReviewCard, isAuthOperationInFlight ? styles.buttonDisabled : null]}
@@ -11459,7 +11463,7 @@ export default function App() {
               {sessionManagementDisplayItems.map((item) => (
                 <Pressable
                   key={previewStatusRowKey(item)}
-                  accessibilityLabel={item.accessibilityLabel}
+                  accessibilityLabel={previewStatusRowAccessibilityLabel(item)}
                   accessibilityRole="button"
                   style={styles.aiReviewCard}
                   onPress={() => pressAuthSessionManagementPreview(item)}

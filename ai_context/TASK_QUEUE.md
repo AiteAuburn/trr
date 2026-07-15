@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1713: Reuse preview status row accessibility labels
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared preview status row accessibility label helper for row models that expose bounded accessibility labels.
+- Reused the helper in auth provider and session management preview Pressables while preserving auth action behavior, disabled state, styling, and labels unchanged.
+- Updated navigation verifier coverage, bounded accessibility source allowlist, and scoped direct-binding guards for preview status row render blocks.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining option/category display bindings and larger extraction opportunities in small behavior-preserving slices.
+
 ### T1712: Reuse analysis range option fields
 
 Status: done
