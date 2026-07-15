@@ -7709,6 +7709,15 @@ def main() -> int:
             ("food community detail share row note helper", "function foodCommunityDetailShareRowNote(share: { note: string })"),
             ("food community detail share row note helper fields", "return share.note;"),
             ("food community detail share row note helper binding", "{foodCommunityDetailShareRowNote(share)}"),
+            ("food community point row key helper", "function foodCommunityPointRowKey(row: (typeof foodCommunityPointRows)[number])"),
+            ("food community point row key helper fields", "return row.label;"),
+            ("food community point row key helper binding", "key={foodCommunityPointRowKey(row)}"),
+            ("food community point row label helper", "function foodCommunityPointRowLabel(row: (typeof foodCommunityPointRows)[number])"),
+            ("food community point row label helper fields", "return row.label;"),
+            ("food community point row label helper binding", "{foodCommunityPointRowLabel(row)}"),
+            ("food community point row value helper", "function foodCommunityPointRowValue(row: (typeof foodCommunityPointRows)[number])"),
+            ("food community point row value helper fields", "return row.value;"),
+            ("food community point row value helper binding", "{foodCommunityPointRowValue(row)}"),
             ("food community detail status example count helper", "function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] })"),
             ("food community detail status example count helper fields", "return item.examples.length;"),
             ("food community detail status title helper binding", "itemTitle: foodCommunityDetailStatusTitle(detailedItem),"),
@@ -9907,6 +9916,21 @@ def main() -> int:
             "food community direct points store bridge copy binding",
             content,
             "<Text style={styles.evidence}>點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。</Text>",
+        )
+        _assert_not_contains(
+            "food community direct point row key binding",
+            content,
+            "foodCommunityPointRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
+        )
+        _assert_not_contains(
+            "food community direct point row label binding",
+            content,
+            "foodCommunityPointRows.map((row) => (\n                <View key={foodCommunityPointRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "food community direct point row value binding",
+            content,
+            "foodCommunityPointRows.map((row) => (\n                <View key={foodCommunityPointRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{foodCommunityPointRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
             "community direct public name preview label binding",

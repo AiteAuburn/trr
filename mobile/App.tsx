@@ -4135,6 +4135,18 @@ export default function App() {
     return share.note;
   }
 
+  function foodCommunityPointRowKey(row: (typeof foodCommunityPointRows)[number]) {
+    return row.label;
+  }
+
+  function foodCommunityPointRowLabel(row: (typeof foodCommunityPointRows)[number]) {
+    return row.label;
+  }
+
+  function foodCommunityPointRowValue(row: (typeof foodCommunityPointRows)[number]) {
+    return row.value;
+  }
+
   function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
     return item.examples.length;
   }
@@ -10139,9 +10151,9 @@ export default function App() {
             </View>
             <View style={styles.reportBoundaryGrid}>
               {foodCommunityPointRows.map((row) => (
-                <View key={row.label} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.recordType}>{row.value}</Text>
+                <View key={foodCommunityPointRowKey(row)} style={styles.reportBoundaryCard}>
+                  <Text style={styles.confidence}>{foodCommunityPointRowLabel(row)}</Text>
+                  <Text style={styles.recordType}>{foodCommunityPointRowValue(row)}</Text>
                 </View>
               ))}
             </View>
