@@ -879,6 +879,8 @@ def _pressable_label_source_errors(content: str) -> list[str]:
         "type.accessibilityLabel",
     }
     helper_label_sources = {
+        "aiCandidateEditAccessibilityLabel(item)",
+        "aiCandidateRemoveAccessibilityLabel(item)",
         "destinationCardAccessibilityLabel(item)",
         "foodCommunityCategoryOptionAccessibilityLabel(category)",
         "quickEntryModeAccessibilityLabel(item)",
@@ -3607,13 +3609,63 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit accessibility binding",
             content,
-            "accessibilityLabel={item.editAccessibilityLabel}",
+            "accessibilityLabel={aiCandidateEditAccessibilityLabel(item)}",
         )
         _assert_contains(
             "AI candidate remove accessibility binding",
             content,
-            "accessibilityLabel={item.removeAccessibilityLabel}",
+            "accessibilityLabel={aiCandidateRemoveAccessibilityLabel(item)}",
         )
+        for label, marker in (
+            ("AI candidate display key helper", "function aiCandidateDisplayKey(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate display key helper fields", "return item.key;"),
+            ("AI candidate display key binding", "key={aiCandidateDisplayKey(item)}"),
+            ("AI candidate display icon helper", "function aiCandidateDisplayIcon(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate display icon helper fields", "return item.icon;"),
+            ("AI candidate display icon binding", "{aiCandidateDisplayIcon(item)}"),
+            ("AI candidate display type helper", "function aiCandidateDisplayTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate display type helper fields", "return item.typeLabel;"),
+            ("AI candidate display type binding", "{aiCandidateDisplayTypeLabel(item)}"),
+            ("AI candidate display payload helper", "function aiCandidateDisplayPayloadSummary(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate display payload helper fields", "return item.payloadSummary;"),
+            ("AI candidate display payload binding", "{aiCandidateDisplayPayloadSummary(item)}"),
+            ("AI candidate display confidence helper", "function aiCandidateDisplayConfidencePercent(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate display confidence helper fields", "return item.confidencePercent;"),
+            ("AI candidate display confidence binding", "{aiCandidateDisplayConfidencePercent(item)}%"),
+            ("AI candidate display source helper", "function aiCandidateDisplaySourceText(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate display source helper fields", "return item.sourceText;"),
+            ("AI candidate display source binding", "{aiCandidateDisplaySourceText(item)}"),
+            ("AI candidate low confidence helper", "function aiCandidateDisplayIsLowConfidence(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate low confidence helper fields", "return item.lowConfidence;"),
+            ("AI candidate low confidence binding", "{aiCandidateDisplayIsLowConfidence(item) ? ("),
+            ("AI candidate decision trace helper", "function aiCandidateDisplayDecisionTrace(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate decision trace helper fields", "return item.decisionTraceDisplayText;"),
+            ("AI candidate decision trace binding", "{aiCandidateDisplayDecisionTrace(item) ? ("),
+            ("AI candidate edit accessibility helper", "function aiCandidateEditAccessibilityLabel(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate edit accessibility helper fields", "return item.editAccessibilityLabel;"),
+            ("AI candidate remove accessibility helper", "function aiCandidateRemoveAccessibilityLabel(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate remove accessibility helper fields", "return item.removeAccessibilityLabel;"),
+        ):
+            _assert_contains(label, content, marker)
+        ai_candidate_card_render_block = _match_block(
+            content,
+            r"previewRecordDisplayItems\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
+            "AI candidate card render block",
+        )
+        for label, marker in (
+            ("direct AI candidate key binding", "key={item.key}"),
+            ("direct AI candidate icon binding", "<Text>{item.icon}</Text>"),
+            ("direct AI candidate type binding", "<Text style={styles.confidence}>{item.typeLabel}</Text>"),
+            ("direct AI candidate payload binding", "<Text style={styles.recordContent}>{item.payloadSummary}</Text>"),
+            ("direct AI candidate confidence binding", "{item.confidencePercent}%"),
+            ("direct AI candidate source binding", "<Text style={styles.evidence}>{item.sourceText}</Text>"),
+            ("direct AI candidate low confidence binding", "{item.lowConfidence ? ("),
+            ("direct AI candidate decision trace binding", "{item.decisionTraceDisplayText ? ("),
+            ("direct AI candidate decision trace text", "<Text style={styles.evidence}>{item.decisionTraceDisplayText}</Text>"),
+            ("direct AI candidate edit accessibility binding", "accessibilityLabel={item.editAccessibilityLabel}"),
+            ("direct AI candidate remove accessibility binding", "accessibilityLabel={item.removeAccessibilityLabel}"),
+        ):
+            _assert_not_contains(label, ai_candidate_card_render_block, marker)
         _assert_contains(
             "AI candidate edit button role",
             content,

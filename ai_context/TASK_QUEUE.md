@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1706: Reuse AI candidate display fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared AI candidate display helpers for candidate card key, icon, type label, payload summary, confidence, source text, low-confidence state, decision trace, and edit/remove accessibility labels.
+- Reused the helpers in the AI Review candidate card list while preserving existing candidate ordering, warnings, decision trace copy, edit/remove actions, and navigation behavior unchanged.
+- Updated navigation verifier coverage, bounded accessibility source allowlist, and scoped direct-binding guards for the AI candidate card render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing daily transcript and daily-record entry display bindings in small behavior-preserving slices.
+
 ### T1705: Reuse home guidance item fields
 
 Status: done

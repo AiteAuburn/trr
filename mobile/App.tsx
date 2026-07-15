@@ -3184,6 +3184,46 @@ export default function App() {
     return item.index;
   }
 
+  function aiCandidateDisplayKey(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.key;
+  }
+
+  function aiCandidateDisplayIcon(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.icon;
+  }
+
+  function aiCandidateDisplayTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.typeLabel;
+  }
+
+  function aiCandidateDisplayPayloadSummary(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.payloadSummary;
+  }
+
+  function aiCandidateDisplayConfidencePercent(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.confidencePercent;
+  }
+
+  function aiCandidateDisplaySourceText(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.sourceText;
+  }
+
+  function aiCandidateDisplayIsLowConfidence(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.lowConfidence;
+  }
+
+  function aiCandidateDisplayDecisionTrace(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.decisionTraceDisplayText;
+  }
+
+  function aiCandidateEditAccessibilityLabel(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.editAccessibilityLabel;
+  }
+
+  function aiCandidateRemoveAccessibilityLabel(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.removeAccessibilityLabel;
+  }
+
   function pressAiCandidateEditAction(item: ReturnType<typeof pendingRecordDisplayItem>) {
     editAiCandidateRecord(aiCandidateActionTarget(item));
   }
@@ -7839,33 +7879,33 @@ export default function App() {
               ) : null}
               {previewRecordDisplayItems.length > 0 ? (
                 previewRecordDisplayItems.map((item) => (
-                  <View key={item.key} style={styles.aiReviewCardStack}>
+                  <View key={aiCandidateDisplayKey(item)} style={styles.aiReviewCardStack}>
                     <View style={styles.recordHeader}>
                       <View style={styles.historyItemTitle}>
                         <View style={styles.iconCircleSmall}>
-                          <Text>{item.icon}</Text>
+                          <Text>{aiCandidateDisplayIcon(item)}</Text>
                         </View>
                         <View style={styles.timelineContent}>
-                          <Text style={styles.confidence}>{item.typeLabel}</Text>
-                          <Text style={styles.recordContent}>{item.payloadSummary}</Text>
+                          <Text style={styles.confidence}>{aiCandidateDisplayTypeLabel(item)}</Text>
+                          <Text style={styles.recordContent}>{aiCandidateDisplayPayloadSummary(item)}</Text>
                         </View>
                       </View>
                       <View style={styles.confidencePill}>
                         <Text style={styles.confidence}>
-                          {item.confidencePercent}%
+                          {aiCandidateDisplayConfidencePercent(item)}%
                         </Text>
                       </View>
                     </View>
-                    <Text style={styles.evidence}>{item.sourceText}</Text>
-                    {item.lowConfidence ? (
+                    <Text style={styles.evidence}>{aiCandidateDisplaySourceText(item)}</Text>
+                    {aiCandidateDisplayIsLowConfidence(item) ? (
                       <Text style={styles.warningText}>{aiReviewLowConfidenceDisplayText}</Text>
                     ) : null}
-                    {item.decisionTraceDisplayText ? (
-                      <Text style={styles.evidence}>{item.decisionTraceDisplayText}</Text>
+                    {aiCandidateDisplayDecisionTrace(item) ? (
+                      <Text style={styles.evidence}>{aiCandidateDisplayDecisionTrace(item)}</Text>
                     ) : null}
                     <View style={styles.actionRow}>
                       <Pressable
-                        accessibilityLabel={item.editAccessibilityLabel}
+                        accessibilityLabel={aiCandidateEditAccessibilityLabel(item)}
                         accessibilityRole="button"
                         style={styles.secondaryButton}
                         onPress={() => pressAiCandidateEditAction(item)}
@@ -7873,7 +7913,7 @@ export default function App() {
                         <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.edit}</Text>
                       </Pressable>
                       <Pressable
-                        accessibilityLabel={item.removeAccessibilityLabel}
+                        accessibilityLabel={aiCandidateRemoveAccessibilityLabel(item)}
                         accessibilityRole="button"
                         style={styles.dangerButton}
                         onPress={() => pressAiCandidateRemoveAction(item)}
