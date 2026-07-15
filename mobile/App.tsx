@@ -3474,8 +3474,12 @@ export default function App() {
     beginOidcProviderChallenge(provider);
   }
 
+  function authProviderPreviewTarget(item: ReturnType<typeof authProviderPreviewDisplayItem>) {
+    return item.provider;
+  }
+
   function pressAuthProviderPreview(item: ReturnType<typeof authProviderPreviewDisplayItem>) {
-    startAuthProviderChallenge(item.provider);
+    startAuthProviderChallenge(authProviderPreviewTarget(item));
   }
 
   function refreshAuthSessionFromSecurity() {

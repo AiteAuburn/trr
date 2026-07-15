@@ -7267,7 +7267,10 @@ def main() -> int:
         for label, marker in (
             ("settings local clear handler", "function clearLocalSessionFromSettings()"),
             ("auth provider challenge handler", "function startAuthProviderChallenge(provider: string)"),
+            ("auth provider preview target helper", "function authProviderPreviewTarget(item: ReturnType<typeof authProviderPreviewDisplayItem>)"),
+            ("auth provider preview target helper fields", "return item.provider;"),
             ("auth provider preview press handler", "function pressAuthProviderPreview(item: ReturnType<typeof authProviderPreviewDisplayItem>)"),
+            ("auth provider preview target helper binding", "startAuthProviderChallenge(authProviderPreviewTarget(item));"),
             ("auth refresh handler", "function refreshAuthSessionFromSecurity()"),
             ("auth sessions load handler", "function loadAuthSessionsFromSecurity()"),
             ("auth logout handler", "function logoutAuthSessionFromSecurity()"),
@@ -8155,6 +8158,7 @@ def main() -> int:
             ("direct native whisper download kind binding", 'onPress={() => selectNativeDownloadKind("whisper")}'),
             ("direct native llama download kind binding", 'onPress={() => selectNativeDownloadKind("llama")}'),
             ("direct auth provider preview binding", "onPress={() => startAuthProviderChallenge(item.provider)}"),
+            ("direct auth provider handler target binding", "startAuthProviderChallenge(item.provider);"),
             ("direct auth session management status binding", "onPress={() => showAuthSessionManagementStatus(item.actionStatus)}"),
             ("direct auth session management handler status binding", "showAuthSessionManagementStatus(item.actionStatus);"),
             ("direct daily record menu index binding", "setDailyRecordMenuIndex((current) => (current === item.index ? null : item.index));"),
