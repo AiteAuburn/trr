@@ -7742,6 +7742,15 @@ def main() -> int:
             ("community public profile save button helper fields", 'return "儲存公開名稱";'),
             ("community public profile save button display label binding", "const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();"),
             ("community public profile save button text binding", "{communityPublicProfileSaveButtonDisplayLabel}"),
+            ("community boundary row key helper", "function communityBoundaryRowKey(row: ReturnType<typeof communityBoundaryDisplayRows>[number])"),
+            ("community boundary row key helper fields", "return row.label;"),
+            ("community boundary row key helper binding", "key={communityBoundaryRowKey(row)}"),
+            ("community boundary row label helper", "function communityBoundaryRowLabel(row: ReturnType<typeof communityBoundaryDisplayRows>[number])"),
+            ("community boundary row label helper fields", "return row.label;"),
+            ("community boundary row label helper binding", "{communityBoundaryRowLabel(row)}"),
+            ("community boundary row value helper", "function communityBoundaryRowValue(row: ReturnType<typeof communityBoundaryDisplayRows>[number])"),
+            ("community boundary row value helper fields", "return row.value;"),
+            ("community boundary row value helper binding", "{communityBoundaryRowValue(row)}"),
             ("ranking screen title helper", "function rankingScreenTitleLabel()"),
             ("ranking screen title helper fields", 'return "社群排行";'),
             ("ranking screen title helper binding", "{rankingScreenTitleLabel()}"),
@@ -10077,6 +10086,21 @@ def main() -> int:
             "community direct readiness section label binding",
             content,
             "<View style={styles.inlineInfoBlock}>\n              <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>\n              {communityReadinessChecklistItems.map((item) => (",
+        )
+        _assert_not_contains(
+            "community direct boundary row key binding",
+            content,
+            "communityBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
+        )
+        _assert_not_contains(
+            "community direct boundary row label binding",
+            content,
+            "communityBoundaryRows.map((row) => (\n                <View key={communityBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "community direct boundary row value binding",
+            content,
+            "communityBoundaryRows.map((row) => (\n                <View key={communityBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{communityBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
             "community direct return future modules accessibility binding",

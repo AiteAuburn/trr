@@ -4191,6 +4191,18 @@ export default function App() {
     return "儲存公開名稱";
   }
 
+  function communityBoundaryRowKey(row: ReturnType<typeof communityBoundaryDisplayRows>[number]) {
+    return row.label;
+  }
+
+  function communityBoundaryRowLabel(row: ReturnType<typeof communityBoundaryDisplayRows>[number]) {
+    return row.label;
+  }
+
+  function communityBoundaryRowValue(row: ReturnType<typeof communityBoundaryDisplayRows>[number]) {
+    return row.value;
+  }
+
   function communityCloseAccessibilityLabel() {
     return auxiliaryDisplayLabels.closeReturn;
   }
@@ -10164,9 +10176,9 @@ export default function App() {
             </View>
             <View style={styles.reportBoundaryGrid}>
               {communityBoundaryRows.map((row) => (
-                <View key={row.label} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.recordType}>{row.value}</Text>
+                <View key={communityBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
+                  <Text style={styles.confidence}>{communityBoundaryRowLabel(row)}</Text>
+                  <Text style={styles.recordType}>{communityBoundaryRowValue(row)}</Text>
                 </View>
               ))}
             </View>
