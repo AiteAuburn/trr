@@ -4262,6 +4262,10 @@ export default function App() {
     return rankingActionStatusDisplayText;
   }
 
+  function rankingActionStatusVisible() {
+    return Boolean(rankingActionStatus);
+  }
+
   function rankingReturnFutureModulesAccessibilityLabel() {
     return futurePreviewDisplayLabels.returnFutureModulesAccessibility;
   }
@@ -10167,7 +10171,7 @@ export default function App() {
                 <Text style={styles.secondaryButtonText}>{rankingOptInButtonDisplayLabel}</Text>
               </Pressable>
             </View>
-            {rankingActionStatus ? (
+            {rankingActionStatusVisible() ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{rankingActionStatusLabel()}</Text>
                 <Text style={styles.evidence}>{rankingActionStatusText()}</Text>

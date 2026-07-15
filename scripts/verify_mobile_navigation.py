@@ -7759,6 +7759,9 @@ def main() -> int:
             ("ranking action status text helper", "function rankingActionStatusText()"),
             ("ranking action status text helper fields", "return rankingActionStatusDisplayText;"),
             ("ranking action status text helper binding", "{rankingActionStatusText()}"),
+            ("ranking action status visible helper", "function rankingActionStatusVisible()"),
+            ("ranking action status visible helper fields", "return Boolean(rankingActionStatus);"),
+            ("ranking action status visible helper binding", "{rankingActionStatusVisible() ? ("),
             ("ranking return future modules accessibility helper", "function rankingReturnFutureModulesAccessibilityLabel()"),
             ("ranking return future modules accessibility helper fields", "return futurePreviewDisplayLabels.returnFutureModulesAccessibility;"),
             ("ranking return future modules accessibility display label binding", "const rankingReturnFutureModulesAccessibilityDisplayLabel = rankingReturnFutureModulesAccessibilityLabel();"),
@@ -9943,6 +9946,11 @@ def main() -> int:
             "ranking direct action status text binding",
             content,
             "{rankingActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingActionStatusLabel()}</Text>\n                <Text style={styles.evidence}>{rankingActionStatusDisplayText}</Text>",
+        )
+        _assert_not_contains(
+            "ranking direct action status visibility binding",
+            content,
+            "{rankingActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingActionStatusLabel()}</Text>\n                <Text style={styles.evidence}>{rankingActionStatusText()}</Text>",
         )
         _assert_not_contains(
             "ranking direct return future modules accessibility binding",
