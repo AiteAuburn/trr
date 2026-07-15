@@ -889,6 +889,7 @@ def _pressable_label_source_errors(content: str) -> list[str]:
         "menuDestinationAccessibilityLabel(item)",
         "quickEntryModeAccessibilityLabel(item)",
         "settingsDisplayRowAccessibilityLabel(row)",
+        "visualSmokeRouteAccessibilityLabel(item)",
         "foodCommunityListItemAccessibilityLabel(item)",
         "storeProductActionAccessibilityLabel(product)",
         "storeRedemptionActionAccessibilityLabel(product)",
@@ -5155,6 +5156,18 @@ def main() -> int:
             content,
             "return item.target;",
         )
+        for label, marker in (
+            ("visual smoke route key helper", "function visualSmokeRouteKey(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>)"),
+            ("visual smoke route key helper fields", "return item.target;"),
+            ("visual smoke route key binding", "key={visualSmokeRouteKey(item)}"),
+            ("visual smoke route accessibility helper", "function visualSmokeRouteAccessibilityLabel(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>)"),
+            ("visual smoke route accessibility helper fields", "return item.accessibilityLabel;"),
+            ("visual smoke route accessibility binding", "accessibilityLabel={visualSmokeRouteAccessibilityLabel(item)}"),
+            ("visual smoke route label helper", "function visualSmokeRouteLabel(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>)"),
+            ("visual smoke route label helper fields", "return item.label;"),
+            ("visual smoke route label binding", "{visualSmokeRouteLabel(item)}"),
+        ):
+            _assert_contains(label, content, marker)
         _assert_contains(
             "visual smoke route target helper binding",
             content,
@@ -5175,6 +5188,17 @@ def main() -> int:
             content,
             "openVisualSmokeRoute(item.target);",
         )
+        visual_smoke_route_render_block = _match_block(
+            content,
+            r"visualSmokeRouteJumpDisplayItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
+            "visual smoke route render block",
+        )
+        for label, marker in (
+            ("direct visual smoke route key binding", "key={item.target}"),
+            ("direct visual smoke route accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
+            ("direct visual smoke route label binding", "<Text style={styles.visualSmokeRouteChipText}>{item.label}</Text>"),
+        ):
+            _assert_not_contains(label, visual_smoke_route_render_block, marker)
         _assert_contains(
             "visual smoke initial route env",
             app_runtime_config_content,
@@ -5193,7 +5217,7 @@ def main() -> int:
         _assert_contains(
             "visual smoke route jump accessibility binding",
             content,
-            "accessibilityLabel={item.accessibilityLabel}",
+            "accessibilityLabel={visualSmokeRouteAccessibilityLabel(item)}",
         )
         _assert_contains(
             "store product action accessibility",

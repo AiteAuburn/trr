@@ -5393,6 +5393,18 @@ export default function App() {
     return item.target;
   }
 
+  function visualSmokeRouteKey(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>) {
+    return item.target;
+  }
+
+  function visualSmokeRouteAccessibilityLabel(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>) {
+    return item.accessibilityLabel;
+  }
+
+  function visualSmokeRouteLabel(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>) {
+    return item.label;
+  }
+
   function pressVisualSmokeRoute(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>) {
     openVisualSmokeRoute(visualSmokeRouteTarget(item));
   }
@@ -10185,13 +10197,13 @@ export default function App() {
                 <View style={styles.visualSmokeRouteGrid}>
                   {visualSmokeRouteJumpDisplayItems.map((item) => (
                     <Pressable
-                      key={item.target}
-                      accessibilityLabel={item.accessibilityLabel}
+                      key={visualSmokeRouteKey(item)}
+                      accessibilityLabel={visualSmokeRouteAccessibilityLabel(item)}
                       accessibilityRole="button"
                       style={styles.visualSmokeRouteChip}
                       onPress={() => pressVisualSmokeRoute(item)}
                     >
-                      <Text style={styles.visualSmokeRouteChipText}>{item.label}</Text>
+                      <Text style={styles.visualSmokeRouteChipText}>{visualSmokeRouteLabel(item)}</Text>
                     </Pressable>
                   ))}
                 </View>

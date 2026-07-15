@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1710: Reuse visual smoke route fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared visual-smoke route helpers for debug route chip key, accessibility label, and label rendering.
+- Reused the helpers in the debug-gated visual-smoke route grid while preserving dev gating, route targets, chip layout, and route jump behavior unchanged.
+- Updated navigation verifier coverage, bounded accessibility source allowlist, and scoped direct-binding guards for the visual-smoke route render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing future-module display card bindings in small behavior-preserving slices.
+
 ### T1709: Reuse menu destination fields
 
 Status: done
