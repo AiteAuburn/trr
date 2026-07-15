@@ -892,6 +892,7 @@ def _pressable_label_source_errors(content: str) -> list[str]:
         "previewStatusRowAccessibilityLabel(item)",
         "quickEntryModeAccessibilityLabel(item)",
         "settingsDisplayRowAccessibilityLabel(row)",
+        "storeCategoryOptionAccessibilityLabel(category)",
         "visualSmokeRouteAccessibilityLabel(item)",
         "foodCommunityListItemAccessibilityLabel(item)",
         "storeProductActionAccessibilityLabel(product)",
@@ -7180,7 +7181,7 @@ def main() -> int:
         for label, marker in (
             ("manual type chip accessibility binding", "accessibilityLabel={type.accessibilityLabel}"),
             ("shared option chip accessibility binding", "accessibilityLabel={option.accessibilityLabel}"),
-            ("store category accessibility binding", "accessibilityLabel={category.accessibilityLabel}"),
+            ("store category accessibility binding", "accessibilityLabel={storeCategoryOptionAccessibilityLabel(category)}"),
             ("analysis range accessibility binding", "accessibilityLabel={analysisRangeOptionAccessibilityLabel(item)}"),
             ("manual type chip button role", 'accessibilityRole="button"'),
             ("manual type chip selected state", "accessibilityState={{ selected: selectedValue === type.value }}"),
@@ -7203,7 +7204,7 @@ def main() -> int:
             ("record edit glucose unit selected state", "accessibilityState={{ selected: recordEditFields.glucoseUnit === option.value }}"),
             ("record edit glucose timing selected state", "accessibilityState={{ selected: recordEditFields.glucoseTiming === option.value }}"),
             ("record edit meal selected state", "accessibilityState={{ selected: recordEditFields.mealType === option.value }}"),
-            ("store category selected state", "accessibilityState={{ selected: storeCategory === category.value }}"),
+            ("store category selected state", "accessibilityState={{ selected: storeCategoryOptionSelected(category, storeCategory) }}"),
         ):
             if label.startswith("manual glucose "):
                 target_content = manual_record_glucose_fields_content
@@ -9728,6 +9729,17 @@ def main() -> int:
             ("store category target helper", "function storeCategoryTarget(category: ReturnType<typeof storeCategoryDisplayItem>)"),
             ("store category target helper fields", "return category.value;"),
             ("store category target helper binding", "selectStoreCategory(storeCategoryTarget(category));"),
+            ("store category option key helper", "function storeCategoryOptionKey(category: ReturnType<typeof storeCategoryDisplayItem>)"),
+            ("store category option key helper binding", "key={storeCategoryOptionKey(category)}"),
+            ("store category option accessibility helper", "function storeCategoryOptionAccessibilityLabel(category: ReturnType<typeof storeCategoryDisplayItem>)"),
+            ("store category option accessibility helper fields", "return category.accessibilityLabel;"),
+            ("store category option accessibility helper binding", "accessibilityLabel={storeCategoryOptionAccessibilityLabel(category)}"),
+            ("store category option label helper", "function storeCategoryOptionLabel(category: ReturnType<typeof storeCategoryDisplayItem>)"),
+            ("store category option label helper fields", "return category.label;"),
+            ("store category option label helper binding", "{storeCategoryOptionLabel(category)}"),
+            ("store category option selected helper", "function storeCategoryOptionSelected(category: ReturnType<typeof storeCategoryDisplayItem>, selectedCategory: StoreCategory)"),
+            ("store category option selected helper fields", "return storeCategoryTarget(category) === selectedCategory;"),
+            ("store category option selected helper binding", "storeCategoryOptionSelected(category, storeCategory)"),
             ("store display bundle helper binding", "const storeDisplay = useMemo("),
             ("store display bundle backend products", "backendProducts: storeBackendProducts"),
             ("store display bundle fallback products", "fallbackProducts: storeProducts"),
@@ -10808,6 +10820,18 @@ def main() -> int:
             content,
             "selectStoreCategory(category.value);",
         )
+        store_category_option_render_block = _match_block(
+            content,
+            r"storeCategoryDisplayOptions\.map\(\(category\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
+            "store category option render block",
+        )
+        for label, marker in (
+            ("direct store category key binding", "key={category.value}"),
+            ("direct store category accessibility binding", "accessibilityLabel={category.accessibilityLabel}"),
+            ("direct store category selected state binding", "storeCategory === category.value"),
+            ("direct store category label binding", "{category.label}"),
+        ):
+            _assert_not_contains(label, store_category_option_render_block, marker)
         _assert_not_contains(
             "food community category direct handler value binding",
             content,

@@ -5086,6 +5086,22 @@ export default function App() {
     return category.value;
   }
 
+  function storeCategoryOptionKey(category: ReturnType<typeof storeCategoryDisplayItem>) {
+    return storeCategoryTarget(category);
+  }
+
+  function storeCategoryOptionAccessibilityLabel(category: ReturnType<typeof storeCategoryDisplayItem>) {
+    return category.accessibilityLabel;
+  }
+
+  function storeCategoryOptionLabel(category: ReturnType<typeof storeCategoryDisplayItem>) {
+    return category.label;
+  }
+
+  function storeCategoryOptionSelected(category: ReturnType<typeof storeCategoryDisplayItem>, selectedCategory: StoreCategory) {
+    return storeCategoryTarget(category) === selectedCategory;
+  }
+
   function pressStoreCategoryOption(category: ReturnType<typeof storeCategoryDisplayItem>) {
     selectStoreCategory(storeCategoryTarget(category));
   }
@@ -12130,23 +12146,23 @@ export default function App() {
             <View style={styles.segmentRow}>
               {storeCategoryDisplayOptions.map((category) => (
                 <Pressable
-                  key={category.value}
-                  accessibilityLabel={category.accessibilityLabel}
+                  key={storeCategoryOptionKey(category)}
+                  accessibilityLabel={storeCategoryOptionAccessibilityLabel(category)}
                   accessibilityRole="button"
-                  accessibilityState={{ selected: storeCategory === category.value }}
+                  accessibilityState={{ selected: storeCategoryOptionSelected(category, storeCategory) }}
                   style={[
                     styles.segmentPill,
-                    storeCategory === category.value ? styles.segmentActive : null
+                    storeCategoryOptionSelected(category, storeCategory) ? styles.segmentActive : null
                   ]}
                   onPress={() => pressStoreCategoryOption(category)}
                 >
                   <Text
                     style={[
                       styles.segmentText,
-                      storeCategory === category.value ? styles.segmentTextActive : null
+                      storeCategoryOptionSelected(category, storeCategory) ? styles.segmentTextActive : null
                     ]}
                   >
-                    {category.label}
+                    {storeCategoryOptionLabel(category)}
                   </Text>
                 </Pressable>
               ))}

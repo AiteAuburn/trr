@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1715 reuse store category option fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared Store category option helpers for render key, accessibility label, display label, and selected-state checks.
+- Reused the helpers in the Store category segment control while preserving category selection, selected styling, accessibility state, and future/store preview behavior unchanged.
+- Updated navigation verifier coverage, bounded accessibility source allowlist, and scoped direct-binding guards for the Store category option render block.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining future/store/community display bindings and larger extraction opportunities in small behavior-preserving slices.
+
 ### T1714 reuse daily record detail row list fields
 
 類型：mobile / refactor / verifier / docs
