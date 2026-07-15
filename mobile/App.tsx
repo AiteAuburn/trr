@@ -1684,7 +1684,7 @@ export default function App() {
   const storeCartIntroDisplayText = storePreviewDisplay.cartIntro;
   const storeCheckoutReadinessTitleDisplayText = storePreviewDisplay.checkoutReadinessTitle;
   const storeCartReturnButtonDisplayLabel = storePreviewDisplay.cartReturnButton;
-  const rankingOptInButtonDisplayLabel = communityActionDisplay.rankingOptInButton;
+  const rankingOptInButtonDisplayLabel = rankingOptInActionButtonLabel(communityActionDisplay.rankingOptInButton);
   const rankingOptInAccessibilityDisplayLabel = rankingOptInActionAccessibilityLabel(communityActionDisplay.rankingOptInAccessibility);
   const rankingPublicActionButtonDisplayLabel = rankingPublicActionButtonLabel();
   const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel();
@@ -4204,6 +4204,10 @@ export default function App() {
   }
 
   function rankingOptInActionAccessibilityLabel(label: string) {
+    return label;
+  }
+
+  function rankingOptInActionButtonLabel(label: string) {
     return label;
   }
 
