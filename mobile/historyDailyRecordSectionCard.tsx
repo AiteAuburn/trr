@@ -29,6 +29,21 @@ type HistoryDailyRecordSectionCardProps<TEntry extends HistoryDailyRecordEntryIt
   onEntryPress: (item: TEntry) => void;
 };
 
+function historyDailyRecordDetailRowKey<TEntry extends HistoryDailyRecordEntryItem>(
+  item: TEntry,
+  row: HistoryDailyRecordDetailRow
+) {
+  return `${item.key}-${row.label}`;
+}
+
+function historyDailyRecordDetailRowLabel(row: HistoryDailyRecordDetailRow) {
+  return row.label;
+}
+
+function historyDailyRecordDetailRowValue(row: HistoryDailyRecordDetailRow) {
+  return row.value;
+}
+
 export function HistoryDailyRecordSectionCard<TEntry extends HistoryDailyRecordEntryItem>({
   section,
   onEntryPress
@@ -65,7 +80,11 @@ export function HistoryDailyRecordSectionCard<TEntry extends HistoryDailyRecordE
             </View>
             <View style={styles.detailRows}>
               {item.detailRows.map((row) => (
-                <DailyRecordDetailRow key={`${item.key}-${row.label}`} label={row.label} value={row.value} />
+                <DailyRecordDetailRow
+                  key={historyDailyRecordDetailRowKey(item, row)}
+                  label={historyDailyRecordDetailRowLabel(row)}
+                  value={historyDailyRecordDetailRowValue(row)}
+                />
               ))}
             </View>
           </Pressable>

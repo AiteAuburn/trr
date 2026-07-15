@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1683 reuse history daily record detail row fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/historyDailyRecordSectionCard.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared `historyDailyRecordDetailRowKey`, `historyDailyRecordDetailRowLabel`, and `historyDailyRecordDetailRowValue` helpers for reusable History daily-record section cards.
+- Reused the helpers in History daily-record detail row rendering while keeping section title/count display, entry press behavior, detail row content, empty state copy, and History navigation unchanged.
+- Updated navigation verifier coverage for the shared History daily-record detail row helpers and direct detail row regression guards.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting remaining record-detail info panel and settings label render bindings in small behavior-preserving slices.
+
 ### T1682 reuse daily record detail row fields
 
 類型：mobile / refactor / verifier / docs

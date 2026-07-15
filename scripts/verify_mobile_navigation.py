@@ -1532,12 +1532,34 @@ def main() -> int:
             ("history daily record section card count", "<Text style={styles.countText}>{section.countLabel}</Text>"),
             ("history daily record section card helper copy", "可新增多筆；每筆可點進詳情修改。"),
             ("history daily record section card entry press", "onPress={() => onEntryPress(item)}"),
-            ("history daily record section card detail row", "item.detailRows.map((row) => (\n                <DailyRecordDetailRow key={`${item.key}-${row.label}`} label={row.label} value={row.value} />"),
+            ("history daily record detail row key helper", "function historyDailyRecordDetailRowKey<TEntry extends HistoryDailyRecordEntryItem>("),
+            ("history daily record detail row key helper item type", "item: TEntry,"),
+            ("history daily record detail row key helper fields", "return `${item.key}-${row.label}`;"),
+            ("history daily record detail row label helper", "function historyDailyRecordDetailRowLabel(row: HistoryDailyRecordDetailRow)"),
+            ("history daily record detail row label helper fields", "return row.label;"),
+            ("history daily record detail row value helper", "function historyDailyRecordDetailRowValue(row: HistoryDailyRecordDetailRow)"),
+            ("history daily record detail row value helper fields", "return row.value;"),
+            ("history daily record section card detail row", "item.detailRows.map((row) => (\n                <DailyRecordDetailRow\n                  key={historyDailyRecordDetailRowKey(item, row)}\n                  label={historyDailyRecordDetailRowLabel(row)}\n                  value={historyDailyRecordDetailRowValue(row)}"),
             ("history daily record section card empty copy", "<Text style={styles.evidence}>{section.emptyCopy}</Text>"),
             ("history daily record section card section style", "dailyRecordSectionCard: {"),
             ("history daily record section card entry style", "dailyRecordEntryCard: {"),
         ):
             _assert_contains(label, history_daily_record_section_card_content, marker)
+        _assert_not_contains(
+            "history daily record direct detail row binding",
+            history_daily_record_section_card_content,
+            "item.detailRows.map((row) => (\n                <DailyRecordDetailRow key={`${item.key}-${row.label}`} label={row.label} value={row.value} />",
+        )
+        _assert_not_contains(
+            "history daily record direct detail row label binding",
+            history_daily_record_section_card_content,
+            "item.detailRows.map((row) => (\n                <DailyRecordDetailRow\n                  key={historyDailyRecordDetailRowKey(item, row)}\n                  label={row.label}\n                  value={historyDailyRecordDetailRowValue(row)}",
+        )
+        _assert_not_contains(
+            "history daily record direct detail row value binding",
+            history_daily_record_section_card_content,
+            "item.detailRows.map((row) => (\n                <DailyRecordDetailRow\n                  key={historyDailyRecordDetailRowKey(item, row)}\n                  label={historyDailyRecordDetailRowLabel(row)}\n                  value={row.value}",
+        )
         for label, marker in (
             ("history daily summary card component", "export function HistoryDailySummaryCard({"),
             ("history daily summary card accessibility role", 'accessibilityRole="button"'),
