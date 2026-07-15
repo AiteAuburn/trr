@@ -4175,6 +4175,10 @@ export default function App() {
     return communityActionStatusDisplayText;
   }
 
+  function communityActionStatusVisible() {
+    return Boolean(communityActionStatus);
+  }
+
   function rankingScreenTitleLabel() {
     return "社群排行";
   }
@@ -10128,7 +10132,7 @@ export default function App() {
                 <Text style={styles.secondaryButtonText}>{rankingOptInButtonDisplayLabel}</Text>
               </Pressable>
             </View>
-            {communityActionStatus ? (
+            {communityActionStatusVisible() ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>
                 <Text style={styles.evidence}>{communityActionStatusDisplayCopy}</Text>

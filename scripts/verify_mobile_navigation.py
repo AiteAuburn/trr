@@ -7561,6 +7561,9 @@ def main() -> int:
             ("community action status text helper fields", "return communityActionStatusDisplayText;"),
             ("community action status text display binding", "const communityActionStatusDisplayCopy = communityActionStatusText();"),
             ("community action status text helper binding", "{communityActionStatusDisplayCopy}"),
+            ("community action status visible helper", "function communityActionStatusVisible()"),
+            ("community action status visible helper fields", "return Boolean(communityActionStatus);"),
+            ("community action status visible helper binding", "{communityActionStatusVisible() ? ("),
             ("community posting status handler", "function showCommunityPostingStatus()"),
             ("community privacy status handler", "function showCommunityPrivacyStatus()"),
             ("food community backend-aware intro copy", "backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。"),
@@ -10000,6 +10003,11 @@ def main() -> int:
             "community direct action status text binding",
             content,
             "{communityActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>\n                <Text style={styles.evidence}>{communityActionStatusDisplayText}</Text>",
+        )
+        _assert_not_contains(
+            "community direct action status visibility binding",
+            content,
+            "{communityActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>\n                <Text style={styles.evidence}>{communityActionStatusDisplayCopy}</Text>",
         )
         _assert_not_contains(
             "ranking direct close accessibility binding",
