@@ -5761,6 +5761,27 @@ def main() -> int:
             ("daily record transcript handler", "function openTodayTranscriptText()"),
             ("daily record transcript expanded status binding", "setStatus(todayTranscriptExpandedStatusMessage());"),
             ("daily record section renderer", "dailyRecordSectionItems.map"),
+            ("daily record section key helper", "function dailyRecordSectionKey(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
+            ("daily record section key helper fields", "return section.id;"),
+            ("daily record section key binding", "key={dailyRecordSectionKey(section)}"),
+            ("daily record section icon helper", "function dailyRecordSectionIcon(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
+            ("daily record section icon helper fields", "return section.icon;"),
+            ("daily record section icon binding", "{dailyRecordSectionIcon(section)}"),
+            ("daily record section title helper", "function dailyRecordSectionTitle(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
+            ("daily record section title helper fields", "return section.title;"),
+            ("daily record section title binding", "{dailyRecordSectionTitle(section)}"),
+            ("daily record section count helper", "function dailyRecordSectionCountLabel(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
+            ("daily record section count helper fields", "return section.countLabel;"),
+            ("daily record section count binding", "{dailyRecordSectionCountLabel(section)}"),
+            ("daily record section entries helper", "function dailyRecordSectionEntries(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
+            ("daily record section entries helper fields", "return section.entries;"),
+            ("daily record section entries binding", "dailyRecordSectionEntries(section).map((item) => ("),
+            ("daily record section has entries helper", "function dailyRecordSectionHasEntries(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
+            ("daily record section has entries helper fields", "return dailyRecordSectionEntries(section).length > 0;"),
+            ("daily record section has entries binding", "dailyRecordSectionHasEntries(section) ? ("),
+            ("daily record section empty helper", "function dailyRecordSectionEmptyCopy(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
+            ("daily record section empty helper fields", "return section.emptyCopy;"),
+            ("daily record section empty binding", "{dailyRecordSectionEmptyCopy(section)}"),
             ("daily record detail row component binding", "dailyRecordEntryDetailRows(item).map((row) => (\n                            <DailyRecordDetailRow key={dailyRecordDetailRowKey(item, row)} label={dailyRecordDetailRowLabel(row)} value={dailyRecordDetailRowValue(row)} />"),
             ("daily record entry management handler", "function pressDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry target helper", "function dailyRecordEntryTarget(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
@@ -5883,9 +5904,24 @@ def main() -> int:
             ("direct daily transcript item source binding", "<Text style={styles.evidence}>{item.sourceText}</Text>"),
         ):
             _assert_not_contains(label, daily_transcript_render_block, marker)
+        daily_record_section_render_block = _match_block(
+            content,
+            r"dailyRecordSectionItems\.map\(\(section\) => \(([\s\S]*?dailyRecordSectionEmptyCopy\(section\)[\s\S]*?</View>)",
+            "daily record section render block",
+        )
+        for label, marker in (
+            ("direct daily record section key binding", "key={section.id}"),
+            ("direct daily record section icon binding", "{section.icon}"),
+            ("direct daily record section title binding", "{section.title}"),
+            ("direct daily record section count binding", "{section.countLabel}"),
+            ("direct daily record section entries length binding", "section.entries.length"),
+            ("direct daily record section entries map binding", "section.entries.map"),
+            ("direct daily record section empty copy binding", "{section.emptyCopy}"),
+        ):
+            _assert_not_contains(label, daily_record_section_render_block, marker)
         daily_record_entry_render_block = _match_block(
             content,
-            r"section\.entries\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
+            r"dailyRecordSectionEntries\(section\)\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
             "daily record entry render block",
         )
         for label, marker in (

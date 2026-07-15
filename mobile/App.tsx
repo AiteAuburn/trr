@@ -3508,6 +3508,34 @@ export default function App() {
     return item.sourceText;
   }
 
+  function dailyRecordSectionKey(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
+    return section.id;
+  }
+
+  function dailyRecordSectionIcon(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
+    return section.icon;
+  }
+
+  function dailyRecordSectionTitle(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
+    return section.title;
+  }
+
+  function dailyRecordSectionCountLabel(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
+    return section.countLabel;
+  }
+
+  function dailyRecordSectionEntries(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
+    return section.entries;
+  }
+
+  function dailyRecordSectionHasEntries(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
+    return dailyRecordSectionEntries(section).length > 0;
+  }
+
+  function dailyRecordSectionEmptyCopy(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
+    return section.emptyCopy;
+  }
+
   function dailyRecordEntryTarget(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
     return item.index;
   }
@@ -8428,21 +8456,21 @@ export default function App() {
             ) : null}
             <View style={styles.dailyRecordSectionList}>
               {dailyRecordSectionItems.map((section) => (
-                <View key={section.id} style={styles.dailyRecordSectionCard}>
+                <View key={dailyRecordSectionKey(section)} style={styles.dailyRecordSectionCard}>
                   <View style={styles.recordHeader}>
                     <View style={styles.historyItemTitle}>
                       <View style={styles.iconCircleSmall}>
-                        <Text>{section.icon}</Text>
+                        <Text>{dailyRecordSectionIcon(section)}</Text>
                       </View>
                       <View style={styles.timelineContent}>
-                        <Text style={styles.label}>{section.title}</Text>
+                        <Text style={styles.label}>{dailyRecordSectionTitle(section)}</Text>
                         <Text style={styles.evidence}>欄位依分類顯示；沒有提到的欄位保持空白。</Text>
                       </View>
                     </View>
-                    <Text style={styles.countText}>{section.countLabel}</Text>
+                    <Text style={styles.countText}>{dailyRecordSectionCountLabel(section)}</Text>
                   </View>
-                  {section.entries.length > 0 ? (
-                    section.entries.map((item) => (
+                  {dailyRecordSectionHasEntries(section) ? (
+                    dailyRecordSectionEntries(section).map((item) => (
                       <View key={dailyRecordEntryKey(item)} style={styles.dailyRecordEntryCard}>
                         <View style={styles.recordHeader}>
                           <View style={styles.timelineContent}>
@@ -8486,7 +8514,7 @@ export default function App() {
                       </View>
                     ))
                   ) : (
-                    <Text style={styles.evidence}>{section.emptyCopy}</Text>
+                    <Text style={styles.evidence}>{dailyRecordSectionEmptyCopy(section)}</Text>
                   )}
                 </View>
               ))}

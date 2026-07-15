@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1725: Reuse daily record section fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared Daily Record section helpers for section key, icon, title, count label, entries, entry presence, and empty copy.
+- Reused the helpers in the Daily Record section cards while preserving section order, category copy, entry cards, edit/delete controls, and fixed save flow unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the Daily Record section render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining first-version render blocks and larger extraction opportunities in small behavior-preserving slices.
+
 ### T1724: Reuse rejected preview event fields
 
 Status: done
