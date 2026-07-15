@@ -1483,6 +1483,7 @@ def main() -> int:
             ("shared auxiliary food community share food name label", 'foodCommunityShareFoodNameAccessibility: boundDisplayText("輸入食物名稱", maxDisplayTextLength),'),
             ("shared auxiliary food community share eaten date label", 'foodCommunityShareEatenDateAccessibility: boundDisplayText("輸入食物分享食用日期", maxDisplayTextLength),'),
             ("shared auxiliary food community share eaten time label", 'foodCommunityShareEatenTimeAccessibility: boundDisplayText("輸入食物分享食用時間", maxDisplayTextLength),'),
+            ("shared auxiliary food community share before glucose label", 'foodCommunityShareBeforeGlucoseAccessibility: boundDisplayText("輸入食用前血糖", maxDisplayTextLength),'),
         ):
             _assert_contains(label, shared_display_items_content, marker)
         for label, marker in (
@@ -7640,6 +7641,7 @@ def main() -> int:
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
             ("food community share eaten time accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
+            ("food community share before glucose accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}"),
             ("food community category api type import", "type FoodCommunityApiCategoryRead,"),
             ("food community backend category state", "const [foodCommunityBackendCategories, setFoodCommunityBackendCategories]"),
             ("food community backend category options", "const foodCommunityCategoriesForDisplay = foodCommunityDisplay.categoriesForDisplay;"),
@@ -7674,6 +7676,7 @@ def main() -> int:
             ("food community share food name binding", "onChangeText={updateFoodCommunityFoodName}"),
             ("food community share eaten date input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
             ("food community share eaten time input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
+            ("food community share before glucose input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}"),
             ("food community share eaten date binding", "onChangeText={updateFoodCommunityEatenDate}"),
             ("food community share eaten time binding", "onChangeText={updateFoodCommunityEatenTime}"),
             ("food community share eaten date max length", "maxLength={maxDateInputLength}"),
@@ -9620,6 +9623,11 @@ def main() -> int:
             "food community direct share eaten time accessibility binding",
             content,
             'accessibilityLabel="輸入食物分享食用時間"',
+        )
+        _assert_not_contains(
+            "food community direct share before glucose accessibility binding",
+            content,
+            'accessibilityLabel="輸入食用前血糖"',
         )
         _assert_not_contains(
             "food community item direct handler id binding",

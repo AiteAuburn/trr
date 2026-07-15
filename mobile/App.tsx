@@ -9780,7 +9780,7 @@ export default function App() {
                 </View>
               </View>
               <TextInput
-                accessibilityLabel="輸入食用前血糖"
+                accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}
                 value={foodCommunityShareFields.beforeGlucose}
                 onChangeText={updateFoodCommunityBeforeGlucose}
                 keyboardType="numeric"

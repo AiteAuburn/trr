@@ -223,6 +223,7 @@ export function auxiliarySectionLabels() {
     foodCommunityShareFoodNameAccessibility: boundDisplayText("輸入食物名稱", maxDisplayTextLength),
     foodCommunityShareEatenDateAccessibility: boundDisplayText("輸入食物分享食用日期", maxDisplayTextLength),
     foodCommunityShareEatenTimeAccessibility: boundDisplayText("輸入食物分享食用時間", maxDisplayTextLength),
+    foodCommunityShareBeforeGlucoseAccessibility: boundDisplayText("輸入食用前血糖", maxDisplayTextLength),
     backendUrlInputAccessibility: boundDisplayText("Backend URL 輸入", maxDisplayTextLength),
     modelUrlInputAccessibility: boundDisplayText("模型下載 URL 輸入", maxDisplayTextLength),
     whisperModelPathInputAccessibility: boundDisplayText("Whisper 模型路徑輸入", maxDisplayTextLength),
