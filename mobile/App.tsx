@@ -4082,6 +4082,14 @@ export default function App() {
     return "尚未有可顯示的個別分享紀錄。";
   }
 
+  function foodCommunityDatabaseSectionLabel() {
+    return "食物血糖資料庫";
+  }
+
+  function foodCommunityDatabaseIntroCopy() {
+    return "建立華人使用者真實食物升糖資料庫，以實際食用前後血糖分享取代理論與網路傳言；backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。";
+  }
+
   function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> }) {
     return item.individualShareDisplayItems;
   }
@@ -9885,8 +9893,8 @@ export default function App() {
               <Text style={styles.evidence}>{communityPreviewBoundaryCopyDisplayText}</Text>
             </View>
             <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>食物血糖資料庫</Text>
-              <Text style={styles.evidence}>建立華人使用者真實食物升糖資料庫，以實際食用前後血糖分享取代理論與網路傳言；backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。</Text>
+              <Text style={styles.label}>{foodCommunityDatabaseSectionLabel()}</Text>
+              <Text style={styles.evidence}>{foodCommunityDatabaseIntroCopy()}</Text>
             </View>
             <TextInput
               accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}

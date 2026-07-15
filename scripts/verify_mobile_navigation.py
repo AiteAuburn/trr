@@ -7587,6 +7587,11 @@ def main() -> int:
             ("food community backend-aware intro copy", "backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。"),
             ("food community Chinese-user real glycemic database positioning", "建立華人使用者真實食物升糖資料庫"),
             ("food community replaces theory and rumors positioning", "以實際食用前後血糖分享取代理論與網路傳言"),
+            ("food community database section label helper", "function foodCommunityDatabaseSectionLabel()"),
+            ("food community database section label helper fields", 'return "食物血糖資料庫";'),
+            ("food community database section label helper binding", "{foodCommunityDatabaseSectionLabel()}"),
+            ("food community database intro copy helper", "function foodCommunityDatabaseIntroCopy()"),
+            ("food community database intro copy helper binding", "{foodCommunityDatabaseIntroCopy()}"),
             ("food community backend-aware empty copy", "backend ready 時會依搜尋同步，未連線時只篩選本機預覽。"),
             ("food community points store bridge current copy", "點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利"),
             ("food community point rows helper binding", "const foodCommunityPointRows = foodCommunityDisplay.pointRows;"),
@@ -10051,6 +10056,16 @@ def main() -> int:
             "community direct screen subtitle binding",
             content,
             "<Text style={styles.evidence}>同步真實食物升糖分享、點數與公開排行榜；貼文留言治理仍待正式開放。</Text>",
+        )
+        _assert_not_contains(
+            "food community direct database section label binding",
+            content,
+            "<Text style={styles.label}>食物血糖資料庫</Text>",
+        )
+        _assert_not_contains(
+            "food community direct database intro copy binding",
+            content,
+            "<Text style={styles.evidence}>建立華人使用者真實食物升糖資料庫，以實際食用前後血糖分享取代理論與網路傳言；backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。</Text>",
         )
         _assert_not_contains(
             "ranking direct close accessibility binding",
