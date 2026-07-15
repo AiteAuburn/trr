@@ -4916,6 +4916,21 @@ def main() -> int:
             "function pressVisualSmokeRoute(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>)",
         )
         _assert_contains(
+            "visual smoke route target helper",
+            content,
+            "function visualSmokeRouteTarget(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>)",
+        )
+        _assert_contains(
+            "visual smoke route target helper fields",
+            content,
+            "return item.target;",
+        )
+        _assert_contains(
+            "visual smoke route target helper binding",
+            content,
+            "openVisualSmokeRoute(visualSmokeRouteTarget(item));",
+        )
+        _assert_contains(
             "visual smoke route press binding",
             content,
             "onPress={() => pressVisualSmokeRoute(item)}",
@@ -4924,6 +4939,11 @@ def main() -> int:
             "visual smoke direct route binding",
             content,
             "onPress={() => openVisualSmokeRoute(item.target)}",
+        )
+        _assert_not_contains(
+            "visual smoke direct route handler target binding",
+            content,
+            "openVisualSmokeRoute(item.target);",
         )
         _assert_contains(
             "visual smoke initial route env",

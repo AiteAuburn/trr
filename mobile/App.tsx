@@ -4297,8 +4297,12 @@ export default function App() {
     openScreen(target);
   }
 
+  function visualSmokeRouteTarget(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>) {
+    return item.target;
+  }
+
   function pressVisualSmokeRoute(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>) {
-    openVisualSmokeRoute(item.target);
+    openVisualSmokeRoute(visualSmokeRouteTarget(item));
   }
 
   useEffect(() => {

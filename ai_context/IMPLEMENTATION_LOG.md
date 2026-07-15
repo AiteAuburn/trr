@@ -15,6 +15,36 @@
 
 ## 2026-07-13
 
+### T1538 reuse visual-smoke route target helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `visualSmokeRouteTarget` helper for debug-gated visual-smoke route jump press handling.
+- Reused the helper in `pressVisualSmokeRoute` while keeping visual-smoke route gating and jump behavior unchanged.
+- Updated navigation verifier coverage for the shared visual-smoke route target helper and direct `item.target` regression guard.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1537 reuse menu destination target helper
 
 類型：mobile / refactor / verifier / docs
