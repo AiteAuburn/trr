@@ -7698,6 +7698,9 @@ def main() -> int:
             ("food community item target helper", "function foodCommunityItemTarget(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
             ("food community item target helper fields", "return item.id;"),
             ("food community item target helper binding", "selectFoodCommunityItem(foodCommunityItemTarget(item));"),
+            ("food community list item key helper", "function foodCommunityListItemKey(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
+            ("food community list item key helper fields", "return item.id;"),
+            ("food community list item key helper binding", "key={foodCommunityListItemKey(item)}"),
             ("food community share status handler", "function showFoodCommunityShareStatus()"),
             ("commerce search input value helper", "function commerceSearchInputValue(value: string)"),
             ("commerce search input value helper fields", "return boundStoreSearchText(value);"),
@@ -8512,6 +8515,9 @@ def main() -> int:
             ("food community category target helper", "function foodCommunityCategoryTarget(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category target helper fields", "return category.value;"),
             ("food community category target helper binding", "selectFoodCommunityCategory(foodCommunityCategoryTarget(category));"),
+            ("food community list item key helper", "function foodCommunityListItemKey(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
+            ("food community list item key helper fields", "return item.id;"),
+            ("food community list item key helper binding", "key={foodCommunityListItemKey(item)}"),
             ("store product status handler", "function showStoreProductStatus(actionStatus: string)"),
             ("store product action status helper", "function storeProductActionStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store product action status helper fields", "return product.actionStatus;"),
@@ -9373,6 +9379,11 @@ def main() -> int:
             "food community direct list detail refresh",
             content,
             "void loadFoodCommunityDetail(nextItems[0].id);",
+        )
+        _assert_not_contains(
+            "food community direct list item key binding",
+            content,
+            "visibleFoodCommunityItems.map((item) => (\n                <Pressable\n                  key={item.id}",
         )
         _assert_not_contains(
             "food community direct list item title binding",

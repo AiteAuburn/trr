@@ -4104,6 +4104,10 @@ export default function App() {
     return item.id;
   }
 
+  function foodCommunityListItemKey(item: ReturnType<typeof foodCommunityItemDisplayItem>) {
+    return item.id;
+  }
+
   function pressFoodCommunityItem(item: ReturnType<typeof foodCommunityItemDisplayItem>) {
     selectFoodCommunityItem(foodCommunityItemTarget(item));
   }
@@ -9618,7 +9622,7 @@ export default function App() {
             <View style={styles.openSection}>
               {visibleFoodCommunityItems.map((item) => (
                 <Pressable
-                  key={item.id}
+                  key={foodCommunityListItemKey(item)}
                   accessibilityLabel={item.accessibilityLabel}
                   accessibilityRole="button"
                   accessibilityState={{ selected: selectedFoodCommunityItem?.id === item.id }}
