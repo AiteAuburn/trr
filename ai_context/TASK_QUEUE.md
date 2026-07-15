@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1701: Reuse insight flow checklist item fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `insightFlowChecklistItemKey` and `insightFlowChecklistItemText` helpers for Delete Confirm, Analysis, and Detailed Report checklist rendering.
+- Reused the helpers in the insight flow checklist rows while preserving existing text, order, layout, record deletion confirmation, analysis navigation, and report behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the insight flow checklist render blocks.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing Year Review custom highlight rows and remaining shared row components for behavior-preserving display helpers.
+
 ### T1700: Reuse record flow checklist item fields
 
 Status: done

@@ -3671,6 +3671,14 @@ export default function App() {
     return item;
   }
 
+  function insightFlowChecklistItemKey(item: string) {
+    return item;
+  }
+
+  function insightFlowChecklistItemText(item: string) {
+    return item;
+  }
+
   function subscriptionComparisonRowKey(row: (typeof subscriptionComparisonDisplayRows)[number]) {
     return row.feature;
   }
@@ -9143,7 +9151,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.deletePreConfirm}</Text>
               {deleteConfirmChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.actionRow}>
@@ -9606,7 +9614,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.analysisDataBoundary}</Text>
               {analysisBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />
               ))}
             </View>
             {recordsForDisplay.length >= mobileRecordSyncLimit ? (
@@ -9692,7 +9700,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.reportNotes}</Text>
               {detailedReportNoteItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />
               ))}
             </View>
           </View>
