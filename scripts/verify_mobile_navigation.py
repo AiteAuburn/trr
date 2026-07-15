@@ -7716,6 +7716,10 @@ def main() -> int:
             ("ranking close accessibility helper fields", "return auxiliaryDisplayLabels.closeReturn;"),
             ("ranking close accessibility display label binding", "const rankingCloseAccessibilityDisplayLabel = rankingCloseAccessibilityLabel();"),
             ("ranking close accessibility helper binding", "accessibilityLabel={rankingCloseAccessibilityDisplayLabel}"),
+            ("ranking close button helper", "function rankingCloseButtonLabel()"),
+            ("ranking close button helper fields", 'return "×";'),
+            ("ranking close button display label binding", "const rankingCloseButtonDisplayLabel = rankingCloseButtonLabel();"),
+            ("ranking close button helper binding", "{rankingCloseButtonDisplayLabel}"),
             ("ranking public action accessibility helper", "function rankingPublicActionAccessibilityLabel()"),
             ("ranking public action accessibility helper fields", "return futurePreviewDisplayLabels.rankingPublicAccessibility;"),
             ("ranking public action accessibility display label binding", "const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel();"),
@@ -9881,6 +9885,11 @@ def main() -> int:
             "ranking direct close accessibility binding",
             content,
             "<Text style={styles.sectionTitle}>{rankingScreenTitleLabel()}</Text>\n                <Text style={styles.evidence}>{rankingScreenSubtitleCopy()}</Text>\n              </View>\n              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole=\"button\" style={styles.closeButton} onPress={returnFromRankingPreview}>",
+        )
+        _assert_not_contains(
+            "ranking direct close button binding",
+            content,
+            "<Text style={styles.sectionTitle}>{rankingScreenTitleLabel()}</Text>\n                <Text style={styles.evidence}>{rankingScreenSubtitleCopy()}</Text>\n              </View>\n              <Pressable accessibilityLabel={rankingCloseAccessibilityDisplayLabel} accessibilityRole=\"button\" style={styles.closeButton} onPress={returnFromRankingPreview}>\n                <Text style={styles.closeButtonText}>×</Text>",
         )
         _assert_not_contains(
             "ranking direct action status label binding",
