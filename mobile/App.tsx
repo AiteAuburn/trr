@@ -3999,6 +3999,10 @@ export default function App() {
     return item.title;
   }
 
+  function foodCommunityDetailShareCount(item: { shareCount: number }) {
+    return item.shareCount;
+  }
+
   function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
     return item.examples.length;
   }
@@ -9588,7 +9592,7 @@ export default function App() {
                 <View style={styles.reportBoundaryGrid}>
                   <View style={styles.reportBoundaryCard}>
                     <Text style={styles.confidence}>分享總人數</Text>
-                    <Text style={styles.recordType}>{selectedFoodCommunityItem.shareCount}</Text>
+                    <Text style={styles.recordType}>{foodCommunityDetailShareCount(selectedFoodCommunityItem)}</Text>
                   </View>
                   <View style={styles.reportBoundaryCard}>
                     <Text style={styles.confidence}>實際升糖參考值（平均）</Text>

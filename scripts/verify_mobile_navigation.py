@@ -7545,6 +7545,9 @@ def main() -> int:
             ("food community detail title helper", "function foodCommunityDetailTitle(item: { title: string })"),
             ("food community detail title helper fields", "return item.title;"),
             ("food community detail title helper binding", "{foodCommunityDetailTitle(selectedFoodCommunityItem)} 資料頁"),
+            ("food community detail share count helper", "function foodCommunityDetailShareCount(item: { shareCount: number })"),
+            ("food community detail share count helper fields", "return item.shareCount;"),
+            ("food community detail share count helper binding", "{foodCommunityDetailShareCount(selectedFoodCommunityItem)}"),
             ("food community detail status example count helper", "function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] })"),
             ("food community detail status example count helper fields", "return item.examples.length;"),
             ("food community detail status title helper binding", "itemTitle: foodCommunityDetailStatusTitle(detailedItem),"),
@@ -9306,6 +9309,11 @@ def main() -> int:
             "food community direct detail title binding",
             content,
             "{selectedFoodCommunityItem.title} 資料頁",
+        )
+        _assert_not_contains(
+            "food community direct detail share count binding",
+            content,
+            "{selectedFoodCommunityItem.shareCount}",
         )
         _assert_not_contains(
             "food community direct share category binding",
