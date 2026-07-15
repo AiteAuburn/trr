@@ -7673,6 +7673,9 @@ def main() -> int:
             ("ranking streak display label helper", "function rankingStreakDisplayLabel(days: number)"),
             ("ranking streak display label helper fields", "return `${days} 天`;"),
             ("ranking streak display label helper binding", "{rankingStreakDisplayLabel(rankingStreakDisplayDays)}"),
+            ("ranking boundary row key helper", "function rankingBoundaryRowKey(row: ReturnType<typeof rankingBoundaryDisplayRows>[number])"),
+            ("ranking boundary row key helper fields", "return row.label;"),
+            ("ranking boundary row key helper binding", "key={rankingBoundaryRowKey(row)}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9739,6 +9742,11 @@ def main() -> int:
             "ranking direct streak display label binding",
             content,
             '<Text style={styles.heroNumber}>{rankingStreakDisplayDays} 天</Text>',
+        )
+        _assert_not_contains(
+            "ranking direct boundary row key binding",
+            content,
+            "rankingBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
