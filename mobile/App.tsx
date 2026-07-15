@@ -3454,6 +3454,26 @@ export default function App() {
     return item.target;
   }
 
+  function destinationCardKey(item: ReturnType<typeof destinationCardDisplayItem>) {
+    return `${item.target}-${item.label}`;
+  }
+
+  function destinationCardAccessibilityLabel(item: ReturnType<typeof destinationCardDisplayItem>) {
+    return item.accessibilityLabel;
+  }
+
+  function destinationCardIcon(item: ReturnType<typeof destinationCardDisplayItem>) {
+    return item.icon;
+  }
+
+  function destinationCardLabel(item: ReturnType<typeof destinationCardDisplayItem>) {
+    return item.label;
+  }
+
+  function destinationCardHelper(item: ReturnType<typeof destinationCardDisplayItem>) {
+    return item.helper;
+  }
+
   function pressSaveSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>) {
     openSaveSuccessDestinationCard(destinationCardTarget(item));
   }
@@ -8661,19 +8681,19 @@ export default function App() {
             <View style={styles.postSaveGrid}>
               {saveSuccessDestinationItems.map((item) => (
                 <Pressable
-                  key={`${item.target}-${item.label}`}
-                  accessibilityLabel={item.accessibilityLabel}
+                  key={destinationCardKey(item)}
+                  accessibilityLabel={destinationCardAccessibilityLabel(item)}
                   accessibilityRole="button"
                   style={styles.postSaveCard}
                   onPress={() => pressSaveSuccessDestinationCard(item)}
                 >
                   <View style={styles.historyItemTitle}>
                     <View style={styles.iconCircleSmall}>
-                      <Text>{item.icon}</Text>
+                      <Text>{destinationCardIcon(item)}</Text>
                     </View>
                     <View style={styles.timelineContent}>
-                      <Text style={styles.recordType}>{item.label}</Text>
-                      <Text style={styles.evidence}>{item.helper}</Text>
+                      <Text style={styles.recordType}>{destinationCardLabel(item)}</Text>
+                      <Text style={styles.evidence}>{destinationCardHelper(item)}</Text>
                     </View>
                   </View>
                 </Pressable>
@@ -8770,19 +8790,19 @@ export default function App() {
             <View style={styles.postSaveGrid}>
               {deleteSuccessDestinationItems.map((item) => (
                 <Pressable
-                  key={`${item.target}-${item.label}`}
-                  accessibilityLabel={item.accessibilityLabel}
+                  key={destinationCardKey(item)}
+                  accessibilityLabel={destinationCardAccessibilityLabel(item)}
                   accessibilityRole="button"
                   style={styles.postSaveCard}
                   onPress={() => pressDeleteSuccessDestinationCard(item)}
                 >
                   <View style={styles.historyItemTitle}>
                     <View style={styles.iconCircleSmall}>
-                      <Text>{item.icon}</Text>
+                      <Text>{destinationCardIcon(item)}</Text>
                     </View>
                     <View style={styles.timelineContent}>
-                      <Text style={styles.recordType}>{item.label}</Text>
-                      <Text style={styles.evidence}>{item.helper}</Text>
+                      <Text style={styles.recordType}>{destinationCardLabel(item)}</Text>
+                      <Text style={styles.evidence}>{destinationCardHelper(item)}</Text>
                     </View>
                   </View>
                 </Pressable>
@@ -8837,19 +8857,19 @@ export default function App() {
             <View style={styles.postSaveGrid}>
               {updateSuccessDestinationItems.map((item) => (
                   <Pressable
-                    key={`${item.target}-${item.label}`}
-                    accessibilityLabel={item.accessibilityLabel}
+                    key={destinationCardKey(item)}
+                    accessibilityLabel={destinationCardAccessibilityLabel(item)}
                     accessibilityRole="button"
                     style={styles.postSaveCard}
                     onPress={() => pressUpdateSuccessDestinationCard(item)}
                   >
                     <View style={styles.historyItemTitle}>
                       <View style={styles.iconCircleSmall}>
-                        <Text>{item.icon}</Text>
+                        <Text>{destinationCardIcon(item)}</Text>
                       </View>
                       <View style={styles.timelineContent}>
-                        <Text style={styles.recordType}>{item.label}</Text>
-                        <Text style={styles.evidence}>{item.helper}</Text>
+                        <Text style={styles.recordType}>{destinationCardLabel(item)}</Text>
+                        <Text style={styles.evidence}>{destinationCardHelper(item)}</Text>
                       </View>
                     </View>
                   </Pressable>

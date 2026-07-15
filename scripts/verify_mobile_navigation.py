@@ -879,6 +879,7 @@ def _pressable_label_source_errors(content: str) -> list[str]:
         "type.accessibilityLabel",
     }
     helper_label_sources = {
+        "destinationCardAccessibilityLabel(item)",
         "foodCommunityCategoryOptionAccessibilityLabel(category)",
         "settingsDisplayRowAccessibilityLabel(row)",
         "foodCommunityListItemAccessibilityLabel(item)",
@@ -3296,6 +3297,24 @@ def main() -> int:
             content,
             "return item.target;",
         )
+        for label, marker in (
+            ("destination card key helper", "function destinationCardKey(item: ReturnType<typeof destinationCardDisplayItem>)"),
+            ("destination card key helper fields", "return `${item.target}-${item.label}`;"),
+            ("destination card key binding", "key={destinationCardKey(item)}"),
+            ("destination card accessibility helper", "function destinationCardAccessibilityLabel(item: ReturnType<typeof destinationCardDisplayItem>)"),
+            ("destination card accessibility helper fields", "return item.accessibilityLabel;"),
+            ("destination card accessibility binding", "accessibilityLabel={destinationCardAccessibilityLabel(item)}"),
+            ("destination card icon helper", "function destinationCardIcon(item: ReturnType<typeof destinationCardDisplayItem>)"),
+            ("destination card icon helper fields", "return item.icon;"),
+            ("destination card icon binding", "{destinationCardIcon(item)}"),
+            ("destination card label helper", "function destinationCardLabel(item: ReturnType<typeof destinationCardDisplayItem>)"),
+            ("destination card label helper fields", "return item.label;"),
+            ("destination card label binding", "{destinationCardLabel(item)}"),
+            ("destination card helper helper", "function destinationCardHelper(item: ReturnType<typeof destinationCardDisplayItem>)"),
+            ("destination card helper helper fields", "return item.helper;"),
+            ("destination card helper binding", "{destinationCardHelper(item)}"),
+        ):
+            _assert_contains(label, content, marker)
         _assert_contains(
             "save success destination card target helper binding",
             content,
@@ -3309,7 +3328,7 @@ def main() -> int:
         _assert_contains(
             "save success destination card accessibility binding",
             content,
-            "accessibilityLabel={item.accessibilityLabel}",
+            "accessibilityLabel={destinationCardAccessibilityLabel(item)}",
         )
         _assert_contains(
             "save success destination card button role",
@@ -4262,7 +4281,7 @@ def main() -> int:
         _assert_contains(
             "delete success destination card accessibility binding",
             content,
-            "accessibilityLabel={item.accessibilityLabel}",
+            "accessibilityLabel={destinationCardAccessibilityLabel(item)}",
         )
         _assert_contains(
             "delete success destination card button role",
@@ -4292,7 +4311,7 @@ def main() -> int:
         _assert_contains(
             "update success destination card accessibility binding",
             content,
-            "accessibilityLabel={item.accessibilityLabel}",
+            "accessibilityLabel={destinationCardAccessibilityLabel(item)}",
         )
         _assert_contains(
             "update success destination card button role",
@@ -4324,6 +4343,29 @@ def main() -> int:
             content,
             "onPress={() => openUpdateSuccessDestination(item.target)}",
         )
+        for block_label, pattern in (
+            (
+                "save success destination card render block",
+                r"saveSuccessDestinationItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
+            ),
+            (
+                "delete success destination card render block",
+                r"deleteSuccessDestinationItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
+            ),
+            (
+                "update success destination card render block",
+                r"updateSuccessDestinationItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
+            ),
+        ):
+            destination_card_render_block = _match_block(content, pattern, block_label)
+            for label, marker in (
+                ("direct destination card key binding", "key={`${item.target}-${item.label}`}"),
+                ("direct destination card accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
+                ("direct destination card icon binding", "<Text>{item.icon}</Text>"),
+                ("direct destination card label binding", "<Text style={styles.recordType}>{item.label}</Text>"),
+                ("direct destination card helper binding", "<Text style={styles.evidence}>{item.helper}</Text>"),
+            ):
+                _assert_not_contains(f"{block_label} {label}", destination_card_render_block, marker)
         _assert_contains(
             "updated record detail binding",
             content,
