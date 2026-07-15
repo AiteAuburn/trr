@@ -2383,6 +2383,46 @@ export default function App() {
     return row.value;
   }
 
+  function analysisChartPointKey(point: (typeof analysisChartPoints)[number]) {
+    return point.id;
+  }
+
+  function analysisChartPointValue(point: (typeof analysisChartPoints)[number]) {
+    return point.value;
+  }
+
+  function analysisChartPointLabel(point: (typeof analysisChartPoints)[number]) {
+    return point.label;
+  }
+
+  function analysisChartPointOffset(
+    point: (typeof analysisChartPoints)[number],
+    minimum: number,
+    range: number
+  ) {
+    const normalized = (analysisChartPointValue(point) - minimum) / range;
+    return Math.round((1 - normalized) * 104);
+  }
+
+  function analysisChartPointIsSelected(index: number, selectedIndex: number | null) {
+    return selectedIndex === index;
+  }
+
+  function analysisChartPointAccessibilityLabel(point: (typeof analysisChartPoints)[number]) {
+    return boundDisplayText(
+      `查看分析圖表點：${analysisChartPointLabel(point)}，血糖 ${analysisChartPointValue(point)}`,
+      maxDisplayDetailTextLength
+    );
+  }
+
+  function analysisAxisLabel(
+    point: (typeof analysisChartPoints)[number],
+    index: number,
+    totalCount: number
+  ) {
+    return index === 0 || index === totalCount - 1 || index % 3 === 0 ? analysisChartPointLabel(point) : "";
+  }
+
   function detailedReportBoundaryRowKey(row: (typeof detailedReportBoundaryRows)[number]) {
     return row.label;
   }
@@ -10006,22 +10046,18 @@ export default function App() {
               </View>
               {analysisChartPoints.length > 0 ? (
                 <>
-                  <View style={styles.lineChartCanvas}>
-                    <View style={styles.chartGridLineTop} />
-                    <View style={styles.chartGridLineMiddle} />
-                    <View style={styles.chartGridLineBottom} />
+                    <View style={styles.lineChartCanvas}>
+                      <View style={styles.chartGridLineTop} />
+                      <View style={styles.chartGridLineMiddle} />
+                      <View style={styles.chartGridLineBottom} />
                     <View style={styles.lineChartRow}>
                       {analysisChartPoints.map((point, index) => {
-                        const normalized = (point.value - chartMinimum) / chartRange;
-                        const pointOffset = Math.round((1 - normalized) * 104);
-                        const isSelected = selectedAnalysisPointIndex === index;
-                        const pointAccessibilityLabel = boundDisplayText(
-                          `查看分析圖表點：${point.label}，血糖 ${point.value}`,
-                          maxDisplayDetailTextLength
-                        );
+                        const pointOffset = analysisChartPointOffset(point, chartMinimum, chartRange);
+                        const isSelected = analysisChartPointIsSelected(index, selectedAnalysisPointIndex);
+                        const pointAccessibilityLabel = analysisChartPointAccessibilityLabel(point);
                         return (
                           <Pressable
-                            key={point.id}
+                            key={analysisChartPointKey(point)}
                             accessibilityLabel={pointAccessibilityLabel}
                             accessibilityRole="button"
                             accessibilityState={{ selected: isSelected }}
@@ -10039,10 +10075,8 @@ export default function App() {
                   </View>
                   <View style={styles.chartXAxisRow}>
                     {analysisChartPoints.map((point, index) => (
-                      <Text key={point.id} style={styles.chartAxisLabel}>
-                        {index === 0 || index === analysisChartPoints.length - 1 || index % 3 === 0
-                          ? point.label
-                          : ""}
+                      <Text key={analysisChartPointKey(point)} style={styles.chartAxisLabel}>
+                        {analysisAxisLabel(point, index, analysisChartPoints.length)}
                       </Text>
                     ))}
                   </View>

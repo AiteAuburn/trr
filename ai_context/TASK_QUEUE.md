@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1726: Reuse analysis chart point fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared Basic Analysis chart-point helpers for point key, value, label, vertical offset, selected state, accessibility copy, and x-axis label display.
+- Reused the helpers in the glucose trend chart while preserving chart data, selected point behavior, axis labeling, and first-version Analysis UI unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for chart point and x-axis render blocks.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining first-version settings/profile/model render blocks and larger extraction opportunities in small behavior-preserving slices.
+
 ### T1725: Reuse daily record section fields
 
 Status: done

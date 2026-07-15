@@ -7470,6 +7470,23 @@ def main() -> int:
             ("analysis metric row value helper", "function analysisMetricRowValue(row: (typeof analysisMetricRows)[number])"),
             ("analysis metric row value helper fields", "return row.value;"),
             ("analysis metric row value helper binding", "value={analysisMetricRowValue(row)}"),
+            ("analysis chart point key helper", "function analysisChartPointKey(point: (typeof analysisChartPoints)[number])"),
+            ("analysis chart point key helper fields", "return point.id;"),
+            ("analysis chart point key binding", "key={analysisChartPointKey(point)}"),
+            ("analysis chart point value helper", "function analysisChartPointValue(point: (typeof analysisChartPoints)[number])"),
+            ("analysis chart point value helper fields", "return point.value;"),
+            ("analysis chart point label helper", "function analysisChartPointLabel(point: (typeof analysisChartPoints)[number])"),
+            ("analysis chart point label helper fields", "return point.label;"),
+            ("analysis chart point offset helper", "function analysisChartPointOffset("),
+            ("analysis chart point offset helper fields", "const normalized = (analysisChartPointValue(point) - minimum) / range;"),
+            ("analysis chart point offset binding", "const pointOffset = analysisChartPointOffset(point, chartMinimum, chartRange);"),
+            ("analysis chart point selected helper", "function analysisChartPointIsSelected(index: number, selectedIndex: number | null)"),
+            ("analysis chart point selected helper fields", "return selectedIndex === index;"),
+            ("analysis chart point selected helper binding", "const isSelected = analysisChartPointIsSelected(index, selectedAnalysisPointIndex);"),
+            ("analysis chart point accessibility helper", "function analysisChartPointAccessibilityLabel(point: (typeof analysisChartPoints)[number])"),
+            ("analysis chart point accessibility helper binding", "const pointAccessibilityLabel = analysisChartPointAccessibilityLabel(point);"),
+            ("analysis axis label helper", "function analysisAxisLabel("),
+            ("analysis axis label helper binding", "{analysisAxisLabel(point, index, analysisChartPoints.length)}"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(
@@ -7590,7 +7607,7 @@ def main() -> int:
         _assert_contains(
             "analysis chart point accessibility label",
             content,
-            "`查看分析圖表點：${point.label}，血糖 ${point.value}`",
+            "`查看分析圖表點：${analysisChartPointLabel(point)}，血糖 ${analysisChartPointValue(point)}`",
         )
         _assert_contains(
             "analysis chart point selected state",
@@ -7617,6 +7634,31 @@ def main() -> int:
             content,
             "onPress={() => toggleAnalysisPoint(index)}",
         )
+        analysis_chart_point_render_block = _match_block(
+            content,
+            r"analysisChartPoints\.map\(\(point, index\) => \{([\s\S]*?pressAnalysisChartPoint\(index\)[\s\S]*?</Pressable>)",
+            "analysis chart point render block",
+        )
+        for label, marker in (
+            ("direct analysis chart point normalized binding", "const normalized = (point.value - chartMinimum) / chartRange;"),
+            ("direct analysis chart point offset binding", "Math.round((1 - normalized) * 104)"),
+            ("direct analysis chart point selected binding", "selectedAnalysisPointIndex === index"),
+            ("direct analysis chart point key binding", "key={point.id}"),
+            ("direct analysis chart point label binding", "point.label"),
+            ("direct analysis chart point value binding", "point.value"),
+        ):
+            _assert_not_contains(label, analysis_chart_point_render_block, marker)
+        analysis_axis_render_block = _match_block(
+            content,
+            r"analysisChartPoints\.map\(\(point, index\) => \(([\s\S]*?analysisAxisLabel\(point, index, analysisChartPoints\.length\)[\s\S]*?</Text>)",
+            "analysis chart axis render block",
+        )
+        for label, marker in (
+            ("direct analysis axis key binding", "key={point.id}"),
+            ("direct analysis axis label binding", "point.label"),
+            ("direct analysis axis visibility binding", "index === 0 || index === analysisChartPoints.length - 1 || index % 3 === 0"),
+        ):
+            _assert_not_contains(label, analysis_axis_render_block, marker)
         _assert_contains(
             "detailed report manual entry binding",
             content,
