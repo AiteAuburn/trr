@@ -7419,11 +7419,14 @@ def main() -> int:
             ("preview status row copy helper fields", "return row.copy;"),
             ("preview status row status helper", "function previewStatusRowStatusLabel(row: { statusLabel: string })"),
             ("preview status row status helper fields", "return row.statusLabel;"),
+            ("preview timed row time helper", "function previewTimedRowTime(row: { time: string })"),
+            ("preview timed row time helper fields", "return row.time;"),
             ("subscription management preview status row key binding", "subscriptionManagementDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
             ("privacy control preview status row key binding", "privacyControlDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
             ("production auth readiness preview status row key binding", "productionAuthReadinessDisplayRows.map((item) => (\n                <View key={previewStatusRowKey(item)}"),
             ("session management preview status row key binding", "sessionManagementDisplayItems.map((item) => (\n                <Pressable\n                  key={previewStatusRowKey(item)}"),
             ("auth provider preview status row key binding", "authProviderDisplayItems.map((item) => (\n                <Pressable\n                  key={previewStatusRowKey(item)}"),
+            ("reminder preview status row key binding", "reminderPreviewDisplayItems.map((item) => (\n                <View key={previewStatusRowKey(item)}"),
             ("preview status row icon binding", "{previewStatusRowIcon(row)}"),
             ("preview status row title binding", "{previewStatusRowTitle(row)}"),
             ("preview status row copy binding", "{previewStatusRowCopy(row)}"),
@@ -7440,6 +7443,7 @@ def main() -> int:
             ("session management preview status row title binding", "{previewStatusRowTitle(item)}"),
             ("session management preview status row copy binding", "{previewStatusRowCopy(item)}"),
             ("session management preview status row status binding", "{previewStatusRowStatusLabel(item)}"),
+            ("reminder preview status row time binding", "{previewTimedRowTime(item)}"),
             ("settings checklist item key helper", "function settingsChecklistItemKey(item: string)"),
             ("settings checklist item key helper fields", "return item;"),
             ("settings checklist item key binding", "key={settingsChecklistItemKey(item)}"),
@@ -7583,6 +7587,10 @@ def main() -> int:
                 "auth provider preview status rows render block",
                 r"authProviderDisplayItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
             ),
+            (
+                "reminder preview status rows render block",
+                r"reminderPreviewDisplayItems\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
+            ),
         ):
             preview_status_rows_render_block = _match_block(content, pattern, block_label)
             for label, marker in (
@@ -7593,6 +7601,7 @@ def main() -> int:
                 ("direct preview status row title binding", "<Text style={styles.recordContent}>{row.title}</Text>"),
                 ("direct preview status item title binding", "<Text style={styles.recordContent}>{item.title}</Text>"),
                 ("direct preview status item login title binding", "<Text style={styles.recordContent}>{item.title} 登入</Text>"),
+                ("direct preview status item time binding", "<Text style={styles.confidence}>{item.time}</Text>"),
                 ("direct preview status row copy binding", "<Text style={styles.evidence}>{row.copy}</Text>"),
                 ("direct preview status item copy binding", "<Text style={styles.evidence}>{item.copy}</Text>"),
                 ("direct preview status row status binding", "<Text style={styles.previewModeBadge}>{row.statusLabel}</Text>"),

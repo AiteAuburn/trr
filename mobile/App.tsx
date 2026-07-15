@@ -3603,6 +3603,10 @@ export default function App() {
     return row.statusLabel;
   }
 
+  function previewTimedRowTime(row: { time: string }) {
+    return row.time;
+  }
+
   function settingsChecklistItemKey(item: string) {
     return item;
   }
@@ -11381,16 +11385,16 @@ export default function App() {
             </View>
             <View style={styles.aiReviewList}>
               {reminderPreviewDisplayItems.map((item) => (
-                <View key={item.title} style={styles.aiReviewCard}>
+                <View key={previewStatusRowKey(item)} style={styles.aiReviewCard}>
                   <View style={styles.iconCircleSmall}>
                     <Text>鈴</Text>
                   </View>
                   <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{item.title}</Text>
-                    <Text style={styles.confidence}>{item.time}</Text>
-                    <Text style={styles.evidence}>{item.copy}</Text>
+                    <Text style={styles.recordContent}>{previewStatusRowTitle(item)}</Text>
+                    <Text style={styles.confidence}>{previewTimedRowTime(item)}</Text>
+                    <Text style={styles.evidence}>{previewStatusRowCopy(item)}</Text>
                   </View>
-                  <Text style={styles.previewModeBadge}>{item.statusLabel}</Text>
+                  <Text style={styles.previewModeBadge}>{previewStatusRowStatusLabel(item)}</Text>
                 </View>
               ))}
             </View>

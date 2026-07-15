@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1692: Reuse reminder preview row fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused shared preview status row helpers for Reminder Settings preview rows.
+- Added `previewTimedRowTime` for the reminder time field while preserving the existing bell icon, reminder copy, ordering, layout, and non-interactive behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the reminder preview render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining runtime session and checklist rows for behavior-preserving display helpers.
+
 ### T1691: Reuse auth provider preview row fields
 
 Status: done
