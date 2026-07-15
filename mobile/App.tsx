@@ -4090,6 +4090,14 @@ export default function App() {
     return "建立華人使用者真實食物升糖資料庫，以實際食用前後血糖分享取代理論與網路傳言；backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。";
   }
 
+  function foodCommunityListEmptyTitle() {
+    return "沒有符合的食物";
+  }
+
+  function foodCommunityListEmptyCopy() {
+    return "可清除搜尋文字或切換分類；backend ready 時會依搜尋同步，未連線時只篩選本機預覽。";
+  }
+
   function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> }) {
     return item.individualShareDisplayItems;
   }
@@ -9955,8 +9963,8 @@ export default function App() {
               ))}
               {foodCommunityListIsEmpty(visibleFoodCommunityItems) ? (
                 <View style={styles.inlineInfoBlock}>
-                  <Text style={styles.label}>沒有符合的食物</Text>
-                  <Text style={styles.evidence}>可清除搜尋文字或切換分類；backend ready 時會依搜尋同步，未連線時只篩選本機預覽。</Text>
+                  <Text style={styles.label}>{foodCommunityListEmptyTitle()}</Text>
+                  <Text style={styles.evidence}>{foodCommunityListEmptyCopy()}</Text>
                 </View>
               ) : null}
             </View>
