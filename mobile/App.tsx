@@ -4031,6 +4031,10 @@ export default function App() {
     return item.maximumRise;
   }
 
+  function foodCommunityDetailMaximumRiseDisplayText(item: { maximumRise: number }) {
+    return `${foodCommunityDetailMaximumRise(item)} mg/dL`;
+  }
+
   function foodCommunityDetailMinimumRise(item: { minimumRise: number }) {
     return item.minimumRise;
   }
@@ -9687,7 +9691,7 @@ export default function App() {
                   </View>
                   <View style={styles.reportBoundaryCard}>
                     <Text style={styles.confidence}>最高上升血糖</Text>
-                    <Text style={styles.recordType}>{foodCommunityDetailMaximumRise(selectedFoodCommunityItem)} mg/dL</Text>
+                    <Text style={styles.recordType}>{foodCommunityDetailMaximumRiseDisplayText(selectedFoodCommunityItem)}</Text>
                   </View>
                   <View style={styles.reportBoundaryCard}>
                     <Text style={styles.confidence}>最低上升血糖</Text>

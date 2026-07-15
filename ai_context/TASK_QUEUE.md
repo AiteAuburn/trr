@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1590: Reuse food community detail maximum rise display helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `foodCommunityDetailMaximumRiseDisplayText` helper for Food Community detail maximum-rise display text.
+- Reused the helper in the maximum-rise metric card while keeping the numeric helper, label copy, units, average/minimum cards, detail panel layout, and selected item behavior unchanged.
+- Updated navigation verifier coverage for the shared Food Community detail maximum-rise display helper and direct maximum-rise display regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Food Community detail metric display text fields in small behavior-preserving slices.
+
 ### T1589: Reuse food community detail average rise display helper
 
 Status: done
