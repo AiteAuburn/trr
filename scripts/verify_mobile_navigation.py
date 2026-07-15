@@ -7693,6 +7693,9 @@ def main() -> int:
             ("ranking leaderboard section label helper", "function rankingLeaderboardSectionLabel(section: (typeof rankingLeaderboardSections)[number])"),
             ("ranking leaderboard section label helper fields", "return section.label;"),
             ("ranking leaderboard section label helper binding", "{rankingLeaderboardSectionLabel(section)}"),
+            ("ranking leaderboard section has entries helper", "function rankingLeaderboardSectionHasEntries(section: (typeof rankingLeaderboardSections)[number])"),
+            ("ranking leaderboard section has entries helper fields", "return section.entries.length > 0;"),
+            ("ranking leaderboard section has entries helper binding", "{rankingLeaderboardSectionHasEntries(section) ? ("),
             ("ranking leaderboard entry key helper", 'function rankingLeaderboardEntryKey(entry: (typeof rankingLeaderboardSections)[number]["entries"][number])'),
             ("ranking leaderboard entry key helper fields", "return entry.id;"),
             ("ranking leaderboard entry key helper binding", "key={rankingLeaderboardEntryKey(entry)}"),
@@ -9905,6 +9908,11 @@ def main() -> int:
             "ranking direct leaderboard section empty copy binding",
             content,
             "rankingLeaderboardSections.map((section) => (\n              <View key={rankingLeaderboardSectionKey(section)} style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingLeaderboardSectionLabel(section)}</Text>\n                {section.entries.length > 0 ? (\n                  section.entries.map((entry) => (\n                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>\n                      <Text style={styles.recordType}>{rankingLeaderboardEntryRankLabel(entry)}</Text>\n                      <View style={styles.timelineContent}>\n                        <Text style={styles.recordContent}>{rankingLeaderboardEntryDisplayName(entry)}</Text>\n                        <Text style={styles.evidence}>{rankingLeaderboardEntryScoreLabel(entry)}</Text>\n                      </View>\n                    </View>\n                  ))\n                ) : (\n                  <Text style={styles.evidence}>{section.emptyCopy}</Text>",
+        )
+        _assert_not_contains(
+            "ranking direct leaderboard section entries condition binding",
+            content,
+            "rankingLeaderboardSections.map((section) => (\n              <View key={rankingLeaderboardSectionKey(section)} style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingLeaderboardSectionLabel(section)}</Text>\n                {section.entries.length > 0 ? (",
         )
         _assert_not_contains(
             "ranking direct readiness section label binding",

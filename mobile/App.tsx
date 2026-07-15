@@ -4183,6 +4183,10 @@ export default function App() {
     return section.label;
   }
 
+  function rankingLeaderboardSectionHasEntries(section: (typeof rankingLeaderboardSections)[number]) {
+    return section.entries.length > 0;
+  }
+
   function rankingLeaderboardEntryKey(entry: (typeof rankingLeaderboardSections)[number]["entries"][number]) {
     return entry.id;
   }
@@ -10137,7 +10141,7 @@ export default function App() {
             {rankingLeaderboardSections.map((section) => (
               <View key={rankingLeaderboardSectionKey(section)} style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{rankingLeaderboardSectionLabel(section)}</Text>
-                {section.entries.length > 0 ? (
+                {rankingLeaderboardSectionHasEntries(section) ? (
                   section.entries.map((entry) => (
                     <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>
                       <Text style={styles.recordType}>{rankingLeaderboardEntryRankLabel(entry)}</Text>
