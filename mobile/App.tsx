@@ -4080,6 +4080,10 @@ export default function App() {
     return category.accessibilityLabel;
   }
 
+  function foodCommunityCategoryOptionLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
+    return category.label;
+  }
+
   function foodCommunityCategoryOptionSelected(category: ReturnType<typeof foodCommunityCategoryDisplayItem>, selectedCategory: FoodCommunityCategory) {
     return selectedCategory === category.value;
   }
@@ -9603,7 +9607,7 @@ export default function App() {
                       foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentTextActive : null
                     ]}
                   >
-                    {category.label}
+                    {foodCommunityCategoryOptionLabel(category)}
                   </Text>
                 </Pressable>
               ))}

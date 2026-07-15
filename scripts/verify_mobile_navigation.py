@@ -7685,6 +7685,9 @@ def main() -> int:
             ("food community category option accessibility label helper", "function foodCommunityCategoryOptionAccessibilityLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option accessibility label helper fields", "return category.accessibilityLabel;"),
             ("food community category option accessibility label helper binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
+            ("food community category option label helper", "function foodCommunityCategoryOptionLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
+            ("food community category option label helper fields", "return category.label;"),
+            ("food community category option label helper binding", "{foodCommunityCategoryOptionLabel(category)}"),
             ("food community category option selected helper", "function foodCommunityCategoryOptionSelected(category: ReturnType<typeof foodCommunityCategoryDisplayItem>, selectedCategory: FoodCommunityCategory)"),
             ("food community category option selected helper fields", "return selectedCategory === category.value;"),
             ("food community category option selected helper state binding", "accessibilityState={{ selected: foodCommunityCategoryOptionSelected(category, foodCommunityCategory) }}"),
@@ -8498,6 +8501,9 @@ def main() -> int:
             ("food community category option accessibility label helper", "function foodCommunityCategoryOptionAccessibilityLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option accessibility label helper fields", "return category.accessibilityLabel;"),
             ("food community category option accessibility label helper binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
+            ("food community category option label helper", "function foodCommunityCategoryOptionLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
+            ("food community category option label helper fields", "return category.label;"),
+            ("food community category option label helper binding", "{foodCommunityCategoryOptionLabel(category)}"),
             ("food community category option selected helper", "function foodCommunityCategoryOptionSelected(category: ReturnType<typeof foodCommunityCategoryDisplayItem>, selectedCategory: FoodCommunityCategory)"),
             ("food community category option selected helper fields", "return selectedCategory === category.value;"),
             ("food community category option selected helper state binding", "accessibilityState={{ selected: foodCommunityCategoryOptionSelected(category, foodCommunityCategory) }}"),
@@ -9347,6 +9353,11 @@ def main() -> int:
             "food community category direct selected text style binding",
             content,
             "foodCommunityCategory === category.value ? styles.segmentTextActive : null",
+        )
+        _assert_not_contains(
+            "food community category direct label binding",
+            content,
+            "foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentTextActive : null\n                    ]}\n                  >\n                    {category.label}",
         )
         _assert_not_contains(
             "food community category direct default item selection",

@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1582 reuse food community category option label helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `foodCommunityCategoryOptionLabel` helper for Food Community category segment display text.
+- Reused the helper in category option text rendering while keeping category keys, accessibility labels, selected state, active styles, press behavior, list rows, and detail panel unchanged.
+- Updated navigation verifier coverage for the shared Food Community category option label helper and direct category label regression guard.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting Food Community category/list/detail fields in small behavior-preserving slices.
+
 ### T1581 reuse food community category option selected helper
 
 類型：mobile / refactor / verifier / docs
