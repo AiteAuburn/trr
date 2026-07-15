@@ -7725,6 +7725,10 @@ def main() -> int:
             ("ranking close button helper fields", 'return "×";'),
             ("ranking close button display label binding", "const rankingCloseButtonDisplayLabel = rankingCloseButtonLabel();"),
             ("ranking close button helper binding", "{rankingCloseButtonDisplayLabel}"),
+            ("ranking close press helper", "function rankingClosePressHandler()"),
+            ("ranking close press helper fields", "return returnFromRankingPreview;"),
+            ("ranking close press target binding", "const rankingClosePressTarget = rankingClosePressHandler();"),
+            ("ranking close press helper binding", "onPress={rankingClosePressTarget}"),
             ("ranking preview boundary badge helper", "function rankingPreviewBoundaryBadgeLabel()"),
             ("ranking preview boundary badge helper fields", "return rankingPreviewBoundaryDisplay.badge;"),
             ("ranking preview boundary badge helper binding", "{rankingPreviewBoundaryBadgeLabel()}"),
@@ -8793,7 +8797,7 @@ def main() -> int:
             ("doctor share return binding", "onPress={returnFromDoctorSharePreview}"),
             ("health integration return binding", "onPress={returnFromHealthIntegrationPreview}"),
             ("community return binding", "onPress={returnFromCommunityPreview}"),
-            ("ranking return binding", "onPress={returnFromRankingPreview}"),
+            ("ranking return binding", "onPress={rankingReturnFutureModulesPressTarget}"),
             ("achievements return binding", "onPress={returnFromAchievements}"),
             ("year review return binding", "onPress={returnFromYearReview}"),
             ("store cart open binding", "onPress={openStoreCart}"),
@@ -9926,6 +9930,11 @@ def main() -> int:
             "ranking direct close button binding",
             content,
             "<Text style={styles.sectionTitle}>{rankingScreenTitleLabel()}</Text>\n                <Text style={styles.evidence}>{rankingScreenSubtitleCopy()}</Text>\n              </View>\n              <Pressable accessibilityLabel={rankingCloseAccessibilityDisplayLabel} accessibilityRole=\"button\" style={styles.closeButton} onPress={returnFromRankingPreview}>\n                <Text style={styles.closeButtonText}>×</Text>",
+        )
+        _assert_not_contains(
+            "ranking direct close press binding",
+            content,
+            "<Text style={styles.sectionTitle}>{rankingScreenTitleLabel()}</Text>\n                <Text style={styles.evidence}>{rankingScreenSubtitleCopy()}</Text>\n              </View>\n              <Pressable accessibilityLabel={rankingCloseAccessibilityDisplayLabel} accessibilityRole=\"button\" style={styles.closeButton} onPress={returnFromRankingPreview}>",
         )
         _assert_not_contains(
             "ranking direct preview boundary badge binding",

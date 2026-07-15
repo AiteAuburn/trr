@@ -223,7 +223,7 @@ VISUAL_SMOKE_ROUTES = {
         'currentScreen === "ranking"',
         "rankingReadinessChecklistItems.map",
         "rankingBoundaryRows.map",
-        "onPress={returnFromRankingPreview}",
+        "onPress={rankingReturnFutureModulesPressTarget}",
     ],
     "achievements": [
         'currentScreen === "achievements"',

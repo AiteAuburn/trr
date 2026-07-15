@@ -1689,6 +1689,7 @@ export default function App() {
   const rankingOptInActionPressTarget = rankingOptInActionPressHandler();
   const rankingCloseButtonDisplayLabel = rankingCloseButtonLabel();
   const rankingCloseAccessibilityDisplayLabel = rankingCloseAccessibilityLabel();
+  const rankingClosePressTarget = rankingClosePressHandler();
   const rankingPublicActionButtonDisplayLabel = rankingPublicActionButtonLabel();
   const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel();
   const rankingPublicActionPressTarget = rankingPublicActionPressHandler();
@@ -4220,6 +4221,10 @@ export default function App() {
 
   function rankingCloseButtonLabel() {
     return "×";
+  }
+
+  function rankingClosePressHandler() {
+    return returnFromRankingPreview;
   }
 
   function rankingPreviewBoundaryBadgeLabel() {
@@ -10103,7 +10108,7 @@ export default function App() {
                 <Text style={styles.sectionTitle}>{rankingScreenTitleLabel()}</Text>
                 <Text style={styles.evidence}>{rankingScreenSubtitleCopy()}</Text>
               </View>
-              <Pressable accessibilityLabel={rankingCloseAccessibilityDisplayLabel} accessibilityRole="button" style={styles.closeButton} onPress={returnFromRankingPreview}>
+              <Pressable accessibilityLabel={rankingCloseAccessibilityDisplayLabel} accessibilityRole="button" style={styles.closeButton} onPress={rankingClosePressTarget}>
                 <Text style={styles.closeButtonText}>{rankingCloseButtonDisplayLabel}</Text>
               </Pressable>
             </View>
