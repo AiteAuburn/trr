@@ -7607,6 +7607,10 @@ def main() -> int:
             ("food community share selected item helper", "function foodCommunityShareSelectedItemId(item: { id: string })"),
             ("food community share selected item helper fields", "return item.id;"),
             ("food community share selected item helper binding", "setSelectedFoodCommunityItemId(foodCommunityShareSelectedItemId(updatedFood));"),
+            ("food community share refresh item helper", "function foodCommunityShareRefreshItemId(item: { id: string })"),
+            ("food community share refresh item helper fields", "return item.id;"),
+            ("food community share refresh item helper binding", "const updatedFoodId = foodCommunityShareRefreshItemId(updatedFood);"),
+            ("food community share refresh item helper filter", "current.filter((item) => item.id !== updatedFoodId)"),
             ("food community share success status binding", "setCommunityActionStatus(\n        foodCommunityShareStatusMessages({"),
             ("food community share failure status binding", "setCommunityActionStatus(shareStatus.failure);"),
             ("community public settings status helper binding", "const publicSettingsStatus = communityPublicSettingsStatusMessages({"),
@@ -9264,6 +9268,11 @@ def main() -> int:
             "food community direct share selected item binding",
             content,
             "setSelectedFoodCommunityItemId(updatedFood.id);",
+        )
+        _assert_not_contains(
+            "food community direct share refresh item filter",
+            content,
+            "item.id !== updatedFood.id",
         )
         _assert_not_contains(
             "food community direct share fallback food name binding",

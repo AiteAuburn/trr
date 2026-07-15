@@ -4003,6 +4003,10 @@ export default function App() {
     return item.id;
   }
 
+  function foodCommunityShareRefreshItemId(item: { id: string }) {
+    return item.id;
+  }
+
   function foodCommunityShareFallbackFoodName(item: { title: string }) {
     return item.title;
   }
@@ -5282,9 +5286,10 @@ export default function App() {
         }
       );
       const updatedFood = foodCommunityItemFromApi(response.food);
+      const updatedFoodId = foodCommunityShareRefreshItemId(updatedFood);
       setFoodCommunityBackendItems((current) => [
         updatedFood,
-        ...current.filter((item) => item.id !== updatedFood.id)
+        ...current.filter((item) => item.id !== updatedFoodId)
       ].slice(0, maxListItems * 4));
       setSelectedFoodCommunityItemId(foodCommunityShareSelectedItemId(updatedFood));
       setFoodCommunityShareFields(emptyFoodCommunityShareFields());

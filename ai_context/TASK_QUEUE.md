@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1561: Reuse food community share refresh item helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `foodCommunityShareRefreshItemId` helper for Food Community share success list refresh filtering.
+- Reused the helper when removing duplicate backend items before prepending the updated shared food while keeping share success selection, list order, and list bounds unchanged.
+- Updated navigation verifier coverage for the shared Food Community share refresh item helper and direct `updatedFood.id` filter regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1560: Reuse food community detail refresh item helper
 
 Status: done
