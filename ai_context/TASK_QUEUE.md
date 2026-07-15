@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1699: Reuse AI flow checklist item fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `aiFlowChecklistItemKey` and `aiFlowChecklistItemText` helpers for AI review, save confirmation, remove confirmation, and save failure checklist rendering.
+- Reused the helpers in the AI flow checklist rows while preserving existing text, order, layout, destination cards, and button behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the AI flow checklist render blocks.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining core-flow checklist rows and summary highlight rows for behavior-preserving display helpers.
+
 ### T1698: Reuse outcome checklist item fields
 
 Status: done

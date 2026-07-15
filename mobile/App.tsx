@@ -3655,6 +3655,14 @@ export default function App() {
     return item;
   }
 
+  function aiFlowChecklistItemKey(item: string) {
+    return item;
+  }
+
+  function aiFlowChecklistItemText(item: string) {
+    return item;
+  }
+
   function subscriptionComparisonRowKey(row: (typeof subscriptionComparisonDisplayRows)[number]) {
     return row.feature;
   }
@@ -7738,7 +7746,7 @@ export default function App() {
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.costBoundaryBadge}</Text>
                 {aiReviewCostBoundaryChecklistItems.map((item) => (
-                  <HighlightBulletRow key={item} text={item} />
+                  <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />
                 ))}
               </View>
               {preview.records.length > 0 ? (
@@ -8042,7 +8050,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.preSubmitCheck}</Text>
               {aiSaveConfirmChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.reportBoundaryGrid}>
@@ -8086,7 +8094,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.removeScope}</Text>
               {aiCandidateRemoveChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.actionRow}>
@@ -8124,7 +8132,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.failureBoundary}</Text>
               {aiSaveFailureChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.actionRow}>

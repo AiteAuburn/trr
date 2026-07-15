@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1699 reuse AI flow checklist item fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared `aiFlowChecklistItemKey` and `aiFlowChecklistItemText` helpers for AI review, save confirmation, remove confirmation, and save failure checklist rendering.
+- Reused the helpers in the AI flow checklist rows while preserving existing text, order, layout, destination cards, and button behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the AI flow checklist render blocks.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining core-flow checklist rows and summary highlight rows for behavior-preserving display helpers.
+
 ### T1698 reuse outcome checklist item fields
 
 類型：mobile / refactor / verifier / docs
