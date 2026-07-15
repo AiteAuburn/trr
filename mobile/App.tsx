@@ -4396,8 +4396,16 @@ export default function App() {
     openScreen(target);
   }
 
+  function futureModuleDestinationTarget(item: ReturnType<typeof futureModuleCardDisplayItem>) {
+    return item.target;
+  }
+
+  function futureModuleDestinationModule(item: ReturnType<typeof futureModuleCardDisplayItem>) {
+    return item.module;
+  }
+
   function pressFutureModuleDestination(item: ReturnType<typeof futureModuleCardDisplayItem>) {
-    openFutureModuleDestination(item.target, item.module);
+    openFutureModuleDestination(futureModuleDestinationTarget(item), futureModuleDestinationModule(item));
   }
 
   async function loadBasicReportForCurrentRange(mode: "analysis" | "detailed") {

@@ -8164,6 +8164,11 @@ def main() -> int:
             ("future module target route helper binding", "if (openFutureModuleTargetRoute(target)) {"),
             ("future module destination fallback screen opener binding", "if (openFutureModuleTargetRoute(target)) {\n      return;\n    }\n    openScreen(target);"),
             ("future module destination press handler", "function pressFutureModuleDestination(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
+            ("future module destination target helper", "function futureModuleDestinationTarget(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
+            ("future module destination target helper fields", "return item.target;"),
+            ("future module destination module helper", "function futureModuleDestinationModule(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
+            ("future module destination module helper fields", "return item.module;"),
+            ("future module destination target helper binding", "openFutureModuleDestination(futureModuleDestinationTarget(item), futureModuleDestinationModule(item));"),
             ("future module display card helper binding", "const futureModuleDisplayCards = useMemo(\n    () => futureModuleCardDisplayItems(futureModuleCards),"),
             ("future preview status display helper binding", "const futurePreviewStatusDisplay = futurePreviewStatusDisplayTexts({"),
             ("future preview status future action binding", "const futureModuleActionStatusDisplayText = futurePreviewStatusDisplay.futureModuleAction;"),
@@ -9018,6 +9023,11 @@ def main() -> int:
             "future module direct destination binding",
             content,
             "onPress={() => openFutureModuleDestination(item.target, item.module)}",
+        )
+        _assert_not_contains(
+            "future module direct destination handler binding",
+            content,
+            "openFutureModuleDestination(item.target, item.module);",
         )
         product_card_block = _style_block(content, "productCard")
         _assert_contains(
