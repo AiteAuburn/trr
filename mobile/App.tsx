@@ -4011,6 +4011,10 @@ export default function App() {
     return item.title;
   }
 
+  function foodCommunityDetailPanelVisible(item: ReturnType<typeof foodCommunityItemDisplayItem> | null): item is ReturnType<typeof foodCommunityItemDisplayItem> {
+    return item !== null;
+  }
+
   function foodCommunityDetailShareCount(item: { shareCount: number }) {
     return item.shareCount;
   }
@@ -9665,7 +9669,7 @@ export default function App() {
                 </View>
               ) : null}
             </View>
-            {selectedFoodCommunityItem ? (
+            {foodCommunityDetailPanelVisible(selectedFoodCommunityItem) ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{foodCommunityDetailTitle(selectedFoodCommunityItem)} 資料頁</Text>
                 <View style={styles.reportBoundaryGrid}>

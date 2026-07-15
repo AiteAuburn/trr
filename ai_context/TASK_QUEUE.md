@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1588: Reuse food community detail panel visibility helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a typed `foodCommunityDetailPanelVisible` helper for Food Community selected-detail panel visibility checks.
+- Reused the helper in detail panel rendering while preserving selected item type narrowing, detail metrics, individual-share rows, empty copy, and share form behavior.
+- Updated navigation verifier coverage for the shared Food Community detail panel visibility helper and direct `selectedFoodCommunityItem ? (` regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Food Community detail fields in small behavior-preserving slices.
+
 ### T1587: Reuse food community detail individual shares presence helper
 
 Status: done
