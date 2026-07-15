@@ -2512,6 +2512,26 @@ export default function App() {
     return item.label;
   }
 
+  function homeSpeechExampleLabel(example: (typeof homeSpeechExamples)[number]) {
+    return example.label;
+  }
+
+  function homeSpeechExampleText(example: (typeof homeSpeechExamples)[number]) {
+    return example.text;
+  }
+
+  function homeSpeechExampleDotKey(example: (typeof homeSpeechExamples)[number]) {
+    return `${example.key}-dot`;
+  }
+
+  function homeSpeechExampleDotIsActive(index: number, currentIndex: number) {
+    return index === currentIndex;
+  }
+
+  function homeSpeechExamplePaginationAccessibilityLabel(currentIndex: number, totalCount: number) {
+    return `目前第 ${currentIndex + 1} 個範例，共 ${totalCount} 個`;
+  }
+
   function pressTodayQuickEntryItem(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
     handleTodayQuickEntryMode(quickEntryModeTarget(item));
   }
@@ -7996,20 +8016,26 @@ export default function App() {
             <View style={styles.homeExamplePanel}>
               <Text style={styles.homeExampleTitle}>範例（怎麼說都可以）</Text>
               <View style={styles.homeExampleMetaRow}>
-                <Text style={styles.homeExampleIndex}>{homeCurrentSpeechExample.label}</Text>
-                <View style={styles.homeExamplePagination} accessibilityLabel={`目前第 ${homeExampleIndex + 1} 個範例，共 ${homeSpeechExamples.length} 個`}>
+                <Text style={styles.homeExampleIndex}>{homeSpeechExampleLabel(homeCurrentSpeechExample)}</Text>
+                <View
+                  style={styles.homeExamplePagination}
+                  accessibilityLabel={homeSpeechExamplePaginationAccessibilityLabel(
+                    homeExampleIndex,
+                    homeSpeechExamples.length
+                  )}
+                >
                   {homeSpeechExamples.map((example, index) => (
                     <View
-                      key={`${example.key}-dot`}
+                      key={homeSpeechExampleDotKey(example)}
                       style={[
                         styles.homeExampleDot,
-                        index === homeExampleIndex ? styles.homeExampleDotActive : null
+                        homeSpeechExampleDotIsActive(index, homeExampleIndex) ? styles.homeExampleDotActive : null
                       ]}
                     />
                   ))}
                 </View>
               </View>
-              <Text style={styles.homeExampleText}>{homeCurrentSpeechExample.text}</Text>
+              <Text style={styles.homeExampleText}>{homeSpeechExampleText(homeCurrentSpeechExample)}</Text>
             </View>
           </View>
         ) : null}

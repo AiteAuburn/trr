@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1723: Reuse home example carousel fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared Home example carousel helpers for current example label, example text, pagination dot key, active dot state, and pagination accessibility copy.
+- Reused the helpers in the guided Home example carousel while preserving example content, rotation timing, pagination styling, and first-version Home layout unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the Home example render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining first-version repeated render blocks in small behavior-preserving slices.
+
 ### T1722: Reuse MVP flow step fields
 
 Status: done

@@ -5433,6 +5433,20 @@ def main() -> int:
             ("guided home item icon helper fields", "return item.icon;"),
             ("guided home item label helper", "function homeGuidanceItemLabel(item: (typeof homeGuidanceDirections)[number][number])"),
             ("guided home item label helper fields", "return item.label;"),
+            ("guided home example label helper", "function homeSpeechExampleLabel(example: (typeof homeSpeechExamples)[number])"),
+            ("guided home example label helper fields", "return example.label;"),
+            ("guided home example label helper binding", "{homeSpeechExampleLabel(homeCurrentSpeechExample)}"),
+            ("guided home example text helper", "function homeSpeechExampleText(example: (typeof homeSpeechExamples)[number])"),
+            ("guided home example text helper fields", "return example.text;"),
+            ("guided home example text helper binding", "{homeSpeechExampleText(homeCurrentSpeechExample)}"),
+            ("guided home example dot key helper", "function homeSpeechExampleDotKey(example: (typeof homeSpeechExamples)[number])"),
+            ("guided home example dot key helper fields", "return `${example.key}-dot`;"),
+            ("guided home example dot key helper binding", "key={homeSpeechExampleDotKey(example)}"),
+            ("guided home example dot active helper", "function homeSpeechExampleDotIsActive(index: number, currentIndex: number)"),
+            ("guided home example dot active helper fields", "return index === currentIndex;"),
+            ("guided home example dot active helper binding", "homeSpeechExampleDotIsActive(index, homeExampleIndex) ? styles.homeExampleDotActive : null"),
+            ("guided home example pagination accessibility helper", "function homeSpeechExamplePaginationAccessibilityLabel(currentIndex: number, totalCount: number)"),
+            ("guided home example pagination accessibility helper binding", "accessibilityLabel={homeSpeechExamplePaginationAccessibilityLabel("),
         ):
             _assert_contains(label, content, marker)
         home_guidance_row_block = _match_block(
@@ -5446,6 +5460,19 @@ def main() -> int:
             ("direct home guidance item label binding", "<Text style={styles.homeGuidanceLabel}>{item.label}</Text>"),
         ):
             _assert_not_contains(label, home_guidance_row_block, marker)
+        home_example_block = _match_block(
+            today_home_block,
+            r"<View style=\{styles\.homeExamplePanel\}>([\s\S]*?homeSpeechExampleText\(homeCurrentSpeechExample\)[\s\S]*?</View>)",
+            "home example render block",
+        )
+        for label, marker in (
+            ("direct home example label binding", "homeCurrentSpeechExample.label"),
+            ("direct home example text binding", "homeCurrentSpeechExample.text"),
+            ("direct home example dot key binding", "`${example.key}-dot`"),
+            ("direct home example dot active binding", "index === homeExampleIndex"),
+            ("direct home example pagination accessibility binding", "`目前第 ${homeExampleIndex + 1} 個範例，共 ${homeSpeechExamples.length} 個`"),
+        ):
+            _assert_not_contains(label, home_example_block, marker)
         _assert_contains("minimal home starts near top", _style_block(content, "homeMinimalSection"), 'justifyContent: "flex-start"')
         _assert_contains("minimal home reduced top padding", _style_block(content, "homeMinimalSection"), "paddingTop: 14")
         _assert_contains("minimal home model status style", _style_block(content, "homeModelStatus"), "fontSize: 12")
