@@ -3563,6 +3563,18 @@ export default function App() {
     openSettingsRow(row);
   }
 
+  function settingsDisplayRowKey(row: ReturnType<typeof settingsRowDisplayItem>) {
+    return row.id;
+  }
+
+  function settingsDisplayRowAccessibilityLabel(row: ReturnType<typeof settingsRowDisplayItem>) {
+    return row.accessibilityLabel;
+  }
+
+  function settingsDisplayRowIcon(row: ReturnType<typeof settingsRowDisplayItem>) {
+    return row.icon;
+  }
+
   function settingsDisplayRowLabel(row: ReturnType<typeof settingsRowDisplayItem>) {
     return row.label;
   }
@@ -10598,14 +10610,14 @@ export default function App() {
             <View style={styles.settingsList}>
               {settingsDisplayRows.map((row) => (
                 <Pressable
-                  key={row.id}
-                  accessibilityLabel={row.accessibilityLabel}
+                  key={settingsDisplayRowKey(row)}
+                  accessibilityLabel={settingsDisplayRowAccessibilityLabel(row)}
                   accessibilityRole="button"
                   style={styles.settingsRow}
                   onPress={() => pressSettingsRow(row)}
                 >
                   <View style={styles.iconCircleSmall}>
-                    <Text>{row.icon}</Text>
+                    <Text>{settingsDisplayRowIcon(row)}</Text>
                   </View>
                   <View style={styles.timelineContent}>
                     <Text style={styles.recordContent}>{settingsDisplayRowLabel(row)}</Text>

@@ -880,6 +880,7 @@ def _pressable_label_source_errors(content: str) -> list[str]:
     }
     helper_label_sources = {
         "foodCommunityCategoryOptionAccessibilityLabel(category)",
+        "settingsDisplayRowAccessibilityLabel(row)",
         "foodCommunityListItemAccessibilityLabel(item)",
         "storeProductActionAccessibilityLabel(product)",
         "storeRedemptionActionAccessibilityLabel(product)",
@@ -7334,6 +7335,51 @@ def main() -> int:
             "function pressSettingsRow(row: ReturnType<typeof settingsRowDisplayItem>)",
         )
         _assert_contains(
+            "settings row key helper",
+            content,
+            "function settingsDisplayRowKey(row: ReturnType<typeof settingsRowDisplayItem>)",
+        )
+        _assert_contains(
+            "settings row key helper fields",
+            content,
+            "return row.id;",
+        )
+        _assert_contains(
+            "settings row key helper binding",
+            content,
+            "key={settingsDisplayRowKey(row)}",
+        )
+        _assert_contains(
+            "settings row accessibility helper",
+            content,
+            "function settingsDisplayRowAccessibilityLabel(row: ReturnType<typeof settingsRowDisplayItem>)",
+        )
+        _assert_contains(
+            "settings row accessibility helper fields",
+            content,
+            "return row.accessibilityLabel;",
+        )
+        _assert_contains(
+            "settings row accessibility helper binding",
+            content,
+            "accessibilityLabel={settingsDisplayRowAccessibilityLabel(row)}",
+        )
+        _assert_contains(
+            "settings row icon helper",
+            content,
+            "function settingsDisplayRowIcon(row: ReturnType<typeof settingsRowDisplayItem>)",
+        )
+        _assert_contains(
+            "settings row icon helper fields",
+            content,
+            "return row.icon;",
+        )
+        _assert_contains(
+            "settings row icon helper binding",
+            content,
+            "{settingsDisplayRowIcon(row)}",
+        )
+        _assert_contains(
             "settings row label helper",
             content,
             "function settingsDisplayRowLabel(row: ReturnType<typeof settingsRowDisplayItem>)",
@@ -7409,10 +7455,15 @@ def main() -> int:
             ("tutorial whisper release copy", "若已選擇本機 Whisper 模型，會先轉成文字並進入確認。"),
         ):
             _assert_contains(label, settings_screen_data_content, marker)
+        settings_display_rows_render_block = _match_block(
+            content,
+            r"settingsDisplayRows\.map\(\(row\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
+            "settings display rows render block",
+        )
         _assert_contains(
             "settings row accessibility binding",
             content,
-            "accessibilityLabel={row.accessibilityLabel}",
+            "accessibilityLabel={settingsDisplayRowAccessibilityLabel(row)}",
         )
         _assert_contains(
             "settings row button role",
@@ -7423,6 +7474,21 @@ def main() -> int:
             "settings row direct destination binding",
             content,
             "onPress={() => openSettingsRow(row)}",
+        )
+        _assert_not_contains(
+            "settings row direct key binding",
+            settings_display_rows_render_block,
+            "key={row.id}",
+        )
+        _assert_not_contains(
+            "settings row direct accessibility binding",
+            settings_display_rows_render_block,
+            "accessibilityLabel={row.accessibilityLabel}",
+        )
+        _assert_not_contains(
+            "settings row direct icon binding",
+            settings_display_rows_render_block,
+            "<Text>{row.icon}</Text>",
         )
         _assert_not_contains(
             "settings row direct label binding",

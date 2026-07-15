@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1686: Reuse settings display row identity fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `settingsDisplayRowKey`, `settingsDisplayRowAccessibilityLabel`, and `settingsDisplayRowIcon` helpers for Settings row identity/accessibility/icon rendering.
+- Reused the helpers in Settings row key, accessibility label, and icon bindings while preserving the existing row press handler, quota helper text, navigation targets, account card behavior, and layout unchanged.
+- Updated navigation verifier coverage for the shared Settings row identity helpers and direct key/accessibility/icon regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining direct Settings row field access and extract only behavior-preserving helpers when the remaining inline binding still has verifier value.
+
 ### T1685: Reuse settings display row text fields
 
 Status: done

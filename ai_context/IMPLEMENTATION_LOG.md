@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1686 reuse settings display row identity fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared `settingsDisplayRowKey`, `settingsDisplayRowAccessibilityLabel`, and `settingsDisplayRowIcon` helpers for Settings row identity/accessibility/icon rendering.
+- Reused the helpers in Settings row key, accessibility label, and icon bindings while preserving the existing row press handler, quota helper text, navigation targets, account card behavior, and layout unchanged.
+- Updated navigation verifier coverage for the shared Settings row identity helpers and direct key/accessibility/icon regression guards.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining direct Settings row field access and extract only behavior-preserving helpers when the remaining inline binding still has verifier value.
+
 ### T1685 reuse settings display row text fields
 
 類型：mobile / refactor / verifier / docs
