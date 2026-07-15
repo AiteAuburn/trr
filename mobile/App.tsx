@@ -4158,6 +4158,14 @@ export default function App() {
     return "食物分享紀錄";
   }
 
+  function foodCommunityShareEatenDateLabel() {
+    return "食用日期";
+  }
+
+  function foodCommunityShareEatenTimeLabel() {
+    return "食用時間";
+  }
+
   function foodCommunityRankingSectionLabel() {
     return "社群排行榜";
   }
@@ -10036,7 +10044,7 @@ export default function App() {
               />
               <View style={styles.dateTimeRow}>
                 <View style={styles.dateTimeField}>
-                  <FieldLabel icon={"📅"} label={"食用日期"} />
+                  <FieldLabel icon={"📅"} label={foodCommunityShareEatenDateLabel()} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}
                     value={foodCommunityShareFields.eatenDate}
@@ -10049,7 +10057,7 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.dateTimeField}>
-                  <FieldLabel icon={"🕒"} label={"食用時間"} />
+                  <FieldLabel icon={"🕒"} label={foodCommunityShareEatenTimeLabel()} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}
                     value={foodCommunityShareFields.eatenTime}

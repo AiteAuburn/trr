@@ -7619,6 +7619,12 @@ def main() -> int:
             ("food community individual share section label", "個別分享紀錄"),
             ("food community individual share render", "foodCommunityDetailIndividualShares(selectedFoodCommunityItem).map((share) =>"),
             ("food community individual share empty state", "尚未有可顯示的個別分享紀錄。"),
+            ("food community share eaten date label helper", "function foodCommunityShareEatenDateLabel()"),
+            ("food community share eaten date label helper fields", 'return "食用日期";'),
+            ("food community share eaten date label helper binding", 'label={foodCommunityShareEatenDateLabel()}'),
+            ("food community share eaten time label helper", "function foodCommunityShareEatenTimeLabel()"),
+            ("food community share eaten time label helper fields", 'return "食用時間";'),
+            ("food community share eaten time label helper binding", 'label={foodCommunityShareEatenTimeLabel()}'),
             ("food community detail sync function", "async function loadFoodCommunityDetail(itemId: string)"),
             ("food community detail endpoint", "`/community/foods/${boundedItemId}`"),
             ("food community list default item helper", "function foodCommunityListDefaultItemId(items: Array<{ id: string }>, fallbackId: string)"),
@@ -9819,6 +9825,16 @@ def main() -> int:
             "food community direct detail share row note binding",
             content,
             "{share.note}",
+        )
+        _assert_not_contains(
+            "food community direct share eaten date label binding",
+            content,
+            '<FieldLabel icon={"📅"} label={"食用日期"} />',
+        )
+        _assert_not_contains(
+            "food community direct share eaten time label binding",
+            content,
+            '<FieldLabel icon={"🕒"} label={"食用時間"} />',
         )
         _assert_not_contains(
             "food community direct share category binding",
