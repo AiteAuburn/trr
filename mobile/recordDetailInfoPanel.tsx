@@ -29,6 +29,18 @@ type RecordDetailInfoPanelProps = {
   detailRows: RecordDetailInfoRow[];
 };
 
+function recordDetailInfoRowKey(row: RecordDetailInfoRow) {
+  return row.label;
+}
+
+function recordDetailInfoRowLabel(row: RecordDetailInfoRow) {
+  return row.label;
+}
+
+function recordDetailInfoRowValue(row: RecordDetailInfoRow) {
+  return row.value;
+}
+
 export function RecordDetailInfoPanel({
   boundaryItems,
   boundaryTitle,
@@ -61,7 +73,7 @@ export function RecordDetailInfoPanel({
         <DetailRow label={<FieldLabel icon={"🕒"} label={timeLabel} />} value={timeValue} />
         <DetailRow label={<FieldLabel icon={"🏷"} label={typeLabel} />} value={typeValue} />
         {detailRows.map((row) => (
-          <DetailRow key={row.label} label={row.label} value={row.value} />
+          <DetailRow key={recordDetailInfoRowKey(row)} label={recordDetailInfoRowLabel(row)} value={recordDetailInfoRowValue(row)} />
         ))}
       </View>
       <View style={styles.detailRows}>

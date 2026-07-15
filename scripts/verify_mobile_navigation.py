@@ -1789,12 +1789,36 @@ def main() -> int:
             ("record detail info panel time row", 'label={<FieldLabel icon={"🕒"} label={timeLabel} />}'),
             ("record detail info panel type row", 'label={<FieldLabel icon={"🏷"} label={typeLabel} />}'),
             ("record detail info panel mapped rows", "detailRows.map((row) => ("),
+            ("record detail info row key helper", "function recordDetailInfoRowKey(row: RecordDetailInfoRow)"),
+            ("record detail info row key helper fields", "return row.label;"),
+            ("record detail info row key helper binding", "key={recordDetailInfoRowKey(row)}"),
+            ("record detail info row label helper", "function recordDetailInfoRowLabel(row: RecordDetailInfoRow)"),
+            ("record detail info row label helper fields", "return row.label;"),
+            ("record detail info row label helper binding", "label={recordDetailInfoRowLabel(row)}"),
+            ("record detail info row value helper", "function recordDetailInfoRowValue(row: RecordDetailInfoRow)"),
+            ("record detail info row value helper fields", "return row.value;"),
+            ("record detail info row value helper binding", "value={recordDetailInfoRowValue(row)}"),
             ("record detail info panel source row", "<DetailRow label={sourceTitle} value={sourceValue} />"),
             ("record detail info panel exercise row", 'label={<FieldLabel icon={"🚶"} label={"運動"} />}'),
             ("record detail info panel medication row", 'label={<FieldLabel icon={"💊"} label={"用藥"} />}'),
             ("record detail info panel boundary bullets", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
         ):
             _assert_contains(label, record_detail_info_panel_content, marker)
+        _assert_not_contains(
+            "record detail info direct row binding",
+            record_detail_info_panel_content,
+            "detailRows.map((row) => (\n          <DetailRow key={row.label} label={row.label} value={row.value} />",
+        )
+        _assert_not_contains(
+            "record detail info direct row label binding",
+            record_detail_info_panel_content,
+            "detailRows.map((row) => (\n          <DetailRow key={recordDetailInfoRowKey(row)} label={row.label} value={recordDetailInfoRowValue(row)} />",
+        )
+        _assert_not_contains(
+            "record detail info direct row value binding",
+            record_detail_info_panel_content,
+            "detailRows.map((row) => (\n          <DetailRow key={recordDetailInfoRowKey(row)} label={recordDetailInfoRowLabel(row)} value={row.value} />",
+        )
         for label, marker in (
             ("record edit header fields component", "export function RecordEditHeaderFields({"),
             ("record edit header date label", '<FieldLabel icon={"📅"} label={"日期"} />'),

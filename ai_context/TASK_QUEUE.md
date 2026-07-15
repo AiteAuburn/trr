@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1684: Reuse record detail info row fields
+
+Status: done
+
+Files:
+
+- `mobile/recordDetailInfoPanel.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `recordDetailInfoRowKey`, `recordDetailInfoRowLabel`, and `recordDetailInfoRowValue` helpers for Record Detail info panel rows.
+- Reused the helpers in Record Detail mapped detail-row rendering while keeping hero content, date/time/type rows, source/exercise/medication rows, boundary checklist, and detail navigation unchanged.
+- Updated navigation verifier coverage for the shared Record Detail info row helpers and direct row field regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting remaining Settings display row label render binding in a small behavior-preserving slice.
+
 ### T1683: Reuse history daily record detail row fields
 
 Status: done
