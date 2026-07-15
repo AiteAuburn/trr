@@ -3987,6 +3987,10 @@ export default function App() {
     return item.id;
   }
 
+  function foodCommunityShareSelectedItemId(item: { id: string }) {
+    return item.id;
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -5249,7 +5253,7 @@ export default function App() {
         updatedFood,
         ...current.filter((item) => item.id !== updatedFood.id)
       ].slice(0, maxListItems * 4));
-      setSelectedFoodCommunityItemId(updatedFood.id);
+      setSelectedFoodCommunityItemId(foodCommunityShareSelectedItemId(updatedFood));
       setFoodCommunityShareFields(emptyFoodCommunityShareFields());
       setCommunityActionStatus(
         foodCommunityShareStatusMessages({

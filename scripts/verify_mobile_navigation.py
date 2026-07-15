@@ -7588,6 +7588,9 @@ def main() -> int:
             ("food community share glucose validation binding", "setCommunityActionStatus(shareStatus.invalidGlucose);"),
             ("food community share time validation binding", "timeErrorMessage: error instanceof Error ? error.message : \"食用時間格式不正確。\""),
             ("food community share loading status binding", "setCommunityActionStatus(shareStatus.loading);"),
+            ("food community share selected item helper", "function foodCommunityShareSelectedItemId(item: { id: string })"),
+            ("food community share selected item helper fields", "return item.id;"),
+            ("food community share selected item helper binding", "setSelectedFoodCommunityItemId(foodCommunityShareSelectedItemId(updatedFood));"),
             ("food community share success status binding", "setCommunityActionStatus(\n        foodCommunityShareStatusMessages({"),
             ("food community share failure status binding", "setCommunityActionStatus(shareStatus.failure);"),
             ("community public settings status helper binding", "const publicSettingsStatus = communityPublicSettingsStatusMessages({"),
@@ -9189,6 +9192,11 @@ def main() -> int:
             "food community direct detail selected item binding",
             content,
             "setSelectedFoodCommunityItemId(detailedItem.id);",
+        )
+        _assert_not_contains(
+            "food community direct share selected item binding",
+            content,
+            "setSelectedFoodCommunityItemId(updatedFood.id);",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
