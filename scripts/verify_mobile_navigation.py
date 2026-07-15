@@ -886,6 +886,7 @@ def _pressable_label_source_errors(content: str) -> list[str]:
         "dailyRecordEntryRemoveAccessibilityLabel(item)",
         "destinationCardAccessibilityLabel(item)",
         "foodCommunityCategoryOptionAccessibilityLabel(category)",
+        "menuDestinationAccessibilityLabel(item)",
         "quickEntryModeAccessibilityLabel(item)",
         "settingsDisplayRowAccessibilityLabel(row)",
         "foodCommunityListItemAccessibilityLabel(item)",
@@ -4445,7 +4446,7 @@ def main() -> int:
         _assert_contains(
             "menu card accessibility binding",
             content,
-            "accessibilityLabel={item.accessibilityLabel}",
+            "accessibilityLabel={menuDestinationAccessibilityLabel(item)}",
         )
         _assert_contains(
             "menu card button role",
@@ -4507,6 +4508,21 @@ def main() -> int:
             content,
             "return item.target;",
         )
+        for label, marker in (
+            ("menu destination key helper", "function menuDestinationKey(item: ReturnType<typeof menuScreenDisplayItem>)"),
+            ("menu destination key helper fields", "return item.target;"),
+            ("menu destination key binding", "key={menuDestinationKey(item)}"),
+            ("menu destination accessibility helper", "function menuDestinationAccessibilityLabel(item: ReturnType<typeof menuScreenDisplayItem>)"),
+            ("menu destination accessibility helper fields", "return item.accessibilityLabel;"),
+            ("menu destination accessibility binding", "accessibilityLabel={menuDestinationAccessibilityLabel(item)}"),
+            ("menu destination icon helper", "function menuDestinationIcon(item: ReturnType<typeof menuScreenDisplayItem>)"),
+            ("menu destination icon helper fields", "return item.icon;"),
+            ("menu destination icon binding", "{menuDestinationIcon(item)}"),
+            ("menu destination label helper", "function menuDestinationLabel(item: ReturnType<typeof menuScreenDisplayItem>)"),
+            ("menu destination label helper fields", "return item.label;"),
+            ("menu destination label binding", "{menuDestinationLabel(item)}"),
+        ):
+            _assert_contains(label, content, marker)
         _assert_contains(
             "menu destination target helper binding",
             content,
@@ -4532,6 +4548,18 @@ def main() -> int:
             content,
             "openMenuDestination(item.target);",
         )
+        menu_destination_render_block = _match_block(
+            content,
+            r"menuDisplayItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
+            "menu destination render block",
+        )
+        for label, marker in (
+            ("direct menu destination key binding", "key={item.target}"),
+            ("direct menu destination accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
+            ("direct menu destination icon binding", "<Text style={styles.menuIconText}>{item.icon}</Text>"),
+            ("direct menu destination label binding", "<Text style={styles.menuLabel}>{item.label}</Text>"),
+        ):
+            _assert_not_contains(label, menu_destination_render_block, marker)
         _assert_contains(
             "more action accessibility",
             content,

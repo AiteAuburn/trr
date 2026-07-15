@@ -4107,6 +4107,22 @@ export default function App() {
     return item.target;
   }
 
+  function menuDestinationKey(item: ReturnType<typeof menuScreenDisplayItem>) {
+    return item.target;
+  }
+
+  function menuDestinationAccessibilityLabel(item: ReturnType<typeof menuScreenDisplayItem>) {
+    return item.accessibilityLabel;
+  }
+
+  function menuDestinationIcon(item: ReturnType<typeof menuScreenDisplayItem>) {
+    return item.icon;
+  }
+
+  function menuDestinationLabel(item: ReturnType<typeof menuScreenDisplayItem>) {
+    return item.label;
+  }
+
   function pressMenuDestination(item: ReturnType<typeof menuScreenDisplayItem>) {
     openMenuDestination(menuDestinationTarget(item));
   }
@@ -10114,16 +10130,16 @@ export default function App() {
             <View style={styles.menuGrid}>
               {menuDisplayItems.map((item) => (
                 <Pressable
-                  key={item.target}
-                  accessibilityLabel={item.accessibilityLabel}
+                  key={menuDestinationKey(item)}
+                  accessibilityLabel={menuDestinationAccessibilityLabel(item)}
                   accessibilityRole="button"
                   style={styles.menuCard}
                   onPress={() => pressMenuDestination(item)}
                 >
                   <View style={styles.menuIconCenter}>
-                    <Text style={styles.menuIconText}>{item.icon}</Text>
+                    <Text style={styles.menuIconText}>{menuDestinationIcon(item)}</Text>
                   </View>
-                  <Text style={styles.menuLabel}>{item.label}</Text>
+                  <Text style={styles.menuLabel}>{menuDestinationLabel(item)}</Text>
                 </Pressable>
               ))}
             </View>
