@@ -7691,6 +7691,9 @@ def main() -> int:
             ("ranking leaderboard entry key helper", 'function rankingLeaderboardEntryKey(entry: (typeof rankingLeaderboardSections)[number]["entries"][number])'),
             ("ranking leaderboard entry key helper fields", "return entry.id;"),
             ("ranking leaderboard entry key helper binding", "key={rankingLeaderboardEntryKey(entry)}"),
+            ("ranking leaderboard entry rank label helper", 'function rankingLeaderboardEntryRankLabel(entry: (typeof rankingLeaderboardSections)[number]["entries"][number])'),
+            ("ranking leaderboard entry rank label helper fields", "return entry.rankLabel;"),
+            ("ranking leaderboard entry rank label helper binding", "{rankingLeaderboardEntryRankLabel(entry)}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9787,6 +9790,11 @@ def main() -> int:
             "ranking direct leaderboard entry key binding",
             content,
             "section.entries.map((entry) => (\n                    <View key={entry.id} style={styles.highlightRow}>",
+        )
+        _assert_not_contains(
+            "ranking direct leaderboard entry rank label binding",
+            content,
+            "section.entries.map((entry) => (\n                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>\n                      <Text style={styles.recordType}>{entry.rankLabel}</Text>",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
