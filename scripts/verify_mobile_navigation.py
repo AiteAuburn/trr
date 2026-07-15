@@ -9954,6 +9954,21 @@ def main() -> int:
             ("achievement newly unlocked section", "本次新解鎖"),
             ("achievement save success newly unlocked section", "新解鎖成就"),
             ("achievement save success newly unlocked render", "saveSuccessNewlyUnlockedDisplayItems.map"),
+            ("achievement unlocked card key helper", "function achievementUnlockedCardKey(prefix: string, displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement unlocked card badge style helper", "function achievementUnlockedCardBadgeStyle(displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement unlocked card badge style helper fields", 'displayItem.kind === "streak" ? styles.achievementBadgeStreak : null'),
+            ("achievement unlocked card icon helper", "function achievementUnlockedCardIcon(displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement unlocked card icon helper binding", "{achievementUnlockedCardIcon(displayItem)}"),
+            ("achievement unlocked card level helper", "function achievementUnlockedCardLevel(displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement unlocked card level helper binding", "{achievementUnlockedCardLevel(displayItem)}"),
+            ("achievement unlocked card title helper", "function achievementUnlockedCardTitle(displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement unlocked card title helper binding", "{achievementUnlockedCardTitle(displayItem)}"),
+            ("achievement unlocked card detail helper", "function achievementUnlockedCardDetail(displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement unlocked card detail helper fields", "return `${displayItem.kindLabel} · ${achievementUnlockDisplayDate(displayItem.unlockedAt)}`;"),
+            ("achievement unlocked card detail helper binding", "{achievementUnlockedCardDetail(displayItem)}"),
+            ("achievement save-success unlocked card key binding", 'achievementUnlockedCardKey("save-success-new-unlock", displayItem)'),
+            ("achievement newly unlocked card key binding", 'achievementUnlockedCardKey("new-unlock", displayItem)'),
+            ("achievement unlocked card key binding", 'achievementUnlockedCardKey("unlock", displayItem)'),
             ("achievement unlocked history endpoint", "`/achievements/unlocks?${query.toString()}`"),
             ("achievement sync status helper binding", "const achievementSyncStatus = achievementSyncStatusMessages({"),
             ("achievement sync unavailable status binding", "setAchievementActionStatus(achievementSyncStatus.unavailable);"),
@@ -11644,6 +11659,32 @@ def main() -> int:
             ("direct store redemption card subtitle binding", "{product.subtitle}"),
         ):
             _assert_not_contains(label, store_redemption_card_render_block, marker)
+        for block_label, pattern in (
+            (
+                "save success unlocked achievement card render block",
+                r"saveSuccessNewlyUnlockedDisplayItems\.map\(\(displayItem\) => \(([\s\S]*?achievementUnlockedCardDetail\(displayItem\)[\s\S]*?</View>\n\s*)\)",
+            ),
+            (
+                "newly unlocked achievement card render block",
+                r"achievementNewlyUnlockedDisplayItems\.map\(\(displayItem\) => \(([\s\S]*?achievementUnlockedCardDetail\(displayItem\)[\s\S]*?</View>\n\s*)\)",
+            ),
+            (
+                "unlocked achievement card render block",
+                r"achievementUnlockedDisplayItems\.map\(\(displayItem\) => \(([\s\S]*?achievementUnlockedCardDetail\(displayItem\)[\s\S]*?</View>\n\s*)\)",
+            ),
+        ):
+            achievement_unlocked_card_render_block = _match_block(content, pattern, block_label)
+            for label, marker in (
+                ("direct achievement unlocked card id binding", "displayItem.id"),
+                ("direct achievement unlocked card streak binding", 'displayItem.kind === "streak"'),
+                ("direct achievement unlocked card color binding", "displayItem.badgeColor"),
+                ("direct achievement unlocked card icon binding", "{displayItem.icon}"),
+                ("direct achievement unlocked card level binding", "{displayItem.level}"),
+                ("direct achievement unlocked card title binding", "{displayItem.title}"),
+                ("direct achievement unlocked card kind label binding", "displayItem.kindLabel"),
+                ("direct achievement unlocked card date binding", "displayItem.unlockedAt"),
+            ):
+                _assert_not_contains(f"{block_label} {label}", achievement_unlocked_card_render_block, marker)
         _assert_not_contains(
             "store redemption direct boundary row key binding",
             content,

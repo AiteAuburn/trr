@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1719: Reuse achievement unlocked card fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared Achievement unlocked-card helpers for render key, badge style, icon, level, title, and unlock detail text.
+- Reused the helpers in Save Success newly-unlocked cards, Achievements newly-unlocked cards, and Achievements unlocked-history cards while preserving display copy and future/achievement preview scope unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for unlocked achievement card render blocks.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing Achievement category progress card bindings in small behavior-preserving slices.
+
 ### T1718: Reuse store redemption card fields
 
 Status: done
