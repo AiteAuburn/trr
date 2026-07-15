@@ -7723,6 +7723,9 @@ def main() -> int:
             ("ranking opt-in action button helper", "function rankingOptInActionButtonLabel(label: string)"),
             ("ranking opt-in action button helper fields", "return label;"),
             ("ranking opt-in action button display label binding", "const rankingOptInButtonDisplayLabel = rankingOptInActionButtonLabel(communityActionDisplay.rankingOptInButton);"),
+            ("ranking action status label helper", "function rankingActionStatusLabel()"),
+            ("ranking action status label helper fields", "return futurePreviewDisplayLabels.rankingStatus;"),
+            ("ranking action status label helper binding", "{rankingActionStatusLabel()}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9850,6 +9853,11 @@ def main() -> int:
             "ranking direct readiness checklist item text binding",
             content,
             "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={item} />",
+        )
+        _assert_not_contains(
+            "ranking direct action status label binding",
+            content,
+            "{rankingActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{futurePreviewDisplayLabels.rankingStatus}</Text>",
         )
         _assert_not_contains(
             "food community item direct handler id binding",

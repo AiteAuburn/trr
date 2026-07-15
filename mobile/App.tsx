@@ -4211,6 +4211,10 @@ export default function App() {
     return label;
   }
 
+  function rankingActionStatusLabel() {
+    return futurePreviewDisplayLabels.rankingStatus;
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -10106,7 +10110,7 @@ export default function App() {
             </View>
             {rankingActionStatus ? (
               <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{futurePreviewDisplayLabels.rankingStatus}</Text>
+                <Text style={styles.label}>{rankingActionStatusLabel()}</Text>
                 <Text style={styles.evidence}>{rankingActionStatusDisplayText}</Text>
               </View>
             ) : null}
