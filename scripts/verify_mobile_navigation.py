@@ -879,6 +879,7 @@ def _pressable_label_source_errors(content: str) -> list[str]:
         "type.accessibilityLabel",
     }
     helper_label_sources = {
+        "foodCommunityCategoryOptionAccessibilityLabel(category)",
         "storeProductActionAccessibilityLabel(product)",
         "storeRedemptionActionAccessibilityLabel(product)",
     }
@@ -7668,6 +7669,9 @@ def main() -> int:
             ("food community category option key helper", "function foodCommunityCategoryOptionKey(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option key helper fields", "return category.value;"),
             ("food community category option key helper binding", "key={foodCommunityCategoryOptionKey(category)}"),
+            ("food community category option accessibility label helper", "function foodCommunityCategoryOptionAccessibilityLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
+            ("food community category option accessibility label helper fields", "return category.accessibilityLabel;"),
+            ("food community category option accessibility label helper binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
             ("food community item select handler", "function selectFoodCommunityItem(itemId: string)"),
             ("food community item press handler", "function pressFoodCommunityItem(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
             ("food community item target helper", "function foodCommunityItemTarget(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
@@ -7704,7 +7708,7 @@ def main() -> int:
             ("food community promoted title", '<Text style={styles.sectionTitle}>食物社群</Text>'),
             ("ranking promoted title", '<Text style={styles.sectionTitle}>社群排行</Text>'),
             ("food community search accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}"),
-            ("food community category accessibility binding", "accessibilityLabel={category.accessibilityLabel}"),
+            ("food community category accessibility binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
             ("food community item accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
             ("food community selected state", "accessibilityState={{ selected: selectedFoodCommunityItem?.id === item.id }}"),
             ("food community share fields", "foodCommunityShareFieldRows.map"),
@@ -8472,6 +8476,9 @@ def main() -> int:
             ("food community category option key helper", "function foodCommunityCategoryOptionKey(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option key helper fields", "return category.value;"),
             ("food community category option key helper binding", "key={foodCommunityCategoryOptionKey(category)}"),
+            ("food community category option accessibility label helper", "function foodCommunityCategoryOptionAccessibilityLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
+            ("food community category option accessibility label helper fields", "return category.accessibilityLabel;"),
+            ("food community category option accessibility label helper binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
             ("food community category target helper", "function foodCommunityCategoryTarget(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category target helper fields", "return category.value;"),
             ("food community category target helper binding", "selectFoodCommunityCategory(foodCommunityCategoryTarget(category));"),
@@ -9296,6 +9303,11 @@ def main() -> int:
             "food community category direct option key binding",
             content,
             "foodCommunityCategoryDisplayOptions.map((category) => (\n                <Pressable\n                  key={category.value}",
+        )
+        _assert_not_contains(
+            "food community category direct accessibility label binding",
+            content,
+            "key={foodCommunityCategoryOptionKey(category)}\n                  accessibilityLabel={category.accessibilityLabel}",
         )
         _assert_not_contains(
             "food community category direct default item selection",

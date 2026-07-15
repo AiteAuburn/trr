@@ -4076,6 +4076,10 @@ export default function App() {
     return category.value;
   }
 
+  function foodCommunityCategoryOptionAccessibilityLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
+    return category.accessibilityLabel;
+  }
+
   function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
     selectFoodCommunityCategory(foodCommunityCategoryTarget(category));
   }
@@ -9580,7 +9584,7 @@ export default function App() {
               {foodCommunityCategoryDisplayOptions.map((category) => (
                 <Pressable
                   key={foodCommunityCategoryOptionKey(category)}
-                  accessibilityLabel={category.accessibilityLabel}
+                  accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}
                   accessibilityRole="button"
                   accessibilityState={{ selected: foodCommunityCategory === category.value }}
                   style={[
