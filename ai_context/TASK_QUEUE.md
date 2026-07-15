@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1638: Reuse ranking preview boundary badge helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `rankingPreviewBoundaryBadgeLabel` helper for the Ranking preview boundary badge text.
+- Reused the helper in Ranking screen rendering while keeping preview boundary copy, close navigation, backend sync behavior, and other future preview screens unchanged.
+- Updated navigation verifier coverage for the shared Ranking preview boundary badge helper and direct badge regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Ranking preview boundary copy binding in a small behavior-preserving slice.
+
 ### T1637: Reuse ranking close button label helper
 
 Status: done

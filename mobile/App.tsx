@@ -4211,6 +4211,10 @@ export default function App() {
     return "×";
   }
 
+  function rankingPreviewBoundaryBadgeLabel() {
+    return rankingPreviewBoundaryDisplay.badge;
+  }
+
   function rankingPublicActionAccessibilityLabel() {
     return futurePreviewDisplayLabels.rankingPublicAccessibility;
   }
@@ -10073,7 +10077,7 @@ export default function App() {
               </Pressable>
             </View>
             <View style={styles.inlineInfoBlock}>
-              <Text style={styles.previewModeBadge}>{rankingPreviewBoundaryDisplay.badge}</Text>
+              <Text style={styles.previewModeBadge}>{rankingPreviewBoundaryBadgeLabel()}</Text>
               <Text style={styles.evidence}>{rankingPreviewBoundaryDisplay.copy}</Text>
             </View>
             <View style={styles.heroCardFeature}>
