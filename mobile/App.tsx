@@ -6192,8 +6192,12 @@ export default function App() {
     updateRecordEditField("glucoseUnit", value);
   }
 
+  function recordEditOptionTarget(option: { value: string }) {
+    return option.value;
+  }
+
   function pressRecordEditGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>) {
-    selectRecordEditGlucoseUnit(option.value);
+    selectRecordEditGlucoseUnit(recordEditOptionTarget(option));
   }
 
   function selectRecordEditGlucoseTiming(value: string) {
@@ -6201,7 +6205,7 @@ export default function App() {
   }
 
   function pressRecordEditGlucoseTimingOption(option: ReturnType<typeof valueLabelDisplayItem>) {
-    selectRecordEditGlucoseTiming(option.value);
+    selectRecordEditGlucoseTiming(recordEditOptionTarget(option));
   }
 
   function selectRecordEditMealType(value: string) {
@@ -6209,7 +6213,7 @@ export default function App() {
   }
 
   function pressRecordEditMealTypeOption(option: ReturnType<typeof valueLabelDisplayItem>) {
-    selectRecordEditMealType(option.value);
+    selectRecordEditMealType(recordEditOptionTarget(option));
   }
 
   function updateRecordEditFoodItems(value: string) {
