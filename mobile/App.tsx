@@ -3647,6 +3647,22 @@ export default function App() {
     return item;
   }
 
+  function subscriptionComparisonRowKey(row: (typeof subscriptionComparisonDisplayRows)[number]) {
+    return row.feature;
+  }
+
+  function subscriptionComparisonRowFeature(row: (typeof subscriptionComparisonDisplayRows)[number]) {
+    return row.feature;
+  }
+
+  function subscriptionComparisonRowTrial(row: (typeof subscriptionComparisonDisplayRows)[number]) {
+    return row.trial;
+  }
+
+  function subscriptionComparisonRowAnnual(row: (typeof subscriptionComparisonDisplayRows)[number]) {
+    return row.annual;
+  }
+
   function clearLocalSessionFromSettings() {
     const display = localClearDisplayMessages();
     clearMobileSessionState();
@@ -9731,10 +9747,10 @@ export default function App() {
             <View style={styles.pricingCard}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.featureComparison}</Text>
               {subscriptionComparisonDisplayRows.map((row) => (
-                <View key={row.feature} style={styles.comparisonRow}>
-                  <Text style={styles.comparisonFeature}>{row.feature}</Text>
-                  <Text style={styles.comparisonCell}>{row.trial}</Text>
-                  <Text style={styles.comparisonCellStrong}>{row.annual}</Text>
+                <View key={subscriptionComparisonRowKey(row)} style={styles.comparisonRow}>
+                  <Text style={styles.comparisonFeature}>{subscriptionComparisonRowFeature(row)}</Text>
+                  <Text style={styles.comparisonCell}>{subscriptionComparisonRowTrial(row)}</Text>
+                  <Text style={styles.comparisonCellStrong}>{subscriptionComparisonRowAnnual(row)}</Text>
                 </View>
               ))}
             </View>

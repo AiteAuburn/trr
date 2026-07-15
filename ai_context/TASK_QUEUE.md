@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1697: Reuse subscription comparison row fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared Subscription comparison row helpers for feature, trial, annual, and key fields.
+- Reused the helpers in the Subscription feature comparison table while preserving existing comparison copy, order, layout, and non-interactive behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the Subscription comparison render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining core-flow checklist rows and summary highlight rows for behavior-preserving display helpers.
+
 ### T1696: Reuse commerce checklist item fields
 
 Status: done

@@ -7474,6 +7474,18 @@ def main() -> int:
             ("commerce readiness checklist item text helper", "function commerceReadinessChecklistItemText(item: string)"),
             ("commerce readiness checklist item text helper fields", "return item;"),
             ("commerce readiness checklist item text binding", "text={commerceReadinessChecklistItemText(item)}"),
+            ("subscription comparison row key helper", "function subscriptionComparisonRowKey(row: (typeof subscriptionComparisonDisplayRows)[number])"),
+            ("subscription comparison row key helper fields", "return row.feature;"),
+            ("subscription comparison row key binding", "key={subscriptionComparisonRowKey(row)}"),
+            ("subscription comparison row feature helper", "function subscriptionComparisonRowFeature(row: (typeof subscriptionComparisonDisplayRows)[number])"),
+            ("subscription comparison row feature helper fields", "return row.feature;"),
+            ("subscription comparison row feature binding", "{subscriptionComparisonRowFeature(row)}"),
+            ("subscription comparison row trial helper", "function subscriptionComparisonRowTrial(row: (typeof subscriptionComparisonDisplayRows)[number])"),
+            ("subscription comparison row trial helper fields", "return row.trial;"),
+            ("subscription comparison row trial binding", "{subscriptionComparisonRowTrial(row)}"),
+            ("subscription comparison row annual helper", "function subscriptionComparisonRowAnnual(row: (typeof subscriptionComparisonDisplayRows)[number])"),
+            ("subscription comparison row annual helper fields", "return row.annual;"),
+            ("subscription comparison row annual binding", "{subscriptionComparisonRowAnnual(row)}"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(
@@ -7633,6 +7645,18 @@ def main() -> int:
                 commerce_checklist_render_block,
                 "key={item} text={item}",
             )
+        subscription_comparison_render_block = _match_block(
+            content,
+            r"subscriptionComparisonDisplayRows\.map\(\(row\) => \(([\s\S]*?</View>\n\s*)\)\)",
+            "subscription comparison render block",
+        )
+        for label, marker in (
+            ("direct subscription comparison row key binding", "key={row.feature}"),
+            ("direct subscription comparison row feature binding", "<Text style={styles.comparisonFeature}>{row.feature}</Text>"),
+            ("direct subscription comparison row trial binding", "<Text style={styles.comparisonCell}>{row.trial}</Text>"),
+            ("direct subscription comparison row annual binding", "<Text style={styles.comparisonCellStrong}>{row.annual}</Text>"),
+        ):
+            _assert_not_contains(label, subscription_comparison_render_block, marker)
         for block_label, pattern in (
             (
                 "subscription management preview status rows render block",
