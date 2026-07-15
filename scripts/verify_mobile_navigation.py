@@ -7703,6 +7703,9 @@ def main() -> int:
             ("ranking leaderboard section empty copy helper", "function rankingLeaderboardSectionEmptyCopy(section: (typeof rankingLeaderboardSections)[number])"),
             ("ranking leaderboard section empty copy helper fields", "return section.emptyCopy;"),
             ("ranking leaderboard section empty copy helper binding", "{rankingLeaderboardSectionEmptyCopy(section)}"),
+            ("ranking readiness section label helper", "function rankingReadinessSectionLabel()"),
+            ("ranking readiness section label helper fields", "return futurePreviewDisplayLabels.formalReadiness;"),
+            ("ranking readiness section label helper binding", "{rankingReadinessSectionLabel()}"),
             ("ranking readiness checklist item key helper", "function rankingReadinessChecklistItemKey(item: string)"),
             ("ranking readiness checklist item key helper fields", "return item;"),
             ("ranking readiness checklist item key helper binding", "key={rankingReadinessChecklistItemKey(item)}"),
@@ -9854,6 +9857,11 @@ def main() -> int:
             "ranking direct leaderboard section empty copy binding",
             content,
             "rankingLeaderboardSections.map((section) => (\n              <View key={rankingLeaderboardSectionKey(section)} style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingLeaderboardSectionLabel(section)}</Text>\n                {section.entries.length > 0 ? (\n                  section.entries.map((entry) => (\n                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>\n                      <Text style={styles.recordType}>{rankingLeaderboardEntryRankLabel(entry)}</Text>\n                      <View style={styles.timelineContent}>\n                        <Text style={styles.recordContent}>{rankingLeaderboardEntryDisplayName(entry)}</Text>\n                        <Text style={styles.evidence}>{rankingLeaderboardEntryScoreLabel(entry)}</Text>\n                      </View>\n                    </View>\n                  ))\n                ) : (\n                  <Text style={styles.evidence}>{section.emptyCopy}</Text>",
+        )
+        _assert_not_contains(
+            "ranking direct readiness section label binding",
+            content,
+            "rankingLeaderboardSections.map((section) => (\n              <View key={rankingLeaderboardSectionKey(section)} style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingLeaderboardSectionLabel(section)}</Text>\n                {section.entries.length > 0 ? (\n                  section.entries.map((entry) => (\n                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>\n                      <Text style={styles.recordType}>{rankingLeaderboardEntryRankLabel(entry)}</Text>\n                      <View style={styles.timelineContent}>\n                        <Text style={styles.recordContent}>{rankingLeaderboardEntryDisplayName(entry)}</Text>\n                        <Text style={styles.evidence}>{rankingLeaderboardEntryScoreLabel(entry)}</Text>\n                      </View>\n                    </View>\n                  ))\n                ) : (\n                  <Text style={styles.evidence}>{rankingLeaderboardSectionEmptyCopy(section)}</Text>\n                )}\n              </View>\n            ))}\n            <View style={styles.inlineInfoBlock}>\n              <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>",
         )
         _assert_not_contains(
             "ranking direct readiness checklist item key binding",

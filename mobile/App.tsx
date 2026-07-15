@@ -4189,6 +4189,10 @@ export default function App() {
     return section.emptyCopy;
   }
 
+  function rankingReadinessSectionLabel() {
+    return futurePreviewDisplayLabels.formalReadiness;
+  }
+
   function rankingReadinessChecklistItemKey(item: string) {
     return item;
   }
@@ -10099,7 +10103,7 @@ export default function App() {
               </View>
             ))}
             <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>
+              <Text style={styles.label}>{rankingReadinessSectionLabel()}</Text>
               {rankingReadinessChecklistItems.map((item) => (
                 <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />
               ))}

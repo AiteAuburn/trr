@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1635 reuse ranking readiness section label helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `rankingReadinessSectionLabel` helper for the Ranking readiness section label.
+- Reused the helper in Ranking screen rendering while keeping readiness copy, checklist rows, backend sync behavior, and other future preview screens unchanged.
+- Updated navigation verifier coverage for the shared Ranking readiness section label helper and direct readiness-label regression guard.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting remaining Ranking render bindings in small behavior-preserving slices.
+
 ### T1634 reuse ranking return button label helper
 
 類型：mobile / refactor / verifier / docs
