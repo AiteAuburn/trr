@@ -1694,6 +1694,7 @@ export default function App() {
   const rankingPublicActionPressTarget = rankingPublicActionPressHandler();
   const rankingReturnFutureModulesButtonDisplayLabel = rankingReturnFutureModulesButtonLabel();
   const rankingReturnFutureModulesAccessibilityDisplayLabel = rankingReturnFutureModulesAccessibilityLabel();
+  const rankingReturnFutureModulesPressTarget = rankingReturnFutureModulesPressHandler();
   const foodPhotoStatusDisplay = foodPhotoStatusDisplayTexts(foodPhotoActionStatus);
   const foodPhotoActionStatusDisplayText = foodPhotoStatusDisplay.action;
   const foodPhotoUploadStatusMessage = foodPhotoStatusDisplay.upload;
@@ -4267,6 +4268,10 @@ export default function App() {
 
   function rankingReturnFutureModulesButtonLabel() {
     return futurePreviewDisplayLabels.returnFutureModules;
+  }
+
+  function rankingReturnFutureModulesPressHandler() {
+    return returnFromRankingPreview;
   }
 
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
@@ -10172,7 +10177,7 @@ export default function App() {
               accessibilityLabel={rankingReturnFutureModulesAccessibilityDisplayLabel}
               accessibilityRole="button"
               style={styles.secondaryButton}
-              onPress={returnFromRankingPreview}
+              onPress={rankingReturnFutureModulesPressTarget}
             >
               <Text style={styles.secondaryButtonText}>{rankingReturnFutureModulesButtonDisplayLabel}</Text>
             </Pressable>

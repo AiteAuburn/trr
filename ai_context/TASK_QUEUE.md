@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1644: Reuse ranking return action press helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `rankingReturnFutureModulesPressHandler` helper for the Ranking return CTA press target.
+- Reused the helper through a bounded Ranking press target while keeping return navigation, labels, accessibility, backend sync behavior, and other future preview screens unchanged.
+- Updated navigation verifier coverage for the shared Ranking return action press helper and direct return press-binding regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting remaining Ranking render/action bindings in small behavior-preserving slices.
+
 ### T1643: Reuse ranking opt-in action press helper
 
 Status: done

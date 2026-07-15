@@ -7767,6 +7767,10 @@ def main() -> int:
             ("ranking return future modules button helper fields", "return futurePreviewDisplayLabels.returnFutureModules;"),
             ("ranking return future modules button display label binding", "const rankingReturnFutureModulesButtonDisplayLabel = rankingReturnFutureModulesButtonLabel();"),
             ("ranking return future modules button helper binding", "{rankingReturnFutureModulesButtonDisplayLabel}"),
+            ("ranking return future modules press helper", "function rankingReturnFutureModulesPressHandler()"),
+            ("ranking return future modules press helper fields", "return returnFromRankingPreview;"),
+            ("ranking return future modules press target binding", "const rankingReturnFutureModulesPressTarget = rankingReturnFutureModulesPressHandler();"),
+            ("ranking return future modules press helper binding", "onPress={rankingReturnFutureModulesPressTarget}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9949,6 +9953,11 @@ def main() -> int:
             "ranking direct return future modules button binding",
             content,
             "<Pressable\n              accessibilityLabel={rankingReturnFutureModulesAccessibilityDisplayLabel}\n              accessibilityRole=\"button\"\n              style={styles.secondaryButton}\n              onPress={returnFromRankingPreview}\n            >\n              <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.returnFutureModules}</Text>",
+        )
+        _assert_not_contains(
+            "ranking direct return future modules press binding",
+            content,
+            "<Pressable\n              accessibilityLabel={rankingReturnFutureModulesAccessibilityDisplayLabel}\n              accessibilityRole=\"button\"\n              style={styles.secondaryButton}\n              onPress={returnFromRankingPreview}",
         )
         _assert_not_contains(
             "ranking direct public action press binding",
