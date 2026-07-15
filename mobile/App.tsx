@@ -5499,6 +5499,42 @@ export default function App() {
     return item.module;
   }
 
+  function futureModuleCardKey(item: ReturnType<typeof futureModuleCardDisplayItem>) {
+    return item.key;
+  }
+
+  function futureModuleCardAccessibilityLabel(item: ReturnType<typeof futureModuleCardDisplayItem>) {
+    return item.accessibilityLabel;
+  }
+
+  function futureModuleCardIcon(item: ReturnType<typeof futureModuleCardDisplayItem>) {
+    return item.icon;
+  }
+
+  function futureModuleCardTitle(item: ReturnType<typeof futureModuleCardDisplayItem>) {
+    return item.title;
+  }
+
+  function futureModuleCardDescription(item: ReturnType<typeof futureModuleCardDisplayItem>) {
+    return item.description;
+  }
+
+  function futureModuleCardReadiness(item: ReturnType<typeof futureModuleCardDisplayItem>) {
+    return item.readiness;
+  }
+
+  function futureModuleCardRequirements(item: ReturnType<typeof futureModuleCardDisplayItem>) {
+    return item.requirements;
+  }
+
+  function futureModuleCardSafety(item: ReturnType<typeof futureModuleCardDisplayItem>) {
+    return item.safety;
+  }
+
+  function futureModuleCardHasTarget(item: ReturnType<typeof futureModuleCardDisplayItem>) {
+    return Boolean(item.target);
+  }
+
   function pressFutureModuleDestination(item: ReturnType<typeof futureModuleCardDisplayItem>) {
     openFutureModuleDestination(futureModuleDestinationTarget(item), futureModuleDestinationModule(item));
   }
@@ -10225,29 +10261,29 @@ export default function App() {
             </View>
             {futureModuleDisplayCards.map((item) => (
                 <Pressable
-                  key={item.key}
-                  accessibilityLabel={item.accessibilityLabel}
+                  key={futureModuleCardKey(item)}
+                  accessibilityLabel={futureModuleCardAccessibilityLabel(item)}
                   accessibilityRole="button"
                   style={styles.recordCard}
                   onPress={() => pressFutureModuleDestination(item)}
                 >
                   <View style={styles.recordHeader}>
                     <View style={styles.iconCircleSmall}>
-                      <Text>{item.icon}</Text>
+                      <Text>{futureModuleCardIcon(item)}</Text>
                     </View>
-                    <Text style={styles.recordType}>{item.title}</Text>
+                    <Text style={styles.recordType}>{futureModuleCardTitle(item)}</Text>
                   </View>
-                  <Text style={styles.recordContent}>{item.description}</Text>
-                  <Text style={styles.evidence}>{item.readiness}</Text>
+                  <Text style={styles.recordContent}>{futureModuleCardDescription(item)}</Text>
+                  <Text style={styles.evidence}>{futureModuleCardReadiness(item)}</Text>
                   <View style={styles.inlineInfoBlock}>
                     <Text style={styles.label}>{futurePreviewDisplayLabels.readiness}</Text>
-                    {item.requirements.map((requirement) => (
+                    {futureModuleCardRequirements(item).map((requirement) => (
                       <HighlightBulletRow key={requirement.key} text={requirement.text} />
                     ))}
-                    <Text style={styles.warningText}>{item.safety}</Text>
+                    <Text style={styles.warningText}>{futureModuleCardSafety(item)}</Text>
                   </View>
-                  {item.target ? <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.viewPreview}</Text> : null}
-                  {!item.target ? <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.viewIntegration}</Text> : null}
+                  {futureModuleCardHasTarget(item) ? <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.viewPreview}</Text> : null}
+                  {!futureModuleCardHasTarget(item) ? <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.viewIntegration}</Text> : null}
                 </Pressable>
               ))}
             {futureModuleActionStatus ? (

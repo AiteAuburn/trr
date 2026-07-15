@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1711 reuse future module card fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared future-module card helpers for card key, accessibility label, icon, title, description, readiness, requirements, safety, and target-state rendering.
+- Reused the helpers in the Future Modules card list while preserving hidden/debug-only scope, route targets, requirements list, safety copy, and navigation behavior unchanged.
+- Updated navigation verifier coverage, bounded accessibility source allowlist, and scoped direct-binding guards for the future-module card render block.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining option/category display bindings and larger extraction opportunities in small behavior-preserving slices.
+
 ### T1710 reuse visual smoke route fields
 
 類型：mobile / refactor / verifier / docs
