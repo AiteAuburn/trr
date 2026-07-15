@@ -4011,6 +4011,10 @@ export default function App() {
     return item.title;
   }
 
+  function foodCommunityDetailTitleDisplayText(item: { title: string }) {
+    return `${foodCommunityDetailTitle(item)} 資料頁`;
+  }
+
   function foodCommunityDetailPanelVisible(item: ReturnType<typeof foodCommunityItemDisplayItem> | null): item is ReturnType<typeof foodCommunityItemDisplayItem> {
     return item !== null;
   }
@@ -9687,7 +9691,7 @@ export default function App() {
             </View>
             {foodCommunityDetailPanelVisible(selectedFoodCommunityItem) ? (
               <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{foodCommunityDetailTitle(selectedFoodCommunityItem)} 資料頁</Text>
+                <Text style={styles.label}>{foodCommunityDetailTitleDisplayText(selectedFoodCommunityItem)}</Text>
                 <View style={styles.reportBoundaryGrid}>
                   <View style={styles.reportBoundaryCard}>
                     <Text style={styles.confidence}>分享總人數</Text>
