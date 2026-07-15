@@ -7643,6 +7643,9 @@ def main() -> int:
             ("food community ranking section label helper", "function foodCommunityRankingSectionLabel()"),
             ("food community ranking section label helper fields", 'return "社群排行榜";'),
             ("food community ranking section label helper binding", "{foodCommunityRankingSectionLabel()}"),
+            ("food community points store bridge copy helper", "function foodCommunityPointsStoreBridgeCopy()"),
+            ("food community points store bridge copy helper fields", 'return "點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。";'),
+            ("food community points store bridge copy helper binding", "{foodCommunityPointsStoreBridgeCopy()}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
             ("food community share eaten time accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
@@ -9652,6 +9655,11 @@ def main() -> int:
             "food community direct ranking section label binding",
             content,
             "<Text style={styles.label}>社群排行榜</Text>",
+        )
+        _assert_not_contains(
+            "food community direct points store bridge copy binding",
+            content,
+            "<Text style={styles.evidence}>點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。</Text>",
         )
         _assert_not_contains(
             "food community item direct handler id binding",

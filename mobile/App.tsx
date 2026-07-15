@@ -4107,6 +4107,10 @@ export default function App() {
     return "社群排行榜";
   }
 
+  function foodCommunityPointsStoreBridgeCopy() {
+    return "點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。";
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -9834,7 +9838,7 @@ export default function App() {
               {foodCommunityRankingRows.map((row) => (
                 <HighlightDetailRow key={row.label} label={row.label} value={row.value} />
               ))}
-              <Text style={styles.evidence}>點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。</Text>
+              <Text style={styles.evidence}>{foodCommunityPointsStoreBridgeCopy()}</Text>
             </View>
             <View style={styles.heroCardFeature}>
               <View style={styles.heroIconBubble}>
