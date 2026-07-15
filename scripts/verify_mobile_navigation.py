@@ -7597,6 +7597,9 @@ def main() -> int:
             ("food community detail individual share section label helper", "function foodCommunityDetailIndividualShareSectionLabel()"),
             ("food community detail individual share section label helper fields", 'return "個別分享紀錄";'),
             ("food community detail individual share section label helper binding", "{foodCommunityDetailIndividualShareSectionLabel()}"),
+            ("food community detail individual share empty text helper", "function foodCommunityDetailIndividualShareEmptyText()"),
+            ("food community detail individual share empty text helper fields", 'return "尚未有可顯示的個別分享紀錄。";'),
+            ("food community detail individual share empty text helper binding", "{foodCommunityDetailIndividualShareEmptyText()}"),
             ("food community detail individual shares helper", "function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> })"),
             ("food community detail individual shares helper fields", "return item.individualShareDisplayItems;"),
             ("food community detail has individual shares helper", "function foodCommunityDetailHasIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> })"),
@@ -9553,6 +9556,11 @@ def main() -> int:
             "food community direct detail individual share section label binding",
             content,
             "<Text style={styles.label}>個別分享紀錄</Text>",
+        )
+        _assert_not_contains(
+            "food community direct detail individual share empty text binding",
+            content,
+            "<Text style={styles.evidence}>尚未有可顯示的個別分享紀錄。</Text>",
         )
         _assert_not_contains(
             "food community direct detail individual shares binding",

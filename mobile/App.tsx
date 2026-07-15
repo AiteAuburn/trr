@@ -4055,6 +4055,10 @@ export default function App() {
     return "個別分享紀錄";
   }
 
+  function foodCommunityDetailIndividualShareEmptyText() {
+    return "尚未有可顯示的個別分享紀錄。";
+  }
+
   function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> }) {
     return item.individualShareDisplayItems;
   }
@@ -9726,7 +9730,7 @@ export default function App() {
                   ))
                 ) : (
                   <View style={styles.inlineInfoBlock}>
-                    <Text style={styles.evidence}>尚未有可顯示的個別分享紀錄。</Text>
+                    <Text style={styles.evidence}>{foodCommunityDetailIndividualShareEmptyText()}</Text>
                   </View>
                 )}
               </View>
