@@ -1688,6 +1688,7 @@ export default function App() {
   const rankingOptInAccessibilityDisplayLabel = rankingOptInActionAccessibilityLabel(communityActionDisplay.rankingOptInAccessibility);
   const rankingPublicActionButtonDisplayLabel = rankingPublicActionButtonLabel();
   const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel();
+  const rankingReturnFutureModulesAccessibilityDisplayLabel = rankingReturnFutureModulesAccessibilityLabel();
   const foodPhotoStatusDisplay = foodPhotoStatusDisplayTexts(foodPhotoActionStatus);
   const foodPhotoActionStatusDisplayText = foodPhotoStatusDisplay.action;
   const foodPhotoUploadStatusMessage = foodPhotoStatusDisplay.upload;
@@ -4217,6 +4218,10 @@ export default function App() {
 
   function rankingActionStatusText() {
     return rankingActionStatusDisplayText;
+  }
+
+  function rankingReturnFutureModulesAccessibilityLabel() {
+    return futurePreviewDisplayLabels.returnFutureModulesAccessibility;
   }
 
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
@@ -10119,7 +10124,7 @@ export default function App() {
               </View>
             ) : null}
             <Pressable
-              accessibilityLabel={futurePreviewDisplayLabels.returnFutureModulesAccessibility}
+              accessibilityLabel={rankingReturnFutureModulesAccessibilityDisplayLabel}
               accessibilityRole="button"
               style={styles.secondaryButton}
               onPress={returnFromRankingPreview}

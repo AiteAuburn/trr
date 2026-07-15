@@ -7729,6 +7729,10 @@ def main() -> int:
             ("ranking action status text helper", "function rankingActionStatusText()"),
             ("ranking action status text helper fields", "return rankingActionStatusDisplayText;"),
             ("ranking action status text helper binding", "{rankingActionStatusText()}"),
+            ("ranking return future modules accessibility helper", "function rankingReturnFutureModulesAccessibilityLabel()"),
+            ("ranking return future modules accessibility helper fields", "return futurePreviewDisplayLabels.returnFutureModulesAccessibility;"),
+            ("ranking return future modules accessibility display label binding", "const rankingReturnFutureModulesAccessibilityDisplayLabel = rankingReturnFutureModulesAccessibilityLabel();"),
+            ("ranking return future modules accessibility helper binding", "accessibilityLabel={rankingReturnFutureModulesAccessibilityDisplayLabel}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9866,6 +9870,11 @@ def main() -> int:
             "ranking direct action status text binding",
             content,
             "{rankingActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingActionStatusLabel()}</Text>\n                <Text style={styles.evidence}>{rankingActionStatusDisplayText}</Text>",
+        )
+        _assert_not_contains(
+            "ranking direct return future modules accessibility binding",
+            content,
+            "{rankingActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingActionStatusLabel()}</Text>\n                <Text style={styles.evidence}>{rankingActionStatusText()}</Text>\n              </View>\n            ) : null}\n            <Pressable\n              accessibilityLabel={futurePreviewDisplayLabels.returnFutureModulesAccessibility}",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
