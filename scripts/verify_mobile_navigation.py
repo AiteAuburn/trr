@@ -8925,6 +8925,15 @@ def main() -> int:
             ("store redemption action label helper fields", "return redemption.actionLabel;"),
             ("store redemption action accessibility helper", "function storeRedemptionActionAccessibilityLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store redemption action accessibility helper fields", "return redemption.actionAccessibilityLabel;"),
+            ("store redemption boundary row key helper", "function storeRedemptionBoundaryRowKey(row: (typeof storeRedemptionBoundaryRows)[number])"),
+            ("store redemption boundary row key helper fields", "return row.label;"),
+            ("store redemption boundary row key helper binding", "key={storeRedemptionBoundaryRowKey(row)}"),
+            ("store redemption boundary row label helper", "function storeRedemptionBoundaryRowLabel(row: (typeof storeRedemptionBoundaryRows)[number])"),
+            ("store redemption boundary row label helper fields", "return row.label;"),
+            ("store redemption boundary row label helper binding", "{storeRedemptionBoundaryRowLabel(row)}"),
+            ("store redemption boundary row value helper", "function storeRedemptionBoundaryRowValue(row: (typeof storeRedemptionBoundaryRows)[number])"),
+            ("store redemption boundary row value helper fields", "return row.value;"),
+            ("store redemption boundary row value helper binding", "{storeRedemptionBoundaryRowValue(row)}"),
             ("store product status press handler", "function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store redemption status press handler", "function pressStoreRedemptionStatus(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store catalog sync function", "async function loadStoreCatalogAndPoints()"),
@@ -10498,6 +10507,21 @@ def main() -> int:
             "store redemption direct action accessibility binding",
             content,
             "accessibilityLabel={product.actionAccessibilityLabel}",
+        )
+        _assert_not_contains(
+            "store redemption direct boundary row key binding",
+            content,
+            "storeRedemptionBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
+        )
+        _assert_not_contains(
+            "store redemption direct boundary row label binding",
+            content,
+            "storeRedemptionBoundaryRows.map((row) => (\n                <View key={storeRedemptionBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "store redemption direct boundary row value binding",
+            content,
+            "storeRedemptionBoundaryRows.map((row) => (\n                <View key={storeRedemptionBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{storeRedemptionBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
             "future module direct destination binding",

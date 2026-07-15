@@ -4723,6 +4723,18 @@ export default function App() {
     return redemption.actionAccessibilityLabel;
   }
 
+  function storeRedemptionBoundaryRowKey(row: (typeof storeRedemptionBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function storeRedemptionBoundaryRowLabel(row: (typeof storeRedemptionBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function storeRedemptionBoundaryRowValue(row: (typeof storeRedemptionBoundaryRows)[number]) {
+    return row.value;
+  }
+
   function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>) {
     void redeemStoreProduct(product);
   }
@@ -11637,9 +11649,9 @@ export default function App() {
             </View>
             <View style={styles.reportBoundaryGrid}>
               {storeRedemptionBoundaryRows.map((row) => (
-                <View key={row.label} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.recordType}>{row.value}</Text>
+                <View key={storeRedemptionBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
+                  <Text style={styles.confidence}>{storeRedemptionBoundaryRowLabel(row)}</Text>
+                  <Text style={styles.recordType}>{storeRedemptionBoundaryRowValue(row)}</Text>
                 </View>
               ))}
             </View>
