@@ -3647,6 +3647,14 @@ export default function App() {
     return item;
   }
 
+  function outcomeChecklistItemKey(item: string) {
+    return item;
+  }
+
+  function outcomeChecklistItemText(item: string) {
+    return item;
+  }
+
   function subscriptionComparisonRowKey(row: (typeof subscriptionComparisonDisplayRows)[number]) {
     return row.feature;
   }
@@ -8615,7 +8623,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.postSaveBoundary}</Text>
               {saveSuccessBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={outcomeChecklistItemKey(item)} text={outcomeChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.postSaveGrid}>
@@ -8724,7 +8732,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.postDeleteBoundary}</Text>
               {deleteSuccessBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={outcomeChecklistItemKey(item)} text={outcomeChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.postSaveGrid}>
@@ -8791,7 +8799,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.postUpdateBoundary}</Text>
               {updateSuccessBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={outcomeChecklistItemKey(item)} text={outcomeChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.postSaveGrid}>

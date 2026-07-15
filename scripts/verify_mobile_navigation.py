@@ -1707,9 +1707,9 @@ def main() -> int:
             ("transcript review highlight bullet row", "transcriptReviewCostBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("ai review highlight bullet row", "aiReviewCostBoundaryChecklistItems.map((item) => (\n                  <HighlightBulletRow key={item} text={item} />"),
             ("ai save confirm highlight bullet row", "aiSaveConfirmChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("save success highlight bullet row", "saveSuccessBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("delete success highlight bullet row", "deleteSuccessBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("update success highlight bullet row", "updateSuccessBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("save success highlight bullet row", "saveSuccessBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={outcomeChecklistItemKey(item)} text={outcomeChecklistItemText(item)} />"),
+            ("delete success highlight bullet row", "deleteSuccessBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={outcomeChecklistItemKey(item)} text={outcomeChecklistItemText(item)} />"),
+            ("update success highlight bullet row", "updateSuccessBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={outcomeChecklistItemKey(item)} text={outcomeChecklistItemText(item)} />"),
             ("history boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("analysis boundary highlight bullet row", "analysisBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("record entry settings highlight bullet row", "recordEntrySettingsChecklistItems.map((item) => (\n                  <HighlightBulletRow key={item} text={item} />"),
@@ -7474,6 +7474,12 @@ def main() -> int:
             ("commerce readiness checklist item text helper", "function commerceReadinessChecklistItemText(item: string)"),
             ("commerce readiness checklist item text helper fields", "return item;"),
             ("commerce readiness checklist item text binding", "text={commerceReadinessChecklistItemText(item)}"),
+            ("outcome checklist item key helper", "function outcomeChecklistItemKey(item: string)"),
+            ("outcome checklist item key helper fields", "return item;"),
+            ("outcome checklist item key binding", "key={outcomeChecklistItemKey(item)}"),
+            ("outcome checklist item text helper", "function outcomeChecklistItemText(item: string)"),
+            ("outcome checklist item text helper fields", "return item;"),
+            ("outcome checklist item text binding", "text={outcomeChecklistItemText(item)}"),
             ("subscription comparison row key helper", "function subscriptionComparisonRowKey(row: (typeof subscriptionComparisonDisplayRows)[number])"),
             ("subscription comparison row key helper fields", "return row.feature;"),
             ("subscription comparison row key binding", "key={subscriptionComparisonRowKey(row)}"),
@@ -7643,6 +7649,21 @@ def main() -> int:
             _assert_not_contains(
                 f"{list_name} direct checklist item binding",
                 commerce_checklist_render_block,
+                "key={item} text={item}",
+            )
+        for list_name in (
+            "saveSuccessBoundaryChecklistItems",
+            "deleteSuccessBoundaryChecklistItems",
+            "updateSuccessBoundaryChecklistItems",
+        ):
+            outcome_checklist_render_block = _match_block(
+                content,
+                rf"{list_name}\.map\(\(item\) => \(([\s\S]*?<HighlightBulletRow[^\n]*/>\n\s*)\)\)",
+                f"{list_name} outcome checklist render block",
+            )
+            _assert_not_contains(
+                f"{list_name} direct checklist item binding",
+                outcome_checklist_render_block,
                 "key={item} text={item}",
             )
         subscription_comparison_render_block = _match_block(
