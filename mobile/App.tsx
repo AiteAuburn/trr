@@ -4159,6 +4159,18 @@ export default function App() {
     return row.value;
   }
 
+  function foodCommunityRankingRowKey(row: (typeof foodCommunityRankingRows)[number]) {
+    return row.label;
+  }
+
+  function foodCommunityRankingRowLabel(row: (typeof foodCommunityRankingRows)[number]) {
+    return row.label;
+  }
+
+  function foodCommunityRankingRowValue(row: (typeof foodCommunityRankingRows)[number]) {
+    return row.value;
+  }
+
   function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
     return item.examples.length;
   }
@@ -10176,7 +10188,11 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{foodCommunityRankingSectionLabel()}</Text>
               {foodCommunityRankingRows.map((row) => (
-                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />
+                <HighlightDetailRow
+                  key={foodCommunityRankingRowKey(row)}
+                  label={foodCommunityRankingRowLabel(row)}
+                  value={foodCommunityRankingRowValue(row)}
+                />
               ))}
               <Text style={styles.evidence}>{foodCommunityPointsStoreBridgeCopy()}</Text>
             </View>

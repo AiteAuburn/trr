@@ -1735,7 +1735,7 @@ def main() -> int:
             _assert_contains(label, highlight_detail_row_content, marker)
         for label, marker in (
             ("food community share field highlight detail row", "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityShareFieldRowKey(row)}\n                  label={foodCommunityShareFieldRowLabel(row)}\n                  value={foodCommunityShareFieldRowValue(row)}"),
-            ("food community ranking highlight detail row", "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />"),
+            ("food community ranking highlight detail row", "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityRankingRowKey(row)}\n                  label={foodCommunityRankingRowLabel(row)}\n                  value={foodCommunityRankingRowValue(row)}"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
@@ -7727,6 +7727,15 @@ def main() -> int:
             ("food community point row value helper", "function foodCommunityPointRowValue(row: (typeof foodCommunityPointRows)[number])"),
             ("food community point row value helper fields", "return row.value;"),
             ("food community point row value helper binding", "{foodCommunityPointRowValue(row)}"),
+            ("food community ranking row key helper", "function foodCommunityRankingRowKey(row: (typeof foodCommunityRankingRows)[number])"),
+            ("food community ranking row key helper fields", "return row.label;"),
+            ("food community ranking row key helper binding", "key={foodCommunityRankingRowKey(row)}"),
+            ("food community ranking row label helper", "function foodCommunityRankingRowLabel(row: (typeof foodCommunityRankingRows)[number])"),
+            ("food community ranking row label helper fields", "return row.label;"),
+            ("food community ranking row label helper binding", "label={foodCommunityRankingRowLabel(row)}"),
+            ("food community ranking row value helper", "function foodCommunityRankingRowValue(row: (typeof foodCommunityRankingRows)[number])"),
+            ("food community ranking row value helper fields", "return row.value;"),
+            ("food community ranking row value helper binding", "value={foodCommunityRankingRowValue(row)}"),
             ("food community detail status example count helper", "function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] })"),
             ("food community detail status example count helper fields", "return item.examples.length;"),
             ("food community detail status title helper binding", "itemTitle: foodCommunityDetailStatusTitle(detailedItem),"),
@@ -9940,6 +9949,21 @@ def main() -> int:
             "food community direct share field row value binding",
             content,
             "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityShareFieldRowKey(row)}\n                  label={foodCommunityShareFieldRowLabel(row)}\n                  value={row.value}",
+        )
+        _assert_not_contains(
+            "food community direct ranking row key binding",
+            content,
+            "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />",
+        )
+        _assert_not_contains(
+            "food community direct ranking row label binding",
+            content,
+            "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityRankingRowKey(row)}\n                  label={row.label}",
+        )
+        _assert_not_contains(
+            "food community direct ranking row value binding",
+            content,
+            "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityRankingRowKey(row)}\n                  label={foodCommunityRankingRowLabel(row)}\n                  value={row.value}",
         )
         _assert_not_contains(
             "food community direct point row key binding",
