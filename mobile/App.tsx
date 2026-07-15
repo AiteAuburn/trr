@@ -3974,10 +3974,14 @@ export default function App() {
     }));
   }
 
+  function foodCommunityCategoryDefaultItemId(category: FoodCommunityCategory) {
+    const firstMatch = foodCommunityItemsForDisplay.find((item) => item.category === category);
+    return firstMatch?.id ?? "";
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
-    const firstMatch = foodCommunityItemsForDisplay.find((item) => item.category === category);
-    setSelectedFoodCommunityItemId(firstMatch?.id ?? "");
+    setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
   }
 
   function foodCommunityCategoryTarget(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {

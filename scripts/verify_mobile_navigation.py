@@ -8360,7 +8360,10 @@ def main() -> int:
             ("store product display items helper binding", "const storeProductDisplayItems = storeDisplay.productDisplayItems;"),
             ("store visible helper binding", "const visibleStoreProducts = storeDisplay.visibleProducts;"),
             ("food community category display items helper binding", "const foodCommunityCategoryDisplayOptions = foodCommunityDisplay.categoryDisplayOptions;"),
+            ("food community category default item helper", "function foodCommunityCategoryDefaultItemId(category: FoodCommunityCategory)"),
+            ("food community category default item helper fields", "return firstMatch?.id ?? \"\";"),
             ("food community category select handler", "function selectFoodCommunityCategory(category: FoodCommunityCategory)"),
+            ("food community category default item helper binding", "setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));"),
             ("food community category option press handler", "function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category target helper", "function foodCommunityCategoryTarget(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category target helper fields", "return category.value;"),
@@ -9160,6 +9163,11 @@ def main() -> int:
             "food community category direct handler value binding",
             content,
             "selectFoodCommunityCategory(category.value);",
+        )
+        _assert_not_contains(
+            "food community category direct default item selection",
+            content,
+            "setSelectedFoodCommunityItemId(firstMatch?.id ?? \"\");",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
