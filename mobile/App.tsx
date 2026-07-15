@@ -4168,6 +4168,10 @@ export default function App() {
     return redemption.actionLabel;
   }
 
+  function storeRedemptionActionAccessibilityLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
+    return redemption.actionAccessibilityLabel;
+  }
+
   function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>) {
     void redeemStoreProduct(product);
   }
@@ -11166,7 +11170,7 @@ export default function App() {
                       <Text style={styles.evidence}>{product.subtitle}</Text>
                     </View>
                     <Pressable
-                      accessibilityLabel={product.actionAccessibilityLabel}
+                      accessibilityLabel={storeRedemptionActionAccessibilityLabel(product)}
                       accessibilityRole="button"
                       accessibilityState={{ disabled: storeRedemptionActionDisabled(product) }}
                       style={[

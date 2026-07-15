@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1566 reuse store redemption action accessibility helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `storeRedemptionActionAccessibilityLabel` helper for Store wallet redemption action accessibility text.
+- Reused the helper in wallet rendering while keeping redemption action accessibility, disabled state, action labels, and press behavior unchanged.
+- Updated navigation verifier coverage for the shared Store redemption action accessibility helper and direct `product.actionAccessibilityLabel` JSX regression guard.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1565 reuse store product action accessibility helper
 
 類型：mobile / refactor / verifier / docs
