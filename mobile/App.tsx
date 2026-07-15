@@ -2471,6 +2471,19 @@ export default function App() {
     setReportStatus(detailedReportResetStatusMessage());
   }
 
+  function defaultSttModelOption(modelOptions: AiModelOptions) {
+    return modelOptions.stt_models.find((model) => model.available) ?? modelOptions.stt_models[0];
+  }
+
+  function preferredLlmModelOption(modelOptions: AiModelOptions) {
+    return (
+      modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??
+      modelOptions.llm_models.find((model) => model.id === "ollama-qwen2.5-1.5b" && model.available) ??
+      modelOptions.llm_models.find((model) => model.available) ??
+      modelOptions.llm_models[0]
+    );
+  }
+
   async function refreshProductionAuthSession() {
     if (isAuthOperationInFlight) {
       setAuthActionStatus(authOperationBusyStatusMessage());
@@ -2637,15 +2650,11 @@ export default function App() {
     }
     const modelOptions = boundAiModelOptions(modelOptionsResponse);
     setModels(modelOptions);
-    const defaultStt = modelOptions.stt_models.find((model) => model.available) ?? modelOptions.stt_models[0];
+    const defaultStt = defaultSttModelOption(modelOptions);
     if (defaultStt) {
       setSttModelId(defaultStt.id);
     }
-    const preferredLlm =
-      modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??
-      modelOptions.llm_models.find((model) => model.id === "ollama-qwen2.5-1.5b" && model.available) ??
-      modelOptions.llm_models.find((model) => model.available) ??
-      modelOptions.llm_models[0];
+    const preferredLlm = preferredLlmModelOption(modelOptions);
     if (preferredLlm) {
       setLlmModelId(preferredLlm.id);
     }
@@ -5408,15 +5417,11 @@ export default function App() {
       }
       const modelOptions = boundAiModelOptions(modelOptionsResponse);
       setModels(modelOptions);
-      const defaultStt = modelOptions.stt_models.find((model) => model.available) ?? modelOptions.stt_models[0];
+      const defaultStt = defaultSttModelOption(modelOptions);
       if (defaultStt) {
         setSttModelId(defaultStt.id);
       }
-      const preferredLlm =
-        modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??
-        modelOptions.llm_models.find((model) => model.id === "ollama-qwen2.5-1.5b" && model.available) ??
-        modelOptions.llm_models.find((model) => model.available) ??
-        modelOptions.llm_models[0];
+      const preferredLlm = preferredLlmModelOption(modelOptions);
       if (preferredLlm) {
         setLlmModelId(preferredLlm.id);
       }

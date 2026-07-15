@@ -2123,12 +2123,24 @@ def main() -> int:
         for label, marker in (
             ("deepseek initial llm model state", 'const [llmModelId, setLlmModelId] = useState("deepseek-chat");'),
             (
-                "deepseek boot preference",
+                "deepseek preferred model helper",
+                "function preferredLlmModelOption(modelOptions: AiModelOptions)",
+            ),
+            (
+                "deepseek preferred model helper priority",
                 'modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??',
             ),
             (
-                "deepseek settings reconnect preference",
-                'modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??',
+                "default STT model helper",
+                "function defaultSttModelOption(modelOptions: AiModelOptions)",
+            ),
+            (
+                "boot default STT helper binding",
+                "const defaultStt = defaultSttModelOption(modelOptions);",
+            ),
+            (
+                "boot preferred LLM helper binding",
+                "const preferredLlm = preferredLlmModelOption(modelOptions);",
             ),
             ("deepseek record parse request binding", "llm_model_id: llmModelId"),
             ("deepseek selected model status render", "LLM：{selectedLlmModel?.label ?? llmModelId}"),
@@ -2159,11 +2171,17 @@ def main() -> int:
             content,
             "homeRecordingTimer: {",
         )
-        deepseek_preference_marker = (
-            'modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??'
+        default_stt_helper_marker = "const defaultStt = defaultSttModelOption(modelOptions);"
+        if content.count(default_stt_helper_marker) < 2:
+            raise AssertionError("Default STT helper must be used in both boot and dev reconnect model selection paths.")
+        preferred_llm_helper_marker = "const preferredLlm = preferredLlmModelOption(modelOptions);"
+        if content.count(preferred_llm_helper_marker) < 2:
+            raise AssertionError("Preferred LLM helper must be used in both boot and dev reconnect model selection paths.")
+        _assert_not_contains(
+            "direct default STT boot fallback",
+            content,
+            "const defaultStt = modelOptions.stt_models.find((model) => model.available) ?? modelOptions.stt_models[0];",
         )
-        if content.count(deepseek_preference_marker) < 2:
-            raise AssertionError("DeepSeek must be preferred in both boot and settings reconnect model selection paths.")
         _assert_not_contains(
             "minimal home chrome must not override hamburger action",
             navigation_content,
