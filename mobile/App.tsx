@@ -1672,6 +1672,7 @@ export default function App() {
   });
   const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;
   const foodCommunityShareAccessibilityDisplayLabel = communityActionDisplay.foodCommunityShareAccessibility;
+  const communityCloseAccessibilityDisplayLabel = communityCloseAccessibilityLabel();
   const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();
   const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();
   const storePreviewDisplay = storePreviewDisplayTexts(storeActionStatus);
@@ -4133,6 +4134,10 @@ export default function App() {
 
   function communityPublicProfileSaveButtonLabel() {
     return "儲存公開名稱";
+  }
+
+  function communityCloseAccessibilityLabel() {
+    return auxiliaryDisplayLabels.closeReturn;
   }
 
   function rankingScreenTitleLabel() {
@@ -9809,7 +9814,7 @@ export default function App() {
                 <Text style={styles.sectionTitle}>食物社群</Text>
                 <Text style={styles.evidence}>同步真實食物升糖分享、點數與公開排行榜；貼文留言治理仍待正式開放。</Text>
               </View>
-              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromCommunityPreview}>
+              <Pressable accessibilityLabel={communityCloseAccessibilityDisplayLabel} accessibilityRole="button" style={styles.closeButton} onPress={returnFromCommunityPreview}>
                 <Text style={styles.closeButtonText}>×</Text>
               </Pressable>
             </View>

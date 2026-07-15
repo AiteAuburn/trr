@@ -7529,6 +7529,10 @@ def main() -> int:
             ("doctor share report status handler", "function showDoctorShareReportBoundaryStatus()"),
             ("health integration permission status handler", "function showHealthIntegrationPermissionStatus()"),
             ("health integration meter status handler", "function showHealthIntegrationMeterStatus()"),
+            ("community close accessibility helper", "function communityCloseAccessibilityLabel()"),
+            ("community close accessibility helper fields", "return auxiliaryDisplayLabels.closeReturn;"),
+            ("community close accessibility display label binding", "const communityCloseAccessibilityDisplayLabel = communityCloseAccessibilityLabel();"),
+            ("community close accessibility helper binding", "accessibilityLabel={communityCloseAccessibilityDisplayLabel}"),
             ("community posting status handler", "function showCommunityPostingStatus()"),
             ("community privacy status handler", "function showCommunityPrivacyStatus()"),
             ("food community backend-aware intro copy", "backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。"),
@@ -9928,6 +9932,11 @@ def main() -> int:
             "ranking direct readiness checklist item text binding",
             content,
             "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={item} />",
+        )
+        _assert_not_contains(
+            "community direct close accessibility binding",
+            content,
+            '<Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromCommunityPreview}>',
         )
         _assert_not_contains(
             "ranking direct close accessibility binding",
