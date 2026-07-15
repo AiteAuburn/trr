@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1704 reuse record quick-entry fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared quick-entry field helpers for Record quick-entry key, accessibility label, icon, label, and helper copy.
+- Reused the helpers in the Record quick-entry rail while preserving existing quick-entry modes, disabled state, layout, labels, and navigation behavior unchanged.
+- Updated navigation verifier coverage, bounded accessibility source allowlist, and scoped direct-binding guards for the Record quick-entry render block.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing menu and future-module display bindings in small behavior-preserving slices.
+
 ### T1703 reuse result destination card fields
 
 類型：mobile / refactor / verifier / docs

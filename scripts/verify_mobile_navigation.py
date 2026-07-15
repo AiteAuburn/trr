@@ -881,6 +881,7 @@ def _pressable_label_source_errors(content: str) -> list[str]:
     helper_label_sources = {
         "destinationCardAccessibilityLabel(item)",
         "foodCommunityCategoryOptionAccessibilityLabel(category)",
+        "quickEntryModeAccessibilityLabel(item)",
         "settingsDisplayRowAccessibilityLabel(row)",
         "foodCommunityListItemAccessibilityLabel(item)",
         "storeProductActionAccessibilityLabel(product)",
@@ -5477,6 +5478,24 @@ def main() -> int:
             content,
             "return item.key;",
         )
+        for label, marker in (
+            ("quick-entry render key helper", "function quickEntryModeRenderKey(item: ReturnType<typeof quickEntryModeDisplayItems>[number])"),
+            ("quick-entry render key helper fields", "return `record-${item.key}`;"),
+            ("quick-entry render key binding", "key={quickEntryModeRenderKey(item)}"),
+            ("quick-entry accessibility helper", "function quickEntryModeAccessibilityLabel(item: ReturnType<typeof quickEntryModeDisplayItems>[number])"),
+            ("quick-entry accessibility helper fields", "return item.accessibilityLabel;"),
+            ("quick-entry accessibility helper binding", "accessibilityLabel={quickEntryModeAccessibilityLabel(item)}"),
+            ("quick-entry icon helper", "function quickEntryModeIcon(item: ReturnType<typeof quickEntryModeDisplayItems>[number])"),
+            ("quick-entry icon helper fields", "return item.icon;"),
+            ("quick-entry icon helper binding", "{quickEntryModeIcon(item)}"),
+            ("quick-entry label helper", "function quickEntryModeLabel(item: ReturnType<typeof quickEntryModeDisplayItems>[number])"),
+            ("quick-entry label helper fields", "return item.label;"),
+            ("quick-entry label helper binding", "{quickEntryModeLabel(item)}"),
+            ("quick-entry copy helper", "function quickEntryModeCopy(item: ReturnType<typeof quickEntryModeDisplayItems>[number])"),
+            ("quick-entry copy helper fields", "return item.copy;"),
+            ("quick-entry copy helper binding", "{quickEntryModeCopy(item)}"),
+        ):
+            _assert_contains(label, content, marker)
         _assert_contains(
             "record quick-entry item press wrapper",
             content,
@@ -5490,7 +5509,7 @@ def main() -> int:
         _assert_contains(
             "quick-entry accessibility labels",
             content,
-            "accessibilityLabel={item.accessibilityLabel}",
+            "accessibilityLabel={quickEntryModeAccessibilityLabel(item)}",
         )
         _assert_contains(
             "quick-entry button role",
@@ -6183,13 +6202,26 @@ def main() -> int:
         _assert_contains(
             "record quick-entry key prefix",
             content,
-            'key={`record-${item.key}`}',
+            "key={quickEntryModeRenderKey(item)}",
         )
         _assert_contains(
             "record quick-entry action",
             content,
             "onPress={() => pressRecordQuickEntryItem(item)}",
         )
+        quick_entry_render_block = _match_block(
+            content,
+            r"quickEntryModeDisplayItemsForRender\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
+            "record quick-entry render block",
+        )
+        for label, marker in (
+            ("direct quick-entry key binding", 'key={`record-${item.key}`}'),
+            ("direct quick-entry accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
+            ("direct quick-entry icon binding", "<Text style={styles.quickEntryIcon}>{item.icon}</Text>"),
+            ("direct quick-entry label binding", "<Text style={styles.quickEntryLabel}>{item.label}</Text>"),
+            ("direct quick-entry copy binding", "<Text style={styles.quickEntryCopy}>{item.copy}</Text>"),
+        ):
+            _assert_not_contains(label, quick_entry_render_block, marker)
         _assert_not_contains(
             "record quick-entry direct source wrapper binding",
             content,

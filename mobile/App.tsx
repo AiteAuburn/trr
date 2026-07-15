@@ -2448,6 +2448,26 @@ export default function App() {
     return item.key;
   }
 
+  function quickEntryModeRenderKey(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
+    return `record-${item.key}`;
+  }
+
+  function quickEntryModeAccessibilityLabel(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
+    return item.accessibilityLabel;
+  }
+
+  function quickEntryModeIcon(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
+    return item.icon;
+  }
+
+  function quickEntryModeLabel(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
+    return item.label;
+  }
+
+  function quickEntryModeCopy(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
+    return item.copy;
+  }
+
   function pressTodayQuickEntryItem(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
     handleTodayQuickEntryMode(quickEntryModeTarget(item));
   }
@@ -7642,17 +7662,17 @@ export default function App() {
               <View style={styles.quickEntryRail}>
                 {quickEntryModeDisplayItemsForRender.map((item) => (
                   <Pressable
-                    key={`record-${item.key}`}
-	                    accessibilityLabel={item.accessibilityLabel}
+                    key={quickEntryModeRenderKey(item)}
+	                    accessibilityLabel={quickEntryModeAccessibilityLabel(item)}
 	                    accessibilityRole="button"
 	                    accessibilityState={{ disabled: isBusy }}
 	                    style={[styles.quickEntryItem, isBusy ? styles.buttonDisabled : null]}
                     disabled={isBusy}
                     onPress={() => pressRecordQuickEntryItem(item)}
                   >
-                    <Text style={styles.quickEntryIcon}>{item.icon}</Text>
-                    <Text style={styles.quickEntryLabel}>{item.label}</Text>
-                    <Text style={styles.quickEntryCopy}>{item.copy}</Text>
+                    <Text style={styles.quickEntryIcon}>{quickEntryModeIcon(item)}</Text>
+                    <Text style={styles.quickEntryLabel}>{quickEntryModeLabel(item)}</Text>
+                    <Text style={styles.quickEntryCopy}>{quickEntryModeCopy(item)}</Text>
                   </Pressable>
                 ))}
               </View>
