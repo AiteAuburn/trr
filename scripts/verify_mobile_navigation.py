@@ -7665,6 +7665,9 @@ def main() -> int:
             ("food community search input handler", "function updateFoodCommunitySearchInput(value: string)"),
             ("food community category select handler", "function selectFoodCommunityCategory(category: FoodCommunityCategory)"),
             ("food community category press handler", "function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
+            ("food community category option key helper", "function foodCommunityCategoryOptionKey(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
+            ("food community category option key helper fields", "return category.value;"),
+            ("food community category option key helper binding", "key={foodCommunityCategoryOptionKey(category)}"),
             ("food community item select handler", "function selectFoodCommunityItem(itemId: string)"),
             ("food community item press handler", "function pressFoodCommunityItem(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
             ("food community item target helper", "function foodCommunityItemTarget(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
@@ -8466,6 +8469,9 @@ def main() -> int:
             ("food community category select handler", "function selectFoodCommunityCategory(category: FoodCommunityCategory)"),
             ("food community category default item helper binding", "setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));"),
             ("food community category option press handler", "function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
+            ("food community category option key helper", "function foodCommunityCategoryOptionKey(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
+            ("food community category option key helper fields", "return category.value;"),
+            ("food community category option key helper binding", "key={foodCommunityCategoryOptionKey(category)}"),
             ("food community category target helper", "function foodCommunityCategoryTarget(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category target helper fields", "return category.value;"),
             ("food community category target helper binding", "selectFoodCommunityCategory(foodCommunityCategoryTarget(category));"),
@@ -9285,6 +9291,11 @@ def main() -> int:
             "food community category direct handler value binding",
             content,
             "selectFoodCommunityCategory(category.value);",
+        )
+        _assert_not_contains(
+            "food community category direct option key binding",
+            content,
+            "foodCommunityCategoryDisplayOptions.map((category) => (\n                <Pressable\n                  key={category.value}",
         )
         _assert_not_contains(
             "food community category direct default item selection",
