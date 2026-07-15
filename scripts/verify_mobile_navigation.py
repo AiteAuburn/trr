@@ -8444,6 +8444,8 @@ def main() -> int:
             ("store redemption use status label helper fields", "return redemption.statusLabel;"),
             ("store redemption action disabled helper", "function storeRedemptionActionDisabled(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store redemption action disabled helper fields", "return !redemption.isUsable;"),
+            ("store redemption action label helper", "function storeRedemptionActionLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
+            ("store redemption action label helper fields", "return redemption.actionLabel;"),
             ("store product status press handler", "function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store redemption status press handler", "function pressStoreRedemptionStatus(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store catalog sync function", "async function loadStoreCatalogAndPoints()"),
@@ -8468,6 +8470,7 @@ def main() -> int:
             ("store redemption disabled helper accessibility state", "accessibilityState={{ disabled: storeRedemptionActionDisabled(product) }}"),
             ("store redemption disabled helper style", "storeRedemptionActionDisabled(product) ? styles.buttonDisabled : null"),
             ("store redemption disabled helper prop", "disabled={storeRedemptionActionDisabled(product)}"),
+            ("store redemption action label helper binding", "{storeRedemptionActionLabel(product)}"),
             ("store redemption boundary rows", "storeRedemptionBoundaryRows.map"),
             ("store redeem status helper binding", "const redeemStatus = storeRedeemStatusMessages({"),
             ("store redeem visual-smoke status binding", "setStoreActionStatus(redeemStatus.visualSmoke);"),
@@ -9310,6 +9313,11 @@ def main() -> int:
             "store redemption direct disabled binding",
             content,
             "!product.isUsable",
+        )
+        _assert_not_contains(
+            "store redemption direct action label binding",
+            content,
+            "{product.actionLabel}",
         )
         _assert_not_contains(
             "future module direct destination binding",

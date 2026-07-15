@@ -4160,6 +4160,10 @@ export default function App() {
     return !redemption.isUsable;
   }
 
+  function storeRedemptionActionLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
+    return redemption.actionLabel;
+  }
+
   function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>) {
     void redeemStoreProduct(product);
   }
@@ -11168,7 +11172,7 @@ export default function App() {
                       disabled={storeRedemptionActionDisabled(product)}
                       onPress={() => pressStoreRedemptionStatus(product)}
                     >
-                      <Text style={styles.secondaryButtonText}>{product.actionLabel}</Text>
+                      <Text style={styles.secondaryButtonText}>{storeRedemptionActionLabel(product)}</Text>
                     </Pressable>
                   </View>
                 ))
