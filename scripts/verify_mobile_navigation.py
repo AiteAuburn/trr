@@ -7479,6 +7479,15 @@ def main() -> int:
             ("profile settings boundary row value helper", "function profileSettingsBoundaryRowValue(row: (typeof profileSettingsBoundaryRows)[number])"),
             ("profile settings boundary row value helper fields", "return row.value;"),
             ("profile settings boundary row value helper binding", "{profileSettingsBoundaryRowValue(row)}"),
+            ("recording quota boundary row key helper", "function recordingQuotaBoundaryRowKey(row: (typeof recordingQuotaBoundaryRows)[number])"),
+            ("recording quota boundary row key helper fields", "return row.label;"),
+            ("recording quota boundary row key helper binding", "key={recordingQuotaBoundaryRowKey(row)}"),
+            ("recording quota boundary row label helper", "function recordingQuotaBoundaryRowLabel(row: (typeof recordingQuotaBoundaryRows)[number])"),
+            ("recording quota boundary row label helper fields", "return row.label;"),
+            ("recording quota boundary row label helper binding", "{recordingQuotaBoundaryRowLabel(row)}"),
+            ("recording quota boundary row value helper", "function recordingQuotaBoundaryRowValue(row: (typeof recordingQuotaBoundaryRows)[number])"),
+            ("recording quota boundary row value helper fields", "return row.value;"),
+            ("recording quota boundary row value helper binding", "{recordingQuotaBoundaryRowValue(row)}"),
             ("dev reset status display text binding", "const devResetStatusDisplayText = authStatusDisplay.devReset;"),
             ("native status display helper binding", "const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);"),
             ("native status display text binding", "const nativeStatusDisplayText = nativeStatusDisplay.native;"),
@@ -9705,6 +9714,21 @@ def main() -> int:
             "profile settings direct boundary row value binding",
             content,
             "profileSettingsBoundaryRows.map((row) => (\n                <View key={profileSettingsBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{profileSettingsBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "recording quota direct boundary row key binding",
+            content,
+            "recordingQuotaBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
+        )
+        _assert_not_contains(
+            "recording quota direct boundary row label binding",
+            content,
+            "recordingQuotaBoundaryRows.map((row) => (\n                <View key={recordingQuotaBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "recording quota direct boundary row value binding",
+            content,
+            "recordingQuotaBoundaryRows.map((row) => (\n                <View key={recordingQuotaBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{recordingQuotaBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
             "food community search direct handler bound input",

@@ -4536,6 +4536,18 @@ export default function App() {
     return row.value;
   }
 
+  function recordingQuotaBoundaryRowKey(row: (typeof recordingQuotaBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function recordingQuotaBoundaryRowLabel(row: (typeof recordingQuotaBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function recordingQuotaBoundaryRowValue(row: (typeof recordingQuotaBoundaryRows)[number]) {
+    return row.value;
+  }
+
   function selectFoodCommunityItem(itemId: string) {
     const boundedItemId = boundIdentifier(itemId);
     setSelectedFoodCommunityItemId(boundedItemId);
@@ -11136,9 +11148,9 @@ export default function App() {
             </View>
             <View style={styles.reportBoundaryGrid}>
               {recordingQuotaBoundaryRows.map((row) => (
-                <View key={row.label} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.recordType}>{row.value}</Text>
+                <View key={recordingQuotaBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
+                  <Text style={styles.confidence}>{recordingQuotaBoundaryRowLabel(row)}</Text>
+                  <Text style={styles.recordType}>{recordingQuotaBoundaryRowValue(row)}</Text>
                 </View>
               ))}
             </View>
