@@ -4015,6 +4015,10 @@ export default function App() {
     return item.minimumRise;
   }
 
+  function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> }) {
+    return item.individualShareDisplayItems;
+  }
+
   function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
     return item.examples.length;
   }
@@ -9620,8 +9624,8 @@ export default function App() {
                   </View>
                 </View>
                 <Text style={styles.label}>個別分享紀錄</Text>
-                {selectedFoodCommunityItem.individualShareDisplayItems.length > 0 ? (
-                  selectedFoodCommunityItem.individualShareDisplayItems.map((share) => (
+                {foodCommunityDetailIndividualShares(selectedFoodCommunityItem).length > 0 ? (
+                  foodCommunityDetailIndividualShares(selectedFoodCommunityItem).map((share) => (
                     <View key={share.id} style={styles.visionResultCard}>
                       <View style={styles.timelineContent}>
                         <Text style={styles.recordContent}>{share.summary}</Text>

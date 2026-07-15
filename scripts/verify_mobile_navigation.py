@@ -7524,7 +7524,7 @@ def main() -> int:
             ("food community maximum rise unit", "{foodCommunityDetailMaximumRise(selectedFoodCommunityItem)} mg/dL"),
             ("food community minimum rise unit", "{foodCommunityDetailMinimumRise(selectedFoodCommunityItem)} mg/dL"),
             ("food community individual share section label", "個別分享紀錄"),
-            ("food community individual share render", "selectedFoodCommunityItem.individualShareDisplayItems.map((share) =>"),
+            ("food community individual share render", "foodCommunityDetailIndividualShares(selectedFoodCommunityItem).map((share) =>"),
             ("food community individual share empty state", "尚未有可顯示的個別分享紀錄。"),
             ("food community detail sync function", "async function loadFoodCommunityDetail(itemId: string)"),
             ("food community detail endpoint", "`/community/foods/${boundedItemId}`"),
@@ -7557,6 +7557,10 @@ def main() -> int:
             ("food community detail minimum rise helper", "function foodCommunityDetailMinimumRise(item: { minimumRise: number })"),
             ("food community detail minimum rise helper fields", "return item.minimumRise;"),
             ("food community detail minimum rise helper binding", "{foodCommunityDetailMinimumRise(selectedFoodCommunityItem)} mg/dL"),
+            ("food community detail individual shares helper", "function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> })"),
+            ("food community detail individual shares helper fields", "return item.individualShareDisplayItems;"),
+            ("food community detail individual shares length helper binding", "foodCommunityDetailIndividualShares(selectedFoodCommunityItem).length > 0"),
+            ("food community detail individual shares map helper binding", "foodCommunityDetailIndividualShares(selectedFoodCommunityItem).map((share) =>"),
             ("food community detail status example count helper", "function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] })"),
             ("food community detail status example count helper fields", "return item.examples.length;"),
             ("food community detail status title helper binding", "itemTitle: foodCommunityDetailStatusTitle(detailedItem),"),
@@ -9338,6 +9342,11 @@ def main() -> int:
             "food community direct detail minimum rise binding",
             content,
             "{selectedFoodCommunityItem.minimumRise} mg/dL",
+        )
+        _assert_not_contains(
+            "food community direct detail individual shares binding",
+            content,
+            "selectedFoodCommunityItem.individualShareDisplayItems",
         )
         _assert_not_contains(
             "food community direct share category binding",
