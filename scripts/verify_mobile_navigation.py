@@ -7531,6 +7531,10 @@ def main() -> int:
             ("food community detail selected item helper", "function foodCommunityDetailSelectedItemId(item: { id: string })"),
             ("food community detail selected item helper fields", "return item.id;"),
             ("food community detail selected item helper binding", "setSelectedFoodCommunityItemId(foodCommunityDetailSelectedItemId(detailedItem));"),
+            ("food community detail refresh item helper", "function foodCommunityDetailRefreshItemId(item: { id: string })"),
+            ("food community detail refresh item helper fields", "return item.id;"),
+            ("food community detail refresh item helper binding", "const detailedItemId = foodCommunityDetailRefreshItemId(detailedItem);"),
+            ("food community detail refresh item helper comparison", "current.map((item) => (item.id === detailedItemId ? detailedItem : item))"),
             ("food community detail status title helper", "function foodCommunityDetailStatusTitle(item: { title: string })"),
             ("food community detail status title helper fields", "return item.title;"),
             ("food community detail status example count helper", "function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] })"),
@@ -9240,6 +9244,11 @@ def main() -> int:
             "food community direct detail selected item binding",
             content,
             "setSelectedFoodCommunityItemId(detailedItem.id);",
+        )
+        _assert_not_contains(
+            "food community direct detail refresh item comparison",
+            content,
+            "item.id === detailedItem.id",
         )
         _assert_not_contains(
             "food community direct detail status title binding",
