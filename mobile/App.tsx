@@ -4140,6 +4140,10 @@ export default function App() {
     return product.title;
   }
 
+  function storeProductActionLabel(product: ReturnType<typeof storeProductDisplayItem>) {
+    return product.rewardStatus === "redeemable" ? "兌" : auxiliaryDisplayLabels.productOpenArrow;
+  }
+
   function storeRedemptionUseId(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
     return redemption.id;
   }
@@ -11119,7 +11123,7 @@ export default function App() {
                   style={styles.roundActionButton}
                   onPress={() => pressStoreProductStatus(product)}
                 >
-                  <Text style={styles.secondaryButtonText}>{product.rewardStatus === "redeemable" ? "兌" : auxiliaryDisplayLabels.productOpenArrow}</Text>
+                  <Text style={styles.secondaryButtonText}>{storeProductActionLabel(product)}</Text>
                 </Pressable>
               </View>
             )) : (

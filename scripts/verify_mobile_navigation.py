@@ -8434,6 +8434,8 @@ def main() -> int:
             ("store product reward id helper fields", "return product.id;"),
             ("store product redeem title helper", "function storeProductRedeemTitle(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store product redeem title helper fields", "return product.title;"),
+            ("store product action label helper", "function storeProductActionLabel(product: ReturnType<typeof storeProductDisplayItem>)"),
+            ("store product action label helper fields", 'return product.rewardStatus === "redeemable" ? "兌" : auxiliaryDisplayLabels.productOpenArrow;'),
             ("store redemption use id helper", "function storeRedemptionUseId(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store redemption use id helper fields", "return redemption.id;"),
             ("store redemption use title helper", "function storeRedemptionUseTitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
@@ -8480,6 +8482,7 @@ def main() -> int:
             ("store redemption use loading status binding", "setStoreActionStatus(redemptionUseStatus.loading);"),
             ("store redemption use success status binding", "setStoreActionStatus(\n        storeRedemptionUseStatusMessages({"),
             ("store redemption use failure status binding", "setStoreActionStatus(redemptionUseStatus.failure);"),
+            ("store product action label binding", "{storeProductActionLabel(product)}"),
             ("food photo upload status handler", "function showFoodPhotoUploadStatus()"),
             ("food photo integration status handler", "function showFoodPhotoIntegrationStatus()"),
             ("food photo retake status handler", "function showFoodPhotoRetakeStatus()"),
@@ -9293,6 +9296,11 @@ def main() -> int:
             "store product direct status binding",
             content,
             "onPress={() => showStoreProductStatus(product.actionStatus)}",
+        )
+        _assert_not_contains(
+            "store product direct action label binding",
+            content,
+            '{product.rewardStatus === "redeemable" ? "兌" : auxiliaryDisplayLabels.productOpenArrow}',
         )
         _assert_not_contains(
             "future module direct destination binding",
