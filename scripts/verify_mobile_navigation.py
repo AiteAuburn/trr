@@ -1715,12 +1715,12 @@ def main() -> int:
             ("record entry settings highlight bullet row", "recordEntrySettingsChecklistItems.map((item) => (\n                  <HighlightBulletRow key={item} text={item} />"),
             ("ai candidate remove highlight bullet row", "aiCandidateRemoveChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("ai save failure highlight bullet row", "aiSaveFailureChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("auth boundary highlight bullet row", "authBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("profile readiness highlight bullet row", "profileReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("quota readiness highlight bullet row", "quotaReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("reminder readiness highlight bullet row", "reminderReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("privacy readiness highlight bullet row", "privacyReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("tutorial safety highlight bullet row", "tutorialSafetyChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("auth boundary highlight bullet row", "authBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
+            ("profile readiness highlight bullet row", "profileReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
+            ("quota readiness highlight bullet row", "quotaReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
+            ("reminder readiness highlight bullet row", "reminderReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
+            ("privacy readiness highlight bullet row", "privacyReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
+            ("tutorial safety highlight bullet row", "tutorialSafetyChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
             ("detailed report notes highlight bullet row", "detailedReportNoteItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("subscription readiness highlight bullet row", "subscriptionReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("subscription management readiness highlight bullet row", "subscriptionManagementReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
@@ -7425,6 +7425,12 @@ def main() -> int:
             ("preview status row title binding", "{previewStatusRowTitle(row)}"),
             ("preview status row copy binding", "{previewStatusRowCopy(row)}"),
             ("preview status row status binding", "{previewStatusRowStatusLabel(row)}"),
+            ("settings checklist item key helper", "function settingsChecklistItemKey(item: string)"),
+            ("settings checklist item key helper fields", "return item;"),
+            ("settings checklist item key binding", "key={settingsChecklistItemKey(item)}"),
+            ("settings checklist item text helper", "function settingsChecklistItemText(item: string)"),
+            ("settings checklist item text helper fields", "return item;"),
+            ("settings checklist item text binding", "text={settingsChecklistItemText(item)}"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(
@@ -7523,6 +7529,24 @@ def main() -> int:
             content,
             "<Text style={styles.evidence}>{row.helper}</Text>",
         )
+        for list_name in (
+            "authBoundaryChecklistItems",
+            "profileReadinessChecklistItems",
+            "quotaReadinessChecklistItems",
+            "reminderReadinessChecklistItems",
+            "privacyReadinessChecklistItems",
+            "tutorialSafetyChecklistItems",
+        ):
+            settings_checklist_render_block = _match_block(
+                content,
+                rf"{list_name}\.map\(\(item\) => \(([\s\S]*?<HighlightBulletRow[^\n]*/>\n\s*)\)\)",
+                f"{list_name} settings checklist render block",
+            )
+            _assert_not_contains(
+                f"{list_name} direct checklist item binding",
+                settings_checklist_render_block,
+                "key={item} text={item}",
+            )
         for block_label, pattern in (
             (
                 "subscription management preview status rows render block",

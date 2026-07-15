@@ -3603,6 +3603,14 @@ export default function App() {
     return row.statusLabel;
   }
 
+  function settingsChecklistItemKey(item: string) {
+    return item;
+  }
+
+  function settingsChecklistItemText(item: string) {
+    return item;
+  }
+
   function clearLocalSessionFromSettings() {
     const display = localClearDisplayMessages();
     clearMobileSessionState();
@@ -11176,7 +11184,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authBoundary}</Text>
               {authBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.inlineInfoBlock}>
@@ -11242,7 +11250,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.profileEditReadiness}</Text>
               {profileReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.inlineInfoBlock}>
@@ -11316,7 +11324,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
               {quotaReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.inlineInfoBlock}>
@@ -11385,7 +11393,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
               {reminderReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.actionRow}>
@@ -11441,7 +11449,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
               {privacyReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.aiReviewList}>
@@ -11502,7 +11510,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{auxiliaryDisplayLabels.tutorialSafety}</Text>
               {tutorialSafetyChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />
               ))}
             </View>
             <Pressable
