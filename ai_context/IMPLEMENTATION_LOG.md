@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1654 reuse community return CTA labels
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared `communityReturnFutureModulesAccessibilityLabel` and `communityReturnFutureModulesButtonLabel` helpers for the Community return CTA.
+- Reused the helpers through bounded Community display constants while keeping return CTA copy, press behavior, status visibility, backend sync behavior, Food Community rendering, and Ranking screen behavior unchanged.
+- Updated navigation verifier coverage for the shared Community return CTA label helpers and direct return accessibility/button regression guards.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting Community return CTA press binding or remaining Community render bindings in small behavior-preserving slices.
+
 ### T1653 reuse community action status visibility helper
 
 類型：mobile / refactor / verifier / docs

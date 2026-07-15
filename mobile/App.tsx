@@ -1680,6 +1680,8 @@ export default function App() {
   const communityPrivacyAccessibilityDisplayLabel = communityPrivacyAccessibilityLabel();
   const communityActionStatusDisplayLabel = communityActionStatusLabel();
   const communityActionStatusDisplayCopy = communityActionStatusText();
+  const communityReturnFutureModulesAccessibilityDisplayLabel = communityReturnFutureModulesAccessibilityLabel();
+  const communityReturnFutureModulesButtonDisplayLabel = communityReturnFutureModulesButtonLabel();
   const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();
   const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();
   const storePreviewDisplay = storePreviewDisplayTexts(storeActionStatus);
@@ -4177,6 +4179,14 @@ export default function App() {
 
   function communityActionStatusVisible() {
     return Boolean(communityActionStatus);
+  }
+
+  function communityReturnFutureModulesAccessibilityLabel() {
+    return futurePreviewDisplayLabels.returnFutureModulesAccessibility;
+  }
+
+  function communityReturnFutureModulesButtonLabel() {
+    return futurePreviewDisplayLabels.returnFutureModules;
   }
 
   function rankingScreenTitleLabel() {
@@ -10139,12 +10149,12 @@ export default function App() {
               </View>
             ) : null}
             <Pressable
-              accessibilityLabel={futurePreviewDisplayLabels.returnFutureModulesAccessibility}
+              accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}
               accessibilityRole="button"
               style={styles.secondaryButton}
               onPress={returnFromCommunityPreview}
             >
-              <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.returnFutureModules}</Text>
+              <Text style={styles.secondaryButtonText}>{communityReturnFutureModulesButtonDisplayLabel}</Text>
             </Pressable>
           </View>
         ) : null}

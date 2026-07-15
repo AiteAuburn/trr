@@ -7564,6 +7564,14 @@ def main() -> int:
             ("community action status visible helper", "function communityActionStatusVisible()"),
             ("community action status visible helper fields", "return Boolean(communityActionStatus);"),
             ("community action status visible helper binding", "{communityActionStatusVisible() ? ("),
+            ("community return future modules accessibility helper", "function communityReturnFutureModulesAccessibilityLabel()"),
+            ("community return future modules accessibility helper fields", "return futurePreviewDisplayLabels.returnFutureModulesAccessibility;"),
+            ("community return future modules accessibility display label binding", "const communityReturnFutureModulesAccessibilityDisplayLabel = communityReturnFutureModulesAccessibilityLabel();"),
+            ("community return future modules accessibility helper binding", "accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}"),
+            ("community return future modules button helper", "function communityReturnFutureModulesButtonLabel()"),
+            ("community return future modules button helper fields", "return futurePreviewDisplayLabels.returnFutureModules;"),
+            ("community return future modules button display label binding", "const communityReturnFutureModulesButtonDisplayLabel = communityReturnFutureModulesButtonLabel();"),
+            ("community return future modules button helper binding", "{communityReturnFutureModulesButtonDisplayLabel}"),
             ("community posting status handler", "function showCommunityPostingStatus()"),
             ("community privacy status handler", "function showCommunityPrivacyStatus()"),
             ("food community backend-aware intro copy", "backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。"),
@@ -7986,7 +7994,7 @@ def main() -> int:
             ("ranking public button label binding", "{rankingPublicActionButtonDisplayLabel}"),
             ("ranking opt-in dynamic accessibility binding", "accessibilityLabel={rankingOptInAccessibilityDisplayLabel}"),
             ("ranking opt-in dynamic button binding", "{rankingOptInButtonDisplayLabel}"),
-            ("future preview return accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.returnFutureModulesAccessibility}"),
+            ("future preview return accessibility binding", "accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}"),
             ("future preview secondary CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
             _assert_contains(label, content, marker)
@@ -10008,6 +10016,16 @@ def main() -> int:
             "community direct action status visibility binding",
             content,
             "{communityActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>\n                <Text style={styles.evidence}>{communityActionStatusDisplayCopy}</Text>",
+        )
+        _assert_not_contains(
+            "community direct return future modules accessibility binding",
+            content,
+            "{communityActionStatusVisible() ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>\n                <Text style={styles.evidence}>{communityActionStatusDisplayCopy}</Text>\n              </View>\n            ) : null}\n            <Pressable\n              accessibilityLabel={futurePreviewDisplayLabels.returnFutureModulesAccessibility}",
+        )
+        _assert_not_contains(
+            "community direct return future modules button binding",
+            content,
+            "<Pressable\n              accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}\n              accessibilityRole=\"button\"\n              style={styles.secondaryButton}\n              onPress={returnFromCommunityPreview}\n            >\n              <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.returnFutureModules}</Text>",
         )
         _assert_not_contains(
             "ranking direct close accessibility binding",
