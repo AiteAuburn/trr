@@ -7542,6 +7542,9 @@ def main() -> int:
             ("food community detail refresh item helper comparison", "current.map((item) => (item.id === detailedItemId ? detailedItem : item))"),
             ("food community detail status title helper", "function foodCommunityDetailStatusTitle(item: { title: string })"),
             ("food community detail status title helper fields", "return item.title;"),
+            ("food community detail title helper", "function foodCommunityDetailTitle(item: { title: string })"),
+            ("food community detail title helper fields", "return item.title;"),
+            ("food community detail title helper binding", "{foodCommunityDetailTitle(selectedFoodCommunityItem)} 資料頁"),
             ("food community detail status example count helper", "function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] })"),
             ("food community detail status example count helper fields", "return item.examples.length;"),
             ("food community detail status title helper binding", "itemTitle: foodCommunityDetailStatusTitle(detailedItem),"),
@@ -9298,6 +9301,11 @@ def main() -> int:
             "food community direct share fallback food name binding",
             content,
             "foodCommunityShareFields.foodName || selectedFoodCommunityItem.title",
+        )
+        _assert_not_contains(
+            "food community direct detail title binding",
+            content,
+            "{selectedFoodCommunityItem.title} 資料頁",
         )
         _assert_not_contains(
             "food community direct share category binding",

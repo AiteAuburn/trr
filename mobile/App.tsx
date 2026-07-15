@@ -3995,6 +3995,10 @@ export default function App() {
     return item.title;
   }
 
+  function foodCommunityDetailTitle(item: { title: string }) {
+    return item.title;
+  }
+
   function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
     return item.examples.length;
   }
@@ -9580,7 +9584,7 @@ export default function App() {
             </View>
             {selectedFoodCommunityItem ? (
               <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{selectedFoodCommunityItem.title} 資料頁</Text>
+                <Text style={styles.label}>{foodCommunityDetailTitle(selectedFoodCommunityItem)} 資料頁</Text>
                 <View style={styles.reportBoundaryGrid}>
                   <View style={styles.reportBoundaryCard}>
                     <Text style={styles.confidence}>分享總人數</Text>
