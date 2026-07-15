@@ -3635,8 +3635,12 @@ export default function App() {
     openScreen(target);
   }
 
-  function pressPrimaryTab(target: AppScreen) {
-    openPrimaryTab(target);
+  function primaryTabTarget(screen: { id: AppScreen }) {
+    return screen.id;
+  }
+
+  function pressPrimaryTab(screen: { id: AppScreen }) {
+    openPrimaryTab(primaryTabTarget(screen));
   }
 
   function returnFromMenu() {
@@ -6522,7 +6526,7 @@ export default function App() {
                     isCurrentPrimaryTab ? styles.tabPillActive : null,
                     isPrimaryTabLocked ? styles.tabPillDisabled : null
                   ]}
-                  onPress={() => pressPrimaryTab(screen.id)}
+                  onPress={() => pressPrimaryTab(screen)}
                 >
                   <Text
                     style={[

@@ -1201,7 +1201,7 @@ def _assert_inline_press_callbacks_use_display_args(content: str) -> None:
         "product",
         "profile",
         "row",
-        "screen.id",
+        "screen",
         "type",
     }
     offenders: list[str] = []
@@ -7151,12 +7151,27 @@ def main() -> int:
         _assert_contains(
             "primary tab press wrapper",
             content,
-            "function pressPrimaryTab(target: AppScreen)",
+            "function pressPrimaryTab(screen: { id: AppScreen })",
         )
         _assert_contains(
             "primary tab press binding",
             content,
-            "onPress={() => pressPrimaryTab(screen.id)}",
+            "onPress={() => pressPrimaryTab(screen)}",
+        )
+        _assert_contains(
+            "primary tab target helper",
+            content,
+            "function primaryTabTarget(screen: { id: AppScreen })",
+        )
+        _assert_contains(
+            "primary tab target helper fields",
+            content,
+            "return screen.id;",
+        )
+        _assert_contains(
+            "primary tab target helper binding",
+            content,
+            "openPrimaryTab(primaryTabTarget(screen));",
         )
         _assert_contains(
             "primary tab button role",
@@ -7167,6 +7182,11 @@ def main() -> int:
             "primary tab direct destination binding",
             content,
             "onPress={() => openPrimaryTab(screen.id)}",
+        )
+        _assert_not_contains(
+            "primary tab direct press target binding",
+            content,
+            "onPress={() => pressPrimaryTab(screen.id)}",
         )
         for label, marker in (
             ("settings local clear handler", "function clearLocalSessionFromSettings()"),
