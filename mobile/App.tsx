@@ -4311,6 +4311,18 @@ export default function App() {
     return row.value;
   }
 
+  function healthIntegrationBoundaryRowKey(row: (typeof healthIntegrationBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function healthIntegrationBoundaryRowLabel(row: (typeof healthIntegrationBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function healthIntegrationBoundaryRowValue(row: (typeof healthIntegrationBoundaryRows)[number]) {
+    return row.value;
+  }
+
   function communityScreenTitleLabel() {
     return "食物社群";
   }
@@ -9935,9 +9947,9 @@ export default function App() {
             </View>
             <View style={styles.reportBoundaryGrid}>
               {healthIntegrationBoundaryRows.map((row) => (
-                <View key={row.label} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.recordType}>{row.value}</Text>
+                <View key={healthIntegrationBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
+                  <Text style={styles.confidence}>{healthIntegrationBoundaryRowLabel(row)}</Text>
+                  <Text style={styles.recordType}>{healthIntegrationBoundaryRowValue(row)}</Text>
                 </View>
               ))}
             </View>

@@ -7595,6 +7595,15 @@ def main() -> int:
             ("doctor share boundary row value helper", "function doctorShareBoundaryRowValue(row: (typeof doctorShareBoundaryRows)[number])"),
             ("doctor share boundary row value helper fields", "return row.value;"),
             ("doctor share boundary row value helper binding", "{doctorShareBoundaryRowValue(row)}"),
+            ("health integration boundary row key helper", "function healthIntegrationBoundaryRowKey(row: (typeof healthIntegrationBoundaryRows)[number])"),
+            ("health integration boundary row key helper fields", "return row.label;"),
+            ("health integration boundary row key helper binding", "key={healthIntegrationBoundaryRowKey(row)}"),
+            ("health integration boundary row label helper", "function healthIntegrationBoundaryRowLabel(row: (typeof healthIntegrationBoundaryRows)[number])"),
+            ("health integration boundary row label helper fields", "return row.label;"),
+            ("health integration boundary row label helper binding", "{healthIntegrationBoundaryRowLabel(row)}"),
+            ("health integration boundary row value helper", "function healthIntegrationBoundaryRowValue(row: (typeof healthIntegrationBoundaryRows)[number])"),
+            ("health integration boundary row value helper fields", "return row.value;"),
+            ("health integration boundary row value helper binding", "{healthIntegrationBoundaryRowValue(row)}"),
             ("community screen title helper", "function communityScreenTitleLabel()"),
             ("community screen title helper fields", 'return "食物社群";'),
             ("community screen title helper binding", "{communityScreenTitleLabel()}"),
@@ -10138,6 +10147,21 @@ def main() -> int:
             "doctor share direct boundary row value binding",
             content,
             "doctorShareBoundaryRows.map((row) => (\n                <View key={doctorShareBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{doctorShareBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "health integration direct boundary row key binding",
+            content,
+            "healthIntegrationBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
+        )
+        _assert_not_contains(
+            "health integration direct boundary row label binding",
+            content,
+            "healthIntegrationBoundaryRows.map((row) => (\n                <View key={healthIntegrationBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "health integration direct boundary row value binding",
+            content,
+            "healthIntegrationBoundaryRows.map((row) => (\n                <View key={healthIntegrationBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{healthIntegrationBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
             "community direct close accessibility binding",
