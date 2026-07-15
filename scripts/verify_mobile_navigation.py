@@ -8221,6 +8221,16 @@ def main() -> int:
             use_redemption_block,
             "`/store/redemptions/${redemptionId}/use`",
         )
+        _assert_contains(
+            "store redemption use title helper binding",
+            use_redemption_block,
+            "redemptionTitle: storeRedemptionUseTitle(redemption),",
+        )
+        _assert_contains(
+            "store redemption use status label helper binding",
+            use_redemption_block,
+            "statusLabel: storeRedemptionUseStatusLabel(redemption),",
+        )
         _assert_not_contains(
             "store redemption direct id fail closed",
             use_redemption_block,
@@ -8230,6 +8240,16 @@ def main() -> int:
             "store redemption direct id endpoint",
             use_redemption_block,
             "`/store/redemptions/${redemption.id}/use`",
+        )
+        _assert_not_contains(
+            "store redemption direct title status",
+            use_redemption_block,
+            "redemptionTitle: redemption.title,",
+        )
+        _assert_not_contains(
+            "store redemption direct status label status",
+            use_redemption_block,
+            "statusLabel: redemption.statusLabel,",
         )
         for label, marker in (
             ("food community stale no-backend empty copy", "目前不查詢 backend"),
@@ -8405,6 +8425,10 @@ def main() -> int:
             ("store product redeem title helper fields", "return product.title;"),
             ("store redemption use id helper", "function storeRedemptionUseId(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store redemption use id helper fields", "return redemption.id;"),
+            ("store redemption use title helper", "function storeRedemptionUseTitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
+            ("store redemption use title helper fields", "return redemption.title;"),
+            ("store redemption use status label helper", "function storeRedemptionUseStatusLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
+            ("store redemption use status label helper fields", "return redemption.statusLabel;"),
             ("store product status press handler", "function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store redemption status press handler", "function pressStoreRedemptionStatus(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store catalog sync function", "async function loadStoreCatalogAndPoints()"),

@@ -4132,6 +4132,14 @@ export default function App() {
     return redemption.id;
   }
 
+  function storeRedemptionUseTitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
+    return redemption.title;
+  }
+
+  function storeRedemptionUseStatusLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
+    return redemption.statusLabel;
+  }
+
   function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>) {
     void redeemStoreProduct(product);
   }
@@ -5353,8 +5361,8 @@ export default function App() {
   async function useStoreRedemption(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
     const redemptionUseStatus = storeRedemptionUseStatusMessages({
       backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-      redemptionTitle: redemption.title,
-      statusLabel: redemption.statusLabel,
+      redemptionTitle: storeRedemptionUseTitle(redemption),
+      statusLabel: storeRedemptionUseStatusLabel(redemption),
       usedIdentifier: ""
     });
     if (visualSmokePreviewActive.current) {
@@ -5393,8 +5401,8 @@ export default function App() {
       setStoreActionStatus(
         storeRedemptionUseStatusMessages({
           backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-          redemptionTitle: redemption.title,
-          statusLabel: redemption.statusLabel,
+          redemptionTitle: storeRedemptionUseTitle(redemption),
+          statusLabel: storeRedemptionUseStatusLabel(redemption),
           usedIdentifier: usedRedemption.fulfillment_code || usedRedemption.reward_code
         }).success
       );
