@@ -3388,6 +3388,21 @@ def main() -> int:
             "function pressAiCandidateEditAction(item: ReturnType<typeof pendingRecordDisplayItem>)",
         )
         _assert_contains(
+            "AI candidate action target helper",
+            content,
+            "function aiCandidateActionTarget(item: ReturnType<typeof pendingRecordDisplayItem>)",
+        )
+        _assert_contains(
+            "AI candidate action target helper fields",
+            content,
+            "return item.index;",
+        )
+        _assert_contains(
+            "AI candidate edit action target helper binding",
+            content,
+            "editAiCandidateRecord(aiCandidateActionTarget(item));",
+        )
+        _assert_contains(
             "AI candidate remove action handler",
             content,
             "function removeAiCandidateRecord(index: number)",
@@ -3396,6 +3411,11 @@ def main() -> int:
             "AI candidate remove action press handler",
             content,
             "function pressAiCandidateRemoveAction(item: ReturnType<typeof pendingRecordDisplayItem>)",
+        )
+        _assert_contains(
+            "AI candidate remove action target helper binding",
+            content,
+            "removeAiCandidateRecord(aiCandidateActionTarget(item));",
         )
         for label, marker in (
             ("AI candidate display item helper", "function pendingRecordDisplayItem(record: PendingRecord, index: number, keyPrefix = \"candidate\")"),
@@ -3499,6 +3519,16 @@ def main() -> int:
             "AI candidate direct remove opener binding",
             content,
             "onPress={() => openPreviewRecordRemoveConfirm(item.index)}",
+        )
+        _assert_not_contains(
+            "AI candidate direct edit handler index binding",
+            content,
+            "editAiCandidateRecord(item.index);",
+        )
+        _assert_not_contains(
+            "AI candidate direct remove handler index binding",
+            content,
+            "removeAiCandidateRecord(item.index);",
         )
         _assert_contains(
             "AI candidate remove-confirm return binding",

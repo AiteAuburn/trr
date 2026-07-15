@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1536: Reuse AI-candidate action target helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `aiCandidateActionTarget` helper for AI candidate edit/remove press handling.
+- Reused the helper in `pressAiCandidateEditAction` and `pressAiCandidateRemoveAction` while keeping candidate edit/remove behavior unchanged.
+- Updated navigation verifier coverage for the shared AI-candidate action target helper and direct `item.index` regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1535: Reuse primary-tab target helper
 
 Status: done

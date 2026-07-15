@@ -3075,8 +3075,12 @@ export default function App() {
     openPreviewRecordEdit(index);
   }
 
+  function aiCandidateActionTarget(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.index;
+  }
+
   function pressAiCandidateEditAction(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    editAiCandidateRecord(item.index);
+    editAiCandidateRecord(aiCandidateActionTarget(item));
   }
 
   function removeAiCandidateRecord(index: number) {
@@ -3084,7 +3088,7 @@ export default function App() {
   }
 
   function pressAiCandidateRemoveAction(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    removeAiCandidateRecord(item.index);
+    removeAiCandidateRecord(aiCandidateActionTarget(item));
   }
 
   function returnFromPreviewRemoveConfirm() {
