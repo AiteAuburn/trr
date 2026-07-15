@@ -4019,6 +4019,10 @@ export default function App() {
     return item.individualShareDisplayItems;
   }
 
+  function foodCommunityDetailShareRowId(share: { id: string }) {
+    return share.id;
+  }
+
   function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
     return item.examples.length;
   }
@@ -9626,7 +9630,7 @@ export default function App() {
                 <Text style={styles.label}>個別分享紀錄</Text>
                 {foodCommunityDetailIndividualShares(selectedFoodCommunityItem).length > 0 ? (
                   foodCommunityDetailIndividualShares(selectedFoodCommunityItem).map((share) => (
-                    <View key={share.id} style={styles.visionResultCard}>
+                    <View key={foodCommunityDetailShareRowId(share)} style={styles.visionResultCard}>
                       <View style={styles.timelineContent}>
                         <Text style={styles.recordContent}>{share.summary}</Text>
                         <Text style={styles.evidence}>{share.note}</Text>

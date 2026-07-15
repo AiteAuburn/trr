@@ -7561,6 +7561,9 @@ def main() -> int:
             ("food community detail individual shares helper fields", "return item.individualShareDisplayItems;"),
             ("food community detail individual shares length helper binding", "foodCommunityDetailIndividualShares(selectedFoodCommunityItem).length > 0"),
             ("food community detail individual shares map helper binding", "foodCommunityDetailIndividualShares(selectedFoodCommunityItem).map((share) =>"),
+            ("food community detail share row id helper", "function foodCommunityDetailShareRowId(share: { id: string })"),
+            ("food community detail share row id helper fields", "return share.id;"),
+            ("food community detail share row id helper binding", "key={foodCommunityDetailShareRowId(share)}"),
             ("food community detail status example count helper", "function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] })"),
             ("food community detail status example count helper fields", "return item.examples.length;"),
             ("food community detail status title helper binding", "itemTitle: foodCommunityDetailStatusTitle(detailedItem),"),
@@ -9347,6 +9350,11 @@ def main() -> int:
             "food community direct detail individual shares binding",
             content,
             "selectedFoodCommunityItem.individualShareDisplayItems",
+        )
+        _assert_not_contains(
+            "food community direct detail share row id binding",
+            content,
+            "key={share.id}",
         )
         _assert_not_contains(
             "food community direct share category binding",
