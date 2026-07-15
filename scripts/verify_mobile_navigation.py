@@ -7422,6 +7422,7 @@ def main() -> int:
             ("subscription management preview status row key binding", "subscriptionManagementDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
             ("privacy control preview status row key binding", "privacyControlDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
             ("production auth readiness preview status row key binding", "productionAuthReadinessDisplayRows.map((item) => (\n                <View key={previewStatusRowKey(item)}"),
+            ("session management preview status row key binding", "sessionManagementDisplayItems.map((item) => (\n                <Pressable\n                  key={previewStatusRowKey(item)}"),
             ("preview status row icon binding", "{previewStatusRowIcon(row)}"),
             ("preview status row title binding", "{previewStatusRowTitle(row)}"),
             ("preview status row copy binding", "{previewStatusRowCopy(row)}"),
@@ -7429,6 +7430,9 @@ def main() -> int:
             ("production auth readiness preview status row title binding", "{previewStatusRowTitle(item)}"),
             ("production auth readiness preview status row copy binding", "{previewStatusRowCopy(item)}"),
             ("production auth readiness preview status row status binding", "{previewStatusRowStatusLabel(item)}"),
+            ("session management preview status row title binding", "{previewStatusRowTitle(item)}"),
+            ("session management preview status row copy binding", "{previewStatusRowCopy(item)}"),
+            ("session management preview status row status binding", "{previewStatusRowStatusLabel(item)}"),
             ("settings checklist item key helper", "function settingsChecklistItemKey(item: string)"),
             ("settings checklist item key helper fields", "return item;"),
             ("settings checklist item key binding", "key={settingsChecklistItemKey(item)}"),
@@ -7563,6 +7567,10 @@ def main() -> int:
             (
                 "production auth readiness preview status rows render block",
                 r"productionAuthReadinessDisplayRows\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
+            ),
+            (
+                "session management preview status rows render block",
+                r"sessionManagementDisplayItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
             ),
         ):
             preview_status_rows_render_block = _match_block(content, pattern, block_label)
