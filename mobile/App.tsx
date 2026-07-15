@@ -2168,8 +2168,12 @@ export default function App() {
     openTodayRecordDetail(record);
   }
 
+  function recordDetailCardTarget(item: { record: RecordItem }) {
+    return item.record;
+  }
+
   function pressTodayRecordDetailCard(item: ReturnType<typeof recordListDisplayItem>) {
-    openTodayRecordDetailCard(item.record);
+    openTodayRecordDetailCard(recordDetailCardTarget(item));
   }
 
   function openTodayAnalysis() {
@@ -2193,13 +2197,13 @@ export default function App() {
   }
 
   function pressHistoryRecordDetailCard(item: ReturnType<typeof recordListDisplayItem>) {
-    openHistoryRecordDetailCard(item.record);
+    openHistoryRecordDetailCard(recordDetailCardTarget(item));
   }
 
   function pressHistoryDailyEntry(
     item: ReturnType<typeof buildHistoryDailyRecordSectionDisplayItems>[number]["entries"][number]
   ) {
-    openHistoryRecordDetailCard(item.record);
+    openHistoryRecordDetailCard(recordDetailCardTarget(item));
   }
 
   function openAnalysisManualRecord() {

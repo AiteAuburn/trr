@@ -5852,9 +5852,24 @@ def main() -> int:
             "function openTodayRecordDetailCard(record: RecordItem)",
         )
         _assert_contains(
+            "record detail card target helper",
+            content,
+            "function recordDetailCardTarget(item: { record: RecordItem })",
+        )
+        _assert_contains(
+            "record detail card target helper fields",
+            content,
+            "return item.record;",
+        )
+        _assert_contains(
             "today record detail card press handler",
             content,
             "function pressTodayRecordDetailCard(item: ReturnType<typeof recordListDisplayItem>)",
+        )
+        _assert_contains(
+            "today record detail card target helper binding",
+            content,
+            "openTodayRecordDetailCard(recordDetailCardTarget(item));",
         )
         _assert_contains(
             "today record display items helper binding",
@@ -6306,6 +6321,11 @@ def main() -> int:
             "function pressHistoryRecordDetailCard(item: ReturnType<typeof recordListDisplayItem>)",
         )
         _assert_contains(
+            "history record detail card target helper binding",
+            content,
+            "openHistoryRecordDetailCard(recordDetailCardTarget(item));",
+        )
+        _assert_contains(
             "history record detail card accessibility binding",
             content,
             "accessibilityLabel={item.accessibilityLabel}",
@@ -6357,6 +6377,16 @@ def main() -> int:
             content,
             "onEntryPress={pressHistoryDailyEntry}",
         )
+        history_daily_entry_block = _match_block(
+            content,
+            r"function pressHistoryDailyEntry\([\s\S]*?\) \{([\s\S]*?)\n  function openAnalysisManualRecord",
+            "history daily entry press block",
+        )
+        _assert_contains(
+            "history daily entry target helper binding",
+            history_daily_entry_block,
+            "openHistoryRecordDetailCard(recordDetailCardTarget(item));",
+        )
         _assert_contains(
             "record detail status opener helper",
             content,
@@ -6381,6 +6411,16 @@ def main() -> int:
             "history direct record detail binding",
             content,
             "onPress={() => openHistoryRecordDetail(item.record)}",
+        )
+        _assert_not_contains(
+            "today direct record detail handler target binding",
+            content,
+            "openTodayRecordDetailCard(item.record);",
+        )
+        _assert_not_contains(
+            "history direct record detail handler target binding",
+            content,
+            "openHistoryRecordDetailCard(item.record);",
         )
         chart_card_block = _style_block(content, "chartCard")
         _assert_not_contains(
