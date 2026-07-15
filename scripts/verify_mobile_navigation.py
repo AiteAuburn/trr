@@ -1734,7 +1734,7 @@ def main() -> int:
         ):
             _assert_contains(label, highlight_detail_row_content, marker)
         for label, marker in (
-            ("food community share field highlight detail row", "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />"),
+            ("food community share field highlight detail row", "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityShareFieldRowKey(row)}\n                  label={foodCommunityShareFieldRowLabel(row)}\n                  value={foodCommunityShareFieldRowValue(row)}"),
             ("food community ranking highlight detail row", "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />"),
         ):
             _assert_contains(label, content, marker)
@@ -7709,6 +7709,15 @@ def main() -> int:
             ("food community detail share row note helper", "function foodCommunityDetailShareRowNote(share: { note: string })"),
             ("food community detail share row note helper fields", "return share.note;"),
             ("food community detail share row note helper binding", "{foodCommunityDetailShareRowNote(share)}"),
+            ("food community share field row key helper", "function foodCommunityShareFieldRowKey(row: (typeof foodCommunityShareFieldRows)[number])"),
+            ("food community share field row key helper fields", "return row.label;"),
+            ("food community share field row key helper binding", "key={foodCommunityShareFieldRowKey(row)}"),
+            ("food community share field row label helper", "function foodCommunityShareFieldRowLabel(row: (typeof foodCommunityShareFieldRows)[number])"),
+            ("food community share field row label helper fields", "return row.label;"),
+            ("food community share field row label helper binding", "label={foodCommunityShareFieldRowLabel(row)}"),
+            ("food community share field row value helper", "function foodCommunityShareFieldRowValue(row: (typeof foodCommunityShareFieldRows)[number])"),
+            ("food community share field row value helper fields", "return row.value;"),
+            ("food community share field row value helper binding", "value={foodCommunityShareFieldRowValue(row)}"),
             ("food community point row key helper", "function foodCommunityPointRowKey(row: (typeof foodCommunityPointRows)[number])"),
             ("food community point row key helper fields", "return row.label;"),
             ("food community point row key helper binding", "key={foodCommunityPointRowKey(row)}"),
@@ -9916,6 +9925,21 @@ def main() -> int:
             "food community direct points store bridge copy binding",
             content,
             "<Text style={styles.evidence}>點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。</Text>",
+        )
+        _assert_not_contains(
+            "food community direct share field row key binding",
+            content,
+            "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />",
+        )
+        _assert_not_contains(
+            "food community direct share field row label binding",
+            content,
+            "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityShareFieldRowKey(row)}\n                  label={row.label}",
+        )
+        _assert_not_contains(
+            "food community direct share field row value binding",
+            content,
+            "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityShareFieldRowKey(row)}\n                  label={foodCommunityShareFieldRowLabel(row)}\n                  value={row.value}",
         )
         _assert_not_contains(
             "food community direct point row key binding",

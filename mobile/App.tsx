@@ -4135,6 +4135,18 @@ export default function App() {
     return share.note;
   }
 
+  function foodCommunityShareFieldRowKey(row: (typeof foodCommunityShareFieldRows)[number]) {
+    return row.label;
+  }
+
+  function foodCommunityShareFieldRowLabel(row: (typeof foodCommunityShareFieldRows)[number]) {
+    return row.label;
+  }
+
+  function foodCommunityShareFieldRowValue(row: (typeof foodCommunityShareFieldRows)[number]) {
+    return row.value;
+  }
+
   function foodCommunityPointRowKey(row: (typeof foodCommunityPointRows)[number]) {
     return row.label;
   }
@@ -10146,7 +10158,11 @@ export default function App() {
                 autoCorrect={false}
               />
               {foodCommunityShareFieldRows.map((row) => (
-                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />
+                <HighlightDetailRow
+                  key={foodCommunityShareFieldRowKey(row)}
+                  label={foodCommunityShareFieldRowLabel(row)}
+                  value={foodCommunityShareFieldRowValue(row)}
+                />
               ))}
             </View>
             <View style={styles.reportBoundaryGrid}>
