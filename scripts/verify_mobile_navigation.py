@@ -5708,6 +5708,15 @@ def main() -> int:
             ("daily record transcript display bundle binding", "const todayTranscriptDisplay = dailyTranscriptDisplayBundle(preview, dailyTranscriptEntries);"),
             ("daily record transcript display items binding", "const todayTranscriptDisplayItems = todayTranscriptDisplay.items;"),
             ("daily record transcript display accessibility binding", "const todayTranscriptAccessibilityLabel = todayTranscriptDisplay.accessibilityLabel;"),
+            ("daily record transcript item key helper", "function todayTranscriptItemKey(item: (typeof todayTranscriptDisplayItems)[number])"),
+            ("daily record transcript item key helper fields", "return item.key;"),
+            ("daily record transcript item key binding", "key={todayTranscriptItemKey(item)}"),
+            ("daily record transcript item time helper", "function todayTranscriptItemTimeLabel(item: (typeof todayTranscriptDisplayItems)[number])"),
+            ("daily record transcript item time helper fields", "return item.timeLabel;"),
+            ("daily record transcript item time binding", "{todayTranscriptItemTimeLabel(item)}"),
+            ("daily record transcript item source helper", "function todayTranscriptItemSourceText(item: (typeof todayTranscriptDisplayItems)[number])"),
+            ("daily record transcript item source helper fields", "return item.sourceText;"),
+            ("daily record transcript item source binding", "{todayTranscriptItemSourceText(item)}"),
             ("daily record reorganization revision state", "const [dailyRecordOrganizationRevision, setDailyRecordOrganizationRevision] = useState(0);"),
             ("daily record reorganization reason state", "const [dailyRecordOrganizationReason, setDailyRecordOrganizationReason] ="),
             ("daily record reorganization apply helper", "function reorganizeDailyRecordDraftAfterChange("),
@@ -5730,6 +5739,17 @@ def main() -> int:
             ("daily record category blank copy", "沒有提到的欄位保持空白"),
         ):
             _assert_contains(label, content, marker)
+        daily_transcript_render_block = _match_block(
+            content,
+            r"todayTranscriptDisplayItems\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
+            "daily transcript item render block",
+        )
+        for label, marker in (
+            ("direct daily transcript item key binding", "key={item.key}"),
+            ("direct daily transcript item time binding", "<Text style={styles.confidence}>{item.timeLabel}</Text>"),
+            ("direct daily transcript item source binding", "<Text style={styles.evidence}>{item.sourceText}</Text>"),
+        ):
+            _assert_not_contains(label, daily_transcript_render_block, marker)
         for label, marker in (
             ("AI review no-candidate title helper", "function aiReviewNoCandidateTitleCopy()"),
             ("AI review no-candidate body helper", "function aiReviewNoCandidateBodyCopy()"),

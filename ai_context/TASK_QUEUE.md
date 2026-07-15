@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1707: Reuse today transcript item fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared today transcript item helpers for retained transcript row key, time label, and source text rendering.
+- Reused the helpers in the Today Transcript list while preserving transcript retention, fallback display, ordering, copy, and navigation behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the daily transcript item render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing daily-record entry and menu/future-module display bindings in small behavior-preserving slices.
+
 ### T1706: Reuse AI candidate display fields
 
 Status: done

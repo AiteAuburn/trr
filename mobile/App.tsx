@@ -3432,6 +3432,18 @@ export default function App() {
     setStatus(todayTranscriptExpandedStatusMessage());
   }
 
+  function todayTranscriptItemKey(item: (typeof todayTranscriptDisplayItems)[number]) {
+    return item.key;
+  }
+
+  function todayTranscriptItemTimeLabel(item: (typeof todayTranscriptDisplayItems)[number]) {
+    return item.timeLabel;
+  }
+
+  function todayTranscriptItemSourceText(item: (typeof todayTranscriptDisplayItems)[number]) {
+    return item.sourceText;
+  }
+
   function dailyRecordEntryTarget(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
     return item.index;
   }
@@ -8073,9 +8085,9 @@ export default function App() {
             {todayTranscriptDisplayItems.length > 0 ? (
               <View style={styles.dailyTranscriptList}>
                 {todayTranscriptDisplayItems.map((item) => (
-                  <View key={item.key} style={styles.dailyTranscriptItem}>
-                    <Text style={styles.confidence}>{item.timeLabel}</Text>
-                    <Text style={styles.evidence}>{item.sourceText}</Text>
+                  <View key={todayTranscriptItemKey(item)} style={styles.dailyTranscriptItem}>
+                    <Text style={styles.confidence}>{todayTranscriptItemTimeLabel(item)}</Text>
+                    <Text style={styles.evidence}>{todayTranscriptItemSourceText(item)}</Text>
                   </View>
                 ))}
               </View>
