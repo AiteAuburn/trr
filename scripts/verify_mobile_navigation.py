@@ -9120,6 +9120,15 @@ def main() -> int:
             ("year review metric row value helper binding", "{yearlyReviewMetricRowValue(row)}"),
             ("year review local health rows helper binding", "const localYearlyHealthOutcomeRows = localYearlyHealthOutcomeDisplayRows("),
             ("year review health outcome rows", "yearlyHealthOutcomeRows.map"),
+            ("year review health outcome row key helper", "function yearlyHealthOutcomeRowKey(row: (typeof yearlyHealthOutcomeRows)[number])"),
+            ("year review health outcome row key helper fields", "return row.label;"),
+            ("year review health outcome row key helper binding", "key={yearlyHealthOutcomeRowKey(row)}"),
+            ("year review health outcome row label helper", "function yearlyHealthOutcomeRowLabel(row: (typeof yearlyHealthOutcomeRows)[number])"),
+            ("year review health outcome row label helper fields", "return row.label;"),
+            ("year review health outcome row label helper binding", "{yearlyHealthOutcomeRowLabel(row)}"),
+            ("year review health outcome row value helper", "function yearlyHealthOutcomeRowValue(row: (typeof yearlyHealthOutcomeRows)[number])"),
+            ("year review health outcome row value helper fields", "return row.value;"),
+            ("year review health outcome row value helper binding", "{yearlyHealthOutcomeRowValue(row)}"),
             ("year review local highlight helper binding", "const yearlyHighlightDisplayTexts = localYearlyHighlightDisplayItems("),
             ("year review insight display helper binding", "const yearlyInsightDisplayTexts = yearReviewInsightDisplayTexts({"),
             ("year review insight backend observation binding", "backendObservation: backendYearAiObservation"),
@@ -9898,6 +9907,21 @@ def main() -> int:
             "year review direct metric row value binding",
             content,
             "yearlyReviewMetricRows.map((row) => (\n                <View key={yearlyReviewMetricRowKey(row)} style={styles.metricCard}>\n                  <Text style={styles.confidence}>{yearlyReviewMetricRowLabel(row)}</Text>\n                  <Text style={styles.metricValue}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "year review direct health outcome row key binding",
+            content,
+            "yearlyHealthOutcomeRows.map((row) => (\n                <View key={row.label} style={styles.metricCard}>",
+        )
+        _assert_not_contains(
+            "year review direct health outcome row label binding",
+            content,
+            "yearlyHealthOutcomeRows.map((row) => (\n                <View key={yearlyHealthOutcomeRowKey(row)} style={styles.metricCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "year review direct health outcome row value binding",
+            content,
+            "yearlyHealthOutcomeRows.map((row) => (\n                <View key={yearlyHealthOutcomeRowKey(row)} style={styles.metricCard}>\n                  <Text style={styles.confidence}>{yearlyHealthOutcomeRowLabel(row)}</Text>\n                  <Text style={styles.metricValue}>{row.value}</Text>",
         )
         _assert_not_contains(
             "food community search direct handler bound input",

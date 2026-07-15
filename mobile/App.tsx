@@ -4718,6 +4718,18 @@ export default function App() {
     return row.value;
   }
 
+  function yearlyHealthOutcomeRowKey(row: (typeof yearlyHealthOutcomeRows)[number]) {
+    return row.label;
+  }
+
+  function yearlyHealthOutcomeRowLabel(row: (typeof yearlyHealthOutcomeRows)[number]) {
+    return row.label;
+  }
+
+  function yearlyHealthOutcomeRowValue(row: (typeof yearlyHealthOutcomeRows)[number]) {
+    return row.value;
+  }
+
   function showYearReviewShareStatus() {
     void loadYearReviewShareCard();
   }
@@ -11628,9 +11640,9 @@ export default function App() {
             </View>
             <View style={styles.metricGrid}>
               {yearlyHealthOutcomeRows.map((row) => (
-                <View key={row.label} style={styles.metricCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.metricValue}>{row.value}</Text>
+                <View key={yearlyHealthOutcomeRowKey(row)} style={styles.metricCard}>
+                  <Text style={styles.confidence}>{yearlyHealthOutcomeRowLabel(row)}</Text>
+                  <Text style={styles.metricValue}>{yearlyHealthOutcomeRowValue(row)}</Text>
                 </View>
               ))}
             </View>
