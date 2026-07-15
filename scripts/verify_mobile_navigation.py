@@ -7181,8 +7181,17 @@ def main() -> int:
             ("auth logout all main status binding", "setStatus(authLogoutAllMainStatusMessage());"),
             ("auth session management status handler", "function showAuthSessionManagementStatus(actionStatus: string)"),
             (
+                "auth session management action status helper",
+                "function authSessionManagementActionStatus(item: ReturnType<typeof sessionManagementPreviewDisplayItem>)",
+            ),
+            ("auth session management action status helper fields", "return item.actionStatus;"),
+            (
                 "auth session management preview press handler",
                 "function pressAuthSessionManagementPreview(item: ReturnType<typeof sessionManagementPreviewDisplayItem>)",
+            ),
+            (
+                "auth session management action status helper binding",
+                "showAuthSessionManagementStatus(authSessionManagementActionStatus(item));",
             ),
             ("profile edit integration status handler", "function showProfileEditIntegrationStatus()"),
             ("recording quota settings sync handler", "function syncRecordingQuotaSettings()"),
@@ -8007,6 +8016,7 @@ def main() -> int:
             ("direct native llama download kind binding", 'onPress={() => selectNativeDownloadKind("llama")}'),
             ("direct auth provider preview binding", "onPress={() => startAuthProviderChallenge(item.provider)}"),
             ("direct auth session management status binding", "onPress={() => showAuthSessionManagementStatus(item.actionStatus)}"),
+            ("direct auth session management handler status binding", "showAuthSessionManagementStatus(item.actionStatus);"),
         ):
             _assert_not_contains(label, content, marker)
         pricing_card_block = _style_block(content, "pricingCard")

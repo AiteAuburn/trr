@@ -15,6 +15,36 @@
 
 ## 2026-07-13
 
+### T1534 reuse auth-session management action-status helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `authSessionManagementActionStatus` helper for auth-session management preview press handling.
+- Reused the helper in `pressAuthSessionManagementPreview` while keeping auth action status behavior unchanged.
+- Updated navigation verifier coverage for the shared auth-session management action-status helper and direct `item.actionStatus` regression guard.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1533 reuse food-community item target helper
 
 類型：mobile / refactor / verifier / docs

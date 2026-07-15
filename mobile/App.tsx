@@ -3485,8 +3485,12 @@ export default function App() {
     setAuthActionStatus(actionStatus);
   }
 
+  function authSessionManagementActionStatus(item: ReturnType<typeof sessionManagementPreviewDisplayItem>) {
+    return item.actionStatus;
+  }
+
   function pressAuthSessionManagementPreview(item: ReturnType<typeof sessionManagementPreviewDisplayItem>) {
-    showAuthSessionManagementStatus(item.actionStatus);
+    showAuthSessionManagementStatus(authSessionManagementActionStatus(item));
   }
 
   function showProfileEditIntegrationStatus() {
