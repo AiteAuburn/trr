@@ -3639,6 +3639,14 @@ export default function App() {
     return item;
   }
 
+  function commerceReadinessChecklistItemKey(item: string) {
+    return item;
+  }
+
+  function commerceReadinessChecklistItemText(item: string) {
+    return item;
+  }
+
   function clearLocalSessionFromSettings() {
     const display = localClearDisplayMessages();
     clearMobileSessionState();
@@ -11985,7 +11993,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{storeCheckoutReadinessTitleDisplayText}</Text>
               {storeCheckoutReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />
               ))}
               <Text style={styles.warningText}>{storeCartUnavailableDisplay.legalWarning}</Text>
             </View>
@@ -12033,7 +12041,7 @@ export default function App() {
                 <Text style={styles.previewModeBadge}>{foodPhotoVisionBoundaryDisplay.resultPending}</Text>
               </View>
               {foodPhotoEmptyResultChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.actionRow}>
@@ -12049,7 +12057,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{foodPhotoReadinessTitleDisplayText}</Text>
               {foodPhotoReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.actionRow}>

@@ -1728,9 +1728,9 @@ def main() -> int:
             ("health integration readiness highlight bullet row", "healthIntegrationReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={futureReadinessChecklistItemKey(item)} text={futureReadinessChecklistItemText(item)} />"),
             ("community readiness highlight bullet row", "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={communityReadinessChecklistItemText(item)}"),
             ("ranking readiness highlight bullet row", "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />"),
-            ("store checkout readiness highlight bullet row", "storeCheckoutReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("food photo empty result highlight bullet row", "foodPhotoEmptyResultChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("food photo readiness highlight bullet row", "foodPhotoReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("store checkout readiness highlight bullet row", "storeCheckoutReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />"),
+            ("food photo empty result highlight bullet row", "foodPhotoEmptyResultChecklistItems.map((item) => (\n                <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />"),
+            ("food photo readiness highlight bullet row", "foodPhotoReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />"),
             ("future module card requirements highlight bullet row", "item.requirements.map((requirement) => (\n                      <HighlightBulletRow key={requirement.key} text={requirement.text} />"),
             ("future module detail requirements highlight bullet row", "selectedFutureModuleDisplay.requirements.map((requirement) => (\n                <HighlightBulletRow key={requirement.key} text={requirement.text} />"),
         ):
@@ -7468,6 +7468,12 @@ def main() -> int:
             ("future readiness checklist item text helper", "function futureReadinessChecklistItemText(item: string)"),
             ("future readiness checklist item text helper fields", "return item;"),
             ("future readiness checklist item text binding", "text={futureReadinessChecklistItemText(item)}"),
+            ("commerce readiness checklist item key helper", "function commerceReadinessChecklistItemKey(item: string)"),
+            ("commerce readiness checklist item key helper fields", "return item;"),
+            ("commerce readiness checklist item key binding", "key={commerceReadinessChecklistItemKey(item)}"),
+            ("commerce readiness checklist item text helper", "function commerceReadinessChecklistItemText(item: string)"),
+            ("commerce readiness checklist item text helper fields", "return item;"),
+            ("commerce readiness checklist item text binding", "text={commerceReadinessChecklistItemText(item)}"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(
@@ -7610,6 +7616,21 @@ def main() -> int:
             _assert_not_contains(
                 f"{list_name} direct checklist item binding",
                 future_checklist_render_block,
+                "key={item} text={item}",
+            )
+        for list_name in (
+            "storeCheckoutReadinessChecklistItems",
+            "foodPhotoEmptyResultChecklistItems",
+            "foodPhotoReadinessChecklistItems",
+        ):
+            commerce_checklist_render_block = _match_block(
+                content,
+                rf"{list_name}\.map\(\(item\) => \(([\s\S]*?<HighlightBulletRow[^\n]*/>\n\s*)\)\)",
+                f"{list_name} commerce checklist render block",
+            )
+            _assert_not_contains(
+                f"{list_name} direct checklist item binding",
+                commerce_checklist_render_block,
                 "key={item} text={item}",
             )
         for block_label, pattern in (

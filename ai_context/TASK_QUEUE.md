@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1696: Reuse commerce checklist item fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `commerceReadinessChecklistItemKey` and `commerceReadinessChecklistItemText` helpers for Store and Food Photo checklist rendering.
+- Reused the helpers in Store Checkout, Food Photo empty-result, and Food Photo readiness checklist rows while preserving existing text, order, layout, disabled checkout behavior, upload behavior, and non-interactive checklist behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the commerce/media checklist render blocks.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining core-flow checklist rows and summary highlight rows for behavior-preserving display helpers.
+
 ### T1695: Reuse future readiness checklist item fields
 
 Status: done
