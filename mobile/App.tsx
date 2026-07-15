@@ -3555,8 +3555,12 @@ export default function App() {
     selectActiveProfileFromSettings(profileId);
   }
 
+  function settingsProfileChoiceTarget(profile: { sourceId: string }) {
+    return profile.sourceId;
+  }
+
   function pressSettingsProfileChoice(profile: (typeof profileChoiceDisplayItems)[number]) {
-    selectSettingsProfileChoice(profile.sourceId);
+    selectSettingsProfileChoice(settingsProfileChoiceTarget(profile));
   }
 
   function selectSettingsLlmModelChoice(modelId: string) {
