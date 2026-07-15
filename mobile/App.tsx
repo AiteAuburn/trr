@@ -4137,6 +4137,10 @@ export default function App() {
     return "本機連續記錄預覽";
   }
 
+  function rankingHeroIconLabel() {
+    return "榜";
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -9972,7 +9976,7 @@ export default function App() {
             </View>
             <View style={styles.heroCardFeature}>
               <View style={styles.heroIconBubble}>
-                <Text style={styles.heroIconText}>榜</Text>
+                <Text style={styles.heroIconText}>{rankingHeroIconLabel()}</Text>
               </View>
               <View style={styles.timelineContent}>
                 <Text style={styles.evidence}>{rankingLocalStreakPreviewLabel()}</Text>

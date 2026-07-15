@@ -7667,6 +7667,9 @@ def main() -> int:
             ("ranking local streak preview label helper", "function rankingLocalStreakPreviewLabel()"),
             ("ranking local streak preview label helper fields", 'return "本機連續記錄預覽";'),
             ("ranking local streak preview label helper binding", "{rankingLocalStreakPreviewLabel()}"),
+            ("ranking hero icon label helper", "function rankingHeroIconLabel()"),
+            ("ranking hero icon label helper fields", 'return "榜";'),
+            ("ranking hero icon label helper binding", "{rankingHeroIconLabel()}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9723,6 +9726,11 @@ def main() -> int:
             "ranking direct local streak preview label binding",
             content,
             '<Text style={styles.evidence}>本機連續記錄預覽</Text>',
+        )
+        _assert_not_contains(
+            "ranking direct hero icon label binding",
+            content,
+            '<Text style={styles.heroIconText}>榜</Text>',
         )
         _assert_not_contains(
             "food community item direct handler id binding",
