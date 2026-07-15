@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1708: Reuse daily record entry fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared daily-record entry helpers for entry key, time label, payload summary, menu accessibility, manage label, and edit/remove accessibility labels.
+- Reused the helpers in the Daily Record entry cards while preserving entry ordering, detail rows, menu toggle, edit/delete actions, and navigation behavior unchanged.
+- Updated navigation verifier coverage, bounded accessibility source allowlist, and scoped direct-binding guards for the daily-record entry render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing menu, visual-smoke, and future-module display bindings in small behavior-preserving slices.
+
 ### T1707: Reuse today transcript item fields
 
 Status: done

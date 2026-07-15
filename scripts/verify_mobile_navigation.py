@@ -881,6 +881,9 @@ def _pressable_label_source_errors(content: str) -> list[str]:
     helper_label_sources = {
         "aiCandidateEditAccessibilityLabel(item)",
         "aiCandidateRemoveAccessibilityLabel(item)",
+        "dailyRecordEntryAccessibilityLabel(item)",
+        "dailyRecordEntryEditAccessibilityLabel(item)",
+        "dailyRecordEntryRemoveAccessibilityLabel(item)",
         "destinationCardAccessibilityLabel(item)",
         "foodCommunityCategoryOptionAccessibilityLabel(category)",
         "quickEntryModeAccessibilityLabel(item)",
@@ -5658,6 +5661,27 @@ def main() -> int:
             ("daily record entry target helper fields", "return item.index;"),
             ("daily record entry type label helper", "function dailyRecordEntryTypeLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry type label helper fields", "return item.typeLabel;"),
+            ("daily record entry key helper", "function dailyRecordEntryKey(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry key helper fields", "return item.key;"),
+            ("daily record entry key binding", "key={dailyRecordEntryKey(item)}"),
+            ("daily record entry time helper", "function dailyRecordEntryTimeLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry time helper fields", "return item.timeLabel;"),
+            ("daily record entry time binding", "{dailyRecordEntryTimeLabel(item)}"),
+            ("daily record entry payload helper", "function dailyRecordEntryPayloadSummary(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry payload helper fields", "return item.payloadSummary;"),
+            ("daily record entry payload binding", "{dailyRecordEntryPayloadSummary(item)}"),
+            ("daily record entry accessibility helper", "function dailyRecordEntryAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry accessibility helper fields", "return item.accessibilityLabel;"),
+            ("daily record entry accessibility binding", "accessibilityLabel={dailyRecordEntryAccessibilityLabel(item)}"),
+            ("daily record entry manage label helper", "function dailyRecordEntryManageLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry manage label helper fields", "return item.manageLabel;"),
+            ("daily record entry manage label binding", "{dailyRecordEntryManageLabel(item)}"),
+            ("daily record entry edit accessibility helper", "function dailyRecordEntryEditAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry edit accessibility helper fields", "return item.editAccessibilityLabel;"),
+            ("daily record entry edit accessibility binding", "accessibilityLabel={dailyRecordEntryEditAccessibilityLabel(item)}"),
+            ("daily record entry remove accessibility helper", "function dailyRecordEntryRemoveAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry remove accessibility helper fields", "return item.removeAccessibilityLabel;"),
+            ("daily record entry remove accessibility binding", "accessibilityLabel={dailyRecordEntryRemoveAccessibilityLabel(item)}"),
             ("daily record detail row key helper", "function dailyRecordDetailRowKey("),
             ("daily record detail row key helper item type", "item: ReturnType<typeof dailyRecordEntryDisplayItem>,"),
             ("daily record detail row key helper row type", 'row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number]'),
@@ -5750,6 +5774,21 @@ def main() -> int:
             ("direct daily transcript item source binding", "<Text style={styles.evidence}>{item.sourceText}</Text>"),
         ):
             _assert_not_contains(label, daily_transcript_render_block, marker)
+        daily_record_entry_render_block = _match_block(
+            content,
+            r"section\.entries\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
+            "daily record entry render block",
+        )
+        for label, marker in (
+            ("direct daily record entry key binding", "key={item.key}"),
+            ("direct daily record entry time binding", "<Text style={styles.confidence}>{item.timeLabel}</Text>"),
+            ("direct daily record entry payload binding", "<Text style={styles.recordContent}>{item.payloadSummary}</Text>"),
+            ("direct daily record entry accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
+            ("direct daily record entry manage label binding", "<Text style={styles.editGlyph}>{item.manageLabel}</Text>"),
+            ("direct daily record entry edit accessibility binding", "accessibilityLabel={item.editAccessibilityLabel}"),
+            ("direct daily record entry remove accessibility binding", "accessibilityLabel={item.removeAccessibilityLabel}"),
+        ):
+            _assert_not_contains(label, daily_record_entry_render_block, marker)
         for label, marker in (
             ("AI review no-candidate title helper", "function aiReviewNoCandidateTitleCopy()"),
             ("AI review no-candidate body helper", "function aiReviewNoCandidateBodyCopy()"),

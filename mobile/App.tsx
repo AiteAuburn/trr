@@ -3452,6 +3452,34 @@ export default function App() {
     return item.typeLabel;
   }
 
+  function dailyRecordEntryKey(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    return item.key;
+  }
+
+  function dailyRecordEntryTimeLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    return item.timeLabel;
+  }
+
+  function dailyRecordEntryPayloadSummary(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    return item.payloadSummary;
+  }
+
+  function dailyRecordEntryAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    return item.accessibilityLabel;
+  }
+
+  function dailyRecordEntryManageLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    return item.manageLabel;
+  }
+
+  function dailyRecordEntryEditAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    return item.editAccessibilityLabel;
+  }
+
+  function dailyRecordEntryRemoveAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    return item.removeAccessibilityLabel;
+  }
+
   function dailyRecordDetailRowKey(
     item: ReturnType<typeof dailyRecordEntryDisplayItem>,
     row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number]
@@ -8109,19 +8137,19 @@ export default function App() {
                   </View>
                   {section.entries.length > 0 ? (
                     section.entries.map((item) => (
-                      <View key={item.key} style={styles.dailyRecordEntryCard}>
+                      <View key={dailyRecordEntryKey(item)} style={styles.dailyRecordEntryCard}>
                         <View style={styles.recordHeader}>
                           <View style={styles.timelineContent}>
-                            <Text style={styles.confidence}>{item.timeLabel}</Text>
-                            <Text style={styles.recordContent}>{item.payloadSummary}</Text>
+                            <Text style={styles.confidence}>{dailyRecordEntryTimeLabel(item)}</Text>
+                            <Text style={styles.recordContent}>{dailyRecordEntryPayloadSummary(item)}</Text>
                           </View>
                           <Pressable
-                            accessibilityLabel={item.accessibilityLabel}
+                            accessibilityLabel={dailyRecordEntryAccessibilityLabel(item)}
                             accessibilityRole="button"
                             style={styles.roundActionButton}
                             onPress={() => pressDailyRecordEntryMenu(item)}
                           >
-                            <Text style={styles.editGlyph}>{item.manageLabel}</Text>
+                            <Text style={styles.editGlyph}>{dailyRecordEntryManageLabel(item)}</Text>
                           </Pressable>
                         </View>
                         <View style={styles.detailRows}>
@@ -8132,7 +8160,7 @@ export default function App() {
                         {dailyRecordMenuIndex === item.index ? (
                           <View style={styles.actionRow}>
                             <Pressable
-                              accessibilityLabel={item.editAccessibilityLabel}
+                              accessibilityLabel={dailyRecordEntryEditAccessibilityLabel(item)}
                               accessibilityRole="button"
                               style={styles.secondaryButton}
                               onPress={() => pressDailyRecordEntryEdit(item)}
@@ -8140,7 +8168,7 @@ export default function App() {
                               <Text style={styles.secondaryButtonText}>編輯</Text>
                             </Pressable>
                             <Pressable
-                              accessibilityLabel={item.removeAccessibilityLabel}
+                              accessibilityLabel={dailyRecordEntryRemoveAccessibilityLabel(item)}
                               accessibilityRole="button"
                               style={styles.dangerButton}
                               onPress={() => pressDailyRecordEntryDelete(item)}

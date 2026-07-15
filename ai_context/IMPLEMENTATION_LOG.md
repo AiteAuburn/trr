@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1708 reuse daily record entry fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared daily-record entry helpers for entry key, time label, payload summary, menu accessibility, manage label, and edit/remove accessibility labels.
+- Reused the helpers in the Daily Record entry cards while preserving entry ordering, detail rows, menu toggle, edit/delete actions, and navigation behavior unchanged.
+- Updated navigation verifier coverage, bounded accessibility source allowlist, and scoped direct-binding guards for the daily-record entry render block.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing menu, visual-smoke, and future-module display bindings in small behavior-preserving slices.
+
 ### T1707 reuse today transcript item fields
 
 類型：mobile / refactor / verifier / docs
