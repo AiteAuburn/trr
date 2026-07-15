@@ -1481,6 +1481,7 @@ def main() -> int:
             ("shared auxiliary store point mall badge", 'storePreview: boundDisplayText("點數商城", maxDisplayTextLength)'),
             ("shared auxiliary year review source label", 'yearReviewSource: boundDisplayText("年度回顧來源", maxDisplayTextLength)'),
             ("shared auxiliary food community share food name label", 'foodCommunityShareFoodNameAccessibility: boundDisplayText("輸入食物名稱", maxDisplayTextLength),'),
+            ("shared auxiliary food community share eaten date label", 'foodCommunityShareEatenDateAccessibility: boundDisplayText("輸入食物分享食用日期", maxDisplayTextLength),'),
         ):
             _assert_contains(label, shared_display_items_content, marker)
         for label, marker in (
@@ -7636,6 +7637,7 @@ def main() -> int:
             ("food community share section label helper fields", 'return "食物分享紀錄";'),
             ("food community share section label helper binding", "{foodCommunityShareSectionLabel()}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
+            ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
             ("food community category api type import", "type FoodCommunityApiCategoryRead,"),
             ("food community backend category state", "const [foodCommunityBackendCategories, setFoodCommunityBackendCategories]"),
             ("food community backend category options", "const foodCommunityCategoriesForDisplay = foodCommunityDisplay.categoriesForDisplay;"),
@@ -7668,7 +7670,7 @@ def main() -> int:
             ("food community share eaten time updater", "function updateFoodCommunityEatenTime(value: string)"),
             ("food community share food name input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share food name binding", "onChangeText={updateFoodCommunityFoodName}"),
-            ("food community share eaten date input", 'accessibilityLabel="輸入食物分享食用日期"'),
+            ("food community share eaten date input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
             ("food community share eaten time input", 'accessibilityLabel="輸入食物分享食用時間"'),
             ("food community share eaten date binding", "onChangeText={updateFoodCommunityEatenDate}"),
             ("food community share eaten time binding", "onChangeText={updateFoodCommunityEatenTime}"),
@@ -9606,6 +9608,11 @@ def main() -> int:
             "food community direct share food name accessibility binding",
             content,
             'accessibilityLabel="輸入食物名稱"',
+        )
+        _assert_not_contains(
+            "food community direct share eaten date accessibility binding",
+            content,
+            'accessibilityLabel="輸入食物分享食用日期"',
         )
         _assert_not_contains(
             "food community item direct handler id binding",

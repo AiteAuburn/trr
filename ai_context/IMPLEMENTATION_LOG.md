@@ -15,6 +15,37 @@
 
 ## 2026-07-15
 
+### T1598 reuse food community share eaten-date accessibility auxiliary label
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/sharedDisplayItems.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility` label for the Food Community share-form eaten-date input accessibility label.
+- Reused the auxiliary label in share-form rendering while keeping the accessibility copy, placeholder copy, date value/update path, food-name label, submit behavior, and detail panel behavior unchanged.
+- Updated navigation verifier coverage for the shared Food Community share-form eaten-date accessibility auxiliary label and direct accessibility-label regression guard.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting Food Community share-form accessibility labels in small behavior-preserving slices.
+
 ### T1597 reuse food community share food-name accessibility auxiliary label
 
 類型：mobile / refactor / verifier / docs
