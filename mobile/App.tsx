@@ -1678,6 +1678,8 @@ export default function App() {
   const communityPostAccessibilityDisplayLabel = communityPostAccessibilityLabel();
   const communityPostButtonDisplayLabel = communityPostButtonLabel();
   const communityPrivacyAccessibilityDisplayLabel = communityPrivacyAccessibilityLabel();
+  const communityActionStatusDisplayLabel = communityActionStatusLabel();
+  const communityActionStatusDisplayCopy = communityActionStatusText();
   const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();
   const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();
   const storePreviewDisplay = storePreviewDisplayTexts(storeActionStatus);
@@ -4163,6 +4165,14 @@ export default function App() {
 
   function communityPrivacyAccessibilityLabel() {
     return futurePreviewDisplayLabels.communityPrivacyAccessibility;
+  }
+
+  function communityActionStatusLabel() {
+    return futurePreviewDisplayLabels.communityStatus;
+  }
+
+  function communityActionStatusText() {
+    return communityActionStatusDisplayText;
   }
 
   function rankingScreenTitleLabel() {
@@ -10120,8 +10130,8 @@ export default function App() {
             </View>
             {communityActionStatus ? (
               <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{futurePreviewDisplayLabels.communityStatus}</Text>
-                <Text style={styles.evidence}>{communityActionStatusDisplayText}</Text>
+                <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>
+                <Text style={styles.evidence}>{communityActionStatusDisplayCopy}</Text>
               </View>
             ) : null}
             <Pressable

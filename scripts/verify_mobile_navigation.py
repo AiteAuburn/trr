@@ -7553,6 +7553,14 @@ def main() -> int:
             ("community privacy accessibility helper fields", "return futurePreviewDisplayLabels.communityPrivacyAccessibility;"),
             ("community privacy accessibility display label binding", "const communityPrivacyAccessibilityDisplayLabel = communityPrivacyAccessibilityLabel();"),
             ("community privacy accessibility helper binding", "accessibilityLabel={communityPrivacyAccessibilityDisplayLabel}"),
+            ("community action status label helper", "function communityActionStatusLabel()"),
+            ("community action status label helper fields", "return futurePreviewDisplayLabels.communityStatus;"),
+            ("community action status label display binding", "const communityActionStatusDisplayLabel = communityActionStatusLabel();"),
+            ("community action status label helper binding", "{communityActionStatusDisplayLabel}"),
+            ("community action status text helper", "function communityActionStatusText()"),
+            ("community action status text helper fields", "return communityActionStatusDisplayText;"),
+            ("community action status text display binding", "const communityActionStatusDisplayCopy = communityActionStatusText();"),
+            ("community action status text helper binding", "{communityActionStatusDisplayCopy}"),
             ("community posting status handler", "function showCommunityPostingStatus()"),
             ("community privacy status handler", "function showCommunityPrivacyStatus()"),
             ("food community backend-aware intro copy", "backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。"),
@@ -9982,6 +9990,16 @@ def main() -> int:
             "community direct privacy accessibility binding",
             content,
             "accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}\n                accessibilityRole=\"button\"\n                style={styles.secondaryButton}\n                onPress={showCommunityPrivacyStatus}",
+        )
+        _assert_not_contains(
+            "community direct action status label binding",
+            content,
+            "{communityActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{futurePreviewDisplayLabels.communityStatus}</Text>",
+        )
+        _assert_not_contains(
+            "community direct action status text binding",
+            content,
+            "{communityActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>\n                <Text style={styles.evidence}>{communityActionStatusDisplayText}</Text>",
         )
         _assert_not_contains(
             "ranking direct close accessibility binding",
