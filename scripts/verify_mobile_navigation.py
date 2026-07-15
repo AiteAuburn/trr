@@ -7712,6 +7712,10 @@ def main() -> int:
             ("ranking readiness checklist item text helper", "function rankingReadinessChecklistItemText(item: string)"),
             ("ranking readiness checklist item text helper fields", "return item;"),
             ("ranking readiness checklist item text helper binding", "text={rankingReadinessChecklistItemText(item)}"),
+            ("ranking close accessibility helper", "function rankingCloseAccessibilityLabel()"),
+            ("ranking close accessibility helper fields", "return auxiliaryDisplayLabels.closeReturn;"),
+            ("ranking close accessibility display label binding", "const rankingCloseAccessibilityDisplayLabel = rankingCloseAccessibilityLabel();"),
+            ("ranking close accessibility helper binding", "accessibilityLabel={rankingCloseAccessibilityDisplayLabel}"),
             ("ranking public action accessibility helper", "function rankingPublicActionAccessibilityLabel()"),
             ("ranking public action accessibility helper fields", "return futurePreviewDisplayLabels.rankingPublicAccessibility;"),
             ("ranking public action accessibility display label binding", "const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel();"),
@@ -9872,6 +9876,11 @@ def main() -> int:
             "ranking direct readiness checklist item text binding",
             content,
             "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={item} />",
+        )
+        _assert_not_contains(
+            "ranking direct close accessibility binding",
+            content,
+            "<Text style={styles.sectionTitle}>{rankingScreenTitleLabel()}</Text>\n                <Text style={styles.evidence}>{rankingScreenSubtitleCopy()}</Text>\n              </View>\n              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole=\"button\" style={styles.closeButton} onPress={returnFromRankingPreview}>",
         )
         _assert_not_contains(
             "ranking direct action status label binding",

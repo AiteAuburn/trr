@@ -1686,6 +1686,7 @@ export default function App() {
   const storeCartReturnButtonDisplayLabel = storePreviewDisplay.cartReturnButton;
   const rankingOptInButtonDisplayLabel = rankingOptInActionButtonLabel(communityActionDisplay.rankingOptInButton);
   const rankingOptInAccessibilityDisplayLabel = rankingOptInActionAccessibilityLabel(communityActionDisplay.rankingOptInAccessibility);
+  const rankingCloseAccessibilityDisplayLabel = rankingCloseAccessibilityLabel();
   const rankingPublicActionButtonDisplayLabel = rankingPublicActionButtonLabel();
   const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel();
   const rankingReturnFutureModulesButtonDisplayLabel = rankingReturnFutureModulesButtonLabel();
@@ -4199,6 +4200,10 @@ export default function App() {
 
   function rankingReadinessChecklistItemText(item: string) {
     return item;
+  }
+
+  function rankingCloseAccessibilityLabel() {
+    return auxiliaryDisplayLabels.closeReturn;
   }
 
   function rankingPublicActionAccessibilityLabel() {
@@ -10058,7 +10063,7 @@ export default function App() {
                 <Text style={styles.sectionTitle}>{rankingScreenTitleLabel()}</Text>
                 <Text style={styles.evidence}>{rankingScreenSubtitleCopy()}</Text>
               </View>
-              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromRankingPreview}>
+              <Pressable accessibilityLabel={rankingCloseAccessibilityDisplayLabel} accessibilityRole="button" style={styles.closeButton} onPress={returnFromRankingPreview}>
                 <Text style={styles.closeButtonText}>×</Text>
               </Pressable>
             </View>
