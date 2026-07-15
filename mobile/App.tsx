@@ -2339,6 +2339,18 @@ export default function App() {
     selectAnalysisRange(analysisRangeTarget(item));
   }
 
+  function detailedReportBoundaryRowKey(row: (typeof detailedReportBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function detailedReportBoundaryRowLabel(row: (typeof detailedReportBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function detailedReportBoundaryRowValue(row: (typeof detailedReportBoundaryRows)[number]) {
+    return row.value;
+  }
+
   function updateAnalysisCustomStartInput(value: string) {
     setAnalysisCustomStart(boundDateInputText(value));
     clearSelectedAnalysisPoint();
@@ -9443,9 +9455,9 @@ export default function App() {
             </View>
             <View style={styles.reportBoundaryGrid}>
               {detailedReportBoundaryRows.map((row) => (
-                <View key={row.label} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.recordType}>{row.value}</Text>
+                <View key={detailedReportBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
+                  <Text style={styles.confidence}>{detailedReportBoundaryRowLabel(row)}</Text>
+                  <Text style={styles.recordType}>{detailedReportBoundaryRowValue(row)}</Text>
                 </View>
               ))}
             </View>

@@ -6987,6 +6987,18 @@ def main() -> int:
             "const detailedReportMetricRows = buildDetailedReportMetricRows(detailedReportMetricInput);",
         )
         for label, marker in (
+            ("detailed report boundary row key helper", "function detailedReportBoundaryRowKey(row: (typeof detailedReportBoundaryRows)[number])"),
+            ("detailed report boundary row key helper fields", "return row.label;"),
+            ("detailed report boundary row key helper binding", "key={detailedReportBoundaryRowKey(row)}"),
+            ("detailed report boundary row label helper", "function detailedReportBoundaryRowLabel(row: (typeof detailedReportBoundaryRows)[number])"),
+            ("detailed report boundary row label helper fields", "return row.label;"),
+            ("detailed report boundary row label helper binding", "{detailedReportBoundaryRowLabel(row)}"),
+            ("detailed report boundary row value helper", "function detailedReportBoundaryRowValue(row: (typeof detailedReportBoundaryRows)[number])"),
+            ("detailed report boundary row value helper fields", "return row.value;"),
+            ("detailed report boundary row value helper binding", "{detailedReportBoundaryRowValue(row)}"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
             ("detailed report local meal count helper binding", 'localMealCount: recordTypeCount(analysisRecords, "meal")'),
             ("detailed report local exercise count helper binding", 'localExerciseCount: recordTypeCount(analysisRecords, "exercise")'),
             ("detailed report local medication count helper binding", 'localMedicationCount: recordTypeCount(analysisRecords, "medication")'),
@@ -9786,6 +9798,21 @@ def main() -> int:
             "AI save confirm direct boundary row value binding",
             content,
             "aiSaveConfirmBoundaryRows.map((row) => (\n                <View key={aiSaveConfirmBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{aiSaveConfirmBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "detailed report direct boundary row key binding",
+            content,
+            "detailedReportBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
+        )
+        _assert_not_contains(
+            "detailed report direct boundary row label binding",
+            content,
+            "detailedReportBoundaryRows.map((row) => (\n                <View key={detailedReportBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "detailed report direct boundary row value binding",
+            content,
+            "detailedReportBoundaryRows.map((row) => (\n                <View key={detailedReportBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{detailedReportBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
             "food community search direct handler bound input",
