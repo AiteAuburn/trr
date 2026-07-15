@@ -9791,7 +9791,7 @@ export default function App() {
                 autoCorrect={false}
               />
               <TextInput
-                accessibilityLabel="輸入食用後血糖"
+                accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareAfterGlucoseAccessibility}
                 value={foodCommunityShareFields.afterGlucose}
                 onChangeText={updateFoodCommunityAfterGlucose}
                 keyboardType="numeric"
