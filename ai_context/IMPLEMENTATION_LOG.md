@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1624 reuse ranking leaderboard section empty copy helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `rankingLeaderboardSectionEmptyCopy` helper for Ranking leaderboard empty-state copy.
+- Reused the helper in Ranking screen rendering while keeping section order, entry rendering, empty-state text, opt-in actions, backend sync behavior, and Community screen behavior unchanged.
+- Updated navigation verifier coverage for the shared Ranking leaderboard section empty-copy helper and direct empty-copy regression guard.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting Ranking readiness checklist bindings in small behavior-preserving slices.
+
 ### T1623 reuse ranking leaderboard entry score label helper
 
 類型：mobile / refactor / verifier / docs

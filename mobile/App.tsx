@@ -4181,6 +4181,10 @@ export default function App() {
     return entry.scoreLabel;
   }
 
+  function rankingLeaderboardSectionEmptyCopy(section: (typeof rankingLeaderboardSections)[number]) {
+    return section.emptyCopy;
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -10046,7 +10050,7 @@ export default function App() {
                     </View>
                   ))
                 ) : (
-                  <Text style={styles.evidence}>{section.emptyCopy}</Text>
+                  <Text style={styles.evidence}>{rankingLeaderboardSectionEmptyCopy(section)}</Text>
                 )}
               </View>
             ))}

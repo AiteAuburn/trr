@@ -7700,6 +7700,9 @@ def main() -> int:
             ("ranking leaderboard entry score label helper", 'function rankingLeaderboardEntryScoreLabel(entry: (typeof rankingLeaderboardSections)[number]["entries"][number])'),
             ("ranking leaderboard entry score label helper fields", "return entry.scoreLabel;"),
             ("ranking leaderboard entry score label helper binding", "{rankingLeaderboardEntryScoreLabel(entry)}"),
+            ("ranking leaderboard section empty copy helper", "function rankingLeaderboardSectionEmptyCopy(section: (typeof rankingLeaderboardSections)[number])"),
+            ("ranking leaderboard section empty copy helper fields", "return section.emptyCopy;"),
+            ("ranking leaderboard section empty copy helper binding", "{rankingLeaderboardSectionEmptyCopy(section)}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9811,6 +9814,11 @@ def main() -> int:
             "ranking direct leaderboard entry score label binding",
             content,
             "section.entries.map((entry) => (\n                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>\n                      <Text style={styles.recordType}>{rankingLeaderboardEntryRankLabel(entry)}</Text>\n                      <View style={styles.timelineContent}>\n                        <Text style={styles.recordContent}>{rankingLeaderboardEntryDisplayName(entry)}</Text>\n                        <Text style={styles.evidence}>{entry.scoreLabel}</Text>",
+        )
+        _assert_not_contains(
+            "ranking direct leaderboard section empty copy binding",
+            content,
+            "rankingLeaderboardSections.map((section) => (\n              <View key={rankingLeaderboardSectionKey(section)} style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingLeaderboardSectionLabel(section)}</Text>\n                {section.entries.length > 0 ? (\n                  section.entries.map((entry) => (\n                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>\n                      <Text style={styles.recordType}>{rankingLeaderboardEntryRankLabel(entry)}</Text>\n                      <View style={styles.timelineContent}>\n                        <Text style={styles.recordContent}>{rankingLeaderboardEntryDisplayName(entry)}</Text>\n                        <Text style={styles.evidence}>{rankingLeaderboardEntryScoreLabel(entry)}</Text>\n                      </View>\n                    </View>\n                  ))\n                ) : (\n                  <Text style={styles.evidence}>{section.emptyCopy}</Text>",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
