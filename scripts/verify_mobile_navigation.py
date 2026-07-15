@@ -7709,6 +7709,9 @@ def main() -> int:
             ("food community list item selected helper fields", "return selectedItem?.id === item.id;"),
             ("food community list item selected helper state binding", "accessibilityState={{ selected: foodCommunityListItemSelected(item, selectedFoodCommunityItem) }}"),
             ("food community list item selected helper style binding", "foodCommunityListItemSelected(item, selectedFoodCommunityItem) ? styles.recordCardSelected : null"),
+            ("food community list empty helper", "function foodCommunityListIsEmpty(items: Array<ReturnType<typeof foodCommunityItemDisplayItem>>)"),
+            ("food community list empty helper fields", "return items.length === 0;"),
+            ("food community list empty helper binding", "foodCommunityListIsEmpty(visibleFoodCommunityItems) ? ("),
             ("food community share status handler", "function showFoodCommunityShareStatus()"),
             ("commerce search input value helper", "function commerceSearchInputValue(value: string)"),
             ("commerce search input value helper fields", "return boundStoreSearchText(value);"),
@@ -8533,6 +8536,9 @@ def main() -> int:
             ("food community list item selected helper fields", "return selectedItem?.id === item.id;"),
             ("food community list item selected helper state binding", "accessibilityState={{ selected: foodCommunityListItemSelected(item, selectedFoodCommunityItem) }}"),
             ("food community list item selected helper style binding", "foodCommunityListItemSelected(item, selectedFoodCommunityItem) ? styles.recordCardSelected : null"),
+            ("food community list empty helper", "function foodCommunityListIsEmpty(items: Array<ReturnType<typeof foodCommunityItemDisplayItem>>)"),
+            ("food community list empty helper fields", "return items.length === 0;"),
+            ("food community list empty helper binding", "foodCommunityListIsEmpty(visibleFoodCommunityItems) ? ("),
             ("store product status handler", "function showStoreProductStatus(actionStatus: string)"),
             ("store product action status helper", "function storeProductActionStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store product action status helper fields", "return product.actionStatus;"),
@@ -9414,6 +9420,11 @@ def main() -> int:
             "food community direct list item selected style binding",
             content,
             "selectedFoodCommunityItem?.id === item.id ? styles.recordCardSelected : null",
+        )
+        _assert_not_contains(
+            "food community direct list empty binding",
+            content,
+            "visibleFoodCommunityItems.length === 0 ? (",
         )
         _assert_not_contains(
             "food community direct list item title binding",

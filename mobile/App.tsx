@@ -4119,6 +4119,10 @@ export default function App() {
     return selectedItem?.id === item.id;
   }
 
+  function foodCommunityListIsEmpty(items: Array<ReturnType<typeof foodCommunityItemDisplayItem>>) {
+    return items.length === 0;
+  }
+
   function pressFoodCommunityItem(item: ReturnType<typeof foodCommunityItemDisplayItem>) {
     selectFoodCommunityItem(foodCommunityItemTarget(item));
   }
@@ -9650,7 +9654,7 @@ export default function App() {
                   <Text style={styles.recordType}>›</Text>
                 </Pressable>
               ))}
-              {visibleFoodCommunityItems.length === 0 ? (
+              {foodCommunityListIsEmpty(visibleFoodCommunityItems) ? (
                 <View style={styles.inlineInfoBlock}>
                   <Text style={styles.label}>沒有符合的食物</Text>
                   <Text style={styles.evidence}>可清除搜尋文字或切換分類；backend ready 時會依搜尋同步，未連線時只篩選本機預覽。</Text>
