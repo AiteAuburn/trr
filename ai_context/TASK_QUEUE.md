@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1718: Reuse store redemption card fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared Store redemption card helpers for render key, title, status label, and subtitle display.
+- Reused the helpers in the Store redemption wallet list while preserving action accessibility, disabled state, use/status behavior, and future/store preview scope unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the Store redemption card render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing Achievement display bindings in small behavior-preserving slices.
+
 ### T1717: Reuse store product card fields
 
 Status: done

@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1718 reuse store redemption card fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared Store redemption card helpers for render key, title, status label, and subtitle display.
+- Reused the helpers in the Store redemption wallet list while preserving action accessibility, disabled state, use/status behavior, and future/store preview scope unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the Store redemption card render block.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing Achievement display bindings in small behavior-preserving slices.
+
 ### T1717 reuse store product card fields
 
 類型：mobile / refactor / verifier / docs

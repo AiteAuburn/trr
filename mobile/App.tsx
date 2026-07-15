@@ -5186,6 +5186,22 @@ export default function App() {
     return redemption.statusLabel;
   }
 
+  function storeRedemptionCardKey(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
+    return redemption.id;
+  }
+
+  function storeRedemptionCardTitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
+    return redemption.title;
+  }
+
+  function storeRedemptionCardStatusLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
+    return redemption.statusLabel;
+  }
+
+  function storeRedemptionCardSubtitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
+    return redemption.subtitle;
+  }
+
   function storeRedemptionActionDisabled(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
     return !redemption.isUsable;
   }
@@ -12249,16 +12265,16 @@ export default function App() {
               <Text style={styles.label}>我的兌換券</Text>
               {storeRedemptionDisplayItems.length > 0 ? (
                 storeRedemptionDisplayItems.map((product) => (
-                  <View key={product.id} style={styles.productCard}>
+                  <View key={storeRedemptionCardKey(product)} style={styles.productCard}>
                     <View style={styles.productImage}>
                       <Text style={styles.productImageText}>券</Text>
                     </View>
                     <View style={styles.timelineContent}>
                       <View style={styles.sectionHeader}>
-                        <Text style={styles.recordContent}>{product.title}</Text>
-                        <Text style={styles.productBadge}>{product.statusLabel}</Text>
+                        <Text style={styles.recordContent}>{storeRedemptionCardTitle(product)}</Text>
+                        <Text style={styles.productBadge}>{storeRedemptionCardStatusLabel(product)}</Text>
                       </View>
-                      <Text style={styles.evidence}>{product.subtitle}</Text>
+                      <Text style={styles.evidence}>{storeRedemptionCardSubtitle(product)}</Text>
                     </View>
                     <Pressable
                       accessibilityLabel={storeRedemptionActionAccessibilityLabel(product)}

@@ -9847,6 +9847,18 @@ def main() -> int:
             ("store redemption use title helper fields", "return redemption.title;"),
             ("store redemption use status label helper", "function storeRedemptionUseStatusLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store redemption use status label helper fields", "return redemption.statusLabel;"),
+            ("store redemption card key helper", "function storeRedemptionCardKey(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
+            ("store redemption card key helper fields", "return redemption.id;"),
+            ("store redemption card key helper binding", "key={storeRedemptionCardKey(product)}"),
+            ("store redemption card title helper", "function storeRedemptionCardTitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
+            ("store redemption card title helper fields", "return redemption.title;"),
+            ("store redemption card title helper binding", "{storeRedemptionCardTitle(product)}"),
+            ("store redemption card status helper", "function storeRedemptionCardStatusLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
+            ("store redemption card status helper fields", "return redemption.statusLabel;"),
+            ("store redemption card status helper binding", "{storeRedemptionCardStatusLabel(product)}"),
+            ("store redemption card subtitle helper", "function storeRedemptionCardSubtitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
+            ("store redemption card subtitle helper fields", "return redemption.subtitle;"),
+            ("store redemption card subtitle helper binding", "{storeRedemptionCardSubtitle(product)}"),
             ("store redemption action disabled helper", "function storeRedemptionActionDisabled(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store redemption action disabled helper fields", "return !redemption.isUsable;"),
             ("store redemption action label helper", "function storeRedemptionActionLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
@@ -11620,6 +11632,18 @@ def main() -> int:
             content,
             "accessibilityLabel={product.actionAccessibilityLabel}",
         )
+        store_redemption_card_render_block = _match_block(
+            content,
+            r"storeRedemptionDisplayItems\.map\(\(product\) => \(([\s\S]*?storeRedemptionActionLabel\(product\)[\s\S]*?</Pressable>)",
+            "store redemption card render block",
+        )
+        for label, marker in (
+            ("direct store redemption card key binding", "key={product.id}"),
+            ("direct store redemption card title binding", "{product.title}"),
+            ("direct store redemption card status binding", "{product.statusLabel}"),
+            ("direct store redemption card subtitle binding", "{product.subtitle}"),
+        ):
+            _assert_not_contains(label, store_redemption_card_render_block, marker)
         _assert_not_contains(
             "store redemption direct boundary row key binding",
             content,
