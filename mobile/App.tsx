@@ -3626,6 +3626,10 @@ export default function App() {
     return item.provider;
   }
 
+  function authProviderPreviewTitleLabel(item: ReturnType<typeof authProviderPreviewDisplayItem>) {
+    return `${previewStatusRowTitle(item)} 登入`;
+  }
+
   function pressAuthProviderPreview(item: ReturnType<typeof authProviderPreviewDisplayItem>) {
     startAuthProviderChallenge(authProviderPreviewTarget(item));
   }
@@ -11065,7 +11069,7 @@ export default function App() {
             <View style={styles.aiReviewList}>
               {authProviderDisplayItems.map((item) => (
                 <Pressable
-                  key={item.title}
+                  key={previewStatusRowKey(item)}
 	                  accessibilityLabel={item.accessibilityLabel}
 	                  accessibilityRole="button"
 	                  accessibilityState={{ disabled: isAuthOperationInFlight }}
@@ -11074,13 +11078,13 @@ export default function App() {
                   onPress={() => pressAuthProviderPreview(item)}
                 >
                   <View style={styles.iconCircleSmall}>
-                    <Text>{item.icon}</Text>
+                    <Text>{previewStatusRowIcon(item)}</Text>
                   </View>
                   <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{item.title} 登入</Text>
-                    <Text style={styles.evidence}>{item.copy}</Text>
+                    <Text style={styles.recordContent}>{authProviderPreviewTitleLabel(item)}</Text>
+                    <Text style={styles.evidence}>{previewStatusRowCopy(item)}</Text>
                   </View>
-                  <Text style={styles.previewModeBadge}>{item.statusLabel}</Text>
+                  <Text style={styles.previewModeBadge}>{previewStatusRowStatusLabel(item)}</Text>
                 </Pressable>
               ))}
             </View>

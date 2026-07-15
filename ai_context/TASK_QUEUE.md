@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1691: Reuse auth provider preview row fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused shared preview status row helpers for Account Security auth provider preview cards.
+- Added `authProviderPreviewTitleLabel` to preserve the existing provider title plus login suffix while moving title composition behind a helper.
+- Updated navigation verifier coverage and scoped direct-binding guards for the auth provider preview render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining Account Security runtime session cards and reminder preview rows for behavior-preserving display helpers.
+
 ### T1690: Reuse session management preview row fields
 
 Status: done
