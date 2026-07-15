@@ -9768,7 +9768,7 @@ export default function App() {
                 <View style={styles.dateTimeField}>
                   <FieldLabel icon={"🕒"} label={"食用時間"} />
                   <TextInput
-                    accessibilityLabel="輸入食物分享食用時間"
+                    accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}
                     value={foodCommunityShareFields.eatenTime}
                     onChangeText={updateFoodCommunityEatenTime}
                     autoCapitalize="none"
