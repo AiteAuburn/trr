@@ -7521,7 +7521,7 @@ def main() -> int:
             ("food community maximum rise detail label", "最高上升血糖"),
             ("food community minimum rise detail label", "最低上升血糖"),
             ("food community average rise unit", "{foodCommunityDetailAverageRise(selectedFoodCommunityItem)} mg/dL"),
-            ("food community maximum rise unit", "{selectedFoodCommunityItem.maximumRise} mg/dL"),
+            ("food community maximum rise unit", "{foodCommunityDetailMaximumRise(selectedFoodCommunityItem)} mg/dL"),
             ("food community minimum rise unit", "{selectedFoodCommunityItem.minimumRise} mg/dL"),
             ("food community individual share section label", "個別分享紀錄"),
             ("food community individual share render", "selectedFoodCommunityItem.individualShareDisplayItems.map((share) =>"),
@@ -7551,6 +7551,9 @@ def main() -> int:
             ("food community detail average rise helper", "function foodCommunityDetailAverageRise(item: { averageRise: number })"),
             ("food community detail average rise helper fields", "return item.averageRise;"),
             ("food community detail average rise helper binding", "{foodCommunityDetailAverageRise(selectedFoodCommunityItem)} mg/dL"),
+            ("food community detail maximum rise helper", "function foodCommunityDetailMaximumRise(item: { maximumRise: number })"),
+            ("food community detail maximum rise helper fields", "return item.maximumRise;"),
+            ("food community detail maximum rise helper binding", "{foodCommunityDetailMaximumRise(selectedFoodCommunityItem)} mg/dL"),
             ("food community detail status example count helper", "function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] })"),
             ("food community detail status example count helper fields", "return item.examples.length;"),
             ("food community detail status title helper binding", "itemTitle: foodCommunityDetailStatusTitle(detailedItem),"),
@@ -9322,6 +9325,11 @@ def main() -> int:
             "food community direct detail average rise binding",
             content,
             "{selectedFoodCommunityItem.averageRise} mg/dL",
+        )
+        _assert_not_contains(
+            "food community direct detail maximum rise binding",
+            content,
+            "{selectedFoodCommunityItem.maximumRise} mg/dL",
         )
         _assert_not_contains(
             "food community direct share category binding",
