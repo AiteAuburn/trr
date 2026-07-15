@@ -4055,6 +4055,10 @@ export default function App() {
     return product.id;
   }
 
+  function storeRedemptionUseId(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
+    return redemption.id;
+  }
+
   function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>) {
     void redeemStoreProduct(product);
   }
@@ -5291,7 +5295,8 @@ export default function App() {
       setStoreActionStatus(redemptionUseStatus.unusable);
       return;
     }
-    if (!redemption.id) {
+    const redemptionId = storeRedemptionUseId(redemption);
+    if (!redemptionId) {
       setStoreActionStatus(redemptionUseStatus.invalid);
       return;
     }
@@ -5305,7 +5310,7 @@ export default function App() {
     try {
       const usedRedemption = await requestJson<StoreApiRedemption>(
         normalizedApiBaseUrl,
-        `/store/redemptions/${redemption.id}/use`,
+        `/store/redemptions/${redemptionId}/use`,
         {
           method: "POST",
           headers: protectedRequestHeaders(account.id, accessToken)

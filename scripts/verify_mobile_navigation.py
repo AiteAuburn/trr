@@ -8104,7 +8104,22 @@ def main() -> int:
         _assert_contains(
             "store redemption id fail closed",
             use_redemption_block,
-            "if (!redemption.id) {\n      setStoreActionStatus(redemptionUseStatus.invalid);\n      return;\n    }",
+            'const redemptionId = storeRedemptionUseId(redemption);\n    if (!redemptionId) {\n      setStoreActionStatus(redemptionUseStatus.invalid);\n      return;\n    }',
+        )
+        _assert_contains(
+            "store redemption use endpoint helper binding",
+            use_redemption_block,
+            "`/store/redemptions/${redemptionId}/use`",
+        )
+        _assert_not_contains(
+            "store redemption direct id fail closed",
+            use_redemption_block,
+            "if (!redemption.id) {",
+        )
+        _assert_not_contains(
+            "store redemption direct id endpoint",
+            use_redemption_block,
+            "`/store/redemptions/${redemption.id}/use`",
         )
         for label, marker in (
             ("food community stale no-backend empty copy", "目前不查詢 backend"),
@@ -8263,6 +8278,8 @@ def main() -> int:
             ("store product action status helper fields", "return product.actionStatus;"),
             ("store product reward id helper", "function storeProductRewardId(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store product reward id helper fields", "return product.id;"),
+            ("store redemption use id helper", "function storeRedemptionUseId(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
+            ("store redemption use id helper fields", "return redemption.id;"),
             ("store product status press handler", "function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store redemption status press handler", "function pressStoreRedemptionStatus(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store catalog sync function", "async function loadStoreCatalogAndPoints()"),
@@ -8279,7 +8296,7 @@ def main() -> int:
             ("store redemption boundary rows helper binding", "const storeRedemptionBoundaryRows = storeDisplay.redemptionBoundaryRows;"),
             ("store redemption post endpoint", '"/store/redemptions"'),
             ("store redemption reward payload", "body: JSON.stringify({ reward_code: rewardId })"),
-            ("store redemption use endpoint", "`/store/redemptions/${redemption.id}/use`"),
+            ("store redemption use endpoint", "`/store/redemptions/${redemptionId}/use`"),
             ("store redemption wallet label", "我的兌換券"),
             ("store empty wallet all reward types copy", "尚未同步兌換紀錄；完成食物分享取得點數後可兌換優惠券、折扣碼、特殊徽章或會員福利。"),
             ("store redemption wallet render", "storeRedemptionDisplayItems.map((product) =>"),
