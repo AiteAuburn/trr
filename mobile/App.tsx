@@ -4071,6 +4071,22 @@ export default function App() {
     return profile.sourceId;
   }
 
+  function settingsProfileChoiceKey(profile: { id: string }) {
+    return profile.id;
+  }
+
+  function settingsProfileChoiceAccessibilityLabel(profile: { accessibilityLabel: string }) {
+    return profile.accessibilityLabel;
+  }
+
+  function settingsProfileChoiceIsSelected(profile: { sourceId: string }, activeId: string) {
+    return settingsProfileChoiceTarget(profile) === activeId;
+  }
+
+  function settingsProfileChoiceLabel(profile: { label: string }) {
+    return profile.label;
+  }
+
   function pressSettingsProfileChoice(profile: (typeof profileChoiceDisplayItems)[number]) {
     selectSettingsProfileChoice(settingsProfileChoiceTarget(profile));
   }
@@ -4081,6 +4097,30 @@ export default function App() {
 
   function settingsModelChoiceTarget(model: { sourceId: string }) {
     return model.sourceId;
+  }
+
+  function settingsModelChoiceKey(model: { id: string }) {
+    return model.id;
+  }
+
+  function settingsModelChoiceAccessibilityLabel(model: { accessibilityLabel: string }) {
+    return model.accessibilityLabel;
+  }
+
+  function settingsModelChoiceIsAvailable(model: { available: boolean }) {
+    return model.available;
+  }
+
+  function settingsModelChoiceIsDisabled(model: { available: boolean }, isRequestInFlight: boolean) {
+    return !settingsModelChoiceIsAvailable(model) || isRequestInFlight;
+  }
+
+  function settingsModelChoiceIsSelected(model: { sourceId: string }, selectedId: string) {
+    return settingsModelChoiceTarget(model) === selectedId;
+  }
+
+  function settingsModelChoiceLabel(model: { label: string }) {
+    return model.label;
   }
 
   function pressSettingsLlmModelChoice(model: (typeof llmModelChoiceDisplayItems)[number]) {
@@ -11313,30 +11353,33 @@ export default function App() {
                   </Pressable>
                   <Text style={styles.label}>{auxiliaryDisplayLabels.careProfile}</Text>
                   <ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false}>
-                    {profileChoiceDisplayItems.map((profile) => (
-                      <Pressable
-                        key={profile.id}
-                        accessibilityLabel={profile.accessibilityLabel}
-                        accessibilityRole="button"
-                        accessibilityState={{ disabled: isAnyRequestInFlight, selected: profile.sourceId === activeProfileId }}
-                        style={[
-                          styles.chip,
-                          profile.sourceId === activeProfileId ? styles.chipSelected : null,
-                          isAnyRequestInFlight ? styles.chipDisabled : null
-                        ]}
-                        disabled={isAnyRequestInFlight}
-                        onPress={() => pressSettingsProfileChoice(profile)}
-                      >
-                        <Text
+                    {profileChoiceDisplayItems.map((profile) => {
+                      const profileSelected = settingsProfileChoiceIsSelected(profile, activeProfileId);
+                      return (
+                        <Pressable
+                          key={settingsProfileChoiceKey(profile)}
+                          accessibilityLabel={settingsProfileChoiceAccessibilityLabel(profile)}
+                          accessibilityRole="button"
+                          accessibilityState={{ disabled: isAnyRequestInFlight, selected: profileSelected }}
                           style={[
-                            styles.chipText,
-                            profile.sourceId === activeProfileId ? styles.chipTextSelected : null
+                            styles.chip,
+                            profileSelected ? styles.chipSelected : null,
+                            isAnyRequestInFlight ? styles.chipDisabled : null
                           ]}
+                          disabled={isAnyRequestInFlight}
+                          onPress={() => pressSettingsProfileChoice(profile)}
                         >
-                          {profile.label}
-                        </Text>
-                      </Pressable>
-                    ))}
+                          <Text
+                            style={[
+                              styles.chipText,
+                              profileSelected ? styles.chipTextSelected : null
+                            ]}
+                          >
+                            {settingsProfileChoiceLabel(profile)}
+                          </Text>
+                        </Pressable>
+                      );
+                    })}
                   </ScrollView>
                 </View>
                 <Text style={styles.evidence}>
@@ -11345,16 +11388,17 @@ export default function App() {
                 <Text style={styles.label}>{auxiliaryDisplayLabels.llmModel}</Text>
                 <ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false}>
                   {llmModelChoiceDisplayItems.map((model) => {
-                    const modelDisabled = !model.available || isAnyRequestInFlight;
+                    const modelDisabled = settingsModelChoiceIsDisabled(model, isAnyRequestInFlight);
+                    const modelSelected = settingsModelChoiceIsSelected(model, llmModelId);
                     return (
                       <Pressable
-                        key={model.id}
-                        accessibilityLabel={model.accessibilityLabel}
+                        key={settingsModelChoiceKey(model)}
+                        accessibilityLabel={settingsModelChoiceAccessibilityLabel(model)}
                         accessibilityRole="button"
-                        accessibilityState={{ disabled: modelDisabled, selected: model.sourceId === llmModelId }}
+                        accessibilityState={{ disabled: modelDisabled, selected: modelSelected }}
                         style={[
                           styles.chip,
-                          model.sourceId === llmModelId ? styles.chipSelected : null,
+                          modelSelected ? styles.chipSelected : null,
                           modelDisabled ? styles.chipDisabled : null
                         ]}
                         disabled={modelDisabled}
@@ -11363,11 +11407,11 @@ export default function App() {
                         <Text
                           style={[
                             styles.chipText,
-                            model.sourceId === llmModelId ? styles.chipTextSelected : null,
-                            !model.available ? styles.chipTextDisabled : null
+                            modelSelected ? styles.chipTextSelected : null,
+                            !settingsModelChoiceIsAvailable(model) ? styles.chipTextDisabled : null
                           ]}
                         >
-                          {model.label}
+                          {settingsModelChoiceLabel(model)}
                         </Text>
                       </Pressable>
                     );
@@ -11377,16 +11421,17 @@ export default function App() {
                 <Text style={styles.label}>{auxiliaryDisplayLabels.sttModel}</Text>
                 <ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false}>
                   {sttModelChoiceDisplayItems.map((model) => {
-                    const modelDisabled = !model.available || isAnyRequestInFlight;
+                    const modelDisabled = settingsModelChoiceIsDisabled(model, isAnyRequestInFlight);
+                    const modelSelected = settingsModelChoiceIsSelected(model, sttModelId);
                     return (
                       <Pressable
-                        key={model.id}
-                        accessibilityLabel={model.accessibilityLabel}
+                        key={settingsModelChoiceKey(model)}
+                        accessibilityLabel={settingsModelChoiceAccessibilityLabel(model)}
                         accessibilityRole="button"
-                        accessibilityState={{ disabled: modelDisabled, selected: model.sourceId === sttModelId }}
+                        accessibilityState={{ disabled: modelDisabled, selected: modelSelected }}
                         style={[
                           styles.chip,
-                          model.sourceId === sttModelId ? styles.chipSelected : null,
+                          modelSelected ? styles.chipSelected : null,
                           modelDisabled ? styles.chipDisabled : null
                         ]}
                         disabled={modelDisabled}
@@ -11395,11 +11440,11 @@ export default function App() {
                         <Text
                           style={[
                             styles.chipText,
-                            model.sourceId === sttModelId ? styles.chipTextSelected : null,
-                            !model.available ? styles.chipTextDisabled : null
+                            modelSelected ? styles.chipTextSelected : null,
+                            !settingsModelChoiceIsAvailable(model) ? styles.chipTextDisabled : null
                           ]}
                         >
-                          {model.label}
+                          {settingsModelChoiceLabel(model)}
                         </Text>
                       </Pressable>
                     );
