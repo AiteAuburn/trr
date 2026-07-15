@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1545 reuse recording Whisper model choice helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared `recordingWhisperModelPathTarget` and `recordingWhisperModelStatusLabel` helpers for local Whisper model selection.
+- Reused the helpers in `selectRecordingWhisperModelChoice` while keeping selected model path and status behavior unchanged.
+- Updated navigation verifier coverage for the shared recording Whisper model choice helpers and direct `item.sourceUri` / `item.label` handler regression guards.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1544 reuse auth provider preview target helper
 
 類型：mobile / refactor / verifier / docs

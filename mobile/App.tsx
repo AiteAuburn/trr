@@ -3587,9 +3587,17 @@ export default function App() {
     selectSettingsSttModelChoice(settingsModelChoiceTarget(model));
   }
 
+  function recordingWhisperModelPathTarget(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
+    return item.sourceUri;
+  }
+
+  function recordingWhisperModelStatusLabel(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
+    return item.label;
+  }
+
   function selectRecordingWhisperModelChoice(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
-    setWhisperModelPath(item.sourceUri);
-    setStatus(recordingModelSelectedStatusMessage(item.label));
+    setWhisperModelPath(recordingWhisperModelPathTarget(item));
+    setStatus(recordingModelSelectedStatusMessage(recordingWhisperModelStatusLabel(item)));
   }
 
   function pressRecordingWhisperModelChoice(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
