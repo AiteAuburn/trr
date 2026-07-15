@@ -7541,6 +7541,14 @@ def main() -> int:
             ("community preview boundary copy helper fields", "return communityPreviewBoundaryDisplay.copy;"),
             ("community preview boundary copy display text binding", "const communityPreviewBoundaryCopyDisplayText = communityPreviewBoundaryCopyText();"),
             ("community preview boundary copy helper binding", "{communityPreviewBoundaryCopyDisplayText}"),
+            ("community post accessibility helper", "function communityPostAccessibilityLabel()"),
+            ("community post accessibility helper fields", "return futurePreviewDisplayLabels.communityPostAccessibility;"),
+            ("community post accessibility display label binding", "const communityPostAccessibilityDisplayLabel = communityPostAccessibilityLabel();"),
+            ("community post accessibility helper binding", "accessibilityLabel={communityPostAccessibilityDisplayLabel}"),
+            ("community post button helper", "function communityPostButtonLabel()"),
+            ("community post button helper fields", "return futurePreviewDisplayLabels.communityPostButton;"),
+            ("community post button display label binding", "const communityPostButtonDisplayLabel = communityPostButtonLabel();"),
+            ("community post button helper binding", "{communityPostButtonDisplayLabel}"),
             ("community posting status handler", "function showCommunityPostingStatus()"),
             ("community privacy status handler", "function showCommunityPrivacyStatus()"),
             ("food community backend-aware intro copy", "backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。"),
@@ -7931,7 +7939,7 @@ def main() -> int:
             ("doctor report accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.doctorReportAccessibility}"),
             ("health permission accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.healthPermissionAccessibility}"),
             ("health meter accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.healthMeterAccessibility}"),
-            ("community post accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPostAccessibility}"),
+            ("community post accessibility binding", "accessibilityLabel={communityPostAccessibilityDisplayLabel}"),
             ("community privacy accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}"),
             ("community privacy dynamic button binding", "{rankingOptInButtonDisplayLabel}"),
             ("food community promoted title", '<Text style={styles.sectionTitle}>食物社群</Text>'),
@@ -9955,6 +9963,16 @@ def main() -> int:
             "community direct preview boundary copy binding",
             content,
             "<Text style={styles.previewModeBadge}>{communityPreviewBoundaryBadgeDisplayLabel}</Text>\n              <Text style={styles.evidence}>{communityPreviewBoundaryDisplay.copy}</Text>",
+        )
+        _assert_not_contains(
+            "community direct post accessibility binding",
+            content,
+            "accessibilityLabel={futurePreviewDisplayLabels.communityPostAccessibility}\n                accessibilityRole=\"button\"\n                style={styles.secondaryButton}\n                onPress={showCommunityPostingStatus}",
+        )
+        _assert_not_contains(
+            "community direct post button binding",
+            content,
+            "<Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.communityPostButton}</Text>",
         )
         _assert_not_contains(
             "ranking direct close accessibility binding",

@@ -1675,6 +1675,8 @@ export default function App() {
   const communityCloseAccessibilityDisplayLabel = communityCloseAccessibilityLabel();
   const communityPreviewBoundaryBadgeDisplayLabel = communityPreviewBoundaryBadgeLabel();
   const communityPreviewBoundaryCopyDisplayText = communityPreviewBoundaryCopyText();
+  const communityPostAccessibilityDisplayLabel = communityPostAccessibilityLabel();
+  const communityPostButtonDisplayLabel = communityPostButtonLabel();
   const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();
   const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();
   const storePreviewDisplay = storePreviewDisplayTexts(storeActionStatus);
@@ -4148,6 +4150,14 @@ export default function App() {
 
   function communityPreviewBoundaryCopyText() {
     return communityPreviewBoundaryDisplay.copy;
+  }
+
+  function communityPostAccessibilityLabel() {
+    return futurePreviewDisplayLabels.communityPostAccessibility;
+  }
+
+  function communityPostButtonLabel() {
+    return futurePreviewDisplayLabels.communityPostButton;
   }
 
   function rankingScreenTitleLabel() {
@@ -10087,12 +10097,12 @@ export default function App() {
                 <Text style={styles.secondaryButtonText}>{foodCommunityShareButtonDisplayLabel}</Text>
               </Pressable>
               <Pressable
-                accessibilityLabel={futurePreviewDisplayLabels.communityPostAccessibility}
+                accessibilityLabel={communityPostAccessibilityDisplayLabel}
                 accessibilityRole="button"
                 style={styles.secondaryButton}
                 onPress={showCommunityPostingStatus}
               >
-                <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.communityPostButton}</Text>
+                <Text style={styles.secondaryButtonText}>{communityPostButtonDisplayLabel}</Text>
               </Pressable>
               <Pressable
                 accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}
