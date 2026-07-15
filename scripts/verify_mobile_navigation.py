@@ -8176,6 +8176,11 @@ def main() -> int:
             redeem_store_block,
             "setStoreActionStatus(storeProductActionStatus(product));",
         )
+        _assert_contains(
+            "store redemption product title helper binding",
+            redeem_store_block,
+            "productTitle: storeProductRedeemTitle(product),",
+        )
         _assert_not_contains(
             "store redemption direct product id fail closed",
             redeem_store_block,
@@ -8190,6 +8195,11 @@ def main() -> int:
             "store redemption direct product action status",
             redeem_store_block,
             "setStoreActionStatus(product.actionStatus);",
+        )
+        _assert_not_contains(
+            "store redemption direct product title status",
+            redeem_store_block,
+            "productTitle: product.title,",
         )
         use_redemption_block = _match_block(
             content,
@@ -8391,6 +8401,8 @@ def main() -> int:
             ("store product action status helper fields", "return product.actionStatus;"),
             ("store product reward id helper", "function storeProductRewardId(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store product reward id helper fields", "return product.id;"),
+            ("store product redeem title helper", "function storeProductRedeemTitle(product: ReturnType<typeof storeProductDisplayItem>)"),
+            ("store product redeem title helper fields", "return product.title;"),
             ("store redemption use id helper", "function storeRedemptionUseId(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store redemption use id helper fields", "return redemption.id;"),
             ("store product status press handler", "function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>)"),

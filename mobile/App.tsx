@@ -4124,6 +4124,10 @@ export default function App() {
     return product.id;
   }
 
+  function storeProductRedeemTitle(product: ReturnType<typeof storeProductDisplayItem>) {
+    return product.title;
+  }
+
   function storeRedemptionUseId(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
     return redemption.id;
   }
@@ -5287,7 +5291,7 @@ export default function App() {
   async function redeemStoreProduct(product: ReturnType<typeof storeProductDisplayItem>) {
     const redeemStatus = storeRedeemStatusMessages({
       backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-      productTitle: product.title,
+      productTitle: storeProductRedeemTitle(product),
       fulfillmentCopy: "",
       pointsCost: 0
     });
@@ -5332,7 +5336,7 @@ export default function App() {
       setStoreActionStatus(
         storeRedeemStatusMessages({
           backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-          productTitle: product.title,
+          productTitle: storeProductRedeemTitle(product),
           fulfillmentCopy,
           pointsCost: redemption.points_cost
         }).success
