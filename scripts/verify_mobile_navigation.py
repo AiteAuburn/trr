@@ -1704,7 +1704,7 @@ def main() -> int:
             ("doctor share readiness highlight bullet row", "doctorShareReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("health integration readiness highlight bullet row", "healthIntegrationReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("community readiness highlight bullet row", "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("ranking readiness highlight bullet row", "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={item} />"),
+            ("ranking readiness highlight bullet row", "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />"),
             ("store checkout readiness highlight bullet row", "storeCheckoutReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("food photo empty result highlight bullet row", "foodPhotoEmptyResultChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("food photo readiness highlight bullet row", "foodPhotoReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
@@ -7706,6 +7706,9 @@ def main() -> int:
             ("ranking readiness checklist item key helper", "function rankingReadinessChecklistItemKey(item: string)"),
             ("ranking readiness checklist item key helper fields", "return item;"),
             ("ranking readiness checklist item key helper binding", "key={rankingReadinessChecklistItemKey(item)}"),
+            ("ranking readiness checklist item text helper", "function rankingReadinessChecklistItemText(item: string)"),
+            ("ranking readiness checklist item text helper fields", "return item;"),
+            ("ranking readiness checklist item text helper binding", "text={rankingReadinessChecklistItemText(item)}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9827,6 +9830,11 @@ def main() -> int:
             "ranking direct readiness checklist item key binding",
             content,
             "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />",
+        )
+        _assert_not_contains(
+            "ranking direct readiness checklist item text binding",
+            content,
+            "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={item} />",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
