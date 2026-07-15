@@ -9815,6 +9815,24 @@ def main() -> int:
             ("store product status handler", "function showStoreProductStatus(actionStatus: string)"),
             ("store product action status helper", "function storeProductActionStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store product action status helper fields", "return product.actionStatus;"),
+            ("store product card key helper", "function storeProductCardKey(product: ReturnType<typeof storeProductDisplayItem>)"),
+            ("store product card key helper fields", "return product.id;"),
+            ("store product card key helper binding", "key={storeProductCardKey(product)}"),
+            ("store product card icon helper", "function storeProductCardIcon(product: ReturnType<typeof storeProductDisplayItem>)"),
+            ("store product card icon helper fields", "return product.icon;"),
+            ("store product card icon helper binding", "{storeProductCardIcon(product)}"),
+            ("store product card title helper", "function storeProductCardTitle(product: ReturnType<typeof storeProductDisplayItem>)"),
+            ("store product card title helper fields", "return product.title;"),
+            ("store product card title helper binding", "{storeProductCardTitle(product)}"),
+            ("store product card badge helper", "function storeProductCardBadge(product: ReturnType<typeof storeProductDisplayItem>)"),
+            ("store product card badge helper fields", "return product.badge;"),
+            ("store product card badge helper binding", "storeProductCardBadge(product) ?"),
+            ("store product card description helper", "function storeProductCardDescription(product: ReturnType<typeof storeProductDisplayItem>)"),
+            ("store product card description helper fields", "return product.description;"),
+            ("store product card description helper binding", "{storeProductCardDescription(product)}"),
+            ("store product card points helper", "function storeProductCardPointsCost(product: ReturnType<typeof storeProductDisplayItem>)"),
+            ("store product card points helper fields", "return product.pointsCost;"),
+            ("store product card points helper binding", "{storeProductCardPointsCost(product)}"),
             ("store product reward id helper", "function storeProductRewardId(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store product reward id helper fields", "return product.id;"),
             ("store product redeem title helper", "function storeProductRedeemTitle(product: ReturnType<typeof storeProductDisplayItem>)"),
@@ -11572,6 +11590,21 @@ def main() -> int:
             content,
             "accessibilityLabel={product.actionAccessibilityLabel}\n                  accessibilityRole=\"button\"\n                  style={styles.roundActionButton}\n                  onPress={() => pressStoreProductStatus(product)}",
         )
+        store_product_card_render_block = _match_block(
+            content,
+            r"visibleStoreProducts\.length > 0 \? visibleStoreProducts\.map\(\(product\) => \(([\s\S]*?storeProductActionLabel\(product\)[\s\S]*?</Pressable>)",
+            "store product card render block",
+        )
+        for label, marker in (
+            ("direct store product card key binding", "key={product.id}"),
+            ("direct store product card icon binding", "{product.icon}"),
+            ("direct store product card title binding", "{product.title}"),
+            ("direct store product card badge conditional", "{product.badge ?"),
+            ("direct store product card badge text", "{product.badge}</Text>"),
+            ("direct store product card description binding", "{product.description}"),
+            ("direct store product card points binding", "{product.pointsCost}"),
+        ):
+            _assert_not_contains(label, store_product_card_render_block, marker)
         _assert_not_contains(
             "store redemption direct disabled binding",
             content,

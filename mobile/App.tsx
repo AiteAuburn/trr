@@ -5134,6 +5134,30 @@ export default function App() {
     return product.actionStatus;
   }
 
+  function storeProductCardKey(product: ReturnType<typeof storeProductDisplayItem>) {
+    return product.id;
+  }
+
+  function storeProductCardIcon(product: ReturnType<typeof storeProductDisplayItem>) {
+    return product.icon;
+  }
+
+  function storeProductCardTitle(product: ReturnType<typeof storeProductDisplayItem>) {
+    return product.title;
+  }
+
+  function storeProductCardBadge(product: ReturnType<typeof storeProductDisplayItem>) {
+    return product.badge;
+  }
+
+  function storeProductCardDescription(product: ReturnType<typeof storeProductDisplayItem>) {
+    return product.description;
+  }
+
+  function storeProductCardPointsCost(product: ReturnType<typeof storeProductDisplayItem>) {
+    return product.pointsCost;
+  }
+
   function storeProductRewardId(product: ReturnType<typeof storeProductDisplayItem>) {
     return product.id;
   }
@@ -12188,17 +12212,17 @@ export default function App() {
               ))}
             </View>
             {visibleStoreProducts.length > 0 ? visibleStoreProducts.map((product) => (
-              <View key={product.id} style={styles.productCard}>
+              <View key={storeProductCardKey(product)} style={styles.productCard}>
                 <View style={styles.productImage}>
-                  <Text style={styles.productImageText}>{product.icon}</Text>
+                  <Text style={styles.productImageText}>{storeProductCardIcon(product)}</Text>
                 </View>
                 <View style={styles.timelineContent}>
                   <View style={styles.sectionHeader}>
-                    <Text style={styles.recordContent}>{product.title}</Text>
-                    {product.badge ? <Text style={styles.productBadge}>{product.badge}</Text> : null}
+                    <Text style={styles.recordContent}>{storeProductCardTitle(product)}</Text>
+                    {storeProductCardBadge(product) ? <Text style={styles.productBadge}>{storeProductCardBadge(product)}</Text> : null}
                   </View>
-                  <Text style={styles.evidence}>{product.description}</Text>
-                  <Text style={styles.planPriceText}>{product.pointsCost}</Text>
+                  <Text style={styles.evidence}>{storeProductCardDescription(product)}</Text>
+                  <Text style={styles.planPriceText}>{storeProductCardPointsCost(product)}</Text>
                 </View>
                 <Pressable
                   accessibilityLabel={storeProductActionAccessibilityLabel(product)}
