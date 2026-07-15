@@ -3983,6 +3983,10 @@ export default function App() {
     return items[0]?.id ?? fallbackId;
   }
 
+  function foodCommunityDetailSelectedItemId(item: { id: string }) {
+    return item.id;
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -4674,7 +4678,7 @@ export default function App() {
       setFoodCommunityBackendItems((current) =>
         current.map((item) => (item.id === detailedItem.id ? detailedItem : item))
       );
-      setSelectedFoodCommunityItemId(detailedItem.id);
+      setSelectedFoodCommunityItemId(foodCommunityDetailSelectedItemId(detailedItem));
       setCommunityActionStatus(
         foodCommunityDetailStatusMessages({
           itemTitle: detailedItem.title,

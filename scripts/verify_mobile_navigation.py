@@ -7528,6 +7528,9 @@ def main() -> int:
             ("food community list default item helper binding", "const nextSelectedItemId = foodCommunityListDefaultItemId(nextItems, selectedFoodCommunityItemId);"),
             ("food community detail list refresh", "void loadFoodCommunityDetail(nextSelectedItemId);"),
             ("food community detail selected refresh", "void loadFoodCommunityDetail(boundedItemId);"),
+            ("food community detail selected item helper", "function foodCommunityDetailSelectedItemId(item: { id: string })"),
+            ("food community detail selected item helper fields", "return item.id;"),
+            ("food community detail selected item helper binding", "setSelectedFoodCommunityItemId(foodCommunityDetailSelectedItemId(detailedItem));"),
             ("food community detail status helper binding", "const detailStatus = foodCommunityDetailStatusMessages({"),
             ("food community detail in-flight guard", "foodCommunityDetailInFlightKeys.current.has(detailKey)"),
             ("food community detail in-flight status binding", "setCommunityActionStatus(detailStatus.inFlight);"),
@@ -9181,6 +9184,11 @@ def main() -> int:
             "food community direct list detail refresh",
             content,
             "void loadFoodCommunityDetail(nextItems[0].id);",
+        )
+        _assert_not_contains(
+            "food community direct detail selected item binding",
+            content,
+            "setSelectedFoodCommunityItemId(detailedItem.id);",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
