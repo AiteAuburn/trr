@@ -7576,6 +7576,12 @@ def main() -> int:
             ("community return future modules press helper fields", "return returnFromCommunityPreview;"),
             ("community return future modules press target binding", "const communityReturnFutureModulesPressTarget = communityReturnFutureModulesPressHandler();"),
             ("community return future modules press helper binding", "onPress={communityReturnFutureModulesPressTarget}"),
+            ("community screen title helper", "function communityScreenTitleLabel()"),
+            ("community screen title helper fields", 'return "食物社群";'),
+            ("community screen title helper binding", "{communityScreenTitleLabel()}"),
+            ("community screen subtitle helper", "function communityScreenSubtitleCopy()"),
+            ("community screen subtitle helper fields", 'return "同步真實食物升糖分享、點數與公開排行榜；貼文留言治理仍待正式開放。";'),
+            ("community screen subtitle helper binding", "{communityScreenSubtitleCopy()}"),
             ("community posting status handler", "function showCommunityPostingStatus()"),
             ("community privacy status handler", "function showCommunityPrivacyStatus()"),
             ("food community backend-aware intro copy", "backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。"),
@@ -7969,7 +7975,7 @@ def main() -> int:
             ("community post accessibility binding", "accessibilityLabel={communityPostAccessibilityDisplayLabel}"),
             ("community privacy accessibility binding", "accessibilityLabel={communityPrivacyAccessibilityDisplayLabel}"),
             ("community privacy dynamic button binding", "{rankingOptInButtonDisplayLabel}"),
-            ("food community promoted title", '<Text style={styles.sectionTitle}>食物社群</Text>'),
+            ("food community promoted title", "{communityScreenTitleLabel()}"),
             ("ranking promoted title", "{rankingScreenTitleLabel()}"),
             ("food community search accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}"),
             ("food community category accessibility binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
@@ -10035,6 +10041,16 @@ def main() -> int:
             "community direct return future modules press binding",
             content,
             "<Pressable\n              accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}\n              accessibilityRole=\"button\"\n              style={styles.secondaryButton}\n              onPress={returnFromCommunityPreview}\n            >\n              <Text style={styles.secondaryButtonText}>{communityReturnFutureModulesButtonDisplayLabel}</Text>",
+        )
+        _assert_not_contains(
+            "community direct screen title binding",
+            content,
+            "<Text style={styles.sectionTitle}>食物社群</Text>",
+        )
+        _assert_not_contains(
+            "community direct screen subtitle binding",
+            content,
+            "<Text style={styles.evidence}>同步真實食物升糖分享、點數與公開排行榜；貼文留言治理仍待正式開放。</Text>",
         )
         _assert_not_contains(
             "ranking direct close accessibility binding",

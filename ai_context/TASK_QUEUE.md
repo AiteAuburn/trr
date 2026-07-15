@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1656: Reuse community screen header copy helpers
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `communityScreenTitleLabel` and `communityScreenSubtitleCopy` helpers for the Community screen header copy.
+- Reused the helpers in Community rendering while keeping header copy, layout, return behavior, backend sync behavior, Food Community rendering, and Ranking screen behavior unchanged.
+- Updated navigation and visual-smoke verifier coverage for the shared Community header copy helpers and direct title/subtitle regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting remaining Community render bindings in small behavior-preserving slices.
+
 ### T1655: Reuse community return CTA press helper
 
 Status: done

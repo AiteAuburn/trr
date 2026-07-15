@@ -307,7 +307,7 @@ VISUAL_SMOKE_ROUTE_IDENTITIES = {
     "futureModuleDetail": "selectedFutureModuleDisplay.title",
     "doctorShare": "醫師 / 醫院合作",
     "healthIntegration": "HealthKit / Health Connect / 血糖機",
-    "community": "食物社群",
+    "community": "communityScreenTitleLabel()",
     "ranking": "rankingScreenTitleLabel()",
     "achievements": "成就榜",
     "yearReview": "年度回顧",

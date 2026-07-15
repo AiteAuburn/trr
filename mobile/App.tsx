@@ -4194,6 +4194,14 @@ export default function App() {
     return returnFromCommunityPreview;
   }
 
+  function communityScreenTitleLabel() {
+    return "食物社群";
+  }
+
+  function communityScreenSubtitleCopy() {
+    return "同步真實食物升糖分享、點數與公開排行榜；貼文留言治理仍待正式開放。";
+  }
+
   function rankingScreenTitleLabel() {
     return "社群排行";
   }
@@ -9865,8 +9873,8 @@ export default function App() {
           <View style={styles.pageSection}>
             <View style={styles.sectionHeader}>
               <View>
-                <Text style={styles.sectionTitle}>食物社群</Text>
-                <Text style={styles.evidence}>同步真實食物升糖分享、點數與公開排行榜；貼文留言治理仍待正式開放。</Text>
+                <Text style={styles.sectionTitle}>{communityScreenTitleLabel()}</Text>
+                <Text style={styles.evidence}>{communityScreenSubtitleCopy()}</Text>
               </View>
               <Pressable accessibilityLabel={communityCloseAccessibilityDisplayLabel} accessibilityRole="button" style={styles.closeButton} onPress={returnFromCommunityPreview}>
                 <Text style={styles.closeButtonText}>×</Text>
