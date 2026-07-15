@@ -3999,6 +3999,10 @@ export default function App() {
     return item.id;
   }
 
+  function foodCommunityShareFallbackFoodName(item: { title: string }) {
+    return item.title;
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -5205,7 +5209,7 @@ export default function App() {
     const beforeGlucose = Number(foodCommunityShareFields.beforeGlucose);
     const afterGlucose = Number(foodCommunityShareFields.afterGlucose);
     const foodName = boundDisplayText(
-      foodCommunityShareFields.foodName || selectedFoodCommunityItem.title,
+      foodCommunityShareFields.foodName || foodCommunityShareFallbackFoodName(selectedFoodCommunityItem),
       maxDisplayTextLength
     ).trim();
     if (!foodName) {

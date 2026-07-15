@@ -7543,6 +7543,9 @@ def main() -> int:
             ("food community detail loading status binding", "setCommunityActionStatus(detailStatus.loading);"),
             ("food community detail success status binding", "setCommunityActionStatus(\n        foodCommunityDetailStatusMessages({"),
             ("food community detail failure status binding", "setCommunityActionStatus(detailStatus.failure);"),
+            ("food community share fallback food name helper", "function foodCommunityShareFallbackFoodName(item: { title: string })"),
+            ("food community share fallback food name helper fields", "return item.title;"),
+            ("food community share fallback food name helper binding", "foodCommunityShareFields.foodName || foodCommunityShareFallbackFoodName(selectedFoodCommunityItem),"),
             ("food community category api type import", "type FoodCommunityApiCategoryRead,"),
             ("food community backend category state", "const [foodCommunityBackendCategories, setFoodCommunityBackendCategories]"),
             ("food community backend category options", "const foodCommunityCategoriesForDisplay = foodCommunityDisplay.categoriesForDisplay;"),
@@ -9213,6 +9216,11 @@ def main() -> int:
             "food community direct share selected item binding",
             content,
             "setSelectedFoodCommunityItemId(updatedFood.id);",
+        )
+        _assert_not_contains(
+            "food community direct share fallback food name binding",
+            content,
+            "foodCommunityShareFields.foodName || selectedFoodCommunityItem.title",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
