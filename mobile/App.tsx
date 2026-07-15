@@ -11172,11 +11172,11 @@ export default function App() {
               <Text style={styles.evidence}>{accountSecurityReadinessBoundaryDisplayText}</Text>
               <Text style={styles.evidence}>{tokenStorageStatusDisplayText}</Text>
               {productionAuthReadinessDisplayRows.map((item) => (
-                <View key={item.title} style={styles.highlightRow}>
-                  <Text style={styles.previewModeBadge}>{item.statusLabel}</Text>
+                <View key={previewStatusRowKey(item)} style={styles.highlightRow}>
+                  <Text style={styles.previewModeBadge}>{previewStatusRowStatusLabel(item)}</Text>
                   <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{item.title}</Text>
-                    <Text style={styles.evidence}>{item.copy}</Text>
+                    <Text style={styles.recordContent}>{previewStatusRowTitle(item)}</Text>
+                    <Text style={styles.evidence}>{previewStatusRowCopy(item)}</Text>
                   </View>
                 </View>
               ))}
