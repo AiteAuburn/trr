@@ -308,7 +308,7 @@ VISUAL_SMOKE_ROUTE_IDENTITIES = {
     "doctorShare": "醫師 / 醫院合作",
     "healthIntegration": "HealthKit / Health Connect / 血糖機",
     "community": "食物社群",
-    "ranking": "社群排行",
+    "ranking": "rankingScreenTitleLabel()",
     "achievements": "成就榜",
     "yearReview": "年度回顧",
     "store": "商城",

@@ -15,6 +15,37 @@
 
 ## 2026-07-15
 
+### T1610 reuse ranking screen title label helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `rankingScreenTitleLabel` helper for the Ranking screen section title.
+- Reused the helper in Ranking screen rendering while keeping the title copy, subtitle copy, close action, leaderboard sections, opt-in actions, backend sync behavior, and Community screen behavior unchanged.
+- Updated navigation and visual-smoke verifier coverage for the shared Ranking screen title helper and direct section-title regression guard.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting Ranking screen subtitle and preview display text in small behavior-preserving slices.
+
 ### T1609 reuse community privacy opt-in button display label
 
 類型：mobile / refactor / verifier / docs

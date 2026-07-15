@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1610: Reuse ranking screen title label helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `rankingScreenTitleLabel` helper for the Ranking screen section title.
+- Reused the helper in Ranking screen rendering while keeping the title copy, subtitle copy, close action, leaderboard sections, opt-in actions, backend sync behavior, and Community screen behavior unchanged.
+- Updated navigation and visual-smoke verifier coverage for the shared Ranking screen title helper and direct section-title regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Ranking screen subtitle and preview display text in small behavior-preserving slices.
+
 ### T1609: Reuse community privacy opt-in button display label
 
 Status: done

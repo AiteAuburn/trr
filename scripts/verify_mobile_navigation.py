@@ -7658,6 +7658,9 @@ def main() -> int:
             ("community public profile save button helper fields", 'return "儲存公開名稱";'),
             ("community public profile save button display label binding", "const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();"),
             ("community public profile save button text binding", "{communityPublicProfileSaveButtonDisplayLabel}"),
+            ("ranking screen title helper", "function rankingScreenTitleLabel()"),
+            ("ranking screen title helper fields", 'return "社群排行";'),
+            ("ranking screen title helper binding", "{rankingScreenTitleLabel()}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -7800,7 +7803,7 @@ def main() -> int:
             ("community privacy accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}"),
             ("community privacy dynamic button binding", "{rankingOptInButtonDisplayLabel}"),
             ("food community promoted title", '<Text style={styles.sectionTitle}>食物社群</Text>'),
-            ("ranking promoted title", '<Text style={styles.sectionTitle}>社群排行</Text>'),
+            ("ranking promoted title", "{rankingScreenTitleLabel()}"),
             ("food community search accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}"),
             ("food community category accessibility binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
             ("food community category selected state", "accessibilityState={{ selected: foodCommunityCategoryOptionSelected(category, foodCommunityCategory) }}"),
@@ -9699,6 +9702,11 @@ def main() -> int:
             "community direct privacy opt-in ternary button text binding",
             content,
             '{communityPublicSettings?.leaderboard_opt_in ? "關閉排行榜 opt-in" : "開啟排行榜 opt-in"}',
+        )
+        _assert_not_contains(
+            "ranking direct screen title binding",
+            content,
+            '<Text style={styles.sectionTitle}>社群排行</Text>',
         )
         _assert_not_contains(
             "food community item direct handler id binding",

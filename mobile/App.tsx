@@ -4125,6 +4125,10 @@ export default function App() {
     return "儲存公開名稱";
   }
 
+  function rankingScreenTitleLabel() {
+    return "社群排行";
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -9947,7 +9951,7 @@ export default function App() {
           <View style={styles.pageSection}>
             <View style={styles.sectionHeader}>
               <View>
-                <Text style={styles.sectionTitle}>社群排行</Text>
+                <Text style={styles.sectionTitle}>{rankingScreenTitleLabel()}</Text>
                 <Text style={styles.evidence}>同步分享次數、貢獻度與食物測試達人公開榜單；只顯示 opt-in 使用者的非敏感分數。</Text>
               </View>
               <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromRankingPreview}>
