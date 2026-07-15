@@ -3663,6 +3663,14 @@ export default function App() {
     return item;
   }
 
+  function recordFlowChecklistItemKey(item: string) {
+    return item;
+  }
+
+  function recordFlowChecklistItemText(item: string) {
+    return item;
+  }
+
   function subscriptionComparisonRowKey(row: (typeof subscriptionComparisonDisplayRows)[number]) {
     return row.feature;
   }
@@ -7621,7 +7629,7 @@ export default function App() {
                   STT：{selectedSttModel?.label ?? sttModelId} · {modelRuntimeLabel(selectedSttModel?.runtime)}
                 </Text>
                 {recordEntrySettingsChecklistItems.map((item) => (
-                  <HighlightBulletRow key={item} text={item} />
+                  <HighlightBulletRow key={recordFlowChecklistItemKey(item)} text={recordFlowChecklistItemText(item)} />
                 ))}
               </View>
               <View style={styles.voiceCaptureCard}>
@@ -8202,7 +8210,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.costBoundary}</Text>
               {transcriptReviewCostBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={recordFlowChecklistItemKey(item)} text={recordFlowChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.actionRow}>
