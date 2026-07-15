@@ -7664,6 +7664,9 @@ def main() -> int:
             ("ranking screen subtitle helper", "function rankingScreenSubtitleCopy()"),
             ("ranking screen subtitle helper fields", 'return "同步分享次數、貢獻度與食物測試達人公開榜單；只顯示 opt-in 使用者的非敏感分數。";'),
             ("ranking screen subtitle helper binding", "{rankingScreenSubtitleCopy()}"),
+            ("ranking local streak preview label helper", "function rankingLocalStreakPreviewLabel()"),
+            ("ranking local streak preview label helper fields", 'return "本機連續記錄預覽";'),
+            ("ranking local streak preview label helper binding", "{rankingLocalStreakPreviewLabel()}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9715,6 +9718,11 @@ def main() -> int:
             "ranking direct screen subtitle copy binding",
             content,
             '<Text style={styles.evidence}>同步分享次數、貢獻度與食物測試達人公開榜單；只顯示 opt-in 使用者的非敏感分數。</Text>',
+        )
+        _assert_not_contains(
+            "ranking direct local streak preview label binding",
+            content,
+            '<Text style={styles.evidence}>本機連續記錄預覽</Text>',
         )
         _assert_not_contains(
             "food community item direct handler id binding",

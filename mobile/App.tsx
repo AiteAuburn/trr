@@ -4133,6 +4133,10 @@ export default function App() {
     return "同步分享次數、貢獻度與食物測試達人公開榜單；只顯示 opt-in 使用者的非敏感分數。";
   }
 
+  function rankingLocalStreakPreviewLabel() {
+    return "本機連續記錄預覽";
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -9971,7 +9975,7 @@ export default function App() {
                 <Text style={styles.heroIconText}>榜</Text>
               </View>
               <View style={styles.timelineContent}>
-                <Text style={styles.evidence}>本機連續記錄預覽</Text>
+                <Text style={styles.evidence}>{rankingLocalStreakPreviewLabel()}</Text>
                 <Text style={styles.heroNumber}>{rankingStreakDisplayDays} 天</Text>
                 <Text style={styles.evidence}>{rankingLocalPreviewBoundaryDisplayText}</Text>
               </View>
