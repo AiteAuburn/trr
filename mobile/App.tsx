@@ -3153,8 +3153,12 @@ export default function App() {
     updatePreviewEditField("glucoseUnit", value);
   }
 
+  function previewEditOptionTarget(option: { value: string }) {
+    return option.value;
+  }
+
   function pressPreviewEditGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>) {
-    selectPreviewEditGlucoseUnit(option.value);
+    selectPreviewEditGlucoseUnit(previewEditOptionTarget(option));
   }
 
   function selectPreviewEditGlucoseTiming(value: string) {
@@ -3162,7 +3166,7 @@ export default function App() {
   }
 
   function pressPreviewEditGlucoseTimingOption(option: ReturnType<typeof valueLabelDisplayItem>) {
-    selectPreviewEditGlucoseTiming(option.value);
+    selectPreviewEditGlucoseTiming(previewEditOptionTarget(option));
   }
 
   function selectPreviewEditMealType(value: string) {
@@ -3170,7 +3174,7 @@ export default function App() {
   }
 
   function pressPreviewEditMealTypeOption(option: ReturnType<typeof valueLabelDisplayItem>) {
-    selectPreviewEditMealType(option.value);
+    selectPreviewEditMealType(previewEditOptionTarget(option));
   }
 
   function updatePreviewEditFoodItems(value: string) {
