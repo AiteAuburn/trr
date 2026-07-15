@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1668: Reuse doctor share boundary row fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `doctorShareBoundaryRowKey`, `doctorShareBoundaryRowLabel`, and `doctorShareBoundaryRowValue` helpers for Doctor Share boundary cards.
+- Reused the helpers in Doctor Share boundary card rendering while keeping boundary labels, values, preview copy, account boundary copy, Community rendering, and Ranking screen behavior unchanged.
+- Updated navigation verifier coverage for the shared Doctor Share boundary row helpers and direct row field regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting remaining future-module render bindings in small behavior-preserving slices.
+
 ### T1667: Reuse food community ranking row fields
 
 Status: done

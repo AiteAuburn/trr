@@ -7586,6 +7586,15 @@ def main() -> int:
             ("community return future modules press helper fields", "return returnFromCommunityPreview;"),
             ("community return future modules press target binding", "const communityReturnFutureModulesPressTarget = communityReturnFutureModulesPressHandler();"),
             ("community return future modules press helper binding", "onPress={communityReturnFutureModulesPressTarget}"),
+            ("doctor share boundary row key helper", "function doctorShareBoundaryRowKey(row: (typeof doctorShareBoundaryRows)[number])"),
+            ("doctor share boundary row key helper fields", "return row.label;"),
+            ("doctor share boundary row key helper binding", "key={doctorShareBoundaryRowKey(row)}"),
+            ("doctor share boundary row label helper", "function doctorShareBoundaryRowLabel(row: (typeof doctorShareBoundaryRows)[number])"),
+            ("doctor share boundary row label helper fields", "return row.label;"),
+            ("doctor share boundary row label helper binding", "{doctorShareBoundaryRowLabel(row)}"),
+            ("doctor share boundary row value helper", "function doctorShareBoundaryRowValue(row: (typeof doctorShareBoundaryRows)[number])"),
+            ("doctor share boundary row value helper fields", "return row.value;"),
+            ("doctor share boundary row value helper binding", "{doctorShareBoundaryRowValue(row)}"),
             ("community screen title helper", "function communityScreenTitleLabel()"),
             ("community screen title helper fields", 'return "食物社群";'),
             ("community screen title helper binding", "{communityScreenTitleLabel()}"),
@@ -10114,6 +10123,21 @@ def main() -> int:
             "ranking direct readiness checklist item text binding",
             content,
             "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={item} />",
+        )
+        _assert_not_contains(
+            "doctor share direct boundary row key binding",
+            content,
+            "doctorShareBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
+        )
+        _assert_not_contains(
+            "doctor share direct boundary row label binding",
+            content,
+            "doctorShareBoundaryRows.map((row) => (\n                <View key={doctorShareBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "doctor share direct boundary row value binding",
+            content,
+            "doctorShareBoundaryRows.map((row) => (\n                <View key={doctorShareBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{doctorShareBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
             "community direct close accessibility binding",

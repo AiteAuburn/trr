@@ -4299,6 +4299,18 @@ export default function App() {
     return returnFromCommunityPreview;
   }
 
+  function doctorShareBoundaryRowKey(row: (typeof doctorShareBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function doctorShareBoundaryRowLabel(row: (typeof doctorShareBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function doctorShareBoundaryRowValue(row: (typeof doctorShareBoundaryRows)[number]) {
+    return row.value;
+  }
+
   function communityScreenTitleLabel() {
     return "食物社群";
   }
@@ -9855,9 +9867,9 @@ export default function App() {
             </View>
             <View style={styles.reportBoundaryGrid}>
               {doctorShareBoundaryRows.map((row) => (
-                <View key={row.label} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.recordType}>{row.value}</Text>
+                <View key={doctorShareBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
+                  <Text style={styles.confidence}>{doctorShareBoundaryRowLabel(row)}</Text>
+                  <Text style={styles.recordType}>{doctorShareBoundaryRowValue(row)}</Text>
                 </View>
               ))}
             </View>
