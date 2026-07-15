@@ -4141,6 +4141,10 @@ export default function App() {
     return "榜";
   }
 
+  function rankingStreakDisplayLabel(days: number) {
+    return `${days} 天`;
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -9980,7 +9984,7 @@ export default function App() {
               </View>
               <View style={styles.timelineContent}>
                 <Text style={styles.evidence}>{rankingLocalStreakPreviewLabel()}</Text>
-                <Text style={styles.heroNumber}>{rankingStreakDisplayDays} 天</Text>
+                <Text style={styles.heroNumber}>{rankingStreakDisplayLabel(rankingStreakDisplayDays)}</Text>
                 <Text style={styles.evidence}>{rankingLocalPreviewBoundaryDisplayText}</Text>
               </View>
             </View>

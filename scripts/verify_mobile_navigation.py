@@ -7670,6 +7670,9 @@ def main() -> int:
             ("ranking hero icon label helper", "function rankingHeroIconLabel()"),
             ("ranking hero icon label helper fields", 'return "榜";'),
             ("ranking hero icon label helper binding", "{rankingHeroIconLabel()}"),
+            ("ranking streak display label helper", "function rankingStreakDisplayLabel(days: number)"),
+            ("ranking streak display label helper fields", "return `${days} 天`;"),
+            ("ranking streak display label helper binding", "{rankingStreakDisplayLabel(rankingStreakDisplayDays)}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9731,6 +9734,11 @@ def main() -> int:
             "ranking direct hero icon label binding",
             content,
             '<Text style={styles.heroIconText}>榜</Text>',
+        )
+        _assert_not_contains(
+            "ranking direct streak display label binding",
+            content,
+            '<Text style={styles.heroNumber}>{rankingStreakDisplayDays} 天</Text>',
         )
         _assert_not_contains(
             "food community item direct handler id binding",
