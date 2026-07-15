@@ -491,7 +491,7 @@ def _verify_food_community_category_contract(content: str, future_module_display
     _assert_contains("food community category sample response", backend_api_content, "sample_foods=sample_foods_by_category.get(code, [])")
     _assert_contains("food community mobile category count state", content, "foodCount: clampNumber(category.food_count ?? 0, 0, maxMobileCountValue)")
     _assert_contains("food community mobile category samples state", content, "sampleFoods: (category.sample_foods ?? [])")
-    _assert_contains("food community category summary render", content, "{selectedFoodCommunityCategoryDisplay.summary}")
+    _assert_contains("food community category summary render", content, "{foodCommunityCategorySummary(selectedFoodCommunityCategoryDisplay)}")
     _assert_contains(
         "food community detail newest eaten share ordering",
         backend_api_content,
@@ -7537,6 +7537,9 @@ def main() -> int:
             ("food community list item metric summary helper", "function foodCommunityListItemMetricSummary(item: { metricSummary: string })"),
             ("food community list item metric summary helper fields", "return item.metricSummary;"),
             ("food community list item metric summary helper binding", "{foodCommunityListItemMetricSummary(item)}"),
+            ("food community category summary helper", "function foodCommunityCategorySummary(category: { summary: string })"),
+            ("food community category summary helper fields", "return category.summary;"),
+            ("food community category summary helper binding", "{foodCommunityCategorySummary(selectedFoodCommunityCategoryDisplay)}"),
             ("food community detail list refresh", "void loadFoodCommunityDetail(nextSelectedItemId);"),
             ("food community detail selected refresh", "void loadFoodCommunityDetail(boundedItemId);"),
             ("food community detail selected item helper", "function foodCommunityDetailSelectedItemId(item: { id: string })"),
@@ -9307,6 +9310,11 @@ def main() -> int:
             "food community direct list item metric summary binding",
             content,
             "{item.metricSummary}",
+        )
+        _assert_not_contains(
+            "food community direct category summary binding",
+            content,
+            "{selectedFoodCommunityCategoryDisplay.summary}",
         )
         _assert_not_contains(
             "food community direct detail selected item binding",

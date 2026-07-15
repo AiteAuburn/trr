@@ -3991,6 +3991,10 @@ export default function App() {
     return item.metricSummary;
   }
 
+  function foodCommunityCategorySummary(category: { summary: string }) {
+    return category.summary;
+  }
+
   function foodCommunityDetailSelectedItemId(item: { id: string }) {
     return item.id;
   }
@@ -9593,7 +9597,7 @@ export default function App() {
               ))}
             </View>
             {selectedFoodCommunityCategoryDisplay ? (
-              <Text style={styles.evidence}>{selectedFoodCommunityCategoryDisplay.summary}</Text>
+              <Text style={styles.evidence}>{foodCommunityCategorySummary(selectedFoodCommunityCategoryDisplay)}</Text>
             ) : null}
             <View style={styles.openSection}>
               {visibleFoodCommunityItems.map((item) => (
