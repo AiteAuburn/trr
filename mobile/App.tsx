@@ -3563,6 +3563,14 @@ export default function App() {
     openSettingsRow(row);
   }
 
+  function settingsDisplayRowLabel(row: ReturnType<typeof settingsRowDisplayItem>) {
+    return row.label;
+  }
+
+  function settingsDisplayRowHelperText(row: ReturnType<typeof settingsRowDisplayItem>) {
+    return row.id === "quota" ? settingsQuotaHelperDisplayText : row.helper;
+  }
+
   function clearLocalSessionFromSettings() {
     const display = localClearDisplayMessages();
     clearMobileSessionState();
@@ -10600,12 +10608,8 @@ export default function App() {
                     <Text>{row.icon}</Text>
                   </View>
                   <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{row.label}</Text>
-                    {row.id === "quota" ? (
-                      <Text style={styles.evidence}>{settingsQuotaHelperDisplayText}</Text>
-                    ) : (
-                      <Text style={styles.evidence}>{row.helper}</Text>
-                    )}
+                    <Text style={styles.recordContent}>{settingsDisplayRowLabel(row)}</Text>
+                    <Text style={styles.evidence}>{settingsDisplayRowHelperText(row)}</Text>
                   </View>
                   <Text style={styles.settingsChevron}>›</Text>
                 </Pressable>

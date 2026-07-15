@@ -7334,6 +7334,36 @@ def main() -> int:
             "function pressSettingsRow(row: ReturnType<typeof settingsRowDisplayItem>)",
         )
         _assert_contains(
+            "settings row label helper",
+            content,
+            "function settingsDisplayRowLabel(row: ReturnType<typeof settingsRowDisplayItem>)",
+        )
+        _assert_contains(
+            "settings row label helper fields",
+            content,
+            "return row.label;",
+        )
+        _assert_contains(
+            "settings row label helper binding",
+            content,
+            "{settingsDisplayRowLabel(row)}",
+        )
+        _assert_contains(
+            "settings row helper text helper",
+            content,
+            "function settingsDisplayRowHelperText(row: ReturnType<typeof settingsRowDisplayItem>)",
+        )
+        _assert_contains(
+            "settings row helper text helper quota branch",
+            content,
+            'return row.id === "quota" ? settingsQuotaHelperDisplayText : row.helper;',
+        )
+        _assert_contains(
+            "settings row helper text helper binding",
+            content,
+            "{settingsDisplayRowHelperText(row)}",
+        )
+        _assert_contains(
             "settings row binding",
             content,
             "onPress={() => pressSettingsRow(row)}",
@@ -7393,6 +7423,21 @@ def main() -> int:
             "settings row direct destination binding",
             content,
             "onPress={() => openSettingsRow(row)}",
+        )
+        _assert_not_contains(
+            "settings row direct label binding",
+            content,
+            "<Text style={styles.recordContent}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "settings row direct quota helper condition",
+            content,
+            'row.id === "quota" ? (',
+        )
+        _assert_not_contains(
+            "settings row direct helper binding",
+            content,
+            "<Text style={styles.evidence}>{row.helper}</Text>",
         )
         _assert_contains(
             "settings tutorial row uses handler",

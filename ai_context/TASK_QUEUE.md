@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1685: Reuse settings display row text fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `settingsDisplayRowLabel` and `settingsDisplayRowHelperText` helpers for Settings row text rendering.
+- Reused the helpers in Settings row label/helper rendering while preserving the quota helper override, settings row navigation, account card behavior, and subpage routing unchanged.
+- Updated navigation verifier coverage for the shared Settings row text helpers and direct label/helper regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining direct display row bindings and extract only behavior-preserving helpers where the evidence still shows repeated inline field access.
+
 ### T1684: Reuse record detail info row fields
 
 Status: done
