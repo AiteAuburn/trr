@@ -3910,8 +3910,12 @@ export default function App() {
     setSelectedFoodCommunityItemId(firstMatch?.id ?? "");
   }
 
+  function foodCommunityCategoryTarget(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
+    return category.value;
+  }
+
   function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
-    selectFoodCommunityCategory(category.value);
+    selectFoodCommunityCategory(foodCommunityCategoryTarget(category));
   }
 
   function selectFoodCommunityItem(itemId: string) {
