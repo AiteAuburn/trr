@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1605: Reuse community public name preview label helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `communityPublicNamePreviewLabel` helper for the Community public-name preview evidence label.
+- Reused the helper in community profile rendering while keeping the label copy, public display-name value, boundary copy, input field, save action, backend sync behavior, and ranking section behavior unchanged.
+- Updated navigation verifier coverage for the shared Community public-name preview label helper and direct evidence-label regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Community public-profile display text and accessibility labels in small behavior-preserving slices.
+
 ### T1604: Reuse food community points store bridge copy helper
 
 Status: done

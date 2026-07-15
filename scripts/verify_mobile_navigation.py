@@ -7646,6 +7646,9 @@ def main() -> int:
             ("food community points store bridge copy helper", "function foodCommunityPointsStoreBridgeCopy()"),
             ("food community points store bridge copy helper fields", 'return "點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。";'),
             ("food community points store bridge copy helper binding", "{foodCommunityPointsStoreBridgeCopy()}"),
+            ("community public name preview label helper", "function communityPublicNamePreviewLabel()"),
+            ("community public name preview label helper fields", 'return "公開顯示名稱預覽";'),
+            ("community public name preview label helper binding", "{communityPublicNamePreviewLabel()}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
             ("food community share eaten time accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
@@ -9660,6 +9663,11 @@ def main() -> int:
             "food community direct points store bridge copy binding",
             content,
             "<Text style={styles.evidence}>點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。</Text>",
+        )
+        _assert_not_contains(
+            "community direct public name preview label binding",
+            content,
+            "<Text style={styles.evidence}>公開顯示名稱預覽</Text>",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
