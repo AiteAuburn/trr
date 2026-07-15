@@ -4039,6 +4039,10 @@ export default function App() {
     return item.minimumRise;
   }
 
+  function foodCommunityDetailMinimumRiseDisplayText(item: { minimumRise: number }) {
+    return `${foodCommunityDetailMinimumRise(item)} mg/dL`;
+  }
+
   function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> }) {
     return item.individualShareDisplayItems;
   }
@@ -9695,7 +9699,7 @@ export default function App() {
                   </View>
                   <View style={styles.reportBoundaryCard}>
                     <Text style={styles.confidence}>最低上升血糖</Text>
-                    <Text style={styles.recordType}>{foodCommunityDetailMinimumRise(selectedFoodCommunityItem)} mg/dL</Text>
+                    <Text style={styles.recordType}>{foodCommunityDetailMinimumRiseDisplayText(selectedFoodCommunityItem)}</Text>
                   </View>
                 </View>
                 <Text style={styles.label}>個別分享紀錄</Text>

@@ -7537,7 +7537,7 @@ def main() -> int:
             ("food community minimum rise detail label", "最低上升血糖"),
             ("food community average rise unit", "{foodCommunityDetailAverageRiseDisplayText(selectedFoodCommunityItem)}"),
             ("food community maximum rise unit", "{foodCommunityDetailMaximumRiseDisplayText(selectedFoodCommunityItem)}"),
-            ("food community minimum rise unit", "{foodCommunityDetailMinimumRise(selectedFoodCommunityItem)} mg/dL"),
+            ("food community minimum rise unit", "{foodCommunityDetailMinimumRiseDisplayText(selectedFoodCommunityItem)}"),
             ("food community individual share section label", "個別分享紀錄"),
             ("food community individual share render", "foodCommunityDetailIndividualShares(selectedFoodCommunityItem).map((share) =>"),
             ("food community individual share empty state", "尚未有可顯示的個別分享紀錄。"),
@@ -7587,7 +7587,9 @@ def main() -> int:
             ("food community detail maximum rise display helper binding", "{foodCommunityDetailMaximumRiseDisplayText(selectedFoodCommunityItem)}"),
             ("food community detail minimum rise helper", "function foodCommunityDetailMinimumRise(item: { minimumRise: number })"),
             ("food community detail minimum rise helper fields", "return item.minimumRise;"),
-            ("food community detail minimum rise helper binding", "{foodCommunityDetailMinimumRise(selectedFoodCommunityItem)} mg/dL"),
+            ("food community detail minimum rise display helper", "function foodCommunityDetailMinimumRiseDisplayText(item: { minimumRise: number })"),
+            ("food community detail minimum rise display helper fields", "return `${foodCommunityDetailMinimumRise(item)} mg/dL`;"),
+            ("food community detail minimum rise display helper binding", "{foodCommunityDetailMinimumRiseDisplayText(selectedFoodCommunityItem)}"),
             ("food community detail individual shares helper", "function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> })"),
             ("food community detail individual shares helper fields", "return item.individualShareDisplayItems;"),
             ("food community detail has individual shares helper", "function foodCommunityDetailHasIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> })"),
@@ -9524,6 +9526,11 @@ def main() -> int:
             "food community direct detail minimum rise binding",
             content,
             "{selectedFoodCommunityItem.minimumRise} mg/dL",
+        )
+        _assert_not_contains(
+            "food community direct detail minimum rise display binding",
+            content,
+            "{foodCommunityDetailMinimumRise(selectedFoodCommunityItem)} mg/dL",
         )
         _assert_not_contains(
             "food community direct detail individual shares binding",
