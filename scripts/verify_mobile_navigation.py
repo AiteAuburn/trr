@@ -7798,6 +7798,7 @@ def main() -> int:
             ("health meter accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.healthMeterAccessibility}"),
             ("community post accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPostAccessibility}"),
             ("community privacy accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}"),
+            ("community privacy dynamic button binding", "{rankingOptInButtonDisplayLabel}"),
             ("food community promoted title", '<Text style={styles.sectionTitle}>食物社群</Text>'),
             ("ranking promoted title", '<Text style={styles.sectionTitle}>社群排行</Text>'),
             ("food community search accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}"),
@@ -9693,6 +9694,11 @@ def main() -> int:
             "community direct public profile save button text binding",
             content,
             "<Text style={styles.secondaryButtonText}>儲存公開名稱</Text>",
+        )
+        _assert_not_contains(
+            "community direct privacy opt-in ternary button text binding",
+            content,
+            '{communityPublicSettings?.leaderboard_opt_in ? "關閉排行榜 opt-in" : "開啟排行榜 opt-in"}',
         )
         _assert_not_contains(
             "food community item direct handler id binding",

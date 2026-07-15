@@ -9923,9 +9923,7 @@ export default function App() {
                 style={styles.secondaryButton}
                 onPress={showCommunityPrivacyStatus}
               >
-                <Text style={styles.secondaryButtonText}>
-                  {communityPublicSettings?.leaderboard_opt_in ? "關閉排行榜 opt-in" : "開啟排行榜 opt-in"}
-                </Text>
+                <Text style={styles.secondaryButtonText}>{rankingOptInButtonDisplayLabel}</Text>
               </Pressable>
             </View>
             {communityActionStatus ? (

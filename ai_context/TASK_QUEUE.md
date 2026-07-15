@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1609: Reuse community privacy opt-in button display label
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused the prepared `rankingOptInButtonDisplayLabel` for the Community privacy / leaderboard opt-in action button text.
+- Removed the inline leaderboard opt-in ternary from Community action rendering while keeping the button copy, opt-in state source, accessibility label, press handler, Ranking screen button behavior, backend sync behavior, and readiness sections unchanged.
+- Updated navigation verifier coverage for the shared Community privacy opt-in button label binding and direct ternary regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Community action/status display text in small behavior-preserving slices.
+
 ### T1608: Reuse community public profile save button label helper
 
 Status: done
