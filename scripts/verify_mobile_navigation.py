@@ -1722,8 +1722,8 @@ def main() -> int:
             ("privacy readiness highlight bullet row", "privacyReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
             ("tutorial safety highlight bullet row", "tutorialSafetyChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
             ("detailed report notes highlight bullet row", "detailedReportNoteItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("subscription readiness highlight bullet row", "subscriptionReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("subscription management readiness highlight bullet row", "subscriptionManagementReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("subscription readiness highlight bullet row", "subscriptionReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={subscriptionChecklistItemKey(item)} text={subscriptionChecklistItemText(item)} />"),
+            ("subscription management readiness highlight bullet row", "subscriptionManagementReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={subscriptionChecklistItemKey(item)} text={subscriptionChecklistItemText(item)} />"),
             ("doctor share readiness highlight bullet row", "doctorShareReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("health integration readiness highlight bullet row", "healthIntegrationReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("community readiness highlight bullet row", "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={communityReadinessChecklistItemText(item)}"),
@@ -7456,6 +7456,12 @@ def main() -> int:
             ("settings checklist item text helper", "function settingsChecklistItemText(item: string)"),
             ("settings checklist item text helper fields", "return item;"),
             ("settings checklist item text binding", "text={settingsChecklistItemText(item)}"),
+            ("subscription checklist item key helper", "function subscriptionChecklistItemKey(item: string)"),
+            ("subscription checklist item key helper fields", "return item;"),
+            ("subscription checklist item key binding", "key={subscriptionChecklistItemKey(item)}"),
+            ("subscription checklist item text helper", "function subscriptionChecklistItemText(item: string)"),
+            ("subscription checklist item text helper fields", "return item;"),
+            ("subscription checklist item text binding", "text={subscriptionChecklistItemText(item)}"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(
@@ -7570,6 +7576,20 @@ def main() -> int:
             _assert_not_contains(
                 f"{list_name} direct checklist item binding",
                 settings_checklist_render_block,
+                "key={item} text={item}",
+            )
+        for list_name in (
+            "subscriptionReadinessChecklistItems",
+            "subscriptionManagementReadinessChecklistItems",
+        ):
+            subscription_checklist_render_block = _match_block(
+                content,
+                rf"{list_name}\.map\(\(item\) => \(([\s\S]*?<HighlightBulletRow[^\n]*/>\n\s*)\)\)",
+                f"{list_name} subscription checklist render block",
+            )
+            _assert_not_contains(
+                f"{list_name} direct checklist item binding",
+                subscription_checklist_render_block,
                 "key={item} text={item}",
             )
         for block_label, pattern in (

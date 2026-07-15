@@ -3623,6 +3623,14 @@ export default function App() {
     return item;
   }
 
+  function subscriptionChecklistItemKey(item: string) {
+    return item;
+  }
+
+  function subscriptionChecklistItemText(item: string) {
+    return item;
+  }
+
   function clearLocalSessionFromSettings() {
     const display = localClearDisplayMessages();
     clearMobileSessionState();
@@ -9717,7 +9725,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
               {subscriptionReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={subscriptionChecklistItemKey(item)} text={subscriptionChecklistItemText(item)} />
               ))}
               <Text style={styles.warningText}>{subscriptionCtaBoundaryDisplayText}</Text>
             </View>
@@ -9799,7 +9807,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
               {subscriptionManagementReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={subscriptionChecklistItemKey(item)} text={subscriptionChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.inlineInfoBlock}>
