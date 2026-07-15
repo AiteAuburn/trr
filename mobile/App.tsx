@@ -1680,6 +1680,7 @@ export default function App() {
   const communityPrivacyAccessibilityDisplayLabel = communityPrivacyAccessibilityLabel();
   const communityActionStatusDisplayLabel = communityActionStatusLabel();
   const communityActionStatusDisplayCopy = communityActionStatusText();
+  const communityReadinessSectionDisplayLabel = communityReadinessSectionLabel();
   const communityReturnFutureModulesAccessibilityDisplayLabel = communityReturnFutureModulesAccessibilityLabel();
   const communityReturnFutureModulesButtonDisplayLabel = communityReturnFutureModulesButtonLabel();
   const communityReturnFutureModulesPressTarget = communityReturnFutureModulesPressHandler();
@@ -4224,6 +4225,10 @@ export default function App() {
 
   function communityActionStatusVisible() {
     return Boolean(communityActionStatus);
+  }
+
+  function communityReadinessSectionLabel() {
+    return futurePreviewDisplayLabels.formalReadiness;
   }
 
   function communityReturnFutureModulesAccessibilityLabel() {
@@ -10166,7 +10171,7 @@ export default function App() {
               ))}
             </View>
             <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>
+              <Text style={styles.label}>{communityReadinessSectionDisplayLabel}</Text>
               {communityReadinessChecklistItems.map((item) => (
                 <HighlightBulletRow key={item} text={item} />
               ))}

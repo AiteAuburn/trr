@@ -7564,6 +7564,10 @@ def main() -> int:
             ("community action status visible helper", "function communityActionStatusVisible()"),
             ("community action status visible helper fields", "return Boolean(communityActionStatus);"),
             ("community action status visible helper binding", "{communityActionStatusVisible() ? ("),
+            ("community readiness section label helper", "function communityReadinessSectionLabel()"),
+            ("community readiness section label helper fields", "return futurePreviewDisplayLabels.formalReadiness;"),
+            ("community readiness section label display binding", "const communityReadinessSectionDisplayLabel = communityReadinessSectionLabel();"),
+            ("community readiness section label helper binding", "{communityReadinessSectionDisplayLabel}"),
             ("community return future modules accessibility helper", "function communityReturnFutureModulesAccessibilityLabel()"),
             ("community return future modules accessibility helper fields", "return futurePreviewDisplayLabels.returnFutureModulesAccessibility;"),
             ("community return future modules accessibility display label binding", "const communityReturnFutureModulesAccessibilityDisplayLabel = communityReturnFutureModulesAccessibilityLabel();"),
@@ -10068,6 +10072,11 @@ def main() -> int:
             "community direct action status visibility binding",
             content,
             "{communityActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>\n                <Text style={styles.evidence}>{communityActionStatusDisplayCopy}</Text>",
+        )
+        _assert_not_contains(
+            "community direct readiness section label binding",
+            content,
+            "<View style={styles.inlineInfoBlock}>\n              <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>\n              {communityReadinessChecklistItems.map((item) => (",
         )
         _assert_not_contains(
             "community direct return future modules accessibility binding",
