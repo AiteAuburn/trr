@@ -1690,6 +1690,7 @@ export default function App() {
   const rankingCloseAccessibilityDisplayLabel = rankingCloseAccessibilityLabel();
   const rankingPublicActionButtonDisplayLabel = rankingPublicActionButtonLabel();
   const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel();
+  const rankingPublicActionPressTarget = rankingPublicActionPressHandler();
   const rankingReturnFutureModulesButtonDisplayLabel = rankingReturnFutureModulesButtonLabel();
   const rankingReturnFutureModulesAccessibilityDisplayLabel = rankingReturnFutureModulesAccessibilityLabel();
   const foodPhotoStatusDisplay = foodPhotoStatusDisplayTexts(foodPhotoActionStatus);
@@ -4233,6 +4234,10 @@ export default function App() {
 
   function rankingPublicActionButtonLabel() {
     return futurePreviewDisplayLabels.rankingPublicButton;
+  }
+
+  function rankingPublicActionPressHandler() {
+    return showRankingPublicStatus;
   }
 
   function rankingOptInActionAccessibilityLabel(label: string) {
@@ -10139,7 +10144,7 @@ export default function App() {
                 accessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}
                 accessibilityRole="button"
                 style={styles.secondaryButton}
-                onPress={showRankingPublicStatus}
+                onPress={rankingPublicActionPressTarget}
               >
                 <Text style={styles.secondaryButtonText}>{rankingPublicActionButtonDisplayLabel}</Text>
               </Pressable>

@@ -7739,6 +7739,10 @@ def main() -> int:
             ("ranking public action button helper fields", "return futurePreviewDisplayLabels.rankingPublicButton;"),
             ("ranking public action button display label binding", "const rankingPublicActionButtonDisplayLabel = rankingPublicActionButtonLabel();"),
             ("ranking public action button helper binding", "{rankingPublicActionButtonDisplayLabel}"),
+            ("ranking public action press helper", "function rankingPublicActionPressHandler()"),
+            ("ranking public action press helper fields", "return showRankingPublicStatus;"),
+            ("ranking public action press target binding", "const rankingPublicActionPressTarget = rankingPublicActionPressHandler();"),
+            ("ranking public action press helper binding", "onPress={rankingPublicActionPressTarget}"),
             ("ranking opt-in action accessibility helper", "function rankingOptInActionAccessibilityLabel(label: string)"),
             ("ranking opt-in action accessibility helper fields", "return label;"),
             ("ranking opt-in action accessibility display label binding", "const rankingOptInAccessibilityDisplayLabel = rankingOptInActionAccessibilityLabel(communityActionDisplay.rankingOptInAccessibility);"),
@@ -7889,7 +7893,7 @@ def main() -> int:
             ("food community share status binding", "onPress={showFoodCommunityShareStatus}"),
             ("food community share accessibility binding", "accessibilityLabel={foodCommunityShareAccessibilityDisplayLabel}"),
             ("food community share button label binding", "{foodCommunityShareButtonDisplayLabel}"),
-            ("ranking public status binding", "onPress={showRankingPublicStatus}"),
+            ("ranking public status binding", "onPress={rankingPublicActionPressTarget}"),
             ("ranking opt-in status binding", "onPress={showRankingOptInStatus}"),
             ("ranking opt-in dynamic button label", "const rankingOptInButtonDisplayLabel = rankingOptInActionButtonLabel(communityActionDisplay.rankingOptInButton);"),
             ("ranking opt-in dynamic accessibility label", "const rankingOptInAccessibilityDisplayLabel = rankingOptInActionAccessibilityLabel(communityActionDisplay.rankingOptInAccessibility);"),
@@ -9941,6 +9945,11 @@ def main() -> int:
             "ranking direct return future modules button binding",
             content,
             "<Pressable\n              accessibilityLabel={rankingReturnFutureModulesAccessibilityDisplayLabel}\n              accessibilityRole=\"button\"\n              style={styles.secondaryButton}\n              onPress={returnFromRankingPreview}\n            >\n              <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.returnFutureModules}</Text>",
+        )
+        _assert_not_contains(
+            "ranking direct public action press binding",
+            content,
+            "<Pressable\n                accessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}\n                accessibilityRole=\"button\"\n                style={styles.secondaryButton}\n                onPress={showRankingPublicStatus}",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
