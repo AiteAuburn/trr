@@ -4512,6 +4512,18 @@ export default function App() {
     selectFoodCommunityCategory(foodCommunityCategoryTarget(category));
   }
 
+  function accountSecurityBoundaryRowKey(row: (typeof accountSecurityBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function accountSecurityBoundaryRowLabel(row: (typeof accountSecurityBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function accountSecurityBoundaryRowValue(row: (typeof accountSecurityBoundaryRows)[number]) {
+    return row.value;
+  }
+
   function selectFoodCommunityItem(itemId: string) {
     const boundedItemId = boundIdentifier(itemId);
     setSelectedFoodCommunityItemId(boundedItemId);
@@ -10849,9 +10861,9 @@ export default function App() {
             </View>
             <View style={styles.reportBoundaryGrid}>
               {accountSecurityBoundaryRows.map((row) => (
-                <View key={row.label} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.recordType}>{row.value}</Text>
+                <View key={accountSecurityBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
+                  <Text style={styles.confidence}>{accountSecurityBoundaryRowLabel(row)}</Text>
+                  <Text style={styles.recordType}>{accountSecurityBoundaryRowValue(row)}</Text>
                 </View>
               ))}
             </View>

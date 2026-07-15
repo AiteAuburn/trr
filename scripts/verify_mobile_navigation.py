@@ -7461,6 +7461,15 @@ def main() -> int:
             ("auth action status display text binding", "const authActionStatusDisplayText = authStatusDisplay.authAction;"),
             ("auth token storage status display text binding", "const tokenStorageStatusDisplayText = authStatusDisplay.tokenStorage;"),
             ("auth token storage render display binding", "<Text style={styles.evidence}>{tokenStorageStatusDisplayText}</Text>"),
+            ("account security boundary row key helper", "function accountSecurityBoundaryRowKey(row: (typeof accountSecurityBoundaryRows)[number])"),
+            ("account security boundary row key helper fields", "return row.label;"),
+            ("account security boundary row key helper binding", "key={accountSecurityBoundaryRowKey(row)}"),
+            ("account security boundary row label helper", "function accountSecurityBoundaryRowLabel(row: (typeof accountSecurityBoundaryRows)[number])"),
+            ("account security boundary row label helper fields", "return row.label;"),
+            ("account security boundary row label helper binding", "{accountSecurityBoundaryRowLabel(row)}"),
+            ("account security boundary row value helper", "function accountSecurityBoundaryRowValue(row: (typeof accountSecurityBoundaryRows)[number])"),
+            ("account security boundary row value helper fields", "return row.value;"),
+            ("account security boundary row value helper binding", "{accountSecurityBoundaryRowValue(row)}"),
             ("dev reset status display text binding", "const devResetStatusDisplayText = authStatusDisplay.devReset;"),
             ("native status display helper binding", "const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);"),
             ("native status display text binding", "const nativeStatusDisplayText = nativeStatusDisplay.native;"),
@@ -9657,6 +9666,21 @@ def main() -> int:
             "store search direct setter binding",
             content,
             "onChangeText={(value) => setStoreSearchText(boundStoreSearchText(value))}",
+        )
+        _assert_not_contains(
+            "account security direct boundary row key binding",
+            content,
+            "accountSecurityBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
+        )
+        _assert_not_contains(
+            "account security direct boundary row label binding",
+            content,
+            "accountSecurityBoundaryRows.map((row) => (\n                <View key={accountSecurityBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "account security direct boundary row value binding",
+            content,
+            "accountSecurityBoundaryRows.map((row) => (\n                <View key={accountSecurityBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{accountSecurityBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
             "food community search direct handler bound input",
