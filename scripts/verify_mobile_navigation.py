@@ -7727,6 +7727,9 @@ def main() -> int:
             ("community public name preview label helper", "function communityPublicNamePreviewLabel()"),
             ("community public name preview label helper fields", 'return "公開顯示名稱預覽";'),
             ("community public name preview label helper binding", "{communityPublicNamePreviewLabel()}"),
+            ("community hero icon label helper", "function communityHeroIconLabel()"),
+            ("community hero icon label helper fields", 'return "群";'),
+            ("community hero icon label helper binding", "{communityHeroIconLabel()}"),
             ("community public profile save accessibility helper", "function communityPublicProfileSaveAccessibilityLabel()"),
             ("community public profile save accessibility helper fields", 'return "儲存社群公開顯示名稱，不公開健康數值";'),
             ("community public profile save accessibility display label binding", "const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();"),
@@ -9890,6 +9893,11 @@ def main() -> int:
             "community direct public name preview label binding",
             content,
             "<Text style={styles.evidence}>公開顯示名稱預覽</Text>",
+        )
+        _assert_not_contains(
+            "community direct hero icon label binding",
+            content,
+            "<Text style={styles.heroIconText}>群</Text>",
         )
         _assert_not_contains(
             "community direct public display name accessibility binding",

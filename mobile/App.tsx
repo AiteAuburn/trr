@@ -4178,6 +4178,10 @@ export default function App() {
     return "公開顯示名稱預覽";
   }
 
+  function communityHeroIconLabel() {
+    return "群";
+  }
+
   function communityPublicProfileSaveAccessibilityLabel() {
     return "儲存社群公開顯示名稱，不公開健康數值";
   }
@@ -10125,7 +10129,7 @@ export default function App() {
             </View>
             <View style={styles.heroCardFeature}>
               <View style={styles.heroIconBubble}>
-                <Text style={styles.heroIconText}>群</Text>
+                <Text style={styles.heroIconText}>{communityHeroIconLabel()}</Text>
               </View>
               <View style={styles.timelineContent}>
                 <Text style={styles.evidence}>{communityPublicNamePreviewLabel()}</Text>

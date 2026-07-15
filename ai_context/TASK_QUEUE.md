@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1661: Reuse community hero icon label
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `communityHeroIconLabel` helper for the Community public profile hero icon label.
+- Reused the helper in Community hero rendering while keeping icon copy, public profile preview behavior, backend sync behavior, Food Community rendering, and Ranking screen behavior unchanged.
+- Updated navigation verifier coverage for the shared Community hero icon helper and direct hero icon regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting remaining Community render bindings in small behavior-preserving slices.
+
 ### T1660: Reuse food community share date-time labels
 
 Status: done
