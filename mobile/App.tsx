@@ -4051,6 +4051,10 @@ export default function App() {
     return `${foodCommunityDetailMinimumRise(item)} mg/dL`;
   }
 
+  function foodCommunityDetailIndividualShareSectionLabel() {
+    return "個別分享紀錄";
+  }
+
   function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> }) {
     return item.individualShareDisplayItems;
   }
@@ -9710,7 +9714,7 @@ export default function App() {
                     <Text style={styles.recordType}>{foodCommunityDetailMinimumRiseDisplayText(selectedFoodCommunityItem)}</Text>
                   </View>
                 </View>
-                <Text style={styles.label}>個別分享紀錄</Text>
+                <Text style={styles.label}>{foodCommunityDetailIndividualShareSectionLabel()}</Text>
                 {foodCommunityDetailHasIndividualShares(selectedFoodCommunityItem) ? (
                   foodCommunityDetailIndividualShares(selectedFoodCommunityItem).map((share) => (
                     <View key={foodCommunityDetailShareRowId(share)} style={styles.visionResultCard}>

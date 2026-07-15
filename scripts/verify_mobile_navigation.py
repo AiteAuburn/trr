@@ -7594,6 +7594,9 @@ def main() -> int:
             ("food community detail minimum rise display helper", "function foodCommunityDetailMinimumRiseDisplayText(item: { minimumRise: number })"),
             ("food community detail minimum rise display helper fields", "return `${foodCommunityDetailMinimumRise(item)} mg/dL`;"),
             ("food community detail minimum rise display helper binding", "{foodCommunityDetailMinimumRiseDisplayText(selectedFoodCommunityItem)}"),
+            ("food community detail individual share section label helper", "function foodCommunityDetailIndividualShareSectionLabel()"),
+            ("food community detail individual share section label helper fields", 'return "個別分享紀錄";'),
+            ("food community detail individual share section label helper binding", "{foodCommunityDetailIndividualShareSectionLabel()}"),
             ("food community detail individual shares helper", "function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> })"),
             ("food community detail individual shares helper fields", "return item.individualShareDisplayItems;"),
             ("food community detail has individual shares helper", "function foodCommunityDetailHasIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> })"),
@@ -9545,6 +9548,11 @@ def main() -> int:
             "food community direct detail minimum rise display binding",
             content,
             "{foodCommunityDetailMinimumRise(selectedFoodCommunityItem)} mg/dL",
+        )
+        _assert_not_contains(
+            "food community direct detail individual share section label binding",
+            content,
+            "<Text style={styles.label}>個別分享紀錄</Text>",
         )
         _assert_not_contains(
             "food community direct detail individual shares binding",
