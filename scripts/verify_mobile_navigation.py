@@ -5469,12 +5469,23 @@ def main() -> int:
             ("daily record transcript handler", "function openTodayTranscriptText()"),
             ("daily record transcript expanded status binding", "setStatus(todayTranscriptExpandedStatusMessage());"),
             ("daily record section renderer", "dailyRecordSectionItems.map"),
-            ("daily record detail row component binding", "item.detailRows.map((row) => (\n                            <DailyRecordDetailRow key={`${item.key}-${row.label}`} label={row.label} value={row.value} />"),
+            ("daily record detail row component binding", "item.detailRows.map((row) => (\n                            <DailyRecordDetailRow key={dailyRecordDetailRowKey(item, row)} label={dailyRecordDetailRowLabel(row)} value={dailyRecordDetailRowValue(row)} />"),
             ("daily record entry management handler", "function pressDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry target helper", "function dailyRecordEntryTarget(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry target helper fields", "return item.index;"),
             ("daily record entry type label helper", "function dailyRecordEntryTypeLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry type label helper fields", "return item.typeLabel;"),
+            ("daily record detail row key helper", "function dailyRecordDetailRowKey("),
+            ("daily record detail row key helper item type", "item: ReturnType<typeof dailyRecordEntryDisplayItem>,"),
+            ("daily record detail row key helper row type", 'row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number]'),
+            ("daily record detail row key helper fields", "return `${item.key}-${row.label}`;"),
+            ("daily record detail row key helper binding", "key={dailyRecordDetailRowKey(item, row)}"),
+            ("daily record detail row label helper", 'function dailyRecordDetailRowLabel(row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number])'),
+            ("daily record detail row label helper fields", "return row.label;"),
+            ("daily record detail row label helper binding", "label={dailyRecordDetailRowLabel(row)}"),
+            ("daily record detail row value helper", 'function dailyRecordDetailRowValue(row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number])'),
+            ("daily record detail row value helper fields", "return row.value;"),
+            ("daily record detail row value helper binding", "value={dailyRecordDetailRowValue(row)}"),
             ("daily record entry menu target helper binding", "const target = dailyRecordEntryTarget(item);"),
             ("daily record entry menu index target binding", "setDailyRecordMenuIndex((current) => (current === target ? null : target));"),
             ("daily record entry menu open status binding", "setStatus(dailyRecordEntryMenuOpenStatusMessage(dailyRecordEntryTypeLabel(item)));"),
@@ -9922,6 +9933,21 @@ def main() -> int:
             "year review direct health outcome row value binding",
             content,
             "yearlyHealthOutcomeRows.map((row) => (\n                <View key={yearlyHealthOutcomeRowKey(row)} style={styles.metricCard}>\n                  <Text style={styles.confidence}>{yearlyHealthOutcomeRowLabel(row)}</Text>\n                  <Text style={styles.metricValue}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "daily record direct detail row binding",
+            content,
+            "item.detailRows.map((row) => (\n                            <DailyRecordDetailRow key={`${item.key}-${row.label}`} label={row.label} value={row.value} />",
+        )
+        _assert_not_contains(
+            "daily record direct detail row label binding",
+            content,
+            "item.detailRows.map((row) => (\n                            <DailyRecordDetailRow key={dailyRecordDetailRowKey(item, row)} label={row.label} value={dailyRecordDetailRowValue(row)} />",
+        )
+        _assert_not_contains(
+            "daily record direct detail row value binding",
+            content,
+            "item.detailRows.map((row) => (\n                            <DailyRecordDetailRow key={dailyRecordDetailRowKey(item, row)} label={dailyRecordDetailRowLabel(row)} value={row.value} />",
         )
         _assert_not_contains(
             "food community search direct handler bound input",

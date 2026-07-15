@@ -3368,6 +3368,21 @@ export default function App() {
     return item.typeLabel;
   }
 
+  function dailyRecordDetailRowKey(
+    item: ReturnType<typeof dailyRecordEntryDisplayItem>,
+    row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number]
+  ) {
+    return `${item.key}-${row.label}`;
+  }
+
+  function dailyRecordDetailRowLabel(row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number]) {
+    return row.label;
+  }
+
+  function dailyRecordDetailRowValue(row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number]) {
+    return row.value;
+  }
+
   function openDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
     const target = dailyRecordEntryTarget(item);
     setDailyRecordMenuIndex((current) => (current === target ? null : target));
@@ -7863,7 +7878,7 @@ export default function App() {
                         </View>
                         <View style={styles.detailRows}>
                           {item.detailRows.map((row) => (
-                            <DailyRecordDetailRow key={`${item.key}-${row.label}`} label={row.label} value={row.value} />
+                            <DailyRecordDetailRow key={dailyRecordDetailRowKey(item, row)} label={dailyRecordDetailRowLabel(row)} value={dailyRecordDetailRowValue(row)} />
                           ))}
                         </View>
                         {dailyRecordMenuIndex === item.index ? (
