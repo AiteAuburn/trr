@@ -7749,6 +7749,10 @@ def main() -> int:
             ("ranking opt-in action button helper", "function rankingOptInActionButtonLabel(label: string)"),
             ("ranking opt-in action button helper fields", "return label;"),
             ("ranking opt-in action button display label binding", "const rankingOptInButtonDisplayLabel = rankingOptInActionButtonLabel(communityActionDisplay.rankingOptInButton);"),
+            ("ranking opt-in action press helper", "function rankingOptInActionPressHandler()"),
+            ("ranking opt-in action press helper fields", "return showRankingOptInStatus;"),
+            ("ranking opt-in action press target binding", "const rankingOptInActionPressTarget = rankingOptInActionPressHandler();"),
+            ("ranking opt-in action press helper binding", "onPress={rankingOptInActionPressTarget}"),
             ("ranking action status label helper", "function rankingActionStatusLabel()"),
             ("ranking action status label helper fields", "return futurePreviewDisplayLabels.rankingStatus;"),
             ("ranking action status label helper binding", "{rankingActionStatusLabel()}"),
@@ -7894,7 +7898,7 @@ def main() -> int:
             ("food community share accessibility binding", "accessibilityLabel={foodCommunityShareAccessibilityDisplayLabel}"),
             ("food community share button label binding", "{foodCommunityShareButtonDisplayLabel}"),
             ("ranking public status binding", "onPress={rankingPublicActionPressTarget}"),
-            ("ranking opt-in status binding", "onPress={showRankingOptInStatus}"),
+            ("ranking opt-in status binding", "onPress={rankingOptInActionPressTarget}"),
             ("ranking opt-in dynamic button label", "const rankingOptInButtonDisplayLabel = rankingOptInActionButtonLabel(communityActionDisplay.rankingOptInButton);"),
             ("ranking opt-in dynamic accessibility label", "const rankingOptInAccessibilityDisplayLabel = rankingOptInActionAccessibilityLabel(communityActionDisplay.rankingOptInAccessibility);"),
             ("doctor token accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.doctorTokenAccessibility}"),
@@ -9950,6 +9954,11 @@ def main() -> int:
             "ranking direct public action press binding",
             content,
             "<Pressable\n                accessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}\n                accessibilityRole=\"button\"\n                style={styles.secondaryButton}\n                onPress={showRankingPublicStatus}",
+        )
+        _assert_not_contains(
+            "ranking direct opt-in action press binding",
+            content,
+            "<Pressable\n                accessibilityLabel={rankingOptInAccessibilityDisplayLabel}\n                accessibilityRole=\"button\"\n                style={styles.secondaryButton}\n                onPress={showRankingOptInStatus}",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
