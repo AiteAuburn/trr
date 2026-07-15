@@ -1973,7 +1973,7 @@ def main() -> int:
             _assert_contains(label, manual_record_confirm_preview_block_content, marker)
         for label, marker in (
             ("analysis metric card render", "analysisMetricRows.map((row) => (\n                <MetricCard key={analysisMetricRowKey(row)} label={analysisMetricRowLabel(row)} value={analysisMetricRowValue(row)} />"),
-            ("detailed report metric card render", "detailedReportMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />"),
+            ("detailed report metric card render", "detailedReportMetricRows.map((row) => (\n                <MetricCard key={detailedReportMetricRowKey(row)} label={detailedReportMetricRowLabel(row)} value={detailedReportMetricRowValue(row)} />"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
@@ -6999,6 +6999,18 @@ def main() -> int:
             "const detailedReportMetricRows = buildDetailedReportMetricRows(detailedReportMetricInput);",
         )
         for label, marker in (
+            ("detailed report metric row key helper", "function detailedReportMetricRowKey(row: (typeof detailedReportMetricRows)[number])"),
+            ("detailed report metric row key helper fields", "return row.label;"),
+            ("detailed report metric row key helper binding", "key={detailedReportMetricRowKey(row)}"),
+            ("detailed report metric row label helper", "function detailedReportMetricRowLabel(row: (typeof detailedReportMetricRows)[number])"),
+            ("detailed report metric row label helper fields", "return row.label;"),
+            ("detailed report metric row label helper binding", "label={detailedReportMetricRowLabel(row)}"),
+            ("detailed report metric row value helper", "function detailedReportMetricRowValue(row: (typeof detailedReportMetricRows)[number])"),
+            ("detailed report metric row value helper fields", "return row.value;"),
+            ("detailed report metric row value helper binding", "value={detailedReportMetricRowValue(row)}"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
             ("detailed report boundary row key helper", "function detailedReportBoundaryRowKey(row: (typeof detailedReportBoundaryRows)[number])"),
             ("detailed report boundary row key helper fields", "return row.label;"),
             ("detailed report boundary row key helper binding", "key={detailedReportBoundaryRowKey(row)}"),
@@ -9830,6 +9842,11 @@ def main() -> int:
             "analysis direct metric row binding",
             content,
             "analysisMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />",
+        )
+        _assert_not_contains(
+            "detailed report direct metric row binding",
+            content,
+            "detailedReportMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />",
         )
         _assert_not_contains(
             "food community search direct handler bound input",

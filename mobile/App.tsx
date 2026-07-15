@@ -2363,6 +2363,18 @@ export default function App() {
     return row.value;
   }
 
+  function detailedReportMetricRowKey(row: (typeof detailedReportMetricRows)[number]) {
+    return row.label;
+  }
+
+  function detailedReportMetricRowLabel(row: (typeof detailedReportMetricRows)[number]) {
+    return row.label;
+  }
+
+  function detailedReportMetricRowValue(row: (typeof detailedReportMetricRows)[number]) {
+    return row.value;
+  }
+
   function updateAnalysisCustomStartInput(value: string) {
     setAnalysisCustomStart(boundDateInputText(value));
     clearSelectedAnalysisPoint();
@@ -9475,7 +9487,7 @@ export default function App() {
             </View>
             <View style={styles.metricGrid}>
               {detailedReportMetricRows.map((row) => (
-                <MetricCard key={row.label} label={row.label} value={row.value} />
+                <MetricCard key={detailedReportMetricRowKey(row)} label={detailedReportMetricRowLabel(row)} value={detailedReportMetricRowValue(row)} />
               ))}
             </View>
             {reportRecordCount === 0 ? (
