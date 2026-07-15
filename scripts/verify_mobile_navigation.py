@@ -7694,6 +7694,9 @@ def main() -> int:
             ("ranking leaderboard entry rank label helper", 'function rankingLeaderboardEntryRankLabel(entry: (typeof rankingLeaderboardSections)[number]["entries"][number])'),
             ("ranking leaderboard entry rank label helper fields", "return entry.rankLabel;"),
             ("ranking leaderboard entry rank label helper binding", "{rankingLeaderboardEntryRankLabel(entry)}"),
+            ("ranking leaderboard entry display name helper", 'function rankingLeaderboardEntryDisplayName(entry: (typeof rankingLeaderboardSections)[number]["entries"][number])'),
+            ("ranking leaderboard entry display name helper fields", "return entry.displayName;"),
+            ("ranking leaderboard entry display name helper binding", "{rankingLeaderboardEntryDisplayName(entry)}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9795,6 +9798,11 @@ def main() -> int:
             "ranking direct leaderboard entry rank label binding",
             content,
             "section.entries.map((entry) => (\n                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>\n                      <Text style={styles.recordType}>{entry.rankLabel}</Text>",
+        )
+        _assert_not_contains(
+            "ranking direct leaderboard entry display name binding",
+            content,
+            "section.entries.map((entry) => (\n                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>\n                      <Text style={styles.recordType}>{rankingLeaderboardEntryRankLabel(entry)}</Text>\n                      <View style={styles.timelineContent}>\n                        <Text style={styles.recordContent}>{entry.displayName}</Text>",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
