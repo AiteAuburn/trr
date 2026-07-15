@@ -7675,7 +7675,9 @@ def main() -> int:
             ("ranking hero icon label helper binding", "{rankingHeroIconLabel()}"),
             ("ranking streak display label helper", "function rankingStreakDisplayLabel(days: number)"),
             ("ranking streak display label helper fields", "return `${days} 天`;"),
-            ("ranking streak display label helper binding", "{rankingStreakDisplayLabel(rankingStreakDisplayDays)}"),
+            ("ranking streak display text helper", "function rankingStreakDisplayText()"),
+            ("ranking streak display text helper fields", "return rankingStreakDisplayLabel(rankingStreakDisplayDays);"),
+            ("ranking streak display text helper binding", "{rankingStreakDisplayText()}"),
             ("ranking boundary row key helper", "function rankingBoundaryRowKey(row: ReturnType<typeof rankingBoundaryDisplayRows>[number])"),
             ("ranking boundary row key helper fields", "return row.label;"),
             ("ranking boundary row key helper binding", "key={rankingBoundaryRowKey(row)}"),
@@ -9824,6 +9826,11 @@ def main() -> int:
             "ranking direct streak display label binding",
             content,
             '<Text style={styles.heroNumber}>{rankingStreakDisplayDays} 天</Text>',
+        )
+        _assert_not_contains(
+            "ranking direct streak display label helper argument binding",
+            content,
+            "<Text style={styles.evidence}>{rankingLocalStreakPreviewLabel()}</Text>\n                <Text style={styles.heroNumber}>{rankingStreakDisplayLabel(rankingStreakDisplayDays)}</Text>",
         )
         _assert_not_contains(
             "ranking direct local preview boundary copy binding",

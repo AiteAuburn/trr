@@ -4155,6 +4155,10 @@ export default function App() {
     return `${days} 天`;
   }
 
+  function rankingStreakDisplayText() {
+    return rankingStreakDisplayLabel(rankingStreakDisplayDays);
+  }
+
   function rankingBoundaryRowKey(row: ReturnType<typeof rankingBoundaryDisplayRows>[number]) {
     return row.label;
   }
@@ -10094,7 +10098,7 @@ export default function App() {
               </View>
               <View style={styles.timelineContent}>
                 <Text style={styles.evidence}>{rankingLocalStreakPreviewLabel()}</Text>
-                <Text style={styles.heroNumber}>{rankingStreakDisplayLabel(rankingStreakDisplayDays)}</Text>
+                <Text style={styles.heroNumber}>{rankingStreakDisplayText()}</Text>
                 <Text style={styles.evidence}>{rankingLocalPreviewBoundaryCopyText()}</Text>
               </View>
             </View>

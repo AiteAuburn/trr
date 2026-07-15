@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1641: Reuse ranking streak display text helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `rankingStreakDisplayText` helper for the Ranking hero streak number display.
+- Reused the helper in Ranking screen rendering while keeping streak calculation, day formatting, backend sync behavior, and other future preview screens unchanged.
+- Updated navigation verifier coverage for the shared Ranking streak display text helper and direct argument-binding regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting remaining Ranking action/handler bindings in small behavior-preserving slices.
+
 ### T1640: Reuse ranking local preview boundary copy helper
 
 Status: done
