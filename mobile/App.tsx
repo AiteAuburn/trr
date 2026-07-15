@@ -4108,6 +4108,26 @@ export default function App() {
     return screen.isLocked;
   }
 
+  function mvpFlowStepKey(step: (typeof mvpFlowSteps)[number]) {
+    return step.id;
+  }
+
+  function mvpFlowStepLabel(step: (typeof mvpFlowSteps)[number]) {
+    return step.label;
+  }
+
+  function mvpFlowStepIsActive(index: number, stepIndex: number) {
+    return index === stepIndex;
+  }
+
+  function mvpFlowStepIsDone(index: number, stepIndex: number) {
+    return index < stepIndex;
+  }
+
+  function mvpFlowStepIndicatorText(index: number, isDone: boolean) {
+    return isDone ? "✓" : String(index + 1);
+  }
+
   function pressPrimaryTab(screen: { id: AppScreen }) {
     openPrimaryTab(primaryTabTarget(screen));
   }
@@ -7899,10 +7919,10 @@ export default function App() {
         {showMvpFlowStepper ? (
           <View style={styles.flowStepperCard}>
             {mvpFlowSteps.map((step, index) => {
-              const isActive = index === mvpFlowStepIndex;
-              const isDone = index < mvpFlowStepIndex;
+              const isActive = mvpFlowStepIsActive(index, mvpFlowStepIndex);
+              const isDone = mvpFlowStepIsDone(index, mvpFlowStepIndex);
               return (
-                <View key={step.id} style={styles.flowStepItem}>
+                <View key={mvpFlowStepKey(step)} style={styles.flowStepItem}>
                   <View
                     style={[
                       styles.flowStepDot,
@@ -7916,11 +7936,11 @@ export default function App() {
                         isActive || isDone ? styles.flowStepDotTextActive : null
                       ]}
                     >
-                      {isDone ? "✓" : String(index + 1)}
+                      {mvpFlowStepIndicatorText(index, isDone)}
                     </Text>
                   </View>
                   <Text style={[styles.flowStepLabel, isActive ? styles.flowStepLabelActive : null]}>
-                    {step.label}
+                    {mvpFlowStepLabel(step)}
                   </Text>
                 </View>
               );

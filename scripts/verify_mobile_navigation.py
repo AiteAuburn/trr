@@ -8209,6 +8209,20 @@ def main() -> int:
             ("primary tab locked state helper", "function primaryTabIsLocked(screen: { isLocked: boolean })"),
             ("primary tab locked state helper fields", "return screen.isLocked;"),
             ("primary tab locked state helper binding", "const isPrimaryTabLocked = primaryTabIsLocked(screen);"),
+            ("MVP flow step key helper", "function mvpFlowStepKey(step: (typeof mvpFlowSteps)[number])"),
+            ("MVP flow step key helper fields", "return step.id;"),
+            ("MVP flow step key helper binding", "key={mvpFlowStepKey(step)}"),
+            ("MVP flow step label helper", "function mvpFlowStepLabel(step: (typeof mvpFlowSteps)[number])"),
+            ("MVP flow step label helper fields", "return step.label;"),
+            ("MVP flow step label helper binding", "{mvpFlowStepLabel(step)}"),
+            ("MVP flow step active helper", "function mvpFlowStepIsActive(index: number, stepIndex: number)"),
+            ("MVP flow step active helper fields", "return index === stepIndex;"),
+            ("MVP flow step active helper binding", "const isActive = mvpFlowStepIsActive(index, mvpFlowStepIndex);"),
+            ("MVP flow step done helper", "function mvpFlowStepIsDone(index: number, stepIndex: number)"),
+            ("MVP flow step done helper fields", "return index < stepIndex;"),
+            ("MVP flow step done helper binding", "const isDone = mvpFlowStepIsDone(index, mvpFlowStepIndex);"),
+            ("MVP flow step indicator helper", "function mvpFlowStepIndicatorText(index: number, isDone: boolean)"),
+            ("MVP flow step indicator helper binding", "{mvpFlowStepIndicatorText(index, isDone)}"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(
@@ -8229,6 +8243,19 @@ def main() -> int:
             ("direct primary tab locked binding", "screen.isLocked"),
         ):
             _assert_not_contains(label, primary_tab_render_block, marker)
+        mvp_flow_step_render_block = _match_block(
+            content,
+            r"mvpFlowSteps\.map\(\(step, index\) => \{([\s\S]*?mvpFlowStepLabel\(step\)[\s\S]*?</View>)",
+            "MVP flow step render block",
+        )
+        for label, marker in (
+            ("direct MVP flow step key binding", "key={step.id}"),
+            ("direct MVP flow step label binding", "{step.label}"),
+            ("direct MVP flow step active binding", "index === mvpFlowStepIndex"),
+            ("direct MVP flow step done binding", "index < mvpFlowStepIndex"),
+            ("direct MVP flow step indicator binding", 'isDone ? "✓" : String(index + 1)'),
+        ):
+            _assert_not_contains(label, mvp_flow_step_render_block, marker)
         _assert_not_contains(
             "primary tab direct destination binding",
             content,
