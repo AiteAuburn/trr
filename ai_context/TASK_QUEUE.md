@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1721: Reuse tutorial step fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared Tutorial step helpers for render key, icon, title, and description.
+- Reused the helpers in the Tutorial screen step cards while preserving tutorial copy, card layout, and first-version navigation behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the Tutorial step render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining first-version repeated render blocks in small behavior-preserving slices.
+
 ### T1720: Reuse achievement progress card fields
 
 Status: done

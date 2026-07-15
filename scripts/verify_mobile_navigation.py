@@ -7890,6 +7890,33 @@ def main() -> int:
             ("tutorial whisper release copy", "若已選擇本機 Whisper 模型，會先轉成文字並進入確認。"),
         ):
             _assert_contains(label, settings_screen_data_content, marker)
+        for label, marker in (
+            ("tutorial step key helper", "function tutorialStepKey(step: (typeof tutorialDisplaySteps)[number])"),
+            ("tutorial step key helper fields", "return step.title;"),
+            ("tutorial step key helper binding", "key={tutorialStepKey(step)}"),
+            ("tutorial step icon helper", "function tutorialStepIcon(step: (typeof tutorialDisplaySteps)[number])"),
+            ("tutorial step icon helper fields", "return step.icon;"),
+            ("tutorial step icon helper binding", "{tutorialStepIcon(step)}"),
+            ("tutorial step title helper", "function tutorialStepTitle(step: (typeof tutorialDisplaySteps)[number])"),
+            ("tutorial step title helper fields", "return step.title;"),
+            ("tutorial step title helper binding", "{tutorialStepTitle(step)}"),
+            ("tutorial step description helper", "function tutorialStepDescription(step: (typeof tutorialDisplaySteps)[number])"),
+            ("tutorial step description helper fields", "return step.description;"),
+            ("tutorial step description helper binding", "{tutorialStepDescription(step)}"),
+        ):
+            _assert_contains(label, content, marker)
+        tutorial_steps_render_block = _match_block(
+            content,
+            r"tutorialDisplaySteps\.map\(\(step\) => \(([\s\S]*?</View>\n\s*)\)\)",
+            "tutorial steps render block",
+        )
+        for label, marker in (
+            ("direct tutorial step key binding", "key={step.title}"),
+            ("direct tutorial step icon binding", "{step.icon}"),
+            ("direct tutorial step title binding", "{step.title}"),
+            ("direct tutorial step description binding", "{step.description}"),
+        ):
+            _assert_not_contains(label, tutorial_steps_render_block, marker)
         settings_display_rows_render_block = _match_block(
             content,
             r"settingsDisplayRows\.map\(\(row\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",

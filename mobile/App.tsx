@@ -2176,6 +2176,22 @@ export default function App() {
     openManualRecordWithStatus("tutorial", tutorialManualEntryStatusMessage());
   }
 
+  function tutorialStepKey(step: (typeof tutorialDisplaySteps)[number]) {
+    return step.title;
+  }
+
+  function tutorialStepIcon(step: (typeof tutorialDisplaySteps)[number]) {
+    return step.icon;
+  }
+
+  function tutorialStepTitle(step: (typeof tutorialDisplaySteps)[number]) {
+    return step.title;
+  }
+
+  function tutorialStepDescription(step: (typeof tutorialDisplaySteps)[number]) {
+    return step.description;
+  }
+
   function openTodayManualRecord() {
     openManualRecordWithStatus("today", todayManualEntryStatusMessage());
   }
@@ -11949,13 +11965,13 @@ export default function App() {
           <View style={styles.pageSection}>
             <Text style={styles.sectionTitle}>使用教學</Text>
             {tutorialDisplaySteps.map((step) => (
-              <View key={step.title} style={styles.timelineCard}>
+              <View key={tutorialStepKey(step)} style={styles.timelineCard}>
                 <View style={styles.iconCircle}>
-                  <Text>{step.icon}</Text>
+                  <Text>{tutorialStepIcon(step)}</Text>
                 </View>
                 <View style={styles.timelineContent}>
-                  <Text style={styles.recordType}>{step.title}</Text>
-                  <Text style={styles.evidence}>{step.description}</Text>
+                  <Text style={styles.recordType}>{tutorialStepTitle(step)}</Text>
+                  <Text style={styles.evidence}>{tutorialStepDescription(step)}</Text>
                 </View>
               </View>
             ))}
