@@ -4027,6 +4027,10 @@ export default function App() {
     return share.summary;
   }
 
+  function foodCommunityDetailShareRowNote(share: { note: string }) {
+    return share.note;
+  }
+
   function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
     return item.examples.length;
   }
@@ -9637,7 +9641,7 @@ export default function App() {
                     <View key={foodCommunityDetailShareRowId(share)} style={styles.visionResultCard}>
                       <View style={styles.timelineContent}>
                         <Text style={styles.recordContent}>{foodCommunityDetailShareRowSummary(share)}</Text>
-                        <Text style={styles.evidence}>{share.note}</Text>
+                        <Text style={styles.evidence}>{foodCommunityDetailShareRowNote(share)}</Text>
                       </View>
                     </View>
                   ))
