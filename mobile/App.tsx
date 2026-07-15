@@ -4003,6 +4003,10 @@ export default function App() {
     return item.shareCount;
   }
 
+  function foodCommunityDetailAverageRise(item: { averageRise: number }) {
+    return item.averageRise;
+  }
+
   function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
     return item.examples.length;
   }
@@ -9596,7 +9600,7 @@ export default function App() {
                   </View>
                   <View style={styles.reportBoundaryCard}>
                     <Text style={styles.confidence}>實際升糖參考值（平均）</Text>
-                    <Text style={styles.recordType}>{selectedFoodCommunityItem.averageRise} mg/dL</Text>
+                    <Text style={styles.recordType}>{foodCommunityDetailAverageRise(selectedFoodCommunityItem)} mg/dL</Text>
                   </View>
                   <View style={styles.reportBoundaryCard}>
                     <Text style={styles.confidence}>最高上升血糖</Text>
