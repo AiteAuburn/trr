@@ -4112,6 +4112,13 @@ export default function App() {
     return item.accessibilityLabel;
   }
 
+  function foodCommunityListItemSelected(
+    item: ReturnType<typeof foodCommunityItemDisplayItem>,
+    selectedItem: ReturnType<typeof foodCommunityItemDisplayItem> | null,
+  ) {
+    return selectedItem?.id === item.id;
+  }
+
   function pressFoodCommunityItem(item: ReturnType<typeof foodCommunityItemDisplayItem>) {
     selectFoodCommunityItem(foodCommunityItemTarget(item));
   }
@@ -9629,10 +9636,10 @@ export default function App() {
                   key={foodCommunityListItemKey(item)}
                   accessibilityLabel={foodCommunityListItemAccessibilityLabel(item)}
                   accessibilityRole="button"
-                  accessibilityState={{ selected: selectedFoodCommunityItem?.id === item.id }}
+                  accessibilityState={{ selected: foodCommunityListItemSelected(item, selectedFoodCommunityItem) }}
                   style={[
                     styles.recordCard,
-                    selectedFoodCommunityItem?.id === item.id ? styles.recordCardSelected : null
+                    foodCommunityListItemSelected(item, selectedFoodCommunityItem) ? styles.recordCardSelected : null
                   ]}
                   onPress={() => pressFoodCommunityItem(item)}
                 >

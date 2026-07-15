@@ -7705,6 +7705,10 @@ def main() -> int:
             ("food community list item accessibility label helper", "function foodCommunityListItemAccessibilityLabel(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
             ("food community list item accessibility label helper fields", "return item.accessibilityLabel;"),
             ("food community list item accessibility label helper binding", "accessibilityLabel={foodCommunityListItemAccessibilityLabel(item)}"),
+            ("food community list item selected helper", "function foodCommunityListItemSelected("),
+            ("food community list item selected helper fields", "return selectedItem?.id === item.id;"),
+            ("food community list item selected helper state binding", "accessibilityState={{ selected: foodCommunityListItemSelected(item, selectedFoodCommunityItem) }}"),
+            ("food community list item selected helper style binding", "foodCommunityListItemSelected(item, selectedFoodCommunityItem) ? styles.recordCardSelected : null"),
             ("food community share status handler", "function showFoodCommunityShareStatus()"),
             ("commerce search input value helper", "function commerceSearchInputValue(value: string)"),
             ("commerce search input value helper fields", "return boundStoreSearchText(value);"),
@@ -7739,7 +7743,7 @@ def main() -> int:
             ("food community category accessibility binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
             ("food community category selected state", "accessibilityState={{ selected: foodCommunityCategoryOptionSelected(category, foodCommunityCategory) }}"),
             ("food community item accessibility binding", "accessibilityLabel={foodCommunityListItemAccessibilityLabel(item)}"),
-            ("food community selected state", "accessibilityState={{ selected: selectedFoodCommunityItem?.id === item.id }}"),
+            ("food community selected state", "accessibilityState={{ selected: foodCommunityListItemSelected(item, selectedFoodCommunityItem) }}"),
             ("food community share fields", "foodCommunityShareFieldRows.map"),
             ("food community point rows", "foodCommunityPointRows.map"),
             ("food community ranking rows", "foodCommunityRankingRows.map"),
@@ -8525,6 +8529,10 @@ def main() -> int:
             ("food community list item accessibility label helper", "function foodCommunityListItemAccessibilityLabel(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
             ("food community list item accessibility label helper fields", "return item.accessibilityLabel;"),
             ("food community list item accessibility label helper binding", "accessibilityLabel={foodCommunityListItemAccessibilityLabel(item)}"),
+            ("food community list item selected helper", "function foodCommunityListItemSelected("),
+            ("food community list item selected helper fields", "return selectedItem?.id === item.id;"),
+            ("food community list item selected helper state binding", "accessibilityState={{ selected: foodCommunityListItemSelected(item, selectedFoodCommunityItem) }}"),
+            ("food community list item selected helper style binding", "foodCommunityListItemSelected(item, selectedFoodCommunityItem) ? styles.recordCardSelected : null"),
             ("store product status handler", "function showStoreProductStatus(actionStatus: string)"),
             ("store product action status helper", "function storeProductActionStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store product action status helper fields", "return product.actionStatus;"),
@@ -9396,6 +9404,16 @@ def main() -> int:
             "food community direct list item accessibility label binding",
             content,
             "key={foodCommunityListItemKey(item)}\n                  accessibilityLabel={item.accessibilityLabel}",
+        )
+        _assert_not_contains(
+            "food community direct list item selected state binding",
+            content,
+            "accessibilityState={{ selected: selectedFoodCommunityItem?.id === item.id }}",
+        )
+        _assert_not_contains(
+            "food community direct list item selected style binding",
+            content,
+            "selectedFoodCommunityItem?.id === item.id ? styles.recordCardSelected : null",
         )
         _assert_not_contains(
             "food community direct list item title binding",
