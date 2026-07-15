@@ -3620,6 +3620,14 @@ export default function App() {
     return boundNativeDebugInput(value);
   }
 
+  function downloadedWhisperModelInitialPath(models: ReturnType<typeof boundDownloadedModels>) {
+    return models[0]?.uri ?? "";
+  }
+
+  function downloadedWhisperModelCount(models: ReturnType<typeof boundDownloadedModels>) {
+    return models.length;
+  }
+
   function updateNativeModelUrlInput(value: string) {
     setModelUrl(nativeDebugInputValue(value));
   }
@@ -6101,11 +6109,12 @@ export default function App() {
       const nextModels = boundDownloadedModels(await listDownloadedModels());
       setDownloadedModels(nextModels);
       const whisperModels = nextModels.filter((model) => model.kind === "whisper" && model.exists);
-      if (!whisperModelPath.trim() && whisperModels[0]?.uri) {
-        setWhisperModelPath(boundNativeDebugInput(whisperModels[0].uri));
+      const initialWhisperModelPath = downloadedWhisperModelInitialPath(whisperModels);
+      if (!whisperModelPath.trim() && initialWhisperModelPath) {
+        setWhisperModelPath(nativeDebugInputValue(initialWhisperModelPath));
       }
       if (showStatus) {
-        setStatus(recordingModelRefreshStatusMessage(whisperModels.length));
+        setStatus(recordingModelRefreshStatusMessage(downloadedWhisperModelCount(whisperModels)));
       }
     } catch (error) {
       setNativeStatus(nativeDownloadedModelsFailureStatusMessage(error));
