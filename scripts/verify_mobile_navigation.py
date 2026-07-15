@@ -8064,7 +8064,32 @@ def main() -> int:
         _assert_contains(
             "store redemption reward id fail closed",
             redeem_store_block,
-            'if (!product.id) {\n      setStoreActionStatus(redeemStatus.invalidProduct);\n      return;\n    }',
+            'const rewardId = storeProductRewardId(product);\n    if (!rewardId) {\n      setStoreActionStatus(redeemStatus.invalidProduct);\n      return;\n    }',
+        )
+        _assert_contains(
+            "store redemption reward id payload helper binding",
+            redeem_store_block,
+            "body: JSON.stringify({ reward_code: rewardId })",
+        )
+        _assert_contains(
+            "store redemption action status helper binding",
+            redeem_store_block,
+            "setStoreActionStatus(storeProductActionStatus(product));",
+        )
+        _assert_not_contains(
+            "store redemption direct product id fail closed",
+            redeem_store_block,
+            "if (!product.id) {",
+        )
+        _assert_not_contains(
+            "store redemption direct product id payload",
+            redeem_store_block,
+            "body: JSON.stringify({ reward_code: product.id })",
+        )
+        _assert_not_contains(
+            "store redemption direct product action status",
+            redeem_store_block,
+            "setStoreActionStatus(product.actionStatus);",
         )
         use_redemption_block = _match_block(
             content,
@@ -8234,6 +8259,10 @@ def main() -> int:
             ("food community category target helper fields", "return category.value;"),
             ("food community category target helper binding", "selectFoodCommunityCategory(foodCommunityCategoryTarget(category));"),
             ("store product status handler", "function showStoreProductStatus(actionStatus: string)"),
+            ("store product action status helper", "function storeProductActionStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
+            ("store product action status helper fields", "return product.actionStatus;"),
+            ("store product reward id helper", "function storeProductRewardId(product: ReturnType<typeof storeProductDisplayItem>)"),
+            ("store product reward id helper fields", "return product.id;"),
             ("store product status press handler", "function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store redemption status press handler", "function pressStoreRedemptionStatus(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store catalog sync function", "async function loadStoreCatalogAndPoints()"),
@@ -8249,7 +8278,7 @@ def main() -> int:
             ("store redemption wallet helper binding", "const storeRedemptionDisplayItems = storeDisplay.redemptionDisplayItems;"),
             ("store redemption boundary rows helper binding", "const storeRedemptionBoundaryRows = storeDisplay.redemptionBoundaryRows;"),
             ("store redemption post endpoint", '"/store/redemptions"'),
-            ("store redemption reward payload", "body: JSON.stringify({ reward_code: product.id })"),
+            ("store redemption reward payload", "body: JSON.stringify({ reward_code: rewardId })"),
             ("store redemption use endpoint", "`/store/redemptions/${redemption.id}/use`"),
             ("store redemption wallet label", "我的兌換券"),
             ("store empty wallet all reward types copy", "尚未同步兌換紀錄；完成食物分享取得點數後可兌換優惠券、折扣碼、特殊徽章或會員福利。"),

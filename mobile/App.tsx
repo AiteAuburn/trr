@@ -4047,6 +4047,14 @@ export default function App() {
     setStoreActionStatus(actionStatus);
   }
 
+  function storeProductActionStatus(product: ReturnType<typeof storeProductDisplayItem>) {
+    return product.actionStatus;
+  }
+
+  function storeProductRewardId(product: ReturnType<typeof storeProductDisplayItem>) {
+    return product.id;
+  }
+
   function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>) {
     void redeemStoreProduct(product);
   }
@@ -5218,10 +5226,11 @@ export default function App() {
       return;
     }
     if (product.rewardStatus !== "redeemable") {
-      setStoreActionStatus(product.actionStatus);
+      setStoreActionStatus(storeProductActionStatus(product));
       return;
     }
-    if (!product.id) {
+    const rewardId = storeProductRewardId(product);
+    if (!rewardId) {
       setStoreActionStatus(redeemStatus.invalidProduct);
       return;
     }
@@ -5239,7 +5248,7 @@ export default function App() {
         {
           method: "POST",
           headers: protectedRequestHeaders(account.id, accessToken),
-          body: JSON.stringify({ reward_code: product.id })
+          body: JSON.stringify({ reward_code: rewardId })
         }
       );
       const fulfillmentCopy =

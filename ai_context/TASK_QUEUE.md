@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1542: Reuse store product redeem helpers
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `storeProductActionStatus` and `storeProductRewardId` helpers for store product redeem handling.
+- Reused the helpers in `redeemStoreProduct` while keeping redeemable checks, invalid-product fail-closed behavior, and reward payload behavior unchanged.
+- Updated navigation verifier coverage for the shared store product helpers and direct `product.actionStatus` / `product.id` redeem regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1541: Reuse settings profile choice target helper
 
 Status: done
