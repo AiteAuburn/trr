@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1547: Reuse commerce search input helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `commerceSearchInputValue` helper for Food Community and Store search input bounding.
+- Reused the helper in `updateFoodCommunitySearchInput` and `updateStoreSearchInput` while keeping existing search text bounds unchanged.
+- Updated navigation verifier coverage for the shared commerce search helper and direct `boundStoreSearchText(value)` setter regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1546: Reuse native debug input helper
 
 Status: done

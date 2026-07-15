@@ -3924,8 +3924,12 @@ export default function App() {
     void saveCommunityPublicSettings();
   }
 
+  function commerceSearchInputValue(value: string) {
+    return boundStoreSearchText(value);
+  }
+
   function updateFoodCommunitySearchInput(value: string) {
-    setFoodCommunitySearchText(boundStoreSearchText(value));
+    setFoodCommunitySearchText(commerceSearchInputValue(value));
   }
 
   function updateFoodCommunityFoodName(value: string) {
@@ -4044,7 +4048,7 @@ export default function App() {
   }
 
   function updateStoreSearchInput(value: string) {
-    setStoreSearchText(boundStoreSearchText(value));
+    setStoreSearchText(commerceSearchInputValue(value));
   }
 
   function selectStoreCategory(category: StoreCategory) {

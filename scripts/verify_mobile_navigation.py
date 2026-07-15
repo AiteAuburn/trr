@@ -7536,6 +7536,9 @@ def main() -> int:
             ("food community item target helper fields", "return item.id;"),
             ("food community item target helper binding", "selectFoodCommunityItem(foodCommunityItemTarget(item));"),
             ("food community share status handler", "function showFoodCommunityShareStatus()"),
+            ("commerce search input value helper", "function commerceSearchInputValue(value: string)"),
+            ("commerce search input value helper fields", "return boundStoreSearchText(value);"),
+            ("food community search input helper binding", "setFoodCommunitySearchText(commerceSearchInputValue(value));"),
             ("ranking public status handler", "function showRankingPublicStatus()"),
             ("ranking opt-in status handler", "function showRankingOptInStatus()"),
             ("doctor share token status binding", "onPress={showDoctorShareTokenStatus}"),
@@ -8278,6 +8281,7 @@ def main() -> int:
             ("achievement unlocked summary binding", "achievementBadgeDisplaySummary.unlockedCount"),
             ("achievement next remaining summary binding", "achievementBadgeDisplaySummary.nextRemaining"),
             ("store search input handler", "function updateStoreSearchInput(value: string)"),
+            ("store search input helper binding", "setStoreSearchText(commerceSearchInputValue(value));"),
             ("store category select handler", "function selectStoreCategory(category: StoreCategory)"),
             ("store category option press handler", "function pressStoreCategoryOption(category: ReturnType<typeof storeCategoryDisplayItem>)"),
             ("store category target helper", "function storeCategoryTarget(category: ReturnType<typeof storeCategoryDisplayItem>)"),
@@ -9065,6 +9069,16 @@ def main() -> int:
             "store search direct setter binding",
             content,
             "onChangeText={(value) => setStoreSearchText(boundStoreSearchText(value))}",
+        )
+        _assert_not_contains(
+            "food community search direct handler bound input",
+            content,
+            "setFoodCommunitySearchText(boundStoreSearchText(value));",
+        )
+        _assert_not_contains(
+            "store search direct handler bound input",
+            content,
+            "setStoreSearchText(boundStoreSearchText(value));",
         )
         _assert_not_contains(
             "store category direct selection binding",
