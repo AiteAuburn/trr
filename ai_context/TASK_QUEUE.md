@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1720: Reuse achievement progress card fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared Achievement progress-card helpers for key, accessibility label, unlocked state, progress ratio, container/status/fill styles, status text, and detail text.
+- Reused the helpers in Achievement category progress cards while preserving progress calculation, streak styling, completion text, and future/achievement preview scope unchanged.
+- Updated navigation verifier coverage, scoped direct-binding guards, and visual-smoke route markers for the Achievement progress card render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining future/community display bindings and larger extraction opportunities in small behavior-preserving slices.
+
 ### T1719: Reuse achievement unlocked card fields
 
 Status: done

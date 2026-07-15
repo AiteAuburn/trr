@@ -4914,6 +4914,46 @@ export default function App() {
     return `${displayItem.kindLabel} · ${achievementUnlockDisplayDate(displayItem.unlockedAt)}`;
   }
 
+  function achievementProgressCardKey(displayItem: (typeof achievementDisplayItems)[number]) {
+    return displayItem.id;
+  }
+
+  function achievementProgressCardAccessibilityLabel(displayItem: (typeof achievementDisplayItems)[number]) {
+    return displayItem.accessibilityLabel;
+  }
+
+  function achievementProgressCardIsUnlocked(displayItem: (typeof achievementDisplayItems)[number]) {
+    return displayItem.progress >= displayItem.target;
+  }
+
+  function achievementProgressCardRatio(displayItem: (typeof achievementDisplayItems)[number]) {
+    return Math.min(1, displayItem.progress / displayItem.target);
+  }
+
+  function achievementProgressCardStyle(displayItem: (typeof achievementDisplayItems)[number]) {
+    return [styles.achievementCard, achievementProgressCardIsUnlocked(displayItem) ? styles.achievementUnlocked : null];
+  }
+
+  function achievementProgressCardStatusStyle(displayItem: (typeof achievementDisplayItems)[number]) {
+    return achievementProgressCardIsUnlocked(displayItem) ? styles.recordType : styles.confidence;
+  }
+
+  function achievementProgressCardStatusText(displayItem: (typeof achievementDisplayItems)[number]) {
+    return achievementProgressCardIsUnlocked(displayItem) ? "完成" : displayItem.progressLabel;
+  }
+
+  function achievementProgressCardDetail(displayItem: (typeof achievementDisplayItems)[number]) {
+    return `${displayItem.kindLabel} · ${displayItem.description}`;
+  }
+
+  function achievementProgressCardFillStyle(displayItem: (typeof achievementDisplayItems)[number]) {
+    return [
+      styles.achievementProgressFill,
+      displayItem.kind === "streak" ? styles.achievementProgressFillStreak : null,
+      { width: `${Math.round(achievementProgressCardRatio(displayItem) * 100)}%` as const }
+    ];
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -12001,40 +12041,24 @@ export default function App() {
               <View key={section.key} style={styles.openSection}>
                 <Text style={styles.label}>{section.label}</Text>
                 {section.items.map((displayItem) => {
-                  const isUnlocked = displayItem.progress >= displayItem.target;
-                  const progressRatio = Math.min(1, displayItem.progress / displayItem.target);
                   return (
                     <View
-                      key={displayItem.id}
-                      accessibilityLabel={displayItem.accessibilityLabel}
-                      style={[styles.achievementCard, isUnlocked ? styles.achievementUnlocked : null]}
+                      key={achievementProgressCardKey(displayItem)}
+                      accessibilityLabel={achievementProgressCardAccessibilityLabel(displayItem)}
+                      style={achievementProgressCardStyle(displayItem)}
                     >
-                      <View
-                        style={[
-                          styles.achievementBadge,
-                          displayItem.kind === "streak" ? styles.achievementBadgeStreak : null,
-                          { backgroundColor: displayItem.badgeColor }
-                        ]}
-                      >
-                        <Text style={styles.achievementBadgeIcon}>{displayItem.icon}</Text>
-                        <Text style={styles.achievementBadgeLevel}>{displayItem.level}</Text>
+                      <View style={achievementUnlockedCardBadgeStyle(displayItem)}>
+                        <Text style={styles.achievementBadgeIcon}>{achievementUnlockedCardIcon(displayItem)}</Text>
+                        <Text style={styles.achievementBadgeLevel}>{achievementUnlockedCardLevel(displayItem)}</Text>
                       </View>
                       <View style={styles.timelineContent}>
                         <View style={styles.sectionHeader}>
-                          <Text style={styles.recordContent}>{displayItem.title}</Text>
-                          <Text style={isUnlocked ? styles.recordType : styles.confidence}>
-                            {isUnlocked ? "完成" : displayItem.progressLabel}
-                          </Text>
+                          <Text style={styles.recordContent}>{achievementUnlockedCardTitle(displayItem)}</Text>
+                          <Text style={achievementProgressCardStatusStyle(displayItem)}>{achievementProgressCardStatusText(displayItem)}</Text>
                         </View>
-                        <Text style={styles.evidence}>{displayItem.kindLabel} · {displayItem.description}</Text>
+                        <Text style={styles.evidence}>{achievementProgressCardDetail(displayItem)}</Text>
                         <View style={styles.achievementProgressTrack}>
-                          <View
-                            style={[
-                              styles.achievementProgressFill,
-                              displayItem.kind === "streak" ? styles.achievementProgressFillStreak : null,
-                              { width: `${Math.round(progressRatio * 100)}%` }
-                            ]}
-                          />
+                          <View style={achievementProgressCardFillStyle(displayItem)} />
                         </View>
                       </View>
                     </View>

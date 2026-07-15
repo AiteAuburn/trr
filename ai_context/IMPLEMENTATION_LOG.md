@@ -15,6 +15,37 @@
 
 ## 2026-07-15
 
+### T1720 reuse achievement progress card fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared Achievement progress-card helpers for key, accessibility label, unlocked state, progress ratio, container/status/fill styles, status text, and detail text.
+- Reused the helpers in Achievement category progress cards while preserving progress calculation, streak styling, completion text, and future/achievement preview scope unchanged.
+- Updated navigation verifier coverage, scoped direct-binding guards, and visual-smoke route markers for the Achievement progress card render block.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining future/community display bindings and larger extraction opportunities in small behavior-preserving slices.
+
 ### T1719 reuse achievement unlocked card fields
 
 類型：mobile / refactor / verifier / docs
