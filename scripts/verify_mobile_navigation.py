@@ -8442,6 +8442,8 @@ def main() -> int:
             ("store redemption use title helper fields", "return redemption.title;"),
             ("store redemption use status label helper", "function storeRedemptionUseStatusLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store redemption use status label helper fields", "return redemption.statusLabel;"),
+            ("store redemption action disabled helper", "function storeRedemptionActionDisabled(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
+            ("store redemption action disabled helper fields", "return !redemption.isUsable;"),
             ("store product status press handler", "function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store redemption status press handler", "function pressStoreRedemptionStatus(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store catalog sync function", "async function loadStoreCatalogAndPoints()"),
@@ -8463,7 +8465,9 @@ def main() -> int:
             ("store empty wallet all reward types copy", "尚未同步兌換紀錄；完成食物分享取得點數後可兌換優惠券、折扣碼、特殊徽章或會員福利。"),
             ("store redemption wallet render", "storeRedemptionDisplayItems.map((product) =>"),
             ("store redemption action binding", "onPress={() => pressStoreRedemptionStatus(product)}"),
-            ("store redemption disabled state", "accessibilityState={{ disabled: !product.isUsable }}"),
+            ("store redemption disabled helper accessibility state", "accessibilityState={{ disabled: storeRedemptionActionDisabled(product) }}"),
+            ("store redemption disabled helper style", "storeRedemptionActionDisabled(product) ? styles.buttonDisabled : null"),
+            ("store redemption disabled helper prop", "disabled={storeRedemptionActionDisabled(product)}"),
             ("store redemption boundary rows", "storeRedemptionBoundaryRows.map"),
             ("store redeem status helper binding", "const redeemStatus = storeRedeemStatusMessages({"),
             ("store redeem visual-smoke status binding", "setStoreActionStatus(redeemStatus.visualSmoke);"),
@@ -9301,6 +9305,11 @@ def main() -> int:
             "store product direct action label binding",
             content,
             '{product.rewardStatus === "redeemable" ? "兌" : auxiliaryDisplayLabels.productOpenArrow}',
+        )
+        _assert_not_contains(
+            "store redemption direct disabled binding",
+            content,
+            "!product.isUsable",
         )
         _assert_not_contains(
             "future module direct destination binding",

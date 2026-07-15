@@ -4156,6 +4156,10 @@ export default function App() {
     return redemption.statusLabel;
   }
 
+  function storeRedemptionActionDisabled(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
+    return !redemption.isUsable;
+  }
+
   function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>) {
     void redeemStoreProduct(product);
   }
@@ -11156,12 +11160,12 @@ export default function App() {
                     <Pressable
                       accessibilityLabel={product.actionAccessibilityLabel}
                       accessibilityRole="button"
-                      accessibilityState={{ disabled: !product.isUsable }}
+                      accessibilityState={{ disabled: storeRedemptionActionDisabled(product) }}
                       style={[
                         styles.roundActionButton,
-                        !product.isUsable ? styles.buttonDisabled : null
+                        storeRedemptionActionDisabled(product) ? styles.buttonDisabled : null
                       ]}
-                      disabled={!product.isUsable}
+                      disabled={storeRedemptionActionDisabled(product)}
                       onPress={() => pressStoreRedemptionStatus(product)}
                     >
                       <Text style={styles.secondaryButtonText}>{product.actionLabel}</Text>
