@@ -4003,6 +4003,10 @@ export default function App() {
     return item.title;
   }
 
+  function foodCommunityShareCategory(item: { category: FoodCommunityCategory }) {
+    return item.category;
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -5264,7 +5268,7 @@ export default function App() {
           headers: protectedRequestHeaders(account.id, accessToken),
           body: JSON.stringify({
             food_name: foodName,
-            category: apiFoodCategoryFromMobile(selectedFoodCommunityItem.category),
+            category: apiFoodCategoryFromMobile(foodCommunityShareCategory(selectedFoodCommunityItem)),
             eaten_at: eatenAt,
             before_glucose: beforeGlucose,
             after_glucose: afterGlucose,

@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1559: Reuse food community share category helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `foodCommunityShareCategory` helper for Food Community share API payload category mapping.
+- Reused the helper when composing the share POST body while keeping mobile-to-API category mapping and share creation behavior unchanged.
+- Updated navigation verifier coverage for the shared Food Community share category helper and direct `selectedFoodCommunityItem.category` payload regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting route-specific action handlers or screen renderer state in small slices.
+
 ### T1558: Reuse store redemption use status payload helpers
 
 Status: done
