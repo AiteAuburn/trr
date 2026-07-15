@@ -7726,6 +7726,9 @@ def main() -> int:
             ("ranking action status label helper", "function rankingActionStatusLabel()"),
             ("ranking action status label helper fields", "return futurePreviewDisplayLabels.rankingStatus;"),
             ("ranking action status label helper binding", "{rankingActionStatusLabel()}"),
+            ("ranking action status text helper", "function rankingActionStatusText()"),
+            ("ranking action status text helper fields", "return rankingActionStatusDisplayText;"),
+            ("ranking action status text helper binding", "{rankingActionStatusText()}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9858,6 +9861,11 @@ def main() -> int:
             "ranking direct action status label binding",
             content,
             "{rankingActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{futurePreviewDisplayLabels.rankingStatus}</Text>",
+        )
+        _assert_not_contains(
+            "ranking direct action status text binding",
+            content,
+            "{rankingActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingActionStatusLabel()}</Text>\n                <Text style={styles.evidence}>{rankingActionStatusDisplayText}</Text>",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
