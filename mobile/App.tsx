@@ -3631,6 +3631,14 @@ export default function App() {
     return item;
   }
 
+  function futureReadinessChecklistItemKey(item: string) {
+    return item;
+  }
+
+  function futureReadinessChecklistItemText(item: string) {
+    return item;
+  }
+
   function clearLocalSessionFromSettings() {
     const display = localClearDisplayMessages();
     clearMobileSessionState();
@@ -10119,7 +10127,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>
               {doctorShareReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={futureReadinessChecklistItemKey(item)} text={futureReadinessChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.inlineInfoBlock}>
@@ -10187,7 +10195,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>
               {healthIntegrationReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={futureReadinessChecklistItemKey(item)} text={futureReadinessChecklistItemText(item)} />
               ))}
             </View>
             <View style={styles.inlineInfoBlock}>

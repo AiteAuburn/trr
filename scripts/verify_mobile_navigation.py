@@ -1724,8 +1724,8 @@ def main() -> int:
             ("detailed report notes highlight bullet row", "detailedReportNoteItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
             ("subscription readiness highlight bullet row", "subscriptionReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={subscriptionChecklistItemKey(item)} text={subscriptionChecklistItemText(item)} />"),
             ("subscription management readiness highlight bullet row", "subscriptionManagementReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={subscriptionChecklistItemKey(item)} text={subscriptionChecklistItemText(item)} />"),
-            ("doctor share readiness highlight bullet row", "doctorShareReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
-            ("health integration readiness highlight bullet row", "healthIntegrationReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
+            ("doctor share readiness highlight bullet row", "doctorShareReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={futureReadinessChecklistItemKey(item)} text={futureReadinessChecklistItemText(item)} />"),
+            ("health integration readiness highlight bullet row", "healthIntegrationReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={futureReadinessChecklistItemKey(item)} text={futureReadinessChecklistItemText(item)} />"),
             ("community readiness highlight bullet row", "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={communityReadinessChecklistItemText(item)}"),
             ("ranking readiness highlight bullet row", "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />"),
             ("store checkout readiness highlight bullet row", "storeCheckoutReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />"),
@@ -7462,6 +7462,12 @@ def main() -> int:
             ("subscription checklist item text helper", "function subscriptionChecklistItemText(item: string)"),
             ("subscription checklist item text helper fields", "return item;"),
             ("subscription checklist item text binding", "text={subscriptionChecklistItemText(item)}"),
+            ("future readiness checklist item key helper", "function futureReadinessChecklistItemKey(item: string)"),
+            ("future readiness checklist item key helper fields", "return item;"),
+            ("future readiness checklist item key binding", "key={futureReadinessChecklistItemKey(item)}"),
+            ("future readiness checklist item text helper", "function futureReadinessChecklistItemText(item: string)"),
+            ("future readiness checklist item text helper fields", "return item;"),
+            ("future readiness checklist item text binding", "text={futureReadinessChecklistItemText(item)}"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(
@@ -7590,6 +7596,20 @@ def main() -> int:
             _assert_not_contains(
                 f"{list_name} direct checklist item binding",
                 subscription_checklist_render_block,
+                "key={item} text={item}",
+            )
+        for list_name in (
+            "doctorShareReadinessChecklistItems",
+            "healthIntegrationReadinessChecklistItems",
+        ):
+            future_checklist_render_block = _match_block(
+                content,
+                rf"{list_name}\.map\(\(item\) => \(([\s\S]*?<HighlightBulletRow[^\n]*/>\n\s*)\)\)",
+                f"{list_name} future checklist render block",
+            )
+            _assert_not_contains(
+                f"{list_name} direct checklist item binding",
+                future_checklist_render_block,
                 "key={item} text={item}",
             )
         for block_label, pattern in (

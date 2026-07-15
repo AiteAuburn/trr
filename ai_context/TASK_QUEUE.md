@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1695: Reuse future readiness checklist item fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `futureReadinessChecklistItemKey` and `futureReadinessChecklistItemText` helpers for future-module readiness checklist rendering.
+- Reused the helpers in Doctor Share and Health Integration readiness checklist rows while preserving existing text, order, layout, and non-interactive behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the Doctor Share and Health Integration readiness checklist render blocks.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining store and food-photo readiness checklist rows for behavior-preserving display helpers.
+
 ### T1694: Reuse subscription checklist item fields
 
 Status: done
