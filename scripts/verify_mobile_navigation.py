@@ -7407,7 +7407,11 @@ def main() -> int:
             ("food community search input handler", "function updateFoodCommunitySearchInput(value: string)"),
             ("food community category select handler", "function selectFoodCommunityCategory(category: FoodCommunityCategory)"),
             ("food community category press handler", "function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
+            ("food community item select handler", "function selectFoodCommunityItem(itemId: string)"),
             ("food community item press handler", "function pressFoodCommunityItem(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
+            ("food community item target helper", "function foodCommunityItemTarget(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
+            ("food community item target helper fields", "return item.id;"),
+            ("food community item target helper binding", "selectFoodCommunityItem(foodCommunityItemTarget(item));"),
             ("food community share status handler", "function showFoodCommunityShareStatus()"),
             ("ranking public status handler", "function showRankingPublicStatus()"),
             ("ranking opt-in status handler", "function showRankingOptInStatus()"),
@@ -8889,6 +8893,11 @@ def main() -> int:
             "food community category direct handler value binding",
             content,
             "selectFoodCommunityCategory(category.value);",
+        )
+        _assert_not_contains(
+            "food community item direct handler id binding",
+            content,
+            "selectFoodCommunityItem(item.id);",
         )
         _assert_not_contains(
             "store product direct status binding",

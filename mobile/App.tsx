@@ -3926,8 +3926,12 @@ export default function App() {
     }
   }
 
+  function foodCommunityItemTarget(item: ReturnType<typeof foodCommunityItemDisplayItem>) {
+    return item.id;
+  }
+
   function pressFoodCommunityItem(item: ReturnType<typeof foodCommunityItemDisplayItem>) {
-    selectFoodCommunityItem(item.id);
+    selectFoodCommunityItem(foodCommunityItemTarget(item));
   }
 
   function showFoodCommunityShareStatus() {
