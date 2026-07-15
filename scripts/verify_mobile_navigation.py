@@ -7549,6 +7549,10 @@ def main() -> int:
             ("community post button helper fields", "return futurePreviewDisplayLabels.communityPostButton;"),
             ("community post button display label binding", "const communityPostButtonDisplayLabel = communityPostButtonLabel();"),
             ("community post button helper binding", "{communityPostButtonDisplayLabel}"),
+            ("community privacy accessibility helper", "function communityPrivacyAccessibilityLabel()"),
+            ("community privacy accessibility helper fields", "return futurePreviewDisplayLabels.communityPrivacyAccessibility;"),
+            ("community privacy accessibility display label binding", "const communityPrivacyAccessibilityDisplayLabel = communityPrivacyAccessibilityLabel();"),
+            ("community privacy accessibility helper binding", "accessibilityLabel={communityPrivacyAccessibilityDisplayLabel}"),
             ("community posting status handler", "function showCommunityPostingStatus()"),
             ("community privacy status handler", "function showCommunityPrivacyStatus()"),
             ("food community backend-aware intro copy", "backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。"),
@@ -7940,7 +7944,7 @@ def main() -> int:
             ("health permission accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.healthPermissionAccessibility}"),
             ("health meter accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.healthMeterAccessibility}"),
             ("community post accessibility binding", "accessibilityLabel={communityPostAccessibilityDisplayLabel}"),
-            ("community privacy accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}"),
+            ("community privacy accessibility binding", "accessibilityLabel={communityPrivacyAccessibilityDisplayLabel}"),
             ("community privacy dynamic button binding", "{rankingOptInButtonDisplayLabel}"),
             ("food community promoted title", '<Text style={styles.sectionTitle}>食物社群</Text>'),
             ("ranking promoted title", "{rankingScreenTitleLabel()}"),
@@ -9973,6 +9977,11 @@ def main() -> int:
             "community direct post button binding",
             content,
             "<Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.communityPostButton}</Text>",
+        )
+        _assert_not_contains(
+            "community direct privacy accessibility binding",
+            content,
+            "accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}\n                accessibilityRole=\"button\"\n                style={styles.secondaryButton}\n                onPress={showCommunityPrivacyStatus}",
         )
         _assert_not_contains(
             "ranking direct close accessibility binding",

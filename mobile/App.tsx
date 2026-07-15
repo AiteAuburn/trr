@@ -1677,6 +1677,7 @@ export default function App() {
   const communityPreviewBoundaryCopyDisplayText = communityPreviewBoundaryCopyText();
   const communityPostAccessibilityDisplayLabel = communityPostAccessibilityLabel();
   const communityPostButtonDisplayLabel = communityPostButtonLabel();
+  const communityPrivacyAccessibilityDisplayLabel = communityPrivacyAccessibilityLabel();
   const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();
   const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();
   const storePreviewDisplay = storePreviewDisplayTexts(storeActionStatus);
@@ -4158,6 +4159,10 @@ export default function App() {
 
   function communityPostButtonLabel() {
     return futurePreviewDisplayLabels.communityPostButton;
+  }
+
+  function communityPrivacyAccessibilityLabel() {
+    return futurePreviewDisplayLabels.communityPrivacyAccessibility;
   }
 
   function rankingScreenTitleLabel() {
@@ -10105,7 +10110,7 @@ export default function App() {
                 <Text style={styles.secondaryButtonText}>{communityPostButtonDisplayLabel}</Text>
               </Pressable>
               <Pressable
-                accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}
+                accessibilityLabel={communityPrivacyAccessibilityDisplayLabel}
                 accessibilityRole="button"
                 style={styles.secondaryButton}
                 onPress={showCommunityPrivacyStatus}

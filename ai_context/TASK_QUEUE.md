@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1651: Reuse community privacy accessibility label
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `communityPrivacyAccessibilityLabel` helper for the Community privacy action accessibility label.
+- Reused the helper through a bounded Community display constant while keeping the privacy action text, opt-in button copy, press behavior, backend sync behavior, Food Community rendering, and Ranking screen behavior unchanged.
+- Updated navigation verifier coverage for the shared Community privacy accessibility helper and direct privacy accessibility regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Community status and return CTA bindings in small behavior-preserving slices.
+
 ### T1650: Reuse community post action labels
 
 Status: done
