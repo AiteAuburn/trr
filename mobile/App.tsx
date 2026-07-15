@@ -3987,6 +3987,10 @@ export default function App() {
     return item.title;
   }
 
+  function foodCommunityListItemMetricSummary(item: { metricSummary: string }) {
+    return item.metricSummary;
+  }
+
   function foodCommunityDetailSelectedItemId(item: { id: string }) {
     return item.id;
   }
@@ -9606,7 +9610,7 @@ export default function App() {
                 >
                   <View style={styles.timelineContent}>
                     <Text style={styles.recordContent}>{foodCommunityListItemTitle(item)}</Text>
-                    <Text style={styles.evidence}>{item.metricSummary}</Text>
+                    <Text style={styles.evidence}>{foodCommunityListItemMetricSummary(item)}</Text>
                   </View>
                   <Text style={styles.recordType}>›</Text>
                 </Pressable>

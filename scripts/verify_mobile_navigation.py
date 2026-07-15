@@ -7534,6 +7534,9 @@ def main() -> int:
             ("food community list item title helper", "function foodCommunityListItemTitle(item: { title: string })"),
             ("food community list item title helper fields", "return item.title;"),
             ("food community list item title helper binding", "{foodCommunityListItemTitle(item)}"),
+            ("food community list item metric summary helper", "function foodCommunityListItemMetricSummary(item: { metricSummary: string })"),
+            ("food community list item metric summary helper fields", "return item.metricSummary;"),
+            ("food community list item metric summary helper binding", "{foodCommunityListItemMetricSummary(item)}"),
             ("food community detail list refresh", "void loadFoodCommunityDetail(nextSelectedItemId);"),
             ("food community detail selected refresh", "void loadFoodCommunityDetail(boundedItemId);"),
             ("food community detail selected item helper", "function foodCommunityDetailSelectedItemId(item: { id: string })"),
@@ -9299,6 +9302,11 @@ def main() -> int:
             "food community direct list item title binding",
             content,
             "<Text style={styles.recordContent}>{item.title}</Text>\n                    <Text style={styles.evidence}>{item.metricSummary}</Text>",
+        )
+        _assert_not_contains(
+            "food community direct list item metric summary binding",
+            content,
+            "{item.metricSummary}",
         )
         _assert_not_contains(
             "food community direct detail selected item binding",
