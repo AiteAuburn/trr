@@ -7470,6 +7470,15 @@ def main() -> int:
             ("account security boundary row value helper", "function accountSecurityBoundaryRowValue(row: (typeof accountSecurityBoundaryRows)[number])"),
             ("account security boundary row value helper fields", "return row.value;"),
             ("account security boundary row value helper binding", "{accountSecurityBoundaryRowValue(row)}"),
+            ("profile settings boundary row key helper", "function profileSettingsBoundaryRowKey(row: (typeof profileSettingsBoundaryRows)[number])"),
+            ("profile settings boundary row key helper fields", "return row.label;"),
+            ("profile settings boundary row key helper binding", "key={profileSettingsBoundaryRowKey(row)}"),
+            ("profile settings boundary row label helper", "function profileSettingsBoundaryRowLabel(row: (typeof profileSettingsBoundaryRows)[number])"),
+            ("profile settings boundary row label helper fields", "return row.label;"),
+            ("profile settings boundary row label helper binding", "{profileSettingsBoundaryRowLabel(row)}"),
+            ("profile settings boundary row value helper", "function profileSettingsBoundaryRowValue(row: (typeof profileSettingsBoundaryRows)[number])"),
+            ("profile settings boundary row value helper fields", "return row.value;"),
+            ("profile settings boundary row value helper binding", "{profileSettingsBoundaryRowValue(row)}"),
             ("dev reset status display text binding", "const devResetStatusDisplayText = authStatusDisplay.devReset;"),
             ("native status display helper binding", "const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);"),
             ("native status display text binding", "const nativeStatusDisplayText = nativeStatusDisplay.native;"),
@@ -9681,6 +9690,21 @@ def main() -> int:
             "account security direct boundary row value binding",
             content,
             "accountSecurityBoundaryRows.map((row) => (\n                <View key={accountSecurityBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{accountSecurityBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "profile settings direct boundary row key binding",
+            content,
+            "profileSettingsBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
+        )
+        _assert_not_contains(
+            "profile settings direct boundary row label binding",
+            content,
+            "profileSettingsBoundaryRows.map((row) => (\n                <View key={profileSettingsBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "profile settings direct boundary row value binding",
+            content,
+            "profileSettingsBoundaryRows.map((row) => (\n                <View key={profileSettingsBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{profileSettingsBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
             "food community search direct handler bound input",

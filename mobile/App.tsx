@@ -4524,6 +4524,18 @@ export default function App() {
     return row.value;
   }
 
+  function profileSettingsBoundaryRowKey(row: (typeof profileSettingsBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function profileSettingsBoundaryRowLabel(row: (typeof profileSettingsBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function profileSettingsBoundaryRowValue(row: (typeof profileSettingsBoundaryRows)[number]) {
+    return row.value;
+  }
+
   function selectFoodCommunityItem(itemId: string) {
     const boundedItemId = boundIdentifier(itemId);
     setSelectedFoodCommunityItemId(boundedItemId);
@@ -11050,9 +11062,9 @@ export default function App() {
             </View>
             <View style={styles.reportBoundaryGrid}>
               {profileSettingsBoundaryRows.map((row) => (
-                <View key={row.label} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.recordType}>{row.value}</Text>
+                <View key={profileSettingsBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
+                  <Text style={styles.confidence}>{profileSettingsBoundaryRowLabel(row)}</Text>
+                  <Text style={styles.recordType}>{profileSettingsBoundaryRowValue(row)}</Text>
                 </View>
               ))}
             </View>
