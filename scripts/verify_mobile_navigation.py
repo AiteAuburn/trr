@@ -7533,6 +7533,14 @@ def main() -> int:
             ("community close accessibility helper fields", "return auxiliaryDisplayLabels.closeReturn;"),
             ("community close accessibility display label binding", "const communityCloseAccessibilityDisplayLabel = communityCloseAccessibilityLabel();"),
             ("community close accessibility helper binding", "accessibilityLabel={communityCloseAccessibilityDisplayLabel}"),
+            ("community preview boundary badge helper", "function communityPreviewBoundaryBadgeLabel()"),
+            ("community preview boundary badge helper fields", "return communityPreviewBoundaryDisplay.badge;"),
+            ("community preview boundary badge display label binding", "const communityPreviewBoundaryBadgeDisplayLabel = communityPreviewBoundaryBadgeLabel();"),
+            ("community preview boundary badge helper binding", "{communityPreviewBoundaryBadgeDisplayLabel}"),
+            ("community preview boundary copy helper", "function communityPreviewBoundaryCopyText()"),
+            ("community preview boundary copy helper fields", "return communityPreviewBoundaryDisplay.copy;"),
+            ("community preview boundary copy display text binding", "const communityPreviewBoundaryCopyDisplayText = communityPreviewBoundaryCopyText();"),
+            ("community preview boundary copy helper binding", "{communityPreviewBoundaryCopyDisplayText}"),
             ("community posting status handler", "function showCommunityPostingStatus()"),
             ("community privacy status handler", "function showCommunityPrivacyStatus()"),
             ("food community backend-aware intro copy", "backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。"),
@@ -9937,6 +9945,16 @@ def main() -> int:
             "community direct close accessibility binding",
             content,
             '<Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromCommunityPreview}>',
+        )
+        _assert_not_contains(
+            "community direct preview boundary badge binding",
+            content,
+            "<View style={styles.inlineInfoBlock}>\n              <Text style={styles.previewModeBadge}>{communityPreviewBoundaryDisplay.badge}</Text>",
+        )
+        _assert_not_contains(
+            "community direct preview boundary copy binding",
+            content,
+            "<Text style={styles.previewModeBadge}>{communityPreviewBoundaryBadgeDisplayLabel}</Text>\n              <Text style={styles.evidence}>{communityPreviewBoundaryDisplay.copy}</Text>",
         )
         _assert_not_contains(
             "ranking direct close accessibility binding",

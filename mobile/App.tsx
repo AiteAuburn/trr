@@ -1673,6 +1673,8 @@ export default function App() {
   const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;
   const foodCommunityShareAccessibilityDisplayLabel = communityActionDisplay.foodCommunityShareAccessibility;
   const communityCloseAccessibilityDisplayLabel = communityCloseAccessibilityLabel();
+  const communityPreviewBoundaryBadgeDisplayLabel = communityPreviewBoundaryBadgeLabel();
+  const communityPreviewBoundaryCopyDisplayText = communityPreviewBoundaryCopyText();
   const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();
   const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();
   const storePreviewDisplay = storePreviewDisplayTexts(storeActionStatus);
@@ -4138,6 +4140,14 @@ export default function App() {
 
   function communityCloseAccessibilityLabel() {
     return auxiliaryDisplayLabels.closeReturn;
+  }
+
+  function communityPreviewBoundaryBadgeLabel() {
+    return communityPreviewBoundaryDisplay.badge;
+  }
+
+  function communityPreviewBoundaryCopyText() {
+    return communityPreviewBoundaryDisplay.copy;
   }
 
   function rankingScreenTitleLabel() {
@@ -9819,8 +9829,8 @@ export default function App() {
               </Pressable>
             </View>
             <View style={styles.inlineInfoBlock}>
-              <Text style={styles.previewModeBadge}>{communityPreviewBoundaryDisplay.badge}</Text>
-              <Text style={styles.evidence}>{communityPreviewBoundaryDisplay.copy}</Text>
+              <Text style={styles.previewModeBadge}>{communityPreviewBoundaryBadgeDisplayLabel}</Text>
+              <Text style={styles.evidence}>{communityPreviewBoundaryCopyDisplayText}</Text>
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>食物血糖資料庫</Text>
