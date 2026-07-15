@@ -4185,6 +4185,10 @@ export default function App() {
     return section.emptyCopy;
   }
 
+  function rankingReadinessChecklistItemKey(item: string) {
+    return item;
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -10057,7 +10061,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>
               {rankingReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={item} text={item} />
+                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={item} />
               ))}
             </View>
             <View style={styles.actionRow}>
