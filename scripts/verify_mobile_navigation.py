@@ -7650,6 +7650,10 @@ def main() -> int:
             ("community public name preview label helper", "function communityPublicNamePreviewLabel()"),
             ("community public name preview label helper fields", 'return "公開顯示名稱預覽";'),
             ("community public name preview label helper binding", "{communityPublicNamePreviewLabel()}"),
+            ("community public profile save accessibility helper", "function communityPublicProfileSaveAccessibilityLabel()"),
+            ("community public profile save accessibility helper fields", 'return "儲存社群公開顯示名稱，不公開健康數值";'),
+            ("community public profile save accessibility display label binding", "const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();"),
+            ("community public profile save accessibility pressable binding", "accessibilityLabel={communityPublicProfileSaveAccessibilityDisplayLabel}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
@@ -9675,6 +9679,11 @@ def main() -> int:
             "community direct public display name accessibility binding",
             content,
             'accessibilityLabel="輸入社群公開顯示名稱"',
+        )
+        _assert_not_contains(
+            "community direct public profile save accessibility binding",
+            content,
+            'accessibilityLabel="儲存社群公開顯示名稱，不公開健康數值"',
         )
         _assert_not_contains(
             "food community item direct handler id binding",

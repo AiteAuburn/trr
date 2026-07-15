@@ -1672,6 +1672,7 @@ export default function App() {
   });
   const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;
   const foodCommunityShareAccessibilityDisplayLabel = communityActionDisplay.foodCommunityShareAccessibility;
+  const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();
   const storePreviewDisplay = storePreviewDisplayTexts(storeActionStatus);
   const storeActionStatusDisplayText = storePreviewDisplay.actionStatus;
   const storePreviewBoundaryDisplayText = storePreviewDisplay.previewBoundary;
@@ -4113,6 +4114,10 @@ export default function App() {
 
   function communityPublicNamePreviewLabel() {
     return "公開顯示名稱預覽";
+  }
+
+  function communityPublicProfileSaveAccessibilityLabel() {
+    return "儲存社群公開顯示名稱，不公開健康數值";
   }
 
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
@@ -9863,7 +9868,7 @@ export default function App() {
                   autoCorrect={false}
                 />
                 <Pressable
-                  accessibilityLabel="儲存社群公開顯示名稱，不公開健康數值"
+                  accessibilityLabel={communityPublicProfileSaveAccessibilityDisplayLabel}
                   accessibilityRole="button"
                   accessibilityState={{ disabled: isBusy || !protectedAccountBackendReady }}
                   style={[styles.secondaryButton, isBusy || !protectedAccountBackendReady ? styles.buttonDisabled : null]}
