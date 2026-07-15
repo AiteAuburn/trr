@@ -2468,6 +2468,18 @@ export default function App() {
     return item.copy;
   }
 
+  function homeGuidanceItemKey(item: (typeof homeGuidanceDirections)[number][number]) {
+    return item.key;
+  }
+
+  function homeGuidanceItemIcon(item: (typeof homeGuidanceDirections)[number][number]) {
+    return item.icon;
+  }
+
+  function homeGuidanceItemLabel(item: (typeof homeGuidanceDirections)[number][number]) {
+    return item.label;
+  }
+
   function pressTodayQuickEntryItem(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
     handleTodayQuickEntryMode(quickEntryModeTarget(item));
   }
@@ -7600,9 +7612,9 @@ export default function App() {
                 {homeGuidanceDirections.map((row, rowIndex) => (
                   <View key={`home-guidance-row-${rowIndex}`} style={styles.homeGuidanceRow}>
                     {row.map((item) => (
-                      <View key={item.key} style={styles.homeGuidanceItem}>
-                        <Text style={styles.homeGuidanceIcon}>{item.icon}</Text>
-                        <Text style={styles.homeGuidanceLabel}>{item.label}</Text>
+                      <View key={homeGuidanceItemKey(item)} style={styles.homeGuidanceItem}>
+                        <Text style={styles.homeGuidanceIcon}>{homeGuidanceItemIcon(item)}</Text>
+                        <Text style={styles.homeGuidanceLabel}>{homeGuidanceItemLabel(item)}</Text>
                       </View>
                     ))}
                   </View>

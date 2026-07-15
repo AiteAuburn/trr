@@ -5302,6 +5302,9 @@ def main() -> int:
             ("guided home block tagline", "<Text style={styles.homeTagline}>想說什麼就說什麼</Text>"),
             ("guided home block direction panel", "styles.homeGuidancePanel"),
             ("guided home block direction items", "homeGuidanceDirections.map"),
+            ("guided home item key binding", "key={homeGuidanceItemKey(item)}"),
+            ("guided home item icon binding", "{homeGuidanceItemIcon(item)}"),
+            ("guided home item label binding", "{homeGuidanceItemLabel(item)}"),
             ("guided home block info row", "styles.homeGuidanceInfoRow"),
             ("guided home block non-button copy", "上面這排不是按鈕喔"),
             ("minimal home block primary hint", "<Text style={styles.homeHint}>按住開始說話記錄</Text>"),
@@ -5312,6 +5315,26 @@ def main() -> int:
             ("guided home block example pagination", "styles.homeExamplePagination"),
         ):
             _assert_contains(label, today_home_block, marker)
+        for label, marker in (
+            ("guided home item key helper", "function homeGuidanceItemKey(item: (typeof homeGuidanceDirections)[number][number])"),
+            ("guided home item key helper fields", "return item.key;"),
+            ("guided home item icon helper", "function homeGuidanceItemIcon(item: (typeof homeGuidanceDirections)[number][number])"),
+            ("guided home item icon helper fields", "return item.icon;"),
+            ("guided home item label helper", "function homeGuidanceItemLabel(item: (typeof homeGuidanceDirections)[number][number])"),
+            ("guided home item label helper fields", "return item.label;"),
+        ):
+            _assert_contains(label, content, marker)
+        home_guidance_row_block = _match_block(
+            today_home_block,
+            r"row\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
+            "home guidance item render block",
+        )
+        for label, marker in (
+            ("direct home guidance item key binding", "key={item.key}"),
+            ("direct home guidance item icon binding", "<Text style={styles.homeGuidanceIcon}>{item.icon}</Text>"),
+            ("direct home guidance item label binding", "<Text style={styles.homeGuidanceLabel}>{item.label}</Text>"),
+        ):
+            _assert_not_contains(label, home_guidance_row_block, marker)
         _assert_contains("minimal home starts near top", _style_block(content, "homeMinimalSection"), 'justifyContent: "flex-start"')
         _assert_contains("minimal home reduced top padding", _style_block(content, "homeMinimalSection"), "paddingTop: 14")
         _assert_contains("minimal home model status style", _style_block(content, "homeModelStatus"), "fontSize: 12")

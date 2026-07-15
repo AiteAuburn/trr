@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1705: Reuse home guidance item fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared Home guidance item helpers for key, icon, and label rendering.
+- Reused the helpers in the Home guidance direction panel while preserving existing guidance rows, copy, spacing, non-button presentation, and recording behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the Home guidance item render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing AI review card and daily-record entry display bindings in small behavior-preserving slices.
+
 ### T1704: Reuse record quick-entry fields
 
 Status: done
