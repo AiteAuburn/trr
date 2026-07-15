@@ -4099,6 +4099,10 @@ export default function App() {
     return item.category;
   }
 
+  function foodCommunityShareSectionLabel() {
+    return "食物分享紀錄";
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -9736,7 +9740,7 @@ export default function App() {
               </View>
             ) : null}
             <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>食物分享紀錄</Text>
+              <Text style={styles.label}>{foodCommunityShareSectionLabel()}</Text>
               <TextInput
                 accessibilityLabel="輸入食物名稱"
                 value={foodCommunityShareFields.foodName}

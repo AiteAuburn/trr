@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1596: Reuse food community share section label helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `foodCommunityShareSectionLabel` helper for the Food Community share-form section label.
+- Reused the helper in share-form rendering while keeping the label copy, input fields, field labels, selected item defaults, submit behavior, and detail panel behavior unchanged.
+- Updated navigation verifier coverage for the shared Food Community share-form section label helper and direct label regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Food Community share-form display text fields in small behavior-preserving slices.
+
 ### T1595: Reuse food community detail individual share empty text helper
 
 Status: done

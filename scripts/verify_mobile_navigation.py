@@ -7631,6 +7631,9 @@ def main() -> int:
             ("food community share category helper", "function foodCommunityShareCategory(item: { category: FoodCommunityCategory })"),
             ("food community share category helper fields", "return item.category;"),
             ("food community share category helper binding", "category: apiFoodCategoryFromMobile(foodCommunityShareCategory(selectedFoodCommunityItem)),"),
+            ("food community share section label helper", "function foodCommunityShareSectionLabel()"),
+            ("food community share section label helper fields", 'return "食物分享紀錄";'),
+            ("food community share section label helper binding", "{foodCommunityShareSectionLabel()}"),
             ("food community category api type import", "type FoodCommunityApiCategoryRead,"),
             ("food community backend category state", "const [foodCommunityBackendCategories, setFoodCommunityBackendCategories]"),
             ("food community backend category options", "const foodCommunityCategoriesForDisplay = foodCommunityDisplay.categoriesForDisplay;"),
@@ -9591,6 +9594,11 @@ def main() -> int:
             "food community direct share category binding",
             content,
             "category: apiFoodCategoryFromMobile(selectedFoodCommunityItem.category),",
+        )
+        _assert_not_contains(
+            "food community direct share section label binding",
+            content,
+            "<Text style={styles.label}>食物分享紀錄</Text>",
         )
         _assert_not_contains(
             "food community item direct handler id binding",
