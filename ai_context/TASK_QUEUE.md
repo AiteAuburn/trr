@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1592: Reuse food community detail share count display helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `foodCommunityDetailShareCountDisplayText` helper for Food Community detail share-count display text.
+- Reused the helper in the share-count metric card while keeping the numeric helper, label copy, rise metric cards, detail panel layout, and selected item behavior unchanged.
+- Updated navigation verifier coverage for the shared Food Community detail share-count display helper and direct share-count display regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Food Community detail metric display text fields in small behavior-preserving slices.
+
 ### T1591: Reuse food community detail minimum rise display helper
 
 Status: done

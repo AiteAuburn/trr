@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1592 reuse food community detail share count display helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `foodCommunityDetailShareCountDisplayText` helper for Food Community detail share-count display text.
+- Reused the helper in the share-count metric card while keeping the numeric helper, label copy, rise metric cards, detail panel layout, and selected item behavior unchanged.
+- Updated navigation verifier coverage for the shared Food Community detail share-count display helper and direct share-count display regression guard.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting Food Community detail metric display text fields in small behavior-preserving slices.
+
 ### T1591 reuse food community detail minimum rise display helper
 
 類型：mobile / refactor / verifier / docs

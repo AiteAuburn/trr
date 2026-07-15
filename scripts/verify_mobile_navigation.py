@@ -7574,7 +7574,9 @@ def main() -> int:
             ("food community detail panel visible helper binding", "foodCommunityDetailPanelVisible(selectedFoodCommunityItem) ? ("),
             ("food community detail share count helper", "function foodCommunityDetailShareCount(item: { shareCount: number })"),
             ("food community detail share count helper fields", "return item.shareCount;"),
-            ("food community detail share count helper binding", "{foodCommunityDetailShareCount(selectedFoodCommunityItem)}"),
+            ("food community detail share count display helper", "function foodCommunityDetailShareCountDisplayText(item: { shareCount: number })"),
+            ("food community detail share count display helper fields", "return String(foodCommunityDetailShareCount(item));"),
+            ("food community detail share count display helper binding", "{foodCommunityDetailShareCountDisplayText(selectedFoodCommunityItem)}"),
             ("food community detail average rise helper", "function foodCommunityDetailAverageRise(item: { averageRise: number })"),
             ("food community detail average rise helper fields", "return item.averageRise;"),
             ("food community detail average rise display helper", "function foodCommunityDetailAverageRiseDisplayText(item: { averageRise: number })"),
@@ -9501,6 +9503,11 @@ def main() -> int:
             "food community direct detail share count binding",
             content,
             "{selectedFoodCommunityItem.shareCount}",
+        )
+        _assert_not_contains(
+            "food community direct detail share count display binding",
+            content,
+            "{foodCommunityDetailShareCount(selectedFoodCommunityItem)}",
         )
         _assert_not_contains(
             "food community direct detail average rise binding",
