@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1581: Reuse food community category option selected helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `foodCommunityCategoryOptionSelected` helper for Food Community category segment selected-state checks.
+- Reused the helper in the category option accessibility state and visual active styles while keeping category keys, accessibility labels, press behavior, list rows, and detail panel unchanged.
+- Updated navigation verifier coverage for the shared Food Community category option selected helper, direct category selected-state regression guard, and helper-call comma parsing in selected-style checks.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting Food Community category/list/detail fields in small behavior-preserving slices.
+
 ### T1580: Reuse food community category option accessibility label helper
 
 Status: done

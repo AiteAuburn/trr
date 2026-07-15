@@ -4080,6 +4080,10 @@ export default function App() {
     return category.accessibilityLabel;
   }
 
+  function foodCommunityCategoryOptionSelected(category: ReturnType<typeof foodCommunityCategoryDisplayItem>, selectedCategory: FoodCommunityCategory) {
+    return selectedCategory === category.value;
+  }
+
   function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
     selectFoodCommunityCategory(foodCommunityCategoryTarget(category));
   }
@@ -9586,17 +9590,17 @@ export default function App() {
                   key={foodCommunityCategoryOptionKey(category)}
                   accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}
                   accessibilityRole="button"
-                  accessibilityState={{ selected: foodCommunityCategory === category.value }}
+                  accessibilityState={{ selected: foodCommunityCategoryOptionSelected(category, foodCommunityCategory) }}
                   style={[
                     styles.segmentPill,
-                    foodCommunityCategory === category.value ? styles.segmentActive : null
+                    foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentActive : null
                   ]}
                   onPress={() => pressFoodCommunityCategoryOption(category)}
                 >
                   <Text
                     style={[
                       styles.segmentText,
-                      foodCommunityCategory === category.value ? styles.segmentTextActive : null
+                      foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentTextActive : null
                     ]}
                   >
                     {category.label}

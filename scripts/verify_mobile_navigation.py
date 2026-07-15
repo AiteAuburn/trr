@@ -984,6 +984,19 @@ def _selected_pressables_mismatched_state(content: str) -> list[str]:
     selected_style_pattern = re.compile(
         r"([\s\S]*?)\?\s*styles\.(?:tabPillActive|segmentActive|chipSelected)\s*:\s*null"
     )
+
+    def selected_style_condition(style_prefix: str) -> str:
+        paren_depth = 0
+        last_separator = -1
+        for index, char in enumerate(style_prefix):
+            if char == "(":
+                paren_depth += 1
+            elif char == ")" and paren_depth > 0:
+                paren_depth -= 1
+            elif char == "," and paren_depth == 0:
+                last_separator = index
+        return _normalize_jsx_expression(style_prefix[last_separator + 1 :])
+
     while True:
         start = content.find("<Pressable", search_from)
         if start == -1:
@@ -994,7 +1007,7 @@ def _selected_pressables_mismatched_state(content: str) -> list[str]:
         tag = content[start : end + 1]
         line_number = content.count("\n", 0, start) + 1
         visual_selected_conditions = [
-            _normalize_jsx_expression(match.group(1).split(",")[-1])
+            selected_style_condition(match.group(1))
             for match in selected_style_pattern.finditer(tag)
         ]
         state_expression = _extract_selected_state_expression(tag)
@@ -7672,6 +7685,11 @@ def main() -> int:
             ("food community category option accessibility label helper", "function foodCommunityCategoryOptionAccessibilityLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option accessibility label helper fields", "return category.accessibilityLabel;"),
             ("food community category option accessibility label helper binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
+            ("food community category option selected helper", "function foodCommunityCategoryOptionSelected(category: ReturnType<typeof foodCommunityCategoryDisplayItem>, selectedCategory: FoodCommunityCategory)"),
+            ("food community category option selected helper fields", "return selectedCategory === category.value;"),
+            ("food community category option selected helper state binding", "accessibilityState={{ selected: foodCommunityCategoryOptionSelected(category, foodCommunityCategory) }}"),
+            ("food community category option selected helper pill style binding", "foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentActive : null"),
+            ("food community category option selected helper text style binding", "foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentTextActive : null"),
             ("food community item select handler", "function selectFoodCommunityItem(itemId: string)"),
             ("food community item press handler", "function pressFoodCommunityItem(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
             ("food community item target helper", "function foodCommunityItemTarget(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
@@ -7709,6 +7727,7 @@ def main() -> int:
             ("ranking promoted title", '<Text style={styles.sectionTitle}>社群排行</Text>'),
             ("food community search accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}"),
             ("food community category accessibility binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
+            ("food community category selected state", "accessibilityState={{ selected: foodCommunityCategoryOptionSelected(category, foodCommunityCategory) }}"),
             ("food community item accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
             ("food community selected state", "accessibilityState={{ selected: selectedFoodCommunityItem?.id === item.id }}"),
             ("food community share fields", "foodCommunityShareFieldRows.map"),
@@ -8479,6 +8498,11 @@ def main() -> int:
             ("food community category option accessibility label helper", "function foodCommunityCategoryOptionAccessibilityLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option accessibility label helper fields", "return category.accessibilityLabel;"),
             ("food community category option accessibility label helper binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
+            ("food community category option selected helper", "function foodCommunityCategoryOptionSelected(category: ReturnType<typeof foodCommunityCategoryDisplayItem>, selectedCategory: FoodCommunityCategory)"),
+            ("food community category option selected helper fields", "return selectedCategory === category.value;"),
+            ("food community category option selected helper state binding", "accessibilityState={{ selected: foodCommunityCategoryOptionSelected(category, foodCommunityCategory) }}"),
+            ("food community category option selected helper pill style binding", "foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentActive : null"),
+            ("food community category option selected helper text style binding", "foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentTextActive : null"),
             ("food community category target helper", "function foodCommunityCategoryTarget(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category target helper fields", "return category.value;"),
             ("food community category target helper binding", "selectFoodCommunityCategory(foodCommunityCategoryTarget(category));"),
@@ -9308,6 +9332,21 @@ def main() -> int:
             "food community category direct accessibility label binding",
             content,
             "key={foodCommunityCategoryOptionKey(category)}\n                  accessibilityLabel={category.accessibilityLabel}",
+        )
+        _assert_not_contains(
+            "food community category direct selected state binding",
+            content,
+            "accessibilityState={{ selected: foodCommunityCategory === category.value }}",
+        )
+        _assert_not_contains(
+            "food community category direct selected active style binding",
+            content,
+            "foodCommunityCategory === category.value ? styles.segmentActive : null",
+        )
+        _assert_not_contains(
+            "food community category direct selected text style binding",
+            content,
+            "foodCommunityCategory === category.value ? styles.segmentTextActive : null",
         )
         _assert_not_contains(
             "food community category direct default item selection",
