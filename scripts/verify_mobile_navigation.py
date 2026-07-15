@@ -9582,6 +9582,12 @@ def main() -> int:
             ("year review health outcome row value helper fields", "return row.value;"),
             ("year review health outcome row value helper binding", "{yearlyHealthOutcomeRowValue(row)}"),
             ("year review local highlight helper binding", "const yearlyHighlightDisplayTexts = localYearlyHighlightDisplayItems("),
+            ("year review highlight item key helper", "function yearlyHighlightItemKey(item: string)"),
+            ("year review highlight item key helper fields", "return item;"),
+            ("year review highlight item key binding", "key={yearlyHighlightItemKey(item)}"),
+            ("year review highlight item text helper", "function yearlyHighlightItemText(item: string)"),
+            ("year review highlight item text helper fields", "return item;"),
+            ("year review highlight item text binding", "{yearlyHighlightItemText(item)}"),
             ("year review insight display helper binding", "const yearlyInsightDisplayTexts = yearReviewInsightDisplayTexts({"),
             ("year review insight backend observation binding", "backendObservation: backendYearAiObservation"),
             ("year review insight backend encouragement binding", "backendEncouragement: backendYearAiEncouragement"),
@@ -10374,6 +10380,16 @@ def main() -> int:
             "year review direct health outcome row value binding",
             content,
             "yearlyHealthOutcomeRows.map((row) => (\n                <View key={yearlyHealthOutcomeRowKey(row)} style={styles.metricCard}>\n                  <Text style={styles.confidence}>{yearlyHealthOutcomeRowLabel(row)}</Text>\n                  <Text style={styles.metricValue}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "year review direct highlight item key binding",
+            content,
+            "yearlyHighlightDisplayTexts.map((item) => (\n                <View key={item} style={styles.highlightRow}>",
+        )
+        _assert_not_contains(
+            "year review direct highlight item text binding",
+            content,
+            "yearlyHighlightDisplayTexts.map((item) => (\n                <View key={yearlyHighlightItemKey(item)} style={styles.highlightRow}>\n                  <Text style={styles.recordType}>•</Text>\n                  <Text style={styles.evidence}>{item}</Text>",
         )
         _assert_not_contains(
             "daily record direct detail row binding",

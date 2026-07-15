@@ -4881,6 +4881,14 @@ export default function App() {
     return row.value;
   }
 
+  function yearlyHighlightItemKey(item: string) {
+    return item;
+  }
+
+  function yearlyHighlightItemText(item: string) {
+    return item;
+  }
+
   function showYearReviewShareStatus() {
     void loadYearReviewShareCard();
   }
@@ -11796,9 +11804,9 @@ export default function App() {
             <View style={styles.highlightCard}>
               <Text style={styles.label}>{auxiliaryDisplayLabels.yearHighlights}</Text>
               {yearlyHighlightDisplayTexts.map((item) => (
-                <View key={item} style={styles.highlightRow}>
+                <View key={yearlyHighlightItemKey(item)} style={styles.highlightRow}>
                   <Text style={styles.recordType}>•</Text>
-                  <Text style={styles.evidence}>{item}</Text>
+                  <Text style={styles.evidence}>{yearlyHighlightItemText(item)}</Text>
                 </View>
               ))}
               {yearlyGlucoseAverageDisplayText ? (
