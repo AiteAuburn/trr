@@ -4143,6 +4143,10 @@ export default function App() {
     return "本機連續記錄預覽";
   }
 
+  function rankingLocalPreviewBoundaryCopyText() {
+    return rankingLocalPreviewBoundaryDisplayText;
+  }
+
   function rankingHeroIconLabel() {
     return "榜";
   }
@@ -10091,7 +10095,7 @@ export default function App() {
               <View style={styles.timelineContent}>
                 <Text style={styles.evidence}>{rankingLocalStreakPreviewLabel()}</Text>
                 <Text style={styles.heroNumber}>{rankingStreakDisplayLabel(rankingStreakDisplayDays)}</Text>
-                <Text style={styles.evidence}>{rankingLocalPreviewBoundaryDisplayText}</Text>
+                <Text style={styles.evidence}>{rankingLocalPreviewBoundaryCopyText()}</Text>
               </View>
             </View>
             <View style={styles.reportBoundaryGrid}>

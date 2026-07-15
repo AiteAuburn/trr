@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1640: Reuse ranking local preview boundary copy helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `rankingLocalPreviewBoundaryCopyText` helper for the Ranking hero local preview boundary copy.
+- Reused the helper in Ranking screen rendering while keeping streak calculation, hero icon, backend sync behavior, and other future preview screens unchanged.
+- Updated navigation verifier coverage for the shared Ranking local preview boundary copy helper and direct local-preview copy regression guard.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting remaining Ranking hero/action bindings in small behavior-preserving slices.
+
 ### T1639: Reuse ranking preview boundary copy helper
 
 Status: done

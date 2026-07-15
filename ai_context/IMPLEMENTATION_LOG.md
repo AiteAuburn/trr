@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1640 reuse ranking local preview boundary copy helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `rankingLocalPreviewBoundaryCopyText` helper for the Ranking hero local preview boundary copy.
+- Reused the helper in Ranking screen rendering while keeping streak calculation, hero icon, backend sync behavior, and other future preview screens unchanged.
+- Updated navigation verifier coverage for the shared Ranking local preview boundary copy helper and direct local-preview copy regression guard.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue splitting remaining Ranking hero/action bindings in small behavior-preserving slices.
+
 ### T1639 reuse ranking preview boundary copy helper
 
 類型：mobile / refactor / verifier / docs

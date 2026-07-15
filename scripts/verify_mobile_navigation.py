@@ -7667,6 +7667,9 @@ def main() -> int:
             ("ranking local streak preview label helper", "function rankingLocalStreakPreviewLabel()"),
             ("ranking local streak preview label helper fields", 'return "本機連續記錄預覽";'),
             ("ranking local streak preview label helper binding", "{rankingLocalStreakPreviewLabel()}"),
+            ("ranking local preview boundary copy helper", "function rankingLocalPreviewBoundaryCopyText()"),
+            ("ranking local preview boundary copy helper fields", "return rankingLocalPreviewBoundaryDisplayText;"),
+            ("ranking local preview boundary copy helper binding", "{rankingLocalPreviewBoundaryCopyText()}"),
             ("ranking hero icon label helper", "function rankingHeroIconLabel()"),
             ("ranking hero icon label helper fields", 'return "榜";'),
             ("ranking hero icon label helper binding", "{rankingHeroIconLabel()}"),
@@ -9821,6 +9824,11 @@ def main() -> int:
             "ranking direct streak display label binding",
             content,
             '<Text style={styles.heroNumber}>{rankingStreakDisplayDays} 天</Text>',
+        )
+        _assert_not_contains(
+            "ranking direct local preview boundary copy binding",
+            content,
+            "<Text style={styles.evidence}>{rankingLocalStreakPreviewLabel()}</Text>\n                <Text style={styles.heroNumber}>{rankingStreakDisplayLabel(rankingStreakDisplayDays)}</Text>\n                <Text style={styles.evidence}>{rankingLocalPreviewBoundaryDisplayText}</Text>",
         )
         _assert_not_contains(
             "ranking direct boundary row key binding",
