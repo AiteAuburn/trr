@@ -3852,6 +3852,18 @@ export default function App() {
     openSubscriptionStatusScreen("membershipStatus", subscriptionMembershipStatusOpenStatusMessage());
   }
 
+  function membershipFeatureRowKey(row: (typeof membershipFeatureRows)[number]) {
+    return row.label;
+  }
+
+  function membershipFeatureRowLabel(row: (typeof membershipFeatureRows)[number]) {
+    return row.label;
+  }
+
+  function membershipFeatureRowValue(row: (typeof membershipFeatureRows)[number]) {
+    return row.value;
+  }
+
   function syncSubscriptionManagementStatus() {
     if (account && protectedAccountBackendReady) {
       setSubscriptionManagementActionStatus(subscriptionManagementSyncingStatusMessage);
@@ -9737,9 +9749,9 @@ export default function App() {
             <View style={styles.pricingCard}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.memberFeatures}</Text>
               {membershipFeatureRows.map((row) => (
-                <View key={row.label} style={styles.detailRow}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.recordContent}>{row.value}</Text>
+                <View key={membershipFeatureRowKey(row)} style={styles.detailRow}>
+                  <Text style={styles.confidence}>{membershipFeatureRowLabel(row)}</Text>
+                  <Text style={styles.recordContent}>{membershipFeatureRowValue(row)}</Text>
                 </View>
               ))}
             </View>

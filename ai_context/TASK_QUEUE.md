@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1679: Reuse membership feature row fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared `membershipFeatureRowKey`, `membershipFeatureRowLabel`, and `membershipFeatureRowValue` helpers for Membership Status feature rows.
+- Reused the helpers in Membership Status feature rendering while keeping membership copy, trial/plan status display, renewal management navigation, and subscription behavior unchanged.
+- Updated navigation verifier coverage for the shared Membership feature row helpers and direct row field regression guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue splitting remaining yearly review, settings label, and detail-row render bindings in small behavior-preserving slices.
+
 ### T1678: Reuse detailed report metric row fields
 
 Status: done

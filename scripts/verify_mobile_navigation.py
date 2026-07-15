@@ -3032,6 +3032,18 @@ def main() -> int:
             content,
             "const membershipFeatureRows = membershipFeatureDisplayRows();",
         )
+        for label, marker in (
+            ("membership feature row key helper", "function membershipFeatureRowKey(row: (typeof membershipFeatureRows)[number])"),
+            ("membership feature row key helper fields", "return row.label;"),
+            ("membership feature row key helper binding", "key={membershipFeatureRowKey(row)}"),
+            ("membership feature row label helper", "function membershipFeatureRowLabel(row: (typeof membershipFeatureRows)[number])"),
+            ("membership feature row label helper fields", "return row.label;"),
+            ("membership feature row label helper binding", "{membershipFeatureRowLabel(row)}"),
+            ("membership feature row value helper", "function membershipFeatureRowValue(row: (typeof membershipFeatureRows)[number])"),
+            ("membership feature row value helper fields", "return row.value;"),
+            ("membership feature row value helper binding", "{membershipFeatureRowValue(row)}"),
+        ):
+            _assert_contains(label, content, marker)
         _assert_contains(
             "subscription membership display helper binding",
             content,
@@ -9847,6 +9859,21 @@ def main() -> int:
             "detailed report direct metric row binding",
             content,
             "detailedReportMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />",
+        )
+        _assert_not_contains(
+            "membership feature direct row key binding",
+            content,
+            "membershipFeatureRows.map((row) => (\n                <View key={row.label} style={styles.detailRow}>",
+        )
+        _assert_not_contains(
+            "membership feature direct row label binding",
+            content,
+            "membershipFeatureRows.map((row) => (\n                <View key={membershipFeatureRowKey(row)} style={styles.detailRow}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "membership feature direct row value binding",
+            content,
+            "membershipFeatureRows.map((row) => (\n                <View key={membershipFeatureRowKey(row)} style={styles.detailRow}>\n                  <Text style={styles.confidence}>{membershipFeatureRowLabel(row)}</Text>\n                  <Text style={styles.recordContent}>{row.value}</Text>",
         )
         _assert_not_contains(
             "food community search direct handler bound input",
