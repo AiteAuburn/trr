@@ -7564,6 +7564,9 @@ def main() -> int:
             ("food community detail share row id helper", "function foodCommunityDetailShareRowId(share: { id: string })"),
             ("food community detail share row id helper fields", "return share.id;"),
             ("food community detail share row id helper binding", "key={foodCommunityDetailShareRowId(share)}"),
+            ("food community detail share row summary helper", "function foodCommunityDetailShareRowSummary(share: { summary: string })"),
+            ("food community detail share row summary helper fields", "return share.summary;"),
+            ("food community detail share row summary helper binding", "{foodCommunityDetailShareRowSummary(share)}"),
             ("food community detail status example count helper", "function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] })"),
             ("food community detail status example count helper fields", "return item.examples.length;"),
             ("food community detail status title helper binding", "itemTitle: foodCommunityDetailStatusTitle(detailedItem),"),
@@ -9355,6 +9358,11 @@ def main() -> int:
             "food community direct detail share row id binding",
             content,
             "key={share.id}",
+        )
+        _assert_not_contains(
+            "food community direct detail share row summary binding",
+            content,
+            "{share.summary}",
         )
         _assert_not_contains(
             "food community direct share category binding",

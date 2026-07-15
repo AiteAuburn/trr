@@ -4023,6 +4023,10 @@ export default function App() {
     return share.id;
   }
 
+  function foodCommunityDetailShareRowSummary(share: { summary: string }) {
+    return share.summary;
+  }
+
   function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
     return item.examples.length;
   }
@@ -9632,7 +9636,7 @@ export default function App() {
                   foodCommunityDetailIndividualShares(selectedFoodCommunityItem).map((share) => (
                     <View key={foodCommunityDetailShareRowId(share)} style={styles.visionResultCard}>
                       <View style={styles.timelineContent}>
-                        <Text style={styles.recordContent}>{share.summary}</Text>
+                        <Text style={styles.recordContent}>{foodCommunityDetailShareRowSummary(share)}</Text>
                         <Text style={styles.evidence}>{share.note}</Text>
                       </View>
                     </View>
