@@ -4548,6 +4548,18 @@ export default function App() {
     return row.value;
   }
 
+  function privacyBoundaryRowKey(row: (typeof privacyBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function privacyBoundaryRowLabel(row: (typeof privacyBoundaryRows)[number]) {
+    return row.label;
+  }
+
+  function privacyBoundaryRowValue(row: (typeof privacyBoundaryRows)[number]) {
+    return row.value;
+  }
+
   function selectFoodCommunityItem(itemId: string) {
     const boundedItemId = boundIdentifier(itemId);
     setSelectedFoodCommunityItemId(boundedItemId);
@@ -11273,9 +11285,9 @@ export default function App() {
             </View>
             <View style={styles.reportBoundaryGrid}>
               {privacyBoundaryRows.map((row) => (
-                <View key={row.label} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{row.label}</Text>
-                  <Text style={styles.recordType}>{row.value}</Text>
+                <View key={privacyBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
+                  <Text style={styles.confidence}>{privacyBoundaryRowLabel(row)}</Text>
+                  <Text style={styles.recordType}>{privacyBoundaryRowValue(row)}</Text>
                 </View>
               ))}
             </View>

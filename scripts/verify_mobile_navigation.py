@@ -7488,6 +7488,15 @@ def main() -> int:
             ("recording quota boundary row value helper", "function recordingQuotaBoundaryRowValue(row: (typeof recordingQuotaBoundaryRows)[number])"),
             ("recording quota boundary row value helper fields", "return row.value;"),
             ("recording quota boundary row value helper binding", "{recordingQuotaBoundaryRowValue(row)}"),
+            ("privacy boundary row key helper", "function privacyBoundaryRowKey(row: (typeof privacyBoundaryRows)[number])"),
+            ("privacy boundary row key helper fields", "return row.label;"),
+            ("privacy boundary row key helper binding", "key={privacyBoundaryRowKey(row)}"),
+            ("privacy boundary row label helper", "function privacyBoundaryRowLabel(row: (typeof privacyBoundaryRows)[number])"),
+            ("privacy boundary row label helper fields", "return row.label;"),
+            ("privacy boundary row label helper binding", "{privacyBoundaryRowLabel(row)}"),
+            ("privacy boundary row value helper", "function privacyBoundaryRowValue(row: (typeof privacyBoundaryRows)[number])"),
+            ("privacy boundary row value helper fields", "return row.value;"),
+            ("privacy boundary row value helper binding", "{privacyBoundaryRowValue(row)}"),
             ("dev reset status display text binding", "const devResetStatusDisplayText = authStatusDisplay.devReset;"),
             ("native status display helper binding", "const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);"),
             ("native status display text binding", "const nativeStatusDisplayText = nativeStatusDisplay.native;"),
@@ -9729,6 +9738,21 @@ def main() -> int:
             "recording quota direct boundary row value binding",
             content,
             "recordingQuotaBoundaryRows.map((row) => (\n                <View key={recordingQuotaBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{recordingQuotaBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "privacy direct boundary row key binding",
+            content,
+            "privacyBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
+        )
+        _assert_not_contains(
+            "privacy direct boundary row label binding",
+            content,
+            "privacyBoundaryRows.map((row) => (\n                <View key={privacyBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
+        )
+        _assert_not_contains(
+            "privacy direct boundary row value binding",
+            content,
+            "privacyBoundaryRows.map((row) => (\n                <View key={privacyBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{privacyBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
             "food community search direct handler bound input",
