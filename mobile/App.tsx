@@ -4072,6 +4072,26 @@ export default function App() {
     return screen.id;
   }
 
+  function primaryTabKey(screen: { id: AppScreen }) {
+    return primaryTabTarget(screen);
+  }
+
+  function primaryTabLabel(screen: { label: string }) {
+    return screen.label;
+  }
+
+  function primaryTabAccessibilityText(screen: { label: string }) {
+    return primaryTabAccessibilityLabel(primaryTabLabel(screen));
+  }
+
+  function primaryTabIsCurrent(screen: { isCurrent: boolean }) {
+    return screen.isCurrent;
+  }
+
+  function primaryTabIsLocked(screen: { isLocked: boolean }) {
+    return screen.isLocked;
+  }
+
   function pressPrimaryTab(screen: { id: AppScreen }) {
     openPrimaryTab(primaryTabTarget(screen));
   }
@@ -7712,13 +7732,13 @@ export default function App() {
         {showPrimaryTabs ? (
           <ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false} style={styles.topTabs}>
             {primaryTabItems.map((screen) => {
-              const isCurrentPrimaryTab = screen.isCurrent;
-              const isPrimaryTabLocked = screen.isLocked;
-              const primaryTabAccessibility = primaryTabAccessibilityLabel(screen.label);
+              const isCurrentPrimaryTab = primaryTabIsCurrent(screen);
+              const isPrimaryTabLocked = primaryTabIsLocked(screen);
+              const primaryTabAccessibility = primaryTabAccessibilityText(screen);
 
               return (
                 <Pressable
-                  key={screen.id}
+                  key={primaryTabKey(screen)}
                   accessibilityLabel={primaryTabAccessibility}
                   accessibilityRole="button"
                   accessibilityState={{ disabled: isPrimaryTabLocked, selected: isCurrentPrimaryTab }}
@@ -7737,7 +7757,7 @@ export default function App() {
                       isPrimaryTabLocked ? styles.tabPillTextDisabled : null
                     ]}
                   >
-                    {screen.label}
+                    {primaryTabLabel(screen)}
                   </Text>
                 </Pressable>
               );

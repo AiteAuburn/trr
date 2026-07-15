@@ -2401,12 +2401,12 @@ def main() -> int:
         _assert_contains(
             "primary tab current helper binding",
             content,
-            "const isCurrentPrimaryTab = screen.isCurrent;",
+            "const isCurrentPrimaryTab = primaryTabIsCurrent(screen);",
         )
         _assert_contains(
             "primary tab locked helper binding",
             content,
-            "const isPrimaryTabLocked = screen.isLocked;",
+            "const isPrimaryTabLocked = primaryTabIsLocked(screen);",
         )
         _assert_contains(
             "close-button accessibility label copy",
@@ -8167,11 +8167,41 @@ def main() -> int:
             content,
             "openPrimaryTab(primaryTabTarget(screen));",
         )
+        for label, marker in (
+            ("primary tab key helper", "function primaryTabKey(screen: { id: AppScreen })"),
+            ("primary tab key helper binding", "key={primaryTabKey(screen)}"),
+            ("primary tab label helper", "function primaryTabLabel(screen: { label: string })"),
+            ("primary tab label helper fields", "return screen.label;"),
+            ("primary tab label helper binding", "{primaryTabLabel(screen)}"),
+            ("primary tab accessibility display helper", "function primaryTabAccessibilityText(screen: { label: string })"),
+            ("primary tab accessibility display helper fields", "return primaryTabAccessibilityLabel(primaryTabLabel(screen));"),
+            ("primary tab accessibility display helper binding", "const primaryTabAccessibility = primaryTabAccessibilityText(screen);"),
+            ("primary tab current state helper", "function primaryTabIsCurrent(screen: { isCurrent: boolean })"),
+            ("primary tab current state helper fields", "return screen.isCurrent;"),
+            ("primary tab current state helper binding", "const isCurrentPrimaryTab = primaryTabIsCurrent(screen);"),
+            ("primary tab locked state helper", "function primaryTabIsLocked(screen: { isLocked: boolean })"),
+            ("primary tab locked state helper fields", "return screen.isLocked;"),
+            ("primary tab locked state helper binding", "const isPrimaryTabLocked = primaryTabIsLocked(screen);"),
+        ):
+            _assert_contains(label, content, marker)
         _assert_contains(
             "primary tab button role",
             content,
             'accessibilityRole="button"\n                  accessibilityState={{ disabled: isPrimaryTabLocked, selected: isCurrentPrimaryTab }}',
         )
+        primary_tab_render_block = _match_block(
+            content,
+            r"primaryTabItems\.map\(\(screen\) => \{([\s\S]*?primaryTabLabel\(screen\)[\s\S]*?</Pressable>)",
+            "primary tab render block",
+        )
+        for label, marker in (
+            ("direct primary tab key binding", "key={screen.id}"),
+            ("direct primary tab accessibility binding", "primaryTabAccessibilityLabel(screen.label)"),
+            ("direct primary tab label binding", "{screen.label}"),
+            ("direct primary tab current binding", "screen.isCurrent"),
+            ("direct primary tab locked binding", "screen.isLocked"),
+        ):
+            _assert_not_contains(label, primary_tab_render_block, marker)
         _assert_not_contains(
             "primary tab direct destination binding",
             content,

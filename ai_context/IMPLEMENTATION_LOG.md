@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1716 reuse primary tab render fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared primary-tab render helpers for tab key, label, accessibility label, current state, and locked state.
+- Reused the helpers in the top primary-tab rail while preserving tab visibility, menu fallback, disabled/selected states, and navigation behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the primary-tab render block.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing first-version render blocks and future/store/community display bindings in small behavior-preserving slices.
+
 ### T1715 reuse store category option fields
 
 類型：mobile / refactor / verifier / docs
