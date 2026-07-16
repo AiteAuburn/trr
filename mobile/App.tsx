@@ -3139,19 +3139,26 @@ export default function App() {
   }
 
   function requestDailyRecordLeaveGuard() {
-    setDailyRecordLeaveGuardVisible(true);
-    setStatus(dailyRecordLeaveGuardPromptStatusMessage());
+    showDailyRecordLeaveGuard(dailyRecordLeaveGuardPromptStatusMessage());
   }
 
   function cancelDailyRecordLeaveGuard() {
-    setDailyRecordLeaveGuardVisible(false);
-    setStatus(dailyRecordLeaveGuardCancelStatusMessage());
+    hideDailyRecordLeaveGuard(dailyRecordLeaveGuardCancelStatusMessage());
   }
 
   function confirmDailyRecordLeaveGuard() {
-    setDailyRecordLeaveGuardVisible(false);
+    hideDailyRecordLeaveGuard(dailyRecordLeaveGuardConfirmStatusMessage());
     returnFromAiSaveConfirm();
-    setStatus(dailyRecordLeaveGuardConfirmStatusMessage());
+  }
+
+  function showDailyRecordLeaveGuard(statusMessage: string) {
+    setDailyRecordLeaveGuardVisible(true);
+    setStatus(statusMessage);
+  }
+
+  function hideDailyRecordLeaveGuard(statusMessage: string) {
+    setDailyRecordLeaveGuardVisible(false);
+    setStatus(statusMessage);
   }
 
   function openMenu(returnScreen: AppScreen = currentScreen) {

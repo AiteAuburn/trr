@@ -5979,8 +5979,16 @@ def main() -> int:
             ("pending remove payload helper fields", "return item.payloadSummary;"),
             ("pending remove payload helper binding", "{pendingRemoveDisplayPayloadSummary(pendingPreviewRemoveDisplayItem)}"),
             ("daily record leave guard request handler", "function requestDailyRecordLeaveGuard()"),
+            ("daily record leave guard show helper", "function showDailyRecordLeaveGuard(statusMessage: string)"),
+            ("daily record leave guard show helper visible", "setDailyRecordLeaveGuardVisible(true);"),
+            ("daily record leave guard show helper status", "setStatus(statusMessage);"),
+            ("daily record leave guard hide helper", "function hideDailyRecordLeaveGuard(statusMessage: string)"),
+            ("daily record leave guard hide helper visible", "setDailyRecordLeaveGuardVisible(false);"),
             ("daily record leave guard cancel handler", "function cancelDailyRecordLeaveGuard()"),
             ("daily record leave guard confirm handler", "function confirmDailyRecordLeaveGuard()"),
+            ("daily record leave guard request helper binding", "showDailyRecordLeaveGuard(dailyRecordLeaveGuardPromptStatusMessage());"),
+            ("daily record leave guard cancel helper binding", "hideDailyRecordLeaveGuard(dailyRecordLeaveGuardCancelStatusMessage());"),
+            ("daily record leave guard confirm helper binding", "hideDailyRecordLeaveGuard(dailyRecordLeaveGuardConfirmStatusMessage());"),
             ("daily record leave guard visible state", "const [dailyRecordLeaveGuardVisible, setDailyRecordLeaveGuardVisible] = useState(false);"),
             ("daily record leave guard state alias", "const shouldGuardDailyRecordLeave = hasUnsavedDailyRecordDraft;"),
             ("daily record leave guard visible alias", "const shouldShowDailyRecordLeaveGuard = dailyRecordLeaveGuardVisible;"),
@@ -6057,6 +6065,9 @@ def main() -> int:
             ("daily record leave guard direct android draft branch", "if (hasUnsavedDailyRecordDraft) {\n        requestDailyRecordLeaveGuard();"),
             ("daily record leave guard direct android dependency", "}, [hasUnsavedDailyRecordDraft]);"),
             ("daily record leave guard direct visible render", "{dailyRecordLeaveGuardVisible ? ("),
+            ("daily record leave guard direct request setters", "setDailyRecordLeaveGuardVisible(true);\n    setStatus(dailyRecordLeaveGuardPromptStatusMessage());"),
+            ("daily record leave guard direct cancel setters", "setDailyRecordLeaveGuardVisible(false);\n    setStatus(dailyRecordLeaveGuardCancelStatusMessage());"),
+            ("daily record leave guard direct confirm setters", "setDailyRecordLeaveGuardVisible(false);\n    returnFromAiSaveConfirm();\n    setStatus(dailyRecordLeaveGuardConfirmStatusMessage());"),
         ):
             _assert_not_contains(label, content, marker)
         daily_transcript_render_block = _match_block(
