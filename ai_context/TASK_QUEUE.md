@@ -34,6 +34,39 @@ None.
 
 ## Done
 
+### T2081: Extract yearly highlight list component
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/yearlyHighlightList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `YearlyHighlightList` for Year Review highlight rows.
+- Moved yearly highlight item key/text helpers out of `App.tsx`.
+- Reused the existing `HighlightBulletRow` presentation to preserve bullet row styling.
+- Kept Year Review data calculation, glucose-average highlight rendering, sharing, sync, and return behavior in `App.tsx`.
+- Updated navigation verifier coverage for component bindings and direct inline-map guards.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily record / record detail / community row clusters without changing first-version scope.
+
 ### T2080: Extract quick entry mode rail component
 
 Status: done

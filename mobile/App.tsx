@@ -854,6 +854,7 @@ import { SubscriptionSubpageCloseButton } from "./subscriptionSubpageCloseButton
 import { TranscriptReviewActionRow } from "./transcriptReviewActionRow";
 import { UpdateSuccessActionRow } from "./updateSuccessActionRow";
 import { VisualSmokeRouteJumpGrid } from "./visualSmokeRouteJumpGrid";
+import { YearlyHighlightList } from "./yearlyHighlightList";
 import type {
   Account,
   AiModelOptions,
@@ -5746,14 +5747,6 @@ export default function App() {
 
   function returnFromYearReview() {
     returnFromFuturePreviewScreen(yearReviewReturnScreen);
-  }
-
-  function yearlyHighlightItemKey(item: string) {
-    return item;
-  }
-
-  function yearlyHighlightItemText(item: string) {
-    return item;
   }
 
   function showYearReviewShareStatus() {
@@ -11968,12 +11961,7 @@ export default function App() {
             <MetricGrid rows={yearlyHealthOutcomeRows} />
             <View style={styles.highlightCard}>
               <Text style={styles.label}>{auxiliaryDisplayLabels.yearHighlights}</Text>
-              {yearlyHighlightDisplayTexts.map((item) => (
-                <View key={yearlyHighlightItemKey(item)} style={styles.highlightRow}>
-                  <Text style={styles.recordType}>•</Text>
-                  <Text style={styles.evidence}>{yearlyHighlightItemText(item)}</Text>
-                </View>
-              ))}
+              <YearlyHighlightList items={yearlyHighlightDisplayTexts} />
               {yearlyGlucoseAverageDisplayText ? (
                 <View style={styles.highlightRow}>
                   <Text style={styles.recordType}>•</Text>

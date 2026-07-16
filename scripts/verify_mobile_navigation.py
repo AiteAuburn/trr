@@ -25,6 +25,7 @@ MENU_DESTINATION_GRID_PATH = REPO_ROOT / "mobile" / "menuDestinationGrid.tsx"
 VISUAL_SMOKE_ROUTE_JUMP_GRID_PATH = REPO_ROOT / "mobile" / "visualSmokeRouteJumpGrid.tsx"
 FUTURE_MODULE_CARD_LIST_PATH = REPO_ROOT / "mobile" / "futureModuleCardList.tsx"
 QUICK_ENTRY_MODE_RAIL_PATH = REPO_ROOT / "mobile" / "quickEntryModeRail.tsx"
+YEARLY_HIGHLIGHT_LIST_PATH = REPO_ROOT / "mobile" / "yearlyHighlightList.tsx"
 SUBSCRIPTION_CHECKLIST_PATH = REPO_ROOT / "mobile" / "subscriptionChecklist.tsx"
 SUBSCRIPTION_COMPARISON_LIST_PATH = REPO_ROOT / "mobile" / "subscriptionComparisonList.tsx"
 PREVIEW_STATUS_LIST_PATH = REPO_ROOT / "mobile" / "previewStatusList.tsx"
@@ -1433,6 +1434,7 @@ def main() -> int:
     visual_smoke_route_jump_grid_content = VISUAL_SMOKE_ROUTE_JUMP_GRID_PATH.read_text(encoding="utf-8")
     future_module_card_list_content = FUTURE_MODULE_CARD_LIST_PATH.read_text(encoding="utf-8")
     quick_entry_mode_rail_content = QUICK_ENTRY_MODE_RAIL_PATH.read_text(encoding="utf-8")
+    yearly_highlight_list_content = YEARLY_HIGHLIGHT_LIST_PATH.read_text(encoding="utf-8")
     subscription_checklist_content = SUBSCRIPTION_CHECKLIST_PATH.read_text(encoding="utf-8")
     subscription_comparison_list_content = SUBSCRIPTION_COMPARISON_LIST_PATH.read_text(encoding="utf-8")
     preview_status_list_content = PREVIEW_STATUS_LIST_PATH.read_text(encoding="utf-8")
@@ -13403,12 +13405,7 @@ def main() -> int:
             ("year review local health rows helper binding", "const localYearlyHealthOutcomeRows = localYearlyHealthOutcomeDisplayRows("),
             ("year review health outcome rows binding", "rows={yearlyHealthOutcomeRows}"),
             ("year review local highlight helper binding", "const yearlyHighlightDisplayTexts = localYearlyHighlightDisplayItems("),
-            ("year review highlight item key helper", "function yearlyHighlightItemKey(item: string)"),
-            ("year review highlight item key helper fields", "return item;"),
-            ("year review highlight item key binding", "key={yearlyHighlightItemKey(item)}"),
-            ("year review highlight item text helper", "function yearlyHighlightItemText(item: string)"),
-            ("year review highlight item text helper fields", "return item;"),
-            ("year review highlight item text binding", "{yearlyHighlightItemText(item)}"),
+            ("year review highlight list binding", "<YearlyHighlightList items={yearlyHighlightDisplayTexts} />"),
             ("year review insight display helper binding", "const yearlyInsightDisplayTexts = yearReviewInsightDisplayTexts({"),
             ("year review insight backend observation binding", "backendObservation: backendYearAiObservation"),
             ("year review insight backend encouragement binding", "backendEncouragement: backendYearAiEncouragement"),
@@ -13474,6 +13471,18 @@ def main() -> int:
             ("future commerce action row CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("year review highlight list component", "export function YearlyHighlightList"),
+            ("year review highlight list items prop", "items: readonly string[]"),
+            ("year review highlight item key helper", "function yearlyHighlightItemKey(item: string)"),
+            ("year review highlight item key helper fields", "return item;"),
+            ("year review highlight item key binding", "key={yearlyHighlightItemKey(item)}"),
+            ("year review highlight item text helper", "function yearlyHighlightItemText(item: string)"),
+            ("year review highlight item text helper fields", "return item;"),
+            ("year review highlight item text binding", "text={yearlyHighlightItemText(item)}"),
+            ("year review highlight bullet row binding", "<HighlightBulletRow"),
+        ):
+            _assert_contains(label, yearly_highlight_list_content, marker)
         for label, marker in (
             ("future module card list component", "export function FutureModuleCardList"),
             ("future module display card type", "export type FutureModuleDisplayCard ="),
@@ -14327,6 +14336,11 @@ def main() -> int:
             "year review direct health outcome row value binding",
             content,
             "yearlyHealthOutcomeRows.map((row) => (\n                <View key={yearlyHealthOutcomeRowKey(row)} style={styles.metricCard}>\n                  <Text style={styles.confidence}>{yearlyHealthOutcomeRowLabel(row)}</Text>\n                  <Text style={styles.metricValue}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "year review direct highlight map binding",
+            content,
+            "yearlyHighlightDisplayTexts.map((item) =>",
         )
         _assert_not_contains(
             "year review direct highlight item key binding",
