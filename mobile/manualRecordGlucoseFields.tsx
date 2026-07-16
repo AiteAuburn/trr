@@ -21,6 +21,22 @@ type ManualRecordGlucoseFieldsProps<TUnit extends ManualRecordGlucoseOption, TTi
   onUnitPress: (option: TUnit) => void;
 };
 
+function manualRecordGlucoseOptionKey(option: ManualRecordGlucoseOption) {
+  return option.value;
+}
+
+function manualRecordGlucoseOptionAccessibilityLabel(option: ManualRecordGlucoseOption) {
+  return option.accessibilityLabel;
+}
+
+function manualRecordGlucoseOptionLabel(option: ManualRecordGlucoseOption) {
+  return option.label;
+}
+
+function manualRecordGlucoseOptionSelected(option: ManualRecordGlucoseOption, selectedValue: string) {
+  return selectedValue === manualRecordGlucoseOptionKey(option);
+}
+
 export function ManualRecordGlucoseFields<TUnit extends ManualRecordGlucoseOption, TTiming extends ManualRecordGlucoseOption>({
   glucoseTiming,
   glucoseValue,
@@ -50,38 +66,44 @@ export function ManualRecordGlucoseFields<TUnit extends ManualRecordGlucoseOptio
         />
       </View>
       <View style={styles.segmentRow}>
-        {unitOptions.map((option) => (
-          <Pressable
-            key={option.value}
-            accessibilityLabel={option.accessibilityLabel}
-            accessibilityRole="button"
-            accessibilityState={{ selected: glucoseUnit === option.value }}
-            style={[styles.segmentPill, glucoseUnit === option.value ? styles.segmentActive : null]}
-            onPress={() => onUnitPress(option)}
-          >
-            <Text style={[styles.segmentText, glucoseUnit === option.value ? styles.segmentTextActive : null]}>
-              {option.label}
-            </Text>
-          </Pressable>
-        ))}
+        {unitOptions.map((option) => {
+          const optionSelected = manualRecordGlucoseOptionSelected(option, glucoseUnit);
+          return (
+            <Pressable
+              key={manualRecordGlucoseOptionKey(option)}
+              accessibilityLabel={manualRecordGlucoseOptionAccessibilityLabel(option)}
+              accessibilityRole="button"
+              accessibilityState={{ selected: optionSelected }}
+              style={[styles.segmentPill, optionSelected ? styles.segmentActive : null]}
+              onPress={() => onUnitPress(option)}
+            >
+              <Text style={[styles.segmentText, optionSelected ? styles.segmentTextActive : null]}>
+                {manualRecordGlucoseOptionLabel(option)}
+              </Text>
+            </Pressable>
+          );
+        })}
       </View>
       <View style={styles.formField}>
         <FieldLabel icon={"◌"} label={"情境"} />
         <View style={styles.segmentRow}>
-          {timingOptions.map((option) => (
-            <Pressable
-              key={option.value}
-              accessibilityLabel={option.accessibilityLabel}
-              accessibilityRole="button"
-              accessibilityState={{ selected: glucoseTiming === option.value }}
-              style={[styles.segmentPill, glucoseTiming === option.value ? styles.segmentActive : null]}
-              onPress={() => onTimingPress(option)}
-            >
-              <Text style={[styles.segmentText, glucoseTiming === option.value ? styles.segmentTextActive : null]}>
-                {option.label}
-              </Text>
-            </Pressable>
-          ))}
+          {timingOptions.map((option) => {
+            const optionSelected = manualRecordGlucoseOptionSelected(option, glucoseTiming);
+            return (
+              <Pressable
+                key={manualRecordGlucoseOptionKey(option)}
+                accessibilityLabel={manualRecordGlucoseOptionAccessibilityLabel(option)}
+                accessibilityRole="button"
+                accessibilityState={{ selected: optionSelected }}
+                style={[styles.segmentPill, optionSelected ? styles.segmentActive : null]}
+                onPress={() => onTimingPress(option)}
+              >
+                <Text style={[styles.segmentText, optionSelected ? styles.segmentTextActive : null]}>
+                  {manualRecordGlucoseOptionLabel(option)}
+                </Text>
+              </Pressable>
+            );
+          })}
         </View>
       </View>
     </>
