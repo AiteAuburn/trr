@@ -3942,13 +3942,21 @@ export default function App() {
   ) {
     return records.map((record, index) =>
       index === editIndex
-        ? {
-            ...record,
-            occurred_at: occurredAt,
-            payload_json: payload
-          }
+        ? previewRecordWithEditPayload(record, occurredAt, payload)
         : record
     );
+  }
+
+  function previewRecordWithEditPayload(
+    record: PendingRecord,
+    occurredAt: string,
+    payload: Record<string, unknown>
+  ) {
+    return {
+      ...record,
+      occurred_at: occurredAt,
+      payload_json: payload
+    };
   }
 
   function applyPreviewRecordEditChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[]) {

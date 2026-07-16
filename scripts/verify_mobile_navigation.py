@@ -4291,7 +4291,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit records update helper usage",
             content,
-            "return previewRecordsWithEditedRecord(\n      currentPreview.records,\n      editIndex,",
+            "index === editIndex\n        ? previewRecordWithEditPayload(record, occurredAt, payload)\n        : record",
+        )
+        _assert_contains(
+            "AI candidate preview edit single record helper",
+            content,
+            "function previewRecordWithEditPayload(",
+        )
+        _assert_contains(
+            "AI candidate preview edit single record helper internals",
+            content,
+            "return {\n      ...record,\n      occurred_at: occurredAt,\n      payload_json: payload\n    };",
         )
         _assert_contains(
             "AI candidate preview edit records builder helper",
