@@ -2,7 +2,7 @@ import { StyleProp, StyleSheet, TextInput, TextInputProps, TextStyle, View } fro
 
 import { FieldLabel } from "./fieldLabel";
 
-type ManualRecordTextFieldProps = {
+type RecordTextFieldProps = {
   accessibilityLabel: string;
   icon: string;
   inputStyle?: StyleProp<TextStyle>;
@@ -16,7 +16,7 @@ type ManualRecordTextFieldProps = {
   value: string;
 };
 
-export function ManualRecordTextField({
+export function RecordTextField({
   accessibilityLabel,
   icon,
   inputStyle,
@@ -28,7 +28,7 @@ export function ManualRecordTextField({
   placeholder,
   textAlignVertical,
   value
-}: ManualRecordTextFieldProps) {
+}: RecordTextFieldProps) {
   return (
     <View style={styles.formField}>
       <FieldLabel icon={icon} label={label} />
@@ -42,14 +42,14 @@ export function ManualRecordTextField({
         autoCorrect={false}
         multiline={multiline}
         textAlignVertical={textAlignVertical}
-        style={inputStyle ?? manualRecordTextFieldStyles.input}
+        style={inputStyle ?? recordTextFieldStyles.input}
         placeholder={placeholder}
       />
     </View>
   );
 }
 
-export const manualRecordTextFieldStyles = StyleSheet.create({
+export const recordTextFieldStyles = StyleSheet.create({
   input: {
     backgroundColor: "#ffffff",
     borderColor: "#E3E8E5",

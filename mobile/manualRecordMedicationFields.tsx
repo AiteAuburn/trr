@@ -1,4 +1,4 @@
-import { ManualRecordTextField } from "./manualRecordTextField";
+import { RecordTextField } from "./recordTextField";
 
 type ManualRecordMedicationFieldsProps = {
   dose: string;
@@ -23,7 +23,7 @@ export function ManualRecordMedicationFields({
 }: ManualRecordMedicationFieldsProps) {
   return (
     <>
-      <ManualRecordTextField
+      <RecordTextField
         icon={"💊"}
         label={"用藥"}
         accessibilityLabel={nameAccessibilityLabel}
@@ -32,7 +32,7 @@ export function ManualRecordMedicationFields({
         maxLength={nameMaxLength}
         placeholder="藥名或胰島素描述"
       />
-      <ManualRecordTextField
+      <RecordTextField
         icon={"▣"}
         label={"劑量"}
         accessibilityLabel={doseAccessibilityLabel}

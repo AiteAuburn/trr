@@ -1,4 +1,4 @@
-import { ManualRecordTextField, manualRecordTextFieldStyles } from "./manualRecordTextField";
+import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 
 type ManualRecordNoteFieldsProps = {
   kind: string;
@@ -23,7 +23,7 @@ export function ManualRecordNoteFields({
 }: ManualRecordNoteFieldsProps) {
   return (
     <>
-      <ManualRecordTextField
+      <RecordTextField
         icon={"📝"}
         label={"備註類型"}
         accessibilityLabel={kindAccessibilityLabel}
@@ -32,7 +32,7 @@ export function ManualRecordNoteFields({
         maxLength={kindMaxLength}
         placeholder="symptom"
       />
-      <ManualRecordTextField
+      <RecordTextField
         icon={"#"}
         label={"標籤"}
         accessibilityLabel={tagsAccessibilityLabel}
@@ -41,7 +41,7 @@ export function ManualRecordNoteFields({
         maxLength={tagsMaxLength}
         multiline
         textAlignVertical="top"
-        inputStyle={[manualRecordTextFieldStyles.input, manualRecordTextFieldStyles.multilineField]}
+        inputStyle={[recordTextFieldStyles.input, recordTextFieldStyles.multilineField]}
         placeholder="頭暈、疲倦"
       />
     </>

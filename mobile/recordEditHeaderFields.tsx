@@ -1,6 +1,7 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { FieldLabel } from "./fieldLabel";
+import { RecordTextField } from "./recordTextField";
 
 type RecordEditHeaderFieldsProps = {
   dateAccessibilityLabel: string;
@@ -29,28 +30,26 @@ export function RecordEditHeaderFields({
     <View style={styles.detailRows}>
       <View style={styles.dateTimeRow}>
         <View style={styles.dateTimeField}>
-          <FieldLabel icon={"📅"} label={"日期"} />
-          <TextInput
+          <RecordTextField
+            icon={"📅"}
+            label={"日期"}
             accessibilityLabel={dateAccessibilityLabel}
             value={dateValue}
             onChangeText={onDateChange}
-            autoCapitalize="none"
-            autoCorrect={false}
             maxLength={dateMaxLength}
-            style={styles.input}
+            inputStyle={styles.input}
             placeholder="2026-04-29"
           />
         </View>
         <View style={styles.dateTimeField}>
-          <FieldLabel icon={"🕒"} label={"時間"} />
-          <TextInput
+          <RecordTextField
+            icon={"🕒"}
+            label={"時間"}
             accessibilityLabel={timeAccessibilityLabel}
             value={timeValue}
             onChangeText={onTimeChange}
-            autoCapitalize="none"
-            autoCorrect={false}
             maxLength={timeMaxLength}
-            style={styles.input}
+            inputStyle={styles.input}
             placeholder="08:10"
           />
         </View>

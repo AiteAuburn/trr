@@ -1,4 +1,4 @@
-import { ManualRecordTextField } from "./manualRecordTextField";
+import { RecordTextField } from "./recordTextField";
 
 type ManualRecordExerciseFieldsProps = {
   activity: string;
@@ -23,7 +23,7 @@ export function ManualRecordExerciseFields({
 }: ManualRecordExerciseFieldsProps) {
   return (
     <>
-      <ManualRecordTextField
+      <RecordTextField
         icon={"🚶"}
         label={"運動"}
         accessibilityLabel={activityAccessibilityLabel}
@@ -32,7 +32,7 @@ export function ManualRecordExerciseFields({
         maxLength={activityMaxLength}
         placeholder="走路"
       />
-      <ManualRecordTextField
+      <RecordTextField
         icon={"⏱"}
         label={"時長（分鐘）"}
         accessibilityLabel={minutesAccessibilityLabel}
