@@ -34,6 +34,41 @@ None.
 
 ## Done
 
+### T2059: Extract future readiness checklist component
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/futureReadinessChecklist.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `FutureReadinessChecklist` for repeated future-module readiness bullet rows.
+- Reused the component for Doctor Share and Health Integration readiness checklists.
+- Removed the future-readiness checklist item key/text helpers from `App.tsx`.
+- Preserved the same checklist item copy, order, keys, and `HighlightBulletRow` presentation.
+- Updated navigation, UI-spec coverage, and visual-smoke route verifier coverage for the component boundary, App item bindings, and direct inline-map guards.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing repeated commerce/food-photo checklist families without changing first-version scope.
+
 ### T2058: Extract subscription checklist component
 
 Status: done

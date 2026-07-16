@@ -775,6 +775,7 @@ import { DangerConfirmActionRow } from "./dangerConfirmActionRow";
 import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
 import { DeleteSuccessActionRow } from "./deleteSuccessActionRow";
 import { FieldLabel } from "./fieldLabel";
+import { FutureReadinessChecklist } from "./futureReadinessChecklist";
 import { DetailRow } from "./detailRow";
 import { CommunityActionRow } from "./communityActionRow";
 import { DoctorShareActionRow } from "./doctorShareActionRow";
@@ -4764,14 +4765,6 @@ export default function App() {
 
   function previewTimedRowTime(row: { time: string }) {
     return row.time;
-  }
-
-  function futureReadinessChecklistItemKey(item: string) {
-    return item;
-  }
-
-  function futureReadinessChecklistItemText(item: string) {
-    return item;
   }
 
   function commerceReadinessChecklistItemKey(item: string) {
@@ -11579,9 +11572,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>
-              {doctorShareReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={futureReadinessChecklistItemKey(item)} text={futureReadinessChecklistItemText(item)} />
-              ))}
+              <FutureReadinessChecklist items={doctorShareReadinessChecklistItems} />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{futurePreviewDisplayLabels.backendFoundation}</Text>
@@ -11637,9 +11628,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>
-              {healthIntegrationReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={futureReadinessChecklistItemKey(item)} text={futureReadinessChecklistItemText(item)} />
-              ))}
+              <FutureReadinessChecklist items={healthIntegrationReadinessChecklistItems} />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{futurePreviewDisplayLabels.externalDataBoundary}</Text>

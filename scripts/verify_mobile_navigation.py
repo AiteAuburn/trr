@@ -17,6 +17,7 @@ ACCOUNT_SECURITY_ACTION_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityActio
 SETTINGS_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "settingsBoundaryGrid.tsx"
 SETTINGS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "settingsChecklist.tsx"
 SUBSCRIPTION_CHECKLIST_PATH = REPO_ROOT / "mobile" / "subscriptionChecklist.tsx"
+FUTURE_READINESS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "futureReadinessChecklist.tsx"
 AUTH_PROVIDER_PREVIEW_LIST_PATH = REPO_ROOT / "mobile" / "authProviderPreviewList.tsx"
 AUTH_SESSION_DISPLAY_LIST_PATH = REPO_ROOT / "mobile" / "authSessionDisplayList.tsx"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
@@ -1406,6 +1407,7 @@ def main() -> int:
     settings_boundary_grid_content = SETTINGS_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
     settings_checklist_content = SETTINGS_CHECKLIST_PATH.read_text(encoding="utf-8")
     subscription_checklist_content = SUBSCRIPTION_CHECKLIST_PATH.read_text(encoding="utf-8")
+    future_readiness_checklist_content = FUTURE_READINESS_CHECKLIST_PATH.read_text(encoding="utf-8")
     auth_provider_preview_list_content = AUTH_PROVIDER_PREVIEW_LIST_PATH.read_text(encoding="utf-8")
     auth_session_display_list_content = AUTH_SESSION_DISPLAY_LIST_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
@@ -1926,8 +1928,6 @@ def main() -> int:
             ("ai candidate remove highlight bullet row", "aiCandidateRemoveChecklistItems.map((item) => (\n                <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />"),
             ("ai save failure highlight bullet row", "aiSaveFailureChecklistItems.map((item) => (\n                <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />"),
             ("detailed report notes highlight bullet row", "detailedReportNoteItems.map((item) => (\n                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />"),
-            ("doctor share readiness highlight bullet row", "doctorShareReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={futureReadinessChecklistItemKey(item)} text={futureReadinessChecklistItemText(item)} />"),
-            ("health integration readiness highlight bullet row", "healthIntegrationReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={futureReadinessChecklistItemKey(item)} text={futureReadinessChecklistItemText(item)} />"),
             ("community readiness highlight bullet row", "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={communityReadinessChecklistItemText(item)}"),
             ("ranking readiness highlight bullet row", "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />"),
             ("store checkout readiness highlight bullet row", "storeCheckoutReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />"),
@@ -1998,6 +1998,17 @@ def main() -> int:
             ("subscription checklist text binding", "text={subscriptionChecklistItemText(item)}"),
         ):
             _assert_contains(label, subscription_checklist_content, marker)
+        for label, marker in (
+            ("future readiness checklist component", "export function FutureReadinessChecklist"),
+            ("future readiness checklist item key helper", "function futureReadinessChecklistItemKey(item: string)"),
+            ("future readiness checklist item key helper fields", "return item;"),
+            ("future readiness checklist item text helper", "function futureReadinessChecklistItemText(item: string)"),
+            ("future readiness checklist item text helper fields", "return item;"),
+            ("future readiness checklist map", "items.map((item) => ("),
+            ("future readiness checklist key binding", "key={futureReadinessChecklistItemKey(item)}"),
+            ("future readiness checklist text binding", "text={futureReadinessChecklistItemText(item)}"),
+        ):
+            _assert_contains(label, future_readiness_checklist_content, marker)
         for label, marker in (
             ("metric card component", "export function MetricCard({ label, value }: MetricCardProps)"),
             ("metric card label", "<Text style={styles.confidence}>{label}</Text>"),
@@ -11047,12 +11058,9 @@ def main() -> int:
             ("subscription checklist binding", "<SubscriptionChecklist"),
             ("subscription readiness checklist items binding", "items={subscriptionReadinessChecklistItems}"),
             ("subscription management readiness checklist items binding", "items={subscriptionManagementReadinessChecklistItems}"),
-            ("future readiness checklist item key helper", "function futureReadinessChecklistItemKey(item: string)"),
-            ("future readiness checklist item key helper fields", "return item;"),
-            ("future readiness checklist item key binding", "key={futureReadinessChecklistItemKey(item)}"),
-            ("future readiness checklist item text helper", "function futureReadinessChecklistItemText(item: string)"),
-            ("future readiness checklist item text helper fields", "return item;"),
-            ("future readiness checklist item text binding", "text={futureReadinessChecklistItemText(item)}"),
+            ("future readiness checklist binding", "<FutureReadinessChecklist"),
+            ("doctor share readiness checklist items binding", "items={doctorShareReadinessChecklistItems}"),
+            ("health integration readiness checklist items binding", "items={healthIntegrationReadinessChecklistItems}"),
             ("commerce readiness checklist item key helper", "function commerceReadinessChecklistItemKey(item: string)"),
             ("commerce readiness checklist item key helper fields", "return item;"),
             ("commerce readiness checklist item key binding", "key={commerceReadinessChecklistItemKey(item)}"),
@@ -11246,15 +11254,10 @@ def main() -> int:
             "doctorShareReadinessChecklistItems",
             "healthIntegrationReadinessChecklistItems",
         ):
-            future_checklist_render_block = _match_block(
-                content,
-                rf"{list_name}\.map\(\(item\) => \(([\s\S]*?<HighlightBulletRow[^\n]*/>\n\s*)\)\)",
-                f"{list_name} future checklist render block",
-            )
             _assert_not_contains(
-                f"{list_name} direct checklist item binding",
-                future_checklist_render_block,
-                "key={item} text={item}",
+                f"{list_name} direct future readiness checklist map",
+                content,
+                f"{list_name}.map((item) => (",
             )
         for list_name in (
             "storeCheckoutReadinessChecklistItems",
