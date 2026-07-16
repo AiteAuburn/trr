@@ -8930,6 +8930,10 @@ export default function App() {
     setNativeStatus(nativeModuleCheckResultStatusMessage(message));
   }
 
+  function startNativeModuleCheckStatus() {
+    setNativeStatus(nativeModuleCheckProgressStatusMessage());
+  }
+
   function handleNativeModuleCheckFailure(error: unknown) {
     setNativeStatus(nativeModuleCheckFailureStatusMessage(error));
   }
@@ -8985,7 +8989,7 @@ export default function App() {
       return;
     }
     startNativeDebugAction();
-    setNativeStatus(nativeModuleCheckProgressStatusMessage());
+    startNativeModuleCheckStatus();
     try {
       const result = await checkNativeLocalModules();
       handleNativeModuleCheckSuccess(result.message);
