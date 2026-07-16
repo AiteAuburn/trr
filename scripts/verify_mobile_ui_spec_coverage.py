@@ -56,7 +56,7 @@ CANONICAL_SPEC_SCREENS = (
     SpecScreen("4.14.1", "未來模組詳情頁", "futureModuleDetail", ("selectedFutureModuleDisplay", "futureModuleDetailBoundaryDisplayText")),
     SpecScreen("4.14.2", "醫師 / 醫院合作預覽頁", "doctorShare", ("items={doctorShareReadinessChecklistItems}", "doctorShareActionStatus")),
     SpecScreen("4.14.3", "HealthKit / Health Connect / 血糖機預覽頁", "healthIntegration", ("items={healthIntegrationReadinessChecklistItems}", "healthIntegrationActionStatus")),
-    SpecScreen("4.14.4", "食物社群頁", "community", ("<SegmentSelector\n              options={foodCommunityCategoryDisplayOptions}", "foodCommunityShareFieldRows.map")),
+    SpecScreen("4.14.4", "食物社群頁", "community", ("<SegmentSelector\n              options={foodCommunityCategoryDisplayOptions}", "rows={foodCommunityShareFieldRows}")),
     SpecScreen("4.14.5", "排行榜預覽頁", "ranking", ("rankingReadinessChecklistItems.map", "rankingActionStatus")),
     SpecScreen("4.15", "文字確認頁", "transcriptReview", ("items={transcriptReviewCostBoundaryChecklistItems}", "parseTranscript")),
     SpecScreen("4.16", "AI 整理確認頁", "aiReview", ("previewRecordDisplayItems.map", "rejectedPreviewDisplayItems.map")),

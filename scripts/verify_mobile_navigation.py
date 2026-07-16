@@ -99,6 +99,7 @@ HISTORY_SYNC_BOUNDARY_BLOCK_PATH = REPO_ROOT / "mobile" / "historySyncBoundaryBl
 FIELD_LABEL_PATH = REPO_ROOT / "mobile" / "fieldLabel.tsx"
 DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "detailRow.tsx"
 HIGHLIGHT_BULLET_ROW_PATH = REPO_ROOT / "mobile" / "highlightBulletRow.tsx"
+HIGHLIGHT_DETAIL_LIST_PATH = REPO_ROOT / "mobile" / "highlightDetailList.tsx"
 HIGHLIGHT_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "highlightDetailRow.tsx"
 INSIGHT_EMPTY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "insightEmptyActionRow.tsx"
 MANUAL_RECORD_CREATE_PREVIEW_ACTION_PATH = REPO_ROOT / "mobile" / "manualRecordCreatePreviewAction.tsx"
@@ -1497,6 +1498,7 @@ def main() -> int:
     field_label_content = FIELD_LABEL_PATH.read_text(encoding="utf-8")
     detail_row_content = DETAIL_ROW_PATH.read_text(encoding="utf-8")
     highlight_bullet_row_content = HIGHLIGHT_BULLET_ROW_PATH.read_text(encoding="utf-8")
+    highlight_detail_list_content = HIGHLIGHT_DETAIL_LIST_PATH.read_text(encoding="utf-8")
     highlight_detail_row_content = HIGHLIGHT_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     insight_empty_action_row_content = INSIGHT_EMPTY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     manual_record_create_preview_action_content = MANUAL_RECORD_CREATE_PREVIEW_ACTION_PATH.read_text(
@@ -1960,6 +1962,21 @@ def main() -> int:
         ):
             _assert_contains(label, highlight_detail_row_content, marker)
         for label, marker in (
+            ("highlight detail list component", "export function HighlightDetailList"),
+            ("highlight detail list row type", "export type HighlightDetailListRow ="),
+            ("highlight detail list rows prop", "rows: HighlightDetailListRow[]"),
+            ("highlight detail list row key helper", "function highlightDetailListRowKey(row: HighlightDetailListRow)"),
+            ("highlight detail list row key helper fields", "return row.label;"),
+            ("highlight detail list row key binding", "key={highlightDetailListRowKey(row)}"),
+            ("highlight detail list row label helper", "function highlightDetailListRowLabel(row: HighlightDetailListRow)"),
+            ("highlight detail list row label helper fields", "return row.label;"),
+            ("highlight detail list row label binding", "label={highlightDetailListRowLabel(row)}"),
+            ("highlight detail list row value helper", "function highlightDetailListRowValue(row: HighlightDetailListRow)"),
+            ("highlight detail list row value helper fields", "return row.value;"),
+            ("highlight detail list row value binding", "value={highlightDetailListRowValue(row)}"),
+        ):
+            _assert_contains(label, highlight_detail_list_content, marker)
+        for label, marker in (
             ("insight empty action row component", "export function InsightEmptyActionRow"),
             ("insight empty action row manual accessibility prop", "accessibilityLabel={manualAccessibilityLabel}"),
             ("insight empty action row return accessibility prop", "accessibilityLabel={returnAccessibilityLabel}"),
@@ -1972,11 +1989,6 @@ def main() -> int:
             ("insight empty action row secondary style", "secondaryButton: {"),
         ):
             _assert_contains(label, insight_empty_action_row_content, marker)
-        for label, marker in (
-            ("food community share field highlight detail row", "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityShareFieldRowKey(row)}\n                  label={foodCommunityShareFieldRowLabel(row)}\n                  value={foodCommunityShareFieldRowValue(row)}"),
-            ("food community ranking highlight detail row", "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityRankingRowKey(row)}\n                  label={foodCommunityRankingRowLabel(row)}\n                  value={foodCommunityRankingRowValue(row)}"),
-        ):
-            _assert_contains(label, content, marker)
         for label, marker in (
             ("AI flow checklist component", "export function AiFlowChecklist"),
             ("AI flow checklist item key helper", "function aiFlowChecklistItemKey(item: string)"),
@@ -12070,25 +12082,10 @@ def main() -> int:
             ("food community detail share row note helper", "function foodCommunityDetailShareRowNote(share: { note: string })"),
             ("food community detail share row note helper fields", "return share.note;"),
             ("food community detail share row note helper binding", "{foodCommunityDetailShareRowNote(share)}"),
-            ("food community share field row key helper", "function foodCommunityShareFieldRowKey(row: (typeof foodCommunityShareFieldRows)[number])"),
-            ("food community share field row key helper fields", "return row.label;"),
-            ("food community share field row key helper binding", "key={foodCommunityShareFieldRowKey(row)}"),
-            ("food community share field row label helper", "function foodCommunityShareFieldRowLabel(row: (typeof foodCommunityShareFieldRows)[number])"),
-            ("food community share field row label helper fields", "return row.label;"),
-            ("food community share field row label helper binding", "label={foodCommunityShareFieldRowLabel(row)}"),
-            ("food community share field row value helper", "function foodCommunityShareFieldRowValue(row: (typeof foodCommunityShareFieldRows)[number])"),
-            ("food community share field row value helper fields", "return row.value;"),
-            ("food community share field row value helper binding", "value={foodCommunityShareFieldRowValue(row)}"),
+            ("highlight detail list binding", "<HighlightDetailList"),
+            ("food community share field rows list binding", "rows={foodCommunityShareFieldRows}"),
             ("food community point grid rows binding", "rows={foodCommunityPointRows}"),
-            ("food community ranking row key helper", "function foodCommunityRankingRowKey(row: (typeof foodCommunityRankingRows)[number])"),
-            ("food community ranking row key helper fields", "return row.label;"),
-            ("food community ranking row key helper binding", "key={foodCommunityRankingRowKey(row)}"),
-            ("food community ranking row label helper", "function foodCommunityRankingRowLabel(row: (typeof foodCommunityRankingRows)[number])"),
-            ("food community ranking row label helper fields", "return row.label;"),
-            ("food community ranking row label helper binding", "label={foodCommunityRankingRowLabel(row)}"),
-            ("food community ranking row value helper", "function foodCommunityRankingRowValue(row: (typeof foodCommunityRankingRows)[number])"),
-            ("food community ranking row value helper fields", "return row.value;"),
-            ("food community ranking row value helper binding", "value={foodCommunityRankingRowValue(row)}"),
+            ("food community ranking rows list binding", "rows={foodCommunityRankingRows}"),
             ("food community detail status example count helper", "function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] })"),
             ("food community detail status example count helper fields", "return item.examples.length;"),
             ("food community detail status title helper binding", "itemTitle: foodCommunityDetailStatusTitle(detailedItem),"),
@@ -12400,9 +12397,9 @@ def main() -> int:
             ("food community category selected state", "isSelected={(category) => foodCommunityCategoryOptionSelected(category, foodCommunityCategory)}"),
             ("food community item accessibility binding", "accessibilityLabel={foodCommunityListItemAccessibilityLabel(item)}"),
             ("food community selected state", "accessibilityState={{ selected: foodCommunityListItemSelected(item, selectedFoodCommunityItem) }}"),
-            ("food community share fields", "foodCommunityShareFieldRows.map"),
+            ("food community share fields", "rows={foodCommunityShareFieldRows}"),
             ("food community point rows", "rows={foodCommunityPointRows}"),
-            ("food community ranking rows", "foodCommunityRankingRows.map"),
+            ("food community ranking rows", "rows={foodCommunityRankingRows}"),
             ("ranking backend sync function", "async function loadCommunityLeaderboards()"),
             ("ranking sync status helper binding", "const leaderboardSyncStatus = communityLeaderboardSyncStatusMessages({"),
             ("ranking sync unavailable status binding", "setRankingActionStatus(leaderboardSyncStatus.unavailable);"),
@@ -14776,6 +14773,11 @@ def main() -> int:
             "<Text style={styles.evidence}>點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。</Text>",
         )
         _assert_not_contains(
+            "food community direct share field row map",
+            content,
+            "foodCommunityShareFieldRows.map((row) => (",
+        )
+        _assert_not_contains(
             "food community direct share field row key binding",
             content,
             "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />",
@@ -14789,6 +14791,11 @@ def main() -> int:
             "food community direct share field row value binding",
             content,
             "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityShareFieldRowKey(row)}\n                  label={foodCommunityShareFieldRowLabel(row)}\n                  value={row.value}",
+        )
+        _assert_not_contains(
+            "food community direct ranking row map",
+            content,
+            "foodCommunityRankingRows.map((row) => (",
         )
         _assert_not_contains(
             "food community direct ranking row key binding",

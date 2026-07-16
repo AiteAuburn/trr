@@ -15,6 +15,41 @@
 
 ## 2026-07-16
 
+### T2071 extract highlight detail list component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/highlightDetailList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `HighlightDetailList` for repeated `{label, value}` highlight detail rows.
+- Reused the component for Food Community share fields and ranking rows.
+- Moved those row key/label/value helpers out of `App.tsx`.
+- Preserved the same row copy, order, keys, and `HighlightDetailRow` presentation.
+- Updated navigation, UI-spec coverage, and visual-smoke route verifier coverage for the component row bindings and direct inline-map guards.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining subscription/membership/settings/action row clusters without changing first-version scope.
+
 ### T2070 reuse future boundary grid for remaining boundary rows
 
 類型：mobile / refactor / verifier / docs

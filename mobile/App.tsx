@@ -796,7 +796,7 @@ import { AuthProviderPreviewList } from "./authProviderPreviewList";
 import { AuthSessionDisplayList } from "./authSessionDisplayList";
 import { BackendUrlField } from "./backendUrlField";
 import { HighlightBulletRow } from "./highlightBulletRow";
-import { HighlightDetailRow } from "./highlightDetailRow";
+import { HighlightDetailList } from "./highlightDetailList";
 import { InsightFlowChecklist } from "./insightFlowChecklist";
 import { InsightEmptyActionRow } from "./insightEmptyActionRow";
 import { CommunityPublicDisplayNameField } from "./communityPublicDisplayNameField";
@@ -5447,30 +5447,6 @@ export default function App() {
 
   function foodCommunityDetailShareRowNote(share: { note: string }) {
     return share.note;
-  }
-
-  function foodCommunityShareFieldRowKey(row: (typeof foodCommunityShareFieldRows)[number]) {
-    return row.label;
-  }
-
-  function foodCommunityShareFieldRowLabel(row: (typeof foodCommunityShareFieldRows)[number]) {
-    return row.label;
-  }
-
-  function foodCommunityShareFieldRowValue(row: (typeof foodCommunityShareFieldRows)[number]) {
-    return row.value;
-  }
-
-  function foodCommunityRankingRowKey(row: (typeof foodCommunityRankingRows)[number]) {
-    return row.label;
-  }
-
-  function foodCommunityRankingRowLabel(row: (typeof foodCommunityRankingRows)[number]) {
-    return row.label;
-  }
-
-  function foodCommunityRankingRowValue(row: (typeof foodCommunityRankingRows)[number]) {
-    return row.value;
   }
 
   function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
@@ -11555,24 +11531,12 @@ export default function App() {
                 onAfterGlucoseChange={updateFoodCommunityAfterGlucose}
                 onNoteChange={updateFoodCommunityNote}
               />
-              {foodCommunityShareFieldRows.map((row) => (
-                <HighlightDetailRow
-                  key={foodCommunityShareFieldRowKey(row)}
-                  label={foodCommunityShareFieldRowLabel(row)}
-                  value={foodCommunityShareFieldRowValue(row)}
-                />
-              ))}
+              <HighlightDetailList rows={foodCommunityShareFieldRows} />
             </View>
             <FutureBoundaryGrid rows={foodCommunityPointRows} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{foodCommunityRankingSectionLabel()}</Text>
-              {foodCommunityRankingRows.map((row) => (
-                <HighlightDetailRow
-                  key={foodCommunityRankingRowKey(row)}
-                  label={foodCommunityRankingRowLabel(row)}
-                  value={foodCommunityRankingRowValue(row)}
-                />
-              ))}
+              <HighlightDetailList rows={foodCommunityRankingRows} />
               <Text style={styles.evidence}>{foodCommunityPointsStoreBridgeCopy()}</Text>
             </View>
             <View style={styles.heroCardFeature}>
