@@ -7861,6 +7861,13 @@ export default function App() {
     return boundRecordItem(updatedResponse);
   }
 
+  function handleSelectedRecordUpdateSuccess(updated: RecordItem) {
+    setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));
+    selectRecordForResult(updated);
+    openUpdateSuccessResult(recordUpdateSummaryMessage(1));
+    setStatus(recordUpdateSuccessStatusMessage());
+  }
+
   async function updateSelectedRecord() {
     if (isBusy || recordUpdateInFlight.current) {
       return;
@@ -7893,10 +7900,7 @@ export default function App() {
         throw new Error("payload_json must be an object");
       }
       const updated = await requestSelectedRecordUpdate(selectedRecord.id, account.id, payload);
-      setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));
-      selectRecordForResult(updated);
-      openUpdateSuccessResult(recordUpdateSummaryMessage(1));
-      setStatus(recordUpdateSuccessStatusMessage());
+      handleSelectedRecordUpdateSuccess(updated);
     } catch (error) {
       setStatus(recordUpdateFailureStatusMessage(error));
     } finally {

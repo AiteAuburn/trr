@@ -4454,9 +4454,9 @@ def main() -> int:
             "if (createdRecords[0]) {\n      selectRecordForResult(createdRecords[0]);\n    }",
         )
         _assert_contains(
-            "record update result selected record helper binding",
+            "record update result selected record helper state",
             content,
-            "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n      selectRecordForResult(updated);",
+            "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n    selectRecordForResult(updated);",
         )
         _assert_contains(
             "record update request helper",
@@ -4482,6 +4482,21 @@ def main() -> int:
             "record update request helper binding",
             content,
             "const updated = await requestSelectedRecordUpdate(selectedRecord.id, account.id, payload);",
+        )
+        _assert_contains(
+            "record update success helper",
+            content,
+            "function handleSelectedRecordUpdateSuccess(updated: RecordItem)",
+        )
+        _assert_contains(
+            "record update success helper state",
+            content,
+            "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n    selectRecordForResult(updated);\n    openUpdateSuccessResult(recordUpdateSummaryMessage(1));\n    setStatus(recordUpdateSuccessStatusMessage());",
+        )
+        _assert_contains(
+            "record update success helper binding",
+            content,
+            "const updated = await requestSelectedRecordUpdate(selectedRecord.id, account.id, payload);\n      handleSelectedRecordUpdateSuccess(updated);",
         )
         _assert_contains(
             "manual create result selected record helper state",
@@ -4644,9 +4659,9 @@ def main() -> int:
             'openRecordSummaryResult(summary, "updateSuccess", setLastUpdatedSummary);',
         )
         _assert_contains(
-            "record update success result helper binding",
+            "record update success result helper state",
             content,
-            "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n      selectRecordForResult(updated);\n      openUpdateSuccessResult(recordUpdateSummaryMessage(1));",
+            "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n    selectRecordForResult(updated);\n    openUpdateSuccessResult(recordUpdateSummaryMessage(1));",
         )
         _assert_contains(
             "record update start helper",
