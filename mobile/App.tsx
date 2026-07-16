@@ -9248,7 +9248,7 @@ export default function App() {
   }
 
   function manualRecordOptionTarget(option: { value: string }) {
-    return option.value;
+    return editOptionKey(option);
   }
 
   function pressManualRecordGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>) {

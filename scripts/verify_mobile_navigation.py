@@ -9436,6 +9436,8 @@ def main() -> int:
             ("manual record option target helper", "function manualRecordOptionTarget(option: { value: string })"),
             ("manual record option target helper fields", "return option.value;"),
             ("manual record unit option press handler", "function pressManualRecordGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>)"),
+            ("manual record option target helper", "function manualRecordOptionTarget(option: { value: string })"),
+            ("manual record option target helper fields", "return editOptionKey(option);"),
             ("manual record unit option target helper binding", "selectManualRecordGlucoseUnit(manualRecordOptionTarget(option));"),
             ("manual record timing option press handler", "function pressManualRecordGlucoseTimingOption(option: ReturnType<typeof valueLabelDisplayItem>)"),
             ("manual record timing option target helper binding", "selectManualRecordGlucoseTiming(manualRecordOptionTarget(option));"),
