@@ -8917,6 +8917,11 @@ export default function App() {
     setNativeStatus(nativeBenchmarkResultStatusMessage(results));
   }
 
+  function startNativeModelDownloadStatus() {
+    setDownloadProgress(0);
+    setNativeStatus(nativeModelDownloadProgressStatusMessage());
+  }
+
   function handleNativeModelDownloadFailure(error: unknown) {
     setNativeStatus(nativeModelDownloadFailureStatusMessage(error));
   }
@@ -8956,8 +8961,7 @@ export default function App() {
       return;
     }
     startNativeDebugAction();
-    setDownloadProgress(0);
-    setNativeStatus(nativeModelDownloadProgressStatusMessage());
+    startNativeModelDownloadStatus();
     try {
       const uri = await downloadModel({
         url: modelUrl,
