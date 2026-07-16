@@ -4049,9 +4049,29 @@ def main() -> int:
             "function seedEmptyPreviewEditStateForNow()",
         )
         _assert_contains(
+            "AI candidate edit date-time inputs helper",
+            content,
+            "function setPreviewEditDateTimeInputs(dateTime: { date: string; time: string })",
+        )
+        _assert_contains(
+            "AI candidate edit date-time inputs helper fields",
+            content,
+            "setPreviewEditDate(dateTime.date);\n    setPreviewEditTime(dateTime.time);",
+        )
+        _assert_contains(
+            "AI candidate edit seed from record date-time binding",
+            content,
+            "setPreviewEditDateTimeInputs(localDateTimeInputs(record.occurred_at));",
+        )
+        _assert_contains(
             "AI candidate edit seed empty uses field clear helper",
             content,
             "function seedEmptyPreviewEditStateForNow() {\n    clearPreviewEditDraftFields();",
+        )
+        _assert_contains(
+            "AI candidate edit seed empty now date-time binding",
+            content,
+            "setPreviewEditDateTimeInputs(localDateTimeInputs(new Date()));",
         )
         _assert_contains(
             "daily record entry menu clear helper",

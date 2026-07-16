@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1976: Reuse preview edit date-time seed helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `setPreviewEditDateTimeInputs()` for AI candidate preview edit date/time state seeding.
+- Reused the helper from record-based and empty-now preview edit seed flows while preserving payload field seeding, local date/time conversion, preview edit cancel/reset behavior, and daily-record entry menu clearing.
+- Updated navigation verifier coverage for the preview date-time seed helper and both seed bindings.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing preview edit/manual edit state helpers in small behavior-preserving slices.
+
 ### T1975: Reuse manual record date-time seed helper
 
 Status: done

@@ -3353,11 +3353,14 @@ export default function App() {
     void finishRecordingPreview();
   }
 
-  function seedPreviewEditStateFromRecord(record: PendingRecord) {
-    setPreviewEditFields(recordPayloadToEditFields(record));
-    const dateTime = localDateTimeInputs(record.occurred_at);
+  function setPreviewEditDateTimeInputs(dateTime: { date: string; time: string }) {
     setPreviewEditDate(dateTime.date);
     setPreviewEditTime(dateTime.time);
+  }
+
+  function seedPreviewEditStateFromRecord(record: PendingRecord) {
+    setPreviewEditFields(recordPayloadToEditFields(record));
+    setPreviewEditDateTimeInputs(localDateTimeInputs(record.occurred_at));
   }
 
   function clearPreviewEditDraftFields() {
@@ -3406,9 +3409,7 @@ export default function App() {
 
   function seedEmptyPreviewEditStateForNow() {
     clearPreviewEditDraftFields();
-    const nowInputs = localDateTimeInputs(new Date());
-    setPreviewEditDate(nowInputs.date);
-    setPreviewEditTime(nowInputs.time);
+    setPreviewEditDateTimeInputs(localDateTimeInputs(new Date()));
   }
 
   function clearPreviewMenuSelectionIndexes() {
