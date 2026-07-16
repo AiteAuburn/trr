@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1747: Reuse preview warning state
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Extended the shared preview state helper with low-confidence candidate count and a combined warning flag.
+- Reused the helper for low-confidence count display state and AI save-confirm warning state.
+- Updated navigation verifier coverage with positive warning-state bindings and direct warning/count guards.
+- No UI copy/layout/backend/schema/Android signing/parser rejected-event schema/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining save-success / daily-record derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1746: Reuse preview state rejected events
 
 Status: done

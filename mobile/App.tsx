@@ -827,11 +827,14 @@ function previewRecordState(preview: ParsePreviewResponse | null) {
   const records = preview?.records ?? [];
   const rejectedEvents = preview?.rejected_events ?? [];
   const recordCount = records.length;
+  const lowConfidenceRecordCount = records.filter((record) => (record.confidence ?? 1) < 0.7).length;
   const rejectedEventCount = rejectedEvents.length;
 
   return {
+    hasWarnings: lowConfidenceRecordCount > 0 || rejectedEventCount > 0,
     hasRecords: recordCount > 0,
     isEmpty: recordCount === 0,
+    lowConfidenceRecordCount,
     recordCount,
     records,
     rejectedEventCount,
@@ -1245,8 +1248,7 @@ export default function App() {
   const analysisNoDataStatusDisplayLabel = analysisNoDataStatusLabel();
   const analysisNoDataDisplayCopy = analysisNoDataCopy();
   const analysisBoundaryDataDisplayCopy = analysisBoundaryDataCopy(analysisPreviewMode);
-  const lowConfidencePreviewRecordCount =
-    previewState.records.filter((record) => (record.confidence ?? 1) < 0.7).length;
+  const lowConfidencePreviewRecordCount = previewState.lowConfidenceRecordCount;
   const rejectedPreviewEventCount = previewState.rejectedEventCount;
   const lowConfidencePreviewRecordDisplayCount = clampNumber(lowConfidencePreviewRecordCount, 0, maxMobilePreviewRecords);
   const rejectedPreviewEventDisplayCount = clampNumber(rejectedPreviewEventCount, 0, maxMobileRejectedEvents);
@@ -1267,8 +1269,7 @@ export default function App() {
   const aiReviewLowConfidenceDisplayText = aiReviewDisplay.lowConfidence;
   const aiReviewRejectedEventsDisplayText = aiReviewDisplay.rejectedEvents;
   const aiReviewBackendRequiredDisplayText = aiReviewDisplay.backendRequired;
-  const hasAiSaveConfirmWarnings =
-    lowConfidencePreviewRecordCount > 0 || rejectedPreviewEventCount > 0;
+  const hasAiSaveConfirmWarnings = previewState.hasWarnings;
   const isAiSaveConfirmBlockedByBackend = !protectedBackendReady;
   const aiSaveConfirmDisplay = aiSaveConfirmDisplayTexts(
     isBusy,

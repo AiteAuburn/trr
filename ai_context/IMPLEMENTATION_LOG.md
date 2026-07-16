@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1747 reuse preview warning state
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extended the shared preview state helper with low-confidence candidate count and a combined warning flag.
+- Reused the helper for low-confidence count display state and AI save-confirm warning state.
+- Updated navigation verifier coverage with positive warning-state bindings and direct warning/count guards.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、parser rejected-event schema、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining save-success / daily-record derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1746 reuse preview state rejected events
 
 類型：mobile / refactor / verifier / docs
