@@ -1293,7 +1293,7 @@ def _assert_text_inputs_use_bounded_state_values(content: str) -> None:
             binding,
         )
         is_record_edit_field_value = re.fullmatch(
-            r'recordEditFieldValue\((previewEditFields|recordEditFields), "[A-Za-z_][A-Za-z0-9_]*"\)',
+            r'recordEditFieldValue\((manualRecordFields|previewEditFields|recordEditFields), "[A-Za-z_][A-Za-z0-9_]*"\)',
             binding,
         )
         if not (is_state_reference or is_record_edit_field_value):
@@ -7479,7 +7479,7 @@ def main() -> int:
             ("manual record type selector binding", "<ManualRecordTypeSelector\n              options={manualRecordTypeDisplayOptions}"),
             ("manual record type selector selected binding", "selectedValue={manualRecordType}"),
             ("manual record type selector press binding", "onTypePress={pressManualRecordTypeOption}"),
-            ("manual record glucose fields binding", "<ManualRecordGlucoseFields\n                glucoseTiming={manualRecordFields.glucoseTiming}"),
+            ("manual record glucose fields binding", '<ManualRecordGlucoseFields\n                glucoseTiming={recordEditFieldValue(manualRecordFields, "glucoseTiming")}'),
             ("manual record glucose input binding", "onGlucoseValueChange={updateManualRecordGlucoseValue}"),
             ("manual record glucose unit binding", "onUnitPress={pressManualRecordGlucoseUnitOption}"),
             ("manual record glucose timing binding", "onTimingPress={pressManualRecordGlucoseTimingOption}"),
@@ -7493,16 +7493,16 @@ def main() -> int:
             ("manual record meal type option target helper binding", "selectManualRecordMealType(manualRecordOptionTarget(option));"),
             ("manual record unit option press binding", "onUnitPress={pressManualRecordGlucoseUnitOption}"),
             ("manual record timing option press binding", "onTimingPress={pressManualRecordGlucoseTimingOption}"),
-            ("manual record meal fields binding", "<ManualRecordMealFields\n                foodItems={manualRecordFields.foodItems}"),
+            ("manual record meal fields binding", '<ManualRecordMealFields\n                foodItems={recordEditFieldValue(manualRecordFields, "foodItems")}'),
             ("manual record food items binding", "onFoodItemsChange={updateManualRecordFoodItems}"),
             ("manual record meal type option press binding", "onMealTypePress={pressManualRecordMealTypeOption}"),
-            ("manual record exercise fields binding", "<ManualRecordExerciseFields\n                activity={manualRecordFields.exerciseActivity}"),
+            ("manual record exercise fields binding", '<ManualRecordExerciseFields\n                activity={recordEditFieldValue(manualRecordFields, "exerciseActivity")}'),
             ("manual record exercise activity binding", "onActivityChange={updateManualRecordExerciseActivity}"),
             ("manual record exercise minutes binding", "onMinutesChange={updateManualRecordExerciseMinutes}"),
-            ("manual record medication fields binding", "<ManualRecordMedicationFields\n                dose={manualRecordFields.medicationDose}"),
+            ("manual record medication fields binding", '<ManualRecordMedicationFields\n                dose={recordEditFieldValue(manualRecordFields, "medicationDose")}'),
             ("manual record medication dose binding", "onDoseChange={updateManualRecordMedicationDose}"),
             ("manual record medication name binding", "onNameChange={updateManualRecordMedicationName}"),
-            ("manual record note fields binding", "<ManualRecordNoteFields\n                kind={manualRecordFields.noteKind}"),
+            ("manual record note fields binding", '<ManualRecordNoteFields\n                kind={recordEditFieldValue(manualRecordFields, "noteKind")}'),
             ("manual record note kind binding", "onKindChange={updateManualRecordNoteKind}"),
             ("manual record note tags binding", "onTagsChange={updateManualRecordNoteTags}"),
             ("manual record header intro binding", "<ManualRecordHeaderIntro\n              backAccessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}"),
@@ -7600,6 +7600,11 @@ def main() -> int:
             ("record edit direct glucose value binding", "value={recordEditFields.glucoseValue}"),
             ("record edit direct food items binding", "value={recordEditFields.foodItems}"),
             ("record edit direct fallback json binding", "value={recordEditFields.fallbackJson}"),
+            ("manual record direct glucose value prop", "glucoseValue={manualRecordFields.glucoseValue}"),
+            ("manual record direct food items prop", "foodItems={manualRecordFields.foodItems}"),
+            ("manual record direct exercise activity prop", "activity={manualRecordFields.exerciseActivity}"),
+            ("manual record direct medication dose prop", "dose={manualRecordFields.medicationDose}"),
+            ("manual record direct note kind prop", "kind={manualRecordFields.noteKind}"),
         ):
             _assert_not_contains(label, content, marker)
         _assert_contains(

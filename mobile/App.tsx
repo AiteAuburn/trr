@@ -9611,11 +9611,11 @@ export default function App() {
 
             {manualRecordType === "glucose" ? (
               <ManualRecordGlucoseFields
-                glucoseTiming={manualRecordFields.glucoseTiming}
-                glucoseValue={manualRecordFields.glucoseValue}
+                glucoseTiming={recordEditFieldValue(manualRecordFields, "glucoseTiming")}
+                glucoseValue={recordEditFieldValue(manualRecordFields, "glucoseValue")}
                 glucoseValueAccessibilityLabel={auxiliaryDisplayLabels.glucoseValueInputAccessibility}
                 glucoseValueMaxLength={recordEditFieldMaxLength("glucoseValue")}
-                glucoseUnit={manualRecordFields.glucoseUnit}
+                glucoseUnit={recordEditFieldValue(manualRecordFields, "glucoseUnit")}
                 timingOptions={glucoseTimingDisplayOptions}
                 unitOptions={glucoseUnitDisplayOptions}
                 onGlucoseValueChange={updateManualRecordGlucoseValue}
@@ -9626,10 +9626,10 @@ export default function App() {
 
             {manualRecordType === "meal" ? (
               <ManualRecordMealFields
-                foodItems={manualRecordFields.foodItems}
+                foodItems={recordEditFieldValue(manualRecordFields, "foodItems")}
                 foodItemsAccessibilityLabel={auxiliaryDisplayLabels.foodItemsInputAccessibility}
                 foodItemsMaxLength={recordEditFieldMaxLength("foodItems")}
-                mealType={manualRecordFields.mealType}
+                mealType={recordEditFieldValue(manualRecordFields, "mealType")}
                 mealTypeOptions={mealTypeDisplayOptions}
                 onFoodItemsChange={updateManualRecordFoodItems}
                 onMealTypePress={pressManualRecordMealTypeOption}
@@ -9638,10 +9638,10 @@ export default function App() {
 
             {manualRecordType === "exercise" ? (
               <ManualRecordExerciseFields
-                activity={manualRecordFields.exerciseActivity}
+                activity={recordEditFieldValue(manualRecordFields, "exerciseActivity")}
                 activityAccessibilityLabel={auxiliaryDisplayLabels.exerciseActivityInputAccessibility}
                 activityMaxLength={recordEditFieldMaxLength("exerciseActivity")}
-                minutes={manualRecordFields.exerciseMinutes}
+                minutes={recordEditFieldValue(manualRecordFields, "exerciseMinutes")}
                 minutesAccessibilityLabel={auxiliaryDisplayLabels.exerciseMinutesInputAccessibility}
                 minutesMaxLength={recordEditFieldMaxLength("exerciseMinutes")}
                 onActivityChange={updateManualRecordExerciseActivity}
@@ -9651,10 +9651,10 @@ export default function App() {
 
             {manualRecordType === "medication" ? (
               <ManualRecordMedicationFields
-                dose={manualRecordFields.medicationDose}
+                dose={recordEditFieldValue(manualRecordFields, "medicationDose")}
                 doseAccessibilityLabel={auxiliaryDisplayLabels.medicationDoseInputAccessibility}
                 doseMaxLength={recordEditFieldMaxLength("medicationDose")}
-                name={manualRecordFields.medicationName}
+                name={recordEditFieldValue(manualRecordFields, "medicationName")}
                 nameAccessibilityLabel={auxiliaryDisplayLabels.medicationNameInputAccessibility}
                 nameMaxLength={recordEditFieldMaxLength("medicationName")}
                 onDoseChange={updateManualRecordMedicationDose}
@@ -9664,10 +9664,10 @@ export default function App() {
 
             {manualRecordType === "note" ? (
               <ManualRecordNoteFields
-                kind={manualRecordFields.noteKind}
+                kind={recordEditFieldValue(manualRecordFields, "noteKind")}
                 kindAccessibilityLabel={auxiliaryDisplayLabels.noteKindInputAccessibility}
                 kindMaxLength={recordEditFieldMaxLength("noteKind")}
-                tags={manualRecordFields.noteTags}
+                tags={recordEditFieldValue(manualRecordFields, "noteTags")}
                 tagsAccessibilityLabel={auxiliaryDisplayLabels.noteTagsInputAccessibility}
                 tagsMaxLength={recordEditFieldMaxLength("noteTags")}
                 onKindChange={updateManualRecordNoteKind}

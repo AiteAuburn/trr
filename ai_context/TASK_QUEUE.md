@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1741: Reuse manual record field props
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused the shared record edit field value helper for manual record form component props.
+- Replaced direct manualRecordFields prop reads in manual glucose, meal, exercise, medication, and note sections while preserving manual field state, update handlers, validation, preview creation, and submit behavior unchanged.
+- Updated navigation verifier coverage and representative direct manual field guards.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining edit/manual form props in small behavior-preserving slices.
+
 ### T1740: Reuse record edit field values
 
 Status: done
