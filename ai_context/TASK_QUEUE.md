@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1964: Reuse native debug ready guard for downloads
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `isNativeDebugActionReady()` for the shared native debug busy/debug-tools availability guard.
+- Reused the helper from `downloadSelectedModel()` while preserving blocked return behavior, unavailable status side effect, and action start order.
+- Updated navigation verifier coverage for the native debug ready helper and download binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue moving native debug actions onto the ready guard in small behavior-preserving slices.
+
 ### T1963: Reuse native benchmark results helper
 
 Status: done

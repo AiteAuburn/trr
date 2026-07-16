@@ -8891,6 +8891,17 @@ export default function App() {
     setIsBusy(false);
   }
 
+  function isNativeDebugActionReady() {
+    if (isNativeDebugActionBlocked()) {
+      return false;
+    }
+    if (!enableDebugTools) {
+      openNativeDebugUnavailable();
+      return false;
+    }
+    return true;
+  }
+
   function nativeWhisperInput() {
     return {
       audioPath: audioPath.trim(),
@@ -9020,11 +9031,7 @@ export default function App() {
   }
 
   async function downloadSelectedModel() {
-    if (isNativeDebugActionBlocked()) {
-      return;
-    }
-    if (!enableDebugTools) {
-      openNativeDebugUnavailable();
+    if (!isNativeDebugActionReady()) {
       return;
     }
     startNativeDebugAction();
