@@ -1,6 +1,6 @@
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { FieldLabel } from "./fieldLabel";
+import { ManualRecordTextField } from "./manualRecordTextField";
 
 type ManualRecordDateTimeFieldsProps = {
   dateAccessibilityLabel: string;
@@ -26,28 +26,26 @@ export function ManualRecordDateTimeFields({
   return (
     <View style={styles.dateTimeRow}>
       <View style={styles.dateTimeField}>
-        <FieldLabel icon={"📅"} label={"日期"} />
-        <TextInput
+        <ManualRecordTextField
+          icon={"📅"}
+          label={"日期"}
           accessibilityLabel={dateAccessibilityLabel}
           value={dateValue}
           onChangeText={onDateChange}
-          autoCapitalize="none"
-          autoCorrect={false}
           maxLength={dateMaxLength}
-          style={styles.input}
+          inputStyle={styles.input}
           placeholder="2026-04-29"
         />
       </View>
       <View style={styles.dateTimeField}>
-        <FieldLabel icon={"🕒"} label={"時間"} />
-        <TextInput
+        <ManualRecordTextField
+          icon={"🕒"}
+          label={"時間"}
           accessibilityLabel={timeAccessibilityLabel}
           value={timeValue}
           onChangeText={onTimeChange}
-          autoCapitalize="none"
-          autoCorrect={false}
           maxLength={timeMaxLength}
-          style={styles.input}
+          inputStyle={styles.input}
           placeholder="08:10"
         />
       </View>

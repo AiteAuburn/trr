@@ -1887,18 +1887,25 @@ def main() -> int:
             _assert_contains(label, manual_record_header_intro_content, marker)
         for label, marker in (
             ("manual record date time fields component", "export function ManualRecordDateTimeFields({"),
-            ("manual record date field label", '<FieldLabel icon={"📅"} label={"日期"} />'),
+            ("manual record date time shared field", "<ManualRecordTextField"),
+            ("manual record date field icon", 'icon={"📅"}'),
+            ("manual record date field label", 'label={"日期"}'),
             ("manual record date accessibility", "accessibilityLabel={dateAccessibilityLabel}"),
             ("manual record date value", "value={dateValue}"),
             ("manual record date handler", "onChangeText={onDateChange}"),
             ("manual record date max length", "maxLength={dateMaxLength}"),
-            ("manual record time field label", '<FieldLabel icon={"🕒"} label={"時間"} />'),
+            ("manual record date input style binding", "inputStyle={styles.input}"),
+            ("manual record date placeholder", 'placeholder="2026-04-29"'),
+            ("manual record time field icon", 'icon={"🕒"}'),
+            ("manual record time field label", 'label={"時間"}'),
             ("manual record time accessibility", "accessibilityLabel={timeAccessibilityLabel}"),
             ("manual record time value", "value={timeValue}"),
             ("manual record time handler", "onChangeText={onTimeChange}"),
             ("manual record time max length", "maxLength={timeMaxLength}"),
+            ("manual record time placeholder", 'placeholder="08:10"'),
             ("manual record date time row style", "dateTimeRow: {"),
             ("manual record date time input style", "input: {"),
+            ("manual record date time input min height", "minHeight: 52"),
         ):
             _assert_contains(label, manual_record_date_time_fields_content, marker)
         for label, marker in (
