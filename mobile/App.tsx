@@ -7475,6 +7475,17 @@ export default function App() {
     }
   }
 
+  function startPreviewSaveRequest() {
+    previewSaveInFlight.current = true;
+    setIsBusy(true);
+    setStatus(aiSaveProgressStatusMessage());
+  }
+
+  function finishPreviewSaveRequest() {
+    previewSaveInFlight.current = false;
+    setIsBusy(false);
+  }
+
   async function savePreviewRecords() {
     if (isBusy || previewSaveInFlight.current) {
       return;
@@ -7490,9 +7501,7 @@ export default function App() {
       return;
     }
 
-    previewSaveInFlight.current = true;
-    setIsBusy(true);
-    setStatus(aiSaveProgressStatusMessage());
+    startPreviewSaveRequest();
     const clientSaveBatchId = createClientSaveBatchId();
     const recordsToSave = preview.records.map((record, index) => {
       const sanitizedRecord = pendingRecordForSave(record);
@@ -7536,8 +7545,7 @@ export default function App() {
       openAiSaveFailureResult(message);
       setStatus(message);
     } finally {
-      previewSaveInFlight.current = false;
-      setIsBusy(false);
+      finishPreviewSaveRequest();
     }
   }
 
