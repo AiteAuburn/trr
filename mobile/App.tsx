@@ -8909,6 +8909,13 @@ export default function App() {
     };
   }
 
+  function nativeWhisperRequestArgs(whisperInput: ReturnType<typeof nativeWhisperInput>) {
+    return {
+      modelPath: whisperInput.modelPath,
+      audioPath: whisperInput.audioPath
+    };
+  }
+
   function nativeLlamaInput() {
     return {
       modelPath: llamaModelPath.trim(),
@@ -8959,12 +8966,7 @@ export default function App() {
     whisperInput: ReturnType<typeof nativeWhisperInput>
   ) {
     if (whisperInput.modelPath && whisperInput.audioPath) {
-      results.push(
-        await benchmarkNativeWhisper({
-          modelPath: whisperInput.modelPath,
-          audioPath: whisperInput.audioPath
-        })
-      );
+      results.push(await benchmarkNativeWhisper(nativeWhisperRequestArgs(whisperInput)));
     }
   }
 
@@ -9082,10 +9084,7 @@ export default function App() {
     startNativeDebugAction();
     startNativeWhisperStatus();
     try {
-      const text = await transcribeWithNativeWhisper({
-        modelPath: whisperInput.modelPath,
-        audioPath: whisperInput.audioPath
-      });
+      const text = await transcribeWithNativeWhisper(nativeWhisperRequestArgs(whisperInput));
       handleNativeWhisperSuccess(text);
     } catch (error) {
       handleNativeWhisperFailure(error);

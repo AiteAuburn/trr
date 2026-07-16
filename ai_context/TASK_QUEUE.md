@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1970: Reuse native Whisper request args
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `nativeWhisperRequestArgs()` for the native debug Whisper request payload.
+- Reused the helper from `runNativeWhisper()` and `appendNativeWhisperBenchmarkResult()` while preserving trimmed input use, missing-input guard behavior, native transcription call semantics, benchmark append semantics, success/failure handling, and action lifecycle order.
+- Updated navigation verifier coverage for the Whisper request args helper, transcription binding, and benchmark append binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing native debug request payload helpers in small behavior-preserving slices.
+
 ### T1969: Reuse native model download request args
 
 Status: done
