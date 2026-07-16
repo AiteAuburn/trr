@@ -2298,7 +2298,12 @@ def main() -> int:
                 "const preferredLlm = preferredLlmModelOption(modelOptions);",
             ),
             ("deepseek record parse request binding", "llm_model_id: llmModelId"),
-            ("deepseek selected model status render", "LLM：{selectedLlmModel?.label ?? llmModelId}"),
+            ("selected model display label helper", "function selectedModelDisplayLabel(model: { label: string } | null | undefined, fallbackId: string)"),
+            ("selected model display label helper fields", "return model?.label ?? fallbackId;"),
+            ("selected model runtime label helper", "function selectedModelRuntimeDisplayLabel("),
+            ("selected model runtime label helper fields", "return modelRuntimeLabel(model?.runtime);"),
+            ("deepseek selected model status render", "LLM：{selectedModelDisplayLabel(selectedLlmModel, llmModelId)}"),
+            ("record STT selected model status render", "STT：{selectedModelDisplayLabel(selectedSttModel, sttModelId)}"),
             ("screen opener helper", "function openScreen(screen: AppScreen) {\n    setCurrentScreen(screen);\n  }"),
             ("screen status opener delegates to screen opener", "function openScreenWithStatus(screen: AppScreen, statusMessage: string) {\n    openScreen(screen);\n    setStatus(statusMessage);"),
             ("transcript review return target helper binding", "setTranscriptReviewReturnScreen(transcriptReviewReturnTargetForScreen(currentScreen));"),
@@ -2326,6 +2331,13 @@ def main() -> int:
             content,
             "homeRecordingTimer: {",
         )
+        for label, marker in (
+            ("record settings direct LLM label fallback", "selectedLlmModel?.label ?? llmModelId"),
+            ("record settings direct LLM runtime fallback", "modelRuntimeLabel(selectedLlmModel?.runtime)"),
+            ("record settings direct STT label fallback", "selectedSttModel?.label ?? sttModelId"),
+            ("record settings direct STT runtime fallback", "modelRuntimeLabel(selectedSttModel?.runtime)"),
+        ):
+            _assert_not_contains(label, content, marker)
         default_stt_helper_marker = "const defaultStt = defaultSttModelOption(modelOptions);"
         if content.count(default_stt_helper_marker) < 2:
             raise AssertionError("Default STT helper must be used in both boot and dev reconnect model selection paths.")

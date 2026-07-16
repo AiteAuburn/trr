@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1738 reuse record model status fallbacks
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added selected model display helpers for Record page LLM/STT label and runtime fallback text.
+- Reused the helpers in the Record parse settings status rows while preserving selected DeepSeek/LLM and STT model display, model ids, parser request path, and settings behavior unchanged.
+- Updated navigation verifier coverage and direct model fallback guards.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining core-flow render blocks in small behavior-preserving slices.
+
 ### T1737 reuse record detail rows fallback
 
 類型：mobile / refactor / verifier / docs

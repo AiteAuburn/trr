@@ -2212,6 +2212,16 @@ export default function App() {
     return item?.typeLabel ?? "紀錄";
   }
 
+  function selectedModelDisplayLabel(model: { label: string } | null | undefined, fallbackId: string) {
+    return model?.label ?? fallbackId;
+  }
+
+  function selectedModelRuntimeDisplayLabel(
+    model: { runtime?: Parameters<typeof modelRuntimeLabel>[0] } | null | undefined
+  ) {
+    return modelRuntimeLabel(model?.runtime);
+  }
+
   function openTutorialRecordEntry() {
     openScreenWithStatus("record", tutorialRecordEntryStatusMessage());
   }
@@ -8312,10 +8322,10 @@ export default function App() {
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{coreFlowDisplayLabels.parseSettings}</Text>
                 <Text style={styles.evidence}>
-                  LLM：{selectedLlmModel?.label ?? llmModelId} · {modelRuntimeLabel(selectedLlmModel?.runtime)}
+                  LLM：{selectedModelDisplayLabel(selectedLlmModel, llmModelId)} · {selectedModelRuntimeDisplayLabel(selectedLlmModel)}
                 </Text>
                 <Text style={styles.evidence}>
-                  STT：{selectedSttModel?.label ?? sttModelId} · {modelRuntimeLabel(selectedSttModel?.runtime)}
+                  STT：{selectedModelDisplayLabel(selectedSttModel, sttModelId)} · {selectedModelRuntimeDisplayLabel(selectedSttModel)}
                 </Text>
                 {recordEntrySettingsChecklistItems.map((item) => (
                   <HighlightBulletRow key={recordFlowChecklistItemKey(item)} text={recordFlowChecklistItemText(item)} />
