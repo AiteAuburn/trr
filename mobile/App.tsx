@@ -3744,8 +3744,12 @@ export default function App() {
   }
 
   function openAiReviewAfterParserSuccess() {
-    setTranscriptVoiceSeconds(0);
+    resetParserTranscriptVoiceSeconds();
     openScreen("aiReview");
+  }
+
+  function resetParserTranscriptVoiceSeconds() {
+    setTranscriptVoiceSeconds(0);
   }
 
   function refreshVoiceQuotaAfterParserSuccess(voiceSeconds: number) {
