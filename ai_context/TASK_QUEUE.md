@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T2001: Reuse shared date range field shell for analysis custom range
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/analysisCustomDateRangeFields.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `AnalysisCustomDateRangeFields` shell for the Basic Analysis custom start/end date inputs.
+- Reused the shared date range field in the Analysis custom range branch.
+- Preserved start/end labels, accessibility labels, values, change handlers, max-length limits, input styling, and placeholders.
+- Updated navigation verifier coverage for the shared Analysis custom date range binding and start/end props.
+- No UI copy/report request semantics/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining inline form field clusters in small behavior-preserving slices.
+
 ### T2000: Reuse shared JSON fallback field for record edit screens
 
 Status: done

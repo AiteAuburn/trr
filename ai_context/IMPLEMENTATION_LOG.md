@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2001 reuse shared date range field shell for analysis custom range
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisCustomDateRangeFields.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `AnalysisCustomDateRangeFields` shell for the Basic Analysis custom start/end date inputs.
+- Reused the shared date range field in the Analysis custom range branch.
+- Preserved start/end labels, accessibility labels, values, change handlers, max-length limits, input styling, and placeholders.
+- Updated navigation verifier coverage for the shared Analysis custom date range binding and start/end props.
+- 未變更 UI copy、report request semantics、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining inline form field clusters in small behavior-preserving slices.
+
 ### T2000 reuse shared JSON fallback field for record edit screens
 
 類型：mobile / refactor / verifier / docs

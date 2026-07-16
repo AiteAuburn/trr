@@ -41,6 +41,7 @@ import {
   mobileReportQueryLimit,
   sampleText
 } from "./appRuntimeConfig";
+import { AnalysisCustomDateRangeFields } from "./analysisCustomDateRangeFields";
 import {
   boundDisplayText,
   boundIdentifier,
@@ -11407,34 +11408,16 @@ export default function App() {
             </View>
             {analysisRange === "custom" ? (
               <>
-                <View style={styles.dateTimeRow}>
-                  <View style={styles.dateTimeField}>
-                    <FieldLabel icon={"📅"} label={"開始日期"} />
-                    <TextInput
-                      accessibilityLabel={auxiliaryDisplayLabels.analysisStartDateInputAccessibility}
-                      value={analysisCustomStart}
-                      onChangeText={updateAnalysisCustomStartInput}
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      maxLength={maxDateInputLength}
-                      style={styles.input}
-                      placeholder="2026-04-01"
-                    />
-                  </View>
-                  <View style={styles.dateTimeField}>
-                    <FieldLabel icon={"📅"} label={"結束日期"} />
-                    <TextInput
-                      accessibilityLabel={auxiliaryDisplayLabels.analysisEndDateInputAccessibility}
-                      value={analysisCustomEnd}
-                      onChangeText={updateAnalysisCustomEndInput}
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      maxLength={maxDateInputLength}
-                      style={styles.input}
-                      placeholder="2026-04-30"
-                    />
-                  </View>
-                </View>
+                <AnalysisCustomDateRangeFields
+                  startAccessibilityLabel={auxiliaryDisplayLabels.analysisStartDateInputAccessibility}
+                  startValue={analysisCustomStart}
+                  onStartChange={updateAnalysisCustomStartInput}
+                  startMaxLength={maxDateInputLength}
+                  endAccessibilityLabel={auxiliaryDisplayLabels.analysisEndDateInputAccessibility}
+                  endValue={analysisCustomEnd}
+                  onEndChange={updateAnalysisCustomEndInput}
+                  endMaxLength={maxDateInputLength}
+                />
                 <Text style={styles.evidence}>{analysisCustomRangeStatusDisplayText}</Text>
                 <Pressable
                   accessibilityLabel={coreFlowDisplayLabels.analysisApplyCustomRangeAccessibility}
