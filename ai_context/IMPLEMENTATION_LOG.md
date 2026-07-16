@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1827 reuse daily record save selected result helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `selectDailyRecordSaveResult()` for daily-record save success selected-result updates.
+- Reused the helper from `handleDailyRecordSaveSuccess()` while preserving the same first-created-record guard, selected result seeding, record insertion, status updates, Save Success result, achievement sync, and cleanup timing.
+- Updated navigation verifier coverage for the selected-result helper internals and success helper binding.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation targets、return behavior、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1826 reuse daily record save apply created records helper
 
 類型：mobile / refactor / verifier / docs

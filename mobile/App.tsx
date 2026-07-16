@@ -7563,13 +7563,17 @@ export default function App() {
     setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));
   }
 
+  function selectDailyRecordSaveResult(createdRecords: RecordItem[]) {
+    if (createdRecords[0]) {
+      selectRecordForResult(createdRecords[0]);
+    }
+  }
+
   function handleDailyRecordSaveSuccess(saveResponse: DailyRecordSaveResponse, savedCount: number) {
     const createdRecords = dailyRecordSaveCreatedRecords(saveResponse);
     clearDailyRecordSaveDraftState();
     applyDailyRecordSaveCreatedRecords(createdRecords);
-    if (createdRecords[0]) {
-      selectRecordForResult(createdRecords[0]);
-    }
+    selectDailyRecordSaveResult(createdRecords);
     setLastSaveErrorSummary("");
     openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), "ai", "today");
     setStatus(aiSaveSuccessStatusMessage());

@@ -4514,7 +4514,7 @@ def main() -> int:
             "setSelectedRecord(record);\n    setRecordEditFields(recordPayloadToEditFields(record));",
         )
         _assert_contains(
-            "ai save result selected record helper binding",
+            "ai save result selected record helper internals",
             content,
             "if (createdRecords[0]) {\n      selectRecordForResult(createdRecords[0]);\n    }",
         )
@@ -6682,6 +6682,8 @@ def main() -> int:
             ("daily record save draft clear helper internals", "setPreview(null);\n    clearTranscriptDraftState();\n    clearDailyRecordDraftOrganizationState();"),
             ("daily record save apply created records helper", "function applyDailyRecordSaveCreatedRecords(createdRecords: RecordItem[])"),
             ("daily record save apply created records helper internals", "setRecords((current) => boundRecordsList([...createdRecords, ...current]));\n    setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));"),
+            ("daily record save selected result helper", "function selectDailyRecordSaveResult(createdRecords: RecordItem[])"),
+            ("daily record save selected result helper binding", "applyDailyRecordSaveCreatedRecords(createdRecords);\n    selectDailyRecordSaveResult(createdRecords);"),
             ("daily record save success helper fields", "clearDailyRecordSaveDraftState();\n    applyDailyRecordSaveCreatedRecords(createdRecords);"),
             ("daily record save success helper binding", "handleDailyRecordSaveSuccess(saveResponse, recordsToSave.length);"),
             ("daily record save failure helper", "function handleDailyRecordSaveFailure(error: unknown)"),
