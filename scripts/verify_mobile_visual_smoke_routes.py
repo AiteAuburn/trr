@@ -137,7 +137,7 @@ VISUAL_SMOKE_ROUTES = {
     "subscriptionManagement": [
         'currentScreen === "subscriptionManagement"',
         "subscriptionManagementDisplayRows.map",
-        "subscriptionManagementReadinessChecklistItems.map",
+        "items={subscriptionManagementReadinessChecklistItems}",
     ],
     "membershipStatus": [
         'currentScreen === "membershipStatus"',

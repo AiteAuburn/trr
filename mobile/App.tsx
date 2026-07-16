@@ -826,6 +826,7 @@ import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 import { SaveSuccessActionRow } from "./saveSuccessActionRow";
 import { SettingsBoundaryGrid } from "./settingsBoundaryGrid";
 import { SettingsChecklist } from "./settingsChecklist";
+import { SubscriptionChecklist } from "./subscriptionChecklist";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
 import { FoodCommunitySearchField } from "./foodCommunitySearchField";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
@@ -4763,14 +4764,6 @@ export default function App() {
 
   function previewTimedRowTime(row: { time: string }) {
     return row.time;
-  }
-
-  function subscriptionChecklistItemKey(item: string) {
-    return item;
-  }
-
-  function subscriptionChecklistItemText(item: string) {
-    return item;
   }
 
   function futureReadinessChecklistItemKey(item: string) {
@@ -11204,9 +11197,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
-              {subscriptionReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={subscriptionChecklistItemKey(item)} text={subscriptionChecklistItemText(item)} />
-              ))}
+              <SubscriptionChecklist items={subscriptionReadinessChecklistItems} />
               <Text style={styles.warningText}>{subscriptionCtaBoundaryDisplayText}</Text>
             </View>
             <Pressable
@@ -11287,9 +11278,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
-              {subscriptionManagementReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={subscriptionChecklistItemKey(item)} text={subscriptionChecklistItemText(item)} />
-              ))}
+              <SubscriptionChecklist items={subscriptionManagementReadinessChecklistItems} />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.noAction}</Text>
