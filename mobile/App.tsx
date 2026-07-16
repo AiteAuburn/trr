@@ -812,6 +812,7 @@ import { SegmentSelector } from "./segmentSelector";
 import { SettingsSubpageActionRow } from "./settingsSubpageActionRow";
 import { SettingsSubpageCloseButton } from "./settingsSubpageCloseButton";
 import { StoreSearchField } from "./storeSearchField";
+import { SubscriptionSubpageCloseButton } from "./subscriptionSubpageCloseButton";
 import type {
   Account,
   AiModelOptions,
@@ -11595,9 +11596,10 @@ export default function App() {
                 <Text style={styles.sectionTitle}>訂閱管理</Text>
                 <Text style={styles.evidence}>{subscriptionManagementIntroDisplayText}</Text>
               </View>
-              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromSubscriptionManagementToSettings}>
-                <Text style={styles.closeButtonText}>×</Text>
-              </Pressable>
+              <SubscriptionSubpageCloseButton
+                accessibilityLabel={auxiliaryDisplayLabels.closeReturn}
+                onPress={returnFromSubscriptionManagementToSettings}
+              />
             </View>
             <View style={styles.subscriptionStatusCard}>
               <View>
@@ -11674,9 +11676,10 @@ export default function App() {
                 <Text style={styles.sectionTitle}>會員方案狀態</Text>
                 <Text style={styles.evidence}>試用與續訂狀態只依目前已同步的會員資料顯示。</Text>
               </View>
-              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromMembershipStatusToSubscription}>
-                <Text style={styles.closeButtonText}>×</Text>
-              </Pressable>
+              <SubscriptionSubpageCloseButton
+                accessibilityLabel={auxiliaryDisplayLabels.closeReturn}
+                onPress={returnFromMembershipStatusToSubscription}
+              />
             </View>
             <View style={styles.heroCard}>
               <Text style={styles.evidence}>{membershipTrialHeroLabelDisplayText}</Text>

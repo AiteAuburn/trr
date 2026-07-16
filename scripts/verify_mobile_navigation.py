@@ -40,6 +40,7 @@ SETTINGS_CHOICE_DISPLAY_PATH = REPO_ROOT / "mobile" / "settingsChoiceDisplay.ts"
 MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "modelTransforms.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
 SUBSCRIPTION_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "subscriptionTransforms.ts"
+SUBSCRIPTION_SUBPAGE_CLOSE_BUTTON_PATH = REPO_ROOT / "mobile" / "subscriptionSubpageCloseButton.tsx"
 ACCOUNT_COPY_PATH = REPO_ROOT / "mobile" / "accountCopy.ts"
 ACCOUNT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "accountTransforms.ts"
 AI_MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "aiModelTransforms.ts"
@@ -1399,6 +1400,7 @@ def main() -> int:
     model_transforms_content = MODEL_TRANSFORMS_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
     subscription_transforms_content = SUBSCRIPTION_TRANSFORMS_PATH.read_text(encoding="utf-8")
+    subscription_subpage_close_button_content = SUBSCRIPTION_SUBPAGE_CLOSE_BUTTON_PATH.read_text(encoding="utf-8")
     account_copy_content = ACCOUNT_COPY_PATH.read_text(encoding="utf-8")
     account_transforms_content = ACCOUNT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     ai_model_transforms_content = AI_MODEL_TRANSFORMS_PATH.read_text(encoding="utf-8")
@@ -14960,10 +14962,24 @@ def main() -> int:
         ):
             _assert_contains(label, subscription_copy_content, marker)
         for label, marker in (
+            ("subscription subpage close button component", "export function SubscriptionSubpageCloseButton"),
+            ("subscription subpage close button accessibility prop", "accessibilityLabel={accessibilityLabel}"),
+            ("subscription subpage close button role", 'accessibilityRole="button"'),
+            ("subscription subpage close button handler prop", "onPress={onPress}"),
+            ("subscription subpage close button text", "<Text style={styles.closeButtonText}>×</Text>"),
+            ("subscription subpage close button shell style", "closeButton: {"),
+            ("subscription subpage close button text style", "closeButtonText: {"),
+        ):
+            _assert_contains(label, subscription_subpage_close_button_content, marker)
+        for label, marker in (
             ("subscription quota accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.syncQuotaAccessibility}"),
             ("subscription trial accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.trialIntegrationAccessibility}"),
             ("subscription management accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.manageSubscribedPlanAccessibility}"),
             ("subscription member status accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.memberStatusAccessibility}"),
+            ("subscription subpage close button binding", "<SubscriptionSubpageCloseButton"),
+            ("subscription subpage close accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.closeReturn}"),
+            ("subscription subpage close management handler binding", "onPress={returnFromSubscriptionManagementToSettings}"),
+            ("subscription subpage close membership handler binding", "onPress={returnFromMembershipStatusToSubscription}"),
             ("subscription return settings accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}"),
             ("subscription payment accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.paymentIntegrationAccessibility}"),
             ("membership renewal accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.renewalIntegrationAccessibility}"),
