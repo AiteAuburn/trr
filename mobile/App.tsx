@@ -7859,6 +7859,10 @@ export default function App() {
     return transcriptValidationError;
   }
 
+  function parserTranscriptText() {
+    return transcript;
+  }
+
   function isParserBackendUnavailable() {
     return !protectedBackendReady;
   }
@@ -7898,7 +7902,7 @@ export default function App() {
     }
 
     const preparedRequest = startPreparedParserPreviewRequest();
-    await completePreparedParserPreviewRequest(parserContext, transcript, preparedRequest);
+    await completePreparedParserPreviewRequest(parserContext, parserTranscriptText(), preparedRequest);
   }
 
   function startPreviewSaveRequest() {
