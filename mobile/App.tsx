@@ -8862,10 +8862,14 @@ export default function App() {
         setStatus(recordingModelRefreshStatusMessage(downloadedWhisperModelCount(whisperModels)));
       }
     } catch (error) {
-      setNativeStatus(nativeDownloadedModelsFailureStatusMessage(error));
-      if (showStatus) {
-        setStatus(recordingModelRefreshFailureStatusMessage(error));
-      }
+      handleDownloadedModelsRefreshFailure(error, showStatus);
+    }
+  }
+
+  function handleDownloadedModelsRefreshFailure(error: unknown, showStatus: boolean) {
+    setNativeStatus(nativeDownloadedModelsFailureStatusMessage(error));
+    if (showStatus) {
+      setStatus(recordingModelRefreshFailureStatusMessage(error));
     }
   }
 
