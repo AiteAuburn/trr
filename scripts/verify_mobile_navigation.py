@@ -4159,9 +4159,24 @@ def main() -> int:
             "const nextRecords = previewRecordsWithoutRecord(preview.records, index);",
         )
         _assert_contains(
+            "AI candidate preview remove apply helper",
+            content,
+            "function applyAiCandidateRemovePreviewRecords(nextRecords: PendingRecord[])",
+        )
+        _assert_contains(
+            "AI candidate preview remove apply helper internals",
+            content,
+            "function applyAiCandidateRemovePreviewRecords(nextRecords: PendingRecord[]) {\n    if (!preview) {\n      return;\n    }\n    setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));\n    setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));",
+        )
+        _assert_contains(
+            "AI candidate preview remove apply helper binding",
+            content,
+            "reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, \"delete\");\n    } else {\n      applyAiCandidateRemovePreviewRecords(nextRecords);",
+        )
+        _assert_contains(
             "AI candidate remove action clear helper binding",
             content,
-            "setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));\n    }\n    clearPreviewRemoveActionState();",
+            "applyAiCandidateRemovePreviewRecords(nextRecords);\n    }\n    clearPreviewRemoveActionState();",
         )
         _assert_not_contains(
             "AI candidate remove action direct clear binding",
