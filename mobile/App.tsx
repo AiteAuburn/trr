@@ -8032,6 +8032,12 @@ export default function App() {
     };
   }
 
+  async function submitDailyRecordSave(saveContext: { account: Account; preview: ParsePreviewResponse }) {
+    const recordsToSave = buildPreviewRecordsForCurrentSave(saveContext.preview);
+    const saveResponse = await requestDailyRecordSave(saveContext.account.id, saveContext.preview, recordsToSave);
+    handleDailyRecordSaveSuccess(saveResponse, recordsToSave.length);
+  }
+
   async function savePreviewRecords() {
     const saveContext = guardedDailyRecordSaveContext();
     if (!saveContext) {
@@ -8039,10 +8045,8 @@ export default function App() {
     }
 
     startPreviewSaveRequest();
-    const recordsToSave = buildPreviewRecordsForCurrentSave(saveContext.preview);
     try {
-      const saveResponse = await requestDailyRecordSave(saveContext.account.id, saveContext.preview, recordsToSave);
-      handleDailyRecordSaveSuccess(saveResponse, recordsToSave.length);
+      await submitDailyRecordSave(saveContext);
     } catch (error) {
       handleDailyRecordSaveFailure(error);
     } finally {

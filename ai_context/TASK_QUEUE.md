@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1894: Reuse daily-record save submit helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `submitDailyRecordSave()` for the daily-record save request-and-success flow.
+- Reused the helper from `savePreviewRecords()` while preserving record batch construction, `/daily-records/save` request arguments, success handling, failure recovery, and finish cleanup behavior.
+- Updated navigation verifier coverage for the save submit helper, internals, and save submit binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing daily-record save request lifecycle and record sync orchestration in small behavior-preserving slices.
+
 ### T1893: Reuse guarded daily-record save context helper
 
 Status: done
