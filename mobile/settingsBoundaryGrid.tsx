@@ -1,33 +1,33 @@
 import { StyleSheet, Text, View } from "react-native";
 
-export type AccountSecurityBoundaryRow = {
+export type SettingsBoundaryRow = {
   label: string;
   value: string;
 };
 
-type AccountSecurityBoundaryGridProps = {
-  rows: AccountSecurityBoundaryRow[];
+type SettingsBoundaryGridProps = {
+  rows: SettingsBoundaryRow[];
 };
 
-function accountSecurityBoundaryRowKey(row: AccountSecurityBoundaryRow) {
+function settingsBoundaryRowKey(row: SettingsBoundaryRow) {
   return row.label;
 }
 
-function accountSecurityBoundaryRowLabel(row: AccountSecurityBoundaryRow) {
+function settingsBoundaryRowLabel(row: SettingsBoundaryRow) {
   return row.label;
 }
 
-function accountSecurityBoundaryRowValue(row: AccountSecurityBoundaryRow) {
+function settingsBoundaryRowValue(row: SettingsBoundaryRow) {
   return row.value;
 }
 
-export function AccountSecurityBoundaryGrid({ rows }: AccountSecurityBoundaryGridProps) {
+export function SettingsBoundaryGrid({ rows }: SettingsBoundaryGridProps) {
   return (
     <View style={styles.reportBoundaryGrid}>
       {rows.map((row) => (
-        <View key={accountSecurityBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
-          <Text style={styles.confidence}>{accountSecurityBoundaryRowLabel(row)}</Text>
-          <Text style={styles.recordType}>{accountSecurityBoundaryRowValue(row)}</Text>
+        <View key={settingsBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
+          <Text style={styles.confidence}>{settingsBoundaryRowLabel(row)}</Text>
+          <Text style={styles.recordType}>{settingsBoundaryRowValue(row)}</Text>
         </View>
       ))}
     </View>

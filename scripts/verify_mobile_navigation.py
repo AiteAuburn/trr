@@ -14,7 +14,7 @@ APP_TYPES_PATH = REPO_ROOT / "mobile" / "appTypes.ts"
 APP_RUNTIME_CONFIG_PATH = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 ACCOUNT_SECURITY_ACTION_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityActionGrid.tsx"
-ACCOUNT_SECURITY_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityBoundaryGrid.tsx"
+SETTINGS_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "settingsBoundaryGrid.tsx"
 AUTH_PROVIDER_PREVIEW_LIST_PATH = REPO_ROOT / "mobile" / "authProviderPreviewList.tsx"
 AUTH_SESSION_DISPLAY_LIST_PATH = REPO_ROOT / "mobile" / "authSessionDisplayList.tsx"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
@@ -1401,7 +1401,7 @@ def main() -> int:
     app_runtime_config_content = APP_RUNTIME_CONFIG_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     account_security_action_grid_content = ACCOUNT_SECURITY_ACTION_GRID_PATH.read_text(encoding="utf-8")
-    account_security_boundary_grid_content = ACCOUNT_SECURITY_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
+    settings_boundary_grid_content = SETTINGS_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
     auth_provider_preview_list_content = AUTH_PROVIDER_PREVIEW_LIST_PATH.read_text(encoding="utf-8")
     auth_session_display_list_content = AUTH_SESSION_DISPLAY_LIST_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
@@ -9835,22 +9835,22 @@ def main() -> int:
         ):
             _assert_contains(label, account_security_action_grid_content, marker)
         for label, marker in (
-            ("account security boundary grid component", "export function AccountSecurityBoundaryGrid"),
-            ("account security boundary grid row type", "export type AccountSecurityBoundaryRow"),
-            ("account security boundary grid key helper", "function accountSecurityBoundaryRowKey(row: AccountSecurityBoundaryRow)"),
-            ("account security boundary grid key helper fields", "return row.label;"),
-            ("account security boundary grid label helper", "function accountSecurityBoundaryRowLabel(row: AccountSecurityBoundaryRow)"),
-            ("account security boundary grid label helper fields", "return row.label;"),
-            ("account security boundary grid value helper", "function accountSecurityBoundaryRowValue(row: AccountSecurityBoundaryRow)"),
-            ("account security boundary grid value helper fields", "return row.value;"),
-            ("account security boundary grid map", "rows.map((row) => ("),
-            ("account security boundary grid key binding", "key={accountSecurityBoundaryRowKey(row)}"),
-            ("account security boundary grid label binding", "{accountSecurityBoundaryRowLabel(row)}"),
-            ("account security boundary grid value binding", "{accountSecurityBoundaryRowValue(row)}"),
-            ("account security boundary grid wrapper style", "reportBoundaryGrid: {"),
-            ("account security boundary grid card style", "reportBoundaryCard: {"),
+            ("settings boundary grid component", "export function SettingsBoundaryGrid"),
+            ("settings boundary grid row type", "export type SettingsBoundaryRow"),
+            ("settings boundary grid key helper", "function settingsBoundaryRowKey(row: SettingsBoundaryRow)"),
+            ("settings boundary grid key helper fields", "return row.label;"),
+            ("settings boundary grid label helper", "function settingsBoundaryRowLabel(row: SettingsBoundaryRow)"),
+            ("settings boundary grid label helper fields", "return row.label;"),
+            ("settings boundary grid value helper", "function settingsBoundaryRowValue(row: SettingsBoundaryRow)"),
+            ("settings boundary grid value helper fields", "return row.value;"),
+            ("settings boundary grid map", "rows.map((row) => ("),
+            ("settings boundary grid key binding", "key={settingsBoundaryRowKey(row)}"),
+            ("settings boundary grid label binding", "{settingsBoundaryRowLabel(row)}"),
+            ("settings boundary grid value binding", "{settingsBoundaryRowValue(row)}"),
+            ("settings boundary grid wrapper style", "reportBoundaryGrid: {"),
+            ("settings boundary grid card style", "reportBoundaryCard: {"),
         ):
-            _assert_contains(label, account_security_boundary_grid_content, marker)
+            _assert_contains(label, settings_boundary_grid_content, marker)
         for label, marker in (
             ("auth provider preview list component", "export function AuthProviderPreviewList"),
             ("auth provider preview title helper", "function authProviderPreviewTitleLabel(item: { title: string })"),
@@ -11733,26 +11733,10 @@ def main() -> int:
             ("auth action status display text binding", "const authActionStatusDisplayText = authStatusDisplay.authAction;"),
             ("auth token storage status display text binding", "const tokenStorageStatusDisplayText = authStatusDisplay.tokenStorage;"),
             ("auth token storage render display binding", "<Text style={styles.evidence}>{tokenStorageStatusDisplayText}</Text>"),
-            ("account security boundary grid binding", "<AccountSecurityBoundaryGrid"),
+            ("settings boundary grid binding", "<SettingsBoundaryGrid"),
             ("account security boundary grid rows binding", "rows={accountSecurityBoundaryRows}"),
-            ("profile settings boundary row key helper", "function profileSettingsBoundaryRowKey(row: (typeof profileSettingsBoundaryRows)[number])"),
-            ("profile settings boundary row key helper fields", "return row.label;"),
-            ("profile settings boundary row key helper binding", "key={profileSettingsBoundaryRowKey(row)}"),
-            ("profile settings boundary row label helper", "function profileSettingsBoundaryRowLabel(row: (typeof profileSettingsBoundaryRows)[number])"),
-            ("profile settings boundary row label helper fields", "return row.label;"),
-            ("profile settings boundary row label helper binding", "{profileSettingsBoundaryRowLabel(row)}"),
-            ("profile settings boundary row value helper", "function profileSettingsBoundaryRowValue(row: (typeof profileSettingsBoundaryRows)[number])"),
-            ("profile settings boundary row value helper fields", "return row.value;"),
-            ("profile settings boundary row value helper binding", "{profileSettingsBoundaryRowValue(row)}"),
-            ("recording quota boundary row key helper", "function recordingQuotaBoundaryRowKey(row: (typeof recordingQuotaBoundaryRows)[number])"),
-            ("recording quota boundary row key helper fields", "return row.label;"),
-            ("recording quota boundary row key helper binding", "key={recordingQuotaBoundaryRowKey(row)}"),
-            ("recording quota boundary row label helper", "function recordingQuotaBoundaryRowLabel(row: (typeof recordingQuotaBoundaryRows)[number])"),
-            ("recording quota boundary row label helper fields", "return row.label;"),
-            ("recording quota boundary row label helper binding", "{recordingQuotaBoundaryRowLabel(row)}"),
-            ("recording quota boundary row value helper", "function recordingQuotaBoundaryRowValue(row: (typeof recordingQuotaBoundaryRows)[number])"),
-            ("recording quota boundary row value helper fields", "return row.value;"),
-            ("recording quota boundary row value helper binding", "{recordingQuotaBoundaryRowValue(row)}"),
+            ("profile settings boundary grid rows binding", "rows={profileSettingsBoundaryRows}"),
+            ("recording quota boundary grid rows binding", "rows={recordingQuotaBoundaryRows}"),
             ("AI save confirm boundary row key helper", "function aiSaveConfirmBoundaryRowKey(row: (typeof aiSaveConfirmBoundaryRows)[number])"),
             ("AI save confirm boundary row key helper fields", "return row.label;"),
             ("AI save confirm boundary row key helper binding", "key={aiSaveConfirmBoundaryRowKey(row)}"),
@@ -11762,15 +11746,7 @@ def main() -> int:
             ("AI save confirm boundary row value helper", "function aiSaveConfirmBoundaryRowValue(row: (typeof aiSaveConfirmBoundaryRows)[number])"),
             ("AI save confirm boundary row value helper fields", "return row.value;"),
             ("AI save confirm boundary row value helper binding", "{aiSaveConfirmBoundaryRowValue(row)}"),
-            ("privacy boundary row key helper", "function privacyBoundaryRowKey(row: (typeof privacyBoundaryRows)[number])"),
-            ("privacy boundary row key helper fields", "return row.label;"),
-            ("privacy boundary row key helper binding", "key={privacyBoundaryRowKey(row)}"),
-            ("privacy boundary row label helper", "function privacyBoundaryRowLabel(row: (typeof privacyBoundaryRows)[number])"),
-            ("privacy boundary row label helper fields", "return row.label;"),
-            ("privacy boundary row label helper binding", "{privacyBoundaryRowLabel(row)}"),
-            ("privacy boundary row value helper", "function privacyBoundaryRowValue(row: (typeof privacyBoundaryRows)[number])"),
-            ("privacy boundary row value helper fields", "return row.value;"),
-            ("privacy boundary row value helper binding", "{privacyBoundaryRowValue(row)}"),
+            ("privacy boundary grid rows binding", "rows={privacyBoundaryRows}"),
             ("dev reset status display text binding", "const devResetStatusDisplayText = authStatusDisplay.devReset;"),
             ("native status display helper binding", "const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);"),
             ("native status display text binding", "const nativeStatusDisplayText = nativeStatusDisplay.native;"),
@@ -14309,6 +14285,12 @@ def main() -> int:
             content,
             "accountSecurityBoundaryRows.map((row) => (\n                <View key={accountSecurityBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{accountSecurityBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
+        for label, marker in (
+            ("profile settings direct boundary grid map", "profileSettingsBoundaryRows.map((row) => ("),
+            ("recording quota direct boundary grid map", "recordingQuotaBoundaryRows.map((row) => ("),
+            ("privacy direct boundary grid map", "privacyBoundaryRows.map((row) => ("),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_not_contains(
             "profile settings direct boundary row key binding",
             content,

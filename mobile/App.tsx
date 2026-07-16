@@ -788,7 +788,6 @@ import { HistoryNoRecordStatusBlock } from "./historyNoRecordStatusBlock";
 import { HistorySelectedDatePanel } from "./historySelectedDatePanel";
 import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
 import { AccountSecurityActionGrid } from "./accountSecurityActionGrid";
-import { AccountSecurityBoundaryGrid } from "./accountSecurityBoundaryGrid";
 import { AuthProviderPreviewList } from "./authProviderPreviewList";
 import { AuthSessionDisplayList } from "./authSessionDisplayList";
 import { BackendUrlField } from "./backendUrlField";
@@ -825,6 +824,7 @@ import { RecordJsonField } from "./recordJsonField";
 import { RecordOptionField, RecordOptionRow } from "./recordOptionField";
 import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 import { SaveSuccessActionRow } from "./saveSuccessActionRow";
+import { SettingsBoundaryGrid } from "./settingsBoundaryGrid";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
 import { FoodCommunitySearchField } from "./foodCommunitySearchField";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
@@ -6006,42 +6006,6 @@ export default function App() {
 
   function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
     selectFoodCommunityCategory(foodCommunityCategoryTarget(category));
-  }
-
-  function profileSettingsBoundaryRowKey(row: (typeof profileSettingsBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function profileSettingsBoundaryRowLabel(row: (typeof profileSettingsBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function profileSettingsBoundaryRowValue(row: (typeof profileSettingsBoundaryRows)[number]) {
-    return row.value;
-  }
-
-  function recordingQuotaBoundaryRowKey(row: (typeof recordingQuotaBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function recordingQuotaBoundaryRowLabel(row: (typeof recordingQuotaBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function recordingQuotaBoundaryRowValue(row: (typeof recordingQuotaBoundaryRows)[number]) {
-    return row.value;
-  }
-
-  function privacyBoundaryRowKey(row: (typeof privacyBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function privacyBoundaryRowLabel(row: (typeof privacyBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function privacyBoundaryRowValue(row: (typeof privacyBoundaryRows)[number]) {
-    return row.value;
   }
 
   function selectFoodCommunityItem(itemId: string) {
@@ -12294,7 +12258,7 @@ export default function App() {
                 <Text style={styles.evidence}>{authModeDisplayCopy}</Text>
               </View>
             </View>
-            <AccountSecurityBoundaryGrid rows={accountSecurityBoundaryRows} />
+            <SettingsBoundaryGrid rows={accountSecurityBoundaryRows} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authProviderPreview}</Text>
               <Text style={styles.evidence}>{accountSecurityProviderBoundaryDisplayText}</Text>
@@ -12385,14 +12349,7 @@ export default function App() {
                 <Text style={styles.evidence}>登入模式：{authModeDisplayLabel}</Text>
               </View>
             </View>
-            <View style={styles.reportBoundaryGrid}>
-              {profileSettingsBoundaryRows.map((row) => (
-                <View key={profileSettingsBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{profileSettingsBoundaryRowLabel(row)}</Text>
-                  <Text style={styles.recordType}>{profileSettingsBoundaryRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
+            <SettingsBoundaryGrid rows={profileSettingsBoundaryRows} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.profileEditReadiness}</Text>
               {profileReadinessChecklistItems.map((item) => (
@@ -12450,14 +12407,7 @@ export default function App() {
               </View>
               <Text style={styles.evidence}>{quotaDailyLimitDisplayText}</Text>
             </View>
-            <View style={styles.reportBoundaryGrid}>
-              {recordingQuotaBoundaryRows.map((row) => (
-                <View key={recordingQuotaBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{recordingQuotaBoundaryRowLabel(row)}</Text>
-                  <Text style={styles.recordType}>{recordingQuotaBoundaryRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
+            <SettingsBoundaryGrid rows={recordingQuotaBoundaryRows} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
               {quotaReadinessChecklistItems.map((item) => (
@@ -12556,14 +12506,7 @@ export default function App() {
               <Text style={styles.previewModeBadge}>{privacyPreviewBoundaryDisplay.badge}</Text>
               <Text style={styles.evidence}>{privacyPreviewBoundaryDisplay.copy}</Text>
             </View>
-            <View style={styles.reportBoundaryGrid}>
-              {privacyBoundaryRows.map((row) => (
-                <View key={privacyBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{privacyBoundaryRowLabel(row)}</Text>
-                  <Text style={styles.recordType}>{privacyBoundaryRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
+            <SettingsBoundaryGrid rows={privacyBoundaryRows} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
               {privacyReadinessChecklistItems.map((item) => (
