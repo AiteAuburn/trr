@@ -1936,7 +1936,7 @@ export default function App() {
   const yearReviewShareAccessibilityDisplayLabel = yearReviewHeaderDisplay.shareAccessibilityLabel;
   const yearReviewRevokeShareButtonDisplayLabel = yearReviewHeaderDisplay.revokeShareButtonLabel;
   const yearReviewRevokeShareAccessibilityDisplayLabel = yearReviewHeaderDisplay.revokeShareAccessibilityLabel;
-  const selectedRecordDetailRows = selectedRecordDisplayItem?.detailRows ?? [];
+  const selectedRecordDetailRows = selectedRecordDetailDisplayRows(selectedRecordDisplayItem);
   const transcriptValidationError = useMemo(
     () => validateTranscriptForParser(transcript),
     [transcript]
@@ -2170,6 +2170,10 @@ export default function App() {
 
   function selectedRecordDetailDateTimeLabel(item: ReturnType<typeof recordDetailDisplayItem> | null) {
     return item?.dateTimeLabel ?? "尚未選擇紀錄";
+  }
+
+  function selectedRecordDetailDisplayRows(item: ReturnType<typeof recordDetailDisplayItem> | null) {
+    return item?.detailRows ?? [];
   }
 
   function selectedRecordDetailDateLabel(item: ReturnType<typeof recordDetailDisplayItem> | null) {

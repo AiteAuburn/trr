@@ -2048,6 +2048,9 @@ def main() -> int:
             ("record detail selected datetime helper", "function selectedRecordDetailDateTimeLabel(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
             ("record detail selected datetime helper fields", 'return item?.dateTimeLabel ?? "尚未選擇紀錄";'),
             ("record detail selected datetime helper binding", "dateTimeLabel={selectedRecordDetailDateTimeLabel(selectedRecordDisplayItem)}"),
+            ("record detail selected rows helper", "function selectedRecordDetailDisplayRows(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
+            ("record detail selected rows helper fields", "return item?.detailRows ?? [];"),
+            ("record detail selected rows helper binding", "const selectedRecordDetailRows = selectedRecordDetailDisplayRows(selectedRecordDisplayItem);"),
             ("record detail selected date helper", "function selectedRecordDetailDateLabel(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
             ("record detail selected date helper fields", 'return item?.dateLabel ?? "尚無";'),
             ("record detail selected date helper binding", "dateValue={selectedRecordDetailDateLabel(selectedRecordDisplayItem)}"),
@@ -2083,6 +2086,7 @@ def main() -> int:
             "record detail screen render block",
         )
         for label, marker in (
+            ("record detail direct rows fallback binding", "selectedRecordDisplayItem?.detailRows ?? []"),
             ("record detail direct datetime fallback binding", 'selectedRecordDisplayItem?.dateTimeLabel ?? "尚未選擇紀錄"'),
             ("record detail direct date fallback binding", 'selectedRecordDisplayItem?.dateLabel ?? "尚無"'),
             ("record detail direct exercise fallback binding", 'selectedRecordDisplayItem?.exerciseSummary ?? "無"'),
