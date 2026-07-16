@@ -3902,6 +3902,15 @@ export default function App() {
     );
   }
 
+  function buildPreviewRecordEditChangeRecords(
+    currentPreview: ParsePreviewResponse,
+    editIndex: number,
+    recordType: string
+  ) {
+    const payload = buildPreviewRecordEditPayload(recordType);
+    return buildPreviewRecordEditRecords(currentPreview, editIndex, payload);
+  }
+
   function previewRecordEditType(record: PendingRecord) {
     return record.record_type;
   }
@@ -3927,8 +3936,7 @@ export default function App() {
     }
 
     try {
-      const payload = buildPreviewRecordEditPayload(recordType);
-      const nextRecords = buildPreviewRecordEditRecords(preview, selectedPreviewIndex, payload);
+      const nextRecords = buildPreviewRecordEditChangeRecords(preview, selectedPreviewIndex, recordType);
       applyPreviewRecordEditChange(preview, nextRecords);
       returnFromPreviewRecordEditSaveSuccess();
     } catch (error) {

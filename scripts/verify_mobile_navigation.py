@@ -4206,7 +4206,22 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit records builder helper binding",
             content,
-            "const nextRecords = buildPreviewRecordEditRecords(preview, selectedPreviewIndex, payload);",
+            "return buildPreviewRecordEditRecords(currentPreview, editIndex, payload);",
+        )
+        _assert_contains(
+            "AI candidate preview edit change records helper",
+            content,
+            "function buildPreviewRecordEditChangeRecords(",
+        )
+        _assert_contains(
+            "AI candidate preview edit change records helper internals",
+            content,
+            "function buildPreviewRecordEditChangeRecords(\n    currentPreview: ParsePreviewResponse,\n    editIndex: number,\n    recordType: string\n  ) {\n    const payload = buildPreviewRecordEditPayload(recordType);\n    return buildPreviewRecordEditRecords(currentPreview, editIndex, payload);",
+        )
+        _assert_contains(
+            "AI candidate preview edit change records helper binding",
+            content,
+            "const nextRecords = buildPreviewRecordEditChangeRecords(preview, selectedPreviewIndex, recordType);",
         )
         _assert_contains(
             "AI candidate preview edit record type helper",
@@ -4281,7 +4296,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit payload helper binding",
             content,
-            "const payload = buildPreviewRecordEditPayload(recordType);",
+            "const payload = buildPreviewRecordEditPayload(recordType);\n    return buildPreviewRecordEditRecords(currentPreview, editIndex, payload);",
         )
         _assert_contains(
             "AI candidate preview edit validation helper",
