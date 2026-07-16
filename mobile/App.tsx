@@ -4139,8 +4139,27 @@ export default function App() {
     return item.sourceUri;
   }
 
+  function recordingWhisperModelKey(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
+    return recordingWhisperModelPathTarget(item);
+  }
+
+  function recordingWhisperModelAccessibilityLabel(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
+    return item.accessibilityLabel;
+  }
+
+  function recordingWhisperModelIsSelected(
+    item: (typeof downloadedWhisperModelChoiceItems)[number],
+    selectedPath: string
+  ) {
+    return recordingWhisperModelPathTarget(item) === selectedPath;
+  }
+
   function recordingWhisperModelStatusLabel(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
     return item.label;
+  }
+
+  function recordingWhisperModelSelectedLabel(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
+    return item.selectedLabel;
   }
 
   function selectRecordingWhisperModelChoice(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
@@ -11460,11 +11479,11 @@ export default function App() {
               {downloadedWhisperModelChoiceItems.length > 0 ? (
                 <View style={styles.actionRow}>
                   {downloadedWhisperModelChoiceItems.map((model) => {
-                    const modelSelected = model.sourceUri === whisperModelPath;
+                    const modelSelected = recordingWhisperModelIsSelected(model, whisperModelPath);
                     return (
                       <Pressable
-                        key={model.sourceUri}
-                        accessibilityLabel={model.accessibilityLabel}
+                        key={recordingWhisperModelKey(model)}
+                        accessibilityLabel={recordingWhisperModelAccessibilityLabel(model)}
                         accessibilityRole="button"
                         accessibilityState={{ selected: modelSelected }}
                         style={[
@@ -11479,9 +11498,9 @@ export default function App() {
                             modelSelected ? styles.chipTextSelected : null
                           ]}
                         >
-                          {model.label}
+                          {recordingWhisperModelStatusLabel(model)}
                         </Text>
-                        {modelSelected ? <Text style={styles.previewModeBadge}>{model.selectedLabel}</Text> : null}
+                        {modelSelected ? <Text style={styles.previewModeBadge}>{recordingWhisperModelSelectedLabel(model)}</Text> : null}
                       </Pressable>
                     );
                   })}

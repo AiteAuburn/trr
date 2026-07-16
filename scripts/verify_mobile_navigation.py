@@ -891,6 +891,7 @@ def _pressable_label_source_errors(content: str) -> list[str]:
         "menuDestinationAccessibilityLabel(item)",
         "previewStatusRowAccessibilityLabel(item)",
         "quickEntryModeAccessibilityLabel(item)",
+        "recordingWhisperModelAccessibilityLabel(model)",
         "settingsDisplayRowAccessibilityLabel(row)",
         "settingsModelChoiceAccessibilityLabel(model)",
         "settingsProfileChoiceAccessibilityLabel(profile)",
@@ -8488,8 +8489,21 @@ def main() -> int:
             ("stt model settings target helper binding", "selectSettingsSttModelChoice(settingsModelChoiceTarget(model));"),
             ("recording whisper model path target helper", "function recordingWhisperModelPathTarget(item: (typeof downloadedWhisperModelChoiceItems)[number])"),
             ("recording whisper model path target helper fields", "return item.sourceUri;"),
+            ("recording whisper model key helper", "function recordingWhisperModelKey(item: (typeof downloadedWhisperModelChoiceItems)[number])"),
+            ("recording whisper model key helper fields", "return recordingWhisperModelPathTarget(item);"),
+            ("recording whisper model key helper binding", "key={recordingWhisperModelKey(model)}"),
+            ("recording whisper model accessibility helper", "function recordingWhisperModelAccessibilityLabel(item: (typeof downloadedWhisperModelChoiceItems)[number])"),
+            ("recording whisper model accessibility helper fields", "return item.accessibilityLabel;"),
+            ("recording whisper model accessibility helper binding", "accessibilityLabel={recordingWhisperModelAccessibilityLabel(model)}"),
+            ("recording whisper model selected helper", "function recordingWhisperModelIsSelected("),
+            ("recording whisper model selected helper fields", "return recordingWhisperModelPathTarget(item) === selectedPath;"),
+            ("recording whisper model selected helper binding", "const modelSelected = recordingWhisperModelIsSelected(model, whisperModelPath);"),
             ("recording whisper model status label helper", "function recordingWhisperModelStatusLabel(item: (typeof downloadedWhisperModelChoiceItems)[number])"),
             ("recording whisper model status label helper fields", "return item.label;"),
+            ("recording whisper model status label helper render binding", "{recordingWhisperModelStatusLabel(model)}"),
+            ("recording whisper model selected label helper", "function recordingWhisperModelSelectedLabel(item: (typeof downloadedWhisperModelChoiceItems)[number])"),
+            ("recording whisper model selected label helper fields", "return item.selectedLabel;"),
+            ("recording whisper model selected label helper binding", "{recordingWhisperModelSelectedLabel(model)}"),
             ("recording whisper model select handler", "function selectRecordingWhisperModelChoice(item: (typeof downloadedWhisperModelChoiceItems)[number])"),
             ("recording whisper model path target helper binding", "setWhisperModelPath(recordingWhisperModelPathTarget(item));"),
             ("recording whisper model status label helper binding", "setStatus(recordingModelSelectedStatusMessage(recordingWhisperModelStatusLabel(item)));"),
@@ -8617,7 +8631,7 @@ def main() -> int:
             ("stt model settings option binding", "onPress={() => pressSettingsSttModelChoice(model)}"),
             ("recording whisper model settings title", "本機 Whisper 模型"),
             ("recording whisper model settings binding", "onPress={() => pressRecordingWhisperModelChoice(model)}"),
-            ("recording whisper model accessibility binding", "accessibilityLabel={model.accessibilityLabel}"),
+            ("recording whisper model accessibility binding", "accessibilityLabel={recordingWhisperModelAccessibilityLabel(model)}"),
             ("recording whisper model selected state", "accessibilityState={{ selected: modelSelected }}"),
             ("recording model refresh binding", "onPress={refreshRecordingModelsFromSettings}"),
             ("recording model refresh accessibility binding", "accessibilityLabel={recordingModelRefreshAccessibilityDisplayLabel}"),
@@ -9261,6 +9275,19 @@ def main() -> int:
             ("direct STT model label binding", "{model.label}"),
         ):
             _assert_not_contains(label, settings_stt_choice_render_block, marker)
+        recording_whisper_model_render_block = _match_block(
+            content,
+            r"downloadedWhisperModelChoiceItems\.map\(\(model\) => \{([\s\S]*?pressRecordingWhisperModelChoice\(model\)[\s\S]*?</Pressable>)",
+            "recording Whisper model choice render block",
+        )
+        for label, marker in (
+            ("direct recording Whisper model selected binding", "model.sourceUri === whisperModelPath"),
+            ("direct recording Whisper model key binding", "key={model.sourceUri}"),
+            ("direct recording Whisper model accessibility binding", "accessibilityLabel={model.accessibilityLabel}"),
+            ("direct recording Whisper model label binding", "{model.label}"),
+            ("direct recording Whisper model selected label binding", "{model.selectedLabel}"),
+        ):
+            _assert_not_contains(label, recording_whisper_model_render_block, marker)
         for label, marker in (
             ("settings model display label helper", "function modelOptionDisplayLabel(model: ModelChoiceDisplaySource)"),
             ("settings model disabled copy", "（未啟用）"),

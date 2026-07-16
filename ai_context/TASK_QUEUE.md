@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1728: Reuse local Whisper model chip fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared local Whisper model chip helpers for render key, accessibility label, selected state, display label, and selected badge text.
+- Reused the helpers in the Settings local Whisper model chooser while preserving selected-state behavior, model path target handling, status messaging, refresh flow, and no-cloud audio boundary unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for the local Whisper model render block.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing future/year-review requirement and section render blocks in small behavior-preserving slices.
+
 ### T1727: Reuse settings choice chip fields
 
 Status: done
