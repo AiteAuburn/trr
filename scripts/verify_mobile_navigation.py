@@ -4119,6 +4119,21 @@ def main() -> int:
             "returnFromPreviewRecordEditSaveSuccess();",
         )
         _assert_contains(
+            "AI candidate preview edit records update helper",
+            content,
+            "function previewRecordsWithEditedRecord(",
+        )
+        _assert_contains(
+            "AI candidate preview edit records update helper internals",
+            content,
+            "function previewRecordsWithEditedRecord(\n    records: PendingRecord[],\n    editIndex: number,\n    occurredAt: string,\n    payload: Record<string, unknown>",
+        )
+        _assert_contains(
+            "AI candidate preview edit records update helper binding",
+            content,
+            "const nextRecords = previewRecordsWithEditedRecord(\n        preview.records,\n        selectedPreviewIndex,",
+        )
+        _assert_contains(
             "AI candidate remove confirm missing pending screen opener fallback",
             content,
             "if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {\n      clearPendingPreviewRemoveSelection();\n      openPreviewRemoveConfirmReturnScreen();\n      return;",

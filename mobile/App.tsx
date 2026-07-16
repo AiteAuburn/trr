@@ -3685,6 +3685,23 @@ export default function App() {
     updatePreviewEditField("fallbackJson", value);
   }
 
+  function previewRecordsWithEditedRecord(
+    records: PendingRecord[],
+    editIndex: number,
+    occurredAt: string,
+    payload: Record<string, unknown>
+  ) {
+    return records.map((record, index) =>
+      index === editIndex
+        ? {
+            ...record,
+            occurred_at: occurredAt,
+            payload_json: payload
+          }
+        : record
+    );
+  }
+
   function savePreviewRecordEdit() {
     if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {
       openScreen("aiReview");
@@ -3706,14 +3723,11 @@ export default function App() {
       if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
         throw new Error("payload_json must be an object");
       }
-      const nextRecords = preview.records.map((record, index) =>
-        index === selectedPreviewIndex
-          ? {
-              ...record,
-              occurred_at: localDateTimeToIso(previewEditDate, previewEditTime),
-              payload_json: payload
-            }
-          : record
+      const nextRecords = previewRecordsWithEditedRecord(
+        preview.records,
+        selectedPreviewIndex,
+        localDateTimeToIso(previewEditDate, previewEditTime),
+        payload
       );
       if (isPreviewActionReturningToDailyRecord) {
         reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, "edit");
