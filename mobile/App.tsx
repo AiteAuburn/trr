@@ -2222,6 +2222,22 @@ export default function App() {
     return modelRuntimeLabel(model?.runtime);
   }
 
+  function manualConfirmPreviewIcon(item: ReturnType<typeof manualRecordConfirmDisplayItem>) {
+    return item.icon;
+  }
+
+  function manualConfirmPreviewPayloadSummary(item: ReturnType<typeof manualRecordConfirmDisplayItem>) {
+    return item.payloadSummary;
+  }
+
+  function manualConfirmPreviewSourceLine(item: ReturnType<typeof manualRecordConfirmDisplayItem>) {
+    return item.sourceLine;
+  }
+
+  function manualConfirmPreviewTypeLabel(item: ReturnType<typeof manualRecordConfirmDisplayItem>) {
+    return item.typeLabel;
+  }
+
   function openTutorialRecordEntry() {
     openScreenWithStatus("record", tutorialRecordEntryStatusMessage());
   }
@@ -9686,11 +9702,11 @@ export default function App() {
             </View>
             <ManualRecordConfirmPreviewBlock
               badgeLabel={auxiliaryDisplayLabels.preSaveConfirmBadge}
-              icon={manualRecordConfirmDisplay.icon}
+              icon={manualConfirmPreviewIcon(manualRecordConfirmDisplay)}
               introText={manualRecordConfirmIntroDisplayText}
-              payloadSummary={manualRecordConfirmDisplay.payloadSummary}
-              sourceLine={manualRecordConfirmDisplay.sourceLine}
-              typeLabel={manualRecordConfirmDisplay.typeLabel}
+              payloadSummary={manualConfirmPreviewPayloadSummary(manualRecordConfirmDisplay)}
+              sourceLine={manualConfirmPreviewSourceLine(manualRecordConfirmDisplay)}
+              typeLabel={manualConfirmPreviewTypeLabel(manualRecordConfirmDisplay)}
             />
             <ManualRecordConfirmFooterActions
               checklistItems={manualSubmitChecklistItems}

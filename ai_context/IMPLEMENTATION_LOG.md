@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1739 reuse manual confirm preview fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added manual confirm preview helpers for icon, payload summary, source line, and type label.
+- Reused the helpers in the manual record confirmation preview block while preserving manual record form state, confirmation copy, backend guard, submit action, and return flow unchanged.
+- Updated navigation verifier coverage and scoped direct-field guards for the manual confirmation preview block.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining core-flow render blocks in small behavior-preserving slices.
+
 ### T1738 reuse record model status fallbacks
 
 類型：mobile / refactor / verifier / docs

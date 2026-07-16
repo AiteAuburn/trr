@@ -2111,6 +2111,18 @@ def main() -> int:
         ):
             edit_type_label_block = _match_block(content, pattern, block_label)
             _assert_not_contains(f"{block_label} direct fallback binding", edit_type_label_block, marker)
+        manual_confirm_preview_block = _match_block(
+            content,
+            r'(currentScreen === "manualRecordConfirm"[\s\S]*?<ManualRecordConfirmFooterActions)',
+            "manual record confirm preview render block",
+        )
+        for label, marker in (
+            ("manual confirm direct icon binding", "icon={manualRecordConfirmDisplay.icon}"),
+            ("manual confirm direct payload binding", "payloadSummary={manualRecordConfirmDisplay.payloadSummary}"),
+            ("manual confirm direct source binding", "sourceLine={manualRecordConfirmDisplay.sourceLine}"),
+            ("manual confirm direct type binding", "typeLabel={manualRecordConfirmDisplay.typeLabel}"),
+        ):
+            _assert_not_contains(label, manual_confirm_preview_block, marker)
         for label, marker in (
             ("app types account alias", "export type Account = AccountTransformSource;"),
             ("app types profile alias", "export type Profile = ProfileTransformSource;"),
@@ -7484,14 +7496,22 @@ def main() -> int:
             ("manual record create preview action label binding", "label={coreFlowDisplayLabels.createRecord}"),
             ("manual record create preview action press binding", "onPress={enterManualRecordConfirm}"),
             ("manual record confirm preview block binding", "<ManualRecordConfirmPreviewBlock\n              badgeLabel={auxiliaryDisplayLabels.preSaveConfirmBadge}"),
-            ("manual record confirm preview icon binding", "icon={manualRecordConfirmDisplay.icon}"),
+            ("manual confirm preview icon helper", "function manualConfirmPreviewIcon(item: ReturnType<typeof manualRecordConfirmDisplayItem>)"),
+            ("manual confirm preview icon helper fields", "return item.icon;"),
+            ("manual record confirm preview icon binding", "icon={manualConfirmPreviewIcon(manualRecordConfirmDisplay)}"),
             ("manual record confirm display helper binding", "const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayTexts(isBusy);"),
             ("manual record confirm intro display binding", "const manualRecordConfirmIntroDisplayText = manualRecordConfirmDisplayTextsForState.intro;"),
             ("manual record confirm submit display binding", "const manualRecordConfirmSubmitDisplayLabel = manualRecordConfirmDisplayTextsForState.submit;"),
             ("manual record confirm preview intro binding", "introText={manualRecordConfirmIntroDisplayText}"),
-            ("manual record confirm preview payload binding", "payloadSummary={manualRecordConfirmDisplay.payloadSummary}"),
-            ("manual record confirm preview source binding", "sourceLine={manualRecordConfirmDisplay.sourceLine}"),
-            ("manual record confirm preview type binding", "typeLabel={manualRecordConfirmDisplay.typeLabel}"),
+            ("manual confirm preview payload helper", "function manualConfirmPreviewPayloadSummary(item: ReturnType<typeof manualRecordConfirmDisplayItem>)"),
+            ("manual confirm preview payload helper fields", "return item.payloadSummary;"),
+            ("manual record confirm preview payload binding", "payloadSummary={manualConfirmPreviewPayloadSummary(manualRecordConfirmDisplay)}"),
+            ("manual confirm preview source helper", "function manualConfirmPreviewSourceLine(item: ReturnType<typeof manualRecordConfirmDisplayItem>)"),
+            ("manual confirm preview source helper fields", "return item.sourceLine;"),
+            ("manual record confirm preview source binding", "sourceLine={manualConfirmPreviewSourceLine(manualRecordConfirmDisplay)}"),
+            ("manual confirm preview type helper", "function manualConfirmPreviewTypeLabel(item: ReturnType<typeof manualRecordConfirmDisplayItem>)"),
+            ("manual confirm preview type helper fields", "return item.typeLabel;"),
+            ("manual record confirm preview type binding", "typeLabel={manualConfirmPreviewTypeLabel(manualRecordConfirmDisplay)}"),
             ("manual record confirm checklist helper binding", "const manualSubmitChecklistItems = manualSubmitChecklistDisplayItems();"),
             ("manual record confirm footer actions binding", "<ManualRecordConfirmFooterActions\n              checklistItems={manualSubmitChecklistItems}"),
             ("record edit date input handler", "function updateRecordEditDateInput(value: string)"),
