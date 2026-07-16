@@ -34,6 +34,39 @@ None.
 
 ## Done
 
+### T2042: Extract preview record edit action row
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/previewRecordEditActionRow.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `PreviewRecordEditActionRow` for the AI candidate edit footer actions.
+- Replaced the inline cancel and apply-changes footer row in `App.tsx`.
+- Preserved existing labels, accessibility labels, validation disabled state, handlers, and preview edit save behavior.
+- Updated navigation and visual-smoke verifier coverage for the component boundary and App wiring.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining inline core-flow action rows without changing first-version scope.
+
 ### T2041: Extract transcript review action row
 
 Status: done

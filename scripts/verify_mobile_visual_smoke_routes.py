@@ -41,7 +41,7 @@ VISUAL_SMOKE_ROUTES = {
         'currentScreen === "editPreviewRecord"',
         "previewRecordEditBoundaryDisplayText",
         "selectedPreviewRecordDisplayItem",
-        "onPress={savePreviewRecordEdit}",
+        "onApplyPress={savePreviewRecordEdit}",
     ],
     "aiRemoveConfirm": [
         'currentScreen === "aiRemoveConfirm"',

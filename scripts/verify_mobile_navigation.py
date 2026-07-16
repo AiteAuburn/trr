@@ -99,6 +99,7 @@ RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPane
 RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.tsx"
 RECORD_EDIT_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "recordEditFooterActions.tsx"
 RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.tsx"
+PREVIEW_RECORD_EDIT_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "previewRecordEditActionRow.tsx"
 BACKEND_URL_FIELD_PATH = REPO_ROOT / "mobile" / "backendUrlField.tsx"
 NATIVE_DEBUG_ACTION_BUTTON_PATH = REPO_ROOT / "mobile" / "nativeDebugActionButton.tsx"
 NATIVE_DEBUG_RUN_ACTIONS_PATH = REPO_ROOT / "mobile" / "nativeDebugRunActions.tsx"
@@ -1480,6 +1481,7 @@ def main() -> int:
     record_detail_info_panel_content = RECORD_DETAIL_INFO_PANEL_PATH.read_text(encoding="utf-8")
     record_edit_footer_actions_content = RECORD_EDIT_FOOTER_ACTIONS_PATH.read_text(encoding="utf-8")
     record_edit_header_fields_content = RECORD_EDIT_HEADER_FIELDS_PATH.read_text(encoding="utf-8")
+    preview_record_edit_action_row_content = PREVIEW_RECORD_EDIT_ACTION_ROW_PATH.read_text(encoding="utf-8")
     backend_url_field_content = BACKEND_URL_FIELD_PATH.read_text(encoding="utf-8")
     native_debug_action_button_content = NATIVE_DEBUG_ACTION_BUTTON_PATH.read_text(encoding="utf-8")
     native_debug_run_actions_content = NATIVE_DEBUG_RUN_ACTIONS_PATH.read_text(encoding="utf-8")
@@ -5238,7 +5240,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit return binding",
             content,
-            "onPress={returnFromPreviewRecordEdit}",
+            "onCancelPress={returnFromPreviewRecordEdit}",
         )
         for label, marker in (
             ("AI candidate preview edit return accessibility label", 'previewEditReturnAccessibility: boundDisplayText("取消候選修改並返回 AI 確認，不寫入正式紀錄", maxDisplayDetailTextLength)'),
@@ -5246,11 +5248,26 @@ def main() -> int:
         ):
             _assert_contains(label, first_version_flow_copy_content, marker)
         for label, marker in (
-            ("AI candidate preview edit return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.previewEditReturnAccessibility}"),
-            ("AI candidate preview edit apply accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.previewEditApplyAccessibility}"),
-            ("AI candidate preview edit disabled state", "accessibilityState={{ disabled: Boolean(previewRecordEditValidationError) }}"),
+            ("AI candidate preview edit return accessibility binding", "cancelAccessibilityLabel={coreFlowDisplayLabels.previewEditReturnAccessibility}"),
+            ("AI candidate preview edit apply accessibility binding", "applyAccessibilityLabel={coreFlowDisplayLabels.previewEditApplyAccessibility}"),
+            ("AI candidate preview edit disabled state", "applyDisabled={Boolean(previewRecordEditValidationError)}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("preview record edit action row component", "export function PreviewRecordEditActionRow"),
+            ("preview record edit action row cancel accessibility prop", "accessibilityLabel={cancelAccessibilityLabel}"),
+            ("preview record edit action row apply accessibility prop", "accessibilityLabel={applyAccessibilityLabel}"),
+            ("preview record edit action row apply disabled state", "accessibilityState={{ disabled: applyDisabled }}"),
+            ("preview record edit action row apply disabled prop", "disabled={applyDisabled}"),
+            ("preview record edit action row cancel handler prop", "onPress={onCancelPress}"),
+            ("preview record edit action row apply handler prop", "onPress={onApplyPress}"),
+            ("preview record edit action row cancel label prop", "{cancelLabel}"),
+            ("preview record edit action row apply label prop", "{applyLabel}"),
+            ("preview record edit action row shell style", "actionRow: {"),
+            ("preview record edit action row primary style", "primaryButton: {"),
+            ("preview record edit action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, preview_record_edit_action_row_content, marker)
         _assert_contains(
             "manual record confirm enter handler",
             content,

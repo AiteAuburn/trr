@@ -809,6 +809,7 @@ import { NativeDebugActionButton } from "./nativeDebugActionButton";
 import { NativeDebugRunActions } from "./nativeDebugRunActions";
 import { NativeDownloadKindSelector } from "./nativeDownloadKindSelector";
 import { NativeDebugTextField } from "./nativeDebugTextField";
+import { PreviewRecordEditActionRow } from "./previewRecordEditActionRow";
 import { RecordingResultActionRow } from "./recordingResultActionRow";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
@@ -10355,29 +10356,15 @@ export default function App() {
                 inputStyle={[styles.input, styles.jsonInput]}
               />
             ) : null}
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.previewEditReturnAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={returnFromPreviewRecordEdit}
-              >
-                <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.cancel}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.previewEditApplyAccessibility}
-                accessibilityRole="button"
-                accessibilityState={{ disabled: Boolean(previewRecordEditValidationError) }}
-                style={[
-                  styles.primaryButton,
-                  previewRecordEditValidationError ? styles.buttonDisabled : null
-                ]}
-                disabled={Boolean(previewRecordEditValidationError)}
-                onPress={savePreviewRecordEdit}
-              >
-                <Text style={styles.primaryButtonText}>{coreFlowDisplayLabels.applyChanges}</Text>
-              </Pressable>
-            </View>
+            <PreviewRecordEditActionRow
+              applyAccessibilityLabel={coreFlowDisplayLabels.previewEditApplyAccessibility}
+              applyDisabled={Boolean(previewRecordEditValidationError)}
+              applyLabel={coreFlowDisplayLabels.applyChanges}
+              cancelAccessibilityLabel={coreFlowDisplayLabels.previewEditReturnAccessibility}
+              cancelLabel={coreFlowDisplayLabels.cancel}
+              onApplyPress={savePreviewRecordEdit}
+              onCancelPress={returnFromPreviewRecordEdit}
+            />
             {previewRecordEditValidationError ? (
               <Text style={styles.warningText}>{previewRecordEditValidationDisplay}</Text>
             ) : null}
