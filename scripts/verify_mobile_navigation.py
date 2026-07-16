@@ -14,6 +14,7 @@ APP_TYPES_PATH = REPO_ROOT / "mobile" / "appTypes.ts"
 APP_RUNTIME_CONFIG_PATH = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 AI_FLOW_CHECKLIST_PATH = REPO_ROOT / "mobile" / "aiFlowChecklist.tsx"
+INSIGHT_FLOW_CHECKLIST_PATH = REPO_ROOT / "mobile" / "insightFlowChecklist.tsx"
 ACCOUNT_SECURITY_ACTION_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityActionGrid.tsx"
 SETTINGS_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "settingsBoundaryGrid.tsx"
 SETTINGS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "settingsChecklist.tsx"
@@ -1408,6 +1409,7 @@ def main() -> int:
     app_runtime_config_content = APP_RUNTIME_CONFIG_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     ai_flow_checklist_content = AI_FLOW_CHECKLIST_PATH.read_text(encoding="utf-8")
+    insight_flow_checklist_content = INSIGHT_FLOW_CHECKLIST_PATH.read_text(encoding="utf-8")
     account_security_action_grid_content = ACCOUNT_SECURITY_ACTION_GRID_PATH.read_text(encoding="utf-8")
     settings_boundary_grid_content = SETTINGS_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
     settings_checklist_content = SETTINGS_CHECKLIST_PATH.read_text(encoding="utf-8")
@@ -1921,12 +1923,9 @@ def main() -> int:
             ("highlight bullet record type color", 'color: "#3FA67F"'),
             ("highlight bullet evidence line height", "lineHeight: 19"),
             ("record detail boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
-            ("delete confirm highlight bullet row", "deleteConfirmChecklistItems.map((item) => (\n                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />"),
             ("record update highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("manual submit highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("history boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
-            ("analysis boundary highlight bullet row", "analysisBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />"),
-            ("detailed report notes highlight bullet row", "detailedReportNoteItems.map((item) => (\n                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />"),
             ("community readiness highlight bullet row", "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={communityReadinessChecklistItemText(item)}"),
             ("ranking readiness highlight bullet row", "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />"),
             ("future module card requirements highlight bullet row", "futureModuleCardRequirements(item).map((requirement) => (\n                      <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />"),
@@ -1983,6 +1982,17 @@ def main() -> int:
             ("AI flow checklist text binding", "text={aiFlowChecklistItemText(item)}"),
         ):
             _assert_contains(label, ai_flow_checklist_content, marker)
+        for label, marker in (
+            ("insight flow checklist component", "export function InsightFlowChecklist"),
+            ("insight flow checklist item key helper", "function insightFlowChecklistItemKey(item: string)"),
+            ("insight flow checklist item key helper fields", "return item;"),
+            ("insight flow checklist item text helper", "function insightFlowChecklistItemText(item: string)"),
+            ("insight flow checklist item text helper fields", "return item;"),
+            ("insight flow checklist map", "items.map((item) => ("),
+            ("insight flow checklist key binding", "key={insightFlowChecklistItemKey(item)}"),
+            ("insight flow checklist text binding", "text={insightFlowChecklistItemText(item)}"),
+        ):
+            _assert_contains(label, insight_flow_checklist_content, marker)
         for label, marker in (
             ("record flow checklist component", "export function RecordFlowChecklist"),
             ("record flow checklist item key helper", "function recordFlowChecklistItemKey(item: string)"),
@@ -11117,12 +11127,10 @@ def main() -> int:
             ("record flow checklist binding", "<RecordFlowChecklist"),
             ("record entry settings checklist items binding", "items={recordEntrySettingsChecklistItems}"),
             ("transcript review cost checklist items binding", "items={transcriptReviewCostBoundaryChecklistItems}"),
-            ("insight flow checklist item key helper", "function insightFlowChecklistItemKey(item: string)"),
-            ("insight flow checklist item key helper fields", "return item;"),
-            ("insight flow checklist item key binding", "key={insightFlowChecklistItemKey(item)}"),
-            ("insight flow checklist item text helper", "function insightFlowChecklistItemText(item: string)"),
-            ("insight flow checklist item text helper fields", "return item;"),
-            ("insight flow checklist item text binding", "text={insightFlowChecklistItemText(item)}"),
+            ("insight flow checklist binding", "<InsightFlowChecklist"),
+            ("delete confirm checklist items binding", "items={deleteConfirmChecklistItems}"),
+            ("analysis boundary checklist items binding", "items={analysisBoundaryChecklistItems}"),
+            ("detailed report notes items binding", "items={detailedReportNoteItems}"),
             ("subscription comparison row key helper", "function subscriptionComparisonRowKey(row: (typeof subscriptionComparisonDisplayRows)[number])"),
             ("subscription comparison row key helper fields", "return row.feature;"),
             ("subscription comparison row key binding", "key={subscriptionComparisonRowKey(row)}"),
@@ -11336,15 +11344,10 @@ def main() -> int:
             "analysisBoundaryChecklistItems",
             "detailedReportNoteItems",
         ):
-            insight_flow_checklist_render_block = _match_block(
-                content,
-                rf"{list_name}\.map\(\(item\) => \(([\s\S]*?<HighlightBulletRow[^\n]*/>\n\s*)\)\)",
-                f"{list_name} insight flow checklist render block",
-            )
             _assert_not_contains(
-                f"{list_name} direct checklist item binding",
-                insight_flow_checklist_render_block,
-                "key={item} text={item}",
+                f"{list_name} direct insight flow checklist map",
+                content,
+                f"{list_name}.map((item) => (",
             )
         subscription_comparison_render_block = _match_block(
             content,

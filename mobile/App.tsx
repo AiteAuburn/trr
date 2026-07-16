@@ -795,6 +795,7 @@ import { AuthSessionDisplayList } from "./authSessionDisplayList";
 import { BackendUrlField } from "./backendUrlField";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
+import { InsightFlowChecklist } from "./insightFlowChecklist";
 import { InsightEmptyActionRow } from "./insightEmptyActionRow";
 import { CommunityPublicDisplayNameField } from "./communityPublicDisplayNameField";
 import { CommerceReadinessChecklist } from "./commerceReadinessChecklist";
@@ -4769,14 +4770,6 @@ export default function App() {
 
   function previewTimedRowTime(row: { time: string }) {
     return row.time;
-  }
-
-  function insightFlowChecklistItemKey(item: string) {
-    return item;
-  }
-
-  function insightFlowChecklistItemText(item: string) {
-    return item;
   }
 
   function subscriptionComparisonRowKey(row: (typeof subscriptionComparisonDisplayRows)[number]) {
@@ -10668,9 +10661,7 @@ export default function App() {
             />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.deletePreConfirm}</Text>
-              {deleteConfirmChecklistItems.map((item) => (
-                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />
-              ))}
+              <InsightFlowChecklist items={deleteConfirmChecklistItems} />
             </View>
             <DangerConfirmActionRow
               cancelAccessibilityLabel={coreFlowDisplayLabels.recordDeleteCancelAccessibility}
@@ -10979,9 +10970,7 @@ export default function App() {
             ) : null}
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.analysisDataBoundary}</Text>
-              {analysisBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />
-              ))}
+              <InsightFlowChecklist items={analysisBoundaryChecklistItems} />
             </View>
             {recordDisplayState.isAtSyncBoundary ? (
               <View style={styles.inlineInfoBlock}>
@@ -11055,9 +11044,7 @@ export default function App() {
             ) : null}
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.reportNotes}</Text>
-              {detailedReportNoteItems.map((item) => (
-                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />
-              ))}
+              <InsightFlowChecklist items={detailedReportNoteItems} />
             </View>
           </View>
         ) : null}

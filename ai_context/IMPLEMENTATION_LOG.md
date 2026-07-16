@@ -15,6 +15,41 @@
 
 ## 2026-07-16
 
+### T2064 extract insight flow checklist component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/insightFlowChecklist.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `InsightFlowChecklist` for repeated delete/analysis/report insight bullet rows.
+- Reused the component for Delete Confirm, Analysis boundary, and Detailed Report note checklists.
+- Removed the insight-flow checklist item key/text helpers from `App.tsx`.
+- Preserved the same checklist item copy, order, keys, and `HighlightBulletRow` presentation.
+- Updated navigation, UI-spec coverage, and visual-smoke route verifier coverage for the component boundary, App item bindings, and direct inline-map guards.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining repeated preview/metric/action row clusters without changing first-version scope.
+
 ### T2063 extract record flow checklist component
 
 類型：mobile / refactor / verifier / docs

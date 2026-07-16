@@ -95,7 +95,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "deleteConfirm": [
         'currentScreen === "deleteConfirm"',
-        "deleteConfirmChecklistItems.map",
+        "items={deleteConfirmChecklistItems}",
         "onConfirmPress={submitRecordDelete}",
     ],
     "manualRecord": [
@@ -127,7 +127,7 @@ VISUAL_SMOKE_ROUTES = {
         'currentScreen === "detailedReport"',
         "detailedReportBoundaryRows.map",
         "detailedReportMetricRows.map",
-        "detailedReportNoteItems.map",
+        "items={detailedReportNoteItems}",
     ],
     "subscription": [
         'currentScreen === "subscription"',
