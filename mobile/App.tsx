@@ -7868,6 +7868,10 @@ export default function App() {
     setStatus(recordUpdateSuccessStatusMessage());
   }
 
+  function handleSelectedRecordUpdateFailure(error: unknown) {
+    setStatus(recordUpdateFailureStatusMessage(error));
+  }
+
   async function updateSelectedRecord() {
     if (isBusy || recordUpdateInFlight.current) {
       return;
@@ -7902,7 +7906,7 @@ export default function App() {
       const updated = await requestSelectedRecordUpdate(selectedRecord.id, account.id, payload);
       handleSelectedRecordUpdateSuccess(updated);
     } catch (error) {
-      setStatus(recordUpdateFailureStatusMessage(error));
+      handleSelectedRecordUpdateFailure(error);
     } finally {
       finishRecordUpdateRequest();
     }

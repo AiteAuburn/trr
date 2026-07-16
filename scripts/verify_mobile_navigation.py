@@ -4499,6 +4499,21 @@ def main() -> int:
             "const updated = await requestSelectedRecordUpdate(selectedRecord.id, account.id, payload);\n      handleSelectedRecordUpdateSuccess(updated);",
         )
         _assert_contains(
+            "record update failure helper",
+            content,
+            "function handleSelectedRecordUpdateFailure(error: unknown)",
+        )
+        _assert_contains(
+            "record update failure helper status",
+            content,
+            "setStatus(recordUpdateFailureStatusMessage(error));",
+        )
+        _assert_contains(
+            "record update failure helper binding",
+            content,
+            "} catch (error) {\n      handleSelectedRecordUpdateFailure(error);\n    } finally {",
+        )
+        _assert_contains(
             "manual create result selected record helper state",
             content,
             "setRecords((current) => boundRecordsList([created, ...current]));\n    selectRecordForResult(created);",
