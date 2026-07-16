@@ -8520,25 +8520,38 @@ export default function App() {
     await completeSelectedRecordUpdateRequest(recordId, accountId, recordType);
   }
 
-  async function updateSelectedRecord() {
+  function guardedSelectedRecordUpdateContext() {
     if (isBusy || recordUpdateInFlight.current) {
-      return;
+      return null;
     }
-    if (!selectedRecord) {
-      return;
+    const record = selectedRecord;
+    if (!record) {
+      return null;
     }
     if (!protectedBackendReady) {
       openRecordActionUnavailable("editRecord", recordUpdateUnavailableStatusMessage(protectedBackendUnavailableMessage));
-      return;
+      return null;
     }
     if (!account) {
+      return null;
+    }
+    return { account, record };
+  }
+
+  async function updateSelectedRecord() {
+    const updateContext = guardedSelectedRecordUpdateContext();
+    if (!updateContext) {
       return;
     }
-    if (!validateSelectedRecordUpdateForSubmit(selectedRecord.record_type)) {
+    if (!validateSelectedRecordUpdateForSubmit(updateContext.record.record_type)) {
       return;
     }
 
-    await startAndCompleteSelectedRecordUpdateRequest(selectedRecord.id, account.id, selectedRecord.record_type);
+    await startAndCompleteSelectedRecordUpdateRequest(
+      updateContext.record.id,
+      updateContext.account.id,
+      updateContext.record.record_type
+    );
   }
 
   function startRecordDeleteRequest() {

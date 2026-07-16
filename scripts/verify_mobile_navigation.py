@@ -5066,7 +5066,7 @@ def main() -> int:
         _assert_contains(
             "record update validation helper binding",
             content,
-            "if (!validateSelectedRecordUpdateForSubmit(selectedRecord.record_type)) {\n      return;\n    }",
+            "if (!validateSelectedRecordUpdateForSubmit(updateContext.record.record_type)) {\n      return;\n    }",
         )
         _assert_contains(
             "record update complete helper",
@@ -5096,7 +5096,37 @@ def main() -> int:
         _assert_contains(
             "record update start and complete helper binding",
             content,
-            "await startAndCompleteSelectedRecordUpdateRequest(selectedRecord.id, account.id, selectedRecord.record_type);",
+            "await startAndCompleteSelectedRecordUpdateRequest(\n      updateContext.record.id,\n      updateContext.account.id,\n      updateContext.record.record_type\n    );",
+        )
+        _assert_contains(
+            "record update guarded context helper",
+            content,
+            "function guardedSelectedRecordUpdateContext()",
+        )
+        _assert_contains(
+            "record update guarded context in-flight guard",
+            content,
+            "if (isBusy || recordUpdateInFlight.current) {\n      return null;\n    }",
+        )
+        _assert_contains(
+            "record update guarded context selected record guard",
+            content,
+            "const record = selectedRecord;\n    if (!record) {\n      return null;\n    }",
+        )
+        _assert_contains(
+            "record update guarded context unavailable guard",
+            content,
+            "if (!protectedBackendReady) {\n      openRecordActionUnavailable(\"editRecord\", recordUpdateUnavailableStatusMessage(protectedBackendUnavailableMessage));\n      return null;\n    }",
+        )
+        _assert_contains(
+            "record update guarded context account guard",
+            content,
+            "if (!account) {\n      return null;\n    }\n    return { account, record };",
+        )
+        _assert_contains(
+            "record update guarded context binding",
+            content,
+            "const updateContext = guardedSelectedRecordUpdateContext();\n    if (!updateContext) {\n      return;\n    }",
         )
         _assert_contains(
             "manual create result selected record helper state",
