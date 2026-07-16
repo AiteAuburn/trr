@@ -2724,7 +2724,17 @@ def main() -> int:
         _assert_contains(
             "parser sample blocked helper binding",
             content,
-            "if (isTranscriptSample) {\n      handleParserSampleBlockedTranscript();\n      return;",
+            "if (isParserSampleTranscriptBlocked()) {\n      handleParserSampleBlockedTranscript();\n      return;",
+        )
+        _assert_contains(
+            "parser sample blocked guard helper",
+            content,
+            "function isParserSampleTranscriptBlocked()",
+        )
+        _assert_contains(
+            "parser sample blocked guard helper internals",
+            content,
+            "return isTranscriptSample;",
         )
         _assert_contains(
             "mobile session clear transcript draft helper binding",
@@ -6577,6 +6587,9 @@ def main() -> int:
             ("parse model unavailable guard helper", "function isParserModelUnavailable()"),
             ("parse model unavailable guard helper internals", "return !parserModelReady;"),
             ("parse model unavailable guard binding", "if (isParserModelUnavailable())"),
+            ("parse sample blocked guard helper", "function isParserSampleTranscriptBlocked()"),
+            ("parse sample blocked guard helper internals", "return isTranscriptSample;"),
+            ("parse sample blocked guard binding", "if (isParserSampleTranscriptBlocked())"),
             ("parse start helper", "function startParserPreviewRequest()"),
             ("parse start helper internals", "parsePreviewInFlight.current = true;\n    setIsBusy(true);"),
             ("parse start helper binding", "startParserPreviewRequest();"),

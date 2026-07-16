@@ -7795,6 +7795,10 @@ export default function App() {
     return !parserModelReady;
   }
 
+  function isParserSampleTranscriptBlocked() {
+    return isTranscriptSample;
+  }
+
   async function parseTranscript() {
     if (isParserPreviewRequestBlocked()) {
       return;
@@ -7815,7 +7819,7 @@ export default function App() {
       handleParserTranscriptValidationError(transcriptValidationError);
       return;
     }
-    if (isTranscriptSample) {
+    if (isParserSampleTranscriptBlocked()) {
       handleParserSampleBlockedTranscript();
       return;
     }
