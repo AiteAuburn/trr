@@ -24,7 +24,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "record": [
         'currentScreen === "record"',
-        "quickEntryModeDisplayItemsForRender.map",
+        "items={quickEntryModeDisplayItemsForRender}",
         "styles.recordHoldButton",
     ],
     "transcriptReview": [

@@ -819,6 +819,7 @@ import { OutcomeChecklist } from "./outcomeChecklist";
 import { PreviewStatusList } from "./previewStatusList";
 import { PreviewRecordEditActionRow } from "./previewRecordEditActionRow";
 import { ProductionAuthReadinessList } from "./productionAuthReadinessList";
+import { QuickEntryModeRail } from "./quickEntryModeRail";
 import { RecordingResultActionRow } from "./recordingResultActionRow";
 import { RecordingWhisperModelSelector } from "./recordingWhisperModelSelector";
 import { RecordFlowChecklist } from "./recordFlowChecklist";
@@ -2683,34 +2684,6 @@ export default function App() {
     openScreenWithStatus("record", quickEntryTextModeStatusMessage());
   }
 
-  function handleTodayQuickEntryMode(mode: QuickEntryMode) {
-    handleQuickEntryMode(mode, "today");
-  }
-
-  function quickEntryModeTarget(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
-    return item.key;
-  }
-
-  function quickEntryModeRenderKey(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
-    return `record-${item.key}`;
-  }
-
-  function quickEntryModeAccessibilityLabel(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
-    return item.accessibilityLabel;
-  }
-
-  function quickEntryModeIcon(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
-    return item.icon;
-  }
-
-  function quickEntryModeLabel(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
-    return item.label;
-  }
-
-  function quickEntryModeCopy(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
-    return item.copy;
-  }
-
   function homeGuidanceRowKey(rowIndex: number) {
     return `home-guidance-row-${rowIndex}`;
   }
@@ -2747,16 +2720,8 @@ export default function App() {
     return `目前第 ${currentIndex + 1} 個範例，共 ${totalCount} 個`;
   }
 
-  function pressTodayQuickEntryItem(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
-    handleTodayQuickEntryMode(quickEntryModeTarget(item));
-  }
-
   function handleRecordQuickEntryMode(mode: QuickEntryMode) {
     handleQuickEntryMode(mode, "record");
-  }
-
-  function pressRecordQuickEntryItem(item: ReturnType<typeof quickEntryModeDisplayItems>[number]) {
-    handleRecordQuickEntryMode(quickEntryModeTarget(item));
   }
 
   function activateVisualSmokePreview() {
@@ -9104,23 +9069,11 @@ export default function App() {
             <View style={styles.pageSection}>
               <Text style={styles.sectionTitle}>快速記錄</Text>
               <Text style={styles.evidence}>先確認文字，再讓 AI 整理成候選紀錄；確認後才會儲存。</Text>
-              <View style={styles.quickEntryRail}>
-                {quickEntryModeDisplayItemsForRender.map((item) => (
-                  <Pressable
-                    key={quickEntryModeRenderKey(item)}
-	                    accessibilityLabel={quickEntryModeAccessibilityLabel(item)}
-	                    accessibilityRole="button"
-	                    accessibilityState={{ disabled: isBusy }}
-	                    style={[styles.quickEntryItem, isBusy ? styles.buttonDisabled : null]}
-                    disabled={isBusy}
-                    onPress={() => pressRecordQuickEntryItem(item)}
-                  >
-                    <Text style={styles.quickEntryIcon}>{quickEntryModeIcon(item)}</Text>
-                    <Text style={styles.quickEntryLabel}>{quickEntryModeLabel(item)}</Text>
-                    <Text style={styles.quickEntryCopy}>{quickEntryModeCopy(item)}</Text>
-                  </Pressable>
-                ))}
-              </View>
+              <QuickEntryModeRail
+                disabled={isBusy}
+                items={quickEntryModeDisplayItemsForRender}
+                onModePress={handleRecordQuickEntryMode}
+              />
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{coreFlowDisplayLabels.parseSettings}</Text>
                 <Text style={styles.evidence}>
@@ -12786,40 +12739,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 21,
     textAlign: "left"
-  },
-  quickEntryRail: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10
-  },
-  quickEntryItem: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
-    borderRadius: 18,
-    borderWidth: 1,
-    flexGrow: 1,
-    gap: 4,
-    minHeight: 72,
-    minWidth: "30%",
-    padding: 12
-  },
-  quickEntryIcon: {
-    color: "#3FA67F",
-    fontSize: 18,
-    fontWeight: "900"
-  },
-  quickEntryLabel: {
-    color: "#0F3F37",
-    fontSize: 13,
-    fontWeight: "900",
-    lineHeight: 18
-  },
-  quickEntryCopy: {
-    color: "#5F666A",
-    flexShrink: 1,
-    fontSize: 11,
-    fontWeight: "700",
-    lineHeight: 16
   },
   voiceCaptureCard: {
     alignItems: "center",

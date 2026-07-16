@@ -34,6 +34,40 @@ None.
 
 ## Done
 
+### T2080: Extract quick entry mode rail component
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/quickEntryModeRail.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `QuickEntryModeRail` for the Record page quick-entry mode cards.
+- Moved quick-entry mode target/key/accessibility/icon/label/copy helpers out of `App.tsx`.
+- Preserved the same quick-entry copy, order, disabled state, button role, styling, and spacing.
+- Kept quick-entry mode routing/status behavior in `App.tsx`.
+- Updated navigation and visual-smoke route verifier coverage for component card bindings and direct inline-map guards.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily record / record detail / community row clusters without changing first-version scope.
+
 ### T2079: Extract future module card list component
 
 Status: done

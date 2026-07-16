@@ -24,6 +24,7 @@ RECORD_RESULT_DESTINATION_GRID_PATH = REPO_ROOT / "mobile" / "recordResultDestin
 MENU_DESTINATION_GRID_PATH = REPO_ROOT / "mobile" / "menuDestinationGrid.tsx"
 VISUAL_SMOKE_ROUTE_JUMP_GRID_PATH = REPO_ROOT / "mobile" / "visualSmokeRouteJumpGrid.tsx"
 FUTURE_MODULE_CARD_LIST_PATH = REPO_ROOT / "mobile" / "futureModuleCardList.tsx"
+QUICK_ENTRY_MODE_RAIL_PATH = REPO_ROOT / "mobile" / "quickEntryModeRail.tsx"
 SUBSCRIPTION_CHECKLIST_PATH = REPO_ROOT / "mobile" / "subscriptionChecklist.tsx"
 SUBSCRIPTION_COMPARISON_LIST_PATH = REPO_ROOT / "mobile" / "subscriptionComparisonList.tsx"
 PREVIEW_STATUS_LIST_PATH = REPO_ROOT / "mobile" / "previewStatusList.tsx"
@@ -1431,6 +1432,7 @@ def main() -> int:
     menu_destination_grid_content = MENU_DESTINATION_GRID_PATH.read_text(encoding="utf-8")
     visual_smoke_route_jump_grid_content = VISUAL_SMOKE_ROUTE_JUMP_GRID_PATH.read_text(encoding="utf-8")
     future_module_card_list_content = FUTURE_MODULE_CARD_LIST_PATH.read_text(encoding="utf-8")
+    quick_entry_mode_rail_content = QUICK_ENTRY_MODE_RAIL_PATH.read_text(encoding="utf-8")
     subscription_checklist_content = SUBSCRIPTION_CHECKLIST_PATH.read_text(encoding="utf-8")
     subscription_comparison_list_content = SUBSCRIPTION_COMPARISON_LIST_PATH.read_text(encoding="utf-8")
     preview_status_list_content = PREVIEW_STATUS_LIST_PATH.read_text(encoding="utf-8")
@@ -7584,7 +7586,8 @@ def main() -> int:
                     f"found {actual_line_height if actual_line_height is not None else 'missing'}."
                 )
         for style_name, (property_name, minimum_value) in MIN_TOUCH_TARGET_STYLE_RULES.items():
-            block = _style_block(content, style_name)
+            style_content = quick_entry_mode_rail_content if style_name == "quickEntryItem" else content
+            block = _style_block(style_content, style_name)
             actual_value = _numeric_style_value(block, property_name)
             if actual_value is None or actual_value < minimum_value:
                 raise AssertionError(
@@ -7987,12 +7990,12 @@ def main() -> int:
         _assert_contains(
             "record quick-entry rail render",
             content,
-            "styles.quickEntryRail",
+            "<QuickEntryModeRail",
         )
         _assert_contains(
             "record quick-entry item render",
             content,
-            "styles.quickEntryItem",
+            "items={quickEntryModeDisplayItemsForRender}",
         )
         _assert_contains(
             "quick-entry action helper",
@@ -8009,52 +8012,41 @@ def main() -> int:
             content,
             "function handleRecordQuickEntryMode(mode: QuickEntryMode)",
         )
-        _assert_contains(
-            "quick-entry mode target helper",
-            content,
-            "function quickEntryModeTarget(item: ReturnType<typeof quickEntryModeDisplayItems>[number])",
-        )
-        _assert_contains(
-            "quick-entry mode target helper fields",
-            content,
-            "return item.key;",
-        )
         for label, marker in (
-            ("quick-entry render key helper", "function quickEntryModeRenderKey(item: ReturnType<typeof quickEntryModeDisplayItems>[number])"),
+            ("quick-entry rail component", "export function QuickEntryModeRail"),
+            ("quick-entry rail item type", "export type QuickEntryModeDisplayItem ="),
+            ("quick-entry rail items prop", "items: QuickEntryModeDisplayItem[]"),
+            ("quick-entry rail press prop", "onModePress: (mode: QuickEntryMode) => void"),
+            ("quick-entry mode target helper", "function quickEntryModeTarget(item: QuickEntryModeDisplayItem)"),
+            ("quick-entry mode target helper fields", "return item.key;"),
+            ("quick-entry render key helper", "function quickEntryModeRenderKey(item: QuickEntryModeDisplayItem)"),
             ("quick-entry render key helper fields", "return `record-${item.key}`;"),
             ("quick-entry render key binding", "key={quickEntryModeRenderKey(item)}"),
-            ("quick-entry accessibility helper", "function quickEntryModeAccessibilityLabel(item: ReturnType<typeof quickEntryModeDisplayItems>[number])"),
+            ("quick-entry accessibility helper", "function quickEntryModeAccessibilityLabel(item: QuickEntryModeDisplayItem)"),
             ("quick-entry accessibility helper fields", "return item.accessibilityLabel;"),
             ("quick-entry accessibility helper binding", "accessibilityLabel={quickEntryModeAccessibilityLabel(item)}"),
-            ("quick-entry icon helper", "function quickEntryModeIcon(item: ReturnType<typeof quickEntryModeDisplayItems>[number])"),
+            ("quick-entry icon helper", "function quickEntryModeIcon(item: QuickEntryModeDisplayItem)"),
             ("quick-entry icon helper fields", "return item.icon;"),
             ("quick-entry icon helper binding", "{quickEntryModeIcon(item)}"),
-            ("quick-entry label helper", "function quickEntryModeLabel(item: ReturnType<typeof quickEntryModeDisplayItems>[number])"),
+            ("quick-entry label helper", "function quickEntryModeLabel(item: QuickEntryModeDisplayItem)"),
             ("quick-entry label helper fields", "return item.label;"),
             ("quick-entry label helper binding", "{quickEntryModeLabel(item)}"),
-            ("quick-entry copy helper", "function quickEntryModeCopy(item: ReturnType<typeof quickEntryModeDisplayItems>[number])"),
+            ("quick-entry copy helper", "function quickEntryModeCopy(item: QuickEntryModeDisplayItem)"),
             ("quick-entry copy helper fields", "return item.copy;"),
             ("quick-entry copy helper binding", "{quickEntryModeCopy(item)}"),
+            ("quick-entry mode press target binding", "onPress={() => onModePress(quickEntryModeTarget(item))}"),
+            ("quick-entry rail style", "quickEntryRail: {"),
+            ("quick-entry item style", "quickEntryItem: {"),
         ):
-            _assert_contains(label, content, marker)
-        _assert_contains(
-            "record quick-entry item press wrapper",
-            content,
-            "function pressRecordQuickEntryItem(item: ReturnType<typeof quickEntryModeDisplayItems>[number])",
-        )
-        _assert_contains(
-            "record quick-entry target helper binding",
-            content,
-            "handleRecordQuickEntryMode(quickEntryModeTarget(item));",
-        )
+            _assert_contains(label, quick_entry_mode_rail_content, marker)
         _assert_contains(
             "quick-entry accessibility labels",
-            content,
+            quick_entry_mode_rail_content,
             "accessibilityLabel={quickEntryModeAccessibilityLabel(item)}",
         )
         _assert_contains(
             "quick-entry button role",
-            content,
+            quick_entry_mode_rail_content,
             'accessibilityRole="button"',
         )
         for label, marker in (
@@ -9049,7 +9041,7 @@ def main() -> int:
             content,
             "onPress={() => handleTodayQuickEntryMode(item.key)}",
         )
-        _assert_contains(
+        _assert_not_contains(
             "today quick-entry target helper binding",
             content,
             "handleTodayQuickEntryMode(quickEntryModeTarget(item));",
@@ -9279,25 +9271,20 @@ def main() -> int:
             content,
             "onPress={openTodayAnalysis}",
         )
-        _assert_contains(
-            "record quick-entry shared render",
+        _assert_not_contains(
+            "direct quick-entry mode map",
             content,
             "quickEntryModeDisplayItemsForRender.map((item) =>",
         )
-        _assert_contains(
-            "record quick-entry key prefix",
+        _assert_not_contains(
+            "record quick-entry old key prefix",
             content,
             "key={quickEntryModeRenderKey(item)}",
         )
-        _assert_contains(
-            "record quick-entry action",
+        _assert_not_contains(
+            "record quick-entry old action",
             content,
             "onPress={() => pressRecordQuickEntryItem(item)}",
-        )
-        quick_entry_render_block = _match_block(
-            content,
-            r"quickEntryModeDisplayItemsForRender\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
-            "record quick-entry render block",
         )
         for label, marker in (
             ("direct quick-entry key binding", 'key={`record-${item.key}`}'),
@@ -9306,7 +9293,7 @@ def main() -> int:
             ("direct quick-entry label binding", "<Text style={styles.quickEntryLabel}>{item.label}</Text>"),
             ("direct quick-entry copy binding", "<Text style={styles.quickEntryCopy}>{item.copy}</Text>"),
         ):
-            _assert_not_contains(label, quick_entry_render_block, marker)
+            _assert_not_contains(label, content, marker)
         _assert_not_contains(
             "record quick-entry direct source wrapper binding",
             content,
