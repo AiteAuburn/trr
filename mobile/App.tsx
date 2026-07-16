@@ -1318,6 +1318,7 @@ export default function App() {
     : styles.container;
   const hasUnsavedDailyRecordDraft = dailyRecordDraftScreen.hasUnsavedDraft;
   const shouldGuardDailyRecordLeave = hasUnsavedDailyRecordDraft;
+  const shouldShowDailyRecordLeaveGuard = dailyRecordLeaveGuardVisible;
   const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayTexts();
   const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardDisplay.title;
   const dailyRecordLeaveGuardBodyDisplayText = dailyRecordLeaveGuardDisplay.body;
@@ -8700,7 +8701,7 @@ export default function App() {
                 <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.returnConfirm}</Text>
               </Pressable>
             </View>
-            {dailyRecordLeaveGuardVisible ? (
+            {shouldShowDailyRecordLeaveGuard ? (
               <View style={styles.dailyLeaveGuardCard}>
                 <Text style={styles.label}>{dailyRecordLeaveGuardTitleDisplayText}</Text>
                 <Text style={styles.warningText}>{dailyRecordLeaveGuardBodyDisplayText}</Text>

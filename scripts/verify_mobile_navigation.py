@@ -5983,12 +5983,14 @@ def main() -> int:
             ("daily record leave guard confirm handler", "function confirmDailyRecordLeaveGuard()"),
             ("daily record leave guard visible state", "const [dailyRecordLeaveGuardVisible, setDailyRecordLeaveGuardVisible] = useState(false);"),
             ("daily record leave guard state alias", "const shouldGuardDailyRecordLeave = hasUnsavedDailyRecordDraft;"),
+            ("daily record leave guard visible alias", "const shouldShowDailyRecordLeaveGuard = dailyRecordLeaveGuardVisible;"),
             ("daily record leave guard header branch", "if (shouldGuardDailyRecordLeave)"),
             ("daily record leave guard android back import", "BackHandler,"),
             ("daily record leave guard android back listener", 'BackHandler.addEventListener("hardwareBackPress"'),
             ("daily record leave guard android branch", "if (shouldGuardDailyRecordLeave)"),
             ("daily record leave guard android handled", "return true;"),
             ("daily record leave guard android dependency", "}, [shouldGuardDailyRecordLeave]);"),
+            ("daily record leave guard render condition", "{shouldShowDailyRecordLeaveGuard ? ("),
             ("daily record leave guard render card", "styles.dailyLeaveGuardCard"),
             ("daily record leave guard cancel binding", "onPress={cancelDailyRecordLeaveGuard}"),
             ("daily record leave guard confirm binding", "onPress={confirmDailyRecordLeaveGuard}"),
@@ -6054,6 +6056,7 @@ def main() -> int:
             ("daily record leave guard direct header draft branch", "if (hasUnsavedDailyRecordDraft) {\n      requestDailyRecordLeaveGuard();"),
             ("daily record leave guard direct android draft branch", "if (hasUnsavedDailyRecordDraft) {\n        requestDailyRecordLeaveGuard();"),
             ("daily record leave guard direct android dependency", "}, [hasUnsavedDailyRecordDraft]);"),
+            ("daily record leave guard direct visible render", "{dailyRecordLeaveGuardVisible ? ("),
         ):
             _assert_not_contains(label, content, marker)
         daily_transcript_render_block = _match_block(
