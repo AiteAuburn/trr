@@ -792,6 +792,7 @@ import { ManualRecordMedicationFields } from "./manualRecordMedicationFields";
 import { ManualRecordNoteFields } from "./manualRecordNoteFields";
 import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
 import { MetricCard } from "./metricCard";
+import { NativeDebugTextField } from "./nativeDebugTextField";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
 import { RecordEditFooterActions } from "./recordEditFooterActions";
@@ -12651,16 +12652,12 @@ export default function App() {
               <View style={styles.rejectedBox}>
                 <Text style={styles.label}>{auxiliaryDisplayLabels.nativeDevClient}</Text>
                 <Text style={styles.evidence}>{nativeStatusDisplayText}</Text>
-                <TextInput
+                <NativeDebugTextField
                   accessibilityLabel={auxiliaryDisplayLabels.modelUrlInputAccessibility}
                   value={modelUrl}
                   onChangeText={updateNativeModelUrlInput}
                   maxLength={maxNativeDebugInputLength}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  editable={!isBusy}
-                  accessibilityState={{ disabled: isBusy }}
-                  style={[styles.input, isBusy ? styles.inputDisabled : null]}
+                  disabled={isBusy}
                   placeholder="https://.../model.gguf"
                 />
                   <View style={styles.actionRow}>

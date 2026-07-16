@@ -83,6 +83,7 @@ RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPane
 RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.tsx"
 RECORD_EDIT_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "recordEditFooterActions.tsx"
 RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.tsx"
+NATIVE_DEBUG_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "nativeDebugTextField.tsx"
 RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
 RECORD_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "recordTextField.tsx"
 COMMUNITY_PUBLIC_DISPLAY_NAME_FIELD_PATH = REPO_ROOT / "mobile" / "communityPublicDisplayNameField.tsx"
@@ -1441,6 +1442,7 @@ def main() -> int:
     record_detail_info_panel_content = RECORD_DETAIL_INFO_PANEL_PATH.read_text(encoding="utf-8")
     record_edit_footer_actions_content = RECORD_EDIT_FOOTER_ACTIONS_PATH.read_text(encoding="utf-8")
     record_edit_header_fields_content = RECORD_EDIT_HEADER_FIELDS_PATH.read_text(encoding="utf-8")
+    native_debug_text_field_content = NATIVE_DEBUG_TEXT_FIELD_PATH.read_text(encoding="utf-8")
     record_option_field_content = RECORD_OPTION_FIELD_PATH.read_text(encoding="utf-8")
     record_text_field_content = RECORD_TEXT_FIELD_PATH.read_text(encoding="utf-8")
     community_public_display_name_field_content = COMMUNITY_PUBLIC_DISPLAY_NAME_FIELD_PATH.read_text(
@@ -2057,6 +2059,22 @@ def main() -> int:
             ("community public display name field min height", "minHeight: 52"),
         ):
             _assert_contains(label, community_public_display_name_field_content, marker)
+        for label, marker in (
+            ("native debug text field component", "export function NativeDebugTextField"),
+            ("native debug text field accessibility prop", "accessibilityLabel={accessibilityLabel}"),
+            ("native debug text field value prop", "value={value}"),
+            ("native debug text field handler prop", "onChangeText={onChangeText}"),
+            ("native debug text field max length prop", "maxLength={maxLength}"),
+            ("native debug text field normalization", 'autoCapitalize="none"'),
+            ("native debug text field autocorrect", "autoCorrect={false}"),
+            ("native debug text field editable prop", "editable={!disabled}"),
+            ("native debug text field accessibility state", "accessibilityState={{ disabled }}"),
+            ("native debug text field disabled style", "style={[styles.input, disabled ? styles.inputDisabled : null]}"),
+            ("native debug text field placeholder", "placeholder={placeholder}"),
+            ("native debug text field input style", "input: {"),
+            ("native debug text field disabled style block", "inputDisabled: {"),
+        ):
+            _assert_contains(label, native_debug_text_field_content, marker)
         for label, marker in (
             ("food community search field component", "export function FoodCommunitySearchField"),
             ("food community search field accessibility prop", "accessibilityLabel={accessibilityLabel}"),
