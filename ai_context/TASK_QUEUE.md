@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1885: Reuse prepared parser preview request helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `requestPreparedParserPreview()` for the parser submit prepared request flow.
+- Reused the helper from `parseTranscript()` while preserving the prepared existing daily preview, shared timestamp, voice seconds, parser request, same-day merge, and success handler behavior.
+- Updated navigation verifier coverage for the prepared request helper, request forwarding, prepared request binding, and daily-record shared timestamp/transcript append markers.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing parser submit request/success helpers in small behavior-preserving slices.
+
 ### T1884: Reuse parser transcript validation message helper
 
 Status: done
