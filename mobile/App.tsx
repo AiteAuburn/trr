@@ -836,6 +836,7 @@ import { SaveSuccessActionRow } from "./saveSuccessActionRow";
 import { SettingsBoundaryGrid } from "./settingsBoundaryGrid";
 import { SettingsChecklist } from "./settingsChecklist";
 import { SubscriptionChecklist } from "./subscriptionChecklist";
+import { SubscriptionComparisonList } from "./subscriptionComparisonList";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
 import { FoodCommunitySearchField } from "./foodCommunitySearchField";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
@@ -4725,22 +4726,6 @@ export default function App() {
 
   function previewTimedRowTime(row: { time: string }) {
     return row.time;
-  }
-
-  function subscriptionComparisonRowKey(row: (typeof subscriptionComparisonDisplayRows)[number]) {
-    return row.feature;
-  }
-
-  function subscriptionComparisonRowFeature(row: (typeof subscriptionComparisonDisplayRows)[number]) {
-    return row.feature;
-  }
-
-  function subscriptionComparisonRowTrial(row: (typeof subscriptionComparisonDisplayRows)[number]) {
-    return row.trial;
-  }
-
-  function subscriptionComparisonRowAnnual(row: (typeof subscriptionComparisonDisplayRows)[number]) {
-    return row.annual;
   }
 
   function clearLocalSessionFromSettings() {
@@ -10922,13 +10907,7 @@ export default function App() {
             </View>
             <View style={styles.pricingCard}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.featureComparison}</Text>
-              {subscriptionComparisonDisplayRows.map((row) => (
-                <View key={subscriptionComparisonRowKey(row)} style={styles.comparisonRow}>
-                  <Text style={styles.comparisonFeature}>{subscriptionComparisonRowFeature(row)}</Text>
-                  <Text style={styles.comparisonCell}>{subscriptionComparisonRowTrial(row)}</Text>
-                  <Text style={styles.comparisonCellStrong}>{subscriptionComparisonRowAnnual(row)}</Text>
-                </View>
-              ))}
+              <SubscriptionComparisonList rows={subscriptionComparisonDisplayRows} />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>

@@ -20,6 +20,7 @@ ACCOUNT_SECURITY_ACTION_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityActio
 SETTINGS_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "settingsBoundaryGrid.tsx"
 SETTINGS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "settingsChecklist.tsx"
 SUBSCRIPTION_CHECKLIST_PATH = REPO_ROOT / "mobile" / "subscriptionChecklist.tsx"
+SUBSCRIPTION_COMPARISON_LIST_PATH = REPO_ROOT / "mobile" / "subscriptionComparisonList.tsx"
 FUTURE_READINESS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "futureReadinessChecklist.tsx"
 FUTURE_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "futureBoundaryGrid.tsx"
 COMMERCE_READINESS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "commerceReadinessChecklist.tsx"
@@ -1420,6 +1421,7 @@ def main() -> int:
     settings_boundary_grid_content = SETTINGS_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
     settings_checklist_content = SETTINGS_CHECKLIST_PATH.read_text(encoding="utf-8")
     subscription_checklist_content = SUBSCRIPTION_CHECKLIST_PATH.read_text(encoding="utf-8")
+    subscription_comparison_list_content = SUBSCRIPTION_COMPARISON_LIST_PATH.read_text(encoding="utf-8")
     future_readiness_checklist_content = FUTURE_READINESS_CHECKLIST_PATH.read_text(encoding="utf-8")
     future_boundary_grid_content = FUTURE_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
     commerce_readiness_checklist_content = COMMERCE_READINESS_CHECKLIST_PATH.read_text(encoding="utf-8")
@@ -11185,20 +11187,35 @@ def main() -> int:
             ("delete confirm checklist items binding", "items={deleteConfirmChecklistItems}"),
             ("analysis boundary checklist items binding", "items={analysisBoundaryChecklistItems}"),
             ("detailed report notes items binding", "items={detailedReportNoteItems}"),
-            ("subscription comparison row key helper", "function subscriptionComparisonRowKey(row: (typeof subscriptionComparisonDisplayRows)[number])"),
-            ("subscription comparison row key helper fields", "return row.feature;"),
-            ("subscription comparison row key binding", "key={subscriptionComparisonRowKey(row)}"),
-            ("subscription comparison row feature helper", "function subscriptionComparisonRowFeature(row: (typeof subscriptionComparisonDisplayRows)[number])"),
-            ("subscription comparison row feature helper fields", "return row.feature;"),
-            ("subscription comparison row feature binding", "{subscriptionComparisonRowFeature(row)}"),
-            ("subscription comparison row trial helper", "function subscriptionComparisonRowTrial(row: (typeof subscriptionComparisonDisplayRows)[number])"),
-            ("subscription comparison row trial helper fields", "return row.trial;"),
-            ("subscription comparison row trial binding", "{subscriptionComparisonRowTrial(row)}"),
-            ("subscription comparison row annual helper", "function subscriptionComparisonRowAnnual(row: (typeof subscriptionComparisonDisplayRows)[number])"),
-            ("subscription comparison row annual helper fields", "return row.annual;"),
-            ("subscription comparison row annual binding", "{subscriptionComparisonRowAnnual(row)}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("subscription comparison list component", "export function SubscriptionComparisonList"),
+            ("subscription comparison list row type", "export type SubscriptionComparisonRow ="),
+            ("subscription comparison list rows prop", "rows: SubscriptionComparisonRow[]"),
+            ("subscription comparison row key helper", "function subscriptionComparisonRowKey(row: SubscriptionComparisonRow)"),
+            ("subscription comparison row key helper fields", "return row.feature;"),
+            ("subscription comparison row key binding", "key={subscriptionComparisonRowKey(row)}"),
+            ("subscription comparison row feature helper", "function subscriptionComparisonRowFeature(row: SubscriptionComparisonRow)"),
+            ("subscription comparison row feature helper fields", "return row.feature;"),
+            ("subscription comparison row feature binding", "{subscriptionComparisonRowFeature(row)}"),
+            ("subscription comparison row trial helper", "function subscriptionComparisonRowTrial(row: SubscriptionComparisonRow)"),
+            ("subscription comparison row trial helper fields", "return row.trial;"),
+            ("subscription comparison row trial binding", "{subscriptionComparisonRowTrial(row)}"),
+            ("subscription comparison row annual helper", "function subscriptionComparisonRowAnnual(row: SubscriptionComparisonRow)"),
+            ("subscription comparison row annual helper fields", "return row.annual;"),
+            ("subscription comparison row annual binding", "{subscriptionComparisonRowAnnual(row)}"),
+            ("subscription comparison list row style", "comparisonRow: {"),
+            ("subscription comparison list feature style", "comparisonFeature: {"),
+            ("subscription comparison list trial style", "comparisonCell: {"),
+            ("subscription comparison list annual style", "comparisonCellStrong: {"),
+        ):
+            _assert_contains(label, subscription_comparison_list_content, marker)
+        _assert_contains(
+            "subscription comparison list rows binding",
+            content,
+            "rows={subscriptionComparisonDisplayRows}",
+        )
         _assert_contains(
             "settings row binding",
             content,
@@ -11403,18 +11420,11 @@ def main() -> int:
                 content,
                 f"{list_name}.map((item) => (",
             )
-        subscription_comparison_render_block = _match_block(
+        _assert_not_contains(
+            "direct subscription comparison rows map",
             content,
-            r"subscriptionComparisonDisplayRows\.map\(\(row\) => \(([\s\S]*?</View>\n\s*)\)\)",
-            "subscription comparison render block",
+            "subscriptionComparisonDisplayRows.map((row) => (",
         )
-        for label, marker in (
-            ("direct subscription comparison row key binding", "key={row.feature}"),
-            ("direct subscription comparison row feature binding", "<Text style={styles.comparisonFeature}>{row.feature}</Text>"),
-            ("direct subscription comparison row trial binding", "<Text style={styles.comparisonCell}>{row.trial}</Text>"),
-            ("direct subscription comparison row annual binding", "<Text style={styles.comparisonCellStrong}>{row.annual}</Text>"),
-        ):
-            _assert_not_contains(label, subscription_comparison_render_block, marker)
         for block_label, pattern in (
             (
                 "subscription management preview status rows render block",

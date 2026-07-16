@@ -131,7 +131,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "subscription": [
         'currentScreen === "subscription"',
-        "subscriptionComparisonDisplayRows.map",
+        "rows={subscriptionComparisonDisplayRows}",
         "subscriptionSyncButtonDisplayLabel",
     ],
     "subscriptionManagement": [

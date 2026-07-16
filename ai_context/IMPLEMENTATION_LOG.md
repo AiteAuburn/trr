@@ -15,6 +15,40 @@
 
 ## 2026-07-16
 
+### T2073 extract subscription comparison list component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/subscriptionComparisonList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `SubscriptionComparisonList` for Subscription feature comparison rows.
+- Moved subscription comparison row key/feature/trial/annual helpers out of `App.tsx`.
+- Preserved the same comparison row copy, order, keys, table styling, and spacing.
+- Updated navigation, UI-spec coverage, and visual-smoke route verifier coverage for the component row binding and direct inline-map guard.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining subscription management/settings/action row clusters without changing first-version scope.
+
 ### T2072 extract membership feature list component
 
 類型：mobile / refactor / verifier / docs

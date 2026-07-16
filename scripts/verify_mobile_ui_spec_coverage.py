@@ -29,7 +29,7 @@ CANONICAL_SPEC_SCREENS = (
     SpecScreen("4.1", "首頁 / 今日紀錄", "today", ("homeMinimalSection", "homeMicButton")),
     SpecScreen("4.2", "歷史紀錄頁", "history", ("HistoryCalendarMonthPicker", "HistoryDailySummaryTable", "HistorySelectedDatePanel")),
     SpecScreen("4.3", "基本分析頁", "analysis", ("AnalysisRangeSelector", "rows={analysisMetricRows}")),
-    SpecScreen("4.4", "會員方案選擇頁", "subscription", ("subscriptionComparisonDisplayRows.map", "subscriptionSyncButtonDisplayLabel")),
+    SpecScreen("4.4", "會員方案選擇頁", "subscription", ("rows={subscriptionComparisonDisplayRows}", "subscriptionSyncButtonDisplayLabel")),
     SpecScreen("4.4.1", "訂閱管理頁", "subscriptionManagement", ("subscriptionManagementDisplayRows.map", "subscriptionManagementReadinessChecklistItems")),
     SpecScreen("4.5", "功能選單頁", "menu", ("menuDisplayItems.map", "styles.menuIconCenter")),
     SpecScreen("4.6", "設定頁", "settings", ("settingsDisplayRows.map", "developerSettingsBox")),
