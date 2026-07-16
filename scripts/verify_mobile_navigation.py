@@ -23,6 +23,7 @@ SETTINGS_ROW_LIST_PATH = REPO_ROOT / "mobile" / "settingsRowList.tsx"
 RECORD_RESULT_DESTINATION_GRID_PATH = REPO_ROOT / "mobile" / "recordResultDestinationGrid.tsx"
 MENU_DESTINATION_GRID_PATH = REPO_ROOT / "mobile" / "menuDestinationGrid.tsx"
 VISUAL_SMOKE_ROUTE_JUMP_GRID_PATH = REPO_ROOT / "mobile" / "visualSmokeRouteJumpGrid.tsx"
+FUTURE_MODULE_CARD_LIST_PATH = REPO_ROOT / "mobile" / "futureModuleCardList.tsx"
 SUBSCRIPTION_CHECKLIST_PATH = REPO_ROOT / "mobile" / "subscriptionChecklist.tsx"
 SUBSCRIPTION_COMPARISON_LIST_PATH = REPO_ROOT / "mobile" / "subscriptionComparisonList.tsx"
 PREVIEW_STATUS_LIST_PATH = REPO_ROOT / "mobile" / "previewStatusList.tsx"
@@ -1429,6 +1430,7 @@ def main() -> int:
     record_result_destination_grid_content = RECORD_RESULT_DESTINATION_GRID_PATH.read_text(encoding="utf-8")
     menu_destination_grid_content = MENU_DESTINATION_GRID_PATH.read_text(encoding="utf-8")
     visual_smoke_route_jump_grid_content = VISUAL_SMOKE_ROUTE_JUMP_GRID_PATH.read_text(encoding="utf-8")
+    future_module_card_list_content = FUTURE_MODULE_CARD_LIST_PATH.read_text(encoding="utf-8")
     subscription_checklist_content = SUBSCRIPTION_CHECKLIST_PATH.read_text(encoding="utf-8")
     subscription_comparison_list_content = SUBSCRIPTION_COMPARISON_LIST_PATH.read_text(encoding="utf-8")
     preview_status_list_content = PREVIEW_STATUS_LIST_PATH.read_text(encoding="utf-8")
@@ -1950,7 +1952,7 @@ def main() -> int:
             ("history boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("community readiness highlight bullet row", "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={communityReadinessChecklistItemText(item)}"),
             ("ranking readiness highlight bullet row", "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />"),
-            ("future module card requirements highlight bullet row", "futureModuleCardRequirements(item).map((requirement) => (\n                      <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />"),
+            ("future module card requirements highlight bullet row", "futureModuleCardRequirements(item).map((requirement) => (\n              <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />"),
             ("future module detail requirements highlight bullet row", "selectedFutureModuleDisplay.requirements.map((requirement) => (\n                <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />"),
         ):
             if label.startswith("history boundary "):
@@ -1961,7 +1963,9 @@ def main() -> int:
                 target_content = record_edit_footer_actions_content
             elif label.startswith("manual submit "):
                 target_content = manual_record_confirm_footer_actions_content
-            elif label.startswith(("delete confirm ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ", "tutorial safety ", "detailed report notes ", "subscription readiness ", "subscription management readiness ", "doctor share readiness ", "health integration readiness ", "community readiness ", "ranking readiness ", "store checkout readiness ", "food photo empty result ", "food photo readiness ", "future module card requirements ", "future module detail requirements ")):
+            elif label.startswith("future module card requirements "):
+                target_content = future_module_card_list_content
+            elif label.startswith(("delete confirm ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ", "tutorial safety ", "detailed report notes ", "subscription readiness ", "subscription management readiness ", "doctor share readiness ", "health integration readiness ", "community readiness ", "ranking readiness ", "store checkout readiness ", "food photo empty result ", "food photo readiness ", "future module detail requirements ")):
                 target_content = content
             else:
                 target_content = highlight_bullet_row_content
@@ -13096,45 +13100,6 @@ def main() -> int:
             ("future module destination handler", "function openFutureModuleDestination(target: AppScreen | undefined, module: FutureModuleCard)"),
             ("future module target route helper binding", "if (openFutureModuleTargetRoute(target)) {"),
             ("future module destination fallback screen opener binding", "if (openFutureModuleTargetRoute(target)) {\n      return;\n    }\n    openScreen(target);"),
-            ("future module destination press handler", "function pressFutureModuleDestination(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
-            ("future module destination target helper", "function futureModuleDestinationTarget(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
-            ("future module destination target helper fields", "return item.target;"),
-            ("future module destination module helper", "function futureModuleDestinationModule(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
-            ("future module destination module helper fields", "return item.module;"),
-            ("future module destination target helper binding", "openFutureModuleDestination(futureModuleDestinationTarget(item), futureModuleDestinationModule(item));"),
-            ("future module card key helper", "function futureModuleCardKey(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
-            ("future module card key helper fields", "return item.key;"),
-            ("future module card key binding", "key={futureModuleCardKey(item)}"),
-            ("future module card accessibility helper", "function futureModuleCardAccessibilityLabel(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
-            ("future module card accessibility helper fields", "return item.accessibilityLabel;"),
-            ("future module card accessibility helper binding", "accessibilityLabel={futureModuleCardAccessibilityLabel(item)}"),
-            ("future module card icon helper", "function futureModuleCardIcon(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
-            ("future module card icon helper fields", "return item.icon;"),
-            ("future module card icon binding", "{futureModuleCardIcon(item)}"),
-            ("future module card title helper", "function futureModuleCardTitle(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
-            ("future module card title helper fields", "return item.title;"),
-            ("future module card title binding", "{futureModuleCardTitle(item)}"),
-            ("future module card description helper", "function futureModuleCardDescription(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
-            ("future module card description helper fields", "return item.description;"),
-            ("future module card description binding", "{futureModuleCardDescription(item)}"),
-            ("future module card readiness helper", "function futureModuleCardReadiness(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
-            ("future module card readiness helper fields", "return item.readiness;"),
-            ("future module card readiness binding", "{futureModuleCardReadiness(item)}"),
-            ("future module card requirements helper", "function futureModuleCardRequirements(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
-            ("future module card requirements helper fields", "return item.requirements;"),
-            ("future module card requirements binding", "futureModuleCardRequirements(item).map((requirement) => ("),
-            ("future module requirement key helper", 'function futureModuleRequirementKey(\n    requirement: ReturnType<typeof futureModuleCardDisplayItem>["requirements"][number]'),
-            ("future module requirement key helper fields", "return requirement.key;"),
-            ("future module requirement key binding", "key={futureModuleRequirementKey(requirement)}"),
-            ("future module requirement text helper", 'function futureModuleRequirementText(\n    requirement: ReturnType<typeof futureModuleCardDisplayItem>["requirements"][number]'),
-            ("future module requirement text helper fields", "return requirement.text;"),
-            ("future module requirement text binding", "text={futureModuleRequirementText(requirement)}"),
-            ("future module card safety helper", "function futureModuleCardSafety(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
-            ("future module card safety helper fields", "return item.safety;"),
-            ("future module card safety binding", "{futureModuleCardSafety(item)}"),
-            ("future module card target state helper", "function futureModuleCardHasTarget(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
-            ("future module card target state helper fields", "return Boolean(item.target);"),
-            ("future module card target state binding", "{futureModuleCardHasTarget(item) ?"),
             ("future module display card helper binding", "const futureModuleDisplayCards = useMemo(\n    () => futureModuleCardDisplayItems(futureModuleCards),"),
             ("future preview status display helper binding", "const futurePreviewStatusDisplay = futurePreviewStatusDisplayTexts({"),
             ("future preview status future action binding", "const futureModuleActionStatusDisplayText = futurePreviewStatusDisplay.futureModuleAction;"),
@@ -13157,8 +13122,6 @@ def main() -> int:
             ("achievement/year review status display helper binding", "const achievementYearReviewStatusDisplay = achievementYearReviewStatusDisplayTexts({"),
             ("achievement action status display binding", "const achievementActionStatusDisplayText = achievementYearReviewStatusDisplay.achievementAction;"),
             ("year review action status display binding", "const yearReviewActionStatusDisplayText = achievementYearReviewStatusDisplay.yearReviewAction;"),
-            ("future module card accessibility binding", "accessibilityLabel={futureModuleCardAccessibilityLabel(item)}"),
-            ("future module card button role", 'accessibilityRole="button"\n                  style={styles.recordCard}'),
             ("doctor share return handler", "function returnFromDoctorSharePreview()"),
             ("health integration return handler", "function returnFromHealthIntegrationPreview()"),
             ("community return handler", "function returnFromCommunityPreview()"),
@@ -13340,7 +13303,7 @@ def main() -> int:
             ("future modules open binding", "onPress={openFutureModulesFromMenu}"),
             ("future modules return menu binding", "onPress={returnFromFutureModulesToMenu}"),
             ("future module detail return binding", "onPress={returnFromFutureModuleDetail}"),
-            ("future module destination binding", "onPress={() => pressFutureModuleDestination(item)}"),
+            ("future module destination binding", "onDestinationPress={openFutureModuleDestination}"),
             ("doctor share return binding", "onPress={returnFromDoctorSharePreview}"),
             ("health integration return binding", "onPress={returnFromHealthIntegrationPreview}"),
             ("community return binding", "onPress={returnFromCommunityPreview}"),
@@ -13524,26 +13487,69 @@ def main() -> int:
             ("future commerce action row CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
             _assert_contains(label, content, marker)
-        future_module_card_render_block = _match_block(
-            content,
-            r"futureModuleDisplayCards\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
-            "future module card render block",
-        )
         for label, marker in (
-            ("direct future module card key binding", "key={item.key}"),
-            ("direct future module card accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
-            ("direct future module card icon binding", "<Text>{item.icon}</Text>"),
-            ("direct future module card title binding", "<Text style={styles.recordType}>{item.title}</Text>"),
-            ("direct future module card description binding", "<Text style={styles.recordContent}>{item.description}</Text>"),
-            ("direct future module card readiness binding", "<Text style={styles.evidence}>{item.readiness}</Text>"),
-            ("direct future module card requirements binding", "item.requirements.map((requirement) => ("),
-            ("direct future module card requirement key binding", "key={requirement.key}"),
-            ("direct future module card requirement text binding", "text={requirement.text}"),
-            ("direct future module card safety binding", "<Text style={styles.warningText}>{item.safety}</Text>"),
-            ("direct future module card target preview binding", "{item.target ? <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.viewPreview}</Text> : null}"),
-            ("direct future module card target integration binding", "{!item.target ? <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.viewIntegration}</Text> : null}"),
+            ("future module card list component", "export function FutureModuleCardList"),
+            ("future module display card type", "export type FutureModuleDisplayCard ="),
+            ("future module display card module type", "module: FutureModuleCard;"),
+            ("future module display card target type", "target?: AppScreen;"),
+            ("future module card list cards prop", "cards: FutureModuleDisplayCard[]"),
+            ("future module card list labels prop", "labels: FutureModuleCardListLabels"),
+            ("future module card list destination prop", "onDestinationPress: (target: AppScreen | undefined, module: FutureModuleCard) => void"),
+            ("future module destination target helper", "function futureModuleDestinationTarget(item: FutureModuleDisplayCard)"),
+            ("future module destination target helper fields", "return item.target;"),
+            ("future module destination module helper", "function futureModuleDestinationModule(item: FutureModuleDisplayCard)"),
+            ("future module destination module helper fields", "return item.module;"),
+            ("future module card key helper", "function futureModuleCardKey(item: FutureModuleDisplayCard)"),
+            ("future module card key helper fields", "return item.key;"),
+            ("future module card key binding", "key={futureModuleCardKey(item)}"),
+            ("future module card accessibility helper", "function futureModuleCardAccessibilityLabel(item: FutureModuleDisplayCard)"),
+            ("future module card accessibility helper fields", "return item.accessibilityLabel;"),
+            ("future module card accessibility helper binding", "accessibilityLabel={futureModuleCardAccessibilityLabel(item)}"),
+            ("future module card icon helper", "function futureModuleCardIcon(item: FutureModuleDisplayCard)"),
+            ("future module card icon helper fields", "return item.icon;"),
+            ("future module card icon binding", "{futureModuleCardIcon(item)}"),
+            ("future module card title helper", "function futureModuleCardTitle(item: FutureModuleDisplayCard)"),
+            ("future module card title helper fields", "return item.title;"),
+            ("future module card title binding", "{futureModuleCardTitle(item)}"),
+            ("future module card description helper", "function futureModuleCardDescription(item: FutureModuleDisplayCard)"),
+            ("future module card description helper fields", "return item.description;"),
+            ("future module card description binding", "{futureModuleCardDescription(item)}"),
+            ("future module card readiness helper", "function futureModuleCardReadiness(item: FutureModuleDisplayCard)"),
+            ("future module card readiness helper fields", "return item.readiness;"),
+            ("future module card readiness binding", "{futureModuleCardReadiness(item)}"),
+            ("future module card requirements helper", "function futureModuleCardRequirements(item: FutureModuleDisplayCard)"),
+            ("future module card requirements helper fields", "return item.requirements;"),
+            ("future module card requirements binding", "futureModuleCardRequirements(item).map((requirement) => ("),
+            ("future module requirement key helper", 'function futureModuleRequirementKey(requirement: FutureModuleDisplayCard["requirements"][number])'),
+            ("future module requirement key helper fields", "return requirement.key;"),
+            ("future module requirement key binding", "key={futureModuleRequirementKey(requirement)}"),
+            ("future module requirement text helper", 'function futureModuleRequirementText(requirement: FutureModuleDisplayCard["requirements"][number])'),
+            ("future module requirement text helper fields", "return requirement.text;"),
+            ("future module requirement text binding", "text={futureModuleRequirementText(requirement)}"),
+            ("future module card safety helper", "function futureModuleCardSafety(item: FutureModuleDisplayCard)"),
+            ("future module card safety helper fields", "return item.safety;"),
+            ("future module card safety binding", "{futureModuleCardSafety(item)}"),
+            ("future module card target state helper", "function futureModuleCardHasTarget(item: FutureModuleDisplayCard)"),
+            ("future module card target state helper fields", "return Boolean(item.target);"),
+            ("future module card target state binding", "{futureModuleCardHasTarget(item) ?"),
+            ("future module card press binding", "onPress={() => onDestinationPress(futureModuleDestinationTarget(item), futureModuleDestinationModule(item))}"),
+            ("future module card button role", 'accessibilityRole="button"'),
+            ("future module card style", "recordCard: {"),
+            ("future module card header style", "recordHeader: {"),
         ):
-            _assert_not_contains(label, future_module_card_render_block, marker)
+            _assert_contains(label, future_module_card_list_content, marker)
+        for label, marker in (
+            ("future module card list binding", "<FutureModuleCardList"),
+            ("future module card list cards binding", "cards={futureModuleDisplayCards}"),
+            ("future module card list labels binding", "labels={futurePreviewDisplayLabels}"),
+            ("future module card list destination binding", "onDestinationPress={openFutureModuleDestination}"),
+        ):
+            _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "direct future module display cards map",
+            content,
+            "futureModuleDisplayCards.map((item) => (",
+        )
         future_module_detail_requirement_block = _match_block(
             content,
             r"selectedFutureModuleDisplay\.requirements\.map\(\(requirement\) => \(([\s\S]*?<HighlightBulletRow[^>]*/>)",

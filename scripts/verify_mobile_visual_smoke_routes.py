@@ -187,9 +187,9 @@ VISUAL_SMOKE_ROUTES = {
     "futureModules": [
         'currentScreen === "futureModules"',
         "未來擴充",
-        "futureModuleDisplayCards.map",
+        "cards={futureModuleDisplayCards}",
         "onPress={returnFromFutureModulesToMenu}",
-        "onPress={() => pressFutureModuleDestination(item)}",
+        "onDestinationPress={openFutureModuleDestination}",
     ],
     "futureModuleDetail": [
         'currentScreen === "futureModuleDetail"',
@@ -517,9 +517,9 @@ def verify(
     ):
         _assert_contains(label, visual_smoke_fixtures_content, marker)
     _assert_contains(
-        "future module destination press wrapper",
+        "future module destination card list",
         content,
-        "function pressFutureModuleDestination(item: ReturnType<typeof futureModuleCardDisplayItem>)",
+        "onDestinationPress={openFutureModuleDestination}",
     )
     _assert_contains(
         "daily record fixed save dock outside scroll",
