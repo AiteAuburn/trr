@@ -4524,6 +4524,36 @@ def main() -> int:
             "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n      selectRecordForResult(updated);\n      openUpdateSuccessResult(recordUpdateSummaryMessage(1));",
         )
         _assert_contains(
+            "record update start helper",
+            content,
+            "function startRecordUpdateRequest()",
+        )
+        _assert_contains(
+            "record update start helper fields",
+            content,
+            "recordUpdateInFlight.current = true;\n    setIsBusy(true);\n    setStatus(recordUpdateProgressStatusMessage());",
+        )
+        _assert_contains(
+            "record update start helper binding",
+            content,
+            "startRecordUpdateRequest();",
+        )
+        _assert_contains(
+            "record update finish helper",
+            content,
+            "function finishRecordUpdateRequest()",
+        )
+        _assert_contains(
+            "record update finish helper fields",
+            content,
+            "recordUpdateInFlight.current = false;\n    setIsBusy(false);",
+        )
+        _assert_contains(
+            "record update finish helper binding",
+            content,
+            "finishRecordUpdateRequest();",
+        )
+        _assert_contains(
             "record delete success result helper",
             content,
             "function openDeleteSuccessResult(summary: string)",

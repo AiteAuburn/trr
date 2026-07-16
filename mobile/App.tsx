@@ -7834,6 +7834,17 @@ export default function App() {
     openScreenWithStatus(screen, statusMessage);
   }
 
+  function startRecordUpdateRequest() {
+    recordUpdateInFlight.current = true;
+    setIsBusy(true);
+    setStatus(recordUpdateProgressStatusMessage());
+  }
+
+  function finishRecordUpdateRequest() {
+    recordUpdateInFlight.current = false;
+    setIsBusy(false);
+  }
+
   async function updateSelectedRecord() {
     if (isBusy || recordUpdateInFlight.current) {
       return;
@@ -7859,9 +7870,7 @@ export default function App() {
       return;
     }
 
-    recordUpdateInFlight.current = true;
-    setIsBusy(true);
-    setStatus(recordUpdateProgressStatusMessage());
+    startRecordUpdateRequest();
     try {
       const payload = buildPayloadFromEditFields(selectedRecord.record_type, recordEditFields);
       if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
@@ -7887,8 +7896,7 @@ export default function App() {
     } catch (error) {
       setStatus(recordUpdateFailureStatusMessage(error));
     } finally {
-      recordUpdateInFlight.current = false;
-      setIsBusy(false);
+      finishRecordUpdateRequest();
     }
   }
 
