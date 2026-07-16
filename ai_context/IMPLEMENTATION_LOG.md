@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1989 reuse record text field shell for edit glucose value
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Reused the shared `RecordTextField` shell for the Edit Record glucose value input.
+- Preserved the glucose value label, icon, accessibility label, value helper, change handler, numeric keyboard, max-length helper, existing App input style, placeholder, and glucose unit/timing segment behavior.
+- Updated navigation verifier coverage for the shared Edit Record glucose value field binding while keeping record edit helper and option checks intact.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining Edit Record field clusters in small behavior-preserving slices.
+
 ### T1988 reuse record text field shell for manual meal food items
 
 類型：mobile / refactor / verifier / docs

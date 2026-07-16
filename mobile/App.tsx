@@ -793,6 +793,7 @@ import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
 import { RecordEditFooterActions } from "./recordEditFooterActions";
 import { RecordEditHeaderFields } from "./recordEditHeaderFields";
+import { RecordTextField } from "./recordTextField";
 import type {
   Account,
   AiModelOptions,
@@ -11197,20 +11198,17 @@ export default function App() {
             />
             {selectedRecord.record_type === "glucose" ? (
               <>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"💧"} label={"血糖數值"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.glucoseValueInputAccessibility}
-                    value={recordEditFieldValue(recordEditFields, "glucoseValue")}
-                    onChangeText={updateRecordEditGlucoseValue}
-                    keyboardType="numeric"
-                    maxLength={recordEditFieldMaxLength("glucoseValue")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    placeholder="138"
-                  />
-                </View>
+                <RecordTextField
+                  icon={"💧"}
+                  label={"血糖數值"}
+                  accessibilityLabel={auxiliaryDisplayLabels.glucoseValueInputAccessibility}
+                  value={recordEditFieldValue(recordEditFields, "glucoseValue")}
+                  onChangeText={updateRecordEditGlucoseValue}
+                  keyboardType="numeric"
+                  maxLength={recordEditFieldMaxLength("glucoseValue")}
+                  inputStyle={styles.input}
+                  placeholder="138"
+                />
                 <View style={styles.segmentRow}>
                   {glucoseUnitDisplayOptions.map((option) => {
                     const optionSelected = editOptionIsSelected(option, recordEditFieldValue(recordEditFields, "glucoseUnit"));

@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1989: Reuse record text field shell for edit glucose value
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused the shared `RecordTextField` shell for the Edit Record glucose value input.
+- Preserved the glucose value label, icon, accessibility label, value helper, change handler, numeric keyboard, max-length helper, existing App input style, placeholder, and glucose unit/timing segment behavior.
+- Updated navigation verifier coverage for the shared Edit Record glucose value field binding while keeping record edit helper and option checks intact.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining Edit Record field clusters in small behavior-preserving slices.
+
 ### T1988: Reuse record text field shell for manual meal food items
 
 Status: done
