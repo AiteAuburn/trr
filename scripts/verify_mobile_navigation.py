@@ -5176,7 +5176,7 @@ def main() -> int:
         _assert_contains(
             "manual create request helper binding",
             content,
-            "const created = await requestManualRecordCreate(activeProfile.id, account.id, payload);",
+            "const created = await requestManualRecordCreate(profileId, accountId, payload);",
         )
         _assert_contains(
             "manual create success helper",
@@ -5191,7 +5191,7 @@ def main() -> int:
         _assert_contains(
             "manual create success helper binding",
             content,
-            "const created = await requestManualRecordCreate(activeProfile.id, account.id, payload);\n      handleManualRecordCreateSuccess(created);",
+            "const created = await requestManualRecordCreate(profileId, accountId, payload);\n      handleManualRecordCreateSuccess(created);",
         )
         _assert_contains(
             "manual create failure helper",
@@ -5237,6 +5237,21 @@ def main() -> int:
             "manual create validation helper binding",
             content,
             "if (!validateManualRecordCreateForSubmit()) {\n      return;\n    }",
+        )
+        _assert_contains(
+            "manual create complete helper",
+            content,
+            "async function completeManualRecordCreateRequest(profileId: string, accountId: string)",
+        )
+        _assert_contains(
+            "manual create complete helper internals",
+            content,
+            "try {\n      const payload = buildManualRecordCreatePayload();\n      const created = await requestManualRecordCreate(profileId, accountId, payload);\n      handleManualRecordCreateSuccess(created);\n    } catch (error) {\n      handleManualRecordCreateFailure(error);\n    } finally {\n      finishManualCreateRequest();",
+        )
+        _assert_contains(
+            "manual create complete helper binding",
+            content,
+            "await completeManualRecordCreateRequest(activeProfile.id, account.id);",
         )
         _assert_contains(
             "AI save failure result helper",

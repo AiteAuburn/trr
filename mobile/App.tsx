@@ -8668,6 +8668,18 @@ export default function App() {
     return true;
   }
 
+  async function completeManualRecordCreateRequest(profileId: string, accountId: string) {
+    try {
+      const payload = buildManualRecordCreatePayload();
+      const created = await requestManualRecordCreate(profileId, accountId, payload);
+      handleManualRecordCreateSuccess(created);
+    } catch (error) {
+      handleManualRecordCreateFailure(error);
+    } finally {
+      finishManualCreateRequest();
+    }
+  }
+
   async function createManualRecord() {
     if (isBusy || manualCreateInFlight.current) {
       return;
@@ -8684,15 +8696,7 @@ export default function App() {
     }
 
     startManualCreateRequest();
-    try {
-      const payload = buildManualRecordCreatePayload();
-      const created = await requestManualRecordCreate(activeProfile.id, account.id, payload);
-      handleManualRecordCreateSuccess(created);
-    } catch (error) {
-      handleManualRecordCreateFailure(error);
-    } finally {
-      finishManualCreateRequest();
-    }
+    await completeManualRecordCreateRequest(activeProfile.id, account.id);
   }
 
   async function refreshDownloadedModels(showStatus = false) {
