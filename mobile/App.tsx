@@ -3612,7 +3612,7 @@ export default function App() {
     if (!preview) {
       return false;
     }
-    setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
+    setPreview(boundParsePreviewResponse(previewWithRecords(preview, nextRecords)));
     return true;
   }
 

@@ -4276,7 +4276,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview records apply helper internals",
             content,
-            "function applyPreviewRecords(nextRecords: PendingRecord[]) {\n    if (!preview) {\n      return false;\n    }\n    setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));\n    return true;",
+            "function applyPreviewRecords(nextRecords: PendingRecord[]) {\n    if (!preview) {\n      return false;\n    }\n    setPreview(boundParsePreviewResponse(previewWithRecords(preview, nextRecords)));\n    return true;",
         )
         _assert_contains(
             "AI candidate preview records apply status helper",
