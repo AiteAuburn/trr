@@ -5384,6 +5384,16 @@ def main() -> int:
             "if (isManualCreateRequestBlocked()) {\n      return null;\n    }",
         )
         _assert_contains(
+            "manual create account profile context helper",
+            content,
+            "function manualRecordCreateAccountProfileContext()",
+        )
+        _assert_contains(
+            "manual create account profile context helper internals",
+            content,
+            "if (!account || !activeProfile) {\n      return null;\n    }\n    return { account, activeProfile };",
+        )
+        _assert_contains(
             "manual create guarded context unavailable guard",
             content,
             "if (!protectedBackendReady) {\n      openManualRecordUnavailable(\"manualRecordConfirm\");\n      return null;\n    }",
@@ -5391,7 +5401,7 @@ def main() -> int:
         _assert_contains(
             "manual create guarded context account profile guard",
             content,
-            "if (!account || !activeProfile) {\n      return null;\n    }\n    return { account, activeProfile };",
+            "const createContext = manualRecordCreateAccountProfileContext();\n    if (!createContext) {\n      return null;\n    }\n    return createContext;",
         )
         _assert_contains(
             "manual create guarded context binding",

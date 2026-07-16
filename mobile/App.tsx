@@ -8803,6 +8803,13 @@ export default function App() {
     return isBusy || manualCreateInFlight.current;
   }
 
+  function manualRecordCreateAccountProfileContext() {
+    if (!account || !activeProfile) {
+      return null;
+    }
+    return { account, activeProfile };
+  }
+
   function guardedManualRecordCreateContext() {
     if (isManualCreateRequestBlocked()) {
       return null;
@@ -8811,10 +8818,11 @@ export default function App() {
       openManualRecordUnavailable("manualRecordConfirm");
       return null;
     }
-    if (!account || !activeProfile) {
+    const createContext = manualRecordCreateAccountProfileContext();
+    if (!createContext) {
       return null;
     }
-    return { account, activeProfile };
+    return createContext;
   }
 
   async function createManualRecord() {
