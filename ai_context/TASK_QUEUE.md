@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1874: Reuse parser profile context helpers
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `parserProfileContext()` and `hasParserProfileContext()` for the parser submit account/profile guard.
+- Reused the helpers from `parseTranscript()` while preserving the existing missing account/profile early return and request account/profile id behavior.
+- Updated navigation verifier coverage for the parser profile context helper, type guard internals, submit binding, and request account/profile id binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing parser submit readiness guards and request context helpers in small behavior-preserving slices.
+
 ### T1873: Reuse parser preview request blocked helper
 
 Status: done

@@ -6533,7 +6533,7 @@ def main() -> int:
             ("parse request body helper binding", "body: JSON.stringify(parserPreviewRequestBody(profileId, text, occurredAt, voiceSeconds))"),
             ("parse request merge helper", "async function requestMergedParserPreview("),
             ("parse request merge helper internals", "const response = await requestParserPreview(accountId, profileId, text, occurredAt, voiceSeconds);\n    return mergedParserPreviewForResponse(currentPreview, response);"),
-            ("parse request helper binding", "const mergedDailyPreview = await requestMergedParserPreview(\n        account.id,\n        activeProfile.id,\n        transcript,\n        parseOccurredAt,\n        parserVoiceSeconds,\n        existingDailyPreview"),
+            ("parse request helper binding", "const mergedDailyPreview = await requestMergedParserPreview(\n        parserContext.account.id,\n        parserContext.activeProfile.id,\n        transcript,\n        parseOccurredAt,\n        parserVoiceSeconds,\n        existingDailyPreview"),
             ("parse request voice seconds", "voice_seconds: voiceSeconds"),
             ("parse request voice seconds binding", "parserVoiceSeconds,\n        existingDailyPreview\n      );"),
             ("parse merge response helper", "function mergedParserPreviewForResponse("),
@@ -6571,6 +6571,12 @@ def main() -> int:
             ("parse request blocked helper", "function isParserPreviewRequestBlocked()"),
             ("parse request blocked helper internals", "return isBusy || parsePreviewInFlight.current;"),
             ("parse request blocked helper binding", "if (isParserPreviewRequestBlocked())"),
+            ("parse profile context helper", "function parserProfileContext()"),
+            ("parse profile context helper internals", "return {\n      account,\n      activeProfile\n    };"),
+            ("parse profile context guard helper", "function hasParserProfileContext(context: {\n    account: Account | null;\n    activeProfile: Profile | null;"),
+            ("parse profile context guard helper internals", "return Boolean(context.account && context.activeProfile);"),
+            ("parse profile context binding", "const parserContext = parserProfileContext();\n    if (!hasParserProfileContext(parserContext))"),
+            ("parse profile context request account binding", "parserContext.account.id,\n        parserContext.activeProfile.id,"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (

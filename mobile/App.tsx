@@ -3835,6 +3835,23 @@ export default function App() {
     return isBusy || parsePreviewInFlight.current;
   }
 
+  function parserProfileContext() {
+    return {
+      account,
+      activeProfile
+    };
+  }
+
+  function hasParserProfileContext(context: {
+    account: Account | null;
+    activeProfile: Profile | null;
+  }): context is {
+    account: Account;
+    activeProfile: Profile;
+  } {
+    return Boolean(context.account && context.activeProfile);
+  }
+
   function applyPreviewRecordRemoveChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[]) {
     if (isPreviewActionReturningToDailyRecord) {
       reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "delete");
@@ -7742,7 +7759,8 @@ export default function App() {
       handleParserBackendUnavailable();
       return;
     }
-    if (!account || !activeProfile) {
+    const parserContext = parserProfileContext();
+    if (!hasParserProfileContext(parserContext)) {
       return;
     }
     if (!parserModelReady) {
@@ -7762,8 +7780,8 @@ export default function App() {
     const { existingDailyPreview, parserVoiceSeconds, parseOccurredAt } = prepareParserPreviewRequest();
     try {
       const mergedDailyPreview = await requestMergedParserPreview(
-        account.id,
-        activeProfile.id,
+        parserContext.account.id,
+        parserContext.activeProfile.id,
         transcript,
         parseOccurredAt,
         parserVoiceSeconds,
