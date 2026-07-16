@@ -8921,6 +8921,10 @@ export default function App() {
     setNativeStatus(nativeLlamaProgressStatusMessage());
   }
 
+  function handleNativeLlamaMissingInput() {
+    setNativeStatus(nativeLlamaMissingInputStatusMessage());
+  }
+
   function handleNativeBenchmarkMissingInput() {
     setNativeStatus(nativeBenchmarkMissingInputStatusMessage());
   }
@@ -9054,7 +9058,7 @@ export default function App() {
     }
     const llamaInput = nativeLlamaInput();
     if (!llamaInput.modelPath || !llamaInput.transcript) {
-      setNativeStatus(nativeLlamaMissingInputStatusMessage());
+      handleNativeLlamaMissingInput();
       return;
     }
     startNativeDebugAction();
