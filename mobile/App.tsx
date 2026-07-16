@@ -7791,6 +7791,10 @@ export default function App() {
     setStatus(message);
   }
 
+  function parserTranscriptValidationMessage() {
+    return transcriptValidationError;
+  }
+
   function isParserBackendUnavailable() {
     return !protectedBackendReady;
   }
@@ -7819,8 +7823,9 @@ export default function App() {
       handleParserModelUnavailable();
       return;
     }
-    if (transcriptValidationError) {
-      handleParserTranscriptValidationError(transcriptValidationError);
+    const validationMessage = parserTranscriptValidationMessage();
+    if (validationMessage) {
+      handleParserTranscriptValidationError(validationMessage);
       return;
     }
     if (isParserSampleTranscriptBlocked()) {
