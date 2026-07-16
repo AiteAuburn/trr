@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1982 reuse manual meal option render helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/manualRecordMealFields.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added local helpers for manual meal option key, accessibility label, display label, and selected state.
+- Reused those helpers from `ManualRecordMealFields` render while preserving meal type key, accessibility label, selected state, active styling, press behavior, and label text.
+- Updated navigation verifier coverage for the new meal option helper functions and render bindings.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing manual glucose option render helpers in small behavior-preserving slices.
+
 ### T1981 reuse manual record type selector render helpers
 
 類型：mobile / refactor / verifier / docs

@@ -18,6 +18,22 @@ type ManualRecordMealFieldsProps<TMeal extends ManualRecordMealOption> = {
   onMealTypePress: (option: TMeal) => void;
 };
 
+function manualRecordMealOptionKey(option: ManualRecordMealOption) {
+  return option.value;
+}
+
+function manualRecordMealOptionAccessibilityLabel(option: ManualRecordMealOption) {
+  return option.accessibilityLabel;
+}
+
+function manualRecordMealOptionLabel(option: ManualRecordMealOption) {
+  return option.label;
+}
+
+function manualRecordMealOptionSelected(option: ManualRecordMealOption, mealType: string) {
+  return mealType === manualRecordMealOptionKey(option);
+}
+
 export function ManualRecordMealFields<TMeal extends ManualRecordMealOption>({
   foodItems,
   foodItemsAccessibilityLabel,
@@ -32,20 +48,23 @@ export function ManualRecordMealFields<TMeal extends ManualRecordMealOption>({
       <View style={styles.formField}>
         <FieldLabel icon={"🥣"} label={"餐別"} />
         <View style={styles.segmentRow}>
-          {mealTypeOptions.map((option) => (
-            <Pressable
-              key={option.value}
-              accessibilityLabel={option.accessibilityLabel}
-              accessibilityRole="button"
-              accessibilityState={{ selected: mealType === option.value }}
-              style={[styles.segmentPill, mealType === option.value ? styles.segmentActive : null]}
-              onPress={() => onMealTypePress(option)}
-            >
-              <Text style={[styles.segmentText, mealType === option.value ? styles.segmentTextActive : null]}>
-                {option.label}
-              </Text>
-            </Pressable>
-          ))}
+          {mealTypeOptions.map((option) => {
+            const optionSelected = manualRecordMealOptionSelected(option, mealType);
+            return (
+              <Pressable
+                key={manualRecordMealOptionKey(option)}
+                accessibilityLabel={manualRecordMealOptionAccessibilityLabel(option)}
+                accessibilityRole="button"
+                accessibilityState={{ selected: optionSelected }}
+                style={[styles.segmentPill, optionSelected ? styles.segmentActive : null]}
+                onPress={() => onMealTypePress(option)}
+              >
+                <Text style={[styles.segmentText, optionSelected ? styles.segmentTextActive : null]}>
+                  {manualRecordMealOptionLabel(option)}
+                </Text>
+              </Pressable>
+            );
+          })}
         </View>
       </View>
       <View style={styles.formField}>
