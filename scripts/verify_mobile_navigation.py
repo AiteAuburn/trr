@@ -4004,6 +4004,11 @@ def main() -> int:
             "openScreenWithStatus(previewActionReturnScreen, aiCandidateRemoveCancelStatusMessage());",
         )
         _assert_contains(
+            "preview action return screen helper",
+            content,
+            "function openPreviewActionReturnScreen() {\n    openScreen(previewActionReturnScreen);\n  }",
+        )
+        _assert_contains(
             "AI candidate edit save success field clear helper binding",
             content,
             "clearSelectedPreviewEditDraft();\n      clearDailyRecordEntryMenu();",
@@ -4016,17 +4021,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit save success screen opener binding",
             content,
-            "clearSelectedPreviewEditDraft();\n      clearDailyRecordEntryMenu();\n      openScreen(previewActionReturnScreen);",
+            "clearSelectedPreviewEditDraft();\n      clearDailyRecordEntryMenu();\n      openPreviewActionReturnScreen();",
         )
         _assert_contains(
             "AI candidate remove confirm missing pending screen opener fallback",
             content,
-            "if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {\n      setPendingPreviewRemoveIndex(null);\n      openScreen(previewActionReturnScreen);\n      return;",
+            "if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {\n      setPendingPreviewRemoveIndex(null);\n      openPreviewActionReturnScreen();\n      return;",
         )
         _assert_contains(
             "AI candidate remove confirm success screen opener binding",
             content,
-            "removePreviewRecord(pendingPreviewRemoveIndex);\n    openScreen(previewActionReturnScreen);",
+            "removePreviewRecord(pendingPreviewRemoveIndex);\n    openPreviewActionReturnScreen();",
         )
         _assert_contains(
             "transcript edit return selected draft clear helper binding",

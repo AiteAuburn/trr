@@ -3501,6 +3501,10 @@ export default function App() {
     openScreenWithStatus(previewActionReturnScreen, aiCandidateRemoveCancelStatusMessage());
   }
 
+  function openPreviewActionReturnScreen() {
+    openScreen(previewActionReturnScreen);
+  }
+
   function reorganizeDailyRecordDraftAfterChange(
     nextPreview: ParsePreviewResponse,
     reason: DailyRecordReorganizationReason,
@@ -3535,11 +3539,11 @@ export default function App() {
   function confirmPreviewRecordRemove() {
     if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {
       setPendingPreviewRemoveIndex(null);
-      openScreen(previewActionReturnScreen);
+      openPreviewActionReturnScreen();
       return;
     }
     removePreviewRecord(pendingPreviewRemoveIndex);
-    openScreen(previewActionReturnScreen);
+    openPreviewActionReturnScreen();
   }
 
   function updatePreviewEditField<K extends keyof RecordEditFields>(
@@ -3679,7 +3683,7 @@ export default function App() {
       }
       clearSelectedPreviewEditDraft();
       clearDailyRecordEntryMenu();
-      openScreen(previewActionReturnScreen);
+      openPreviewActionReturnScreen();
     } catch (error) {
       setStatus(aiCandidateEditFailureStatusMessage(error));
     }
