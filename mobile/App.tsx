@@ -3814,6 +3814,10 @@ export default function App() {
     return item.detailRows;
   }
 
+  function isDailyRecordEntryMenuOpen(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    return dailyRecordMenuIndex === dailyRecordEntryTarget(item);
+  }
+
   function dailyRecordDetailRowKey(
     item: ReturnType<typeof dailyRecordEntryDisplayItem>,
     row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number]
@@ -8820,7 +8824,7 @@ export default function App() {
                             <DailyRecordDetailRow key={dailyRecordDetailRowKey(item, row)} label={dailyRecordDetailRowLabel(row)} value={dailyRecordDetailRowValue(row)} />
                           ))}
                         </View>
-                        {dailyRecordMenuIndex === item.index ? (
+                        {isDailyRecordEntryMenuOpen(item) ? (
                           <View style={styles.actionRow}>
                             <Pressable
                               accessibilityLabel={dailyRecordEntryEditAccessibilityLabel(item)}

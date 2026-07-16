@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1761: Reuse daily record entry menu open state
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a helper for checking whether a daily-record entry action menu is open.
+- Reused the helper in the daily-record entry render condition so the menu-open comparison goes through the existing entry target helper.
+- Updated navigation verifier coverage with positive helper/render bindings and a direct index-condition guard in the daily-record entry render block.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/return target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1760: Reuse daily record section description copy
 
 Status: done
