@@ -5686,7 +5686,17 @@ def main() -> int:
         _assert_contains(
             "update success destination detail special case",
             content,
-            "if (target === \"recordDetail\") {\n      openSelectedRecordDetail(\"updateSuccess\");\n      setStatus(recordResultDestinationStatusMessage(\"update\", target));\n      return;\n    }",
+            "if (target === \"recordDetail\") {\n      openUpdateSuccessRecordDetailDestination();\n      return;\n    }",
+        )
+        _assert_contains(
+            "update success record detail destination helper",
+            content,
+            "function openUpdateSuccessRecordDetailDestination()",
+        )
+        _assert_contains(
+            "update success record detail destination helper fields",
+            content,
+            "openSelectedRecordDetail(\"updateSuccess\");\n    setStatus(recordResultDestinationStatusMessage(\"update\", \"recordDetail\"));",
         )
         _assert_contains(
             "update success destination result helper binding",

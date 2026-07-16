@@ -8435,10 +8435,14 @@ export default function App() {
     openDeleteSuccessDestination("history");
   }
 
+  function openUpdateSuccessRecordDetailDestination() {
+    openSelectedRecordDetail("updateSuccess");
+    setStatus(recordResultDestinationStatusMessage("update", "recordDetail"));
+  }
+
   function openUpdateSuccessDestination(target: AppScreen) {
     if (target === "recordDetail") {
-      openSelectedRecordDetail("updateSuccess");
-      setStatus(recordResultDestinationStatusMessage("update", target));
+      openUpdateSuccessRecordDetailDestination();
       return;
     }
     openRecordResultDestination("update", target);

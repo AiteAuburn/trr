@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1930 reuse update-success record-detail destination helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `openUpdateSuccessRecordDetailDestination()` for the update-success record-detail destination special case.
+- Reused the helper from `openUpdateSuccessDestination()` while preserving selected-record detail opening, update-success return-screen behavior, and the record-detail status message.
+- Updated navigation verifier coverage for the update-success record-detail destination helper, internals, and branch binding.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing record-result destination card and return orchestration in small behavior-preserving slices.
+
 ### T1929 reuse selected-record detail-open helper
 
 類型：mobile / refactor / verifier / docs
