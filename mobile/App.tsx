@@ -7340,6 +7340,12 @@ export default function App() {
     openScreenWithStatus("transcriptReview", message);
   }
 
+  function handleParserSampleBlockedTranscript() {
+    const message = parserSampleBlockedStatusMessage();
+    setParserRecoveryMessage(message);
+    setStatus(message);
+  }
+
   async function parseTranscript() {
     if (isBusy || parsePreviewInFlight.current) {
       return;
@@ -7362,9 +7368,7 @@ export default function App() {
       return;
     }
     if (isTranscriptSample) {
-      const message = parserSampleBlockedStatusMessage();
-      setParserRecoveryMessage(message);
-      setStatus(message);
+      handleParserSampleBlockedTranscript();
       return;
     }
 

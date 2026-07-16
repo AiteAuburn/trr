@@ -2682,6 +2682,21 @@ def main() -> int:
             "const boundedMessage = parserModelUnavailableStatusMessage(parserModelUnavailableMessage);\n      openParserRecoveryMessage(boundedMessage);",
         )
         _assert_contains(
+            "parser sample blocked helper",
+            content,
+            "function handleParserSampleBlockedTranscript()",
+        )
+        _assert_contains(
+            "parser sample blocked helper fields",
+            content,
+            "const message = parserSampleBlockedStatusMessage();\n    setParserRecoveryMessage(message);\n    setStatus(message);",
+        )
+        _assert_contains(
+            "parser sample blocked helper binding",
+            content,
+            "if (isTranscriptSample) {\n      handleParserSampleBlockedTranscript();\n      return;",
+        )
+        _assert_contains(
             "mobile session clear transcript draft helper binding",
             content,
             "clearDailyRecordDraftOrganizationState();\n    clearTranscriptDraftState();\n    setSelectedRecord(null);",
