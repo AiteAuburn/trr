@@ -3393,8 +3393,7 @@ export default function App() {
   }
 
   function selectPreviewEditIndex(index: number) {
-    clearDailyRecordEntryMenu();
-    setPendingPreviewRemoveIndex(null);
+    clearPreviewRemoveActionState();
     setSelectedPreviewIndex(index);
   }
 

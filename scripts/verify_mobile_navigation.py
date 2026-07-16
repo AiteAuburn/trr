@@ -3966,7 +3966,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit index selection helper internals",
             content,
-            "function selectPreviewEditIndex(index: number) {\n    clearDailyRecordEntryMenu();\n    setPendingPreviewRemoveIndex(null);\n    setSelectedPreviewIndex(index);",
+            "function selectPreviewEditIndex(index: number) {\n    clearPreviewRemoveActionState();\n    setSelectedPreviewIndex(index);",
         )
         _assert_contains(
             "AI candidate remove index selection helper",
