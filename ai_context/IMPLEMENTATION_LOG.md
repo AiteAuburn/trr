@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1865 reuse daily record next revision helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `nextDailyRecordOrganizationRevision()` for the daily-record reorganization revision clamp.
+- Reused the helper from `reorganizeDailyRecordDraftAfterChange()` while preserving the existing revision increment, bounds, status message, and state update behavior.
+- Updated navigation verifier coverage for the next revision helper binding and internals.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining preview apply/parser helpers in small behavior-preserving slices.
+
 ### T1864 reuse preview-with-records helper in apply path
 
 類型：mobile / refactor / verifier / docs

@@ -3641,7 +3641,7 @@ export default function App() {
     statusOverride?: string
   ) {
     const reorganizedPreview = boundParsePreviewResponse(nextPreview);
-    const nextRevision = clampNumber(dailyRecordOrganizationRevision + 1, 0, maxMobileCountValue);
+    const nextRevision = nextDailyRecordOrganizationRevision();
     setPreview(reorganizedPreview);
     setDailyRecordOrganizationRevision(nextRevision);
     setDailyRecordOrganizationReason(reason);
@@ -3649,6 +3649,10 @@ export default function App() {
       statusOverride ??
         dailyRecordReorganizationStatusMessage(reason, reorganizedPreview.records.length, nextRevision)
     );
+  }
+
+  function nextDailyRecordOrganizationRevision() {
+    return clampNumber(dailyRecordOrganizationRevision + 1, 0, maxMobileCountValue);
   }
 
   function parserSuccessStatusForPreview(nextPreview: ParsePreviewResponse, voiceSeconds: number) {
