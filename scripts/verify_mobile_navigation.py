@@ -5735,6 +5735,9 @@ def main() -> int:
             ("parse failure helper", "function handleParserPreviewFailure(error: unknown)"),
             ("parse failure helper internals", "const message = parserFailureStatusMessage(error);\n    setParserRecoveryMessage(parserFailureRecoveryMessage(message));\n    setStatus(message);"),
             ("parse failure helper binding", "handleParserPreviewFailure(error);"),
+            ("parse finish helper", "function finishParserPreviewRequest()"),
+            ("parse finish helper internals", "parsePreviewInFlight.current = false;\n    setIsBusy(false);"),
+            ("parse finish helper binding", "finishParserPreviewRequest();"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (

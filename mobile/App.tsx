@@ -3623,6 +3623,11 @@ export default function App() {
     setStatus(message);
   }
 
+  function finishParserPreviewRequest() {
+    parsePreviewInFlight.current = false;
+    setIsBusy(false);
+  }
+
   function removePreviewRecord(index: number) {
     if (!preview) {
       return;
@@ -7402,8 +7407,7 @@ export default function App() {
     } catch (error) {
       handleParserPreviewFailure(error);
     } finally {
-      parsePreviewInFlight.current = false;
-      setIsBusy(false);
+      finishParserPreviewRequest();
     }
   }
 
