@@ -8885,6 +8885,20 @@ export default function App() {
     setIsBusy(false);
   }
 
+  function nativeWhisperInput() {
+    return {
+      audioPath: audioPath.trim(),
+      modelPath: whisperModelPath.trim()
+    };
+  }
+
+  function nativeLlamaInput() {
+    return {
+      modelPath: llamaModelPath.trim(),
+      transcript: transcript.trim()
+    };
+  }
+
   async function downloadSelectedModel() {
     if (isNativeDebugActionBlocked()) {
       return;
@@ -8944,7 +8958,8 @@ export default function App() {
       openNativeDebugUnavailable();
       return;
     }
-    if (!whisperModelPath.trim() || !audioPath.trim()) {
+    const whisperInput = nativeWhisperInput();
+    if (!whisperInput.modelPath || !whisperInput.audioPath) {
       setNativeStatus(nativeWhisperMissingInputStatusMessage());
       return;
     }
@@ -8952,8 +8967,8 @@ export default function App() {
     setNativeStatus(nativeWhisperProgressStatusMessage());
     try {
       const text = await transcribeWithNativeWhisper({
-        modelPath: whisperModelPath.trim(),
-        audioPath: audioPath.trim()
+        modelPath: whisperInput.modelPath,
+        audioPath: whisperInput.audioPath
       });
       updateTranscriptDraft(text);
       setNativeStatus(nativeWhisperSuccessStatusMessage());
@@ -8972,7 +8987,8 @@ export default function App() {
       openNativeDebugUnavailable();
       return;
     }
-    if (!llamaModelPath.trim() || !transcript.trim()) {
+    const llamaInput = nativeLlamaInput();
+    if (!llamaInput.modelPath || !llamaInput.transcript) {
       setNativeStatus(nativeLlamaMissingInputStatusMessage());
       return;
     }
@@ -8980,8 +8996,8 @@ export default function App() {
     setNativeStatus(nativeLlamaProgressStatusMessage());
     try {
       const output = await parseWithNativeLlama({
-        modelPath: llamaModelPath.trim(),
-        transcript: transcript.trim()
+        modelPath: llamaInput.modelPath,
+        transcript: llamaInput.transcript
       });
       setLlamaDebugOutput(nativeLlamaOutputSummaryMessage(output.length));
       setNativeStatus(nativeLlamaSuccessStatusMessage());
@@ -9004,19 +9020,21 @@ export default function App() {
     setNativeStatus(nativeBenchmarkProgressStatusMessage());
     try {
       const results = [];
-      if (whisperModelPath.trim() && audioPath.trim()) {
+      const whisperInput = nativeWhisperInput();
+      if (whisperInput.modelPath && whisperInput.audioPath) {
         results.push(
           await benchmarkNativeWhisper({
-            modelPath: whisperModelPath.trim(),
-            audioPath: audioPath.trim()
+            modelPath: whisperInput.modelPath,
+            audioPath: whisperInput.audioPath
           })
         );
       }
-      if (llamaModelPath.trim() && transcript.trim()) {
+      const llamaInput = nativeLlamaInput();
+      if (llamaInput.modelPath && llamaInput.transcript) {
         results.push(
           await benchmarkNativeLlama({
-            modelPath: llamaModelPath.trim(),
-            transcript: transcript.trim()
+            modelPath: llamaInput.modelPath,
+            transcript: llamaInput.transcript
           })
         );
       }
