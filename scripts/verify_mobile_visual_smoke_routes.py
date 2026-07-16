@@ -29,7 +29,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "transcriptReview": [
         'currentScreen === "transcriptReview"',
-        "transcriptReviewCostBoundaryChecklistItems.map",
+        "items={transcriptReviewCostBoundaryChecklistItems}",
         "onSubmitPress={submitTranscriptParse}",
     ],
     "aiReview": [

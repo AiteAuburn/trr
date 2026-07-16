@@ -820,6 +820,7 @@ import { PreviewRecordEditActionRow } from "./previewRecordEditActionRow";
 import { ProductionAuthReadinessList } from "./productionAuthReadinessList";
 import { RecordingResultActionRow } from "./recordingResultActionRow";
 import { RecordingWhisperModelSelector } from "./recordingWhisperModelSelector";
+import { RecordFlowChecklist } from "./recordFlowChecklist";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
 import { RecordEditFooterActions } from "./recordEditFooterActions";
@@ -4768,14 +4769,6 @@ export default function App() {
 
   function previewTimedRowTime(row: { time: string }) {
     return row.time;
-  }
-
-  function recordFlowChecklistItemKey(item: string) {
-    return item;
-  }
-
-  function recordFlowChecklistItemText(item: string) {
-    return item;
   }
 
   function insightFlowChecklistItemKey(item: string) {
@@ -9514,9 +9507,7 @@ export default function App() {
                 <Text style={styles.evidence}>
                   STT：{selectedModelDisplayLabel(selectedSttModel, sttModelId)} · {selectedModelRuntimeDisplayLabel(selectedSttModel)}
                 </Text>
-                {recordEntrySettingsChecklistItems.map((item) => (
-                  <HighlightBulletRow key={recordFlowChecklistItemKey(item)} text={recordFlowChecklistItemText(item)} />
-                ))}
+                <RecordFlowChecklist items={recordEntrySettingsChecklistItems} />
               </View>
               <View style={styles.voiceCaptureCard}>
                 <Pressable
@@ -9971,9 +9962,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.costBoundary}</Text>
-              {transcriptReviewCostBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={recordFlowChecklistItemKey(item)} text={recordFlowChecklistItemText(item)} />
-              ))}
+              <RecordFlowChecklist items={transcriptReviewCostBoundaryChecklistItems} />
             </View>
             <TranscriptReviewActionRow
               isSubmitDisabled={

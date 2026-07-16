@@ -114,6 +114,7 @@ RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPane
 RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.tsx"
 RECORD_EDIT_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "recordEditFooterActions.tsx"
 RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.tsx"
+RECORD_FLOW_CHECKLIST_PATH = REPO_ROOT / "mobile" / "recordFlowChecklist.tsx"
 PREVIEW_RECORD_EDIT_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "previewRecordEditActionRow.tsx"
 PRODUCTION_AUTH_READINESS_LIST_PATH = REPO_ROOT / "mobile" / "productionAuthReadinessList.tsx"
 BACKEND_URL_FIELD_PATH = REPO_ROOT / "mobile" / "backendUrlField.tsx"
@@ -1513,6 +1514,7 @@ def main() -> int:
     record_detail_info_panel_content = RECORD_DETAIL_INFO_PANEL_PATH.read_text(encoding="utf-8")
     record_edit_footer_actions_content = RECORD_EDIT_FOOTER_ACTIONS_PATH.read_text(encoding="utf-8")
     record_edit_header_fields_content = RECORD_EDIT_HEADER_FIELDS_PATH.read_text(encoding="utf-8")
+    record_flow_checklist_content = RECORD_FLOW_CHECKLIST_PATH.read_text(encoding="utf-8")
     preview_record_edit_action_row_content = PREVIEW_RECORD_EDIT_ACTION_ROW_PATH.read_text(encoding="utf-8")
     production_auth_readiness_list_content = PRODUCTION_AUTH_READINESS_LIST_PATH.read_text(encoding="utf-8")
     backend_url_field_content = BACKEND_URL_FIELD_PATH.read_text(encoding="utf-8")
@@ -1922,10 +1924,8 @@ def main() -> int:
             ("delete confirm highlight bullet row", "deleteConfirmChecklistItems.map((item) => (\n                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />"),
             ("record update highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("manual submit highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
-            ("transcript review highlight bullet row", "transcriptReviewCostBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={recordFlowChecklistItemKey(item)} text={recordFlowChecklistItemText(item)} />"),
             ("history boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("analysis boundary highlight bullet row", "analysisBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />"),
-            ("record entry settings highlight bullet row", "recordEntrySettingsChecklistItems.map((item) => (\n                  <HighlightBulletRow key={recordFlowChecklistItemKey(item)} text={recordFlowChecklistItemText(item)} />"),
             ("detailed report notes highlight bullet row", "detailedReportNoteItems.map((item) => (\n                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />"),
             ("community readiness highlight bullet row", "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={communityReadinessChecklistItemText(item)}"),
             ("ranking readiness highlight bullet row", "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />"),
@@ -1983,6 +1983,17 @@ def main() -> int:
             ("AI flow checklist text binding", "text={aiFlowChecklistItemText(item)}"),
         ):
             _assert_contains(label, ai_flow_checklist_content, marker)
+        for label, marker in (
+            ("record flow checklist component", "export function RecordFlowChecklist"),
+            ("record flow checklist item key helper", "function recordFlowChecklistItemKey(item: string)"),
+            ("record flow checklist item key helper fields", "return item;"),
+            ("record flow checklist item text helper", "function recordFlowChecklistItemText(item: string)"),
+            ("record flow checklist item text helper fields", "return item;"),
+            ("record flow checklist map", "items.map((item) => ("),
+            ("record flow checklist key binding", "key={recordFlowChecklistItemKey(item)}"),
+            ("record flow checklist text binding", "text={recordFlowChecklistItemText(item)}"),
+        ):
+            _assert_contains(label, record_flow_checklist_content, marker)
         for label, marker in (
             ("settings checklist component", "export function SettingsChecklist"),
             ("settings checklist item key helper", "function settingsChecklistItemKey(item: string)"),
@@ -11103,12 +11114,9 @@ def main() -> int:
             ("AI save confirm checklist items binding", "items={aiSaveConfirmChecklistItems}"),
             ("AI candidate remove checklist items binding", "items={aiCandidateRemoveChecklistItems}"),
             ("AI save failure checklist items binding", "items={aiSaveFailureChecklistItems}"),
-            ("record flow checklist item key helper", "function recordFlowChecklistItemKey(item: string)"),
-            ("record flow checklist item key helper fields", "return item;"),
-            ("record flow checklist item key binding", "key={recordFlowChecklistItemKey(item)}"),
-            ("record flow checklist item text helper", "function recordFlowChecklistItemText(item: string)"),
-            ("record flow checklist item text helper fields", "return item;"),
-            ("record flow checklist item text binding", "text={recordFlowChecklistItemText(item)}"),
+            ("record flow checklist binding", "<RecordFlowChecklist"),
+            ("record entry settings checklist items binding", "items={recordEntrySettingsChecklistItems}"),
+            ("transcript review cost checklist items binding", "items={transcriptReviewCostBoundaryChecklistItems}"),
             ("insight flow checklist item key helper", "function insightFlowChecklistItemKey(item: string)"),
             ("insight flow checklist item key helper fields", "return item;"),
             ("insight flow checklist item key binding", "key={insightFlowChecklistItemKey(item)}"),
@@ -11318,15 +11326,10 @@ def main() -> int:
             "recordEntrySettingsChecklistItems",
             "transcriptReviewCostBoundaryChecklistItems",
         ):
-            record_flow_checklist_render_block = _match_block(
-                content,
-                rf"{list_name}\.map\(\(item\) => \(([\s\S]*?<HighlightBulletRow[^\n]*/>\n\s*)\)\)",
-                f"{list_name} record flow checklist render block",
-            )
             _assert_not_contains(
-                f"{list_name} direct checklist item binding",
-                record_flow_checklist_render_block,
-                "key={item} text={item}",
+                f"{list_name} direct record flow checklist map",
+                content,
+                f"{list_name}.map((item) => (",
             )
         for list_name in (
             "deleteConfirmChecklistItems",
