@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1888: Reuse prepared parser preview start helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `startPreparedParserPreviewRequest()` for the parser submit start-and-prepare flow.
+- Reused the helper from `parseTranscript()` while preserving the existing in-flight/busy start state, parser preview state clear, progress status, prepared existing daily preview, shared timestamp, and voice seconds behavior.
+- Updated navigation verifier coverage for the prepared start helper, internals, start binding, and prepared request binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing parser submit request lifecycle helpers in small behavior-preserving slices.
+
 ### T1887: Reuse prepared parser preview submit helper
 
 Status: done

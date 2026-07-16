@@ -2659,7 +2659,7 @@ def main() -> int:
         _assert_contains(
             "parse transcript progress clears parser preview helper binding",
             content,
-            "const preparedRequest = prepareParserPreviewRequest();",
+            "const preparedRequest = startPreparedParserPreviewRequest();",
         )
         _assert_contains(
             "parser recovery message helper",
@@ -6613,9 +6613,11 @@ def main() -> int:
             ("parse sample blocked guard binding", "if (isParserSampleTranscriptBlocked())"),
             ("parse start helper", "function startParserPreviewRequest()"),
             ("parse start helper internals", "parsePreviewInFlight.current = true;\n    setIsBusy(true);"),
-            ("parse start helper binding", "startParserPreviewRequest();"),
+            ("parse start helper binding", "startPreparedParserPreviewRequest();"),
             ("parse prepare helper", "function prepareParserPreviewRequest()"),
             ("parse prepare helper internals", "const existingDailyPreview = parserExistingDailyPreview();\n    clearParserPreviewState();\n    startParserPreviewProgressStatus();\n    return {\n      existingDailyPreview,\n      parserVoiceSeconds: parserPreviewVoiceSeconds(),\n      parseOccurredAt: parserPreviewOccurredAt()"),
+            ("parse start prepared helper", "function startPreparedParserPreviewRequest()"),
+            ("parse start prepared helper internals", "startParserPreviewRequest();\n    return prepareParserPreviewRequest();"),
             ("parse progress status helper", "function startParserPreviewProgressStatus()"),
             ("parse progress status helper internals", "setStatus(parserProgressStatusMessage());"),
             ("parse existing daily preview helper", "function parserExistingDailyPreview()"),
@@ -6624,7 +6626,7 @@ def main() -> int:
             ("parse voice seconds helper internals", "return clampNumber(transcriptVoiceSeconds, 0, maxMobileCountValue);"),
             ("parse occurred at helper", "function parserPreviewOccurredAt()"),
             ("parse occurred at helper internals", "return new Date().toISOString();"),
-            ("parse prepare helper binding", "const preparedRequest = prepareParserPreviewRequest();"),
+            ("parse prepare helper binding", "const preparedRequest = startPreparedParserPreviewRequest();"),
             ("parse finish helper", "function finishParserPreviewRequest()"),
             ("parse finish helper internals", "parsePreviewInFlight.current = false;\n    setIsBusy(false);"),
             ("parse finish helper binding", "finishParserPreviewRequest();"),

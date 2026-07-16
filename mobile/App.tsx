@@ -3846,6 +3846,11 @@ export default function App() {
     };
   }
 
+  function startPreparedParserPreviewRequest() {
+    startParserPreviewRequest();
+    return prepareParserPreviewRequest();
+  }
+
   function startParserPreviewProgressStatus() {
     setStatus(parserProgressStatusMessage());
   }
@@ -7875,8 +7880,7 @@ export default function App() {
       return;
     }
 
-    startParserPreviewRequest();
-    const preparedRequest = prepareParserPreviewRequest();
+    const preparedRequest = startPreparedParserPreviewRequest();
     try {
       await submitPreparedParserPreview(parserContext, transcript, preparedRequest);
     } catch (error) {
