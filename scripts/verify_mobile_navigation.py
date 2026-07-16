@@ -4616,7 +4616,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview remove records update helper internals",
             content,
-            "function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number) {\n    return records.filter((_, recordIndex) => recordIndex !== removeIndex);",
+            "function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number) {\n    return records.filter((_, recordIndex) => isPreviewRecordKeptAfterRemove(recordIndex, removeIndex));",
+        )
+        _assert_contains(
+            "AI candidate preview remove keep-index helper",
+            content,
+            "function isPreviewRecordKeptAfterRemove(recordIndex: number, removeIndex: number)",
+        )
+        _assert_contains(
+            "AI candidate preview remove keep-index helper internals",
+            content,
+            "function isPreviewRecordKeptAfterRemove(recordIndex: number, removeIndex: number) {\n    return recordIndex !== removeIndex;",
         )
         _assert_contains(
             "AI candidate preview remove records update helper binding",

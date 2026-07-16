@@ -3601,7 +3601,11 @@ export default function App() {
   }
 
   function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number) {
-    return records.filter((_, recordIndex) => recordIndex !== removeIndex);
+    return records.filter((_, recordIndex) => isPreviewRecordKeptAfterRemove(recordIndex, removeIndex));
+  }
+
+  function isPreviewRecordKeptAfterRemove(recordIndex: number, removeIndex: number) {
+    return recordIndex !== removeIndex;
   }
 
   function applyPreviewRecords(nextRecords: PendingRecord[]) {
