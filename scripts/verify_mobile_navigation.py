@@ -5744,6 +5744,11 @@ def main() -> int:
             "function openUpdatedRecordDetail()",
         )
         _assert_contains(
+            "updated record detail helper binding",
+            content,
+            "function openUpdatedRecordDetail() {\n    openUpdateSuccessRecordDetailDestination();\n  }",
+        )
+        _assert_contains(
             "record result return destination helper",
             content,
             "function recordResultReturnDestination()",

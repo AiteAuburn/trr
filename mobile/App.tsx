@@ -8457,7 +8457,7 @@ export default function App() {
   }
 
   function openUpdatedRecordDetail() {
-    openUpdateSuccessDestination("recordDetail");
+    openUpdateSuccessRecordDetailDestination();
   }
 
   function recordResultReturnDestination() {

@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1932: Reuse update-success record-detail helper from updated detail CTA
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `openUpdateSuccessRecordDetailDestination()` directly from `openUpdatedRecordDetail()`.
+- Removed the extra string-target dispatch hop for the updated-record detail CTA while preserving selected-record detail opening and record-detail status behavior.
+- Updated navigation verifier coverage for the updated-record detail helper binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing record-result destination card target orchestration in small behavior-preserving slices.
+
 ### T1931: Reuse record-result return destination helper
 
 Status: done
