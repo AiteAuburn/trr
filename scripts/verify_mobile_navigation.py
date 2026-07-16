@@ -81,6 +81,7 @@ RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPane
 RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.tsx"
 RECORD_EDIT_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "recordEditFooterActions.tsx"
 RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.tsx"
+RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
 RECORD_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "recordTextField.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
@@ -1431,6 +1432,7 @@ def main() -> int:
     record_detail_info_panel_content = RECORD_DETAIL_INFO_PANEL_PATH.read_text(encoding="utf-8")
     record_edit_footer_actions_content = RECORD_EDIT_FOOTER_ACTIONS_PATH.read_text(encoding="utf-8")
     record_edit_header_fields_content = RECORD_EDIT_HEADER_FIELDS_PATH.read_text(encoding="utf-8")
+    record_option_field_content = RECORD_OPTION_FIELD_PATH.read_text(encoding="utf-8")
     record_text_field_content = RECORD_TEXT_FIELD_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
@@ -9424,7 +9426,7 @@ def main() -> int:
         )
         for label, marker in (
             ("manual type chip accessibility binding", "accessibilityLabel={manualRecordTypeOptionAccessibilityLabel(type)}"),
-            ("shared option chip accessibility binding", "accessibilityLabel={editOptionAccessibilityLabel(option)}"),
+            ("shared option chip accessibility binding", "accessibilityLabel={option.accessibilityLabel}"),
             ("store category accessibility binding", "accessibilityLabel={storeCategoryOptionAccessibilityLabel(category)}"),
             ("analysis range accessibility binding", "accessibilityLabel={analysisRangeOptionAccessibilityLabel(item)}"),
             ("manual type chip button role", 'accessibilityRole="button"'),
@@ -9450,7 +9452,7 @@ def main() -> int:
             ("preview glucose unit selected state", 'selectedValue={recordEditFieldValue(previewEditFields, "glucoseUnit")}'),
             ("preview glucose timing selected state", 'selectedValue={recordEditFieldValue(previewEditFields, "glucoseTiming")}'),
             ("preview meal selected state", 'selectedValue={recordEditFieldValue(previewEditFields, "mealType")}'),
-            ("record edit glucose unit selected state", 'const optionSelected = editOptionIsSelected(option, recordEditFieldValue(recordEditFields, "glucoseUnit"));'),
+            ("record edit glucose unit selected state", 'selectedValue={recordEditFieldValue(recordEditFields, "glucoseUnit")}'),
             ("record edit glucose timing selected state", 'selectedValue={recordEditFieldValue(recordEditFields, "glucoseTiming")}'),
             ("record edit meal selected state", 'selectedValue={recordEditFieldValue(recordEditFields, "mealType")}'),
             ("store category selected state", "accessibilityState={{ selected: storeCategoryOptionSelected(category, storeCategory) }}"),
@@ -9461,6 +9463,8 @@ def main() -> int:
                 target_content = manual_record_meal_fields_content
             elif label.startswith("manual type chip "):
                 target_content = manual_record_type_selector_content
+            elif label.startswith("shared option chip "):
+                target_content = record_option_field_content
             elif label == "history detail selected state":
                 target_content = history_detail_mode_tabs_content
             elif label == "history calendar selected state":
@@ -9487,15 +9491,15 @@ def main() -> int:
             ("preview edit glucose input binding", "onChangeText={updatePreviewEditGlucoseValue}"),
             ("edit option key helper", "function editOptionKey<T extends string>(option: { value: T })"),
             ("edit option key helper fields", "return option.value;"),
-            ("edit option key helper binding", "key={editOptionKey(option)}"),
+            ("edit option key helper binding", "key={option.value}"),
             ("edit option accessibility helper", "function editOptionAccessibilityLabel(option: { accessibilityLabel: string })"),
             ("edit option accessibility helper fields", "return option.accessibilityLabel;"),
-            ("edit option accessibility helper binding", "accessibilityLabel={editOptionAccessibilityLabel(option)}"),
+            ("edit option accessibility helper binding", "accessibilityLabel={option.accessibilityLabel}"),
             ("edit option label helper", "function editOptionLabel(option: { label: string })"),
             ("edit option label helper fields", "return option.label;"),
-            ("edit option label helper binding", "{editOptionLabel(option)}"),
+            ("edit option label helper binding", "{option.label}"),
             ("edit option selected helper", "function editOptionIsSelected(option: { value: string }, selectedValue: string)"),
-            ("edit option selected helper fields", "return editOptionKey(option) === selectedValue;"),
+            ("edit option selected helper fields", "const optionSelected = option.value === selectedValue;"),
             ("edit option selected state binding", "accessibilityState={{ selected: optionSelected }}"),
             ("edit option selected style binding", "optionSelected ? styles.segmentActive : null"),
             ("edit option selected text binding", "optionSelected ? styles.segmentTextActive : null"),
@@ -9526,7 +9530,9 @@ def main() -> int:
             ("record edit fallback json helper binding", 'value={recordEditFieldValue(recordEditFields, "fallbackJson")}'),
             ("record edit fallback json max length binding", 'maxLength={recordEditFieldMaxLength("fallbackJson")}'),
             ("record edit fallback json style binding", "inputStyle={[styles.input, styles.jsonInput]}"),
-            ("record edit glucose unit selected helper binding", 'editOptionIsSelected(option, recordEditFieldValue(recordEditFields, "glucoseUnit"))'),
+            ("record edit glucose unit option row binding", "<RecordOptionRow\n                  options={glucoseUnitDisplayOptions}"),
+            ("record edit glucose unit selected helper binding", 'selectedValue={recordEditFieldValue(recordEditFields, "glucoseUnit")}'),
+            ("record edit glucose unit option row press", "onOptionPress={pressRecordEditGlucoseUnitOption}"),
             ("record edit glucose timing option field binding", "<RecordOptionField\n                  icon={\"◌\"}"),
             ("record edit glucose timing option field label", 'label={"情境"}'),
             ("record edit glucose timing option field options", "options={glucoseTimingDisplayOptions}"),
@@ -9765,12 +9771,24 @@ def main() -> int:
             ("record edit timing option target helper binding", "selectRecordEditGlucoseTiming(recordEditOptionTarget(option));"),
             ("record edit meal type option press handler", "function pressRecordEditMealTypeOption(option: ReturnType<typeof valueLabelDisplayItem>)"),
             ("record edit meal type option target helper binding", "selectRecordEditMealType(recordEditOptionTarget(option));"),
-            ("record edit unit option press binding", "onPress={() => pressRecordEditGlucoseUnitOption(option)}"),
+            ("record edit unit option press binding", "onOptionPress={pressRecordEditGlucoseUnitOption}"),
             ("record edit timing option press binding", "onOptionPress={pressRecordEditGlucoseTimingOption}"),
             ("record edit meal type option press binding", "onOptionPress={pressRecordEditMealTypeOption}"),
             ("record edit fallback json binding", "onChangeText={updateRecordEditFallbackJson}"),
         ):
-            _assert_contains(label, content, marker)
+            if label in {
+                "edit option key helper binding",
+                "edit option accessibility helper binding",
+                "edit option label helper binding",
+                "edit option selected helper fields",
+                "edit option selected state binding",
+                "edit option selected style binding",
+                "edit option selected text binding",
+            }:
+                target_content = record_option_field_content
+            else:
+                target_content = content
+            _assert_contains(label, target_content, marker)
         for label, marker in (
             ("manual record direct type binding", "onPress={() => onTypePress(type)}"),
             ("manual record direct type handler value binding", "selectManualRecordType(type.value);"),

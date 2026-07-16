@@ -11085,33 +11085,11 @@ export default function App() {
                   inputStyle={styles.input}
                   placeholder="138"
                 />
-                <View style={styles.segmentRow}>
-                  {glucoseUnitDisplayOptions.map((option) => {
-                    const optionSelected = editOptionIsSelected(option, recordEditFieldValue(recordEditFields, "glucoseUnit"));
-                    return (
-                      <Pressable
-                        key={editOptionKey(option)}
-                        accessibilityLabel={editOptionAccessibilityLabel(option)}
-                        accessibilityRole="button"
-                        accessibilityState={{ selected: optionSelected }}
-                        style={[
-                          styles.segmentPill,
-                          optionSelected ? styles.segmentActive : null
-                        ]}
-                        onPress={() => pressRecordEditGlucoseUnitOption(option)}
-                      >
-                        <Text
-                          style={[
-                            styles.segmentText,
-                            optionSelected ? styles.segmentTextActive : null
-                          ]}
-                        >
-                          {editOptionLabel(option)}
-                        </Text>
-                      </Pressable>
-                    );
-                  })}
-                </View>
+                <RecordOptionRow
+                  options={glucoseUnitDisplayOptions}
+                  selectedValue={recordEditFieldValue(recordEditFields, "glucoseUnit")}
+                  onOptionPress={pressRecordEditGlucoseUnitOption}
+                />
                 <RecordOptionField
                   icon={"◌"}
                   label={"情境"}
