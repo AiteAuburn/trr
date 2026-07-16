@@ -34,6 +34,39 @@ None.
 
 ## Done
 
+### T2040: Extract AI Save Failure action row
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/aiSaveFailureActionRow.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `AiSaveFailureActionRow` for the AI Save Failure footer actions.
+- Replaced the inline back-to-AI-review, manual-add, and return-save-confirm footer row in `App.tsx`.
+- Preserved existing labels, accessibility labels, return-save disabled state, handlers, and preview-state fallback behavior.
+- Updated navigation and visual-smoke verifier coverage for the component boundary and App wiring.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining inline core-flow action rows without changing first-version scope.
+
 ### T2039: Extract AI Review action row
 
 Status: done

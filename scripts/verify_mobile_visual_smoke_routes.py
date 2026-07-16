@@ -59,7 +59,7 @@ VISUAL_SMOKE_ROUTES = {
     "aiSaveFailure": [
         'currentScreen === "aiSaveFailure"',
         "aiSaveFailureChecklistItems.map",
-        "onPress={returnFromAiSaveFailureToAiReview}",
+        "onBackPress={returnFromAiSaveFailureToAiReview}",
     ],
     "saveSuccess": [
         'currentScreen === "saveSuccess"',

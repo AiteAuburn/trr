@@ -769,6 +769,7 @@ import { protectedRequestHeaders } from "./authRequestHeaders";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { AiCandidateActionRow } from "./aiCandidateActionRow";
 import { AiReviewActionRow } from "./aiReviewActionRow";
+import { AiSaveFailureActionRow } from "./aiSaveFailureActionRow";
 import { CoreFlowEntryActionRow } from "./coreFlowEntryActionRow";
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { DangerConfirmActionRow } from "./dangerConfirmActionRow";
@@ -10101,37 +10102,18 @@ export default function App() {
                 <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />
               ))}
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.backAiConfirmAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={returnFromAiSaveFailureToAiReview}
-              >
-                <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.backAiConfirm}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.manualAddAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={openAiSaveFailureManualFallback}
-              >
-                <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.manualAdd}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.returnSaveConfirmAccessibility}
-                accessibilityRole="button"
-                accessibilityState={{ disabled: previewState.isEmpty }}
-                style={[
-                  styles.primaryButton,
-                  previewState.isEmpty ? styles.buttonDisabled : null
-                ]}
-                disabled={previewState.isEmpty}
-                onPress={returnFromAiSaveFailureToSaveConfirm}
-              >
-                <Text style={styles.primaryButtonText}>{coreFlowDisplayLabels.returnSaveConfirm}</Text>
-              </Pressable>
-            </View>
+            <AiSaveFailureActionRow
+              backAccessibilityLabel={coreFlowDisplayLabels.backAiConfirmAccessibility}
+              backLabel={coreFlowDisplayLabels.backAiConfirm}
+              manualAddAccessibilityLabel={coreFlowDisplayLabels.manualAddAccessibility}
+              manualAddLabel={coreFlowDisplayLabels.manualAdd}
+              onBackPress={returnFromAiSaveFailureToAiReview}
+              onManualAddPress={openAiSaveFailureManualFallback}
+              onReturnSavePress={returnFromAiSaveFailureToSaveConfirm}
+              returnSaveAccessibilityLabel={coreFlowDisplayLabels.returnSaveConfirmAccessibility}
+              returnSaveDisabled={previewState.isEmpty}
+              returnSaveLabel={coreFlowDisplayLabels.returnSaveConfirm}
+            />
           </View>
         ) : null}
 

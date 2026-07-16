@@ -55,6 +55,7 @@ FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 AI_CANDIDATE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiCandidateActionRow.tsx"
 AI_REVIEW_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiReviewActionRow.tsx"
+AI_SAVE_FAILURE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiSaveFailureActionRow.tsx"
 CORE_FLOW_ENTRY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "coreFlowEntryActionRow.tsx"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 DANGER_CONFIRM_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dangerConfirmActionRow.tsx"
@@ -1428,6 +1429,7 @@ def main() -> int:
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     ai_candidate_action_row_content = AI_CANDIDATE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     ai_review_action_row_content = AI_REVIEW_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    ai_save_failure_action_row_content = AI_SAVE_FAILURE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     core_flow_entry_action_row_content = CORE_FLOW_ENTRY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     danger_confirm_action_row_content = DANGER_CONFIRM_ACTION_ROW_PATH.read_text(encoding="utf-8")
@@ -4113,17 +4115,17 @@ def main() -> int:
         _assert_contains(
             "AI save failure back AI review binding",
             content,
-            "onPress={returnFromAiSaveFailureToAiReview}",
+            "onBackPress={returnFromAiSaveFailureToAiReview}",
         )
         _assert_contains(
             "AI save failure return save confirm binding",
             content,
-            "onPress={returnFromAiSaveFailureToSaveConfirm}",
+            "onReturnSavePress={returnFromAiSaveFailureToSaveConfirm}",
         )
         _assert_contains(
             "AI save failure manual fallback binding",
             content,
-            "onPress={openAiSaveFailureManualFallback}",
+            "onManualAddPress={openAiSaveFailureManualFallback}",
         )
         _assert_contains(
             "AI candidate remove-confirm return handler",
@@ -7943,6 +7945,24 @@ def main() -> int:
         ):
             _assert_contains(label, ai_review_action_row_content, marker)
         for label, marker in (
+            ("AI save failure action row component", "export function AiSaveFailureActionRow"),
+            ("AI save failure action row back accessibility prop", "accessibilityLabel={backAccessibilityLabel}"),
+            ("AI save failure action row manual accessibility prop", "accessibilityLabel={manualAddAccessibilityLabel}"),
+            ("AI save failure action row return save accessibility prop", "accessibilityLabel={returnSaveAccessibilityLabel}"),
+            ("AI save failure action row return save disabled state", "accessibilityState={{ disabled: returnSaveDisabled }}"),
+            ("AI save failure action row return save disabled prop", "disabled={returnSaveDisabled}"),
+            ("AI save failure action row back handler prop", "onPress={onBackPress}"),
+            ("AI save failure action row manual handler prop", "onPress={onManualAddPress}"),
+            ("AI save failure action row return save handler prop", "onPress={onReturnSavePress}"),
+            ("AI save failure action row back label prop", "{backLabel}"),
+            ("AI save failure action row manual label prop", "{manualAddLabel}"),
+            ("AI save failure action row return save label prop", "{returnSaveLabel}"),
+            ("AI save failure action row shell style", "actionRow: {"),
+            ("AI save failure action row primary style", "primaryButton: {"),
+            ("AI save failure action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, ai_save_failure_action_row_content, marker)
+        for label, marker in (
             ("confirmation return edit accessibility label", 'returnEditAccessibility: boundDisplayText("返回文字修改，保留目前輸入且不重新呼叫 AI", maxDisplayDetailTextLength)'),
             ("confirmation save confirm accessibility label", 'enterSaveConfirmAccessibility: boundDisplayText("進入每日紀錄頁，不儲存也不重新呼叫 AI", maxDisplayDetailTextLength)'),
             ("confirmation return text accessibility label", 'returnTextConfirmAccessibility: boundDisplayText("回文字確認，不送 parser 或寫入資料", maxDisplayDetailTextLength)'),
@@ -7962,8 +7982,8 @@ def main() -> int:
             ("confirmation submit save accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.submitAiSaveAccessibility}"),
             ("confirmation cancel accessibility binding", "cancelAccessibilityLabel={coreFlowDisplayLabels.cancelAccessibility}"),
             ("confirmation remove accessibility binding", "confirmAccessibilityLabel={coreFlowDisplayLabels.confirmRemoveAccessibility}"),
-            ("confirmation back AI accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.backAiConfirmAccessibility}"),
-            ("confirmation return save accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.returnSaveConfirmAccessibility}"),
+            ("confirmation back AI accessibility binding", "backAccessibilityLabel={coreFlowDisplayLabels.backAiConfirmAccessibility}"),
+            ("confirmation return save accessibility binding", "returnSaveAccessibilityLabel={coreFlowDisplayLabels.returnSaveConfirmAccessibility}"),
             ("confirmation transcript back accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.backAccessibility}"),
             ("confirmation retry accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.retryInputAccessibility}"),
             ("confirmation parse accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.submitTranscriptParseAccessibility}"),
@@ -8510,7 +8530,7 @@ def main() -> int:
             ("ai review manual fallback preview state binding", "showManualAdd={previewState.isEmpty}"),
             ("ai review save confirm preview state binding", "showEnterSave={previewState.hasRecords}"),
             ("ai review backend warning preview state binding", "{previewState.hasRecords && !account ? ("),
-            ("ai save failure return disabled preview state binding", "accessibilityState={{ disabled: previewState.isEmpty }}"),
+            ("ai save failure return disabled preview state binding", "returnSaveDisabled={previewState.isEmpty}"),
             ("ai save confirm submit accessibility disabled binding", "disabled: isAiSaveConfirmSubmitDisabled"),
             ("ai save confirm submit style disabled binding", "isAiSaveConfirmSubmitDisabled ? styles.buttonDisabled : null"),
             ("ai save confirm submit disabled binding", "disabled={isAiSaveConfirmSubmitDisabled}"),
