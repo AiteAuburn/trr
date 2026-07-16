@@ -7532,6 +7532,10 @@ export default function App() {
     return previewRecordsForSave(currentPreview.records, previewState.recordCount);
   }
 
+  function dailyRecordSaveRequestBody(nextPreview: ParsePreviewResponse, recordsToSave: PendingRecord[]) {
+    return buildDailyRecordSaveRequest(nextPreview, recordsToSave, dailyTranscriptEntries);
+  }
+
   function requestDailyRecordSave(
     accountId: string,
     nextPreview: ParsePreviewResponse,
@@ -7540,7 +7544,7 @@ export default function App() {
     return requestJson<DailyRecordSaveResponse>(normalizedApiBaseUrl, "/daily-records/save", {
       method: "POST",
       headers: protectedRequestHeaders(accountId, accessToken),
-      body: JSON.stringify(buildDailyRecordSaveRequest(nextPreview, recordsToSave, dailyTranscriptEntries))
+      body: JSON.stringify(dailyRecordSaveRequestBody(nextPreview, recordsToSave))
     });
   }
 
