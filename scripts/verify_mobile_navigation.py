@@ -2724,7 +2724,7 @@ def main() -> int:
         _assert_contains(
             "AI save success clears transcript draft helper binding",
             content,
-            "setPreview(null);\n      clearTranscriptDraftState();\n      clearDailyRecordDraftOrganizationState();",
+            "setPreview(null);\n    clearTranscriptDraftState();\n    clearDailyRecordDraftOrganizationState();",
         )
         _assert_contains(
             "transcript review return clears parser preview helper binding",
@@ -4451,7 +4451,7 @@ def main() -> int:
         _assert_contains(
             "ai save result selected record helper binding",
             content,
-            "if (createdRecords[0]) {\n        selectRecordForResult(createdRecords[0]);\n      }",
+            "if (createdRecords[0]) {\n      selectRecordForResult(createdRecords[0]);\n    }",
         )
         _assert_contains(
             "record update result selected record helper binding",
@@ -4476,7 +4476,7 @@ def main() -> int:
         _assert_contains(
             "ai save success result helper binding",
             content,
-            "setLastSaveErrorSummary(\"\");\n      openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), \"ai\", \"today\");",
+            "setLastSaveErrorSummary(\"\");\n    openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), \"ai\", \"today\");",
         )
         _assert_contains(
             "manual create save success result helper binding",
@@ -6340,6 +6340,10 @@ def main() -> int:
             ("daily record save request helper headers", "headers: protectedRequestHeaders(accountId, accessToken),"),
             ("daily record save request helper payload", "body: JSON.stringify(buildDailyRecordSaveRequest(nextPreview, recordsToSave, dailyTranscriptEntries))"),
             ("daily record save request helper binding", "const saveResponse = await requestDailyRecordSave(account.id, preview, recordsToSave);"),
+            ("daily record save success helper", "function handleDailyRecordSaveSuccess(saveResponse: DailyRecordSaveResponse, savedCount: number)"),
+            ("daily record save success helper records", "const createdRecords = boundRecordsList(saveResponse.records, maxMobilePreviewRecords);"),
+            ("daily record save success helper fields", "setPreview(null);\n    clearTranscriptDraftState();\n    clearDailyRecordDraftOrganizationState();\n    setRecords((current) => boundRecordsList([...createdRecords, ...current]));\n    setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));"),
+            ("daily record save success helper binding", "handleDailyRecordSaveSuccess(saveResponse, recordsToSave.length);"),
             ("daily record save endpoint", '"/daily-records/save"'),
             ("daily record save payload binding", "body: JSON.stringify(buildDailyRecordSaveRequest(nextPreview, recordsToSave, dailyTranscriptEntries))"),
             ("daily record save clears retained transcripts", "clearDailyRecordDraftOrganizationState();"),
@@ -10960,7 +10964,7 @@ def main() -> int:
             ("achievement sync failure status binding", "setAchievementActionStatus(achievementSyncStatus.failure);"),
             ("achievement sync handler passes true", "void loadAchievementSummary(true);"),
             ("achievement post-save sync helper", "function syncAchievementsAfterRecordSave()"),
-            ("achievement AI save success sync", "setStatus(aiSaveSuccessStatusMessage());\n      syncAchievementsAfterRecordSave();"),
+            ("achievement AI save success sync", "setStatus(aiSaveSuccessStatusMessage());\n    syncAchievementsAfterRecordSave();"),
             ("achievement AI daily save transactional response", "const saveResponse = await requestDailyRecordSave(account.id, preview, recordsToSave);"),
             ("achievement manual create sync", "setStatus(manualRecordCreateSuccessStatusMessage());\n      syncAchievementsAfterRecordSave();"),
             ("achievement category sections", "achievementCategoryDisplaySections.map"),

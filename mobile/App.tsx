@@ -7515,6 +7515,22 @@ export default function App() {
     });
   }
 
+  function handleDailyRecordSaveSuccess(saveResponse: DailyRecordSaveResponse, savedCount: number) {
+    const createdRecords = boundRecordsList(saveResponse.records, maxMobilePreviewRecords);
+    setPreview(null);
+    clearTranscriptDraftState();
+    clearDailyRecordDraftOrganizationState();
+    setRecords((current) => boundRecordsList([...createdRecords, ...current]));
+    setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));
+    if (createdRecords[0]) {
+      selectRecordForResult(createdRecords[0]);
+    }
+    setLastSaveErrorSummary("");
+    openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), "ai", "today");
+    setStatus(aiSaveSuccessStatusMessage());
+    syncAchievementsAfterRecordSave();
+  }
+
   async function savePreviewRecords() {
     if (isBusy || previewSaveInFlight.current) {
       return;
@@ -7534,20 +7550,7 @@ export default function App() {
     const recordsToSave = previewRecordsForSave(preview.records, previewState.recordCount);
     try {
       const saveResponse = await requestDailyRecordSave(account.id, preview, recordsToSave);
-      const createdRecords = boundRecordsList(saveResponse.records, maxMobilePreviewRecords);
-      const savedCount = recordsToSave.length;
-      setPreview(null);
-      clearTranscriptDraftState();
-      clearDailyRecordDraftOrganizationState();
-      setRecords((current) => boundRecordsList([...createdRecords, ...current]));
-      setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));
-      if (createdRecords[0]) {
-        selectRecordForResult(createdRecords[0]);
-      }
-      setLastSaveErrorSummary("");
-      openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), "ai", "today");
-      setStatus(aiSaveSuccessStatusMessage());
-      syncAchievementsAfterRecordSave();
+      handleDailyRecordSaveSuccess(saveResponse, recordsToSave.length);
     } catch (error) {
       const message = aiSaveFailureStatusMessage(error);
       openAiSaveFailureResult(message);
