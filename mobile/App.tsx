@@ -7938,6 +7938,10 @@ export default function App() {
     setStatus(recordDeleteSuccessStatusMessage());
   }
 
+  function handleSelectedRecordDeleteFailure(error: unknown) {
+    setStatus(recordDeleteFailureStatusMessage(error));
+  }
+
   async function deleteSelectedRecord() {
     if (isBusy || recordDeleteInFlight.current) {
       return;
@@ -7958,7 +7962,7 @@ export default function App() {
       await requestSelectedRecordDelete(selectedRecord.id, account.id);
       handleSelectedRecordDeleteSuccess(selectedRecord.id);
     } catch (error) {
-      setStatus(recordDeleteFailureStatusMessage(error));
+      handleSelectedRecordDeleteFailure(error);
     } finally {
       finishRecordDeleteRequest();
     }

@@ -4779,6 +4779,21 @@ def main() -> int:
             "await requestSelectedRecordDelete(selectedRecord.id, account.id);\n      handleSelectedRecordDeleteSuccess(selectedRecord.id);",
         )
         _assert_contains(
+            "record delete failure helper",
+            content,
+            "function handleSelectedRecordDeleteFailure(error: unknown)",
+        )
+        _assert_contains(
+            "record delete failure helper status",
+            content,
+            "setStatus(recordDeleteFailureStatusMessage(error));",
+        )
+        _assert_contains(
+            "record delete failure helper binding",
+            content,
+            "} catch (error) {\n      handleSelectedRecordDeleteFailure(error);\n    } finally {",
+        )
+        _assert_contains(
             "record delete success result helper fields",
             content,
             'openRecordSummaryResult(summary, "deleteSuccess", setLastDeletedSummary);',
