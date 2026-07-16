@@ -789,6 +789,7 @@ import { HistoryNoRecordStatusBlock } from "./historyNoRecordStatusBlock";
 import { HistorySelectedDatePanel } from "./historySelectedDatePanel";
 import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
 import { AccountSecurityActionGrid } from "./accountSecurityActionGrid";
+import { AuthProviderPreviewList } from "./authProviderPreviewList";
 import { BackendUrlField } from "./backendUrlField";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
@@ -4861,10 +4862,6 @@ export default function App() {
 
   function authProviderPreviewTarget(item: ReturnType<typeof authProviderPreviewDisplayItem>) {
     return item.provider;
-  }
-
-  function authProviderPreviewTitleLabel(item: ReturnType<typeof authProviderPreviewDisplayItem>) {
-    return `${previewStatusRowTitle(item)} 登入`;
   }
 
   function pressAuthProviderPreview(item: ReturnType<typeof authProviderPreviewDisplayItem>) {
@@ -12326,28 +12323,11 @@ export default function App() {
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authProviderPreview}</Text>
               <Text style={styles.evidence}>{accountSecurityProviderBoundaryDisplayText}</Text>
             </View>
-            <View style={styles.aiReviewList}>
-              {authProviderDisplayItems.map((item) => (
-                <Pressable
-                  key={previewStatusRowKey(item)}
-	                  accessibilityLabel={previewStatusRowAccessibilityLabel(item)}
-	                  accessibilityRole="button"
-	                  accessibilityState={{ disabled: isAuthOperationInFlight }}
-	                  style={[styles.aiReviewCard, isAuthOperationInFlight ? styles.buttonDisabled : null]}
-                  disabled={isAuthOperationInFlight}
-                  onPress={() => pressAuthProviderPreview(item)}
-                >
-                  <View style={styles.iconCircleSmall}>
-                    <Text>{previewStatusRowIcon(item)}</Text>
-                  </View>
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{authProviderPreviewTitleLabel(item)}</Text>
-                    <Text style={styles.evidence}>{previewStatusRowCopy(item)}</Text>
-                  </View>
-                  <Text style={styles.previewModeBadge}>{previewStatusRowStatusLabel(item)}</Text>
-                </Pressable>
-              ))}
-            </View>
+            <AuthProviderPreviewList
+              disabled={isAuthOperationInFlight}
+              items={authProviderDisplayItems}
+              onProviderPress={pressAuthProviderPreview}
+            />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.sessionPreview}</Text>
               <Text style={styles.evidence}>{accountSecuritySessionBoundaryDisplayText}</Text>

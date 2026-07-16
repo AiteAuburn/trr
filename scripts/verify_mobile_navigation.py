@@ -14,6 +14,7 @@ APP_TYPES_PATH = REPO_ROOT / "mobile" / "appTypes.ts"
 APP_RUNTIME_CONFIG_PATH = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 ACCOUNT_SECURITY_ACTION_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityActionGrid.tsx"
+AUTH_PROVIDER_PREVIEW_LIST_PATH = REPO_ROOT / "mobile" / "authProviderPreviewList.tsx"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
 RECORD_EDIT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "recordEditTransforms.ts"
 RECORD_BOUNDS_PATH = REPO_ROOT / "mobile" / "recordBounds.ts"
@@ -1396,6 +1397,7 @@ def main() -> int:
     app_runtime_config_content = APP_RUNTIME_CONFIG_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     account_security_action_grid_content = ACCOUNT_SECURITY_ACTION_GRID_PATH.read_text(encoding="utf-8")
+    auth_provider_preview_list_content = AUTH_PROVIDER_PREVIEW_LIST_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
     record_edit_transforms_content = RECORD_EDIT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     record_bounds_content = RECORD_BOUNDS_PATH.read_text(encoding="utf-8")
@@ -9811,6 +9813,28 @@ def main() -> int:
         ):
             _assert_contains(label, account_security_action_grid_content, marker)
         for label, marker in (
+            ("auth provider preview list component", "export function AuthProviderPreviewList"),
+            ("auth provider preview title helper", "function authProviderPreviewTitleLabel(item: { title: string })"),
+            ("auth provider preview title helper fields", "return `${item.title} 登入`;"),
+            ("auth provider preview list wrapper style", "style={styles.aiReviewList}"),
+            ("auth provider preview list map", "items.map((item) => ("),
+            ("auth provider preview list accessibility", "accessibilityLabel={item.accessibilityLabel}"),
+            ("auth provider preview list role", 'accessibilityRole="button"'),
+            ("auth provider preview list disabled state", "accessibilityState={{ disabled }}"),
+            ("auth provider preview list disabled prop", "disabled={disabled}"),
+            ("auth provider preview list key", "key={item.title}"),
+            ("auth provider preview list handler", "onPress={() => onProviderPress(item)}"),
+            ("auth provider preview list disabled style", "disabled ? styles.buttonDisabled : null"),
+            ("auth provider preview list icon", "{item.icon}"),
+            ("auth provider preview list title", "{authProviderPreviewTitleLabel(item)}"),
+            ("auth provider preview list copy", "{item.copy}"),
+            ("auth provider preview list status", "{item.statusLabel}"),
+            ("auth provider preview list card style", "aiReviewCard: {"),
+            ("auth provider preview list text style", "recordContent: {"),
+            ("auth provider preview list badge style", "previewModeBadge: {"),
+        ):
+            _assert_contains(label, auth_provider_preview_list_content, marker)
+        for label, marker in (
             ("settings subpage action row component", "export function SettingsSubpageActionRow"),
             ("settings subpage action row return accessibility prop", "accessibilityLabel={returnAccessibilityLabel}"),
             ("settings subpage action row action accessibility prop", "accessibilityLabel={actionAccessibilityLabel}"),
@@ -10908,21 +10932,18 @@ def main() -> int:
             ("privacy control preview status row key binding", "privacyControlDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
             ("production auth readiness preview status row key binding", "productionAuthReadinessDisplayRows.map((item) => (\n                <View key={previewStatusRowKey(item)}"),
             ("session management preview status row key binding", "sessionManagementDisplayItems.map((item) => (\n                <Pressable\n                  key={previewStatusRowKey(item)}"),
-            ("auth provider preview status row key binding", "authProviderDisplayItems.map((item) => (\n                <Pressable\n                  key={previewStatusRowKey(item)}"),
+            ("auth provider preview list key boundary", "<AuthProviderPreviewList"),
             ("reminder preview status row key binding", "reminderPreviewDisplayItems.map((item) => (\n                <View key={previewStatusRowKey(item)}"),
             ("auth session display row key binding", "authSessionDisplayItems.map((item) => (\n                  <View key={previewKeyedRowKey(item)}"),
-            ("auth provider preview accessibility binding", "accessibilityLabel={previewStatusRowAccessibilityLabel(item)}"),
             ("session management preview accessibility binding", "accessibilityLabel={previewStatusRowAccessibilityLabel(item)}"),
             ("preview status row icon binding", "{previewStatusRowIcon(row)}"),
             ("preview status row title binding", "{previewStatusRowTitle(row)}"),
             ("preview status row copy binding", "{previewStatusRowCopy(row)}"),
             ("preview status row status binding", "{previewStatusRowStatusLabel(row)}"),
-            ("auth provider preview status row icon binding", "{previewStatusRowIcon(item)}"),
-            ("auth provider preview title helper", "function authProviderPreviewTitleLabel(item: ReturnType<typeof authProviderPreviewDisplayItem>)"),
-            ("auth provider preview title helper fields", "return `${previewStatusRowTitle(item)} 登入`;"),
-            ("auth provider preview title helper binding", "{authProviderPreviewTitleLabel(item)}"),
-            ("auth provider preview status row copy binding", "{previewStatusRowCopy(item)}"),
-            ("auth provider preview status row status binding", "{previewStatusRowStatusLabel(item)}"),
+            ("auth provider preview list binding", "<AuthProviderPreviewList"),
+            ("auth provider preview list disabled binding", "disabled={isAuthOperationInFlight}"),
+            ("auth provider preview list items binding", "items={authProviderDisplayItems}"),
+            ("auth provider preview list handler binding", "onProviderPress={pressAuthProviderPreview}"),
             ("production auth readiness preview status row title binding", "{previewStatusRowTitle(item)}"),
             ("production auth readiness preview status row copy binding", "{previewStatusRowCopy(item)}"),
             ("production auth readiness preview status row status binding", "{previewStatusRowStatusLabel(item)}"),
@@ -11265,10 +11286,6 @@ def main() -> int:
             (
                 "session management preview status rows render block",
                 r"sessionManagementDisplayItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
-            ),
-            (
-                "auth provider preview status rows render block",
-                r"authProviderDisplayItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
             ),
             (
                 "reminder preview status rows render block",
@@ -11637,9 +11654,9 @@ def main() -> int:
             ("native model download success helper fields", "if (downloadKind === \"llama\") {\n      setLlamaModelPath(boundNativeDebugInput(uri));\n    } else {\n      setWhisperModelPath(boundNativeDebugInput(uri));\n    }\n    await refreshDownloadedModels();\n    setNativeStatus(nativeModelDownloadSuccessStatusMessage());"),
             ("native model download success helper binding", "await handleNativeModelDownloadSuccess(uri);"),
             ("settings local clear binding", "onPress={clearLocalSessionFromSettings}"),
-            ("auth provider preview press binding", "onPress={() => pressAuthProviderPreview(item)}"),
-            ("auth provider accessibility binding", "accessibilityLabel={previewStatusRowAccessibilityLabel(item)}"),
-            ("auth provider disabled state", "accessibilityState={{ disabled: isAuthOperationInFlight }}"),
+            ("auth provider preview list settings binding", "<AuthProviderPreviewList"),
+            ("auth provider preview list handler binding", "onProviderPress={pressAuthProviderPreview}"),
+            ("auth provider preview list disabled state", "disabled={isAuthOperationInFlight}"),
             ("auth action grid binding", "<AccountSecurityActionGrid"),
             ("auth refresh binding", "onRefreshSessionPress={refreshAuthSessionFromSecurity}"),
             ("auth sessions load binding", "onLoadSessionsPress={loadAuthSessionsFromSecurity}"),
@@ -13091,6 +13108,7 @@ def main() -> int:
             ("direct downloaded model list map", "downloadedModels.map((model) => ("),
             ("direct downloaded model row key binding", "key={model.uri}"),
             ("direct downloaded model row label binding", "{downloadedModelDisplayLabel(model)}"),
+            ("direct auth provider preview map", "authProviderDisplayItems.map((item) => ("),
             ("direct auth provider preview binding", "onPress={() => startAuthProviderChallenge(item.provider)}"),
             ("direct auth provider handler target binding", "startAuthProviderChallenge(item.provider);"),
             ("direct auth session management status binding", "onPress={() => showAuthSessionManagementStatus(item.actionStatus)}"),

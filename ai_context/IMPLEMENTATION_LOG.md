@@ -15,6 +15,40 @@
 
 ## 2026-07-16
 
+### T2051 extract auth provider preview list
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/authProviderPreviewList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added generic `AuthProviderPreviewList` for Account Security provider preview rows.
+- Replaced the inline `authProviderDisplayItems.map` Pressable list in `App.tsx`.
+- Preserved provider action target, disabled state while auth operations are in flight, accessibility labels, provider title suffix, copy/status text, and card styling.
+- Updated navigation, UI-spec, and visual-smoke verifier coverage for the component boundary and App wiring.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing adjacent Account Security session display and session-management rows without changing first-version scope.
+
 ### T2050 extract downloaded model list
 
 類型：mobile / refactor / verifier / docs

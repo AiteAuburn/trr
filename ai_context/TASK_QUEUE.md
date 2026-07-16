@@ -34,6 +34,40 @@ None.
 
 ## Done
 
+### T2051: Extract auth provider preview list
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/authProviderPreviewList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added generic `AuthProviderPreviewList` for Account Security provider preview rows.
+- Replaced the inline `authProviderDisplayItems.map` Pressable list in `App.tsx`.
+- Preserved provider action target, disabled state while auth operations are in flight, accessibility labels, provider title suffix, copy/status text, and card styling.
+- Updated navigation, UI-spec, and visual-smoke verifier coverage for the component boundary and App wiring.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing adjacent Account Security session display and session-management rows without changing first-version scope.
+
 ### T2050: Extract downloaded model list
 
 Status: done
