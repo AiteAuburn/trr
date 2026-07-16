@@ -4484,6 +4484,36 @@ def main() -> int:
             "seedEmptyManualRecordStateForNow();\n      openSaveSuccessResult(manualRecordCreateSummaryMessage(1), \"manual\", manualRecordReturnScreen);",
         )
         _assert_contains(
+            "manual create start helper",
+            content,
+            "function startManualCreateRequest()",
+        )
+        _assert_contains(
+            "manual create start helper fields",
+            content,
+            "manualCreateInFlight.current = true;\n    setIsBusy(true);\n    setStatus(manualRecordCreateProgressStatusMessage());",
+        )
+        _assert_contains(
+            "manual create start helper binding",
+            content,
+            "startManualCreateRequest();",
+        )
+        _assert_contains(
+            "manual create finish helper",
+            content,
+            "function finishManualCreateRequest()",
+        )
+        _assert_contains(
+            "manual create finish helper fields",
+            content,
+            "manualCreateInFlight.current = false;\n    setIsBusy(false);",
+        )
+        _assert_contains(
+            "manual create finish helper binding",
+            content,
+            "finishManualCreateRequest();",
+        )
+        _assert_contains(
             "AI save failure result helper",
             content,
             "function openAiSaveFailureResult(message: string)",

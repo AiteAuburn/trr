@@ -7944,6 +7944,17 @@ export default function App() {
     }
   }
 
+  function startManualCreateRequest() {
+    manualCreateInFlight.current = true;
+    setIsBusy(true);
+    setStatus(manualRecordCreateProgressStatusMessage());
+  }
+
+  function finishManualCreateRequest() {
+    manualCreateInFlight.current = false;
+    setIsBusy(false);
+  }
+
   async function createManualRecord() {
     if (isBusy || manualCreateInFlight.current) {
       return;
@@ -7966,9 +7977,7 @@ export default function App() {
       return;
     }
 
-    manualCreateInFlight.current = true;
-    setIsBusy(true);
-    setStatus(manualRecordCreateProgressStatusMessage());
+    startManualCreateRequest();
     try {
       const payload = buildPayloadFromEditFields(manualRecordType, manualRecordFields);
       if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
@@ -8001,8 +8010,7 @@ export default function App() {
     } catch (error) {
       setStatus(manualRecordCreateFailureStatusMessage(error));
     } finally {
-      manualCreateInFlight.current = false;
-      setIsBusy(false);
+      finishManualCreateRequest();
     }
   }
 
