@@ -771,6 +771,7 @@ import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
+import { DoctorShareActionRow } from "./doctorShareActionRow";
 import { HistoryCalendarMonthPicker } from "./historyCalendarMonthPicker";
 import { HistoryDailySummaryTable } from "./historyDailySummaryTable";
 import { HistoryIntroStatusBlocks } from "./historyIntroStatusBlocks";
@@ -11947,24 +11948,14 @@ export default function App() {
               <Text style={styles.label}>{futurePreviewDisplayLabels.backendFoundation}</Text>
               <Text style={styles.evidence}>{doctorShareBackendBoundaryDisplayText}</Text>
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={futurePreviewDisplayLabels.doctorTokenAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={showDoctorShareTokenStatus}
-              >
-                <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.doctorTokenButton}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={futurePreviewDisplayLabels.doctorReportAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={showDoctorShareReportBoundaryStatus}
-              >
-                <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.doctorReportButton}</Text>
-              </Pressable>
-            </View>
+            <DoctorShareActionRow
+              onReportPress={showDoctorShareReportBoundaryStatus}
+              onTokenPress={showDoctorShareTokenStatus}
+              reportAccessibilityLabel={futurePreviewDisplayLabels.doctorReportAccessibility}
+              reportLabel={futurePreviewDisplayLabels.doctorReportButton}
+              tokenAccessibilityLabel={futurePreviewDisplayLabels.doctorTokenAccessibility}
+              tokenLabel={futurePreviewDisplayLabels.doctorTokenButton}
+            />
             {doctorShareActionStatus ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{futurePreviewDisplayLabels.doctorStatus}</Text>

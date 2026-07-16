@@ -55,6 +55,7 @@ FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreviewBlock.tsx"
+DOCTOR_SHARE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "doctorShareActionRow.tsx"
 HISTORY_CALENDAR_MONTH_PICKER_PATH = REPO_ROOT / "mobile" / "historyCalendarMonthPicker.tsx"
 HISTORY_DAILY_RECORD_SECTION_CARD_PATH = REPO_ROOT / "mobile" / "historyDailyRecordSectionCard.tsx"
 HISTORY_DAILY_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historyDailySummaryCard.tsx"
@@ -1417,6 +1418,7 @@ def main() -> int:
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     delete_confirm_preview_block_content = DELETE_CONFIRM_PREVIEW_BLOCK_PATH.read_text(encoding="utf-8")
+    doctor_share_action_row_content = DOCTOR_SHARE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     history_calendar_month_picker_content = HISTORY_CALENDAR_MONTH_PICKER_PATH.read_text(encoding="utf-8")
     history_daily_record_section_card_content = HISTORY_DAILY_RECORD_SECTION_CARD_PATH.read_text(encoding="utf-8")
     history_daily_summary_card_content = HISTORY_DAILY_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
@@ -1578,6 +1580,19 @@ def main() -> int:
             ("delete confirm preview danger icon style", 'backgroundColor: "#C85D5D"'),
         ):
             _assert_contains(label, delete_confirm_preview_block_content, marker)
+        for label, marker in (
+            ("doctor share action row component", "export function DoctorShareActionRow"),
+            ("doctor share action row token accessibility prop", "accessibilityLabel={tokenAccessibilityLabel}"),
+            ("doctor share action row report accessibility prop", "accessibilityLabel={reportAccessibilityLabel}"),
+            ("doctor share action row button role", 'accessibilityRole="button"'),
+            ("doctor share action row token handler prop", "onPress={onTokenPress}"),
+            ("doctor share action row report handler prop", "onPress={onReportPress}"),
+            ("doctor share action row token label", "{tokenLabel}"),
+            ("doctor share action row report label", "{reportLabel}"),
+            ("doctor share action row shell style", "actionRow: {"),
+            ("doctor share action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, doctor_share_action_row_content, marker)
         for label, marker in (
             ("history calendar month picker component", "export function HistoryCalendarMonthPicker<TDay extends HistoryCalendarDayItem>({"),
             ("history calendar month picker title", "<Text style={styles.recordContent}>{title}</Text>"),
@@ -11986,8 +12001,9 @@ def main() -> int:
             ("food community search input helper binding", "setFoodCommunitySearchText(commerceSearchInputValue(value));"),
             ("ranking public status handler", "function showRankingPublicStatus()"),
             ("ranking opt-in status handler", "function showRankingOptInStatus()"),
-            ("doctor share token status binding", "onPress={showDoctorShareTokenStatus}"),
-            ("doctor share report status binding", "onPress={showDoctorShareReportBoundaryStatus}"),
+            ("doctor share action row binding", "<DoctorShareActionRow"),
+            ("doctor share token status binding", "onTokenPress={showDoctorShareTokenStatus}"),
+            ("doctor share report status binding", "onReportPress={showDoctorShareReportBoundaryStatus}"),
             ("health integration permission status binding", "onPress={showHealthIntegrationPermissionStatus}"),
             ("health integration meter status binding", "onPress={showHealthIntegrationMeterStatus}"),
             ("community posting status binding", "onPress={showCommunityPostingStatus}"),
@@ -12002,8 +12018,10 @@ def main() -> int:
             ("ranking opt-in status binding", "onPress={rankingOptInActionPressTarget}"),
             ("ranking opt-in dynamic button label", "const rankingOptInButtonDisplayLabel = rankingOptInActionButtonLabel(communityActionDisplay.rankingOptInButton);"),
             ("ranking opt-in dynamic accessibility label", "const rankingOptInAccessibilityDisplayLabel = rankingOptInActionAccessibilityLabel(communityActionDisplay.rankingOptInAccessibility);"),
-            ("doctor token accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.doctorTokenAccessibility}"),
-            ("doctor report accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.doctorReportAccessibility}"),
+            ("doctor token accessibility binding", "tokenAccessibilityLabel={futurePreviewDisplayLabels.doctorTokenAccessibility}"),
+            ("doctor report accessibility binding", "reportAccessibilityLabel={futurePreviewDisplayLabels.doctorReportAccessibility}"),
+            ("doctor token label binding", "tokenLabel={futurePreviewDisplayLabels.doctorTokenButton}"),
+            ("doctor report label binding", "reportLabel={futurePreviewDisplayLabels.doctorReportButton}"),
             ("health permission accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.healthPermissionAccessibility}"),
             ("health meter accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.healthMeterAccessibility}"),
             ("community post accessibility binding", "accessibilityLabel={communityPostAccessibilityDisplayLabel}"),
