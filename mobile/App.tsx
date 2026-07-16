@@ -8484,6 +8484,14 @@ export default function App() {
     openScreenWithStatus(screen, statusMessage);
   }
 
+  function openRecordUpdateUnavailable() {
+    openRecordActionUnavailable("editRecord", recordUpdateUnavailableStatusMessage(protectedBackendUnavailableMessage));
+  }
+
+  function openRecordDeleteUnavailable() {
+    openRecordActionUnavailable("deleteConfirm", recordDeleteUnavailableStatusMessage(protectedBackendUnavailableMessage));
+  }
+
   function startRecordUpdateRequest() {
     recordUpdateInFlight.current = true;
     setIsBusy(true);
@@ -8570,7 +8578,7 @@ export default function App() {
       return null;
     }
     if (!protectedBackendReady) {
-      openRecordActionUnavailable("editRecord", recordUpdateUnavailableStatusMessage(protectedBackendUnavailableMessage));
+      openRecordUpdateUnavailable();
       return null;
     }
     if (!account) {
@@ -8650,7 +8658,7 @@ export default function App() {
       return null;
     }
     if (!protectedBackendReady) {
-      openRecordActionUnavailable("deleteConfirm", recordDeleteUnavailableStatusMessage(protectedBackendUnavailableMessage));
+      openRecordDeleteUnavailable();
       return null;
     }
     if (!account) {

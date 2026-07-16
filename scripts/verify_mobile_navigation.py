@@ -5126,7 +5126,7 @@ def main() -> int:
         _assert_contains(
             "record update guarded context unavailable guard",
             content,
-            "if (!protectedBackendReady) {\n      openRecordActionUnavailable(\"editRecord\", recordUpdateUnavailableStatusMessage(protectedBackendUnavailableMessage));\n      return null;\n    }",
+            "if (!protectedBackendReady) {\n      openRecordUpdateUnavailable();\n      return null;\n    }",
         )
         _assert_contains(
             "record update guarded context account guard",
@@ -5551,7 +5551,7 @@ def main() -> int:
         _assert_contains(
             "record delete guarded context unavailable guard",
             content,
-            "if (!protectedBackendReady) {\n      openRecordActionUnavailable(\"deleteConfirm\", recordDeleteUnavailableStatusMessage(protectedBackendUnavailableMessage));\n      return null;\n    }",
+            "if (!protectedBackendReady) {\n      openRecordDeleteUnavailable();\n      return null;\n    }",
         )
         _assert_contains(
             "record delete guarded context account guard",
@@ -5814,14 +5814,34 @@ def main() -> int:
             "openScreenWithStatus(screen, statusMessage);",
         )
         _assert_contains(
-            "record update unavailable helper binding",
+            "record update unavailable helper",
+            content,
+            "function openRecordUpdateUnavailable()",
+        )
+        _assert_contains(
+            "record update unavailable helper fields",
             content,
             'openRecordActionUnavailable("editRecord", recordUpdateUnavailableStatusMessage(protectedBackendUnavailableMessage));',
         )
         _assert_contains(
-            "record delete unavailable helper binding",
+            "record delete unavailable helper",
+            content,
+            "function openRecordDeleteUnavailable()",
+        )
+        _assert_contains(
+            "record delete unavailable helper fields",
             content,
             'openRecordActionUnavailable("deleteConfirm", recordDeleteUnavailableStatusMessage(protectedBackendUnavailableMessage));',
+        )
+        _assert_contains(
+            "record update unavailable helper binding",
+            content,
+            "openRecordUpdateUnavailable();",
+        )
+        _assert_contains(
+            "record delete unavailable helper binding",
+            content,
+            "openRecordDeleteUnavailable();",
         )
         _assert_contains(
             "delete success destination card binding",
