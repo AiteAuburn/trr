@@ -4301,7 +4301,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit records builder helper internals",
             content,
-            "return previewRecordsWithEditedRecord(\n      currentPreview.records,\n      editIndex,\n      localDateTimeToIso(previewEditDate, previewEditTime),\n      payload\n    );",
+            "return previewRecordsWithEditedRecord(\n      currentPreview.records,\n      editIndex,\n      previewRecordEditOccurredAt(),\n      payload\n    );",
+        )
+        _assert_contains(
+            "AI candidate preview edit occurred-at helper",
+            content,
+            "function previewRecordEditOccurredAt()",
+        )
+        _assert_contains(
+            "AI candidate preview edit occurred-at helper internals",
+            content,
+            "function previewRecordEditOccurredAt() {\n    return localDateTimeToIso(previewEditDate, previewEditTime);",
         )
         _assert_contains(
             "AI candidate preview edit records builder helper binding",

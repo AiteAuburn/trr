@@ -3988,9 +3988,13 @@ export default function App() {
     return previewRecordsWithEditedRecord(
       currentPreview.records,
       editIndex,
-      localDateTimeToIso(previewEditDate, previewEditTime),
+      previewRecordEditOccurredAt(),
       payload
     );
+  }
+
+  function previewRecordEditOccurredAt() {
+    return localDateTimeToIso(previewEditDate, previewEditTime);
   }
 
   function buildPreviewRecordEditChangeRecords(

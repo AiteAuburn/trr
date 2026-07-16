@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1859: Reuse preview edit occurred-at helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `previewRecordEditOccurredAt()` for the edit-record occurred-at timestamp derived from the preview edit date/time inputs.
+- Reused the helper from `buildPreviewRecordEditRecords()` while preserving the existing `localDateTimeToIso(previewEditDate, previewEditTime)` behavior.
+- Updated navigation verifier coverage for the build-records binding and occurred-at helper internals.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser endpoint/request semantics/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining preview edit/remove build helpers in small behavior-preserving slices.
+
 ### T1858: Reuse preview edit validation error guard
 
 Status: done
