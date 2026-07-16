@@ -3361,8 +3361,12 @@ export default function App() {
     setPreviewEditFields(emptyRecordEditFields());
   }
 
-  function clearSelectedPreviewEditDraft() {
+  function clearSelectedPreviewEditSelection() {
     setSelectedPreviewIndex(null);
+  }
+
+  function clearSelectedPreviewEditDraft() {
+    clearSelectedPreviewEditSelection();
     clearPreviewEditDraftFields();
   }
 
@@ -3372,7 +3376,7 @@ export default function App() {
   }
 
   function clearPreviewEditSelectionState() {
-    setSelectedPreviewIndex(null);
+    clearSelectedPreviewEditSelection();
     clearDailyRecordEntryMenu();
   }
 
@@ -3397,7 +3401,7 @@ export default function App() {
   }
 
   function clearPreviewMenuSelectionIndexes() {
-    setSelectedPreviewIndex(null);
+    clearSelectedPreviewEditSelection();
     clearPreviewRemoveActionState();
   }
 
