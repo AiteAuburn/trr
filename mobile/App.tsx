@@ -3842,12 +3842,16 @@ export default function App() {
     return {
       existingDailyPreview,
       parserVoiceSeconds: parserPreviewVoiceSeconds(),
-      parseOccurredAt: new Date().toISOString()
+      parseOccurredAt: parserPreviewOccurredAt()
     };
   }
 
   function parserPreviewVoiceSeconds() {
     return clampNumber(transcriptVoiceSeconds, 0, maxMobileCountValue);
+  }
+
+  function parserPreviewOccurredAt() {
+    return new Date().toISOString();
   }
 
   function finishParserPreviewRequest() {
