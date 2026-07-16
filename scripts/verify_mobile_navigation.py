@@ -4436,12 +4436,22 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit save draft helper guard",
             content,
-            "function previewRecordEditSaveDraft() {\n    if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {\n      return null;",
+            "function previewRecordEditSaveDraft() {\n    const editDraftSource = {\n      currentPreview: preview,\n      editIndex: selectedPreviewIndex,\n      record: selectedPreviewRecord\n    };\n    if (!hasPreviewRecordEditSaveDraft(editDraftSource)) {\n      return null;",
+        )
+        _assert_contains(
+            "AI candidate preview edit save draft readiness helper",
+            content,
+            "function hasPreviewRecordEditSaveDraft(source: {",
+        )
+        _assert_contains(
+            "AI candidate preview edit save draft readiness helper internals",
+            content,
+            "return Boolean(source.currentPreview && source.editIndex !== null && source.record);",
         )
         _assert_contains(
             "AI candidate preview edit save draft helper payload",
             content,
-            "return {\n      currentPreview: preview,\n      editIndex: selectedPreviewIndex,\n      record: selectedPreviewRecord\n    };",
+            "return {\n      currentPreview: editDraftSource.currentPreview,\n      editIndex: editDraftSource.editIndex,\n      record: editDraftSource.record\n    };",
         )
         _assert_contains(
             "AI candidate preview edit change helper",

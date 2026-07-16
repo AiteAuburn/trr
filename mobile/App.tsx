@@ -4014,14 +4014,31 @@ export default function App() {
   }
 
   function previewRecordEditSaveDraft() {
-    if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {
-      return null;
-    }
-    return {
+    const editDraftSource = {
       currentPreview: preview,
       editIndex: selectedPreviewIndex,
       record: selectedPreviewRecord
     };
+    if (!hasPreviewRecordEditSaveDraft(editDraftSource)) {
+      return null;
+    }
+    return {
+      currentPreview: editDraftSource.currentPreview,
+      editIndex: editDraftSource.editIndex,
+      record: editDraftSource.record
+    };
+  }
+
+  function hasPreviewRecordEditSaveDraft(source: {
+    currentPreview: ParsePreviewResponse | null;
+    editIndex: number | null;
+    record: PendingRecord | null;
+  }): source is {
+    currentPreview: ParsePreviewResponse;
+    editIndex: number;
+    record: PendingRecord;
+  } {
+    return Boolean(source.currentPreview && source.editIndex !== null && source.record);
   }
 
   function savePreviewRecordEditDraft(

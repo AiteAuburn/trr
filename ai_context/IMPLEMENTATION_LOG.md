@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1855 reuse preview edit save draft readiness helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `hasPreviewRecordEditSaveDraft()` as a small type guard for edit-save draft readiness.
+- Reused the helper from `previewRecordEditSaveDraft()` while preserving its missing-draft return behavior and draft payload fields.
+- Updated navigation verifier coverage for the draft source, readiness helper, helper internals, and narrowed payload fields.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining preview edit/remove draft helpers in small behavior-preserving slices.
+
 ### T1854 reuse preview remove missing confirm reset helper
 
 類型：mobile / refactor / verifier / docs
