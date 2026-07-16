@@ -786,6 +786,7 @@ import { AccountSecurityActionGrid } from "./accountSecurityActionGrid";
 import { BackendUrlField } from "./backendUrlField";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
+import { InsightEmptyActionRow } from "./insightEmptyActionRow";
 import { CommunityPublicDisplayNameField } from "./communityPublicDisplayNameField";
 import { ManualRecordCreatePreviewAction } from "./manualRecordCreatePreviewAction";
 import { ManualRecordConfirmFooterActions } from "./manualRecordConfirmFooterActions";
@@ -11362,24 +11363,14 @@ export default function App() {
             </View>
             <Text style={styles.evidence}>{analysisRangeSummaryDisplayText}</Text>
             {analysisGlucoseRecords.length === 0 ? (
-              <View style={styles.actionRow}>
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.analysisManualAccessibility}
-                  accessibilityRole="button"
-                  style={styles.secondaryButton}
-                  onPress={openAnalysisManualRecord}
-                >
-                  <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.manualAdd}</Text>
-                </Pressable>
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.analysisReturnTodayAccessibility}
-                  accessibilityRole="button"
-                  style={styles.secondaryButton}
-                  onPress={returnFromAnalysisToToday}
-                >
-                  <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.backTodayAlt}</Text>
-                </Pressable>
-              </View>
+              <InsightEmptyActionRow
+                manualAccessibilityLabel={coreFlowDisplayLabels.analysisManualAccessibility}
+                manualLabel={coreFlowDisplayLabels.manualAdd}
+                onManualPress={openAnalysisManualRecord}
+                onReturnPress={returnFromAnalysisToToday}
+                returnAccessibilityLabel={coreFlowDisplayLabels.analysisReturnTodayAccessibility}
+                returnLabel={coreFlowDisplayLabels.backTodayAlt}
+              />
             ) : null}
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.analysisDataBoundary}</Text>
@@ -11448,24 +11439,14 @@ export default function App() {
               ))}
             </View>
             {reportRecordCount === 0 ? (
-              <View style={styles.actionRow}>
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.reportManualAccessibility}
-                  accessibilityRole="button"
-                  style={styles.secondaryButton}
-                  onPress={openDetailedReportManualRecord}
-                >
-                  <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.manualAdd}</Text>
-                </Pressable>
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.reportReturnTodayAccessibility}
-                  accessibilityRole="button"
-                  style={styles.secondaryButton}
-                  onPress={returnFromDetailedReportToToday}
-                >
-                  <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.backTodayAlt}</Text>
-                </Pressable>
-              </View>
+              <InsightEmptyActionRow
+                manualAccessibilityLabel={coreFlowDisplayLabels.reportManualAccessibility}
+                manualLabel={coreFlowDisplayLabels.manualAdd}
+                onManualPress={openDetailedReportManualRecord}
+                onReturnPress={returnFromDetailedReportToToday}
+                returnAccessibilityLabel={coreFlowDisplayLabels.reportReturnTodayAccessibility}
+                returnLabel={coreFlowDisplayLabels.backTodayAlt}
+              />
             ) : null}
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.reportNotes}</Text>

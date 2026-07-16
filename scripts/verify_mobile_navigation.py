@@ -77,6 +77,7 @@ FIELD_LABEL_PATH = REPO_ROOT / "mobile" / "fieldLabel.tsx"
 DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "detailRow.tsx"
 HIGHLIGHT_BULLET_ROW_PATH = REPO_ROOT / "mobile" / "highlightBulletRow.tsx"
 HIGHLIGHT_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "highlightDetailRow.tsx"
+INSIGHT_EMPTY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "insightEmptyActionRow.tsx"
 MANUAL_RECORD_CREATE_PREVIEW_ACTION_PATH = REPO_ROOT / "mobile" / "manualRecordCreatePreviewAction.tsx"
 MANUAL_RECORD_CONFIRM_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmFooterActions.tsx"
 MANUAL_RECORD_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "manualRecordConfirmPreviewBlock.tsx"
@@ -1444,6 +1445,7 @@ def main() -> int:
     detail_row_content = DETAIL_ROW_PATH.read_text(encoding="utf-8")
     highlight_bullet_row_content = HIGHLIGHT_BULLET_ROW_PATH.read_text(encoding="utf-8")
     highlight_detail_row_content = HIGHLIGHT_DETAIL_ROW_PATH.read_text(encoding="utf-8")
+    insight_empty_action_row_content = INSIGHT_EMPTY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     manual_record_create_preview_action_content = MANUAL_RECORD_CREATE_PREVIEW_ACTION_PATH.read_text(
         encoding="utf-8"
     )
@@ -1902,6 +1904,19 @@ def main() -> int:
             ("highlight detail evidence line height", "lineHeight: 19"),
         ):
             _assert_contains(label, highlight_detail_row_content, marker)
+        for label, marker in (
+            ("insight empty action row component", "export function InsightEmptyActionRow"),
+            ("insight empty action row manual accessibility prop", "accessibilityLabel={manualAccessibilityLabel}"),
+            ("insight empty action row return accessibility prop", "accessibilityLabel={returnAccessibilityLabel}"),
+            ("insight empty action row button role", 'accessibilityRole="button"'),
+            ("insight empty action row manual handler prop", "onPress={onManualPress}"),
+            ("insight empty action row return handler prop", "onPress={onReturnPress}"),
+            ("insight empty action row manual label", "{manualLabel}"),
+            ("insight empty action row return label", "{returnLabel}"),
+            ("insight empty action row shell style", "actionRow: {"),
+            ("insight empty action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, insight_empty_action_row_content, marker)
         for label, marker in (
             ("food community share field highlight detail row", "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityShareFieldRowKey(row)}\n                  label={foodCommunityShareFieldRowLabel(row)}\n                  value={foodCommunityShareFieldRowValue(row)}"),
             ("food community ranking highlight detail row", "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityRankingRowKey(row)}\n                  label={foodCommunityRankingRowLabel(row)}\n                  value={foodCommunityRankingRowValue(row)}"),
@@ -9707,12 +9722,12 @@ def main() -> int:
         _assert_contains(
             "analysis manual entry binding",
             content,
-            "onPress={openAnalysisManualRecord}",
+            "onManualPress={openAnalysisManualRecord}",
         )
         _assert_contains(
             "analysis return today binding",
             content,
-            "onPress={returnFromAnalysisToToday}",
+            "onReturnPress={returnFromAnalysisToToday}",
         )
         _assert_contains(
             "analysis detailed report binding",
@@ -9735,8 +9750,11 @@ def main() -> int:
         ):
             _assert_contains(label, first_version_flow_copy_content, marker)
         for label, marker in (
-            ("analysis manual accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.analysisManualAccessibility}"),
-            ("analysis today accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.analysisReturnTodayAccessibility}"),
+            ("analysis empty action row binding", "<InsightEmptyActionRow"),
+            ("analysis manual accessibility binding", "manualAccessibilityLabel={coreFlowDisplayLabels.analysisManualAccessibility}"),
+            ("analysis today accessibility binding", "returnAccessibilityLabel={coreFlowDisplayLabels.analysisReturnTodayAccessibility}"),
+            ("analysis manual label binding", "manualLabel={coreFlowDisplayLabels.manualAdd}"),
+            ("analysis return label binding", "returnLabel={coreFlowDisplayLabels.backTodayAlt}"),
             ("analysis detailed report accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.analysisDetailedReportAccessibility}"),
             ("analysis detailed report disabled state", "accessibilityState={{ disabled: isReportLoading }}"),
             ("analysis custom apply accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.analysisApplyCustomRangeAccessibility}"),
@@ -9752,8 +9770,10 @@ def main() -> int:
             ("transcript review draft shared input style", "inputStyle={[styles.input, styles.transcriptReviewInput]}"),
             ("transcript review draft shared input placeholder", 'placeholder="輸入或貼上血糖、飲食、運動或用藥紀錄..."'),
             ("report return analysis accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.reportReturnAnalysisAccessibility}"),
-            ("report manual accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.reportManualAccessibility}"),
-            ("report today accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.reportReturnTodayAccessibility}"),
+            ("report manual accessibility binding", "manualAccessibilityLabel={coreFlowDisplayLabels.reportManualAccessibility}"),
+            ("report today accessibility binding", "returnAccessibilityLabel={coreFlowDisplayLabels.reportReturnTodayAccessibility}"),
+            ("report manual label binding", "manualLabel={coreFlowDisplayLabels.manualAdd}"),
+            ("report return label binding", "returnLabel={coreFlowDisplayLabels.backTodayAlt}"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(
@@ -10413,12 +10433,12 @@ def main() -> int:
         _assert_contains(
             "detailed report manual entry binding",
             content,
-            "onPress={openDetailedReportManualRecord}",
+            "onManualPress={openDetailedReportManualRecord}",
         )
         _assert_contains(
             "detailed report return today binding",
             content,
-            "onPress={returnFromDetailedReportToToday}",
+            "onReturnPress={returnFromDetailedReportToToday}",
         )
         rejected_box_block = _style_block(content, "rejectedBox")
         _assert_not_contains(
