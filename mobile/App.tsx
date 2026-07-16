@@ -812,6 +812,7 @@ import { SegmentSelector } from "./segmentSelector";
 import { SettingsSubpageActionRow } from "./settingsSubpageActionRow";
 import { SettingsSubpageCloseButton } from "./settingsSubpageCloseButton";
 import { StoreSearchField } from "./storeSearchField";
+import { SubscriptionSubpageActionRow } from "./subscriptionSubpageActionRow";
 import { SubscriptionSubpageCloseButton } from "./subscriptionSubpageCloseButton";
 import type {
   Account,
@@ -11642,24 +11643,14 @@ export default function App() {
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.noAction}</Text>
               <Text style={styles.evidence}>{subscriptionManagementNoActionDisplayText}</Text>
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={returnFromSubscriptionManagementToSettings}
-              >
-                <Text style={styles.secondaryButtonText}>{settingsSubscriptionDisplayLabels.returnSettings}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={settingsSubscriptionDisplayLabels.paymentIntegrationAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={showSubscriptionManagementPaymentStatus}
-              >
-                <Text style={styles.secondaryButtonText}>{settingsSubscriptionDisplayLabels.paymentIntegrationButton}</Text>
-              </Pressable>
-            </View>
+            <SubscriptionSubpageActionRow
+              actionAccessibilityLabel={settingsSubscriptionDisplayLabels.paymentIntegrationAccessibility}
+              actionLabel={settingsSubscriptionDisplayLabels.paymentIntegrationButton}
+              onActionPress={showSubscriptionManagementPaymentStatus}
+              onReturnPress={returnFromSubscriptionManagementToSettings}
+              returnAccessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}
+              returnLabel={settingsSubscriptionDisplayLabels.returnSettings}
+            />
             {subscriptionManagementActionStatus ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{settingsSubscriptionDisplayLabels.paymentIntegrationStatus}</Text>

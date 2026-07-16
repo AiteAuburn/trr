@@ -40,6 +40,7 @@ SETTINGS_CHOICE_DISPLAY_PATH = REPO_ROOT / "mobile" / "settingsChoiceDisplay.ts"
 MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "modelTransforms.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
 SUBSCRIPTION_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "subscriptionTransforms.ts"
+SUBSCRIPTION_SUBPAGE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "subscriptionSubpageActionRow.tsx"
 SUBSCRIPTION_SUBPAGE_CLOSE_BUTTON_PATH = REPO_ROOT / "mobile" / "subscriptionSubpageCloseButton.tsx"
 ACCOUNT_COPY_PATH = REPO_ROOT / "mobile" / "accountCopy.ts"
 ACCOUNT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "accountTransforms.ts"
@@ -1400,6 +1401,7 @@ def main() -> int:
     model_transforms_content = MODEL_TRANSFORMS_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
     subscription_transforms_content = SUBSCRIPTION_TRANSFORMS_PATH.read_text(encoding="utf-8")
+    subscription_subpage_action_row_content = SUBSCRIPTION_SUBPAGE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     subscription_subpage_close_button_content = SUBSCRIPTION_SUBPAGE_CLOSE_BUTTON_PATH.read_text(encoding="utf-8")
     account_copy_content = ACCOUNT_COPY_PATH.read_text(encoding="utf-8")
     account_transforms_content = ACCOUNT_TRANSFORMS_PATH.read_text(encoding="utf-8")
@@ -14938,8 +14940,8 @@ def main() -> int:
             ("subscription management open binding", "onPress={openSubscriptionManagementFromSubscription}"),
             ("subscription membership status binding", "onPress={openMembershipStatusFromSubscription}"),
             ("subscription management sync binding", "onPress={syncSubscriptionManagementStatus}"),
-            ("subscription management return binding", "onPress={returnFromSubscriptionManagementToSettings}"),
-            ("subscription management payment binding", "onPress={showSubscriptionManagementPaymentStatus}"),
+            ("subscription management return binding", "onReturnPress={returnFromSubscriptionManagementToSettings}"),
+            ("subscription management payment binding", "onActionPress={showSubscriptionManagementPaymentStatus}"),
             ("membership return subscription binding", "onPress={returnFromMembershipStatusToSubscription}"),
             ("membership renewal management binding", "onPress={openMembershipRenewalManagement}"),
             ("membership management binding", "onPress={openMembershipManagement}"),
@@ -14972,6 +14974,19 @@ def main() -> int:
         ):
             _assert_contains(label, subscription_subpage_close_button_content, marker)
         for label, marker in (
+            ("subscription subpage action row component", "export function SubscriptionSubpageActionRow"),
+            ("subscription subpage action row return accessibility prop", "accessibilityLabel={returnAccessibilityLabel}"),
+            ("subscription subpage action row action accessibility prop", "accessibilityLabel={actionAccessibilityLabel}"),
+            ("subscription subpage action row button role", 'accessibilityRole="button"'),
+            ("subscription subpage action row return handler prop", "onPress={onReturnPress}"),
+            ("subscription subpage action row action handler prop", "onPress={onActionPress}"),
+            ("subscription subpage action row return label", "{returnLabel}"),
+            ("subscription subpage action row action label", "{actionLabel}"),
+            ("subscription subpage action row shell style", "actionRow: {"),
+            ("subscription subpage action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, subscription_subpage_action_row_content, marker)
+        for label, marker in (
             ("subscription quota accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.syncQuotaAccessibility}"),
             ("subscription trial accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.trialIntegrationAccessibility}"),
             ("subscription management accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.manageSubscribedPlanAccessibility}"),
@@ -14980,8 +14995,11 @@ def main() -> int:
             ("subscription subpage close accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.closeReturn}"),
             ("subscription subpage close management handler binding", "onPress={returnFromSubscriptionManagementToSettings}"),
             ("subscription subpage close membership handler binding", "onPress={returnFromMembershipStatusToSubscription}"),
-            ("subscription return settings accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}"),
-            ("subscription payment accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.paymentIntegrationAccessibility}"),
+            ("subscription subpage action row binding", "<SubscriptionSubpageActionRow"),
+            ("subscription return settings accessibility binding", "returnAccessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}"),
+            ("subscription return settings label binding", "returnLabel={settingsSubscriptionDisplayLabels.returnSettings}"),
+            ("subscription payment accessibility binding", "actionAccessibilityLabel={settingsSubscriptionDisplayLabels.paymentIntegrationAccessibility}"),
+            ("subscription payment label binding", "actionLabel={settingsSubscriptionDisplayLabels.paymentIntegrationButton}"),
             ("membership renewal accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.renewalIntegrationAccessibility}"),
             ("membership manage accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.managePlanAccessibility}"),
             ("subscription primary CTA button role", 'accessibilityRole="button"\n              style={styles.primaryButtonFull}'),
