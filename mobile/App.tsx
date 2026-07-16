@@ -3410,8 +3410,24 @@ export default function App() {
     updatePreviewEditField("glucoseUnit", value);
   }
 
-  function previewEditOptionTarget(option: { value: string }) {
+  function editOptionKey(option: { value: string }) {
     return option.value;
+  }
+
+  function editOptionAccessibilityLabel(option: { accessibilityLabel: string }) {
+    return option.accessibilityLabel;
+  }
+
+  function editOptionLabel(option: { label: string }) {
+    return option.label;
+  }
+
+  function editOptionIsSelected(option: { value: string }, selectedValue: string) {
+    return editOptionKey(option) === selectedValue;
+  }
+
+  function previewEditOptionTarget(option: { value: string }) {
+    return editOptionKey(option);
   }
 
   function pressPreviewEditGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>) {
@@ -7766,7 +7782,7 @@ export default function App() {
   }
 
   function recordEditOptionTarget(option: { value: string }) {
-    return option.value;
+    return editOptionKey(option);
   }
 
   function pressRecordEditGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>) {
@@ -8948,54 +8964,60 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.segmentRow}>
-                  {glucoseUnitDisplayOptions.map((option) => (
-                    <Pressable
-                      key={option.value}
-                      accessibilityLabel={option.accessibilityLabel}
-                      accessibilityRole="button"
-                      accessibilityState={{ selected: previewEditFields.glucoseUnit === option.value }}
-                      style={[
-                        styles.segmentPill,
-                        previewEditFields.glucoseUnit === option.value ? styles.segmentActive : null
-                      ]}
-                      onPress={() => pressPreviewEditGlucoseUnitOption(option)}
-                    >
-                      <Text
-                        style={[
-                          styles.segmentText,
-                          previewEditFields.glucoseUnit === option.value ? styles.segmentTextActive : null
-                        ]}
-                      >
-                        {option.label}
-                      </Text>
-                    </Pressable>
-                  ))}
-                </View>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"◌"} label={"情境"} />
-                  <View style={styles.segmentRow}>
-                    {glucoseTimingDisplayOptions.map((option) => (
+                  {glucoseUnitDisplayOptions.map((option) => {
+                    const optionSelected = editOptionIsSelected(option, previewEditFields.glucoseUnit);
+                    return (
                       <Pressable
-                        key={option.value}
-                        accessibilityLabel={option.accessibilityLabel}
+                        key={editOptionKey(option)}
+                        accessibilityLabel={editOptionAccessibilityLabel(option)}
                         accessibilityRole="button"
-                        accessibilityState={{ selected: previewEditFields.glucoseTiming === option.value }}
+                        accessibilityState={{ selected: optionSelected }}
                         style={[
                           styles.segmentPill,
-                          previewEditFields.glucoseTiming === option.value ? styles.segmentActive : null
+                          optionSelected ? styles.segmentActive : null
                         ]}
-                        onPress={() => pressPreviewEditGlucoseTimingOption(option)}
+                        onPress={() => pressPreviewEditGlucoseUnitOption(option)}
                       >
                         <Text
                           style={[
                             styles.segmentText,
-                            previewEditFields.glucoseTiming === option.value ? styles.segmentTextActive : null
+                            optionSelected ? styles.segmentTextActive : null
                           ]}
                         >
-                          {option.label}
+                          {editOptionLabel(option)}
                         </Text>
                       </Pressable>
-                    ))}
+                    );
+                  })}
+                </View>
+                <View style={styles.formField}>
+                  <FieldLabel icon={"◌"} label={"情境"} />
+                  <View style={styles.segmentRow}>
+                    {glucoseTimingDisplayOptions.map((option) => {
+                      const optionSelected = editOptionIsSelected(option, previewEditFields.glucoseTiming);
+                      return (
+                        <Pressable
+                          key={editOptionKey(option)}
+                          accessibilityLabel={editOptionAccessibilityLabel(option)}
+                          accessibilityRole="button"
+                          accessibilityState={{ selected: optionSelected }}
+                          style={[
+                            styles.segmentPill,
+                            optionSelected ? styles.segmentActive : null
+                          ]}
+                          onPress={() => pressPreviewEditGlucoseTimingOption(option)}
+                        >
+                          <Text
+                            style={[
+                              styles.segmentText,
+                              optionSelected ? styles.segmentTextActive : null
+                            ]}
+                          >
+                            {editOptionLabel(option)}
+                          </Text>
+                        </Pressable>
+                      );
+                    })}
                   </View>
                 </View>
               </>
@@ -9005,28 +9027,31 @@ export default function App() {
                 <View style={styles.formField}>
                   <FieldLabel icon={"🥣"} label={"餐別"} />
                   <View style={styles.segmentRow}>
-                    {mealTypeDisplayOptions.map((option) => (
-                      <Pressable
-                        key={option.value}
-                        accessibilityLabel={option.accessibilityLabel}
-                        accessibilityRole="button"
-                        accessibilityState={{ selected: previewEditFields.mealType === option.value }}
-                        style={[
-                          styles.segmentPill,
-                          previewEditFields.mealType === option.value ? styles.segmentActive : null
-                        ]}
-                        onPress={() => pressPreviewEditMealTypeOption(option)}
-                      >
-                        <Text
+                    {mealTypeDisplayOptions.map((option) => {
+                      const optionSelected = editOptionIsSelected(option, previewEditFields.mealType);
+                      return (
+                        <Pressable
+                          key={editOptionKey(option)}
+                          accessibilityLabel={editOptionAccessibilityLabel(option)}
+                          accessibilityRole="button"
+                          accessibilityState={{ selected: optionSelected }}
                           style={[
-                            styles.segmentText,
-                            previewEditFields.mealType === option.value ? styles.segmentTextActive : null
+                            styles.segmentPill,
+                            optionSelected ? styles.segmentActive : null
                           ]}
+                          onPress={() => pressPreviewEditMealTypeOption(option)}
                         >
-                          {option.label}
-                        </Text>
-                      </Pressable>
-                    ))}
+                          <Text
+                            style={[
+                              styles.segmentText,
+                              optionSelected ? styles.segmentTextActive : null
+                            ]}
+                          >
+                            {editOptionLabel(option)}
+                          </Text>
+                        </Pressable>
+                      );
+                    })}
                   </View>
                 </View>
                 <View style={styles.formField}>
@@ -9800,54 +9825,60 @@ export default function App() {
                   />
                 </View>
                 <View style={styles.segmentRow}>
-                  {glucoseUnitDisplayOptions.map((option) => (
-                    <Pressable
-                      key={option.value}
-                      accessibilityLabel={option.accessibilityLabel}
-                      accessibilityRole="button"
-                      accessibilityState={{ selected: recordEditFields.glucoseUnit === option.value }}
-                      style={[
-                        styles.segmentPill,
-                        recordEditFields.glucoseUnit === option.value ? styles.segmentActive : null
-                      ]}
-                      onPress={() => pressRecordEditGlucoseUnitOption(option)}
-                    >
-                      <Text
-                        style={[
-                          styles.segmentText,
-                          recordEditFields.glucoseUnit === option.value ? styles.segmentTextActive : null
-                        ]}
-                      >
-                        {option.label}
-                      </Text>
-                    </Pressable>
-                  ))}
-                </View>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"◌"} label={"情境"} />
-                  <View style={styles.segmentRow}>
-                    {glucoseTimingDisplayOptions.map((option) => (
+                  {glucoseUnitDisplayOptions.map((option) => {
+                    const optionSelected = editOptionIsSelected(option, recordEditFields.glucoseUnit);
+                    return (
                       <Pressable
-                        key={option.value}
-                        accessibilityLabel={option.accessibilityLabel}
+                        key={editOptionKey(option)}
+                        accessibilityLabel={editOptionAccessibilityLabel(option)}
                         accessibilityRole="button"
-                        accessibilityState={{ selected: recordEditFields.glucoseTiming === option.value }}
+                        accessibilityState={{ selected: optionSelected }}
                         style={[
                           styles.segmentPill,
-                          recordEditFields.glucoseTiming === option.value ? styles.segmentActive : null
+                          optionSelected ? styles.segmentActive : null
                         ]}
-                        onPress={() => pressRecordEditGlucoseTimingOption(option)}
+                        onPress={() => pressRecordEditGlucoseUnitOption(option)}
                       >
                         <Text
                           style={[
                             styles.segmentText,
-                            recordEditFields.glucoseTiming === option.value ? styles.segmentTextActive : null
+                            optionSelected ? styles.segmentTextActive : null
                           ]}
                         >
-                          {option.label}
+                          {editOptionLabel(option)}
                         </Text>
                       </Pressable>
-                    ))}
+                    );
+                  })}
+                </View>
+                <View style={styles.formField}>
+                  <FieldLabel icon={"◌"} label={"情境"} />
+                  <View style={styles.segmentRow}>
+                    {glucoseTimingDisplayOptions.map((option) => {
+                      const optionSelected = editOptionIsSelected(option, recordEditFields.glucoseTiming);
+                      return (
+                        <Pressable
+                          key={editOptionKey(option)}
+                          accessibilityLabel={editOptionAccessibilityLabel(option)}
+                          accessibilityRole="button"
+                          accessibilityState={{ selected: optionSelected }}
+                          style={[
+                            styles.segmentPill,
+                            optionSelected ? styles.segmentActive : null
+                          ]}
+                          onPress={() => pressRecordEditGlucoseTimingOption(option)}
+                        >
+                          <Text
+                            style={[
+                              styles.segmentText,
+                              optionSelected ? styles.segmentTextActive : null
+                            ]}
+                          >
+                            {editOptionLabel(option)}
+                          </Text>
+                        </Pressable>
+                      );
+                    })}
                   </View>
                 </View>
               </>
@@ -9858,28 +9889,31 @@ export default function App() {
                 <View style={styles.formField}>
                   <FieldLabel icon={"🥣"} label={"餐別"} />
                   <View style={styles.segmentRow}>
-                    {mealTypeDisplayOptions.map((option) => (
-                      <Pressable
-                        key={option.value}
-                        accessibilityLabel={option.accessibilityLabel}
-                        accessibilityRole="button"
-                        accessibilityState={{ selected: recordEditFields.mealType === option.value }}
-                        style={[
-                          styles.segmentPill,
-                          recordEditFields.mealType === option.value ? styles.segmentActive : null
-                        ]}
-                        onPress={() => pressRecordEditMealTypeOption(option)}
-                      >
-                        <Text
+                    {mealTypeDisplayOptions.map((option) => {
+                      const optionSelected = editOptionIsSelected(option, recordEditFields.mealType);
+                      return (
+                        <Pressable
+                          key={editOptionKey(option)}
+                          accessibilityLabel={editOptionAccessibilityLabel(option)}
+                          accessibilityRole="button"
+                          accessibilityState={{ selected: optionSelected }}
                           style={[
-                            styles.segmentText,
-                            recordEditFields.mealType === option.value ? styles.segmentTextActive : null
+                            styles.segmentPill,
+                            optionSelected ? styles.segmentActive : null
                           ]}
+                          onPress={() => pressRecordEditMealTypeOption(option)}
                         >
-                          {option.label}
-                        </Text>
-                      </Pressable>
-                    ))}
+                          <Text
+                            style={[
+                              styles.segmentText,
+                              optionSelected ? styles.segmentTextActive : null
+                            ]}
+                          >
+                            {editOptionLabel(option)}
+                          </Text>
+                        </Pressable>
+                      );
+                    })}
                   </View>
                 </View>
                 <View style={styles.formField}>
