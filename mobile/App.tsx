@@ -3905,6 +3905,19 @@ export default function App() {
     );
   }
 
+  function handlePreparedParserPreviewSuccess(
+    nextPreview: ParsePreviewResponse,
+    text: string,
+    preparedRequest: ReturnType<typeof prepareParserPreviewRequest>
+  ) {
+    handleParserPreviewSuccess(
+      nextPreview,
+      preparedRequest.parseOccurredAt,
+      text,
+      preparedRequest.parserVoiceSeconds
+    );
+  }
+
   function applyPreviewRecordRemoveChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[]) {
     if (isPreviewActionReturningToDailyRecord) {
       reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "delete");
@@ -7858,12 +7871,7 @@ export default function App() {
         transcript,
         preparedRequest
       );
-      handleParserPreviewSuccess(
-        mergedDailyPreview,
-        preparedRequest.parseOccurredAt,
-        transcript,
-        preparedRequest.parserVoiceSeconds
-      );
+      handlePreparedParserPreviewSuccess(mergedDailyPreview, transcript, preparedRequest);
     } catch (error) {
       handleParserPreviewFailure(error);
     } finally {
