@@ -778,6 +778,7 @@ import { DeleteSuccessActionRow } from "./deleteSuccessActionRow";
 import { FieldLabel } from "./fieldLabel";
 import { FutureReadinessChecklist } from "./futureReadinessChecklist";
 import { DetailRow } from "./detailRow";
+import { DetailedReportBoundaryGrid } from "./detailedReportBoundaryGrid";
 import { CommunityActionRow } from "./communityActionRow";
 import { DoctorShareActionRow } from "./doctorShareActionRow";
 import { FoodPhotoActionRow } from "./foodPhotoActionRow";
@@ -2623,18 +2624,6 @@ export default function App() {
     totalCount: number
   ) {
     return index === 0 || index === totalCount - 1 || index % 3 === 0 ? analysisChartPointLabel(point) : "";
-  }
-
-  function detailedReportBoundaryRowKey(row: (typeof detailedReportBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function detailedReportBoundaryRowLabel(row: (typeof detailedReportBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function detailedReportBoundaryRowValue(row: (typeof detailedReportBoundaryRows)[number]) {
-    return row.value;
   }
 
   function detailedReportMetricRowKey(row: (typeof detailedReportMetricRows)[number]) {
@@ -11019,14 +11008,7 @@ export default function App() {
                 <Text style={styles.evidence}>{reportGeneratedAtDisplayText}</Text>
               </View>
             </View>
-            <View style={styles.reportBoundaryGrid}>
-              {detailedReportBoundaryRows.map((row) => (
-                <View key={detailedReportBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{detailedReportBoundaryRowLabel(row)}</Text>
-                  <Text style={styles.recordType}>{detailedReportBoundaryRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
+            <DetailedReportBoundaryGrid rows={detailedReportBoundaryRows} />
             <View style={styles.metricGrid}>
               {detailedReportMetricRows.map((row) => (
                 <MetricCard key={detailedReportMetricRowKey(row)} label={detailedReportMetricRowLabel(row)} value={detailedReportMetricRowValue(row)} />

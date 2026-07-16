@@ -34,6 +34,40 @@ None.
 
 ## Done
 
+### T2065: Extract detailed report boundary grid component
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/detailedReportBoundaryGrid.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `DetailedReportBoundaryGrid` for the Detailed Report boundary cards.
+- Moved detailed-report boundary row key/label/value helpers out of `App.tsx`.
+- Reused the component in the Detailed Report screen with the existing `detailedReportBoundaryRows` data.
+- Preserved the same boundary row copy, order, keys, colors, spacing, and card presentation.
+- Updated navigation and visual-smoke route verifier coverage for the component boundary, App row binding, and direct inline-map guard.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining repeated metric/boundary/action row clusters without changing first-version scope.
+
 ### T2064: Extract insight flow checklist component
 
 Status: done

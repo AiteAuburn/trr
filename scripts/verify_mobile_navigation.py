@@ -15,6 +15,7 @@ APP_RUNTIME_CONFIG_PATH = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 AI_FLOW_CHECKLIST_PATH = REPO_ROOT / "mobile" / "aiFlowChecklist.tsx"
 INSIGHT_FLOW_CHECKLIST_PATH = REPO_ROOT / "mobile" / "insightFlowChecklist.tsx"
+DETAILED_REPORT_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "detailedReportBoundaryGrid.tsx"
 ACCOUNT_SECURITY_ACTION_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityActionGrid.tsx"
 SETTINGS_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "settingsBoundaryGrid.tsx"
 SETTINGS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "settingsChecklist.tsx"
@@ -1410,6 +1411,7 @@ def main() -> int:
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     ai_flow_checklist_content = AI_FLOW_CHECKLIST_PATH.read_text(encoding="utf-8")
     insight_flow_checklist_content = INSIGHT_FLOW_CHECKLIST_PATH.read_text(encoding="utf-8")
+    detailed_report_boundary_grid_content = DETAILED_REPORT_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
     account_security_action_grid_content = ACCOUNT_SECURITY_ACTION_GRID_PATH.read_text(encoding="utf-8")
     settings_boundary_grid_content = SETTINGS_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
     settings_checklist_content = SETTINGS_CHECKLIST_PATH.read_text(encoding="utf-8")
@@ -10711,17 +10713,27 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
-            ("detailed report boundary row key helper", "function detailedReportBoundaryRowKey(row: (typeof detailedReportBoundaryRows)[number])"),
+            ("detailed report boundary grid component", "export function DetailedReportBoundaryGrid"),
+            ("detailed report boundary grid row type", "export type DetailedReportBoundaryRow ="),
+            ("detailed report boundary grid rows prop", "rows: DetailedReportBoundaryRow[]"),
+            ("detailed report boundary row key helper", "function detailedReportBoundaryRowKey(row: DetailedReportBoundaryRow)"),
             ("detailed report boundary row key helper fields", "return row.label;"),
             ("detailed report boundary row key helper binding", "key={detailedReportBoundaryRowKey(row)}"),
-            ("detailed report boundary row label helper", "function detailedReportBoundaryRowLabel(row: (typeof detailedReportBoundaryRows)[number])"),
+            ("detailed report boundary row label helper", "function detailedReportBoundaryRowLabel(row: DetailedReportBoundaryRow)"),
             ("detailed report boundary row label helper fields", "return row.label;"),
             ("detailed report boundary row label helper binding", "{detailedReportBoundaryRowLabel(row)}"),
-            ("detailed report boundary row value helper", "function detailedReportBoundaryRowValue(row: (typeof detailedReportBoundaryRows)[number])"),
+            ("detailed report boundary row value helper", "function detailedReportBoundaryRowValue(row: DetailedReportBoundaryRow)"),
             ("detailed report boundary row value helper fields", "return row.value;"),
             ("detailed report boundary row value helper binding", "{detailedReportBoundaryRowValue(row)}"),
+            ("detailed report boundary grid wrapper style", "reportBoundaryGrid: {"),
+            ("detailed report boundary grid card style", "reportBoundaryCard: {"),
         ):
-            _assert_contains(label, content, marker)
+            _assert_contains(label, detailed_report_boundary_grid_content, marker)
+        _assert_contains(
+            "detailed report boundary grid binding",
+            content,
+            "<DetailedReportBoundaryGrid rows={detailedReportBoundaryRows} />",
+        )
         for label, marker in (
             ("detailed report local meal count helper binding", 'localMealCount: recordTypeCount(analysisRecords, "meal")'),
             ("detailed report local exercise count helper binding", 'localExerciseCount: recordTypeCount(analysisRecords, "exercise")'),
@@ -14374,6 +14386,11 @@ def main() -> int:
             "AI save confirm direct boundary row value binding",
             content,
             "aiSaveConfirmBoundaryRows.map((row) => (\n                <View key={aiSaveConfirmBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{aiSaveConfirmBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "detailed report direct boundary row map",
+            content,
+            "detailedReportBoundaryRows.map((row) => (",
         )
         _assert_not_contains(
             "detailed report direct boundary row key binding",
