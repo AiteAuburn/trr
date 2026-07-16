@@ -247,7 +247,9 @@ export function dailyRecordEntryDisplayItem(record: PendingRecord, index: number
       `管理第 ${clampNumber(index + 1, 1, maxMobilePreviewRecords)} 筆${typeLabel}，可編輯或刪除`,
       maxDisplayDetailTextLength
     ),
+    editLabel: boundDisplayText("編輯", maxDisplayTextLength),
     editAccessibilityLabel: boundDisplayText(`編輯每日紀錄中的${typeLabel}`, maxDisplayDetailTextLength),
+    removeLabel: boundDisplayText("刪除", maxDisplayTextLength),
     removeAccessibilityLabel: boundDisplayText(`刪除每日紀錄中的${typeLabel}`, maxDisplayDetailTextLength)
   };
 }

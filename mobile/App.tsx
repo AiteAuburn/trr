@@ -3794,8 +3794,16 @@ export default function App() {
     return item.editAccessibilityLabel;
   }
 
+  function dailyRecordEntryEditLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    return item.editLabel;
+  }
+
   function dailyRecordEntryRemoveAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
     return item.removeAccessibilityLabel;
+  }
+
+  function dailyRecordEntryRemoveLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
+    return item.removeLabel;
   }
 
   function dailyRecordEntryDetailRows(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
@@ -8816,7 +8824,7 @@ export default function App() {
                               style={styles.secondaryButton}
                               onPress={() => pressDailyRecordEntryEdit(item)}
                             >
-                              <Text style={styles.secondaryButtonText}>編輯</Text>
+                              <Text style={styles.secondaryButtonText}>{dailyRecordEntryEditLabel(item)}</Text>
                             </Pressable>
                             <Pressable
                               accessibilityLabel={dailyRecordEntryRemoveAccessibilityLabel(item)}
@@ -8824,7 +8832,7 @@ export default function App() {
                               style={styles.dangerButton}
                               onPress={() => pressDailyRecordEntryDelete(item)}
                             >
-                              <Text style={styles.dangerButtonText}>刪除</Text>
+                              <Text style={styles.dangerButtonText}>{dailyRecordEntryRemoveLabel(item)}</Text>
                             </Pressable>
                           </View>
                         ) : null}

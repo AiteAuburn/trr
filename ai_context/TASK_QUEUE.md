@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1759: Reuse daily record entry action labels
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/recordDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added edit and remove visible labels to the daily-record entry display item.
+- Reused those labels through App helper accessors in the daily-record entry action menu instead of direct JSX literals.
+- Updated navigation verifier coverage with positive display-item/helper bindings and direct literal guards in the daily-record entry render block.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/return target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1758: Reuse today transcript CTA display copy
 
 Status: done
