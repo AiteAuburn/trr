@@ -3838,12 +3838,16 @@ export default function App() {
   function prepareParserPreviewRequest() {
     const existingDailyPreview = parserExistingDailyPreview();
     clearParserPreviewState();
-    setStatus(parserProgressStatusMessage());
+    startParserPreviewProgressStatus();
     return {
       existingDailyPreview,
       parserVoiceSeconds: parserPreviewVoiceSeconds(),
       parseOccurredAt: parserPreviewOccurredAt()
     };
+  }
+
+  function startParserPreviewProgressStatus() {
+    setStatus(parserProgressStatusMessage());
   }
 
   function parserExistingDailyPreview() {
