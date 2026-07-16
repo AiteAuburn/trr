@@ -4209,6 +4209,21 @@ def main() -> int:
             "const nextRecords = buildPreviewRecordEditRecords(preview, selectedPreviewIndex, payload);",
         )
         _assert_contains(
+            "AI candidate preview edit failure helper",
+            content,
+            "function handlePreviewRecordEditFailure(error: unknown)",
+        )
+        _assert_contains(
+            "AI candidate preview edit failure helper internals",
+            content,
+            "function handlePreviewRecordEditFailure(error: unknown) {\n    setStatus(aiCandidateEditFailureStatusMessage(error));",
+        )
+        _assert_contains(
+            "AI candidate preview edit failure helper binding",
+            content,
+            "} catch (error) {\n      handlePreviewRecordEditFailure(error);",
+        )
+        _assert_contains(
             "AI candidate preview edit change helper",
             content,
             "function applyPreviewRecordEditChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[])",

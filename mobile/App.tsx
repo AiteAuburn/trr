@@ -3902,6 +3902,10 @@ export default function App() {
     );
   }
 
+  function handlePreviewRecordEditFailure(error: unknown) {
+    setStatus(aiCandidateEditFailureStatusMessage(error));
+  }
+
   function savePreviewRecordEdit() {
     if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {
       returnFromMissingPreviewRecordEditSaveDraft();
@@ -3919,7 +3923,7 @@ export default function App() {
       applyPreviewRecordEditChange(preview, nextRecords);
       returnFromPreviewRecordEditSaveSuccess();
     } catch (error) {
-      setStatus(aiCandidateEditFailureStatusMessage(error));
+      handlePreviewRecordEditFailure(error);
     }
   }
 
