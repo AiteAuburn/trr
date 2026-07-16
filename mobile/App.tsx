@@ -8389,12 +8389,16 @@ export default function App() {
     openScreenWithStatus("editRecord", recordEditOpenStatusMessage());
   }
 
-  function returnFromRecordEdit() {
+  function seedRecordEditStateForReturn() {
     if (selectedRecord) {
       seedRecordEditStateFromRecord(selectedRecord);
     } else {
       seedEmptyRecordEditStateForNow();
     }
+  }
+
+  function returnFromRecordEdit() {
+    seedRecordEditStateForReturn();
     openScreenWithStatus("recordDetail", recordEditCancelStatusMessage());
   }
 

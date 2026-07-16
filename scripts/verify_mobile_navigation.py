@@ -5586,7 +5586,17 @@ def main() -> int:
         _assert_contains(
             "record edit return empty seed helper binding",
             content,
-            'seedEmptyRecordEditStateForNow();\n    }\n    openScreenWithStatus("recordDetail", recordEditCancelStatusMessage());',
+            "seedRecordEditStateForReturn();\n    openScreenWithStatus(\"recordDetail\", recordEditCancelStatusMessage());",
+        )
+        _assert_contains(
+            "record edit return seed helper",
+            content,
+            "function seedRecordEditStateForReturn()",
+        )
+        _assert_contains(
+            "record edit return seed helper internals",
+            content,
+            "if (selectedRecord) {\n      seedRecordEditStateFromRecord(selectedRecord);\n    } else {\n      seedEmptyRecordEditStateForNow();\n    }",
         )
         _assert_contains(
             "record delete success empty edit seed helper state",
