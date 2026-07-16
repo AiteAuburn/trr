@@ -3674,8 +3674,12 @@ export default function App() {
     currentPreview: ParsePreviewResponse | null,
     response: ParsePreviewResponse
   ) {
-    const boundedPreview = boundParsePreviewResponse(response);
+    const boundedPreview = boundedParserPreviewResponse(response);
     return mergeSameDayParsePreviewDraft(currentPreview, boundedPreview);
+  }
+
+  function boundedParserPreviewResponse(response: ParsePreviewResponse) {
+    return boundParsePreviewResponse(response);
   }
 
   function parserPreviewRequestBody(
