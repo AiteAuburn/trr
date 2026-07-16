@@ -812,6 +812,7 @@ import { ManualRecordMealFields } from "./manualRecordMealFields";
 import { ManualRecordMedicationFields } from "./manualRecordMedicationFields";
 import { ManualRecordNoteFields } from "./manualRecordNoteFields";
 import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
+import { MembershipFeatureList } from "./membershipFeatureList";
 import { MetricGrid } from "./metricGrid";
 import { DownloadedModelList } from "./downloadedModelList";
 import { NativeDebugActionButton } from "./nativeDebugActionButton";
@@ -5104,18 +5105,6 @@ export default function App() {
 
   function openMembershipStatusFromSubscription() {
     openSubscriptionStatusScreen("membershipStatus", subscriptionMembershipStatusOpenStatusMessage());
-  }
-
-  function membershipFeatureRowKey(row: (typeof membershipFeatureRows)[number]) {
-    return row.label;
-  }
-
-  function membershipFeatureRowLabel(row: (typeof membershipFeatureRows)[number]) {
-    return row.label;
-  }
-
-  function membershipFeatureRowValue(row: (typeof membershipFeatureRows)[number]) {
-    return row.value;
   }
 
   function syncSubscriptionManagementStatus() {
@@ -11066,12 +11055,7 @@ export default function App() {
             </View>
             <View style={styles.pricingCard}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.memberFeatures}</Text>
-              {membershipFeatureRows.map((row) => (
-                <View key={membershipFeatureRowKey(row)} style={styles.detailRow}>
-                  <Text style={styles.confidence}>{membershipFeatureRowLabel(row)}</Text>
-                  <Text style={styles.recordContent}>{membershipFeatureRowValue(row)}</Text>
-                </View>
-              ))}
+              <MembershipFeatureList rows={membershipFeatureRows} />
             </View>
             <View style={styles.planCard}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.founderAnnualPrice}</Text>

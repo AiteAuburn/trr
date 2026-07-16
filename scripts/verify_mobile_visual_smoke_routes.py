@@ -141,7 +141,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "membershipStatus": [
         'currentScreen === "membershipStatus"',
-        "membershipFeatureRows.map",
+        "rows={membershipFeatureRows}",
         "membershipTrialHeroLabelDisplayText",
     ],
     "settings": [

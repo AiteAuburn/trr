@@ -113,6 +113,7 @@ MANUAL_RECORD_MEAL_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordMealFields.
 MANUAL_RECORD_MEDICATION_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordMedicationFields.tsx"
 MANUAL_RECORD_NOTE_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordNoteFields.tsx"
 MANUAL_RECORD_TYPE_SELECTOR_PATH = REPO_ROOT / "mobile" / "manualRecordTypeSelector.tsx"
+MEMBERSHIP_FEATURE_LIST_PATH = REPO_ROOT / "mobile" / "membershipFeatureList.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
 METRIC_GRID_PATH = REPO_ROOT / "mobile" / "metricGrid.tsx"
 RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPanel.tsx"
@@ -1518,6 +1519,7 @@ def main() -> int:
     manual_record_medication_fields_content = MANUAL_RECORD_MEDICATION_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_note_fields_content = MANUAL_RECORD_NOTE_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_type_selector_content = MANUAL_RECORD_TYPE_SELECTOR_PATH.read_text(encoding="utf-8")
+    membership_feature_list_content = MEMBERSHIP_FEATURE_LIST_PATH.read_text(encoding="utf-8")
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
     metric_grid_content = METRIC_GRID_PATH.read_text(encoding="utf-8")
     record_detail_action_panel_content = RECORD_DETAIL_ACTION_PANEL_PATH.read_text(encoding="utf-8")
@@ -3863,17 +3865,27 @@ def main() -> int:
             "const membershipFeatureRows = membershipFeatureDisplayRows();",
         )
         for label, marker in (
-            ("membership feature row key helper", "function membershipFeatureRowKey(row: (typeof membershipFeatureRows)[number])"),
+            ("membership feature list component", "export function MembershipFeatureList"),
+            ("membership feature list row type", "export type MembershipFeatureRow ="),
+            ("membership feature list rows prop", "rows: MembershipFeatureRow[]"),
+            ("membership feature row key helper", "function membershipFeatureRowKey(row: MembershipFeatureRow)"),
             ("membership feature row key helper fields", "return row.label;"),
             ("membership feature row key helper binding", "key={membershipFeatureRowKey(row)}"),
-            ("membership feature row label helper", "function membershipFeatureRowLabel(row: (typeof membershipFeatureRows)[number])"),
+            ("membership feature row label helper", "function membershipFeatureRowLabel(row: MembershipFeatureRow)"),
             ("membership feature row label helper fields", "return row.label;"),
             ("membership feature row label helper binding", "{membershipFeatureRowLabel(row)}"),
-            ("membership feature row value helper", "function membershipFeatureRowValue(row: (typeof membershipFeatureRows)[number])"),
+            ("membership feature row value helper", "function membershipFeatureRowValue(row: MembershipFeatureRow)"),
             ("membership feature row value helper fields", "return row.value;"),
             ("membership feature row value helper binding", "{membershipFeatureRowValue(row)}"),
+            ("membership feature list row style", "detailRow: {"),
+            ("membership feature list record content style", "recordContent: {"),
         ):
-            _assert_contains(label, content, marker)
+            _assert_contains(label, membership_feature_list_content, marker)
+        _assert_contains(
+            "membership feature list rows binding",
+            content,
+            "rows={membershipFeatureRows}",
+        )
         _assert_contains(
             "subscription membership display helper binding",
             content,
@@ -14373,6 +14385,11 @@ def main() -> int:
             "detailed report direct metric row binding",
             content,
             "detailedReportMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />",
+        )
+        _assert_not_contains(
+            "membership feature direct row map",
+            content,
+            "membershipFeatureRows.map((row) => (",
         )
         _assert_not_contains(
             "membership feature direct row key binding",

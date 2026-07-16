@@ -15,6 +15,40 @@
 
 ## 2026-07-16
 
+### T2072 extract membership feature list component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/membershipFeatureList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `MembershipFeatureList` for the Membership Status feature rows.
+- Moved membership feature row key/label/value helpers out of `App.tsx`.
+- Preserved the same feature row copy, order, keys, card styling, and spacing.
+- Updated navigation, UI-spec coverage, and visual-smoke route verifier coverage for the component row binding and direct inline-map guard.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining subscription/settings/action row clusters without changing first-version scope.
+
 ### T2071 extract highlight detail list component
 
 類型：mobile / refactor / verifier / docs
