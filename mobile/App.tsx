@@ -8192,6 +8192,24 @@ export default function App() {
     };
   }
 
+  function requestMoreRecordSync(syncContext: {
+    account: Account;
+    activeProfileId: string;
+    cursorRecord: RecordItem;
+  }) {
+    const query = new URLSearchParams({
+      profile_id: syncContext.activeProfileId,
+      limit: String(mobileRecordSyncLimit),
+      before: syncContext.cursorRecord.occurred_at,
+      before_created_at: syncContext.cursorRecord.created_at
+    });
+    return requestJson<RecordItem[]>(
+      normalizedApiBaseUrl,
+      `/records?${query.toString()}`,
+      { headers: protectedRequestHeaders(syncContext.account.id, accessToken) }
+    );
+  }
+
   async function loadMoreRecords() {
     const syncContext = guardedMoreRecordSyncContext();
     if (!syncContext) {
@@ -8204,17 +8222,7 @@ export default function App() {
     recordSyncInFlightKeys.current.add(syncContext.syncKey);
     setRecordsStatus(recordSyncPageLoadingStatusMessage());
     try {
-      const query = new URLSearchParams({
-        profile_id: syncContext.activeProfileId,
-        limit: String(mobileRecordSyncLimit),
-        before: syncContext.cursorRecord.occurred_at,
-        before_created_at: syncContext.cursorRecord.created_at
-      });
-      const response = await requestJson<RecordItem[]>(
-        normalizedApiBaseUrl,
-        `/records?${query.toString()}`,
-        { headers: protectedRequestHeaders(syncContext.account.id, accessToken) }
-      );
+      const response = await requestMoreRecordSync(syncContext);
       const boundedPage = boundRecordsList(response, mobileRecordSyncLimit);
       setRecords((current) => mergeRecordsByCursorOrder(current, boundedPage));
       const hasMoreAfterPage = response.length >= mobileRecordSyncLimit;

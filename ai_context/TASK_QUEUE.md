@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1906: Reuse load-more record sync request helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `requestMoreRecordSync()` for the load-more `/records` cursor request boundary.
+- Reused the helper from `loadMoreRecords()` while preserving query params, endpoint, protected headers, page merge, has-more calculation, success status, failure status, and cleanup behavior.
+- Updated navigation verifier coverage for the load-more request helper, endpoint, profile/cursor/account bindings, and request call binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing load-more record sync success/failure lifecycle in small behavior-preserving slices.
+
 ### T1905: Reuse guarded load-more record sync context helper
 
 Status: done

@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1906 reuse load-more record sync request helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `requestMoreRecordSync()` for the load-more `/records` cursor request boundary.
+- Reused the helper from `loadMoreRecords()` while preserving query params, endpoint, protected headers, page merge, has-more calculation, success status, failure status, and cleanup behavior.
+- Updated navigation verifier coverage for the load-more request helper, endpoint, profile/cursor/account bindings, and request call binding.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing load-more record sync success/failure lifecycle in small behavior-preserving slices.
+
 ### T1905 reuse guarded load-more record sync context helper
 
 類型：mobile / refactor / verifier / docs
