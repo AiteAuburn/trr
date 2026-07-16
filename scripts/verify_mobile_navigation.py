@@ -4061,7 +4061,12 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove action clear helper binding",
             content,
-            "clearPreviewRemoveActionState();",
+            "setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));\n    }\n    clearPreviewRemoveActionState();",
+        )
+        _assert_not_contains(
+            "AI candidate remove action direct clear binding",
+            content,
+            "setPendingPreviewRemoveIndex(null);\n    clearDailyRecordEntryMenu();\n  }\n\n  function confirmPreviewRecordRemove()",
         )
         _assert_contains(
             "transcript edit return selected draft clear helper binding",

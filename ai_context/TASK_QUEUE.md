@@ -34,6 +34,35 @@ None.
 
 ## Done
 
+### T1769: Reuse preview remove record cleanup
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused the preview remove action cleanup helper inside `removePreviewRecord` after preview records are updated.
+- Tightened navigation verifier coverage so the helper is checked at the remove-record cleanup site and the direct setter/menu-clear pair is guarded.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/return behavior/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1768: Reuse preview edit selection cleanup
 
 Status: done

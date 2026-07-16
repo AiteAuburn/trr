@@ -3544,8 +3544,7 @@ export default function App() {
       setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
       setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));
     }
-    setPendingPreviewRemoveIndex(null);
-    clearDailyRecordEntryMenu();
+    clearPreviewRemoveActionState();
   }
 
   function confirmPreviewRecordRemove() {
