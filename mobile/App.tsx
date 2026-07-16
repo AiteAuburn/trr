@@ -8048,14 +8048,18 @@ export default function App() {
     }
   }
 
+  async function startAndCompleteDailyRecordSaveRequest(saveContext: { account: Account; preview: ParsePreviewResponse }) {
+    startPreviewSaveRequest();
+    await completeDailyRecordSaveRequest(saveContext);
+  }
+
   async function savePreviewRecords() {
     const saveContext = guardedDailyRecordSaveContext();
     if (!saveContext) {
       return;
     }
 
-    startPreviewSaveRequest();
-    await completeDailyRecordSaveRequest(saveContext);
+    await startAndCompleteDailyRecordSaveRequest(saveContext);
   }
 
   async function loadRecords() {

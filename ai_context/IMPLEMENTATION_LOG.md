@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1896 reuse daily-record save start-and-complete helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `startAndCompleteDailyRecordSaveRequest()` for the daily-record save start-and-complete lifecycle.
+- Reused the helper from `savePreviewRecords()` while preserving the start request call, complete request lifecycle, failure recovery, and finish cleanup behavior.
+- Updated navigation verifier coverage for the save start-and-complete helper, internals, and save entry binding.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing record sync orchestration and first-version flow helpers in small behavior-preserving slices.
+
 ### T1895 reuse daily-record save complete helper
 
 類型：mobile / refactor / verifier / docs
