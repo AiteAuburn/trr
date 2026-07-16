@@ -8515,6 +8515,11 @@ export default function App() {
     }
   }
 
+  async function startAndCompleteSelectedRecordUpdateRequest(recordId: string, accountId: string, recordType: string) {
+    startRecordUpdateRequest();
+    await completeSelectedRecordUpdateRequest(recordId, accountId, recordType);
+  }
+
   async function updateSelectedRecord() {
     if (isBusy || recordUpdateInFlight.current) {
       return;
@@ -8533,8 +8538,7 @@ export default function App() {
       return;
     }
 
-    startRecordUpdateRequest();
-    await completeSelectedRecordUpdateRequest(selectedRecord.id, account.id, selectedRecord.record_type);
+    await startAndCompleteSelectedRecordUpdateRequest(selectedRecord.id, account.id, selectedRecord.record_type);
   }
 
   function startRecordDeleteRequest() {

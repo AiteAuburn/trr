@@ -5081,7 +5081,22 @@ def main() -> int:
         _assert_contains(
             "record update complete helper binding",
             content,
-            "await completeSelectedRecordUpdateRequest(selectedRecord.id, account.id, selectedRecord.record_type);",
+            "await completeSelectedRecordUpdateRequest(recordId, accountId, recordType);",
+        )
+        _assert_contains(
+            "record update start and complete helper",
+            content,
+            "async function startAndCompleteSelectedRecordUpdateRequest(recordId: string, accountId: string, recordType: string)",
+        )
+        _assert_contains(
+            "record update start and complete helper internals",
+            content,
+            "startRecordUpdateRequest();\n    await completeSelectedRecordUpdateRequest(recordId, accountId, recordType);",
+        )
+        _assert_contains(
+            "record update start and complete helper binding",
+            content,
+            "await startAndCompleteSelectedRecordUpdateRequest(selectedRecord.id, account.id, selectedRecord.record_type);",
         )
         _assert_contains(
             "manual create result selected record helper state",
