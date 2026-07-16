@@ -3602,6 +3602,10 @@ export default function App() {
     setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, entry]));
   }
 
+  function parserTranscriptSource(voiceSeconds: number): DailyTranscriptEntry["source"] {
+    return voiceSeconds > 0 ? "voice" : "text";
+  }
+
   function removePreviewRecord(index: number) {
     if (!preview) {
       return;
@@ -7366,7 +7370,7 @@ export default function App() {
       const transcriptEntry = createDailyTranscriptEntry(
         parseOccurredAt,
         transcript,
-        parserVoiceSeconds > 0 ? "voice" : "text"
+        parserTranscriptSource(parserVoiceSeconds)
       );
       if (transcriptEntry) {
         appendDailyTranscriptEntry(transcriptEntry);
