@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1742 reuse record collection state
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared record collection state helper for loaded-record empty, sync-boundary, cache-limit, and cursor-record checks.
+- Reused the helper for Analysis preview mode, History boundary checklist input, History empty/sync-boundary rendering, Analysis sync-boundary rendering, and load-more pagination guard/cursor selection.
+- Updated navigation verifier coverage with positive helper bindings and negative guards for representative direct `recordsForDisplay.length` checks.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、record sync request path、pagination query parameters、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining core History / Analysis record state and display preparation in small behavior-preserving slices.
+
 ### T1741 reuse manual record field props
 
 類型：mobile / refactor / verifier / docs

@@ -6308,6 +6308,20 @@ def main() -> int:
             ("record sync boundary load-more binding", "const canLoadMoreRecords = recordSyncBoundaryDisplay.canLoadMoreRecords;"),
             ("record sync boundary history display binding", "const historySyncBoundaryDisplayText = recordSyncBoundaryDisplay.history;"),
             ("record sync boundary analysis display binding", "const analysisSyncBoundaryDisplayText = recordSyncBoundaryDisplay.analysis;"),
+            ("record collection state helper", "function recordCollectionState(records: readonly RecordItem[], syncLimit: number, cacheLimit: number)"),
+            ("record collection has records flag", "hasRecords: recordCount > 0"),
+            ("record collection empty flag", "isEmpty: recordCount === 0"),
+            ("record collection cache limit flag", "isAtCacheLimit: recordCount >= cacheLimit"),
+            ("record collection sync boundary flag", "isAtSyncBoundary: recordCount >= syncLimit"),
+            ("record collection last record binding", "lastRecord: records[recordCount - 1] ?? null"),
+            ("record display state helper binding", "const recordDisplayState = recordCollectionState(\n    recordsForDisplay,\n    mobileRecordSyncLimit,\n    maxMobileRecordCacheLimit\n  );"),
+            ("analysis preview mode record state binding", "const analysisPreviewMode = recordDisplayState.isEmpty;"),
+            ("history boundary record state binding", "recordDisplayState.hasRecords"),
+            ("load more record state guard", "if (!account || !activeProfileId || recordDisplayState.isEmpty || recordDisplayState.isAtCacheLimit)"),
+            ("load more cursor record state binding", "const cursorRecord = recordDisplayState.lastRecord;"),
+            ("history empty record state render binding", "{recordDisplayState.isEmpty ? ("),
+            ("history sync boundary record state render binding", "{recordDisplayState.isAtSyncBoundary ? ("),
+            ("analysis sync boundary record state render binding", "{recordDisplayState.isAtSyncBoundary ? ("),
             ("record sync pagination status clear helper", "function clearRecordSyncPaginationStatus(statusMessage: string)"),
             ("record sync pagination status clear helper internals", "function clearRecordSyncPaginationStatus(statusMessage: string) {\n    setRecordsStatus(statusMessage);\n    setRecordsHasMore(false);"),
             ("record sync initial clear helper binding", "clearRecordSyncPaginationStatus(recordSyncInitialStatusMessage());"),
@@ -6319,6 +6333,15 @@ def main() -> int:
             ("manual record backend unavailable display binding", "const manualRecordBackendUnavailableDisplayText = manualRecordCreateDisplay.backendUnavailable;"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("analysis preview mode direct records length guard", "const analysisPreviewMode = recordsForDisplay.length === 0;"),
+            ("history boundary direct records length guard", "recordsForDisplay.length > 0"),
+            ("load more direct empty/cache guard", "recordsForDisplay.length === 0 || recordsForDisplay.length >= maxMobileRecordCacheLimit"),
+            ("load more direct cursor record binding", "recordsForDisplay[recordsForDisplay.length - 1]"),
+            ("history direct empty render guard", "{recordsForDisplay.length === 0 ? ("),
+            ("history direct sync boundary render guard", "{recordsForDisplay.length >= mobileRecordSyncLimit ? ("),
+        ):
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("records status display texts helper", "function recordsStatusDisplayTexts(recordsStatus: string)"),
             ("records status display binding", "records: boundUiMessage(recordsStatus)"),

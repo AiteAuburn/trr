@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1742: Reuse record collection state
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared record collection state helper for loaded-record empty, sync-boundary, cache-limit, and cursor-record checks.
+- Reused the helper for Analysis preview mode, History boundary checklist input, History empty/sync-boundary rendering, Analysis sync-boundary rendering, and load-more pagination guard/cursor selection.
+- Updated navigation verifier coverage with positive helper bindings and negative guards for representative direct `recordsForDisplay.length` checks.
+- No UI copy/layout/backend/schema/Android signing/record sync request path/pagination query/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining core History / Analysis record state and display preparation in small behavior-preserving slices.
+
 ### T1741: Reuse manual record field props
 
 Status: done

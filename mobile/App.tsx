@@ -804,6 +804,19 @@ import type {
   VoiceQuota
 } from "./appTypes";
 
+function recordCollectionState(records: readonly RecordItem[], syncLimit: number, cacheLimit: number) {
+  const recordCount = records.length;
+
+  return {
+    hasRecords: recordCount > 0,
+    isEmpty: recordCount === 0,
+    isAtCacheLimit: recordCount >= cacheLimit,
+    isAtSyncBoundary: recordCount >= syncLimit,
+    lastRecord: records[recordCount - 1] ?? null,
+    recordCount
+  };
+}
+
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>(initialVisualSmokeScreen ?? "today");
   const [apiBaseUrl, setApiBaseUrl] = useState(defaultApiBaseUrl);
@@ -1093,6 +1106,11 @@ export default function App() {
     () => groupedRecordListDisplaySections(groupedHistoryRecords),
     [groupedHistoryRecords]
   );
+  const recordDisplayState = recordCollectionState(
+    recordsForDisplay,
+    mobileRecordSyncLimit,
+    maxMobileRecordCacheLimit
+  );
   const historyRecordsByDate = useMemo(() => {
     const groups = new Map<string, RecordItem[]>();
     for (const record of recordsForDisplay) {
@@ -1164,7 +1182,7 @@ export default function App() {
     [analysisRecords]
   );
   const analysisGlucoseValues = buildAnalysisGlucoseValues(analysisGlucoseRecords);
-  const analysisPreviewMode = recordsForDisplay.length === 0;
+  const analysisPreviewMode = recordDisplayState.isEmpty;
   const analysisRangeDisplay = analysisRangeDisplayTexts(
     analysisRange,
     analysisCustomStart,
@@ -1289,7 +1307,7 @@ export default function App() {
   const historyBoundaryChecklistItems = historyBoundaryChecklistDisplayItems(
     mobileRecordSyncDisplayLimit,
     maxMobileRecordCacheLimit,
-    recordsForDisplay.length > 0
+    recordDisplayState.hasRecords
   );
   const deleteConfirmChecklistItems = deleteConfirmChecklistDisplayItems();
   const recordUpdateChecklistItems = recordUpdateChecklistDisplayItems();
@@ -7326,10 +7344,10 @@ export default function App() {
       setRecordsStatus(recordSyncUnavailableStatusMessage(protectedBackendUnavailableMessage));
       return;
     }
-    if (!account || !activeProfileId || recordsForDisplay.length === 0 || recordsForDisplay.length >= maxMobileRecordCacheLimit) {
+    if (!account || !activeProfileId || recordDisplayState.isEmpty || recordDisplayState.isAtCacheLimit) {
       return;
     }
-    const cursorRecord = recordsForDisplay[recordsForDisplay.length - 1];
+    const cursorRecord = recordDisplayState.lastRecord;
     if (!cursorRecord?.occurred_at || !cursorRecord.created_at) {
       clearRecordSyncPaginationStatus(recordSyncFailureStatusMessage());
       return;
@@ -9761,13 +9779,13 @@ export default function App() {
               selectedDate={selectedHistoryDate}
               onSummaryPress={pressHistoryDailySummary}
             />
-            {recordsForDisplay.length === 0 ? (
+            {recordDisplayState.isEmpty ? (
               <HistoryNoRecordStatusBlock
                 body={historyNoRealRecordHealthValueDisplayText}
                 title={coreFlowDisplayLabels.historyDataStatus}
               />
             ) : null}
-            {recordsForDisplay.length >= mobileRecordSyncLimit ? (
+            {recordDisplayState.isAtSyncBoundary ? (
               <HistorySyncBoundaryBlock
                 body={historySyncBoundaryDisplayText}
                 canLoadMoreRecords={canLoadMoreRecords}
@@ -10332,7 +10350,7 @@ export default function App() {
                 <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />
               ))}
             </View>
-            {recordsForDisplay.length >= mobileRecordSyncLimit ? (
+            {recordDisplayState.isAtSyncBoundary ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{coreFlowDisplayLabels.analysisSyncBoundary}</Text>
                 <Text style={styles.evidence}>{analysisSyncBoundaryDisplayText}</Text>
