@@ -3606,6 +3606,22 @@ export default function App() {
     return mergeSameDayParsePreviewDraft(currentPreview, boundedPreview);
   }
 
+  function parserPreviewRequestBody(
+    profileId: string,
+    text: string,
+    occurredAt: string,
+    voiceSeconds: number
+  ) {
+    return {
+      profile_id: profileId,
+      transcript: text,
+      stt_model_id: sttModelId,
+      llm_model_id: llmModelId,
+      occurred_at: occurredAt,
+      voice_seconds: voiceSeconds
+    };
+  }
+
   function appendDailyTranscriptEntry(entry: DailyTranscriptEntry) {
     setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, entry]));
   }
@@ -7412,14 +7428,9 @@ export default function App() {
         {
           method: "POST",
           headers: protectedRequestHeaders(account.id, accessToken),
-          body: JSON.stringify({
-            profile_id: activeProfile.id,
-            transcript,
-            stt_model_id: sttModelId,
-            llm_model_id: llmModelId,
-            occurred_at: parseOccurredAt,
-            voice_seconds: parserVoiceSeconds
-          })
+          body: JSON.stringify(
+            parserPreviewRequestBody(activeProfile.id, transcript, parseOccurredAt, parserVoiceSeconds)
+          )
         }
       );
       const mergedDailyPreview = mergedParserPreviewForResponse(existingDailyPreview, response);
