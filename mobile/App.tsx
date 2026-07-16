@@ -8996,6 +8996,14 @@ export default function App() {
     setNativeStatus(nativeModelDownloadProgressStatusMessage());
   }
 
+  function nativeModelDownloadRequestArgs() {
+    return {
+      url: modelUrl,
+      kind: downloadKind,
+      onProgress: setDownloadProgress
+    };
+  }
+
   function handleNativeModelDownloadFailure(error: unknown) {
     setNativeStatus(nativeModelDownloadFailureStatusMessage(error));
   }
@@ -9037,11 +9045,7 @@ export default function App() {
     startNativeDebugAction();
     startNativeModelDownloadStatus();
     try {
-      const uri = await downloadModel({
-        url: modelUrl,
-        kind: downloadKind,
-        onProgress: setDownloadProgress
-      });
+      const uri = await downloadModel(nativeModelDownloadRequestArgs());
       await handleNativeModelDownloadSuccess(uri);
     } catch (error) {
       handleNativeModelDownloadFailure(error);
