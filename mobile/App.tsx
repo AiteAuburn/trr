@@ -8877,6 +8877,14 @@ export default function App() {
     return isBusy;
   }
 
+  function startNativeDebugAction() {
+    setIsBusy(true);
+  }
+
+  function finishNativeDebugAction() {
+    setIsBusy(false);
+  }
+
   async function downloadSelectedModel() {
     if (isNativeDebugActionBlocked()) {
       return;
@@ -8885,7 +8893,7 @@ export default function App() {
       openNativeDebugUnavailable();
       return;
     }
-    setIsBusy(true);
+    startNativeDebugAction();
     setDownloadProgress(0);
     setNativeStatus(nativeModelDownloadProgressStatusMessage());
     try {
@@ -8904,7 +8912,7 @@ export default function App() {
     } catch (error) {
       setNativeStatus(nativeModelDownloadFailureStatusMessage(error));
     } finally {
-      setIsBusy(false);
+      finishNativeDebugAction();
     }
   }
 
@@ -8916,7 +8924,7 @@ export default function App() {
       openNativeDebugUnavailable();
       return;
     }
-    setIsBusy(true);
+    startNativeDebugAction();
     setNativeStatus(nativeModuleCheckProgressStatusMessage());
     try {
       const result = await checkNativeLocalModules();
@@ -8924,7 +8932,7 @@ export default function App() {
     } catch (error) {
       setNativeStatus(nativeModuleCheckFailureStatusMessage(error));
     } finally {
-      setIsBusy(false);
+      finishNativeDebugAction();
     }
   }
 
@@ -8940,7 +8948,7 @@ export default function App() {
       setNativeStatus(nativeWhisperMissingInputStatusMessage());
       return;
     }
-    setIsBusy(true);
+    startNativeDebugAction();
     setNativeStatus(nativeWhisperProgressStatusMessage());
     try {
       const text = await transcribeWithNativeWhisper({
@@ -8952,7 +8960,7 @@ export default function App() {
     } catch (error) {
       setNativeStatus(nativeWhisperFailureStatusMessage(error));
     } finally {
-      setIsBusy(false);
+      finishNativeDebugAction();
     }
   }
 
@@ -8968,7 +8976,7 @@ export default function App() {
       setNativeStatus(nativeLlamaMissingInputStatusMessage());
       return;
     }
-    setIsBusy(true);
+    startNativeDebugAction();
     setNativeStatus(nativeLlamaProgressStatusMessage());
     try {
       const output = await parseWithNativeLlama({
@@ -8980,7 +8988,7 @@ export default function App() {
     } catch (error) {
       setNativeStatus(nativeLlamaFailureStatusMessage(error));
     } finally {
-      setIsBusy(false);
+      finishNativeDebugAction();
     }
   }
 
@@ -8992,7 +9000,7 @@ export default function App() {
       openNativeDebugUnavailable();
       return;
     }
-    setIsBusy(true);
+    startNativeDebugAction();
     setNativeStatus(nativeBenchmarkProgressStatusMessage());
     try {
       const results = [];
@@ -9018,7 +9026,7 @@ export default function App() {
       }
       setNativeStatus(nativeBenchmarkResultStatusMessage(results));
     } finally {
-      setIsBusy(false);
+      finishNativeDebugAction();
     }
   }
 
