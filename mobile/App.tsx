@@ -8108,18 +8108,25 @@ export default function App() {
     );
   }
 
+  function startInitialRecordSyncRequest(syncContext: { syncKey: string }) {
+    latestRecordSyncKey.current = syncContext.syncKey;
+    if (recordSyncInFlightKeys.current.has(syncContext.syncKey)) {
+      return false;
+    }
+    recordSyncInFlightKeys.current.add(syncContext.syncKey);
+    setRecordsStatus(recordSyncLoadingStatusMessage());
+    return true;
+  }
+
   async function loadRecords() {
     const syncContext = guardedInitialRecordSyncContext();
     if (!syncContext) {
       return;
     }
 
-    latestRecordSyncKey.current = syncContext.syncKey;
-    if (recordSyncInFlightKeys.current.has(syncContext.syncKey)) {
+    if (!startInitialRecordSyncRequest(syncContext)) {
       return;
     }
-    recordSyncInFlightKeys.current.add(syncContext.syncKey);
-    setRecordsStatus(recordSyncLoadingStatusMessage());
     try {
       const response = await requestInitialRecordSync(syncContext);
       if (latestRecordSyncKey.current !== syncContext.syncKey) {
