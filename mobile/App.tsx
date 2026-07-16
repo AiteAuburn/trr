@@ -8582,6 +8582,11 @@ export default function App() {
     }
   }
 
+  async function startAndCompleteSelectedRecordDeleteRequest(recordId: string, accountId: string) {
+    startRecordDeleteRequest();
+    await completeSelectedRecordDeleteRequest(recordId, accountId);
+  }
+
   async function deleteSelectedRecord() {
     if (isBusy || recordDeleteInFlight.current) {
       return;
@@ -8597,8 +8602,7 @@ export default function App() {
       return;
     }
 
-    startRecordDeleteRequest();
-    await completeSelectedRecordDeleteRequest(selectedRecord.id, account.id);
+    await startAndCompleteSelectedRecordDeleteRequest(selectedRecord.id, account.id);
   }
 
   function startManualCreateRequest() {

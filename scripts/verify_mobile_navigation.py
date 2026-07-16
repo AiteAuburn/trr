@@ -5436,7 +5436,22 @@ def main() -> int:
         _assert_contains(
             "record delete complete helper binding",
             content,
-            "await completeSelectedRecordDeleteRequest(selectedRecord.id, account.id);",
+            "await completeSelectedRecordDeleteRequest(recordId, accountId);",
+        )
+        _assert_contains(
+            "record delete start and complete helper",
+            content,
+            "async function startAndCompleteSelectedRecordDeleteRequest(recordId: string, accountId: string)",
+        )
+        _assert_contains(
+            "record delete start and complete helper internals",
+            content,
+            "startRecordDeleteRequest();\n    await completeSelectedRecordDeleteRequest(recordId, accountId);",
+        )
+        _assert_contains(
+            "record delete start and complete helper binding",
+            content,
+            "await startAndCompleteSelectedRecordDeleteRequest(selectedRecord.id, account.id);",
         )
         _assert_contains(
             "record delete success result helper fields",
