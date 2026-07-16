@@ -3941,10 +3941,14 @@ export default function App() {
     payload: Record<string, unknown>
   ) {
     return records.map((record, index) =>
-      index === editIndex
+      isPreviewRecordEditTargetIndex(index, editIndex)
         ? previewRecordWithEditPayload(record, occurredAt, payload)
         : record
     );
+  }
+
+  function isPreviewRecordEditTargetIndex(recordIndex: number, editIndex: number) {
+    return recordIndex === editIndex;
   }
 
   function previewRecordWithEditPayload(

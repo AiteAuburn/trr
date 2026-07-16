@@ -4291,7 +4291,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit records update helper usage",
             content,
-            "index === editIndex\n        ? previewRecordWithEditPayload(record, occurredAt, payload)\n        : record",
+            "isPreviewRecordEditTargetIndex(index, editIndex)\n        ? previewRecordWithEditPayload(record, occurredAt, payload)\n        : record",
+        )
+        _assert_contains(
+            "AI candidate preview edit target index helper",
+            content,
+            "function isPreviewRecordEditTargetIndex(recordIndex: number, editIndex: number)",
+        )
+        _assert_contains(
+            "AI candidate preview edit target index helper internals",
+            content,
+            "function isPreviewRecordEditTargetIndex(recordIndex: number, editIndex: number) {\n    return recordIndex === editIndex;",
         )
         _assert_contains(
             "AI candidate preview edit single record helper",

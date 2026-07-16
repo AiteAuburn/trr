@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1861: Reuse preview edit target-index helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `isPreviewRecordEditTargetIndex()` for the edited-record map index match.
+- Reused the helper from `previewRecordsWithEditedRecord()` while preserving unchanged-record passthrough and edited-record merge behavior.
+- Updated navigation verifier coverage for the target-index helper binding and internals.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser endpoint/request semantics/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining preview edit/remove build helpers in small behavior-preserving slices.
+
 ### T1860: Reuse preview edit single-record helper
 
 Status: done
