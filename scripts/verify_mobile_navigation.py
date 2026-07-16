@@ -4496,7 +4496,7 @@ def main() -> int:
         _assert_contains(
             "AI save failure result helper binding",
             content,
-            "const message = aiSaveFailureStatusMessage(error);\n      openAiSaveFailureResult(message);\n      setStatus(message);",
+            "handleDailyRecordSaveFailure(error);",
         )
         _assert_contains(
             "record summary result helper",
@@ -6344,6 +6344,9 @@ def main() -> int:
             ("daily record save success helper records", "const createdRecords = boundRecordsList(saveResponse.records, maxMobilePreviewRecords);"),
             ("daily record save success helper fields", "setPreview(null);\n    clearTranscriptDraftState();\n    clearDailyRecordDraftOrganizationState();\n    setRecords((current) => boundRecordsList([...createdRecords, ...current]));\n    setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));"),
             ("daily record save success helper binding", "handleDailyRecordSaveSuccess(saveResponse, recordsToSave.length);"),
+            ("daily record save failure helper", "function handleDailyRecordSaveFailure(error: unknown)"),
+            ("daily record save failure helper internals", "const message = aiSaveFailureStatusMessage(error);\n    openAiSaveFailureResult(message);\n    setStatus(message);"),
+            ("daily record save failure helper binding", "handleDailyRecordSaveFailure(error);"),
             ("daily record save endpoint", '"/daily-records/save"'),
             ("daily record save payload binding", "body: JSON.stringify(buildDailyRecordSaveRequest(nextPreview, recordsToSave, dailyTranscriptEntries))"),
             ("daily record save clears retained transcripts", "clearDailyRecordDraftOrganizationState();"),

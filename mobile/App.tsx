@@ -7531,6 +7531,12 @@ export default function App() {
     syncAchievementsAfterRecordSave();
   }
 
+  function handleDailyRecordSaveFailure(error: unknown) {
+    const message = aiSaveFailureStatusMessage(error);
+    openAiSaveFailureResult(message);
+    setStatus(message);
+  }
+
   async function savePreviewRecords() {
     if (isBusy || previewSaveInFlight.current) {
       return;
@@ -7552,9 +7558,7 @@ export default function App() {
       const saveResponse = await requestDailyRecordSave(account.id, preview, recordsToSave);
       handleDailyRecordSaveSuccess(saveResponse, recordsToSave.length);
     } catch (error) {
-      const message = aiSaveFailureStatusMessage(error);
-      openAiSaveFailureResult(message);
-      setStatus(message);
+      handleDailyRecordSaveFailure(error);
     } finally {
       finishPreviewSaveRequest();
     }
