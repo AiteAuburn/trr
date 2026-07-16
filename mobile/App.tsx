@@ -7900,6 +7900,17 @@ export default function App() {
     }
   }
 
+  function startRecordDeleteRequest() {
+    recordDeleteInFlight.current = true;
+    setIsBusy(true);
+    setStatus(recordDeleteProgressStatusMessage());
+  }
+
+  function finishRecordDeleteRequest() {
+    recordDeleteInFlight.current = false;
+    setIsBusy(false);
+  }
+
   async function deleteSelectedRecord() {
     if (isBusy || recordDeleteInFlight.current) {
       return;
@@ -7915,9 +7926,7 @@ export default function App() {
       return;
     }
 
-    recordDeleteInFlight.current = true;
-    setIsBusy(true);
-    setStatus(recordDeleteProgressStatusMessage());
+    startRecordDeleteRequest();
     try {
       await requestNoContent(normalizedApiBaseUrl, `/records/${selectedRecord.id}`, {
         method: "DELETE",
@@ -7931,8 +7940,7 @@ export default function App() {
     } catch (error) {
       setStatus(recordDeleteFailureStatusMessage(error));
     } finally {
-      recordDeleteInFlight.current = false;
-      setIsBusy(false);
+      finishRecordDeleteRequest();
     }
   }
 

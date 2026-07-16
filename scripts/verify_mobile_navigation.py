@@ -4559,6 +4559,36 @@ def main() -> int:
             "function openDeleteSuccessResult(summary: string)",
         )
         _assert_contains(
+            "record delete start helper",
+            content,
+            "function startRecordDeleteRequest()",
+        )
+        _assert_contains(
+            "record delete start helper fields",
+            content,
+            "recordDeleteInFlight.current = true;\n    setIsBusy(true);\n    setStatus(recordDeleteProgressStatusMessage());",
+        )
+        _assert_contains(
+            "record delete start helper binding",
+            content,
+            "startRecordDeleteRequest();",
+        )
+        _assert_contains(
+            "record delete finish helper",
+            content,
+            "function finishRecordDeleteRequest()",
+        )
+        _assert_contains(
+            "record delete finish helper fields",
+            content,
+            "recordDeleteInFlight.current = false;\n    setIsBusy(false);",
+        )
+        _assert_contains(
+            "record delete finish helper binding",
+            content,
+            "finishRecordDeleteRequest();",
+        )
+        _assert_contains(
             "record delete success result helper fields",
             content,
             'openRecordSummaryResult(summary, "deleteSuccess", setLastDeletedSummary);',

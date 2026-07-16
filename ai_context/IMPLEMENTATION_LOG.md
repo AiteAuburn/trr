@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1805 reuse record delete request state helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `startRecordDeleteRequest()` and `finishRecordDeleteRequest()` for record delete in-flight, busy, progress, and cleanup state.
+- Reused the helpers from `deleteSelectedRecord()` while preserving the same DELETE request, unavailable guard, success path, failure status, and cleanup timing.
+- Updated navigation verifier coverage for the record delete start/finish helpers and bindings.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation targets、return behavior、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1804 reuse record update request state helpers
 
 類型：mobile / refactor / verifier / docs
