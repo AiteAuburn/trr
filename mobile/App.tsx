@@ -8913,6 +8913,10 @@ export default function App() {
     setNativeStatus(nativeLlamaSuccessStatusMessage());
   }
 
+  function startNativeLlamaStatus() {
+    setNativeStatus(nativeLlamaProgressStatusMessage());
+  }
+
   function handleNativeBenchmarkMissingInput() {
     setNativeStatus(nativeBenchmarkMissingInputStatusMessage());
   }
@@ -9046,7 +9050,7 @@ export default function App() {
       return;
     }
     startNativeDebugAction();
-    setNativeStatus(nativeLlamaProgressStatusMessage());
+    startNativeLlamaStatus();
     try {
       const output = await parseWithNativeLlama({
         modelPath: llamaInput.modelPath,
