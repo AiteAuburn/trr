@@ -1910,7 +1910,8 @@ export default function App() {
     pendingPreviewRemoveRecord && pendingPreviewRemoveIndex !== null
       ? pendingRecordDisplayItem(pendingPreviewRemoveRecord, pendingPreviewRemoveIndex, "remove-preview")
       : null;
-  const isDailyRecordRemoveConfirm = previewActionReturnScreen === "aiSaveConfirm";
+  const isPreviewActionReturningToDailyRecord = previewActionReturnScreen === "aiSaveConfirm";
+  const isDailyRecordRemoveConfirm = isPreviewActionReturningToDailyRecord;
   const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayTexts(
     isDailyRecordRemoveConfirm,
     pendingPreviewRemoveDisplayItem?.confidencePercent ?? null
@@ -3521,7 +3522,7 @@ export default function App() {
       return;
     }
     const nextRecords = preview.records.filter((_, recordIndex) => recordIndex !== index);
-    if (previewActionReturnScreen === "aiSaveConfirm") {
+    if (isPreviewActionReturningToDailyRecord) {
       reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, "delete");
     } else {
       setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
@@ -3670,7 +3671,7 @@ export default function App() {
             }
           : record
       );
-      if (previewActionReturnScreen === "aiSaveConfirm") {
+      if (isPreviewActionReturningToDailyRecord) {
         reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, "edit");
       } else {
         setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
