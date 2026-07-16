@@ -7923,6 +7923,13 @@ export default function App() {
     setIsBusy(false);
   }
 
+  async function requestSelectedRecordDelete(recordId: string, accountId: string) {
+    await requestNoContent(normalizedApiBaseUrl, `/records/${recordId}`, {
+      method: "DELETE",
+      headers: protectedRequestHeaders(accountId, accessToken)
+    });
+  }
+
   async function deleteSelectedRecord() {
     if (isBusy || recordDeleteInFlight.current) {
       return;
@@ -7940,10 +7947,7 @@ export default function App() {
 
     startRecordDeleteRequest();
     try {
-      await requestNoContent(normalizedApiBaseUrl, `/records/${selectedRecord.id}`, {
-        method: "DELETE",
-        headers: protectedRequestHeaders(account.id, accessToken)
-      });
+      await requestSelectedRecordDelete(selectedRecord.id, account.id);
       setRecords((current) => current.filter((record) => record.id !== selectedRecord.id));
       setSelectedRecord(null);
       seedEmptyRecordEditStateForNow();

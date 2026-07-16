@@ -4744,6 +4744,26 @@ def main() -> int:
             "finishRecordDeleteRequest();",
         )
         _assert_contains(
+            "record delete request helper",
+            content,
+            "async function requestSelectedRecordDelete(recordId: string, accountId: string)",
+        )
+        _assert_contains(
+            "record delete request helper endpoint",
+            content,
+            "await requestNoContent(normalizedApiBaseUrl, `/records/${recordId}`, {",
+        )
+        _assert_contains(
+            "record delete request helper options",
+            content,
+            "method: \"DELETE\",\n      headers: protectedRequestHeaders(accountId, accessToken)",
+        )
+        _assert_contains(
+            "record delete request helper binding",
+            content,
+            "await requestSelectedRecordDelete(selectedRecord.id, account.id);",
+        )
+        _assert_contains(
             "record delete success result helper fields",
             content,
             'openRecordSummaryResult(summary, "deleteSuccess", setLastDeletedSummary);',
