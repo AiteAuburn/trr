@@ -4215,6 +4215,14 @@ export default function App() {
     return models.length;
   }
 
+  function downloadedModelRowKey(model: DownloadedModel) {
+    return model.uri;
+  }
+
+  function downloadedModelRowLabel(model: DownloadedModel) {
+    return downloadedModelDisplayLabel(model);
+  }
+
   function updateNativeModelUrlInput(value: string) {
     setModelUrl(nativeDebugInputValue(value));
   }
@@ -11664,8 +11672,8 @@ export default function App() {
                     </Text>
                   </Pressable>
                 {downloadedModels.map((model) => (
-                  <Text key={model.uri} style={styles.rejectedText}>
-                    {downloadedModelDisplayLabel(model)}
+                  <Text key={downloadedModelRowKey(model)} style={styles.rejectedText}>
+                    {downloadedModelRowLabel(model)}
                   </Text>
                 ))}
                 <TextInput

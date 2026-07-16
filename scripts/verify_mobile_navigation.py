@@ -9346,6 +9346,15 @@ def main() -> int:
         ):
             _assert_contains(label, settings_choice_display_content, marker)
         for label, marker in (
+            ("downloaded model row key helper", "function downloadedModelRowKey(model: DownloadedModel)"),
+            ("downloaded model row key helper fields", "return model.uri;"),
+            ("downloaded model row key helper binding", "key={downloadedModelRowKey(model)}"),
+            ("downloaded model row label helper", "function downloadedModelRowLabel(model: DownloadedModel)"),
+            ("downloaded model row label helper fields", "return downloadedModelDisplayLabel(model);"),
+            ("downloaded model row label helper binding", "{downloadedModelRowLabel(model)}"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
             ("AI model option bound helper", "function boundAiModelOption<T extends AiModelOptionTransformSource>(value: T): T"),
             ("AI model option id bound", "id: boundIdentifier(value.id)"),
             ("AI model option availability bool", "available: Boolean(value.available)"),
@@ -9936,6 +9945,8 @@ def main() -> int:
             ("direct recording whisper model status label binding", "setStatus(recordingModelSelectedStatusMessage(item.label));"),
             ("direct native whisper download kind binding", 'onPress={() => selectNativeDownloadKind("whisper")}'),
             ("direct native llama download kind binding", 'onPress={() => selectNativeDownloadKind("llama")}'),
+            ("direct downloaded model row key binding", "key={model.uri}"),
+            ("direct downloaded model row label binding", "{downloadedModelDisplayLabel(model)}"),
             ("direct auth provider preview binding", "onPress={() => startAuthProviderChallenge(item.provider)}"),
             ("direct auth provider handler target binding", "startAuthProviderChallenge(item.provider);"),
             ("direct auth session management status binding", "onPress={() => showAuthSessionManagementStatus(item.actionStatus)}"),
