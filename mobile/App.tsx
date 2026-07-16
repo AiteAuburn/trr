@@ -3606,6 +3606,11 @@ export default function App() {
     return voiceSeconds > 0 ? "voice" : "text";
   }
 
+  function openAiReviewAfterParserSuccess() {
+    setTranscriptVoiceSeconds(0);
+    openScreen("aiReview");
+  }
+
   function removePreviewRecord(index: number) {
     if (!preview) {
       return;
@@ -7375,8 +7380,7 @@ export default function App() {
       if (transcriptEntry) {
         appendDailyTranscriptEntry(transcriptEntry);
       }
-      setTranscriptVoiceSeconds(0);
-      openScreen("aiReview");
+      openAiReviewAfterParserSuccess();
       reorganizeDailyRecordDraftAfterChange(
         mergedDailyPreview,
         "add",

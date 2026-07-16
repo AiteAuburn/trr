@@ -5726,8 +5726,9 @@ def main() -> int:
             ("home recording whisper handoff", 'void transcribeRecordingToReview("today", capturedAudioPath, elapsedSeconds);'),
             ("home recording fallback transcript review", 'setTranscriptReviewReturnScreen("today");\n      openScreenWithStatus("transcriptReview", recordingTextFallbackStatusMessage());'),
             ("parse request voice seconds", "voice_seconds: parserVoiceSeconds"),
-            ("parse success clears voice seconds", "setTranscriptVoiceSeconds(0);"),
-            ("parse success screen opener binding", 'setTranscriptVoiceSeconds(0);\n      openScreen("aiReview");'),
+            ("parse success clears voice seconds helper", "function openAiReviewAfterParserSuccess() {\n    setTranscriptVoiceSeconds(0);"),
+            ("parse success screen opener helper", 'function openAiReviewAfterParserSuccess() {\n    setTranscriptVoiceSeconds(0);\n    openScreen("aiReview");'),
+            ("parse success screen opener binding", "openAiReviewAfterParserSuccess();"),
             ("parse success refreshes quota", "void loadVoiceQuota(account.id);"),
         ):
             _assert_contains(label, content, marker)
