@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1947: Reuse native debug success helpers
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `handleNativeWhisperSuccess()` and `handleNativeLlamaSuccess()` for native debug success side effects.
+- Reused the helpers from native Whisper and Llama actions while preserving transcript update behavior, bounded Llama output summary behavior, and success statuses.
+- Updated navigation verifier coverage for native debug success helpers, fields, and bindings.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing native debug action result helpers in small behavior-preserving slices.
+
 ### T1946: Reuse native debug input helpers
 
 Status: done

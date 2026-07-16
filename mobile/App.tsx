@@ -8899,6 +8899,16 @@ export default function App() {
     };
   }
 
+  function handleNativeWhisperSuccess(text: string) {
+    updateTranscriptDraft(text);
+    setNativeStatus(nativeWhisperSuccessStatusMessage());
+  }
+
+  function handleNativeLlamaSuccess(output: string) {
+    setLlamaDebugOutput(nativeLlamaOutputSummaryMessage(output.length));
+    setNativeStatus(nativeLlamaSuccessStatusMessage());
+  }
+
   async function downloadSelectedModel() {
     if (isNativeDebugActionBlocked()) {
       return;
@@ -8970,8 +8980,7 @@ export default function App() {
         modelPath: whisperInput.modelPath,
         audioPath: whisperInput.audioPath
       });
-      updateTranscriptDraft(text);
-      setNativeStatus(nativeWhisperSuccessStatusMessage());
+      handleNativeWhisperSuccess(text);
     } catch (error) {
       setNativeStatus(nativeWhisperFailureStatusMessage(error));
     } finally {
@@ -8999,8 +9008,7 @@ export default function App() {
         modelPath: llamaInput.modelPath,
         transcript: llamaInput.transcript
       });
-      setLlamaDebugOutput(nativeLlamaOutputSummaryMessage(output.length));
-      setNativeStatus(nativeLlamaSuccessStatusMessage());
+      handleNativeLlamaSuccess(output);
     } catch (error) {
       setNativeStatus(nativeLlamaFailureStatusMessage(error));
     } finally {
