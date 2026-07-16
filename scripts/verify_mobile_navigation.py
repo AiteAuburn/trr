@@ -5124,6 +5124,16 @@ def main() -> int:
             "function isRecordUpdateRequestBlocked() {\n    return isBusy || recordUpdateInFlight.current;\n  }",
         )
         _assert_contains(
+            "guarded record action selected record helper",
+            content,
+            "function selectedRecordForGuardedRecordActionContext()",
+        )
+        _assert_contains(
+            "guarded record action selected record helper internals",
+            content,
+            "function selectedRecordForGuardedRecordActionContext() {\n    return selectedRecord;\n  }",
+        )
+        _assert_contains(
             "record update guarded context in-flight guard",
             content,
             "if (isRecordUpdateRequestBlocked()) {\n      return null;\n    }",
@@ -5131,7 +5141,7 @@ def main() -> int:
         _assert_contains(
             "record update guarded context selected record guard",
             content,
-            "const record = selectedRecord;\n    if (!record) {\n      return null;\n    }",
+            "const record = selectedRecordForGuardedRecordActionContext();\n    if (!record) {\n      return null;\n    }",
         )
         _assert_contains(
             "record update guarded context unavailable guard",
@@ -5566,7 +5576,7 @@ def main() -> int:
         _assert_contains(
             "record delete guarded context selected record guard",
             content,
-            "const record = selectedRecord;\n    if (!record) {\n      return null;\n    }",
+            "const record = selectedRecordForGuardedRecordActionContext();\n    if (!record) {\n      return null;\n    }",
         )
         _assert_contains(
             "record delete guarded context unavailable guard",

@@ -8573,11 +8573,15 @@ export default function App() {
     return isBusy || recordUpdateInFlight.current;
   }
 
+  function selectedRecordForGuardedRecordActionContext() {
+    return selectedRecord;
+  }
+
   function guardedSelectedRecordUpdateContext() {
     if (isRecordUpdateRequestBlocked()) {
       return null;
     }
-    const record = selectedRecord;
+    const record = selectedRecordForGuardedRecordActionContext();
     if (!record) {
       return null;
     }
@@ -8661,7 +8665,7 @@ export default function App() {
     if (isRecordDeleteRequestBlocked()) {
       return null;
     }
-    const record = selectedRecord;
+    const record = selectedRecordForGuardedRecordActionContext();
     if (!record) {
       return null;
     }
