@@ -3770,6 +3770,10 @@ export default function App() {
     return item.index;
   }
 
+  function dailyRecordEntryReturnScreen(): AppScreen {
+    return "aiSaveConfirm";
+  }
+
   function dailyRecordEntryTypeLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
     return item.typeLabel;
   }
@@ -3844,7 +3848,7 @@ export default function App() {
   }
 
   function editDailyRecordEntry(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    openPreviewRecordEdit(dailyRecordEntryTarget(item), "aiSaveConfirm");
+    openPreviewRecordEdit(dailyRecordEntryTarget(item), dailyRecordEntryReturnScreen());
   }
 
   function pressDailyRecordEntryEdit(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
@@ -3852,7 +3856,7 @@ export default function App() {
   }
 
   function deleteDailyRecordEntry(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    openPreviewRecordRemoveConfirm(dailyRecordEntryTarget(item), "aiSaveConfirm");
+    openPreviewRecordRemoveConfirm(dailyRecordEntryTarget(item), dailyRecordEntryReturnScreen());
   }
 
   function pressDailyRecordEntryDelete(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
