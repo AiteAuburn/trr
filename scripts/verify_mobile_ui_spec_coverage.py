@@ -60,7 +60,7 @@ CANONICAL_SPEC_SCREENS = (
     SpecScreen("4.14.5", "排行榜預覽頁", "ranking", ("rankingReadinessChecklistItems.map", "rankingActionStatus")),
     SpecScreen("4.15", "文字確認頁", "transcriptReview", ("transcriptReviewCostBoundaryChecklistItems.map", "parseTranscript")),
     SpecScreen("4.16", "AI 整理確認頁", "aiReview", ("previewRecordDisplayItems.map", "rejectedPreviewDisplayItems.map")),
-    SpecScreen("4.16.0", "AI 候選移除確認頁", "aiRemoveConfirm", ("removePreviewRecord", "aiCandidateRemoveChecklistItems.map")),
+    SpecScreen("4.16.0", "AI 候選移除確認頁", "aiRemoveConfirm", ("removePreviewRecord", "items={aiCandidateRemoveChecklistItems}")),
     SpecScreen("4.16.1", "AI 儲存確認頁", "aiSaveConfirm", ("savePreviewRecords", "aiSaveConfirmBoundaryRows.map")),
     SpecScreen(
         "4.17",
@@ -68,7 +68,7 @@ CANONICAL_SPEC_SCREENS = (
         "aiSaveConfirm",
         ("dailyRecordSectionItems.map", "todayTranscriptTitleDisplayText", "fixedSaveBar"),
     ),
-    SpecScreen("4.16.2", "AI 儲存失敗頁", "aiSaveFailure", ("aiSaveFailureChecklistItems.map", "openManualRecord")),
+    SpecScreen("4.16.2", "AI 儲存失敗頁", "aiSaveFailure", ("items={aiSaveFailureChecklistItems}", "openManualRecord")),
 )
 
 TOP_LEVEL_MENU_SCREENS = {

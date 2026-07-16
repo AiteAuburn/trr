@@ -766,6 +766,7 @@ import {
 import { protectedRequestHeaders } from "./authRequestHeaders";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { AiCandidateActionRow } from "./aiCandidateActionRow";
+import { AiFlowChecklist } from "./aiFlowChecklist";
 import { AiReviewActionRow } from "./aiReviewActionRow";
 import { AiSaveFailureActionRow } from "./aiSaveFailureActionRow";
 import { CoreFlowEntryActionRow } from "./coreFlowEntryActionRow";
@@ -4767,14 +4768,6 @@ export default function App() {
 
   function previewTimedRowTime(row: { time: string }) {
     return row.time;
-  }
-
-  function aiFlowChecklistItemKey(item: string) {
-    return item;
-  }
-
-  function aiFlowChecklistItemText(item: string) {
-    return item;
   }
 
   function recordFlowChecklistItemKey(item: string) {
@@ -9611,9 +9604,7 @@ export default function App() {
             <View style={styles.aiReviewList}>
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.costBoundaryBadge}</Text>
-                {aiReviewCostBoundaryChecklistItems.map((item) => (
-                  <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />
-                ))}
+                <AiFlowChecklist items={aiReviewCostBoundaryChecklistItems} />
               </View>
               {previewState.hasRecords ? (
                 <View style={styles.aiReviewCard}>
@@ -9867,9 +9858,7 @@ export default function App() {
             ) : null}
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.preSubmitCheck}</Text>
-              {aiSaveConfirmChecklistItems.map((item) => (
-                <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />
-              ))}
+              <AiFlowChecklist items={aiSaveConfirmChecklistItems} />
             </View>
             <View style={styles.reportBoundaryGrid}>
               {aiSaveConfirmBoundaryRows.map((row) => (
@@ -9911,9 +9900,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.removeScope}</Text>
-              {aiCandidateRemoveChecklistItems.map((item) => (
-                <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />
-              ))}
+              <AiFlowChecklist items={aiCandidateRemoveChecklistItems} />
             </View>
             <DangerConfirmActionRow
               cancelAccessibilityLabel={coreFlowDisplayLabels.cancelAccessibility}
@@ -9939,9 +9926,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.failureBoundary}</Text>
-              {aiSaveFailureChecklistItems.map((item) => (
-                <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />
-              ))}
+              <AiFlowChecklist items={aiSaveFailureChecklistItems} />
             </View>
             <AiSaveFailureActionRow
               backAccessibilityLabel={coreFlowDisplayLabels.backAiConfirmAccessibility}

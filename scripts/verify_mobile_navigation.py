@@ -13,6 +13,7 @@ API_CLIENT_PATH = REPO_ROOT / "mobile" / "apiClient.ts"
 APP_TYPES_PATH = REPO_ROOT / "mobile" / "appTypes.ts"
 APP_RUNTIME_CONFIG_PATH = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
+AI_FLOW_CHECKLIST_PATH = REPO_ROOT / "mobile" / "aiFlowChecklist.tsx"
 ACCOUNT_SECURITY_ACTION_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityActionGrid.tsx"
 SETTINGS_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "settingsBoundaryGrid.tsx"
 SETTINGS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "settingsChecklist.tsx"
@@ -1405,6 +1406,7 @@ def main() -> int:
     app_types_content = APP_TYPES_PATH.read_text(encoding="utf-8")
     app_runtime_config_content = APP_RUNTIME_CONFIG_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
+    ai_flow_checklist_content = AI_FLOW_CHECKLIST_PATH.read_text(encoding="utf-8")
     account_security_action_grid_content = ACCOUNT_SECURITY_ACTION_GRID_PATH.read_text(encoding="utf-8")
     settings_boundary_grid_content = SETTINGS_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
     settings_checklist_content = SETTINGS_CHECKLIST_PATH.read_text(encoding="utf-8")
@@ -1921,13 +1923,9 @@ def main() -> int:
             ("record update highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("manual submit highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("transcript review highlight bullet row", "transcriptReviewCostBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={recordFlowChecklistItemKey(item)} text={recordFlowChecklistItemText(item)} />"),
-            ("ai review highlight bullet row", "aiReviewCostBoundaryChecklistItems.map((item) => (\n                  <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />"),
-            ("ai save confirm highlight bullet row", "aiSaveConfirmChecklistItems.map((item) => (\n                <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />"),
             ("history boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("analysis boundary highlight bullet row", "analysisBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />"),
             ("record entry settings highlight bullet row", "recordEntrySettingsChecklistItems.map((item) => (\n                  <HighlightBulletRow key={recordFlowChecklistItemKey(item)} text={recordFlowChecklistItemText(item)} />"),
-            ("ai candidate remove highlight bullet row", "aiCandidateRemoveChecklistItems.map((item) => (\n                <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />"),
-            ("ai save failure highlight bullet row", "aiSaveFailureChecklistItems.map((item) => (\n                <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />"),
             ("detailed report notes highlight bullet row", "detailedReportNoteItems.map((item) => (\n                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />"),
             ("community readiness highlight bullet row", "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={communityReadinessChecklistItemText(item)}"),
             ("ranking readiness highlight bullet row", "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />"),
@@ -1974,6 +1972,17 @@ def main() -> int:
             ("food community ranking highlight detail row", "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityRankingRowKey(row)}\n                  label={foodCommunityRankingRowLabel(row)}\n                  value={foodCommunityRankingRowValue(row)}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("AI flow checklist component", "export function AiFlowChecklist"),
+            ("AI flow checklist item key helper", "function aiFlowChecklistItemKey(item: string)"),
+            ("AI flow checklist item key helper fields", "return item;"),
+            ("AI flow checklist item text helper", "function aiFlowChecklistItemText(item: string)"),
+            ("AI flow checklist item text helper fields", "return item;"),
+            ("AI flow checklist map", "items.map((item) => ("),
+            ("AI flow checklist key binding", "key={aiFlowChecklistItemKey(item)}"),
+            ("AI flow checklist text binding", "text={aiFlowChecklistItemText(item)}"),
+        ):
+            _assert_contains(label, ai_flow_checklist_content, marker)
         for label, marker in (
             ("settings checklist component", "export function SettingsChecklist"),
             ("settings checklist item key helper", "function settingsChecklistItemKey(item: string)"),
@@ -11089,12 +11098,11 @@ def main() -> int:
             ("save success boundary checklist items binding", "items={saveSuccessBoundaryChecklistItems}"),
             ("delete success boundary checklist items binding", "items={deleteSuccessBoundaryChecklistItems}"),
             ("update success boundary checklist items binding", "items={updateSuccessBoundaryChecklistItems}"),
-            ("ai flow checklist item key helper", "function aiFlowChecklistItemKey(item: string)"),
-            ("ai flow checklist item key helper fields", "return item;"),
-            ("ai flow checklist item key binding", "key={aiFlowChecklistItemKey(item)}"),
-            ("ai flow checklist item text helper", "function aiFlowChecklistItemText(item: string)"),
-            ("ai flow checklist item text helper fields", "return item;"),
-            ("ai flow checklist item text binding", "text={aiFlowChecklistItemText(item)}"),
+            ("AI flow checklist binding", "<AiFlowChecklist"),
+            ("AI review cost checklist items binding", "items={aiReviewCostBoundaryChecklistItems}"),
+            ("AI save confirm checklist items binding", "items={aiSaveConfirmChecklistItems}"),
+            ("AI candidate remove checklist items binding", "items={aiCandidateRemoveChecklistItems}"),
+            ("AI save failure checklist items binding", "items={aiSaveFailureChecklistItems}"),
             ("record flow checklist item key helper", "function recordFlowChecklistItemKey(item: string)"),
             ("record flow checklist item key helper fields", "return item;"),
             ("record flow checklist item key binding", "key={recordFlowChecklistItemKey(item)}"),
@@ -11301,15 +11309,10 @@ def main() -> int:
             "aiCandidateRemoveChecklistItems",
             "aiSaveFailureChecklistItems",
         ):
-            ai_flow_checklist_render_block = _match_block(
-                content,
-                rf"{list_name}\.map\(\(item\) => \(([\s\S]*?<HighlightBulletRow[^\n]*/>\n\s*)\)\)",
-                f"{list_name} AI flow checklist render block",
-            )
             _assert_not_contains(
-                f"{list_name} direct checklist item binding",
-                ai_flow_checklist_render_block,
-                "key={item} text={item}",
+                f"{list_name} direct AI flow checklist map",
+                content,
+                f"{list_name}.map((item) => (",
             )
         for list_name in (
             "recordEntrySettingsChecklistItems",

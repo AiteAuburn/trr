@@ -45,7 +45,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "aiRemoveConfirm": [
         'currentScreen === "aiRemoveConfirm"',
-        "aiCandidateRemoveChecklistItems.map",
+        "items={aiCandidateRemoveChecklistItems}",
         "pendingPreviewRemoveDisplayItem",
         "onConfirmPress={confirmPreviewRecordRemove}",
     ],
@@ -58,7 +58,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "aiSaveFailure": [
         'currentScreen === "aiSaveFailure"',
-        "aiSaveFailureChecklistItems.map",
+        "items={aiSaveFailureChecklistItems}",
         "onBackPress={returnFromAiSaveFailureToAiReview}",
     ],
     "saveSuccess": [
