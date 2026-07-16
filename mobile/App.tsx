@@ -12741,16 +12741,12 @@ export default function App() {
                   disabled={isBusy}
                   placeholder="Whisper model path"
                 />
-                <TextInput
+                <NativeDebugTextField
                   accessibilityLabel={auxiliaryDisplayLabels.audioPathInputAccessibility}
                   value={audioPath}
                   onChangeText={updateNativeAudioPathInput}
                   maxLength={maxNativeDebugInputLength}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  editable={!isBusy}
-                  accessibilityState={{ disabled: isBusy }}
-                  style={[styles.input, isBusy ? styles.inputDisabled : null]}
+                  disabled={isBusy}
                   placeholder="Audio file path"
                 />
                 <TextInput
