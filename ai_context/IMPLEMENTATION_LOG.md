@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1937 reuse guarded record action account helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `accountForGuardedRecordActionContext()` for update/delete guarded-context account reads.
+- Reused the helper from update/delete guarded contexts while preserving the existing no-account null return behavior and context shape consumed by update/delete requests.
+- Updated navigation verifier coverage for the guarded record action account helper, internals, and both guarded-context bindings.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing record update/delete request argument extraction in small behavior-preserving slices.
+
 ### T1936 reuse guarded record action selected-record helper
 
 類型：mobile / refactor / verifier / docs

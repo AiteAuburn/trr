@@ -5134,6 +5134,16 @@ def main() -> int:
             "function selectedRecordForGuardedRecordActionContext() {\n    return selectedRecord;\n  }",
         )
         _assert_contains(
+            "guarded record action account helper",
+            content,
+            "function accountForGuardedRecordActionContext()",
+        )
+        _assert_contains(
+            "guarded record action account helper internals",
+            content,
+            "function accountForGuardedRecordActionContext() {\n    return account;\n  }",
+        )
+        _assert_contains(
             "record update guarded context in-flight guard",
             content,
             "if (isRecordUpdateRequestBlocked()) {\n      return null;\n    }",
@@ -5151,7 +5161,7 @@ def main() -> int:
         _assert_contains(
             "record update guarded context account guard",
             content,
-            "if (!account) {\n      return null;\n    }\n    return { account, record };",
+            "const actionAccount = accountForGuardedRecordActionContext();\n    if (!actionAccount) {\n      return null;\n    }\n    return { account: actionAccount, record };",
         )
         _assert_contains(
             "record update guarded context binding",
@@ -5586,7 +5596,7 @@ def main() -> int:
         _assert_contains(
             "record delete guarded context account guard",
             content,
-            "if (!account) {\n      return null;\n    }\n    return { account, record };",
+            "const actionAccount = accountForGuardedRecordActionContext();\n    if (!actionAccount) {\n      return null;\n    }\n    return { account: actionAccount, record };",
         )
         _assert_contains(
             "record delete guarded context binding",

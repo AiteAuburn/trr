@@ -8577,6 +8577,10 @@ export default function App() {
     return selectedRecord;
   }
 
+  function accountForGuardedRecordActionContext() {
+    return account;
+  }
+
   function guardedSelectedRecordUpdateContext() {
     if (isRecordUpdateRequestBlocked()) {
       return null;
@@ -8589,10 +8593,11 @@ export default function App() {
       openRecordUpdateUnavailable();
       return null;
     }
-    if (!account) {
+    const actionAccount = accountForGuardedRecordActionContext();
+    if (!actionAccount) {
       return null;
     }
-    return { account, record };
+    return { account: actionAccount, record };
   }
 
   async function updateSelectedRecord() {
@@ -8673,10 +8678,11 @@ export default function App() {
       openRecordDeleteUnavailable();
       return null;
     }
-    if (!account) {
+    const actionAccount = accountForGuardedRecordActionContext();
+    if (!actionAccount) {
       return null;
     }
-    return { account, record };
+    return { account: actionAccount, record };
   }
 
   async function deleteSelectedRecord() {
