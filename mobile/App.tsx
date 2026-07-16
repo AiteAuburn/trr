@@ -8371,10 +8371,18 @@ export default function App() {
     openScreenWithStatus("recordDetail", deleteConfirmReturnStatusMessage());
   }
 
-  function openRecordEdit() {
+  function selectedRecordForEditOpen() {
     const record = selectedRecord;
     if (!record) {
       returnToRecordDetailForMissingSelection();
+      return null;
+    }
+    return record;
+  }
+
+  function openRecordEdit() {
+    const record = selectedRecordForEditOpen();
+    if (!record) {
       return;
     }
     seedRecordEditStateFromRecord(record);

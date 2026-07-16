@@ -5571,7 +5571,17 @@ def main() -> int:
         _assert_contains(
             "record edit missing selection screen opener fallback",
             content,
-            'const record = selectedRecord;\n    if (!record) {\n      returnToRecordDetailForMissingSelection();\n      return;\n    }\n    seedRecordEditStateFromRecord(record);',
+            "const record = selectedRecordForEditOpen();\n    if (!record) {\n      return;\n    }\n    seedRecordEditStateFromRecord(record);",
+        )
+        _assert_contains(
+            "record edit selected record helper",
+            content,
+            "function selectedRecordForEditOpen()",
+        )
+        _assert_contains(
+            "record edit selected record helper internals",
+            content,
+            "const record = selectedRecord;\n    if (!record) {\n      returnToRecordDetailForMissingSelection();\n      return null;\n    }\n    return record;",
         )
         _assert_contains(
             "record edit return empty seed helper binding",
