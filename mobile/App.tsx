@@ -771,6 +771,7 @@ import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
+import { CommunityActionRow } from "./communityActionRow";
 import { DoctorShareActionRow } from "./doctorShareActionRow";
 import { HealthIntegrationActionRow } from "./healthIntegrationActionRow";
 import { HistoryCalendarMonthPicker } from "./historyCalendarMonthPicker";
@@ -12235,34 +12236,18 @@ export default function App() {
                 />
               ))}
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={foodCommunityShareAccessibilityDisplayLabel}
-                accessibilityRole="button"
-                accessibilityState={{ disabled: isBusy || !protectedAccountBackendReady }}
-                style={[styles.secondaryButton, isBusy || !protectedAccountBackendReady ? styles.buttonDisabled : null]}
-                disabled={isBusy || !protectedAccountBackendReady}
-                onPress={showFoodCommunityShareStatus}
-              >
-                <Text style={styles.secondaryButtonText}>{foodCommunityShareButtonDisplayLabel}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={communityPostAccessibilityDisplayLabel}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={showCommunityPostingStatus}
-              >
-                <Text style={styles.secondaryButtonText}>{communityPostButtonDisplayLabel}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={communityPrivacyAccessibilityDisplayLabel}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={showCommunityPrivacyStatus}
-              >
-                <Text style={styles.secondaryButtonText}>{rankingOptInButtonDisplayLabel}</Text>
-              </Pressable>
-            </View>
+            <CommunityActionRow
+              isShareDisabled={isBusy || !protectedAccountBackendReady}
+              onPostPress={showCommunityPostingStatus}
+              onPrivacyPress={showCommunityPrivacyStatus}
+              onSharePress={showFoodCommunityShareStatus}
+              postAccessibilityLabel={communityPostAccessibilityDisplayLabel}
+              postLabel={communityPostButtonDisplayLabel}
+              privacyAccessibilityLabel={communityPrivacyAccessibilityDisplayLabel}
+              privacyLabel={rankingOptInButtonDisplayLabel}
+              shareAccessibilityLabel={foodCommunityShareAccessibilityDisplayLabel}
+              shareLabel={foodCommunityShareButtonDisplayLabel}
+            />
             {communityActionStatusVisible() ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>

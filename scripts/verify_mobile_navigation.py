@@ -55,6 +55,7 @@ FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreviewBlock.tsx"
+COMMUNITY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "communityActionRow.tsx"
 DOCTOR_SHARE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "doctorShareActionRow.tsx"
 HEALTH_INTEGRATION_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "healthIntegrationActionRow.tsx"
 HISTORY_CALENDAR_MONTH_PICKER_PATH = REPO_ROOT / "mobile" / "historyCalendarMonthPicker.tsx"
@@ -1419,6 +1420,7 @@ def main() -> int:
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     delete_confirm_preview_block_content = DELETE_CONFIRM_PREVIEW_BLOCK_PATH.read_text(encoding="utf-8")
+    community_action_row_content = COMMUNITY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     doctor_share_action_row_content = DOCTOR_SHARE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     health_integration_action_row_content = HEALTH_INTEGRATION_ACTION_ROW_PATH.read_text(encoding="utf-8")
     history_calendar_month_picker_content = HISTORY_CALENDAR_MONTH_PICKER_PATH.read_text(encoding="utf-8")
@@ -1582,6 +1584,26 @@ def main() -> int:
             ("delete confirm preview danger icon style", 'backgroundColor: "#C85D5D"'),
         ):
             _assert_contains(label, delete_confirm_preview_block_content, marker)
+        for label, marker in (
+            ("community action row component", "export function CommunityActionRow"),
+            ("community action row share accessibility prop", "accessibilityLabel={shareAccessibilityLabel}"),
+            ("community action row post accessibility prop", "accessibilityLabel={postAccessibilityLabel}"),
+            ("community action row privacy accessibility prop", "accessibilityLabel={privacyAccessibilityLabel}"),
+            ("community action row button role", 'accessibilityRole="button"'),
+            ("community action row disabled state prop", "accessibilityState={{ disabled: isShareDisabled }}"),
+            ("community action row disabled prop", "disabled={isShareDisabled}"),
+            ("community action row share handler prop", "onPress={onSharePress}"),
+            ("community action row post handler prop", "onPress={onPostPress}"),
+            ("community action row privacy handler prop", "onPress={onPrivacyPress}"),
+            ("community action row share label", "{shareLabel}"),
+            ("community action row post label", "{postLabel}"),
+            ("community action row privacy label", "{privacyLabel}"),
+            ("community action row disabled style", "isShareDisabled ? styles.buttonDisabled : null"),
+            ("community action row shell style", "actionRow: {"),
+            ("community action row secondary style", "secondaryButton: {"),
+            ("community action row disabled style definition", "buttonDisabled: {"),
+        ):
+            _assert_contains(label, community_action_row_content, marker)
         for label, marker in (
             ("doctor share action row component", "export function DoctorShareActionRow"),
             ("doctor share action row token accessibility prop", "accessibilityLabel={tokenAccessibilityLabel}"),
@@ -11519,7 +11541,7 @@ def main() -> int:
             ("community post accessibility helper", "function communityPostAccessibilityLabel()"),
             ("community post accessibility helper fields", "return futurePreviewDisplayLabels.communityPostAccessibility;"),
             ("community post accessibility display label binding", "const communityPostAccessibilityDisplayLabel = communityPostAccessibilityLabel();"),
-            ("community post accessibility helper binding", "accessibilityLabel={communityPostAccessibilityDisplayLabel}"),
+            ("community post accessibility helper binding", "postAccessibilityLabel={communityPostAccessibilityDisplayLabel}"),
             ("community post button helper", "function communityPostButtonLabel()"),
             ("community post button helper fields", "return futurePreviewDisplayLabels.communityPostButton;"),
             ("community post button display label binding", "const communityPostButtonDisplayLabel = communityPostButtonLabel();"),
@@ -11527,7 +11549,7 @@ def main() -> int:
             ("community privacy accessibility helper", "function communityPrivacyAccessibilityLabel()"),
             ("community privacy accessibility helper fields", "return futurePreviewDisplayLabels.communityPrivacyAccessibility;"),
             ("community privacy accessibility display label binding", "const communityPrivacyAccessibilityDisplayLabel = communityPrivacyAccessibilityLabel();"),
-            ("community privacy accessibility helper binding", "accessibilityLabel={communityPrivacyAccessibilityDisplayLabel}"),
+            ("community privacy accessibility helper binding", "privacyAccessibilityLabel={communityPrivacyAccessibilityDisplayLabel}"),
             ("community action status label helper", "function communityActionStatusLabel()"),
             ("community action status label helper fields", "return futurePreviewDisplayLabels.communityStatus;"),
             ("community action status label display binding", "const communityActionStatusDisplayLabel = communityActionStatusLabel();"),
@@ -12022,14 +12044,15 @@ def main() -> int:
             ("health integration action row binding", "<HealthIntegrationActionRow"),
             ("health integration permission status binding", "onPermissionPress={showHealthIntegrationPermissionStatus}"),
             ("health integration meter status binding", "onMeterPress={showHealthIntegrationMeterStatus}"),
-            ("community posting status binding", "onPress={showCommunityPostingStatus}"),
-            ("community privacy status binding", "onPress={showCommunityPrivacyStatus}"),
+            ("community action row binding", "<CommunityActionRow"),
+            ("community posting status binding", "onPostPress={showCommunityPostingStatus}"),
+            ("community privacy status binding", "onPrivacyPress={showCommunityPrivacyStatus}"),
             ("food community search input binding", "onChangeText={updateFoodCommunitySearchInput}"),
             ("food community category press binding", "onOptionPress={pressFoodCommunityCategoryOption}"),
             ("food community item press binding", "onPress={() => pressFoodCommunityItem(item)}"),
-            ("food community share status binding", "onPress={showFoodCommunityShareStatus}"),
-            ("food community share accessibility binding", "accessibilityLabel={foodCommunityShareAccessibilityDisplayLabel}"),
-            ("food community share button label binding", "{foodCommunityShareButtonDisplayLabel}"),
+            ("food community share status binding", "onSharePress={showFoodCommunityShareStatus}"),
+            ("food community share accessibility binding", "shareAccessibilityLabel={foodCommunityShareAccessibilityDisplayLabel}"),
+            ("food community share button label binding", "shareLabel={foodCommunityShareButtonDisplayLabel}"),
             ("ranking public status binding", "onPress={rankingPublicActionPressTarget}"),
             ("ranking opt-in status binding", "onPress={rankingOptInActionPressTarget}"),
             ("ranking opt-in dynamic button label", "const rankingOptInButtonDisplayLabel = rankingOptInActionButtonLabel(communityActionDisplay.rankingOptInButton);"),
@@ -12042,9 +12065,11 @@ def main() -> int:
             ("health meter accessibility binding", "meterAccessibilityLabel={futurePreviewDisplayLabels.healthMeterAccessibility}"),
             ("health permission label binding", "permissionLabel={futurePreviewDisplayLabels.healthPermissionButton}"),
             ("health meter label binding", "meterLabel={futurePreviewDisplayLabels.healthMeterButton}"),
-            ("community post accessibility binding", "accessibilityLabel={communityPostAccessibilityDisplayLabel}"),
-            ("community privacy accessibility binding", "accessibilityLabel={communityPrivacyAccessibilityDisplayLabel}"),
-            ("community privacy dynamic button binding", "{rankingOptInButtonDisplayLabel}"),
+            ("community post accessibility binding", "postAccessibilityLabel={communityPostAccessibilityDisplayLabel}"),
+            ("community privacy accessibility binding", "privacyAccessibilityLabel={communityPrivacyAccessibilityDisplayLabel}"),
+            ("community post button binding", "postLabel={communityPostButtonDisplayLabel}"),
+            ("community privacy dynamic button binding", "privacyLabel={rankingOptInButtonDisplayLabel}"),
+            ("food community share disabled binding", "isShareDisabled={isBusy || !protectedAccountBackendReady}"),
             ("food community promoted title", "{communityScreenTitleLabel()}"),
             ("ranking promoted title", "{rankingScreenTitleLabel()}"),
             ("food community search accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}"),
