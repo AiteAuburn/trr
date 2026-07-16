@@ -8229,6 +8229,10 @@ export default function App() {
     );
   }
 
+  function handleMoreRecordSyncFailure() {
+    setRecordsStatus(recordSyncFailureStatusMessage());
+  }
+
   async function loadMoreRecords() {
     const syncContext = guardedMoreRecordSyncContext();
     if (!syncContext) {
@@ -8244,7 +8248,7 @@ export default function App() {
       const response = await requestMoreRecordSync(syncContext);
       handleMoreRecordSyncSuccess(response);
     } catch {
-      setRecordsStatus(recordSyncFailureStatusMessage());
+      handleMoreRecordSyncFailure();
     } finally {
       recordSyncInFlightKeys.current.delete(syncContext.syncKey);
     }
