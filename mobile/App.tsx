@@ -8799,8 +8799,12 @@ export default function App() {
     await completeManualRecordCreateRequest(profileId, accountId);
   }
 
+  function isManualCreateRequestBlocked() {
+    return isBusy || manualCreateInFlight.current;
+  }
+
   function guardedManualRecordCreateContext() {
-    if (isBusy || manualCreateInFlight.current) {
+    if (isManualCreateRequestBlocked()) {
       return null;
     }
     if (!protectedBackendReady) {

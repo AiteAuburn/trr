@@ -5369,9 +5369,19 @@ def main() -> int:
             "function guardedManualRecordCreateContext()",
         )
         _assert_contains(
+            "manual create request blocked helper",
+            content,
+            "function isManualCreateRequestBlocked()",
+        )
+        _assert_contains(
+            "manual create request blocked helper internals",
+            content,
+            "function isManualCreateRequestBlocked() {\n    return isBusy || manualCreateInFlight.current;\n  }",
+        )
+        _assert_contains(
             "manual create guarded context in-flight guard",
             content,
-            "if (isBusy || manualCreateInFlight.current) {\n      return null;\n    }",
+            "if (isManualCreateRequestBlocked()) {\n      return null;\n    }",
         )
         _assert_contains(
             "manual create guarded context unavailable guard",
