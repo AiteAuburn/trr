@@ -9934,24 +9934,14 @@ export default function App() {
                 <Text style={styles.label}>{dailyRecordLeaveGuardTitleDisplayText}</Text>
                 <Text style={styles.warningText}>{dailyRecordLeaveGuardBodyDisplayText}</Text>
                 <Text style={styles.evidence}>{dailyRecordLeaveGuardQuestionDisplayText}</Text>
-                <View style={styles.actionRow}>
-                  <Pressable
-                    accessibilityLabel={dailyRecordLeaveGuardCancelAccessibilityLabel}
-                    accessibilityRole="button"
-                    style={styles.secondaryButton}
-                    onPress={cancelDailyRecordLeaveGuard}
-                  >
-                    <Text style={styles.secondaryButtonText}>{dailyRecordLeaveGuardCancelDisplayText}</Text>
-                  </Pressable>
-                  <Pressable
-                    accessibilityLabel={dailyRecordLeaveGuardConfirmAccessibilityLabel}
-                    accessibilityRole="button"
-                    style={styles.dangerButton}
-                    onPress={confirmDailyRecordLeaveGuard}
-                  >
-                    <Text style={styles.dangerButtonText}>{dailyRecordLeaveGuardConfirmDisplayText}</Text>
-                  </Pressable>
-                </View>
+                <DangerConfirmActionRow
+                  cancelAccessibilityLabel={dailyRecordLeaveGuardCancelAccessibilityLabel}
+                  cancelLabel={dailyRecordLeaveGuardCancelDisplayText}
+                  confirmAccessibilityLabel={dailyRecordLeaveGuardConfirmAccessibilityLabel}
+                  confirmLabel={dailyRecordLeaveGuardConfirmDisplayText}
+                  onCancelPress={cancelDailyRecordLeaveGuard}
+                  onConfirmPress={confirmDailyRecordLeaveGuard}
+                />
               </View>
             ) : null}
             <View style={styles.dailyRecordDateCard}>
