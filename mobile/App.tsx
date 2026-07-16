@@ -3753,9 +3753,17 @@ export default function App() {
   }
 
   function refreshVoiceQuotaAfterParserSuccess(voiceSeconds: number) {
-    if (voiceSeconds > 0 && account) {
-      void loadVoiceQuota(account.id);
+    const currentAccount = account;
+    if (shouldRefreshVoiceQuotaAfterParserSuccess(voiceSeconds, currentAccount)) {
+      void loadVoiceQuota(currentAccount.id);
     }
+  }
+
+  function shouldRefreshVoiceQuotaAfterParserSuccess(
+    voiceSeconds: number,
+    currentAccount: Account | null
+  ): currentAccount is Account {
+    return voiceSeconds > 0 && Boolean(currentAccount);
   }
 
   function handleParserPreviewFailure(error: unknown) {
