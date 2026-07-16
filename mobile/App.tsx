@@ -8210,6 +8210,25 @@ export default function App() {
     );
   }
 
+  function handleMoreRecordSyncSuccess(response: RecordItem[]) {
+    const boundedPage = boundRecordsList(response, mobileRecordSyncLimit);
+    setRecords((current) => mergeRecordsByCursorOrder(current, boundedPage));
+    const hasMoreAfterPage = response.length >= mobileRecordSyncLimit;
+    setRecordsHasMore(hasMoreAfterPage);
+    const nextCount = Math.min(
+      mergeRecordsByCursorOrder(recordsForDisplay, boundedPage).length,
+      maxMobileRecordCacheLimit
+    );
+    setRecordsStatus(
+      recordSyncPageSuccessStatusMessage(
+        nextCount,
+        boundedPage.length,
+        maxMobileRecordCacheLimit,
+        hasMoreAfterPage && nextCount < maxMobileRecordCacheLimit
+      )
+    );
+  }
+
   async function loadMoreRecords() {
     const syncContext = guardedMoreRecordSyncContext();
     if (!syncContext) {
@@ -8223,22 +8242,7 @@ export default function App() {
     setRecordsStatus(recordSyncPageLoadingStatusMessage());
     try {
       const response = await requestMoreRecordSync(syncContext);
-      const boundedPage = boundRecordsList(response, mobileRecordSyncLimit);
-      setRecords((current) => mergeRecordsByCursorOrder(current, boundedPage));
-      const hasMoreAfterPage = response.length >= mobileRecordSyncLimit;
-      setRecordsHasMore(hasMoreAfterPage);
-      const nextCount = Math.min(
-        mergeRecordsByCursorOrder(recordsForDisplay, boundedPage).length,
-        maxMobileRecordCacheLimit
-      );
-      setRecordsStatus(
-        recordSyncPageSuccessStatusMessage(
-          nextCount,
-          boundedPage.length,
-          maxMobileRecordCacheLimit,
-          hasMoreAfterPage && nextCount < maxMobileRecordCacheLimit
-        )
-      );
+      handleMoreRecordSyncSuccess(response);
     } catch {
       setRecordsStatus(recordSyncFailureStatusMessage());
     } finally {
