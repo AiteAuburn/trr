@@ -3690,7 +3690,7 @@ def main() -> int:
         _assert_contains(
             "AI rejected preview list helper binding",
             content,
-            "const rejectedPreviewDisplayItems = preview ? buildRejectedPreviewDisplayItems(preview.rejected_events) : [];",
+            "const rejectedPreviewDisplayItems = preview\n    ? buildRejectedPreviewDisplayItems(previewState.rejectedEvents)\n    : [];",
         )
         _assert_not_contains(
             "AI rejected preview inline event mapping",
@@ -6203,12 +6203,18 @@ def main() -> int:
         for label, marker in (
             ("preview record state helper", "function previewRecordState(preview: ParsePreviewResponse | null)"),
             ("preview record state records fallback", "const records = preview?.records ?? [];"),
+            ("preview record state rejected events fallback", "const rejectedEvents = preview?.rejected_events ?? [];"),
             ("preview record state count binding", "const recordCount = records.length;"),
+            ("preview record state rejected event count binding", "const rejectedEventCount = rejectedEvents.length;"),
             ("preview record state has records flag", "hasRecords: recordCount > 0"),
             ("preview record state empty flag", "isEmpty: recordCount === 0"),
+            ("preview record state rejected event count field", "rejectedEventCount,"),
+            ("preview record state rejected events field", "rejectedEvents"),
             ("preview state helper binding", "const previewState = previewRecordState(preview);"),
             ("preview unsaved count state binding", "const unsavedPreviewRecordCount = previewState.recordCount;"),
             ("preview low confidence state records binding", "previewState.records.filter((record) => (record.confidence ?? 1) < 0.7).length;"),
+            ("preview rejected event count state binding", "const rejectedPreviewEventCount = previewState.rejectedEventCount;"),
+            ("preview rejected display items state binding", "buildRejectedPreviewDisplayItems(previewState.rejectedEvents)"),
             ("ai review date state records binding", "preview ? aiReviewDateLabel(previewState.records) : \"\""),
             ("daily record date state records binding", "const dailyRecordDateDisplayText = preview ? dailyRecordDateLabel(previewState.records) : \"\";"),
             ("daily record summary state records binding", "const dailyRecordSummaryDisplayText = preview ? dailyRecordSummaryText(previewState.records) : \"\";"),
@@ -6232,6 +6238,8 @@ def main() -> int:
             _assert_contains(label, content, marker)
         for label, marker in (
             ("direct preview unsaved count binding", "const unsavedPreviewRecordCount = preview?.records.length ?? 0;"),
+            ("direct preview rejected event count binding", "const rejectedPreviewEventCount = preview?.rejected_events.length ?? 0;"),
+            ("direct preview rejected display items binding", "const rejectedPreviewDisplayItems = preview ? buildRejectedPreviewDisplayItems(preview.rejected_events) : [];"),
             ("direct preview low confidence records binding", "preview?.records.filter((record) => (record.confidence ?? 1) < 0.7).length ?? 0"),
             ("direct ai review date records binding", "preview ? aiReviewDateLabel(preview.records) : \"\""),
             ("direct daily record date records binding", "const dailyRecordDateDisplayText = preview ? dailyRecordDateLabel(preview.records) : \"\";"),

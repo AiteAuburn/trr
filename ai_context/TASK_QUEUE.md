@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1746: Reuse preview state rejected events
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Extended the shared preview state helper with rejected preview events and a rejected-event count.
+- Reused the helper for rejected-event warning counts and rejected-event display item preparation in AI Review / save-confirm warnings.
+- Updated navigation verifier coverage with positive rejected-event state bindings and direct `preview.rejected_events` display-prep guards.
+- No UI copy/layout/backend/schema/Android signing/parser rejected-event schema/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining AI Review / daily-record display preparation and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1745: Reuse preview state records for display prep
 
 Status: done

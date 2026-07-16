@@ -825,13 +825,17 @@ function recordCollectionState(
 
 function previewRecordState(preview: ParsePreviewResponse | null) {
   const records = preview?.records ?? [];
+  const rejectedEvents = preview?.rejected_events ?? [];
   const recordCount = records.length;
+  const rejectedEventCount = rejectedEvents.length;
 
   return {
     hasRecords: recordCount > 0,
     isEmpty: recordCount === 0,
     recordCount,
-    records
+    records,
+    rejectedEventCount,
+    rejectedEvents
   };
 }
 
@@ -1243,10 +1247,12 @@ export default function App() {
   const analysisBoundaryDataDisplayCopy = analysisBoundaryDataCopy(analysisPreviewMode);
   const lowConfidencePreviewRecordCount =
     previewState.records.filter((record) => (record.confidence ?? 1) < 0.7).length;
-  const rejectedPreviewEventCount = preview?.rejected_events.length ?? 0;
+  const rejectedPreviewEventCount = previewState.rejectedEventCount;
   const lowConfidencePreviewRecordDisplayCount = clampNumber(lowConfidencePreviewRecordCount, 0, maxMobilePreviewRecords);
   const rejectedPreviewEventDisplayCount = clampNumber(rejectedPreviewEventCount, 0, maxMobileRejectedEvents);
-  const rejectedPreviewDisplayItems = preview ? buildRejectedPreviewDisplayItems(preview.rejected_events) : [];
+  const rejectedPreviewDisplayItems = preview
+    ? buildRejectedPreviewDisplayItems(previewState.rejectedEvents)
+    : [];
   const aiReviewDateDisplayLabel = boundDisplayText(
     preview ? aiReviewDateLabel(previewState.records) : "",
     maxDisplayDetailTextLength
