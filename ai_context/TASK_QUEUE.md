@@ -34,6 +34,39 @@ None.
 
 ## Done
 
+### T2009: Reuse shared segment selector for food community categories
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/segmentSelector.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a neutral shared `SegmentSelector` shell for segmented option rows.
+- Reused it for the hidden Food Community category selector while preserving option keys, accessibility labels, labels, selected-state logic, and press handler.
+- Updated navigation, UI spec coverage, and visual-smoke route verifiers for the new component boundary and Food Community wiring.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue migrating repeated hidden/future segmented selectors to `SegmentSelector` in small behavior-preserving slices.
+
 ### T2008: Reuse food community share date/time fields
 
 Status: done

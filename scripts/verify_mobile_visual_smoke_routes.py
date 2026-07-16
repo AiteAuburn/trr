@@ -211,7 +211,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "community": [
         'currentScreen === "community"',
-        "foodCommunityCategoryDisplayOptions.map",
+        "<SegmentSelector\n              options={foodCommunityCategoryDisplayOptions}",
         "visibleFoodCommunityItems.map",
         "foodCommunityShareFieldRows.map",
         "foodCommunityPointRows.map",

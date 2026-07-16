@@ -15,6 +15,39 @@
 
 ## 2026-07-16
 
+### T2009 reuse shared segment selector for food community categories
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/segmentSelector.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a neutral shared `SegmentSelector` shell for segmented option rows.
+- Reused it for the hidden Food Community category selector while preserving option keys, accessibility labels, labels, selected-state logic, and press handler.
+- Updated navigation, UI spec coverage, and visual-smoke route verifiers for the new component boundary and Food Community wiring.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue migrating repeated hidden/future segmented selectors to `SegmentSelector` in small behavior-preserving slices.
+
 ### T2008 reuse food community share date/time fields
 
 類型：mobile / refactor / verifier / docs

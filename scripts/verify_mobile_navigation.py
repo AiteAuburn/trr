@@ -30,6 +30,7 @@ ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
 ANALYSIS_DATA_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisDataTransforms.ts"
 ANALYSIS_METRIC_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisMetricTransforms.ts"
 ANALYSIS_RANGE_SELECTOR_PATH = REPO_ROOT / "mobile" / "analysisRangeSelector.tsx"
+SEGMENT_SELECTOR_PATH = REPO_ROOT / "mobile" / "segmentSelector.tsx"
 ANALYSIS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "analysisScreenData.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
@@ -1377,6 +1378,7 @@ def main() -> int:
     analysis_data_content = ANALYSIS_DATA_TRANSFORMS_PATH.read_text(encoding="utf-8")
     analysis_metric_content = ANALYSIS_METRIC_TRANSFORMS_PATH.read_text(encoding="utf-8")
     analysis_range_selector_content = ANALYSIS_RANGE_SELECTOR_PATH.read_text(encoding="utf-8")
+    segment_selector_content = SEGMENT_SELECTOR_PATH.read_text(encoding="utf-8")
     analysis_screen_data_content = ANALYSIS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     settings_screen_data_content = SETTINGS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
@@ -9252,6 +9254,21 @@ def main() -> int:
             "<AnalysisRangeSelector\n              options={analysisRangeDisplayOptions}",
         )
         for label, marker in (
+            ("segment selector component", "export function SegmentSelector<TOption>"),
+            ("segment selector options map", "options.map((option) => {"),
+            ("segment selector selected constant", "const optionSelected = isSelected(option);"),
+            ("segment selector option key", "key={optionKey(option)}"),
+            ("segment selector accessibility", "accessibilityLabel={optionAccessibilityLabel(option)}"),
+            ("segment selector button role", 'accessibilityRole="button"'),
+            ("segment selector selected state", "accessibilityState={{ selected: optionSelected }}"),
+            ("segment selector selected pill style", "style={[styles.segmentPill, optionSelected ? styles.segmentActive : null]}"),
+            ("segment selector press handler", "onPress={() => onOptionPress(option)}"),
+            ("segment selector selected text style", "style={[styles.segmentText, optionSelected ? styles.segmentTextActive : null]}"),
+            ("segment selector label", "{optionLabel(option)}"),
+            ("segment selector compact target", "minHeight: 44"),
+        ):
+            _assert_contains(label, segment_selector_content, marker)
+        for label, marker in (
             ("direct analysis range key binding", "key={option.value}"),
             ("direct analysis range accessibility binding", "accessibilityLabel={option.accessibilityLabel}"),
             ("direct analysis range selected state binding", "analysisRange === option.value"),
@@ -11681,18 +11698,16 @@ def main() -> int:
             ("food community category press handler", "function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option key helper", "function foodCommunityCategoryOptionKey(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option key helper fields", "return category.value;"),
-            ("food community category option key helper binding", "key={foodCommunityCategoryOptionKey(category)}"),
+            ("food community category option key helper binding", "optionKey={foodCommunityCategoryOptionKey}"),
             ("food community category option accessibility label helper", "function foodCommunityCategoryOptionAccessibilityLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option accessibility label helper fields", "return category.accessibilityLabel;"),
-            ("food community category option accessibility label helper binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
+            ("food community category option accessibility label helper binding", "optionAccessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel}"),
             ("food community category option label helper", "function foodCommunityCategoryOptionLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option label helper fields", "return category.label;"),
-            ("food community category option label helper binding", "{foodCommunityCategoryOptionLabel(category)}"),
+            ("food community category option label helper binding", "optionLabel={foodCommunityCategoryOptionLabel}"),
             ("food community category option selected helper", "function foodCommunityCategoryOptionSelected(category: ReturnType<typeof foodCommunityCategoryDisplayItem>, selectedCategory: FoodCommunityCategory)"),
             ("food community category option selected helper fields", "return selectedCategory === category.value;"),
-            ("food community category option selected helper state binding", "accessibilityState={{ selected: foodCommunityCategoryOptionSelected(category, foodCommunityCategory) }}"),
-            ("food community category option selected helper pill style binding", "foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentActive : null"),
-            ("food community category option selected helper text style binding", "foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentTextActive : null"),
+            ("food community category option selected helper binding", "isSelected={(category) => foodCommunityCategoryOptionSelected(category, foodCommunityCategory)}"),
             ("food community item select handler", "function selectFoodCommunityItem(itemId: string)"),
             ("food community item press handler", "function pressFoodCommunityItem(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
             ("food community item target helper", "function foodCommunityItemTarget(item: ReturnType<typeof foodCommunityItemDisplayItem>)"),
@@ -11724,7 +11739,7 @@ def main() -> int:
             ("community posting status binding", "onPress={showCommunityPostingStatus}"),
             ("community privacy status binding", "onPress={showCommunityPrivacyStatus}"),
             ("food community search input binding", "onChangeText={updateFoodCommunitySearchInput}"),
-            ("food community category press binding", "onPress={() => pressFoodCommunityCategoryOption(category)}"),
+            ("food community category press binding", "onOptionPress={pressFoodCommunityCategoryOption}"),
             ("food community item press binding", "onPress={() => pressFoodCommunityItem(item)}"),
             ("food community share status binding", "onPress={showFoodCommunityShareStatus}"),
             ("food community share accessibility binding", "accessibilityLabel={foodCommunityShareAccessibilityDisplayLabel}"),
@@ -11743,8 +11758,8 @@ def main() -> int:
             ("food community promoted title", "{communityScreenTitleLabel()}"),
             ("ranking promoted title", "{rankingScreenTitleLabel()}"),
             ("food community search accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}"),
-            ("food community category accessibility binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
-            ("food community category selected state", "accessibilityState={{ selected: foodCommunityCategoryOptionSelected(category, foodCommunityCategory) }}"),
+            ("food community category accessibility binding", "optionAccessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel}"),
+            ("food community category selected state", "isSelected={(category) => foodCommunityCategoryOptionSelected(category, foodCommunityCategory)}"),
             ("food community item accessibility binding", "accessibilityLabel={foodCommunityListItemAccessibilityLabel(item)}"),
             ("food community selected state", "accessibilityState={{ selected: foodCommunityListItemSelected(item, selectedFoodCommunityItem) }}"),
             ("food community share fields", "foodCommunityShareFieldRows.map"),
@@ -12620,18 +12635,16 @@ def main() -> int:
             ("food community category option press handler", "function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option key helper", "function foodCommunityCategoryOptionKey(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option key helper fields", "return category.value;"),
-            ("food community category option key helper binding", "key={foodCommunityCategoryOptionKey(category)}"),
+            ("food community category option key helper binding", "optionKey={foodCommunityCategoryOptionKey}"),
             ("food community category option accessibility label helper", "function foodCommunityCategoryOptionAccessibilityLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option accessibility label helper fields", "return category.accessibilityLabel;"),
-            ("food community category option accessibility label helper binding", "accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}"),
+            ("food community category option accessibility label helper binding", "optionAccessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel}"),
             ("food community category option label helper", "function foodCommunityCategoryOptionLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category option label helper fields", "return category.label;"),
-            ("food community category option label helper binding", "{foodCommunityCategoryOptionLabel(category)}"),
+            ("food community category option label helper binding", "optionLabel={foodCommunityCategoryOptionLabel}"),
             ("food community category option selected helper", "function foodCommunityCategoryOptionSelected(category: ReturnType<typeof foodCommunityCategoryDisplayItem>, selectedCategory: FoodCommunityCategory)"),
             ("food community category option selected helper fields", "return selectedCategory === category.value;"),
-            ("food community category option selected helper state binding", "accessibilityState={{ selected: foodCommunityCategoryOptionSelected(category, foodCommunityCategory) }}"),
-            ("food community category option selected helper pill style binding", "foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentActive : null"),
-            ("food community category option selected helper text style binding", "foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentTextActive : null"),
+            ("food community category option selected helper binding", "isSelected={(category) => foodCommunityCategoryOptionSelected(category, foodCommunityCategory)}"),
             ("food community category target helper", "function foodCommunityCategoryTarget(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
             ("food community category target helper fields", "return category.value;"),
             ("food community category target helper binding", "selectFoodCommunityCategory(foodCommunityCategoryTarget(category));"),

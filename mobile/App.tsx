@@ -800,6 +800,7 @@ import { RecordOptionField, RecordOptionRow } from "./recordOptionField";
 import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
+import { SegmentSelector } from "./segmentSelector";
 import type {
   Account,
   AiModelOptions,
@@ -12072,30 +12073,14 @@ export default function App() {
               style={styles.input}
               placeholder="搜尋食物名稱"
             />
-            <View style={styles.segmentRow}>
-              {foodCommunityCategoryDisplayOptions.map((category) => (
-                <Pressable
-                  key={foodCommunityCategoryOptionKey(category)}
-                  accessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel(category)}
-                  accessibilityRole="button"
-                  accessibilityState={{ selected: foodCommunityCategoryOptionSelected(category, foodCommunityCategory) }}
-                  style={[
-                    styles.segmentPill,
-                    foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentActive : null
-                  ]}
-                  onPress={() => pressFoodCommunityCategoryOption(category)}
-                >
-                  <Text
-                    style={[
-                      styles.segmentText,
-                      foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentTextActive : null
-                    ]}
-                  >
-                    {foodCommunityCategoryOptionLabel(category)}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
+            <SegmentSelector
+              options={foodCommunityCategoryDisplayOptions}
+              optionKey={foodCommunityCategoryOptionKey}
+              optionAccessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel}
+              optionLabel={foodCommunityCategoryOptionLabel}
+              isSelected={(category) => foodCommunityCategoryOptionSelected(category, foodCommunityCategory)}
+              onOptionPress={pressFoodCommunityCategoryOption}
+            />
             {selectedFoodCommunityCategoryDisplay ? (
               <Text style={styles.evidence}>{foodCommunityCategorySummary(selectedFoodCommunityCategoryDisplay)}</Text>
             ) : null}
