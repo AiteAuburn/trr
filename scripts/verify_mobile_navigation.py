@@ -4184,9 +4184,24 @@ def main() -> int:
             "function previewRecordsWithEditedRecord(\n    records: PendingRecord[],\n    editIndex: number,\n    occurredAt: string,\n    payload: Record<string, unknown>",
         )
         _assert_contains(
-            "AI candidate preview edit records update helper binding",
+            "AI candidate preview edit records update helper usage",
             content,
-            "const nextRecords = previewRecordsWithEditedRecord(\n        preview.records,\n        selectedPreviewIndex,",
+            "return previewRecordsWithEditedRecord(\n      currentPreview.records,\n      editIndex,",
+        )
+        _assert_contains(
+            "AI candidate preview edit records builder helper",
+            content,
+            "function buildPreviewRecordEditRecords(\n    currentPreview: ParsePreviewResponse,\n    editIndex: number,\n    payload: Record<string, unknown>",
+        )
+        _assert_contains(
+            "AI candidate preview edit records builder helper internals",
+            content,
+            "return previewRecordsWithEditedRecord(\n      currentPreview.records,\n      editIndex,\n      localDateTimeToIso(previewEditDate, previewEditTime),\n      payload\n    );",
+        )
+        _assert_contains(
+            "AI candidate preview edit records builder helper binding",
+            content,
+            "const nextRecords = buildPreviewRecordEditRecords(preview, selectedPreviewIndex, payload);",
         )
         _assert_contains(
             "AI candidate preview edit change helper",

@@ -3877,6 +3877,19 @@ export default function App() {
     );
   }
 
+  function buildPreviewRecordEditRecords(
+    currentPreview: ParsePreviewResponse,
+    editIndex: number,
+    payload: Record<string, unknown>
+  ) {
+    return previewRecordsWithEditedRecord(
+      currentPreview.records,
+      editIndex,
+      localDateTimeToIso(previewEditDate, previewEditTime),
+      payload
+    );
+  }
+
   function savePreviewRecordEdit() {
     if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {
       openScreen("aiReview");
@@ -3890,12 +3903,7 @@ export default function App() {
 
     try {
       const payload = buildPreviewRecordEditPayload(selectedPreviewRecord.record_type);
-      const nextRecords = previewRecordsWithEditedRecord(
-        preview.records,
-        selectedPreviewIndex,
-        localDateTimeToIso(previewEditDate, previewEditTime),
-        payload
-      );
+      const nextRecords = buildPreviewRecordEditRecords(preview, selectedPreviewIndex, payload);
       applyPreviewRecordEditChange(preview, nextRecords);
       returnFromPreviewRecordEditSaveSuccess();
     } catch (error) {
