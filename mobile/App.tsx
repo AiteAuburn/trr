@@ -7787,6 +7787,10 @@ export default function App() {
     setStatus(message);
   }
 
+  function handleParserTranscriptValidationError(message: string) {
+    setStatus(message);
+  }
+
   async function parseTranscript() {
     if (isParserPreviewRequestBlocked()) {
       return;
@@ -7804,7 +7808,7 @@ export default function App() {
       return;
     }
     if (transcriptValidationError) {
-      setStatus(transcriptValidationError);
+      handleParserTranscriptValidationError(transcriptValidationError);
       return;
     }
     if (isTranscriptSample) {
