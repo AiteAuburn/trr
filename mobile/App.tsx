@@ -8941,6 +8941,20 @@ export default function App() {
     setNativeStatus(nativeBenchmarkResultStatusMessage(results));
   }
 
+  async function appendNativeWhisperBenchmarkResult(
+    results: Array<Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>>,
+    whisperInput: ReturnType<typeof nativeWhisperInput>
+  ) {
+    if (whisperInput.modelPath && whisperInput.audioPath) {
+      results.push(
+        await benchmarkNativeWhisper({
+          modelPath: whisperInput.modelPath,
+          audioPath: whisperInput.audioPath
+        })
+      );
+    }
+  }
+
   function startNativeModelDownloadStatus() {
     setDownloadProgress(0);
     setNativeStatus(nativeModelDownloadProgressStatusMessage());
@@ -9091,16 +9105,9 @@ export default function App() {
     startNativeDebugAction();
     startNativeBenchmarkStatus();
     try {
-      const results = [];
+      const results: Array<Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>> = [];
       const whisperInput = nativeWhisperInput();
-      if (whisperInput.modelPath && whisperInput.audioPath) {
-        results.push(
-          await benchmarkNativeWhisper({
-            modelPath: whisperInput.modelPath,
-            audioPath: whisperInput.audioPath
-          })
-        );
-      }
+      await appendNativeWhisperBenchmarkResult(results, whisperInput);
       const llamaInput = nativeLlamaInput();
       if (llamaInput.modelPath && llamaInput.transcript) {
         results.push(
