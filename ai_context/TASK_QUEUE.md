@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1846: Reuse preview action return target helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `setPreviewActionReturnTarget()` for preview edit/remove action return target storage.
+- Reused the helper from `openPreviewRecordEdit()` and `openPreviewRecordRemoveConfirm()` while preserving missing-record fallback, selection state, seeded edit fields, target screens, and status behavior.
+- Updated navigation verifier coverage for the return-target helper internals and edit/remove open bindings.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser endpoint/request semantics/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining preview edit/remove open and return helpers in small behavior-preserving slices.
+
 ### T1845: Reuse preview remove confirm screen opener
 
 Status: done

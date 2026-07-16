@@ -3423,12 +3423,16 @@ export default function App() {
     setPendingPreviewRemoveSelection(index);
   }
 
+  function setPreviewActionReturnTarget(returnScreen: AppScreen) {
+    setPreviewActionReturnScreen(returnScreen);
+  }
+
   function openPreviewRecordEdit(index: number, returnScreen: AppScreen = "aiReview") {
     const record = preview?.records[index];
     if (!record) {
       return;
     }
-    setPreviewActionReturnScreen(returnScreen);
+    setPreviewActionReturnTarget(returnScreen);
     selectPreviewEditIndex(index);
     seedPreviewEditStateFromRecord(record);
     openScreenWithStatus("editPreviewRecord", aiCandidateEditOpenStatusMessage());
@@ -3446,7 +3450,7 @@ export default function App() {
       openScreen(returnScreen);
       return;
     }
-    setPreviewActionReturnScreen(returnScreen);
+    setPreviewActionReturnTarget(returnScreen);
     selectPreviewRemoveIndex(index);
     openPreviewRemoveConfirmScreen();
   }

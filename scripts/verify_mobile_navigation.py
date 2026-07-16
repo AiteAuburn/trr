@@ -4064,6 +4064,21 @@ def main() -> int:
             "function selectPreviewRemoveIndex(index: number) {\n    clearPreviewEditSelectionState();\n    setPendingPreviewRemoveSelection(index);",
         )
         _assert_contains(
+            "preview action return target helper",
+            content,
+            "function setPreviewActionReturnTarget(returnScreen: AppScreen)",
+        )
+        _assert_contains(
+            "preview action return target helper internals",
+            content,
+            "function setPreviewActionReturnTarget(returnScreen: AppScreen) {\n    setPreviewActionReturnScreen(returnScreen);",
+        )
+        _assert_contains(
+            "AI candidate edit return target helper binding",
+            content,
+            "setPreviewActionReturnTarget(returnScreen);\n    selectPreviewEditIndex(index);",
+        )
+        _assert_contains(
             "AI candidate edit open seed helper binding",
             content,
             "selectPreviewEditIndex(index);\n    seedPreviewEditStateFromRecord(record);",
@@ -4076,7 +4091,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove confirm selection helper binding",
             content,
-            "selectPreviewRemoveIndex(index);\n    openPreviewRemoveConfirmScreen();",
+            "setPreviewActionReturnTarget(returnScreen);\n    selectPreviewRemoveIndex(index);\n    openPreviewRemoveConfirmScreen();",
         )
         _assert_contains(
             "AI candidate remove confirm screen opener helper",
