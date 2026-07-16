@@ -4224,6 +4224,21 @@ def main() -> int:
             "} catch (error) {\n      handlePreviewRecordEditFailure(error);",
         )
         _assert_contains(
+            "AI candidate preview edit validation failure helper",
+            content,
+            "function handlePreviewRecordEditValidationFailure(validationError: string)",
+        )
+        _assert_contains(
+            "AI candidate preview edit validation failure helper internals",
+            content,
+            "function handlePreviewRecordEditValidationFailure(validationError: string) {\n    setStatus(validationError);",
+        )
+        _assert_contains(
+            "AI candidate preview edit validation failure helper binding",
+            content,
+            "if (validationError) {\n      handlePreviewRecordEditValidationFailure(validationError);\n      return;",
+        )
+        _assert_contains(
             "AI candidate preview edit change helper",
             content,
             "function applyPreviewRecordEditChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[])",

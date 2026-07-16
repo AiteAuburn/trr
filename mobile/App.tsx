@@ -3906,6 +3906,10 @@ export default function App() {
     setStatus(aiCandidateEditFailureStatusMessage(error));
   }
 
+  function handlePreviewRecordEditValidationFailure(validationError: string) {
+    setStatus(validationError);
+  }
+
   function savePreviewRecordEdit() {
     if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {
       returnFromMissingPreviewRecordEditSaveDraft();
@@ -3913,7 +3917,7 @@ export default function App() {
     }
     const validationError = validatePreviewRecordEdit(selectedPreviewRecord.record_type);
     if (validationError) {
-      setStatus(validationError);
+      handlePreviewRecordEditValidationFailure(validationError);
       return;
     }
 
