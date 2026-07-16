@@ -669,7 +669,7 @@ def _verify_daily_record_contract(content: str, daily_transcript_content: str) -
         ("daily record backend one row assertion", backend_tests_content, "assert len(daily_records) == 1"),
         ("daily record mobile save endpoint", content, '"/daily-records/save"'),
         ("daily record mobile save request helper", daily_transcript_content, "function buildDailyRecordSaveRequest("),
-        ("daily record mobile transactional response", content, "const saveResponse = await requestJson<DailyRecordSaveResponse>"),
+        ("daily record mobile transactional response", content, "return requestJson<DailyRecordSaveResponse>(normalizedApiBaseUrl, \"/daily-records/save\", {"),
     ):
         _assert_contains(label, haystack, marker)
 
@@ -6335,8 +6335,13 @@ def main() -> int:
             ("daily record save records helper internals", "const clientSaveBatchId = createClientSaveBatchId();\n    return records.map((record, index) => {\n      const sanitizedRecord = pendingRecordForSave(record);"),
             ("daily record save records helper metadata", "client_save_batch_id: clientSaveBatchId,\n          client_save_sequence: index + 1,\n          client_save_batch_size: recordCount,\n          entry_method: \"ai_confirmation\""),
             ("daily record save records helper binding", "const recordsToSave = previewRecordsForSave(preview.records, previewState.recordCount);"),
+            ("daily record save request helper", "function requestDailyRecordSave(\n    accountId: string,\n    nextPreview: ParsePreviewResponse,"),
+            ("daily record save request helper endpoint", 'return requestJson<DailyRecordSaveResponse>(normalizedApiBaseUrl, "/daily-records/save", {'),
+            ("daily record save request helper headers", "headers: protectedRequestHeaders(accountId, accessToken),"),
+            ("daily record save request helper payload", "body: JSON.stringify(buildDailyRecordSaveRequest(nextPreview, recordsToSave, dailyTranscriptEntries))"),
+            ("daily record save request helper binding", "const saveResponse = await requestDailyRecordSave(account.id, preview, recordsToSave);"),
             ("daily record save endpoint", '"/daily-records/save"'),
-            ("daily record save payload binding", "body: JSON.stringify(buildDailyRecordSaveRequest(preview, recordsToSave, dailyTranscriptEntries))"),
+            ("daily record save payload binding", "body: JSON.stringify(buildDailyRecordSaveRequest(nextPreview, recordsToSave, dailyTranscriptEntries))"),
             ("daily record save clears retained transcripts", "clearDailyRecordDraftOrganizationState();"),
             ("daily record fixed save visible flag", "const isDailyRecordFixedSaveVisible = dailyRecordDraftScreen.isFixedSaveVisible;"),
             ("daily record fixed save dock visible flag", "const isDailyRecordFixedSaveDockVisible = isDailyRecordFixedSaveVisible && Boolean(preview);"),
@@ -10956,7 +10961,7 @@ def main() -> int:
             ("achievement sync handler passes true", "void loadAchievementSummary(true);"),
             ("achievement post-save sync helper", "function syncAchievementsAfterRecordSave()"),
             ("achievement AI save success sync", "setStatus(aiSaveSuccessStatusMessage());\n      syncAchievementsAfterRecordSave();"),
-            ("achievement AI daily save transactional response", "const saveResponse = await requestJson<DailyRecordSaveResponse>"),
+            ("achievement AI daily save transactional response", "const saveResponse = await requestDailyRecordSave(account.id, preview, recordsToSave);"),
             ("achievement manual create sync", "setStatus(manualRecordCreateSuccessStatusMessage());\n      syncAchievementsAfterRecordSave();"),
             ("achievement category sections", "achievementCategoryDisplaySections.map"),
             ("achievement section item render", "achievementCategorySectionItems(section).map"),

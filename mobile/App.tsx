@@ -7503,6 +7503,18 @@ export default function App() {
     });
   }
 
+  function requestDailyRecordSave(
+    accountId: string,
+    nextPreview: ParsePreviewResponse,
+    recordsToSave: PendingRecord[]
+  ) {
+    return requestJson<DailyRecordSaveResponse>(normalizedApiBaseUrl, "/daily-records/save", {
+      method: "POST",
+      headers: protectedRequestHeaders(accountId, accessToken),
+      body: JSON.stringify(buildDailyRecordSaveRequest(nextPreview, recordsToSave, dailyTranscriptEntries))
+    });
+  }
+
   async function savePreviewRecords() {
     if (isBusy || previewSaveInFlight.current) {
       return;
@@ -7521,15 +7533,7 @@ export default function App() {
     startPreviewSaveRequest();
     const recordsToSave = previewRecordsForSave(preview.records, previewState.recordCount);
     try {
-      const saveResponse = await requestJson<DailyRecordSaveResponse>(
-        normalizedApiBaseUrl,
-        "/daily-records/save",
-        {
-          method: "POST",
-          headers: protectedRequestHeaders(account.id, accessToken),
-          body: JSON.stringify(buildDailyRecordSaveRequest(preview, recordsToSave, dailyTranscriptEntries))
-        }
-      );
+      const saveResponse = await requestDailyRecordSave(account.id, preview, recordsToSave);
       const createdRecords = boundRecordsList(saveResponse.records, maxMobilePreviewRecords);
       const savedCount = recordsToSave.length;
       setPreview(null);
