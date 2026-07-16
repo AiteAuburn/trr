@@ -7340,6 +7340,16 @@ export default function App() {
     openScreenWithStatus("transcriptReview", message);
   }
 
+  function handleParserBackendUnavailable() {
+    const boundedMessage = parserBackendUnavailableStatusMessage(protectedBackendUnavailableMessage);
+    openParserRecoveryMessage(boundedMessage);
+  }
+
+  function handleParserModelUnavailable() {
+    const boundedMessage = parserModelUnavailableStatusMessage(parserModelUnavailableMessage);
+    openParserRecoveryMessage(boundedMessage);
+  }
+
   function handleParserSampleBlockedTranscript() {
     const message = parserSampleBlockedStatusMessage();
     setParserRecoveryMessage(message);
@@ -7351,16 +7361,14 @@ export default function App() {
       return;
     }
     if (!protectedBackendReady) {
-      const boundedMessage = parserBackendUnavailableStatusMessage(protectedBackendUnavailableMessage);
-      openParserRecoveryMessage(boundedMessage);
+      handleParserBackendUnavailable();
       return;
     }
     if (!account || !activeProfile) {
       return;
     }
     if (!parserModelReady) {
-      const boundedMessage = parserModelUnavailableStatusMessage(parserModelUnavailableMessage);
-      openParserRecoveryMessage(boundedMessage);
+      handleParserModelUnavailable();
       return;
     }
     if (transcriptValidationError) {

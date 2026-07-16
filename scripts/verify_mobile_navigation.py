@@ -2672,14 +2672,34 @@ def main() -> int:
             'setParserRecoveryMessage(message);\n    openScreenWithStatus("transcriptReview", message);',
         )
         _assert_contains(
-            "parser backend unavailable recovery helper binding",
+            "parser backend unavailable helper",
             content,
-            "const boundedMessage = parserBackendUnavailableStatusMessage(protectedBackendUnavailableMessage);\n      openParserRecoveryMessage(boundedMessage);",
+            "function handleParserBackendUnavailable()",
         )
         _assert_contains(
-            "parser model unavailable recovery helper binding",
+            "parser backend unavailable helper fields",
             content,
-            "const boundedMessage = parserModelUnavailableStatusMessage(parserModelUnavailableMessage);\n      openParserRecoveryMessage(boundedMessage);",
+            "const boundedMessage = parserBackendUnavailableStatusMessage(protectedBackendUnavailableMessage);\n    openParserRecoveryMessage(boundedMessage);",
+        )
+        _assert_contains(
+            "parser backend unavailable helper binding",
+            content,
+            "if (!protectedBackendReady) {\n      handleParserBackendUnavailable();\n      return;",
+        )
+        _assert_contains(
+            "parser model unavailable helper",
+            content,
+            "function handleParserModelUnavailable()",
+        )
+        _assert_contains(
+            "parser model unavailable helper fields",
+            content,
+            "const boundedMessage = parserModelUnavailableStatusMessage(parserModelUnavailableMessage);\n    openParserRecoveryMessage(boundedMessage);",
+        )
+        _assert_contains(
+            "parser model unavailable helper binding",
+            content,
+            "if (!parserModelReady) {\n      handleParserModelUnavailable();\n      return;",
         )
         _assert_contains(
             "parser sample blocked helper",
