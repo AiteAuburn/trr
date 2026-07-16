@@ -8094,6 +8094,20 @@ export default function App() {
     );
   }
 
+  function handleInitialRecordSyncSuccess(response: RecordItem[]) {
+    const boundedResponse = boundRecordsList(response, mobileRecordSyncLimit);
+    setRecords(boundedResponse);
+    setRecordsHasMore(response.length >= mobileRecordSyncLimit);
+    setRecordsStatus(
+      recordSyncSuccessStatusMessage(
+        boundedResponse.length,
+        mobileRecordSyncDisplayLimit,
+        maxMobileRecordCacheLimit,
+        response.length >= mobileRecordSyncLimit
+      )
+    );
+  }
+
   async function loadRecords() {
     const syncContext = guardedInitialRecordSyncContext();
     if (!syncContext) {
@@ -8111,17 +8125,7 @@ export default function App() {
       if (latestRecordSyncKey.current !== syncContext.syncKey) {
         return;
       }
-      const boundedResponse = boundRecordsList(response, mobileRecordSyncLimit);
-      setRecords(boundedResponse);
-      setRecordsHasMore(response.length >= mobileRecordSyncLimit);
-      setRecordsStatus(
-        recordSyncSuccessStatusMessage(
-          boundedResponse.length,
-          mobileRecordSyncDisplayLimit,
-          maxMobileRecordCacheLimit,
-          response.length >= mobileRecordSyncLimit
-        )
-      );
+      handleInitialRecordSyncSuccess(response);
     } catch {
       if (latestRecordSyncKey.current === syncContext.syncKey) {
         clearRecordSyncPaginationStatus(recordSyncFailureStatusMessage());
