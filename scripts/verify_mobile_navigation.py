@@ -58,6 +58,7 @@ DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreview
 COMMUNITY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "communityActionRow.tsx"
 DOCTOR_SHARE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "doctorShareActionRow.tsx"
 HEALTH_INTEGRATION_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "healthIntegrationActionRow.tsx"
+RANKING_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "rankingActionRow.tsx"
 HISTORY_CALENDAR_MONTH_PICKER_PATH = REPO_ROOT / "mobile" / "historyCalendarMonthPicker.tsx"
 HISTORY_DAILY_RECORD_SECTION_CARD_PATH = REPO_ROOT / "mobile" / "historyDailyRecordSectionCard.tsx"
 HISTORY_DAILY_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historyDailySummaryCard.tsx"
@@ -1423,6 +1424,7 @@ def main() -> int:
     community_action_row_content = COMMUNITY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     doctor_share_action_row_content = DOCTOR_SHARE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     health_integration_action_row_content = HEALTH_INTEGRATION_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    ranking_action_row_content = RANKING_ACTION_ROW_PATH.read_text(encoding="utf-8")
     history_calendar_month_picker_content = HISTORY_CALENDAR_MONTH_PICKER_PATH.read_text(encoding="utf-8")
     history_daily_record_section_card_content = HISTORY_DAILY_RECORD_SECTION_CARD_PATH.read_text(encoding="utf-8")
     history_daily_summary_card_content = HISTORY_DAILY_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
@@ -1630,6 +1632,19 @@ def main() -> int:
             ("health integration action row secondary style", "secondaryButton: {"),
         ):
             _assert_contains(label, health_integration_action_row_content, marker)
+        for label, marker in (
+            ("ranking action row component", "export function RankingActionRow"),
+            ("ranking action row public accessibility prop", "accessibilityLabel={publicAccessibilityLabel}"),
+            ("ranking action row opt-in accessibility prop", "accessibilityLabel={optInAccessibilityLabel}"),
+            ("ranking action row button role", 'accessibilityRole="button"'),
+            ("ranking action row public handler prop", "onPress={onPublicPress}"),
+            ("ranking action row opt-in handler prop", "onPress={onOptInPress}"),
+            ("ranking action row public label", "{publicLabel}"),
+            ("ranking action row opt-in label", "{optInLabel}"),
+            ("ranking action row shell style", "actionRow: {"),
+            ("ranking action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, ranking_action_row_content, marker)
         for label, marker in (
             ("history calendar month picker component", "export function HistoryCalendarMonthPicker<TDay extends HistoryCalendarDayItem>({"),
             ("history calendar month picker title", "<Text style={styles.recordContent}>{title}</Text>"),
@@ -11882,15 +11897,15 @@ def main() -> int:
             ("ranking public action accessibility helper", "function rankingPublicActionAccessibilityLabel()"),
             ("ranking public action accessibility helper fields", "return futurePreviewDisplayLabels.rankingPublicAccessibility;"),
             ("ranking public action accessibility display label binding", "const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel();"),
-            ("ranking public action accessibility helper binding", "accessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}"),
+            ("ranking public action accessibility helper binding", "publicAccessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}"),
             ("ranking public action button helper", "function rankingPublicActionButtonLabel()"),
             ("ranking public action button helper fields", "return futurePreviewDisplayLabels.rankingPublicButton;"),
             ("ranking public action button display label binding", "const rankingPublicActionButtonDisplayLabel = rankingPublicActionButtonLabel();"),
-            ("ranking public action button helper binding", "{rankingPublicActionButtonDisplayLabel}"),
+            ("ranking public action button helper binding", "publicLabel={rankingPublicActionButtonDisplayLabel}"),
             ("ranking public action press helper", "function rankingPublicActionPressHandler()"),
             ("ranking public action press helper fields", "return showRankingPublicStatus;"),
             ("ranking public action press target binding", "const rankingPublicActionPressTarget = rankingPublicActionPressHandler();"),
-            ("ranking public action press helper binding", "onPress={rankingPublicActionPressTarget}"),
+            ("ranking public action press helper binding", "onPublicPress={rankingPublicActionPressTarget}"),
             ("ranking opt-in action accessibility helper", "function rankingOptInActionAccessibilityLabel(label: string)"),
             ("ranking opt-in action accessibility helper fields", "return label;"),
             ("ranking opt-in action accessibility display label binding", "const rankingOptInAccessibilityDisplayLabel = rankingOptInActionAccessibilityLabel(communityActionDisplay.rankingOptInAccessibility);"),
@@ -11900,7 +11915,7 @@ def main() -> int:
             ("ranking opt-in action press helper", "function rankingOptInActionPressHandler()"),
             ("ranking opt-in action press helper fields", "return showRankingOptInStatus;"),
             ("ranking opt-in action press target binding", "const rankingOptInActionPressTarget = rankingOptInActionPressHandler();"),
-            ("ranking opt-in action press helper binding", "onPress={rankingOptInActionPressTarget}"),
+            ("ranking opt-in action press helper binding", "onOptInPress={rankingOptInActionPressTarget}"),
             ("ranking action status label helper", "function rankingActionStatusLabel()"),
             ("ranking action status label helper fields", "return futurePreviewDisplayLabels.rankingStatus;"),
             ("ranking action status label helper binding", "{rankingActionStatusLabel()}"),
@@ -12053,8 +12068,9 @@ def main() -> int:
             ("food community share status binding", "onSharePress={showFoodCommunityShareStatus}"),
             ("food community share accessibility binding", "shareAccessibilityLabel={foodCommunityShareAccessibilityDisplayLabel}"),
             ("food community share button label binding", "shareLabel={foodCommunityShareButtonDisplayLabel}"),
-            ("ranking public status binding", "onPress={rankingPublicActionPressTarget}"),
-            ("ranking opt-in status binding", "onPress={rankingOptInActionPressTarget}"),
+            ("ranking action row binding", "<RankingActionRow"),
+            ("ranking public status binding", "onPublicPress={rankingPublicActionPressTarget}"),
+            ("ranking opt-in status binding", "onOptInPress={rankingOptInActionPressTarget}"),
             ("ranking opt-in dynamic button label", "const rankingOptInButtonDisplayLabel = rankingOptInActionButtonLabel(communityActionDisplay.rankingOptInButton);"),
             ("ranking opt-in dynamic accessibility label", "const rankingOptInAccessibilityDisplayLabel = rankingOptInActionAccessibilityLabel(communityActionDisplay.rankingOptInAccessibility);"),
             ("doctor token accessibility binding", "tokenAccessibilityLabel={futurePreviewDisplayLabels.doctorTokenAccessibility}"),
@@ -12095,10 +12111,12 @@ def main() -> int:
             ("ranking section render", "rankingLeaderboardSections.map((section) =>"),
             ("ranking entry render", "section.entries.map((entry) =>"),
             ("ranking public status loads backend", "void loadCommunityLeaderboards();"),
-            ("ranking public accessibility binding", "accessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}"),
-            ("ranking public button label binding", "{rankingPublicActionButtonDisplayLabel}"),
-            ("ranking opt-in dynamic accessibility binding", "accessibilityLabel={rankingOptInAccessibilityDisplayLabel}"),
-            ("ranking opt-in dynamic button binding", "{rankingOptInButtonDisplayLabel}"),
+            ("ranking public accessibility binding", "publicAccessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}"),
+            ("ranking public button label binding", "publicLabel={rankingPublicActionButtonDisplayLabel}"),
+            ("ranking opt-in accessibility binding", "optInAccessibilityLabel={rankingOptInAccessibilityDisplayLabel}"),
+            ("ranking opt-in button label binding", "optInLabel={rankingOptInButtonDisplayLabel}"),
+            ("ranking opt-in dynamic accessibility binding", "optInAccessibilityLabel={rankingOptInAccessibilityDisplayLabel}"),
+            ("ranking opt-in dynamic button binding", "optInLabel={rankingOptInButtonDisplayLabel}"),
             ("future preview return accessibility binding", "accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}"),
             ("future preview secondary CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):

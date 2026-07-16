@@ -774,6 +774,7 @@ import { DetailRow } from "./detailRow";
 import { CommunityActionRow } from "./communityActionRow";
 import { DoctorShareActionRow } from "./doctorShareActionRow";
 import { HealthIntegrationActionRow } from "./healthIntegrationActionRow";
+import { RankingActionRow } from "./rankingActionRow";
 import { HistoryCalendarMonthPicker } from "./historyCalendarMonthPicker";
 import { HistoryDailySummaryTable } from "./historyDailySummaryTable";
 import { HistoryIntroStatusBlocks } from "./historyIntroStatusBlocks";
@@ -12322,24 +12323,14 @@ export default function App() {
                 <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />
               ))}
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={rankingPublicActionPressTarget}
-              >
-                <Text style={styles.secondaryButtonText}>{rankingPublicActionButtonDisplayLabel}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={rankingOptInAccessibilityDisplayLabel}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={rankingOptInActionPressTarget}
-              >
-                <Text style={styles.secondaryButtonText}>{rankingOptInButtonDisplayLabel}</Text>
-              </Pressable>
-            </View>
+            <RankingActionRow
+              onOptInPress={rankingOptInActionPressTarget}
+              onPublicPress={rankingPublicActionPressTarget}
+              optInAccessibilityLabel={rankingOptInAccessibilityDisplayLabel}
+              optInLabel={rankingOptInButtonDisplayLabel}
+              publicAccessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}
+              publicLabel={rankingPublicActionButtonDisplayLabel}
+            />
             {rankingActionStatusVisible() ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{rankingActionStatusLabel()}</Text>
