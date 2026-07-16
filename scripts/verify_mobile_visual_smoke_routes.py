@@ -47,7 +47,7 @@ VISUAL_SMOKE_ROUTES = {
         'currentScreen === "aiRemoveConfirm"',
         "aiCandidateRemoveChecklistItems.map",
         "pendingPreviewRemoveDisplayItem",
-        "onPress={confirmPreviewRecordRemove}",
+        "onConfirmPress={confirmPreviewRecordRemove}",
     ],
     "aiSaveConfirm": [
         'currentScreen === "aiSaveConfirm"',
@@ -96,7 +96,7 @@ VISUAL_SMOKE_ROUTES = {
     "deleteConfirm": [
         'currentScreen === "deleteConfirm"',
         "deleteConfirmChecklistItems.map",
-        "onPress={submitRecordDelete}",
+        "onConfirmPress={submitRecordDelete}",
     ],
     "manualRecord": [
         'currentScreen === "manualRecord"',

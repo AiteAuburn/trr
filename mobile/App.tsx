@@ -768,6 +768,7 @@ import {
 import { protectedRequestHeaders } from "./authRequestHeaders";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
+import { DangerConfirmActionRow } from "./dangerConfirmActionRow";
 import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
@@ -10137,24 +10138,14 @@ export default function App() {
                 <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />
               ))}
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.cancelAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={returnFromPreviewRemoveConfirm}
-              >
-                <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.cancel}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.confirmRemoveAccessibility}
-                accessibilityRole="button"
-                style={styles.dangerButton}
-                onPress={confirmPreviewRecordRemove}
-              >
-                <Text style={styles.dangerButtonText}>{aiRemoveConfirmSubmitDisplayText}</Text>
-              </Pressable>
-            </View>
+            <DangerConfirmActionRow
+              cancelAccessibilityLabel={coreFlowDisplayLabels.cancelAccessibility}
+              cancelLabel={coreFlowDisplayLabels.cancel}
+              confirmAccessibilityLabel={coreFlowDisplayLabels.confirmRemoveAccessibility}
+              confirmLabel={aiRemoveConfirmSubmitDisplayText}
+              onCancelPress={returnFromPreviewRemoveConfirm}
+              onConfirmPress={confirmPreviewRecordRemove}
+            />
           </View>
         ) : null}
 
@@ -11055,28 +11046,16 @@ export default function App() {
                 <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />
               ))}
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.recordDeleteCancelAccessibility}
-                accessibilityRole="button"
-                accessibilityState={{ disabled: isBusy }}
-                style={[styles.secondaryButton, isBusy ? styles.buttonDisabled : null]}
-                disabled={isBusy}
-                onPress={returnFromDeleteConfirm}
-              >
-                <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.cancel}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.recordDeleteSubmitAccessibility}
-                accessibilityRole="button"
-                accessibilityState={{ disabled: isBusy }}
-                style={[styles.dangerButton, isBusy ? styles.buttonDisabled : null]}
-                disabled={isBusy}
-                onPress={submitRecordDelete}
-              >
-                <Text style={styles.dangerButtonText}>{deleteConfirmSubmitDisplayLabel}</Text>
-              </Pressable>
-            </View>
+            <DangerConfirmActionRow
+              cancelAccessibilityLabel={coreFlowDisplayLabels.recordDeleteCancelAccessibility}
+              cancelDisabled={isBusy}
+              cancelLabel={coreFlowDisplayLabels.cancel}
+              confirmAccessibilityLabel={coreFlowDisplayLabels.recordDeleteSubmitAccessibility}
+              confirmDisabled={isBusy}
+              confirmLabel={deleteConfirmSubmitDisplayLabel}
+              onCancelPress={returnFromDeleteConfirm}
+              onConfirmPress={submitRecordDelete}
+            />
           </View>
         ) : null}
 

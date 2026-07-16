@@ -54,6 +54,7 @@ SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
+DANGER_CONFIRM_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dangerConfirmActionRow.tsx"
 DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreviewBlock.tsx"
 COMMUNITY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "communityActionRow.tsx"
 DOCTOR_SHARE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "doctorShareActionRow.tsx"
@@ -1422,6 +1423,7 @@ def main() -> int:
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
+    danger_confirm_action_row_content = DANGER_CONFIRM_ACTION_ROW_PATH.read_text(encoding="utf-8")
     delete_confirm_preview_block_content = DELETE_CONFIRM_PREVIEW_BLOCK_PATH.read_text(encoding="utf-8")
     community_action_row_content = COMMUNITY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     doctor_share_action_row_content = DOCTOR_SHARE_ACTION_ROW_PATH.read_text(encoding="utf-8")
@@ -1578,6 +1580,24 @@ def main() -> int:
             ("daily record detail row evidence line height", "lineHeight: 19"),
         ):
             _assert_contains(label, daily_record_detail_row_content, marker)
+        for label, marker in (
+            ("danger confirm action row component", "export function DangerConfirmActionRow"),
+            ("danger confirm action row cancel accessibility prop", "accessibilityLabel={cancelAccessibilityLabel}"),
+            ("danger confirm action row confirm accessibility prop", "accessibilityLabel={confirmAccessibilityLabel}"),
+            ("danger confirm action row button role", 'accessibilityRole="button"'),
+            ("danger confirm action row cancel disabled state", "accessibilityState={{ disabled: cancelDisabled }}"),
+            ("danger confirm action row confirm disabled state", "accessibilityState={{ disabled: confirmDisabled }}"),
+            ("danger confirm action row cancel disabled prop", "disabled={cancelDisabled}"),
+            ("danger confirm action row confirm disabled prop", "disabled={confirmDisabled}"),
+            ("danger confirm action row cancel handler prop", "onPress={onCancelPress}"),
+            ("danger confirm action row confirm handler prop", "onPress={onConfirmPress}"),
+            ("danger confirm action row cancel label", "{cancelLabel}"),
+            ("danger confirm action row confirm label", "{confirmLabel}"),
+            ("danger confirm action row shell style", "actionRow: {"),
+            ("danger confirm action row danger style", "dangerButton: {"),
+            ("danger confirm action row disabled style", "buttonDisabled: {"),
+        ):
+            _assert_contains(label, danger_confirm_action_row_content, marker)
         for label, marker in (
             ("delete confirm preview block component", "export function DeleteConfirmPreviewBlock({"),
             ("delete confirm preview danger label", "<Text style={styles.previewModeBadge}>{dangerLabel}</Text>"),
@@ -4317,7 +4337,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove-confirm return binding",
             content,
-            "onPress={returnFromPreviewRemoveConfirm}",
+            "onCancelPress={returnFromPreviewRemoveConfirm}",
         )
         _assert_contains(
             "AI candidate remove checklist helper binding",
@@ -5311,7 +5331,7 @@ def main() -> int:
             ("AI save submit binding", "onPress={submitAiSaveConfirm}"),
             ("manual record create submit binding", "onSubmitPress={submitManualRecordCreate}"),
             ("record update submit binding", "onSubmitPress={submitRecordUpdate}"),
-            ("record delete submit binding", "onPress={submitRecordDelete}"),
+            ("record delete submit binding", "onConfirmPress={submitRecordDelete}"),
             ("dev reset menu submit binding", "onPress={resetDevelopmentDataFromMenu}"),
         ):
             _assert_contains(label, content, marker)
@@ -5382,7 +5402,7 @@ def main() -> int:
         _assert_contains(
             "delete confirm return binding",
             content,
-            "onPress={returnFromDeleteConfirm}",
+            "onCancelPress={returnFromDeleteConfirm}",
         )
         _assert_contains(
             "record edit open handler",
@@ -7873,8 +7893,8 @@ def main() -> int:
             ("confirmation return text accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.returnTextConfirmAccessibility}"),
             ("confirmation return confirm accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.returnConfirmAccessibility}"),
             ("confirmation submit save accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.submitAiSaveAccessibility}"),
-            ("confirmation cancel accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.cancelAccessibility}"),
-            ("confirmation remove accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.confirmRemoveAccessibility}"),
+            ("confirmation cancel accessibility binding", "cancelAccessibilityLabel={coreFlowDisplayLabels.cancelAccessibility}"),
+            ("confirmation remove accessibility binding", "confirmAccessibilityLabel={coreFlowDisplayLabels.confirmRemoveAccessibility}"),
             ("confirmation back AI accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.backAiConfirmAccessibility}"),
             ("confirmation return save accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.returnSaveConfirmAccessibility}"),
             ("confirmation transcript back accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.backAccessibility}"),
@@ -8478,13 +8498,14 @@ def main() -> int:
             ("record edit open accessibility binding", "editAccessibilityLabel={coreFlowDisplayLabels.recordEditOpenAccessibility}"),
             ("record delete open accessibility binding", "deleteAccessibilityLabel={coreFlowDisplayLabels.recordDeleteOpenAccessibility}"),
             ("record delete return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordDeleteReturnAccessibility}"),
-            ("record delete cancel accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordDeleteCancelAccessibility}"),
-            ("record delete submit accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordDeleteSubmitAccessibility}"),
+            ("record delete cancel accessibility binding", "cancelAccessibilityLabel={coreFlowDisplayLabels.recordDeleteCancelAccessibility}"),
+            ("record delete submit accessibility binding", "confirmAccessibilityLabel={coreFlowDisplayLabels.recordDeleteSubmitAccessibility}"),
             ("record edit return accessibility binding", "cancelAccessibilityLabel={coreFlowDisplayLabels.recordEditReturnAccessibility}"),
             ("record update submit accessibility binding", "submitAccessibilityLabel={coreFlowDisplayLabels.recordUpdateSubmitAccessibility}"),
             ("manual create preview disabled state", "disabled={Boolean(manualRecordValidationError) || isBusy || !protectedBackendReady}"),
             ("record update submit disabled state", "disabled={Boolean(selectedRecordEditValidationError) || isBusy}"),
-            ("record delete disabled state", "disabled={isBusy}"),
+            ("record delete cancel disabled state", "cancelDisabled={isBusy}"),
+            ("record delete confirm disabled state", "confirmDisabled={isBusy}"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
@@ -14133,7 +14154,7 @@ def main() -> int:
         )
         ai_remove_confirm_block = _match_block(
             content,
-            r'(currentScreen === "aiRemoveConfirm"[\s\S]*?<Text style=\{styles\.dangerButtonText\}>\{aiRemoveConfirmSubmitDisplayText\}</Text>)',
+            r'(currentScreen === "aiRemoveConfirm"[\s\S]*?confirmLabel=\{aiRemoveConfirmSubmitDisplayText\})',
             "AI remove confirm render block",
         )
         for label, marker in (
