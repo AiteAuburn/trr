@@ -795,6 +795,7 @@ import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
 import { RecordEditFooterActions } from "./recordEditFooterActions";
 import { RecordEditHeaderFields } from "./recordEditHeaderFields";
 import { RecordJsonField } from "./recordJsonField";
+import { RecordOptionField } from "./recordOptionField";
 import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
 import type {
@@ -10349,70 +10350,24 @@ export default function App() {
                     );
                   })}
                 </View>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"◌"} label={"情境"} />
-                  <View style={styles.segmentRow}>
-                    {glucoseTimingDisplayOptions.map((option) => {
-                      const optionSelected = editOptionIsSelected(option, recordEditFieldValue(previewEditFields, "glucoseTiming"));
-                      return (
-                        <Pressable
-                          key={editOptionKey(option)}
-                          accessibilityLabel={editOptionAccessibilityLabel(option)}
-                          accessibilityRole="button"
-                          accessibilityState={{ selected: optionSelected }}
-                          style={[
-                            styles.segmentPill,
-                            optionSelected ? styles.segmentActive : null
-                          ]}
-                          onPress={() => pressPreviewEditGlucoseTimingOption(option)}
-                        >
-                          <Text
-                            style={[
-                              styles.segmentText,
-                              optionSelected ? styles.segmentTextActive : null
-                            ]}
-                          >
-                            {editOptionLabel(option)}
-                          </Text>
-                        </Pressable>
-                      );
-                    })}
-                  </View>
-                </View>
+                <RecordOptionField
+                  icon={"◌"}
+                  label={"情境"}
+                  options={glucoseTimingDisplayOptions}
+                  selectedValue={recordEditFieldValue(previewEditFields, "glucoseTiming")}
+                  onOptionPress={pressPreviewEditGlucoseTimingOption}
+                />
               </>
             ) : null}
             {selectedPreviewRecord.record_type === "meal" ? (
               <>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"🥣"} label={"餐別"} />
-                  <View style={styles.segmentRow}>
-                    {mealTypeDisplayOptions.map((option) => {
-                      const optionSelected = editOptionIsSelected(option, recordEditFieldValue(previewEditFields, "mealType"));
-                      return (
-                        <Pressable
-                          key={editOptionKey(option)}
-                          accessibilityLabel={editOptionAccessibilityLabel(option)}
-                          accessibilityRole="button"
-                          accessibilityState={{ selected: optionSelected }}
-                          style={[
-                            styles.segmentPill,
-                            optionSelected ? styles.segmentActive : null
-                          ]}
-                          onPress={() => pressPreviewEditMealTypeOption(option)}
-                        >
-                          <Text
-                            style={[
-                              styles.segmentText,
-                              optionSelected ? styles.segmentTextActive : null
-                            ]}
-                          >
-                            {editOptionLabel(option)}
-                          </Text>
-                        </Pressable>
-                      );
-                    })}
-                  </View>
-                </View>
+                <RecordOptionField
+                  icon={"🥣"}
+                  label={"餐別"}
+                  options={mealTypeDisplayOptions}
+                  selectedValue={recordEditFieldValue(previewEditFields, "mealType")}
+                  onOptionPress={pressPreviewEditMealTypeOption}
+                />
                 <RecordTextField
                   icon={"🍽"}
                   label={"飲食內容"}
