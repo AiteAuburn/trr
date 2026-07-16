@@ -9091,11 +9091,7 @@ export default function App() {
   }
 
   async function runNativeLlama() {
-    if (isNativeDebugActionBlocked()) {
-      return;
-    }
-    if (!enableDebugTools) {
-      openNativeDebugUnavailable();
+    if (!isNativeDebugActionReady()) {
       return;
     }
     const llamaInput = nativeLlamaInput();

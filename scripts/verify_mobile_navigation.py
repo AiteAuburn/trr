@@ -10608,6 +10608,7 @@ def main() -> int:
             ("native debug action ready download binding", "if (!isNativeDebugActionReady()) {\n      return;\n    }\n    startNativeDebugAction();\n    startNativeModelDownloadStatus();"),
             ("native debug action ready module check binding", "if (!isNativeDebugActionReady()) {\n      return;\n    }\n    startNativeDebugAction();\n    startNativeModuleCheckStatus();"),
             ("native debug action ready whisper binding", "if (!isNativeDebugActionReady()) {\n      return;\n    }\n    const whisperInput = nativeWhisperInput();"),
+            ("native debug action ready llama binding", "if (!isNativeDebugActionReady()) {\n      return;\n    }\n    const llamaInput = nativeLlamaInput();"),
             ("native whisper input helper", "function nativeWhisperInput()"),
             ("native whisper input helper fields", "audioPath: audioPath.trim(),\n      modelPath: whisperModelPath.trim()"),
             ("native whisper input helper binding", "const whisperInput = nativeWhisperInput();"),
