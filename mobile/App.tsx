@@ -7980,6 +7980,15 @@ export default function App() {
     return boundRecordItem(createdResponse);
   }
 
+  function handleManualRecordCreateSuccess(created: RecordItem) {
+    setRecords((current) => boundRecordsList([created, ...current]));
+    selectRecordForResult(created);
+    seedEmptyManualRecordStateForNow();
+    openSaveSuccessResult(manualRecordCreateSummaryMessage(1), "manual", manualRecordReturnScreen);
+    setStatus(manualRecordCreateSuccessStatusMessage());
+    syncAchievementsAfterRecordSave();
+  }
+
   async function createManualRecord() {
     if (isBusy || manualCreateInFlight.current) {
       return;
@@ -8009,12 +8018,7 @@ export default function App() {
         throw new Error("payload_json must be an object");
       }
       const created = await requestManualRecordCreate(activeProfile.id, account.id, payload);
-      setRecords((current) => boundRecordsList([created, ...current]));
-      selectRecordForResult(created);
-      seedEmptyManualRecordStateForNow();
-      openSaveSuccessResult(manualRecordCreateSummaryMessage(1), "manual", manualRecordReturnScreen);
-      setStatus(manualRecordCreateSuccessStatusMessage());
-      syncAchievementsAfterRecordSave();
+      handleManualRecordCreateSuccess(created);
     } catch (error) {
       setStatus(manualRecordCreateFailureStatusMessage(error));
     } finally {

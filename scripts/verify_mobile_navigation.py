@@ -4459,9 +4459,9 @@ def main() -> int:
             "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n      selectRecordForResult(updated);",
         )
         _assert_contains(
-            "manual create result selected record helper binding",
+            "manual create result selected record helper state",
             content,
-            "setRecords((current) => boundRecordsList([created, ...current]));\n      selectRecordForResult(created);",
+            "setRecords((current) => boundRecordsList([created, ...current]));\n    selectRecordForResult(created);",
         )
         _assert_contains(
             "save success result helper",
@@ -4479,9 +4479,9 @@ def main() -> int:
             "setLastSaveErrorSummary(\"\");\n    openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), \"ai\", \"today\");",
         )
         _assert_contains(
-            "manual create save success result helper binding",
+            "manual create save success result helper state",
             content,
-            "seedEmptyManualRecordStateForNow();\n      openSaveSuccessResult(manualRecordCreateSummaryMessage(1), \"manual\", manualRecordReturnScreen);",
+            "seedEmptyManualRecordStateForNow();\n    openSaveSuccessResult(manualRecordCreateSummaryMessage(1), \"manual\", manualRecordReturnScreen);",
         )
         _assert_contains(
             "manual create start helper",
@@ -4552,6 +4552,21 @@ def main() -> int:
             "manual create request helper binding",
             content,
             "const created = await requestManualRecordCreate(activeProfile.id, account.id, payload);",
+        )
+        _assert_contains(
+            "manual create success helper",
+            content,
+            "function handleManualRecordCreateSuccess(created: RecordItem)",
+        )
+        _assert_contains(
+            "manual create success helper state",
+            content,
+            "setRecords((current) => boundRecordsList([created, ...current]));\n    selectRecordForResult(created);\n    seedEmptyManualRecordStateForNow();\n    openSaveSuccessResult(manualRecordCreateSummaryMessage(1), \"manual\", manualRecordReturnScreen);\n    setStatus(manualRecordCreateSuccessStatusMessage());\n    syncAchievementsAfterRecordSave();",
+        )
+        _assert_contains(
+            "manual create success helper binding",
+            content,
+            "const created = await requestManualRecordCreate(activeProfile.id, account.id, payload);\n      handleManualRecordCreateSuccess(created);",
         )
         _assert_contains(
             "AI save failure result helper",
@@ -11099,7 +11114,7 @@ def main() -> int:
             ("achievement post-save sync helper", "function syncAchievementsAfterRecordSave()"),
             ("achievement AI save success sync", "setStatus(aiSaveSuccessStatusMessage());\n    syncAchievementsAfterRecordSave();"),
             ("achievement AI daily save transactional response", "const saveResponse = await requestDailyRecordSave(account.id, preview, recordsToSave);"),
-            ("achievement manual create sync", "setStatus(manualRecordCreateSuccessStatusMessage());\n      syncAchievementsAfterRecordSave();"),
+            ("achievement manual create sync", "setStatus(manualRecordCreateSuccessStatusMessage());\n    syncAchievementsAfterRecordSave();"),
             ("achievement category sections", "achievementCategoryDisplaySections.map"),
             ("achievement section item render", "achievementCategorySectionItems(section).map"),
             ("achievement streak style", "displayItem.kind === \"streak\" ? styles.achievementBadgeStreak : null"),
