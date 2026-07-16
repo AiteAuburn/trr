@@ -10439,21 +10439,18 @@ export default function App() {
                     })}
                   </View>
                 </View>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"🍽"} label={"飲食內容"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.foodItemsInputAccessibility}
-                    value={recordEditFieldValue(previewEditFields, "foodItems")}
-                    onChangeText={updatePreviewEditFoodItems}
-                    maxLength={recordEditFieldMaxLength("foodItems")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    multiline
-                    textAlignVertical="top"
-                    style={[styles.input, styles.multilineField]}
-                    placeholder="水煮蛋、熱狗"
-                  />
-                </View>
+                <RecordTextField
+                  icon={"🍽"}
+                  label={"飲食內容"}
+                  accessibilityLabel={auxiliaryDisplayLabels.foodItemsInputAccessibility}
+                  value={recordEditFieldValue(previewEditFields, "foodItems")}
+                  onChangeText={updatePreviewEditFoodItems}
+                  maxLength={recordEditFieldMaxLength("foodItems")}
+                  multiline
+                  textAlignVertical="top"
+                  inputStyle={[styles.input, recordTextFieldStyles.multilineField]}
+                  placeholder="水煮蛋、熱狗"
+                />
               </>
             ) : null}
             {selectedPreviewRecord.record_type === "exercise" ? (

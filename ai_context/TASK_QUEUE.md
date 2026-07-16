@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1995: Reuse record text field shell for preview edit meal food items
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused the shared `RecordTextField` shell for the Preview Edit meal food-items multiline input.
+- Preserved the food-items label, icon, accessibility label, value helper, change handler, max-length helper, multiline/top-aligned behavior, existing App input style, 96px minimum multiline height, placeholder, and meal-type segment behavior.
+- Updated navigation verifier coverage for the shared Preview Edit food-items field binding while keeping preview edit helper and option checks intact.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining Preview Edit exercise/medication/note field clusters in small behavior-preserving slices.
+
 ### T1994: Reuse record text field shell for preview edit glucose value
 
 Status: done
