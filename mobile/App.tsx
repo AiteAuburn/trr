@@ -799,6 +799,7 @@ import { RecordJsonField } from "./recordJsonField";
 import { RecordOptionField, RecordOptionRow } from "./recordOptionField";
 import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
+import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
 import type {
   Account,
   AiModelOptions,
@@ -12175,34 +12176,18 @@ export default function App() {
                 autoCapitalize="none"
                 autoCorrect={false}
               />
-              <View style={styles.dateTimeRow}>
-                <View style={styles.dateTimeField}>
-                  <FieldLabel icon={"📅"} label={foodCommunityShareEatenDateLabel()} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}
-                    value={foodCommunityShareFields.eatenDate}
-                    onChangeText={updateFoodCommunityEatenDate}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    maxLength={maxDateInputLength}
-                    style={styles.input}
-                    placeholder="2026-04-29"
-                  />
-                </View>
-                <View style={styles.dateTimeField}>
-                  <FieldLabel icon={"🕒"} label={foodCommunityShareEatenTimeLabel()} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}
-                    value={foodCommunityShareFields.eatenTime}
-                    onChangeText={updateFoodCommunityEatenTime}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    maxLength={maxTimeInputLength}
-                    style={styles.input}
-                    placeholder="08:10"
-                  />
-                </View>
-              </View>
+              <FoodCommunityShareDateTimeFields
+                dateAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}
+                dateLabel={foodCommunityShareEatenDateLabel()}
+                dateMaxLength={maxDateInputLength}
+                dateValue={foodCommunityShareFields.eatenDate}
+                timeAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}
+                timeLabel={foodCommunityShareEatenTimeLabel()}
+                timeMaxLength={maxTimeInputLength}
+                timeValue={foodCommunityShareFields.eatenTime}
+                onDateChange={updateFoodCommunityEatenDate}
+                onTimeChange={updateFoodCommunityEatenTime}
+              />
               <TextInput
                 accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}
                 value={foodCommunityShareFields.beforeGlucose}

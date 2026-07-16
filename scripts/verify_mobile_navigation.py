@@ -84,6 +84,7 @@ RECORD_EDIT_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "recordEditFooterAction
 RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.tsx"
 RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
 RECORD_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "recordTextField.tsx"
+FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareDateTimeFields.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1436,6 +1437,9 @@ def main() -> int:
     record_edit_header_fields_content = RECORD_EDIT_HEADER_FIELDS_PATH.read_text(encoding="utf-8")
     record_option_field_content = RECORD_OPTION_FIELD_PATH.read_text(encoding="utf-8")
     record_text_field_content = RECORD_TEXT_FIELD_PATH.read_text(encoding="utf-8")
+    food_community_share_date_time_fields_content = FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH.read_text(
+        encoding="utf-8"
+    )
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -2028,6 +2032,27 @@ def main() -> int:
             ("record text field multiline style", "multilineField: {"),
         ):
             _assert_contains(label, record_text_field_content, marker)
+        for label, marker in (
+            ("food community share date time fields component", "export function FoodCommunityShareDateTimeFields"),
+            ("food community share date time shared field", "<RecordTextField"),
+            ("food community share date icon", 'icon={"📅"}'),
+            ("food community share date label prop", "label={dateLabel}"),
+            ("food community share date accessibility prop", "accessibilityLabel={dateAccessibilityLabel}"),
+            ("food community share date value prop", "value={dateValue}"),
+            ("food community share date handler prop", "onChangeText={onDateChange}"),
+            ("food community share date max length prop", "maxLength={dateMaxLength}"),
+            ("food community share date placeholder", 'placeholder="2026-04-29"'),
+            ("food community share time icon", 'icon={"🕒"}'),
+            ("food community share time label prop", "label={timeLabel}"),
+            ("food community share time accessibility prop", "accessibilityLabel={timeAccessibilityLabel}"),
+            ("food community share time value prop", "value={timeValue}"),
+            ("food community share time handler prop", "onChangeText={onTimeChange}"),
+            ("food community share time max length prop", "maxLength={timeMaxLength}"),
+            ("food community share time placeholder", 'placeholder="08:10"'),
+            ("food community share date time row style", "dateTimeRow: {"),
+            ("food community share date time field style", "dateTimeField: {"),
+        ):
+            _assert_contains(label, food_community_share_date_time_fields_content, marker)
         for label, marker in (
             ("manual record exercise fields component", "export function ManualRecordExerciseFields"),
             ("manual record exercise shared field", "<RecordTextField"),
@@ -11298,10 +11323,10 @@ def main() -> int:
             ("food community individual share empty state", "尚未有可顯示的個別分享紀錄。"),
             ("food community share eaten date label helper", "function foodCommunityShareEatenDateLabel()"),
             ("food community share eaten date label helper fields", 'return "食用日期";'),
-            ("food community share eaten date label helper binding", 'label={foodCommunityShareEatenDateLabel()}'),
+            ("food community share eaten date label helper binding", 'dateLabel={foodCommunityShareEatenDateLabel()}'),
             ("food community share eaten time label helper", "function foodCommunityShareEatenTimeLabel()"),
             ("food community share eaten time label helper fields", 'return "食用時間";'),
-            ("food community share eaten time label helper binding", 'label={foodCommunityShareEatenTimeLabel()}'),
+            ("food community share eaten time label helper binding", 'timeLabel={foodCommunityShareEatenTimeLabel()}'),
             ("food community detail sync function", "async function loadFoodCommunityDetail(itemId: string)"),
             ("food community detail endpoint", "`/community/foods/${boundedItemId}`"),
             ("food community list default item helper", "function foodCommunityListDefaultItemId(items: Array<{ id: string }>, fallbackId: string)"),
@@ -11576,8 +11601,8 @@ def main() -> int:
             ("ranking return future modules press helper binding", "onPress={rankingReturnFutureModulesPressTarget}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
             ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
-            ("food community share eaten date accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
-            ("food community share eaten time accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
+            ("food community share eaten date accessibility auxiliary binding", "dateAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
+            ("food community share eaten time accessibility auxiliary binding", "timeAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
             ("food community share before glucose accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}"),
             ("food community share after glucose accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareAfterGlucoseAccessibility}"),
             ("food community share note accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}"),
@@ -11613,15 +11638,15 @@ def main() -> int:
             ("food community share eaten time updater", "function updateFoodCommunityEatenTime(value: string)"),
             ("food community share food name input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share food name binding", "onChangeText={updateFoodCommunityFoodName}"),
-            ("food community share eaten date input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
-            ("food community share eaten time input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
+            ("food community share eaten date input", "dateAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
+            ("food community share eaten time input", "timeAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
             ("food community share before glucose input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}"),
             ("food community share after glucose input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareAfterGlucoseAccessibility}"),
             ("food community share note input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}"),
-            ("food community share eaten date binding", "onChangeText={updateFoodCommunityEatenDate}"),
-            ("food community share eaten time binding", "onChangeText={updateFoodCommunityEatenTime}"),
-            ("food community share eaten date max length", "maxLength={maxDateInputLength}"),
-            ("food community share eaten time max length", "maxLength={maxTimeInputLength}"),
+            ("food community share eaten date binding", "onDateChange={updateFoodCommunityEatenDate}"),
+            ("food community share eaten time binding", "onTimeChange={updateFoodCommunityEatenTime}"),
+            ("food community share eaten date max length", "dateMaxLength={maxDateInputLength}"),
+            ("food community share eaten time max length", "timeMaxLength={maxTimeInputLength}"),
             ("food community share food name payload", "food_name: foodName"),
             ("food community share eaten_at payload", "eaten_at: eatenAt"),
             ("food community share eaten_at local parser", "eatenAt = localDateTimeToIso(foodCommunityShareFields.eatenDate, foodCommunityShareFields.eatenTime);"),
