@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1903: Reuse initial record sync complete helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `completeInitialRecordSyncRequest()` for the initial record sync request/stale-success/failure/finish lifecycle.
+- Reused the helper from `loadRecords()` while preserving request arguments, stale-response guard, success handling, failure handling, and cleanup behavior.
+- Updated navigation verifier coverage for the initial record sync complete helper, internals, and complete binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing initial record sync start-and-complete lifecycle and load-more orchestration in small behavior-preserving slices.
+
 ### T1902: Reuse initial record sync finish helper
 
 Status: done

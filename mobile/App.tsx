@@ -8128,15 +8128,11 @@ export default function App() {
     recordSyncInFlightKeys.current.delete(syncContext.syncKey);
   }
 
-  async function loadRecords() {
-    const syncContext = guardedInitialRecordSyncContext();
-    if (!syncContext) {
-      return;
-    }
-
-    if (!startInitialRecordSyncRequest(syncContext)) {
-      return;
-    }
+  async function completeInitialRecordSyncRequest(syncContext: {
+    account: Account;
+    activeProfileId: string;
+    syncKey: string;
+  }) {
     try {
       const response = await requestInitialRecordSync(syncContext);
       if (latestRecordSyncKey.current !== syncContext.syncKey) {
@@ -8148,6 +8144,18 @@ export default function App() {
     } finally {
       finishInitialRecordSyncRequest(syncContext);
     }
+  }
+
+  async function loadRecords() {
+    const syncContext = guardedInitialRecordSyncContext();
+    if (!syncContext) {
+      return;
+    }
+
+    if (!startInitialRecordSyncRequest(syncContext)) {
+      return;
+    }
+    await completeInitialRecordSyncRequest(syncContext);
   }
 
   async function loadMoreRecords() {
