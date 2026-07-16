@@ -34,6 +34,34 @@ None.
 
 ## Done
 
+### T1978: Tighten manual record option target verifier
+
+Status: done
+
+Files:
+
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Removed the stale manual record option target verifier marker that still accepted `return option.value;`.
+- Kept coverage for the intended `return editOptionKey(option);` helper field so the verifier no longer passes by matching the generic `editOptionKey()` implementation.
+- No app runtime, UI copy/layout, entry menu timing, edit/delete navigation target, backend/schema, Android signing, daily-record save endpoint, save payload shape, record sync endpoint/request semantics, preview edit/delete data operations, token storage, AI/LLM prompt behavior, parser endpoint/request semantics, PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue tightening verifier markers when refactor slices reveal stale positive assertions.
+
 ### T1977: Reuse manual record option target helper
 
 Status: done

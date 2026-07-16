@@ -9433,8 +9433,6 @@ def main() -> int:
             ("manual record glucose input binding", "onGlucoseValueChange={updateManualRecordGlucoseValue}"),
             ("manual record glucose unit binding", "onUnitPress={pressManualRecordGlucoseUnitOption}"),
             ("manual record glucose timing binding", "onTimingPress={pressManualRecordGlucoseTimingOption}"),
-            ("manual record option target helper", "function manualRecordOptionTarget(option: { value: string })"),
-            ("manual record option target helper fields", "return option.value;"),
             ("manual record unit option press handler", "function pressManualRecordGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>)"),
             ("manual record option target helper", "function manualRecordOptionTarget(option: { value: string })"),
             ("manual record option target helper fields", "return editOptionKey(option);"),

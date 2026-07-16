@@ -15,6 +15,34 @@
 
 ## 2026-07-16
 
+### T1978 tighten manual record option target verifier
+
+類型：mobile / verifier / docs
+
+檔案：
+
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Removed the stale manual record option target verifier marker that still accepted `return option.value;`.
+- Kept coverage for the intended `return editOptionKey(option);` helper field so the verifier no longer passes by matching the generic `editOptionKey()` implementation.
+- 未變更 app runtime、UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue tightening verifier markers when refactor slices reveal stale positive assertions.
+
 ### T1977 reuse manual record option target helper
 
 類型：mobile / refactor / verifier / docs
