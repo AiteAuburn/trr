@@ -4096,7 +4096,12 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit save success field clear helper binding",
             content,
-            "clearPreviewEditActionState();",
+            "function returnFromPreviewRecordEditSaveSuccess() {\n    clearPreviewEditActionState();",
+        )
+        _assert_contains(
+            "AI candidate edit save success return helper",
+            content,
+            "function returnFromPreviewRecordEditSaveSuccess()",
         )
         _assert_contains(
             "AI candidate edit missing draft screen opener fallback",
@@ -4106,7 +4111,12 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit save success screen opener binding",
             content,
-            "clearPreviewEditActionState();\n      openPreviewActionReturnScreen();",
+            "function returnFromPreviewRecordEditSaveSuccess() {\n    clearPreviewEditActionState();\n    openPreviewActionReturnScreen();",
+        )
+        _assert_contains(
+            "AI candidate edit save success return helper call",
+            content,
+            "returnFromPreviewRecordEditSaveSuccess();",
         )
         _assert_contains(
             "AI candidate remove confirm missing pending screen opener fallback",

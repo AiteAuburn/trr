@@ -3541,6 +3541,11 @@ export default function App() {
     openPreviewActionReturnScreen();
   }
 
+  function returnFromPreviewRecordEditSaveSuccess() {
+    clearPreviewEditActionState();
+    openPreviewActionReturnScreen();
+  }
+
   function reorganizeDailyRecordDraftAfterChange(
     nextPreview: ParsePreviewResponse,
     reason: DailyRecordReorganizationReason,
@@ -3716,8 +3721,7 @@ export default function App() {
         setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
         setStatus(aiCandidateEditSuccessStatusMessage());
       }
-      clearPreviewEditActionState();
-      openPreviewActionReturnScreen();
+      returnFromPreviewRecordEditSaveSuccess();
     } catch (error) {
       setStatus(aiCandidateEditFailureStatusMessage(error));
     }
