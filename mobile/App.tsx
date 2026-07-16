@@ -8933,6 +8933,16 @@ export default function App() {
     setNativeStatus(nativeLlamaFailureStatusMessage(error));
   }
 
+  async function handleNativeModelDownloadSuccess(uri: string) {
+    if (downloadKind === "llama") {
+      setLlamaModelPath(boundNativeDebugInput(uri));
+    } else {
+      setWhisperModelPath(boundNativeDebugInput(uri));
+    }
+    await refreshDownloadedModels();
+    setNativeStatus(nativeModelDownloadSuccessStatusMessage());
+  }
+
   async function downloadSelectedModel() {
     if (isNativeDebugActionBlocked()) {
       return;
@@ -8950,13 +8960,7 @@ export default function App() {
         kind: downloadKind,
         onProgress: setDownloadProgress
       });
-      if (downloadKind === "llama") {
-        setLlamaModelPath(boundNativeDebugInput(uri));
-      } else {
-        setWhisperModelPath(boundNativeDebugInput(uri));
-      }
-      await refreshDownloadedModels();
-      setNativeStatus(nativeModelDownloadSuccessStatusMessage());
+      await handleNativeModelDownloadSuccess(uri);
     } catch (error) {
       handleNativeModelDownloadFailure(error);
     } finally {
