@@ -777,6 +777,7 @@ import { HistoryIntroStatusBlocks } from "./historyIntroStatusBlocks";
 import { HistoryNoRecordStatusBlock } from "./historyNoRecordStatusBlock";
 import { HistorySelectedDatePanel } from "./historySelectedDatePanel";
 import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
+import { AccountSecurityActionGrid } from "./accountSecurityActionGrid";
 import { BackendUrlField } from "./backendUrlField";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
@@ -12783,48 +12784,21 @@ export default function App() {
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.sessionPreview}</Text>
               <Text style={styles.evidence}>{accountSecuritySessionBoundaryDisplayText}</Text>
             </View>
-            <View style={styles.actionGrid}>
-              <Pressable
-	                accessibilityLabel={settingsSubscriptionDisplayLabels.refreshSessionAccessibility}
-	                accessibilityRole="button"
-	                accessibilityState={{ disabled: isAuthOperationInFlight }}
-	                style={[styles.secondaryButton, isAuthOperationInFlight ? styles.buttonDisabled : null]}
-                disabled={isAuthOperationInFlight}
-                onPress={refreshAuthSessionFromSecurity}
-              >
-                <Text style={styles.secondaryButtonText}>{settingsSubscriptionDisplayLabels.refreshSession}</Text>
-              </Pressable>
-              <Pressable
-	                accessibilityLabel={settingsSubscriptionDisplayLabels.loadSessionsAccessibility}
-	                accessibilityRole="button"
-	                accessibilityState={{ disabled: isAuthOperationInFlight }}
-	                style={[styles.secondaryButton, isAuthOperationInFlight ? styles.buttonDisabled : null]}
-                disabled={isAuthOperationInFlight}
-                onPress={loadAuthSessionsFromSecurity}
-              >
-                <Text style={styles.secondaryButtonText}>{settingsSubscriptionDisplayLabels.loadSessions}</Text>
-              </Pressable>
-              <Pressable
-	                accessibilityLabel={settingsSubscriptionDisplayLabels.logoutLocalAccessibility}
-	                accessibilityRole="button"
-	                accessibilityState={{ disabled: isAuthOperationInFlight }}
-	                style={[styles.secondaryButton, isAuthOperationInFlight ? styles.buttonDisabled : null]}
-                disabled={isAuthOperationInFlight}
-                onPress={logoutAuthSessionFromSecurity}
-              >
-                <Text style={styles.secondaryButtonText}>{settingsSubscriptionDisplayLabels.logoutLocal}</Text>
-              </Pressable>
-              <Pressable
-	                accessibilityLabel={settingsSubscriptionDisplayLabels.logoutAllAccessibility}
-	                accessibilityRole="button"
-	                accessibilityState={{ disabled: isAuthOperationInFlight }}
-	                style={[styles.dangerButton, isAuthOperationInFlight ? styles.buttonDisabled : null]}
-                disabled={isAuthOperationInFlight}
-                onPress={logoutAllAuthSessionsFromSecurity}
-              >
-                <Text style={styles.dangerButtonText}>{settingsSubscriptionDisplayLabels.logoutAll}</Text>
-              </Pressable>
-            </View>
+            <AccountSecurityActionGrid
+              disabled={isAuthOperationInFlight}
+              loadSessionsAccessibilityLabel={settingsSubscriptionDisplayLabels.loadSessionsAccessibility}
+              loadSessionsLabel={settingsSubscriptionDisplayLabels.loadSessions}
+              logoutAllAccessibilityLabel={settingsSubscriptionDisplayLabels.logoutAllAccessibility}
+              logoutAllLabel={settingsSubscriptionDisplayLabels.logoutAll}
+              logoutLocalAccessibilityLabel={settingsSubscriptionDisplayLabels.logoutLocalAccessibility}
+              logoutLocalLabel={settingsSubscriptionDisplayLabels.logoutLocal}
+              onLoadSessionsPress={loadAuthSessionsFromSecurity}
+              onLogoutAllPress={logoutAllAuthSessionsFromSecurity}
+              onLogoutLocalPress={logoutAuthSessionFromSecurity}
+              onRefreshSessionPress={refreshAuthSessionFromSecurity}
+              refreshSessionAccessibilityLabel={settingsSubscriptionDisplayLabels.refreshSessionAccessibility}
+              refreshSessionLabel={settingsSubscriptionDisplayLabels.refreshSession}
+            />
             {authSessionDisplayItems.length > 0 ? (
               <View style={styles.aiReviewList}>
                 {authSessionDisplayItems.map((item) => (

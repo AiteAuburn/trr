@@ -13,6 +13,7 @@ API_CLIENT_PATH = REPO_ROOT / "mobile" / "apiClient.ts"
 APP_TYPES_PATH = REPO_ROOT / "mobile" / "appTypes.ts"
 APP_RUNTIME_CONFIG_PATH = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
+ACCOUNT_SECURITY_ACTION_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityActionGrid.tsx"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
 RECORD_EDIT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "recordEditTransforms.ts"
 RECORD_BOUNDS_PATH = REPO_ROOT / "mobile" / "recordBounds.ts"
@@ -1374,6 +1375,7 @@ def main() -> int:
     app_types_content = APP_TYPES_PATH.read_text(encoding="utf-8")
     app_runtime_config_content = APP_RUNTIME_CONFIG_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
+    account_security_action_grid_content = ACCOUNT_SECURITY_ACTION_GRID_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
     record_edit_transforms_content = RECORD_EDIT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     record_bounds_content = RECORD_BOUNDS_PATH.read_text(encoding="utf-8")
@@ -9446,6 +9448,25 @@ def main() -> int:
         ):
             _assert_contains(label, segment_selector_content, marker)
         for label, marker in (
+            ("account security action grid component", "export function AccountSecurityActionGrid"),
+            ("account security action grid shared button", "function AccountSecurityActionButton"),
+            ("account security action grid refresh accessibility prop", "accessibilityLabel={refreshSessionAccessibilityLabel}"),
+            ("account security action grid load sessions accessibility prop", "accessibilityLabel={loadSessionsAccessibilityLabel}"),
+            ("account security action grid logout local accessibility prop", "accessibilityLabel={logoutLocalAccessibilityLabel}"),
+            ("account security action grid logout all accessibility prop", "accessibilityLabel={logoutAllAccessibilityLabel}"),
+            ("account security action grid button role", 'accessibilityRole="button"'),
+            ("account security action grid disabled state", "accessibilityState={{ disabled }}"),
+            ("account security action grid disabled prop", "disabled={disabled}"),
+            ("account security action grid refresh handler", "onPress={onRefreshSessionPress}"),
+            ("account security action grid load sessions handler", "onPress={onLoadSessionsPress}"),
+            ("account security action grid logout local handler", "onPress={onLogoutLocalPress}"),
+            ("account security action grid logout all handler", "onPress={onLogoutAllPress}"),
+            ("account security action grid danger variant", 'variant="danger"'),
+            ("account security action grid secondary style", "secondaryButton: {"),
+            ("account security action grid danger style", "dangerButton: {"),
+        ):
+            _assert_contains(label, account_security_action_grid_content, marker)
+        for label, marker in (
             ("settings subpage action row component", "export function SettingsSubpageActionRow"),
             ("settings subpage action row return accessibility prop", "accessibilityLabel={returnAccessibilityLabel}"),
             ("settings subpage action row action accessibility prop", "accessibilityLabel={actionAccessibilityLabel}"),
@@ -11296,15 +11317,21 @@ def main() -> int:
             ("auth provider preview press binding", "onPress={() => pressAuthProviderPreview(item)}"),
             ("auth provider accessibility binding", "accessibilityLabel={previewStatusRowAccessibilityLabel(item)}"),
             ("auth provider disabled state", "accessibilityState={{ disabled: isAuthOperationInFlight }}"),
-            ("auth refresh binding", "onPress={refreshAuthSessionFromSecurity}"),
-            ("auth sessions load binding", "onPress={loadAuthSessionsFromSecurity}"),
-            ("auth logout binding", "onPress={logoutAuthSessionFromSecurity}"),
-            ("auth logout all binding", "onPress={logoutAllAuthSessionsFromSecurity}"),
+            ("auth action grid binding", "<AccountSecurityActionGrid"),
+            ("auth refresh binding", "onRefreshSessionPress={refreshAuthSessionFromSecurity}"),
+            ("auth sessions load binding", "onLoadSessionsPress={loadAuthSessionsFromSecurity}"),
+            ("auth logout binding", "onLogoutLocalPress={logoutAuthSessionFromSecurity}"),
+            ("auth logout all binding", "onLogoutAllPress={logoutAllAuthSessionsFromSecurity}"),
             ("auth session display list helper binding", "const authSessionDisplayItems = settingsChoiceDisplay.authSessionDisplayItems;"),
-            ("auth refresh accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.refreshSessionAccessibility}"),
-            ("auth load sessions accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.loadSessionsAccessibility}"),
-            ("auth logout local accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.logoutLocalAccessibility}"),
-            ("auth logout all accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.logoutAllAccessibility}"),
+            ("auth action grid disabled binding", "disabled={isAuthOperationInFlight}"),
+            ("auth refresh accessibility binding", "refreshSessionAccessibilityLabel={settingsSubscriptionDisplayLabels.refreshSessionAccessibility}"),
+            ("auth load sessions accessibility binding", "loadSessionsAccessibilityLabel={settingsSubscriptionDisplayLabels.loadSessionsAccessibility}"),
+            ("auth logout local accessibility binding", "logoutLocalAccessibilityLabel={settingsSubscriptionDisplayLabels.logoutLocalAccessibility}"),
+            ("auth logout all accessibility binding", "logoutAllAccessibilityLabel={settingsSubscriptionDisplayLabels.logoutAllAccessibility}"),
+            ("auth refresh label binding", "refreshSessionLabel={settingsSubscriptionDisplayLabels.refreshSession}"),
+            ("auth load sessions label binding", "loadSessionsLabel={settingsSubscriptionDisplayLabels.loadSessions}"),
+            ("auth logout local label binding", "logoutLocalLabel={settingsSubscriptionDisplayLabels.logoutLocal}"),
+            ("auth logout all label binding", "logoutAllLabel={settingsSubscriptionDisplayLabels.logoutAll}"),
             ("settings local clear accessibility binding", "actionAccessibilityLabel={settingsSubscriptionDisplayLabels.localClearAccessibility}"),
             ("auth status display helper binding", "const authStatusDisplay = authStatusDisplayTexts({"),
             ("auth action status display text binding", "const authActionStatusDisplayText = authStatusDisplay.authAction;"),
@@ -11358,8 +11385,8 @@ def main() -> int:
             ("dev reset status display text binding", "const devResetStatusDisplayText = authStatusDisplay.devReset;"),
             ("native status display helper binding", "const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);"),
             ("native status display text binding", "const nativeStatusDisplayText = nativeStatusDisplay.native;"),
-            ("auth secondary action disabled state", "accessibilityState={{ disabled: isAuthOperationInFlight }}"),
-            ("auth danger action disabled state", "accessibilityState={{ disabled: isAuthOperationInFlight }}"),
+            ("auth secondary action disabled state", "disabled={isAuthOperationInFlight}"),
+            ("auth danger action disabled state", "disabled={isAuthOperationInFlight}"),
             ("auth session management preview press binding", "onPress={() => pressAuthSessionManagementPreview(item)}"),
             ("auth session management button role", 'accessibilityRole="button"\n                  style={styles.aiReviewCard}'),
             ("profile edit integration status binding", "onActionPress={showProfileEditIntegrationStatus}"),
