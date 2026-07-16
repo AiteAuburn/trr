@@ -5553,18 +5553,6 @@ export default function App() {
     return "儲存公開名稱";
   }
 
-  function communityBoundaryRowKey(row: ReturnType<typeof communityBoundaryDisplayRows>[number]) {
-    return row.label;
-  }
-
-  function communityBoundaryRowLabel(row: ReturnType<typeof communityBoundaryDisplayRows>[number]) {
-    return row.label;
-  }
-
-  function communityBoundaryRowValue(row: ReturnType<typeof communityBoundaryDisplayRows>[number]) {
-    return row.value;
-  }
-
   function communityCloseAccessibilityLabel() {
     return auxiliaryDisplayLabels.closeReturn;
   }
@@ -5659,18 +5647,6 @@ export default function App() {
 
   function rankingStreakDisplayText() {
     return rankingStreakDisplayLabel(rankingStreakDisplayDays);
-  }
-
-  function rankingBoundaryRowKey(row: ReturnType<typeof rankingBoundaryDisplayRows>[number]) {
-    return row.label;
-  }
-
-  function rankingBoundaryRowLabel(row: ReturnType<typeof rankingBoundaryDisplayRows>[number]) {
-    return row.label;
-  }
-
-  function rankingBoundaryRowValue(row: ReturnType<typeof rankingBoundaryDisplayRows>[number]) {
-    return row.value;
   }
 
   function rankingLeaderboardSectionKey(section: (typeof rankingLeaderboardSections)[number]) {
@@ -11699,14 +11675,7 @@ export default function App() {
                 </Pressable>
               </View>
             </View>
-            <View style={styles.reportBoundaryGrid}>
-              {communityBoundaryRows.map((row) => (
-                <View key={communityBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{communityBoundaryRowLabel(row)}</Text>
-                  <Text style={styles.recordType}>{communityBoundaryRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
+            <FutureBoundaryGrid rows={communityBoundaryRows} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{communityReadinessSectionDisplayLabel}</Text>
               {communityReadinessChecklistItems.map((item) => (
@@ -11770,14 +11739,7 @@ export default function App() {
                 <Text style={styles.evidence}>{rankingLocalPreviewBoundaryCopyText()}</Text>
               </View>
             </View>
-            <View style={styles.reportBoundaryGrid}>
-              {rankingBoundaryRows.map((row) => (
-                <View key={rankingBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{rankingBoundaryRowLabel(row)}</Text>
-                  <Text style={styles.recordType}>{rankingBoundaryRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
+            <FutureBoundaryGrid rows={rankingBoundaryRows} />
             {rankingLeaderboardSections.map((section) => (
               <View key={rankingLeaderboardSectionKey(section)} style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{rankingLeaderboardSectionLabel(section)}</Text>

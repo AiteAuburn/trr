@@ -12144,15 +12144,7 @@ def main() -> int:
             ("community public profile save button helper fields", 'return "儲存公開名稱";'),
             ("community public profile save button display label binding", "const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();"),
             ("community public profile save button text binding", "{communityPublicProfileSaveButtonDisplayLabel}"),
-            ("community boundary row key helper", "function communityBoundaryRowKey(row: ReturnType<typeof communityBoundaryDisplayRows>[number])"),
-            ("community boundary row key helper fields", "return row.label;"),
-            ("community boundary row key helper binding", "key={communityBoundaryRowKey(row)}"),
-            ("community boundary row label helper", "function communityBoundaryRowLabel(row: ReturnType<typeof communityBoundaryDisplayRows>[number])"),
-            ("community boundary row label helper fields", "return row.label;"),
-            ("community boundary row label helper binding", "{communityBoundaryRowLabel(row)}"),
-            ("community boundary row value helper", "function communityBoundaryRowValue(row: ReturnType<typeof communityBoundaryDisplayRows>[number])"),
-            ("community boundary row value helper fields", "return row.value;"),
-            ("community boundary row value helper binding", "{communityBoundaryRowValue(row)}"),
+            ("community boundary grid rows binding", "rows={communityBoundaryRows}"),
             ("ranking screen title helper", "function rankingScreenTitleLabel()"),
             ("ranking screen title helper fields", 'return "社群排行";'),
             ("ranking screen title helper binding", "{rankingScreenTitleLabel()}"),
@@ -12173,15 +12165,7 @@ def main() -> int:
             ("ranking streak display text helper", "function rankingStreakDisplayText()"),
             ("ranking streak display text helper fields", "return rankingStreakDisplayLabel(rankingStreakDisplayDays);"),
             ("ranking streak display text helper binding", "{rankingStreakDisplayText()}"),
-            ("ranking boundary row key helper", "function rankingBoundaryRowKey(row: ReturnType<typeof rankingBoundaryDisplayRows>[number])"),
-            ("ranking boundary row key helper fields", "return row.label;"),
-            ("ranking boundary row key helper binding", "key={rankingBoundaryRowKey(row)}"),
-            ("ranking boundary row label helper", "function rankingBoundaryRowLabel(row: ReturnType<typeof rankingBoundaryDisplayRows>[number])"),
-            ("ranking boundary row label helper fields", "return row.label;"),
-            ("ranking boundary row label helper binding", "{rankingBoundaryRowLabel(row)}"),
-            ("ranking boundary row value helper", "function rankingBoundaryRowValue(row: ReturnType<typeof rankingBoundaryDisplayRows>[number])"),
-            ("ranking boundary row value helper fields", "return row.value;"),
-            ("ranking boundary row value helper binding", "{rankingBoundaryRowValue(row)}"),
+            ("ranking boundary grid rows binding", "rows={rankingBoundaryRows}"),
             ("ranking leaderboard section key helper", "function rankingLeaderboardSectionKey(section: (typeof rankingLeaderboardSections)[number])"),
             ("ranking leaderboard section key helper fields", "return section.type;"),
             ("ranking leaderboard section key helper binding", "key={rankingLeaderboardSectionKey(section)}"),
@@ -14929,6 +14913,11 @@ def main() -> int:
             "<Text style={styles.evidence}>{rankingLocalStreakPreviewLabel()}</Text>\n                <Text style={styles.heroNumber}>{rankingStreakDisplayLabel(rankingStreakDisplayDays)}</Text>\n                <Text style={styles.evidence}>{rankingLocalPreviewBoundaryDisplayText}</Text>",
         )
         _assert_not_contains(
+            "ranking direct boundary row map",
+            content,
+            "rankingBoundaryRows.map((row) => (",
+        )
+        _assert_not_contains(
             "ranking direct boundary row key binding",
             content,
             "rankingBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
@@ -15097,6 +15086,11 @@ def main() -> int:
             "community direct readiness checklist item text binding",
             content,
             "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={item}",
+        )
+        _assert_not_contains(
+            "community direct boundary row map",
+            content,
+            "communityBoundaryRows.map((row) => (",
         )
         _assert_not_contains(
             "community direct boundary row key binding",

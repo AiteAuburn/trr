@@ -216,13 +216,13 @@ VISUAL_SMOKE_ROUTES = {
         "foodCommunityShareFieldRows.map",
         "foodCommunityPointRows.map",
         "communityReadinessChecklistItems.map",
-        "communityBoundaryRows.map",
+        "rows={communityBoundaryRows}",
         "onPress={returnFromCommunityPreview}",
     ],
     "ranking": [
         'currentScreen === "ranking"',
         "rankingReadinessChecklistItems.map",
-        "rankingBoundaryRows.map",
+        "rows={rankingBoundaryRows}",
         "onPress={rankingReturnFutureModulesPressTarget}",
     ],
     "achievements": [

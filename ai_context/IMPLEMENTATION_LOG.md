@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2068 reuse future boundary grid for community and ranking
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Reused `FutureBoundaryGrid` for Community and Ranking preview boundary rows.
+- Moved Community and Ranking boundary row key/label/value helpers out of `App.tsx`.
+- Preserved the same boundary row copy, order, keys, colors, spacing, and card presentation.
+- Updated navigation and visual-smoke route verifier coverage for the component row bindings and direct inline-map guards.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining food-community/store/year-review row clusters without changing first-version scope.
+
 ### T2067 extract future boundary grid component
 
 類型：mobile / refactor / verifier / docs
