@@ -3919,6 +3919,16 @@ def main() -> int:
             "function clearPreviewEditActionState() {\n    clearSelectedPreviewEditDraft();\n    clearDailyRecordEntryMenu();",
         )
         _assert_contains(
+            "AI candidate remove action clear helper",
+            content,
+            "function clearPreviewRemoveActionState()",
+        )
+        _assert_contains(
+            "AI candidate remove action clear helper internals",
+            content,
+            "function clearPreviewRemoveActionState() {\n    setPendingPreviewRemoveIndex(null);\n    clearDailyRecordEntryMenu();",
+        )
+        _assert_contains(
             "AI candidate edit seed empty now helper",
             content,
             "function seedEmptyPreviewEditStateForNow()",
@@ -3946,7 +3956,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate menu selection index clear helper internals",
             content,
-            "function clearPreviewMenuSelectionIndexes() {\n    setSelectedPreviewIndex(null);\n    setPendingPreviewRemoveIndex(null);\n    clearDailyRecordEntryMenu();",
+            "function clearPreviewMenuSelectionIndexes() {\n    setSelectedPreviewIndex(null);\n    clearPreviewRemoveActionState();",
         )
         _assert_contains(
             "AI candidate edit index selection helper",
@@ -4047,6 +4057,11 @@ def main() -> int:
             "AI candidate remove confirm success screen opener binding",
             content,
             "removePreviewRecord(pendingPreviewRemoveIndex);\n    openPreviewActionReturnScreen();",
+        )
+        _assert_contains(
+            "AI candidate remove action clear helper binding",
+            content,
+            "clearPreviewRemoveActionState();",
         )
         _assert_contains(
             "transcript edit return selected draft clear helper binding",

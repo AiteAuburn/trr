@@ -3371,6 +3371,11 @@ export default function App() {
     clearDailyRecordEntryMenu();
   }
 
+  function clearPreviewRemoveActionState() {
+    setPendingPreviewRemoveIndex(null);
+    clearDailyRecordEntryMenu();
+  }
+
   function clearDailyRecordEntryMenu() {
     setDailyRecordMenuIndex(null);
   }
@@ -3384,8 +3389,7 @@ export default function App() {
 
   function clearPreviewMenuSelectionIndexes() {
     setSelectedPreviewIndex(null);
-    setPendingPreviewRemoveIndex(null);
-    clearDailyRecordEntryMenu();
+    clearPreviewRemoveActionState();
   }
 
   function selectPreviewEditIndex(index: number) {
