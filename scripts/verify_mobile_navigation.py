@@ -60,6 +60,7 @@ CORE_FLOW_ENTRY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "coreFlowEntryActionRow
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 DANGER_CONFIRM_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dangerConfirmActionRow.tsx"
 DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreviewBlock.tsx"
+DELETE_SUCCESS_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "deleteSuccessActionRow.tsx"
 COMMUNITY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "communityActionRow.tsx"
 DOCTOR_SHARE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "doctorShareActionRow.tsx"
 FOOD_PHOTO_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "foodPhotoActionRow.tsx"
@@ -1436,6 +1437,7 @@ def main() -> int:
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     danger_confirm_action_row_content = DANGER_CONFIRM_ACTION_ROW_PATH.read_text(encoding="utf-8")
     delete_confirm_preview_block_content = DELETE_CONFIRM_PREVIEW_BLOCK_PATH.read_text(encoding="utf-8")
+    delete_success_action_row_content = DELETE_SUCCESS_ACTION_ROW_PATH.read_text(encoding="utf-8")
     community_action_row_content = COMMUNITY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     doctor_share_action_row_content = DOCTOR_SHARE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     food_photo_action_row_content = FOOD_PHOTO_ACTION_ROW_PATH.read_text(encoding="utf-8")
@@ -6470,7 +6472,7 @@ def main() -> int:
         _assert_contains(
             "delete success history destination binding",
             content,
-            "onPress={openDeleteSuccessHistoryDestination}",
+            "onHistoryPress={openDeleteSuccessHistoryDestination}",
         )
         _assert_contains(
             "update success destination card binding",
@@ -6553,7 +6555,7 @@ def main() -> int:
         _assert_contains(
             "delete success return binding",
             content,
-            "onPress={returnFromDeleteSuccess}",
+            "onReturnPress={returnFromDeleteSuccess}",
         )
         _assert_contains(
             "update success return binding",
@@ -8623,8 +8625,8 @@ def main() -> int:
         ):
             _assert_contains(label, first_version_flow_copy_content, marker)
         for label, marker in (
-            ("delete success history accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.deleteSuccessHistoryAccessibility}"),
-            ("record result return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.recordResultReturnAccessibility}"),
+            ("delete success history accessibility binding", "historyAccessibilityLabel={coreFlowDisplayLabels.deleteSuccessHistoryAccessibility}"),
+            ("record result return accessibility binding", "returnAccessibilityLabel={coreFlowDisplayLabels.recordResultReturnAccessibility}"),
             ("updated record detail accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.updatedRecordDetailAccessibility}"),
             ("manual return accessibility binding", "backAccessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}"),
             ("manual create preview accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualCreatePreviewAccessibility}"),
@@ -8644,6 +8646,19 @@ def main() -> int:
             ("record delete confirm disabled state", "confirmDisabled={isBusy}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("delete success action row component", "export function DeleteSuccessActionRow"),
+            ("delete success action row history accessibility prop", "accessibilityLabel={historyAccessibilityLabel}"),
+            ("delete success action row return accessibility prop", "accessibilityLabel={returnAccessibilityLabel}"),
+            ("delete success action row history handler prop", "onPress={onHistoryPress}"),
+            ("delete success action row return handler prop", "onPress={onReturnPress}"),
+            ("delete success action row history label prop", "{historyLabel}"),
+            ("delete success action row return label prop", "{returnLabel}"),
+            ("delete success action row shell style", "actionRow: {"),
+            ("delete success action row primary style", "primaryButton: {"),
+            ("delete success action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, delete_success_action_row_content, marker)
         for label, marker in (
             ("delete confirm intro copy helper", "function deleteConfirmIntroCopy()"),
             ("delete confirm record meta copy helper", "function deleteConfirmRecordMetaCopy(dateTimeLabel: string, sourceLabel: string)"),

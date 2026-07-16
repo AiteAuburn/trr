@@ -774,6 +774,7 @@ import { CoreFlowEntryActionRow } from "./coreFlowEntryActionRow";
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { DangerConfirmActionRow } from "./dangerConfirmActionRow";
 import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
+import { DeleteSuccessActionRow } from "./deleteSuccessActionRow";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { CommunityActionRow } from "./communityActionRow";
@@ -10554,26 +10555,14 @@ export default function App() {
                 </Pressable>
               ))}
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.deleteSuccessHistoryAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={openDeleteSuccessHistoryDestination}
-              >
-                <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.viewHistory}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.recordResultReturnAccessibility}
-                accessibilityRole="button"
-                style={styles.primaryButton}
-                onPress={returnFromDeleteSuccess}
-              >
-                <Text style={styles.primaryButtonText}>
-                  {recordDetailReturnScreen === "history" ? "回歷史紀錄" : "回今日紀錄"}
-                </Text>
-              </Pressable>
-            </View>
+            <DeleteSuccessActionRow
+              historyAccessibilityLabel={coreFlowDisplayLabels.deleteSuccessHistoryAccessibility}
+              historyLabel={coreFlowDisplayLabels.viewHistory}
+              onHistoryPress={openDeleteSuccessHistoryDestination}
+              onReturnPress={returnFromDeleteSuccess}
+              returnAccessibilityLabel={coreFlowDisplayLabels.recordResultReturnAccessibility}
+              returnLabel={recordDetailReturnScreen === "history" ? "回歷史紀錄" : "回今日紀錄"}
+            />
           </View>
         ) : null}
 
