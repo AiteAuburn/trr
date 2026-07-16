@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T1757: Reuse AI save confirm static labels
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added AI save confirm title, date label, and summary label fields to the existing display text bundle.
+- Reused those fields in the daily-record save confirmation render instead of direct JSX literals.
+- Updated navigation and visual-smoke route verifier coverage with positive display-bundle bindings and direct literal guards.
+- No UI copy/layout/leave-guard visibility timing/Android back behavior/return guard behavior/navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1756: Reuse daily record leave guard button labels
 
 Status: done

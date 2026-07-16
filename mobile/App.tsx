@@ -1291,6 +1291,9 @@ export default function App() {
     isAiSaveConfirmBlockedByBackend,
     hasAiSaveConfirmWarnings
   );
+  const aiSaveConfirmTitleDisplayText = aiSaveConfirmDisplay.title;
+  const aiSaveConfirmDateLabelDisplayText = aiSaveConfirmDisplay.dateLabel;
+  const aiSaveConfirmSummaryLabelDisplayText = aiSaveConfirmDisplay.summaryLabel;
   const aiSaveConfirmIntroDisplayText = aiSaveConfirmDisplay.intro;
   const dailyRecordDateDisplayText = preview ? dailyRecordDateLabel(previewState.records) : "";
   const dailyRecordSummaryDisplayText = preview ? dailyRecordSummaryText(previewState.records) : "";
@@ -8698,7 +8701,7 @@ export default function App() {
           <View style={styles.pageSection}>
             <View style={styles.sectionHeader}>
               <View style={styles.timelineContent}>
-                <Text style={styles.sectionTitle}>每日紀錄</Text>
+                <Text style={styles.sectionTitle}>{aiSaveConfirmTitleDisplayText}</Text>
                 <Text style={styles.evidence}>{aiSaveConfirmIntroDisplayText}</Text>
               </View>
               <Pressable
@@ -8736,11 +8739,11 @@ export default function App() {
               </View>
             ) : null}
             <View style={styles.dailyRecordDateCard}>
-              <Text style={styles.confidence}>記錄日期</Text>
+              <Text style={styles.confidence}>{aiSaveConfirmDateLabelDisplayText}</Text>
               <Text style={styles.dailyRecordDateText}>{dailyRecordDateDisplayText}</Text>
             </View>
             <View style={styles.dailySummaryCard}>
-              <Text style={styles.previewModeBadge}>AI今日摘要</Text>
+              <Text style={styles.previewModeBadge}>{aiSaveConfirmSummaryLabelDisplayText}</Text>
               <Text style={styles.recordContent}>{dailyRecordSummaryDisplayText}</Text>
               <Text style={styles.evidence}>{dailyRecordReorganizationDisplay}</Text>
             </View>

@@ -284,6 +284,9 @@ export function aiSaveConfirmSubmitLabel(isBusy: boolean, isBlockedByBackend: bo
 
 export function aiSaveConfirmDisplayTexts(isBusy: boolean, isBlockedByBackend: boolean, hasWarnings: boolean) {
   return {
+    title: boundDisplayText("每日紀錄", maxDisplayTextLength),
+    dateLabel: boundDisplayText("記錄日期", maxDisplayTextLength),
+    summaryLabel: boundDisplayText("AI今日摘要", maxDisplayTextLength),
     intro: aiSaveConfirmIntroCopy(),
     submit: aiSaveConfirmSubmitLabel(isBusy, isBlockedByBackend, hasWarnings)
   };

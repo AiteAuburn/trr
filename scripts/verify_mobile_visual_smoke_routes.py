@@ -53,7 +53,7 @@ VISUAL_SMOKE_ROUTES = {
         'currentScreen === "aiSaveConfirm"',
         "aiSaveConfirmBoundaryRows.map",
         "dailyRecordSectionItems.map",
-        "AI今日摘要",
+        "aiSaveConfirmSummaryLabelDisplayText",
         "今日錄音文字",
     ],
     "aiSaveFailure": [
@@ -279,7 +279,7 @@ VISUAL_SMOKE_ROUTE_IDENTITIES = {
     "aiReview": "AI 整理確認",
     "editPreviewRecord": "修改整理結果",
     "aiRemoveConfirm": "aiRemoveConfirmTitleDisplayText",
-    "aiSaveConfirm": "每日紀錄",
+    "aiSaveConfirm": "aiSaveConfirmTitleDisplayText",
     "aiSaveFailure": "儲存未完成",
     "saveSuccess": "coreFlowDisplayLabels.saveResult",
     "deleteSuccess": "刪除完成",
