@@ -13591,30 +13591,14 @@ export default function App() {
                 autoCorrect={false}
               />
             </View>
-            <View style={styles.segmentRow}>
-              {storeCategoryDisplayOptions.map((category) => (
-                <Pressable
-                  key={storeCategoryOptionKey(category)}
-                  accessibilityLabel={storeCategoryOptionAccessibilityLabel(category)}
-                  accessibilityRole="button"
-                  accessibilityState={{ selected: storeCategoryOptionSelected(category, storeCategory) }}
-                  style={[
-                    styles.segmentPill,
-                    storeCategoryOptionSelected(category, storeCategory) ? styles.segmentActive : null
-                  ]}
-                  onPress={() => pressStoreCategoryOption(category)}
-                >
-                  <Text
-                    style={[
-                      styles.segmentText,
-                      storeCategoryOptionSelected(category, storeCategory) ? styles.segmentTextActive : null
-                    ]}
-                  >
-                    {storeCategoryOptionLabel(category)}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
+            <SegmentSelector
+              options={storeCategoryDisplayOptions}
+              optionKey={storeCategoryOptionKey}
+              optionAccessibilityLabel={storeCategoryOptionAccessibilityLabel}
+              optionLabel={storeCategoryOptionLabel}
+              isSelected={(category) => storeCategoryOptionSelected(category, storeCategory)}
+              onOptionPress={pressStoreCategoryOption}
+            />
             {visibleStoreProducts.length > 0 ? visibleStoreProducts.map((product) => (
               <View key={storeProductCardKey(product)} style={styles.productCard}>
                 <View style={styles.productImage}>

@@ -247,7 +247,7 @@ VISUAL_SMOKE_ROUTES = {
         'currentScreen === "store"',
         "商城",
         "storeRedemptionBoundaryRows.map",
-        "storeCategoryDisplayOptions.map",
+        "<SegmentSelector\n              options={storeCategoryDisplayOptions}",
         "visibleStoreProducts",
         "storeCartButtonDisplayLabel",
         "storeReturnButtonDisplayLabel",
