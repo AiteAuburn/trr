@@ -3734,6 +3734,18 @@ export default function App() {
     };
   }
 
+  async function requestMergedParserPreview(
+    accountId: string,
+    profileId: string,
+    text: string,
+    occurredAt: string,
+    voiceSeconds: number,
+    currentPreview: ParsePreviewResponse | null
+  ) {
+    const response = await requestParserPreview(accountId, profileId, text, occurredAt, voiceSeconds);
+    return mergedParserPreviewForResponse(currentPreview, response);
+  }
+
   function appendDailyTranscriptEntry(entry: DailyTranscriptEntry) {
     setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, entry]));
   }
@@ -7745,14 +7757,14 @@ export default function App() {
     startParserPreviewRequest();
     const { existingDailyPreview, parserVoiceSeconds, parseOccurredAt } = prepareParserPreviewRequest();
     try {
-      const response = await requestParserPreview(
+      const mergedDailyPreview = await requestMergedParserPreview(
         account.id,
         activeProfile.id,
         transcript,
         parseOccurredAt,
-        parserVoiceSeconds
+        parserVoiceSeconds,
+        existingDailyPreview
       );
-      const mergedDailyPreview = mergedParserPreviewForResponse(existingDailyPreview, response);
       handleParserPreviewSuccess(mergedDailyPreview, parseOccurredAt, transcript, parserVoiceSeconds);
     } catch (error) {
       handleParserPreviewFailure(error);
