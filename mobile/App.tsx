@@ -8934,6 +8934,10 @@ export default function App() {
     };
   }
 
+  function hasNativeLlamaInput(llamaInput: ReturnType<typeof nativeLlamaInput>) {
+    return Boolean(llamaInput.modelPath && llamaInput.transcript);
+  }
+
   function handleNativeWhisperSuccess(text: string) {
     updateTranscriptDraft(text);
     setNativeStatus(nativeWhisperSuccessStatusMessage());
@@ -8985,7 +8989,7 @@ export default function App() {
     results: NativeBenchmarkResult[],
     llamaInput: ReturnType<typeof nativeLlamaInput>
   ) {
-    if (llamaInput.modelPath && llamaInput.transcript) {
+    if (hasNativeLlamaInput(llamaInput)) {
       results.push(await benchmarkNativeLlama(nativeLlamaRequestArgs(llamaInput)));
     }
   }
@@ -9104,7 +9108,7 @@ export default function App() {
       return;
     }
     const llamaInput = nativeLlamaInput();
-    if (!llamaInput.modelPath || !llamaInput.transcript) {
+    if (!hasNativeLlamaInput(llamaInput)) {
       handleNativeLlamaMissingInput();
       return;
     }

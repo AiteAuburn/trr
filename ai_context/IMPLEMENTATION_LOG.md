@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1973 reuse native Llama input predicate
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `hasNativeLlamaInput()` for the native debug Llama input completeness check.
+- Reused the helper from `runNativeLlama()` and `appendNativeLlamaBenchmarkResult()` while preserving trimmed input use, missing-input status behavior, parse request args, benchmark append semantics, success/failure handling, and action lifecycle order.
+- Updated navigation verifier coverage for the Llama input predicate helper, run guard binding, and benchmark append guard binding.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing native debug helper extraction in small behavior-preserving slices.
+
 ### T1972 reuse native Whisper input predicate
 
 類型：mobile / refactor / verifier / docs
