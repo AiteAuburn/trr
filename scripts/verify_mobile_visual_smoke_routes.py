@@ -118,7 +118,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "analysis": [
         'currentScreen === "analysis"',
-        "analysisRangeDisplayOptions.map",
+        "AnalysisRangeSelector",
         "analysisCustomStart",
         "analysisMetricRows.map",
         "analysisChartPoints",

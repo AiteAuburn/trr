@@ -15,6 +15,37 @@
 
 ## 2026-07-16
 
+### T2007 reuse shared selector shell for analysis range
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisRangeSelector.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `AnalysisRangeSelector` shell for the Basic Analysis range selector.
+- Reused the selector in the Analysis screen while preserving existing option key, accessibility, label, selected-state, and press-handler helpers.
+- Updated navigation verifier coverage for the shared Analysis range selector binding and render boundary.
+- 未變更 UI copy、report request semantics、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining inline field clusters in hidden/future surfaces without changing first-version scope.
+
 ### T2006 reuse shared option row for record edit glucose unit
 
 類型：mobile / refactor / verifier / docs

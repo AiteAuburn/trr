@@ -31,6 +31,7 @@ import {
   writeStoredAuthSession
 } from "./authTokenStorage";
 import { requestJson, requestNoContent } from "./apiClient";
+import { AnalysisRangeSelector } from "./analysisRangeSelector";
 import {
   allowMobileDevAuth,
   defaultApiBaseUrl,
@@ -11240,30 +11241,14 @@ export default function App() {
               <Text style={styles.label}>{coreFlowDisplayLabels.analysisReportStatus}</Text>
               <Text style={styles.evidence}>{reportStatusDisplayText}</Text>
             </View>
-            <View style={styles.segmentRow}>
-              {analysisRangeDisplayOptions.map((item) => (
-                <Pressable
-                  key={analysisRangeOptionKey(item)}
-                  accessibilityLabel={analysisRangeOptionAccessibilityLabel(item)}
-                  accessibilityRole="button"
-                  accessibilityState={{ selected: analysisRangeOptionSelected(item, analysisRange) }}
-                  style={[
-                    styles.segmentPill,
-                    analysisRangeOptionSelected(item, analysisRange) ? styles.segmentActive : null
-                  ]}
-                  onPress={() => pressAnalysisRangeOption(item)}
-                >
-                  <Text
-                    style={[
-                      styles.segmentText,
-                      analysisRangeOptionSelected(item, analysisRange) ? styles.segmentTextActive : null
-                    ]}
-                  >
-                    {analysisRangeOptionLabel(item)}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
+            <AnalysisRangeSelector
+              options={analysisRangeDisplayOptions}
+              optionKey={analysisRangeOptionKey}
+              optionAccessibilityLabel={analysisRangeOptionAccessibilityLabel}
+              optionLabel={analysisRangeOptionLabel}
+              isSelected={(item) => analysisRangeOptionSelected(item, analysisRange)}
+              onOptionPress={pressAnalysisRangeOption}
+            />
             {analysisRange === "custom" ? (
               <>
                 <AnalysisCustomDateRangeFields

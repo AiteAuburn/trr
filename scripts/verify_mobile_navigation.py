@@ -29,6 +29,7 @@ HISTORY_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "historyScreenData.ts"
 ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
 ANALYSIS_DATA_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisDataTransforms.ts"
 ANALYSIS_METRIC_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisMetricTransforms.ts"
+ANALYSIS_RANGE_SELECTOR_PATH = REPO_ROOT / "mobile" / "analysisRangeSelector.tsx"
 ANALYSIS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "analysisScreenData.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
@@ -1374,6 +1375,7 @@ def main() -> int:
     analysis_copy_content = ANALYSIS_COPY_PATH.read_text(encoding="utf-8")
     analysis_data_content = ANALYSIS_DATA_TRANSFORMS_PATH.read_text(encoding="utf-8")
     analysis_metric_content = ANALYSIS_METRIC_TRANSFORMS_PATH.read_text(encoding="utf-8")
+    analysis_range_selector_content = ANALYSIS_RANGE_SELECTOR_PATH.read_text(encoding="utf-8")
     analysis_screen_data_content = ANALYSIS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     settings_screen_data_content = SETTINGS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
@@ -9157,7 +9159,7 @@ def main() -> int:
         _assert_contains(
             "analysis range option key helper binding",
             content,
-            "key={analysisRangeOptionKey(item)}",
+            "optionKey={analysisRangeOptionKey}",
         )
         _assert_contains(
             "analysis range option accessibility helper",
@@ -9172,7 +9174,7 @@ def main() -> int:
         _assert_contains(
             "analysis range option accessibility helper binding",
             content,
-            "accessibilityLabel={analysisRangeOptionAccessibilityLabel(item)}",
+            "optionAccessibilityLabel={analysisRangeOptionAccessibilityLabel}",
         )
         _assert_contains(
             "analysis range option label helper",
@@ -9187,7 +9189,7 @@ def main() -> int:
         _assert_contains(
             "analysis range option label helper binding",
             content,
-            "{analysisRangeOptionLabel(item)}",
+            "optionLabel={analysisRangeOptionLabel}",
         )
         _assert_contains(
             "analysis range option selected helper",
@@ -9202,7 +9204,7 @@ def main() -> int:
         _assert_contains(
             "analysis range option selected helper binding",
             content,
-            "analysisRangeOptionSelected(item, analysisRange)",
+            "isSelected={(item) => analysisRangeOptionSelected(item, analysisRange)}",
         )
         _assert_contains(
             "analysis range target helper binding",
@@ -9219,18 +9221,18 @@ def main() -> int:
             content,
             "const analysisRangeDisplayOptions = useMemo(() => analysisRangeDisplayItems(analysisRanges), []);",
         )
-        analysis_range_option_render_block = _match_block(
+        _assert_contains(
+            "analysis range selector binding",
             content,
-            r"analysisRangeDisplayOptions\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
-            "analysis range option render block",
+            "<AnalysisRangeSelector\n              options={analysisRangeDisplayOptions}",
         )
         for label, marker in (
-            ("direct analysis range key binding", "key={item.value}"),
-            ("direct analysis range accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
-            ("direct analysis range selected state binding", "analysisRange === item.value"),
-            ("direct analysis range label binding", "{item.label}"),
+            ("direct analysis range key binding", "key={option.value}"),
+            ("direct analysis range accessibility binding", "accessibilityLabel={option.accessibilityLabel}"),
+            ("direct analysis range selected state binding", "analysisRange === option.value"),
+            ("direct analysis range label binding", "{option.label}"),
         ):
-            _assert_not_contains(label, analysis_range_option_render_block, marker)
+            _assert_not_contains(label, analysis_range_selector_content, marker)
         _assert_contains(
             "analysis custom start input handler",
             content,
@@ -9428,12 +9430,12 @@ def main() -> int:
             ("manual type chip accessibility binding", "accessibilityLabel={manualRecordTypeOptionAccessibilityLabel(type)}"),
             ("shared option chip accessibility binding", "accessibilityLabel={option.accessibilityLabel}"),
             ("store category accessibility binding", "accessibilityLabel={storeCategoryOptionAccessibilityLabel(category)}"),
-            ("analysis range accessibility binding", "accessibilityLabel={analysisRangeOptionAccessibilityLabel(item)}"),
+            ("analysis range accessibility binding", "optionAccessibilityLabel={analysisRangeOptionAccessibilityLabel}"),
             ("manual type chip button role", 'accessibilityRole="button"'),
             ("manual type chip selected state", "accessibilityState={{ selected: typeSelected }}"),
             ("history calendar selected state", "accessibilityState={{ selected: item.isSelected }}"),
             ("history detail selected state", "accessibilityState={{ selected: isSelected }}"),
-            ("analysis range selected state", "accessibilityState={{ selected: analysisRangeOptionSelected(item, analysisRange) }}"),
+            ("analysis range selected state", "isSelected={(item) => analysisRangeOptionSelected(item, analysisRange)}"),
             ("analysis custom date conditional render", '{analysisRange === "custom" ? ('),
             ("analysis custom date range fields binding", "<AnalysisCustomDateRangeFields\n                  startAccessibilityLabel={auxiliaryDisplayLabels.analysisStartDateInputAccessibility}"),
             ("analysis start date accessibility binding", "startAccessibilityLabel={auxiliaryDisplayLabels.analysisStartDateInputAccessibility}"),
@@ -9847,7 +9849,7 @@ def main() -> int:
         _assert_contains(
             "analysis range binding",
             content,
-            "onPress={() => pressAnalysisRangeOption(item)}",
+            "onOptionPress={pressAnalysisRangeOption}",
         )
         _assert_contains(
             "analysis metric rows",

@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T2007: Reuse shared selector shell for analysis range
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/analysisRangeSelector.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `AnalysisRangeSelector` shell for the Basic Analysis range selector.
+- Reused the selector in the Analysis screen while preserving existing option key, accessibility, label, selected-state, and press-handler helpers.
+- Updated navigation verifier coverage for the shared Analysis range selector binding and render boundary.
+- No UI copy/report request semantics/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining inline field clusters in hidden/future surfaces without changing first-version scope.
+
 ### T2006: Reuse shared option row for record edit glucose unit
 
 Status: done
