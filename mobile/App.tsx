@@ -3831,6 +3831,10 @@ export default function App() {
     setIsBusy(false);
   }
 
+  function isParserPreviewRequestBlocked() {
+    return isBusy || parsePreviewInFlight.current;
+  }
+
   function applyPreviewRecordRemoveChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[]) {
     if (isPreviewActionReturningToDailyRecord) {
       reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "delete");
@@ -7731,7 +7735,7 @@ export default function App() {
   }
 
   async function parseTranscript() {
-    if (isBusy || parsePreviewInFlight.current) {
+    if (isParserPreviewRequestBlocked()) {
       return;
     }
     if (!protectedBackendReady) {

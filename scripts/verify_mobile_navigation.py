@@ -6568,6 +6568,9 @@ def main() -> int:
             ("parse finish helper", "function finishParserPreviewRequest()"),
             ("parse finish helper internals", "parsePreviewInFlight.current = false;\n    setIsBusy(false);"),
             ("parse finish helper binding", "finishParserPreviewRequest();"),
+            ("parse request blocked helper", "function isParserPreviewRequestBlocked()"),
+            ("parse request blocked helper internals", "return isBusy || parsePreviewInFlight.current;"),
+            ("parse request blocked helper binding", "if (isParserPreviewRequestBlocked())"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
