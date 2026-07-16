@@ -767,6 +767,7 @@ import {
 } from "./authTransforms";
 import { protectedRequestHeaders } from "./authRequestHeaders";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
+import { AiCandidateActionRow } from "./aiCandidateActionRow";
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { DangerConfirmActionRow } from "./dangerConfirmActionRow";
 import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
@@ -9817,24 +9818,14 @@ export default function App() {
                     {aiCandidateDisplayDecisionTrace(item) ? (
                       <Text style={styles.evidence}>{aiCandidateDisplayDecisionTrace(item)}</Text>
                     ) : null}
-                    <View style={styles.actionRow}>
-                      <Pressable
-                        accessibilityLabel={aiCandidateEditAccessibilityLabel(item)}
-                        accessibilityRole="button"
-                        style={styles.secondaryButton}
-                        onPress={() => pressAiCandidateEditAction(item)}
-                      >
-                        <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.edit}</Text>
-                      </Pressable>
-                      <Pressable
-                        accessibilityLabel={aiCandidateRemoveAccessibilityLabel(item)}
-                        accessibilityRole="button"
-                        style={styles.dangerButton}
-                        onPress={() => pressAiCandidateRemoveAction(item)}
-                      >
-                        <Text style={styles.dangerButtonText}>移除</Text>
-                      </Pressable>
-                    </View>
+                    <AiCandidateActionRow
+                      editAccessibilityLabel={aiCandidateEditAccessibilityLabel(item)}
+                      editLabel={coreFlowDisplayLabels.edit}
+                      onEditPress={() => pressAiCandidateEditAction(item)}
+                      onRemovePress={() => pressAiCandidateRemoveAction(item)}
+                      removeAccessibilityLabel={aiCandidateRemoveAccessibilityLabel(item)}
+                      removeLabel="移除"
+                    />
                   </View>
                 ))
               ) : (

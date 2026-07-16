@@ -53,6 +53,7 @@ AUTH_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "authStatusCopy.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
+AI_CANDIDATE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiCandidateActionRow.tsx"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 DANGER_CONFIRM_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dangerConfirmActionRow.tsx"
 DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreviewBlock.tsx"
@@ -1423,6 +1424,7 @@ def main() -> int:
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
+    ai_candidate_action_row_content = AI_CANDIDATE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     danger_confirm_action_row_content = DANGER_CONFIRM_ACTION_ROW_PATH.read_text(encoding="utf-8")
     delete_confirm_preview_block_content = DELETE_CONFIRM_PREVIEW_BLOCK_PATH.read_text(encoding="utf-8")
@@ -4243,22 +4245,22 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit action binding",
             content,
-            "onPress={() => pressAiCandidateEditAction(item)}",
+            "onEditPress={() => pressAiCandidateEditAction(item)}",
         )
         _assert_contains(
             "AI candidate remove action binding",
             content,
-            "onPress={() => pressAiCandidateRemoveAction(item)}",
+            "onRemovePress={() => pressAiCandidateRemoveAction(item)}",
         )
         _assert_contains(
             "AI candidate edit accessibility binding",
             content,
-            "accessibilityLabel={aiCandidateEditAccessibilityLabel(item)}",
+            "editAccessibilityLabel={aiCandidateEditAccessibilityLabel(item)}",
         )
         _assert_contains(
             "AI candidate remove accessibility binding",
             content,
-            "accessibilityLabel={aiCandidateRemoveAccessibilityLabel(item)}",
+            "removeAccessibilityLabel={aiCandidateRemoveAccessibilityLabel(item)}",
         )
         for label, marker in (
             ("AI candidate display key helper", "function aiCandidateDisplayKey(item: ReturnType<typeof pendingRecordDisplayItem>)"),
@@ -4312,13 +4314,13 @@ def main() -> int:
             _assert_not_contains(label, ai_candidate_card_render_block, marker)
         _assert_contains(
             "AI candidate edit button role",
-            content,
-            'accessibilityRole="button"\n                        style={styles.secondaryButton}',
+            ai_candidate_action_row_content,
+            'accessibilityRole="button"\n        onPress={onEditPress}\n        style={styles.secondaryButton}',
         )
         _assert_contains(
             "AI candidate remove button role",
-            content,
-            'accessibilityRole="button"\n                        style={styles.dangerButton}',
+            ai_candidate_action_row_content,
+            'accessibilityRole="button"\n        onPress={onRemovePress}\n        style={styles.dangerButton}',
         )
         _assert_not_contains(
             "AI candidate direct edit action binding",
@@ -8400,6 +8402,20 @@ def main() -> int:
             ("daily record save payload helper", "function buildDailyRecordSaveRequest("),
         ):
             _assert_contains(label, daily_transcript_content, marker)
+        for label, marker in (
+            ("AI candidate action row component", "export function AiCandidateActionRow"),
+            ("AI candidate action row edit accessibility prop", "accessibilityLabel={editAccessibilityLabel}"),
+            ("AI candidate action row remove accessibility prop", "accessibilityLabel={removeAccessibilityLabel}"),
+            ("AI candidate action row button role", 'accessibilityRole="button"'),
+            ("AI candidate action row edit handler prop", "onPress={onEditPress}"),
+            ("AI candidate action row remove handler prop", "onPress={onRemovePress}"),
+            ("AI candidate action row edit label", "{editLabel}"),
+            ("AI candidate action row remove label", "{removeLabel}"),
+            ("AI candidate action row shell style", "actionRow: {"),
+            ("AI candidate action row danger style", "dangerButton: {"),
+            ("AI candidate action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, ai_candidate_action_row_content, marker)
         _assert_contains(
             "daily record fixed save outside scroll",
             content,
