@@ -7964,6 +7964,22 @@ export default function App() {
     };
   }
 
+  async function requestManualRecordCreate(profileId: string, accountId: string, payload: object) {
+    const createdResponse = await requestJson<RecordItem>(normalizedApiBaseUrl, "/records", {
+      method: "POST",
+      headers: protectedRequestHeaders(accountId, accessToken),
+      body: JSON.stringify({
+        profile_id: profileId,
+        record_type: manualRecordType,
+        occurred_at: localDateTimeToIso(manualRecordDate, manualRecordTime),
+        payload_json: payload,
+        metadata_json: manualRecordCreateMetadata(),
+        source: "manual"
+      })
+    });
+    return boundRecordItem(createdResponse);
+  }
+
   async function createManualRecord() {
     if (isBusy || manualCreateInFlight.current) {
       return;
@@ -7992,19 +8008,7 @@ export default function App() {
       if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
         throw new Error("payload_json must be an object");
       }
-      const createdResponse = await requestJson<RecordItem>(normalizedApiBaseUrl, "/records", {
-        method: "POST",
-        headers: protectedRequestHeaders(account.id, accessToken),
-        body: JSON.stringify({
-          profile_id: activeProfile.id,
-          record_type: manualRecordType,
-          occurred_at: localDateTimeToIso(manualRecordDate, manualRecordTime),
-          payload_json: payload,
-          metadata_json: manualRecordCreateMetadata(),
-          source: "manual"
-        })
-      });
-      const created = boundRecordItem(createdResponse);
+      const created = await requestManualRecordCreate(activeProfile.id, account.id, payload);
       setRecords((current) => boundRecordsList([created, ...current]));
       selectRecordForResult(created);
       seedEmptyManualRecordStateForNow();

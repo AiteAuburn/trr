@@ -4529,6 +4529,31 @@ def main() -> int:
             "metadata_json: manualRecordCreateMetadata()",
         )
         _assert_contains(
+            "manual create request helper",
+            content,
+            "async function requestManualRecordCreate(profileId: string, accountId: string, payload: object)",
+        )
+        _assert_contains(
+            "manual create request helper endpoint",
+            content,
+            'const createdResponse = await requestJson<RecordItem>(normalizedApiBaseUrl, "/records", {',
+        )
+        _assert_contains(
+            "manual create request helper body",
+            content,
+            "profile_id: profileId,\n        record_type: manualRecordType,\n        occurred_at: localDateTimeToIso(manualRecordDate, manualRecordTime),\n        payload_json: payload,\n        metadata_json: manualRecordCreateMetadata(),\n        source: \"manual\"",
+        )
+        _assert_contains(
+            "manual create request helper response binding",
+            content,
+            "return boundRecordItem(createdResponse);",
+        )
+        _assert_contains(
+            "manual create request helper binding",
+            content,
+            "const created = await requestManualRecordCreate(activeProfile.id, account.id, payload);",
+        )
+        _assert_contains(
             "AI save failure result helper",
             content,
             "function openAiSaveFailureResult(message: string)",
