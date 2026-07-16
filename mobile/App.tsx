@@ -8118,6 +8118,12 @@ export default function App() {
     return true;
   }
 
+  function handleInitialRecordSyncFailure(syncContext: { syncKey: string }) {
+    if (latestRecordSyncKey.current === syncContext.syncKey) {
+      clearRecordSyncPaginationStatus(recordSyncFailureStatusMessage());
+    }
+  }
+
   async function loadRecords() {
     const syncContext = guardedInitialRecordSyncContext();
     if (!syncContext) {
@@ -8134,9 +8140,7 @@ export default function App() {
       }
       handleInitialRecordSyncSuccess(response);
     } catch {
-      if (latestRecordSyncKey.current === syncContext.syncKey) {
-        clearRecordSyncPaginationStatus(recordSyncFailureStatusMessage());
-      }
+      handleInitialRecordSyncFailure(syncContext);
     } finally {
       recordSyncInFlightKeys.current.delete(syncContext.syncKey);
     }

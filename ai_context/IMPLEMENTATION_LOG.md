@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1901 reuse initial record sync failure helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `handleInitialRecordSyncFailure()` for the initial record sync latest-key failure-status boundary.
+- Reused the helper from `loadRecords()` while preserving stale failure suppression, failure status copy, request, success handling, and cleanup behavior.
+- Updated navigation verifier coverage for the initial record sync failure helper, internals, and failure binding.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing initial record sync cleanup/lifecycle and load-more orchestration in small behavior-preserving slices.
+
 ### T1900 reuse initial record sync start helper
 
 類型：mobile / refactor / verifier / docs
