@@ -4189,9 +4189,19 @@ def main() -> int:
             "const nextRecords = previewRecordsWithEditedRecord(\n        preview.records,\n        selectedPreviewIndex,",
         )
         _assert_contains(
-            "AI candidate preview edit apply helper binding",
+            "AI candidate preview edit change helper",
             content,
-            "reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), \"edit\");\n      } else {\n        applyAiCandidateEditPreviewRecords(nextRecords);",
+            "function applyPreviewRecordEditChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[])",
+        )
+        _assert_contains(
+            "AI candidate preview edit change helper internals",
+            content,
+            "if (isPreviewActionReturningToDailyRecord) {\n      reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), \"edit\");\n    } else {\n      applyAiCandidateEditPreviewRecords(nextRecords);",
+        )
+        _assert_contains(
+            "AI candidate preview edit change helper binding",
+            content,
+            "applyPreviewRecordEditChange(preview, nextRecords);\n      returnFromPreviewRecordEditSaveSuccess();",
         )
         _assert_contains(
             "AI candidate preview with records helper",
@@ -6582,8 +6592,8 @@ def main() -> int:
             ("daily record parser success status helper", "function parserSuccessStatusForPreview(nextPreview: ParsePreviewResponse, voiceSeconds: number)"),
             ("daily record parser success status helper internals", "return voiceSeconds > 0\n      ? parserVoiceQuotaSyncedStatusMessage(nextPreview.records.length, voiceSeconds)\n      : parserSuccessStatusMessage(nextPreview.records.length);"),
             ("daily record reorganization add binding", 'reorganizeDailyRecordDraftAfterChange(\n      nextPreview,\n      "add",\n      parserSuccessStatusForPreview(nextPreview, voiceSeconds)'),
-            ("daily record reorganization edit daily return state binding", 'if (isPreviewActionReturningToDailyRecord) {\n        reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), "edit");'),
-            ("daily record reorganization edit binding", 'reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), "edit");'),
+            ("daily record reorganization edit daily return state binding", 'if (isPreviewActionReturningToDailyRecord) {\n      reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "edit");'),
+            ("daily record reorganization edit binding", 'reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "edit");'),
             ("daily record reorganization delete daily return state binding", 'if (isPreviewActionReturningToDailyRecord) {\n      reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), "delete");'),
             ("daily record reorganization delete binding", 'reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), "delete");'),
             ("daily record reorganization summary display", "const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayText("),

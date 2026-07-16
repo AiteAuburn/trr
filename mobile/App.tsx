@@ -3848,6 +3848,14 @@ export default function App() {
     );
   }
 
+  function applyPreviewRecordEditChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[]) {
+    if (isPreviewActionReturningToDailyRecord) {
+      reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "edit");
+    } else {
+      applyAiCandidateEditPreviewRecords(nextRecords);
+    }
+  }
+
   function savePreviewRecordEdit() {
     if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {
       openScreen("aiReview");
@@ -3875,11 +3883,7 @@ export default function App() {
         localDateTimeToIso(previewEditDate, previewEditTime),
         payload
       );
-      if (isPreviewActionReturningToDailyRecord) {
-        reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), "edit");
-      } else {
-        applyAiCandidateEditPreviewRecords(nextRecords);
-      }
+      applyPreviewRecordEditChange(preview, nextRecords);
       returnFromPreviewRecordEditSaveSuccess();
     } catch (error) {
       setStatus(aiCandidateEditFailureStatusMessage(error));
