@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1833: Reuse preview edit record type helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `previewRecordEditType()` for preview edit record-type reads.
+- Reused the helper from `savePreviewRecordEdit()` so validation and payload construction share the same local `recordType` value.
+- Updated navigation verifier coverage for the record-type helper internals and validation/payload bindings.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser endpoint/request semantics/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining preview edit/delete validation/status helpers and action return paths in small behavior-preserving slices.
+
 ### T1832: Reuse preview edit validation failure helper
 
 Status: done

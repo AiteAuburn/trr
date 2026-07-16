@@ -3902,6 +3902,10 @@ export default function App() {
     );
   }
 
+  function previewRecordEditType(record: PendingRecord) {
+    return record.record_type;
+  }
+
   function handlePreviewRecordEditFailure(error: unknown) {
     setStatus(aiCandidateEditFailureStatusMessage(error));
   }
@@ -3915,14 +3919,15 @@ export default function App() {
       returnFromMissingPreviewRecordEditSaveDraft();
       return;
     }
-    const validationError = validatePreviewRecordEdit(selectedPreviewRecord.record_type);
+    const recordType = previewRecordEditType(selectedPreviewRecord);
+    const validationError = validatePreviewRecordEdit(recordType);
     if (validationError) {
       handlePreviewRecordEditValidationFailure(validationError);
       return;
     }
 
     try {
-      const payload = buildPreviewRecordEditPayload(selectedPreviewRecord.record_type);
+      const payload = buildPreviewRecordEditPayload(recordType);
       const nextRecords = buildPreviewRecordEditRecords(preview, selectedPreviewIndex, payload);
       applyPreviewRecordEditChange(preview, nextRecords);
       returnFromPreviewRecordEditSaveSuccess();

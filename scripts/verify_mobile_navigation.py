@@ -4209,6 +4209,21 @@ def main() -> int:
             "const nextRecords = buildPreviewRecordEditRecords(preview, selectedPreviewIndex, payload);",
         )
         _assert_contains(
+            "AI candidate preview edit record type helper",
+            content,
+            "function previewRecordEditType(record: PendingRecord)",
+        )
+        _assert_contains(
+            "AI candidate preview edit record type helper internals",
+            content,
+            "function previewRecordEditType(record: PendingRecord) {\n    return record.record_type;",
+        )
+        _assert_contains(
+            "AI candidate preview edit record type helper binding",
+            content,
+            "const recordType = previewRecordEditType(selectedPreviewRecord);",
+        )
+        _assert_contains(
             "AI candidate preview edit failure helper",
             content,
             "function handlePreviewRecordEditFailure(error: unknown)",
@@ -4266,7 +4281,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit payload helper binding",
             content,
-            "const payload = buildPreviewRecordEditPayload(selectedPreviewRecord.record_type);",
+            "const payload = buildPreviewRecordEditPayload(recordType);",
         )
         _assert_contains(
             "AI candidate preview edit validation helper",
@@ -4281,7 +4296,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit validation helper binding",
             content,
-            "const validationError = validatePreviewRecordEdit(selectedPreviewRecord.record_type);",
+            "const validationError = validatePreviewRecordEdit(recordType);",
         )
         _assert_contains(
             "AI candidate preview with records helper",

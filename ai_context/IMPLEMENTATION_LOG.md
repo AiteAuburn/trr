@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1833 reuse preview edit record type helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `previewRecordEditType()` for preview edit record-type reads.
+- Reused the helper from `savePreviewRecordEdit()` so validation and payload construction share the same local `recordType` value.
+- Updated navigation verifier coverage for the record-type helper internals and validation/payload bindings.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining preview edit/delete validation/status helpers and action return paths in small behavior-preserving slices.
+
 ### T1832 reuse preview edit validation failure helper
 
 類型：mobile / refactor / verifier / docs
