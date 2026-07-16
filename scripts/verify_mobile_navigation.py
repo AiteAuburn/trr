@@ -4204,6 +4204,21 @@ def main() -> int:
             "applyPreviewRecordEditChange(preview, nextRecords);\n      returnFromPreviewRecordEditSaveSuccess();",
         )
         _assert_contains(
+            "AI candidate preview edit payload helper",
+            content,
+            "function buildPreviewRecordEditPayload(recordType: string)",
+        )
+        _assert_contains(
+            "AI candidate preview edit payload helper internals",
+            content,
+            "const payload = buildPayloadFromEditFields(recordType, previewEditFields);\n    if (!payload || typeof payload !== \"object\" || Array.isArray(payload)) {\n      throw new Error(\"payload_json must be an object\");\n    }\n    return payload;",
+        )
+        _assert_contains(
+            "AI candidate preview edit payload helper binding",
+            content,
+            "const payload = buildPreviewRecordEditPayload(selectedPreviewRecord.record_type);",
+        )
+        _assert_contains(
             "AI candidate preview with records helper",
             content,
             "function previewWithRecords(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[])",

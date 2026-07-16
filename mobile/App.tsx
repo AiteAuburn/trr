@@ -3860,6 +3860,14 @@ export default function App() {
     }
   }
 
+  function buildPreviewRecordEditPayload(recordType: string) {
+    const payload = buildPayloadFromEditFields(recordType, previewEditFields);
+    if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+      throw new Error("payload_json must be an object");
+    }
+    return payload;
+  }
+
   function savePreviewRecordEdit() {
     if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {
       openScreen("aiReview");
@@ -3877,10 +3885,7 @@ export default function App() {
     }
 
     try {
-      const payload = buildPayloadFromEditFields(selectedPreviewRecord.record_type, previewEditFields);
-      if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
-        throw new Error("payload_json must be an object");
-      }
+      const payload = buildPreviewRecordEditPayload(selectedPreviewRecord.record_type);
       const nextRecords = previewRecordsWithEditedRecord(
         preview.records,
         selectedPreviewIndex,
