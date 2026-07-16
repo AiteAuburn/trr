@@ -777,6 +777,7 @@ import { HistoryIntroStatusBlocks } from "./historyIntroStatusBlocks";
 import { HistoryNoRecordStatusBlock } from "./historyNoRecordStatusBlock";
 import { HistorySelectedDatePanel } from "./historySelectedDatePanel";
 import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
+import { BackendUrlField } from "./backendUrlField";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
 import { CommunityPublicDisplayNameField } from "./communityPublicDisplayNameField";
@@ -12474,17 +12475,12 @@ export default function App() {
                       : "dev login 未啟用；本機預覽請複製 mobile/.env.example 到 .env，正式版需接 JWT/OIDC login。"}
                   </Text>
                   <Text style={styles.label}>{auxiliaryDisplayLabels.backendUrl}</Text>
-                  <TextInput
+                  <BackendUrlField
                     accessibilityLabel={auxiliaryDisplayLabels.backendUrlInputAccessibility}
                     value={apiBaseUrl}
                     onChangeText={updateApiBaseUrlDraft}
                     maxLength={maxBackendUrlLength}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    editable={!isAnyRequestInFlight}
-                    accessibilityState={{ disabled: isAnyRequestInFlight }}
-                    style={[styles.input, isAnyRequestInFlight ? styles.inputDisabled : null]}
-                    placeholder="http://192.168.1.50:8000"
+                    disabled={isAnyRequestInFlight}
                   />
                   <Pressable
                     accessibilityLabel={settingsSubscriptionDisplayLabels.backendReconnectAccessibility}

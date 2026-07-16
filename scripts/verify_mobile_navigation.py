@@ -83,6 +83,7 @@ RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPane
 RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.tsx"
 RECORD_EDIT_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "recordEditFooterActions.tsx"
 RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.tsx"
+BACKEND_URL_FIELD_PATH = REPO_ROOT / "mobile" / "backendUrlField.tsx"
 NATIVE_DEBUG_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "nativeDebugTextField.tsx"
 RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
 RECORD_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "recordTextField.tsx"
@@ -1442,6 +1443,7 @@ def main() -> int:
     record_detail_info_panel_content = RECORD_DETAIL_INFO_PANEL_PATH.read_text(encoding="utf-8")
     record_edit_footer_actions_content = RECORD_EDIT_FOOTER_ACTIONS_PATH.read_text(encoding="utf-8")
     record_edit_header_fields_content = RECORD_EDIT_HEADER_FIELDS_PATH.read_text(encoding="utf-8")
+    backend_url_field_content = BACKEND_URL_FIELD_PATH.read_text(encoding="utf-8")
     native_debug_text_field_content = NATIVE_DEBUG_TEXT_FIELD_PATH.read_text(encoding="utf-8")
     record_option_field_content = RECORD_OPTION_FIELD_PATH.read_text(encoding="utf-8")
     record_text_field_content = RECORD_TEXT_FIELD_PATH.read_text(encoding="utf-8")
@@ -2059,6 +2061,22 @@ def main() -> int:
             ("community public display name field min height", "minHeight: 52"),
         ):
             _assert_contains(label, community_public_display_name_field_content, marker)
+        for label, marker in (
+            ("backend url field component", "export function BackendUrlField"),
+            ("backend url field accessibility prop", "accessibilityLabel={accessibilityLabel}"),
+            ("backend url field value prop", "value={value}"),
+            ("backend url field handler prop", "onChangeText={onChangeText}"),
+            ("backend url field max length prop", "maxLength={maxLength}"),
+            ("backend url field normalization", 'autoCapitalize="none"'),
+            ("backend url field autocorrect", "autoCorrect={false}"),
+            ("backend url field editable prop", "editable={!disabled}"),
+            ("backend url field accessibility state", "accessibilityState={{ disabled }}"),
+            ("backend url field disabled style", "style={[styles.input, disabled ? styles.inputDisabled : null]}"),
+            ("backend url field placeholder", 'placeholder="http://192.168.1.50:8000"'),
+            ("backend url field input style", "input: {"),
+            ("backend url field disabled style block", "inputDisabled: {"),
+        ):
+            _assert_contains(label, backend_url_field_content, marker)
         for label, marker in (
             ("native debug text field component", "export function NativeDebugTextField"),
             ("native debug text field accessibility prop", "accessibilityLabel={accessibilityLabel}"),
@@ -11276,6 +11294,11 @@ def main() -> int:
             ("advanced settings toggle binding", "onPress={toggleAdvancedSettings}"),
             ("advanced settings toggle accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.advancedSettingsToggleAccessibility}"),
             ("advanced settings expanded state", "accessibilityState={{ expanded: showAdvancedSettings }}"),
+            ("backend url input accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.backendUrlInputAccessibility}"),
+            ("backend url input value binding", "value={apiBaseUrl}"),
+            ("backend url input handler binding", "onChangeText={updateApiBaseUrlDraft}"),
+            ("backend url input max length binding", "maxLength={maxBackendUrlLength}"),
+            ("backend url input disabled binding", "disabled={isAnyRequestInFlight}"),
             ("backend reconnect settings binding", "onPress={reconnectBackendFromSettings}"),
             ("backend reconnect accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.backendReconnectAccessibility}"),
             ("backend reconnect disabled state", "accessibilityState={{ disabled: isAnyRequestInFlight }}"),
