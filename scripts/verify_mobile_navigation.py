@@ -4501,7 +4501,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove confirm missing pending return helper",
             content,
-            "function returnFromMissingPreviewRecordRemoveConfirm() {\n    clearPendingPreviewRemoveSelection();\n    openPreviewRemoveConfirmReturnScreen();",
+            "function returnFromMissingPreviewRecordRemoveConfirm() {\n    resetMissingPreviewRecordRemoveConfirmState();\n    openPreviewRemoveConfirmReturnScreen();",
+        )
+        _assert_contains(
+            "AI candidate remove confirm missing pending reset helper",
+            content,
+            "function resetMissingPreviewRecordRemoveConfirmState()",
+        )
+        _assert_contains(
+            "AI candidate remove confirm missing pending reset helper internals",
+            content,
+            "function resetMissingPreviewRecordRemoveConfirmState() {\n    clearPendingPreviewRemoveSelection();",
         )
         _assert_contains(
             "AI candidate remove confirm missing pending return helper binding",

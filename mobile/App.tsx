@@ -3583,8 +3583,12 @@ export default function App() {
   }
 
   function returnFromMissingPreviewRecordRemoveConfirm() {
-    clearPendingPreviewRemoveSelection();
+    resetMissingPreviewRecordRemoveConfirmState();
     openPreviewRemoveConfirmReturnScreen();
+  }
+
+  function resetMissingPreviewRecordRemoveConfirmState() {
+    clearPendingPreviewRemoveSelection();
   }
 
   function returnFromPreviewRecordRemoveConfirmSuccess(removeIndex: number) {
