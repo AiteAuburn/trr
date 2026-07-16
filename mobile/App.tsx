@@ -8082,6 +8082,18 @@ export default function App() {
     };
   }
 
+  function requestInitialRecordSync(syncContext: { account: Account; activeProfileId: string }) {
+    const query = new URLSearchParams({
+      profile_id: syncContext.activeProfileId,
+      limit: String(mobileRecordSyncLimit)
+    });
+    return requestJson<RecordItem[]>(
+      normalizedApiBaseUrl,
+      `/records?${query.toString()}`,
+      { headers: protectedRequestHeaders(syncContext.account.id, accessToken) }
+    );
+  }
+
   async function loadRecords() {
     const syncContext = guardedInitialRecordSyncContext();
     if (!syncContext) {
@@ -8095,15 +8107,7 @@ export default function App() {
     recordSyncInFlightKeys.current.add(syncContext.syncKey);
     setRecordsStatus(recordSyncLoadingStatusMessage());
     try {
-      const query = new URLSearchParams({
-        profile_id: syncContext.activeProfileId,
-        limit: String(mobileRecordSyncLimit)
-      });
-      const response = await requestJson<RecordItem[]>(
-        normalizedApiBaseUrl,
-        `/records?${query.toString()}`,
-        { headers: protectedRequestHeaders(syncContext.account.id, accessToken) }
-      );
+      const response = await requestInitialRecordSync(syncContext);
       if (latestRecordSyncKey.current !== syncContext.syncKey) {
         return;
       }
