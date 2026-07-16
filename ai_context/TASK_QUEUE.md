@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1841: Reuse preview remove records builder helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `buildPreviewRecordRemoveRecords()` to build the post-delete preview records list from the current preview and remove index.
+- Reused the helper from `removePreviewRecord()` while preserving the existing no-preview guard, record filtering semantics, apply/clear behavior, confirm return behavior, and status behavior.
+- Updated navigation verifier coverage for the remove-records builder helper internals and remove-handler binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser endpoint/request semantics/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining preview remove/edit validation/status helpers and action return paths in small behavior-preserving slices.
+
 ### T1840: Reuse preview remove apply clear helper
 
 Status: done

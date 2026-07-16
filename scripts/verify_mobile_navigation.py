@@ -4431,7 +4431,22 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview remove records update helper binding",
             content,
-            "const nextRecords = previewRecordsWithoutRecord(preview.records, index);",
+            "return previewRecordsWithoutRecord(currentPreview.records, removeIndex);",
+        )
+        _assert_contains(
+            "AI candidate preview remove records builder helper",
+            content,
+            "function buildPreviewRecordRemoveRecords(currentPreview: ParsePreviewResponse, removeIndex: number)",
+        )
+        _assert_contains(
+            "AI candidate preview remove records builder helper internals",
+            content,
+            "function buildPreviewRecordRemoveRecords(currentPreview: ParsePreviewResponse, removeIndex: number) {\n    return previewRecordsWithoutRecord(currentPreview.records, removeIndex);",
+        )
+        _assert_contains(
+            "AI candidate preview remove records builder helper binding",
+            content,
+            "const nextRecords = buildPreviewRecordRemoveRecords(preview, index);",
         )
         _assert_contains(
             "AI candidate preview remove apply helper",

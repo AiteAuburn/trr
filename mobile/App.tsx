@@ -3739,11 +3739,15 @@ export default function App() {
     clearPreviewRemoveActionState();
   }
 
+  function buildPreviewRecordRemoveRecords(currentPreview: ParsePreviewResponse, removeIndex: number) {
+    return previewRecordsWithoutRecord(currentPreview.records, removeIndex);
+  }
+
   function removePreviewRecord(index: number) {
     if (!preview) {
       return;
     }
-    const nextRecords = previewRecordsWithoutRecord(preview.records, index);
+    const nextRecords = buildPreviewRecordRemoveRecords(preview, index);
     applyPreviewRecordRemoveChangeAndClearState(preview, nextRecords);
   }
 
