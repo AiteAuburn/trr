@@ -4016,11 +4016,15 @@ export default function App() {
 
   function validatePreviewRecordEditForSave(recordType: string) {
     const validationError = validatePreviewRecordEdit(recordType);
-    if (validationError) {
+    if (hasPreviewRecordEditValidationError(validationError)) {
       handlePreviewRecordEditValidationFailure(validationError);
       return false;
     }
     return true;
+  }
+
+  function hasPreviewRecordEditValidationError(validationError: string | null): validationError is string {
+    return Boolean(validationError);
   }
 
   function applyPreviewRecordEditChangeAndReturnSuccess(

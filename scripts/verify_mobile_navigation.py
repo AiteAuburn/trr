@@ -4366,7 +4366,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit validation failure helper binding",
             content,
-            "if (validationError) {\n      handlePreviewRecordEditValidationFailure(validationError);\n      return false;",
+            "if (hasPreviewRecordEditValidationError(validationError)) {\n      handlePreviewRecordEditValidationFailure(validationError);\n      return false;",
         )
         _assert_contains(
             "AI candidate preview edit save validation helper",
@@ -4376,7 +4376,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit save validation helper internals",
             content,
-            "function validatePreviewRecordEditForSave(recordType: string) {\n    const validationError = validatePreviewRecordEdit(recordType);\n    if (validationError) {\n      handlePreviewRecordEditValidationFailure(validationError);\n      return false;\n    }\n    return true;",
+            "function validatePreviewRecordEditForSave(recordType: string) {\n    const validationError = validatePreviewRecordEdit(recordType);\n    if (hasPreviewRecordEditValidationError(validationError)) {\n      handlePreviewRecordEditValidationFailure(validationError);\n      return false;\n    }\n    return true;",
+        )
+        _assert_contains(
+            "AI candidate preview edit validation error guard",
+            content,
+            "function hasPreviewRecordEditValidationError(validationError: string | null): validationError is string",
+        )
+        _assert_contains(
+            "AI candidate preview edit validation error guard internals",
+            content,
+            "function hasPreviewRecordEditValidationError(validationError: string | null): validationError is string {\n    return Boolean(validationError);",
         )
         _assert_contains(
             "AI candidate preview edit save validation helper binding",
@@ -4506,7 +4516,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit validation helper binding",
             content,
-            "const validationError = validatePreviewRecordEdit(recordType);\n    if (validationError) {",
+            "const validationError = validatePreviewRecordEdit(recordType);\n    if (hasPreviewRecordEditValidationError(validationError)) {",
         )
         _assert_contains(
             "AI candidate preview with records helper",
