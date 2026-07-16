@@ -776,6 +776,7 @@ import { DangerConfirmActionRow } from "./dangerConfirmActionRow";
 import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
 import { DeleteSuccessActionRow } from "./deleteSuccessActionRow";
 import { FieldLabel } from "./fieldLabel";
+import { FutureBoundaryGrid } from "./futureBoundaryGrid";
 import { FutureReadinessChecklist } from "./futureReadinessChecklist";
 import { DetailRow } from "./detailRow";
 import { DetailedReportBoundaryGrid } from "./detailedReportBoundaryGrid";
@@ -5622,30 +5623,6 @@ export default function App() {
 
   function communityReturnFutureModulesPressHandler() {
     return returnFromCommunityPreview;
-  }
-
-  function doctorShareBoundaryRowKey(row: (typeof doctorShareBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function doctorShareBoundaryRowLabel(row: (typeof doctorShareBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function doctorShareBoundaryRowValue(row: (typeof doctorShareBoundaryRows)[number]) {
-    return row.value;
-  }
-
-  function healthIntegrationBoundaryRowKey(row: (typeof healthIntegrationBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function healthIntegrationBoundaryRowLabel(row: (typeof healthIntegrationBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function healthIntegrationBoundaryRowValue(row: (typeof healthIntegrationBoundaryRows)[number]) {
-    return row.value;
   }
 
   function communityScreenTitleLabel() {
@@ -11453,14 +11430,7 @@ export default function App() {
                 <Text style={styles.evidence}>{doctorShareAccountBoundaryDisplayText}</Text>
               </View>
             </View>
-            <View style={styles.reportBoundaryGrid}>
-              {doctorShareBoundaryRows.map((row) => (
-                <View key={doctorShareBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{doctorShareBoundaryRowLabel(row)}</Text>
-                  <Text style={styles.recordType}>{doctorShareBoundaryRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
+            <FutureBoundaryGrid rows={doctorShareBoundaryRows} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>
               <FutureReadinessChecklist items={doctorShareReadinessChecklistItems} />
@@ -11509,14 +11479,7 @@ export default function App() {
               <Text style={styles.previewModeBadge}>{healthIntegrationPreviewBoundaryDisplay.badge}</Text>
               <Text style={styles.evidence}>{healthIntegrationPreviewBoundaryDisplay.copy}</Text>
             </View>
-            <View style={styles.reportBoundaryGrid}>
-              {healthIntegrationBoundaryRows.map((row) => (
-                <View key={healthIntegrationBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{healthIntegrationBoundaryRowLabel(row)}</Text>
-                  <Text style={styles.recordType}>{healthIntegrationBoundaryRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
+            <FutureBoundaryGrid rows={healthIntegrationBoundaryRows} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>
               <FutureReadinessChecklist items={healthIntegrationReadinessChecklistItems} />

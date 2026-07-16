@@ -200,13 +200,13 @@ VISUAL_SMOKE_ROUTES = {
     "doctorShare": [
         'currentScreen === "doctorShare"',
         "items={doctorShareReadinessChecklistItems}",
-        "doctorShareBoundaryRows.map",
+        "rows={doctorShareBoundaryRows}",
         "onPress={returnFromDoctorSharePreview}",
     ],
     "healthIntegration": [
         'currentScreen === "healthIntegration"',
         "items={healthIntegrationReadinessChecklistItems}",
-        "healthIntegrationBoundaryRows.map",
+        "rows={healthIntegrationBoundaryRows}",
         "onPress={returnFromHealthIntegrationPreview}",
     ],
     "community": [

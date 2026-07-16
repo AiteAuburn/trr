@@ -21,6 +21,7 @@ SETTINGS_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "settingsBoundaryGrid.tsx"
 SETTINGS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "settingsChecklist.tsx"
 SUBSCRIPTION_CHECKLIST_PATH = REPO_ROOT / "mobile" / "subscriptionChecklist.tsx"
 FUTURE_READINESS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "futureReadinessChecklist.tsx"
+FUTURE_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "futureBoundaryGrid.tsx"
 COMMERCE_READINESS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "commerceReadinessChecklist.tsx"
 OUTCOME_CHECKLIST_PATH = REPO_ROOT / "mobile" / "outcomeChecklist.tsx"
 AUTH_PROVIDER_PREVIEW_LIST_PATH = REPO_ROOT / "mobile" / "authProviderPreviewList.tsx"
@@ -1418,6 +1419,7 @@ def main() -> int:
     settings_checklist_content = SETTINGS_CHECKLIST_PATH.read_text(encoding="utf-8")
     subscription_checklist_content = SUBSCRIPTION_CHECKLIST_PATH.read_text(encoding="utf-8")
     future_readiness_checklist_content = FUTURE_READINESS_CHECKLIST_PATH.read_text(encoding="utf-8")
+    future_boundary_grid_content = FUTURE_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
     commerce_readiness_checklist_content = COMMERCE_READINESS_CHECKLIST_PATH.read_text(encoding="utf-8")
     outcome_checklist_content = OUTCOME_CHECKLIST_PATH.read_text(encoding="utf-8")
     auth_provider_preview_list_content = AUTH_PROVIDER_PREVIEW_LIST_PATH.read_text(encoding="utf-8")
@@ -2041,6 +2043,23 @@ def main() -> int:
             ("future readiness checklist text binding", "text={futureReadinessChecklistItemText(item)}"),
         ):
             _assert_contains(label, future_readiness_checklist_content, marker)
+        for label, marker in (
+            ("future boundary grid component", "export function FutureBoundaryGrid"),
+            ("future boundary grid row type", "export type FutureBoundaryRow ="),
+            ("future boundary grid rows prop", "rows: FutureBoundaryRow[]"),
+            ("future boundary row key helper", "function futureBoundaryRowKey(row: FutureBoundaryRow)"),
+            ("future boundary row key helper fields", "return row.label;"),
+            ("future boundary row key binding", "key={futureBoundaryRowKey(row)}"),
+            ("future boundary row label helper", "function futureBoundaryRowLabel(row: FutureBoundaryRow)"),
+            ("future boundary row label helper fields", "return row.label;"),
+            ("future boundary row label binding", "{futureBoundaryRowLabel(row)}"),
+            ("future boundary row value helper", "function futureBoundaryRowValue(row: FutureBoundaryRow)"),
+            ("future boundary row value helper fields", "return row.value;"),
+            ("future boundary row value binding", "{futureBoundaryRowValue(row)}"),
+            ("future boundary grid wrapper style", "reportBoundaryGrid: {"),
+            ("future boundary grid card style", "reportBoundaryCard: {"),
+        ):
+            _assert_contains(label, future_boundary_grid_content, marker)
         for label, marker in (
             ("commerce readiness checklist component", "export function CommerceReadinessChecklist"),
             ("commerce readiness checklist item key helper", "function commerceReadinessChecklistItemKey(item: string)"),
@@ -11933,24 +11952,9 @@ def main() -> int:
             ("community return future modules press helper fields", "return returnFromCommunityPreview;"),
             ("community return future modules press target binding", "const communityReturnFutureModulesPressTarget = communityReturnFutureModulesPressHandler();"),
             ("community return future modules press helper binding", "onPress={communityReturnFutureModulesPressTarget}"),
-            ("doctor share boundary row key helper", "function doctorShareBoundaryRowKey(row: (typeof doctorShareBoundaryRows)[number])"),
-            ("doctor share boundary row key helper fields", "return row.label;"),
-            ("doctor share boundary row key helper binding", "key={doctorShareBoundaryRowKey(row)}"),
-            ("doctor share boundary row label helper", "function doctorShareBoundaryRowLabel(row: (typeof doctorShareBoundaryRows)[number])"),
-            ("doctor share boundary row label helper fields", "return row.label;"),
-            ("doctor share boundary row label helper binding", "{doctorShareBoundaryRowLabel(row)}"),
-            ("doctor share boundary row value helper", "function doctorShareBoundaryRowValue(row: (typeof doctorShareBoundaryRows)[number])"),
-            ("doctor share boundary row value helper fields", "return row.value;"),
-            ("doctor share boundary row value helper binding", "{doctorShareBoundaryRowValue(row)}"),
-            ("health integration boundary row key helper", "function healthIntegrationBoundaryRowKey(row: (typeof healthIntegrationBoundaryRows)[number])"),
-            ("health integration boundary row key helper fields", "return row.label;"),
-            ("health integration boundary row key helper binding", "key={healthIntegrationBoundaryRowKey(row)}"),
-            ("health integration boundary row label helper", "function healthIntegrationBoundaryRowLabel(row: (typeof healthIntegrationBoundaryRows)[number])"),
-            ("health integration boundary row label helper fields", "return row.label;"),
-            ("health integration boundary row label helper binding", "{healthIntegrationBoundaryRowLabel(row)}"),
-            ("health integration boundary row value helper", "function healthIntegrationBoundaryRowValue(row: (typeof healthIntegrationBoundaryRows)[number])"),
-            ("health integration boundary row value helper fields", "return row.value;"),
-            ("health integration boundary row value helper binding", "{healthIntegrationBoundaryRowValue(row)}"),
+            ("future boundary grid binding", "<FutureBoundaryGrid"),
+            ("doctor share boundary grid rows binding", "rows={doctorShareBoundaryRows}"),
+            ("health integration boundary grid rows binding", "rows={healthIntegrationBoundaryRows}"),
             ("community screen title helper", "function communityScreenTitleLabel()"),
             ("community screen title helper fields", 'return "食物社群";'),
             ("community screen title helper binding", "{communityScreenTitleLabel()}"),
@@ -14995,6 +14999,11 @@ def main() -> int:
             "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={item} />",
         )
         _assert_not_contains(
+            "doctor share direct boundary row map",
+            content,
+            "doctorShareBoundaryRows.map((row) => (",
+        )
+        _assert_not_contains(
             "doctor share direct boundary row key binding",
             content,
             "doctorShareBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
@@ -15008,6 +15017,11 @@ def main() -> int:
             "doctor share direct boundary row value binding",
             content,
             "doctorShareBoundaryRows.map((row) => (\n                <View key={doctorShareBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{doctorShareBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
+        )
+        _assert_not_contains(
+            "health integration direct boundary row map",
+            content,
+            "healthIntegrationBoundaryRows.map((row) => (",
         )
         _assert_not_contains(
             "health integration direct boundary row key binding",
