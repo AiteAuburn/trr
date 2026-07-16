@@ -2684,7 +2684,7 @@ def main() -> int:
         _assert_contains(
             "parser backend unavailable helper binding",
             content,
-            "if (isParserBackendUnavailable()) {\n      handleParserBackendUnavailable();\n      return;",
+            "if (isParserBackendUnavailable()) {\n      handleParserBackendUnavailable();\n      return null;",
         )
         _assert_contains(
             "parser backend unavailable guard helper",
@@ -2709,7 +2709,7 @@ def main() -> int:
         _assert_contains(
             "parser model unavailable helper binding",
             content,
-            "if (isParserModelUnavailable()) {\n      handleParserModelUnavailable();\n      return;",
+            "if (isParserModelUnavailable()) {\n      handleParserModelUnavailable();\n      return null;",
         )
         _assert_contains(
             "parser model unavailable guard helper",
@@ -2734,7 +2734,7 @@ def main() -> int:
         _assert_contains(
             "parser sample blocked helper binding",
             content,
-            "if (isParserSampleTranscriptBlocked()) {\n      handleParserSampleBlockedTranscript();\n      return;",
+            "if (isParserSampleTranscriptBlocked()) {\n      handleParserSampleBlockedTranscript();\n      return null;",
         )
         _assert_contains(
             "parser sample blocked guard helper",
@@ -6618,6 +6618,10 @@ def main() -> int:
             ("parse sample blocked guard helper", "function isParserSampleTranscriptBlocked()"),
             ("parse sample blocked guard helper internals", "return isTranscriptSample;"),
             ("parse sample blocked guard binding", "if (isParserSampleTranscriptBlocked())"),
+            ("parse guarded context helper", "function guardedParserPreviewContext()"),
+            ("parse guarded context helper internals", "const parserContext = parserProfileContext();\n    if (!hasParserProfileContext(parserContext))"),
+            ("parse guarded context helper success", "return parserContext;"),
+            ("parse guarded context submit binding", "const parserContext = guardedParserPreviewContext();\n    if (!parserContext) {\n      return;\n    }\n\n    await startAndCompleteParserPreviewRequest(parserContext);"),
             ("parse start helper", "function startParserPreviewRequest()"),
             ("parse start helper internals", "parsePreviewInFlight.current = true;\n    setIsBusy(true);"),
             ("parse start helper binding", "startPreparedParserPreviewRequest();"),

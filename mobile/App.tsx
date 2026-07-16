@@ -7883,29 +7883,38 @@ export default function App() {
     return isTranscriptSample;
   }
 
-  async function parseTranscript() {
+  function guardedParserPreviewContext() {
     if (isParserPreviewRequestBlocked()) {
-      return;
+      return null;
     }
     if (isParserBackendUnavailable()) {
       handleParserBackendUnavailable();
-      return;
+      return null;
     }
     const parserContext = parserProfileContext();
     if (!hasParserProfileContext(parserContext)) {
-      return;
+      return null;
     }
     if (isParserModelUnavailable()) {
       handleParserModelUnavailable();
-      return;
+      return null;
     }
     const validationMessage = parserTranscriptValidationMessage();
     if (validationMessage) {
       handleParserTranscriptValidationError(validationMessage);
-      return;
+      return null;
     }
     if (isParserSampleTranscriptBlocked()) {
       handleParserSampleBlockedTranscript();
+      return null;
+    }
+
+    return parserContext;
+  }
+
+  async function parseTranscript() {
+    const parserContext = guardedParserPreviewContext();
+    if (!parserContext) {
       return;
     }
 

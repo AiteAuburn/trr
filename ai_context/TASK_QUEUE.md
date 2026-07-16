@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1892: Reuse guarded parser preview context helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `guardedParserPreviewContext()` for the parser submit preflight guard sequence.
+- Reused the helper from `parseTranscript()` while preserving the existing blocked-request, backend-ready, profile-context, model-ready, transcript-validation, and sample-transcript guard order and recovery side effects.
+- Updated navigation verifier coverage for the guarded context helper, context success return, and parse submit binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing parser submit and daily-record save orchestration in small behavior-preserving slices.
+
 ### T1891: Reuse parser preview start-and-complete helper
 
 Status: done
