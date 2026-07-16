@@ -3427,8 +3427,12 @@ export default function App() {
     setPreviewActionReturnScreen(returnScreen);
   }
 
+  function previewRecordAtIndex(index: number) {
+    return preview?.records[index] ?? null;
+  }
+
   function openPreviewRecordEdit(index: number, returnScreen: AppScreen = "aiReview") {
-    const record = preview?.records[index];
+    const record = previewRecordAtIndex(index);
     if (!record) {
       return;
     }
@@ -3449,7 +3453,7 @@ export default function App() {
   }
 
   function openPreviewRecordRemoveConfirm(index: number, returnScreen: AppScreen = "aiReview") {
-    const record = preview?.records[index];
+    const record = previewRecordAtIndex(index);
     if (!record) {
       openScreen(returnScreen);
       return;

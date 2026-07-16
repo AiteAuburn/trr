@@ -4079,6 +4079,21 @@ def main() -> int:
             "setPreviewActionReturnTarget(returnScreen);\n    selectPreviewEditIndex(index);",
         )
         _assert_contains(
+            "preview record index lookup helper",
+            content,
+            "function previewRecordAtIndex(index: number)",
+        )
+        _assert_contains(
+            "preview record index lookup helper internals",
+            content,
+            "function previewRecordAtIndex(index: number) {\n    return preview?.records[index] ?? null;",
+        )
+        _assert_contains(
+            "AI candidate edit record lookup helper binding",
+            content,
+            "function openPreviewRecordEdit(index: number, returnScreen: AppScreen = \"aiReview\") {\n    const record = previewRecordAtIndex(index);",
+        )
+        _assert_contains(
             "AI candidate edit open seed helper binding",
             content,
             "selectPreviewEditIndex(index);\n    seedPreviewEditStateFromRecord(record);",
@@ -4102,6 +4117,11 @@ def main() -> int:
             "AI candidate remove confirm selection helper binding",
             content,
             "setPreviewActionReturnTarget(returnScreen);\n    selectPreviewRemoveIndex(index);\n    openPreviewRemoveConfirmScreen();",
+        )
+        _assert_contains(
+            "AI candidate remove record lookup helper binding",
+            content,
+            "function openPreviewRecordRemoveConfirm(index: number, returnScreen: AppScreen = \"aiReview\") {\n    const record = previewRecordAtIndex(index);",
         )
         _assert_contains(
             "AI candidate remove confirm screen opener helper",
