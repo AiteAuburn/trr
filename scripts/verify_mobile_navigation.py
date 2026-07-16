@@ -2069,6 +2069,12 @@ def main() -> int:
             ("record detail selected type helper", "function selectedRecordDetailTypeLabel(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
             ("record detail selected type helper fields", 'return item?.typeLabel ?? "請從今日或歷史紀錄選擇一筆真實紀錄。";'),
             ("record detail selected type helper binding", "typeValue={selectedRecordDetailTypeLabel(selectedRecordDisplayItem)}"),
+            ("preview edit type label helper", "function previewRecordEditTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem> | null)"),
+            ("preview edit type label helper fields", 'return item?.typeLabel ?? "紀錄";'),
+            ("preview edit type label helper binding", "{previewRecordEditTypeLabel(selectedPreviewRecordDisplayItem)}"),
+            ("record edit header type label helper", "function recordEditHeaderTypeLabel(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
+            ("record edit header type label helper fields", 'return item?.typeLabel ?? "紀錄";'),
+            ("record edit header type label helper binding", "typeLabel={recordEditHeaderTypeLabel(selectedRecordDisplayItem)}"),
         ):
             _assert_contains(label, content, marker)
         record_detail_screen_block = _match_block(
@@ -2087,6 +2093,20 @@ def main() -> int:
             ("record detail direct type fallback binding", 'selectedRecordDisplayItem?.typeLabel ?? "請從今日或歷史紀錄選擇一筆真實紀錄。"'),
         ):
             _assert_not_contains(label, record_detail_screen_block, marker)
+        for block_label, pattern, marker in (
+            (
+                "preview edit type label render block",
+                r'(currentScreen === "editPreviewRecord"[\s\S]*?<Text style=\{styles\.recordContent\}>\{previewRecordEditTypeLabel\(selectedPreviewRecordDisplayItem\)\}</Text>)',
+                'selectedPreviewRecordDisplayItem?.typeLabel ?? "紀錄"',
+            ),
+            (
+                "record edit header render block",
+                r'(currentScreen === "editRecord"[\s\S]*?<RecordEditHeaderFields[\s\S]*?onTimeChange=\{updateRecordEditTimeInput\})',
+                'selectedRecordDisplayItem?.typeLabel ?? "紀錄"',
+            ),
+        ):
+            edit_type_label_block = _match_block(content, pattern, block_label)
+            _assert_not_contains(f"{block_label} direct fallback binding", edit_type_label_block, marker)
         for label, marker in (
             ("app types account alias", "export type Account = AccountTransformSource;"),
             ("app types profile alias", "export type Profile = ProfileTransformSource;"),

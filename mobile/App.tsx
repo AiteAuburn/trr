@@ -2200,6 +2200,14 @@ export default function App() {
     return item?.typeLabel ?? "請從今日或歷史紀錄選擇一筆真實紀錄。";
   }
 
+  function previewRecordEditTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem> | null) {
+    return item?.typeLabel ?? "紀錄";
+  }
+
+  function recordEditHeaderTypeLabel(item: ReturnType<typeof recordDetailDisplayItem> | null) {
+    return item?.typeLabel ?? "紀錄";
+  }
+
   function openTutorialRecordEntry() {
     openScreenWithStatus("record", tutorialRecordEntryStatusMessage());
   }
@@ -9001,7 +9009,7 @@ export default function App() {
             </View>
             <View style={styles.detailRow}>
               <FieldLabel icon={"🏷"} label={"類型"} />
-              <Text style={styles.recordContent}>{selectedPreviewRecordDisplayItem?.typeLabel ?? "紀錄"}</Text>
+              <Text style={styles.recordContent}>{previewRecordEditTypeLabel(selectedPreviewRecordDisplayItem)}</Text>
             </View>
             {selectedPreviewRecord.record_type === "glucose" ? (
               <>
@@ -9860,7 +9868,7 @@ export default function App() {
               timeAccessibilityLabel={auxiliaryDisplayLabels.timeInputAccessibility}
               timeMaxLength={maxTimeInputLength}
               timeValue={recordEditTime}
-              typeLabel={selectedRecordDisplayItem?.typeLabel ?? "紀錄"}
+              typeLabel={recordEditHeaderTypeLabel(selectedRecordDisplayItem)}
               onDateChange={updateRecordEditDateInput}
               onTimeChange={updateRecordEditTimeInput}
             />
