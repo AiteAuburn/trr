@@ -7486,6 +7486,23 @@ export default function App() {
     setIsBusy(false);
   }
 
+  function previewRecordsForSave(records: PendingRecord[], recordCount: number) {
+    const clientSaveBatchId = createClientSaveBatchId();
+    return records.map((record, index) => {
+      const sanitizedRecord = pendingRecordForSave(record);
+      return {
+        ...sanitizedRecord,
+        metadata_json: {
+          ...(sanitizedRecord.metadata_json ?? {}),
+          client_save_batch_id: clientSaveBatchId,
+          client_save_sequence: index + 1,
+          client_save_batch_size: recordCount,
+          entry_method: "ai_confirmation"
+        }
+      };
+    });
+  }
+
   async function savePreviewRecords() {
     if (isBusy || previewSaveInFlight.current) {
       return;
@@ -7502,20 +7519,7 @@ export default function App() {
     }
 
     startPreviewSaveRequest();
-    const clientSaveBatchId = createClientSaveBatchId();
-    const recordsToSave = preview.records.map((record, index) => {
-      const sanitizedRecord = pendingRecordForSave(record);
-      return {
-        ...sanitizedRecord,
-        metadata_json: {
-          ...(sanitizedRecord.metadata_json ?? {}),
-          client_save_batch_id: clientSaveBatchId,
-          client_save_sequence: index + 1,
-          client_save_batch_size: previewState.recordCount,
-          entry_method: "ai_confirmation"
-        }
-      };
-    });
+    const recordsToSave = previewRecordsForSave(preview.records, previewState.recordCount);
     try {
       const saveResponse = await requestJson<DailyRecordSaveResponse>(
         normalizedApiBaseUrl,
