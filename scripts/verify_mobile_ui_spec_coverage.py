@@ -32,7 +32,7 @@ CANONICAL_SPEC_SCREENS = (
     SpecScreen("4.4", "會員方案選擇頁", "subscription", ("rows={subscriptionComparisonDisplayRows}", "subscriptionSyncButtonDisplayLabel")),
     SpecScreen("4.4.1", "訂閱管理頁", "subscriptionManagement", ("rows={subscriptionManagementDisplayRows}", "subscriptionManagementReadinessChecklistItems")),
     SpecScreen("4.5", "功能選單頁", "menu", ("menuDisplayItems.map", "styles.menuIconCenter")),
-    SpecScreen("4.6", "設定頁", "settings", ("settingsDisplayRows.map", "developerSettingsBox")),
+    SpecScreen("4.6", "設定頁", "settings", ("rows={settingsDisplayRows}", "developerSettingsBox")),
     SpecScreen("4.6.1", "帳號與登入安全頁", "accountSecurity", ("AuthProviderPreviewList", "SessionManagementPreviewList")),
     SpecScreen("4.6.2", "個人資料頁", "profileSettings", ("rows={profileSettingsBoundaryRows}", "profileReadinessChecklistItems")),
     SpecScreen("4.6.3", "錄音額度頁", "recordingQuotaSettings", ("rows={recordingQuotaBoundaryRows}", "quotaReadinessChecklistItems")),

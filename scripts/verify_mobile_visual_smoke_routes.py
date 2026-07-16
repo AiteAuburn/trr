@@ -146,7 +146,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "settings": [
         'currentScreen === "settings"',
-        "settingsDisplayRows.map",
+        "rows={settingsDisplayRows}",
         "styles.developerSettingsBox",
     ],
     "accountSecurity": [

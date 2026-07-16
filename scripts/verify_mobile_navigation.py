@@ -19,6 +19,7 @@ DETAILED_REPORT_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "detailedReportBound
 ACCOUNT_SECURITY_ACTION_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityActionGrid.tsx"
 SETTINGS_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "settingsBoundaryGrid.tsx"
 SETTINGS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "settingsChecklist.tsx"
+SETTINGS_ROW_LIST_PATH = REPO_ROOT / "mobile" / "settingsRowList.tsx"
 SUBSCRIPTION_CHECKLIST_PATH = REPO_ROOT / "mobile" / "subscriptionChecklist.tsx"
 SUBSCRIPTION_COMPARISON_LIST_PATH = REPO_ROOT / "mobile" / "subscriptionComparisonList.tsx"
 PREVIEW_STATUS_LIST_PATH = REPO_ROOT / "mobile" / "previewStatusList.tsx"
@@ -1421,6 +1422,7 @@ def main() -> int:
     account_security_action_grid_content = ACCOUNT_SECURITY_ACTION_GRID_PATH.read_text(encoding="utf-8")
     settings_boundary_grid_content = SETTINGS_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
     settings_checklist_content = SETTINGS_CHECKLIST_PATH.read_text(encoding="utf-8")
+    settings_row_list_content = SETTINGS_ROW_LIST_PATH.read_text(encoding="utf-8")
     subscription_checklist_content = SUBSCRIPTION_CHECKLIST_PATH.read_text(encoding="utf-8")
     subscription_comparison_list_content = SUBSCRIPTION_COMPARISON_LIST_PATH.read_text(encoding="utf-8")
     preview_status_list_content = PREVIEW_STATUS_LIST_PATH.read_text(encoding="utf-8")
@@ -11045,83 +11047,36 @@ def main() -> int:
         _assert_contains(
             "settings row press wrapper",
             content,
-            "function pressSettingsRow(row: ReturnType<typeof settingsRowDisplayItem>)",
+            "function pressSettingsRow(row: SettingsDisplayRow)",
         )
-        _assert_contains(
-            "settings row key helper",
-            content,
-            "function settingsDisplayRowKey(row: ReturnType<typeof settingsRowDisplayItem>)",
-        )
-        _assert_contains(
-            "settings row key helper fields",
-            content,
-            "return row.id;",
-        )
-        _assert_contains(
-            "settings row key helper binding",
-            content,
-            "key={settingsDisplayRowKey(row)}",
-        )
-        _assert_contains(
-            "settings row accessibility helper",
-            content,
-            "function settingsDisplayRowAccessibilityLabel(row: ReturnType<typeof settingsRowDisplayItem>)",
-        )
-        _assert_contains(
-            "settings row accessibility helper fields",
-            content,
-            "return row.accessibilityLabel;",
-        )
-        _assert_contains(
-            "settings row accessibility helper binding",
-            content,
-            "accessibilityLabel={settingsDisplayRowAccessibilityLabel(row)}",
-        )
-        _assert_contains(
-            "settings row icon helper",
-            content,
-            "function settingsDisplayRowIcon(row: ReturnType<typeof settingsRowDisplayItem>)",
-        )
-        _assert_contains(
-            "settings row icon helper fields",
-            content,
-            "return row.icon;",
-        )
-        _assert_contains(
-            "settings row icon helper binding",
-            content,
-            "{settingsDisplayRowIcon(row)}",
-        )
-        _assert_contains(
-            "settings row label helper",
-            content,
-            "function settingsDisplayRowLabel(row: ReturnType<typeof settingsRowDisplayItem>)",
-        )
-        _assert_contains(
-            "settings row label helper fields",
-            content,
-            "return row.label;",
-        )
-        _assert_contains(
-            "settings row label helper binding",
-            content,
-            "{settingsDisplayRowLabel(row)}",
-        )
-        _assert_contains(
-            "settings row helper text helper",
-            content,
-            "function settingsDisplayRowHelperText(row: ReturnType<typeof settingsRowDisplayItem>)",
-        )
-        _assert_contains(
-            "settings row helper text helper quota branch",
-            content,
-            'return row.id === "quota" ? settingsQuotaHelperDisplayText : row.helper;',
-        )
-        _assert_contains(
-            "settings row helper text helper binding",
-            content,
-            "{settingsDisplayRowHelperText(row)}",
-        )
+        for label, marker in (
+            ("settings row list component", "export function SettingsRowList"),
+            ("settings row list row type", "export type SettingsDisplayRow ="),
+            ("settings row list target field", "target?: AppScreen;"),
+            ("settings row list rows prop", "rows: SettingsDisplayRow[]"),
+            ("settings row key helper", "function settingsDisplayRowKey(row: SettingsDisplayRow)"),
+            ("settings row key helper fields", "return row.id;"),
+            ("settings row key helper binding", "key={settingsDisplayRowKey(row)}"),
+            ("settings row accessibility helper", "function settingsDisplayRowAccessibilityLabel(row: SettingsDisplayRow)"),
+            ("settings row accessibility helper fields", "return row.accessibilityLabel;"),
+            ("settings row accessibility helper binding", "accessibilityLabel={settingsDisplayRowAccessibilityLabel(row)}"),
+            ("settings row icon helper", "function settingsDisplayRowIcon(row: SettingsDisplayRow)"),
+            ("settings row icon helper fields", "return row.icon;"),
+            ("settings row icon helper binding", "{settingsDisplayRowIcon(row)}"),
+            ("settings row label helper", "function settingsDisplayRowLabel(row: SettingsDisplayRow)"),
+            ("settings row label helper fields", "return row.label;"),
+            ("settings row label helper binding", "{settingsDisplayRowLabel(row)}"),
+            ("settings row helper text helper", "function settingsDisplayRowHelperText(row: SettingsDisplayRow, quotaHelperText: string)"),
+            ("settings row helper text helper quota branch", 'return row.id === "quota" ? quotaHelperText : row.helper;'),
+            ("settings row helper text helper binding", "{settingsDisplayRowHelperText(row, quotaHelperText)}"),
+            ("settings row list press binding", "onPress={() => onRowPress(row)}"),
+            ("settings row list button role", 'accessibilityRole="button"'),
+            ("settings row list style", "settingsRow: {"),
+            ("settings row list icon style", "iconCircleSmall: {"),
+            ("settings row list content style", "timelineContent: {"),
+            ("settings row list chevron style", "settingsChevron: {"),
+        ):
+            _assert_contains(label, settings_row_list_content, marker)
         for label, marker in (
             ("subscription management preview status list binding", "rows={subscriptionManagementDisplayRows}"),
             ("privacy control preview status list binding", "rows={privacyControlDisplayRows}"),
@@ -11233,9 +11188,24 @@ def main() -> int:
             "rows={subscriptionComparisonDisplayRows}",
         )
         _assert_contains(
-            "settings row binding",
+            "settings row list binding",
             content,
-            "onPress={() => pressSettingsRow(row)}",
+            "<SettingsRowList",
+        )
+        _assert_contains(
+            "settings row list press prop",
+            content,
+            "onRowPress={pressSettingsRow}",
+        )
+        _assert_contains(
+            "settings row list quota helper prop",
+            content,
+            "quotaHelperText={settingsQuotaHelperDisplayText}",
+        )
+        _assert_contains(
+            "settings row list rows prop",
+            content,
+            "rows={settingsDisplayRows}",
         )
         _assert_contains(
             "settings display rows helper binding",
@@ -11305,39 +11275,24 @@ def main() -> int:
             ("direct tutorial step description binding", "{step.description}"),
         ):
             _assert_not_contains(label, tutorial_steps_render_block, marker)
-        settings_display_rows_render_block = _match_block(
-            content,
-            r"settingsDisplayRows\.map\(\(row\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
-            "settings display rows render block",
-        )
-        _assert_contains(
-            "settings row accessibility binding",
-            content,
-            "accessibilityLabel={settingsDisplayRowAccessibilityLabel(row)}",
-        )
-        _assert_contains(
-            "settings row button role",
-            content,
-            'accessibilityRole="button"\n                  style={styles.settingsRow}',
-        )
         _assert_not_contains(
             "settings row direct destination binding",
             content,
             "onPress={() => openSettingsRow(row)}",
         )
         _assert_not_contains(
-            "settings row direct key binding",
-            settings_display_rows_render_block,
-            "key={row.id}",
+            "direct settings display rows map",
+            content,
+            "settingsDisplayRows.map((row) => (",
         )
         _assert_not_contains(
             "settings row direct accessibility binding",
-            settings_display_rows_render_block,
+            content,
             "accessibilityLabel={row.accessibilityLabel}",
         )
         _assert_not_contains(
             "settings row direct icon binding",
-            settings_display_rows_render_block,
+            content,
             "<Text>{row.icon}</Text>",
         )
         _assert_not_contains(

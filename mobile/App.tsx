@@ -699,7 +699,6 @@ import {
   productionAuthReadinessDisplayRows as buildProductionAuthReadinessDisplayRows,
   sessionManagementDisplayItems as buildSessionManagementDisplayItems,
   settingsDisplayRows as buildSettingsDisplayRows,
-  settingsRowDisplayItem,
   settingsRowSubpageTarget,
   subscriptionManagementDisplayRows as buildSubscriptionManagementDisplayRows,
   tutorialDisplaySteps as buildTutorialDisplaySteps,
@@ -836,6 +835,7 @@ import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 import { SaveSuccessActionRow } from "./saveSuccessActionRow";
 import { SettingsBoundaryGrid } from "./settingsBoundaryGrid";
 import { SettingsChecklist } from "./settingsChecklist";
+import { SettingsRowList, type SettingsDisplayRow } from "./settingsRowList";
 import { SubscriptionChecklist } from "./subscriptionChecklist";
 import { SubscriptionComparisonList } from "./subscriptionComparisonList";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
@@ -4677,28 +4677,8 @@ export default function App() {
     }
   }
 
-  function pressSettingsRow(row: ReturnType<typeof settingsRowDisplayItem>) {
+  function pressSettingsRow(row: SettingsDisplayRow) {
     openSettingsRow(row);
-  }
-
-  function settingsDisplayRowKey(row: ReturnType<typeof settingsRowDisplayItem>) {
-    return row.id;
-  }
-
-  function settingsDisplayRowAccessibilityLabel(row: ReturnType<typeof settingsRowDisplayItem>) {
-    return row.accessibilityLabel;
-  }
-
-  function settingsDisplayRowIcon(row: ReturnType<typeof settingsRowDisplayItem>) {
-    return row.icon;
-  }
-
-  function settingsDisplayRowLabel(row: ReturnType<typeof settingsRowDisplayItem>) {
-    return row.label;
-  }
-
-  function settingsDisplayRowHelperText(row: ReturnType<typeof settingsRowDisplayItem>) {
-    return row.id === "quota" ? settingsQuotaHelperDisplayText : row.helper;
   }
 
   function clearLocalSessionFromSettings() {
@@ -11628,26 +11608,11 @@ export default function App() {
               </View>
               <Text style={styles.settingsChevron}>›</Text>
             </Pressable>
-            <View style={styles.settingsList}>
-              {settingsDisplayRows.map((row) => (
-                <Pressable
-                  key={settingsDisplayRowKey(row)}
-                  accessibilityLabel={settingsDisplayRowAccessibilityLabel(row)}
-                  accessibilityRole="button"
-                  style={styles.settingsRow}
-                  onPress={() => pressSettingsRow(row)}
-                >
-                  <View style={styles.iconCircleSmall}>
-                    <Text>{settingsDisplayRowIcon(row)}</Text>
-                  </View>
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{settingsDisplayRowLabel(row)}</Text>
-                    <Text style={styles.evidence}>{settingsDisplayRowHelperText(row)}</Text>
-                  </View>
-                  <Text style={styles.settingsChevron}>›</Text>
-                </Pressable>
-              ))}
-            </View>
+            <SettingsRowList
+              onRowPress={pressSettingsRow}
+              quotaHelperText={settingsQuotaHelperDisplayText}
+              rows={settingsDisplayRows}
+            />
             <Pressable
               accessibilityLabel={settingsSubscriptionDisplayLabels.localClearAccessibility}
               accessibilityRole="button"

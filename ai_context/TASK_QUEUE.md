@@ -34,6 +34,41 @@ None.
 
 ## Done
 
+### T2075: Extract settings row list component
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/settingsRowList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `SettingsRowList` for the Settings page destination rows.
+- Moved settings row key/accessibility/icon/label/helper-text helpers out of `App.tsx`.
+- Preserved the same settings row copy, order, quota helper override, button role, chevron, styling, and spacing.
+- Kept settings navigation behavior in `App.tsx` through `pressSettingsRow` and `openSettingsRow`.
+- Updated navigation, UI-spec coverage, and visual-smoke route verifier coverage for component row bindings and direct inline-map guards.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining menu/future/outcome row clusters without changing first-version scope.
+
 ### T2074: Extract preview status list component
 
 Status: done

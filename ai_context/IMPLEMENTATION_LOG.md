@@ -15,6 +15,41 @@
 
 ## 2026-07-16
 
+### T2075 extract settings row list component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/settingsRowList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `SettingsRowList` for the Settings page destination rows.
+- Moved settings row key/accessibility/icon/label/helper-text helpers out of `App.tsx`.
+- Preserved the same settings row copy, order, quota helper override, button role, chevron, styling, and spacing.
+- Kept settings navigation behavior in `App.tsx` through `pressSettingsRow` and `openSettingsRow`.
+- Updated navigation, UI-spec coverage, and visual-smoke route verifier coverage for component row bindings and direct inline-map guards.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining menu/future/outcome row clusters without changing first-version scope.
+
 ### T2074 extract preview status list component
 
 類型：mobile / refactor / verifier / docs
