@@ -7930,6 +7930,14 @@ export default function App() {
     });
   }
 
+  function handleSelectedRecordDeleteSuccess(recordId: string) {
+    setRecords((current) => current.filter((record) => record.id !== recordId));
+    setSelectedRecord(null);
+    seedEmptyRecordEditStateForNow();
+    openDeleteSuccessResult(recordDeleteSummaryMessage(1));
+    setStatus(recordDeleteSuccessStatusMessage());
+  }
+
   async function deleteSelectedRecord() {
     if (isBusy || recordDeleteInFlight.current) {
       return;
@@ -7948,11 +7956,7 @@ export default function App() {
     startRecordDeleteRequest();
     try {
       await requestSelectedRecordDelete(selectedRecord.id, account.id);
-      setRecords((current) => current.filter((record) => record.id !== selectedRecord.id));
-      setSelectedRecord(null);
-      seedEmptyRecordEditStateForNow();
-      openDeleteSuccessResult(recordDeleteSummaryMessage(1));
-      setStatus(recordDeleteSuccessStatusMessage());
+      handleSelectedRecordDeleteSuccess(selectedRecord.id);
     } catch (error) {
       setStatus(recordDeleteFailureStatusMessage(error));
     } finally {

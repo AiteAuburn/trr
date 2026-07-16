@@ -4764,6 +4764,21 @@ def main() -> int:
             "await requestSelectedRecordDelete(selectedRecord.id, account.id);",
         )
         _assert_contains(
+            "record delete success helper",
+            content,
+            "function handleSelectedRecordDeleteSuccess(recordId: string)",
+        )
+        _assert_contains(
+            "record delete success helper state",
+            content,
+            "setRecords((current) => current.filter((record) => record.id !== recordId));\n    setSelectedRecord(null);\n    seedEmptyRecordEditStateForNow();\n    openDeleteSuccessResult(recordDeleteSummaryMessage(1));\n    setStatus(recordDeleteSuccessStatusMessage());",
+        )
+        _assert_contains(
+            "record delete success helper binding",
+            content,
+            "await requestSelectedRecordDelete(selectedRecord.id, account.id);\n      handleSelectedRecordDeleteSuccess(selectedRecord.id);",
+        )
+        _assert_contains(
             "record delete success result helper fields",
             content,
             'openRecordSummaryResult(summary, "deleteSuccess", setLastDeletedSummary);',
@@ -4789,9 +4804,9 @@ def main() -> int:
             'seedEmptyRecordEditStateForNow();\n    }\n    openScreenWithStatus("recordDetail", recordEditCancelStatusMessage());',
         )
         _assert_contains(
-            "record delete success empty edit seed helper binding",
+            "record delete success empty edit seed helper state",
             content,
-            "setSelectedRecord(null);\n      seedEmptyRecordEditStateForNow();\n      openDeleteSuccessResult(recordDeleteSummaryMessage(1));",
+            "setSelectedRecord(null);\n    seedEmptyRecordEditStateForNow();\n    openDeleteSuccessResult(recordDeleteSummaryMessage(1));",
         )
         _assert_contains(
             "record detail screen helper",
