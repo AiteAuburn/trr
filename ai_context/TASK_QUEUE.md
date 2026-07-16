@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1968: Reuse native debug ready guard for benchmarks
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `isNativeDebugActionReady()` from `runNativeBenchmarks()`.
+- Preserved blocked return behavior, unavailable status side effect, benchmark start status, result collection, empty-result handling, success handling, and action lifecycle order.
+- Updated navigation verifier coverage for the benchmark ready-guard binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing native debug action helpers in small behavior-preserving slices.
+
 ### T1967: Reuse native debug ready guard for Llama
 
 Status: done

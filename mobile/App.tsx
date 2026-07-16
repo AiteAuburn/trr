@@ -9115,11 +9115,7 @@ export default function App() {
   }
 
   async function runNativeBenchmarks() {
-    if (isNativeDebugActionBlocked()) {
-      return;
-    }
-    if (!enableDebugTools) {
-      openNativeDebugUnavailable();
+    if (!isNativeDebugActionReady()) {
       return;
     }
     startNativeDebugAction();
