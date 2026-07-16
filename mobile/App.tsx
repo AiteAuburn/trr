@@ -3598,6 +3598,14 @@ export default function App() {
       : parserSuccessStatusMessage(nextPreview.records.length);
   }
 
+  function mergedParserPreviewForResponse(
+    currentPreview: ParsePreviewResponse | null,
+    response: ParsePreviewResponse
+  ) {
+    const boundedPreview = boundParsePreviewResponse(response);
+    return mergeSameDayParsePreviewDraft(currentPreview, boundedPreview);
+  }
+
   function appendDailyTranscriptEntry(entry: DailyTranscriptEntry) {
     setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, entry]));
   }
@@ -7414,8 +7422,7 @@ export default function App() {
           })
         }
       );
-      const boundedPreview = boundParsePreviewResponse(response);
-      const mergedDailyPreview = mergeSameDayParsePreviewDraft(existingDailyPreview, boundedPreview);
+      const mergedDailyPreview = mergedParserPreviewForResponse(existingDailyPreview, response);
       appendParserTranscriptEntry(parseOccurredAt, transcript, parserVoiceSeconds);
       openAiReviewAfterParserSuccess();
       reorganizeDailyRecordDraftAfterChange(
