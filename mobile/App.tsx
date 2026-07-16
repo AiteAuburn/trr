@@ -2423,7 +2423,7 @@ export default function App() {
   }
 
   function manualRecordTypeTarget(type: (typeof manualRecordTypeDisplayOptions)[number]) {
-    return type.value;
+    return editOptionKey(type);
   }
 
   function pressManualRecordTypeOption(type: (typeof manualRecordTypeDisplayOptions)[number]) {
@@ -4059,7 +4059,7 @@ export default function App() {
     updatePreviewEditField("glucoseUnit", value);
   }
 
-  function editOptionKey(option: { value: string }) {
+  function editOptionKey<T extends string>(option: { value: T }) {
     return option.value;
   }
 

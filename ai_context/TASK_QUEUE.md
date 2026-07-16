@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1980: Reuse edit option key for manual type target
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `editOptionKey()` from `manualRecordTypeTarget()` so manual record type targets align with edit option target helpers.
+- Preserved manual record type press behavior and manual record type selection semantics.
+- Updated navigation verifier coverage for the manual record type target helper field.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing manual record type selector render helpers in small behavior-preserving slices.
+
 ### T1979: Reuse edit field value helper for selected options
 
 Status: done

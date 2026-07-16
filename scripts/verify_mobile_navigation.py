@@ -9023,7 +9023,7 @@ def main() -> int:
         _assert_contains(
             "manual record type target helper fields",
             content,
-            "return type.value;",
+            "return editOptionKey(type);",
         )
         _assert_contains(
             "manual record type target helper binding",
@@ -9381,7 +9381,7 @@ def main() -> int:
             ("preview edit date input handler", "function updatePreviewEditDateInput(value: string)"),
             ("preview edit time input handler", "function updatePreviewEditTimeInput(value: string)"),
             ("preview edit glucose input binding", "onChangeText={updatePreviewEditGlucoseValue}"),
-            ("edit option key helper", "function editOptionKey(option: { value: string })"),
+            ("edit option key helper", "function editOptionKey<T extends string>(option: { value: T })"),
             ("edit option key helper fields", "return option.value;"),
             ("edit option key helper binding", "key={editOptionKey(option)}"),
             ("edit option accessibility helper", "function editOptionAccessibilityLabel(option: { accessibilityLabel: string })"),
