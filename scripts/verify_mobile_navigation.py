@@ -5209,6 +5209,21 @@ def main() -> int:
             "const payload = buildManualRecordCreatePayload();",
         )
         _assert_contains(
+            "manual create validation helper",
+            content,
+            "function validateManualRecordCreateForSubmit()",
+        )
+        _assert_contains(
+            "manual create validation helper internals",
+            content,
+            "const validationError = validateRecordForm(\n      manualRecordType,\n      manualRecordFields,\n      manualRecordDate,\n      manualRecordTime\n    );\n    if (validationError) {\n      setStatus(validationError);\n      return false;\n    }\n    return true;",
+        )
+        _assert_contains(
+            "manual create validation helper binding",
+            content,
+            "if (!validateManualRecordCreateForSubmit()) {\n      return;\n    }",
+        )
+        _assert_contains(
             "AI save failure result helper",
             content,
             "function openAiSaveFailureResult(message: string)",

@@ -8646,6 +8646,20 @@ export default function App() {
     return payload;
   }
 
+  function validateManualRecordCreateForSubmit() {
+    const validationError = validateRecordForm(
+      manualRecordType,
+      manualRecordFields,
+      manualRecordDate,
+      manualRecordTime
+    );
+    if (validationError) {
+      setStatus(validationError);
+      return false;
+    }
+    return true;
+  }
+
   async function createManualRecord() {
     if (isBusy || manualCreateInFlight.current) {
       return;
@@ -8657,14 +8671,7 @@ export default function App() {
     if (!account || !activeProfile) {
       return;
     }
-    const validationError = validateRecordForm(
-      manualRecordType,
-      manualRecordFields,
-      manualRecordDate,
-      manualRecordTime
-    );
-    if (validationError) {
-      setStatus(validationError);
+    if (!validateManualRecordCreateForSubmit()) {
       return;
     }
 
