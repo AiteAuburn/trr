@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1912: Reuse load-more record sync start-and-complete helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `startAndCompleteMoreRecordSyncRequest()` for the load-more record sync start-and-complete lifecycle.
+- Reused the helper from `loadMoreRecords()` while preserving start guard, request arguments, success handling, failure handling, and cleanup behavior.
+- Updated navigation verifier coverage for the load-more start-and-complete helper, internals, and entry binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing record edit/create orchestration in small behavior-preserving slices.
+
 ### T1911: Reuse load-more record sync complete helper
 
 Status: done

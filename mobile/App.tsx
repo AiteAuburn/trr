@@ -8262,16 +8262,25 @@ export default function App() {
     }
   }
 
+  async function startAndCompleteMoreRecordSyncRequest(syncContext: {
+    account: Account;
+    activeProfileId: string;
+    cursorRecord: RecordItem;
+    syncKey: string;
+  }) {
+    if (!startMoreRecordSyncRequest(syncContext)) {
+      return;
+    }
+    await completeMoreRecordSyncRequest(syncContext);
+  }
+
   async function loadMoreRecords() {
     const syncContext = guardedMoreRecordSyncContext();
     if (!syncContext) {
       return;
     }
 
-    if (!startMoreRecordSyncRequest(syncContext)) {
-      return;
-    }
-    await completeMoreRecordSyncRequest(syncContext);
+    await startAndCompleteMoreRecordSyncRequest(syncContext);
   }
 
   function seedRecordEditStateFromRecord(record: RecordItem) {
