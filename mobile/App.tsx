@@ -793,7 +793,7 @@ import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
 import { RecordEditFooterActions } from "./recordEditFooterActions";
 import { RecordEditHeaderFields } from "./recordEditHeaderFields";
-import { RecordTextField } from "./recordTextField";
+import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 import type {
   Account,
   AiModelOptions,
@@ -11301,21 +11301,18 @@ export default function App() {
                     })}
                   </View>
                 </View>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"🍽"} label={"飲食內容"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.foodItemsInputAccessibility}
-                    value={recordEditFieldValue(recordEditFields, "foodItems")}
-                    onChangeText={updateRecordEditFoodItems}
-                    maxLength={recordEditFieldMaxLength("foodItems")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    multiline
-                    textAlignVertical="top"
-                    style={[styles.input, styles.multilineField]}
-                    placeholder="水煮蛋、熱狗"
-                  />
-                </View>
+                <RecordTextField
+                  icon={"🍽"}
+                  label={"飲食內容"}
+                  accessibilityLabel={auxiliaryDisplayLabels.foodItemsInputAccessibility}
+                  value={recordEditFieldValue(recordEditFields, "foodItems")}
+                  onChangeText={updateRecordEditFoodItems}
+                  maxLength={recordEditFieldMaxLength("foodItems")}
+                  multiline
+                  textAlignVertical="top"
+                  inputStyle={[styles.input, recordTextFieldStyles.multilineField]}
+                  placeholder="水煮蛋、熱狗"
+                />
               </>
             ) : null}
 
