@@ -804,6 +804,8 @@ import type {
   VoiceQuota
 } from "./appTypes";
 
+type NativeBenchmarkResult = Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>;
+
 function recordCollectionState(
   records: readonly RecordItem[],
   syncLimit: number,
@@ -8937,12 +8939,12 @@ export default function App() {
     setNativeStatus(nativeBenchmarkProgressStatusMessage());
   }
 
-  function handleNativeBenchmarkSuccess(results: Array<Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>>) {
+  function handleNativeBenchmarkSuccess(results: NativeBenchmarkResult[]) {
     setNativeStatus(nativeBenchmarkResultStatusMessage(results));
   }
 
   async function appendNativeWhisperBenchmarkResult(
-    results: Array<Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>>,
+    results: NativeBenchmarkResult[],
     whisperInput: ReturnType<typeof nativeWhisperInput>
   ) {
     if (whisperInput.modelPath && whisperInput.audioPath) {
@@ -8956,7 +8958,7 @@ export default function App() {
   }
 
   async function appendNativeLlamaBenchmarkResult(
-    results: Array<Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>>,
+    results: NativeBenchmarkResult[],
     llamaInput: ReturnType<typeof nativeLlamaInput>
   ) {
     if (llamaInput.modelPath && llamaInput.transcript) {
@@ -9119,7 +9121,7 @@ export default function App() {
     startNativeDebugAction();
     startNativeBenchmarkStatus();
     try {
-      const results: Array<Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>> = [];
+      const results: NativeBenchmarkResult[] = [];
       const whisperInput = nativeWhisperInput();
       await appendNativeWhisperBenchmarkResult(results, whisperInput);
       const llamaInput = nativeLlamaInput();

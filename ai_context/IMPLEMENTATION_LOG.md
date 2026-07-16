@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1962 reuse native benchmark result type alias
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `NativeBenchmarkResult` for native Whisper/Llama benchmark result unions.
+- Reused the alias from benchmark success, append helpers, and result array initialization while preserving runtime behavior.
+- Updated navigation verifier coverage for the benchmark result alias and helper bindings.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing native debug benchmark helpers in small behavior-preserving slices.
+
 ### T1961 reuse native Llama benchmark append helper
 
 類型：mobile / refactor / verifier / docs
