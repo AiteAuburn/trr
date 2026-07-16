@@ -54,6 +54,7 @@ SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 AI_CANDIDATE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiCandidateActionRow.tsx"
+CORE_FLOW_ENTRY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "coreFlowEntryActionRow.tsx"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 DANGER_CONFIRM_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dangerConfirmActionRow.tsx"
 DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreviewBlock.tsx"
@@ -1425,6 +1426,7 @@ def main() -> int:
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     ai_candidate_action_row_content = AI_CANDIDATE_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    core_flow_entry_action_row_content = CORE_FLOW_ENTRY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     danger_confirm_action_row_content = DANGER_CONFIRM_ACTION_ROW_PATH.read_text(encoding="utf-8")
     delete_confirm_preview_block_content = DELETE_CONFIRM_PREVIEW_BLOCK_PATH.read_text(encoding="utf-8")
@@ -3333,7 +3335,7 @@ def main() -> int:
         _assert_contains(
             "record manual entry binding",
             content,
-            "onPress={openRecordManualRecord}",
+            "onManualAddPress={openRecordManualRecord}",
         )
         _assert_contains(
             "AI review manual entry binding",
@@ -7889,13 +7891,35 @@ def main() -> int:
             ("core rerecord action binding", "onRerecordPress={resetRecordingPreview}"),
             ("core rerecord label binding", "rerecordLabel={coreFlowDisplayLabels.rerecord}"),
             ("core recording text label binding", "useTextLabel={recordingResultPrimaryActionDisplayText}"),
-            ("core sample accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.fillSampleAccessibility}"),
-            ("core manual accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualAddAccessibility}"),
-            ("core next accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.nextOrganizeAccessibility}"),
-            ("core next disabled accessibility state", "accessibilityState={{ disabled: Boolean(transcriptValidationError) || isBusy }}"),
+            ("core flow entry action row binding", "<CoreFlowEntryActionRow"),
+            ("core sample accessibility binding", "fillSampleAccessibilityLabel={coreFlowDisplayLabels.fillSampleAccessibility}"),
+            ("core manual accessibility binding", "manualAddAccessibilityLabel={coreFlowDisplayLabels.manualAddAccessibility}"),
+            ("core next accessibility binding", "nextAccessibilityLabel={coreFlowDisplayLabels.nextOrganizeAccessibility}"),
+            ("core next disabled binding", "isNextDisabled={Boolean(transcriptValidationError) || isBusy}"),
+            ("core sample action binding", "onFillSamplePress={fillTranscriptSampleDraft}"),
+            ("core manual action binding", "onManualAddPress={openRecordManualRecord}"),
+            ("core next action binding", "onNextPress={openTranscriptReview}"),
             ("core entry button role", 'accessibilityRole="button"'),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("core flow entry action row component", "export function CoreFlowEntryActionRow"),
+            ("core flow entry sample accessibility prop", "accessibilityLabel={fillSampleAccessibilityLabel}"),
+            ("core flow entry manual accessibility prop", "accessibilityLabel={manualAddAccessibilityLabel}"),
+            ("core flow entry next accessibility prop", "accessibilityLabel={nextAccessibilityLabel}"),
+            ("core flow entry disabled state prop", "accessibilityState={{ disabled: isNextDisabled }}"),
+            ("core flow entry disabled prop", "disabled={isNextDisabled}"),
+            ("core flow entry sample handler prop", "onPress={onFillSamplePress}"),
+            ("core flow entry manual handler prop", "onPress={onManualAddPress}"),
+            ("core flow entry next handler prop", "onPress={onNextPress}"),
+            ("core flow entry sample label prop", "{fillSampleLabel}"),
+            ("core flow entry manual label prop", "{manualAddLabel}"),
+            ("core flow entry next label prop", "{nextLabel}"),
+            ("core flow entry shell style", "actionRow: {"),
+            ("core flow entry primary style", "primaryButton: {"),
+            ("core flow entry secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, core_flow_entry_action_row_content, marker)
         for label, marker in (
             ("confirmation return edit accessibility label", 'returnEditAccessibility: boundDisplayText("返回文字修改，保留目前輸入且不重新呼叫 AI", maxDisplayDetailTextLength)'),
             ("confirmation save confirm accessibility label", 'enterSaveConfirmAccessibility: boundDisplayText("進入每日紀錄頁，不儲存也不重新呼叫 AI", maxDisplayDetailTextLength)'),
@@ -8953,7 +8977,7 @@ def main() -> int:
         _assert_contains(
             "transcript sample fill binding",
             content,
-            "onPress={fillTranscriptSampleDraft}",
+            "onFillSamplePress={fillTranscriptSampleDraft}",
         )
         _assert_not_contains(
             "transcript sample direct JSX updater",

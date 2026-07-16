@@ -768,6 +768,7 @@ import {
 import { protectedRequestHeaders } from "./authRequestHeaders";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { AiCandidateActionRow } from "./aiCandidateActionRow";
+import { CoreFlowEntryActionRow } from "./coreFlowEntryActionRow";
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { DangerConfirmActionRow } from "./dangerConfirmActionRow";
 import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
@@ -9723,37 +9724,18 @@ export default function App() {
                 inputStyle={[styles.input, styles.transcriptInput]}
                 placeholder="例如：昨天晚餐後兩小時血糖 168，晚餐吃火鍋，飯後走路 20 分鐘。"
               />
-                <View style={styles.actionRow}>
-                  <Pressable
-                    accessibilityLabel={coreFlowDisplayLabels.fillSampleAccessibility}
-                    accessibilityRole="button"
-                    style={styles.secondaryButton}
-                    onPress={fillTranscriptSampleDraft}
-                  >
-                    <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.fillSample}</Text>
-                  </Pressable>
-                  <Pressable
-                    accessibilityLabel={coreFlowDisplayLabels.manualAddAccessibility}
-                    accessibilityRole="button"
-                    style={styles.secondaryButton}
-                    onPress={openRecordManualRecord}
-                  >
-                    <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.manualAdd}</Text>
-                  </Pressable>
-                  <Pressable
-                    accessibilityLabel={coreFlowDisplayLabels.nextOrganizeAccessibility}
-                    accessibilityRole="button"
-                    accessibilityState={{ disabled: Boolean(transcriptValidationError) || isBusy }}
-                    style={[
-                      styles.primaryButton,
-                      transcriptValidationError || isBusy ? styles.buttonDisabled : null
-                    ]}
-                  disabled={Boolean(transcriptValidationError) || isBusy}
-                  onPress={openTranscriptReview}
-                >
-                  <Text style={styles.primaryButtonText}>{coreFlowDisplayLabels.nextOrganize}</Text>
-                </Pressable>
-              </View>
+                <CoreFlowEntryActionRow
+                  fillSampleAccessibilityLabel={coreFlowDisplayLabels.fillSampleAccessibility}
+                  fillSampleLabel={coreFlowDisplayLabels.fillSample}
+                  isNextDisabled={Boolean(transcriptValidationError) || isBusy}
+                  manualAddAccessibilityLabel={coreFlowDisplayLabels.manualAddAccessibility}
+                  manualAddLabel={coreFlowDisplayLabels.manualAdd}
+                  nextAccessibilityLabel={coreFlowDisplayLabels.nextOrganizeAccessibility}
+                  nextLabel={coreFlowDisplayLabels.nextOrganize}
+                  onFillSamplePress={fillTranscriptSampleDraft}
+                  onManualAddPress={openRecordManualRecord}
+                  onNextPress={openTranscriptReview}
+                />
               {transcriptValidationError ? (
                 <Text style={transcript.trim() ? styles.warningText : styles.evidence}>
                   {transcriptValidationDisplayText}
