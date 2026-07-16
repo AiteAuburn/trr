@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1828: Reuse daily record save success result helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `openDailyRecordSaveSuccessResult()` for daily-record save success result state.
+- Reused the helper from `handleDailyRecordSaveSuccess()` while preserving save error clearing, Save Success result, success status, achievement sync, created record insertion, selected result, and cleanup timing.
+- Updated navigation verifier coverage for the save success result helper internals and AI save success result binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/return behavior/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser endpoint/request semantics/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1827: Reuse daily record save selected result helper
 
 Status: done

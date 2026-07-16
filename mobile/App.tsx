@@ -7569,15 +7569,19 @@ export default function App() {
     }
   }
 
+  function openDailyRecordSaveSuccessResult(savedCount: number) {
+    setLastSaveErrorSummary("");
+    openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), "ai", "today");
+    setStatus(aiSaveSuccessStatusMessage());
+    syncAchievementsAfterRecordSave();
+  }
+
   function handleDailyRecordSaveSuccess(saveResponse: DailyRecordSaveResponse, savedCount: number) {
     const createdRecords = dailyRecordSaveCreatedRecords(saveResponse);
     clearDailyRecordSaveDraftState();
     applyDailyRecordSaveCreatedRecords(createdRecords);
     selectDailyRecordSaveResult(createdRecords);
-    setLastSaveErrorSummary("");
-    openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), "ai", "today");
-    setStatus(aiSaveSuccessStatusMessage());
-    syncAchievementsAfterRecordSave();
+    openDailyRecordSaveSuccessResult(savedCount);
   }
 
   function handleDailyRecordSaveFailure(error: unknown) {

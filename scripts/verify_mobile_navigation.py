@@ -4596,7 +4596,7 @@ def main() -> int:
         _assert_contains(
             "ai save success result helper binding",
             content,
-            "setLastSaveErrorSummary(\"\");\n    openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), \"ai\", \"today\");",
+            "function openDailyRecordSaveSuccessResult(savedCount: number)",
         )
         _assert_contains(
             "manual create save success result helper state",
@@ -6684,6 +6684,8 @@ def main() -> int:
             ("daily record save apply created records helper internals", "setRecords((current) => boundRecordsList([...createdRecords, ...current]));\n    setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));"),
             ("daily record save selected result helper", "function selectDailyRecordSaveResult(createdRecords: RecordItem[])"),
             ("daily record save selected result helper binding", "applyDailyRecordSaveCreatedRecords(createdRecords);\n    selectDailyRecordSaveResult(createdRecords);"),
+            ("daily record save success result helper", "function openDailyRecordSaveSuccessResult(savedCount: number)"),
+            ("daily record save success result helper internals", "setLastSaveErrorSummary(\"\");\n    openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), \"ai\", \"today\");\n    setStatus(aiSaveSuccessStatusMessage());\n    syncAchievementsAfterRecordSave();"),
             ("daily record save success helper fields", "clearDailyRecordSaveDraftState();\n    applyDailyRecordSaveCreatedRecords(createdRecords);"),
             ("daily record save success helper binding", "handleDailyRecordSaveSuccess(saveResponse, recordsToSave.length);"),
             ("daily record save failure helper", "function handleDailyRecordSaveFailure(error: unknown)"),
