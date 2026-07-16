@@ -7528,6 +7528,10 @@ export default function App() {
     });
   }
 
+  function buildPreviewRecordsForCurrentSave(currentPreview: ParsePreviewResponse) {
+    return previewRecordsForSave(currentPreview.records, previewState.recordCount);
+  }
+
   function requestDailyRecordSave(
     accountId: string,
     nextPreview: ParsePreviewResponse,
@@ -7578,7 +7582,7 @@ export default function App() {
     }
 
     startPreviewSaveRequest();
-    const recordsToSave = previewRecordsForSave(preview.records, previewState.recordCount);
+    const recordsToSave = buildPreviewRecordsForCurrentSave(preview);
     try {
       const saveResponse = await requestDailyRecordSave(account.id, preview, recordsToSave);
       handleDailyRecordSaveSuccess(saveResponse, recordsToSave.length);
