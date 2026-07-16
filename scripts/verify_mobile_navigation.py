@@ -100,6 +100,7 @@ NATIVE_DEBUG_ACTION_BUTTON_PATH = REPO_ROOT / "mobile" / "nativeDebugActionButto
 NATIVE_DEBUG_RUN_ACTIONS_PATH = REPO_ROOT / "mobile" / "nativeDebugRunActions.tsx"
 NATIVE_DOWNLOAD_KIND_SELECTOR_PATH = REPO_ROOT / "mobile" / "nativeDownloadKindSelector.tsx"
 NATIVE_DEBUG_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "nativeDebugTextField.tsx"
+RECORDING_RESULT_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "recordingResultActionRow.tsx"
 RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
 RECORD_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "recordTextField.tsx"
 COMMUNITY_PUBLIC_DISPLAY_NAME_FIELD_PATH = REPO_ROOT / "mobile" / "communityPublicDisplayNameField.tsx"
@@ -1475,6 +1476,7 @@ def main() -> int:
     native_debug_run_actions_content = NATIVE_DEBUG_RUN_ACTIONS_PATH.read_text(encoding="utf-8")
     native_download_kind_selector_content = NATIVE_DOWNLOAD_KIND_SELECTOR_PATH.read_text(encoding="utf-8")
     native_debug_text_field_content = NATIVE_DEBUG_TEXT_FIELD_PATH.read_text(encoding="utf-8")
+    recording_result_action_row_content = RECORDING_RESULT_ACTION_ROW_PATH.read_text(encoding="utf-8")
     record_option_field_content = RECORD_OPTION_FIELD_PATH.read_text(encoding="utf-8")
     record_text_field_content = RECORD_TEXT_FIELD_PATH.read_text(encoding="utf-8")
     community_public_display_name_field_content = COMMUNITY_PUBLIC_DISPLAY_NAME_FIELD_PATH.read_text(
@@ -2252,6 +2254,20 @@ def main() -> int:
             ("native debug run actions row style", "actionRow: {"),
         ):
             _assert_contains(label, native_debug_run_actions_content, marker)
+        for label, marker in (
+            ("recording result action row component", "export function RecordingResultActionRow"),
+            ("recording result action row rerecord accessibility prop", "accessibilityLabel={rerecordAccessibilityLabel}"),
+            ("recording result action row use text accessibility prop", "accessibilityLabel={useTextAccessibilityLabel}"),
+            ("recording result action row button role", 'accessibilityRole="button"'),
+            ("recording result action row rerecord handler prop", "onPress={onRerecordPress}"),
+            ("recording result action row use text handler prop", "onPress={onUseTextPress}"),
+            ("recording result action row rerecord label", "{rerecordLabel}"),
+            ("recording result action row use text label", "{useTextLabel}"),
+            ("recording result action row shell style", "actionRow: {"),
+            ("recording result action row primary style", "primaryButton: {"),
+            ("recording result action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, recording_result_action_row_content, marker)
         for label, marker in (
             ("native download kind selector component", "export function NativeDownloadKindSelector"),
             ("native download kind selector whisper label prop", "whisperAccessibilityLabel"),
@@ -3220,7 +3236,7 @@ def main() -> int:
         _assert_contains(
             "recording result record fallback binding",
             content,
-            "onPress={useRecordRecordingResultTextFallback}",
+            "onUseTextPress={useRecordRecordingResultTextFallback}",
         )
         _assert_not_contains(
             "recording result direct home fallback binding",
@@ -7866,8 +7882,11 @@ def main() -> int:
         ):
             _assert_contains(label, first_version_flow_copy_content, marker)
         for label, marker in (
-            ("core rerecord accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.rerecordAccessibility}"),
-            ("core recording text accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.useRecordingTextAccessibility}"),
+            ("core rerecord accessibility binding", "rerecordAccessibilityLabel={coreFlowDisplayLabels.rerecordAccessibility}"),
+            ("core recording text accessibility binding", "useTextAccessibilityLabel={coreFlowDisplayLabels.useRecordingTextAccessibility}"),
+            ("core rerecord action binding", "onRerecordPress={resetRecordingPreview}"),
+            ("core rerecord label binding", "rerecordLabel={coreFlowDisplayLabels.rerecord}"),
+            ("core recording text label binding", "useTextLabel={recordingResultPrimaryActionDisplayText}"),
             ("core sample accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.fillSampleAccessibility}"),
             ("core manual accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualAddAccessibility}"),
             ("core next accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.nextOrganizeAccessibility}"),

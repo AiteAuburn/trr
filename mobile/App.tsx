@@ -805,6 +805,7 @@ import { NativeDebugActionButton } from "./nativeDebugActionButton";
 import { NativeDebugRunActions } from "./nativeDebugRunActions";
 import { NativeDownloadKindSelector } from "./nativeDownloadKindSelector";
 import { NativeDebugTextField } from "./nativeDebugTextField";
+import { RecordingResultActionRow } from "./recordingResultActionRow";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
 import { RecordEditFooterActions } from "./recordEditFooterActions";
@@ -9703,26 +9704,14 @@ export default function App() {
                     <Text style={styles.confidence}>{recordingElapsedSecondsDisplayText}</Text>
                   </View>
                     <Text style={styles.evidence}>{recordingResultBodyDisplayText}</Text>
-                    <View style={styles.actionRow}>
-                      <Pressable
-                        accessibilityLabel={coreFlowDisplayLabels.rerecordAccessibility}
-                        accessibilityRole="button"
-                        style={styles.secondaryButton}
-                        onPress={resetRecordingPreview}
-                      >
-                        <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.rerecord}</Text>
-                      </Pressable>
-                      <Pressable
-                        accessibilityLabel={coreFlowDisplayLabels.useRecordingTextAccessibility}
-                        accessibilityRole="button"
-                        style={styles.primaryButton}
-                        onPress={useRecordRecordingResultTextFallback}
-                      >
-                        <Text style={styles.primaryButtonText}>
-                          {recordingResultPrimaryActionDisplayText}
-                      </Text>
-                    </Pressable>
-                  </View>
+                    <RecordingResultActionRow
+                      onRerecordPress={resetRecordingPreview}
+                      onUseTextPress={useRecordRecordingResultTextFallback}
+                      rerecordAccessibilityLabel={coreFlowDisplayLabels.rerecordAccessibility}
+                      rerecordLabel={coreFlowDisplayLabels.rerecord}
+                      useTextAccessibilityLabel={coreFlowDisplayLabels.useRecordingTextAccessibility}
+                      useTextLabel={recordingResultPrimaryActionDisplayText}
+                    />
                 </View>
               ) : null}
               <TranscriptDraftInput
