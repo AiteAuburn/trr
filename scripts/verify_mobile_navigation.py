@@ -57,6 +57,7 @@ AI_CANDIDATE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiCandidateActionRow.tsx"
 AI_REVIEW_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiReviewActionRow.tsx"
 AI_SAVE_FAILURE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiSaveFailureActionRow.tsx"
 CORE_FLOW_ENTRY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "coreFlowEntryActionRow.tsx"
+DAILY_RECORD_ENTRY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordEntryActionRow.tsx"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 DANGER_CONFIRM_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dangerConfirmActionRow.tsx"
 DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreviewBlock.tsx"
@@ -1436,6 +1437,7 @@ def main() -> int:
     ai_review_action_row_content = AI_REVIEW_ACTION_ROW_PATH.read_text(encoding="utf-8")
     ai_save_failure_action_row_content = AI_SAVE_FAILURE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     core_flow_entry_action_row_content = CORE_FLOW_ENTRY_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    daily_record_entry_action_row_content = DAILY_RECORD_ENTRY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     danger_confirm_action_row_content = DANGER_CONFIRM_ACTION_ROW_PATH.read_text(encoding="utf-8")
     delete_confirm_preview_block_content = DELETE_CONFIRM_PREVIEW_BLOCK_PATH.read_text(encoding="utf-8")
@@ -8117,16 +8119,16 @@ def main() -> int:
             ("daily record entry manage label binding", "{dailyRecordEntryManageLabel(item)}"),
             ("daily record entry edit accessibility helper", "function dailyRecordEntryEditAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry edit accessibility helper fields", "return item.editAccessibilityLabel;"),
-            ("daily record entry edit accessibility binding", "accessibilityLabel={dailyRecordEntryEditAccessibilityLabel(item)}"),
+            ("daily record entry edit accessibility binding", "editAccessibilityLabel={dailyRecordEntryEditAccessibilityLabel(item)}"),
             ("daily record entry edit label helper", "function dailyRecordEntryEditLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry edit label helper fields", "return item.editLabel;"),
-            ("daily record entry edit label binding", "{dailyRecordEntryEditLabel(item)}"),
+            ("daily record entry edit label binding", "editLabel={dailyRecordEntryEditLabel(item)}"),
             ("daily record entry remove accessibility helper", "function dailyRecordEntryRemoveAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry remove accessibility helper fields", "return item.removeAccessibilityLabel;"),
-            ("daily record entry remove accessibility binding", "accessibilityLabel={dailyRecordEntryRemoveAccessibilityLabel(item)}"),
+            ("daily record entry remove accessibility binding", "removeAccessibilityLabel={dailyRecordEntryRemoveAccessibilityLabel(item)}"),
             ("daily record entry remove label helper", "function dailyRecordEntryRemoveLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry remove label helper fields", "return item.removeLabel;"),
-            ("daily record entry remove label binding", "{dailyRecordEntryRemoveLabel(item)}"),
+            ("daily record entry remove label binding", "removeLabel={dailyRecordEntryRemoveLabel(item)}"),
             ("daily record entry detail rows helper", "function dailyRecordEntryDetailRows(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry detail rows helper fields", "return item.detailRows;"),
             ("daily record entry detail rows helper binding", "dailyRecordEntryDetailRows(item).map((row) => ("),
@@ -8150,8 +8152,8 @@ def main() -> int:
             ("daily record entry management binding", "onPress={() => pressDailyRecordEntryMenu(item)}"),
             ("daily record entry edit handler", "function pressDailyRecordEntryEdit(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
             ("daily record entry delete handler", "function pressDailyRecordEntryDelete(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
-            ("daily record entry edit binding", "onPress={() => pressDailyRecordEntryEdit(item)}"),
-            ("daily record entry delete binding", "onPress={() => pressDailyRecordEntryDelete(item)}"),
+            ("daily record entry edit binding", "onEditPress={() => pressDailyRecordEntryEdit(item)}"),
+            ("daily record entry delete binding", "onRemovePress={() => pressDailyRecordEntryDelete(item)}"),
             ("daily record entry edit return target", "openPreviewRecordEdit(dailyRecordEntryTarget(item), dailyRecordEntryReturnScreen())"),
             ("daily record entry delete return target", "openPreviewRecordRemoveConfirm(dailyRecordEntryTarget(item), dailyRecordEntryReturnScreen())"),
             ("daily record delete confirm display helper binding", "const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayTexts("),
@@ -8311,6 +8313,19 @@ def main() -> int:
             ("daily record fixed save return disabled prop", "disabled={isDailyRecordFixedSaveReturnDisabled}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("daily record entry action row component", "export function DailyRecordEntryActionRow"),
+            ("daily record entry action row edit accessibility prop", "accessibilityLabel={editAccessibilityLabel}"),
+            ("daily record entry action row remove accessibility prop", "accessibilityLabel={removeAccessibilityLabel}"),
+            ("daily record entry action row edit handler prop", "onPress={onEditPress}"),
+            ("daily record entry action row remove handler prop", "onPress={onRemovePress}"),
+            ("daily record entry action row edit label prop", "{editLabel}"),
+            ("daily record entry action row remove label prop", "{removeLabel}"),
+            ("daily record entry action row shell style", "actionRow: {"),
+            ("daily record entry action row secondary style", "secondaryButton: {"),
+            ("daily record entry action row danger style", "dangerButton: {"),
+        ):
+            _assert_contains(label, daily_record_entry_action_row_content, marker)
         _assert_not_contains(
             "daily record fixed save inline dock condition",
             content,

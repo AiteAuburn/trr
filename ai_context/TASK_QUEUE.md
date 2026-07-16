@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T2046: Extract daily record entry action row
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/dailyRecordEntryActionRow.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `DailyRecordEntryActionRow` for each daily-record entry menu.
+- Replaced the inline edit and delete menu buttons in `App.tsx`.
+- Preserved existing labels, accessibility labels, menu visibility, handlers, and edit/delete return targets.
+- Updated navigation verifier coverage for the component boundary and App wiring.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining inline menu/debug action rows without changing first-version scope.
+
 ### T2045: Extract save success action row
 
 Status: done

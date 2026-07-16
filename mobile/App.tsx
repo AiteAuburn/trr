@@ -772,6 +772,7 @@ import { AiReviewActionRow } from "./aiReviewActionRow";
 import { AiSaveFailureActionRow } from "./aiSaveFailureActionRow";
 import { CoreFlowEntryActionRow } from "./coreFlowEntryActionRow";
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
+import { DailyRecordEntryActionRow } from "./dailyRecordEntryActionRow";
 import { DangerConfirmActionRow } from "./dangerConfirmActionRow";
 import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
 import { DeleteSuccessActionRow } from "./deleteSuccessActionRow";
@@ -9984,24 +9985,14 @@ export default function App() {
                           ))}
                         </View>
                         {isDailyRecordEntryMenuOpen(item) ? (
-                          <View style={styles.actionRow}>
-                            <Pressable
-                              accessibilityLabel={dailyRecordEntryEditAccessibilityLabel(item)}
-                              accessibilityRole="button"
-                              style={styles.secondaryButton}
-                              onPress={() => pressDailyRecordEntryEdit(item)}
-                            >
-                              <Text style={styles.secondaryButtonText}>{dailyRecordEntryEditLabel(item)}</Text>
-                            </Pressable>
-                            <Pressable
-                              accessibilityLabel={dailyRecordEntryRemoveAccessibilityLabel(item)}
-                              accessibilityRole="button"
-                              style={styles.dangerButton}
-                              onPress={() => pressDailyRecordEntryDelete(item)}
-                            >
-                              <Text style={styles.dangerButtonText}>{dailyRecordEntryRemoveLabel(item)}</Text>
-                            </Pressable>
-                          </View>
+                          <DailyRecordEntryActionRow
+                            editAccessibilityLabel={dailyRecordEntryEditAccessibilityLabel(item)}
+                            editLabel={dailyRecordEntryEditLabel(item)}
+                            onEditPress={() => pressDailyRecordEntryEdit(item)}
+                            onRemovePress={() => pressDailyRecordEntryDelete(item)}
+                            removeAccessibilityLabel={dailyRecordEntryRemoveAccessibilityLabel(item)}
+                            removeLabel={dailyRecordEntryRemoveLabel(item)}
+                          />
                         ) : null}
                       </View>
                     ))
