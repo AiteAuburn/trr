@@ -4449,6 +4449,21 @@ def main() -> int:
             "const nextRecords = buildPreviewRecordRemoveRecords(removeDraft.currentPreview, removeDraft.removeIndex);",
         )
         _assert_contains(
+            "AI candidate preview remove draft executor helper",
+            content,
+            "function removePreviewRecordDraft(removeDraft: NonNullable<ReturnType<typeof previewRecordRemoveDraft>>)",
+        )
+        _assert_contains(
+            "AI candidate preview remove draft executor helper internals",
+            content,
+            "function removePreviewRecordDraft(removeDraft: NonNullable<ReturnType<typeof previewRecordRemoveDraft>>) {\n    const nextRecords = buildPreviewRecordRemoveRecords(removeDraft.currentPreview, removeDraft.removeIndex);\n    applyPreviewRecordRemoveChangeAndClearState(removeDraft.currentPreview, nextRecords);",
+        )
+        _assert_contains(
+            "AI candidate preview remove draft executor helper binding",
+            content,
+            "removePreviewRecordDraft(removeDraft);",
+        )
+        _assert_contains(
             "AI candidate preview remove draft helper",
             content,
             "function previewRecordRemoveDraft(removeIndex: number)",

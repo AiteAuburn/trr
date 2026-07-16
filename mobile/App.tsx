@@ -3753,13 +3753,17 @@ export default function App() {
     };
   }
 
+  function removePreviewRecordDraft(removeDraft: NonNullable<ReturnType<typeof previewRecordRemoveDraft>>) {
+    const nextRecords = buildPreviewRecordRemoveRecords(removeDraft.currentPreview, removeDraft.removeIndex);
+    applyPreviewRecordRemoveChangeAndClearState(removeDraft.currentPreview, nextRecords);
+  }
+
   function removePreviewRecord(index: number) {
     const removeDraft = previewRecordRemoveDraft(index);
     if (!removeDraft) {
       return;
     }
-    const nextRecords = buildPreviewRecordRemoveRecords(removeDraft.currentPreview, removeDraft.removeIndex);
-    applyPreviewRecordRemoveChangeAndClearState(removeDraft.currentPreview, nextRecords);
+    removePreviewRecordDraft(removeDraft);
   }
 
   function confirmPreviewRecordRemove() {
