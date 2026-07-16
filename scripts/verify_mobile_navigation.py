@@ -31,6 +31,7 @@ ANALYSIS_DATA_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisDataTransforms.t
 ANALYSIS_METRIC_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisMetricTransforms.ts"
 ANALYSIS_RANGE_SELECTOR_PATH = REPO_ROOT / "mobile" / "analysisRangeSelector.tsx"
 SEGMENT_SELECTOR_PATH = REPO_ROOT / "mobile" / "segmentSelector.tsx"
+SETTINGS_SUBPAGE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "settingsSubpageActionRow.tsx"
 SETTINGS_SUBPAGE_CLOSE_BUTTON_PATH = REPO_ROOT / "mobile" / "settingsSubpageCloseButton.tsx"
 ANALYSIS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "analysisScreenData.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
@@ -1389,6 +1390,7 @@ def main() -> int:
     analysis_metric_content = ANALYSIS_METRIC_TRANSFORMS_PATH.read_text(encoding="utf-8")
     analysis_range_selector_content = ANALYSIS_RANGE_SELECTOR_PATH.read_text(encoding="utf-8")
     segment_selector_content = SEGMENT_SELECTOR_PATH.read_text(encoding="utf-8")
+    settings_subpage_action_row_content = SETTINGS_SUBPAGE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     settings_subpage_close_button_content = SETTINGS_SUBPAGE_CLOSE_BUTTON_PATH.read_text(encoding="utf-8")
     analysis_screen_data_content = ANALYSIS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
@@ -9440,6 +9442,22 @@ def main() -> int:
         ):
             _assert_contains(label, segment_selector_content, marker)
         for label, marker in (
+            ("settings subpage action row component", "export function SettingsSubpageActionRow"),
+            ("settings subpage action row return accessibility prop", "accessibilityLabel={returnAccessibilityLabel}"),
+            ("settings subpage action row action accessibility prop", "accessibilityLabel={actionAccessibilityLabel}"),
+            ("settings subpage action row button role", 'accessibilityRole="button"'),
+            ("settings subpage action row return handler prop", "onPress={onReturnPress}"),
+            ("settings subpage action row action handler prop", "onPress={onActionPress}"),
+            ("settings subpage action row action disabled state", "accessibilityState={{ disabled: actionDisabled }}"),
+            ("settings subpage action row disabled prop", "disabled={actionDisabled}"),
+            ("settings subpage action row return label", "{returnLabel}"),
+            ("settings subpage action row action label", "{actionLabel}"),
+            ("settings subpage action row disabled style", "actionDisabled ? styles.buttonDisabled : null"),
+            ("settings subpage action row shell style", "actionRow: {"),
+            ("settings subpage action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, settings_subpage_action_row_content, marker)
+        for label, marker in (
             ("settings subpage close button component", "export function SettingsSubpageCloseButton"),
             ("settings subpage close button accessibility prop", "accessibilityLabel={accessibilityLabel}"),
             ("settings subpage close button role", 'accessibilityRole="button"'),
@@ -11283,7 +11301,7 @@ def main() -> int:
             ("auth load sessions accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.loadSessionsAccessibility}"),
             ("auth logout local accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.logoutLocalAccessibility}"),
             ("auth logout all accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.logoutAllAccessibility}"),
-            ("settings local clear accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.localClearAccessibility}"),
+            ("settings local clear accessibility binding", "actionAccessibilityLabel={settingsSubscriptionDisplayLabels.localClearAccessibility}"),
             ("auth status display helper binding", "const authStatusDisplay = authStatusDisplayTexts({"),
             ("auth action status display text binding", "const authActionStatusDisplayText = authStatusDisplay.authAction;"),
             ("auth token storage status display text binding", "const tokenStorageStatusDisplayText = authStatusDisplay.tokenStorage;"),
@@ -11340,25 +11358,32 @@ def main() -> int:
             ("auth danger action disabled state", "accessibilityState={{ disabled: isAuthOperationInFlight }}"),
             ("auth session management preview press binding", "onPress={() => pressAuthSessionManagementPreview(item)}"),
             ("auth session management button role", 'accessibilityRole="button"\n                  style={styles.aiReviewCard}'),
-            ("profile edit integration status binding", "onPress={showProfileEditIntegrationStatus}"),
+            ("profile edit integration status binding", "onActionPress={showProfileEditIntegrationStatus}"),
             ("settings subpage status display helper binding", "const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayTexts({"),
             ("settings subpage profile action display binding", "const profileActionStatusDisplayText = settingsSubpageStatusDisplay.profileAction;"),
             ("settings subpage quota unavailable binding", "const recordingQuotaUnavailableStatusMessage = settingsSubpageStatusDisplay.recordingQuotaUnavailable;"),
             ("settings subpage reminder integration binding", "const reminderIntegrationStatusMessage = settingsSubpageStatusDisplay.reminderIntegration;"),
             ("settings subpage privacy integration binding", "const privacyIntegrationStatusMessage = settingsSubpageStatusDisplay.privacyIntegration;"),
-            ("profile edit accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.editIntegrationAccessibility}"),
-            ("recording quota settings sync binding", "onPress={syncRecordingQuotaSettings}"),
-            ("recording quota accessibility binding", "accessibilityLabel={recordingQuotaSyncAccessibilityDisplayLabel}"),
-            ("reminder integration status binding", "onPress={showReminderIntegrationStatus}"),
-            ("reminder integration accessibility binding", "accessibilityLabel={reminderIntegrationAccessibilityDisplayLabel}"),
-            ("privacy integration status binding", "onPress={showPrivacyIntegrationStatus}"),
-            ("privacy integration accessibility binding", "accessibilityLabel={privacyIntegrationAccessibilityDisplayLabel}"),
+            ("profile edit accessibility binding", "actionAccessibilityLabel={settingsSubscriptionDisplayLabels.editIntegrationAccessibility}"),
+            ("recording quota settings sync binding", "onActionPress={syncRecordingQuotaSettings}"),
+            ("recording quota accessibility binding", "actionAccessibilityLabel={recordingQuotaSyncAccessibilityDisplayLabel}"),
+            ("reminder integration status binding", "onActionPress={showReminderIntegrationStatus}"),
+            ("reminder integration accessibility binding", "actionAccessibilityLabel={reminderIntegrationAccessibilityDisplayLabel}"),
+            ("privacy integration status binding", "onActionPress={showPrivacyIntegrationStatus}"),
+            ("privacy integration accessibility binding", "actionAccessibilityLabel={privacyIntegrationAccessibilityDisplayLabel}"),
             ("settings subpage close button binding", "<SettingsSubpageCloseButton"),
             ("settings subpage close accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.closeReturn}"),
             ("settings subpage close handler binding", "onPress={returnFromSettingsSubpage}"),
-            ("settings subpage return accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}"),
-            ("settings subpage secondary button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
-            ("settings subpage quota disabled state", "accessibilityState={{ disabled: isQuotaSyncing }}"),
+            ("settings subpage action row binding", "<SettingsSubpageActionRow"),
+            ("settings subpage return accessibility binding", "returnAccessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}"),
+            ("settings subpage return label binding", "returnLabel={settingsSubscriptionDisplayLabels.returnSettings}"),
+            ("settings subpage return handler binding", "onReturnPress={returnFromSettingsSubpage}"),
+            ("settings subpage local clear label binding", "actionLabel={settingsSubscriptionDisplayLabels.localClearButton}"),
+            ("settings subpage profile edit label binding", "actionLabel={settingsSubscriptionDisplayLabels.editIntegrationButton}"),
+            ("settings subpage quota label binding", "actionLabel={recordingQuotaSyncButtonDisplayLabel}"),
+            ("settings subpage reminder label binding", "actionLabel={reminderIntegrationButtonDisplayLabel}"),
+            ("settings subpage privacy label binding", "actionLabel={privacyIntegrationButtonDisplayLabel}"),
+            ("settings subpage quota disabled state", "actionDisabled={isQuotaSyncing}"),
             ("advanced settings toggle binding", "onPress={toggleAdvancedSettings}"),
             ("advanced settings toggle accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.advancedSettingsToggleAccessibility}"),
             ("advanced settings expanded state", "accessibilityState={{ expanded: showAdvancedSettings }}"),

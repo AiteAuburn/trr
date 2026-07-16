@@ -809,6 +809,7 @@ import { FoodCommunitySearchField } from "./foodCommunitySearchField";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
 import { FoodCommunityShareTextFields } from "./foodCommunityShareTextFields";
 import { SegmentSelector } from "./segmentSelector";
+import { SettingsSubpageActionRow } from "./settingsSubpageActionRow";
 import { SettingsSubpageCloseButton } from "./settingsSubpageCloseButton";
 import { StoreSearchField } from "./storeSearchField";
 import type {
@@ -12891,24 +12892,14 @@ export default function App() {
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.noAction}</Text>
               <Text style={styles.evidence}>{accountSecurityNoActionBoundaryDisplayText}</Text>
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={returnFromSettingsSubpage}
-              >
-                <Text style={styles.secondaryButtonText}>{settingsSubscriptionDisplayLabels.returnSettings}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={settingsSubscriptionDisplayLabels.localClearAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={clearLocalSessionFromSettings}
-              >
-                <Text style={styles.secondaryButtonText}>{settingsSubscriptionDisplayLabels.localClearButton}</Text>
-              </Pressable>
-            </View>
+            <SettingsSubpageActionRow
+              actionAccessibilityLabel={settingsSubscriptionDisplayLabels.localClearAccessibility}
+              actionLabel={settingsSubscriptionDisplayLabels.localClearButton}
+              onActionPress={clearLocalSessionFromSettings}
+              onReturnPress={returnFromSettingsSubpage}
+              returnAccessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}
+              returnLabel={settingsSubscriptionDisplayLabels.returnSettings}
+            />
             {authActionStatus ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{settingsSubscriptionDisplayLabels.localStateResult}</Text>
@@ -12958,24 +12949,14 @@ export default function App() {
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.noAction}</Text>
               <Text style={styles.evidence}>{profileNoActionBoundaryDisplayText}</Text>
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={returnFromSettingsSubpage}
-              >
-                <Text style={styles.secondaryButtonText}>{settingsSubscriptionDisplayLabels.returnSettings}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={settingsSubscriptionDisplayLabels.editIntegrationAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={showProfileEditIntegrationStatus}
-              >
-                <Text style={styles.secondaryButtonText}>{settingsSubscriptionDisplayLabels.editIntegrationButton}</Text>
-              </Pressable>
-            </View>
+            <SettingsSubpageActionRow
+              actionAccessibilityLabel={settingsSubscriptionDisplayLabels.editIntegrationAccessibility}
+              actionLabel={settingsSubscriptionDisplayLabels.editIntegrationButton}
+              onActionPress={showProfileEditIntegrationStatus}
+              onReturnPress={returnFromSettingsSubpage}
+              returnAccessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}
+              returnLabel={settingsSubscriptionDisplayLabels.returnSettings}
+            />
             {profileActionStatus ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{settingsSubscriptionDisplayLabels.editIntegrationStatus}</Text>
@@ -13033,26 +13014,15 @@ export default function App() {
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.dataCostBoundary}</Text>
               <Text style={styles.evidence}>{recordingQuotaDataBoundaryDisplayText}</Text>
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={returnFromSettingsSubpage}
-              >
-                <Text style={styles.secondaryButtonText}>{settingsSubscriptionDisplayLabels.returnSettings}</Text>
-              </Pressable>
-              <Pressable
-	                accessibilityLabel={recordingQuotaSyncAccessibilityDisplayLabel}
-	                accessibilityRole="button"
-	                accessibilityState={{ disabled: isQuotaSyncing }}
-	                style={[styles.secondaryButton, isQuotaSyncing ? styles.buttonDisabled : null]}
-                disabled={isQuotaSyncing}
-                onPress={syncRecordingQuotaSettings}
-              >
-                <Text style={styles.secondaryButtonText}>{recordingQuotaSyncButtonDisplayLabel}</Text>
-              </Pressable>
-            </View>
+            <SettingsSubpageActionRow
+              actionAccessibilityLabel={recordingQuotaSyncAccessibilityDisplayLabel}
+              actionDisabled={isQuotaSyncing}
+              actionLabel={recordingQuotaSyncButtonDisplayLabel}
+              onActionPress={syncRecordingQuotaSettings}
+              onReturnPress={returnFromSettingsSubpage}
+              returnAccessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}
+              returnLabel={settingsSubscriptionDisplayLabels.returnSettings}
+            />
             {recordingQuotaActionStatus ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{settingsSubscriptionDisplayLabels.quotaSyncStatus}</Text>
@@ -13099,24 +13069,14 @@ export default function App() {
                 <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />
               ))}
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={returnFromSettingsSubpage}
-              >
-                <Text style={styles.secondaryButtonText}>{settingsSubscriptionDisplayLabels.returnSettings}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={reminderIntegrationAccessibilityDisplayLabel}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={showReminderIntegrationStatus}
-              >
-                <Text style={styles.secondaryButtonText}>{reminderIntegrationButtonDisplayLabel}</Text>
-              </Pressable>
-            </View>
+            <SettingsSubpageActionRow
+              actionAccessibilityLabel={reminderIntegrationAccessibilityDisplayLabel}
+              actionLabel={reminderIntegrationButtonDisplayLabel}
+              onActionPress={showReminderIntegrationStatus}
+              onReturnPress={returnFromSettingsSubpage}
+              returnAccessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}
+              returnLabel={settingsSubscriptionDisplayLabels.returnSettings}
+            />
             {reminderActionStatus ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{settingsSubscriptionDisplayLabels.notificationStatus}</Text>
@@ -13170,24 +13130,14 @@ export default function App() {
                 </View>
               ))}
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={returnFromSettingsSubpage}
-              >
-                <Text style={styles.secondaryButtonText}>{settingsSubscriptionDisplayLabels.returnSettings}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={privacyIntegrationAccessibilityDisplayLabel}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={showPrivacyIntegrationStatus}
-              >
-                <Text style={styles.secondaryButtonText}>{privacyIntegrationButtonDisplayLabel}</Text>
-              </Pressable>
-            </View>
+            <SettingsSubpageActionRow
+              actionAccessibilityLabel={privacyIntegrationAccessibilityDisplayLabel}
+              actionLabel={privacyIntegrationButtonDisplayLabel}
+              onActionPress={showPrivacyIntegrationStatus}
+              onReturnPress={returnFromSettingsSubpage}
+              returnAccessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}
+              returnLabel={settingsSubscriptionDisplayLabels.returnSettings}
+            />
             {privacyActionStatus ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{settingsSubscriptionDisplayLabels.privacyStatus}</Text>
