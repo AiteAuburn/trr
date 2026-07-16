@@ -8237,17 +8237,24 @@ export default function App() {
     recordSyncInFlightKeys.current.delete(syncContext.syncKey);
   }
 
+  function startMoreRecordSyncRequest(syncContext: { syncKey: string }) {
+    if (recordSyncInFlightKeys.current.has(syncContext.syncKey)) {
+      return false;
+    }
+    recordSyncInFlightKeys.current.add(syncContext.syncKey);
+    setRecordsStatus(recordSyncPageLoadingStatusMessage());
+    return true;
+  }
+
   async function loadMoreRecords() {
     const syncContext = guardedMoreRecordSyncContext();
     if (!syncContext) {
       return;
     }
 
-    if (recordSyncInFlightKeys.current.has(syncContext.syncKey)) {
+    if (!startMoreRecordSyncRequest(syncContext)) {
       return;
     }
-    recordSyncInFlightKeys.current.add(syncContext.syncKey);
-    setRecordsStatus(recordSyncPageLoadingStatusMessage());
     try {
       const response = await requestMoreRecordSync(syncContext);
       handleMoreRecordSyncSuccess(response);
