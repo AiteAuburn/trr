@@ -809,6 +809,7 @@ import { FoodCommunitySearchField } from "./foodCommunitySearchField";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
 import { FoodCommunityShareTextFields } from "./foodCommunityShareTextFields";
 import { SegmentSelector } from "./segmentSelector";
+import { SettingsSubpageCloseButton } from "./settingsSubpageCloseButton";
 import { StoreSearchField } from "./storeSearchField";
 import type {
   Account,
@@ -12733,9 +12734,10 @@ export default function App() {
                 <Text style={styles.sectionTitle}>帳號與登入安全</Text>
                 <Text style={styles.evidence}>把 dev auth、正式登入與 session 邊界分清楚。</Text>
               </View>
-              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromSettingsSubpage}>
-                <Text style={styles.closeButtonText}>×</Text>
-              </Pressable>
+              <SettingsSubpageCloseButton
+                accessibilityLabel={auxiliaryDisplayLabels.closeReturn}
+                onPress={returnFromSettingsSubpage}
+              />
             </View>
             <View style={styles.accountCard}>
               <View style={styles.iconCircle}>
@@ -12923,9 +12925,10 @@ export default function App() {
                 <Text style={styles.sectionTitle}>個人資料</Text>
                 <Text style={styles.evidence}>只顯示已同步帳號與照護對象，不在本機假造個資。</Text>
               </View>
-              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromSettingsSubpage}>
-                <Text style={styles.closeButtonText}>×</Text>
-              </Pressable>
+              <SettingsSubpageCloseButton
+                accessibilityLabel={auxiliaryDisplayLabels.closeReturn}
+                onPress={returnFromSettingsSubpage}
+              />
             </View>
             <View style={styles.accountCard}>
               <View style={styles.iconCircle}>
@@ -12989,9 +12992,10 @@ export default function App() {
                 <Text style={styles.sectionTitle}>錄音額度</Text>
                 <Text style={styles.evidence}>{recordingQuotaIntroDisplayText}</Text>
               </View>
-              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromSettingsSubpage}>
-                <Text style={styles.closeButtonText}>×</Text>
-              </Pressable>
+              <SettingsSubpageCloseButton
+                accessibilityLabel={auxiliaryDisplayLabels.closeReturn}
+                onPress={returnFromSettingsSubpage}
+              />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.quotaControl}</Text>
@@ -13065,9 +13069,10 @@ export default function App() {
                 <Text style={styles.sectionTitle}>提醒設定</Text>
                 <Text style={styles.evidence}>{reminderSettingsIntroDisplayText}</Text>
               </View>
-              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromSettingsSubpage}>
-                <Text style={styles.closeButtonText}>×</Text>
-              </Pressable>
+              <SettingsSubpageCloseButton
+                accessibilityLabel={auxiliaryDisplayLabels.closeReturn}
+                onPress={returnFromSettingsSubpage}
+              />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.previewModeBadge}>{reminderPreviewBoundaryDisplay.badge}</Text>
@@ -13128,9 +13133,10 @@ export default function App() {
                 <Text style={styles.sectionTitle}>通知與隱私</Text>
                 <Text style={styles.evidence}>{privacySettingsIntroDisplayText}</Text>
               </View>
-              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromSettingsSubpage}>
-                <Text style={styles.closeButtonText}>×</Text>
-              </Pressable>
+              <SettingsSubpageCloseButton
+                accessibilityLabel={auxiliaryDisplayLabels.closeReturn}
+                onPress={returnFromSettingsSubpage}
+              />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.previewModeBadge}>{privacyPreviewBoundaryDisplay.badge}</Text>

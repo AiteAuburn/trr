@@ -31,6 +31,7 @@ ANALYSIS_DATA_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisDataTransforms.t
 ANALYSIS_METRIC_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisMetricTransforms.ts"
 ANALYSIS_RANGE_SELECTOR_PATH = REPO_ROOT / "mobile" / "analysisRangeSelector.tsx"
 SEGMENT_SELECTOR_PATH = REPO_ROOT / "mobile" / "segmentSelector.tsx"
+SETTINGS_SUBPAGE_CLOSE_BUTTON_PATH = REPO_ROOT / "mobile" / "settingsSubpageCloseButton.tsx"
 ANALYSIS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "analysisScreenData.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
@@ -1388,6 +1389,7 @@ def main() -> int:
     analysis_metric_content = ANALYSIS_METRIC_TRANSFORMS_PATH.read_text(encoding="utf-8")
     analysis_range_selector_content = ANALYSIS_RANGE_SELECTOR_PATH.read_text(encoding="utf-8")
     segment_selector_content = SEGMENT_SELECTOR_PATH.read_text(encoding="utf-8")
+    settings_subpage_close_button_content = SETTINGS_SUBPAGE_CLOSE_BUTTON_PATH.read_text(encoding="utf-8")
     analysis_screen_data_content = ANALYSIS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     settings_screen_data_content = SETTINGS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
@@ -9438,6 +9440,16 @@ def main() -> int:
         ):
             _assert_contains(label, segment_selector_content, marker)
         for label, marker in (
+            ("settings subpage close button component", "export function SettingsSubpageCloseButton"),
+            ("settings subpage close button accessibility prop", "accessibilityLabel={accessibilityLabel}"),
+            ("settings subpage close button role", 'accessibilityRole="button"'),
+            ("settings subpage close button handler prop", "onPress={onPress}"),
+            ("settings subpage close button text", "<Text style={styles.closeButtonText}>×</Text>"),
+            ("settings subpage close button shell style", "closeButton: {"),
+            ("settings subpage close button text style", "closeButtonText: {"),
+        ):
+            _assert_contains(label, settings_subpage_close_button_content, marker)
+        for label, marker in (
             ("direct analysis range key binding", "key={option.value}"),
             ("direct analysis range accessibility binding", "accessibilityLabel={option.accessibilityLabel}"),
             ("direct analysis range selected state binding", "analysisRange === option.value"),
@@ -11341,6 +11353,9 @@ def main() -> int:
             ("reminder integration accessibility binding", "accessibilityLabel={reminderIntegrationAccessibilityDisplayLabel}"),
             ("privacy integration status binding", "onPress={showPrivacyIntegrationStatus}"),
             ("privacy integration accessibility binding", "accessibilityLabel={privacyIntegrationAccessibilityDisplayLabel}"),
+            ("settings subpage close button binding", "<SettingsSubpageCloseButton"),
+            ("settings subpage close accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.closeReturn}"),
+            ("settings subpage close handler binding", "onPress={returnFromSettingsSubpage}"),
             ("settings subpage return accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.returnSettingsAccessibility}"),
             ("settings subpage secondary button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
             ("settings subpage quota disabled state", "accessibilityState={{ disabled: isQuotaSyncing }}"),
