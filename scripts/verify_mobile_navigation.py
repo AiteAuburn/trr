@@ -6027,14 +6027,20 @@ def main() -> int:
             ("daily record save payload binding", "body: JSON.stringify(buildDailyRecordSaveRequest(preview, recordsToSave, dailyTranscriptEntries))"),
             ("daily record save clears retained transcripts", "clearDailyRecordDraftOrganizationState();"),
             ("daily record fixed save visible flag", "const isDailyRecordFixedSaveVisible = dailyRecordDraftScreen.isFixedSaveVisible;"),
+            ("daily record fixed save dock visible flag", "const isDailyRecordFixedSaveDockVisible = isDailyRecordFixedSaveVisible && Boolean(preview);"),
             ("daily record fixed save scroll padding style", "const mainScrollContainerStyle = isDailyRecordFixedSaveVisible"),
             ("daily record fixed save scroll binding", "contentContainerStyle={mainScrollContainerStyle}"),
-            ("daily record fixed save dock render", "{isDailyRecordFixedSaveVisible && preview ? ("),
+            ("daily record fixed save dock render", "{isDailyRecordFixedSaveDockVisible ? ("),
             ("daily record fixed save dock style", "styles.fixedSaveBarDock"),
             ("daily record fixed save bar", "styles.fixedSaveBar"),
             ("daily record category blank copy", "沒有提到的欄位保持空白"),
         ):
             _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "daily record fixed save inline dock condition",
+            content,
+            "{isDailyRecordFixedSaveVisible && preview ? (",
+        )
         daily_transcript_render_block = _match_block(
             content,
             r"todayTranscriptDisplayItems\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
@@ -6223,7 +6229,7 @@ def main() -> int:
         _assert_contains(
             "daily record fixed save outside scroll",
             content,
-            "</ScrollView>\n      {isDailyRecordFixedSaveVisible && preview ? (",
+            "</ScrollView>\n      {isDailyRecordFixedSaveDockVisible ? (",
         )
         for label, marker in (
             ("preview record state helper", "function previewRecordState(preview: ParsePreviewResponse | null)"),

@@ -15,6 +15,37 @@
 
 ## 2026-07-15
 
+### T1750 reuse daily record fixed save dock state
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a named fixed-save dock visibility state for the daily-record save-confirm footer.
+- Reused it for the fixed save dock render condition while preserving scroll padding, button states, return guard, and save-submit behavior unchanged.
+- Updated navigation and visual-smoke route verifier coverage with positive dock visibility binding / render markers and an inline-condition guard.
+- 未變更 UI copy/layout、fixed-save timing、button order、navigation targets、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1749 reuse save success state inputs
 
 類型：mobile / refactor / verifier / docs

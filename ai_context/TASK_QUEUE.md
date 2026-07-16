@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1750: Reuse daily record fixed save dock state
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a named fixed-save dock visibility state for the daily-record save-confirm footer.
+- Reused it for the fixed save dock render condition while preserving scroll padding, button states, return guard, and save-submit behavior unchanged.
+- Updated navigation and visual-smoke route verifier coverage with positive dock visibility binding / render markers and an inline-condition guard.
+- No UI copy/layout/fixed-save timing/button order/navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1749: Reuse save success state inputs
 
 Status: done

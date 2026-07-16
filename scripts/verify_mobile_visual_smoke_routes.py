@@ -524,7 +524,7 @@ def verify(
     _assert_contains(
         "daily record fixed save dock outside scroll",
         content,
-        "</ScrollView>\n      {isDailyRecordFixedSaveVisible && preview ? (",
+        "</ScrollView>\n      {isDailyRecordFixedSaveDockVisible ? (",
     )
     _assert_contains(
         "daily record fixed save dock submit binding",

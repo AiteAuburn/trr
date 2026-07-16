@@ -1310,6 +1310,7 @@ export default function App() {
     hasUnsavedPreviewRecords
   });
   const isDailyRecordFixedSaveVisible = dailyRecordDraftScreen.isFixedSaveVisible;
+  const isDailyRecordFixedSaveDockVisible = isDailyRecordFixedSaveVisible && Boolean(preview);
   const mainScrollContainerStyle = isDailyRecordFixedSaveVisible
     ? [styles.container, styles.containerWithFixedSaveBar]
     : styles.container;
@@ -12887,7 +12888,7 @@ export default function App() {
           </View>
         ) : null}
       </ScrollView>
-      {isDailyRecordFixedSaveVisible && preview ? (
+      {isDailyRecordFixedSaveDockVisible ? (
         <View style={styles.fixedSaveBarDock}>
           <View style={styles.fixedSaveBar}>
             <Pressable
