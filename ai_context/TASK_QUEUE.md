@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1949: Reuse native debug failure helpers
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added native debug failure helpers for model download, module check, Whisper, and Llama actions.
+- Reused the helpers from the existing catch blocks while preserving catch scopes, error values, and failure status messages.
+- Updated navigation verifier coverage for native debug failure helpers, fields, and bindings.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing native debug action success/status helpers in small behavior-preserving slices.
+
 ### T1948: Reuse native benchmark result helpers
 
 Status: done

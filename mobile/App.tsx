@@ -8917,6 +8917,22 @@ export default function App() {
     setNativeStatus(nativeBenchmarkResultStatusMessage(results));
   }
 
+  function handleNativeModelDownloadFailure(error: unknown) {
+    setNativeStatus(nativeModelDownloadFailureStatusMessage(error));
+  }
+
+  function handleNativeModuleCheckFailure(error: unknown) {
+    setNativeStatus(nativeModuleCheckFailureStatusMessage(error));
+  }
+
+  function handleNativeWhisperFailure(error: unknown) {
+    setNativeStatus(nativeWhisperFailureStatusMessage(error));
+  }
+
+  function handleNativeLlamaFailure(error: unknown) {
+    setNativeStatus(nativeLlamaFailureStatusMessage(error));
+  }
+
   async function downloadSelectedModel() {
     if (isNativeDebugActionBlocked()) {
       return;
@@ -8942,7 +8958,7 @@ export default function App() {
       await refreshDownloadedModels();
       setNativeStatus(nativeModelDownloadSuccessStatusMessage());
     } catch (error) {
-      setNativeStatus(nativeModelDownloadFailureStatusMessage(error));
+      handleNativeModelDownloadFailure(error);
     } finally {
       finishNativeDebugAction();
     }
@@ -8962,7 +8978,7 @@ export default function App() {
       const result = await checkNativeLocalModules();
       setNativeStatus(nativeModuleCheckResultStatusMessage(result.message));
     } catch (error) {
-      setNativeStatus(nativeModuleCheckFailureStatusMessage(error));
+      handleNativeModuleCheckFailure(error);
     } finally {
       finishNativeDebugAction();
     }
@@ -8990,7 +9006,7 @@ export default function App() {
       });
       handleNativeWhisperSuccess(text);
     } catch (error) {
-      setNativeStatus(nativeWhisperFailureStatusMessage(error));
+      handleNativeWhisperFailure(error);
     } finally {
       finishNativeDebugAction();
     }
@@ -9018,7 +9034,7 @@ export default function App() {
       });
       handleNativeLlamaSuccess(output);
     } catch (error) {
-      setNativeStatus(nativeLlamaFailureStatusMessage(error));
+      handleNativeLlamaFailure(error);
     } finally {
       finishNativeDebugAction();
     }
