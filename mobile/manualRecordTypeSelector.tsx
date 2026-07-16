@@ -12,6 +12,22 @@ type ManualRecordTypeSelectorProps<T extends ManualRecordTypeOption> = {
   onTypePress: (type: T) => void;
 };
 
+function manualRecordTypeOptionKey(type: ManualRecordTypeOption) {
+  return type.value;
+}
+
+function manualRecordTypeOptionAccessibilityLabel(type: ManualRecordTypeOption) {
+  return type.accessibilityLabel;
+}
+
+function manualRecordTypeOptionLabel(type: ManualRecordTypeOption) {
+  return type.label;
+}
+
+function manualRecordTypeOptionSelected(type: ManualRecordTypeOption, selectedValue: string) {
+  return selectedValue === manualRecordTypeOptionKey(type);
+}
+
 export function ManualRecordTypeSelector<T extends ManualRecordTypeOption>({
   options,
   selectedValue,
@@ -19,20 +35,23 @@ export function ManualRecordTypeSelector<T extends ManualRecordTypeOption>({
 }: ManualRecordTypeSelectorProps<T>) {
   return (
     <View style={styles.segmentRow}>
-      {options.map((type) => (
-        <Pressable
-          key={type.value}
-          accessibilityLabel={type.accessibilityLabel}
-          accessibilityRole="button"
-          accessibilityState={{ selected: selectedValue === type.value }}
-          style={[styles.segmentPill, selectedValue === type.value ? styles.segmentActive : null]}
-          onPress={() => onTypePress(type)}
-        >
-          <Text style={[styles.segmentText, selectedValue === type.value ? styles.segmentTextActive : null]}>
-            {type.label}
-          </Text>
-        </Pressable>
-      ))}
+      {options.map((type) => {
+        const typeSelected = manualRecordTypeOptionSelected(type, selectedValue);
+        return (
+          <Pressable
+            key={manualRecordTypeOptionKey(type)}
+            accessibilityLabel={manualRecordTypeOptionAccessibilityLabel(type)}
+            accessibilityRole="button"
+            accessibilityState={{ selected: typeSelected }}
+            style={[styles.segmentPill, typeSelected ? styles.segmentActive : null]}
+            onPress={() => onTypePress(type)}
+          >
+            <Text style={[styles.segmentText, typeSelected ? styles.segmentTextActive : null]}>
+              {manualRecordTypeOptionLabel(type)}
+            </Text>
+          </Pressable>
+        );
+      })}
     </View>
   );
 }
