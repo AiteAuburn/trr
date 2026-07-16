@@ -811,7 +811,7 @@ import { ManualRecordMealFields } from "./manualRecordMealFields";
 import { ManualRecordMedicationFields } from "./manualRecordMedicationFields";
 import { ManualRecordNoteFields } from "./manualRecordNoteFields";
 import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
-import { MetricCard } from "./metricCard";
+import { MetricGrid } from "./metricGrid";
 import { DownloadedModelList } from "./downloadedModelList";
 import { NativeDebugActionButton } from "./nativeDebugActionButton";
 import { NativeDebugRunActions } from "./nativeDebugRunActions";
@@ -2574,18 +2574,6 @@ export default function App() {
     selectAnalysisRange(analysisRangeTarget(item));
   }
 
-  function analysisMetricRowKey(row: (typeof analysisMetricRows)[number]) {
-    return row.label;
-  }
-
-  function analysisMetricRowLabel(row: (typeof analysisMetricRows)[number]) {
-    return row.label;
-  }
-
-  function analysisMetricRowValue(row: (typeof analysisMetricRows)[number]) {
-    return row.value;
-  }
-
   function analysisChartPointKey(point: (typeof analysisChartPoints)[number]) {
     return point.id;
   }
@@ -2624,18 +2612,6 @@ export default function App() {
     totalCount: number
   ) {
     return index === 0 || index === totalCount - 1 || index % 3 === 0 ? analysisChartPointLabel(point) : "";
-  }
-
-  function detailedReportMetricRowKey(row: (typeof detailedReportMetricRows)[number]) {
-    return row.label;
-  }
-
-  function detailedReportMetricRowLabel(row: (typeof detailedReportMetricRows)[number]) {
-    return row.label;
-  }
-
-  function detailedReportMetricRowValue(row: (typeof detailedReportMetricRows)[number]) {
-    return row.value;
   }
 
   function updateAnalysisCustomStartInput(value: string) {
@@ -10941,11 +10917,7 @@ export default function App() {
                 <Text style={styles.emptyText}>{analysisChartEmptyDisplayText}</Text>
               )}
             </View>
-            <View style={styles.metricGrid}>
-              {analysisMetricRows.map((row) => (
-                <MetricCard key={analysisMetricRowKey(row)} label={analysisMetricRowLabel(row)} value={analysisMetricRowValue(row)} />
-              ))}
-            </View>
+            <MetricGrid rows={analysisMetricRows} />
             <Text style={styles.evidence}>{analysisRangeSummaryDisplayText}</Text>
             {analysisGlucoseRecords.length === 0 ? (
               <InsightEmptyActionRow
@@ -11009,11 +10981,7 @@ export default function App() {
               </View>
             </View>
             <DetailedReportBoundaryGrid rows={detailedReportBoundaryRows} />
-            <View style={styles.metricGrid}>
-              {detailedReportMetricRows.map((row) => (
-                <MetricCard key={detailedReportMetricRowKey(row)} label={detailedReportMetricRowLabel(row)} value={detailedReportMetricRowValue(row)} />
-              ))}
-            </View>
+            <MetricGrid rows={detailedReportMetricRows} />
             {reportRecordCount === 0 ? (
               <InsightEmptyActionRow
                 manualAccessibilityLabel={coreFlowDisplayLabels.reportManualAccessibility}

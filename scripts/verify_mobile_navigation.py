@@ -112,6 +112,7 @@ MANUAL_RECORD_MEDICATION_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordMedic
 MANUAL_RECORD_NOTE_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordNoteFields.tsx"
 MANUAL_RECORD_TYPE_SELECTOR_PATH = REPO_ROOT / "mobile" / "manualRecordTypeSelector.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
+METRIC_GRID_PATH = REPO_ROOT / "mobile" / "metricGrid.tsx"
 RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPanel.tsx"
 RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.tsx"
 RECORD_EDIT_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "recordEditFooterActions.tsx"
@@ -1514,6 +1515,7 @@ def main() -> int:
     manual_record_note_fields_content = MANUAL_RECORD_NOTE_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_type_selector_content = MANUAL_RECORD_TYPE_SELECTOR_PATH.read_text(encoding="utf-8")
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
+    metric_grid_content = METRIC_GRID_PATH.read_text(encoding="utf-8")
     record_detail_action_panel_content = RECORD_DETAIL_ACTION_PANEL_PATH.read_text(encoding="utf-8")
     record_detail_info_panel_content = RECORD_DETAIL_INFO_PANEL_PATH.read_text(encoding="utf-8")
     record_edit_footer_actions_content = RECORD_EDIT_FOOTER_ACTIONS_PATH.read_text(encoding="utf-8")
@@ -2071,6 +2073,22 @@ def main() -> int:
         ):
             _assert_contains(label, metric_card_content, marker)
         for label, marker in (
+            ("metric grid component", "export function MetricGrid"),
+            ("metric grid row type", "export type MetricGridRow ="),
+            ("metric grid rows prop", "rows: MetricGridRow[]"),
+            ("metric grid row key helper", "function metricGridRowKey(row: MetricGridRow)"),
+            ("metric grid row key helper fields", "return row.label;"),
+            ("metric grid row key binding", "key={metricGridRowKey(row)}"),
+            ("metric grid row label helper", "function metricGridRowLabel(row: MetricGridRow)"),
+            ("metric grid row label helper fields", "return row.label;"),
+            ("metric grid row label binding", "label={metricGridRowLabel(row)}"),
+            ("metric grid row value helper", "function metricGridRowValue(row: MetricGridRow)"),
+            ("metric grid row value helper fields", "return row.value;"),
+            ("metric grid row value binding", "value={metricGridRowValue(row)}"),
+            ("metric grid style", "metricGrid: {"),
+        ):
+            _assert_contains(label, metric_grid_content, marker)
+        for label, marker in (
             ("record detail action panel component", "export function RecordDetailActionPanel({"),
             ("record detail action panel fallback copy", "請從今日或歷史頁選擇真實紀錄；未選擇時不可編輯或刪除。"),
             ("record detail action panel edit accessibility", "accessibilityLabel={editAccessibilityLabel}"),
@@ -2599,11 +2617,6 @@ def main() -> int:
             ("manual record confirm preview badge style", "previewModeBadge: {"),
         ):
             _assert_contains(label, manual_record_confirm_preview_block_content, marker)
-        for label, marker in (
-            ("analysis metric card render", "analysisMetricRows.map((row) => (\n                <MetricCard key={analysisMetricRowKey(row)} label={analysisMetricRowLabel(row)} value={analysisMetricRowValue(row)} />"),
-            ("detailed report metric card render", "detailedReportMetricRows.map((row) => (\n                <MetricCard key={detailedReportMetricRowKey(row)} label={detailedReportMetricRowLabel(row)} value={detailedReportMetricRowValue(row)} />"),
-        ):
-            _assert_contains(label, content, marker)
         for label, marker in (
             ("record detail checklist helper binding", "const recordDetailBoundaryChecklistItems = recordDetailBoundaryChecklistDisplayItems();"),
             ("record detail info panel binding", "<RecordDetailInfoPanel\n              boundaryItems={recordDetailBoundaryChecklistItems}"),
@@ -10662,15 +10675,8 @@ def main() -> int:
             "analysisMetricInput.glucoseCount",
         )
         for label, marker in (
-            ("analysis metric row key helper", "function analysisMetricRowKey(row: (typeof analysisMetricRows)[number])"),
-            ("analysis metric row key helper fields", "return row.label;"),
-            ("analysis metric row key helper binding", "key={analysisMetricRowKey(row)}"),
-            ("analysis metric row label helper", "function analysisMetricRowLabel(row: (typeof analysisMetricRows)[number])"),
-            ("analysis metric row label helper fields", "return row.label;"),
-            ("analysis metric row label helper binding", "label={analysisMetricRowLabel(row)}"),
-            ("analysis metric row value helper", "function analysisMetricRowValue(row: (typeof analysisMetricRows)[number])"),
-            ("analysis metric row value helper fields", "return row.value;"),
-            ("analysis metric row value helper binding", "value={analysisMetricRowValue(row)}"),
+            ("metric grid binding", "<MetricGrid"),
+            ("analysis metric grid rows binding", "rows={analysisMetricRows}"),
             ("analysis chart point key helper", "function analysisChartPointKey(point: (typeof analysisChartPoints)[number])"),
             ("analysis chart point key helper fields", "return point.id;"),
             ("analysis chart point key binding", "key={analysisChartPointKey(point)}"),
@@ -10700,18 +10706,11 @@ def main() -> int:
             content,
             "const detailedReportMetricRows = buildDetailedReportMetricRows(detailedReportMetricInput);",
         )
-        for label, marker in (
-            ("detailed report metric row key helper", "function detailedReportMetricRowKey(row: (typeof detailedReportMetricRows)[number])"),
-            ("detailed report metric row key helper fields", "return row.label;"),
-            ("detailed report metric row key helper binding", "key={detailedReportMetricRowKey(row)}"),
-            ("detailed report metric row label helper", "function detailedReportMetricRowLabel(row: (typeof detailedReportMetricRows)[number])"),
-            ("detailed report metric row label helper fields", "return row.label;"),
-            ("detailed report metric row label helper binding", "label={detailedReportMetricRowLabel(row)}"),
-            ("detailed report metric row value helper", "function detailedReportMetricRowValue(row: (typeof detailedReportMetricRows)[number])"),
-            ("detailed report metric row value helper fields", "return row.value;"),
-            ("detailed report metric row value helper binding", "value={detailedReportMetricRowValue(row)}"),
-        ):
-            _assert_contains(label, content, marker)
+        _assert_contains(
+            "detailed report metric grid rows binding",
+            content,
+            "rows={detailedReportMetricRows}",
+        )
         for label, marker in (
             ("detailed report boundary grid component", "export function DetailedReportBoundaryGrid"),
             ("detailed report boundary grid row type", "export type DetailedReportBoundaryRow ="),
@@ -10808,7 +10807,7 @@ def main() -> int:
         _assert_contains(
             "analysis metric rows render",
             content,
-            "analysisMetricRows.map((row) =>",
+            "rows={analysisMetricRows}",
         )
         _assert_contains(
             "analysis point toggle binding",
@@ -14408,9 +14407,19 @@ def main() -> int:
             "detailedReportBoundaryRows.map((row) => (\n                <View key={detailedReportBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{detailedReportBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
+            "analysis direct metric row map",
+            content,
+            "analysisMetricRows.map((row) => (",
+        )
+        _assert_not_contains(
             "analysis direct metric row binding",
             content,
             "analysisMetricRows.map((row) => (\n                <MetricCard key={row.label} label={row.label} value={row.value} />",
+        )
+        _assert_not_contains(
+            "detailed report direct metric row map",
+            content,
+            "detailedReportMetricRows.map((row) => (",
         )
         _assert_not_contains(
             "detailed report direct metric row binding",

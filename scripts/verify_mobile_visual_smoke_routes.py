@@ -120,13 +120,13 @@ VISUAL_SMOKE_ROUTES = {
         'currentScreen === "analysis"',
         "AnalysisRangeSelector",
         "analysisCustomStart",
-        "analysisMetricRows.map",
+        "rows={analysisMetricRows}",
         "analysisChartPoints",
     ],
     "detailedReport": [
         'currentScreen === "detailedReport"',
         "rows={detailedReportBoundaryRows}",
-        "detailedReportMetricRows.map",
+        "rows={detailedReportMetricRows}",
         "items={detailedReportNoteItems}",
     ],
     "subscription": [

@@ -34,6 +34,41 @@ None.
 
 ## Done
 
+### T2066: Extract shared metric grid component
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/metricGrid.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `MetricGrid` for repeated `{label, value}` metric card grids.
+- Reused the component for Analysis metrics and Detailed Report metrics.
+- Moved analysis and detailed-report metric row key/label/value helpers out of `App.tsx`.
+- Preserved the same metric row copy, order, keys, card styling, and grid spacing.
+- Updated navigation, UI-spec coverage, and visual-smoke route verifier coverage for the shared metric component boundary, App row bindings, and direct inline-map guards.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining repeated boundary/action row clusters without changing first-version scope.
+
 ### T2065: Extract detailed report boundary grid component
 
 Status: done

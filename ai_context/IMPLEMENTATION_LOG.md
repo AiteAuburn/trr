@@ -15,6 +15,41 @@
 
 ## 2026-07-16
 
+### T2066 extract shared metric grid component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/metricGrid.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `MetricGrid` for repeated `{label, value}` metric card grids.
+- Reused the component for Analysis metrics and Detailed Report metrics.
+- Moved analysis and detailed-report metric row key/label/value helpers out of `App.tsx`.
+- Preserved the same metric row copy, order, keys, card styling, and grid spacing.
+- Updated navigation, UI-spec coverage, and visual-smoke route verifier coverage for the shared metric component boundary, App row bindings, and direct inline-map guards.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining repeated boundary/action row clusters without changing first-version scope.
+
 ### T2065 extract detailed report boundary grid component
 
 類型：mobile / refactor / verifier / docs
