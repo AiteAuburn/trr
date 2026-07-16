@@ -3622,6 +3622,20 @@ export default function App() {
     };
   }
 
+  function requestParserPreview(
+    accountId: string,
+    profileId: string,
+    text: string,
+    occurredAt: string,
+    voiceSeconds: number
+  ) {
+    return requestJson<ParsePreviewResponse>(normalizedApiBaseUrl, "/ai/parse-preview", {
+      method: "POST",
+      headers: protectedRequestHeaders(accountId, accessToken),
+      body: JSON.stringify(parserPreviewRequestBody(profileId, text, occurredAt, voiceSeconds))
+    });
+  }
+
   function appendDailyTranscriptEntry(entry: DailyTranscriptEntry) {
     setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, entry]));
   }
@@ -7422,16 +7436,12 @@ export default function App() {
     const parserVoiceSeconds = clampNumber(transcriptVoiceSeconds, 0, maxMobileCountValue);
     const parseOccurredAt = new Date().toISOString();
     try {
-      const response = await requestJson<ParsePreviewResponse>(
-        normalizedApiBaseUrl,
-        "/ai/parse-preview",
-        {
-          method: "POST",
-          headers: protectedRequestHeaders(account.id, accessToken),
-          body: JSON.stringify(
-            parserPreviewRequestBody(activeProfile.id, transcript, parseOccurredAt, parserVoiceSeconds)
-          )
-        }
+      const response = await requestParserPreview(
+        account.id,
+        activeProfile.id,
+        transcript,
+        parseOccurredAt,
+        parserVoiceSeconds
       );
       const mergedDailyPreview = mergedParserPreviewForResponse(existingDailyPreview, response);
       appendParserTranscriptEntry(parseOccurredAt, transcript, parserVoiceSeconds);
