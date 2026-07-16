@@ -4314,6 +4314,21 @@ def main() -> int:
             "try {\n      savePreviewRecordEditDraft(editDraft, recordType);\n    } catch (error) {",
         )
         _assert_contains(
+            "AI candidate preview edit save draft failure handling helper",
+            content,
+            "function savePreviewRecordEditDraftWithFailureHandling(",
+        )
+        _assert_contains(
+            "AI candidate preview edit save draft failure handling helper internals",
+            content,
+            "function savePreviewRecordEditDraftWithFailureHandling(\n    editDraft: NonNullable<ReturnType<typeof previewRecordEditSaveDraft>>,\n    recordType: string\n  ) {\n    try {\n      savePreviewRecordEditDraft(editDraft, recordType);\n    } catch (error) {\n      handlePreviewRecordEditFailure(error);",
+        )
+        _assert_contains(
+            "AI candidate preview edit save draft failure handling helper binding",
+            content,
+            "savePreviewRecordEditDraftWithFailureHandling(editDraft, recordType);",
+        )
+        _assert_contains(
             "AI candidate preview edit save draft helper",
             content,
             "function previewRecordEditSaveDraft()",

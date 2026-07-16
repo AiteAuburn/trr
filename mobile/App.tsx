@@ -3963,6 +3963,17 @@ export default function App() {
     applyPreviewRecordEditChangeAndReturnSuccess(editDraft.currentPreview, nextRecords);
   }
 
+  function savePreviewRecordEditDraftWithFailureHandling(
+    editDraft: NonNullable<ReturnType<typeof previewRecordEditSaveDraft>>,
+    recordType: string
+  ) {
+    try {
+      savePreviewRecordEditDraft(editDraft, recordType);
+    } catch (error) {
+      handlePreviewRecordEditFailure(error);
+    }
+  }
+
   function savePreviewRecordEdit() {
     const editDraft = previewRecordEditSaveDraft();
     if (!editDraft) {
@@ -3974,11 +3985,7 @@ export default function App() {
       return;
     }
 
-    try {
-      savePreviewRecordEditDraft(editDraft, recordType);
-    } catch (error) {
-      handlePreviewRecordEditFailure(error);
-    }
+    savePreviewRecordEditDraftWithFailureHandling(editDraft, recordType);
   }
 
   function enterAiSaveConfirm() {
