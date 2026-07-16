@@ -4459,6 +4459,31 @@ def main() -> int:
             "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n      selectRecordForResult(updated);",
         )
         _assert_contains(
+            "record update request helper",
+            content,
+            "async function requestSelectedRecordUpdate(recordId: string, accountId: string, payload: object)",
+        )
+        _assert_contains(
+            "record update request helper endpoint",
+            content,
+            "normalizedApiBaseUrl,\n      `/records/${recordId}`,",
+        )
+        _assert_contains(
+            "record update request helper body",
+            content,
+            "method: \"PATCH\",\n        headers: protectedRequestHeaders(accountId, accessToken),\n        body: JSON.stringify({\n          occurred_at: localDateTimeToIso(recordEditDate, recordEditTime),\n          payload_json: payload",
+        )
+        _assert_contains(
+            "record update request helper response binding",
+            content,
+            "return boundRecordItem(updatedResponse);",
+        )
+        _assert_contains(
+            "record update request helper binding",
+            content,
+            "const updated = await requestSelectedRecordUpdate(selectedRecord.id, account.id, payload);",
+        )
+        _assert_contains(
             "manual create result selected record helper state",
             content,
             "setRecords((current) => boundRecordsList([created, ...current]));\n    selectRecordForResult(created);",

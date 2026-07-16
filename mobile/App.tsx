@@ -7845,6 +7845,22 @@ export default function App() {
     setIsBusy(false);
   }
 
+  async function requestSelectedRecordUpdate(recordId: string, accountId: string, payload: object) {
+    const updatedResponse = await requestJson<RecordItem>(
+      normalizedApiBaseUrl,
+      `/records/${recordId}`,
+      {
+        method: "PATCH",
+        headers: protectedRequestHeaders(accountId, accessToken),
+        body: JSON.stringify({
+          occurred_at: localDateTimeToIso(recordEditDate, recordEditTime),
+          payload_json: payload
+        })
+      }
+    );
+    return boundRecordItem(updatedResponse);
+  }
+
   async function updateSelectedRecord() {
     if (isBusy || recordUpdateInFlight.current) {
       return;
@@ -7876,19 +7892,7 @@ export default function App() {
       if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
         throw new Error("payload_json must be an object");
       }
-      const updatedResponse = await requestJson<RecordItem>(
-        normalizedApiBaseUrl,
-        `/records/${selectedRecord.id}`,
-        {
-          method: "PATCH",
-          headers: protectedRequestHeaders(account.id, accessToken),
-          body: JSON.stringify({
-            occurred_at: localDateTimeToIso(recordEditDate, recordEditTime),
-            payload_json: payload
-          })
-        }
-      );
-      const updated = boundRecordItem(updatedResponse);
+      const updated = await requestSelectedRecordUpdate(selectedRecord.id, account.id, payload);
       setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));
       selectRecordForResult(updated);
       openUpdateSuccessResult(recordUpdateSummaryMessage(1));
