@@ -7989,6 +7989,10 @@ export default function App() {
     syncAchievementsAfterRecordSave();
   }
 
+  function handleManualRecordCreateFailure(error: unknown) {
+    setStatus(manualRecordCreateFailureStatusMessage(error));
+  }
+
   async function createManualRecord() {
     if (isBusy || manualCreateInFlight.current) {
       return;
@@ -8020,7 +8024,7 @@ export default function App() {
       const created = await requestManualRecordCreate(activeProfile.id, account.id, payload);
       handleManualRecordCreateSuccess(created);
     } catch (error) {
-      setStatus(manualRecordCreateFailureStatusMessage(error));
+      handleManualRecordCreateFailure(error);
     } finally {
       finishManualCreateRequest();
     }

@@ -4569,6 +4569,21 @@ def main() -> int:
             "const created = await requestManualRecordCreate(activeProfile.id, account.id, payload);\n      handleManualRecordCreateSuccess(created);",
         )
         _assert_contains(
+            "manual create failure helper",
+            content,
+            "function handleManualRecordCreateFailure(error: unknown)",
+        )
+        _assert_contains(
+            "manual create failure helper status",
+            content,
+            "setStatus(manualRecordCreateFailureStatusMessage(error));",
+        )
+        _assert_contains(
+            "manual create failure helper binding",
+            content,
+            "} catch (error) {\n      handleManualRecordCreateFailure(error);\n    } finally {",
+        )
+        _assert_contains(
             "AI save failure result helper",
             content,
             "function openAiSaveFailureResult(message: string)",
