@@ -51,7 +51,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "aiSaveConfirm": [
         'currentScreen === "aiSaveConfirm"',
-        "aiSaveConfirmBoundaryRows.map",
+        "rows={aiSaveConfirmBoundaryRows}",
         "dailyRecordSectionItems.map",
         "aiSaveConfirmSummaryLabelDisplayText",
         "todayTranscriptTitleDisplayText",
@@ -214,7 +214,7 @@ VISUAL_SMOKE_ROUTES = {
         "<SegmentSelector\n              options={foodCommunityCategoryDisplayOptions}",
         "visibleFoodCommunityItems.map",
         "foodCommunityShareFieldRows.map",
-        "foodCommunityPointRows.map",
+        "rows={foodCommunityPointRows}",
         "communityReadinessChecklistItems.map",
         "rows={communityBoundaryRows}",
         "onPress={returnFromCommunityPreview}",
@@ -246,7 +246,7 @@ VISUAL_SMOKE_ROUTES = {
     "store": [
         'currentScreen === "store"',
         "商城",
-        "storeRedemptionBoundaryRows.map",
+        "rows={storeRedemptionBoundaryRows}",
         "<SegmentSelector\n              options={storeCategoryDisplayOptions}",
         "visibleStoreProducts",
         "storeCartButtonDisplayLabel",

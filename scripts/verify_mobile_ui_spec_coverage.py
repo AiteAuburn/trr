@@ -51,7 +51,7 @@ CANONICAL_SPEC_SCREENS = (
         "yearReview",
         ("rows={yearlyReviewMetricRows}", "rows={yearlyHealthOutcomeRows}", "yearlyAiObservationDisplayText"),
     ),
-    SpecScreen("4.13", "商城頁", "store", ("storeRedemptionBoundaryRows.map", "visibleStoreProducts")),
+    SpecScreen("4.13", "商城頁", "store", ("rows={storeRedemptionBoundaryRows}", "visibleStoreProducts")),
     SpecScreen("4.14", "食物拍照分析頁", "foodPhoto", ("items={foodPhotoReadinessChecklistItems}", "styles.uploadBox")),
     SpecScreen("4.14.1", "未來模組詳情頁", "futureModuleDetail", ("selectedFutureModuleDisplay", "futureModuleDetailBoundaryDisplayText")),
     SpecScreen("4.14.2", "醫師 / 醫院合作預覽頁", "doctorShare", ("items={doctorShareReadinessChecklistItems}", "doctorShareActionStatus")),
@@ -61,7 +61,7 @@ CANONICAL_SPEC_SCREENS = (
     SpecScreen("4.15", "文字確認頁", "transcriptReview", ("items={transcriptReviewCostBoundaryChecklistItems}", "parseTranscript")),
     SpecScreen("4.16", "AI 整理確認頁", "aiReview", ("previewRecordDisplayItems.map", "rejectedPreviewDisplayItems.map")),
     SpecScreen("4.16.0", "AI 候選移除確認頁", "aiRemoveConfirm", ("removePreviewRecord", "items={aiCandidateRemoveChecklistItems}")),
-    SpecScreen("4.16.1", "AI 儲存確認頁", "aiSaveConfirm", ("savePreviewRecords", "aiSaveConfirmBoundaryRows.map")),
+    SpecScreen("4.16.1", "AI 儲存確認頁", "aiSaveConfirm", ("savePreviewRecords", "rows={aiSaveConfirmBoundaryRows}")),
     SpecScreen(
         "4.17",
         "每日紀錄頁（AI 整理完成頁）",

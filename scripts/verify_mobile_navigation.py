@@ -11791,15 +11791,7 @@ def main() -> int:
             ("account security boundary grid rows binding", "rows={accountSecurityBoundaryRows}"),
             ("profile settings boundary grid rows binding", "rows={profileSettingsBoundaryRows}"),
             ("recording quota boundary grid rows binding", "rows={recordingQuotaBoundaryRows}"),
-            ("AI save confirm boundary row key helper", "function aiSaveConfirmBoundaryRowKey(row: (typeof aiSaveConfirmBoundaryRows)[number])"),
-            ("AI save confirm boundary row key helper fields", "return row.label;"),
-            ("AI save confirm boundary row key helper binding", "key={aiSaveConfirmBoundaryRowKey(row)}"),
-            ("AI save confirm boundary row label helper", "function aiSaveConfirmBoundaryRowLabel(row: (typeof aiSaveConfirmBoundaryRows)[number])"),
-            ("AI save confirm boundary row label helper fields", "return row.label;"),
-            ("AI save confirm boundary row label helper binding", "{aiSaveConfirmBoundaryRowLabel(row)}"),
-            ("AI save confirm boundary row value helper", "function aiSaveConfirmBoundaryRowValue(row: (typeof aiSaveConfirmBoundaryRows)[number])"),
-            ("AI save confirm boundary row value helper fields", "return row.value;"),
-            ("AI save confirm boundary row value helper binding", "{aiSaveConfirmBoundaryRowValue(row)}"),
+            ("AI save confirm boundary grid rows binding", "rows={aiSaveConfirmBoundaryRows}"),
             ("privacy boundary grid rows binding", "rows={privacyBoundaryRows}"),
             ("dev reset status display text binding", "const devResetStatusDisplayText = authStatusDisplay.devReset;"),
             ("native status display helper binding", "const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);"),
@@ -12087,15 +12079,7 @@ def main() -> int:
             ("food community share field row value helper", "function foodCommunityShareFieldRowValue(row: (typeof foodCommunityShareFieldRows)[number])"),
             ("food community share field row value helper fields", "return row.value;"),
             ("food community share field row value helper binding", "value={foodCommunityShareFieldRowValue(row)}"),
-            ("food community point row key helper", "function foodCommunityPointRowKey(row: (typeof foodCommunityPointRows)[number])"),
-            ("food community point row key helper fields", "return row.label;"),
-            ("food community point row key helper binding", "key={foodCommunityPointRowKey(row)}"),
-            ("food community point row label helper", "function foodCommunityPointRowLabel(row: (typeof foodCommunityPointRows)[number])"),
-            ("food community point row label helper fields", "return row.label;"),
-            ("food community point row label helper binding", "{foodCommunityPointRowLabel(row)}"),
-            ("food community point row value helper", "function foodCommunityPointRowValue(row: (typeof foodCommunityPointRows)[number])"),
-            ("food community point row value helper fields", "return row.value;"),
-            ("food community point row value helper binding", "{foodCommunityPointRowValue(row)}"),
+            ("food community point grid rows binding", "rows={foodCommunityPointRows}"),
             ("food community ranking row key helper", "function foodCommunityRankingRowKey(row: (typeof foodCommunityRankingRows)[number])"),
             ("food community ranking row key helper fields", "return row.label;"),
             ("food community ranking row key helper binding", "key={foodCommunityRankingRowKey(row)}"),
@@ -12417,7 +12401,7 @@ def main() -> int:
             ("food community item accessibility binding", "accessibilityLabel={foodCommunityListItemAccessibilityLabel(item)}"),
             ("food community selected state", "accessibilityState={{ selected: foodCommunityListItemSelected(item, selectedFoodCommunityItem) }}"),
             ("food community share fields", "foodCommunityShareFieldRows.map"),
-            ("food community point rows", "foodCommunityPointRows.map"),
+            ("food community point rows", "rows={foodCommunityPointRows}"),
             ("food community ranking rows", "foodCommunityRankingRows.map"),
             ("ranking backend sync function", "async function loadCommunityLeaderboards()"),
             ("ranking sync status helper binding", "const leaderboardSyncStatus = communityLeaderboardSyncStatusMessages({"),
@@ -13406,15 +13390,7 @@ def main() -> int:
             ("store redemption action label helper fields", "return redemption.actionLabel;"),
             ("store redemption action accessibility helper", "function storeRedemptionActionAccessibilityLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store redemption action accessibility helper fields", "return redemption.actionAccessibilityLabel;"),
-            ("store redemption boundary row key helper", "function storeRedemptionBoundaryRowKey(row: (typeof storeRedemptionBoundaryRows)[number])"),
-            ("store redemption boundary row key helper fields", "return row.label;"),
-            ("store redemption boundary row key helper binding", "key={storeRedemptionBoundaryRowKey(row)}"),
-            ("store redemption boundary row label helper", "function storeRedemptionBoundaryRowLabel(row: (typeof storeRedemptionBoundaryRows)[number])"),
-            ("store redemption boundary row label helper fields", "return row.label;"),
-            ("store redemption boundary row label helper binding", "{storeRedemptionBoundaryRowLabel(row)}"),
-            ("store redemption boundary row value helper", "function storeRedemptionBoundaryRowValue(row: (typeof storeRedemptionBoundaryRows)[number])"),
-            ("store redemption boundary row value helper fields", "return row.value;"),
-            ("store redemption boundary row value helper binding", "{storeRedemptionBoundaryRowValue(row)}"),
+            ("store redemption boundary grid rows binding", "rows={storeRedemptionBoundaryRows}"),
             ("store product status press handler", "function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
             ("store redemption status press handler", "function pressStoreRedemptionStatus(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
             ("store catalog sync function", "async function loadStoreCatalogAndPoints()"),
@@ -13441,7 +13417,7 @@ def main() -> int:
             ("store redemption disabled helper prop", "disabled={storeRedemptionActionDisabled(product)}"),
             ("store redemption action label helper binding", "{storeRedemptionActionLabel(product)}"),
             ("store redemption action accessibility helper binding", "accessibilityLabel={storeRedemptionActionAccessibilityLabel(product)}"),
-            ("store redemption boundary rows", "storeRedemptionBoundaryRows.map"),
+            ("store redemption boundary rows", "rows={storeRedemptionBoundaryRows}"),
             ("store redeem status helper binding", "const redeemStatus = storeRedeemStatusMessages({"),
             ("store redeem visual-smoke status binding", "setStoreActionStatus(redeemStatus.visualSmoke);"),
             ("store redeem unavailable status binding", "setStoreActionStatus(redeemStatus.unavailable);"),
@@ -14342,6 +14318,11 @@ def main() -> int:
             "privacyBoundaryRows.map((row) => (\n                <View key={privacyBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{privacyBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
+            "AI save confirm direct boundary row map",
+            content,
+            "aiSaveConfirmBoundaryRows.map((row) => (",
+        )
+        _assert_not_contains(
             "AI save confirm direct boundary row key binding",
             content,
             "aiSaveConfirmBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
@@ -14823,6 +14804,11 @@ def main() -> int:
             "food community direct ranking row value binding",
             content,
             "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityRankingRowKey(row)}\n                  label={foodCommunityRankingRowLabel(row)}\n                  value={row.value}",
+        )
+        _assert_not_contains(
+            "food community direct point row map",
+            content,
+            "foodCommunityPointRows.map((row) => (",
         )
         _assert_not_contains(
             "food community direct point row key binding",
@@ -15348,6 +15334,11 @@ def main() -> int:
             ("direct achievement category section items binding", "section.items.map"),
         ):
             _assert_not_contains(label, achievement_category_section_render_block, marker)
+        _assert_not_contains(
+            "store redemption direct boundary row map",
+            content,
+            "storeRedemptionBoundaryRows.map((row) => (",
+        )
         _assert_not_contains(
             "store redemption direct boundary row key binding",
             content,

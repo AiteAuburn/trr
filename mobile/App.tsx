@@ -4348,18 +4348,6 @@ export default function App() {
     openScreenWithStatus("aiSaveConfirm", aiSaveConfirmReadyStatusMessage());
   }
 
-  function aiSaveConfirmBoundaryRowKey(row: (typeof aiSaveConfirmBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function aiSaveConfirmBoundaryRowLabel(row: (typeof aiSaveConfirmBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function aiSaveConfirmBoundaryRowValue(row: (typeof aiSaveConfirmBoundaryRows)[number]) {
-    return row.value;
-  }
-
   function pendingRemoveDisplayIcon(item: ReturnType<typeof pendingRecordDisplayItem>) {
     return item.icon;
   }
@@ -5473,18 +5461,6 @@ export default function App() {
     return row.value;
   }
 
-  function foodCommunityPointRowKey(row: (typeof foodCommunityPointRows)[number]) {
-    return row.label;
-  }
-
-  function foodCommunityPointRowLabel(row: (typeof foodCommunityPointRows)[number]) {
-    return row.label;
-  }
-
-  function foodCommunityPointRowValue(row: (typeof foodCommunityPointRows)[number]) {
-    return row.value;
-  }
-
   function foodCommunityRankingRowKey(row: (typeof foodCommunityRankingRows)[number]) {
     return row.label;
   }
@@ -6095,18 +6071,6 @@ export default function App() {
 
   function storeRedemptionActionAccessibilityLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
     return redemption.actionAccessibilityLabel;
-  }
-
-  function storeRedemptionBoundaryRowKey(row: (typeof storeRedemptionBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function storeRedemptionBoundaryRowLabel(row: (typeof storeRedemptionBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function storeRedemptionBoundaryRowValue(row: (typeof storeRedemptionBoundaryRows)[number]) {
-    return row.value;
   }
 
   function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>) {
@@ -9738,14 +9702,7 @@ export default function App() {
               <Text style={styles.label}>{coreFlowDisplayLabels.preSubmitCheck}</Text>
               <AiFlowChecklist items={aiSaveConfirmChecklistItems} />
             </View>
-            <View style={styles.reportBoundaryGrid}>
-              {aiSaveConfirmBoundaryRows.map((row) => (
-                <View key={aiSaveConfirmBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{aiSaveConfirmBoundaryRowLabel(row)}</Text>
-                  <Text style={styles.recordType}>{aiSaveConfirmBoundaryRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
+            <FutureBoundaryGrid rows={aiSaveConfirmBoundaryRows} />
           </View>
         ) : null}
 
@@ -11606,14 +11563,7 @@ export default function App() {
                 />
               ))}
             </View>
-            <View style={styles.reportBoundaryGrid}>
-              {foodCommunityPointRows.map((row) => (
-                <View key={foodCommunityPointRowKey(row)} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{foodCommunityPointRowLabel(row)}</Text>
-                  <Text style={styles.recordType}>{foodCommunityPointRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
+            <FutureBoundaryGrid rows={foodCommunityPointRows} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{foodCommunityRankingSectionLabel()}</Text>
               {foodCommunityRankingRows.map((row) => (
@@ -12546,14 +12496,7 @@ export default function App() {
               <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.storePreview}</Text>
               <Text style={styles.evidence}>{storePreviewBoundaryDisplayText}</Text>
             </View>
-            <View style={styles.reportBoundaryGrid}>
-              {storeRedemptionBoundaryRows.map((row) => (
-                <View key={storeRedemptionBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{storeRedemptionBoundaryRowLabel(row)}</Text>
-                  <Text style={styles.recordType}>{storeRedemptionBoundaryRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
+            <FutureBoundaryGrid rows={storeRedemptionBoundaryRows} />
             <StoreSearchField
               accessibilityLabel={auxiliaryDisplayLabels.storeSearchInputAccessibility}
               value={storeSearchText}
