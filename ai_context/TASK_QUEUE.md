@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T2047: Extract recording Whisper model selector
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/recordingWhisperModelSelector.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `RecordingWhisperModelSelector` for downloaded local Whisper model choices.
+- Replaced the inline settings chip row in `App.tsx`.
+- Preserved selected state, accessibility labels, selected badge, handlers, and local-only model selection behavior.
+- Updated navigation verifier coverage for the component boundary and App wiring.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining inline settings/debug clusters without changing first-version scope.
+
 ### T2046: Extract daily record entry action row
 
 Status: done

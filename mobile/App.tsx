@@ -813,6 +813,7 @@ import { NativeDownloadKindSelector } from "./nativeDownloadKindSelector";
 import { NativeDebugTextField } from "./nativeDebugTextField";
 import { PreviewRecordEditActionRow } from "./previewRecordEditActionRow";
 import { RecordingResultActionRow } from "./recordingResultActionRow";
+import { RecordingWhisperModelSelector } from "./recordingWhisperModelSelector";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
 import { RecordEditFooterActions } from "./recordEditFooterActions";
@@ -5017,27 +5018,8 @@ export default function App() {
     return item.sourceUri;
   }
 
-  function recordingWhisperModelKey(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
-    return recordingWhisperModelPathTarget(item);
-  }
-
-  function recordingWhisperModelAccessibilityLabel(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
-    return item.accessibilityLabel;
-  }
-
-  function recordingWhisperModelIsSelected(
-    item: (typeof downloadedWhisperModelChoiceItems)[number],
-    selectedPath: string
-  ) {
-    return recordingWhisperModelPathTarget(item) === selectedPath;
-  }
-
   function recordingWhisperModelStatusLabel(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
     return item.label;
-  }
-
-  function recordingWhisperModelSelectedLabel(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
-    return item.selectedLabel;
   }
 
   function selectRecordingWhisperModelChoice(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
@@ -12336,34 +12318,11 @@ export default function App() {
                 選擇已下載的本機 Whisper 模型，供首頁與記錄頁錄音轉文字使用；不呼叫雲端、不上傳音檔。
               </Text>
               {downloadedWhisperModelChoiceItems.length > 0 ? (
-                <View style={styles.actionRow}>
-                  {downloadedWhisperModelChoiceItems.map((model) => {
-                    const modelSelected = recordingWhisperModelIsSelected(model, whisperModelPath);
-                    return (
-                      <Pressable
-                        key={recordingWhisperModelKey(model)}
-                        accessibilityLabel={recordingWhisperModelAccessibilityLabel(model)}
-                        accessibilityRole="button"
-                        accessibilityState={{ selected: modelSelected }}
-                        style={[
-                          styles.chip,
-                          modelSelected ? styles.chipSelected : null
-                        ]}
-                        onPress={() => pressRecordingWhisperModelChoice(model)}
-                      >
-                        <Text
-                          style={[
-                            styles.chipText,
-                            modelSelected ? styles.chipTextSelected : null
-                          ]}
-                        >
-                          {recordingWhisperModelStatusLabel(model)}
-                        </Text>
-                        {modelSelected ? <Text style={styles.previewModeBadge}>{recordingWhisperModelSelectedLabel(model)}</Text> : null}
-                      </Pressable>
-                    );
-                  })}
-                </View>
+                <RecordingWhisperModelSelector
+                  items={downloadedWhisperModelChoiceItems}
+                  onModelPress={pressRecordingWhisperModelChoice}
+                  selectedPath={whisperModelPath}
+                />
               ) : (
                 <Text style={styles.evidence}>尚未找到本機 Whisper 模型；可在 Dev Client 工具下載後回來選擇。</Text>
               )}
