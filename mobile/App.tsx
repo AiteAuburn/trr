@@ -800,6 +800,7 @@ import { RecordOptionField, RecordOptionRow } from "./recordOptionField";
 import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
+import { FoodCommunityShareTextFields } from "./foodCommunityShareTextFields";
 import { SegmentSelector } from "./segmentSelector";
 import type {
   Account,
@@ -12151,61 +12152,35 @@ export default function App() {
             ) : null}
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{foodCommunityShareSectionLabel()}</Text>
-              <TextInput
-                accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}
-                value={foodCommunityShareFields.foodName}
-                onChangeText={updateFoodCommunityFoodName}
-                maxLength={maxDisplayTextLength}
-                style={styles.input}
-                placeholder="食物名稱"
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-              <FoodCommunityShareDateTimeFields
-                dateAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}
-                dateLabel={foodCommunityShareEatenDateLabel()}
-                dateMaxLength={maxDateInputLength}
-                dateValue={foodCommunityShareFields.eatenDate}
-                timeAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}
-                timeLabel={foodCommunityShareEatenTimeLabel()}
-                timeMaxLength={maxTimeInputLength}
-                timeValue={foodCommunityShareFields.eatenTime}
-                onDateChange={updateFoodCommunityEatenDate}
-                onTimeChange={updateFoodCommunityEatenTime}
-              />
-              <TextInput
-                accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}
-                value={foodCommunityShareFields.beforeGlucose}
-                onChangeText={updateFoodCommunityBeforeGlucose}
-                keyboardType="numeric"
-                maxLength={3}
-                style={styles.input}
-                placeholder="食用前血糖"
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-              <TextInput
-                accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareAfterGlucoseAccessibility}
-                value={foodCommunityShareFields.afterGlucose}
-                onChangeText={updateFoodCommunityAfterGlucose}
-                keyboardType="numeric"
-                maxLength={3}
-                style={styles.input}
-                placeholder="食用後血糖"
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-              <TextInput
-                accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}
-                value={foodCommunityShareFields.note}
-                onChangeText={updateFoodCommunityNote}
-                maxLength={maxDisplayDetailTextLength}
-                style={[styles.input, styles.multilineField]}
-                placeholder="備註心得"
-                multiline
-                textAlignVertical="top"
-                autoCapitalize="none"
-                autoCorrect={false}
+              <FoodCommunityShareTextFields
+                foodNameAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}
+                foodNameValue={foodCommunityShareFields.foodName}
+                foodNameMaxLength={maxDisplayTextLength}
+                dateTimeFields={
+                  <FoodCommunityShareDateTimeFields
+                    dateAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}
+                    dateLabel={foodCommunityShareEatenDateLabel()}
+                    dateMaxLength={maxDateInputLength}
+                    dateValue={foodCommunityShareFields.eatenDate}
+                    timeAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}
+                    timeLabel={foodCommunityShareEatenTimeLabel()}
+                    timeMaxLength={maxTimeInputLength}
+                    timeValue={foodCommunityShareFields.eatenTime}
+                    onDateChange={updateFoodCommunityEatenDate}
+                    onTimeChange={updateFoodCommunityEatenTime}
+                  />
+                }
+                beforeGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}
+                beforeGlucoseValue={foodCommunityShareFields.beforeGlucose}
+                afterGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareAfterGlucoseAccessibility}
+                afterGlucoseValue={foodCommunityShareFields.afterGlucose}
+                noteAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}
+                noteValue={foodCommunityShareFields.note}
+                noteMaxLength={maxDisplayDetailTextLength}
+                onFoodNameChange={updateFoodCommunityFoodName}
+                onBeforeGlucoseChange={updateFoodCommunityBeforeGlucose}
+                onAfterGlucoseChange={updateFoodCommunityAfterGlucose}
+                onNoteChange={updateFoodCommunityNote}
               />
               {foodCommunityShareFieldRows.map((row) => (
                 <HighlightDetailRow

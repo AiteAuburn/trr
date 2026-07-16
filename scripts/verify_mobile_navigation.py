@@ -86,6 +86,7 @@ RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.
 RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
 RECORD_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "recordTextField.tsx"
 FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareDateTimeFields.tsx"
+FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareTextFields.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1442,6 +1443,7 @@ def main() -> int:
     food_community_share_date_time_fields_content = FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH.read_text(
         encoding="utf-8"
     )
+    food_community_share_text_fields_content = FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -2055,6 +2057,35 @@ def main() -> int:
             ("food community share date time field style", "dateTimeField: {"),
         ):
             _assert_contains(label, food_community_share_date_time_fields_content, marker)
+        for label, marker in (
+            ("food community share text fields component", "export function FoodCommunityShareTextFields"),
+            ("food community share text fields date time slot", "{dateTimeFields}"),
+            ("food community share food name accessibility prop", "accessibilityLabel={foodNameAccessibilityLabel}"),
+            ("food community share food name value prop", "value={foodNameValue}"),
+            ("food community share food name handler prop", "onChangeText={onFoodNameChange}"),
+            ("food community share food name max length prop", "maxLength={foodNameMaxLength}"),
+            ("food community share food name placeholder", 'placeholder="食物名稱"'),
+            ("food community share before glucose accessibility prop", "accessibilityLabel={beforeGlucoseAccessibilityLabel}"),
+            ("food community share before glucose value prop", "value={beforeGlucoseValue}"),
+            ("food community share before glucose handler prop", "onChangeText={onBeforeGlucoseChange}"),
+            ("food community share before glucose keyboard prop", 'keyboardType="numeric"'),
+            ("food community share before glucose max length prop", "maxLength={3}"),
+            ("food community share before glucose placeholder", 'placeholder="食用前血糖"'),
+            ("food community share after glucose accessibility prop", "accessibilityLabel={afterGlucoseAccessibilityLabel}"),
+            ("food community share after glucose value prop", "value={afterGlucoseValue}"),
+            ("food community share after glucose handler prop", "onChangeText={onAfterGlucoseChange}"),
+            ("food community share after glucose placeholder", 'placeholder="食用後血糖"'),
+            ("food community share note accessibility prop", "accessibilityLabel={noteAccessibilityLabel}"),
+            ("food community share note value prop", "value={noteValue}"),
+            ("food community share note handler prop", "onChangeText={onNoteChange}"),
+            ("food community share note max length prop", "maxLength={noteMaxLength}"),
+            ("food community share note placeholder", 'placeholder="備註心得"'),
+            ("food community share note multiline", "multiline"),
+            ("food community share note text align", 'textAlignVertical="top"'),
+            ("food community share text fields input style", "input: {"),
+            ("food community share text fields multiline style", "multilineField: {"),
+        ):
+            _assert_contains(label, food_community_share_text_fields_content, marker)
         for label, marker in (
             ("manual record exercise fields component", "export function ManualRecordExerciseFields"),
             ("manual record exercise shared field", "<RecordTextField"),
@@ -11617,12 +11648,12 @@ def main() -> int:
             ("ranking return future modules press target binding", "const rankingReturnFutureModulesPressTarget = rankingReturnFutureModulesPressHandler();"),
             ("ranking return future modules press helper binding", "onPress={rankingReturnFutureModulesPressTarget}"),
             ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
-            ("food community share food name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
+            ("food community share food name accessibility auxiliary binding", "foodNameAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
             ("food community share eaten date accessibility auxiliary binding", "dateAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
             ("food community share eaten time accessibility auxiliary binding", "timeAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
-            ("food community share before glucose accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}"),
-            ("food community share after glucose accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareAfterGlucoseAccessibility}"),
-            ("food community share note accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}"),
+            ("food community share before glucose accessibility auxiliary binding", "beforeGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}"),
+            ("food community share after glucose accessibility auxiliary binding", "afterGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareAfterGlucoseAccessibility}"),
+            ("food community share note accessibility auxiliary binding", "noteAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}"),
             ("food community category api type import", "type FoodCommunityApiCategoryRead,"),
             ("food community backend category state", "const [foodCommunityBackendCategories, setFoodCommunityBackendCategories]"),
             ("food community backend category options", "const foodCommunityCategoriesForDisplay = foodCommunityDisplay.categoriesForDisplay;"),
@@ -11653,13 +11684,13 @@ def main() -> int:
             ("food community share food name updater", "function updateFoodCommunityFoodName(value: string)"),
             ("food community share eaten date updater", "function updateFoodCommunityEatenDate(value: string)"),
             ("food community share eaten time updater", "function updateFoodCommunityEatenTime(value: string)"),
-            ("food community share food name input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
-            ("food community share food name binding", "onChangeText={updateFoodCommunityFoodName}"),
+            ("food community share food name input", "foodNameAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
+            ("food community share food name binding", "onFoodNameChange={updateFoodCommunityFoodName}"),
             ("food community share eaten date input", "dateAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
             ("food community share eaten time input", "timeAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
-            ("food community share before glucose input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}"),
-            ("food community share after glucose input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareAfterGlucoseAccessibility}"),
-            ("food community share note input", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}"),
+            ("food community share before glucose input", "beforeGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}"),
+            ("food community share after glucose input", "afterGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareAfterGlucoseAccessibility}"),
+            ("food community share note input", "noteAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}"),
             ("food community share eaten date binding", "onDateChange={updateFoodCommunityEatenDate}"),
             ("food community share eaten time binding", "onTimeChange={updateFoodCommunityEatenTime}"),
             ("food community share eaten date max length", "dateMaxLength={maxDateInputLength}"),
