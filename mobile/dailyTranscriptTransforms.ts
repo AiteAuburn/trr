@@ -298,6 +298,8 @@ export function dailyTranscriptDisplayBundle(
   const countText = boundDisplayText(`${clampNumber(items.length, 0, maxListItems)} 段`, 20);
   return {
     items,
+    title: boundDisplayText("今日錄音文字", maxDisplayTextLength),
+    body: boundDisplayText("保留今天所有文字片段；目前先顯示本次整理內容。", maxDisplayDetailTextLength),
     countText,
     accessibilityLabel: boundDisplayText(`查看今日錄音文字，共 ${countText}`, maxDisplayDetailTextLength)
   };

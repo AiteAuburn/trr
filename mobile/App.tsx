@@ -1304,6 +1304,8 @@ export default function App() {
   const dailyRecordSectionItems = preview ? buildDailyRecordSectionDisplayItems(previewState.records) : [];
   const todayTranscriptDisplay = dailyTranscriptDisplayBundle(preview, dailyTranscriptEntries);
   const todayTranscriptDisplayItems = todayTranscriptDisplay.items;
+  const todayTranscriptTitleDisplayText = todayTranscriptDisplay.title;
+  const todayTranscriptBodyDisplayText = todayTranscriptDisplay.body;
   const todayTranscriptCountDisplayText = todayTranscriptDisplay.countText;
   const todayTranscriptAccessibilityLabel = todayTranscriptDisplay.accessibilityLabel;
   const aiSaveConfirmSubmitDisplayLabel = aiSaveConfirmDisplay.submit;
@@ -8754,8 +8756,8 @@ export default function App() {
               onPress={openTodayTranscriptText}
             >
               <View style={styles.timelineContent}>
-                <Text style={styles.label}>今日錄音文字</Text>
-                <Text style={styles.evidence}>保留今天所有文字片段；目前先顯示本次整理內容。</Text>
+                <Text style={styles.label}>{todayTranscriptTitleDisplayText}</Text>
+                <Text style={styles.evidence}>{todayTranscriptBodyDisplayText}</Text>
               </View>
               <Text style={styles.countText}>{todayTranscriptCountDisplayText}</Text>
             </Pressable>

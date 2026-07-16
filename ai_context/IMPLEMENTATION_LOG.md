@@ -15,6 +15,39 @@
 
 ## 2026-07-15
 
+### T1758 reuse today transcript CTA display copy
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/dailyTranscriptTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added title and body fields to the daily transcript display bundle used by the AI save confirm transcript CTA.
+- Reused those bundled fields in the daily-record save confirmation render instead of direct JSX literals.
+- Updated navigation, UI spec coverage, and visual-smoke route verifier coverage with positive display-bundle bindings and direct literal guards.
+- 未變更 UI copy/layout、transcript retention behavior、leave-guard visibility timing、Android back behavior、return guard behavior、navigation targets、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1757 reuse AI save confirm static labels
 
 類型：mobile / refactor / verifier / docs

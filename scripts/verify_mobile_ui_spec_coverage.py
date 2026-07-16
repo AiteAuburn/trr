@@ -62,7 +62,12 @@ CANONICAL_SPEC_SCREENS = (
     SpecScreen("4.16", "AI 整理確認頁", "aiReview", ("previewRecordDisplayItems.map", "rejectedPreviewDisplayItems.map")),
     SpecScreen("4.16.0", "AI 候選移除確認頁", "aiRemoveConfirm", ("removePreviewRecord", "aiCandidateRemoveChecklistItems.map")),
     SpecScreen("4.16.1", "AI 儲存確認頁", "aiSaveConfirm", ("savePreviewRecords", "aiSaveConfirmBoundaryRows.map")),
-    SpecScreen("4.17", "每日紀錄頁（AI 整理完成頁）", "aiSaveConfirm", ("dailyRecordSectionItems.map", "今日錄音文字", "fixedSaveBar")),
+    SpecScreen(
+        "4.17",
+        "每日紀錄頁（AI 整理完成頁）",
+        "aiSaveConfirm",
+        ("dailyRecordSectionItems.map", "todayTranscriptTitleDisplayText", "fixedSaveBar"),
+    ),
     SpecScreen("4.16.2", "AI 儲存失敗頁", "aiSaveFailure", ("aiSaveFailureChecklistItems.map", "openManualRecord")),
 )
 
