@@ -3548,9 +3548,13 @@ export default function App() {
   }
 
   function returnFromPreviewRemoveConfirm() {
+    resetPreviewRecordRemoveCancelState();
+    openPreviewActionReturnScreenWithStatus(aiCandidateRemoveCancelStatusMessage());
+  }
+
+  function resetPreviewRecordRemoveCancelState() {
     clearPreviewMenuSelectionIndexes();
     clearPreviewEditDraftFields();
-    openPreviewActionReturnScreenWithStatus(aiCandidateRemoveCancelStatusMessage());
   }
 
   function openPreviewActionReturnScreen() {

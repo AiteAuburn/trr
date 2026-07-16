@@ -4176,12 +4176,22 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove return index clear helper binding",
             content,
-            "function returnFromPreviewRemoveConfirm() {\n    clearPreviewMenuSelectionIndexes();",
+            "function returnFromPreviewRemoveConfirm() {\n    resetPreviewRecordRemoveCancelState();",
+        )
+        _assert_contains(
+            "AI candidate remove cancel reset helper",
+            content,
+            "function resetPreviewRecordRemoveCancelState()",
+        )
+        _assert_contains(
+            "AI candidate remove cancel reset helper internals",
+            content,
+            "function resetPreviewRecordRemoveCancelState() {\n    clearPreviewMenuSelectionIndexes();\n    clearPreviewEditDraftFields();",
         )
         _assert_contains(
             "AI candidate remove return field clear helper binding",
             content,
-            "clearPreviewMenuSelectionIndexes();\n    clearPreviewEditDraftFields();",
+            "resetPreviewRecordRemoveCancelState();\n    openPreviewActionReturnScreenWithStatus(aiCandidateRemoveCancelStatusMessage());",
         )
         _assert_contains(
             "AI candidate remove return status helper binding",
