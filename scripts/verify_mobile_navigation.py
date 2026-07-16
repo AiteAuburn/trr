@@ -38,6 +38,7 @@ ANALYSIS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "analysisScreenData.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
 SETTINGS_CHOICE_DISPLAY_PATH = REPO_ROOT / "mobile" / "settingsChoiceDisplay.ts"
+SETTINGS_MODEL_CHOICE_SELECTOR_PATH = REPO_ROOT / "mobile" / "settingsModelChoiceSelector.tsx"
 SETTINGS_PROFILE_CHOICE_SELECTOR_PATH = REPO_ROOT / "mobile" / "settingsProfileChoiceSelector.tsx"
 MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "modelTransforms.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
@@ -933,8 +934,6 @@ def _pressable_label_source_errors(content: str) -> list[str]:
         "quickEntryModeAccessibilityLabel(item)",
         "recordingWhisperModelAccessibilityLabel(model)",
         "settingsDisplayRowAccessibilityLabel(row)",
-        "settingsModelChoiceAccessibilityLabel(model)",
-        "settingsProfileChoiceAccessibilityLabel(profile)",
         "storeCategoryOptionAccessibilityLabel(category)",
         "visualSmokeRouteAccessibilityLabel(item)",
         "foodCommunityListItemAccessibilityLabel(item)",
@@ -1420,6 +1419,7 @@ def main() -> int:
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     settings_screen_data_content = SETTINGS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     settings_choice_display_content = SETTINGS_CHOICE_DISPLAY_PATH.read_text(encoding="utf-8")
+    settings_model_choice_selector_content = SETTINGS_MODEL_CHOICE_SELECTOR_PATH.read_text(encoding="utf-8")
     settings_profile_choice_selector_content = SETTINGS_PROFILE_CHOICE_SELECTOR_PATH.read_text(encoding="utf-8")
     model_transforms_content = MODEL_TRANSFORMS_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
@@ -11474,24 +11474,14 @@ def main() -> int:
             ("settings profile choice selector handler binding", "onProfilePress={pressSettingsProfileChoice}"),
             ("settings model choice target helper", "function settingsModelChoiceTarget(model: { sourceId: string })"),
             ("settings model choice target helper fields", "return model.sourceId;"),
-            ("settings model choice key helper", "function settingsModelChoiceKey(model: { id: string })"),
-            ("settings model choice key helper fields", "return model.id;"),
-            ("settings model choice key binding", "key={settingsModelChoiceKey(model)}"),
-            ("settings model choice accessibility helper", "function settingsModelChoiceAccessibilityLabel(model: { accessibilityLabel: string })"),
-            ("settings model choice accessibility helper fields", "return model.accessibilityLabel;"),
-            ("settings model choice accessibility binding", "accessibilityLabel={settingsModelChoiceAccessibilityLabel(model)}"),
-            ("settings model choice available helper", "function settingsModelChoiceIsAvailable(model: { available: boolean })"),
-            ("settings model choice available helper fields", "return model.available;"),
-            ("settings model choice disabled helper", "function settingsModelChoiceIsDisabled(model: { available: boolean }, isRequestInFlight: boolean)"),
-            ("settings model choice disabled helper fields", "return !settingsModelChoiceIsAvailable(model) || isRequestInFlight;"),
-            ("settings model choice disabled binding", "const modelDisabled = settingsModelChoiceIsDisabled(model, isAnyRequestInFlight);"),
-            ("settings model choice selected helper", "function settingsModelChoiceIsSelected(model: { sourceId: string }, selectedId: string)"),
-            ("settings model choice selected helper fields", "return settingsModelChoiceTarget(model) === selectedId;"),
-            ("settings model choice LLM selected binding", "const modelSelected = settingsModelChoiceIsSelected(model, llmModelId);"),
-            ("settings model choice STT selected binding", "const modelSelected = settingsModelChoiceIsSelected(model, sttModelId);"),
-            ("settings model choice label helper", "function settingsModelChoiceLabel(model: { label: string })"),
-            ("settings model choice label helper fields", "return model.label;"),
-            ("settings model choice label binding", "{settingsModelChoiceLabel(model)}"),
+            ("settings model choice selector binding", "<SettingsModelChoiceSelector"),
+            ("settings model choice selector disabled binding", "disabled={isAnyRequestInFlight}"),
+            ("settings LLM model choice selector items binding", "items={llmModelChoiceDisplayItems}"),
+            ("settings LLM model choice selector handler binding", "onModelPress={pressSettingsLlmModelChoice}"),
+            ("settings LLM model choice selector selected binding", "selectedModelId={llmModelId}"),
+            ("settings STT model choice selector items binding", "items={sttModelChoiceDisplayItems}"),
+            ("settings STT model choice selector handler binding", "onModelPress={pressSettingsSttModelChoice}"),
+            ("settings STT model choice selector selected binding", "selectedModelId={sttModelId}"),
             ("llm model settings option press handler", "function pressSettingsLlmModelChoice(model: (typeof llmModelChoiceDisplayItems)[number])"),
             ("llm model settings target helper binding", "selectSettingsLlmModelChoice(settingsModelChoiceTarget(model));"),
             ("stt model settings option press handler", "function pressSettingsSttModelChoice(model: (typeof sttModelChoiceDisplayItems)[number])"),
@@ -11758,8 +11748,8 @@ def main() -> int:
             ("backend reconnect accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.backendReconnectAccessibility}"),
             ("backend reconnect disabled state", "accessibilityState={{ disabled: isAnyRequestInFlight }}"),
             ("profile settings choice selector binding", "<SettingsProfileChoiceSelector"),
-            ("llm model settings option binding", "onPress={() => pressSettingsLlmModelChoice(model)}"),
-            ("stt model settings option binding", "onPress={() => pressSettingsSttModelChoice(model)}"),
+            ("llm model settings selector binding", "onModelPress={pressSettingsLlmModelChoice}"),
+            ("stt model settings selector binding", "onModelPress={pressSettingsSttModelChoice}"),
             ("recording whisper model settings title", "本機 Whisper 模型"),
             ("recording whisper model selector settings binding", "<RecordingWhisperModelSelector"),
             ("recording whisper model selector items binding", "items={downloadedWhisperModelChoiceItems}"),
@@ -11768,11 +11758,12 @@ def main() -> int:
             ("recording model refresh binding", "onPress={refreshRecordingModelsFromSettings}"),
             ("recording model refresh accessibility binding", "accessibilityLabel={recordingModelRefreshAccessibilityDisplayLabel}"),
             ("profile settings choice selector accessibility boundary", "onProfilePress={pressSettingsProfileChoice}"),
-            ("llm model settings option accessibility binding", "accessibilityLabel={settingsModelChoiceAccessibilityLabel(model)}"),
+            ("llm model settings selector selected binding", "selectedModelId={llmModelId}"),
+            ("stt model settings selector selected binding", "selectedModelId={sttModelId}"),
             ("settings option button role", 'accessibilityRole="button"'),
             ("profile settings choice selector disabled binding", "disabled={isAnyRequestInFlight}"),
-            ("llm model settings option state binding", "accessibilityState={{ disabled: modelDisabled, selected: modelSelected }}"),
-            ("stt model settings option state binding", "accessibilityState={{ disabled: modelDisabled, selected: modelSelected }}"),
+            ("llm model settings selector items binding", "items={llmModelChoiceDisplayItems}"),
+            ("stt model settings selector items binding", "items={sttModelChoiceDisplayItems}"),
             ("native model URL input binding", "onChangeText={updateNativeModelUrlInput}"),
             ("native whisper path input binding", "onChangeText={updateWhisperModelPathInput}"),
             ("native audio path input binding", "onChangeText={updateNativeAudioPathInput}"),
@@ -12394,12 +12385,8 @@ def main() -> int:
             ("direct settings profile label binding", "{profile.label}"),
         ):
             _assert_not_contains(label, content, marker)
-        settings_llm_choice_render_block = _match_block(
-            content,
-            r"llmModelChoiceDisplayItems\.map\(\(model\) => \{([\s\S]*?pressSettingsLlmModelChoice\(model\)[\s\S]*?</Pressable>)",
-            "settings LLM model choice render block",
-        )
         for label, marker in (
+            ("direct LLM model choice map", "llmModelChoiceDisplayItems.map((model) => {"),
             ("direct LLM model key binding", "key={model.id}"),
             ("direct LLM model accessibility binding", "accessibilityLabel={model.accessibilityLabel}"),
             ("direct LLM model disabled binding", "!model.available || isAnyRequestInFlight"),
@@ -12407,13 +12394,9 @@ def main() -> int:
             ("direct LLM model available text binding", "!model.available ? styles.chipTextDisabled : null"),
             ("direct LLM model label binding", "{model.label}"),
         ):
-            _assert_not_contains(label, settings_llm_choice_render_block, marker)
-        settings_stt_choice_render_block = _match_block(
-            content,
-            r"sttModelChoiceDisplayItems\.map\(\(model\) => \{([\s\S]*?pressSettingsSttModelChoice\(model\)[\s\S]*?</Pressable>)",
-            "settings STT model choice render block",
-        )
+            _assert_not_contains(label, content, marker)
         for label, marker in (
+            ("direct STT model choice map", "sttModelChoiceDisplayItems.map((model) => {"),
             ("direct STT model key binding", "key={model.id}"),
             ("direct STT model accessibility binding", "accessibilityLabel={model.accessibilityLabel}"),
             ("direct STT model disabled binding", "!model.available || isAnyRequestInFlight"),
@@ -12421,7 +12404,7 @@ def main() -> int:
             ("direct STT model available text binding", "!model.available ? styles.chipTextDisabled : null"),
             ("direct STT model label binding", "{model.label}"),
         ):
-            _assert_not_contains(label, settings_stt_choice_render_block, marker)
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("direct recording Whisper model map", "downloadedWhisperModelChoiceItems.map((model) => {"),
             ("direct recording Whisper model selected binding", "model.sourceUri === whisperModelPath"),
@@ -12474,6 +12457,27 @@ def main() -> int:
             ("settings profile choice selector text style", "chipText: {"),
         ):
             _assert_contains(label, settings_profile_choice_selector_content, marker)
+        for label, marker in (
+            ("settings model choice selector component", "export function SettingsModelChoiceSelector"),
+            ("settings model choice selector scroll", '<ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false}>'),
+            ("settings model choice selector map", "items.map((model) => {"),
+            ("settings model choice selector disabled binding", "const modelDisabled = !model.available || disabled;"),
+            ("settings model choice selector selected binding", "const modelSelected = model.sourceId === selectedModelId;"),
+            ("settings model choice selector accessibility binding", "accessibilityLabel={model.accessibilityLabel}"),
+            ("settings model choice selector role", 'accessibilityRole="button"'),
+            ("settings model choice selector state", "accessibilityState={{ disabled: modelDisabled, selected: modelSelected }}"),
+            ("settings model choice selector disabled prop", "disabled={modelDisabled}"),
+            ("settings model choice selector key binding", "key={model.id}"),
+            ("settings model choice selector handler", "onPress={() => onModelPress(model)}"),
+            ("settings model choice selector unavailable text style", "!model.available ? styles.chipTextDisabled : null"),
+            ("settings model choice selector label", "{model.label}"),
+            ("settings model choice selector chip style", "chip: {"),
+            ("settings model choice selector disabled style", "chipDisabled: {"),
+            ("settings model choice selector selected style", "chipSelected: {"),
+            ("settings model choice selector text style", "chipText: {"),
+            ("settings model choice selector disabled text style", "chipTextDisabled: {"),
+        ):
+            _assert_contains(label, settings_model_choice_selector_content, marker)
         for label, marker in (
             ("downloaded model row key helper", "function downloadedModelRowKey(model: DownloadedModel)"),
             ("downloaded model row key helper fields", "return model.uri;"),

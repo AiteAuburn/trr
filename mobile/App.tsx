@@ -827,9 +827,10 @@ import { FoodCommunitySearchField } from "./foodCommunitySearchField";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
 import { FoodCommunityShareTextFields } from "./foodCommunityShareTextFields";
 import { SegmentSelector } from "./segmentSelector";
+import { SettingsModelChoiceSelector } from "./settingsModelChoiceSelector";
+import { SettingsProfileChoiceSelector } from "./settingsProfileChoiceSelector";
 import { SettingsSubpageActionRow } from "./settingsSubpageActionRow";
 import { SettingsSubpageCloseButton } from "./settingsSubpageCloseButton";
-import { SettingsProfileChoiceSelector } from "./settingsProfileChoiceSelector";
 import { StoreSearchField } from "./storeSearchField";
 import { SubscriptionSubpageActionRow } from "./subscriptionSubpageActionRow";
 import { SubscriptionSubpageCloseButton } from "./subscriptionSubpageCloseButton";
@@ -4961,30 +4962,6 @@ export default function App() {
 
   function settingsModelChoiceTarget(model: { sourceId: string }) {
     return model.sourceId;
-  }
-
-  function settingsModelChoiceKey(model: { id: string }) {
-    return model.id;
-  }
-
-  function settingsModelChoiceAccessibilityLabel(model: { accessibilityLabel: string }) {
-    return model.accessibilityLabel;
-  }
-
-  function settingsModelChoiceIsAvailable(model: { available: boolean }) {
-    return model.available;
-  }
-
-  function settingsModelChoiceIsDisabled(model: { available: boolean }, isRequestInFlight: boolean) {
-    return !settingsModelChoiceIsAvailable(model) || isRequestInFlight;
-  }
-
-  function settingsModelChoiceIsSelected(model: { sourceId: string }, selectedId: string) {
-    return settingsModelChoiceTarget(model) === selectedId;
-  }
-
-  function settingsModelChoiceLabel(model: { label: string }) {
-    return model.label;
   }
 
   function pressSettingsLlmModelChoice(model: (typeof llmModelChoiceDisplayItems)[number]) {
@@ -12208,70 +12185,20 @@ export default function App() {
                   處理中會暫停切換照護對象與模型，避免 parser、同步或儲存使用到不一致設定。
                 </Text>
                 <Text style={styles.label}>{auxiliaryDisplayLabels.llmModel}</Text>
-                <ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false}>
-                  {llmModelChoiceDisplayItems.map((model) => {
-                    const modelDisabled = settingsModelChoiceIsDisabled(model, isAnyRequestInFlight);
-                    const modelSelected = settingsModelChoiceIsSelected(model, llmModelId);
-                    return (
-                      <Pressable
-                        key={settingsModelChoiceKey(model)}
-                        accessibilityLabel={settingsModelChoiceAccessibilityLabel(model)}
-                        accessibilityRole="button"
-                        accessibilityState={{ disabled: modelDisabled, selected: modelSelected }}
-                        style={[
-                          styles.chip,
-                          modelSelected ? styles.chipSelected : null,
-                          modelDisabled ? styles.chipDisabled : null
-                        ]}
-                        disabled={modelDisabled}
-                        onPress={() => pressSettingsLlmModelChoice(model)}
-                      >
-                        <Text
-                          style={[
-                            styles.chipText,
-                            modelSelected ? styles.chipTextSelected : null,
-                            !settingsModelChoiceIsAvailable(model) ? styles.chipTextDisabled : null
-                          ]}
-                        >
-                          {settingsModelChoiceLabel(model)}
-                        </Text>
-                      </Pressable>
-                    );
-                  })}
-                </ScrollView>
+                <SettingsModelChoiceSelector
+                  disabled={isAnyRequestInFlight}
+                  items={llmModelChoiceDisplayItems}
+                  onModelPress={pressSettingsLlmModelChoice}
+                  selectedModelId={llmModelId}
+                />
                 <Text style={styles.evidence}>{modelSelectionBoundaryDisplayText}</Text>
                 <Text style={styles.label}>{auxiliaryDisplayLabels.sttModel}</Text>
-                <ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false}>
-                  {sttModelChoiceDisplayItems.map((model) => {
-                    const modelDisabled = settingsModelChoiceIsDisabled(model, isAnyRequestInFlight);
-                    const modelSelected = settingsModelChoiceIsSelected(model, sttModelId);
-                    return (
-                      <Pressable
-                        key={settingsModelChoiceKey(model)}
-                        accessibilityLabel={settingsModelChoiceAccessibilityLabel(model)}
-                        accessibilityRole="button"
-                        accessibilityState={{ disabled: modelDisabled, selected: modelSelected }}
-                        style={[
-                          styles.chip,
-                          modelSelected ? styles.chipSelected : null,
-                          modelDisabled ? styles.chipDisabled : null
-                        ]}
-                        disabled={modelDisabled}
-                        onPress={() => pressSettingsSttModelChoice(model)}
-                      >
-                        <Text
-                          style={[
-                            styles.chipText,
-                            modelSelected ? styles.chipTextSelected : null,
-                            !settingsModelChoiceIsAvailable(model) ? styles.chipTextDisabled : null
-                          ]}
-                        >
-                          {settingsModelChoiceLabel(model)}
-                        </Text>
-                      </Pressable>
-                    );
-                  })}
-                </ScrollView>
+                <SettingsModelChoiceSelector
+                  disabled={isAnyRequestInFlight}
+                  items={sttModelChoiceDisplayItems}
+                  onModelPress={pressSettingsSttModelChoice}
+                  selectedModelId={sttModelId}
+                />
               </>
             ) : null}
             <View style={styles.rejectedBox}>

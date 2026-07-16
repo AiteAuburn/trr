@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2049 extract settings model choice selector
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/settingsModelChoiceSelector.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added generic `SettingsModelChoiceSelector` for the advanced Settings LLM and STT model chips.
+- Replaced both inline model choice horizontal chip lists in `App.tsx`.
+- Preserved selected state, unavailable-model disabled state, request-in-flight disabled state, accessibility labels, press handlers, and chip styling.
+- Updated navigation verifier coverage for the shared component boundary and App wiring.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing adjacent advanced Settings native/debug clusters without changing first-version scope.
+
 ### T2048 extract settings profile choice selector
 
 類型：mobile / refactor / verifier / docs
