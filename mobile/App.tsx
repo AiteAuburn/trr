@@ -3617,6 +3617,12 @@ export default function App() {
     }
   }
 
+  function handleParserPreviewFailure(error: unknown) {
+    const message = parserFailureStatusMessage(error);
+    setParserRecoveryMessage(parserFailureRecoveryMessage(message));
+    setStatus(message);
+  }
+
   function removePreviewRecord(index: number) {
     if (!preview) {
       return;
@@ -7394,9 +7400,7 @@ export default function App() {
       );
       refreshVoiceQuotaAfterParserSuccess(parserVoiceSeconds);
     } catch (error) {
-      const message = parserFailureStatusMessage(error);
-      setParserRecoveryMessage(parserFailureRecoveryMessage(message));
-      setStatus(message);
+      handleParserPreviewFailure(error);
     } finally {
       parsePreviewInFlight.current = false;
       setIsBusy(false);

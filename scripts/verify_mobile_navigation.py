@@ -5732,6 +5732,9 @@ def main() -> int:
             ("parse success refresh quota helper", "function refreshVoiceQuotaAfterParserSuccess(voiceSeconds: number)"),
             ("parse success refresh quota helper internals", "if (voiceSeconds > 0 && account) {\n      void loadVoiceQuota(account.id);"),
             ("parse success refreshes quota", "refreshVoiceQuotaAfterParserSuccess(parserVoiceSeconds);"),
+            ("parse failure helper", "function handleParserPreviewFailure(error: unknown)"),
+            ("parse failure helper internals", "const message = parserFailureStatusMessage(error);\n    setParserRecoveryMessage(parserFailureRecoveryMessage(message));\n    setStatus(message);"),
+            ("parse failure helper binding", "handleParserPreviewFailure(error);"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
