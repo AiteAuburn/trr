@@ -5076,7 +5076,7 @@ def main() -> int:
         _assert_contains(
             "record update validation helper binding",
             content,
-            "if (!validateSelectedRecordUpdateForSubmit(updateContext.record.record_type)) {\n      return;\n    }",
+            "const updateArgs = selectedRecordUpdateRequestArgs(updateContext);\n    if (!validateSelectedRecordUpdateForSubmit(updateArgs.recordType)) {\n      return;\n    }",
         )
         _assert_contains(
             "record update complete helper",
@@ -5106,7 +5106,17 @@ def main() -> int:
         _assert_contains(
             "record update start and complete helper binding",
             content,
-            "await startAndCompleteSelectedRecordUpdateRequest(\n      updateContext.record.id,\n      updateContext.account.id,\n      updateContext.record.record_type\n    );",
+            "await startAndCompleteSelectedRecordUpdateRequest(\n      updateArgs.recordId,\n      updateArgs.accountId,\n      updateArgs.recordType\n    );",
+        )
+        _assert_contains(
+            "record update request args helper",
+            content,
+            "function selectedRecordUpdateRequestArgs(updateContext: NonNullable<ReturnType<typeof guardedSelectedRecordUpdateContext>>)",
+        )
+        _assert_contains(
+            "record update request args helper fields",
+            content,
+            "return {\n      accountId: updateContext.account.id,\n      recordId: updateContext.record.id,\n      recordType: updateContext.record.record_type\n    };",
         )
         _assert_contains(
             "record update guarded context helper",
@@ -5561,7 +5571,17 @@ def main() -> int:
         _assert_contains(
             "record delete start and complete helper binding",
             content,
-            "await startAndCompleteSelectedRecordDeleteRequest(deleteContext.record.id, deleteContext.account.id);",
+            "const deleteArgs = selectedRecordDeleteRequestArgs(deleteContext);\n    await startAndCompleteSelectedRecordDeleteRequest(deleteArgs.recordId, deleteArgs.accountId);",
+        )
+        _assert_contains(
+            "record delete request args helper",
+            content,
+            "function selectedRecordDeleteRequestArgs(deleteContext: NonNullable<ReturnType<typeof guardedSelectedRecordDeleteContext>>)",
+        )
+        _assert_contains(
+            "record delete request args helper fields",
+            content,
+            "return {\n      accountId: deleteContext.account.id,\n      recordId: deleteContext.record.id\n    };",
         )
         _assert_contains(
             "record delete guarded context helper",

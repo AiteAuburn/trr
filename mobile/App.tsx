@@ -8605,15 +8605,24 @@ export default function App() {
     if (!updateContext) {
       return;
     }
-    if (!validateSelectedRecordUpdateForSubmit(updateContext.record.record_type)) {
+    const updateArgs = selectedRecordUpdateRequestArgs(updateContext);
+    if (!validateSelectedRecordUpdateForSubmit(updateArgs.recordType)) {
       return;
     }
 
     await startAndCompleteSelectedRecordUpdateRequest(
-      updateContext.record.id,
-      updateContext.account.id,
-      updateContext.record.record_type
+      updateArgs.recordId,
+      updateArgs.accountId,
+      updateArgs.recordType
     );
+  }
+
+  function selectedRecordUpdateRequestArgs(updateContext: NonNullable<ReturnType<typeof guardedSelectedRecordUpdateContext>>) {
+    return {
+      accountId: updateContext.account.id,
+      recordId: updateContext.record.id,
+      recordType: updateContext.record.record_type
+    };
   }
 
   function startRecordDeleteRequest() {
@@ -8691,7 +8700,15 @@ export default function App() {
       return;
     }
 
-    await startAndCompleteSelectedRecordDeleteRequest(deleteContext.record.id, deleteContext.account.id);
+    const deleteArgs = selectedRecordDeleteRequestArgs(deleteContext);
+    await startAndCompleteSelectedRecordDeleteRequest(deleteArgs.recordId, deleteArgs.accountId);
+  }
+
+  function selectedRecordDeleteRequestArgs(deleteContext: NonNullable<ReturnType<typeof guardedSelectedRecordDeleteContext>>) {
+    return {
+      accountId: deleteContext.account.id,
+      recordId: deleteContext.record.id
+    };
   }
 
   function startManualCreateRequest() {
