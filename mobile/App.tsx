@@ -8124,6 +8124,10 @@ export default function App() {
     }
   }
 
+  function finishInitialRecordSyncRequest(syncContext: { syncKey: string }) {
+    recordSyncInFlightKeys.current.delete(syncContext.syncKey);
+  }
+
   async function loadRecords() {
     const syncContext = guardedInitialRecordSyncContext();
     if (!syncContext) {
@@ -8142,7 +8146,7 @@ export default function App() {
     } catch {
       handleInitialRecordSyncFailure(syncContext);
     } finally {
-      recordSyncInFlightKeys.current.delete(syncContext.syncKey);
+      finishInitialRecordSyncRequest(syncContext);
     }
   }
 
