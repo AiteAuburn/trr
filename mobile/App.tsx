@@ -3935,6 +3935,23 @@ export default function App() {
     handlePreparedParserPreviewSuccess(mergedDailyPreview, text, preparedRequest);
   }
 
+  async function completePreparedParserPreviewRequest(
+    context: {
+      account: Account;
+      activeProfile: Profile;
+    },
+    text: string,
+    preparedRequest: ReturnType<typeof prepareParserPreviewRequest>
+  ) {
+    try {
+      await submitPreparedParserPreview(context, text, preparedRequest);
+    } catch (error) {
+      handleParserPreviewFailure(error);
+    } finally {
+      finishParserPreviewRequest();
+    }
+  }
+
   function applyPreviewRecordRemoveChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[]) {
     if (isPreviewActionReturningToDailyRecord) {
       reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "delete");
@@ -7881,13 +7898,7 @@ export default function App() {
     }
 
     const preparedRequest = startPreparedParserPreviewRequest();
-    try {
-      await submitPreparedParserPreview(parserContext, transcript, preparedRequest);
-    } catch (error) {
-      handleParserPreviewFailure(error);
-    } finally {
-      finishParserPreviewRequest();
-    }
+    await completePreparedParserPreviewRequest(parserContext, transcript, preparedRequest);
   }
 
   function startPreviewSaveRequest() {
