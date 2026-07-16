@@ -15,6 +15,7 @@ APP_RUNTIME_CONFIG_PATH = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 ACCOUNT_SECURITY_ACTION_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityActionGrid.tsx"
 AUTH_PROVIDER_PREVIEW_LIST_PATH = REPO_ROOT / "mobile" / "authProviderPreviewList.tsx"
+AUTH_SESSION_DISPLAY_LIST_PATH = REPO_ROOT / "mobile" / "authSessionDisplayList.tsx"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
 RECORD_EDIT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "recordEditTransforms.ts"
 RECORD_BOUNDS_PATH = REPO_ROOT / "mobile" / "recordBounds.ts"
@@ -1399,6 +1400,7 @@ def main() -> int:
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     account_security_action_grid_content = ACCOUNT_SECURITY_ACTION_GRID_PATH.read_text(encoding="utf-8")
     auth_provider_preview_list_content = AUTH_PROVIDER_PREVIEW_LIST_PATH.read_text(encoding="utf-8")
+    auth_session_display_list_content = AUTH_SESSION_DISPLAY_LIST_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
     record_edit_transforms_content = RECORD_EDIT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     record_bounds_content = RECORD_BOUNDS_PATH.read_text(encoding="utf-8")
@@ -9837,6 +9839,25 @@ def main() -> int:
         ):
             _assert_contains(label, auth_provider_preview_list_content, marker)
         for label, marker in (
+            ("auth session display list component", "export function AuthSessionDisplayList"),
+            ("auth session display row key helper", "function authSessionDisplayRowKey(item: { key: string })"),
+            ("auth session display row key helper fields", "return item.key;"),
+            ("auth session display last used helper", "function authSessionDisplayLastUsedText(item: { lastUsed: string })"),
+            ("auth session display last used helper fields", "return item.lastUsed;"),
+            ("auth session display list wrapper style", "style={styles.aiReviewList}"),
+            ("auth session display list map", "items.map((item) => ("),
+            ("auth session display list row key", "key={authSessionDisplayRowKey(item)}"),
+            ("auth session display list fixed icon", "<Text>裝</Text>"),
+            ("auth session display list title", "{item.title}"),
+            ("auth session display list copy", "{item.copy}"),
+            ("auth session display list last used", "{authSessionDisplayLastUsedText(item)}"),
+            ("auth session display list status", "{item.statusLabel}"),
+            ("auth session display list card style", "aiReviewCard: {"),
+            ("auth session display list text style", "recordContent: {"),
+            ("auth session display list badge style", "previewModeBadge: {"),
+        ):
+            _assert_contains(label, auth_session_display_list_content, marker)
+        for label, marker in (
             ("session management preview list component", "export function SessionManagementPreviewList"),
             ("session management preview list wrapper style", "style={styles.aiReviewList}"),
             ("session management preview list map", "items.map((item) => ("),
@@ -10941,10 +10962,6 @@ def main() -> int:
             ("preview status row copy helper fields", "return row.copy;"),
             ("preview status row status helper", "function previewStatusRowStatusLabel(row: { statusLabel: string })"),
             ("preview status row status helper fields", "return row.statusLabel;"),
-            ("preview keyed row key helper", "function previewKeyedRowKey(row: { key: string })"),
-            ("preview keyed row key helper fields", "return row.key;"),
-            ("preview last used row helper", "function previewLastUsedRowText(row: { lastUsed: string })"),
-            ("preview last used row helper fields", "return row.lastUsed;"),
             ("preview timed row time helper", "function previewTimedRowTime(row: { time: string })"),
             ("preview timed row time helper fields", "return row.time;"),
             ("subscription management preview status row key binding", "subscriptionManagementDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
@@ -10953,7 +10970,7 @@ def main() -> int:
             ("session management preview list key boundary", "<SessionManagementPreviewList"),
             ("auth provider preview list key boundary", "<AuthProviderPreviewList"),
             ("reminder preview status row key binding", "reminderPreviewDisplayItems.map((item) => (\n                <View key={previewStatusRowKey(item)}"),
-            ("auth session display row key binding", "authSessionDisplayItems.map((item) => (\n                  <View key={previewKeyedRowKey(item)}"),
+            ("auth session display list key boundary", "<AuthSessionDisplayList"),
             ("session management preview list items binding", "items={sessionManagementDisplayItems}"),
             ("preview status row icon binding", "{previewStatusRowIcon(row)}"),
             ("preview status row title binding", "{previewStatusRowTitle(row)}"),
@@ -10967,7 +10984,7 @@ def main() -> int:
             ("production auth readiness preview status row copy binding", "{previewStatusRowCopy(item)}"),
             ("production auth readiness preview status row status binding", "{previewStatusRowStatusLabel(item)}"),
             ("session management preview list handler binding", "onSessionPress={pressAuthSessionManagementPreview}"),
-            ("auth session display last used row binding", "{previewLastUsedRowText(item)}"),
+            ("auth session display list items binding", "items={authSessionDisplayItems}"),
             ("reminder preview status row time binding", "{previewTimedRowTime(item)}"),
             ("settings checklist item key helper", "function settingsChecklistItemKey(item: string)"),
             ("settings checklist item key helper fields", "return item;"),
@@ -11303,10 +11320,6 @@ def main() -> int:
             (
                 "reminder preview status rows render block",
                 r"reminderPreviewDisplayItems\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
-            ),
-            (
-                "auth session display rows render block",
-                r"authSessionDisplayItems\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
             ),
         ):
             preview_status_rows_render_block = _match_block(content, pattern, block_label)
@@ -11676,6 +11689,7 @@ def main() -> int:
             ("auth logout binding", "onLogoutLocalPress={logoutAuthSessionFromSecurity}"),
             ("auth logout all binding", "onLogoutAllPress={logoutAllAuthSessionsFromSecurity}"),
             ("auth session display list helper binding", "const authSessionDisplayItems = settingsChoiceDisplay.authSessionDisplayItems;"),
+            ("auth session display list render binding", "<AuthSessionDisplayList"),
             ("auth action grid disabled binding", "disabled={isAuthOperationInFlight}"),
             ("auth refresh accessibility binding", "refreshSessionAccessibilityLabel={settingsSubscriptionDisplayLabels.refreshSessionAccessibility}"),
             ("auth load sessions accessibility binding", "loadSessionsAccessibilityLabel={settingsSubscriptionDisplayLabels.loadSessionsAccessibility}"),
@@ -13124,6 +13138,7 @@ def main() -> int:
             ("direct auth provider preview map", "authProviderDisplayItems.map((item) => ("),
             ("direct auth provider preview binding", "onPress={() => startAuthProviderChallenge(item.provider)}"),
             ("direct auth provider handler target binding", "startAuthProviderChallenge(item.provider);"),
+            ("direct auth session display map", "authSessionDisplayItems.map((item) => ("),
             ("direct auth session management map", "sessionManagementDisplayItems.map((item) => ("),
             ("direct auth session management status binding", "onPress={() => showAuthSessionManagementStatus(item.actionStatus)}"),
             ("direct auth session management handler status binding", "showAuthSessionManagementStatus(item.actionStatus);"),

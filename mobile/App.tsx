@@ -789,6 +789,7 @@ import { HistorySelectedDatePanel } from "./historySelectedDatePanel";
 import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
 import { AccountSecurityActionGrid } from "./accountSecurityActionGrid";
 import { AuthProviderPreviewList } from "./authProviderPreviewList";
+import { AuthSessionDisplayList } from "./authSessionDisplayList";
 import { BackendUrlField } from "./backendUrlField";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
@@ -4755,14 +4756,6 @@ export default function App() {
 
   function previewStatusRowStatusLabel(row: { statusLabel: string }) {
     return row.statusLabel;
-  }
-
-  function previewKeyedRowKey(row: { key: string }) {
-    return row.key;
-  }
-
-  function previewLastUsedRowText(row: { lastUsed: string }) {
-    return row.lastUsed;
   }
 
   function previewTimedRowTime(row: { time: string }) {
@@ -12348,21 +12341,7 @@ export default function App() {
               refreshSessionLabel={settingsSubscriptionDisplayLabels.refreshSession}
             />
             {authSessionDisplayItems.length > 0 ? (
-              <View style={styles.aiReviewList}>
-                {authSessionDisplayItems.map((item) => (
-                  <View key={previewKeyedRowKey(item)} style={styles.aiReviewCard}>
-                    <View style={styles.iconCircleSmall}>
-                      <Text>裝</Text>
-                    </View>
-                    <View style={styles.timelineContent}>
-                      <Text style={styles.recordContent}>{previewStatusRowTitle(item)}</Text>
-                      <Text style={styles.evidence}>{previewStatusRowCopy(item)}</Text>
-                      <Text style={styles.evidence}>{previewLastUsedRowText(item)}</Text>
-                    </View>
-                    <Text style={styles.previewModeBadge}>{previewStatusRowStatusLabel(item)}</Text>
-                  </View>
-                ))}
-              </View>
+              <AuthSessionDisplayList items={authSessionDisplayItems} />
             ) : null}
             <SessionManagementPreviewList
               items={sessionManagementDisplayItems}

@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T2053: Extract auth session display list
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/authSessionDisplayList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `AuthSessionDisplayList` for Account Security loaded session rows.
+- Replaced the inline `authSessionDisplayItems.map` display list in `App.tsx`.
+- Preserved the existing loaded-sessions visibility guard, row keys, fixed device icon, title/copy/last-used/status text, and card styling.
+- Updated navigation verifier coverage for the component boundary and App wiring.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing adjacent Account Security readiness and boundary row clusters without changing first-version scope.
+
 ### T2052: Extract session management preview list
 
 Status: done

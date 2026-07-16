@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2053 extract auth session display list
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/authSessionDisplayList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `AuthSessionDisplayList` for Account Security loaded session rows.
+- Replaced the inline `authSessionDisplayItems.map` display list in `App.tsx`.
+- Preserved the existing loaded-sessions visibility guard, row keys, fixed device icon, title/copy/last-used/status text, and card styling.
+- Updated navigation verifier coverage for the component boundary and App wiring.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing adjacent Account Security readiness and boundary row clusters without changing first-version scope.
+
 ### T2052 extract session management preview list
 
 類型：mobile / refactor / verifier / docs
