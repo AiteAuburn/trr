@@ -63,17 +63,17 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "saveSuccess": [
         'currentScreen === "saveSuccess"',
-        "saveSuccessBoundaryChecklistItems.map",
+        "items={saveSuccessBoundaryChecklistItems}",
         "saveSuccessDestinationItems.map",
     ],
     "deleteSuccess": [
         'currentScreen === "deleteSuccess"',
-        "deleteSuccessBoundaryChecklistItems.map",
+        "items={deleteSuccessBoundaryChecklistItems}",
         "deleteSuccessDestinationItems.map",
     ],
     "updateSuccess": [
         'currentScreen === "updateSuccess"',
-        "updateSuccessBoundaryChecklistItems.map",
+        "items={updateSuccessBoundaryChecklistItems}",
         "updateSuccessDestinationItems.map",
     ],
     "history": [

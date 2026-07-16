@@ -814,6 +814,7 @@ import { NativeDebugActionButton } from "./nativeDebugActionButton";
 import { NativeDebugRunActions } from "./nativeDebugRunActions";
 import { NativeDownloadKindSelector } from "./nativeDownloadKindSelector";
 import { NativeDebugTextField } from "./nativeDebugTextField";
+import { OutcomeChecklist } from "./outcomeChecklist";
 import { PreviewRecordEditActionRow } from "./previewRecordEditActionRow";
 import { ProductionAuthReadinessList } from "./productionAuthReadinessList";
 import { RecordingResultActionRow } from "./recordingResultActionRow";
@@ -4766,14 +4767,6 @@ export default function App() {
 
   function previewTimedRowTime(row: { time: string }) {
     return row.time;
-  }
-
-  function outcomeChecklistItemKey(item: string) {
-    return item;
-  }
-
-  function outcomeChecklistItemText(item: string) {
-    return item;
   }
 
   function aiFlowChecklistItemKey(item: string) {
@@ -10266,9 +10259,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.postSaveBoundary}</Text>
-              {saveSuccessBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={outcomeChecklistItemKey(item)} text={outcomeChecklistItemText(item)} />
-              ))}
+              <OutcomeChecklist items={saveSuccessBoundaryChecklistItems} />
             </View>
             <View style={styles.postSaveGrid}>
               {saveSuccessDestinationItems.map((item) => (
@@ -10337,9 +10328,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.postDeleteBoundary}</Text>
-              {deleteSuccessBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={outcomeChecklistItemKey(item)} text={outcomeChecklistItemText(item)} />
-              ))}
+              <OutcomeChecklist items={deleteSuccessBoundaryChecklistItems} />
             </View>
             <View style={styles.postSaveGrid}>
               {deleteSuccessDestinationItems.map((item) => (
@@ -10392,9 +10381,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.postUpdateBoundary}</Text>
-              {updateSuccessBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={outcomeChecklistItemKey(item)} text={outcomeChecklistItemText(item)} />
-              ))}
+              <OutcomeChecklist items={updateSuccessBoundaryChecklistItems} />
             </View>
             <View style={styles.postSaveGrid}>
               {updateSuccessDestinationItems.map((item) => (
