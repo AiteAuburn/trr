@@ -3646,13 +3646,22 @@ export default function App() {
     setDailyRecordOrganizationRevision(nextRevision);
     setDailyRecordOrganizationReason(reason);
     setStatus(
-      statusOverride ??
-        dailyRecordReorganizationStatusMessage(reason, reorganizedPreview.records.length, nextRevision)
+      dailyRecordReorganizationStatusForChange(reason, reorganizedPreview, nextRevision, statusOverride)
     );
   }
 
   function nextDailyRecordOrganizationRevision() {
     return clampNumber(dailyRecordOrganizationRevision + 1, 0, maxMobileCountValue);
+  }
+
+  function dailyRecordReorganizationStatusForChange(
+    reason: DailyRecordReorganizationReason,
+    reorganizedPreview: ParsePreviewResponse,
+    nextRevision: number,
+    statusOverride?: string
+  ) {
+    return statusOverride ??
+      dailyRecordReorganizationStatusMessage(reason, reorganizedPreview.records.length, nextRevision);
   }
 
   function parserSuccessStatusForPreview(nextPreview: ParsePreviewResponse, voiceSeconds: number) {
