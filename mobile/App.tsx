@@ -8146,16 +8146,24 @@ export default function App() {
     }
   }
 
+  async function startAndCompleteInitialRecordSyncRequest(syncContext: {
+    account: Account;
+    activeProfileId: string;
+    syncKey: string;
+  }) {
+    if (!startInitialRecordSyncRequest(syncContext)) {
+      return;
+    }
+    await completeInitialRecordSyncRequest(syncContext);
+  }
+
   async function loadRecords() {
     const syncContext = guardedInitialRecordSyncContext();
     if (!syncContext) {
       return;
     }
 
-    if (!startInitialRecordSyncRequest(syncContext)) {
-      return;
-    }
-    await completeInitialRecordSyncRequest(syncContext);
+    await startAndCompleteInitialRecordSyncRequest(syncContext);
   }
 
   async function loadMoreRecords() {
