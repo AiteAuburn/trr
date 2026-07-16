@@ -2699,7 +2699,17 @@ def main() -> int:
         _assert_contains(
             "parser model unavailable helper binding",
             content,
-            "if (!parserModelReady) {\n      handleParserModelUnavailable();\n      return;",
+            "if (isParserModelUnavailable()) {\n      handleParserModelUnavailable();\n      return;",
+        )
+        _assert_contains(
+            "parser model unavailable guard helper",
+            content,
+            "function isParserModelUnavailable()",
+        )
+        _assert_contains(
+            "parser model unavailable guard helper internals",
+            content,
+            "return !parserModelReady;",
         )
         _assert_contains(
             "parser sample blocked helper",
@@ -6564,6 +6574,9 @@ def main() -> int:
             ("parse transcript validation error helper", "function handleParserTranscriptValidationError(message: string)"),
             ("parse transcript validation error helper internals", "setStatus(message);"),
             ("parse transcript validation error binding", "handleParserTranscriptValidationError(transcriptValidationError);"),
+            ("parse model unavailable guard helper", "function isParserModelUnavailable()"),
+            ("parse model unavailable guard helper internals", "return !parserModelReady;"),
+            ("parse model unavailable guard binding", "if (isParserModelUnavailable())"),
             ("parse start helper", "function startParserPreviewRequest()"),
             ("parse start helper internals", "parsePreviewInFlight.current = true;\n    setIsBusy(true);"),
             ("parse start helper binding", "startParserPreviewRequest();"),

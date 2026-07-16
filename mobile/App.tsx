@@ -7791,6 +7791,10 @@ export default function App() {
     setStatus(message);
   }
 
+  function isParserModelUnavailable() {
+    return !parserModelReady;
+  }
+
   async function parseTranscript() {
     if (isParserPreviewRequestBlocked()) {
       return;
@@ -7803,7 +7807,7 @@ export default function App() {
     if (!hasParserProfileContext(parserContext)) {
       return;
     }
-    if (!parserModelReady) {
+    if (isParserModelUnavailable()) {
       handleParserModelUnavailable();
       return;
     }
