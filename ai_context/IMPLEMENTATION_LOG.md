@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2005 reuse shared option row for preview edit glucose unit
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordOptionField.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `RecordOptionRow` export for unlabeled record option rows.
+- Reused the shared option row for the Preview Edit glucose unit selector.
+- Preserved options, selected value, accessibility labels, selected state, press handler, and segment pill styling.
+- Updated navigation verifier coverage for the shared Preview Edit glucose unit row binding.
+- 未變更 UI copy、navigation、edit data semantics、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining Record Edit option row clusters in small behavior-preserving slices.
+
 ### T2004 reuse shared option field shell for record edit selectors
 
 類型：mobile / refactor / verifier / docs

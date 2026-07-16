@@ -26,26 +26,42 @@ export function RecordOptionField<TOption extends RecordOptionItem>({
   return (
     <View style={styles.formField}>
       <FieldLabel icon={icon} label={label} />
-      <View style={styles.segmentRow}>
-        {options.map((option) => {
-          const optionSelected = option.value === selectedValue;
+      <RecordOptionRow options={options} selectedValue={selectedValue} onOptionPress={onOptionPress} />
+    </View>
+  );
+}
 
-          return (
-            <Pressable
-              key={option.value}
-              accessibilityLabel={option.accessibilityLabel}
-              accessibilityRole="button"
-              accessibilityState={{ selected: optionSelected }}
-              style={[styles.segmentPill, optionSelected ? styles.segmentActive : null]}
-              onPress={() => onOptionPress(option)}
-            >
-              <Text style={[styles.segmentText, optionSelected ? styles.segmentTextActive : null]}>
-                {option.label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
+type RecordOptionRowProps<TOption extends RecordOptionItem> = {
+  onOptionPress: (option: TOption) => void;
+  options: readonly TOption[];
+  selectedValue: string;
+};
+
+export function RecordOptionRow<TOption extends RecordOptionItem>({
+  onOptionPress,
+  options,
+  selectedValue
+}: RecordOptionRowProps<TOption>) {
+  return (
+    <View style={styles.segmentRow}>
+      {options.map((option) => {
+        const optionSelected = option.value === selectedValue;
+
+        return (
+          <Pressable
+            key={option.value}
+            accessibilityLabel={option.accessibilityLabel}
+            accessibilityRole="button"
+            accessibilityState={{ selected: optionSelected }}
+            style={[styles.segmentPill, optionSelected ? styles.segmentActive : null]}
+            onPress={() => onOptionPress(option)}
+          >
+            <Text style={[styles.segmentText, optionSelected ? styles.segmentTextActive : null]}>
+              {option.label}
+            </Text>
+          </Pressable>
+        );
+      })}
     </View>
   );
 }

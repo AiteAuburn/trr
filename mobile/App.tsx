@@ -795,7 +795,7 @@ import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
 import { RecordEditFooterActions } from "./recordEditFooterActions";
 import { RecordEditHeaderFields } from "./recordEditHeaderFields";
 import { RecordJsonField } from "./recordJsonField";
-import { RecordOptionField } from "./recordOptionField";
+import { RecordOptionField, RecordOptionRow } from "./recordOptionField";
 import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
 import type {
@@ -10323,33 +10323,11 @@ export default function App() {
                   inputStyle={styles.input}
                   placeholder="138"
                 />
-                <View style={styles.segmentRow}>
-                  {glucoseUnitDisplayOptions.map((option) => {
-                    const optionSelected = editOptionIsSelected(option, recordEditFieldValue(previewEditFields, "glucoseUnit"));
-                    return (
-                      <Pressable
-                        key={editOptionKey(option)}
-                        accessibilityLabel={editOptionAccessibilityLabel(option)}
-                        accessibilityRole="button"
-                        accessibilityState={{ selected: optionSelected }}
-                        style={[
-                          styles.segmentPill,
-                          optionSelected ? styles.segmentActive : null
-                        ]}
-                        onPress={() => pressPreviewEditGlucoseUnitOption(option)}
-                      >
-                        <Text
-                          style={[
-                            styles.segmentText,
-                            optionSelected ? styles.segmentTextActive : null
-                          ]}
-                        >
-                          {editOptionLabel(option)}
-                        </Text>
-                      </Pressable>
-                    );
-                  })}
-                </View>
+                <RecordOptionRow
+                  options={glucoseUnitDisplayOptions}
+                  selectedValue={recordEditFieldValue(previewEditFields, "glucoseUnit")}
+                  onOptionPress={pressPreviewEditGlucoseUnitOption}
+                />
                 <RecordOptionField
                   icon={"◌"}
                   label={"情境"}
