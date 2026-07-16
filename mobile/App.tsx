@@ -3546,6 +3546,16 @@ export default function App() {
     openPreviewActionReturnScreen();
   }
 
+  function returnFromMissingPreviewRecordRemoveConfirm() {
+    clearPendingPreviewRemoveSelection();
+    openPreviewRemoveConfirmReturnScreen();
+  }
+
+  function returnFromPreviewRecordRemoveConfirmSuccess(removeIndex: number) {
+    removePreviewRecord(removeIndex);
+    openPreviewRemoveConfirmReturnScreen();
+  }
+
   function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number) {
     return records.filter((_, recordIndex) => recordIndex !== removeIndex);
   }
@@ -3728,12 +3738,10 @@ export default function App() {
 
   function confirmPreviewRecordRemove() {
     if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {
-      clearPendingPreviewRemoveSelection();
-      openPreviewRemoveConfirmReturnScreen();
+      returnFromMissingPreviewRecordRemoveConfirm();
       return;
     }
-    removePreviewRecord(pendingPreviewRemoveIndex);
-    openPreviewRemoveConfirmReturnScreen();
+    returnFromPreviewRecordRemoveConfirmSuccess(pendingPreviewRemoveIndex);
   }
 
   function updatePreviewEditField<K extends keyof RecordEditFields>(

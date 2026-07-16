@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1829: Reuse preview remove confirm return helpers
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `returnFromMissingPreviewRecordRemoveConfirm()` for the remove-confirm missing-selection return path.
+- Added `returnFromPreviewRecordRemoveConfirmSuccess()` for the remove-confirm successful deletion return path.
+- Reused both helpers from `confirmPreviewRecordRemove()` while preserving pending selection clearing, preview record removal, AI Review / daily-record return routing, and existing status behavior.
+- Updated navigation verifier coverage for both helper internals and confirm-handler bindings.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser endpoint/request semantics/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining preview edit/delete action return paths and daily-record derived state in small behavior-preserving slices.
+
 ### T1828: Reuse daily record save success result helper
 
 Status: done

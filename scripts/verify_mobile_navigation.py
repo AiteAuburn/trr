@@ -4259,14 +4259,24 @@ def main() -> int:
             "function previewWithRecords(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[]) {\n    return { ...currentPreview, records: nextRecords };",
         )
         _assert_contains(
-            "AI candidate remove confirm missing pending screen opener fallback",
+            "AI candidate remove confirm missing pending return helper",
             content,
-            "if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {\n      clearPendingPreviewRemoveSelection();\n      openPreviewRemoveConfirmReturnScreen();\n      return;",
+            "function returnFromMissingPreviewRecordRemoveConfirm() {\n    clearPendingPreviewRemoveSelection();\n    openPreviewRemoveConfirmReturnScreen();",
         )
         _assert_contains(
-            "AI candidate remove confirm success screen opener binding",
+            "AI candidate remove confirm missing pending return helper binding",
             content,
-            "removePreviewRecord(pendingPreviewRemoveIndex);\n    openPreviewRemoveConfirmReturnScreen();",
+            "if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {\n      returnFromMissingPreviewRecordRemoveConfirm();\n      return;",
+        )
+        _assert_contains(
+            "AI candidate remove confirm success return helper",
+            content,
+            "function returnFromPreviewRecordRemoveConfirmSuccess(removeIndex: number) {\n    removePreviewRecord(removeIndex);\n    openPreviewRemoveConfirmReturnScreen();",
+        )
+        _assert_contains(
+            "AI candidate remove confirm success return helper binding",
+            content,
+            "returnFromPreviewRecordRemoveConfirmSuccess(pendingPreviewRemoveIndex);",
         )
         _assert_contains(
             "AI candidate preview remove records update helper",
