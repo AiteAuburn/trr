@@ -5006,7 +5006,7 @@ def main() -> int:
         _assert_contains(
             "record update request helper binding",
             content,
-            "const updated = await requestSelectedRecordUpdate(selectedRecord.id, account.id, payload);",
+            "const updated = await requestSelectedRecordUpdate(recordId, accountId, payload);",
         )
         _assert_contains(
             "record update success helper",
@@ -5021,7 +5021,7 @@ def main() -> int:
         _assert_contains(
             "record update success helper binding",
             content,
-            "const updated = await requestSelectedRecordUpdate(selectedRecord.id, account.id, payload);\n      handleSelectedRecordUpdateSuccess(updated);",
+            "const updated = await requestSelectedRecordUpdate(recordId, accountId, payload);\n      handleSelectedRecordUpdateSuccess(updated);",
         )
         _assert_contains(
             "record update failure helper",
@@ -5051,7 +5051,7 @@ def main() -> int:
         _assert_contains(
             "record update payload helper binding",
             content,
-            "const payload = buildSelectedRecordUpdatePayload(selectedRecord.record_type);",
+            "const payload = buildSelectedRecordUpdatePayload(recordType);",
         )
         _assert_contains(
             "record update validation helper",
@@ -5067,6 +5067,21 @@ def main() -> int:
             "record update validation helper binding",
             content,
             "if (!validateSelectedRecordUpdateForSubmit(selectedRecord.record_type)) {\n      return;\n    }",
+        )
+        _assert_contains(
+            "record update complete helper",
+            content,
+            "async function completeSelectedRecordUpdateRequest(recordId: string, accountId: string, recordType: string)",
+        )
+        _assert_contains(
+            "record update complete helper internals",
+            content,
+            "try {\n      const payload = buildSelectedRecordUpdatePayload(recordType);\n      const updated = await requestSelectedRecordUpdate(recordId, accountId, payload);\n      handleSelectedRecordUpdateSuccess(updated);\n    } catch (error) {\n      handleSelectedRecordUpdateFailure(error);\n    } finally {\n      finishRecordUpdateRequest();",
+        )
+        _assert_contains(
+            "record update complete helper binding",
+            content,
+            "await completeSelectedRecordUpdateRequest(selectedRecord.id, account.id, selectedRecord.record_type);",
         )
         _assert_contains(
             "manual create result selected record helper state",

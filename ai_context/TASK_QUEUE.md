@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1918: Reuse selected record update complete helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `completeSelectedRecordUpdateRequest()` for selected record update payload construction, PATCH request, success handling, failure handling, and cleanup.
+- Reused the helper from `updateSelectedRecord()` while preserving guard order, validation behavior, in-flight start behavior, PATCH endpoint, request body shape, success state updates, failure status handling, and cleanup behavior.
+- Updated navigation verifier coverage for the selected record update complete helper, internals, and submit-flow binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing record edit/create orchestration in small behavior-preserving slices.
+
 ### T1917: Reuse selected record delete complete helper
 
 Status: done

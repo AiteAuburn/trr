@@ -8503,6 +8503,18 @@ export default function App() {
     return true;
   }
 
+  async function completeSelectedRecordUpdateRequest(recordId: string, accountId: string, recordType: string) {
+    try {
+      const payload = buildSelectedRecordUpdatePayload(recordType);
+      const updated = await requestSelectedRecordUpdate(recordId, accountId, payload);
+      handleSelectedRecordUpdateSuccess(updated);
+    } catch (error) {
+      handleSelectedRecordUpdateFailure(error);
+    } finally {
+      finishRecordUpdateRequest();
+    }
+  }
+
   async function updateSelectedRecord() {
     if (isBusy || recordUpdateInFlight.current) {
       return;
@@ -8522,15 +8534,7 @@ export default function App() {
     }
 
     startRecordUpdateRequest();
-    try {
-      const payload = buildSelectedRecordUpdatePayload(selectedRecord.record_type);
-      const updated = await requestSelectedRecordUpdate(selectedRecord.id, account.id, payload);
-      handleSelectedRecordUpdateSuccess(updated);
-    } catch (error) {
-      handleSelectedRecordUpdateFailure(error);
-    } finally {
-      finishRecordUpdateRequest();
-    }
+    await completeSelectedRecordUpdateRequest(selectedRecord.id, account.id, selectedRecord.record_type);
   }
 
   function startRecordDeleteRequest() {
