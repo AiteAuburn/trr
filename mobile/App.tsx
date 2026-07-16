@@ -9051,11 +9051,7 @@ export default function App() {
   }
 
   async function checkNativeModules() {
-    if (isNativeDebugActionBlocked()) {
-      return;
-    }
-    if (!enableDebugTools) {
-      openNativeDebugUnavailable();
+    if (!isNativeDebugActionReady()) {
       return;
     }
     startNativeDebugAction();
