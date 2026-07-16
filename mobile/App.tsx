@@ -8873,8 +8873,12 @@ export default function App() {
     setNativeStatus(nativeDebugDisabledStatusMessage());
   }
 
+  function isNativeDebugActionBlocked() {
+    return isBusy;
+  }
+
   async function downloadSelectedModel() {
-    if (isBusy) {
+    if (isNativeDebugActionBlocked()) {
       return;
     }
     if (!enableDebugTools) {
@@ -8905,7 +8909,7 @@ export default function App() {
   }
 
   async function checkNativeModules() {
-    if (isBusy) {
+    if (isNativeDebugActionBlocked()) {
       return;
     }
     if (!enableDebugTools) {
@@ -8925,7 +8929,7 @@ export default function App() {
   }
 
   async function runNativeWhisper() {
-    if (isBusy) {
+    if (isNativeDebugActionBlocked()) {
       return;
     }
     if (!enableDebugTools) {
@@ -8953,7 +8957,7 @@ export default function App() {
   }
 
   async function runNativeLlama() {
-    if (isBusy) {
+    if (isNativeDebugActionBlocked()) {
       return;
     }
     if (!enableDebugTools) {
@@ -8981,7 +8985,7 @@ export default function App() {
   }
 
   async function runNativeBenchmarks() {
-    if (isBusy) {
+    if (isNativeDebugActionBlocked()) {
       return;
     }
     if (!enableDebugTools) {
