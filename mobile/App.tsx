@@ -10504,34 +10504,28 @@ export default function App() {
             ) : null}
             {selectedPreviewRecord.record_type === "note" ? (
               <>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"📝"} label={"備註類型"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.noteKindInputAccessibility}
-                    value={recordEditFieldValue(previewEditFields, "noteKind")}
-                    onChangeText={updatePreviewEditNoteKind}
-                    maxLength={recordEditFieldMaxLength("noteKind")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    placeholder="symptom"
-                  />
-                </View>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"#"} label={"標籤"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.noteTagsInputAccessibility}
-                    value={recordEditFieldValue(previewEditFields, "noteTags")}
-                    onChangeText={updatePreviewEditNoteTags}
-                    maxLength={recordEditFieldMaxLength("noteTags")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    multiline
-                    textAlignVertical="top"
-                    style={[styles.input, styles.multilineField]}
-                    placeholder="頭暈、疲倦"
-                  />
-                </View>
+                <RecordTextField
+                  icon={"📝"}
+                  label={"備註類型"}
+                  accessibilityLabel={auxiliaryDisplayLabels.noteKindInputAccessibility}
+                  value={recordEditFieldValue(previewEditFields, "noteKind")}
+                  onChangeText={updatePreviewEditNoteKind}
+                  maxLength={recordEditFieldMaxLength("noteKind")}
+                  inputStyle={styles.input}
+                  placeholder="symptom"
+                />
+                <RecordTextField
+                  icon={"#"}
+                  label={"標籤"}
+                  accessibilityLabel={auxiliaryDisplayLabels.noteTagsInputAccessibility}
+                  value={recordEditFieldValue(previewEditFields, "noteTags")}
+                  onChangeText={updatePreviewEditNoteTags}
+                  maxLength={recordEditFieldMaxLength("noteTags")}
+                  multiline
+                  textAlignVertical="top"
+                  inputStyle={[styles.input, recordTextFieldStyles.multilineField]}
+                  placeholder="頭暈、疲倦"
+                />
               </>
             ) : null}
             {!["glucose", "meal", "exercise", "medication", "note"].includes(
