@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1954 reuse native Whisper start status helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `startNativeWhisperStatus()` for native Whisper progress status setup.
+- Reused the helper from `runNativeWhisper()` while preserving input guards, native debug lifecycle, and transcription request arguments.
+- Updated navigation verifier coverage for the native Whisper start status helper, fields, and binding.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing native debug action start/status helpers in small behavior-preserving slices.
+
 ### T1953 reuse native module check start status helper
 
 類型：mobile / refactor / verifier / docs

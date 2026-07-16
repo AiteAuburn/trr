@@ -8904,6 +8904,10 @@ export default function App() {
     setNativeStatus(nativeWhisperSuccessStatusMessage());
   }
 
+  function startNativeWhisperStatus() {
+    setNativeStatus(nativeWhisperProgressStatusMessage());
+  }
+
   function handleNativeLlamaSuccess(output: string) {
     setLlamaDebugOutput(nativeLlamaOutputSummaryMessage(output.length));
     setNativeStatus(nativeLlamaSuccessStatusMessage());
@@ -9014,7 +9018,7 @@ export default function App() {
       return;
     }
     startNativeDebugAction();
-    setNativeStatus(nativeWhisperProgressStatusMessage());
+    startNativeWhisperStatus();
     try {
       const text = await transcribeWithNativeWhisper({
         modelPath: whisperInput.modelPath,
