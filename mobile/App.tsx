@@ -3552,6 +3552,18 @@ export default function App() {
     return row.value;
   }
 
+  function pendingRemoveDisplayIcon(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.icon;
+  }
+
+  function pendingRemoveDisplayTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.typeLabel;
+  }
+
+  function pendingRemoveDisplayPayloadSummary(item: ReturnType<typeof pendingRecordDisplayItem>) {
+    return item.payloadSummary;
+  }
+
   function openTodayTranscriptText() {
     setStatus(todayTranscriptExpandedStatusMessage());
   }
@@ -8724,11 +8736,11 @@ export default function App() {
             </View>
             <View style={styles.aiReviewCard}>
               <View style={styles.iconCircleSmall}>
-                <Text>{pendingPreviewRemoveDisplayItem.icon}</Text>
+                <Text>{pendingRemoveDisplayIcon(pendingPreviewRemoveDisplayItem)}</Text>
               </View>
               <View style={styles.timelineContent}>
-                <Text style={styles.confidence}>{pendingPreviewRemoveDisplayItem.typeLabel}</Text>
-                <Text style={styles.recordContent}>{pendingPreviewRemoveDisplayItem.payloadSummary}</Text>
+                <Text style={styles.confidence}>{pendingRemoveDisplayTypeLabel(pendingPreviewRemoveDisplayItem)}</Text>
+                <Text style={styles.recordContent}>{pendingRemoveDisplayPayloadSummary(pendingPreviewRemoveDisplayItem)}</Text>
                 <Text style={styles.evidence}>{aiRemoveConfirmSourceDisplayText}</Text>
               </View>
             </View>

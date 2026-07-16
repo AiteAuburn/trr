@@ -5848,6 +5848,15 @@ def main() -> int:
             ("daily record delete confirm display helper binding", "const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayTexts("),
             ("daily record delete confirm title binding", "const aiRemoveConfirmTitleDisplayText = aiRemoveConfirmDisplay.title;"),
             ("daily record delete submit binding", "const aiRemoveConfirmSubmitDisplayText = aiRemoveConfirmDisplay.submit;"),
+            ("pending remove icon helper", "function pendingRemoveDisplayIcon(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("pending remove icon helper fields", "return item.icon;"),
+            ("pending remove icon helper binding", "{pendingRemoveDisplayIcon(pendingPreviewRemoveDisplayItem)}"),
+            ("pending remove type helper", "function pendingRemoveDisplayTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("pending remove type helper fields", "return item.typeLabel;"),
+            ("pending remove type helper binding", "{pendingRemoveDisplayTypeLabel(pendingPreviewRemoveDisplayItem)}"),
+            ("pending remove payload helper", "function pendingRemoveDisplayPayloadSummary(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("pending remove payload helper fields", "return item.payloadSummary;"),
+            ("pending remove payload helper binding", "{pendingRemoveDisplayPayloadSummary(pendingPreviewRemoveDisplayItem)}"),
             ("daily record leave guard request handler", "function requestDailyRecordLeaveGuard()"),
             ("daily record leave guard cancel handler", "function cancelDailyRecordLeaveGuard()"),
             ("daily record leave guard confirm handler", "function confirmDailyRecordLeaveGuard()"),
@@ -11244,6 +11253,17 @@ def main() -> int:
             content,
             "item.detailRows.map((row) => (\n                            <DailyRecordDetailRow key={dailyRecordDetailRowKey(item, row)} label={dailyRecordDetailRowLabel(row)} value={row.value} />",
         )
+        ai_remove_confirm_block = _match_block(
+            content,
+            r'(currentScreen === "aiRemoveConfirm"[\s\S]*?<Text style=\{styles\.dangerButtonText\}>\{aiRemoveConfirmSubmitDisplayText\}</Text>)',
+            "AI remove confirm render block",
+        )
+        for label, marker in (
+            ("direct pending remove icon binding", "{pendingPreviewRemoveDisplayItem.icon}"),
+            ("direct pending remove type binding", "{pendingPreviewRemoveDisplayItem.typeLabel}"),
+            ("direct pending remove payload binding", "{pendingPreviewRemoveDisplayItem.payloadSummary}"),
+        ):
+            _assert_not_contains(label, ai_remove_confirm_block, marker)
         _assert_not_contains(
             "food community search direct handler bound input",
             content,
