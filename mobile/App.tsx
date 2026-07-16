@@ -823,6 +823,18 @@ function recordCollectionState(
   };
 }
 
+function previewRecordState(preview: ParsePreviewResponse | null) {
+  const records = preview?.records ?? [];
+  const recordCount = records.length;
+
+  return {
+    hasRecords: recordCount > 0,
+    isEmpty: recordCount === 0,
+    recordCount,
+    records
+  };
+}
+
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>(initialVisualSmokeScreen ?? "today");
   const [apiBaseUrl, setApiBaseUrl] = useState(defaultApiBaseUrl);
@@ -1220,7 +1232,8 @@ export default function App() {
     voiceQuota.remaining_seconds_today <= 120;
   const quotaTrialDaysLeft = trialDaysLeft(voiceQuota?.trial_ends_at);
   const isAnyRequestInFlight = isBusy || isQuotaSyncing || isReportLoading || isAuthOperationInFlight;
-  const unsavedPreviewRecordCount = preview?.records.length ?? 0;
+  const previewState = previewRecordState(preview);
+  const unsavedPreviewRecordCount = previewState.recordCount;
   const unsavedPreviewRecordDisplayCount = clampNumber(unsavedPreviewRecordCount, 0, maxMobilePreviewRecords);
   const mobileRecordSyncDisplayLimit = clampNumber(mobileRecordSyncLimit, 0, maxMobileCountValue);
   const mobileReportQueryDisplayLimit = clampNumber(mobileReportQueryLimit, 0, maxMobileCountValue);
@@ -3630,7 +3643,7 @@ export default function App() {
   }
 
   function enterAiSaveConfirm() {
-    if (!preview || preview.records.length === 0) {
+    if (previewState.isEmpty) {
       openScreen("aiReview");
       return;
     }
@@ -3809,7 +3822,7 @@ export default function App() {
   }
 
   function processUnsavedPreviewRecords() {
-    if (!preview || preview.records.length === 0) {
+    if (previewState.isEmpty) {
       openScreen("today");
       return;
     }
@@ -3887,7 +3900,7 @@ export default function App() {
   }
 
   function returnFromAiSaveFailureToSaveConfirm() {
-    if (!preview || preview.records.length === 0) {
+    if (previewState.isEmpty) {
       returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());
       return;
     }
@@ -7228,7 +7241,7 @@ export default function App() {
     if (isBusy || previewSaveInFlight.current) {
       return;
     }
-    if (!preview || preview.records.length === 0) {
+    if (!preview || previewState.isEmpty) {
       return;
     }
     if (!protectedBackendReady) {
@@ -7251,7 +7264,7 @@ export default function App() {
           ...(sanitizedRecord.metadata_json ?? {}),
           client_save_batch_id: clientSaveBatchId,
           client_save_sequence: index + 1,
-          client_save_batch_size: preview.records.length,
+          client_save_batch_size: previewState.recordCount,
           entry_method: "ai_confirmation"
         }
       };
@@ -8501,7 +8514,7 @@ export default function App() {
                   <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />
                 ))}
               </View>
-              {preview.records.length > 0 ? (
+              {previewState.hasRecords ? (
                 <View style={styles.aiReviewCard}>
                   <View style={styles.iconCircleSmall}>
                     <Text>📅</Text>
@@ -8593,7 +8606,7 @@ export default function App() {
                   >
                     <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.returnEdit}</Text>
                   </Pressable>
-                  {preview.records.length === 0 ? (
+                  {previewState.isEmpty ? (
                     <Pressable
                       accessibilityLabel={coreFlowDisplayLabels.manualAddAccessibility}
                       accessibilityRole="button"
@@ -8603,7 +8616,7 @@ export default function App() {
                       <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.manualAdd}</Text>
                     </Pressable>
                   ) : null}
-                  {preview.records.length > 0 ? (
+                  {previewState.hasRecords ? (
                     <Pressable
                       accessibilityLabel={coreFlowDisplayLabels.enterSaveConfirmAccessibility}
                       accessibilityRole="button"
@@ -8616,7 +8629,7 @@ export default function App() {
                     </Pressable>
                   ) : null}
                 </View>
-                {preview.records.length > 0 && !account ? (
+                {previewState.hasRecords && !account ? (
                   <Text style={styles.warningText}>{aiReviewBackendRequiredDisplayText}</Text>
                 ) : null}
               </View>
@@ -8907,12 +8920,12 @@ export default function App() {
               <Pressable
                 accessibilityLabel={coreFlowDisplayLabels.returnSaveConfirmAccessibility}
                 accessibilityRole="button"
-                accessibilityState={{ disabled: !preview || preview.records.length === 0 }}
+                accessibilityState={{ disabled: previewState.isEmpty }}
                 style={[
                   styles.primaryButton,
-                  !preview || preview.records.length === 0 ? styles.buttonDisabled : null
+                  previewState.isEmpty ? styles.buttonDisabled : null
                 ]}
-                disabled={!preview || preview.records.length === 0}
+                disabled={previewState.isEmpty}
                 onPress={returnFromAiSaveFailureToSaveConfirm}
               >
                 <Text style={styles.primaryButtonText}>{coreFlowDisplayLabels.returnSaveConfirm}</Text>
@@ -12868,15 +12881,15 @@ export default function App() {
               accessibilityLabel={coreFlowDisplayLabels.submitAiSaveAccessibility}
               accessibilityRole="button"
               accessibilityState={{
-                disabled: isBusy || isAiSaveConfirmBlockedByBackend || preview.records.length === 0
+                disabled: isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty
               }}
               style={[
                 styles.primaryButton,
-                isBusy || isAiSaveConfirmBlockedByBackend || preview.records.length === 0
+                isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty
                   ? styles.buttonDisabled
                   : null
               ]}
-              disabled={isBusy || isAiSaveConfirmBlockedByBackend || preview.records.length === 0}
+              disabled={isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty}
               onPress={submitAiSaveConfirm}
             >
               <Text style={styles.primaryButtonText}>{aiSaveConfirmSubmitDisplayLabel}</Text>

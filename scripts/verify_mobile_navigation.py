@@ -3352,7 +3352,7 @@ def main() -> int:
         _assert_contains(
             "AI save confirm enter empty preview screen opener fallback",
             content,
-            'if (!preview || preview.records.length === 0) {\n      openScreen("aiReview");\n      return;',
+            'if (previewState.isEmpty) {\n      openScreen("aiReview");\n      return;',
         )
         _assert_contains(
             "save success unsaved candidate handler",
@@ -3362,7 +3362,7 @@ def main() -> int:
         _assert_contains(
             "save success unsaved empty preview screen opener fallback",
             content,
-            'if (!preview || preview.records.length === 0) {\n      openScreen("today");\n      return;',
+            'if (previewState.isEmpty) {\n      openScreen("today");\n      return;',
         )
         _assert_contains(
             "save success process clear helper binding",
@@ -6200,6 +6200,41 @@ def main() -> int:
             content,
             "</ScrollView>\n      {isDailyRecordFixedSaveVisible && preview ? (",
         )
+        for label, marker in (
+            ("preview record state helper", "function previewRecordState(preview: ParsePreviewResponse | null)"),
+            ("preview record state records fallback", "const records = preview?.records ?? [];"),
+            ("preview record state count binding", "const recordCount = records.length;"),
+            ("preview record state has records flag", "hasRecords: recordCount > 0"),
+            ("preview record state empty flag", "isEmpty: recordCount === 0"),
+            ("preview state helper binding", "const previewState = previewRecordState(preview);"),
+            ("preview unsaved count state binding", "const unsavedPreviewRecordCount = previewState.recordCount;"),
+            ("ai save confirm preview state guard", "if (previewState.isEmpty) {\n      openScreen(\"aiReview\");"),
+            ("process unsaved preview state guard", "if (previewState.isEmpty) {\n      openScreen(\"today\");"),
+            ("save failure return preview state guard", "if (previewState.isEmpty) {\n      returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());"),
+            ("save preview records preview state guard", "if (!preview || previewState.isEmpty)"),
+            ("save preview batch size state binding", "client_save_batch_size: previewState.recordCount"),
+            ("ai review date card preview state binding", "{previewState.hasRecords ? ("),
+            ("ai review manual fallback preview state binding", "{previewState.isEmpty ? ("),
+            ("ai review save confirm preview state binding", "{previewState.hasRecords ? ("),
+            ("ai review backend warning preview state binding", "{previewState.hasRecords && !account ? ("),
+            ("ai save failure return disabled preview state binding", "accessibilityState={{ disabled: previewState.isEmpty }}"),
+            ("ai save confirm submit disabled preview state binding", "disabled: isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
+            ("direct preview unsaved count binding", "const unsavedPreviewRecordCount = preview?.records.length ?? 0;"),
+            ("direct enter save confirm empty guard", "if (!preview || preview.records.length === 0) {\n      openScreen(\"aiReview\");"),
+            ("direct process unsaved preview empty guard", "if (!preview || preview.records.length === 0) {\n      openScreen(\"today\");"),
+            ("direct save failure return preview empty guard", "if (!preview || preview.records.length === 0) {\n      returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());"),
+            ("direct save preview records empty guard", "if (!preview || preview.records.length === 0)"),
+            ("direct save preview batch size binding", "client_save_batch_size: preview.records.length"),
+            ("direct ai review date card preview length binding", "{preview.records.length > 0 ? ("),
+            ("direct ai review manual fallback preview length binding", "{preview.records.length === 0 ? ("),
+            ("direct ai review backend warning preview length binding", "{preview.records.length > 0 && !account ? ("),
+            ("direct ai save failure return disabled preview length binding", "accessibilityState={{ disabled: !preview || preview.records.length === 0 }}"),
+            ("direct ai save confirm submit disabled preview length binding", "disabled: isBusy || isAiSaveConfirmBlockedByBackend || preview.records.length === 0"),
+        ):
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("core flow section labels helper", "function coreFlowSectionLabels()"),
             ("record delete success history accessibility label", 'deleteSuccessHistoryAccessibility: boundDisplayText("前往歷史紀錄，只查看已載入清單，不重送 delete request", maxDisplayDetailTextLength)'),

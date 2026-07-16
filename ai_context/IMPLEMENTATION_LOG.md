@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1744 reuse preview record state
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared preview record state helper for AI review / daily-record candidate count, empty, and has-record checks.
+- Reused the helper for unsaved preview count, AI save confirm entry guard, unsaved-preview processing, save-failure return routing, save request batch-size metadata, AI Review candidate/manual/backend-warning rendering, and save-confirm disabled state.
+- Updated navigation verifier coverage with positive helper bindings and negative guards for representative direct `preview.records.length` conditions.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync request path、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining preview-record display preparation and daily-record route state in small behavior-preserving slices.
+
 ### T1743 reuse record collection display count
 
 類型：mobile / refactor / verifier / docs
