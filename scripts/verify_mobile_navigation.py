@@ -109,6 +109,7 @@ NATIVE_DEBUG_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "nativeDebugTextField.tsx"
 RECORDING_RESULT_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "recordingResultActionRow.tsx"
 RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
 RECORD_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "recordTextField.tsx"
+SAVE_SUCCESS_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "saveSuccessActionRow.tsx"
 COMMUNITY_PUBLIC_DISPLAY_NAME_FIELD_PATH = REPO_ROOT / "mobile" / "communityPublicDisplayNameField.tsx"
 FOOD_COMMUNITY_SEARCH_FIELD_PATH = REPO_ROOT / "mobile" / "foodCommunitySearchField.tsx"
 FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareDateTimeFields.tsx"
@@ -1493,6 +1494,7 @@ def main() -> int:
     recording_result_action_row_content = RECORDING_RESULT_ACTION_ROW_PATH.read_text(encoding="utf-8")
     record_option_field_content = RECORD_OPTION_FIELD_PATH.read_text(encoding="utf-8")
     record_text_field_content = RECORD_TEXT_FIELD_PATH.read_text(encoding="utf-8")
+    save_success_action_row_content = SAVE_SUCCESS_ACTION_ROW_PATH.read_text(encoding="utf-8")
     community_public_display_name_field_content = COMMUNITY_PUBLIC_DISPLAY_NAME_FIELD_PATH.read_text(
         encoding="utf-8"
     )
@@ -3911,10 +3913,10 @@ def main() -> int:
             ("save success title manual state binding", ": saveSuccessViewState.isManualSave"),
             ("save success summary manual state binding", "{saveSuccessViewState.isManualSave"),
             ("save success summary unsaved state binding", ": saveSuccessViewState.hasUnsavedPreviewRecords"),
-            ("save success manual continue state binding", "{saveSuccessViewState.canContinueManual ? ("),
-            ("save success record entry state binding", ") : saveSuccessViewState.canContinueRecordEntry ? ("),
-            ("save success pause entry state binding", ") : saveSuccessViewState.shouldPauseEntryActions ? ("),
-            ("save success unsaved primary state binding", "{saveSuccessViewState.hasUnsavedPreviewRecords ? ("),
+            ("save success manual continue state binding", "canContinueManual={saveSuccessViewState.canContinueManual}"),
+            ("save success record entry state binding", "canContinueRecordEntry={saveSuccessViewState.canContinueRecordEntry}"),
+            ("save success pause entry state binding", "shouldPauseEntryActions={saveSuccessViewState.shouldPauseEntryActions}"),
+            ("save success unsaved primary state binding", "hasUnsavedPreviewRecords={saveSuccessViewState.hasUnsavedPreviewRecords}"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(
@@ -4013,27 +4015,27 @@ def main() -> int:
         _assert_contains(
             "save success manual continue binding",
             content,
-            "onPress={openSaveSuccessManualContinue}",
+            "onContinueManualPress={openSaveSuccessManualContinue}",
         )
         _assert_contains(
             "save success record entry binding",
             content,
-            "onPress={openSaveSuccessRecordEntry}",
+            "onRecordEntryPress={openSaveSuccessRecordEntry}",
         )
         _assert_contains(
             "save success detail binding",
             content,
-            "onPress={openSaveSuccessRecordDetail}",
+            "onViewDetailPress={openSaveSuccessRecordDetail}",
         )
         _assert_contains(
             "save success today return binding",
             content,
-            "onPress={returnFromSaveSuccessToToday}",
+            "onReturnTodayPress={returnFromSaveSuccessToToday}",
         )
         _assert_contains(
             "save success unsaved CTA binding",
             content,
-            "onPress={processUnsavedPreviewRecords}",
+            "onProcessUnsavedPress={processUnsavedPreviewRecords}",
         )
         _assert_contains(
             "save success unsaved destination first",
@@ -4058,7 +4060,7 @@ def main() -> int:
         _assert_contains(
             "save success unsaved primary CTA",
             content,
-            "saveSuccessViewState.hasUnsavedPreviewRecords ? (\n                <Pressable",
+            "hasUnsavedPreviewRecords={saveSuccessViewState.hasUnsavedPreviewRecords}",
         )
         for label, marker in (
             ("save success manual continue accessibility label", 'saveSuccessManualContinueAccessibility: boundDisplayText("繼續手動新增，不呼叫 AI 或 parser", maxDisplayDetailTextLength)'),
@@ -4073,13 +4075,35 @@ def main() -> int:
         ):
             _assert_contains(label, first_version_flow_copy_content, marker)
         for label, marker in (
-            ("save success manual continue accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.saveSuccessManualContinueAccessibility}"),
-            ("save success record entry accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.saveSuccessRecordEntryAccessibility}"),
-            ("save success detail accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.saveSuccessDetailAccessibility}"),
-            ("save success unsaved accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.saveSuccessProcessUnsavedAccessibility}"),
-            ("save success today accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.saveSuccessReturnTodayAccessibility}"),
+            ("save success manual continue accessibility binding", "continueManualAccessibilityLabel={coreFlowDisplayLabels.saveSuccessManualContinueAccessibility}"),
+            ("save success record entry accessibility binding", "recordEntryAccessibilityLabel={coreFlowDisplayLabels.saveSuccessRecordEntryAccessibility}"),
+            ("save success detail accessibility binding", "detailAccessibilityLabel={coreFlowDisplayLabels.saveSuccessDetailAccessibility}"),
+            ("save success unsaved accessibility binding", "processUnsavedAccessibilityLabel={coreFlowDisplayLabels.saveSuccessProcessUnsavedAccessibility}"),
+            ("save success today accessibility binding", "returnTodayAccessibilityLabel={coreFlowDisplayLabels.saveSuccessReturnTodayAccessibility}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("save success action row component", "export function SaveSuccessActionRow"),
+            ("save success action row manual branch", "canContinueManual ? ("),
+            ("save success action row record branch", ") : canContinueRecordEntry ? ("),
+            ("save success action row pause branch", ") : shouldPauseEntryActions ? ("),
+            ("save success action row unsaved primary branch", "hasUnsavedPreviewRecords ? ("),
+            ("save success action row manual accessibility prop", "accessibilityLabel={continueManualAccessibilityLabel}"),
+            ("save success action row record accessibility prop", "accessibilityLabel={recordEntryAccessibilityLabel}"),
+            ("save success action row detail accessibility prop", "accessibilityLabel={detailAccessibilityLabel}"),
+            ("save success action row unsaved accessibility prop", "accessibilityLabel={processUnsavedAccessibilityLabel}"),
+            ("save success action row today accessibility prop", "accessibilityLabel={returnTodayAccessibilityLabel}"),
+            ("save success action row manual handler prop", "onPress={onContinueManualPress}"),
+            ("save success action row record handler prop", "onPress={onRecordEntryPress}"),
+            ("save success action row detail handler prop", "onPress={onViewDetailPress}"),
+            ("save success action row unsaved handler prop", "onPress={onProcessUnsavedPress}"),
+            ("save success action row today handler prop", "onPress={onReturnTodayPress}"),
+            ("save success action row pause copy prop", "{pauseEntryText}"),
+            ("save success action row shell style", "actionRow: {"),
+            ("save success action row primary style", "primaryButton: {"),
+            ("save success action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, save_success_action_row_content, marker)
         _assert_contains(
             "AI save failure manual fallback handler",
             content,

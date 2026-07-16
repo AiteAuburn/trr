@@ -819,6 +819,7 @@ import { RecordEditHeaderFields } from "./recordEditHeaderFields";
 import { RecordJsonField } from "./recordJsonField";
 import { RecordOptionField, RecordOptionRow } from "./recordOptionField";
 import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
+import { SaveSuccessActionRow } from "./saveSuccessActionRow";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
 import { FoodCommunitySearchField } from "./foodCommunitySearchField";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
@@ -10447,68 +10448,30 @@ export default function App() {
                 </Pressable>
               ))}
             </View>
-            <View style={styles.actionRow}>
-              {saveSuccessViewState.canContinueManual ? (
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.saveSuccessManualContinueAccessibility}
-                  accessibilityRole="button"
-                  style={styles.secondaryButton}
-                  onPress={openSaveSuccessManualContinue}
-                >
-                  <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.continueManualAdd}</Text>
-                </Pressable>
-              ) : saveSuccessViewState.canContinueRecordEntry ? (
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.saveSuccessRecordEntryAccessibility}
-                  accessibilityRole="button"
-                  style={styles.secondaryButton}
-                  onPress={openSaveSuccessRecordEntry}
-                >
-                  <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.continueRecord}</Text>
-                </Pressable>
-              ) : null}
-              {saveSuccessViewState.canContinueManual ? (
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.saveSuccessRecordEntryAccessibility}
-                  accessibilityRole="button"
-                  style={styles.secondaryButton}
-                  onPress={openSaveSuccessRecordEntry}
-                >
-                  <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.voiceText}</Text>
-                </Pressable>
-              ) : saveSuccessViewState.shouldPauseEntryActions ? (
-                <Text style={styles.evidence}>請先處理未儲存 AI 候選；新增入口會在候選處理後恢復。</Text>
-              ) : null}
-              {selectedRecord ? (
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.saveSuccessDetailAccessibility}
-                  accessibilityRole="button"
-                  style={styles.secondaryButton}
-                  onPress={openSaveSuccessRecordDetail}
-                >
-                  <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.viewDetail}</Text>
-                </Pressable>
-              ) : null}
-              {saveSuccessViewState.hasUnsavedPreviewRecords ? (
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.saveSuccessProcessUnsavedAccessibility}
-                  accessibilityRole="button"
-                  style={styles.primaryButton}
-                  onPress={processUnsavedPreviewRecords}
-                >
-                  <Text style={styles.primaryButtonText}>{coreFlowDisplayLabels.processUnsavedCandidates}</Text>
-                </Pressable>
-              ) : (
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.saveSuccessReturnTodayAccessibility}
-                  accessibilityRole="button"
-                  style={styles.primaryButton}
-                  onPress={returnFromSaveSuccessToToday}
-                >
-                  <Text style={styles.primaryButtonText}>{coreFlowDisplayLabels.backToday}</Text>
-                </Pressable>
-              )}
-            </View>
+            <SaveSuccessActionRow
+              canContinueManual={saveSuccessViewState.canContinueManual}
+              canContinueRecordEntry={saveSuccessViewState.canContinueRecordEntry}
+              continueManualAccessibilityLabel={coreFlowDisplayLabels.saveSuccessManualContinueAccessibility}
+              continueManualLabel={coreFlowDisplayLabels.continueManualAdd}
+              detailAccessibilityLabel={coreFlowDisplayLabels.saveSuccessDetailAccessibility}
+              detailLabel={coreFlowDisplayLabels.viewDetail}
+              hasUnsavedPreviewRecords={saveSuccessViewState.hasUnsavedPreviewRecords}
+              onContinueManualPress={openSaveSuccessManualContinue}
+              onProcessUnsavedPress={processUnsavedPreviewRecords}
+              onRecordEntryPress={openSaveSuccessRecordEntry}
+              onReturnTodayPress={returnFromSaveSuccessToToday}
+              onViewDetailPress={openSaveSuccessRecordDetail}
+              pauseEntryText="請先處理未儲存 AI 候選；新增入口會在候選處理後恢復。"
+              processUnsavedAccessibilityLabel={coreFlowDisplayLabels.saveSuccessProcessUnsavedAccessibility}
+              processUnsavedLabel={coreFlowDisplayLabels.processUnsavedCandidates}
+              recordEntryAccessibilityLabel={coreFlowDisplayLabels.saveSuccessRecordEntryAccessibility}
+              recordEntryLabel={coreFlowDisplayLabels.continueRecord}
+              returnTodayAccessibilityLabel={coreFlowDisplayLabels.saveSuccessReturnTodayAccessibility}
+              returnTodayLabel={coreFlowDisplayLabels.backToday}
+              shouldPauseEntryActions={saveSuccessViewState.shouldPauseEntryActions}
+              showDetail={Boolean(selectedRecord)}
+              voiceTextLabel={coreFlowDisplayLabels.voiceText}
+            />
           </View>
         ) : null}
 
