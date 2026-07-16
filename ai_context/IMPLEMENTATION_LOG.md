@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1752 reuse fixed save return disabled state
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a named fixed-save return-disabled state for the daily-record fixed footer return button.
+- Reused it for the return button accessibility state, disabled style, and disabled prop.
+- Updated navigation verifier coverage with positive return-disabled bindings and direct inline-condition guards.
+- 未變更 UI copy/layout、disabled condition、fixed-save timing、button order、return guard behavior、navigation targets、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1751 reuse AI save-confirm submit disabled state
 
 類型：mobile / refactor / verifier / docs

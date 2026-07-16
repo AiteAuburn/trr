@@ -6028,11 +6028,15 @@ def main() -> int:
             ("daily record save clears retained transcripts", "clearDailyRecordDraftOrganizationState();"),
             ("daily record fixed save visible flag", "const isDailyRecordFixedSaveVisible = dailyRecordDraftScreen.isFixedSaveVisible;"),
             ("daily record fixed save dock visible flag", "const isDailyRecordFixedSaveDockVisible = isDailyRecordFixedSaveVisible && Boolean(preview);"),
+            ("daily record fixed save return disabled flag", "const isDailyRecordFixedSaveReturnDisabled = isBusy;"),
             ("daily record fixed save scroll padding style", "const mainScrollContainerStyle = isDailyRecordFixedSaveVisible"),
             ("daily record fixed save scroll binding", "contentContainerStyle={mainScrollContainerStyle}"),
             ("daily record fixed save dock render", "{isDailyRecordFixedSaveDockVisible ? ("),
             ("daily record fixed save dock style", "styles.fixedSaveBarDock"),
             ("daily record fixed save bar", "styles.fixedSaveBar"),
+            ("daily record fixed save return accessibility disabled", "accessibilityState={{ disabled: isDailyRecordFixedSaveReturnDisabled }}"),
+            ("daily record fixed save return style disabled", "isDailyRecordFixedSaveReturnDisabled ? styles.buttonDisabled : null"),
+            ("daily record fixed save return disabled prop", "disabled={isDailyRecordFixedSaveReturnDisabled}"),
             ("daily record category blank copy", "沒有提到的欄位保持空白"),
         ):
             _assert_contains(label, content, marker)
@@ -6041,6 +6045,11 @@ def main() -> int:
             content,
             "{isDailyRecordFixedSaveVisible && preview ? (",
         )
+        for label, marker in (
+            ("daily record fixed save return direct accessibility disabled", "accessibilityState={{ disabled: isBusy }}\n              style={[styles.secondaryButton, isBusy ? styles.buttonDisabled : null]}\n              disabled={isBusy}\n              onPress={requestDailyRecordLeaveGuard}"),
+            ("daily record fixed save return direct disabled prop", "disabled={isBusy}\n              onPress={requestDailyRecordLeaveGuard}"),
+        ):
+            _assert_not_contains(label, content, marker)
         daily_transcript_render_block = _match_block(
             content,
             r"todayTranscriptDisplayItems\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",

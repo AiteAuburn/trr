@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1752: Reuse fixed save return disabled state
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a named fixed-save return-disabled state for the daily-record fixed footer return button.
+- Reused it for the return button accessibility state, disabled style, and disabled prop.
+- Updated navigation verifier coverage with positive return-disabled bindings and direct inline-condition guards.
+- No UI copy/layout/disabled condition/fixed-save timing/button order/return guard behavior/navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1751: Reuse AI save-confirm submit disabled state
 
 Status: done

@@ -1312,6 +1312,7 @@ export default function App() {
   });
   const isDailyRecordFixedSaveVisible = dailyRecordDraftScreen.isFixedSaveVisible;
   const isDailyRecordFixedSaveDockVisible = isDailyRecordFixedSaveVisible && Boolean(preview);
+  const isDailyRecordFixedSaveReturnDisabled = isBusy;
   const mainScrollContainerStyle = isDailyRecordFixedSaveVisible
     ? [styles.container, styles.containerWithFixedSaveBar]
     : styles.container;
@@ -12895,9 +12896,12 @@ export default function App() {
             <Pressable
               accessibilityLabel={coreFlowDisplayLabels.returnConfirmAccessibility}
               accessibilityRole="button"
-              accessibilityState={{ disabled: isBusy }}
-              style={[styles.secondaryButton, isBusy ? styles.buttonDisabled : null]}
-              disabled={isBusy}
+              accessibilityState={{ disabled: isDailyRecordFixedSaveReturnDisabled }}
+              style={[
+                styles.secondaryButton,
+                isDailyRecordFixedSaveReturnDisabled ? styles.buttonDisabled : null
+              ]}
+              disabled={isDailyRecordFixedSaveReturnDisabled}
               onPress={requestDailyRecordLeaveGuard}
             >
               <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.returnConfirm}</Text>
