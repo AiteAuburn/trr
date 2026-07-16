@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1905 reuse guarded load-more record sync context helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `guardedMoreRecordSyncContext()` for the load-more record sync guard and cursor sync-key setup boundary.
+- Reused the helper from `loadMoreRecords()` while preserving visual-smoke, backend-ready, account/profile, empty/cache-limit, cursor validity, in-flight, request, success, failure, and cleanup behavior.
+- Updated navigation verifier coverage for the guarded load-more context, sync-key binding, in-flight binding, request profile/account bindings, and cursor query bindings.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing load-more record sync request/success lifecycle in small behavior-preserving slices.
+
 ### T1904 reuse initial record sync start-and-complete helper
 
 類型：mobile / refactor / verifier / docs

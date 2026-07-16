@@ -8166,40 +8166,54 @@ export default function App() {
     await startAndCompleteInitialRecordSyncRequest(syncContext);
   }
 
-  async function loadMoreRecords() {
+  function guardedMoreRecordSyncContext() {
     if (visualSmokePreviewActive.current) {
       setRecordsStatus(visualSmokeRecordSyncStatusMessage());
-      return;
+      return null;
     }
     if (!protectedBackendReady) {
       setRecordsStatus(recordSyncUnavailableStatusMessage(protectedBackendUnavailableMessage));
-      return;
+      return null;
     }
     if (!account || !activeProfileId || recordDisplayState.isEmpty || recordDisplayState.isAtCacheLimit) {
-      return;
+      return null;
     }
     const cursorRecord = recordDisplayState.lastRecord;
     if (!cursorRecord?.occurred_at || !cursorRecord.created_at) {
       clearRecordSyncPaginationStatus(recordSyncFailureStatusMessage());
+      return null;
+    }
+
+    return {
+      account,
+      activeProfileId,
+      cursorRecord,
+      syncKey: `${normalizedApiBaseUrl}:${account.id}:${activeProfileId}:before:${cursorRecord.occurred_at}:${cursorRecord.created_at}`
+    };
+  }
+
+  async function loadMoreRecords() {
+    const syncContext = guardedMoreRecordSyncContext();
+    if (!syncContext) {
       return;
     }
-    const syncKey = `${normalizedApiBaseUrl}:${account.id}:${activeProfileId}:before:${cursorRecord.occurred_at}:${cursorRecord.created_at}`;
-    if (recordSyncInFlightKeys.current.has(syncKey)) {
+
+    if (recordSyncInFlightKeys.current.has(syncContext.syncKey)) {
       return;
     }
-    recordSyncInFlightKeys.current.add(syncKey);
+    recordSyncInFlightKeys.current.add(syncContext.syncKey);
     setRecordsStatus(recordSyncPageLoadingStatusMessage());
     try {
       const query = new URLSearchParams({
-        profile_id: activeProfileId,
+        profile_id: syncContext.activeProfileId,
         limit: String(mobileRecordSyncLimit),
-        before: cursorRecord.occurred_at,
-        before_created_at: cursorRecord.created_at
+        before: syncContext.cursorRecord.occurred_at,
+        before_created_at: syncContext.cursorRecord.created_at
       });
       const response = await requestJson<RecordItem[]>(
         normalizedApiBaseUrl,
         `/records?${query.toString()}`,
-        { headers: protectedRequestHeaders(account.id, accessToken) }
+        { headers: protectedRequestHeaders(syncContext.account.id, accessToken) }
       );
       const boundedPage = boundRecordsList(response, mobileRecordSyncLimit);
       setRecords((current) => mergeRecordsByCursorOrder(current, boundedPage));
@@ -8220,7 +8234,7 @@ export default function App() {
     } catch {
       setRecordsStatus(recordSyncFailureStatusMessage());
     } finally {
-      recordSyncInFlightKeys.current.delete(syncKey);
+      recordSyncInFlightKeys.current.delete(syncContext.syncKey);
     }
   }
 
