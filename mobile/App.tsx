@@ -3951,6 +3951,18 @@ export default function App() {
     };
   }
 
+  function savePreviewRecordEditDraft(
+    editDraft: NonNullable<ReturnType<typeof previewRecordEditSaveDraft>>,
+    recordType: string
+  ) {
+    const nextRecords = buildPreviewRecordEditChangeRecords(
+      editDraft.currentPreview,
+      editDraft.editIndex,
+      recordType
+    );
+    applyPreviewRecordEditChangeAndReturnSuccess(editDraft.currentPreview, nextRecords);
+  }
+
   function savePreviewRecordEdit() {
     const editDraft = previewRecordEditSaveDraft();
     if (!editDraft) {
@@ -3963,12 +3975,7 @@ export default function App() {
     }
 
     try {
-      const nextRecords = buildPreviewRecordEditChangeRecords(
-        editDraft.currentPreview,
-        editDraft.editIndex,
-        recordType
-      );
-      applyPreviewRecordEditChangeAndReturnSuccess(editDraft.currentPreview, nextRecords);
+      savePreviewRecordEditDraft(editDraft, recordType);
     } catch (error) {
       handlePreviewRecordEditFailure(error);
     }

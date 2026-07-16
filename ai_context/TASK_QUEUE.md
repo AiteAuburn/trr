@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1838: Reuse preview edit save draft executor helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `savePreviewRecordEditDraft()` to execute preview edit draft record construction and apply-success handling.
+- Reused the helper from `savePreviewRecordEdit()` while preserving the existing try/catch boundary, missing-draft fallback, validation flow, payload construction, edit apply behavior, failure handling, and success return behavior.
+- Updated navigation verifier coverage for the draft executor helper internals and try-block binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser endpoint/request semantics/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining preview edit/delete validation/status helpers and action return paths in small behavior-preserving slices.
+
 ### T1837: Reuse preview edit save draft helper
 
 Status: done

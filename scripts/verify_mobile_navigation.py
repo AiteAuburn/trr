@@ -4221,7 +4221,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit change records helper binding",
             content,
-            "const nextRecords = buildPreviewRecordEditChangeRecords(\n        editDraft.currentPreview,\n        editDraft.editIndex,\n        recordType\n      );",
+            "const nextRecords = buildPreviewRecordEditChangeRecords(\n      editDraft.currentPreview,\n      editDraft.editIndex,\n      recordType\n    );",
         )
         _assert_contains(
             "AI candidate preview edit record type helper",
@@ -4297,6 +4297,21 @@ def main() -> int:
             "AI candidate preview edit apply and success helper binding",
             content,
             "applyPreviewRecordEditChangeAndReturnSuccess(editDraft.currentPreview, nextRecords);",
+        )
+        _assert_contains(
+            "AI candidate preview edit save draft executor helper",
+            content,
+            "function savePreviewRecordEditDraft(",
+        )
+        _assert_contains(
+            "AI candidate preview edit save draft executor helper internals",
+            content,
+            "function savePreviewRecordEditDraft(\n    editDraft: NonNullable<ReturnType<typeof previewRecordEditSaveDraft>>,\n    recordType: string\n  ) {\n    const nextRecords = buildPreviewRecordEditChangeRecords(",
+        )
+        _assert_contains(
+            "AI candidate preview edit save draft executor helper binding",
+            content,
+            "try {\n      savePreviewRecordEditDraft(editDraft, recordType);\n    } catch (error) {",
         )
         _assert_contains(
             "AI candidate preview edit save draft helper",
