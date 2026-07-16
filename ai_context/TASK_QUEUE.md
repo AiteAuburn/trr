@@ -34,6 +34,41 @@ None.
 
 ## Done
 
+### T2077: Extract menu destination grid component
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/menuDestinationGrid.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `MenuDestinationGrid` for the Feature Menu destination cards.
+- Moved menu destination target/key/accessibility/icon/label helpers out of `App.tsx`.
+- Preserved the same menu card copy, order, target routing, button role, styling, and spacing.
+- Kept menu destination routing behavior in `App.tsx`.
+- Updated navigation, UI-spec coverage, and visual-smoke route verifier coverage for component card bindings and direct inline-map guards.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining future modules / record detail / daily record row clusters without changing first-version scope.
+
 ### T2076: Extract record result destination grid component
 
 Status: done

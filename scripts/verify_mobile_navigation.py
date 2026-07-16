@@ -21,6 +21,7 @@ SETTINGS_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "settingsBoundaryGrid.tsx"
 SETTINGS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "settingsChecklist.tsx"
 SETTINGS_ROW_LIST_PATH = REPO_ROOT / "mobile" / "settingsRowList.tsx"
 RECORD_RESULT_DESTINATION_GRID_PATH = REPO_ROOT / "mobile" / "recordResultDestinationGrid.tsx"
+MENU_DESTINATION_GRID_PATH = REPO_ROOT / "mobile" / "menuDestinationGrid.tsx"
 SUBSCRIPTION_CHECKLIST_PATH = REPO_ROOT / "mobile" / "subscriptionChecklist.tsx"
 SUBSCRIPTION_COMPARISON_LIST_PATH = REPO_ROOT / "mobile" / "subscriptionComparisonList.tsx"
 PREVIEW_STATUS_LIST_PATH = REPO_ROOT / "mobile" / "previewStatusList.tsx"
@@ -1425,6 +1426,7 @@ def main() -> int:
     settings_checklist_content = SETTINGS_CHECKLIST_PATH.read_text(encoding="utf-8")
     settings_row_list_content = SETTINGS_ROW_LIST_PATH.read_text(encoding="utf-8")
     record_result_destination_grid_content = RECORD_RESULT_DESTINATION_GRID_PATH.read_text(encoding="utf-8")
+    menu_destination_grid_content = MENU_DESTINATION_GRID_PATH.read_text(encoding="utf-8")
     subscription_checklist_content = SUBSCRIPTION_CHECKLIST_PATH.read_text(encoding="utf-8")
     subscription_comparison_list_content = SUBSCRIPTION_COMPARISON_LIST_PATH.read_text(encoding="utf-8")
     preview_status_list_content = PREVIEW_STATUS_LIST_PATH.read_text(encoding="utf-8")
@@ -6726,13 +6728,13 @@ def main() -> int:
         )
         _assert_contains(
             "menu card accessibility binding",
-            content,
+            menu_destination_grid_content,
             "accessibilityLabel={menuDestinationAccessibilityLabel(item)}",
         )
         _assert_contains(
             "menu card button role",
-            content,
-            'accessibilityRole="button"\n                  style={styles.menuCard}',
+            menu_destination_grid_content,
+            'accessibilityRole="button"\n          style={styles.menuCard}',
         )
         _assert_contains(
             "menu return handler",
@@ -6774,50 +6776,53 @@ def main() -> int:
             content,
             "if (openMenuTargetRoute(target)) {\n      return;\n    }\n    openScreen(target);",
         )
-        _assert_contains(
-            "menu destination press wrapper",
-            content,
-            "function pressMenuDestination(item: ReturnType<typeof menuScreenDisplayItem>)",
-        )
-        _assert_contains(
-            "menu destination target helper",
-            content,
-            "function menuDestinationTarget(item: ReturnType<typeof menuScreenDisplayItem>)",
-        )
-        _assert_contains(
-            "menu destination target helper fields",
-            content,
-            "return item.target;",
-        )
         for label, marker in (
-            ("menu destination key helper", "function menuDestinationKey(item: ReturnType<typeof menuScreenDisplayItem>)"),
+            ("menu destination grid component", "export function MenuDestinationGrid"),
+            ("menu destination grid item type", "export type MenuDestinationItem ="),
+            ("menu destination grid target type", "target: AppScreen;"),
+            ("menu destination grid items prop", "items: MenuDestinationItem[]"),
+            ("menu destination grid press prop", "onDestinationPress: (target: AppScreen) => void"),
+            ("menu destination target helper", "function menuDestinationTarget(item: MenuDestinationItem)"),
+            ("menu destination target helper fields", "return item.target;"),
+            ("menu destination key helper", "function menuDestinationKey(item: MenuDestinationItem)"),
             ("menu destination key helper fields", "return item.target;"),
             ("menu destination key binding", "key={menuDestinationKey(item)}"),
-            ("menu destination accessibility helper", "function menuDestinationAccessibilityLabel(item: ReturnType<typeof menuScreenDisplayItem>)"),
+            ("menu destination accessibility helper", "function menuDestinationAccessibilityLabel(item: MenuDestinationItem)"),
             ("menu destination accessibility helper fields", "return item.accessibilityLabel;"),
             ("menu destination accessibility binding", "accessibilityLabel={menuDestinationAccessibilityLabel(item)}"),
-            ("menu destination icon helper", "function menuDestinationIcon(item: ReturnType<typeof menuScreenDisplayItem>)"),
+            ("menu destination icon helper", "function menuDestinationIcon(item: MenuDestinationItem)"),
             ("menu destination icon helper fields", "return item.icon;"),
             ("menu destination icon binding", "{menuDestinationIcon(item)}"),
-            ("menu destination label helper", "function menuDestinationLabel(item: ReturnType<typeof menuScreenDisplayItem>)"),
+            ("menu destination label helper", "function menuDestinationLabel(item: MenuDestinationItem)"),
             ("menu destination label helper fields", "return item.label;"),
             ("menu destination label binding", "{menuDestinationLabel(item)}"),
+            ("menu destination press target binding", "onPress={() => onDestinationPress(menuDestinationTarget(item))}"),
+            ("menu destination button role", 'accessibilityRole="button"'),
+            ("menu destination grid style", "menuGrid: {"),
+            ("menu destination card style", "menuCard: {"),
+            ("menu destination icon center style", "menuIconCenter: {"),
+            ("menu destination label style", "menuLabel: {"),
         ):
-            _assert_contains(label, content, marker)
-        _assert_contains(
-            "menu destination target helper binding",
-            content,
-            "openMenuDestination(menuDestinationTarget(item));",
-        )
+            _assert_contains(label, menu_destination_grid_content, marker)
         _assert_contains(
             "menu return binding",
             content,
             "onPress={returnFromMenu}",
         )
         _assert_contains(
-            "menu destination binding",
+            "menu destination grid binding",
             content,
-            "onPress={() => pressMenuDestination(item)}",
+            "<MenuDestinationGrid",
+        )
+        _assert_contains(
+            "menu destination grid items binding",
+            content,
+            "items={menuDisplayItems}",
+        )
+        _assert_contains(
+            "menu destination grid press binding",
+            content,
+            "onDestinationPress={openMenuDestination}",
         )
         _assert_not_contains(
             "menu direct destination binding",
@@ -6829,18 +6834,11 @@ def main() -> int:
             content,
             "openMenuDestination(item.target);",
         )
-        menu_destination_render_block = _match_block(
+        _assert_not_contains(
+            "direct menu destination map",
             content,
-            r"menuDisplayItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
-            "menu destination render block",
+            "menuDisplayItems.map((item) => (",
         )
-        for label, marker in (
-            ("direct menu destination key binding", "key={item.target}"),
-            ("direct menu destination accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
-            ("direct menu destination icon binding", "<Text style={styles.menuIconText}>{item.icon}</Text>"),
-            ("direct menu destination label binding", "<Text style={styles.menuLabel}>{item.label}</Text>"),
-        ):
-            _assert_not_contains(label, menu_destination_render_block, marker)
         _assert_contains(
             "more action accessibility",
             content,

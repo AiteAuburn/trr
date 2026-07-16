@@ -276,7 +276,6 @@ import {
   boundaryMetricDisplayItem,
   detailPairDisplayItem,
   manualRecordTypeDisplayItems,
-  menuScreenDisplayItem,
   menuScreenDisplayItems,
   optionDisplayItem,
   optionDisplayItems,
@@ -810,6 +809,7 @@ import { ManualRecordMealFields } from "./manualRecordMealFields";
 import { ManualRecordMedicationFields } from "./manualRecordMedicationFields";
 import { ManualRecordNoteFields } from "./manualRecordNoteFields";
 import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
+import { MenuDestinationGrid } from "./menuDestinationGrid";
 import { MembershipFeatureList } from "./membershipFeatureList";
 import { MetricGrid } from "./metricGrid";
 import { DownloadedModelList } from "./downloadedModelList";
@@ -4967,30 +4967,6 @@ export default function App() {
       return;
     }
     openScreen(target);
-  }
-
-  function menuDestinationTarget(item: ReturnType<typeof menuScreenDisplayItem>) {
-    return item.target;
-  }
-
-  function menuDestinationKey(item: ReturnType<typeof menuScreenDisplayItem>) {
-    return item.target;
-  }
-
-  function menuDestinationAccessibilityLabel(item: ReturnType<typeof menuScreenDisplayItem>) {
-    return item.accessibilityLabel;
-  }
-
-  function menuDestinationIcon(item: ReturnType<typeof menuScreenDisplayItem>) {
-    return item.icon;
-  }
-
-  function menuDestinationLabel(item: ReturnType<typeof menuScreenDisplayItem>) {
-    return item.label;
-  }
-
-  function pressMenuDestination(item: ReturnType<typeof menuScreenDisplayItem>) {
-    openMenuDestination(menuDestinationTarget(item));
   }
 
   function syncSubscriptionQuota() {
@@ -10932,22 +10908,7 @@ export default function App() {
                 <Text style={styles.closeButtonText}>×</Text>
               </Pressable>
             </View>
-            <View style={styles.menuGrid}>
-              {menuDisplayItems.map((item) => (
-                <Pressable
-                  key={menuDestinationKey(item)}
-                  accessibilityLabel={menuDestinationAccessibilityLabel(item)}
-                  accessibilityRole="button"
-                  style={styles.menuCard}
-                  onPress={() => pressMenuDestination(item)}
-                >
-                  <View style={styles.menuIconCenter}>
-                    <Text style={styles.menuIconText}>{menuDestinationIcon(item)}</Text>
-                  </View>
-                  <Text style={styles.menuLabel}>{menuDestinationLabel(item)}</Text>
-                </Pressable>
-              ))}
-            </View>
+            <MenuDestinationGrid items={menuDisplayItems} onDestinationPress={openMenuDestination} />
             {enableDebugTools ? (
               <Pressable
                 accessibilityLabel={auxiliaryDisplayLabels.showMoreFeaturesAccessibility}
