@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1971: Reuse native Llama request args
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `nativeLlamaRequestArgs()` for the native debug Llama request payload.
+- Reused the helper from `runNativeLlama()` and `appendNativeLlamaBenchmarkResult()` while preserving trimmed input use, missing-input guard behavior, native parse call semantics, benchmark append semantics, success/failure handling, and action lifecycle order.
+- Updated navigation verifier coverage for the Llama request args helper, parse binding, and benchmark append binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing native debug helper extraction in small behavior-preserving slices.
+
 ### T1970: Reuse native Whisper request args
 
 Status: done

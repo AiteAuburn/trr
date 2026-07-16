@@ -8923,6 +8923,13 @@ export default function App() {
     };
   }
 
+  function nativeLlamaRequestArgs(llamaInput: ReturnType<typeof nativeLlamaInput>) {
+    return {
+      modelPath: llamaInput.modelPath,
+      transcript: llamaInput.transcript
+    };
+  }
+
   function handleNativeWhisperSuccess(text: string) {
     updateTranscriptDraft(text);
     setNativeStatus(nativeWhisperSuccessStatusMessage());
@@ -8975,12 +8982,7 @@ export default function App() {
     llamaInput: ReturnType<typeof nativeLlamaInput>
   ) {
     if (llamaInput.modelPath && llamaInput.transcript) {
-      results.push(
-        await benchmarkNativeLlama({
-          modelPath: llamaInput.modelPath,
-          transcript: llamaInput.transcript
-        })
-      );
+      results.push(await benchmarkNativeLlama(nativeLlamaRequestArgs(llamaInput)));
     }
   }
 
@@ -9105,10 +9107,7 @@ export default function App() {
     startNativeDebugAction();
     startNativeLlamaStatus();
     try {
-      const output = await parseWithNativeLlama({
-        modelPath: llamaInput.modelPath,
-        transcript: llamaInput.transcript
-      });
+      const output = await parseWithNativeLlama(nativeLlamaRequestArgs(llamaInput));
       handleNativeLlamaSuccess(output);
     } catch (error) {
       handleNativeLlamaFailure(error);
