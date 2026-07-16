@@ -3546,6 +3546,10 @@ export default function App() {
     openPreviewActionReturnScreen();
   }
 
+  function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number) {
+    return records.filter((_, recordIndex) => recordIndex !== removeIndex);
+  }
+
   function reorganizeDailyRecordDraftAfterChange(
     nextPreview: ParsePreviewResponse,
     reason: DailyRecordReorganizationReason,
@@ -3566,7 +3570,7 @@ export default function App() {
     if (!preview) {
       return;
     }
-    const nextRecords = preview.records.filter((_, recordIndex) => recordIndex !== index);
+    const nextRecords = previewRecordsWithoutRecord(preview.records, index);
     if (isPreviewActionReturningToDailyRecord) {
       reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, "delete");
     } else {

@@ -4144,6 +4144,21 @@ def main() -> int:
             "removePreviewRecord(pendingPreviewRemoveIndex);\n    openPreviewRemoveConfirmReturnScreen();",
         )
         _assert_contains(
+            "AI candidate preview remove records update helper",
+            content,
+            "function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number)",
+        )
+        _assert_contains(
+            "AI candidate preview remove records update helper internals",
+            content,
+            "function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number) {\n    return records.filter((_, recordIndex) => recordIndex !== removeIndex);",
+        )
+        _assert_contains(
+            "AI candidate preview remove records update helper binding",
+            content,
+            "const nextRecords = previewRecordsWithoutRecord(preview.records, index);",
+        )
+        _assert_contains(
             "AI candidate remove action clear helper binding",
             content,
             "setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));\n    }\n    clearPreviewRemoveActionState();",
