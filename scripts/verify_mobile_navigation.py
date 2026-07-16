@@ -3919,6 +3919,16 @@ def main() -> int:
             "function clearSelectedPreviewEditSelection() {\n    setSelectedPreviewIndex(null);",
         )
         _assert_contains(
+            "AI candidate selected edit selection set helper",
+            content,
+            "function setSelectedPreviewEditSelection(index: number)",
+        )
+        _assert_contains(
+            "AI candidate selected edit selection set helper internals",
+            content,
+            "function setSelectedPreviewEditSelection(index: number) {\n    setSelectedPreviewIndex(index);",
+        )
+        _assert_contains(
             "AI candidate edit action clear helper",
             content,
             "function clearPreviewEditActionState()",
@@ -3959,6 +3969,16 @@ def main() -> int:
             "function clearPendingPreviewRemoveSelection() {\n    setPendingPreviewRemoveIndex(null);",
         )
         _assert_contains(
+            "AI candidate pending remove selection set helper",
+            content,
+            "function setPendingPreviewRemoveSelection(index: number)",
+        )
+        _assert_contains(
+            "AI candidate pending remove selection set helper internals",
+            content,
+            "function setPendingPreviewRemoveSelection(index: number) {\n    setPendingPreviewRemoveIndex(index);",
+        )
+        _assert_contains(
             "AI candidate edit seed empty now helper",
             content,
             "function seedEmptyPreviewEditStateForNow()",
@@ -3996,7 +4016,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit index selection helper internals",
             content,
-            "function selectPreviewEditIndex(index: number) {\n    clearPreviewRemoveActionState();\n    setSelectedPreviewIndex(index);",
+            "function selectPreviewEditIndex(index: number) {\n    clearPreviewRemoveActionState();\n    setSelectedPreviewEditSelection(index);",
         )
         _assert_contains(
             "AI candidate remove index selection helper",
@@ -4006,7 +4026,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove index selection helper internals",
             content,
-            "function selectPreviewRemoveIndex(index: number) {\n    clearPreviewEditSelectionState();\n    setPendingPreviewRemoveIndex(index);",
+            "function selectPreviewRemoveIndex(index: number) {\n    clearPreviewEditSelectionState();\n    setPendingPreviewRemoveSelection(index);",
         )
         _assert_contains(
             "AI candidate edit open seed helper binding",

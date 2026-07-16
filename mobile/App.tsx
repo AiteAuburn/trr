@@ -3365,6 +3365,10 @@ export default function App() {
     setSelectedPreviewIndex(null);
   }
 
+  function setSelectedPreviewEditSelection(index: number) {
+    setSelectedPreviewIndex(index);
+  }
+
   function clearSelectedPreviewEditDraft() {
     clearSelectedPreviewEditSelection();
     clearPreviewEditDraftFields();
@@ -3382,6 +3386,10 @@ export default function App() {
 
   function clearPendingPreviewRemoveSelection() {
     setPendingPreviewRemoveIndex(null);
+  }
+
+  function setPendingPreviewRemoveSelection(index: number) {
+    setPendingPreviewRemoveIndex(index);
   }
 
   function clearPreviewRemoveActionState() {
@@ -3407,12 +3415,12 @@ export default function App() {
 
   function selectPreviewEditIndex(index: number) {
     clearPreviewRemoveActionState();
-    setSelectedPreviewIndex(index);
+    setSelectedPreviewEditSelection(index);
   }
 
   function selectPreviewRemoveIndex(index: number) {
     clearPreviewEditSelectionState();
-    setPendingPreviewRemoveIndex(index);
+    setPendingPreviewRemoveSelection(index);
   }
 
   function openPreviewRecordEdit(index: number, returnScreen: AppScreen = "aiReview") {
