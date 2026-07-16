@@ -5631,7 +5631,17 @@ def main() -> int:
         _assert_contains(
             "selected record detail open helper binding",
             content,
-            "openRecordDetailScreen(selectedRecord, returnScreen);",
+            "const record = selectedRecordForDetailOpen();\n    if (!record) {\n      return;\n    }\n    openRecordDetailScreen(record, returnScreen);",
+        )
+        _assert_contains(
+            "selected record detail open selection helper",
+            content,
+            "function selectedRecordForDetailOpen()",
+        )
+        _assert_contains(
+            "selected record detail open selection helper internals",
+            content,
+            "function selectedRecordForDetailOpen() {\n    return selectedRecord;\n  }",
         )
         _assert_contains(
             "record edit return handler",

@@ -8348,11 +8348,16 @@ export default function App() {
     setStatus(statusMessage);
   }
 
+  function selectedRecordForDetailOpen() {
+    return selectedRecord;
+  }
+
   function openSelectedRecordDetail(returnScreen: AppScreen) {
-    if (!selectedRecord) {
+    const record = selectedRecordForDetailOpen();
+    if (!record) {
       return;
     }
-    openRecordDetailScreen(selectedRecord, returnScreen);
+    openRecordDetailScreen(record, returnScreen);
   }
 
   function returnToRecordDetailForMissingSelection() {

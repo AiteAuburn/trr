@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1929: Reuse selected-record detail-open helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `selectedRecordForDetailOpen()` for the selected-record detail-open read boundary.
+- Reused the helper from `openSelectedRecordDetail()` while preserving the no-selection no-op, return-screen seeding, record edit field seeding, and record-detail navigation behavior.
+- Updated navigation verifier coverage for the selected-record detail-open helper, internals, and open binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing update-success return and record-result destination orchestration in small behavior-preserving slices.
+
 ### T1928: Reuse delete-confirm selected-record helper
 
 Status: done
