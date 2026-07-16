@@ -8359,9 +8359,17 @@ export default function App() {
     openScreen("recordDetail");
   }
 
-  function openDeleteConfirm() {
-    if (!selectedRecord) {
+  function selectedRecordForDeleteConfirm() {
+    const record = selectedRecord;
+    if (!record) {
       returnToRecordDetailForMissingSelection();
+      return null;
+    }
+    return record;
+  }
+
+  function openDeleteConfirm() {
+    if (!selectedRecordForDeleteConfirm()) {
       return;
     }
     openScreenWithStatus("deleteConfirm", deleteConfirmReadyStatusMessage());

@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1928: Reuse delete-confirm selected-record helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `selectedRecordForDeleteConfirm()` for the delete-confirm selected-record guard and missing-selection fallback.
+- Reused the helper from `openDeleteConfirm()` while preserving missing-selection navigation, delete-confirm ready status behavior, and delete request behavior.
+- Updated navigation verifier coverage for the delete-confirm selected-record helper, internals, and open binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing record edit/create orchestration in small behavior-preserving slices.
+
 ### T1927: Reuse record edit return seed helper
 
 Status: done

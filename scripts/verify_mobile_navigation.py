@@ -4926,7 +4926,17 @@ def main() -> int:
         _assert_contains(
             "delete confirm missing selection screen opener fallback",
             content,
-            'if (!selectedRecord) {\n      returnToRecordDetailForMissingSelection();\n      return;\n    }\n    openScreenWithStatus("deleteConfirm", deleteConfirmReadyStatusMessage());',
+            'if (!selectedRecordForDeleteConfirm()) {\n      return;\n    }\n    openScreenWithStatus("deleteConfirm", deleteConfirmReadyStatusMessage());',
+        )
+        _assert_contains(
+            "delete confirm selected record helper",
+            content,
+            "function selectedRecordForDeleteConfirm()",
+        )
+        _assert_contains(
+            "delete confirm selected record helper internals",
+            content,
+            "const record = selectedRecord;\n    if (!record) {\n      returnToRecordDetailForMissingSelection();\n      return null;\n    }\n    return record;",
         )
         _assert_contains(
             "delete confirm return handler",
