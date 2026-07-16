@@ -57,6 +57,7 @@ DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreviewBlock.tsx"
 COMMUNITY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "communityActionRow.tsx"
 DOCTOR_SHARE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "doctorShareActionRow.tsx"
+FOOD_PHOTO_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "foodPhotoActionRow.tsx"
 HEALTH_INTEGRATION_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "healthIntegrationActionRow.tsx"
 RANKING_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "rankingActionRow.tsx"
 HISTORY_CALENDAR_MONTH_PICKER_PATH = REPO_ROOT / "mobile" / "historyCalendarMonthPicker.tsx"
@@ -1423,6 +1424,7 @@ def main() -> int:
     delete_confirm_preview_block_content = DELETE_CONFIRM_PREVIEW_BLOCK_PATH.read_text(encoding="utf-8")
     community_action_row_content = COMMUNITY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     doctor_share_action_row_content = DOCTOR_SHARE_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    food_photo_action_row_content = FOOD_PHOTO_ACTION_ROW_PATH.read_text(encoding="utf-8")
     health_integration_action_row_content = HEALTH_INTEGRATION_ACTION_ROW_PATH.read_text(encoding="utf-8")
     ranking_action_row_content = RANKING_ACTION_ROW_PATH.read_text(encoding="utf-8")
     history_calendar_month_picker_content = HISTORY_CALENDAR_MONTH_PICKER_PATH.read_text(encoding="utf-8")
@@ -1619,6 +1621,16 @@ def main() -> int:
             ("doctor share action row secondary style", "secondaryButton: {"),
         ):
             _assert_contains(label, doctor_share_action_row_content, marker)
+        for label, marker in (
+            ("food photo action row component", "export function FoodPhotoActionRow"),
+            ("food photo action row accessibility prop", "accessibilityLabel={accessibilityLabel}"),
+            ("food photo action row button role", 'accessibilityRole="button"'),
+            ("food photo action row handler prop", "onPress={onPress}"),
+            ("food photo action row label", "{label}"),
+            ("food photo action row shell style", "actionRow: {"),
+            ("food photo action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, food_photo_action_row_content, marker)
         for label, marker in (
             ("health integration action row component", "export function HealthIntegrationActionRow"),
             ("health integration action row permission accessibility prop", "accessibilityLabel={permissionAccessibilityLabel}"),
@@ -13124,6 +13136,7 @@ def main() -> int:
             ("store category option press binding", "onOptionPress={pressStoreCategoryOption}"),
             ("store product status press binding", "onPress={() => pressStoreProductStatus(product)}"),
             ("food photo upload status binding", "onPress={showFoodPhotoUploadStatus}"),
+            ("food photo action row binding", "<FoodPhotoActionRow"),
             ("food photo integration status binding", "onPress={showFoodPhotoIntegrationStatus}"),
             ("food photo retake status binding", "onPress={showFoodPhotoRetakeStatus}"),
             ("achievement integration accessibility binding", "accessibilityLabel={achievementIntegrationAccessibilityDisplayLabel}"),
@@ -13301,6 +13314,8 @@ def main() -> int:
             ("food photo upload status binding", "const foodPhotoUploadStatusMessage = foodPhotoStatusDisplay.upload;"),
             ("food photo integration accessibility binding", "accessibilityLabel={foodPhotoIntegrationAccessibilityDisplayLabel}"),
             ("food photo retake accessibility binding", "accessibilityLabel={foodPhotoRetakeAccessibilityDisplayLabel}"),
+            ("food photo integration label binding", "label={foodPhotoIntegrationButtonDisplayLabel}"),
+            ("food photo retake label binding", "label={foodPhotoRetakeButtonDisplayLabel}"),
             ("future commerce primary CTA button role", 'accessibilityRole="button"\n              style={styles.primaryButtonFull}'),
             ("future commerce secondary CTA button role", 'accessibilityRole="button"\n              style={styles.secondaryButton}'),
             ("future commerce action row CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),

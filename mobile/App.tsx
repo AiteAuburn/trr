@@ -773,6 +773,7 @@ import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { CommunityActionRow } from "./communityActionRow";
 import { DoctorShareActionRow } from "./doctorShareActionRow";
+import { FoodPhotoActionRow } from "./foodPhotoActionRow";
 import { HealthIntegrationActionRow } from "./healthIntegrationActionRow";
 import { RankingActionRow } from "./rankingActionRow";
 import { HistoryCalendarMonthPicker } from "./historyCalendarMonthPicker";
@@ -13529,32 +13530,22 @@ export default function App() {
                 <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />
               ))}
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={foodPhotoIntegrationAccessibilityDisplayLabel}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={showFoodPhotoIntegrationStatus}
-              >
-                <Text style={styles.secondaryButtonText}>{foodPhotoIntegrationButtonDisplayLabel}</Text>
-              </Pressable>
-            </View>
+            <FoodPhotoActionRow
+              accessibilityLabel={foodPhotoIntegrationAccessibilityDisplayLabel}
+              label={foodPhotoIntegrationButtonDisplayLabel}
+              onPress={showFoodPhotoIntegrationStatus}
+            />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{foodPhotoReadinessTitleDisplayText}</Text>
               {foodPhotoReadinessChecklistItems.map((item) => (
                 <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />
               ))}
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={foodPhotoRetakeAccessibilityDisplayLabel}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={showFoodPhotoRetakeStatus}
-              >
-                <Text style={styles.secondaryButtonText}>{foodPhotoRetakeButtonDisplayLabel}</Text>
-              </Pressable>
-            </View>
+            <FoodPhotoActionRow
+              accessibilityLabel={foodPhotoRetakeAccessibilityDisplayLabel}
+              label={foodPhotoRetakeButtonDisplayLabel}
+              onPress={showFoodPhotoRetakeStatus}
+            />
             {foodPhotoActionStatus ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{auxiliaryDisplayLabels.foodPhotoStatus}</Text>
