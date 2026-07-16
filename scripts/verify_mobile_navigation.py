@@ -38,6 +38,7 @@ ANALYSIS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "analysisScreenData.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
 SETTINGS_CHOICE_DISPLAY_PATH = REPO_ROOT / "mobile" / "settingsChoiceDisplay.ts"
+SETTINGS_PROFILE_CHOICE_SELECTOR_PATH = REPO_ROOT / "mobile" / "settingsProfileChoiceSelector.tsx"
 MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "modelTransforms.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
 SUBSCRIPTION_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "subscriptionTransforms.ts"
@@ -1419,6 +1420,7 @@ def main() -> int:
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     settings_screen_data_content = SETTINGS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     settings_choice_display_content = SETTINGS_CHOICE_DISPLAY_PATH.read_text(encoding="utf-8")
+    settings_profile_choice_selector_content = SETTINGS_PROFILE_CHOICE_SELECTOR_PATH.read_text(encoding="utf-8")
     model_transforms_content = MODEL_TRANSFORMS_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
     subscription_transforms_content = SUBSCRIPTION_TRANSFORMS_PATH.read_text(encoding="utf-8")
@@ -11464,19 +11466,12 @@ def main() -> int:
             ("profile settings option press handler", "function pressSettingsProfileChoice(profile: (typeof profileChoiceDisplayItems)[number])"),
             ("settings profile choice target helper", "function settingsProfileChoiceTarget(profile: { sourceId: string })"),
             ("settings profile choice target helper fields", "return profile.sourceId;"),
-            ("settings profile choice key helper", "function settingsProfileChoiceKey(profile: { id: string })"),
-            ("settings profile choice key helper fields", "return profile.id;"),
-            ("settings profile choice key binding", "key={settingsProfileChoiceKey(profile)}"),
-            ("settings profile choice accessibility helper", "function settingsProfileChoiceAccessibilityLabel(profile: { accessibilityLabel: string })"),
-            ("settings profile choice accessibility helper fields", "return profile.accessibilityLabel;"),
-            ("settings profile choice accessibility binding", "accessibilityLabel={settingsProfileChoiceAccessibilityLabel(profile)}"),
-            ("settings profile choice selected helper", "function settingsProfileChoiceIsSelected(profile: { sourceId: string }, activeId: string)"),
-            ("settings profile choice selected helper fields", "return settingsProfileChoiceTarget(profile) === activeId;"),
-            ("settings profile choice selected binding", "const profileSelected = settingsProfileChoiceIsSelected(profile, activeProfileId);"),
-            ("settings profile choice label helper", "function settingsProfileChoiceLabel(profile: { label: string })"),
-            ("settings profile choice label helper fields", "return profile.label;"),
-            ("settings profile choice label binding", "{settingsProfileChoiceLabel(profile)}"),
             ("profile settings target helper binding", "selectSettingsProfileChoice(settingsProfileChoiceTarget(profile));"),
+            ("settings profile choice selector binding", "<SettingsProfileChoiceSelector"),
+            ("settings profile choice selector active profile binding", "activeProfileId={activeProfileId}"),
+            ("settings profile choice selector disabled binding", "disabled={isAnyRequestInFlight}"),
+            ("settings profile choice selector items binding", "items={profileChoiceDisplayItems}"),
+            ("settings profile choice selector handler binding", "onProfilePress={pressSettingsProfileChoice}"),
             ("settings model choice target helper", "function settingsModelChoiceTarget(model: { sourceId: string })"),
             ("settings model choice target helper fields", "return model.sourceId;"),
             ("settings model choice key helper", "function settingsModelChoiceKey(model: { id: string })"),
@@ -11762,7 +11757,7 @@ def main() -> int:
             ("backend reconnect settings binding", "onPress={reconnectBackendFromSettings}"),
             ("backend reconnect accessibility binding", "accessibilityLabel={settingsSubscriptionDisplayLabels.backendReconnectAccessibility}"),
             ("backend reconnect disabled state", "accessibilityState={{ disabled: isAnyRequestInFlight }}"),
-            ("profile settings option binding", "onPress={() => pressSettingsProfileChoice(profile)}"),
+            ("profile settings choice selector binding", "<SettingsProfileChoiceSelector"),
             ("llm model settings option binding", "onPress={() => pressSettingsLlmModelChoice(model)}"),
             ("stt model settings option binding", "onPress={() => pressSettingsSttModelChoice(model)}"),
             ("recording whisper model settings title", "本機 Whisper 模型"),
@@ -11772,10 +11767,10 @@ def main() -> int:
             ("recording whisper model selector selected path binding", "selectedPath={whisperModelPath}"),
             ("recording model refresh binding", "onPress={refreshRecordingModelsFromSettings}"),
             ("recording model refresh accessibility binding", "accessibilityLabel={recordingModelRefreshAccessibilityDisplayLabel}"),
-            ("profile settings option accessibility binding", "accessibilityLabel={settingsProfileChoiceAccessibilityLabel(profile)}"),
+            ("profile settings choice selector accessibility boundary", "onProfilePress={pressSettingsProfileChoice}"),
             ("llm model settings option accessibility binding", "accessibilityLabel={settingsModelChoiceAccessibilityLabel(model)}"),
             ("settings option button role", 'accessibilityRole="button"'),
-            ("profile settings option state binding", "accessibilityState={{ disabled: isAnyRequestInFlight, selected: profileSelected }}"),
+            ("profile settings choice selector disabled binding", "disabled={isAnyRequestInFlight}"),
             ("llm model settings option state binding", "accessibilityState={{ disabled: modelDisabled, selected: modelSelected }}"),
             ("stt model settings option state binding", "accessibilityState={{ disabled: modelDisabled, selected: modelSelected }}"),
             ("native model URL input binding", "onChangeText={updateNativeModelUrlInput}"),
@@ -12391,18 +12386,14 @@ def main() -> int:
             ("future preview secondary CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
             _assert_contains(label, content, marker)
-        settings_profile_choice_render_block = _match_block(
-            content,
-            r"profileChoiceDisplayItems\.map\(\(profile\) => \{([\s\S]*?pressSettingsProfileChoice\(profile\)[\s\S]*?</Pressable>)",
-            "settings profile choice render block",
-        )
         for label, marker in (
+            ("direct settings profile choice map", "profileChoiceDisplayItems.map((profile) => {"),
             ("direct settings profile key binding", "key={profile.id}"),
             ("direct settings profile accessibility binding", "accessibilityLabel={profile.accessibilityLabel}"),
             ("direct settings profile selected state binding", "profile.sourceId === activeProfileId"),
             ("direct settings profile label binding", "{profile.label}"),
         ):
-            _assert_not_contains(label, settings_profile_choice_render_block, marker)
+            _assert_not_contains(label, content, marker)
         settings_llm_choice_render_block = _match_block(
             content,
             r"llmModelChoiceDisplayItems\.map\(\(model\) => \{([\s\S]*?pressSettingsLlmModelChoice\(model\)[\s\S]*?</Pressable>)",
@@ -12465,6 +12456,24 @@ def main() -> int:
             ("downloaded whisper model accessibility label", "`選擇本機 Whisper 模型：${fileName}，只用於本機錄音轉文字`"),
         ):
             _assert_contains(label, settings_choice_display_content, marker)
+        for label, marker in (
+            ("settings profile choice selector component", "export function SettingsProfileChoiceSelector"),
+            ("settings profile choice selector scroll", '<ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false}>'),
+            ("settings profile choice selector map", "items.map((profile) => {"),
+            ("settings profile choice selector selected binding", "const profileSelected = profile.sourceId === activeProfileId;"),
+            ("settings profile choice selector accessibility binding", "accessibilityLabel={profile.accessibilityLabel}"),
+            ("settings profile choice selector role", 'accessibilityRole="button"'),
+            ("settings profile choice selector state", "accessibilityState={{ disabled, selected: profileSelected }}"),
+            ("settings profile choice selector disabled prop", "disabled={disabled}"),
+            ("settings profile choice selector key binding", "key={profile.id}"),
+            ("settings profile choice selector handler", "onPress={() => onProfilePress(profile)}"),
+            ("settings profile choice selector label", "{profile.label}"),
+            ("settings profile choice selector chip style", "chip: {"),
+            ("settings profile choice selector disabled style", "chipDisabled: {"),
+            ("settings profile choice selector selected style", "chipSelected: {"),
+            ("settings profile choice selector text style", "chipText: {"),
+        ):
+            _assert_contains(label, settings_profile_choice_selector_content, marker)
         for label, marker in (
             ("downloaded model row key helper", "function downloadedModelRowKey(model: DownloadedModel)"),
             ("downloaded model row key helper fields", "return model.uri;"),

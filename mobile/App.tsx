@@ -829,6 +829,7 @@ import { FoodCommunityShareTextFields } from "./foodCommunityShareTextFields";
 import { SegmentSelector } from "./segmentSelector";
 import { SettingsSubpageActionRow } from "./settingsSubpageActionRow";
 import { SettingsSubpageCloseButton } from "./settingsSubpageCloseButton";
+import { SettingsProfileChoiceSelector } from "./settingsProfileChoiceSelector";
 import { StoreSearchField } from "./storeSearchField";
 import { SubscriptionSubpageActionRow } from "./subscriptionSubpageActionRow";
 import { SubscriptionSubpageCloseButton } from "./subscriptionSubpageCloseButton";
@@ -4948,22 +4949,6 @@ export default function App() {
 
   function settingsProfileChoiceTarget(profile: { sourceId: string }) {
     return profile.sourceId;
-  }
-
-  function settingsProfileChoiceKey(profile: { id: string }) {
-    return profile.id;
-  }
-
-  function settingsProfileChoiceAccessibilityLabel(profile: { accessibilityLabel: string }) {
-    return profile.accessibilityLabel;
-  }
-
-  function settingsProfileChoiceIsSelected(profile: { sourceId: string }, activeId: string) {
-    return settingsProfileChoiceTarget(profile) === activeId;
-  }
-
-  function settingsProfileChoiceLabel(profile: { label: string }) {
-    return profile.label;
   }
 
   function pressSettingsProfileChoice(profile: (typeof profileChoiceDisplayItems)[number]) {
@@ -12212,35 +12197,12 @@ export default function App() {
                     </Text>
                   </Pressable>
                   <Text style={styles.label}>{auxiliaryDisplayLabels.careProfile}</Text>
-                  <ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false}>
-                    {profileChoiceDisplayItems.map((profile) => {
-                      const profileSelected = settingsProfileChoiceIsSelected(profile, activeProfileId);
-                      return (
-                        <Pressable
-                          key={settingsProfileChoiceKey(profile)}
-                          accessibilityLabel={settingsProfileChoiceAccessibilityLabel(profile)}
-                          accessibilityRole="button"
-                          accessibilityState={{ disabled: isAnyRequestInFlight, selected: profileSelected }}
-                          style={[
-                            styles.chip,
-                            profileSelected ? styles.chipSelected : null,
-                            isAnyRequestInFlight ? styles.chipDisabled : null
-                          ]}
-                          disabled={isAnyRequestInFlight}
-                          onPress={() => pressSettingsProfileChoice(profile)}
-                        >
-                          <Text
-                            style={[
-                              styles.chipText,
-                              profileSelected ? styles.chipTextSelected : null
-                            ]}
-                          >
-                            {settingsProfileChoiceLabel(profile)}
-                          </Text>
-                        </Pressable>
-                      );
-                    })}
-                  </ScrollView>
+                  <SettingsProfileChoiceSelector
+                    activeProfileId={activeProfileId}
+                    disabled={isAnyRequestInFlight}
+                    items={profileChoiceDisplayItems}
+                    onProfilePress={pressSettingsProfileChoice}
+                  />
                 </View>
                 <Text style={styles.evidence}>
                   處理中會暫停切換照護對象與模型，避免 parser、同步或儲存使用到不一致設定。
