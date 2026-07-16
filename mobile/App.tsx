@@ -3655,6 +3655,22 @@ export default function App() {
     }
   }
 
+  function handleParserPreviewSuccess(
+    nextPreview: ParsePreviewResponse,
+    occurredAt: string,
+    text: string,
+    voiceSeconds: number
+  ) {
+    appendParserTranscriptEntry(occurredAt, text, voiceSeconds);
+    openAiReviewAfterParserSuccess();
+    reorganizeDailyRecordDraftAfterChange(
+      nextPreview,
+      "add",
+      parserSuccessStatusForPreview(nextPreview, voiceSeconds)
+    );
+    refreshVoiceQuotaAfterParserSuccess(voiceSeconds);
+  }
+
   function openAiReviewAfterParserSuccess() {
     setTranscriptVoiceSeconds(0);
     openScreen("aiReview");
@@ -7444,14 +7460,7 @@ export default function App() {
         parserVoiceSeconds
       );
       const mergedDailyPreview = mergedParserPreviewForResponse(existingDailyPreview, response);
-      appendParserTranscriptEntry(parseOccurredAt, transcript, parserVoiceSeconds);
-      openAiReviewAfterParserSuccess();
-      reorganizeDailyRecordDraftAfterChange(
-        mergedDailyPreview,
-        "add",
-        parserSuccessStatusForPreview(mergedDailyPreview, parserVoiceSeconds)
-      );
-      refreshVoiceQuotaAfterParserSuccess(parserVoiceSeconds);
+      handleParserPreviewSuccess(mergedDailyPreview, parseOccurredAt, transcript, parserVoiceSeconds);
     } catch (error) {
       handleParserPreviewFailure(error);
     } finally {
