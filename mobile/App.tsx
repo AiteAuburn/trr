@@ -3598,6 +3598,10 @@ export default function App() {
       : parserSuccessStatusMessage(nextPreview.records.length);
   }
 
+  function appendDailyTranscriptEntry(entry: DailyTranscriptEntry) {
+    setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, entry]));
+  }
+
   function removePreviewRecord(index: number) {
     if (!preview) {
       return;
@@ -7365,7 +7369,7 @@ export default function App() {
         parserVoiceSeconds > 0 ? "voice" : "text"
       );
       if (transcriptEntry) {
-        setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, transcriptEntry]));
+        appendDailyTranscriptEntry(transcriptEntry);
       }
       setTranscriptVoiceSeconds(0);
       openScreen("aiReview");
