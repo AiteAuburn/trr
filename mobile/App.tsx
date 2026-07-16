@@ -3731,13 +3731,20 @@ export default function App() {
     }
   }
 
+  function applyPreviewRecordRemoveChangeAndClearState(
+    currentPreview: ParsePreviewResponse,
+    nextRecords: PendingRecord[]
+  ) {
+    applyPreviewRecordRemoveChange(currentPreview, nextRecords);
+    clearPreviewRemoveActionState();
+  }
+
   function removePreviewRecord(index: number) {
     if (!preview) {
       return;
     }
     const nextRecords = previewRecordsWithoutRecord(preview.records, index);
-    applyPreviewRecordRemoveChange(preview, nextRecords);
-    clearPreviewRemoveActionState();
+    applyPreviewRecordRemoveChangeAndClearState(preview, nextRecords);
   }
 
   function confirmPreviewRecordRemove() {

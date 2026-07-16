@@ -4456,12 +4456,22 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview remove change helper binding",
             content,
-            "applyPreviewRecordRemoveChange(preview, nextRecords);\n    clearPreviewRemoveActionState();",
+            "applyPreviewRecordRemoveChange(currentPreview, nextRecords);\n    clearPreviewRemoveActionState();",
+        )
+        _assert_contains(
+            "AI candidate preview remove apply clear helper",
+            content,
+            "function applyPreviewRecordRemoveChangeAndClearState(",
+        )
+        _assert_contains(
+            "AI candidate preview remove apply clear helper internals",
+            content,
+            "function applyPreviewRecordRemoveChangeAndClearState(\n    currentPreview: ParsePreviewResponse,\n    nextRecords: PendingRecord[]\n  ) {\n    applyPreviewRecordRemoveChange(currentPreview, nextRecords);\n    clearPreviewRemoveActionState();",
         )
         _assert_contains(
             "AI candidate remove action clear helper binding",
             content,
-            "applyPreviewRecordRemoveChange(preview, nextRecords);\n    clearPreviewRemoveActionState();",
+            "applyPreviewRecordRemoveChangeAndClearState(preview, nextRecords);",
         )
         _assert_not_contains(
             "AI candidate remove action direct clear binding",
