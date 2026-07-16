@@ -3836,7 +3836,7 @@ export default function App() {
   }
 
   function prepareParserPreviewRequest() {
-    const existingDailyPreview = preview;
+    const existingDailyPreview = parserExistingDailyPreview();
     clearParserPreviewState();
     setStatus(parserProgressStatusMessage());
     return {
@@ -3844,6 +3844,10 @@ export default function App() {
       parserVoiceSeconds: parserPreviewVoiceSeconds(),
       parseOccurredAt: parserPreviewOccurredAt()
     };
+  }
+
+  function parserExistingDailyPreview() {
+    return preview;
   }
 
   function parserPreviewVoiceSeconds() {
