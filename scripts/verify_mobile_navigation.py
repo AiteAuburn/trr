@@ -5039,6 +5039,21 @@ def main() -> int:
             "} catch (error) {\n      handleSelectedRecordUpdateFailure(error);\n    } finally {",
         )
         _assert_contains(
+            "record update payload helper",
+            content,
+            "function buildSelectedRecordUpdatePayload(recordType: string)",
+        )
+        _assert_contains(
+            "record update payload helper guard",
+            content,
+            "const payload = buildPayloadFromEditFields(recordType, recordEditFields);\n    if (!payload || typeof payload !== \"object\" || Array.isArray(payload)) {\n      throw new Error(\"payload_json must be an object\");\n    }\n    return payload;",
+        )
+        _assert_contains(
+            "record update payload helper binding",
+            content,
+            "const payload = buildSelectedRecordUpdatePayload(selectedRecord.record_type);",
+        )
+        _assert_contains(
             "manual create result selected record helper state",
             content,
             "setRecords((current) => boundRecordsList([created, ...current]));\n    selectRecordForResult(created);",

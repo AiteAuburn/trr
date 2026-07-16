@@ -8481,6 +8481,14 @@ export default function App() {
     setStatus(recordUpdateFailureStatusMessage(error));
   }
 
+  function buildSelectedRecordUpdatePayload(recordType: string) {
+    const payload = buildPayloadFromEditFields(recordType, recordEditFields);
+    if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+      throw new Error("payload_json must be an object");
+    }
+    return payload;
+  }
+
   async function updateSelectedRecord() {
     if (isBusy || recordUpdateInFlight.current) {
       return;
@@ -8508,10 +8516,7 @@ export default function App() {
 
     startRecordUpdateRequest();
     try {
-      const payload = buildPayloadFromEditFields(selectedRecord.record_type, recordEditFields);
-      if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
-        throw new Error("payload_json must be an object");
-      }
+      const payload = buildSelectedRecordUpdatePayload(selectedRecord.record_type);
       const updated = await requestSelectedRecordUpdate(selectedRecord.id, account.id, payload);
       handleSelectedRecordUpdateSuccess(updated);
     } catch (error) {
