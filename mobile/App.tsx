@@ -8916,6 +8916,10 @@ export default function App() {
     };
   }
 
+  function hasNativeWhisperInput(whisperInput: ReturnType<typeof nativeWhisperInput>) {
+    return Boolean(whisperInput.modelPath && whisperInput.audioPath);
+  }
+
   function nativeLlamaInput() {
     return {
       modelPath: llamaModelPath.trim(),
@@ -8972,7 +8976,7 @@ export default function App() {
     results: NativeBenchmarkResult[],
     whisperInput: ReturnType<typeof nativeWhisperInput>
   ) {
-    if (whisperInput.modelPath && whisperInput.audioPath) {
+    if (hasNativeWhisperInput(whisperInput)) {
       results.push(await benchmarkNativeWhisper(nativeWhisperRequestArgs(whisperInput)));
     }
   }
@@ -9079,7 +9083,7 @@ export default function App() {
       return;
     }
     const whisperInput = nativeWhisperInput();
-    if (!whisperInput.modelPath || !whisperInput.audioPath) {
+    if (!hasNativeWhisperInput(whisperInput)) {
       handleNativeWhisperMissingInput();
       return;
     }
