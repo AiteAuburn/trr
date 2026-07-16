@@ -15,6 +15,37 @@
 
 ## 2026-07-15
 
+### T1756 reuse daily record leave guard button labels
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added cancel and confirm button labels to the daily-record unsaved-leave display text bundle.
+- Reused the bundled labels in the leave-guard card buttons so visible copy and accessibility labels share the same helper boundary.
+- Updated navigation verifier coverage with positive label bindings, copy-helper markers, and direct JSX literal guards.
+- 未變更 UI copy/layout、leave-guard visibility timing、Android back behavior、return guard behavior、navigation targets、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1755 reuse daily record leave guard visibility helpers
 
 類型：mobile / refactor / verifier / docs

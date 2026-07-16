@@ -1323,7 +1323,9 @@ export default function App() {
   const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardDisplay.title;
   const dailyRecordLeaveGuardBodyDisplayText = dailyRecordLeaveGuardDisplay.body;
   const dailyRecordLeaveGuardQuestionDisplayText = dailyRecordLeaveGuardDisplay.question;
+  const dailyRecordLeaveGuardCancelDisplayText = dailyRecordLeaveGuardDisplay.cancel;
   const dailyRecordLeaveGuardCancelAccessibilityLabel = dailyRecordLeaveGuardDisplay.cancelAccessibility;
+  const dailyRecordLeaveGuardConfirmDisplayText = dailyRecordLeaveGuardDisplay.confirm;
   const dailyRecordLeaveGuardConfirmAccessibilityLabel = dailyRecordLeaveGuardDisplay.confirmAccessibility;
   const saveSuccessViewState = saveSuccessState(lastSaveEntryMethod, hasUnsavedPreviewRecords);
   const hasPartialAiSave = saveSuccessViewState.hasPartialAiSave;
@@ -8720,7 +8722,7 @@ export default function App() {
                     style={styles.secondaryButton}
                     onPress={cancelDailyRecordLeaveGuard}
                   >
-                    <Text style={styles.secondaryButtonText}>取消</Text>
+                    <Text style={styles.secondaryButtonText}>{dailyRecordLeaveGuardCancelDisplayText}</Text>
                   </Pressable>
                   <Pressable
                     accessibilityLabel={dailyRecordLeaveGuardConfirmAccessibilityLabel}
@@ -8728,7 +8730,7 @@ export default function App() {
                     style={styles.dangerButton}
                     onPress={confirmDailyRecordLeaveGuard}
                   >
-                    <Text style={styles.dangerButtonText}>離開</Text>
+                    <Text style={styles.dangerButtonText}>{dailyRecordLeaveGuardConfirmDisplayText}</Text>
                   </Pressable>
                 </View>
               </View>

@@ -6004,7 +6004,11 @@ def main() -> int:
             ("daily record leave guard confirm binding", "onPress={confirmDailyRecordLeaveGuard}"),
             ("daily record leave guard display helper binding", "const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayTexts();"),
             ("daily record leave guard title display binding", "const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardDisplay.title;"),
+            ("daily record leave guard cancel display binding", "const dailyRecordLeaveGuardCancelDisplayText = dailyRecordLeaveGuardDisplay.cancel;"),
             ("daily record leave guard cancel accessibility binding", "const dailyRecordLeaveGuardCancelAccessibilityLabel = dailyRecordLeaveGuardDisplay.cancelAccessibility;"),
+            ("daily record leave guard confirm display binding", "const dailyRecordLeaveGuardConfirmDisplayText = dailyRecordLeaveGuardDisplay.confirm;"),
+            ("daily record leave guard cancel label render", "{dailyRecordLeaveGuardCancelDisplayText}"),
+            ("daily record leave guard confirm label render", "{dailyRecordLeaveGuardConfirmDisplayText}"),
             ("daily record draft screen helper binding", "const dailyRecordDraftScreen = dailyRecordDraftScreenState({"),
             ("daily record fixed save visible helper binding", "const isDailyRecordFixedSaveVisible = dailyRecordDraftScreen.isFixedSaveVisible;"),
             ("daily record unsaved draft helper binding", "const hasUnsavedDailyRecordDraft = dailyRecordDraftScreen.hasUnsavedDraft;"),
@@ -6068,6 +6072,8 @@ def main() -> int:
             ("daily record leave guard direct request setters", "setDailyRecordLeaveGuardVisible(true);\n    setStatus(dailyRecordLeaveGuardPromptStatusMessage());"),
             ("daily record leave guard direct cancel setters", "setDailyRecordLeaveGuardVisible(false);\n    setStatus(dailyRecordLeaveGuardCancelStatusMessage());"),
             ("daily record leave guard direct confirm setters", "setDailyRecordLeaveGuardVisible(false);\n    returnFromAiSaveConfirm();\n    setStatus(dailyRecordLeaveGuardConfirmStatusMessage());"),
+            ("daily record leave guard direct cancel label", '<Text style={styles.secondaryButtonText}>取消</Text>'),
+            ("daily record leave guard direct confirm label", '<Text style={styles.dangerButtonText}>離開</Text>'),
         ):
             _assert_not_contains(label, content, marker)
         daily_transcript_render_block = _match_block(
@@ -6164,7 +6170,9 @@ def main() -> int:
             ("daily record leave guard body helper", "function dailyRecordLeaveGuardBodyCopy()"),
             ("daily record leave guard question helper", "function dailyRecordLeaveGuardQuestionCopy()"),
             ("daily record leave guard display helper", "function dailyRecordLeaveGuardDisplayTexts()"),
+            ("daily record leave guard display cancel label", "cancel: boundDisplayText(\"取消\", maxDisplayTextLength)"),
             ("daily record leave guard display cancel accessibility", "cancelAccessibility: boundDisplayText(\"取消離開，保留每日紀錄草稿\", maxDisplayDetailTextLength)"),
+            ("daily record leave guard display confirm label", "confirm: boundDisplayText(\"離開\", maxDisplayTextLength)"),
             ("daily record leave guard display confirm accessibility", "confirmAccessibility: boundDisplayText(\"離開每日紀錄頁，今天未儲存修改不會保留\", maxDisplayDetailTextLength)"),
             ("daily record leave guard prompt status helper", "function dailyRecordLeaveGuardPromptStatusMessage()"),
             ("daily record leave guard cancel status helper", "function dailyRecordLeaveGuardCancelStatusMessage()"),

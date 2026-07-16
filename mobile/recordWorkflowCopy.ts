@@ -357,7 +357,9 @@ export function dailyRecordLeaveGuardDisplayTexts() {
     title: dailyRecordLeaveGuardTitleCopy(),
     body: dailyRecordLeaveGuardBodyCopy(),
     question: dailyRecordLeaveGuardQuestionCopy(),
+    cancel: boundDisplayText("取消", maxDisplayTextLength),
     cancelAccessibility: boundDisplayText("取消離開，保留每日紀錄草稿", maxDisplayDetailTextLength),
+    confirm: boundDisplayText("離開", maxDisplayTextLength),
     confirmAccessibility: boundDisplayText("離開每日紀錄頁，今天未儲存修改不會保留", maxDisplayDetailTextLength)
   };
 }

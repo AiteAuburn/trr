@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1756: Reuse daily record leave guard button labels
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added cancel and confirm button labels to the daily-record unsaved-leave display text bundle.
+- Reused the bundled labels in the leave-guard card buttons so visible copy and accessibility labels share the same helper boundary.
+- Updated navigation verifier coverage with positive label bindings, copy-helper markers, and direct JSX literal guards.
+- No UI copy/layout/leave-guard visibility timing/Android back behavior/return guard behavior/navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1755: Reuse daily record leave guard visibility helpers
 
 Status: done
