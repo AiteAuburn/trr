@@ -15,6 +15,37 @@
 
 ## 2026-07-15
 
+### T1760 reuse daily record section description copy
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the daily-record section description copy to each section display item.
+- Reused the description through an App helper in the daily-record section header instead of a direct JSX literal.
+- Updated navigation verifier coverage with positive display-item/helper bindings and a direct literal guard in the section render block.
+- 未變更 UI copy/layout、section ordering、entry menu timing、edit/delete navigation targets、return targets、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1759 reuse daily record entry action labels
 
 類型：mobile / refactor / verifier / docs

@@ -264,6 +264,7 @@ export function buildDailyRecordSectionDisplayItems(records: PendingRecord[]) {
       ...definition,
       title: boundDisplayText(definition.title, 80),
       icon: boundDisplayText(definition.icon, 4),
+      description: boundDisplayText("欄位依分類顯示；沒有提到的欄位保持空白。", maxDisplayDetailTextLength),
       emptyCopy: boundDisplayText(definition.emptyCopy, maxDisplayDetailTextLength),
       countLabel: boundDisplayText(`${clampNumber(entries.length, 0, maxMobilePreviewRecords)} 筆`, 20),
       entries

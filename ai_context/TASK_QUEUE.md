@@ -34,6 +34,37 @@ None.
 
 ## Done
 
+### T1760: Reuse daily record section description copy
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/recordDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added the daily-record section description copy to each section display item.
+- Reused the description through an App helper in the daily-record section header instead of a direct JSX literal.
+- Updated navigation verifier coverage with positive display-item/helper bindings and a direct literal guard in the section render block.
+- No UI copy/layout/section ordering/entry menu timing/edit/delete navigation target/return target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1759: Reuse daily record entry action labels
 
 Status: done

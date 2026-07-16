@@ -3746,6 +3746,10 @@ export default function App() {
     return section.title;
   }
 
+  function dailyRecordSectionDescription(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
+    return section.description;
+  }
+
   function dailyRecordSectionCountLabel(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
     return section.countLabel;
   }
@@ -8789,7 +8793,7 @@ export default function App() {
                       </View>
                       <View style={styles.timelineContent}>
                         <Text style={styles.label}>{dailyRecordSectionTitle(section)}</Text>
-                        <Text style={styles.evidence}>欄位依分類顯示；沒有提到的欄位保持空白。</Text>
+                        <Text style={styles.evidence}>{dailyRecordSectionDescription(section)}</Text>
                       </View>
                     </View>
                     <Text style={styles.countText}>{dailyRecordSectionCountLabel(section)}</Text>

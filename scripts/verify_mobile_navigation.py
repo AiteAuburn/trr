@@ -5906,6 +5906,9 @@ def main() -> int:
             ("daily record section title helper", "function dailyRecordSectionTitle(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
             ("daily record section title helper fields", "return section.title;"),
             ("daily record section title binding", "{dailyRecordSectionTitle(section)}"),
+            ("daily record section description helper", "function dailyRecordSectionDescription(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
+            ("daily record section description helper fields", "return section.description;"),
+            ("daily record section description binding", "{dailyRecordSectionDescription(section)}"),
             ("daily record section count helper", "function dailyRecordSectionCountLabel(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
             ("daily record section count helper fields", "return section.countLabel;"),
             ("daily record section count binding", "{dailyRecordSectionCountLabel(section)}"),
@@ -6065,7 +6068,6 @@ def main() -> int:
             ("daily record fixed save return accessibility disabled", "accessibilityState={{ disabled: isDailyRecordFixedSaveReturnDisabled }}"),
             ("daily record fixed save return style disabled", "isDailyRecordFixedSaveReturnDisabled ? styles.buttonDisabled : null"),
             ("daily record fixed save return disabled prop", "disabled={isDailyRecordFixedSaveReturnDisabled}"),
-            ("daily record category blank copy", "沒有提到的欄位保持空白"),
         ):
             _assert_contains(label, content, marker)
         _assert_not_contains(
@@ -6112,6 +6114,7 @@ def main() -> int:
             ("direct daily record section key binding", "key={section.id}"),
             ("direct daily record section icon binding", "{section.icon}"),
             ("direct daily record section title binding", "{section.title}"),
+            ("direct daily record section description literal", "<Text style={styles.evidence}>欄位依分類顯示；沒有提到的欄位保持空白。</Text>"),
             ("direct daily record section count binding", "{section.countLabel}"),
             ("direct daily record section entries length binding", "section.entries.length"),
             ("direct daily record section entries map binding", "section.entries.map"),
@@ -6963,6 +6966,7 @@ def main() -> int:
             ("daily section time detail label helper", "function dailyRecordTimeDetailLabel(recordType: string)"),
             ("daily section entry display item helper", "function dailyRecordEntryDisplayItem(record: PendingRecord, index: number)"),
             ("daily section display item builder", "function buildDailyRecordSectionDisplayItems(records: PendingRecord[])"),
+            ("daily section description", 'description: boundDisplayText("欄位依分類顯示；沒有提到的欄位保持空白。", maxDisplayDetailTextLength)'),
             ("daily section entry management label", "可編輯或刪除"),
             ("daily section entry edit label", 'editLabel: boundDisplayText("編輯", maxDisplayTextLength)'),
             ("daily section entry remove label", 'removeLabel: boundDisplayText("刪除", maxDisplayTextLength)'),
