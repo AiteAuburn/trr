@@ -15,6 +15,7 @@ APP_RUNTIME_CONFIG_PATH = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 ACCOUNT_SECURITY_ACTION_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityActionGrid.tsx"
 SETTINGS_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "settingsBoundaryGrid.tsx"
+SETTINGS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "settingsChecklist.tsx"
 AUTH_PROVIDER_PREVIEW_LIST_PATH = REPO_ROOT / "mobile" / "authProviderPreviewList.tsx"
 AUTH_SESSION_DISPLAY_LIST_PATH = REPO_ROOT / "mobile" / "authSessionDisplayList.tsx"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
@@ -1402,6 +1403,7 @@ def main() -> int:
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     account_security_action_grid_content = ACCOUNT_SECURITY_ACTION_GRID_PATH.read_text(encoding="utf-8")
     settings_boundary_grid_content = SETTINGS_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
+    settings_checklist_content = SETTINGS_CHECKLIST_PATH.read_text(encoding="utf-8")
     auth_provider_preview_list_content = AUTH_PROVIDER_PREVIEW_LIST_PATH.read_text(encoding="utf-8")
     auth_session_display_list_content = AUTH_SESSION_DISPLAY_LIST_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
@@ -1921,12 +1923,6 @@ def main() -> int:
             ("record entry settings highlight bullet row", "recordEntrySettingsChecklistItems.map((item) => (\n                  <HighlightBulletRow key={recordFlowChecklistItemKey(item)} text={recordFlowChecklistItemText(item)} />"),
             ("ai candidate remove highlight bullet row", "aiCandidateRemoveChecklistItems.map((item) => (\n                <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />"),
             ("ai save failure highlight bullet row", "aiSaveFailureChecklistItems.map((item) => (\n                <HighlightBulletRow key={aiFlowChecklistItemKey(item)} text={aiFlowChecklistItemText(item)} />"),
-            ("auth boundary highlight bullet row", "authBoundaryChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
-            ("profile readiness highlight bullet row", "profileReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
-            ("quota readiness highlight bullet row", "quotaReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
-            ("reminder readiness highlight bullet row", "reminderReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
-            ("privacy readiness highlight bullet row", "privacyReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
-            ("tutorial safety highlight bullet row", "tutorialSafetyChecklistItems.map((item) => (\n                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />"),
             ("detailed report notes highlight bullet row", "detailedReportNoteItems.map((item) => (\n                <HighlightBulletRow key={insightFlowChecklistItemKey(item)} text={insightFlowChecklistItemText(item)} />"),
             ("subscription readiness highlight bullet row", "subscriptionReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={subscriptionChecklistItemKey(item)} text={subscriptionChecklistItemText(item)} />"),
             ("subscription management readiness highlight bullet row", "subscriptionManagementReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={subscriptionChecklistItemKey(item)} text={subscriptionChecklistItemText(item)} />"),
@@ -1980,6 +1976,17 @@ def main() -> int:
             ("food community ranking highlight detail row", "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityRankingRowKey(row)}\n                  label={foodCommunityRankingRowLabel(row)}\n                  value={foodCommunityRankingRowValue(row)}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("settings checklist component", "export function SettingsChecklist"),
+            ("settings checklist item key helper", "function settingsChecklistItemKey(item: string)"),
+            ("settings checklist item key helper fields", "return item;"),
+            ("settings checklist item text helper", "function settingsChecklistItemText(item: string)"),
+            ("settings checklist item text helper fields", "return item;"),
+            ("settings checklist map", "items.map((item) => ("),
+            ("settings checklist key binding", "key={settingsChecklistItemKey(item)}"),
+            ("settings checklist text binding", "text={settingsChecklistItemText(item)}"),
+        ):
+            _assert_contains(label, settings_checklist_content, marker)
         for label, marker in (
             ("metric card component", "export function MetricCard({ label, value }: MetricCardProps)"),
             ("metric card label", "<Text style={styles.confidence}>{label}</Text>"),
@@ -11019,12 +11026,13 @@ def main() -> int:
             ("session management preview list handler binding", "onSessionPress={pressAuthSessionManagementPreview}"),
             ("auth session display list items binding", "items={authSessionDisplayItems}"),
             ("reminder preview status row time binding", "{previewTimedRowTime(item)}"),
-            ("settings checklist item key helper", "function settingsChecklistItemKey(item: string)"),
-            ("settings checklist item key helper fields", "return item;"),
-            ("settings checklist item key binding", "key={settingsChecklistItemKey(item)}"),
-            ("settings checklist item text helper", "function settingsChecklistItemText(item: string)"),
-            ("settings checklist item text helper fields", "return item;"),
-            ("settings checklist item text binding", "text={settingsChecklistItemText(item)}"),
+            ("settings checklist binding", "<SettingsChecklist"),
+            ("auth boundary settings checklist items binding", "items={authBoundaryChecklistItems}"),
+            ("profile readiness settings checklist items binding", "items={profileReadinessChecklistItems}"),
+            ("quota readiness settings checklist items binding", "items={quotaReadinessChecklistItems}"),
+            ("reminder readiness settings checklist items binding", "items={reminderReadinessChecklistItems}"),
+            ("privacy readiness settings checklist items binding", "items={privacyReadinessChecklistItems}"),
+            ("tutorial safety settings checklist items binding", "items={tutorialSafetyChecklistItems}"),
             ("subscription checklist item key helper", "function subscriptionChecklistItemKey(item: string)"),
             ("subscription checklist item key helper fields", "return item;"),
             ("subscription checklist item key binding", "key={subscriptionChecklistItemKey(item)}"),
@@ -11212,15 +11220,10 @@ def main() -> int:
             "privacyReadinessChecklistItems",
             "tutorialSafetyChecklistItems",
         ):
-            settings_checklist_render_block = _match_block(
-                content,
-                rf"{list_name}\.map\(\(item\) => \(([\s\S]*?<HighlightBulletRow[^\n]*/>\n\s*)\)\)",
-                f"{list_name} settings checklist render block",
-            )
             _assert_not_contains(
-                f"{list_name} direct checklist item binding",
-                settings_checklist_render_block,
-                "key={item} text={item}",
+                f"{list_name} direct settings checklist map",
+                content,
+                f"{list_name}.map((item) => (",
             )
         for list_name in (
             "subscriptionReadinessChecklistItems",

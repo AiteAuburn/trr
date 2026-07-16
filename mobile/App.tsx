@@ -825,6 +825,7 @@ import { RecordOptionField, RecordOptionRow } from "./recordOptionField";
 import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 import { SaveSuccessActionRow } from "./saveSuccessActionRow";
 import { SettingsBoundaryGrid } from "./settingsBoundaryGrid";
+import { SettingsChecklist } from "./settingsChecklist";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
 import { FoodCommunitySearchField } from "./foodCommunitySearchField";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
@@ -4762,14 +4763,6 @@ export default function App() {
 
   function previewTimedRowTime(row: { time: string }) {
     return row.time;
-  }
-
-  function settingsChecklistItemKey(item: string) {
-    return item;
-  }
-
-  function settingsChecklistItemText(item: string) {
-    return item;
   }
 
   function subscriptionChecklistItemKey(item: string) {
@@ -12302,9 +12295,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authBoundary}</Text>
-              {authBoundaryChecklistItems.map((item) => (
-                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />
-              ))}
+              <SettingsChecklist items={authBoundaryChecklistItems} />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.noAction}</Text>
@@ -12352,9 +12343,7 @@ export default function App() {
             <SettingsBoundaryGrid rows={profileSettingsBoundaryRows} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.profileEditReadiness}</Text>
-              {profileReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />
-              ))}
+              <SettingsChecklist items={profileReadinessChecklistItems} />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.noAction}</Text>
@@ -12410,9 +12399,7 @@ export default function App() {
             <SettingsBoundaryGrid rows={recordingQuotaBoundaryRows} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
-              {quotaReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />
-              ))}
+              <SettingsChecklist items={quotaReadinessChecklistItems} />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.dataCostBoundary}</Text>
@@ -12469,9 +12456,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
-              {reminderReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />
-              ))}
+              <SettingsChecklist items={reminderReadinessChecklistItems} />
             </View>
             <SettingsSubpageActionRow
               actionAccessibilityLabel={reminderIntegrationAccessibilityDisplayLabel}
@@ -12509,9 +12494,7 @@ export default function App() {
             <SettingsBoundaryGrid rows={privacyBoundaryRows} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
-              {privacyReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />
-              ))}
+              <SettingsChecklist items={privacyReadinessChecklistItems} />
             </View>
             <View style={styles.aiReviewList}>
               {privacyControlDisplayRows.map((row) => (
@@ -12560,9 +12543,7 @@ export default function App() {
             ))}
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{auxiliaryDisplayLabels.tutorialSafety}</Text>
-              {tutorialSafetyChecklistItems.map((item) => (
-                <HighlightBulletRow key={settingsChecklistItemKey(item)} text={settingsChecklistItemText(item)} />
-              ))}
+              <SettingsChecklist items={tutorialSafetyChecklistItems} />
             </View>
             <Pressable
               accessibilityLabel={auxiliaryDisplayLabels.tutorialStartAccessibility}

@@ -157,17 +157,17 @@ VISUAL_SMOKE_ROUTES = {
     "profileSettings": [
         'currentScreen === "profileSettings"',
         "rows={profileSettingsBoundaryRows}",
-        "profileReadinessChecklistItems.map",
+        "items={profileReadinessChecklistItems}",
     ],
     "recordingQuotaSettings": [
         'currentScreen === "recordingQuotaSettings"',
         "rows={recordingQuotaBoundaryRows}",
-        "quotaReadinessChecklistItems.map",
+        "items={quotaReadinessChecklistItems}",
     ],
     "reminderSettings": [
         'currentScreen === "reminderSettings"',
         "reminderPreviewDisplayItems.map",
-        "reminderReadinessChecklistItems.map",
+        "items={reminderReadinessChecklistItems}",
     ],
     "privacySettings": [
         'currentScreen === "privacySettings"',
@@ -177,7 +177,7 @@ VISUAL_SMOKE_ROUTES = {
     "tutorial": [
         'currentScreen === "tutorial"',
         "tutorialDisplaySteps.map",
-        "tutorialSafetyChecklistItems.map",
+        "items={tutorialSafetyChecklistItems}",
     ],
     "menu": [
         'currentScreen === "menu"',
