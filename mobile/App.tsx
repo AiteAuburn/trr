@@ -3376,8 +3376,12 @@ export default function App() {
     clearDailyRecordEntryMenu();
   }
 
-  function clearPreviewRemoveActionState() {
+  function clearPendingPreviewRemoveSelection() {
     setPendingPreviewRemoveIndex(null);
+  }
+
+  function clearPreviewRemoveActionState() {
+    clearPendingPreviewRemoveSelection();
     clearDailyRecordEntryMenu();
   }
 
@@ -3553,7 +3557,7 @@ export default function App() {
 
   function confirmPreviewRecordRemove() {
     if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {
-      setPendingPreviewRemoveIndex(null);
+      clearPendingPreviewRemoveSelection();
       openPreviewActionReturnScreen();
       return;
     }
@@ -3884,7 +3888,7 @@ export default function App() {
 
   function clearPreviewSelectionState() {
     clearSelectedPreviewEditDraft();
-    setPendingPreviewRemoveIndex(null);
+    clearPendingPreviewRemoveSelection();
   }
 
   function clearPreviewActionState() {

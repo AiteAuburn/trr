@@ -3317,7 +3317,7 @@ def main() -> int:
         _assert_contains(
             "preview selection state clear helper edit draft binding",
             content,
-            "function clearPreviewSelectionState() {\n    clearSelectedPreviewEditDraft();\n    setPendingPreviewRemoveIndex(null);",
+            "function clearPreviewSelectionState() {\n    clearSelectedPreviewEditDraft();\n    clearPendingPreviewRemoveSelection();",
         )
         _assert_not_contains(
             "preview selection state clear helper direct edit draft cleanup",
@@ -3936,7 +3936,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove action clear helper internals",
             content,
-            "function clearPreviewRemoveActionState() {\n    setPendingPreviewRemoveIndex(null);\n    clearDailyRecordEntryMenu();",
+            "function clearPreviewRemoveActionState() {\n    clearPendingPreviewRemoveSelection();\n    clearDailyRecordEntryMenu();",
+        )
+        _assert_contains(
+            "AI candidate pending remove selection clear helper",
+            content,
+            "function clearPendingPreviewRemoveSelection()",
+        )
+        _assert_contains(
+            "AI candidate pending remove selection clear helper internals",
+            content,
+            "function clearPendingPreviewRemoveSelection() {\n    setPendingPreviewRemoveIndex(null);",
         )
         _assert_contains(
             "AI candidate edit seed empty now helper",
@@ -4061,7 +4071,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove confirm missing pending screen opener fallback",
             content,
-            "if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {\n      setPendingPreviewRemoveIndex(null);\n      openPreviewActionReturnScreen();\n      return;",
+            "if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {\n      clearPendingPreviewRemoveSelection();\n      openPreviewActionReturnScreen();\n      return;",
         )
         _assert_contains(
             "AI candidate remove confirm success screen opener binding",
