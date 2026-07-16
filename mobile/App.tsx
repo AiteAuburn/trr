@@ -8955,6 +8955,20 @@ export default function App() {
     }
   }
 
+  async function appendNativeLlamaBenchmarkResult(
+    results: Array<Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>>,
+    llamaInput: ReturnType<typeof nativeLlamaInput>
+  ) {
+    if (llamaInput.modelPath && llamaInput.transcript) {
+      results.push(
+        await benchmarkNativeLlama({
+          modelPath: llamaInput.modelPath,
+          transcript: llamaInput.transcript
+        })
+      );
+    }
+  }
+
   function startNativeModelDownloadStatus() {
     setDownloadProgress(0);
     setNativeStatus(nativeModelDownloadProgressStatusMessage());
@@ -9109,14 +9123,7 @@ export default function App() {
       const whisperInput = nativeWhisperInput();
       await appendNativeWhisperBenchmarkResult(results, whisperInput);
       const llamaInput = nativeLlamaInput();
-      if (llamaInput.modelPath && llamaInput.transcript) {
-        results.push(
-          await benchmarkNativeLlama({
-            modelPath: llamaInput.modelPath,
-            transcript: llamaInput.transcript
-          })
-        );
-      }
+      await appendNativeLlamaBenchmarkResult(results, llamaInput);
       if (results.length === 0) {
         handleNativeBenchmarkMissingInput();
         return;

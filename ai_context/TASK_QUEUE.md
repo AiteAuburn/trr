@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1961: Reuse native Llama benchmark append helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `appendNativeLlamaBenchmarkResult()` for native Llama benchmark result collection.
+- Reused the helper from `runNativeBenchmarks()` while preserving the model/transcript guard, request arguments, result array mutation, and benchmark order.
+- Updated navigation verifier coverage for the native Llama benchmark append helper, fields, and binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing native debug benchmark helpers in small behavior-preserving slices.
+
 ### T1960: Reuse native Whisper benchmark append helper
 
 Status: done
