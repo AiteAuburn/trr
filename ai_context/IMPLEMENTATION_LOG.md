@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1917 reuse selected record delete complete helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `completeSelectedRecordDeleteRequest()` for selected record delete request, success handling, failure handling, and cleanup.
+- Reused the helper from `deleteSelectedRecord()` while preserving guard order, in-flight start behavior, DELETE endpoint, success state updates, failure status handling, and cleanup behavior.
+- Updated navigation verifier coverage for the selected record delete complete helper, internals, and submit-flow binding.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing record edit/create orchestration in small behavior-preserving slices.
+
 ### T1916 reuse manual record create validation helper
 
 類型：mobile / refactor / verifier / docs

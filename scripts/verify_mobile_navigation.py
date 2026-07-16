@@ -5346,7 +5346,7 @@ def main() -> int:
         _assert_contains(
             "record delete request helper binding",
             content,
-            "await requestSelectedRecordDelete(selectedRecord.id, account.id);",
+            "await requestSelectedRecordDelete(recordId, accountId);",
         )
         _assert_contains(
             "record delete success helper",
@@ -5361,7 +5361,7 @@ def main() -> int:
         _assert_contains(
             "record delete success helper binding",
             content,
-            "await requestSelectedRecordDelete(selectedRecord.id, account.id);\n      handleSelectedRecordDeleteSuccess(selectedRecord.id);",
+            "await requestSelectedRecordDelete(recordId, accountId);\n      handleSelectedRecordDeleteSuccess(recordId);",
         )
         _assert_contains(
             "record delete failure helper",
@@ -5377,6 +5377,21 @@ def main() -> int:
             "record delete failure helper binding",
             content,
             "} catch (error) {\n      handleSelectedRecordDeleteFailure(error);\n    } finally {",
+        )
+        _assert_contains(
+            "record delete complete helper",
+            content,
+            "async function completeSelectedRecordDeleteRequest(recordId: string, accountId: string)",
+        )
+        _assert_contains(
+            "record delete complete helper internals",
+            content,
+            "try {\n      await requestSelectedRecordDelete(recordId, accountId);\n      handleSelectedRecordDeleteSuccess(recordId);\n    } catch (error) {\n      handleSelectedRecordDeleteFailure(error);\n    } finally {\n      finishRecordDeleteRequest();",
+        )
+        _assert_contains(
+            "record delete complete helper binding",
+            content,
+            "await completeSelectedRecordDeleteRequest(selectedRecord.id, account.id);",
         )
         _assert_contains(
             "record delete success result helper fields",

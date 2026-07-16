@@ -8563,6 +8563,17 @@ export default function App() {
     setStatus(recordDeleteFailureStatusMessage(error));
   }
 
+  async function completeSelectedRecordDeleteRequest(recordId: string, accountId: string) {
+    try {
+      await requestSelectedRecordDelete(recordId, accountId);
+      handleSelectedRecordDeleteSuccess(recordId);
+    } catch (error) {
+      handleSelectedRecordDeleteFailure(error);
+    } finally {
+      finishRecordDeleteRequest();
+    }
+  }
+
   async function deleteSelectedRecord() {
     if (isBusy || recordDeleteInFlight.current) {
       return;
@@ -8579,14 +8590,7 @@ export default function App() {
     }
 
     startRecordDeleteRequest();
-    try {
-      await requestSelectedRecordDelete(selectedRecord.id, account.id);
-      handleSelectedRecordDeleteSuccess(selectedRecord.id);
-    } catch (error) {
-      handleSelectedRecordDeleteFailure(error);
-    } finally {
-      finishRecordDeleteRequest();
-    }
+    await completeSelectedRecordDeleteRequest(selectedRecord.id, account.id);
   }
 
   function startManualCreateRequest() {
