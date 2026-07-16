@@ -49,7 +49,7 @@ CANONICAL_SPEC_SCREENS = (
         "4.12",
         "年度回顧頁",
         "yearReview",
-        ("yearlyReviewMetricRows.map", "yearlyHealthOutcomeRows.map", "yearlyAiObservationDisplayText"),
+        ("rows={yearlyReviewMetricRows}", "rows={yearlyHealthOutcomeRows}", "yearlyAiObservationDisplayText"),
     ),
     SpecScreen("4.13", "商城頁", "store", ("storeRedemptionBoundaryRows.map", "visibleStoreProducts")),
     SpecScreen("4.14", "食物拍照分析頁", "foodPhoto", ("items={foodPhotoReadinessChecklistItems}", "styles.uploadBox")),

@@ -237,8 +237,8 @@ VISUAL_SMOKE_ROUTES = {
     "yearReview": [
         'currentScreen === "yearReview"',
         "年度回顧",
-        "yearlyReviewMetricRows.map",
-        "yearlyHealthOutcomeRows.map",
+        "rows={yearlyReviewMetricRows}",
+        "rows={yearlyHealthOutcomeRows}",
         "yearlyAiObservationDisplayText",
         "yearReviewReturnButtonDisplayLabel",
         "onPress={returnFromYearReview}",

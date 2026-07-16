@@ -5956,30 +5956,6 @@ export default function App() {
     returnFromFuturePreviewScreen(yearReviewReturnScreen);
   }
 
-  function yearlyReviewMetricRowKey(row: (typeof yearlyReviewMetricRows)[number]) {
-    return row.label;
-  }
-
-  function yearlyReviewMetricRowLabel(row: (typeof yearlyReviewMetricRows)[number]) {
-    return row.label;
-  }
-
-  function yearlyReviewMetricRowValue(row: (typeof yearlyReviewMetricRows)[number]) {
-    return row.value;
-  }
-
-  function yearlyHealthOutcomeRowKey(row: (typeof yearlyHealthOutcomeRows)[number]) {
-    return row.label;
-  }
-
-  function yearlyHealthOutcomeRowLabel(row: (typeof yearlyHealthOutcomeRows)[number]) {
-    return row.label;
-  }
-
-  function yearlyHealthOutcomeRowValue(row: (typeof yearlyHealthOutcomeRows)[number]) {
-    return row.value;
-  }
-
   function yearlyHighlightItemKey(item: string) {
     return item;
   }
@@ -12483,22 +12459,8 @@ export default function App() {
                 <Text style={styles.evidence}>{yearReviewLiveCalculationDisplayText}</Text>
               </View>
             </View>
-            <View style={styles.metricGrid}>
-              {yearlyReviewMetricRows.map((row) => (
-                <View key={yearlyReviewMetricRowKey(row)} style={styles.metricCard}>
-                  <Text style={styles.confidence}>{yearlyReviewMetricRowLabel(row)}</Text>
-                  <Text style={styles.metricValue}>{yearlyReviewMetricRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
-            <View style={styles.metricGrid}>
-              {yearlyHealthOutcomeRows.map((row) => (
-                <View key={yearlyHealthOutcomeRowKey(row)} style={styles.metricCard}>
-                  <Text style={styles.confidence}>{yearlyHealthOutcomeRowLabel(row)}</Text>
-                  <Text style={styles.metricValue}>{yearlyHealthOutcomeRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
+            <MetricGrid rows={yearlyReviewMetricRows} />
+            <MetricGrid rows={yearlyHealthOutcomeRows} />
             <View style={styles.highlightCard}>
               <Text style={styles.label}>{auxiliaryDisplayLabels.yearHighlights}</Text>
               {yearlyHighlightDisplayTexts.map((item) => (
