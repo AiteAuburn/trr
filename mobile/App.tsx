@@ -11318,33 +11318,27 @@ export default function App() {
 
             {selectedRecord.record_type === "exercise" ? (
               <>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"🚶"} label={"運動"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.exerciseActivityInputAccessibility}
-                    value={recordEditFieldValue(recordEditFields, "exerciseActivity")}
-                    onChangeText={updateRecordEditExerciseActivity}
-                    maxLength={recordEditFieldMaxLength("exerciseActivity")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    placeholder="走路"
-                  />
-                </View>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"⏱"} label={"時長（分鐘）"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.exerciseMinutesInputAccessibility}
-                    value={recordEditFieldValue(recordEditFields, "exerciseMinutes")}
-                    onChangeText={updateRecordEditExerciseMinutes}
-                    keyboardType="numeric"
-                    maxLength={recordEditFieldMaxLength("exerciseMinutes")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    placeholder="20"
-                  />
-                </View>
+                <RecordTextField
+                  icon={"🚶"}
+                  label={"運動"}
+                  accessibilityLabel={auxiliaryDisplayLabels.exerciseActivityInputAccessibility}
+                  value={recordEditFieldValue(recordEditFields, "exerciseActivity")}
+                  onChangeText={updateRecordEditExerciseActivity}
+                  maxLength={recordEditFieldMaxLength("exerciseActivity")}
+                  inputStyle={styles.input}
+                  placeholder="走路"
+                />
+                <RecordTextField
+                  icon={"⏱"}
+                  label={"時長（分鐘）"}
+                  accessibilityLabel={auxiliaryDisplayLabels.exerciseMinutesInputAccessibility}
+                  value={recordEditFieldValue(recordEditFields, "exerciseMinutes")}
+                  onChangeText={updateRecordEditExerciseMinutes}
+                  keyboardType="numeric"
+                  maxLength={recordEditFieldMaxLength("exerciseMinutes")}
+                  inputStyle={styles.input}
+                  placeholder="20"
+                />
               </>
             ) : null}
 

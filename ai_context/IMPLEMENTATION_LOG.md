@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1991 reuse record text field shell for edit exercise fields
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Reused the shared `RecordTextField` shell for the Edit Record exercise activity and minutes inputs.
+- Preserved labels, icons, accessibility labels, value helpers, change handlers, max-length helpers, existing App input style, placeholders, and numeric keyboard behavior for minutes.
+- Updated navigation verifier coverage for the shared Edit Record exercise field bindings while keeping record edit helper and option checks intact.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining Edit Record medication/note field clusters in small behavior-preserving slices.
+
 ### T1990 reuse record text field shell for edit meal food items
 
 類型：mobile / refactor / verifier / docs
