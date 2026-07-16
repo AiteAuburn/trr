@@ -3746,6 +3746,26 @@ export default function App() {
     return mergedParserPreviewForResponse(currentPreview, response);
   }
 
+  async function requestMergedParserPreviewForContext(
+    context: {
+      account: Account;
+      activeProfile: Profile;
+    },
+    text: string,
+    occurredAt: string,
+    voiceSeconds: number,
+    currentPreview: ParsePreviewResponse | null
+  ) {
+    return requestMergedParserPreview(
+      context.account.id,
+      context.activeProfile.id,
+      text,
+      occurredAt,
+      voiceSeconds,
+      currentPreview
+    );
+  }
+
   function appendDailyTranscriptEntry(entry: DailyTranscriptEntry) {
     setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, entry]));
   }
@@ -7779,9 +7799,8 @@ export default function App() {
     startParserPreviewRequest();
     const { existingDailyPreview, parserVoiceSeconds, parseOccurredAt } = prepareParserPreviewRequest();
     try {
-      const mergedDailyPreview = await requestMergedParserPreview(
-        parserContext.account.id,
-        parserContext.activeProfile.id,
+      const mergedDailyPreview = await requestMergedParserPreviewForContext(
+        parserContext,
         transcript,
         parseOccurredAt,
         parserVoiceSeconds,
