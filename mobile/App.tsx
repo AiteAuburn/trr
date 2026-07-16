@@ -8038,13 +8038,7 @@ export default function App() {
     handleDailyRecordSaveSuccess(saveResponse, recordsToSave.length);
   }
 
-  async function savePreviewRecords() {
-    const saveContext = guardedDailyRecordSaveContext();
-    if (!saveContext) {
-      return;
-    }
-
-    startPreviewSaveRequest();
+  async function completeDailyRecordSaveRequest(saveContext: { account: Account; preview: ParsePreviewResponse }) {
     try {
       await submitDailyRecordSave(saveContext);
     } catch (error) {
@@ -8052,6 +8046,16 @@ export default function App() {
     } finally {
       finishPreviewSaveRequest();
     }
+  }
+
+  async function savePreviewRecords() {
+    const saveContext = guardedDailyRecordSaveContext();
+    if (!saveContext) {
+      return;
+    }
+
+    startPreviewSaveRequest();
+    await completeDailyRecordSaveRequest(saveContext);
   }
 
   async function loadRecords() {
