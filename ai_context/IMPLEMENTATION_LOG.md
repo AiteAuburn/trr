@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1749 reuse save success state inputs
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Reused the Save Success view-state unsaved-candidate flag as the input for Save Success boundary checklist and destination-card preparation.
+- Kept daily-record draft unsaved state on its existing dedicated `dailyRecordDraftScreenState` boundary.
+- Updated navigation verifier coverage with positive view-state input markers and direct input guards.
+- 未變更 UI copy/layout、button order、navigation targets、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining Save Success / daily-record derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1748 reuse save success view state
 
 類型：mobile / refactor / verifier / docs

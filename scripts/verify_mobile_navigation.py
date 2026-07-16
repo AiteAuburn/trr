@@ -3058,6 +3058,11 @@ def main() -> int:
             "const saveSuccessBoundaryChecklistItems = saveSuccessBoundaryChecklistDisplayItems(",
         )
         _assert_contains(
+            "save success checklist view-state input",
+            content,
+            "saveSuccessViewState.hasUnsavedPreviewRecords,\n    unsavedPreviewRecordDisplayCount,",
+        )
+        _assert_contains(
             "save result display helper binding",
             content,
             "const saveResultDisplay = saveResultDisplayTexts({",
@@ -3387,7 +3392,7 @@ def main() -> int:
         _assert_contains(
             "save success destination helper binding",
             content,
-            "const saveSuccessDestinationItems = saveSuccessDestinationDisplayItems(hasUnsavedPreviewRecords);",
+            "const saveSuccessDestinationItems = saveSuccessDestinationDisplayItems(\n    saveSuccessViewState.hasUnsavedPreviewRecords\n  );",
         )
         for label, marker in (
             ("save success state helper", "function saveSuccessState(lastSaveEntryMethod: SaveEntryMethod, hasUnsavedPreviewRecords: boolean)"),
@@ -3538,6 +3543,8 @@ def main() -> int:
             ("save success direct manual title condition", ': lastSaveEntryMethod === "manual"'),
             ("save success direct unsaved summary condition", ": hasUnsavedPreviewRecords\n                    ? `已有部分紀錄儲存成功"),
             ("save success direct unsaved primary condition", "{hasUnsavedPreviewRecords ? (\n                <Pressable"),
+            ("save success direct checklist unsaved input", "saveSuccessBoundaryChecklistDisplayItems(\n    lastSaveEntryMethod,\n    hasUnsavedPreviewRecords,"),
+            ("save success direct destination unsaved input", "saveSuccessDestinationDisplayItems(hasUnsavedPreviewRecords);"),
         ):
             _assert_not_contains(label, content, marker)
         _assert_contains(

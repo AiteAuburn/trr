@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1749: Reuse save success state inputs
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused the Save Success view-state unsaved-candidate flag as the input for Save Success boundary checklist and destination-card preparation.
+- Kept daily-record draft unsaved state on its existing dedicated `dailyRecordDraftScreenState` boundary.
+- Updated navigation verifier coverage with positive view-state input markers and direct input guards.
+- No UI copy/layout/button order/navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining Save Success / daily-record derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1748: Reuse save success view state
 
 Status: done

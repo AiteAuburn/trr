@@ -1332,7 +1332,7 @@ export default function App() {
   );
   const saveSuccessBoundaryChecklistItems = saveSuccessBoundaryChecklistDisplayItems(
     lastSaveEntryMethod,
-    hasUnsavedPreviewRecords,
+    saveSuccessViewState.hasUnsavedPreviewRecords,
     unsavedPreviewRecordDisplayCount,
     mobileRecordSyncDisplayLimit
   );
@@ -1357,7 +1357,9 @@ export default function App() {
     maxMobileRecordCacheLimit,
     mobileReportQueryDisplayLimit
   );
-  const saveSuccessDestinationItems = saveSuccessDestinationDisplayItems(hasUnsavedPreviewRecords);
+  const saveSuccessDestinationItems = saveSuccessDestinationDisplayItems(
+    saveSuccessViewState.hasUnsavedPreviewRecords
+  );
   const deleteSuccessDestinationItems = deleteSuccessDestinationDisplayItems();
   const updateSuccessDestinationItems = updateSuccessDestinationDisplayItems(Boolean(selectedRecord));
   const currentChrome = screenChrome[currentScreen];
