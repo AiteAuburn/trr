@@ -8715,22 +8715,30 @@ export default function App() {
     await completeManualRecordCreateRequest(profileId, accountId);
   }
 
-  async function createManualRecord() {
+  function guardedManualRecordCreateContext() {
     if (isBusy || manualCreateInFlight.current) {
-      return;
+      return null;
     }
     if (!protectedBackendReady) {
       openManualRecordUnavailable("manualRecordConfirm");
-      return;
+      return null;
     }
     if (!account || !activeProfile) {
+      return null;
+    }
+    return { account, activeProfile };
+  }
+
+  async function createManualRecord() {
+    const createContext = guardedManualRecordCreateContext();
+    if (!createContext) {
       return;
     }
     if (!validateManualRecordCreateForSubmit()) {
       return;
     }
 
-    await startAndCompleteManualRecordCreateRequest(activeProfile.id, account.id);
+    await startAndCompleteManualRecordCreateRequest(createContext.activeProfile.id, createContext.account.id);
   }
 
   async function refreshDownloadedModels(showStatus = false) {

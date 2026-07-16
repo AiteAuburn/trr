@@ -5311,7 +5311,32 @@ def main() -> int:
         _assert_contains(
             "manual create start and complete helper binding",
             content,
-            "await startAndCompleteManualRecordCreateRequest(activeProfile.id, account.id);",
+            "await startAndCompleteManualRecordCreateRequest(createContext.activeProfile.id, createContext.account.id);",
+        )
+        _assert_contains(
+            "manual create guarded context helper",
+            content,
+            "function guardedManualRecordCreateContext()",
+        )
+        _assert_contains(
+            "manual create guarded context in-flight guard",
+            content,
+            "if (isBusy || manualCreateInFlight.current) {\n      return null;\n    }",
+        )
+        _assert_contains(
+            "manual create guarded context unavailable guard",
+            content,
+            "if (!protectedBackendReady) {\n      openManualRecordUnavailable(\"manualRecordConfirm\");\n      return null;\n    }",
+        )
+        _assert_contains(
+            "manual create guarded context account profile guard",
+            content,
+            "if (!account || !activeProfile) {\n      return null;\n    }\n    return { account, activeProfile };",
+        )
+        _assert_contains(
+            "manual create guarded context binding",
+            content,
+            "const createContext = guardedManualRecordCreateContext();\n    if (!createContext) {\n      return;\n    }",
         )
         _assert_contains(
             "AI save failure result helper",
