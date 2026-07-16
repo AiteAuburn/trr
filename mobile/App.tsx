@@ -1242,13 +1242,13 @@ export default function App() {
   const analysisNoDataDisplayCopy = analysisNoDataCopy();
   const analysisBoundaryDataDisplayCopy = analysisBoundaryDataCopy(analysisPreviewMode);
   const lowConfidencePreviewRecordCount =
-    preview?.records.filter((record) => (record.confidence ?? 1) < 0.7).length ?? 0;
+    previewState.records.filter((record) => (record.confidence ?? 1) < 0.7).length;
   const rejectedPreviewEventCount = preview?.rejected_events.length ?? 0;
   const lowConfidencePreviewRecordDisplayCount = clampNumber(lowConfidencePreviewRecordCount, 0, maxMobilePreviewRecords);
   const rejectedPreviewEventDisplayCount = clampNumber(rejectedPreviewEventCount, 0, maxMobileRejectedEvents);
   const rejectedPreviewDisplayItems = preview ? buildRejectedPreviewDisplayItems(preview.rejected_events) : [];
   const aiReviewDateDisplayLabel = boundDisplayText(
-    preview ? aiReviewDateLabel(preview.records) : "",
+    preview ? aiReviewDateLabel(previewState.records) : "",
     maxDisplayDetailTextLength
   );
   const aiReviewDisplay = aiReviewDisplayTexts();
@@ -1270,13 +1270,13 @@ export default function App() {
     hasAiSaveConfirmWarnings
   );
   const aiSaveConfirmIntroDisplayText = aiSaveConfirmDisplay.intro;
-  const dailyRecordDateDisplayText = preview ? dailyRecordDateLabel(preview.records) : "";
-  const dailyRecordSummaryDisplayText = preview ? dailyRecordSummaryText(preview.records) : "";
+  const dailyRecordDateDisplayText = preview ? dailyRecordDateLabel(previewState.records) : "";
+  const dailyRecordSummaryDisplayText = preview ? dailyRecordSummaryText(previewState.records) : "";
   const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayText(
     dailyRecordOrganizationReason,
     dailyRecordOrganizationRevision
   );
-  const dailyRecordSectionItems = preview ? buildDailyRecordSectionDisplayItems(preview.records) : [];
+  const dailyRecordSectionItems = preview ? buildDailyRecordSectionDisplayItems(previewState.records) : [];
   const todayTranscriptDisplay = dailyTranscriptDisplayBundle(preview, dailyTranscriptEntries);
   const todayTranscriptDisplayItems = todayTranscriptDisplay.items;
   const todayTranscriptCountDisplayText = todayTranscriptDisplay.countText;
@@ -1862,11 +1862,11 @@ export default function App() {
   const recordingQuotaBoundaryRows = recordingQuotaBoundaryDisplayRows(voiceQuota, quotaRemainingLow);
   const privacyBoundaryRows = privacyBoundaryDisplayRows();
   const selectedPreviewRecord =
-    selectedPreviewIndex === null ? null : preview?.records[selectedPreviewIndex] ?? null;
+    selectedPreviewIndex === null ? null : previewState.records[selectedPreviewIndex] ?? null;
   const pendingPreviewRemoveRecord =
-    pendingPreviewRemoveIndex === null ? null : preview?.records[pendingPreviewRemoveIndex] ?? null;
-  const previewRecordDisplayItems = preview ? pendingRecordDisplayItems(preview.records, "review") : [];
-  const previewSaveConfirmDisplayItems = preview ? pendingRecordDisplayItems(preview.records, "save-confirm") : [];
+    pendingPreviewRemoveIndex === null ? null : previewState.records[pendingPreviewRemoveIndex] ?? null;
+  const previewRecordDisplayItems = preview ? pendingRecordDisplayItems(previewState.records, "review") : [];
+  const previewSaveConfirmDisplayItems = preview ? pendingRecordDisplayItems(previewState.records, "save-confirm") : [];
   const selectedPreviewRecordDisplayItem =
     selectedPreviewRecord && selectedPreviewIndex !== null
       ? pendingRecordDisplayItem(selectedPreviewRecord, selectedPreviewIndex, "edit-preview")

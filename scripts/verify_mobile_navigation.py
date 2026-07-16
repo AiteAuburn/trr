@@ -3700,7 +3700,7 @@ def main() -> int:
         _assert_contains(
             "AI review candidate list helper binding",
             content,
-            'const previewRecordDisplayItems = preview ? pendingRecordDisplayItems(preview.records, "review") : [];',
+            'const previewRecordDisplayItems = preview ? pendingRecordDisplayItems(previewState.records, "review") : [];',
         )
         rejected_preview_render_block = _match_block(
             content,
@@ -3716,7 +3716,7 @@ def main() -> int:
         _assert_contains(
             "AI save-confirm candidate list helper binding",
             content,
-            'const previewSaveConfirmDisplayItems = preview ? pendingRecordDisplayItems(preview.records, "save-confirm") : [];',
+            'const previewSaveConfirmDisplayItems = preview ? pendingRecordDisplayItems(previewState.records, "save-confirm") : [];',
         )
         _assert_not_contains(
             "AI review inline candidate mapping",
@@ -6208,6 +6208,15 @@ def main() -> int:
             ("preview record state empty flag", "isEmpty: recordCount === 0"),
             ("preview state helper binding", "const previewState = previewRecordState(preview);"),
             ("preview unsaved count state binding", "const unsavedPreviewRecordCount = previewState.recordCount;"),
+            ("preview low confidence state records binding", "previewState.records.filter((record) => (record.confidence ?? 1) < 0.7).length;"),
+            ("ai review date state records binding", "preview ? aiReviewDateLabel(previewState.records) : \"\""),
+            ("daily record date state records binding", "const dailyRecordDateDisplayText = preview ? dailyRecordDateLabel(previewState.records) : \"\";"),
+            ("daily record summary state records binding", "const dailyRecordSummaryDisplayText = preview ? dailyRecordSummaryText(previewState.records) : \"\";"),
+            ("daily record sections state records binding", "const dailyRecordSectionItems = preview ? buildDailyRecordSectionDisplayItems(previewState.records) : [];"),
+            ("selected preview record state records binding", "selectedPreviewIndex === null ? null : previewState.records[selectedPreviewIndex] ?? null;"),
+            ("pending preview remove state records binding", "pendingPreviewRemoveIndex === null ? null : previewState.records[pendingPreviewRemoveIndex] ?? null;"),
+            ("preview review display items state records binding", "const previewRecordDisplayItems = preview ? pendingRecordDisplayItems(previewState.records, \"review\") : [];"),
+            ("preview save display items state records binding", "const previewSaveConfirmDisplayItems = preview ? pendingRecordDisplayItems(previewState.records, \"save-confirm\") : [];"),
             ("ai save confirm preview state guard", "if (previewState.isEmpty) {\n      openScreen(\"aiReview\");"),
             ("process unsaved preview state guard", "if (previewState.isEmpty) {\n      openScreen(\"today\");"),
             ("save failure return preview state guard", "if (previewState.isEmpty) {\n      returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());"),
@@ -6223,6 +6232,15 @@ def main() -> int:
             _assert_contains(label, content, marker)
         for label, marker in (
             ("direct preview unsaved count binding", "const unsavedPreviewRecordCount = preview?.records.length ?? 0;"),
+            ("direct preview low confidence records binding", "preview?.records.filter((record) => (record.confidence ?? 1) < 0.7).length ?? 0"),
+            ("direct ai review date records binding", "preview ? aiReviewDateLabel(preview.records) : \"\""),
+            ("direct daily record date records binding", "const dailyRecordDateDisplayText = preview ? dailyRecordDateLabel(preview.records) : \"\";"),
+            ("direct daily record summary records binding", "const dailyRecordSummaryDisplayText = preview ? dailyRecordSummaryText(preview.records) : \"\";"),
+            ("direct daily record sections records binding", "const dailyRecordSectionItems = preview ? buildDailyRecordSectionDisplayItems(preview.records) : [];"),
+            ("direct selected preview record binding", "selectedPreviewIndex === null ? null : preview?.records[selectedPreviewIndex] ?? null;"),
+            ("direct pending preview remove record binding", "pendingPreviewRemoveIndex === null ? null : preview?.records[pendingPreviewRemoveIndex] ?? null;"),
+            ("direct preview review display items binding", "const previewRecordDisplayItems = preview ? pendingRecordDisplayItems(preview.records, \"review\") : [];"),
+            ("direct preview save display items binding", "const previewSaveConfirmDisplayItems = preview ? pendingRecordDisplayItems(preview.records, \"save-confirm\") : [];"),
             ("direct enter save confirm empty guard", "if (!preview || preview.records.length === 0) {\n      openScreen(\"aiReview\");"),
             ("direct process unsaved preview empty guard", "if (!preview || preview.records.length === 0) {\n      openScreen(\"today\");"),
             ("direct save failure return preview empty guard", "if (!preview || preview.records.length === 0) {\n      returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());"),

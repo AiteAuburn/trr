@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1745: Reuse preview state records for display prep
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `previewState.records` for preview-record display preparation in AI Review and daily-record confirmation.
+- Moved low-confidence counts, AI review date label, daily-record date/summary/sections, selected preview lookup, remove-preview lookup, and review/save-confirm display item preparation onto the shared preview record state.
+- Updated navigation verifier coverage with positive state-record bindings and scoped direct `preview.records` display-prep guards.
+- No UI copy/layout/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining preview edit/delete data paths and daily-record route state in small behavior-preserving slices.
+
 ### T1744: Reuse preview record state
 
 Status: done
