@@ -4446,7 +4446,27 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview remove records builder helper binding",
             content,
-            "const nextRecords = buildPreviewRecordRemoveRecords(preview, index);",
+            "const nextRecords = buildPreviewRecordRemoveRecords(removeDraft.currentPreview, removeDraft.removeIndex);",
+        )
+        _assert_contains(
+            "AI candidate preview remove draft helper",
+            content,
+            "function previewRecordRemoveDraft(removeIndex: number)",
+        )
+        _assert_contains(
+            "AI candidate preview remove draft helper guard",
+            content,
+            "function previewRecordRemoveDraft(removeIndex: number) {\n    if (!preview) {\n      return null;",
+        )
+        _assert_contains(
+            "AI candidate preview remove draft helper payload",
+            content,
+            "return {\n      currentPreview: preview,\n      removeIndex\n    };",
+        )
+        _assert_contains(
+            "AI candidate preview remove draft helper binding",
+            content,
+            "const removeDraft = previewRecordRemoveDraft(index);\n    if (!removeDraft) {\n      return;",
         )
         _assert_contains(
             "AI candidate preview remove apply helper",
@@ -4486,7 +4506,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove action clear helper binding",
             content,
-            "applyPreviewRecordRemoveChangeAndClearState(preview, nextRecords);",
+            "applyPreviewRecordRemoveChangeAndClearState(removeDraft.currentPreview, nextRecords);",
         )
         _assert_not_contains(
             "AI candidate remove action direct clear binding",

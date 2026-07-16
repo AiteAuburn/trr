@@ -3743,12 +3743,23 @@ export default function App() {
     return previewRecordsWithoutRecord(currentPreview.records, removeIndex);
   }
 
-  function removePreviewRecord(index: number) {
+  function previewRecordRemoveDraft(removeIndex: number) {
     if (!preview) {
+      return null;
+    }
+    return {
+      currentPreview: preview,
+      removeIndex
+    };
+  }
+
+  function removePreviewRecord(index: number) {
+    const removeDraft = previewRecordRemoveDraft(index);
+    if (!removeDraft) {
       return;
     }
-    const nextRecords = buildPreviewRecordRemoveRecords(preview, index);
-    applyPreviewRecordRemoveChangeAndClearState(preview, nextRecords);
+    const nextRecords = buildPreviewRecordRemoveRecords(removeDraft.currentPreview, removeDraft.removeIndex);
+    applyPreviewRecordRemoveChangeAndClearState(removeDraft.currentPreview, nextRecords);
   }
 
   function confirmPreviewRecordRemove() {
