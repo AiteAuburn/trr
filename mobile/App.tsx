@@ -3606,6 +3606,17 @@ export default function App() {
     return voiceSeconds > 0 ? "voice" : "text";
   }
 
+  function appendParserTranscriptEntry(occurredAt: string, text: string, voiceSeconds: number) {
+    const transcriptEntry = createDailyTranscriptEntry(
+      occurredAt,
+      text,
+      parserTranscriptSource(voiceSeconds)
+    );
+    if (transcriptEntry) {
+      appendDailyTranscriptEntry(transcriptEntry);
+    }
+  }
+
   function openAiReviewAfterParserSuccess() {
     setTranscriptVoiceSeconds(0);
     openScreen("aiReview");
@@ -7405,14 +7416,7 @@ export default function App() {
       );
       const boundedPreview = boundParsePreviewResponse(response);
       const mergedDailyPreview = mergeSameDayParsePreviewDraft(existingDailyPreview, boundedPreview);
-      const transcriptEntry = createDailyTranscriptEntry(
-        parseOccurredAt,
-        transcript,
-        parserTranscriptSource(parserVoiceSeconds)
-      );
-      if (transcriptEntry) {
-        appendDailyTranscriptEntry(transcriptEntry);
-      }
+      appendParserTranscriptEntry(parseOccurredAt, transcript, parserVoiceSeconds);
       openAiReviewAfterParserSuccess();
       reorganizeDailyRecordDraftAfterChange(
         mergedDailyPreview,
