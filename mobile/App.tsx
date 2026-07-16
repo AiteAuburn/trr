@@ -3693,6 +3693,17 @@ export default function App() {
     setIsBusy(true);
   }
 
+  function prepareParserPreviewRequest() {
+    const existingDailyPreview = preview;
+    clearParserPreviewState();
+    setStatus(parserProgressStatusMessage());
+    return {
+      existingDailyPreview,
+      parserVoiceSeconds: clampNumber(transcriptVoiceSeconds, 0, maxMobileCountValue),
+      parseOccurredAt: new Date().toISOString()
+    };
+  }
+
   function finishParserPreviewRequest() {
     parsePreviewInFlight.current = false;
     setIsBusy(false);
@@ -7446,11 +7457,7 @@ export default function App() {
     }
 
     startParserPreviewRequest();
-    const existingDailyPreview = preview;
-    clearParserPreviewState();
-    setStatus(parserProgressStatusMessage());
-    const parserVoiceSeconds = clampNumber(transcriptVoiceSeconds, 0, maxMobileCountValue);
-    const parseOccurredAt = new Date().toISOString();
+    const { existingDailyPreview, parserVoiceSeconds, parseOccurredAt } = prepareParserPreviewRequest();
     try {
       const response = await requestParserPreview(
         account.id,

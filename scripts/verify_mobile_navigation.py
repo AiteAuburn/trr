@@ -2659,7 +2659,7 @@ def main() -> int:
         _assert_contains(
             "parse transcript progress clears parser preview helper binding",
             content,
-            "const existingDailyPreview = preview;\n    clearParserPreviewState();\n    setStatus(parserProgressStatusMessage());",
+            "const { existingDailyPreview, parserVoiceSeconds, parseOccurredAt } = prepareParserPreviewRequest();",
         )
         _assert_contains(
             "parser recovery message helper",
@@ -5790,6 +5790,9 @@ def main() -> int:
             ("parse start helper", "function startParserPreviewRequest()"),
             ("parse start helper internals", "parsePreviewInFlight.current = true;\n    setIsBusy(true);"),
             ("parse start helper binding", "startParserPreviewRequest();"),
+            ("parse prepare helper", "function prepareParserPreviewRequest()"),
+            ("parse prepare helper internals", "const existingDailyPreview = preview;\n    clearParserPreviewState();\n    setStatus(parserProgressStatusMessage());\n    return {\n      existingDailyPreview,\n      parserVoiceSeconds: clampNumber(transcriptVoiceSeconds, 0, maxMobileCountValue),\n      parseOccurredAt: new Date().toISOString()"),
+            ("parse prepare helper binding", "const { existingDailyPreview, parserVoiceSeconds, parseOccurredAt } = prepareParserPreviewRequest();"),
             ("parse finish helper", "function finishParserPreviewRequest()"),
             ("parse finish helper internals", "parsePreviewInFlight.current = false;\n    setIsBusy(false);"),
             ("parse finish helper binding", "finishParserPreviewRequest();"),
@@ -6285,7 +6288,7 @@ def main() -> int:
             ("daily record unsaved draft helper binding", "const hasUnsavedDailyRecordDraft = dailyRecordDraftScreen.hasUnsavedDraft;"),
             ("daily record transcript retained state", "const [dailyTranscriptEntries, setDailyTranscriptEntries] = useState<DailyTranscriptEntry[]>([]);"),
             ("daily record parse existing draft capture", "const existingDailyPreview = preview;"),
-            ("daily record parse occurred timestamp", "const parseOccurredAt = new Date().toISOString();"),
+            ("daily record parse occurred timestamp", "parseOccurredAt: new Date().toISOString()"),
             ("daily record parse sends shared timestamp", "parseOccurredAt,\n        parserVoiceSeconds"),
             ("daily record parse merges same-day draft", "const mergedDailyPreview = mergedParserPreviewForResponse(existingDailyPreview, response);"),
             ("daily record transcript append helper", "function appendDailyTranscriptEntry(entry: DailyTranscriptEntry)"),
