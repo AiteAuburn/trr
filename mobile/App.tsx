@@ -8011,25 +8011,37 @@ export default function App() {
     setStatus(message);
   }
 
-  async function savePreviewRecords() {
+  function guardedDailyRecordSaveContext() {
     if (isBusy || previewSaveInFlight.current) {
-      return;
+      return null;
     }
     if (!preview || previewState.isEmpty) {
-      return;
+      return null;
     }
     if (!protectedBackendReady) {
       openAiSaveConfirmWithStatus(aiSaveUnavailableStatusMessage(protectedBackendUnavailableMessage));
-      return;
+      return null;
     }
     if (!account) {
+      return null;
+    }
+
+    return {
+      account,
+      preview
+    };
+  }
+
+  async function savePreviewRecords() {
+    const saveContext = guardedDailyRecordSaveContext();
+    if (!saveContext) {
       return;
     }
 
     startPreviewSaveRequest();
-    const recordsToSave = buildPreviewRecordsForCurrentSave(preview);
+    const recordsToSave = buildPreviewRecordsForCurrentSave(saveContext.preview);
     try {
-      const saveResponse = await requestDailyRecordSave(account.id, preview, recordsToSave);
+      const saveResponse = await requestDailyRecordSave(saveContext.account.id, saveContext.preview, recordsToSave);
       handleDailyRecordSaveSuccess(saveResponse, recordsToSave.length);
     } catch (error) {
       handleDailyRecordSaveFailure(error);

@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1893 reuse guarded daily-record save context helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `guardedDailyRecordSaveContext()` for the daily-record save preflight guard sequence.
+- Reused the helper from `savePreviewRecords()` while preserving the existing busy/in-flight, preview-empty, backend-ready, and account guard order and recovery side effects.
+- Updated navigation verifier coverage for the guarded save context helper, submit binding, record-build binding, and save request context binding.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing daily-record save request lifecycle and record sync orchestration in small behavior-preserving slices.
+
 ### T1892 reuse guarded parser preview context helper
 
 類型：mobile / refactor / verifier / docs

@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1893: Reuse guarded daily-record save context helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `guardedDailyRecordSaveContext()` for the daily-record save preflight guard sequence.
+- Reused the helper from `savePreviewRecords()` while preserving the existing busy/in-flight, preview-empty, backend-ready, and account guard order and recovery side effects.
+- Updated navigation verifier coverage for the guarded save context helper, submit binding, record-build binding, and save request context binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing daily-record save request lifecycle and record sync orchestration in small behavior-preserving slices.
+
 ### T1892: Reuse guarded parser preview context helper
 
 Status: done
