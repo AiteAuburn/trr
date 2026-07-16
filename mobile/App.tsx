@@ -3435,6 +3435,10 @@ export default function App() {
     setPreviewActionReturnTarget(returnScreen);
     selectPreviewEditIndex(index);
     seedPreviewEditStateFromRecord(record);
+    openPreviewEditScreen();
+  }
+
+  function openPreviewEditScreen() {
     openScreenWithStatus("editPreviewRecord", aiCandidateEditOpenStatusMessage());
   }
 

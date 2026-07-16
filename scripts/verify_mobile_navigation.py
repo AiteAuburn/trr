@@ -4086,7 +4086,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit open status helper binding",
             content,
-            'openScreenWithStatus("editPreviewRecord", aiCandidateEditOpenStatusMessage());',
+            "seedPreviewEditStateFromRecord(record);\n    openPreviewEditScreen();",
+        )
+        _assert_contains(
+            "AI candidate edit screen opener helper",
+            content,
+            "function openPreviewEditScreen()",
+        )
+        _assert_contains(
+            "AI candidate edit screen opener helper internals",
+            content,
+            'function openPreviewEditScreen() {\n    openScreenWithStatus("editPreviewRecord", aiCandidateEditOpenStatusMessage());',
         )
         _assert_contains(
             "AI candidate remove confirm selection helper binding",
