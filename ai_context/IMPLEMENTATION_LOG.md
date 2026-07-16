@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2050 extract downloaded model list
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/downloadedModelList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `DownloadedModelList` for the advanced Settings native downloaded-model rows.
+- Replaced the inline `downloadedModels.map` text rows in `App.tsx`.
+- Preserved row keys, bounded display labels, rejected-text styling, native debug visibility, and downloaded-model data source.
+- Updated navigation verifier coverage for the component boundary and App wiring.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing adjacent advanced Settings native/debug clusters without changing first-version scope.
+
 ### T2049 extract settings model choice selector
 
 類型：mobile / refactor / verifier / docs

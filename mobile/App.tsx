@@ -707,7 +707,6 @@ import {
   type SettingsRow
 } from "./settingsScreenData";
 import {
-  downloadedModelDisplayLabel,
   downloadedWhisperModelDisplayItems,
   settingsChoiceDisplayBundle
 } from "./settingsChoiceDisplay";
@@ -807,6 +806,7 @@ import { ManualRecordMedicationFields } from "./manualRecordMedicationFields";
 import { ManualRecordNoteFields } from "./manualRecordNoteFields";
 import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
 import { MetricCard } from "./metricCard";
+import { DownloadedModelList } from "./downloadedModelList";
 import { NativeDebugActionButton } from "./nativeDebugActionButton";
 import { NativeDebugRunActions } from "./nativeDebugRunActions";
 import { NativeDownloadKindSelector } from "./nativeDownloadKindSelector";
@@ -5019,14 +5019,6 @@ export default function App() {
 
   function downloadedWhisperModelCount(models: ReturnType<typeof boundDownloadedModels>) {
     return models.length;
-  }
-
-  function downloadedModelRowKey(model: DownloadedModel) {
-    return model.uri;
-  }
-
-  function downloadedModelRowLabel(model: DownloadedModel) {
-    return downloadedModelDisplayLabel(model);
   }
 
   function updateNativeModelUrlInput(value: string) {
@@ -12256,11 +12248,7 @@ export default function App() {
                     label={nativeModelDownloadDisplayLabel}
                     onPress={downloadNativeModelFromSettings}
                   />
-                {downloadedModels.map((model) => (
-                  <Text key={downloadedModelRowKey(model)} style={styles.rejectedText}>
-                    {downloadedModelRowLabel(model)}
-                  </Text>
-                ))}
+                  <DownloadedModelList models={downloadedModels} />
                 <NativeDebugTextField
                   accessibilityLabel={auxiliaryDisplayLabels.whisperModelPathInputAccessibility}
                   value={whisperModelPath}

@@ -64,6 +64,7 @@ DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 DANGER_CONFIRM_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dangerConfirmActionRow.tsx"
 DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreviewBlock.tsx"
 DELETE_SUCCESS_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "deleteSuccessActionRow.tsx"
+DOWNLOADED_MODEL_LIST_PATH = REPO_ROOT / "mobile" / "downloadedModelList.tsx"
 COMMUNITY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "communityActionRow.tsx"
 DOCTOR_SHARE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "doctorShareActionRow.tsx"
 FOOD_PHOTO_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "foodPhotoActionRow.tsx"
@@ -1445,6 +1446,7 @@ def main() -> int:
     danger_confirm_action_row_content = DANGER_CONFIRM_ACTION_ROW_PATH.read_text(encoding="utf-8")
     delete_confirm_preview_block_content = DELETE_CONFIRM_PREVIEW_BLOCK_PATH.read_text(encoding="utf-8")
     delete_success_action_row_content = DELETE_SUCCESS_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    downloaded_model_list_content = DOWNLOADED_MODEL_LIST_PATH.read_text(encoding="utf-8")
     community_action_row_content = COMMUNITY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     doctor_share_action_row_content = DOCTOR_SHARE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     food_photo_action_row_content = FOOD_PHOTO_ACTION_ROW_PATH.read_text(encoding="utf-8")
@@ -12479,14 +12481,22 @@ def main() -> int:
         ):
             _assert_contains(label, settings_model_choice_selector_content, marker)
         for label, marker in (
-            ("downloaded model row key helper", "function downloadedModelRowKey(model: DownloadedModel)"),
-            ("downloaded model row key helper fields", "return model.uri;"),
-            ("downloaded model row key helper binding", "key={downloadedModelRowKey(model)}"),
-            ("downloaded model row label helper", "function downloadedModelRowLabel(model: DownloadedModel)"),
-            ("downloaded model row label helper fields", "return downloadedModelDisplayLabel(model);"),
-            ("downloaded model row label helper binding", "{downloadedModelRowLabel(model)}"),
+            ("downloaded model list binding", "<DownloadedModelList"),
+            ("downloaded model list models binding", "models={downloadedModels}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("downloaded model list component", "export function DownloadedModelList"),
+            ("downloaded model list row key helper", "function downloadedModelRowKey(model: DownloadedModel)"),
+            ("downloaded model list row key helper fields", "return model.uri;"),
+            ("downloaded model list row label helper", "function downloadedModelRowLabel(model: DownloadedModel)"),
+            ("downloaded model list row label helper fields", "return downloadedModelDisplayLabel(model);"),
+            ("downloaded model list map", "models.map((model) => ("),
+            ("downloaded model list row key binding", "key={downloadedModelRowKey(model)}"),
+            ("downloaded model list row label binding", "{downloadedModelRowLabel(model)}"),
+            ("downloaded model list rejected text style", "rejectedText: {"),
+        ):
+            _assert_contains(label, downloaded_model_list_content, marker)
         for label, marker in (
             ("AI model option bound helper", "function boundAiModelOption<T extends AiModelOptionTransformSource>(value: T): T"),
             ("AI model option id bound", "id: boundIdentifier(value.id)"),
@@ -13078,6 +13088,7 @@ def main() -> int:
             ("direct recording whisper model status label binding", "setStatus(recordingModelSelectedStatusMessage(item.label));"),
             ("direct native whisper download kind binding", 'onPress={() => selectNativeDownloadKind("whisper")}'),
             ("direct native llama download kind binding", 'onPress={() => selectNativeDownloadKind("llama")}'),
+            ("direct downloaded model list map", "downloadedModels.map((model) => ("),
             ("direct downloaded model row key binding", "key={model.uri}"),
             ("direct downloaded model row label binding", "{downloadedModelDisplayLabel(model)}"),
             ("direct auth provider preview binding", "onPress={() => startAuthProviderChallenge(item.provider)}"),
