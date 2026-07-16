@@ -4266,7 +4266,22 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit validation failure helper binding",
             content,
-            "if (validationError) {\n      handlePreviewRecordEditValidationFailure(validationError);\n      return;",
+            "if (validationError) {\n      handlePreviewRecordEditValidationFailure(validationError);\n      return false;",
+        )
+        _assert_contains(
+            "AI candidate preview edit save validation helper",
+            content,
+            "function validatePreviewRecordEditForSave(recordType: string)",
+        )
+        _assert_contains(
+            "AI candidate preview edit save validation helper internals",
+            content,
+            "function validatePreviewRecordEditForSave(recordType: string) {\n    const validationError = validatePreviewRecordEdit(recordType);\n    if (validationError) {\n      handlePreviewRecordEditValidationFailure(validationError);\n      return false;\n    }\n    return true;",
+        )
+        _assert_contains(
+            "AI candidate preview edit save validation helper binding",
+            content,
+            "if (!validatePreviewRecordEditForSave(recordType)) {\n      return;",
         )
         _assert_contains(
             "AI candidate preview edit apply and success helper",
@@ -4326,7 +4341,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit validation helper binding",
             content,
-            "const validationError = validatePreviewRecordEdit(recordType);",
+            "const validationError = validatePreviewRecordEdit(recordType);\n    if (validationError) {",
         )
         _assert_contains(
             "AI candidate preview with records helper",

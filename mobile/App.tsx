@@ -3923,6 +3923,15 @@ export default function App() {
     setStatus(validationError);
   }
 
+  function validatePreviewRecordEditForSave(recordType: string) {
+    const validationError = validatePreviewRecordEdit(recordType);
+    if (validationError) {
+      handlePreviewRecordEditValidationFailure(validationError);
+      return false;
+    }
+    return true;
+  }
+
   function applyPreviewRecordEditChangeAndReturnSuccess(
     currentPreview: ParsePreviewResponse,
     nextRecords: PendingRecord[]
@@ -3937,9 +3946,7 @@ export default function App() {
       return;
     }
     const recordType = previewRecordEditType(selectedPreviewRecord);
-    const validationError = validatePreviewRecordEdit(recordType);
-    if (validationError) {
-      handlePreviewRecordEditValidationFailure(validationError);
+    if (!validatePreviewRecordEditForSave(recordType)) {
       return;
     }
 
