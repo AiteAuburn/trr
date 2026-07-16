@@ -4221,7 +4221,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit save success field clear helper binding",
             content,
-            "function returnFromPreviewRecordEditSaveSuccess() {\n    clearPreviewEditActionState();",
+            "function returnFromPreviewRecordEditSaveSuccess() {\n    resetPreviewRecordEditSaveSuccessState();",
+        )
+        _assert_contains(
+            "AI candidate edit save success reset helper",
+            content,
+            "function resetPreviewRecordEditSaveSuccessState()",
+        )
+        _assert_contains(
+            "AI candidate edit save success reset helper internals",
+            content,
+            "function resetPreviewRecordEditSaveSuccessState() {\n    clearPreviewEditActionState();",
         )
         _assert_contains(
             "AI candidate edit save success return helper",
@@ -4241,7 +4251,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit save success screen opener binding",
             content,
-            "function returnFromPreviewRecordEditSaveSuccess() {\n    clearPreviewEditActionState();\n    openPreviewActionReturnScreen();",
+            "function returnFromPreviewRecordEditSaveSuccess() {\n    resetPreviewRecordEditSaveSuccessState();\n    openPreviewActionReturnScreen();",
         )
         _assert_contains(
             "AI candidate edit save success return helper call",

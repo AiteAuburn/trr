@@ -3570,8 +3570,12 @@ export default function App() {
   }
 
   function returnFromPreviewRecordEditSaveSuccess() {
-    clearPreviewEditActionState();
+    resetPreviewRecordEditSaveSuccessState();
     openPreviewActionReturnScreen();
+  }
+
+  function resetPreviewRecordEditSaveSuccessState() {
+    clearPreviewEditActionState();
   }
 
   function returnFromMissingPreviewRecordEditSaveDraft() {
