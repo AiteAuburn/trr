@@ -5266,7 +5266,22 @@ def main() -> int:
         _assert_contains(
             "manual create complete helper binding",
             content,
-            "await completeManualRecordCreateRequest(activeProfile.id, account.id);",
+            "await completeManualRecordCreateRequest(profileId, accountId);",
+        )
+        _assert_contains(
+            "manual create start and complete helper",
+            content,
+            "async function startAndCompleteManualRecordCreateRequest(profileId: string, accountId: string)",
+        )
+        _assert_contains(
+            "manual create start and complete helper internals",
+            content,
+            "startManualCreateRequest();\n    await completeManualRecordCreateRequest(profileId, accountId);",
+        )
+        _assert_contains(
+            "manual create start and complete helper binding",
+            content,
+            "await startAndCompleteManualRecordCreateRequest(activeProfile.id, account.id);",
         )
         _assert_contains(
             "AI save failure result helper",

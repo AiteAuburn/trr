@@ -8688,6 +8688,11 @@ export default function App() {
     }
   }
 
+  async function startAndCompleteManualRecordCreateRequest(profileId: string, accountId: string) {
+    startManualCreateRequest();
+    await completeManualRecordCreateRequest(profileId, accountId);
+  }
+
   async function createManualRecord() {
     if (isBusy || manualCreateInFlight.current) {
       return;
@@ -8703,8 +8708,7 @@ export default function App() {
       return;
     }
 
-    startManualCreateRequest();
-    await completeManualRecordCreateRequest(activeProfile.id, account.id);
+    await startAndCompleteManualRecordCreateRequest(activeProfile.id, account.id);
   }
 
   async function refreshDownloadedModels(showStatus = false) {
