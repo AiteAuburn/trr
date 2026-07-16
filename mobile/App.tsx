@@ -3558,6 +3558,14 @@ export default function App() {
     setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));
   }
 
+  function applyAiCandidateEditPreviewRecords(nextRecords: PendingRecord[]) {
+    if (!preview) {
+      return;
+    }
+    setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
+    setStatus(aiCandidateEditSuccessStatusMessage());
+  }
+
   function reorganizeDailyRecordDraftAfterChange(
     nextPreview: ParsePreviewResponse,
     reason: DailyRecordReorganizationReason,
@@ -3743,8 +3751,7 @@ export default function App() {
       if (isPreviewActionReturningToDailyRecord) {
         reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, "edit");
       } else {
-        setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
-        setStatus(aiCandidateEditSuccessStatusMessage());
+        applyAiCandidateEditPreviewRecords(nextRecords);
       }
       returnFromPreviewRecordEditSaveSuccess();
     } catch (error) {

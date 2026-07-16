@@ -4119,6 +4119,16 @@ def main() -> int:
             "returnFromPreviewRecordEditSaveSuccess();",
         )
         _assert_contains(
+            "AI candidate preview edit apply helper",
+            content,
+            "function applyAiCandidateEditPreviewRecords(nextRecords: PendingRecord[])",
+        )
+        _assert_contains(
+            "AI candidate preview edit apply helper internals",
+            content,
+            "function applyAiCandidateEditPreviewRecords(nextRecords: PendingRecord[]) {\n    if (!preview) {\n      return;\n    }\n    setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));\n    setStatus(aiCandidateEditSuccessStatusMessage());",
+        )
+        _assert_contains(
             "AI candidate preview edit records update helper",
             content,
             "function previewRecordsWithEditedRecord(",
@@ -4132,6 +4142,11 @@ def main() -> int:
             "AI candidate preview edit records update helper binding",
             content,
             "const nextRecords = previewRecordsWithEditedRecord(\n        preview.records,\n        selectedPreviewIndex,",
+        )
+        _assert_contains(
+            "AI candidate preview edit apply helper binding",
+            content,
+            "reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, \"edit\");\n      } else {\n        applyAiCandidateEditPreviewRecords(nextRecords);",
         )
         _assert_contains(
             "AI candidate remove confirm missing pending screen opener fallback",
