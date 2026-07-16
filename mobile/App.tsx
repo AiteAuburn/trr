@@ -3841,9 +3841,13 @@ export default function App() {
     setStatus(parserProgressStatusMessage());
     return {
       existingDailyPreview,
-      parserVoiceSeconds: clampNumber(transcriptVoiceSeconds, 0, maxMobileCountValue),
+      parserVoiceSeconds: parserPreviewVoiceSeconds(),
       parseOccurredAt: new Date().toISOString()
     };
+  }
+
+  function parserPreviewVoiceSeconds() {
+    return clampNumber(transcriptVoiceSeconds, 0, maxMobileCountValue);
   }
 
   function finishParserPreviewRequest() {
