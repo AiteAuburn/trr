@@ -8908,6 +8908,10 @@ export default function App() {
     setNativeStatus(nativeWhisperProgressStatusMessage());
   }
 
+  function handleNativeWhisperMissingInput() {
+    setNativeStatus(nativeWhisperMissingInputStatusMessage());
+  }
+
   function handleNativeLlamaSuccess(output: string) {
     setLlamaDebugOutput(nativeLlamaOutputSummaryMessage(output.length));
     setNativeStatus(nativeLlamaSuccessStatusMessage());
@@ -9022,7 +9026,7 @@ export default function App() {
     }
     const whisperInput = nativeWhisperInput();
     if (!whisperInput.modelPath || !whisperInput.audioPath) {
-      setNativeStatus(nativeWhisperMissingInputStatusMessage());
+      handleNativeWhisperMissingInput();
       return;
     }
     startNativeDebugAction();
