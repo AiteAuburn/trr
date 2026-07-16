@@ -802,6 +802,7 @@ import { TranscriptDraftInput } from "./transcriptDraftInput";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
 import { FoodCommunityShareTextFields } from "./foodCommunityShareTextFields";
 import { SegmentSelector } from "./segmentSelector";
+import { StoreSearchField } from "./storeSearchField";
 import type {
   Account,
   AiModelOptions,
@@ -13553,19 +13554,12 @@ export default function App() {
                 </View>
               ))}
             </View>
-            <View style={styles.searchField}>
-              <Text style={styles.searchIcon}>⌕</Text>
-              <TextInput
-                accessibilityLabel={auxiliaryDisplayLabels.storeSearchInputAccessibility}
-                style={styles.searchInput}
-                placeholder="搜尋商品"
-                value={storeSearchText}
-                onChangeText={updateStoreSearchInput}
-                maxLength={maxStoreSearchTextLength}
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-            </View>
+            <StoreSearchField
+              accessibilityLabel={auxiliaryDisplayLabels.storeSearchInputAccessibility}
+              value={storeSearchText}
+              onChangeText={updateStoreSearchInput}
+              maxLength={maxStoreSearchTextLength}
+            />
             <SegmentSelector
               options={storeCategoryDisplayOptions}
               optionKey={storeCategoryOptionKey}
@@ -14050,28 +14044,6 @@ const styles = StyleSheet.create({
   },
   inputDisabled: {
     opacity: 0.55
-  },
-  searchField: {
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
-    borderRadius: 20,
-    borderWidth: 1,
-    flexDirection: "row",
-    gap: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 12
-  },
-  searchIcon: {
-    color: "#3FA67F",
-    fontSize: 18,
-    fontWeight: "900"
-  },
-  searchInput: {
-    color: "#1E1E1E",
-    flex: 1,
-    fontSize: 16,
-    padding: 0
   },
   transcriptInput: {
     minHeight: 180,

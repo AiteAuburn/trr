@@ -87,6 +87,7 @@ RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
 RECORD_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "recordTextField.tsx"
 FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareDateTimeFields.tsx"
 FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareTextFields.tsx"
+STORE_SEARCH_FIELD_PATH = REPO_ROOT / "mobile" / "storeSearchField.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1444,6 +1445,7 @@ def main() -> int:
         encoding="utf-8"
     )
     food_community_share_text_fields_content = FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH.read_text(encoding="utf-8")
+    store_search_field_content = STORE_SEARCH_FIELD_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -2086,6 +2088,21 @@ def main() -> int:
             ("food community share text fields multiline style", "multilineField: {"),
         ):
             _assert_contains(label, food_community_share_text_fields_content, marker)
+        for label, marker in (
+            ("store search field component", "export function StoreSearchField"),
+            ("store search field accessibility prop", "accessibilityLabel={accessibilityLabel}"),
+            ("store search field icon", "<Text style={styles.searchIcon}>⌕</Text>"),
+            ("store search field value prop", "value={value}"),
+            ("store search field handler prop", "onChangeText={onChangeText}"),
+            ("store search field max length prop", "maxLength={maxLength}"),
+            ("store search field placeholder", 'placeholder="搜尋商品"'),
+            ("store search field normalization", 'autoCapitalize="none"'),
+            ("store search field autocorrect", "autoCorrect={false}"),
+            ("store search field wrapper style", "searchField: {"),
+            ("store search field icon style", "searchIcon: {"),
+            ("store search field input style", "searchInput: {"),
+        ):
+            _assert_contains(label, store_search_field_content, marker)
         for label, marker in (
             ("manual record exercise fields component", "export function ManualRecordExerciseFields"),
             ("manual record exercise shared field", "<RecordTextField"),
