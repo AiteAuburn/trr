@@ -3611,6 +3611,12 @@ export default function App() {
     openScreen("aiReview");
   }
 
+  function refreshVoiceQuotaAfterParserSuccess(voiceSeconds: number) {
+    if (voiceSeconds > 0 && account) {
+      void loadVoiceQuota(account.id);
+    }
+  }
+
   function removePreviewRecord(index: number) {
     if (!preview) {
       return;
@@ -7386,9 +7392,7 @@ export default function App() {
         "add",
         parserSuccessStatusForPreview(mergedDailyPreview, parserVoiceSeconds)
       );
-      if (parserVoiceSeconds > 0 && account) {
-        void loadVoiceQuota(account.id);
-      }
+      refreshVoiceQuotaAfterParserSuccess(parserVoiceSeconds);
     } catch (error) {
       const message = parserFailureStatusMessage(error);
       setParserRecoveryMessage(parserFailureRecoveryMessage(message));

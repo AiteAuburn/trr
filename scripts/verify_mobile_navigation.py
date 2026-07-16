@@ -5729,7 +5729,9 @@ def main() -> int:
             ("parse success clears voice seconds helper", "function openAiReviewAfterParserSuccess() {\n    setTranscriptVoiceSeconds(0);"),
             ("parse success screen opener helper", 'function openAiReviewAfterParserSuccess() {\n    setTranscriptVoiceSeconds(0);\n    openScreen("aiReview");'),
             ("parse success screen opener binding", "openAiReviewAfterParserSuccess();"),
-            ("parse success refreshes quota", "void loadVoiceQuota(account.id);"),
+            ("parse success refresh quota helper", "function refreshVoiceQuotaAfterParserSuccess(voiceSeconds: number)"),
+            ("parse success refresh quota helper internals", "if (voiceSeconds > 0 && account) {\n      void loadVoiceQuota(account.id);"),
+            ("parse success refreshes quota", "refreshVoiceQuotaAfterParserSuccess(parserVoiceSeconds);"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
