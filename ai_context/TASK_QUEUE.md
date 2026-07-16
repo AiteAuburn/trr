@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1871: Reuse parser preview request options helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `parserPreviewRequestOptions()` for parser preview POST request options.
+- Reused the helper from `requestParserPreview()` while preserving the parser endpoint, protected headers, request body helper, selected STT model, and selected LLM model behavior.
+- Updated navigation verifier coverage for the parser request endpoint, request options helper, method, protected headers, and body binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining parser submit and daily-record draft helpers in small behavior-preserving slices.
+
 ### T1870: Reuse parser preview model ids helper
 
 Status: done

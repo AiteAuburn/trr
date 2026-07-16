@@ -3713,11 +3713,25 @@ export default function App() {
     occurredAt: string,
     voiceSeconds: number
   ) {
-    return requestJson<ParsePreviewResponse>(normalizedApiBaseUrl, "/ai/parse-preview", {
+    return requestJson<ParsePreviewResponse>(
+      normalizedApiBaseUrl,
+      "/ai/parse-preview",
+      parserPreviewRequestOptions(accountId, profileId, text, occurredAt, voiceSeconds)
+    );
+  }
+
+  function parserPreviewRequestOptions(
+    accountId: string,
+    profileId: string,
+    text: string,
+    occurredAt: string,
+    voiceSeconds: number
+  ) {
+    return {
       method: "POST",
       headers: protectedRequestHeaders(accountId, accessToken),
       body: JSON.stringify(parserPreviewRequestBody(profileId, text, occurredAt, voiceSeconds))
-    });
+    };
   }
 
   function appendDailyTranscriptEntry(entry: DailyTranscriptEntry) {
