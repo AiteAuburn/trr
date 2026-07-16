@@ -3868,17 +3868,21 @@ export default function App() {
     return payload;
   }
 
+  function validatePreviewRecordEdit(recordType: string) {
+    return validateRecordForm(
+      recordType,
+      previewEditFields,
+      previewEditDate,
+      previewEditTime
+    );
+  }
+
   function savePreviewRecordEdit() {
     if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {
       openScreen("aiReview");
       return;
     }
-    const validationError = validateRecordForm(
-      selectedPreviewRecord.record_type,
-      previewEditFields,
-      previewEditDate,
-      previewEditTime
-    );
+    const validationError = validatePreviewRecordEdit(selectedPreviewRecord.record_type);
     if (validationError) {
       setStatus(validationError);
       return;

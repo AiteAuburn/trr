@@ -4219,6 +4219,21 @@ def main() -> int:
             "const payload = buildPreviewRecordEditPayload(selectedPreviewRecord.record_type);",
         )
         _assert_contains(
+            "AI candidate preview edit validation helper",
+            content,
+            "function validatePreviewRecordEdit(recordType: string)",
+        )
+        _assert_contains(
+            "AI candidate preview edit validation helper internals",
+            content,
+            "return validateRecordForm(\n      recordType,\n      previewEditFields,\n      previewEditDate,\n      previewEditTime\n    );",
+        )
+        _assert_contains(
+            "AI candidate preview edit validation helper binding",
+            content,
+            "const validationError = validatePreviewRecordEdit(selectedPreviewRecord.record_type);",
+        )
+        _assert_contains(
             "AI candidate preview with records helper",
             content,
             "function previewWithRecords(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[])",
