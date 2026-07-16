@@ -2168,6 +2168,38 @@ export default function App() {
     openScreenWithStatus(recordDetailReturnScreen, recordDetailReturnStatusMessage(recordDetailReturnScreen));
   }
 
+  function selectedRecordDetailDateTimeLabel(item: ReturnType<typeof recordDetailDisplayItem> | null) {
+    return item?.dateTimeLabel ?? "尚未選擇紀錄";
+  }
+
+  function selectedRecordDetailDateLabel(item: ReturnType<typeof recordDetailDisplayItem> | null) {
+    return item?.dateLabel ?? "尚無";
+  }
+
+  function selectedRecordDetailExerciseSummary(item: ReturnType<typeof recordDetailDisplayItem> | null) {
+    return item?.exerciseSummary ?? "無";
+  }
+
+  function selectedRecordDetailMedicationSummary(item: ReturnType<typeof recordDetailDisplayItem> | null) {
+    return item?.medicationSummary ?? "無";
+  }
+
+  function selectedRecordDetailPayloadSummary(item: ReturnType<typeof recordDetailDisplayItem> | null) {
+    return item?.payloadSummary ?? "沒有資料";
+  }
+
+  function selectedRecordDetailSourceLabel(item: ReturnType<typeof recordDetailDisplayItem> | null) {
+    return item?.sourceLabel ?? "尚無";
+  }
+
+  function selectedRecordDetailTimeLabel(item: ReturnType<typeof recordDetailDisplayItem> | null) {
+    return item?.timeLabel ?? "尚無";
+  }
+
+  function selectedRecordDetailTypeLabel(item: ReturnType<typeof recordDetailDisplayItem> | null) {
+    return item?.typeLabel ?? "請從今日或歷史紀錄選擇一筆真實紀錄。";
+  }
+
   function openTutorialRecordEntry() {
     openScreenWithStatus("record", tutorialRecordEntryStatusMessage());
   }
@@ -9739,20 +9771,20 @@ export default function App() {
               boundaryItems={recordDetailBoundaryChecklistItems}
               boundaryTitle={coreFlowDisplayLabels.detailBoundary}
               dateLabel={"日期"}
-              dateTimeLabel={selectedRecordDisplayItem?.dateTimeLabel ?? "尚未選擇紀錄"}
-              dateValue={selectedRecordDisplayItem?.dateLabel ?? "尚無"}
+              dateTimeLabel={selectedRecordDetailDateTimeLabel(selectedRecordDisplayItem)}
+              dateValue={selectedRecordDetailDateLabel(selectedRecordDisplayItem)}
               detailRows={selectedRecordDetailRows}
-              exerciseValue={selectedRecordDisplayItem?.exerciseSummary ?? "無"}
+              exerciseValue={selectedRecordDetailExerciseSummary(selectedRecordDisplayItem)}
               mainInfoTitle={coreFlowDisplayLabels.mainInfo}
-              medicationValue={selectedRecordDisplayItem?.medicationSummary ?? "無"}
-              payloadSummary={selectedRecordDisplayItem?.payloadSummary ?? "沒有資料"}
+              medicationValue={selectedRecordDetailMedicationSummary(selectedRecordDisplayItem)}
+              payloadSummary={selectedRecordDetailPayloadSummary(selectedRecordDisplayItem)}
               sourceTitle={coreFlowDisplayLabels.source}
-              sourceValue={selectedRecordDisplayItem?.sourceLabel ?? "尚無"}
+              sourceValue={selectedRecordDetailSourceLabel(selectedRecordDisplayItem)}
               supplementalInfoTitle={coreFlowDisplayLabels.supplementalInfo}
               timeLabel={"時間"}
-              timeValue={selectedRecordDisplayItem?.timeLabel ?? "尚無"}
+              timeValue={selectedRecordDetailTimeLabel(selectedRecordDisplayItem)}
               typeLabel={"類型"}
-              typeValue={selectedRecordDisplayItem?.typeLabel ?? "請從今日或歷史紀錄選擇一筆真實紀錄。"}
+              typeValue={selectedRecordDetailTypeLabel(selectedRecordDisplayItem)}
             />
             <RecordDetailActionPanel
               canManageRecord={Boolean(selectedRecord)}

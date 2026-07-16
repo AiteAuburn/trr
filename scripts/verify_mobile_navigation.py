@@ -2045,8 +2045,48 @@ def main() -> int:
             ("record detail info panel binding", "<RecordDetailInfoPanel\n              boundaryItems={recordDetailBoundaryChecklistItems}"),
             ("record detail mapped detail row binding", "detailRows={selectedRecordDetailRows}"),
             ("record detail source detail row binding", "sourceTitle={coreFlowDisplayLabels.source}"),
+            ("record detail selected datetime helper", "function selectedRecordDetailDateTimeLabel(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
+            ("record detail selected datetime helper fields", 'return item?.dateTimeLabel ?? "尚未選擇紀錄";'),
+            ("record detail selected datetime helper binding", "dateTimeLabel={selectedRecordDetailDateTimeLabel(selectedRecordDisplayItem)}"),
+            ("record detail selected date helper", "function selectedRecordDetailDateLabel(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
+            ("record detail selected date helper fields", 'return item?.dateLabel ?? "尚無";'),
+            ("record detail selected date helper binding", "dateValue={selectedRecordDetailDateLabel(selectedRecordDisplayItem)}"),
+            ("record detail selected exercise helper", "function selectedRecordDetailExerciseSummary(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
+            ("record detail selected exercise helper fields", 'return item?.exerciseSummary ?? "無";'),
+            ("record detail selected exercise helper binding", "exerciseValue={selectedRecordDetailExerciseSummary(selectedRecordDisplayItem)}"),
+            ("record detail selected medication helper", "function selectedRecordDetailMedicationSummary(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
+            ("record detail selected medication helper fields", 'return item?.medicationSummary ?? "無";'),
+            ("record detail selected medication helper binding", "medicationValue={selectedRecordDetailMedicationSummary(selectedRecordDisplayItem)}"),
+            ("record detail selected payload helper", "function selectedRecordDetailPayloadSummary(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
+            ("record detail selected payload helper fields", 'return item?.payloadSummary ?? "沒有資料";'),
+            ("record detail selected payload helper binding", "payloadSummary={selectedRecordDetailPayloadSummary(selectedRecordDisplayItem)}"),
+            ("record detail selected source helper", "function selectedRecordDetailSourceLabel(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
+            ("record detail selected source helper fields", 'return item?.sourceLabel ?? "尚無";'),
+            ("record detail selected source helper binding", "sourceValue={selectedRecordDetailSourceLabel(selectedRecordDisplayItem)}"),
+            ("record detail selected time helper", "function selectedRecordDetailTimeLabel(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
+            ("record detail selected time helper fields", 'return item?.timeLabel ?? "尚無";'),
+            ("record detail selected time helper binding", "timeValue={selectedRecordDetailTimeLabel(selectedRecordDisplayItem)}"),
+            ("record detail selected type helper", "function selectedRecordDetailTypeLabel(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
+            ("record detail selected type helper fields", 'return item?.typeLabel ?? "請從今日或歷史紀錄選擇一筆真實紀錄。";'),
+            ("record detail selected type helper binding", "typeValue={selectedRecordDetailTypeLabel(selectedRecordDisplayItem)}"),
         ):
             _assert_contains(label, content, marker)
+        record_detail_screen_block = _match_block(
+            content,
+            r'(currentScreen === "recordDetail"[\s\S]*?<RecordDetailActionPanel)',
+            "record detail screen render block",
+        )
+        for label, marker in (
+            ("record detail direct datetime fallback binding", 'selectedRecordDisplayItem?.dateTimeLabel ?? "尚未選擇紀錄"'),
+            ("record detail direct date fallback binding", 'selectedRecordDisplayItem?.dateLabel ?? "尚無"'),
+            ("record detail direct exercise fallback binding", 'selectedRecordDisplayItem?.exerciseSummary ?? "無"'),
+            ("record detail direct medication fallback binding", 'selectedRecordDisplayItem?.medicationSummary ?? "無"'),
+            ("record detail direct payload fallback binding", 'selectedRecordDisplayItem?.payloadSummary ?? "沒有資料"'),
+            ("record detail direct source fallback binding", 'selectedRecordDisplayItem?.sourceLabel ?? "尚無"'),
+            ("record detail direct time fallback binding", 'selectedRecordDisplayItem?.timeLabel ?? "尚無"'),
+            ("record detail direct type fallback binding", 'selectedRecordDisplayItem?.typeLabel ?? "請從今日或歷史紀錄選擇一筆真實紀錄。"'),
+        ):
+            _assert_not_contains(label, record_detail_screen_block, marker)
         for label, marker in (
             ("app types account alias", "export type Account = AccountTransformSource;"),
             ("app types profile alias", "export type Profile = ProfileTransformSource;"),
