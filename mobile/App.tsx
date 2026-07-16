@@ -3447,9 +3447,13 @@ export default function App() {
   }
 
   function returnFromPreviewRecordEdit() {
+    resetPreviewRecordEditCancelState();
+    openPreviewActionReturnScreenWithStatus(aiCandidateEditCancelStatusMessage());
+  }
+
+  function resetPreviewRecordEditCancelState() {
     clearPreviewMenuSelectionIndexes();
     seedEmptyPreviewEditStateForNow();
-    openPreviewActionReturnScreenWithStatus(aiCandidateEditCancelStatusMessage());
   }
 
   function openPreviewRecordRemoveConfirm(index: number, returnScreen: AppScreen = "aiReview") {

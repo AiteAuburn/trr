@@ -4156,12 +4156,22 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit return index clear helper binding",
             content,
-            "clearPreviewMenuSelectionIndexes();\n    seedEmptyPreviewEditStateForNow();",
+            "function returnFromPreviewRecordEdit() {\n    resetPreviewRecordEditCancelState();",
+        )
+        _assert_contains(
+            "AI candidate edit cancel reset helper",
+            content,
+            "function resetPreviewRecordEditCancelState()",
+        )
+        _assert_contains(
+            "AI candidate edit cancel reset helper internals",
+            content,
+            "function resetPreviewRecordEditCancelState() {\n    clearPreviewMenuSelectionIndexes();\n    seedEmptyPreviewEditStateForNow();",
         )
         _assert_contains(
             "AI candidate edit return empty seed helper binding",
             content,
-            "seedEmptyPreviewEditStateForNow();\n    openPreviewActionReturnScreenWithStatus(aiCandidateEditCancelStatusMessage());",
+            "resetPreviewRecordEditCancelState();\n    openPreviewActionReturnScreenWithStatus(aiCandidateEditCancelStatusMessage());",
         )
         _assert_contains(
             "AI candidate remove return index clear helper binding",
