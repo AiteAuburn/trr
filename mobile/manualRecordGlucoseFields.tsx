@@ -1,6 +1,7 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { FieldLabel } from "./fieldLabel";
+import { RecordTextField } from "./recordTextField";
 
 type ManualRecordGlucoseOption = {
   accessibilityLabel: string;
@@ -51,20 +52,16 @@ export function ManualRecordGlucoseFields<TUnit extends ManualRecordGlucoseOptio
 }: ManualRecordGlucoseFieldsProps<TUnit, TTiming>) {
   return (
     <>
-      <View style={styles.formField}>
-        <FieldLabel icon={"💧"} label={"血糖數值"} />
-        <TextInput
-          accessibilityLabel={glucoseValueAccessibilityLabel}
-          value={glucoseValue}
-          onChangeText={onGlucoseValueChange}
-          keyboardType="numeric"
-          maxLength={glucoseValueMaxLength}
-          autoCapitalize="none"
-          autoCorrect={false}
-          style={styles.input}
-          placeholder="138"
-        />
-      </View>
+      <RecordTextField
+        icon={"💧"}
+        label={"血糖數值"}
+        accessibilityLabel={glucoseValueAccessibilityLabel}
+        value={glucoseValue}
+        onChangeText={onGlucoseValueChange}
+        keyboardType="numeric"
+        maxLength={glucoseValueMaxLength}
+        placeholder="138"
+      />
       <View style={styles.segmentRow}>
         {unitOptions.map((option) => {
           const optionSelected = manualRecordGlucoseOptionSelected(option, glucoseUnit);
@@ -113,16 +110,6 @@ export function ManualRecordGlucoseFields<TUnit extends ManualRecordGlucoseOptio
 const styles = StyleSheet.create({
   formField: {
     gap: 8
-  },
-  input: {
-    backgroundColor: "#ffffff",
-    borderColor: "#E3E8E5",
-    borderRadius: 18,
-    borderWidth: 1,
-    color: "#1E1E1E",
-    fontSize: 16,
-    paddingHorizontal: 14,
-    paddingVertical: 12
   },
   segmentActive: {
     backgroundColor: "#3FA67F",

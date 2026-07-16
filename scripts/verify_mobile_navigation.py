@@ -1940,12 +1940,15 @@ def main() -> int:
             _assert_contains(label, manual_record_type_selector_content, marker)
         for label, marker in (
             ("manual record glucose fields component", "export function ManualRecordGlucoseFields"),
-            ("manual record glucose value label", '<FieldLabel icon={"💧"} label={"血糖數值"} />'),
+            ("manual record glucose shared value field", "<RecordTextField"),
+            ("manual record glucose value icon", 'icon={"💧"}'),
+            ("manual record glucose value label", 'label={"血糖數值"}'),
             ("manual record glucose value accessibility", "accessibilityLabel={glucoseValueAccessibilityLabel}"),
             ("manual record glucose value binding", "value={glucoseValue}"),
             ("manual record glucose value handler", "onChangeText={onGlucoseValueChange}"),
             ("manual record glucose keyboard", 'keyboardType="numeric"'),
             ("manual record glucose max length", "maxLength={glucoseValueMaxLength}"),
+            ("manual record glucose placeholder", 'placeholder="138"'),
             ("manual record glucose option key helper", "function manualRecordGlucoseOptionKey(option: ManualRecordGlucoseOption)"),
             ("manual record glucose option key helper fields", "return option.value;"),
             ("manual record glucose option accessibility helper", "function manualRecordGlucoseOptionAccessibilityLabel(option: ManualRecordGlucoseOption)"),
@@ -1969,7 +1972,6 @@ def main() -> int:
             ("manual record glucose timing selected", "accessibilityState={{ selected: optionSelected }}"),
             ("manual record glucose timing press", "onPress={() => onTimingPress(option)}"),
             ("manual record glucose timing label helper binding", "{manualRecordGlucoseOptionLabel(option)}"),
-            ("manual record glucose input style", "input: {"),
         ):
             _assert_contains(label, manual_record_glucose_fields_content, marker)
         for label, marker in (
