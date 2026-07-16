@@ -7548,8 +7548,12 @@ export default function App() {
     });
   }
 
+  function dailyRecordSaveCreatedRecords(saveResponse: DailyRecordSaveResponse) {
+    return boundRecordsList(saveResponse.records, maxMobilePreviewRecords);
+  }
+
   function handleDailyRecordSaveSuccess(saveResponse: DailyRecordSaveResponse, savedCount: number) {
-    const createdRecords = boundRecordsList(saveResponse.records, maxMobilePreviewRecords);
+    const createdRecords = dailyRecordSaveCreatedRecords(saveResponse);
     setPreview(null);
     clearTranscriptDraftState();
     clearDailyRecordDraftOrganizationState();
