@@ -5744,14 +5744,34 @@ def main() -> int:
             "function openUpdatedRecordDetail()",
         )
         _assert_contains(
+            "record result return destination helper",
+            content,
+            "function recordResultReturnDestination()",
+        )
+        _assert_contains(
+            "record result return destination helper internals",
+            content,
+            "function recordResultReturnDestination() {\n    return recordDetailReturnScreen;\n  }",
+        )
+        _assert_contains(
             "delete success return handler",
             content,
             "function returnFromDeleteSuccess()",
         )
         _assert_contains(
+            "delete success return destination helper binding",
+            content,
+            "openDeleteSuccessDestination(recordResultReturnDestination());",
+        )
+        _assert_contains(
             "update success return handler",
             content,
             "function returnFromUpdateSuccess()",
+        )
+        _assert_contains(
+            "update success return destination helper binding",
+            content,
+            "openUpdateSuccessDestination(recordResultReturnDestination());",
         )
         _assert_contains(
             "record action unavailable helper",

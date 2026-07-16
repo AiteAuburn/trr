@@ -8460,12 +8460,16 @@ export default function App() {
     openUpdateSuccessDestination("recordDetail");
   }
 
+  function recordResultReturnDestination() {
+    return recordDetailReturnScreen;
+  }
+
   function returnFromDeleteSuccess() {
-    openDeleteSuccessDestination(recordDetailReturnScreen);
+    openDeleteSuccessDestination(recordResultReturnDestination());
   }
 
   function returnFromUpdateSuccess() {
-    openUpdateSuccessDestination(recordDetailReturnScreen);
+    openUpdateSuccessDestination(recordResultReturnDestination());
   }
 
   function openRecordActionUnavailable(screen: AppScreen, statusMessage: string) {
