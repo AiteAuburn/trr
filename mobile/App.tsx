@@ -5890,6 +5890,18 @@ export default function App() {
     return item.requirements;
   }
 
+  function futureModuleRequirementKey(
+    requirement: ReturnType<typeof futureModuleCardDisplayItem>["requirements"][number]
+  ) {
+    return requirement.key;
+  }
+
+  function futureModuleRequirementText(
+    requirement: ReturnType<typeof futureModuleCardDisplayItem>["requirements"][number]
+  ) {
+    return requirement.text;
+  }
+
   function futureModuleCardSafety(item: ReturnType<typeof futureModuleCardDisplayItem>) {
     return item.safety;
   }
@@ -10633,7 +10645,7 @@ export default function App() {
                   <View style={styles.inlineInfoBlock}>
                     <Text style={styles.label}>{futurePreviewDisplayLabels.readiness}</Text>
                     {futureModuleCardRequirements(item).map((requirement) => (
-                      <HighlightBulletRow key={requirement.key} text={requirement.text} />
+                      <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />
                     ))}
                     <Text style={styles.warningText}>{futureModuleCardSafety(item)}</Text>
                   </View>
@@ -10688,7 +10700,7 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{futurePreviewDisplayLabels.readiness}</Text>
               {selectedFutureModuleDisplay.requirements.map((requirement) => (
-                <HighlightBulletRow key={requirement.key} text={requirement.text} />
+                <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />
               ))}
             </View>
             <View style={styles.inlineInfoBlock}>

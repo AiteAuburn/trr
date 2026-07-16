@@ -1747,8 +1747,8 @@ def main() -> int:
             ("store checkout readiness highlight bullet row", "storeCheckoutReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />"),
             ("food photo empty result highlight bullet row", "foodPhotoEmptyResultChecklistItems.map((item) => (\n                <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />"),
             ("food photo readiness highlight bullet row", "foodPhotoReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />"),
-            ("future module card requirements highlight bullet row", "futureModuleCardRequirements(item).map((requirement) => (\n                      <HighlightBulletRow key={requirement.key} text={requirement.text} />"),
-            ("future module detail requirements highlight bullet row", "selectedFutureModuleDisplay.requirements.map((requirement) => (\n                <HighlightBulletRow key={requirement.key} text={requirement.text} />"),
+            ("future module card requirements highlight bullet row", "futureModuleCardRequirements(item).map((requirement) => (\n                      <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />"),
+            ("future module detail requirements highlight bullet row", "selectedFutureModuleDisplay.requirements.map((requirement) => (\n                <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />"),
         ):
             if label.startswith("history boundary "):
                 target_content = history_intro_status_blocks_content
@@ -9985,6 +9985,12 @@ def main() -> int:
             ("future module card requirements helper", "function futureModuleCardRequirements(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
             ("future module card requirements helper fields", "return item.requirements;"),
             ("future module card requirements binding", "futureModuleCardRequirements(item).map((requirement) => ("),
+            ("future module requirement key helper", 'function futureModuleRequirementKey(\n    requirement: ReturnType<typeof futureModuleCardDisplayItem>["requirements"][number]'),
+            ("future module requirement key helper fields", "return requirement.key;"),
+            ("future module requirement key binding", "key={futureModuleRequirementKey(requirement)}"),
+            ("future module requirement text helper", 'function futureModuleRequirementText(\n    requirement: ReturnType<typeof futureModuleCardDisplayItem>["requirements"][number]'),
+            ("future module requirement text helper fields", "return requirement.text;"),
+            ("future module requirement text binding", "text={futureModuleRequirementText(requirement)}"),
             ("future module card safety helper", "function futureModuleCardSafety(item: ReturnType<typeof futureModuleCardDisplayItem>)"),
             ("future module card safety helper fields", "return item.safety;"),
             ("future module card safety binding", "{futureModuleCardSafety(item)}"),
@@ -10409,11 +10415,23 @@ def main() -> int:
             ("direct future module card description binding", "<Text style={styles.recordContent}>{item.description}</Text>"),
             ("direct future module card readiness binding", "<Text style={styles.evidence}>{item.readiness}</Text>"),
             ("direct future module card requirements binding", "item.requirements.map((requirement) => ("),
+            ("direct future module card requirement key binding", "key={requirement.key}"),
+            ("direct future module card requirement text binding", "text={requirement.text}"),
             ("direct future module card safety binding", "<Text style={styles.warningText}>{item.safety}</Text>"),
             ("direct future module card target preview binding", "{item.target ? <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.viewPreview}</Text> : null}"),
             ("direct future module card target integration binding", "{!item.target ? <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.viewIntegration}</Text> : null}"),
         ):
             _assert_not_contains(label, future_module_card_render_block, marker)
+        future_module_detail_requirement_block = _match_block(
+            content,
+            r"selectedFutureModuleDisplay\.requirements\.map\(\(requirement\) => \(([\s\S]*?<HighlightBulletRow[^>]*/>)",
+            "future module detail requirement render block",
+        )
+        for label, marker in (
+            ("direct future module detail requirement key binding", "key={requirement.key}"),
+            ("direct future module detail requirement text binding", "text={requirement.text}"),
+        ):
+            _assert_not_contains(label, future_module_detail_requirement_block, marker)
         for label, marker in (
             ("year review file system import", 'import * as FileSystem from "expo-file-system";'),
             ("year review share asset cache helper", "export async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset)"),

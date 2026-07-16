@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1729: Reuse future module requirement fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared Future Module requirement helpers for checklist row key and text.
+- Reused the helpers in Future Modules cards and Future Module Detail while preserving requirement copy, readiness sections, navigation, and future-only preview behavior unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for future module requirement rows.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing year-review sections and remaining option chip render blocks in small behavior-preserving slices.
+
 ### T1728: Reuse local Whisper model chip fields
 
 Status: done
