@@ -274,7 +274,6 @@ import {
 import {
   auxiliarySectionLabels,
   boundaryMetricDisplayItem,
-  destinationCardDisplayItem,
   detailPairDisplayItem,
   manualRecordTypeDisplayItems,
   menuScreenDisplayItem,
@@ -827,6 +826,7 @@ import { RecordingWhisperModelSelector } from "./recordingWhisperModelSelector";
 import { RecordFlowChecklist } from "./recordFlowChecklist";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
+import { RecordResultDestinationGrid } from "./recordResultDestinationGrid";
 import { RecordEditFooterActions } from "./recordEditFooterActions";
 import { RecordEditHeaderFields } from "./recordEditHeaderFields";
 import { RecordJsonField } from "./recordJsonField";
@@ -4548,34 +4548,6 @@ export default function App() {
     openSaveSuccessDestination(target);
   }
 
-  function destinationCardTarget(item: ReturnType<typeof destinationCardDisplayItem>) {
-    return item.target;
-  }
-
-  function destinationCardKey(item: ReturnType<typeof destinationCardDisplayItem>) {
-    return `${item.target}-${item.label}`;
-  }
-
-  function destinationCardAccessibilityLabel(item: ReturnType<typeof destinationCardDisplayItem>) {
-    return item.accessibilityLabel;
-  }
-
-  function destinationCardIcon(item: ReturnType<typeof destinationCardDisplayItem>) {
-    return item.icon;
-  }
-
-  function destinationCardLabel(item: ReturnType<typeof destinationCardDisplayItem>) {
-    return item.label;
-  }
-
-  function destinationCardHelper(item: ReturnType<typeof destinationCardDisplayItem>) {
-    return item.helper;
-  }
-
-  function pressSaveSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>) {
-    openSaveSuccessDestinationCard(destinationCardTarget(item));
-  }
-
   function openSaveSuccessManualContinue() {
     clearPreviewActionState();
     openManualRecord(manualRecordReturnScreen);
@@ -8069,10 +8041,6 @@ export default function App() {
     openRecordResultDestinationCard("delete", target);
   }
 
-  function pressDeleteSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>) {
-    openDeleteSuccessDestinationCard(destinationCardTarget(item));
-  }
-
   function openDeleteSuccessHistoryDestination() {
     openDeleteSuccessDestination("history");
   }
@@ -8092,10 +8060,6 @@ export default function App() {
 
   function openUpdateSuccessDestinationCard(target: AppScreen) {
     openRecordResultDestinationCard("update", target);
-  }
-
-  function pressUpdateSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>) {
-    openUpdateSuccessDestinationCard(destinationCardTarget(item));
   }
 
   function openUpdatedRecordDetail() {
@@ -9982,27 +9946,10 @@ export default function App() {
               <Text style={styles.label}>{coreFlowDisplayLabels.postSaveBoundary}</Text>
               <OutcomeChecklist items={saveSuccessBoundaryChecklistItems} />
             </View>
-            <View style={styles.postSaveGrid}>
-              {saveSuccessDestinationItems.map((item) => (
-                <Pressable
-                  key={destinationCardKey(item)}
-                  accessibilityLabel={destinationCardAccessibilityLabel(item)}
-                  accessibilityRole="button"
-                  style={styles.postSaveCard}
-                  onPress={() => pressSaveSuccessDestinationCard(item)}
-                >
-                  <View style={styles.historyItemTitle}>
-                    <View style={styles.iconCircleSmall}>
-                      <Text>{destinationCardIcon(item)}</Text>
-                    </View>
-                    <View style={styles.timelineContent}>
-                      <Text style={styles.recordType}>{destinationCardLabel(item)}</Text>
-                      <Text style={styles.evidence}>{destinationCardHelper(item)}</Text>
-                    </View>
-                  </View>
-                </Pressable>
-              ))}
-            </View>
+            <RecordResultDestinationGrid
+              items={saveSuccessDestinationItems}
+              onDestinationPress={openSaveSuccessDestinationCard}
+            />
             <SaveSuccessActionRow
               canContinueManual={saveSuccessViewState.canContinueManual}
               canContinueRecordEntry={saveSuccessViewState.canContinueRecordEntry}
@@ -10051,27 +9998,10 @@ export default function App() {
               <Text style={styles.label}>{coreFlowDisplayLabels.postDeleteBoundary}</Text>
               <OutcomeChecklist items={deleteSuccessBoundaryChecklistItems} />
             </View>
-            <View style={styles.postSaveGrid}>
-              {deleteSuccessDestinationItems.map((item) => (
-                <Pressable
-                  key={destinationCardKey(item)}
-                  accessibilityLabel={destinationCardAccessibilityLabel(item)}
-                  accessibilityRole="button"
-                  style={styles.postSaveCard}
-                  onPress={() => pressDeleteSuccessDestinationCard(item)}
-                >
-                  <View style={styles.historyItemTitle}>
-                    <View style={styles.iconCircleSmall}>
-                      <Text>{destinationCardIcon(item)}</Text>
-                    </View>
-                    <View style={styles.timelineContent}>
-                      <Text style={styles.recordType}>{destinationCardLabel(item)}</Text>
-                      <Text style={styles.evidence}>{destinationCardHelper(item)}</Text>
-                    </View>
-                  </View>
-                </Pressable>
-              ))}
-            </View>
+            <RecordResultDestinationGrid
+              items={deleteSuccessDestinationItems}
+              onDestinationPress={openDeleteSuccessDestinationCard}
+            />
             <DeleteSuccessActionRow
               historyAccessibilityLabel={coreFlowDisplayLabels.deleteSuccessHistoryAccessibility}
               historyLabel={coreFlowDisplayLabels.viewHistory}
@@ -10104,27 +10034,10 @@ export default function App() {
               <Text style={styles.label}>{coreFlowDisplayLabels.postUpdateBoundary}</Text>
               <OutcomeChecklist items={updateSuccessBoundaryChecklistItems} />
             </View>
-            <View style={styles.postSaveGrid}>
-              {updateSuccessDestinationItems.map((item) => (
-                  <Pressable
-                    key={destinationCardKey(item)}
-                    accessibilityLabel={destinationCardAccessibilityLabel(item)}
-                    accessibilityRole="button"
-                    style={styles.postSaveCard}
-                    onPress={() => pressUpdateSuccessDestinationCard(item)}
-                  >
-                    <View style={styles.historyItemTitle}>
-                      <View style={styles.iconCircleSmall}>
-                        <Text>{destinationCardIcon(item)}</Text>
-                      </View>
-                      <View style={styles.timelineContent}>
-                        <Text style={styles.recordType}>{destinationCardLabel(item)}</Text>
-                        <Text style={styles.evidence}>{destinationCardHelper(item)}</Text>
-                      </View>
-                    </View>
-                  </Pressable>
-              ))}
-            </View>
+            <RecordResultDestinationGrid
+              items={updateSuccessDestinationItems}
+              onDestinationPress={openUpdateSuccessDestinationCard}
+            />
             <UpdateSuccessActionRow
               detailAccessibilityLabel={coreFlowDisplayLabels.updatedRecordDetailAccessibility}
               detailLabel={coreFlowDisplayLabels.viewDetail}

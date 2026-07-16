@@ -20,6 +20,7 @@ ACCOUNT_SECURITY_ACTION_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityActio
 SETTINGS_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "settingsBoundaryGrid.tsx"
 SETTINGS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "settingsChecklist.tsx"
 SETTINGS_ROW_LIST_PATH = REPO_ROOT / "mobile" / "settingsRowList.tsx"
+RECORD_RESULT_DESTINATION_GRID_PATH = REPO_ROOT / "mobile" / "recordResultDestinationGrid.tsx"
 SUBSCRIPTION_CHECKLIST_PATH = REPO_ROOT / "mobile" / "subscriptionChecklist.tsx"
 SUBSCRIPTION_COMPARISON_LIST_PATH = REPO_ROOT / "mobile" / "subscriptionComparisonList.tsx"
 PREVIEW_STATUS_LIST_PATH = REPO_ROOT / "mobile" / "previewStatusList.tsx"
@@ -1423,6 +1424,7 @@ def main() -> int:
     settings_boundary_grid_content = SETTINGS_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
     settings_checklist_content = SETTINGS_CHECKLIST_PATH.read_text(encoding="utf-8")
     settings_row_list_content = SETTINGS_ROW_LIST_PATH.read_text(encoding="utf-8")
+    record_result_destination_grid_content = RECORD_RESULT_DESTINATION_GRID_PATH.read_text(encoding="utf-8")
     subscription_checklist_content = SUBSCRIPTION_CHECKLIST_PATH.read_text(encoding="utf-8")
     subscription_comparison_list_content = SUBSCRIPTION_COMPARISON_LIST_PATH.read_text(encoding="utf-8")
     preview_status_list_content = PREVIEW_STATUS_LIST_PATH.read_text(encoding="utf-8")
@@ -4102,58 +4104,50 @@ def main() -> int:
             shared_display_items_content,
             "accessibilityLabel: boundDisplayText(`前往${label}`, maxDisplayTextLength)",
         )
-        _assert_contains(
-            "save success destination card press handler",
-            content,
-            "function pressSaveSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>)",
-        )
-        _assert_contains(
-            "destination card target helper",
-            content,
-            "function destinationCardTarget(item: ReturnType<typeof destinationCardDisplayItem>)",
-        )
-        _assert_contains(
-            "destination card target helper fields",
-            content,
-            "return item.target;",
-        )
         for label, marker in (
-            ("destination card key helper", "function destinationCardKey(item: ReturnType<typeof destinationCardDisplayItem>)"),
+            ("record result destination grid component", "export function RecordResultDestinationGrid"),
+            ("record result destination item type", "export type RecordResultDestinationItem ="),
+            ("record result destination target type", "target: AppScreen;"),
+            ("record result destination items prop", "items: RecordResultDestinationItem[]"),
+            ("record result destination press prop", "onDestinationPress: (target: AppScreen) => void"),
+            ("destination card target helper", "function destinationCardTarget(item: RecordResultDestinationItem)"),
+            ("destination card target helper fields", "return item.target;"),
+            ("destination card key helper", "function destinationCardKey(item: RecordResultDestinationItem)"),
             ("destination card key helper fields", "return `${item.target}-${item.label}`;"),
             ("destination card key binding", "key={destinationCardKey(item)}"),
-            ("destination card accessibility helper", "function destinationCardAccessibilityLabel(item: ReturnType<typeof destinationCardDisplayItem>)"),
+            ("destination card accessibility helper", "function destinationCardAccessibilityLabel(item: RecordResultDestinationItem)"),
             ("destination card accessibility helper fields", "return item.accessibilityLabel;"),
             ("destination card accessibility binding", "accessibilityLabel={destinationCardAccessibilityLabel(item)}"),
-            ("destination card icon helper", "function destinationCardIcon(item: ReturnType<typeof destinationCardDisplayItem>)"),
+            ("destination card icon helper", "function destinationCardIcon(item: RecordResultDestinationItem)"),
             ("destination card icon helper fields", "return item.icon;"),
             ("destination card icon binding", "{destinationCardIcon(item)}"),
-            ("destination card label helper", "function destinationCardLabel(item: ReturnType<typeof destinationCardDisplayItem>)"),
+            ("destination card label helper", "function destinationCardLabel(item: RecordResultDestinationItem)"),
             ("destination card label helper fields", "return item.label;"),
             ("destination card label binding", "{destinationCardLabel(item)}"),
-            ("destination card helper helper", "function destinationCardHelper(item: ReturnType<typeof destinationCardDisplayItem>)"),
+            ("destination card helper helper", "function destinationCardHelper(item: RecordResultDestinationItem)"),
             ("destination card helper helper fields", "return item.helper;"),
             ("destination card helper binding", "{destinationCardHelper(item)}"),
+            ("destination card press target binding", "onPress={() => onDestinationPress(destinationCardTarget(item))}"),
+            ("destination card button role", 'accessibilityRole="button"'),
+            ("destination card grid style", "postSaveGrid: {"),
+            ("destination card style", "postSaveCard: {"),
+            ("destination card title row style", "historyItemTitle: {"),
         ):
-            _assert_contains(label, content, marker)
+            _assert_contains(label, record_result_destination_grid_content, marker)
         _assert_contains(
-            "save success destination card target helper binding",
+            "save success destination grid binding",
             content,
-            "openSaveSuccessDestinationCard(destinationCardTarget(item));",
+            "<RecordResultDestinationGrid",
         )
         _assert_contains(
-            "save success destination card binding",
+            "save success destination grid items binding",
             content,
-            "onPress={() => pressSaveSuccessDestinationCard(item)}",
+            "items={saveSuccessDestinationItems}",
         )
         _assert_contains(
-            "save success destination card accessibility binding",
+            "save success destination grid press binding",
             content,
-            "accessibilityLabel={destinationCardAccessibilityLabel(item)}",
-        )
-        _assert_contains(
-            "save success destination card button role",
-            content,
-            'accessibilityRole="button"\n                  style={styles.postSaveCard}',
+            "onDestinationPress={openSaveSuccessDestinationCard}",
         )
         _assert_not_contains(
             "save success direct destination card binding",
@@ -6548,16 +6542,6 @@ def main() -> int:
             'openRecordResultDestinationCard("delete", target);',
         )
         _assert_contains(
-            "delete success destination card press handler",
-            content,
-            "function pressDeleteSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>)",
-        )
-        _assert_contains(
-            "delete success destination card target helper binding",
-            content,
-            "openDeleteSuccessDestinationCard(destinationCardTarget(item));",
-        )
-        _assert_contains(
             "delete success history destination handler",
             content,
             "function openDeleteSuccessHistoryDestination()",
@@ -6571,16 +6555,6 @@ def main() -> int:
             "update success destination card helper binding",
             content,
             'openRecordResultDestinationCard("update", target);',
-        )
-        _assert_contains(
-            "update success destination card press handler",
-            content,
-            "function pressUpdateSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>)",
-        )
-        _assert_contains(
-            "update success destination card target helper binding",
-            content,
-            "openUpdateSuccessDestinationCard(destinationCardTarget(item));",
         )
         _assert_contains(
             "updated record detail handler",
@@ -6663,9 +6637,9 @@ def main() -> int:
             "openRecordDeleteUnavailable();",
         )
         _assert_contains(
-            "delete success destination card binding",
+            "delete success destination grid press binding",
             content,
-            "onPress={() => pressDeleteSuccessDestinationCard(item)}",
+            "onDestinationPress={openDeleteSuccessDestinationCard}",
         )
         _assert_contains(
             "delete success destination helper binding",
@@ -6677,25 +6651,16 @@ def main() -> int:
             content,
             "deleteSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit)",
         )
-        _assert_contains(
-            "delete success destination card accessibility binding",
-            content,
-            "accessibilityLabel={destinationCardAccessibilityLabel(item)}",
-        )
-        _assert_contains(
-            "delete success destination card button role",
-            content,
-            'accessibilityRole="button"\n                  style={styles.postSaveCard}',
-        )
+        _assert_contains("delete success destination grid items binding", content, "items={deleteSuccessDestinationItems}")
         _assert_contains(
             "delete success history destination binding",
             content,
             "onHistoryPress={openDeleteSuccessHistoryDestination}",
         )
         _assert_contains(
-            "update success destination card binding",
+            "update success destination grid press binding",
             content,
-            "onPress={() => pressUpdateSuccessDestinationCard(item)}",
+            "onDestinationPress={openUpdateSuccessDestinationCard}",
         )
         _assert_contains(
             "update success destination helper binding",
@@ -6707,16 +6672,7 @@ def main() -> int:
             content,
             "updateSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit)",
         )
-        _assert_contains(
-            "update success destination card accessibility binding",
-            content,
-            "accessibilityLabel={destinationCardAccessibilityLabel(item)}",
-        )
-        _assert_contains(
-            "update success destination card button role",
-            content,
-            'accessibilityRole="button"\n                    style={styles.postSaveCard}',
-        )
+        _assert_contains("update success destination grid items binding", content, "items={updateSuccessDestinationItems}")
         _assert_not_contains(
             "delete success direct destination card press binding",
             content,
@@ -6742,29 +6698,12 @@ def main() -> int:
             content,
             "onPress={() => openUpdateSuccessDestination(item.target)}",
         )
-        for block_label, pattern in (
-            (
-                "save success destination card render block",
-                r"saveSuccessDestinationItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
-            ),
-            (
-                "delete success destination card render block",
-                r"deleteSuccessDestinationItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
-            ),
-            (
-                "update success destination card render block",
-                r"updateSuccessDestinationItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
-            ),
+        for label, marker in (
+            ("direct save success destination map", "saveSuccessDestinationItems.map((item) => ("),
+            ("direct delete success destination map", "deleteSuccessDestinationItems.map((item) => ("),
+            ("direct update success destination map", "updateSuccessDestinationItems.map((item) => ("),
         ):
-            destination_card_render_block = _match_block(content, pattern, block_label)
-            for label, marker in (
-                ("direct destination card key binding", "key={`${item.target}-${item.label}`}"),
-                ("direct destination card accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
-                ("direct destination card icon binding", "<Text>{item.icon}</Text>"),
-                ("direct destination card label binding", "<Text style={styles.recordType}>{item.label}</Text>"),
-                ("direct destination card helper binding", "<Text style={styles.evidence}>{item.helper}</Text>"),
-            ):
-                _assert_not_contains(f"{block_label} {label}", destination_card_render_block, marker)
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "updated record detail binding",
             content,
