@@ -8600,22 +8600,31 @@ export default function App() {
     await completeSelectedRecordDeleteRequest(recordId, accountId);
   }
 
-  async function deleteSelectedRecord() {
+  function guardedSelectedRecordDeleteContext() {
     if (isBusy || recordDeleteInFlight.current) {
-      return;
+      return null;
     }
-    if (!selectedRecord) {
-      return;
+    const record = selectedRecord;
+    if (!record) {
+      return null;
     }
     if (!protectedBackendReady) {
       openRecordActionUnavailable("deleteConfirm", recordDeleteUnavailableStatusMessage(protectedBackendUnavailableMessage));
-      return;
+      return null;
     }
     if (!account) {
+      return null;
+    }
+    return { account, record };
+  }
+
+  async function deleteSelectedRecord() {
+    const deleteContext = guardedSelectedRecordDeleteContext();
+    if (!deleteContext) {
       return;
     }
 
-    await startAndCompleteSelectedRecordDeleteRequest(selectedRecord.id, account.id);
+    await startAndCompleteSelectedRecordDeleteRequest(deleteContext.record.id, deleteContext.account.id);
   }
 
   function startManualCreateRequest() {

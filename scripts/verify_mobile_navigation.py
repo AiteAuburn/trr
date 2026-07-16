@@ -5496,7 +5496,37 @@ def main() -> int:
         _assert_contains(
             "record delete start and complete helper binding",
             content,
-            "await startAndCompleteSelectedRecordDeleteRequest(selectedRecord.id, account.id);",
+            "await startAndCompleteSelectedRecordDeleteRequest(deleteContext.record.id, deleteContext.account.id);",
+        )
+        _assert_contains(
+            "record delete guarded context helper",
+            content,
+            "function guardedSelectedRecordDeleteContext()",
+        )
+        _assert_contains(
+            "record delete guarded context in-flight guard",
+            content,
+            "if (isBusy || recordDeleteInFlight.current) {\n      return null;\n    }",
+        )
+        _assert_contains(
+            "record delete guarded context selected record guard",
+            content,
+            "const record = selectedRecord;\n    if (!record) {\n      return null;\n    }",
+        )
+        _assert_contains(
+            "record delete guarded context unavailable guard",
+            content,
+            "if (!protectedBackendReady) {\n      openRecordActionUnavailable(\"deleteConfirm\", recordDeleteUnavailableStatusMessage(protectedBackendUnavailableMessage));\n      return null;\n    }",
+        )
+        _assert_contains(
+            "record delete guarded context account guard",
+            content,
+            "if (!account) {\n      return null;\n    }\n    return { account, record };",
+        )
+        _assert_contains(
+            "record delete guarded context binding",
+            content,
+            "const deleteContext = guardedSelectedRecordDeleteContext();\n    if (!deleteContext) {\n      return;\n    }",
         )
         _assert_contains(
             "record delete success result helper fields",
