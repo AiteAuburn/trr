@@ -22,6 +22,7 @@ SETTINGS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "settingsChecklist.tsx"
 SETTINGS_ROW_LIST_PATH = REPO_ROOT / "mobile" / "settingsRowList.tsx"
 RECORD_RESULT_DESTINATION_GRID_PATH = REPO_ROOT / "mobile" / "recordResultDestinationGrid.tsx"
 MENU_DESTINATION_GRID_PATH = REPO_ROOT / "mobile" / "menuDestinationGrid.tsx"
+VISUAL_SMOKE_ROUTE_JUMP_GRID_PATH = REPO_ROOT / "mobile" / "visualSmokeRouteJumpGrid.tsx"
 SUBSCRIPTION_CHECKLIST_PATH = REPO_ROOT / "mobile" / "subscriptionChecklist.tsx"
 SUBSCRIPTION_COMPARISON_LIST_PATH = REPO_ROOT / "mobile" / "subscriptionComparisonList.tsx"
 PREVIEW_STATUS_LIST_PATH = REPO_ROOT / "mobile" / "previewStatusList.tsx"
@@ -1427,6 +1428,7 @@ def main() -> int:
     settings_row_list_content = SETTINGS_ROW_LIST_PATH.read_text(encoding="utf-8")
     record_result_destination_grid_content = RECORD_RESULT_DESTINATION_GRID_PATH.read_text(encoding="utf-8")
     menu_destination_grid_content = MENU_DESTINATION_GRID_PATH.read_text(encoding="utf-8")
+    visual_smoke_route_jump_grid_content = VISUAL_SMOKE_ROUTE_JUMP_GRID_PATH.read_text(encoding="utf-8")
     subscription_checklist_content = SUBSCRIPTION_CHECKLIST_PATH.read_text(encoding="utf-8")
     subscription_comparison_list_content = SUBSCRIPTION_COMPARISON_LIST_PATH.read_text(encoding="utf-8")
     preview_status_list_content = PREVIEW_STATUS_LIST_PATH.read_text(encoding="utf-8")
@@ -7419,42 +7421,44 @@ def main() -> int:
             content,
             "const display = visualSmokeBootIgnoredDisplayMessages();",
         )
-        _assert_contains(
-            "visual smoke route press wrapper",
-            content,
-            "function pressVisualSmokeRoute(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>)",
-        )
-        _assert_contains(
-            "visual smoke route target helper",
-            content,
-            "function visualSmokeRouteTarget(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>)",
-        )
-        _assert_contains(
-            "visual smoke route target helper fields",
-            content,
-            "return item.target;",
-        )
         for label, marker in (
-            ("visual smoke route key helper", "function visualSmokeRouteKey(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>)"),
+            ("visual smoke route jump grid component", "export function VisualSmokeRouteJumpGrid"),
+            ("visual smoke route jump item type", "export type VisualSmokeRouteJumpItem ="),
+            ("visual smoke route jump target type", "target: AppScreen;"),
+            ("visual smoke route jump items prop", "items: VisualSmokeRouteJumpItem[]"),
+            ("visual smoke route jump press prop", "onRoutePress: (target: AppScreen) => void"),
+            ("visual smoke route target helper", "function visualSmokeRouteTarget(item: VisualSmokeRouteJumpItem)"),
+            ("visual smoke route target helper fields", "return item.target;"),
+            ("visual smoke route key helper", "function visualSmokeRouteKey(item: VisualSmokeRouteJumpItem)"),
             ("visual smoke route key helper fields", "return item.target;"),
             ("visual smoke route key binding", "key={visualSmokeRouteKey(item)}"),
-            ("visual smoke route accessibility helper", "function visualSmokeRouteAccessibilityLabel(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>)"),
+            ("visual smoke route accessibility helper", "function visualSmokeRouteAccessibilityLabel(item: VisualSmokeRouteJumpItem)"),
             ("visual smoke route accessibility helper fields", "return item.accessibilityLabel;"),
             ("visual smoke route accessibility binding", "accessibilityLabel={visualSmokeRouteAccessibilityLabel(item)}"),
-            ("visual smoke route label helper", "function visualSmokeRouteLabel(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>)"),
+            ("visual smoke route label helper", "function visualSmokeRouteLabel(item: VisualSmokeRouteJumpItem)"),
             ("visual smoke route label helper fields", "return item.label;"),
             ("visual smoke route label binding", "{visualSmokeRouteLabel(item)}"),
+            ("visual smoke route jump press target binding", "onPress={() => onRoutePress(visualSmokeRouteTarget(item))}"),
+            ("visual smoke route jump button role", 'accessibilityRole="button"'),
+            ("visual smoke route jump grid style", "visualSmokeRouteGrid: {"),
+            ("visual smoke route jump chip style", "visualSmokeRouteChip: {"),
+            ("visual smoke route jump chip text style", "visualSmokeRouteChipText: {"),
         ):
-            _assert_contains(label, content, marker)
+            _assert_contains(label, visual_smoke_route_jump_grid_content, marker)
         _assert_contains(
-            "visual smoke route target helper binding",
+            "visual smoke route jump grid binding",
             content,
-            "openVisualSmokeRoute(visualSmokeRouteTarget(item));",
+            "<VisualSmokeRouteJumpGrid",
         )
         _assert_contains(
-            "visual smoke route press binding",
+            "visual smoke route jump grid items binding",
             content,
-            "onPress={() => pressVisualSmokeRoute(item)}",
+            "items={visualSmokeRouteJumpDisplayItems}",
+        )
+        _assert_contains(
+            "visual smoke route jump grid press binding",
+            content,
+            "onRoutePress={openVisualSmokeRoute}",
         )
         _assert_not_contains(
             "visual smoke direct route binding",
@@ -7466,17 +7470,11 @@ def main() -> int:
             content,
             "openVisualSmokeRoute(item.target);",
         )
-        visual_smoke_route_render_block = _match_block(
+        _assert_not_contains(
+            "direct visual smoke route jump map",
             content,
-            r"visualSmokeRouteJumpDisplayItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
-            "visual smoke route render block",
+            "visualSmokeRouteJumpDisplayItems.map((item) => (",
         )
-        for label, marker in (
-            ("direct visual smoke route key binding", "key={item.target}"),
-            ("direct visual smoke route accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
-            ("direct visual smoke route label binding", "<Text style={styles.visualSmokeRouteChipText}>{item.label}</Text>"),
-        ):
-            _assert_not_contains(label, visual_smoke_route_render_block, marker)
         _assert_contains(
             "visual smoke initial route env",
             app_runtime_config_content,
@@ -7494,7 +7492,7 @@ def main() -> int:
         )
         _assert_contains(
             "visual smoke route jump accessibility binding",
-            content,
+            visual_smoke_route_jump_grid_content,
             "accessibilityLabel={visualSmokeRouteAccessibilityLabel(item)}",
         )
         _assert_contains(

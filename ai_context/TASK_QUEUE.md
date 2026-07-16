@@ -34,6 +34,40 @@ None.
 
 ## Done
 
+### T2078: Extract visual smoke route jump grid component
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/visualSmokeRouteJumpGrid.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `VisualSmokeRouteJumpGrid` for debug-gated visual smoke route chips.
+- Moved visual smoke route target/key/accessibility/label helpers out of `App.tsx`.
+- Preserved the same debug-only visibility, route jump behavior, button role, chip styling, and spacing.
+- Kept visual smoke route opening and side-effect-free route handling in `App.tsx`.
+- Updated navigation and visual-smoke route verifier coverage for component chip bindings and direct inline-map guards.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining future modules / record detail / daily record row clusters without changing first-version scope.
+
 ### T2077: Extract menu destination grid component
 
 Status: done

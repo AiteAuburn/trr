@@ -182,7 +182,7 @@ VISUAL_SMOKE_ROUTES = {
     "menu": [
         'currentScreen === "menu"',
         "items={menuDisplayItems}",
-        "visualSmokeRouteJumpDisplayItems.map",
+        "items={visualSmokeRouteJumpDisplayItems}",
     ],
     "futureModules": [
         'currentScreen === "futureModules"',

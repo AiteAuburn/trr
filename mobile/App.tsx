@@ -282,7 +282,6 @@ import {
   previewTupleDisplayItem,
   valueLabelDisplayItem,
   valueLabelDisplayItems,
-  visualSmokeRouteJumpDisplayItem,
   visualSmokeRouteJumpDisplayItems as buildVisualSmokeRouteJumpDisplayItems
 } from "./sharedDisplayItems";
 import {
@@ -853,6 +852,7 @@ import { SubscriptionSubpageActionRow } from "./subscriptionSubpageActionRow";
 import { SubscriptionSubpageCloseButton } from "./subscriptionSubpageCloseButton";
 import { TranscriptReviewActionRow } from "./transcriptReviewActionRow";
 import { UpdateSuccessActionRow } from "./updateSuccessActionRow";
+import { VisualSmokeRouteJumpGrid } from "./visualSmokeRouteJumpGrid";
 import type {
   Account,
   AiModelOptions,
@@ -6187,26 +6187,6 @@ export default function App() {
     openScreen(target);
   }
 
-  function visualSmokeRouteTarget(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>) {
-    return item.target;
-  }
-
-  function visualSmokeRouteKey(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>) {
-    return item.target;
-  }
-
-  function visualSmokeRouteAccessibilityLabel(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>) {
-    return item.accessibilityLabel;
-  }
-
-  function visualSmokeRouteLabel(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>) {
-    return item.label;
-  }
-
-  function pressVisualSmokeRoute(item: ReturnType<typeof visualSmokeRouteJumpDisplayItem>) {
-    openVisualSmokeRoute(visualSmokeRouteTarget(item));
-  }
-
   useEffect(() => {
     if (!enableDebugTools || !allowMobileDevAuth) {
       return undefined;
@@ -10948,19 +10928,10 @@ export default function App() {
                 <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.devOnly}</Text>
                 <Text style={styles.label}>{auxiliaryDisplayLabels.visualSmokeRoutes}</Text>
                 <Text style={styles.evidence}>{auxiliaryDisplayLabels.visualSmokeRouteCopy}</Text>
-                <View style={styles.visualSmokeRouteGrid}>
-                  {visualSmokeRouteJumpDisplayItems.map((item) => (
-                    <Pressable
-                      key={visualSmokeRouteKey(item)}
-                      accessibilityLabel={visualSmokeRouteAccessibilityLabel(item)}
-                      accessibilityRole="button"
-                      style={styles.visualSmokeRouteChip}
-                      onPress={() => pressVisualSmokeRoute(item)}
-                    >
-                      <Text style={styles.visualSmokeRouteChipText}>{visualSmokeRouteLabel(item)}</Text>
-                    </Pressable>
-                  ))}
-                </View>
+                <VisualSmokeRouteJumpGrid
+                  items={visualSmokeRouteJumpDisplayItems}
+                  onRoutePress={openVisualSmokeRoute}
+                />
               </View>
             ) : null}
           </View>
