@@ -827,6 +827,7 @@ import { SettingsSubpageCloseButton } from "./settingsSubpageCloseButton";
 import { StoreSearchField } from "./storeSearchField";
 import { SubscriptionSubpageActionRow } from "./subscriptionSubpageActionRow";
 import { SubscriptionSubpageCloseButton } from "./subscriptionSubpageCloseButton";
+import { TranscriptReviewActionRow } from "./transcriptReviewActionRow";
 import type {
   Account,
   AiModelOptions,
@@ -10149,44 +10150,21 @@ export default function App() {
                 <HighlightBulletRow key={recordFlowChecklistItemKey(item)} text={recordFlowChecklistItemText(item)} />
               ))}
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.retryInputAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={retryTranscriptInput}
-              >
-                <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.retryInput}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.submitTranscriptParseAccessibility}
-                accessibilityRole="button"
-                accessibilityState={{
-                  disabled:
-                    Boolean(transcriptValidationError) ||
-                    isTranscriptSample ||
-                    isBusy ||
-                    !protectedBackendReady ||
-                    !parserModelReady
-                }}
-                style={[
-                  styles.primaryButton,
-                  transcriptValidationError || isTranscriptSample || isBusy || !protectedBackendReady || !parserModelReady
-                    ? styles.buttonDisabled
-                    : null
-                ]}
-                disabled={
-                  Boolean(transcriptValidationError) ||
-                  isTranscriptSample ||
-                  isBusy ||
-                  !protectedBackendReady ||
-                  !parserModelReady
-                }
-                onPress={submitTranscriptParse}
-              >
-                <Text style={styles.primaryButtonText}>{coreFlowDisplayLabels.nextOrganize}</Text>
-              </Pressable>
-            </View>
+            <TranscriptReviewActionRow
+              isSubmitDisabled={
+                Boolean(transcriptValidationError) ||
+                isTranscriptSample ||
+                isBusy ||
+                !protectedBackendReady ||
+                !parserModelReady
+              }
+              onRetryPress={retryTranscriptInput}
+              onSubmitPress={submitTranscriptParse}
+              retryAccessibilityLabel={coreFlowDisplayLabels.retryInputAccessibility}
+              retryLabel={coreFlowDisplayLabels.retryInput}
+              submitAccessibilityLabel={coreFlowDisplayLabels.submitTranscriptParseAccessibility}
+              submitLabel={coreFlowDisplayLabels.nextOrganize}
+            />
             {transcriptValidationError ? (
               <Text style={transcript.trim() ? styles.warningText : styles.evidence}>
                 {transcriptReviewValidationDisplayText}

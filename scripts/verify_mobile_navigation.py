@@ -112,6 +112,7 @@ FOOD_COMMUNITY_SEARCH_FIELD_PATH = REPO_ROOT / "mobile" / "foodCommunitySearchFi
 FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareDateTimeFields.tsx"
 FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareTextFields.tsx"
 STORE_SEARCH_FIELD_PATH = REPO_ROOT / "mobile" / "storeSearchField.tsx"
+TRANSCRIPT_REVIEW_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "transcriptReviewActionRow.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1496,6 +1497,7 @@ def main() -> int:
     )
     food_community_share_text_fields_content = FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH.read_text(encoding="utf-8")
     store_search_field_content = STORE_SEARCH_FIELD_PATH.read_text(encoding="utf-8")
+    transcript_review_action_row_content = TRANSCRIPT_REVIEW_ACTION_ROW_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -3284,7 +3286,7 @@ def main() -> int:
         _assert_contains(
             "transcript review retry binding",
             content,
-            "onPress={retryTranscriptInput}",
+            "onRetryPress={retryTranscriptInput}",
         )
         _assert_contains(
             "record manual entry handler",
@@ -5351,7 +5353,7 @@ def main() -> int:
             ("record update submit handler", "function submitRecordUpdate()"),
             ("record delete submit handler", "function submitRecordDelete()"),
             ("dev reset menu submit handler", "function resetDevelopmentDataFromMenu()"),
-            ("transcript parse submit binding", "onPress={submitTranscriptParse}"),
+            ("transcript parse submit binding", "onSubmitPress={submitTranscriptParse}"),
             ("AI save submit binding", "onPress={submitAiSaveConfirm}"),
             ("manual record create submit binding", "onSubmitPress={submitManualRecordCreate}"),
             ("record update submit binding", "onSubmitPress={submitRecordUpdate}"),
@@ -7963,6 +7965,21 @@ def main() -> int:
         ):
             _assert_contains(label, ai_save_failure_action_row_content, marker)
         for label, marker in (
+            ("transcript review action row component", "export function TranscriptReviewActionRow"),
+            ("transcript review action row retry accessibility prop", "accessibilityLabel={retryAccessibilityLabel}"),
+            ("transcript review action row submit accessibility prop", "accessibilityLabel={submitAccessibilityLabel}"),
+            ("transcript review action row submit disabled state", "accessibilityState={{ disabled: isSubmitDisabled }}"),
+            ("transcript review action row submit disabled prop", "disabled={isSubmitDisabled}"),
+            ("transcript review action row retry handler prop", "onPress={onRetryPress}"),
+            ("transcript review action row submit handler prop", "onPress={onSubmitPress}"),
+            ("transcript review action row retry label prop", "{retryLabel}"),
+            ("transcript review action row submit label prop", "{submitLabel}"),
+            ("transcript review action row shell style", "actionRow: {"),
+            ("transcript review action row primary style", "primaryButton: {"),
+            ("transcript review action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, transcript_review_action_row_content, marker)
+        for label, marker in (
             ("confirmation return edit accessibility label", 'returnEditAccessibility: boundDisplayText("返回文字修改，保留目前輸入且不重新呼叫 AI", maxDisplayDetailTextLength)'),
             ("confirmation save confirm accessibility label", 'enterSaveConfirmAccessibility: boundDisplayText("進入每日紀錄頁，不儲存也不重新呼叫 AI", maxDisplayDetailTextLength)'),
             ("confirmation return text accessibility label", 'returnTextConfirmAccessibility: boundDisplayText("回文字確認，不送 parser 或寫入資料", maxDisplayDetailTextLength)'),
@@ -7985,11 +8002,11 @@ def main() -> int:
             ("confirmation back AI accessibility binding", "backAccessibilityLabel={coreFlowDisplayLabels.backAiConfirmAccessibility}"),
             ("confirmation return save accessibility binding", "returnSaveAccessibilityLabel={coreFlowDisplayLabels.returnSaveConfirmAccessibility}"),
             ("confirmation transcript back accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.backAccessibility}"),
-            ("confirmation retry accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.retryInputAccessibility}"),
-            ("confirmation parse accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.submitTranscriptParseAccessibility}"),
+            ("confirmation retry accessibility binding", "retryAccessibilityLabel={coreFlowDisplayLabels.retryInputAccessibility}"),
+            ("confirmation parse accessibility binding", "submitAccessibilityLabel={coreFlowDisplayLabels.submitTranscriptParseAccessibility}"),
             ("confirmation manual fallback accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.switchManualAddAccessibility}"),
             ("confirmation save disabled state", "enterSaveDisabled={isBusy || !account}"),
-            ("confirmation transcript parse disabled state", "accessibilityState={{\n                  disabled:\n                    Boolean(transcriptValidationError) ||"),
+            ("confirmation transcript parse disabled state", "isSubmitDisabled={\n                Boolean(transcriptValidationError) ||"),
         ):
             _assert_contains(label, content, marker)
         _assert_contains(
