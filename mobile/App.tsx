@@ -799,6 +799,7 @@ import { RecordJsonField } from "./recordJsonField";
 import { RecordOptionField, RecordOptionRow } from "./recordOptionField";
 import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
+import { FoodCommunitySearchField } from "./foodCommunitySearchField";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
 import { FoodCommunityShareTextFields } from "./foodCommunityShareTextFields";
 import { SegmentSelector } from "./segmentSelector";
@@ -12065,15 +12066,11 @@ export default function App() {
               <Text style={styles.label}>{foodCommunityDatabaseSectionLabel()}</Text>
               <Text style={styles.evidence}>{foodCommunityDatabaseIntroCopy()}</Text>
             </View>
-            <TextInput
+            <FoodCommunitySearchField
               accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}
               value={foodCommunitySearchText}
               onChangeText={updateFoodCommunitySearchInput}
-              autoCapitalize="none"
-              autoCorrect={false}
               maxLength={maxStoreSearchTextLength}
-              style={styles.input}
-              placeholder="搜尋食物名稱"
             />
             <SegmentSelector
               options={foodCommunityCategoryDisplayOptions}

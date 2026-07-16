@@ -85,6 +85,7 @@ RECORD_EDIT_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "recordEditFooterAction
 RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.tsx"
 RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
 RECORD_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "recordTextField.tsx"
+FOOD_COMMUNITY_SEARCH_FIELD_PATH = REPO_ROOT / "mobile" / "foodCommunitySearchField.tsx"
 FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareDateTimeFields.tsx"
 FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareTextFields.tsx"
 STORE_SEARCH_FIELD_PATH = REPO_ROOT / "mobile" / "storeSearchField.tsx"
@@ -1441,6 +1442,7 @@ def main() -> int:
     record_edit_header_fields_content = RECORD_EDIT_HEADER_FIELDS_PATH.read_text(encoding="utf-8")
     record_option_field_content = RECORD_OPTION_FIELD_PATH.read_text(encoding="utf-8")
     record_text_field_content = RECORD_TEXT_FIELD_PATH.read_text(encoding="utf-8")
+    food_community_search_field_content = FOOD_COMMUNITY_SEARCH_FIELD_PATH.read_text(encoding="utf-8")
     food_community_share_date_time_fields_content = FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH.read_text(
         encoding="utf-8"
     )
@@ -2038,6 +2040,19 @@ def main() -> int:
             ("record text field multiline style", "multilineField: {"),
         ):
             _assert_contains(label, record_text_field_content, marker)
+        for label, marker in (
+            ("food community search field component", "export function FoodCommunitySearchField"),
+            ("food community search field accessibility prop", "accessibilityLabel={accessibilityLabel}"),
+            ("food community search field value prop", "value={value}"),
+            ("food community search field handler prop", "onChangeText={onChangeText}"),
+            ("food community search field max length prop", "maxLength={maxLength}"),
+            ("food community search field placeholder", 'placeholder="搜尋食物名稱"'),
+            ("food community search field normalization", 'autoCapitalize="none"'),
+            ("food community search field autocorrect", "autoCorrect={false}"),
+            ("food community search field input style", "input: {"),
+            ("food community search field min height", "minHeight: 52"),
+        ):
+            _assert_contains(label, food_community_search_field_content, marker)
         for label, marker in (
             ("food community share date time fields component", "export function FoodCommunityShareDateTimeFields"),
             ("food community share date time shared field", "<RecordTextField"),
