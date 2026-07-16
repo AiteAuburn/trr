@@ -3688,13 +3688,21 @@ export default function App() {
     occurredAt: string,
     voiceSeconds: number
   ) {
+    const modelIds = parserPreviewModelIds();
     return {
       profile_id: profileId,
       transcript: text,
-      stt_model_id: sttModelId,
-      llm_model_id: llmModelId,
+      stt_model_id: modelIds.sttModelId,
+      llm_model_id: modelIds.llmModelId,
       occurred_at: occurredAt,
       voice_seconds: voiceSeconds
+    };
+  }
+
+  function parserPreviewModelIds() {
+    return {
+      sttModelId,
+      llmModelId
     };
   }
 
