@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1830: Reuse preview edit missing draft return helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `returnFromMissingPreviewRecordEditSaveDraft()` for the preview edit save missing-draft fallback.
+- Reused the helper from `savePreviewRecordEdit()` while preserving the existing AI Review fallback, validation flow, edit payload construction, edit apply behavior, and success return behavior.
+- Updated navigation verifier coverage for the missing-draft helper internals and save-handler binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser endpoint/request semantics/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining preview edit/delete action return paths and validation/status helpers in small behavior-preserving slices.
+
 ### T1829: Reuse preview remove confirm return helpers
 
 Status: done

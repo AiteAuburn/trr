@@ -3546,6 +3546,10 @@ export default function App() {
     openPreviewActionReturnScreen();
   }
 
+  function returnFromMissingPreviewRecordEditSaveDraft() {
+    openScreen("aiReview");
+  }
+
   function returnFromMissingPreviewRecordRemoveConfirm() {
     clearPendingPreviewRemoveSelection();
     openPreviewRemoveConfirmReturnScreen();
@@ -3900,7 +3904,7 @@ export default function App() {
 
   function savePreviewRecordEdit() {
     if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {
-      openScreen("aiReview");
+      returnFromMissingPreviewRecordEditSaveDraft();
       return;
     }
     const validationError = validatePreviewRecordEdit(selectedPreviewRecord.record_type);

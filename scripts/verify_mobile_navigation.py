@@ -4139,9 +4139,14 @@ def main() -> int:
             "function returnFromPreviewRecordEditSaveSuccess()",
         )
         _assert_contains(
-            "AI candidate edit missing draft screen opener fallback",
+            "AI candidate edit missing draft return helper",
             content,
-            'if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {\n      openScreen("aiReview");\n      return;',
+            'function returnFromMissingPreviewRecordEditSaveDraft() {\n    openScreen("aiReview");',
+        )
+        _assert_contains(
+            "AI candidate edit missing draft return helper binding",
+            content,
+            "if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {\n      returnFromMissingPreviewRecordEditSaveDraft();\n      return;",
         )
         _assert_contains(
             "AI candidate edit save success screen opener binding",
