@@ -772,6 +772,7 @@ import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
 import { FieldLabel } from "./fieldLabel";
 import { DetailRow } from "./detailRow";
 import { DoctorShareActionRow } from "./doctorShareActionRow";
+import { HealthIntegrationActionRow } from "./healthIntegrationActionRow";
 import { HistoryCalendarMonthPicker } from "./historyCalendarMonthPicker";
 import { HistoryDailySummaryTable } from "./historyDailySummaryTable";
 import { HistoryIntroStatusBlocks } from "./historyIntroStatusBlocks";
@@ -12006,24 +12007,14 @@ export default function App() {
               <Text style={styles.label}>{futurePreviewDisplayLabels.externalDataBoundary}</Text>
               <Text style={styles.evidence}>{healthIntegrationExternalDataBoundaryDisplayText}</Text>
             </View>
-            <View style={styles.actionRow}>
-              <Pressable
-                accessibilityLabel={futurePreviewDisplayLabels.healthPermissionAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={showHealthIntegrationPermissionStatus}
-              >
-                <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.healthPermissionButton}</Text>
-              </Pressable>
-              <Pressable
-                accessibilityLabel={futurePreviewDisplayLabels.healthMeterAccessibility}
-                accessibilityRole="button"
-                style={styles.secondaryButton}
-                onPress={showHealthIntegrationMeterStatus}
-              >
-                <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.healthMeterButton}</Text>
-              </Pressable>
-            </View>
+            <HealthIntegrationActionRow
+              meterAccessibilityLabel={futurePreviewDisplayLabels.healthMeterAccessibility}
+              meterLabel={futurePreviewDisplayLabels.healthMeterButton}
+              onMeterPress={showHealthIntegrationMeterStatus}
+              onPermissionPress={showHealthIntegrationPermissionStatus}
+              permissionAccessibilityLabel={futurePreviewDisplayLabels.healthPermissionAccessibility}
+              permissionLabel={futurePreviewDisplayLabels.healthPermissionButton}
+            />
             {healthIntegrationActionStatus ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{futurePreviewDisplayLabels.healthStatus}</Text>

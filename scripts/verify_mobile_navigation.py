@@ -56,6 +56,7 @@ YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreviewBlock.tsx"
 DOCTOR_SHARE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "doctorShareActionRow.tsx"
+HEALTH_INTEGRATION_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "healthIntegrationActionRow.tsx"
 HISTORY_CALENDAR_MONTH_PICKER_PATH = REPO_ROOT / "mobile" / "historyCalendarMonthPicker.tsx"
 HISTORY_DAILY_RECORD_SECTION_CARD_PATH = REPO_ROOT / "mobile" / "historyDailyRecordSectionCard.tsx"
 HISTORY_DAILY_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historyDailySummaryCard.tsx"
@@ -1419,6 +1420,7 @@ def main() -> int:
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     delete_confirm_preview_block_content = DELETE_CONFIRM_PREVIEW_BLOCK_PATH.read_text(encoding="utf-8")
     doctor_share_action_row_content = DOCTOR_SHARE_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    health_integration_action_row_content = HEALTH_INTEGRATION_ACTION_ROW_PATH.read_text(encoding="utf-8")
     history_calendar_month_picker_content = HISTORY_CALENDAR_MONTH_PICKER_PATH.read_text(encoding="utf-8")
     history_daily_record_section_card_content = HISTORY_DAILY_RECORD_SECTION_CARD_PATH.read_text(encoding="utf-8")
     history_daily_summary_card_content = HISTORY_DAILY_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
@@ -1593,6 +1595,19 @@ def main() -> int:
             ("doctor share action row secondary style", "secondaryButton: {"),
         ):
             _assert_contains(label, doctor_share_action_row_content, marker)
+        for label, marker in (
+            ("health integration action row component", "export function HealthIntegrationActionRow"),
+            ("health integration action row permission accessibility prop", "accessibilityLabel={permissionAccessibilityLabel}"),
+            ("health integration action row meter accessibility prop", "accessibilityLabel={meterAccessibilityLabel}"),
+            ("health integration action row button role", 'accessibilityRole="button"'),
+            ("health integration action row permission handler prop", "onPress={onPermissionPress}"),
+            ("health integration action row meter handler prop", "onPress={onMeterPress}"),
+            ("health integration action row permission label", "{permissionLabel}"),
+            ("health integration action row meter label", "{meterLabel}"),
+            ("health integration action row shell style", "actionRow: {"),
+            ("health integration action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, health_integration_action_row_content, marker)
         for label, marker in (
             ("history calendar month picker component", "export function HistoryCalendarMonthPicker<TDay extends HistoryCalendarDayItem>({"),
             ("history calendar month picker title", "<Text style={styles.recordContent}>{title}</Text>"),
@@ -12004,8 +12019,9 @@ def main() -> int:
             ("doctor share action row binding", "<DoctorShareActionRow"),
             ("doctor share token status binding", "onTokenPress={showDoctorShareTokenStatus}"),
             ("doctor share report status binding", "onReportPress={showDoctorShareReportBoundaryStatus}"),
-            ("health integration permission status binding", "onPress={showHealthIntegrationPermissionStatus}"),
-            ("health integration meter status binding", "onPress={showHealthIntegrationMeterStatus}"),
+            ("health integration action row binding", "<HealthIntegrationActionRow"),
+            ("health integration permission status binding", "onPermissionPress={showHealthIntegrationPermissionStatus}"),
+            ("health integration meter status binding", "onMeterPress={showHealthIntegrationMeterStatus}"),
             ("community posting status binding", "onPress={showCommunityPostingStatus}"),
             ("community privacy status binding", "onPress={showCommunityPrivacyStatus}"),
             ("food community search input binding", "onChangeText={updateFoodCommunitySearchInput}"),
@@ -12022,8 +12038,10 @@ def main() -> int:
             ("doctor report accessibility binding", "reportAccessibilityLabel={futurePreviewDisplayLabels.doctorReportAccessibility}"),
             ("doctor token label binding", "tokenLabel={futurePreviewDisplayLabels.doctorTokenButton}"),
             ("doctor report label binding", "reportLabel={futurePreviewDisplayLabels.doctorReportButton}"),
-            ("health permission accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.healthPermissionAccessibility}"),
-            ("health meter accessibility binding", "accessibilityLabel={futurePreviewDisplayLabels.healthMeterAccessibility}"),
+            ("health permission accessibility binding", "permissionAccessibilityLabel={futurePreviewDisplayLabels.healthPermissionAccessibility}"),
+            ("health meter accessibility binding", "meterAccessibilityLabel={futurePreviewDisplayLabels.healthMeterAccessibility}"),
+            ("health permission label binding", "permissionLabel={futurePreviewDisplayLabels.healthPermissionButton}"),
+            ("health meter label binding", "meterLabel={futurePreviewDisplayLabels.healthMeterButton}"),
             ("community post accessibility binding", "accessibilityLabel={communityPostAccessibilityDisplayLabel}"),
             ("community privacy accessibility binding", "accessibilityLabel={communityPrivacyAccessibilityDisplayLabel}"),
             ("community privacy dynamic button binding", "{rankingOptInButtonDisplayLabel}"),
