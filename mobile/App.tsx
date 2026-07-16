@@ -8631,6 +8631,14 @@ export default function App() {
     setStatus(manualRecordCreateFailureStatusMessage(error));
   }
 
+  function buildManualRecordCreatePayload() {
+    const payload = buildPayloadFromEditFields(manualRecordType, manualRecordFields);
+    if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+      throw new Error("payload_json must be an object");
+    }
+    return payload;
+  }
+
   async function createManualRecord() {
     if (isBusy || manualCreateInFlight.current) {
       return;
@@ -8655,10 +8663,7 @@ export default function App() {
 
     startManualCreateRequest();
     try {
-      const payload = buildPayloadFromEditFields(manualRecordType, manualRecordFields);
-      if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
-        throw new Error("payload_json must be an object");
-      }
+      const payload = buildManualRecordCreatePayload();
       const created = await requestManualRecordCreate(activeProfile.id, account.id, payload);
       handleManualRecordCreateSuccess(created);
     } catch (error) {

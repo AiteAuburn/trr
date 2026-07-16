@@ -5179,6 +5179,21 @@ def main() -> int:
             "} catch (error) {\n      handleManualRecordCreateFailure(error);\n    } finally {",
         )
         _assert_contains(
+            "manual create payload helper",
+            content,
+            "function buildManualRecordCreatePayload()",
+        )
+        _assert_contains(
+            "manual create payload helper guard",
+            content,
+            "const payload = buildPayloadFromEditFields(manualRecordType, manualRecordFields);\n    if (!payload || typeof payload !== \"object\" || Array.isArray(payload)) {\n      throw new Error(\"payload_json must be an object\");\n    }\n    return payload;",
+        )
+        _assert_contains(
+            "manual create payload helper binding",
+            content,
+            "const payload = buildManualRecordCreatePayload();",
+        )
+        _assert_contains(
             "AI save failure result helper",
             content,
             "function openAiSaveFailureResult(message: string)",
