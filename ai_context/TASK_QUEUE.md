@@ -34,6 +34,35 @@ None.
 
 ## Done
 
+### T2018: Reuse native debug text field for Llama path
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused the shared `NativeDebugTextField` for the advanced/debug Llama model path input.
+- Preserved accessibility label, value, change handler, max length, disabled/editable state, disabled style, placeholder, and input normalization.
+- Completed the native debug input group migration to the shared text field shell.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining hidden/future settings inputs without changing first-version scope.
+
 ### T2017: Reuse native debug text field for audio path
 
 Status: done

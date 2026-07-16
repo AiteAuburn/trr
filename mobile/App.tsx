@@ -12749,16 +12749,12 @@ export default function App() {
                   disabled={isBusy}
                   placeholder="Audio file path"
                 />
-                <TextInput
+                <NativeDebugTextField
                   accessibilityLabel={auxiliaryDisplayLabels.llamaModelPathInputAccessibility}
                   value={llamaModelPath}
                   onChangeText={updateLlamaModelPathInput}
                   maxLength={maxNativeDebugInputLength}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  editable={!isBusy}
-                  accessibilityState={{ disabled: isBusy }}
-                  style={[styles.input, isBusy ? styles.inputDisabled : null]}
+                  disabled={isBusy}
                   placeholder="Llama GGUF model path"
                 />
                   <View style={styles.actionRow}>
