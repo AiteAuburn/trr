@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T2002: Reuse shared transcript draft input shell
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/transcriptDraftInput.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `TranscriptDraftInput` shell for core transcript draft editing.
+- Reused the shared transcript input on the Record page draft box and the Transcript Review confirmation box.
+- Preserved transcript accessibility label, value, change handler, max-length limit, multiline top-aligned behavior, caller-specific styles, and placeholders.
+- Updated navigation verifier coverage for both shared transcript draft input bindings.
+- No UI copy/navigation/parser request semantics/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining inline form field clusters in small behavior-preserving slices.
+
 ### T2001: Reuse shared date range field shell for analysis custom range
 
 Status: done

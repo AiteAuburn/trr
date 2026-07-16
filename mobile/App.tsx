@@ -796,6 +796,7 @@ import { RecordEditFooterActions } from "./recordEditFooterActions";
 import { RecordEditHeaderFields } from "./recordEditHeaderFields";
 import { RecordJsonField } from "./recordJsonField";
 import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
+import { TranscriptDraftInput } from "./transcriptDraftInput";
 import type {
   Account,
   AiModelOptions,
@@ -9699,18 +9700,14 @@ export default function App() {
                   </View>
                 </View>
               ) : null}
-              <TextInput
+              <TranscriptDraftInput
                 accessibilityLabel={auxiliaryDisplayLabels.transcriptInputAccessibility}
                 value={transcript}
                 onChangeText={updateTranscriptDraft}
                 maxLength={maxTranscriptTextLength}
-                autoCapitalize="none"
-                autoCorrect={false}
-                multiline
-                textAlignVertical="top"
-                style={[styles.input, styles.transcriptInput]}
+                inputStyle={[styles.input, styles.transcriptInput]}
                 placeholder="例如：昨天晚餐後兩小時血糖 168，晚餐吃火鍋，飯後走路 20 分鐘。"
-                />
+              />
                 <View style={styles.actionRow}>
                   <Pressable
                     accessibilityLabel={coreFlowDisplayLabels.fillSampleAccessibility}
@@ -10202,16 +10199,12 @@ export default function App() {
               </Pressable>
             </View>
             <Text style={styles.evidence}>{transcriptReviewIntroDisplayText}</Text>
-            <TextInput
+            <TranscriptDraftInput
               accessibilityLabel={auxiliaryDisplayLabels.transcriptInputAccessibility}
               value={transcript}
               onChangeText={updateTranscriptDraft}
               maxLength={maxTranscriptTextLength}
-              autoCapitalize="none"
-              autoCorrect={false}
-              multiline
-              textAlignVertical="top"
-              style={[styles.input, styles.transcriptReviewInput]}
+              inputStyle={[styles.input, styles.transcriptReviewInput]}
               placeholder="輸入或貼上血糖、飲食、運動或用藥紀錄..."
             />
             <View style={styles.inlineInfoBlock}>
