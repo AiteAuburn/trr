@@ -3617,17 +3617,18 @@ export default function App() {
   }
 
   function applyAiCandidateRemovePreviewRecords(nextRecords: PendingRecord[]) {
-    if (!applyPreviewRecords(nextRecords)) {
-      return;
-    }
-    setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));
+    applyPreviewRecordsWithStatus(nextRecords, aiCandidateRemoveResultStatusMessage(nextRecords.length));
   }
 
   function applyAiCandidateEditPreviewRecords(nextRecords: PendingRecord[]) {
+    applyPreviewRecordsWithStatus(nextRecords, aiCandidateEditSuccessStatusMessage());
+  }
+
+  function applyPreviewRecordsWithStatus(nextRecords: PendingRecord[], statusMessage: string) {
     if (!applyPreviewRecords(nextRecords)) {
       return;
     }
-    setStatus(aiCandidateEditSuccessStatusMessage());
+    setStatus(statusMessage);
   }
 
   function previewWithRecords(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[]) {
