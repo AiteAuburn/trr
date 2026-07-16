@@ -3537,6 +3537,10 @@ export default function App() {
     openScreenWithStatus(previewActionReturnScreen, statusMessage);
   }
 
+  function openPreviewRemoveConfirmReturnScreen() {
+    openPreviewActionReturnScreen();
+  }
+
   function reorganizeDailyRecordDraftAfterChange(
     nextPreview: ParsePreviewResponse,
     reason: DailyRecordReorganizationReason,
@@ -3570,11 +3574,11 @@ export default function App() {
   function confirmPreviewRecordRemove() {
     if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {
       clearPendingPreviewRemoveSelection();
-      openPreviewActionReturnScreen();
+      openPreviewRemoveConfirmReturnScreen();
       return;
     }
     removePreviewRecord(pendingPreviewRemoveIndex);
-    openPreviewActionReturnScreen();
+    openPreviewRemoveConfirmReturnScreen();
   }
 
   function updatePreviewEditField<K extends keyof RecordEditFields>(

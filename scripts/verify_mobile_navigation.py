@@ -4084,6 +4084,16 @@ def main() -> int:
             "function openPreviewActionReturnScreenWithStatus(statusMessage: string) {\n    openScreenWithStatus(previewActionReturnScreen, statusMessage);\n  }",
         )
         _assert_contains(
+            "preview remove confirm return screen helper",
+            content,
+            "function openPreviewRemoveConfirmReturnScreen()",
+        )
+        _assert_contains(
+            "preview remove confirm return screen helper binding",
+            content,
+            "function openPreviewRemoveConfirmReturnScreen() {\n    openPreviewActionReturnScreen();",
+        )
+        _assert_contains(
             "AI candidate edit save success field clear helper binding",
             content,
             "clearPreviewEditActionState();",
@@ -4101,12 +4111,12 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove confirm missing pending screen opener fallback",
             content,
-            "if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {\n      clearPendingPreviewRemoveSelection();\n      openPreviewActionReturnScreen();\n      return;",
+            "if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {\n      clearPendingPreviewRemoveSelection();\n      openPreviewRemoveConfirmReturnScreen();\n      return;",
         )
         _assert_contains(
             "AI candidate remove confirm success screen opener binding",
             content,
-            "removePreviewRecord(pendingPreviewRemoveIndex);\n    openPreviewActionReturnScreen();",
+            "removePreviewRecord(pendingPreviewRemoveIndex);\n    openPreviewRemoveConfirmReturnScreen();",
         )
         _assert_contains(
             "AI candidate remove action clear helper binding",
