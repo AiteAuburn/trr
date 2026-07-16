@@ -15,6 +15,39 @@
 
 ## 2026-07-16
 
+### T1984 reuse manual record text field shell
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/manualRecordTextField.tsx`
+- `mobile/manualRecordExerciseFields.tsx`
+- `mobile/manualRecordMedicationFields.tsx`
+- `mobile/manualRecordNoteFields.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `ManualRecordTextField` shell for manual record label/input rows.
+- Reused the shared shell from exercise, medication, and note fields while preserving labels, icons, accessibility labels, values, change handlers, max-length limits, placeholders, numeric keyboard behavior, and multiline note tag styling.
+- Updated navigation verifier coverage for the shared text field contract and the leaf field prop bindings.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing manual record subcomponent boundaries in small behavior-preserving slices.
+
 ### T1983 reuse manual glucose option render helpers
 
 類型：mobile / refactor / verifier / docs

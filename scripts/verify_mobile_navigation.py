@@ -75,6 +75,7 @@ MANUAL_RECORD_HEADER_INTRO_PATH = REPO_ROOT / "mobile" / "manualRecordHeaderIntr
 MANUAL_RECORD_MEAL_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordMealFields.tsx"
 MANUAL_RECORD_MEDICATION_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordMedicationFields.tsx"
 MANUAL_RECORD_NOTE_FIELDS_PATH = REPO_ROOT / "mobile" / "manualRecordNoteFields.tsx"
+MANUAL_RECORD_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "manualRecordTextField.tsx"
 MANUAL_RECORD_TYPE_SELECTOR_PATH = REPO_ROOT / "mobile" / "manualRecordTypeSelector.tsx"
 METRIC_CARD_PATH = REPO_ROOT / "mobile" / "metricCard.tsx"
 RECORD_DETAIL_ACTION_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailActionPanel.tsx"
@@ -1424,6 +1425,7 @@ def main() -> int:
     manual_record_meal_fields_content = MANUAL_RECORD_MEAL_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_medication_fields_content = MANUAL_RECORD_MEDICATION_FIELDS_PATH.read_text(encoding="utf-8")
     manual_record_note_fields_content = MANUAL_RECORD_NOTE_FIELDS_PATH.read_text(encoding="utf-8")
+    manual_record_text_field_content = MANUAL_RECORD_TEXT_FIELD_PATH.read_text(encoding="utf-8")
     manual_record_type_selector_content = MANUAL_RECORD_TYPE_SELECTOR_PATH.read_text(encoding="utf-8")
     metric_card_content = METRIC_CARD_PATH.read_text(encoding="utf-8")
     record_detail_action_panel_content = RECORD_DETAIL_ACTION_PANEL_PATH.read_text(encoding="utf-8")
@@ -1986,58 +1988,82 @@ def main() -> int:
         ):
             _assert_contains(label, manual_record_meal_fields_content, marker)
         for label, marker in (
+            ("manual record text field component", "export function ManualRecordTextField({"),
+            ("manual record text field label", "<FieldLabel icon={icon} label={label} />"),
+            ("manual record text field accessibility", "accessibilityLabel={accessibilityLabel}"),
+            ("manual record text field value", "value={value}"),
+            ("manual record text field handler", "onChangeText={onChangeText}"),
+            ("manual record text field keyboard", "keyboardType={keyboardType}"),
+            ("manual record text field max length", "maxLength={maxLength}"),
+            ("manual record text field normalization", 'autoCapitalize="none"'),
+            ("manual record text field autocorrect", "autoCorrect={false}"),
+            ("manual record text field multiline", "multiline={multiline}"),
+            ("manual record text field text align", "textAlignVertical={textAlignVertical}"),
+            ("manual record text field style", "style={inputStyle ?? manualRecordTextFieldStyles.input}"),
+            ("manual record text field placeholder", "placeholder={placeholder}"),
+            ("manual record text field input style", "input: {"),
+            ("manual record text field multiline style", "multilineField: {"),
+        ):
+            _assert_contains(label, manual_record_text_field_content, marker)
+        for label, marker in (
             ("manual record exercise fields component", "export function ManualRecordExerciseFields"),
-            ("manual record exercise activity label", '<FieldLabel icon={"🚶"} label={"運動"} />'),
+            ("manual record exercise shared field", "<ManualRecordTextField"),
+            ("manual record exercise activity label", 'label={"運動"}'),
+            ("manual record exercise activity icon", 'icon={"🚶"}'),
             ("manual record exercise activity accessibility", "accessibilityLabel={activityAccessibilityLabel}"),
             ("manual record exercise activity value", "value={activity}"),
             ("manual record exercise activity handler", "onChangeText={onActivityChange}"),
             ("manual record exercise activity max length", "maxLength={activityMaxLength}"),
             ("manual record exercise activity placeholder", 'placeholder="走路"'),
-            ("manual record exercise minutes label", '<FieldLabel icon={"⏱"} label={"時長（分鐘）"} />'),
+            ("manual record exercise minutes label", 'label={"時長（分鐘）"}'),
+            ("manual record exercise minutes icon", 'icon={"⏱"}'),
             ("manual record exercise minutes accessibility", "accessibilityLabel={minutesAccessibilityLabel}"),
             ("manual record exercise minutes value", "value={minutes}"),
             ("manual record exercise minutes handler", "onChangeText={onMinutesChange}"),
             ("manual record exercise minutes keyboard", 'keyboardType="numeric"'),
             ("manual record exercise minutes max length", "maxLength={minutesMaxLength}"),
             ("manual record exercise minutes placeholder", 'placeholder="20"'),
-            ("manual record exercise input style", "input: {"),
         ):
             _assert_contains(label, manual_record_exercise_fields_content, marker)
         for label, marker in (
             ("manual record medication fields component", "export function ManualRecordMedicationFields"),
-            ("manual record medication name label", '<FieldLabel icon={"💊"} label={"用藥"} />'),
+            ("manual record medication shared field", "<ManualRecordTextField"),
+            ("manual record medication name label", 'label={"用藥"}'),
+            ("manual record medication name icon", 'icon={"💊"}'),
             ("manual record medication name accessibility", "accessibilityLabel={nameAccessibilityLabel}"),
             ("manual record medication name value", "value={name}"),
             ("manual record medication name handler", "onChangeText={onNameChange}"),
             ("manual record medication name max length", "maxLength={nameMaxLength}"),
             ("manual record medication name placeholder", 'placeholder="藥名或胰島素描述"'),
-            ("manual record medication dose label", '<FieldLabel icon={"▣"} label={"劑量"} />'),
+            ("manual record medication dose label", 'label={"劑量"}'),
+            ("manual record medication dose icon", 'icon={"▣"}'),
             ("manual record medication dose accessibility", "accessibilityLabel={doseAccessibilityLabel}"),
             ("manual record medication dose value", "value={dose}"),
             ("manual record medication dose handler", "onChangeText={onDoseChange}"),
             ("manual record medication dose max length", "maxLength={doseMaxLength}"),
             ("manual record medication dose placeholder", 'placeholder="例如：1 顆、8u"'),
-            ("manual record medication input style", "input: {"),
         ):
             _assert_contains(label, manual_record_medication_fields_content, marker)
         for label, marker in (
             ("manual record note fields component", "export function ManualRecordNoteFields"),
-            ("manual record note kind label", '<FieldLabel icon={"📝"} label={"備註類型"} />'),
+            ("manual record note shared field", "<ManualRecordTextField"),
+            ("manual record note kind label", 'label={"備註類型"}'),
+            ("manual record note kind icon", 'icon={"📝"}'),
             ("manual record note kind accessibility", "accessibilityLabel={kindAccessibilityLabel}"),
             ("manual record note kind value", "value={kind}"),
             ("manual record note kind handler", "onChangeText={onKindChange}"),
             ("manual record note kind max length", "maxLength={kindMaxLength}"),
             ("manual record note kind placeholder", 'placeholder="symptom"'),
-            ("manual record note tags label", '<FieldLabel icon={"#"} label={"標籤"} />'),
+            ("manual record note tags label", 'label={"標籤"}'),
+            ("manual record note tags icon", 'icon={"#"}'),
             ("manual record note tags accessibility", "accessibilityLabel={tagsAccessibilityLabel}"),
             ("manual record note tags value", "value={tags}"),
             ("manual record note tags handler", "onChangeText={onTagsChange}"),
             ("manual record note tags max length", "maxLength={tagsMaxLength}"),
             ("manual record note tags multiline", "multiline"),
             ("manual record note tags text align", 'textAlignVertical="top"'),
+            ("manual record note tags input style", "inputStyle={[manualRecordTextFieldStyles.input, manualRecordTextFieldStyles.multilineField]}"),
             ("manual record note tags placeholder", 'placeholder="頭暈、疲倦"'),
-            ("manual record note input style", "input: {"),
-            ("manual record note multiline style", "multilineField: {"),
         ):
             _assert_contains(label, manual_record_note_fields_content, marker)
         for label, marker in (

@@ -1,6 +1,4 @@
-import { StyleSheet, TextInput, View } from "react-native";
-
-import { FieldLabel } from "./fieldLabel";
+import { ManualRecordTextField } from "./manualRecordTextField";
 
 type ManualRecordExerciseFieldsProps = {
   activity: string;
@@ -25,49 +23,25 @@ export function ManualRecordExerciseFields({
 }: ManualRecordExerciseFieldsProps) {
   return (
     <>
-      <View style={styles.formField}>
-        <FieldLabel icon={"🚶"} label={"運動"} />
-        <TextInput
-          accessibilityLabel={activityAccessibilityLabel}
-          value={activity}
-          onChangeText={onActivityChange}
-          maxLength={activityMaxLength}
-          autoCapitalize="none"
-          autoCorrect={false}
-          style={styles.input}
-          placeholder="走路"
-        />
-      </View>
-      <View style={styles.formField}>
-        <FieldLabel icon={"⏱"} label={"時長（分鐘）"} />
-        <TextInput
-          accessibilityLabel={minutesAccessibilityLabel}
-          value={minutes}
-          onChangeText={onMinutesChange}
-          keyboardType="numeric"
-          maxLength={minutesMaxLength}
-          autoCapitalize="none"
-          autoCorrect={false}
-          style={styles.input}
-          placeholder="20"
-        />
-      </View>
+      <ManualRecordTextField
+        icon={"🚶"}
+        label={"運動"}
+        accessibilityLabel={activityAccessibilityLabel}
+        value={activity}
+        onChangeText={onActivityChange}
+        maxLength={activityMaxLength}
+        placeholder="走路"
+      />
+      <ManualRecordTextField
+        icon={"⏱"}
+        label={"時長（分鐘）"}
+        accessibilityLabel={minutesAccessibilityLabel}
+        value={minutes}
+        onChangeText={onMinutesChange}
+        keyboardType="numeric"
+        maxLength={minutesMaxLength}
+        placeholder="20"
+      />
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  formField: {
-    gap: 8
-  },
-  input: {
-    backgroundColor: "#ffffff",
-    borderColor: "#E3E8E5",
-    borderRadius: 18,
-    borderWidth: 1,
-    color: "#1E1E1E",
-    fontSize: 16,
-    paddingHorizontal: 14,
-    paddingVertical: 12
-  }
-});

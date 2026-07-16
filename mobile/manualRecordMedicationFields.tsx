@@ -1,6 +1,4 @@
-import { StyleSheet, TextInput, View } from "react-native";
-
-import { FieldLabel } from "./fieldLabel";
+import { ManualRecordTextField } from "./manualRecordTextField";
 
 type ManualRecordMedicationFieldsProps = {
   dose: string;
@@ -25,48 +23,24 @@ export function ManualRecordMedicationFields({
 }: ManualRecordMedicationFieldsProps) {
   return (
     <>
-      <View style={styles.formField}>
-        <FieldLabel icon={"💊"} label={"用藥"} />
-        <TextInput
-          accessibilityLabel={nameAccessibilityLabel}
-          value={name}
-          onChangeText={onNameChange}
-          maxLength={nameMaxLength}
-          autoCapitalize="none"
-          autoCorrect={false}
-          style={styles.input}
-          placeholder="藥名或胰島素描述"
-        />
-      </View>
-      <View style={styles.formField}>
-        <FieldLabel icon={"▣"} label={"劑量"} />
-        <TextInput
-          accessibilityLabel={doseAccessibilityLabel}
-          value={dose}
-          onChangeText={onDoseChange}
-          maxLength={doseMaxLength}
-          autoCapitalize="none"
-          autoCorrect={false}
-          style={styles.input}
-          placeholder="例如：1 顆、8u"
-        />
-      </View>
+      <ManualRecordTextField
+        icon={"💊"}
+        label={"用藥"}
+        accessibilityLabel={nameAccessibilityLabel}
+        value={name}
+        onChangeText={onNameChange}
+        maxLength={nameMaxLength}
+        placeholder="藥名或胰島素描述"
+      />
+      <ManualRecordTextField
+        icon={"▣"}
+        label={"劑量"}
+        accessibilityLabel={doseAccessibilityLabel}
+        value={dose}
+        onChangeText={onDoseChange}
+        maxLength={doseMaxLength}
+        placeholder="例如：1 顆、8u"
+      />
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  formField: {
-    gap: 8
-  },
-  input: {
-    backgroundColor: "#ffffff",
-    borderColor: "#E3E8E5",
-    borderRadius: 18,
-    borderWidth: 1,
-    color: "#1E1E1E",
-    fontSize: 16,
-    paddingHorizontal: 14,
-    paddingVertical: 12
-  }
-});
