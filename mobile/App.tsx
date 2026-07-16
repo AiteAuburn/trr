@@ -3623,6 +3623,11 @@ export default function App() {
     setStatus(message);
   }
 
+  function startParserPreviewRequest() {
+    parsePreviewInFlight.current = true;
+    setIsBusy(true);
+  }
+
   function finishParserPreviewRequest() {
     parsePreviewInFlight.current = false;
     setIsBusy(false);
@@ -7363,8 +7368,7 @@ export default function App() {
       return;
     }
 
-    parsePreviewInFlight.current = true;
-    setIsBusy(true);
+    startParserPreviewRequest();
     const existingDailyPreview = preview;
     clearParserPreviewState();
     setStatus(parserProgressStatusMessage());
