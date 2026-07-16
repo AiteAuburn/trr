@@ -12733,16 +12733,12 @@ export default function App() {
                     {downloadedModelRowLabel(model)}
                   </Text>
                 ))}
-                <TextInput
+                <NativeDebugTextField
                   accessibilityLabel={auxiliaryDisplayLabels.whisperModelPathInputAccessibility}
                   value={whisperModelPath}
                   onChangeText={updateWhisperModelPathInput}
                   maxLength={maxNativeDebugInputLength}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  editable={!isBusy}
-                  accessibilityState={{ disabled: isBusy }}
-                  style={[styles.input, isBusy ? styles.inputDisabled : null]}
+                  disabled={isBusy}
                   placeholder="Whisper model path"
                 />
                 <TextInput
