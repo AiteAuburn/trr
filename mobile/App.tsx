@@ -8289,11 +8289,14 @@ export default function App() {
     await startAndCompleteMoreRecordSyncRequest(syncContext);
   }
 
-  function seedRecordEditStateFromRecord(record: RecordItem) {
-    setRecordEditFields(recordPayloadToEditFields(record));
-    const dateTime = localDateTimeInputs(record.occurred_at);
+  function setRecordEditDateTimeInputs(dateTime: { date: string; time: string }) {
     setRecordEditDate(dateTime.date);
     setRecordEditTime(dateTime.time);
+  }
+
+  function seedRecordEditStateFromRecord(record: RecordItem) {
+    setRecordEditFields(recordPayloadToEditFields(record));
+    setRecordEditDateTimeInputs(localDateTimeInputs(record.occurred_at));
   }
 
   function selectRecordForResult(record: RecordItem) {
@@ -8333,9 +8336,7 @@ export default function App() {
 
   function seedEmptyRecordEditStateForNow() {
     setRecordEditFields(emptyRecordEditFields());
-    const nowInputs = localDateTimeInputs(new Date());
-    setRecordEditDate(nowInputs.date);
-    setRecordEditTime(nowInputs.time);
+    setRecordEditDateTimeInputs(localDateTimeInputs(new Date()));
   }
 
   function openRecordDetailScreen(record: RecordItem, returnScreen: AppScreen) {

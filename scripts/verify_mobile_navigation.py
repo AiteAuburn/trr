@@ -4969,9 +4969,24 @@ def main() -> int:
             "function seedRecordEditStateFromRecord(record: RecordItem)",
         )
         _assert_contains(
+            "record edit date time inputs helper",
+            content,
+            "function setRecordEditDateTimeInputs(dateTime: { date: string; time: string })",
+        )
+        _assert_contains(
+            "record edit date time inputs helper fields",
+            content,
+            "setRecordEditDate(dateTime.date);\n    setRecordEditTime(dateTime.time);",
+        )
+        _assert_contains(
             "record edit seed from record fields",
             content,
             "setRecordEditFields(recordPayloadToEditFields(record));",
+        )
+        _assert_contains(
+            "record edit seed from record date time binding",
+            content,
+            "setRecordEditDateTimeInputs(localDateTimeInputs(record.occurred_at));",
         )
         _assert_contains(
             "record result select helper",
@@ -5662,6 +5677,11 @@ def main() -> int:
             "record edit seed empty now helper",
             content,
             "function seedEmptyRecordEditStateForNow()",
+        )
+        _assert_contains(
+            "record edit seed empty now date time binding",
+            content,
+            "setRecordEditDateTimeInputs(localDateTimeInputs(new Date()));",
         )
         _assert_contains(
             "record edit open seed helper binding",
