@@ -8834,7 +8834,15 @@ export default function App() {
       return;
     }
 
-    await startAndCompleteManualRecordCreateRequest(createContext.activeProfile.id, createContext.account.id);
+    const createArgs = manualRecordCreateRequestArgs(createContext);
+    await startAndCompleteManualRecordCreateRequest(createArgs.profileId, createArgs.accountId);
+  }
+
+  function manualRecordCreateRequestArgs(createContext: NonNullable<ReturnType<typeof guardedManualRecordCreateContext>>) {
+    return {
+      accountId: createContext.account.id,
+      profileId: createContext.activeProfile.id
+    };
   }
 
   async function refreshDownloadedModels(showStatus = false) {

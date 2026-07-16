@@ -5361,7 +5361,17 @@ def main() -> int:
         _assert_contains(
             "manual create start and complete helper binding",
             content,
-            "await startAndCompleteManualRecordCreateRequest(createContext.activeProfile.id, createContext.account.id);",
+            "const createArgs = manualRecordCreateRequestArgs(createContext);\n    await startAndCompleteManualRecordCreateRequest(createArgs.profileId, createArgs.accountId);",
+        )
+        _assert_contains(
+            "manual create request args helper",
+            content,
+            "function manualRecordCreateRequestArgs(createContext: NonNullable<ReturnType<typeof guardedManualRecordCreateContext>>)",
+        )
+        _assert_contains(
+            "manual create request args helper fields",
+            content,
+            "return {\n      accountId: createContext.account.id,\n      profileId: createContext.activeProfile.id\n    };",
         )
         _assert_contains(
             "manual create guarded context helper",
