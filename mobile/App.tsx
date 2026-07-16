@@ -793,6 +793,7 @@ import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
 import { RecordEditFooterActions } from "./recordEditFooterActions";
 import { RecordEditHeaderFields } from "./recordEditHeaderFields";
+import { RecordJsonField } from "./recordJsonField";
 import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 import type {
   Account,
@@ -10510,20 +10511,13 @@ export default function App() {
             {!["glucose", "meal", "exercise", "medication", "note"].includes(
               selectedPreviewRecord.record_type
             ) ? (
-              <>
-                <FieldLabel icon={"{}"} label={"payload_json"} />
-                <TextInput
-                  accessibilityLabel={auxiliaryDisplayLabels.fallbackJsonInputAccessibility}
-                  value={recordEditFieldValue(previewEditFields, "fallbackJson")}
-                  onChangeText={updatePreviewEditFallbackJson}
-                  maxLength={recordEditFieldMaxLength("fallbackJson")}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  multiline
-                  textAlignVertical="top"
-                  style={[styles.input, styles.jsonInput]}
-                />
-              </>
+              <RecordJsonField
+                accessibilityLabel={auxiliaryDisplayLabels.fallbackJsonInputAccessibility}
+                value={recordEditFieldValue(previewEditFields, "fallbackJson")}
+                onChangeText={updatePreviewEditFallbackJson}
+                maxLength={recordEditFieldMaxLength("fallbackJson")}
+                inputStyle={[styles.input, styles.jsonInput]}
+              />
             ) : null}
             <View style={styles.actionRow}>
               <Pressable
@@ -11352,20 +11346,13 @@ export default function App() {
             {!["glucose", "meal", "exercise", "medication", "note"].includes(
               selectedRecord.record_type
             ) ? (
-              <>
-                <FieldLabel icon={"{}"} label={"payload_json"} />
-                <TextInput
-                  accessibilityLabel={auxiliaryDisplayLabels.fallbackJsonInputAccessibility}
-                  value={recordEditFieldValue(recordEditFields, "fallbackJson")}
-                  onChangeText={updateRecordEditFallbackJson}
-                  maxLength={recordEditFieldMaxLength("fallbackJson")}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  multiline
-                  textAlignVertical="top"
-                  style={[styles.input, styles.jsonInput]}
-                />
-              </>
+              <RecordJsonField
+                accessibilityLabel={auxiliaryDisplayLabels.fallbackJsonInputAccessibility}
+                value={recordEditFieldValue(recordEditFields, "fallbackJson")}
+                onChangeText={updateRecordEditFallbackJson}
+                maxLength={recordEditFieldMaxLength("fallbackJson")}
+                inputStyle={[styles.input, styles.jsonInput]}
+              />
             ) : null}
             <RecordEditFooterActions
               cancelAccessibilityLabel={coreFlowDisplayLabels.recordEditReturnAccessibility}

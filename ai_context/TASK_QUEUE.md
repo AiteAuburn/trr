@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T2000: Reuse shared JSON fallback field for record edit screens
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/recordJsonField.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `RecordJsonField` shell for fallback `payload_json` editing without adding a wrapper view, preserving the existing sibling layout behavior.
+- Reused the shared JSON field in Preview Edit and Record Edit fallback record-type branches.
+- Preserved fallback JSON accessibility label, value helpers, change handlers, max-length helpers, multiline top-aligned behavior, and existing JSON input styling.
+- Updated navigation verifier coverage for the shared fallback JSON field bindings.
+- No UI copy/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining screen field clusters in small behavior-preserving slices.
+
 ### T1999: Reuse record edit header shell for preview edit header
 
 Status: done
