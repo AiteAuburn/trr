@@ -136,7 +136,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "subscriptionManagement": [
         'currentScreen === "subscriptionManagement"',
-        "subscriptionManagementDisplayRows.map",
+        "rows={subscriptionManagementDisplayRows}",
         "items={subscriptionManagementReadinessChecklistItems}",
     ],
     "membershipStatus": [
@@ -166,13 +166,13 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "reminderSettings": [
         'currentScreen === "reminderSettings"',
-        "reminderPreviewDisplayItems.map",
+        "rows={reminderPreviewDisplayItems}",
         "items={reminderReadinessChecklistItems}",
     ],
     "privacySettings": [
         'currentScreen === "privacySettings"',
         "rows={privacyBoundaryRows}",
-        "privacyControlDisplayRows.map",
+        "rows={privacyControlDisplayRows}",
     ],
     "tutorial": [
         'currentScreen === "tutorial"',

@@ -21,6 +21,7 @@ SETTINGS_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "settingsBoundaryGrid.tsx"
 SETTINGS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "settingsChecklist.tsx"
 SUBSCRIPTION_CHECKLIST_PATH = REPO_ROOT / "mobile" / "subscriptionChecklist.tsx"
 SUBSCRIPTION_COMPARISON_LIST_PATH = REPO_ROOT / "mobile" / "subscriptionComparisonList.tsx"
+PREVIEW_STATUS_LIST_PATH = REPO_ROOT / "mobile" / "previewStatusList.tsx"
 FUTURE_READINESS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "futureReadinessChecklist.tsx"
 FUTURE_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "futureBoundaryGrid.tsx"
 COMMERCE_READINESS_CHECKLIST_PATH = REPO_ROOT / "mobile" / "commerceReadinessChecklist.tsx"
@@ -1422,6 +1423,7 @@ def main() -> int:
     settings_checklist_content = SETTINGS_CHECKLIST_PATH.read_text(encoding="utf-8")
     subscription_checklist_content = SUBSCRIPTION_CHECKLIST_PATH.read_text(encoding="utf-8")
     subscription_comparison_list_content = SUBSCRIPTION_COMPARISON_LIST_PATH.read_text(encoding="utf-8")
+    preview_status_list_content = PREVIEW_STATUS_LIST_PATH.read_text(encoding="utf-8")
     future_readiness_checklist_content = FUTURE_READINESS_CHECKLIST_PATH.read_text(encoding="utf-8")
     future_boundary_grid_content = FUTURE_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
     commerce_readiness_checklist_content = COMMERCE_READINESS_CHECKLIST_PATH.read_text(encoding="utf-8")
@@ -11121,39 +11123,22 @@ def main() -> int:
             "{settingsDisplayRowHelperText(row)}",
         )
         for label, marker in (
-            ("preview status row key helper", "function previewStatusRowKey(row: { title: string })"),
-            ("preview status row key helper fields", "return row.title;"),
-            ("preview status row accessibility helper", "function previewStatusRowAccessibilityLabel(row: { accessibilityLabel: string })"),
-            ("preview status row accessibility helper fields", "return row.accessibilityLabel;"),
-            ("preview status row icon helper", "function previewStatusRowIcon(row: { icon: string })"),
-            ("preview status row icon helper fields", "return row.icon;"),
-            ("preview status row title helper", "function previewStatusRowTitle(row: { title: string })"),
-            ("preview status row copy helper", "function previewStatusRowCopy(row: { copy: string })"),
-            ("preview status row copy helper fields", "return row.copy;"),
-            ("preview status row status helper", "function previewStatusRowStatusLabel(row: { statusLabel: string })"),
-            ("preview status row status helper fields", "return row.statusLabel;"),
-            ("preview timed row time helper", "function previewTimedRowTime(row: { time: string })"),
-            ("preview timed row time helper fields", "return row.time;"),
-            ("subscription management preview status row key binding", "subscriptionManagementDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
-            ("privacy control preview status row key binding", "privacyControlDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
+            ("subscription management preview status list binding", "rows={subscriptionManagementDisplayRows}"),
+            ("privacy control preview status list binding", "rows={privacyControlDisplayRows}"),
             ("production auth readiness list binding", "<ProductionAuthReadinessList"),
             ("production auth readiness list items binding", "items={productionAuthReadinessDisplayRows}"),
             ("session management preview list key boundary", "<SessionManagementPreviewList"),
             ("auth provider preview list key boundary", "<AuthProviderPreviewList"),
-            ("reminder preview status row key binding", "reminderPreviewDisplayItems.map((item) => (\n                <View key={previewStatusRowKey(item)}"),
+            ("reminder preview status list binding", "rows={reminderPreviewDisplayItems}"),
+            ("reminder preview status icon fallback binding", 'iconFallback="鈴"'),
             ("auth session display list key boundary", "<AuthSessionDisplayList"),
             ("session management preview list items binding", "items={sessionManagementDisplayItems}"),
-            ("preview status row icon binding", "{previewStatusRowIcon(row)}"),
-            ("preview status row title binding", "{previewStatusRowTitle(row)}"),
-            ("preview status row copy binding", "{previewStatusRowCopy(row)}"),
-            ("preview status row status binding", "{previewStatusRowStatusLabel(row)}"),
             ("auth provider preview list binding", "<AuthProviderPreviewList"),
             ("auth provider preview list disabled binding", "disabled={isAuthOperationInFlight}"),
             ("auth provider preview list items binding", "items={authProviderDisplayItems}"),
             ("auth provider preview list handler binding", "onProviderPress={pressAuthProviderPreview}"),
             ("session management preview list handler binding", "onSessionPress={pressAuthSessionManagementPreview}"),
             ("auth session display list items binding", "items={authSessionDisplayItems}"),
-            ("reminder preview status row time binding", "{previewTimedRowTime(item)}"),
             ("settings checklist binding", "<SettingsChecklist"),
             ("auth boundary settings checklist items binding", "items={authBoundaryChecklistItems}"),
             ("profile readiness settings checklist items binding", "items={profileReadinessChecklistItems}"),
@@ -11189,6 +11174,37 @@ def main() -> int:
             ("detailed report notes items binding", "items={detailedReportNoteItems}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("preview status list component", "export function PreviewStatusList"),
+            ("preview status list row type", "export type PreviewStatusRow ="),
+            ("preview status list rows prop", "rows: PreviewStatusRow[]"),
+            ("preview status list icon fallback prop", 'iconFallback = "•"'),
+            ("preview status row key helper", "function previewStatusRowKey(row: PreviewStatusRow)"),
+            ("preview status row key helper fields", "return row.title;"),
+            ("preview status row accessibility helper", "function previewStatusRowAccessibilityLabel(row: PreviewStatusRow)"),
+            ("preview status row accessibility helper fields", "return row.accessibilityLabel;"),
+            ("preview status row accessibility binding", "accessibilityLabel={previewStatusRowAccessibilityLabel(row)}"),
+            ("preview status row icon helper", "function previewStatusRowIcon(row: PreviewStatusRow, iconFallback: string)"),
+            ("preview status row icon helper fields", "return row.icon ?? iconFallback;"),
+            ("preview status row icon binding", "{previewStatusRowIcon(row, iconFallback)}"),
+            ("preview status row title helper", "function previewStatusRowTitle(row: PreviewStatusRow)"),
+            ("preview status row copy helper", "function previewStatusRowCopy(row: PreviewStatusRow)"),
+            ("preview status row copy helper fields", "return row.copy;"),
+            ("preview status row status helper", "function previewStatusRowStatusLabel(row: PreviewStatusRow)"),
+            ("preview status row status helper fields", "return row.statusLabel;"),
+            ("preview timed row time helper", "function previewTimedRowTime(row: PreviewStatusRow)"),
+            ("preview timed row time helper fields", "return row.time;"),
+            ("preview status row key binding", "key={previewStatusRowKey(row)}"),
+            ("preview status row title binding", "{previewStatusRowTitle(row)}"),
+            ("preview status row copy binding", "{previewStatusRowCopy(row)}"),
+            ("preview status row status binding", "{previewStatusRowStatusLabel(row)}"),
+            ("preview status row time binding", "{previewTimedRowTime(row)}"),
+            ("preview status list card style", "aiReviewCard: {"),
+            ("preview status list icon style", "iconCircleSmall: {"),
+            ("preview status list content style", "timelineContent: {"),
+            ("preview status list badge style", "previewModeBadge: {"),
+        ):
+            _assert_contains(label, preview_status_list_content, marker)
         for label, marker in (
             ("subscription comparison list component", "export function SubscriptionComparisonList"),
             ("subscription comparison list row type", "export type SubscriptionComparisonRow ="),
@@ -11425,39 +11441,12 @@ def main() -> int:
             content,
             "subscriptionComparisonDisplayRows.map((row) => (",
         )
-        for block_label, pattern in (
-            (
-                "subscription management preview status rows render block",
-                r"subscriptionManagementDisplayRows\.map\(\(row\) => \(([\s\S]*?</View>\n\s*)\)\)",
-            ),
-            (
-                "privacy control preview status rows render block",
-                r"privacyControlDisplayRows\.map\(\(row\) => \(([\s\S]*?</View>\n\s*)\)\)",
-            ),
-            (
-                "reminder preview status rows render block",
-                r"reminderPreviewDisplayItems\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
-            ),
+        for label, marker in (
+            ("direct subscription management preview status map", "subscriptionManagementDisplayRows.map((row) => ("),
+            ("direct privacy control preview status map", "privacyControlDisplayRows.map((row) => ("),
+            ("direct reminder preview status map", "reminderPreviewDisplayItems.map((item) => ("),
         ):
-            preview_status_rows_render_block = _match_block(content, pattern, block_label)
-            for label, marker in (
-                ("direct preview status row key binding", "key={row.title}"),
-                ("direct preview status item key binding", "key={item.title}"),
-                ("direct preview keyed item key binding", "key={item.key}"),
-                ("direct preview status item accessibility binding", "accessibilityLabel={item.accessibilityLabel}"),
-                ("direct preview status row icon binding", "<Text>{row.icon}</Text>"),
-                ("direct preview status item icon binding", "<Text>{item.icon}</Text>"),
-                ("direct preview status row title binding", "<Text style={styles.recordContent}>{row.title}</Text>"),
-                ("direct preview status item title binding", "<Text style={styles.recordContent}>{item.title}</Text>"),
-                ("direct preview status item login title binding", "<Text style={styles.recordContent}>{item.title} 登入</Text>"),
-                ("direct preview status item time binding", "<Text style={styles.confidence}>{item.time}</Text>"),
-                ("direct preview status item last used binding", "<Text style={styles.evidence}>{item.lastUsed}</Text>"),
-                ("direct preview status row copy binding", "<Text style={styles.evidence}>{row.copy}</Text>"),
-                ("direct preview status item copy binding", "<Text style={styles.evidence}>{item.copy}</Text>"),
-                ("direct preview status row status binding", "<Text style={styles.previewModeBadge}>{row.statusLabel}</Text>"),
-                ("direct preview status item status binding", "<Text style={styles.previewModeBadge}>{item.statusLabel}</Text>"),
-            ):
-                _assert_not_contains(f"{block_label} {label}", preview_status_rows_render_block, marker)
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "settings tutorial row uses handler",
             content,

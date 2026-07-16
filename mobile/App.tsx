@@ -820,6 +820,7 @@ import { NativeDebugRunActions } from "./nativeDebugRunActions";
 import { NativeDownloadKindSelector } from "./nativeDownloadKindSelector";
 import { NativeDebugTextField } from "./nativeDebugTextField";
 import { OutcomeChecklist } from "./outcomeChecklist";
+import { PreviewStatusList } from "./previewStatusList";
 import { PreviewRecordEditActionRow } from "./previewRecordEditActionRow";
 import { ProductionAuthReadinessList } from "./productionAuthReadinessList";
 import { RecordingResultActionRow } from "./recordingResultActionRow";
@@ -4698,34 +4699,6 @@ export default function App() {
 
   function settingsDisplayRowHelperText(row: ReturnType<typeof settingsRowDisplayItem>) {
     return row.id === "quota" ? settingsQuotaHelperDisplayText : row.helper;
-  }
-
-  function previewStatusRowKey(row: { title: string }) {
-    return row.title;
-  }
-
-  function previewStatusRowAccessibilityLabel(row: { accessibilityLabel: string }) {
-    return row.accessibilityLabel;
-  }
-
-  function previewStatusRowIcon(row: { icon: string }) {
-    return row.icon;
-  }
-
-  function previewStatusRowTitle(row: { title: string }) {
-    return row.title;
-  }
-
-  function previewStatusRowCopy(row: { copy: string }) {
-    return row.copy;
-  }
-
-  function previewStatusRowStatusLabel(row: { statusLabel: string }) {
-    return row.statusLabel;
-  }
-
-  function previewTimedRowTime(row: { time: string }) {
-    return row.time;
   }
 
   function clearLocalSessionFromSettings() {
@@ -10977,18 +10950,7 @@ export default function App() {
               </Pressable>
             </View>
             <View style={styles.aiReviewList}>
-              {subscriptionManagementDisplayRows.map((row) => (
-                <View key={previewStatusRowKey(row)} style={styles.aiReviewCard}>
-                  <View style={styles.iconCircleSmall}>
-                    <Text>{previewStatusRowIcon(row)}</Text>
-                  </View>
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{previewStatusRowTitle(row)}</Text>
-                    <Text style={styles.evidence}>{previewStatusRowCopy(row)}</Text>
-                  </View>
-                  <Text style={styles.previewModeBadge}>{previewStatusRowStatusLabel(row)}</Text>
-                </View>
-              ))}
+              <PreviewStatusList rows={subscriptionManagementDisplayRows} />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
@@ -12087,19 +12049,7 @@ export default function App() {
               <Text style={styles.evidence}>{reminderPreviewBoundaryDisplay.copy}</Text>
             </View>
             <View style={styles.aiReviewList}>
-              {reminderPreviewDisplayItems.map((item) => (
-                <View key={previewStatusRowKey(item)} style={styles.aiReviewCard}>
-                  <View style={styles.iconCircleSmall}>
-                    <Text>鈴</Text>
-                  </View>
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{previewStatusRowTitle(item)}</Text>
-                    <Text style={styles.confidence}>{previewTimedRowTime(item)}</Text>
-                    <Text style={styles.evidence}>{previewStatusRowCopy(item)}</Text>
-                  </View>
-                  <Text style={styles.previewModeBadge}>{previewStatusRowStatusLabel(item)}</Text>
-                </View>
-              ))}
+              <PreviewStatusList iconFallback="鈴" rows={reminderPreviewDisplayItems} />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
@@ -12144,18 +12094,7 @@ export default function App() {
               <SettingsChecklist items={privacyReadinessChecklistItems} />
             </View>
             <View style={styles.aiReviewList}>
-              {privacyControlDisplayRows.map((row) => (
-                <View key={previewStatusRowKey(row)} style={styles.aiReviewCard}>
-                  <View style={styles.iconCircleSmall}>
-                    <Text>{previewStatusRowIcon(row)}</Text>
-                  </View>
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{previewStatusRowTitle(row)}</Text>
-                    <Text style={styles.evidence}>{previewStatusRowCopy(row)}</Text>
-                  </View>
-                  <Text style={styles.previewModeBadge}>{previewStatusRowStatusLabel(row)}</Text>
-                </View>
-              ))}
+              <PreviewStatusList rows={privacyControlDisplayRows} />
             </View>
             <SettingsSubpageActionRow
               actionAccessibilityLabel={privacyIntegrationAccessibilityDisplayLabel}
