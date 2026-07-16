@@ -8971,6 +8971,15 @@ export default function App() {
     }
   }
 
+  async function nativeBenchmarkResults() {
+    const results: NativeBenchmarkResult[] = [];
+    const whisperInput = nativeWhisperInput();
+    await appendNativeWhisperBenchmarkResult(results, whisperInput);
+    const llamaInput = nativeLlamaInput();
+    await appendNativeLlamaBenchmarkResult(results, llamaInput);
+    return results;
+  }
+
   function startNativeModelDownloadStatus() {
     setDownloadProgress(0);
     setNativeStatus(nativeModelDownloadProgressStatusMessage());
@@ -9121,11 +9130,7 @@ export default function App() {
     startNativeDebugAction();
     startNativeBenchmarkStatus();
     try {
-      const results: NativeBenchmarkResult[] = [];
-      const whisperInput = nativeWhisperInput();
-      await appendNativeWhisperBenchmarkResult(results, whisperInput);
-      const llamaInput = nativeLlamaInput();
-      await appendNativeLlamaBenchmarkResult(results, llamaInput);
+      const results = await nativeBenchmarkResults();
       if (results.length === 0) {
         handleNativeBenchmarkMissingInput();
         return;
