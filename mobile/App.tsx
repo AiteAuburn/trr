@@ -8569,8 +8569,12 @@ export default function App() {
     await completeSelectedRecordUpdateRequest(recordId, accountId, recordType);
   }
 
+  function isRecordUpdateRequestBlocked() {
+    return isBusy || recordUpdateInFlight.current;
+  }
+
   function guardedSelectedRecordUpdateContext() {
-    if (isBusy || recordUpdateInFlight.current) {
+    if (isRecordUpdateRequestBlocked()) {
       return null;
     }
     const record = selectedRecord;
@@ -8649,8 +8653,12 @@ export default function App() {
     await completeSelectedRecordDeleteRequest(recordId, accountId);
   }
 
+  function isRecordDeleteRequestBlocked() {
+    return isBusy || recordDeleteInFlight.current;
+  }
+
   function guardedSelectedRecordDeleteContext() {
-    if (isBusy || recordDeleteInFlight.current) {
+    if (isRecordDeleteRequestBlocked()) {
       return null;
     }
     const record = selectedRecord;
