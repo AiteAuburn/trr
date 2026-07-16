@@ -84,6 +84,7 @@ RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.ts
 RECORD_EDIT_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "recordEditFooterActions.tsx"
 RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.tsx"
 BACKEND_URL_FIELD_PATH = REPO_ROOT / "mobile" / "backendUrlField.tsx"
+NATIVE_DOWNLOAD_KIND_SELECTOR_PATH = REPO_ROOT / "mobile" / "nativeDownloadKindSelector.tsx"
 NATIVE_DEBUG_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "nativeDebugTextField.tsx"
 RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
 RECORD_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "recordTextField.tsx"
@@ -1444,6 +1445,7 @@ def main() -> int:
     record_edit_footer_actions_content = RECORD_EDIT_FOOTER_ACTIONS_PATH.read_text(encoding="utf-8")
     record_edit_header_fields_content = RECORD_EDIT_HEADER_FIELDS_PATH.read_text(encoding="utf-8")
     backend_url_field_content = BACKEND_URL_FIELD_PATH.read_text(encoding="utf-8")
+    native_download_kind_selector_content = NATIVE_DOWNLOAD_KIND_SELECTOR_PATH.read_text(encoding="utf-8")
     native_debug_text_field_content = NATIVE_DEBUG_TEXT_FIELD_PATH.read_text(encoding="utf-8")
     record_option_field_content = RECORD_OPTION_FIELD_PATH.read_text(encoding="utf-8")
     record_text_field_content = RECORD_TEXT_FIELD_PATH.read_text(encoding="utf-8")
@@ -2093,6 +2095,24 @@ def main() -> int:
             ("native debug text field disabled style block", "inputDisabled: {"),
         ):
             _assert_contains(label, native_debug_text_field_content, marker)
+        for label, marker in (
+            ("native download kind selector component", "export function NativeDownloadKindSelector"),
+            ("native download kind selector whisper label prop", "whisperAccessibilityLabel"),
+            ("native download kind selector llama label prop", "llamaAccessibilityLabel"),
+            ("native download kind selector whisper handler prop", "onWhisperPress"),
+            ("native download kind selector llama handler prop", "onLlamaPress"),
+            ("native download kind selector selected kind prop", "selectedKind"),
+            ("native download kind selector button role", 'accessibilityRole="button"'),
+            ("native download kind selector accessibility state", "accessibilityState={{ disabled, selected }}"),
+            ("native download kind selector disabled prop", "disabled={disabled}"),
+            ("native download kind selector whisper selected state", 'selected={selectedKind === "whisper"}'),
+            ("native download kind selector llama selected state", 'selected={selectedKind === "llama"}'),
+            ("native download kind selector selected style", "selected ? styles.chipSelected : null"),
+            ("native download kind selector disabled style", "disabled ? styles.chipDisabled : null"),
+            ("native download kind selector whisper label", 'label="Whisper"'),
+            ("native download kind selector llama label", 'label="Llama"'),
+        ):
+            _assert_contains(label, native_download_kind_selector_content, marker)
         for label, marker in (
             ("food community search field component", "export function FoodCommunitySearchField"),
             ("food community search field accessibility prop", "accessibilityLabel={accessibilityLabel}"),
@@ -11321,11 +11341,13 @@ def main() -> int:
             ("native whisper path input binding", "onChangeText={updateWhisperModelPathInput}"),
             ("native audio path input binding", "onChangeText={updateNativeAudioPathInput}"),
             ("native llama path input binding", "onChangeText={updateLlamaModelPathInput}"),
-            ("native whisper download kind binding", "onPress={selectWhisperNativeDownloadKind}"),
-            ("native llama download kind binding", "onPress={selectLlamaNativeDownloadKind}"),
-            ("native whisper download kind accessibility binding", "accessibilityLabel={nativeWhisperDownloadKindAccessibilityDisplayLabel}"),
-            ("native llama download kind accessibility binding", "accessibilityLabel={nativeLlamaDownloadKindAccessibilityDisplayLabel}"),
-            ("native download kind state binding", 'accessibilityState={{ disabled: isBusy, selected: downloadKind === "whisper" }}'),
+            ("native download kind selector binding", "<NativeDownloadKindSelector"),
+            ("native whisper download kind binding", "onWhisperPress={selectWhisperNativeDownloadKind}"),
+            ("native llama download kind binding", "onLlamaPress={selectLlamaNativeDownloadKind}"),
+            ("native whisper download kind accessibility binding", "whisperAccessibilityLabel={nativeWhisperDownloadKindAccessibilityDisplayLabel}"),
+            ("native llama download kind accessibility binding", "llamaAccessibilityLabel={nativeLlamaDownloadKindAccessibilityDisplayLabel}"),
+            ("native download kind selected binding", "selectedKind={downloadKind}"),
+            ("native download kind disabled binding", "disabled={isBusy}"),
             ("native module check settings binding", "onPress={checkNativeModulesFromSettings}"),
             ("native model download settings binding", "onPress={downloadNativeModelFromSettings}"),
             ("native whisper settings binding", "onPress={runNativeWhisperFromSettings}"),

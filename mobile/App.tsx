@@ -793,6 +793,7 @@ import { ManualRecordMedicationFields } from "./manualRecordMedicationFields";
 import { ManualRecordNoteFields } from "./manualRecordNoteFields";
 import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
 import { MetricCard } from "./metricCard";
+import { NativeDownloadKindSelector } from "./nativeDownloadKindSelector";
 import { NativeDebugTextField } from "./nativeDebugTextField";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
@@ -12656,50 +12657,14 @@ export default function App() {
                   disabled={isBusy}
                   placeholder="https://.../model.gguf"
                 />
-                  <View style={styles.actionRow}>
-                    <Pressable
-                      accessibilityLabel={nativeWhisperDownloadKindAccessibilityDisplayLabel}
-                      accessibilityRole="button"
-                      accessibilityState={{ disabled: isBusy, selected: downloadKind === "whisper" }}
-                      style={[
-                        styles.chip,
-                        downloadKind === "whisper" ? styles.chipSelected : null,
-                        isBusy ? styles.chipDisabled : null
-                      ]}
-                      disabled={isBusy}
-                      onPress={selectWhisperNativeDownloadKind}
-                    >
-                      <Text
-                        style={[
-                          styles.chipText,
-                          downloadKind === "whisper" ? styles.chipTextSelected : null
-                        ]}
-                      >
-                        Whisper
-                      </Text>
-                    </Pressable>
-                    <Pressable
-                      accessibilityLabel={nativeLlamaDownloadKindAccessibilityDisplayLabel}
-                      accessibilityRole="button"
-                      accessibilityState={{ disabled: isBusy, selected: downloadKind === "llama" }}
-                      style={[
-                        styles.chip,
-                        downloadKind === "llama" ? styles.chipSelected : null,
-                        isBusy ? styles.chipDisabled : null
-                      ]}
-                      disabled={isBusy}
-                      onPress={selectLlamaNativeDownloadKind}
-                    >
-                      <Text
-                        style={[
-                          styles.chipText,
-                          downloadKind === "llama" ? styles.chipTextSelected : null
-                        ]}
-                      >
-                        Llama
-                      </Text>
-                    </Pressable>
-                  </View>
+                  <NativeDownloadKindSelector
+                    disabled={isBusy}
+                    llamaAccessibilityLabel={nativeLlamaDownloadKindAccessibilityDisplayLabel}
+                    onLlamaPress={selectLlamaNativeDownloadKind}
+                    onWhisperPress={selectWhisperNativeDownloadKind}
+                    selectedKind={downloadKind}
+                    whisperAccessibilityLabel={nativeWhisperDownloadKindAccessibilityDisplayLabel}
+                  />
                   <Pressable
                     accessibilityLabel={nativeModuleCheckAccessibilityDisplayLabel}
                     accessibilityRole="button"
