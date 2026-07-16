@@ -52,7 +52,7 @@ CANONICAL_SPEC_SCREENS = (
         ("yearlyReviewMetricRows.map", "yearlyHealthOutcomeRows.map", "yearlyAiObservationDisplayText"),
     ),
     SpecScreen("4.13", "商城頁", "store", ("storeRedemptionBoundaryRows.map", "visibleStoreProducts")),
-    SpecScreen("4.14", "食物拍照分析頁", "foodPhoto", ("foodPhotoReadinessChecklistItems.map", "styles.uploadBox")),
+    SpecScreen("4.14", "食物拍照分析頁", "foodPhoto", ("items={foodPhotoReadinessChecklistItems}", "styles.uploadBox")),
     SpecScreen("4.14.1", "未來模組詳情頁", "futureModuleDetail", ("selectedFutureModuleDisplay", "futureModuleDetailBoundaryDisplayText")),
     SpecScreen("4.14.2", "醫師 / 醫院合作預覽頁", "doctorShare", ("items={doctorShareReadinessChecklistItems}", "doctorShareActionStatus")),
     SpecScreen("4.14.3", "HealthKit / Health Connect / 血糖機預覽頁", "healthIntegration", ("items={healthIntegrationReadinessChecklistItems}", "healthIntegrationActionStatus")),

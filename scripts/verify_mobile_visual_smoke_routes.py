@@ -257,7 +257,7 @@ VISUAL_SMOKE_ROUTES = {
     "storeCart": [
         'currentScreen === "storeCart"',
         "購物車",
-        "storeCheckoutReadinessChecklistItems",
+        "items={storeCheckoutReadinessChecklistItems}",
         "disabled",
         "storeCartReturnButtonDisplayLabel",
         "onPress={returnFromStoreCartToStore}",
@@ -266,7 +266,7 @@ VISUAL_SMOKE_ROUTES = {
         'currentScreen === "foodPhoto"',
         "食物拍照分析",
         "styles.uploadBox",
-        "foodPhotoReadinessChecklistItems",
+        "items={foodPhotoReadinessChecklistItems}",
         "foodPhotoReturnButtonDisplayLabel",
         "onPress={returnFromFoodPhoto}",
     ],

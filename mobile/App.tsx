@@ -796,6 +796,7 @@ import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
 import { InsightEmptyActionRow } from "./insightEmptyActionRow";
 import { CommunityPublicDisplayNameField } from "./communityPublicDisplayNameField";
+import { CommerceReadinessChecklist } from "./commerceReadinessChecklist";
 import { ManualRecordCreatePreviewAction } from "./manualRecordCreatePreviewAction";
 import { ManualRecordConfirmFooterActions } from "./manualRecordConfirmFooterActions";
 import { ManualRecordConfirmPreviewBlock } from "./manualRecordConfirmPreviewBlock";
@@ -4765,14 +4766,6 @@ export default function App() {
 
   function previewTimedRowTime(row: { time: string }) {
     return row.time;
-  }
-
-  function commerceReadinessChecklistItemKey(item: string) {
-    return item;
-  }
-
-  function commerceReadinessChecklistItemText(item: string) {
-    return item;
   }
 
   function outcomeChecklistItemKey(item: string) {
@@ -12907,9 +12900,7 @@ export default function App() {
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{storeCheckoutReadinessTitleDisplayText}</Text>
-              {storeCheckoutReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />
-              ))}
+              <CommerceReadinessChecklist items={storeCheckoutReadinessChecklistItems} />
               <Text style={styles.warningText}>{storeCartUnavailableDisplay.legalWarning}</Text>
             </View>
             <Pressable
@@ -12955,9 +12946,7 @@ export default function App() {
                 <Text style={styles.label}>{foodPhotoResultDisplayTitle}</Text>
                 <Text style={styles.previewModeBadge}>{foodPhotoVisionBoundaryDisplay.resultPending}</Text>
               </View>
-              {foodPhotoEmptyResultChecklistItems.map((item) => (
-                <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />
-              ))}
+              <CommerceReadinessChecklist items={foodPhotoEmptyResultChecklistItems} />
             </View>
             <FoodPhotoActionRow
               accessibilityLabel={foodPhotoIntegrationAccessibilityDisplayLabel}
@@ -12966,9 +12955,7 @@ export default function App() {
             />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{foodPhotoReadinessTitleDisplayText}</Text>
-              {foodPhotoReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={commerceReadinessChecklistItemKey(item)} text={commerceReadinessChecklistItemText(item)} />
-              ))}
+              <CommerceReadinessChecklist items={foodPhotoReadinessChecklistItems} />
             </View>
             <FoodPhotoActionRow
               accessibilityLabel={foodPhotoRetakeAccessibilityDisplayLabel}
