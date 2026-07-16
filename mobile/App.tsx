@@ -7552,11 +7552,15 @@ export default function App() {
     return boundRecordsList(saveResponse.records, maxMobilePreviewRecords);
   }
 
-  function handleDailyRecordSaveSuccess(saveResponse: DailyRecordSaveResponse, savedCount: number) {
-    const createdRecords = dailyRecordSaveCreatedRecords(saveResponse);
+  function clearDailyRecordSaveDraftState() {
     setPreview(null);
     clearTranscriptDraftState();
     clearDailyRecordDraftOrganizationState();
+  }
+
+  function handleDailyRecordSaveSuccess(saveResponse: DailyRecordSaveResponse, savedCount: number) {
+    const createdRecords = dailyRecordSaveCreatedRecords(saveResponse);
+    clearDailyRecordSaveDraftState();
     setRecords((current) => boundRecordsList([...createdRecords, ...current]));
     setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));
     if (createdRecords[0]) {
