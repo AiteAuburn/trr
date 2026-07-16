@@ -85,6 +85,7 @@ RECORD_EDIT_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "recordEditFooterAction
 RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.tsx"
 BACKEND_URL_FIELD_PATH = REPO_ROOT / "mobile" / "backendUrlField.tsx"
 NATIVE_DEBUG_ACTION_BUTTON_PATH = REPO_ROOT / "mobile" / "nativeDebugActionButton.tsx"
+NATIVE_DEBUG_RUN_ACTIONS_PATH = REPO_ROOT / "mobile" / "nativeDebugRunActions.tsx"
 NATIVE_DOWNLOAD_KIND_SELECTOR_PATH = REPO_ROOT / "mobile" / "nativeDownloadKindSelector.tsx"
 NATIVE_DEBUG_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "nativeDebugTextField.tsx"
 RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
@@ -1447,6 +1448,7 @@ def main() -> int:
     record_edit_header_fields_content = RECORD_EDIT_HEADER_FIELDS_PATH.read_text(encoding="utf-8")
     backend_url_field_content = BACKEND_URL_FIELD_PATH.read_text(encoding="utf-8")
     native_debug_action_button_content = NATIVE_DEBUG_ACTION_BUTTON_PATH.read_text(encoding="utf-8")
+    native_debug_run_actions_content = NATIVE_DEBUG_RUN_ACTIONS_PATH.read_text(encoding="utf-8")
     native_download_kind_selector_content = NATIVE_DOWNLOAD_KIND_SELECTOR_PATH.read_text(encoding="utf-8")
     native_debug_text_field_content = NATIVE_DEBUG_TEXT_FIELD_PATH.read_text(encoding="utf-8")
     record_option_field_content = RECORD_OPTION_FIELD_PATH.read_text(encoding="utf-8")
@@ -2110,6 +2112,22 @@ def main() -> int:
             ("native debug action button text style", "secondaryButtonText: {"),
         ):
             _assert_contains(label, native_debug_action_button_content, marker)
+        for label, marker in (
+            ("native debug run actions component", "export function NativeDebugRunActions"),
+            ("native debug run actions shared button", "<NativeDebugActionButton"),
+            ("native debug run actions whisper accessibility", "accessibilityLabel={whisperAccessibilityLabel}"),
+            ("native debug run actions llama accessibility", "accessibilityLabel={llamaAccessibilityLabel}"),
+            ("native debug run actions benchmark accessibility", "accessibilityLabel={benchmarkAccessibilityLabel}"),
+            ("native debug run actions whisper label", "label={whisperLabel}"),
+            ("native debug run actions llama label", "label={llamaLabel}"),
+            ("native debug run actions benchmark label", "label={benchmarkLabel}"),
+            ("native debug run actions whisper handler", "onPress={onWhisperPress}"),
+            ("native debug run actions llama handler", "onPress={onLlamaPress}"),
+            ("native debug run actions benchmark handler", "onPress={onBenchmarkPress}"),
+            ("native debug run actions disabled", "disabled={disabled}"),
+            ("native debug run actions row style", "actionRow: {"),
+        ):
+            _assert_contains(label, native_debug_run_actions_content, marker)
         for label, marker in (
             ("native download kind selector component", "export function NativeDownloadKindSelector"),
             ("native download kind selector whisper label prop", "whisperAccessibilityLabel"),
@@ -11364,21 +11382,22 @@ def main() -> int:
             ("native download kind selected binding", "selectedKind={downloadKind}"),
             ("native download kind disabled binding", "disabled={isBusy}"),
             ("native debug action button binding", "<NativeDebugActionButton"),
+            ("native debug run actions binding", "<NativeDebugRunActions"),
             ("native module check settings binding", "onPress={checkNativeModulesFromSettings}"),
             ("native model download settings binding", "onPress={downloadNativeModelFromSettings}"),
-            ("native whisper settings binding", "onPress={runNativeWhisperFromSettings}"),
-            ("native llama settings binding", "onPress={runNativeLlamaFromSettings}"),
-            ("native benchmarks settings binding", "onPress={runNativeBenchmarksFromSettings}"),
+            ("native whisper settings binding", "onWhisperPress={runNativeWhisperFromSettings}"),
+            ("native llama settings binding", "onLlamaPress={runNativeLlamaFromSettings}"),
+            ("native benchmarks settings binding", "onBenchmarkPress={runNativeBenchmarksFromSettings}"),
             ("native module check accessibility binding", "accessibilityLabel={nativeModuleCheckAccessibilityDisplayLabel}"),
             ("native model download accessibility binding", "accessibilityLabel={nativeModelDownloadAccessibilityDisplayLabel}"),
-            ("native whisper run accessibility binding", "accessibilityLabel={nativeWhisperRunAccessibilityDisplayLabel}"),
-            ("native llama run accessibility binding", "accessibilityLabel={nativeLlamaRunAccessibilityDisplayLabel}"),
-            ("native benchmark accessibility binding", "accessibilityLabel={nativeBenchmarkAccessibilityDisplayLabel}"),
+            ("native whisper run accessibility binding", "whisperAccessibilityLabel={nativeWhisperRunAccessibilityDisplayLabel}"),
+            ("native llama run accessibility binding", "llamaAccessibilityLabel={nativeLlamaRunAccessibilityDisplayLabel}"),
+            ("native benchmark accessibility binding", "benchmarkAccessibilityLabel={nativeBenchmarkAccessibilityDisplayLabel}"),
             ("native module check label binding", "label={nativeModuleCheckDisplayLabel}"),
             ("native model download label binding", "label={nativeModelDownloadDisplayLabel}"),
-            ("native whisper run label binding", "label={auxiliaryDisplayLabels.whisper}"),
-            ("native llama run label binding", "label={auxiliaryDisplayLabels.llama}"),
-            ("native benchmark label binding", "label={auxiliaryDisplayLabels.benchmark}"),
+            ("native whisper run label binding", "whisperLabel={auxiliaryDisplayLabels.whisper}"),
+            ("native llama run label binding", "llamaLabel={auxiliaryDisplayLabels.llama}"),
+            ("native benchmark label binding", "benchmarkLabel={auxiliaryDisplayLabels.benchmark}"),
             ("native debug action disabled binding", "disabled={isBusy}"),
             ("doctor share token status handler", "function showDoctorShareTokenStatus()"),
             ("doctor share report status handler", "function showDoctorShareReportBoundaryStatus()"),

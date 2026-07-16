@@ -794,6 +794,7 @@ import { ManualRecordNoteFields } from "./manualRecordNoteFields";
 import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
 import { MetricCard } from "./metricCard";
 import { NativeDebugActionButton } from "./nativeDebugActionButton";
+import { NativeDebugRunActions } from "./nativeDebugRunActions";
 import { NativeDownloadKindSelector } from "./nativeDownloadKindSelector";
 import { NativeDebugTextField } from "./nativeDebugTextField";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
@@ -12707,26 +12708,18 @@ export default function App() {
                   disabled={isBusy}
                   placeholder="Llama GGUF model path"
                 />
-                  <View style={styles.actionRow}>
-                    <NativeDebugActionButton
-                      accessibilityLabel={nativeWhisperRunAccessibilityDisplayLabel}
-                      disabled={isBusy}
-                      label={auxiliaryDisplayLabels.whisper}
-                      onPress={runNativeWhisperFromSettings}
-                    />
-                    <NativeDebugActionButton
-                      accessibilityLabel={nativeLlamaRunAccessibilityDisplayLabel}
-                      disabled={isBusy}
-                      label={auxiliaryDisplayLabels.llama}
-                      onPress={runNativeLlamaFromSettings}
-                    />
-                    <NativeDebugActionButton
-                      accessibilityLabel={nativeBenchmarkAccessibilityDisplayLabel}
-                      disabled={isBusy}
-                      label={auxiliaryDisplayLabels.benchmark}
-                      onPress={runNativeBenchmarksFromSettings}
-                    />
-                  </View>
+                <NativeDebugRunActions
+                  benchmarkAccessibilityLabel={nativeBenchmarkAccessibilityDisplayLabel}
+                  benchmarkLabel={auxiliaryDisplayLabels.benchmark}
+                  disabled={isBusy}
+                  llamaAccessibilityLabel={nativeLlamaRunAccessibilityDisplayLabel}
+                  llamaLabel={auxiliaryDisplayLabels.llama}
+                  onBenchmarkPress={runNativeBenchmarksFromSettings}
+                  onLlamaPress={runNativeLlamaFromSettings}
+                  onWhisperPress={runNativeWhisperFromSettings}
+                  whisperAccessibilityLabel={nativeWhisperRunAccessibilityDisplayLabel}
+                  whisperLabel={auxiliaryDisplayLabels.whisper}
+                />
                 {llamaDebugOutput ? <Text style={styles.debugOutput}>{llamaDebugOutput}</Text> : null}
               </View>
             ) : null}
