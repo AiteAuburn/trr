@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2044 extract update success action row
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/updateSuccessActionRow.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `UpdateSuccessActionRow` for the update-success footer actions.
+- Replaced the inline view-detail and return-to-result-destination footer row in `App.tsx`.
+- Preserved existing labels, accessibility labels, selected-record detail visibility, handlers, and return destination text.
+- Updated navigation verifier coverage for the component boundary and App wiring.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining inline result action rows without changing first-version scope.
+
 ### T2043 extract delete success action row
 
 類型：mobile / refactor / verifier / docs

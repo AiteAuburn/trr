@@ -830,6 +830,7 @@ import { StoreSearchField } from "./storeSearchField";
 import { SubscriptionSubpageActionRow } from "./subscriptionSubpageActionRow";
 import { SubscriptionSubpageCloseButton } from "./subscriptionSubpageCloseButton";
 import { TranscriptReviewActionRow } from "./transcriptReviewActionRow";
+import { UpdateSuccessActionRow } from "./updateSuccessActionRow";
 import type {
   Account,
   AiModelOptions,
@@ -10610,28 +10611,15 @@ export default function App() {
                   </Pressable>
               ))}
             </View>
-            <View style={styles.actionRow}>
-              {selectedRecord ? (
-                <Pressable
-                  accessibilityLabel={coreFlowDisplayLabels.updatedRecordDetailAccessibility}
-                  accessibilityRole="button"
-                  style={styles.secondaryButton}
-                  onPress={openUpdatedRecordDetail}
-                >
-                  <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.viewDetail}</Text>
-                </Pressable>
-              ) : null}
-              <Pressable
-                accessibilityLabel={coreFlowDisplayLabels.recordResultReturnAccessibility}
-                accessibilityRole="button"
-                style={styles.primaryButton}
-                onPress={returnFromUpdateSuccess}
-              >
-                <Text style={styles.primaryButtonText}>
-                  {recordDetailReturnScreen === "history" ? "回歷史紀錄" : "回今日紀錄"}
-                </Text>
-              </Pressable>
-            </View>
+            <UpdateSuccessActionRow
+              detailAccessibilityLabel={coreFlowDisplayLabels.updatedRecordDetailAccessibility}
+              detailLabel={coreFlowDisplayLabels.viewDetail}
+              onDetailPress={openUpdatedRecordDetail}
+              onReturnPress={returnFromUpdateSuccess}
+              returnAccessibilityLabel={coreFlowDisplayLabels.recordResultReturnAccessibility}
+              returnLabel={recordDetailReturnScreen === "history" ? "回歷史紀錄" : "回今日紀錄"}
+              showDetail={Boolean(selectedRecord)}
+            />
           </View>
         ) : null}
 

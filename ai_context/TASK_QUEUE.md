@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T2044: Extract update success action row
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/updateSuccessActionRow.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `UpdateSuccessActionRow` for the update-success footer actions.
+- Replaced the inline view-detail and return-to-result-destination footer row in `App.tsx`.
+- Preserved existing labels, accessibility labels, selected-record detail visibility, handlers, and return destination text.
+- Updated navigation verifier coverage for the component boundary and App wiring.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining inline result action rows without changing first-version scope.
+
 ### T2043: Extract delete success action row
 
 Status: done

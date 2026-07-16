@@ -115,6 +115,7 @@ FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommuni
 FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareTextFields.tsx"
 STORE_SEARCH_FIELD_PATH = REPO_ROOT / "mobile" / "storeSearchField.tsx"
 TRANSCRIPT_REVIEW_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "transcriptReviewActionRow.tsx"
+UPDATE_SUCCESS_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "updateSuccessActionRow.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
@@ -1502,6 +1503,7 @@ def main() -> int:
     food_community_share_text_fields_content = FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH.read_text(encoding="utf-8")
     store_search_field_content = STORE_SEARCH_FIELD_PATH.read_text(encoding="utf-8")
     transcript_review_action_row_content = TRANSCRIPT_REVIEW_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    update_success_action_row_content = UPDATE_SUCCESS_ACTION_ROW_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -6550,7 +6552,7 @@ def main() -> int:
         _assert_contains(
             "updated record detail binding",
             content,
-            "onPress={openUpdatedRecordDetail}",
+            "onDetailPress={openUpdatedRecordDetail}",
         )
         _assert_contains(
             "delete success return binding",
@@ -6560,7 +6562,7 @@ def main() -> int:
         _assert_contains(
             "update success return binding",
             content,
-            "onPress={returnFromUpdateSuccess}",
+            "onReturnPress={returnFromUpdateSuccess}",
         )
         _assert_contains(
             "menu card accessibility item",
@@ -8627,7 +8629,7 @@ def main() -> int:
         for label, marker in (
             ("delete success history accessibility binding", "historyAccessibilityLabel={coreFlowDisplayLabels.deleteSuccessHistoryAccessibility}"),
             ("record result return accessibility binding", "returnAccessibilityLabel={coreFlowDisplayLabels.recordResultReturnAccessibility}"),
-            ("updated record detail accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.updatedRecordDetailAccessibility}"),
+            ("updated record detail accessibility binding", "detailAccessibilityLabel={coreFlowDisplayLabels.updatedRecordDetailAccessibility}"),
             ("manual return accessibility binding", "backAccessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}"),
             ("manual create preview accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualCreatePreviewAccessibility}"),
             ("manual confirm return accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.manualConfirmReturnAccessibility}"),
@@ -8659,6 +8661,20 @@ def main() -> int:
             ("delete success action row secondary style", "secondaryButton: {"),
         ):
             _assert_contains(label, delete_success_action_row_content, marker)
+        for label, marker in (
+            ("update success action row component", "export function UpdateSuccessActionRow"),
+            ("update success action row detail accessibility prop", "accessibilityLabel={detailAccessibilityLabel}"),
+            ("update success action row return accessibility prop", "accessibilityLabel={returnAccessibilityLabel}"),
+            ("update success action row detail visibility prop", "showDetail ? ("),
+            ("update success action row detail handler prop", "onPress={onDetailPress}"),
+            ("update success action row return handler prop", "onPress={onReturnPress}"),
+            ("update success action row detail label prop", "{detailLabel}"),
+            ("update success action row return label prop", "{returnLabel}"),
+            ("update success action row shell style", "actionRow: {"),
+            ("update success action row primary style", "primaryButton: {"),
+            ("update success action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, update_success_action_row_content, marker)
         for label, marker in (
             ("delete confirm intro copy helper", "function deleteConfirmIntroCopy()"),
             ("delete confirm record meta copy helper", "function deleteConfirmRecordMetaCopy(dateTimeLabel: string, sourceLabel: string)"),
