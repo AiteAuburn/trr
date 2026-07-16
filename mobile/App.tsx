@@ -8062,36 +8062,49 @@ export default function App() {
     await startAndCompleteDailyRecordSaveRequest(saveContext);
   }
 
-  async function loadRecords() {
+  function guardedInitialRecordSyncContext() {
     if (visualSmokePreviewActive.current) {
       setRecordsStatus(visualSmokeRecordSyncStatusMessage());
-      return;
+      return null;
     }
     if (!protectedBackendReady) {
       setRecordsStatus(recordSyncUnavailableStatusMessage(protectedBackendUnavailableMessage));
-      return;
+      return null;
     }
     if (!account || !activeProfileId) {
+      return null;
+    }
+
+    return {
+      account,
+      activeProfileId,
+      syncKey: `${normalizedApiBaseUrl}:${account.id}:${activeProfileId}`
+    };
+  }
+
+  async function loadRecords() {
+    const syncContext = guardedInitialRecordSyncContext();
+    if (!syncContext) {
       return;
     }
-    const syncKey = `${normalizedApiBaseUrl}:${account.id}:${activeProfileId}`;
-    latestRecordSyncKey.current = syncKey;
-    if (recordSyncInFlightKeys.current.has(syncKey)) {
+
+    latestRecordSyncKey.current = syncContext.syncKey;
+    if (recordSyncInFlightKeys.current.has(syncContext.syncKey)) {
       return;
     }
-    recordSyncInFlightKeys.current.add(syncKey);
+    recordSyncInFlightKeys.current.add(syncContext.syncKey);
     setRecordsStatus(recordSyncLoadingStatusMessage());
     try {
       const query = new URLSearchParams({
-        profile_id: activeProfileId,
+        profile_id: syncContext.activeProfileId,
         limit: String(mobileRecordSyncLimit)
       });
       const response = await requestJson<RecordItem[]>(
         normalizedApiBaseUrl,
         `/records?${query.toString()}`,
-        { headers: protectedRequestHeaders(account.id, accessToken) }
+        { headers: protectedRequestHeaders(syncContext.account.id, accessToken) }
       );
-      if (latestRecordSyncKey.current !== syncKey) {
+      if (latestRecordSyncKey.current !== syncContext.syncKey) {
         return;
       }
       const boundedResponse = boundRecordsList(response, mobileRecordSyncLimit);
@@ -8106,11 +8119,11 @@ export default function App() {
         )
       );
     } catch {
-      if (latestRecordSyncKey.current === syncKey) {
+      if (latestRecordSyncKey.current === syncContext.syncKey) {
         clearRecordSyncPaginationStatus(recordSyncFailureStatusMessage());
       }
     } finally {
-      recordSyncInFlightKeys.current.delete(syncKey);
+      recordSyncInFlightKeys.current.delete(syncContext.syncKey);
     }
   }
 
