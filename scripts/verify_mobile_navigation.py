@@ -2164,7 +2164,7 @@ def main() -> int:
             ("record detail selected type helper binding", "typeValue={selectedRecordDetailTypeLabel(selectedRecordDisplayItem)}"),
             ("preview edit type label helper", "function previewRecordEditTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem> | null)"),
             ("preview edit type label helper fields", 'return item?.typeLabel ?? "紀錄";'),
-            ("preview edit type label helper binding", "{previewRecordEditTypeLabel(selectedPreviewRecordDisplayItem)}"),
+            ("preview edit type label helper binding", "typeLabel={previewRecordEditTypeLabel(selectedPreviewRecordDisplayItem)}"),
             ("record edit header type label helper", "function recordEditHeaderTypeLabel(item: ReturnType<typeof recordDetailDisplayItem> | null)"),
             ("record edit header type label helper fields", 'return item?.typeLabel ?? "紀錄";'),
             ("record edit header type label helper binding", "typeLabel={recordEditHeaderTypeLabel(selectedRecordDisplayItem)}"),
@@ -2190,7 +2190,7 @@ def main() -> int:
         for block_label, pattern, marker in (
             (
                 "preview edit type label render block",
-                r'(currentScreen === "editPreviewRecord"[\s\S]*?<Text style=\{styles\.recordContent\}>\{previewRecordEditTypeLabel\(selectedPreviewRecordDisplayItem\)\}</Text>)',
+                r'(currentScreen === "editPreviewRecord"[\s\S]*?<RecordEditHeaderFields[\s\S]*?onTimeChange=\{updatePreviewEditTimeInput\})',
                 'selectedPreviewRecordDisplayItem?.typeLabel ?? "紀錄"',
             ),
             (
@@ -9462,6 +9462,14 @@ def main() -> int:
         for label, marker in (
             ("preview edit date input handler", "function updatePreviewEditDateInput(value: string)"),
             ("preview edit time input handler", "function updatePreviewEditTimeInput(value: string)"),
+            ("preview edit header fields binding", "<RecordEditHeaderFields\n              dateAccessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}"),
+            ("preview edit header date max length binding", "dateMaxLength={maxDateInputLength}"),
+            ("preview edit header date value binding", "dateValue={previewEditDate}"),
+            ("preview edit header time accessibility binding", "timeAccessibilityLabel={auxiliaryDisplayLabels.timeInputAccessibility}"),
+            ("preview edit header time max length binding", "timeMaxLength={maxTimeInputLength}"),
+            ("preview edit header time value binding", "timeValue={previewEditTime}"),
+            ("preview edit header date input binding", "onDateChange={updatePreviewEditDateInput}"),
+            ("preview edit header time input binding", "onTimeChange={updatePreviewEditTimeInput}"),
             ("preview edit glucose input binding", "onChangeText={updatePreviewEditGlucoseValue}"),
             ("edit option key helper", "function editOptionKey<T extends string>(option: { value: T })"),
             ("edit option key helper fields", "return option.value;"),

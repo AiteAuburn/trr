@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1999 reuse record edit header shell for preview edit header
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Reused the shared `RecordEditHeaderFields` shell for the Preview Edit date, time, and type header.
+- Preserved date/time accessibility labels, values, change handlers, max-length limits, placeholders through the shared header field shell, and the preview type-label helper.
+- Updated navigation verifier coverage for the shared Preview Edit header binding and type-label helper prop.
+- 未變更 UI copy、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing fallback JSON or remaining screen field clusters in small behavior-preserving slices.
+
 ### T1998 reuse record text field shell for preview edit note fields
 
 類型：mobile / refactor / verifier / docs

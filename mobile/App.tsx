@@ -10303,38 +10303,17 @@ export default function App() {
               </Pressable>
             </View>
             <Text style={styles.evidence}>{previewRecordEditBoundaryDisplayText}</Text>
-            <View style={styles.dateTimeRow}>
-              <View style={styles.dateTimeField}>
-                <FieldLabel icon={"📅"} label={"日期"} />
-                <TextInput
-                  accessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}
-                  value={previewEditDate}
-                  onChangeText={updatePreviewEditDateInput}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  maxLength={maxDateInputLength}
-                  style={styles.input}
-                  placeholder="2026-04-29"
-                />
-              </View>
-              <View style={styles.dateTimeField}>
-                <FieldLabel icon={"🕒"} label={"時間"} />
-                <TextInput
-                  accessibilityLabel={auxiliaryDisplayLabels.timeInputAccessibility}
-                  value={previewEditTime}
-                  onChangeText={updatePreviewEditTimeInput}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  maxLength={maxTimeInputLength}
-                  style={styles.input}
-                  placeholder="08:10"
-                />
-              </View>
-            </View>
-            <View style={styles.detailRow}>
-              <FieldLabel icon={"🏷"} label={"類型"} />
-              <Text style={styles.recordContent}>{previewRecordEditTypeLabel(selectedPreviewRecordDisplayItem)}</Text>
-            </View>
+            <RecordEditHeaderFields
+              dateAccessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}
+              dateMaxLength={maxDateInputLength}
+              dateValue={previewEditDate}
+              timeAccessibilityLabel={auxiliaryDisplayLabels.timeInputAccessibility}
+              timeMaxLength={maxTimeInputLength}
+              timeValue={previewEditTime}
+              typeLabel={previewRecordEditTypeLabel(selectedPreviewRecordDisplayItem)}
+              onDateChange={updatePreviewEditDateInput}
+              onTimeChange={updatePreviewEditTimeInput}
+            />
             {selectedPreviewRecord.record_type === "glucose" ? (
               <>
                 <RecordTextField
