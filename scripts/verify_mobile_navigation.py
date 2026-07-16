@@ -4514,6 +4514,21 @@ def main() -> int:
             "finishManualCreateRequest();",
         )
         _assert_contains(
+            "manual create metadata helper",
+            content,
+            "function manualRecordCreateMetadata()",
+        )
+        _assert_contains(
+            "manual create metadata helper fields",
+            content,
+            "client_save_batch_id: createClientSaveBatchId(),\n      client_save_sequence: 1,\n      client_save_batch_size: 1,\n      entry_method: \"manual_form\"",
+        )
+        _assert_contains(
+            "manual create metadata helper binding",
+            content,
+            "metadata_json: manualRecordCreateMetadata()",
+        )
+        _assert_contains(
             "AI save failure result helper",
             content,
             "function openAiSaveFailureResult(message: string)",

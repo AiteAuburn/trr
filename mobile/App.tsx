@@ -7955,6 +7955,15 @@ export default function App() {
     setIsBusy(false);
   }
 
+  function manualRecordCreateMetadata() {
+    return {
+      client_save_batch_id: createClientSaveBatchId(),
+      client_save_sequence: 1,
+      client_save_batch_size: 1,
+      entry_method: "manual_form"
+    };
+  }
+
   async function createManualRecord() {
     if (isBusy || manualCreateInFlight.current) {
       return;
@@ -7991,12 +8000,7 @@ export default function App() {
           record_type: manualRecordType,
           occurred_at: localDateTimeToIso(manualRecordDate, manualRecordTime),
           payload_json: payload,
-          metadata_json: {
-            client_save_batch_id: createClientSaveBatchId(),
-            client_save_sequence: 1,
-            client_save_batch_size: 1,
-            entry_method: "manual_form"
-          },
+          metadata_json: manualRecordCreateMetadata(),
           source: "manual"
         })
       });
