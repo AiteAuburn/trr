@@ -5679,6 +5679,21 @@ def main() -> int:
             'openRecordResultDestination("delete", target);',
         )
         _assert_contains(
+            "record result destination card helper",
+            content,
+            'function openRecordResultDestinationCard(kind: "delete" | "update", target: AppScreen)',
+        )
+        _assert_contains(
+            "record result destination card helper delete branch",
+            content,
+            "if (kind === \"delete\") {\n      openDeleteSuccessDestination(target);\n      return;\n    }",
+        )
+        _assert_contains(
+            "record result destination card helper update branch",
+            content,
+            "openUpdateSuccessDestination(target);",
+        )
+        _assert_contains(
             "update success destination handler",
             content,
             "function openUpdateSuccessDestination(target: AppScreen)",
@@ -5709,6 +5724,11 @@ def main() -> int:
             "function openDeleteSuccessDestinationCard(target: AppScreen)",
         )
         _assert_contains(
+            "delete success destination card helper binding",
+            content,
+            'openRecordResultDestinationCard("delete", target);',
+        )
+        _assert_contains(
             "delete success destination card press handler",
             content,
             "function pressDeleteSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>)",
@@ -5727,6 +5747,11 @@ def main() -> int:
             "update success destination card handler",
             content,
             "function openUpdateSuccessDestinationCard(target: AppScreen)",
+        )
+        _assert_contains(
+            "update success destination card helper binding",
+            content,
+            'openRecordResultDestinationCard("update", target);',
         )
         _assert_contains(
             "update success destination card press handler",

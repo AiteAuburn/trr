@@ -8423,8 +8423,16 @@ export default function App() {
     openRecordResultDestination("delete", target);
   }
 
+  function openRecordResultDestinationCard(kind: "delete" | "update", target: AppScreen) {
+    if (kind === "delete") {
+      openDeleteSuccessDestination(target);
+      return;
+    }
+    openUpdateSuccessDestination(target);
+  }
+
   function openDeleteSuccessDestinationCard(target: AppScreen) {
-    openDeleteSuccessDestination(target);
+    openRecordResultDestinationCard("delete", target);
   }
 
   function pressDeleteSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>) {
@@ -8449,7 +8457,7 @@ export default function App() {
   }
 
   function openUpdateSuccessDestinationCard(target: AppScreen) {
-    openUpdateSuccessDestination(target);
+    openRecordResultDestinationCard("update", target);
   }
 
   function pressUpdateSuccessDestinationCard(item: ReturnType<typeof destinationCardDisplayItem>) {
