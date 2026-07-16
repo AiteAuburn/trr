@@ -1285,6 +1285,7 @@ export default function App() {
   const aiReviewBackendRequiredDisplayText = aiReviewDisplay.backendRequired;
   const hasAiSaveConfirmWarnings = previewState.hasWarnings;
   const isAiSaveConfirmBlockedByBackend = !protectedBackendReady;
+  const isAiSaveConfirmSubmitDisabled = isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty;
   const aiSaveConfirmDisplay = aiSaveConfirmDisplayTexts(
     isBusy,
     isAiSaveConfirmBlockedByBackend,
@@ -12905,15 +12906,13 @@ export default function App() {
               accessibilityLabel={coreFlowDisplayLabels.submitAiSaveAccessibility}
               accessibilityRole="button"
               accessibilityState={{
-                disabled: isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty
+                disabled: isAiSaveConfirmSubmitDisabled
               }}
               style={[
                 styles.primaryButton,
-                isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty
-                  ? styles.buttonDisabled
-                  : null
+                isAiSaveConfirmSubmitDisabled ? styles.buttonDisabled : null
               ]}
-              disabled={isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty}
+              disabled={isAiSaveConfirmSubmitDisabled}
               onPress={submitAiSaveConfirm}
             >
               <Text style={styles.primaryButtonText}>{aiSaveConfirmSubmitDisplayLabel}</Text>

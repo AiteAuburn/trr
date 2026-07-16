@@ -6263,12 +6263,15 @@ def main() -> int:
             ("save failure return preview state guard", "if (previewState.isEmpty) {\n      returnToAiReviewWithClearedPreviewStatus(aiSaveFailureBackAiReviewStatusMessage());"),
             ("save preview records preview state guard", "if (!preview || previewState.isEmpty)"),
             ("save preview batch size state binding", "client_save_batch_size: previewState.recordCount"),
+            ("ai save confirm submit disabled state", "const isAiSaveConfirmSubmitDisabled = isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty;"),
             ("ai review date card preview state binding", "{previewState.hasRecords ? ("),
             ("ai review manual fallback preview state binding", "{previewState.isEmpty ? ("),
             ("ai review save confirm preview state binding", "{previewState.hasRecords ? ("),
             ("ai review backend warning preview state binding", "{previewState.hasRecords && !account ? ("),
             ("ai save failure return disabled preview state binding", "accessibilityState={{ disabled: previewState.isEmpty }}"),
-            ("ai save confirm submit disabled preview state binding", "disabled: isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty"),
+            ("ai save confirm submit accessibility disabled binding", "disabled: isAiSaveConfirmSubmitDisabled"),
+            ("ai save confirm submit style disabled binding", "isAiSaveConfirmSubmitDisabled ? styles.buttonDisabled : null"),
+            ("ai save confirm submit disabled binding", "disabled={isAiSaveConfirmSubmitDisabled}"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
@@ -6296,6 +6299,8 @@ def main() -> int:
             ("direct ai review backend warning preview length binding", "{preview.records.length > 0 && !account ? ("),
             ("direct ai save failure return disabled preview length binding", "accessibilityState={{ disabled: !preview || preview.records.length === 0 }}"),
             ("direct ai save confirm submit disabled preview length binding", "disabled: isBusy || isAiSaveConfirmBlockedByBackend || preview.records.length === 0"),
+            ("direct ai save confirm submit disabled state binding", "disabled: isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty"),
+            ("direct ai save confirm submit disabled prop binding", "disabled={isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty}"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (
