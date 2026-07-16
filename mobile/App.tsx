@@ -804,10 +804,16 @@ import type {
   VoiceQuota
 } from "./appTypes";
 
-function recordCollectionState(records: readonly RecordItem[], syncLimit: number, cacheLimit: number) {
+function recordCollectionState(
+  records: readonly RecordItem[],
+  syncLimit: number,
+  cacheLimit: number,
+  displayLimit: number
+) {
   const recordCount = records.length;
 
   return {
+    displayCount: clampNumber(recordCount, 0, displayLimit),
     hasRecords: recordCount > 0,
     isEmpty: recordCount === 0,
     isAtCacheLimit: recordCount >= cacheLimit,
@@ -1109,7 +1115,8 @@ export default function App() {
   const recordDisplayState = recordCollectionState(
     recordsForDisplay,
     mobileRecordSyncLimit,
-    maxMobileRecordCacheLimit
+    maxMobileRecordCacheLimit,
+    maxMobileCountValue
   );
   const historyRecordsByDate = useMemo(() => {
     const groups = new Map<string, RecordItem[]>();
@@ -1799,7 +1806,7 @@ export default function App() {
   const recordsStatusDisplay = recordsStatusDisplayTexts(recordsStatus);
   const recordsStatusDisplayText = recordsStatusDisplay.records;
   const todayRecordSummaryDisplayText = todayRecordSummaryText(todayRecords.length);
-  const historyRecordDisplayCount = clampNumber(historyRecords.length, 0, maxMobileCountValue);
+  const historyRecordDisplayCount = recordDisplayState.displayCount;
   const rankingStreakDisplayDays = clampNumber(currentRecordStreakDays(records), 0, maxMobileCountValue);
   const analysisMetricInput = buildAnalysisMetricInput({
     report: activeAnalysisReport,
@@ -2039,7 +2046,7 @@ export default function App() {
   const transcriptModelUnavailableDisplayText = transcriptStatusDisplay.modelUnavailable;
   const manualRecordBackendUnavailableDisplayText = manualRecordCreateDisplay.backendUnavailable;
   const recordSyncBoundaryDisplay = recordSyncBoundaryDisplayTexts({
-    recordCount: recordsForDisplay.length,
+    recordCount: recordDisplayState.recordCount,
     cacheLimit: maxMobileRecordCacheLimit,
     hasMore: recordsHasMore,
     isBackendReady: protectedBackendReady,

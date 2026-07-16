@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1743 reuse record collection display count
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extended the shared record collection state helper with a bounded display count.
+- Reused the helper count for History total-record display and record-sync boundary display input.
+- Updated navigation verifier coverage and direct-count guards for representative History / record-sync bindings.
+- 未變更 UI copy/layout、backend runtime、database schema、Android signing config、record sync request path、pagination query parameters、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining core display counts and preview-record state in small behavior-preserving slices.
+
 ### T1742 reuse record collection state
 
 類型：mobile / refactor / verifier / docs

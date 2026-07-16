@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1743: Reuse record collection display count
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Extended the shared record collection state helper with a bounded display count.
+- Reused the helper count for History total-record display and record-sync boundary display input.
+- Updated navigation verifier coverage and direct-count guards for representative History / record-sync bindings.
+- No UI copy/layout/backend/schema/Android signing/record sync request path/pagination query/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining core display counts and preview-record state in small behavior-preserving slices.
+
 ### T1742: Reuse record collection state
 
 Status: done
