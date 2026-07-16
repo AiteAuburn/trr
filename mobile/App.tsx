@@ -3952,6 +3952,14 @@ export default function App() {
     }
   }
 
+  async function startAndCompleteParserPreviewRequest(context: {
+    account: Account;
+    activeProfile: Profile;
+  }) {
+    const preparedRequest = startPreparedParserPreviewRequest();
+    await completePreparedParserPreviewRequest(context, parserTranscriptText(), preparedRequest);
+  }
+
   function applyPreviewRecordRemoveChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[]) {
     if (isPreviewActionReturningToDailyRecord) {
       reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "delete");
@@ -7901,8 +7909,7 @@ export default function App() {
       return;
     }
 
-    const preparedRequest = startPreparedParserPreviewRequest();
-    await completePreparedParserPreviewRequest(parserContext, parserTranscriptText(), preparedRequest);
+    await startAndCompleteParserPreviewRequest(parserContext);
   }
 
   function startPreviewSaveRequest() {
