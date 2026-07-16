@@ -779,6 +779,7 @@ import { HistorySelectedDatePanel } from "./historySelectedDatePanel";
 import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import { HighlightDetailRow } from "./highlightDetailRow";
+import { CommunityPublicDisplayNameField } from "./communityPublicDisplayNameField";
 import { ManualRecordCreatePreviewAction } from "./manualRecordCreatePreviewAction";
 import { ManualRecordConfirmFooterActions } from "./manualRecordConfirmFooterActions";
 import { ManualRecordConfirmPreviewBlock } from "./manualRecordConfirmPreviewBlock";
@@ -12215,15 +12216,11 @@ export default function App() {
                 <Text style={styles.evidence}>{communityPublicNamePreviewLabel()}</Text>
                 <Text style={styles.heroNumber}>{accountPublicDisplayNameDisplayText}</Text>
                 <Text style={styles.evidence}>{communityPublicNameBoundaryDisplayText}</Text>
-                <TextInput
+                <CommunityPublicDisplayNameField
                   accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}
                   value={communityPublicDisplayNameDraft}
                   onChangeText={updateCommunityPublicDisplayNameDraft}
                   maxLength={maxDisplayTextLength}
-                  style={styles.input}
-                  placeholder="社群公開顯示名稱"
-                  autoCapitalize="none"
-                  autoCorrect={false}
                 />
                 <Pressable
                   accessibilityLabel={communityPublicProfileSaveAccessibilityDisplayLabel}

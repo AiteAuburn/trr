@@ -85,6 +85,7 @@ RECORD_EDIT_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "recordEditFooterAction
 RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.tsx"
 RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
 RECORD_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "recordTextField.tsx"
+COMMUNITY_PUBLIC_DISPLAY_NAME_FIELD_PATH = REPO_ROOT / "mobile" / "communityPublicDisplayNameField.tsx"
 FOOD_COMMUNITY_SEARCH_FIELD_PATH = REPO_ROOT / "mobile" / "foodCommunitySearchField.tsx"
 FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareDateTimeFields.tsx"
 FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareTextFields.tsx"
@@ -1442,6 +1443,9 @@ def main() -> int:
     record_edit_header_fields_content = RECORD_EDIT_HEADER_FIELDS_PATH.read_text(encoding="utf-8")
     record_option_field_content = RECORD_OPTION_FIELD_PATH.read_text(encoding="utf-8")
     record_text_field_content = RECORD_TEXT_FIELD_PATH.read_text(encoding="utf-8")
+    community_public_display_name_field_content = COMMUNITY_PUBLIC_DISPLAY_NAME_FIELD_PATH.read_text(
+        encoding="utf-8"
+    )
     food_community_search_field_content = FOOD_COMMUNITY_SEARCH_FIELD_PATH.read_text(encoding="utf-8")
     food_community_share_date_time_fields_content = FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH.read_text(
         encoding="utf-8"
@@ -2040,6 +2044,19 @@ def main() -> int:
             ("record text field multiline style", "multilineField: {"),
         ):
             _assert_contains(label, record_text_field_content, marker)
+        for label, marker in (
+            ("community public display name field component", "export function CommunityPublicDisplayNameField"),
+            ("community public display name field accessibility prop", "accessibilityLabel={accessibilityLabel}"),
+            ("community public display name field value prop", "value={value}"),
+            ("community public display name field handler prop", "onChangeText={onChangeText}"),
+            ("community public display name field max length prop", "maxLength={maxLength}"),
+            ("community public display name field placeholder", 'placeholder="社群公開顯示名稱"'),
+            ("community public display name field normalization", 'autoCapitalize="none"'),
+            ("community public display name field autocorrect", "autoCorrect={false}"),
+            ("community public display name field input style", "input: {"),
+            ("community public display name field min height", "minHeight: 52"),
+        ):
+            _assert_contains(label, community_public_display_name_field_content, marker)
         for label, marker in (
             ("food community search field component", "export function FoodCommunitySearchField"),
             ("food community search field accessibility prop", "accessibilityLabel={accessibilityLabel}"),

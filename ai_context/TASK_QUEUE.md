@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T2014: Reuse community public display name field shell
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/communityPublicDisplayNameField.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared `CommunityPublicDisplayNameField` shell for the hidden Community public profile input.
+- Moved the public display-name input and local input styling out of `App.tsx`.
+- Preserved accessibility label, value, change handler, max length, placeholder, normalization, and input styling without adding a visible label.
+- Updated navigation verifier coverage for the component boundary and App wiring.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining hidden/future single-input clusters without changing first-version scope.
+
 ### T2013: Reuse food community search field shell
 
 Status: done
