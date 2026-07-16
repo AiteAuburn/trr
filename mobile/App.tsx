@@ -813,6 +813,7 @@ import { NativeDebugRunActions } from "./nativeDebugRunActions";
 import { NativeDownloadKindSelector } from "./nativeDownloadKindSelector";
 import { NativeDebugTextField } from "./nativeDebugTextField";
 import { PreviewRecordEditActionRow } from "./previewRecordEditActionRow";
+import { ProductionAuthReadinessList } from "./productionAuthReadinessList";
 import { RecordingResultActionRow } from "./recordingResultActionRow";
 import { RecordingWhisperModelSelector } from "./recordingWhisperModelSelector";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
@@ -12351,15 +12352,7 @@ export default function App() {
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authReadiness}</Text>
               <Text style={styles.evidence}>{accountSecurityReadinessBoundaryDisplayText}</Text>
               <Text style={styles.evidence}>{tokenStorageStatusDisplayText}</Text>
-              {productionAuthReadinessDisplayRows.map((item) => (
-                <View key={previewStatusRowKey(item)} style={styles.highlightRow}>
-                  <Text style={styles.previewModeBadge}>{previewStatusRowStatusLabel(item)}</Text>
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{previewStatusRowTitle(item)}</Text>
-                    <Text style={styles.evidence}>{previewStatusRowCopy(item)}</Text>
-                  </View>
-                </View>
-              ))}
+              <ProductionAuthReadinessList items={productionAuthReadinessDisplayRows} />
             </View>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authBoundary}</Text>

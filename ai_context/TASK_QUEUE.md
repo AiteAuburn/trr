@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T2054: Extract production auth readiness list
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/productionAuthReadinessList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `ProductionAuthReadinessList` for Account Security production-auth readiness rows.
+- Replaced the inline `productionAuthReadinessDisplayRows.map` highlight-row list in `App.tsx`.
+- Preserved the auth-readiness block, token-storage status text, row keys, status badges, title/copy text, and highlight-row styling.
+- Updated navigation verifier coverage for the component boundary and App wiring.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing adjacent Account Security boundary checklist and settings subpage row clusters without changing first-version scope.
+
 ### T2053: Extract auth session display list
 
 Status: done

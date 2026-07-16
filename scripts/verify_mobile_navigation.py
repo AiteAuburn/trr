@@ -108,6 +108,7 @@ RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.ts
 RECORD_EDIT_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "recordEditFooterActions.tsx"
 RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.tsx"
 PREVIEW_RECORD_EDIT_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "previewRecordEditActionRow.tsx"
+PRODUCTION_AUTH_READINESS_LIST_PATH = REPO_ROOT / "mobile" / "productionAuthReadinessList.tsx"
 BACKEND_URL_FIELD_PATH = REPO_ROOT / "mobile" / "backendUrlField.tsx"
 NATIVE_DEBUG_ACTION_BUTTON_PATH = REPO_ROOT / "mobile" / "nativeDebugActionButton.tsx"
 NATIVE_DEBUG_RUN_ACTIONS_PATH = REPO_ROOT / "mobile" / "nativeDebugRunActions.tsx"
@@ -1499,6 +1500,7 @@ def main() -> int:
     record_edit_footer_actions_content = RECORD_EDIT_FOOTER_ACTIONS_PATH.read_text(encoding="utf-8")
     record_edit_header_fields_content = RECORD_EDIT_HEADER_FIELDS_PATH.read_text(encoding="utf-8")
     preview_record_edit_action_row_content = PREVIEW_RECORD_EDIT_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    production_auth_readiness_list_content = PRODUCTION_AUTH_READINESS_LIST_PATH.read_text(encoding="utf-8")
     backend_url_field_content = BACKEND_URL_FIELD_PATH.read_text(encoding="utf-8")
     native_debug_action_button_content = NATIVE_DEBUG_ACTION_BUTTON_PATH.read_text(encoding="utf-8")
     native_debug_run_actions_content = NATIVE_DEBUG_RUN_ACTIONS_PATH.read_text(encoding="utf-8")
@@ -5327,6 +5329,20 @@ def main() -> int:
             ("preview record edit action row secondary style", "secondaryButton: {"),
         ):
             _assert_contains(label, preview_record_edit_action_row_content, marker)
+        for label, marker in (
+            ("production auth readiness list component", "export function ProductionAuthReadinessList"),
+            ("production auth readiness list key helper", "function productionAuthReadinessItemKey(item: { title: string })"),
+            ("production auth readiness list key helper fields", "return item.title;"),
+            ("production auth readiness list map", "items.map((item) => ("),
+            ("production auth readiness list row key", "key={productionAuthReadinessItemKey(item)}"),
+            ("production auth readiness list status", "{item.statusLabel}"),
+            ("production auth readiness list title", "{item.title}"),
+            ("production auth readiness list copy", "{item.copy}"),
+            ("production auth readiness list row style", "highlightRow: {"),
+            ("production auth readiness list badge style", "previewModeBadge: {"),
+            ("production auth readiness list text style", "recordContent: {"),
+        ):
+            _assert_contains(label, production_auth_readiness_list_content, marker)
         _assert_contains(
             "manual record confirm enter handler",
             content,
@@ -10966,7 +10982,8 @@ def main() -> int:
             ("preview timed row time helper fields", "return row.time;"),
             ("subscription management preview status row key binding", "subscriptionManagementDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
             ("privacy control preview status row key binding", "privacyControlDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
-            ("production auth readiness preview status row key binding", "productionAuthReadinessDisplayRows.map((item) => (\n                <View key={previewStatusRowKey(item)}"),
+            ("production auth readiness list binding", "<ProductionAuthReadinessList"),
+            ("production auth readiness list items binding", "items={productionAuthReadinessDisplayRows}"),
             ("session management preview list key boundary", "<SessionManagementPreviewList"),
             ("auth provider preview list key boundary", "<AuthProviderPreviewList"),
             ("reminder preview status row key binding", "reminderPreviewDisplayItems.map((item) => (\n                <View key={previewStatusRowKey(item)}"),
@@ -10980,9 +10997,6 @@ def main() -> int:
             ("auth provider preview list disabled binding", "disabled={isAuthOperationInFlight}"),
             ("auth provider preview list items binding", "items={authProviderDisplayItems}"),
             ("auth provider preview list handler binding", "onProviderPress={pressAuthProviderPreview}"),
-            ("production auth readiness preview status row title binding", "{previewStatusRowTitle(item)}"),
-            ("production auth readiness preview status row copy binding", "{previewStatusRowCopy(item)}"),
-            ("production auth readiness preview status row status binding", "{previewStatusRowStatusLabel(item)}"),
             ("session management preview list handler binding", "onSessionPress={pressAuthSessionManagementPreview}"),
             ("auth session display list items binding", "items={authSessionDisplayItems}"),
             ("reminder preview status row time binding", "{previewTimedRowTime(item)}"),
@@ -11312,10 +11326,6 @@ def main() -> int:
             (
                 "privacy control preview status rows render block",
                 r"privacyControlDisplayRows\.map\(\(row\) => \(([\s\S]*?</View>\n\s*)\)\)",
-            ),
-            (
-                "production auth readiness preview status rows render block",
-                r"productionAuthReadinessDisplayRows\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
             ),
             (
                 "reminder preview status rows render block",
@@ -13138,6 +13148,7 @@ def main() -> int:
             ("direct auth provider preview map", "authProviderDisplayItems.map((item) => ("),
             ("direct auth provider preview binding", "onPress={() => startAuthProviderChallenge(item.provider)}"),
             ("direct auth provider handler target binding", "startAuthProviderChallenge(item.provider);"),
+            ("direct production auth readiness map", "productionAuthReadinessDisplayRows.map((item) => ("),
             ("direct auth session display map", "authSessionDisplayItems.map((item) => ("),
             ("direct auth session management map", "sessionManagementDisplayItems.map((item) => ("),
             ("direct auth session management status binding", "onPress={() => showAuthSessionManagementStatus(item.actionStatus)}"),

@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2054 extract production auth readiness list
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/productionAuthReadinessList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `ProductionAuthReadinessList` for Account Security production-auth readiness rows.
+- Replaced the inline `productionAuthReadinessDisplayRows.map` highlight-row list in `App.tsx`.
+- Preserved the auth-readiness block, token-storage status text, row keys, status badges, title/copy text, and highlight-row styling.
+- Updated navigation verifier coverage for the component boundary and App wiring.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing adjacent Account Security boundary checklist and settings subpage row clusters without changing first-version scope.
+
 ### T2053 extract auth session display list
 
 類型：mobile / refactor / verifier / docs
