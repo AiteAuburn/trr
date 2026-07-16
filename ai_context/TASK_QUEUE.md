@@ -34,6 +34,39 @@ None.
 
 ## Done
 
+### T2055: Extract account security boundary grid
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/accountSecurityBoundaryGrid.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `AccountSecurityBoundaryGrid` for Account Security boundary metric rows.
+- Replaced the inline `accountSecurityBoundaryRows.map` report-boundary grid in `App.tsx`.
+- Moved Account Security boundary row key/label/value helpers into the component.
+- Preserved the same boundary row data, labels, values, card styling, and grid wrapping.
+- Updated navigation verifier coverage for the component boundary, App wiring, and direct inline-map guard.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing adjacent settings subpage boundary grids and checklist clusters without changing first-version scope.
+
 ### T2054: Extract production auth readiness list
 
 Status: done

@@ -14,6 +14,7 @@ APP_TYPES_PATH = REPO_ROOT / "mobile" / "appTypes.ts"
 APP_RUNTIME_CONFIG_PATH = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 ACCOUNT_SECURITY_ACTION_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityActionGrid.tsx"
+ACCOUNT_SECURITY_BOUNDARY_GRID_PATH = REPO_ROOT / "mobile" / "accountSecurityBoundaryGrid.tsx"
 AUTH_PROVIDER_PREVIEW_LIST_PATH = REPO_ROOT / "mobile" / "authProviderPreviewList.tsx"
 AUTH_SESSION_DISPLAY_LIST_PATH = REPO_ROOT / "mobile" / "authSessionDisplayList.tsx"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
@@ -1400,6 +1401,7 @@ def main() -> int:
     app_runtime_config_content = APP_RUNTIME_CONFIG_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     account_security_action_grid_content = ACCOUNT_SECURITY_ACTION_GRID_PATH.read_text(encoding="utf-8")
+    account_security_boundary_grid_content = ACCOUNT_SECURITY_BOUNDARY_GRID_PATH.read_text(encoding="utf-8")
     auth_provider_preview_list_content = AUTH_PROVIDER_PREVIEW_LIST_PATH.read_text(encoding="utf-8")
     auth_session_display_list_content = AUTH_SESSION_DISPLAY_LIST_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
@@ -9833,6 +9835,23 @@ def main() -> int:
         ):
             _assert_contains(label, account_security_action_grid_content, marker)
         for label, marker in (
+            ("account security boundary grid component", "export function AccountSecurityBoundaryGrid"),
+            ("account security boundary grid row type", "export type AccountSecurityBoundaryRow"),
+            ("account security boundary grid key helper", "function accountSecurityBoundaryRowKey(row: AccountSecurityBoundaryRow)"),
+            ("account security boundary grid key helper fields", "return row.label;"),
+            ("account security boundary grid label helper", "function accountSecurityBoundaryRowLabel(row: AccountSecurityBoundaryRow)"),
+            ("account security boundary grid label helper fields", "return row.label;"),
+            ("account security boundary grid value helper", "function accountSecurityBoundaryRowValue(row: AccountSecurityBoundaryRow)"),
+            ("account security boundary grid value helper fields", "return row.value;"),
+            ("account security boundary grid map", "rows.map((row) => ("),
+            ("account security boundary grid key binding", "key={accountSecurityBoundaryRowKey(row)}"),
+            ("account security boundary grid label binding", "{accountSecurityBoundaryRowLabel(row)}"),
+            ("account security boundary grid value binding", "{accountSecurityBoundaryRowValue(row)}"),
+            ("account security boundary grid wrapper style", "reportBoundaryGrid: {"),
+            ("account security boundary grid card style", "reportBoundaryCard: {"),
+        ):
+            _assert_contains(label, account_security_boundary_grid_content, marker)
+        for label, marker in (
             ("auth provider preview list component", "export function AuthProviderPreviewList"),
             ("auth provider preview title helper", "function authProviderPreviewTitleLabel(item: { title: string })"),
             ("auth provider preview title helper fields", "return `${item.title} 登入`;"),
@@ -11714,15 +11733,8 @@ def main() -> int:
             ("auth action status display text binding", "const authActionStatusDisplayText = authStatusDisplay.authAction;"),
             ("auth token storage status display text binding", "const tokenStorageStatusDisplayText = authStatusDisplay.tokenStorage;"),
             ("auth token storage render display binding", "<Text style={styles.evidence}>{tokenStorageStatusDisplayText}</Text>"),
-            ("account security boundary row key helper", "function accountSecurityBoundaryRowKey(row: (typeof accountSecurityBoundaryRows)[number])"),
-            ("account security boundary row key helper fields", "return row.label;"),
-            ("account security boundary row key helper binding", "key={accountSecurityBoundaryRowKey(row)}"),
-            ("account security boundary row label helper", "function accountSecurityBoundaryRowLabel(row: (typeof accountSecurityBoundaryRows)[number])"),
-            ("account security boundary row label helper fields", "return row.label;"),
-            ("account security boundary row label helper binding", "{accountSecurityBoundaryRowLabel(row)}"),
-            ("account security boundary row value helper", "function accountSecurityBoundaryRowValue(row: (typeof accountSecurityBoundaryRows)[number])"),
-            ("account security boundary row value helper fields", "return row.value;"),
-            ("account security boundary row value helper binding", "{accountSecurityBoundaryRowValue(row)}"),
+            ("account security boundary grid binding", "<AccountSecurityBoundaryGrid"),
+            ("account security boundary grid rows binding", "rows={accountSecurityBoundaryRows}"),
             ("profile settings boundary row key helper", "function profileSettingsBoundaryRowKey(row: (typeof profileSettingsBoundaryRows)[number])"),
             ("profile settings boundary row key helper fields", "return row.label;"),
             ("profile settings boundary row key helper binding", "key={profileSettingsBoundaryRowKey(row)}"),
@@ -14271,6 +14283,16 @@ def main() -> int:
             "store search direct setter binding",
             content,
             "onChangeText={(value) => setStoreSearchText(boundStoreSearchText(value))}",
+        )
+        _assert_not_contains(
+            "account security direct boundary grid map",
+            content,
+            "accountSecurityBoundaryRows.map((row) => (",
+        )
+        _assert_not_contains(
+            "account security direct boundary row key helper",
+            content,
+            "function accountSecurityBoundaryRowKey(row: (typeof accountSecurityBoundaryRows)[number])",
         )
         _assert_not_contains(
             "account security direct boundary row key binding",

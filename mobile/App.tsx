@@ -788,6 +788,7 @@ import { HistoryNoRecordStatusBlock } from "./historyNoRecordStatusBlock";
 import { HistorySelectedDatePanel } from "./historySelectedDatePanel";
 import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
 import { AccountSecurityActionGrid } from "./accountSecurityActionGrid";
+import { AccountSecurityBoundaryGrid } from "./accountSecurityBoundaryGrid";
 import { AuthProviderPreviewList } from "./authProviderPreviewList";
 import { AuthSessionDisplayList } from "./authSessionDisplayList";
 import { BackendUrlField } from "./backendUrlField";
@@ -6005,18 +6006,6 @@ export default function App() {
 
   function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
     selectFoodCommunityCategory(foodCommunityCategoryTarget(category));
-  }
-
-  function accountSecurityBoundaryRowKey(row: (typeof accountSecurityBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function accountSecurityBoundaryRowLabel(row: (typeof accountSecurityBoundaryRows)[number]) {
-    return row.label;
-  }
-
-  function accountSecurityBoundaryRowValue(row: (typeof accountSecurityBoundaryRows)[number]) {
-    return row.value;
   }
 
   function profileSettingsBoundaryRowKey(row: (typeof profileSettingsBoundaryRows)[number]) {
@@ -12305,14 +12294,7 @@ export default function App() {
                 <Text style={styles.evidence}>{authModeDisplayCopy}</Text>
               </View>
             </View>
-            <View style={styles.reportBoundaryGrid}>
-              {accountSecurityBoundaryRows.map((row) => (
-                <View key={accountSecurityBoundaryRowKey(row)} style={styles.reportBoundaryCard}>
-                  <Text style={styles.confidence}>{accountSecurityBoundaryRowLabel(row)}</Text>
-                  <Text style={styles.recordType}>{accountSecurityBoundaryRowValue(row)}</Text>
-                </View>
-              ))}
-            </View>
+            <AccountSecurityBoundaryGrid rows={accountSecurityBoundaryRows} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authProviderPreview}</Text>
               <Text style={styles.evidence}>{accountSecurityProviderBoundaryDisplayText}</Text>
