@@ -8909,6 +8909,14 @@ export default function App() {
     setNativeStatus(nativeLlamaSuccessStatusMessage());
   }
 
+  function handleNativeBenchmarkMissingInput() {
+    setNativeStatus(nativeBenchmarkMissingInputStatusMessage());
+  }
+
+  function handleNativeBenchmarkSuccess(results: Array<Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>>) {
+    setNativeStatus(nativeBenchmarkResultStatusMessage(results));
+  }
+
   async function downloadSelectedModel() {
     if (isNativeDebugActionBlocked()) {
       return;
@@ -9047,10 +9055,10 @@ export default function App() {
         );
       }
       if (results.length === 0) {
-        setNativeStatus(nativeBenchmarkMissingInputStatusMessage());
+        handleNativeBenchmarkMissingInput();
         return;
       }
-      setNativeStatus(nativeBenchmarkResultStatusMessage(results));
+      handleNativeBenchmarkSuccess(results);
     } finally {
       finishNativeDebugAction();
     }
