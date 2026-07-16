@@ -9067,11 +9067,7 @@ export default function App() {
   }
 
   async function runNativeWhisper() {
-    if (isNativeDebugActionBlocked()) {
-      return;
-    }
-    if (!enableDebugTools) {
-      openNativeDebugUnavailable();
+    if (!isNativeDebugActionReady()) {
       return;
     }
     const whisperInput = nativeWhisperInput();
