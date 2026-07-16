@@ -5021,6 +5021,10 @@ export default function App() {
     return boundNativeDebugInput(value);
   }
 
+  function downloadedWhisperModels(models: ReturnType<typeof boundDownloadedModels>) {
+    return models.filter((model) => model.kind === "whisper" && model.exists);
+  }
+
   function downloadedWhisperModelInitialPath(models: ReturnType<typeof boundDownloadedModels>) {
     return models[0]?.uri ?? "";
   }
@@ -8849,7 +8853,7 @@ export default function App() {
     try {
       const nextModels = boundDownloadedModels(await listDownloadedModels());
       setDownloadedModels(nextModels);
-      const whisperModels = nextModels.filter((model) => model.kind === "whisper" && model.exists);
+      const whisperModels = downloadedWhisperModels(nextModels);
       const initialWhisperModelPath = downloadedWhisperModelInitialPath(whisperModels);
       if (!whisperModelPath.trim() && initialWhisperModelPath) {
         setWhisperModelPath(nativeDebugInputValue(initialWhisperModelPath));

@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1942: Reuse downloaded Whisper model filter helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `downloadedWhisperModels()` for downloaded native model refresh filtering.
+- Reused the helper from `refreshDownloadedModels()` while preserving automatic Whisper path selection and refresh status count behavior.
+- Updated navigation verifier coverage for the downloaded Whisper model filter helper, fields, and refresh binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing native debug model actions in small behavior-preserving slices.
+
 ### T1941: Reuse manual create request argument helper
 
 Status: done
