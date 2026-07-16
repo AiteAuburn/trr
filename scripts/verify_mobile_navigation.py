@@ -4269,6 +4269,21 @@ def main() -> int:
             "if (validationError) {\n      handlePreviewRecordEditValidationFailure(validationError);\n      return;",
         )
         _assert_contains(
+            "AI candidate preview edit apply and success helper",
+            content,
+            "function applyPreviewRecordEditChangeAndReturnSuccess(",
+        )
+        _assert_contains(
+            "AI candidate preview edit apply and success helper internals",
+            content,
+            "function applyPreviewRecordEditChangeAndReturnSuccess(\n    currentPreview: ParsePreviewResponse,\n    nextRecords: PendingRecord[]\n  ) {\n    applyPreviewRecordEditChange(currentPreview, nextRecords);\n    returnFromPreviewRecordEditSaveSuccess();",
+        )
+        _assert_contains(
+            "AI candidate preview edit apply and success helper binding",
+            content,
+            "applyPreviewRecordEditChangeAndReturnSuccess(preview, nextRecords);",
+        )
+        _assert_contains(
             "AI candidate preview edit change helper",
             content,
             "function applyPreviewRecordEditChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[])",
@@ -4281,7 +4296,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit change helper binding",
             content,
-            "applyPreviewRecordEditChange(preview, nextRecords);\n      returnFromPreviewRecordEditSaveSuccess();",
+            "applyPreviewRecordEditChange(currentPreview, nextRecords);\n    returnFromPreviewRecordEditSaveSuccess();",
         )
         _assert_contains(
             "AI candidate preview edit payload helper",

@@ -3923,6 +3923,14 @@ export default function App() {
     setStatus(validationError);
   }
 
+  function applyPreviewRecordEditChangeAndReturnSuccess(
+    currentPreview: ParsePreviewResponse,
+    nextRecords: PendingRecord[]
+  ) {
+    applyPreviewRecordEditChange(currentPreview, nextRecords);
+    returnFromPreviewRecordEditSaveSuccess();
+  }
+
   function savePreviewRecordEdit() {
     if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {
       returnFromMissingPreviewRecordEditSaveDraft();
@@ -3937,8 +3945,7 @@ export default function App() {
 
     try {
       const nextRecords = buildPreviewRecordEditChangeRecords(preview, selectedPreviewIndex, recordType);
-      applyPreviewRecordEditChange(preview, nextRecords);
-      returnFromPreviewRecordEditSaveSuccess();
+      applyPreviewRecordEditChangeAndReturnSuccess(preview, nextRecords);
     } catch (error) {
       handlePreviewRecordEditFailure(error);
     }
