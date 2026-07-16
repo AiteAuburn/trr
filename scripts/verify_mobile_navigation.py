@@ -4476,7 +4476,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit payload helper internals",
             content,
-            "const payload = buildPayloadFromEditFields(recordType, previewEditFields);\n    if (!payload || typeof payload !== \"object\" || Array.isArray(payload)) {\n      throw new Error(\"payload_json must be an object\");\n    }\n    return payload;",
+            "const payload = buildPayloadFromEditFields(recordType, previewEditFields);\n    if (!isPreviewRecordEditPayloadObject(payload)) {\n      throw new Error(\"payload_json must be an object\");\n    }\n    return payload;",
+        )
+        _assert_contains(
+            "AI candidate preview edit payload object guard",
+            content,
+            "function isPreviewRecordEditPayloadObject(payload: unknown)",
+        )
+        _assert_contains(
+            "AI candidate preview edit payload object guard internals",
+            content,
+            "return Boolean(payload && typeof payload === \"object\" && !Array.isArray(payload));",
         )
         _assert_contains(
             "AI candidate preview edit payload helper binding",

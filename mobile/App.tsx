@@ -3961,10 +3961,14 @@ export default function App() {
 
   function buildPreviewRecordEditPayload(recordType: string) {
     const payload = buildPayloadFromEditFields(recordType, previewEditFields);
-    if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    if (!isPreviewRecordEditPayloadObject(payload)) {
       throw new Error("payload_json must be an object");
     }
     return payload;
+  }
+
+  function isPreviewRecordEditPayloadObject(payload: unknown): payload is Record<string, unknown> {
+    return Boolean(payload && typeof payload === "object" && !Array.isArray(payload));
   }
 
   function validatePreviewRecordEdit(recordType: string) {
