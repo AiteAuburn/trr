@@ -8921,6 +8921,10 @@ export default function App() {
     setNativeStatus(nativeBenchmarkMissingInputStatusMessage());
   }
 
+  function startNativeBenchmarkStatus() {
+    setNativeStatus(nativeBenchmarkProgressStatusMessage());
+  }
+
   function handleNativeBenchmarkSuccess(results: Array<Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>>) {
     setNativeStatus(nativeBenchmarkResultStatusMessage(results));
   }
@@ -9073,7 +9077,7 @@ export default function App() {
       return;
     }
     startNativeDebugAction();
-    setNativeStatus(nativeBenchmarkProgressStatusMessage());
+    startNativeBenchmarkStatus();
     try {
       const results = [];
       const whisperInput = nativeWhisperInput();
