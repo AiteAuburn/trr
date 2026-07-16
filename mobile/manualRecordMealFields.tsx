@@ -1,6 +1,7 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { FieldLabel } from "./fieldLabel";
+import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 
 type ManualRecordMealOption = {
   accessibilityLabel: string;
@@ -67,21 +68,18 @@ export function ManualRecordMealFields<TMeal extends ManualRecordMealOption>({
           })}
         </View>
       </View>
-      <View style={styles.formField}>
-        <FieldLabel icon={"🍽"} label={"飲食內容"} />
-        <TextInput
-          accessibilityLabel={foodItemsAccessibilityLabel}
-          value={foodItems}
-          onChangeText={onFoodItemsChange}
-          maxLength={foodItemsMaxLength}
-          autoCapitalize="none"
-          autoCorrect={false}
-          multiline
-          textAlignVertical="top"
-          style={[styles.input, styles.multilineField]}
-          placeholder="水煮蛋、熱狗"
-        />
-      </View>
+      <RecordTextField
+        icon={"🍽"}
+        label={"飲食內容"}
+        accessibilityLabel={foodItemsAccessibilityLabel}
+        value={foodItems}
+        onChangeText={onFoodItemsChange}
+        maxLength={foodItemsMaxLength}
+        multiline
+        textAlignVertical="top"
+        inputStyle={[recordTextFieldStyles.input, recordTextFieldStyles.multilineField]}
+        placeholder="水煮蛋、熱狗"
+      />
     </>
   );
 }
@@ -89,20 +87,6 @@ export function ManualRecordMealFields<TMeal extends ManualRecordMealOption>({
 const styles = StyleSheet.create({
   formField: {
     gap: 8
-  },
-  input: {
-    backgroundColor: "#ffffff",
-    borderColor: "#E3E8E5",
-    borderRadius: 18,
-    borderWidth: 1,
-    color: "#1E1E1E",
-    fontSize: 16,
-    paddingHorizontal: 14,
-    paddingVertical: 12
-  },
-  multilineField: {
-    lineHeight: 22,
-    minHeight: 96
   },
   segmentActive: {
     backgroundColor: "#3FA67F",

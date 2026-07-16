@@ -1993,15 +1993,17 @@ def main() -> int:
             ("manual record meal type selected", "accessibilityState={{ selected: optionSelected }}"),
             ("manual record meal type press", "onPress={() => onMealTypePress(option)}"),
             ("manual record meal type label helper binding", "{manualRecordMealOptionLabel(option)}"),
-            ("manual record food items label", '<FieldLabel icon={"🍽"} label={"飲食內容"} />'),
+            ("manual record meal shared food items field", "<RecordTextField"),
+            ("manual record food items icon", 'icon={"🍽"}'),
+            ("manual record food items label", 'label={"飲食內容"}'),
             ("manual record food items accessibility", "accessibilityLabel={foodItemsAccessibilityLabel}"),
             ("manual record food items value", "value={foodItems}"),
             ("manual record food items handler", "onChangeText={onFoodItemsChange}"),
             ("manual record food items max length", "maxLength={foodItemsMaxLength}"),
             ("manual record food items multiline", "multiline"),
             ("manual record food items text align", 'textAlignVertical="top"'),
-            ("manual record meal input style", "input: {"),
-            ("manual record meal multiline style", "multilineField: {"),
+            ("manual record food items input style", "inputStyle={[recordTextFieldStyles.input, recordTextFieldStyles.multilineField]}"),
+            ("manual record food items placeholder", 'placeholder="水煮蛋、熱狗"'),
         ):
             _assert_contains(label, manual_record_meal_fields_content, marker)
         for label, marker in (
