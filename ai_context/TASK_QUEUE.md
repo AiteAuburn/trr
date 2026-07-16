@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1979: Reuse edit field value helper for selected options
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `recordEditFieldValue()` for preview and record edit selected option comparisons.
+- Preserved glucose unit, glucose timing, and meal type selected-state behavior while aligning selected-value reads with the existing edit field value helper.
+- Updated navigation verifier coverage for the selected option helper bindings.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/preview edit/delete data operations/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing edit field value/helper coverage in small behavior-preserving slices.
+
 ### T1978: Tighten manual record option target verifier
 
 Status: done

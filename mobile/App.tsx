@@ -10352,7 +10352,7 @@ export default function App() {
                 </View>
                 <View style={styles.segmentRow}>
                   {glucoseUnitDisplayOptions.map((option) => {
-                    const optionSelected = editOptionIsSelected(option, previewEditFields.glucoseUnit);
+                    const optionSelected = editOptionIsSelected(option, recordEditFieldValue(previewEditFields, "glucoseUnit"));
                     return (
                       <Pressable
                         key={editOptionKey(option)}
@@ -10381,7 +10381,7 @@ export default function App() {
                   <FieldLabel icon={"◌"} label={"情境"} />
                   <View style={styles.segmentRow}>
                     {glucoseTimingDisplayOptions.map((option) => {
-                      const optionSelected = editOptionIsSelected(option, previewEditFields.glucoseTiming);
+                      const optionSelected = editOptionIsSelected(option, recordEditFieldValue(previewEditFields, "glucoseTiming"));
                       return (
                         <Pressable
                           key={editOptionKey(option)}
@@ -10415,7 +10415,7 @@ export default function App() {
                   <FieldLabel icon={"🥣"} label={"餐別"} />
                   <View style={styles.segmentRow}>
                     {mealTypeDisplayOptions.map((option) => {
-                      const optionSelected = editOptionIsSelected(option, previewEditFields.mealType);
+                      const optionSelected = editOptionIsSelected(option, recordEditFieldValue(previewEditFields, "mealType"));
                       return (
                         <Pressable
                           key={editOptionKey(option)}
@@ -11213,7 +11213,7 @@ export default function App() {
                 </View>
                 <View style={styles.segmentRow}>
                   {glucoseUnitDisplayOptions.map((option) => {
-                    const optionSelected = editOptionIsSelected(option, recordEditFields.glucoseUnit);
+                    const optionSelected = editOptionIsSelected(option, recordEditFieldValue(recordEditFields, "glucoseUnit"));
                     return (
                       <Pressable
                         key={editOptionKey(option)}
@@ -11242,7 +11242,7 @@ export default function App() {
                   <FieldLabel icon={"◌"} label={"情境"} />
                   <View style={styles.segmentRow}>
                     {glucoseTimingDisplayOptions.map((option) => {
-                      const optionSelected = editOptionIsSelected(option, recordEditFields.glucoseTiming);
+                      const optionSelected = editOptionIsSelected(option, recordEditFieldValue(recordEditFields, "glucoseTiming"));
                       return (
                         <Pressable
                           key={editOptionKey(option)}
@@ -11277,7 +11277,7 @@ export default function App() {
                   <FieldLabel icon={"🥣"} label={"餐別"} />
                   <View style={styles.segmentRow}>
                     {mealTypeDisplayOptions.map((option) => {
-                      const optionSelected = editOptionIsSelected(option, recordEditFields.mealType);
+                      const optionSelected = editOptionIsSelected(option, recordEditFieldValue(recordEditFields, "mealType"));
                       return (
                         <Pressable
                           key={editOptionKey(option)}
