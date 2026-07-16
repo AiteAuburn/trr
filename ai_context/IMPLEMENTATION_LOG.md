@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2021 reuse native debug action button
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/nativeDebugActionButton.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared `NativeDebugActionButton` shell for advanced Dev Client debug actions.
+- Reused it for native module check, native model download, Whisper run, Llama run, and native benchmark actions.
+- Preserved existing labels, accessibility labels, disabled binding, and handler targets.
+- Updated navigation verifier coverage for the component boundary and App wiring.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining inline pressable and layout clusters without changing first-version scope.
+
 ### T2020 reuse native download kind selector
 
 類型：mobile / refactor / verifier / docs

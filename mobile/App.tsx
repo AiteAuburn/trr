@@ -793,6 +793,7 @@ import { ManualRecordMedicationFields } from "./manualRecordMedicationFields";
 import { ManualRecordNoteFields } from "./manualRecordNoteFields";
 import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
 import { MetricCard } from "./metricCard";
+import { NativeDebugActionButton } from "./nativeDebugActionButton";
 import { NativeDownloadKindSelector } from "./nativeDownloadKindSelector";
 import { NativeDebugTextField } from "./nativeDebugTextField";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
@@ -12665,30 +12666,18 @@ export default function App() {
                     selectedKind={downloadKind}
                     whisperAccessibilityLabel={nativeWhisperDownloadKindAccessibilityDisplayLabel}
                   />
-                  <Pressable
+                  <NativeDebugActionButton
                     accessibilityLabel={nativeModuleCheckAccessibilityDisplayLabel}
-                    accessibilityRole="button"
-                    accessibilityState={{ disabled: isBusy }}
-                    style={[styles.secondaryButton, isBusy ? styles.buttonDisabled : null]}
                     disabled={isBusy}
+                    label={nativeModuleCheckDisplayLabel}
                     onPress={checkNativeModulesFromSettings}
-                  >
-                    <Text style={styles.secondaryButtonText}>
-                      {nativeModuleCheckDisplayLabel}
-                    </Text>
-                  </Pressable>
-                  <Pressable
+                  />
+                  <NativeDebugActionButton
                     accessibilityLabel={nativeModelDownloadAccessibilityDisplayLabel}
-                    accessibilityRole="button"
-                    accessibilityState={{ disabled: isBusy }}
-                    style={[styles.secondaryButton, isBusy ? styles.buttonDisabled : null]}
                     disabled={isBusy}
+                    label={nativeModelDownloadDisplayLabel}
                     onPress={downloadNativeModelFromSettings}
-                  >
-                    <Text style={styles.secondaryButtonText}>
-                      {nativeModelDownloadDisplayLabel}
-                    </Text>
-                  </Pressable>
+                  />
                 {downloadedModels.map((model) => (
                   <Text key={downloadedModelRowKey(model)} style={styles.rejectedText}>
                     {downloadedModelRowLabel(model)}
@@ -12719,36 +12708,24 @@ export default function App() {
                   placeholder="Llama GGUF model path"
                 />
                   <View style={styles.actionRow}>
-                    <Pressable
+                    <NativeDebugActionButton
                       accessibilityLabel={nativeWhisperRunAccessibilityDisplayLabel}
-                      accessibilityRole="button"
-                      accessibilityState={{ disabled: isBusy }}
-                      style={[styles.secondaryButton, isBusy ? styles.buttonDisabled : null]}
                       disabled={isBusy}
+                      label={auxiliaryDisplayLabels.whisper}
                       onPress={runNativeWhisperFromSettings}
-                    >
-                      <Text style={styles.secondaryButtonText}>{auxiliaryDisplayLabels.whisper}</Text>
-                    </Pressable>
-                    <Pressable
+                    />
+                    <NativeDebugActionButton
                       accessibilityLabel={nativeLlamaRunAccessibilityDisplayLabel}
-                      accessibilityRole="button"
-                      accessibilityState={{ disabled: isBusy }}
-                      style={[styles.secondaryButton, isBusy ? styles.buttonDisabled : null]}
                       disabled={isBusy}
+                      label={auxiliaryDisplayLabels.llama}
                       onPress={runNativeLlamaFromSettings}
-                    >
-                      <Text style={styles.secondaryButtonText}>{auxiliaryDisplayLabels.llama}</Text>
-                    </Pressable>
-                    <Pressable
+                    />
+                    <NativeDebugActionButton
                       accessibilityLabel={nativeBenchmarkAccessibilityDisplayLabel}
-                      accessibilityRole="button"
-                      accessibilityState={{ disabled: isBusy }}
-                      style={[styles.secondaryButton, isBusy ? styles.buttonDisabled : null]}
                       disabled={isBusy}
+                      label={auxiliaryDisplayLabels.benchmark}
                       onPress={runNativeBenchmarksFromSettings}
-                    >
-                      <Text style={styles.secondaryButtonText}>{auxiliaryDisplayLabels.benchmark}</Text>
-                    </Pressable>
+                    />
                   </View>
                 {llamaDebugOutput ? <Text style={styles.debugOutput}>{llamaDebugOutput}</Text> : null}
               </View>

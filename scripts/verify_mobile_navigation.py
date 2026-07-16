@@ -84,6 +84,7 @@ RECORD_DETAIL_INFO_PANEL_PATH = REPO_ROOT / "mobile" / "recordDetailInfoPanel.ts
 RECORD_EDIT_FOOTER_ACTIONS_PATH = REPO_ROOT / "mobile" / "recordEditFooterActions.tsx"
 RECORD_EDIT_HEADER_FIELDS_PATH = REPO_ROOT / "mobile" / "recordEditHeaderFields.tsx"
 BACKEND_URL_FIELD_PATH = REPO_ROOT / "mobile" / "backendUrlField.tsx"
+NATIVE_DEBUG_ACTION_BUTTON_PATH = REPO_ROOT / "mobile" / "nativeDebugActionButton.tsx"
 NATIVE_DOWNLOAD_KIND_SELECTOR_PATH = REPO_ROOT / "mobile" / "nativeDownloadKindSelector.tsx"
 NATIVE_DEBUG_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "nativeDebugTextField.tsx"
 RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
@@ -1445,6 +1446,7 @@ def main() -> int:
     record_edit_footer_actions_content = RECORD_EDIT_FOOTER_ACTIONS_PATH.read_text(encoding="utf-8")
     record_edit_header_fields_content = RECORD_EDIT_HEADER_FIELDS_PATH.read_text(encoding="utf-8")
     backend_url_field_content = BACKEND_URL_FIELD_PATH.read_text(encoding="utf-8")
+    native_debug_action_button_content = NATIVE_DEBUG_ACTION_BUTTON_PATH.read_text(encoding="utf-8")
     native_download_kind_selector_content = NATIVE_DOWNLOAD_KIND_SELECTOR_PATH.read_text(encoding="utf-8")
     native_debug_text_field_content = NATIVE_DEBUG_TEXT_FIELD_PATH.read_text(encoding="utf-8")
     record_option_field_content = RECORD_OPTION_FIELD_PATH.read_text(encoding="utf-8")
@@ -2095,6 +2097,19 @@ def main() -> int:
             ("native debug text field disabled style block", "inputDisabled: {"),
         ):
             _assert_contains(label, native_debug_text_field_content, marker)
+        for label, marker in (
+            ("native debug action button component", "export function NativeDebugActionButton"),
+            ("native debug action button accessibility prop", "accessibilityLabel={accessibilityLabel}"),
+            ("native debug action button role", 'accessibilityRole="button"'),
+            ("native debug action button disabled state", "accessibilityState={{ disabled }}"),
+            ("native debug action button disabled prop", "disabled={disabled}"),
+            ("native debug action button handler prop", "onPress={onPress}"),
+            ("native debug action button label prop", "{label}"),
+            ("native debug action button disabled style", "disabled ? styles.buttonDisabled : null"),
+            ("native debug action button secondary style", "secondaryButton: {"),
+            ("native debug action button text style", "secondaryButtonText: {"),
+        ):
+            _assert_contains(label, native_debug_action_button_content, marker)
         for label, marker in (
             ("native download kind selector component", "export function NativeDownloadKindSelector"),
             ("native download kind selector whisper label prop", "whisperAccessibilityLabel"),
@@ -11348,6 +11363,7 @@ def main() -> int:
             ("native llama download kind accessibility binding", "llamaAccessibilityLabel={nativeLlamaDownloadKindAccessibilityDisplayLabel}"),
             ("native download kind selected binding", "selectedKind={downloadKind}"),
             ("native download kind disabled binding", "disabled={isBusy}"),
+            ("native debug action button binding", "<NativeDebugActionButton"),
             ("native module check settings binding", "onPress={checkNativeModulesFromSettings}"),
             ("native model download settings binding", "onPress={downloadNativeModelFromSettings}"),
             ("native whisper settings binding", "onPress={runNativeWhisperFromSettings}"),
@@ -11358,7 +11374,12 @@ def main() -> int:
             ("native whisper run accessibility binding", "accessibilityLabel={nativeWhisperRunAccessibilityDisplayLabel}"),
             ("native llama run accessibility binding", "accessibilityLabel={nativeLlamaRunAccessibilityDisplayLabel}"),
             ("native benchmark accessibility binding", "accessibilityLabel={nativeBenchmarkAccessibilityDisplayLabel}"),
-            ("native debug action disabled state", "accessibilityState={{ disabled: isBusy }}"),
+            ("native module check label binding", "label={nativeModuleCheckDisplayLabel}"),
+            ("native model download label binding", "label={nativeModelDownloadDisplayLabel}"),
+            ("native whisper run label binding", "label={auxiliaryDisplayLabels.whisper}"),
+            ("native llama run label binding", "label={auxiliaryDisplayLabels.llama}"),
+            ("native benchmark label binding", "label={auxiliaryDisplayLabels.benchmark}"),
+            ("native debug action disabled binding", "disabled={isBusy}"),
             ("doctor share token status handler", "function showDoctorShareTokenStatus()"),
             ("doctor share report status handler", "function showDoctorShareReportBoundaryStatus()"),
             ("health integration permission status handler", "function showHealthIntegrationPermissionStatus()"),
