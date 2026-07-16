@@ -3448,6 +3448,10 @@ export default function App() {
     }
     setPreviewActionReturnScreen(returnScreen);
     selectPreviewRemoveIndex(index);
+    openPreviewRemoveConfirmScreen();
+  }
+
+  function openPreviewRemoveConfirmScreen() {
     openScreenWithStatus("aiRemoveConfirm", aiCandidateRemoveConfirmStatusMessage());
   }
 

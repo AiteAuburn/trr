@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1845: Reuse preview remove confirm screen opener
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `openPreviewRemoveConfirmScreen()` for the AI remove-confirm screen/status opener.
+- Reused the helper from `openPreviewRecordRemoveConfirm()` while preserving missing-record fallback, return target storage, remove selection state, target screen, and status behavior.
+- Updated navigation verifier coverage for the screen opener helper internals and remove-open binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser endpoint/request semantics/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining preview remove/edit open/return helpers and action paths in small behavior-preserving slices.
+
 ### T1844: Reuse preview remove confirm index helper
 
 Status: done

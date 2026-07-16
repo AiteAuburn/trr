@@ -4076,7 +4076,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove confirm selection helper binding",
             content,
-            'selectPreviewRemoveIndex(index);\n    openScreenWithStatus("aiRemoveConfirm", aiCandidateRemoveConfirmStatusMessage());',
+            "selectPreviewRemoveIndex(index);\n    openPreviewRemoveConfirmScreen();",
+        )
+        _assert_contains(
+            "AI candidate remove confirm screen opener helper",
+            content,
+            "function openPreviewRemoveConfirmScreen()",
+        )
+        _assert_contains(
+            "AI candidate remove confirm screen opener helper internals",
+            content,
+            'function openPreviewRemoveConfirmScreen() {\n    openScreenWithStatus("aiRemoveConfirm", aiCandidateRemoveConfirmStatusMessage());',
         )
         _assert_contains(
             "AI candidate remove confirm missing record screen opener fallback",
