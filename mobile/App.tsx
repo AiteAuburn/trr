@@ -3709,16 +3709,20 @@ export default function App() {
     setIsBusy(false);
   }
 
+  function applyPreviewRecordRemoveChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[]) {
+    if (isPreviewActionReturningToDailyRecord) {
+      reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "delete");
+    } else {
+      applyAiCandidateRemovePreviewRecords(nextRecords);
+    }
+  }
+
   function removePreviewRecord(index: number) {
     if (!preview) {
       return;
     }
     const nextRecords = previewRecordsWithoutRecord(preview.records, index);
-    if (isPreviewActionReturningToDailyRecord) {
-      reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), "delete");
-    } else {
-      applyAiCandidateRemovePreviewRecords(nextRecords);
-    }
+    applyPreviewRecordRemoveChange(preview, nextRecords);
     clearPreviewRemoveActionState();
   }
 

@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1818: Reuse preview remove apply helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `applyPreviewRecordRemoveChange()` for preview remove apply behavior.
+- Reused the helper from `removePreviewRecord()` while preserving daily-record return reorganization, AI candidate remove preview updates, pending selection handling, return screen behavior, action state cleanup, and status messages.
+- Updated navigation verifier coverage for the preview remove apply helper, branch behavior, cleanup binding, and daily-record delete reorganization markers.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/return behavior/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser endpoint/request semantics/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1817: Reuse preview edit apply helper
 
 Status: done

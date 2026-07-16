@@ -4249,14 +4249,24 @@ def main() -> int:
             "function applyAiCandidateRemovePreviewRecords(nextRecords: PendingRecord[]) {\n    if (!applyPreviewRecords(nextRecords)) {\n      return;\n    }\n    setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));",
         )
         _assert_contains(
-            "AI candidate preview remove apply helper binding",
+            "AI candidate preview remove change helper",
             content,
-            "reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), \"delete\");\n    } else {\n      applyAiCandidateRemovePreviewRecords(nextRecords);",
+            "function applyPreviewRecordRemoveChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[])",
+        )
+        _assert_contains(
+            "AI candidate preview remove change helper internals",
+            content,
+            "if (isPreviewActionReturningToDailyRecord) {\n      reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), \"delete\");\n    } else {\n      applyAiCandidateRemovePreviewRecords(nextRecords);",
+        )
+        _assert_contains(
+            "AI candidate preview remove change helper binding",
+            content,
+            "applyPreviewRecordRemoveChange(preview, nextRecords);\n    clearPreviewRemoveActionState();",
         )
         _assert_contains(
             "AI candidate remove action clear helper binding",
             content,
-            "applyAiCandidateRemovePreviewRecords(nextRecords);\n    }\n    clearPreviewRemoveActionState();",
+            "applyPreviewRecordRemoveChange(preview, nextRecords);\n    clearPreviewRemoveActionState();",
         )
         _assert_not_contains(
             "AI candidate remove action direct clear binding",
@@ -6594,8 +6604,8 @@ def main() -> int:
             ("daily record reorganization add binding", 'reorganizeDailyRecordDraftAfterChange(\n      nextPreview,\n      "add",\n      parserSuccessStatusForPreview(nextPreview, voiceSeconds)'),
             ("daily record reorganization edit daily return state binding", 'if (isPreviewActionReturningToDailyRecord) {\n      reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "edit");'),
             ("daily record reorganization edit binding", 'reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "edit");'),
-            ("daily record reorganization delete daily return state binding", 'if (isPreviewActionReturningToDailyRecord) {\n      reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), "delete");'),
-            ("daily record reorganization delete binding", 'reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), "delete");'),
+            ("daily record reorganization delete daily return state binding", 'if (isPreviewActionReturningToDailyRecord) {\n      reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "delete");'),
+            ("daily record reorganization delete binding", 'reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "delete");'),
             ("daily record reorganization summary display", "const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayText("),
             ("daily record reorganization summary render", "<Text style={styles.evidence}>{dailyRecordReorganizationDisplay}</Text>"),
             ("daily record save checklist helper binding", "const aiSaveConfirmChecklistItems = aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordDisplayCount);"),
