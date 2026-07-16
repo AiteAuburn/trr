@@ -842,6 +842,20 @@ function previewRecordState(preview: ParsePreviewResponse | null) {
   };
 }
 
+function saveSuccessState(lastSaveEntryMethod: SaveEntryMethod, hasUnsavedPreviewRecords: boolean) {
+  const isManualSave = lastSaveEntryMethod === "manual";
+
+  return {
+    canContinueManual: isManualSave && !hasUnsavedPreviewRecords,
+    canContinueRecordEntry: !hasUnsavedPreviewRecords,
+    hasManualFallbackWithAiCandidates: isManualSave && hasUnsavedPreviewRecords,
+    hasPartialAiSave: lastSaveEntryMethod === "ai" && hasUnsavedPreviewRecords,
+    hasUnsavedPreviewRecords,
+    isManualSave,
+    shouldPauseEntryActions: hasUnsavedPreviewRecords
+  };
+}
+
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>(initialVisualSmokeScreen ?? "today");
   const [apiBaseUrl, setApiBaseUrl] = useState(defaultApiBaseUrl);
@@ -1306,9 +1320,9 @@ export default function App() {
   const dailyRecordLeaveGuardQuestionDisplayText = dailyRecordLeaveGuardDisplay.question;
   const dailyRecordLeaveGuardCancelAccessibilityLabel = dailyRecordLeaveGuardDisplay.cancelAccessibility;
   const dailyRecordLeaveGuardConfirmAccessibilityLabel = dailyRecordLeaveGuardDisplay.confirmAccessibility;
-  const hasPartialAiSave = lastSaveEntryMethod === "ai" && hasUnsavedPreviewRecords;
-  const hasManualFallbackWithAiCandidates =
-    lastSaveEntryMethod === "manual" && hasUnsavedPreviewRecords;
+  const saveSuccessViewState = saveSuccessState(lastSaveEntryMethod, hasUnsavedPreviewRecords);
+  const hasPartialAiSave = saveSuccessViewState.hasPartialAiSave;
+  const hasManualFallbackWithAiCandidates = saveSuccessViewState.hasManualFallbackWithAiCandidates;
   const aiSaveConfirmChecklistItems = aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordDisplayCount);
   const aiReviewCostBoundaryChecklistItems = aiReviewCostBoundaryChecklistDisplayItems();
   const transcriptReviewCostBoundaryChecklistItems = transcriptReviewCostBoundaryChecklistDisplayItems(
@@ -9363,7 +9377,7 @@ export default function App() {
               <Text style={styles.sectionTitle}>
                 {hasPartialAiSave
                   ? "部分儲存完成"
-                  : lastSaveEntryMethod === "manual"
+                  : saveSuccessViewState.isManualSave
                     ? "手動儲存完成"
                     : "儲存完成"}
               </Text>
@@ -9392,11 +9406,11 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.saveResult}</Text>
               <Text style={styles.evidence}>
-              {lastSaveEntryMethod === "manual"
+              {saveSuccessViewState.isManualSave
                   ? hasManualFallbackWithAiCandidates
                     ? `這筆資料由手動表單直接建立，沒有呼叫 parser 或 LLM；仍有 ${unsavedPreviewRecordDisplayCount} 筆 AI 候選保留在確認流程。`
                     : "這筆資料由手動表單直接建立，沒有呼叫 parser 或 LLM；你可以回到今日紀錄查看，也可以繼續新增下一筆。"
-                  : hasUnsavedPreviewRecords
+                  : saveSuccessViewState.hasUnsavedPreviewRecords
                     ? `已有部分紀錄儲存成功，仍有 ${unsavedPreviewRecordDisplayCount} 筆候選紀錄尚未儲存；不會自動重試或再次呼叫 AI。`
                     : "你可以回到今日紀錄查看，也可以繼續新增下一筆。AI 原始文字只用於確認流程；儲存後已清空目前輸入。"}
               </Text>
@@ -9429,7 +9443,7 @@ export default function App() {
               ))}
             </View>
             <View style={styles.actionRow}>
-              {lastSaveEntryMethod === "manual" && !hasUnsavedPreviewRecords ? (
+              {saveSuccessViewState.canContinueManual ? (
                 <Pressable
                   accessibilityLabel={coreFlowDisplayLabels.saveSuccessManualContinueAccessibility}
                   accessibilityRole="button"
@@ -9438,7 +9452,7 @@ export default function App() {
                 >
                   <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.continueManualAdd}</Text>
                 </Pressable>
-              ) : !hasUnsavedPreviewRecords ? (
+              ) : saveSuccessViewState.canContinueRecordEntry ? (
                 <Pressable
                   accessibilityLabel={coreFlowDisplayLabels.saveSuccessRecordEntryAccessibility}
                   accessibilityRole="button"
@@ -9448,7 +9462,7 @@ export default function App() {
                   <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.continueRecord}</Text>
                 </Pressable>
               ) : null}
-              {lastSaveEntryMethod === "manual" && !hasUnsavedPreviewRecords ? (
+              {saveSuccessViewState.canContinueManual ? (
                 <Pressable
                   accessibilityLabel={coreFlowDisplayLabels.saveSuccessRecordEntryAccessibility}
                   accessibilityRole="button"
@@ -9457,7 +9471,7 @@ export default function App() {
                 >
                   <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.voiceText}</Text>
                 </Pressable>
-              ) : hasUnsavedPreviewRecords ? (
+              ) : saveSuccessViewState.shouldPauseEntryActions ? (
                 <Text style={styles.evidence}>請先處理未儲存 AI 候選；新增入口會在候選處理後恢復。</Text>
               ) : null}
               {selectedRecord ? (
@@ -9470,7 +9484,7 @@ export default function App() {
                   <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.viewDetail}</Text>
                 </Pressable>
               ) : null}
-              {hasUnsavedPreviewRecords ? (
+              {saveSuccessViewState.hasUnsavedPreviewRecords ? (
                 <Pressable
                   accessibilityLabel={coreFlowDisplayLabels.saveSuccessProcessUnsavedAccessibility}
                   accessibilityRole="button"

@@ -3389,6 +3389,26 @@ def main() -> int:
             content,
             "const saveSuccessDestinationItems = saveSuccessDestinationDisplayItems(hasUnsavedPreviewRecords);",
         )
+        for label, marker in (
+            ("save success state helper", "function saveSuccessState(lastSaveEntryMethod: SaveEntryMethod, hasUnsavedPreviewRecords: boolean)"),
+            ("save success state manual flag", 'const isManualSave = lastSaveEntryMethod === "manual";'),
+            ("save success state manual continue flag", "canContinueManual: isManualSave && !hasUnsavedPreviewRecords"),
+            ("save success state record entry flag", "canContinueRecordEntry: !hasUnsavedPreviewRecords"),
+            ("save success state manual fallback flag", "hasManualFallbackWithAiCandidates: isManualSave && hasUnsavedPreviewRecords"),
+            ("save success state partial ai flag", 'hasPartialAiSave: lastSaveEntryMethod === "ai" && hasUnsavedPreviewRecords'),
+            ("save success state pause entry flag", "shouldPauseEntryActions: hasUnsavedPreviewRecords"),
+            ("save success state helper binding", "const saveSuccessViewState = saveSuccessState(lastSaveEntryMethod, hasUnsavedPreviewRecords);"),
+            ("save success partial ai state binding", "const hasPartialAiSave = saveSuccessViewState.hasPartialAiSave;"),
+            ("save success manual fallback state binding", "const hasManualFallbackWithAiCandidates = saveSuccessViewState.hasManualFallbackWithAiCandidates;"),
+            ("save success title manual state binding", ": saveSuccessViewState.isManualSave"),
+            ("save success summary manual state binding", "{saveSuccessViewState.isManualSave"),
+            ("save success summary unsaved state binding", ": saveSuccessViewState.hasUnsavedPreviewRecords"),
+            ("save success manual continue state binding", "{saveSuccessViewState.canContinueManual ? ("),
+            ("save success record entry state binding", ") : saveSuccessViewState.canContinueRecordEntry ? ("),
+            ("save success pause entry state binding", ") : saveSuccessViewState.shouldPauseEntryActions ? ("),
+            ("save success unsaved primary state binding", "{saveSuccessViewState.hasUnsavedPreviewRecords ? ("),
+        ):
+            _assert_contains(label, content, marker)
         _assert_contains(
             "result destination accessibility item",
             shared_display_items_content,
@@ -3512,16 +3532,14 @@ def main() -> int:
             first_version_flow_copy_content,
             '...(hasUnsavedPreviewRecords\n      ? [["⚠", "返回確認", "處理尚未儲存的候選紀錄", "aiReview"] as const]\n      : [])',
         )
-        _assert_contains(
-            "save success manual continue hidden while unsaved",
-            content,
-            'lastSaveEntryMethod === "manual" && !hasUnsavedPreviewRecords',
-        )
-        _assert_contains(
-            "save success record entry hidden while unsaved",
-            content,
-            ') : !hasUnsavedPreviewRecords ? (',
-        )
+        for label, marker in (
+            ("save success direct manual continue condition", 'lastSaveEntryMethod === "manual" && !hasUnsavedPreviewRecords'),
+            ("save success direct record entry condition", ') : !hasUnsavedPreviewRecords ? ('),
+            ("save success direct manual title condition", ': lastSaveEntryMethod === "manual"'),
+            ("save success direct unsaved summary condition", ": hasUnsavedPreviewRecords\n                    ? `已有部分紀錄儲存成功"),
+            ("save success direct unsaved primary condition", "{hasUnsavedPreviewRecords ? (\n                <Pressable"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "save success unsaved entry pause copy",
             content,
@@ -3530,7 +3548,7 @@ def main() -> int:
         _assert_contains(
             "save success unsaved primary CTA",
             content,
-            "hasUnsavedPreviewRecords ? (\n                <Pressable",
+            "saveSuccessViewState.hasUnsavedPreviewRecords ? (\n                <Pressable",
         )
         for label, marker in (
             ("save success manual continue accessibility label", 'saveSuccessManualContinueAccessibility: boundDisplayText("繼續手動新增，不呼叫 AI 或 parser", maxDisplayDetailTextLength)'),

@@ -15,6 +15,36 @@
 
 ## 2026-07-15
 
+### T1748 reuse save success view state
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added a shared save-success view state helper for manual-save, partial-AI-save, manual-fallback-with-candidates, entry-pause, and follow-up action visibility.
+- Reused the helper in Save Success title, result summary, manual/record-entry CTA visibility, entry-pause notice, and unsaved-candidate primary CTA.
+- Updated navigation verifier coverage with positive view-state bindings and negative guards for representative direct Save Success manual/unsaved conditions.
+- 未變更 UI copy/layout、button order、navigation targets、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser request path、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining Save Success / daily-record derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1747 reuse preview warning state
 
 類型：mobile / refactor / verifier / docs
