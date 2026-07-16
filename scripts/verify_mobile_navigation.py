@@ -3315,14 +3315,14 @@ def main() -> int:
             "function clearPreviewSelectionState()",
         )
         _assert_contains(
-            "preview selection state clear helper selected index",
+            "preview selection state clear helper edit draft binding",
             content,
-            "function clearPreviewSelectionState() {\n    setSelectedPreviewIndex(null);",
+            "function clearPreviewSelectionState() {\n    clearSelectedPreviewEditDraft();\n    setPendingPreviewRemoveIndex(null);",
         )
-        _assert_contains(
-            "preview selection state clear helper remove index",
+        _assert_not_contains(
+            "preview selection state clear helper direct edit draft cleanup",
             content,
-            "setPendingPreviewRemoveIndex(null);\n    setPreviewEditFields(emptyRecordEditFields());",
+            "function clearPreviewSelectionState() {\n    setSelectedPreviewIndex(null);\n    setPendingPreviewRemoveIndex(null);\n    setPreviewEditFields(emptyRecordEditFields());",
         )
         _assert_contains(
             "preview action state clear helper",

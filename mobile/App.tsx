@@ -3883,9 +3883,8 @@ export default function App() {
   }
 
   function clearPreviewSelectionState() {
-    setSelectedPreviewIndex(null);
+    clearSelectedPreviewEditDraft();
     setPendingPreviewRemoveIndex(null);
-    setPreviewEditFields(emptyRecordEditFields());
   }
 
   function clearPreviewActionState() {

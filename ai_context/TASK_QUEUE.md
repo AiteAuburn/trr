@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1771: Reuse preview selection edit draft cleanup
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Reused `clearSelectedPreviewEditDraft()` inside `clearPreviewSelectionState()`.
+- Kept pending preview remove index clearing unchanged while centralizing selected edit index and edit-field cleanup.
+- Updated navigation verifier coverage with positive helper binding and direct cleanup-sequence guard.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/return behavior/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1770: Reuse preview remove selection cleanup
 
 Status: done
