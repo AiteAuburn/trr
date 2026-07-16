@@ -3784,13 +3784,27 @@ export default function App() {
   }
 
   function previewRecordRemoveDraft(removeIndex: number) {
-    if (!preview) {
-      return null;
-    }
-    return {
+    const removeDraftSource = {
       currentPreview: preview,
       removeIndex
     };
+    if (!hasPreviewRecordRemoveDraft(removeDraftSource)) {
+      return null;
+    }
+    return {
+      currentPreview: removeDraftSource.currentPreview,
+      removeIndex: removeDraftSource.removeIndex
+    };
+  }
+
+  function hasPreviewRecordRemoveDraft(source: {
+    currentPreview: ParsePreviewResponse | null;
+    removeIndex: number;
+  }): source is {
+    currentPreview: ParsePreviewResponse;
+    removeIndex: number;
+  } {
+    return Boolean(source.currentPreview);
   }
 
   function removePreviewRecordDraft(removeDraft: NonNullable<ReturnType<typeof previewRecordRemoveDraft>>) {

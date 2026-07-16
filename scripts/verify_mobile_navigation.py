@@ -4611,12 +4611,22 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview remove draft helper guard",
             content,
-            "function previewRecordRemoveDraft(removeIndex: number) {\n    if (!preview) {\n      return null;",
+            "function previewRecordRemoveDraft(removeIndex: number) {\n    const removeDraftSource = {\n      currentPreview: preview,\n      removeIndex\n    };\n    if (!hasPreviewRecordRemoveDraft(removeDraftSource)) {\n      return null;",
+        )
+        _assert_contains(
+            "AI candidate preview remove draft readiness helper",
+            content,
+            "function hasPreviewRecordRemoveDraft(source: {",
+        )
+        _assert_contains(
+            "AI candidate preview remove draft readiness helper internals",
+            content,
+            "return Boolean(source.currentPreview);",
         )
         _assert_contains(
             "AI candidate preview remove draft helper payload",
             content,
-            "return {\n      currentPreview: preview,\n      removeIndex\n    };",
+            "return {\n      currentPreview: removeDraftSource.currentPreview,\n      removeIndex: removeDraftSource.removeIndex\n    };",
         )
         _assert_contains(
             "AI candidate preview remove draft helper binding",
