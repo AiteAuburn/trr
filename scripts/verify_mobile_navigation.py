@@ -4835,9 +4835,29 @@ def main() -> int:
             "function seedManualRecordDateTimeForNow()",
         )
         _assert_contains(
+            "manual record date-time inputs helper",
+            content,
+            "function setManualRecordDateTimeInputs(dateTime: { date: string; time: string })",
+        )
+        _assert_contains(
+            "manual record date-time inputs helper fields",
+            content,
+            "setManualRecordDate(dateTime.date);\n    setManualRecordTime(dateTime.time);",
+        )
+        _assert_contains(
+            "manual record date-time now seed helper binding",
+            content,
+            "setManualRecordDateTimeInputs(localDateTimeInputs(new Date()));",
+        )
+        _assert_contains(
             "manual record seed from record helper",
             content,
             "function seedManualRecordStateFromRecord(record: RecordItem)",
+        )
+        _assert_contains(
+            "manual record seed from record date-time binding",
+            content,
+            "setManualRecordDateTimeInputs(localDateTimeInputs(record.occurred_at));",
         )
         _assert_contains(
             "manual record empty now seed helper",

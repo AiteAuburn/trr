@@ -2184,17 +2184,18 @@ export default function App() {
     updateTranscriptDraft(sampleText, "sample");
   }
 
+  function setManualRecordDateTimeInputs(dateTime: { date: string; time: string }) {
+    setManualRecordDate(dateTime.date);
+    setManualRecordTime(dateTime.time);
+  }
+
   function seedManualRecordDateTimeForNow() {
-    const nowInputs = localDateTimeInputs(new Date());
-    setManualRecordDate(nowInputs.date);
-    setManualRecordTime(nowInputs.time);
+    setManualRecordDateTimeInputs(localDateTimeInputs(new Date()));
   }
 
   function seedManualRecordStateFromRecord(record: RecordItem) {
     setManualRecordFields(recordPayloadToEditFields(record));
-    const dateTime = localDateTimeInputs(record.occurred_at);
-    setManualRecordDate(dateTime.date);
-    setManualRecordTime(dateTime.time);
+    setManualRecordDateTimeInputs(localDateTimeInputs(record.occurred_at));
   }
 
   function seedEmptyManualRecordStateForNow() {
