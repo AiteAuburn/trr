@@ -4146,7 +4146,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit missing draft return helper binding",
             content,
-            "if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {\n      returnFromMissingPreviewRecordEditSaveDraft();\n      return;",
+            "const editDraft = previewRecordEditSaveDraft();\n    if (!editDraft) {\n      returnFromMissingPreviewRecordEditSaveDraft();\n      return;",
         )
         _assert_contains(
             "AI candidate edit save success screen opener binding",
@@ -4221,7 +4221,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit change records helper binding",
             content,
-            "const nextRecords = buildPreviewRecordEditChangeRecords(preview, selectedPreviewIndex, recordType);",
+            "const nextRecords = buildPreviewRecordEditChangeRecords(\n        editDraft.currentPreview,\n        editDraft.editIndex,\n        recordType\n      );",
         )
         _assert_contains(
             "AI candidate preview edit record type helper",
@@ -4236,7 +4236,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit record type helper binding",
             content,
-            "const recordType = previewRecordEditType(selectedPreviewRecord);",
+            "const recordType = previewRecordEditType(editDraft.record);",
         )
         _assert_contains(
             "AI candidate preview edit failure helper",
@@ -4296,7 +4296,22 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit apply and success helper binding",
             content,
-            "applyPreviewRecordEditChangeAndReturnSuccess(preview, nextRecords);",
+            "applyPreviewRecordEditChangeAndReturnSuccess(editDraft.currentPreview, nextRecords);",
+        )
+        _assert_contains(
+            "AI candidate preview edit save draft helper",
+            content,
+            "function previewRecordEditSaveDraft()",
+        )
+        _assert_contains(
+            "AI candidate preview edit save draft helper guard",
+            content,
+            "function previewRecordEditSaveDraft() {\n    if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {\n      return null;",
+        )
+        _assert_contains(
+            "AI candidate preview edit save draft helper payload",
+            content,
+            "return {\n      currentPreview: preview,\n      editIndex: selectedPreviewIndex,\n      record: selectedPreviewRecord\n    };",
         )
         _assert_contains(
             "AI candidate preview edit change helper",

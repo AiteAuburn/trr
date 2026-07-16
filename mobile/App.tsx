@@ -3940,19 +3940,35 @@ export default function App() {
     returnFromPreviewRecordEditSaveSuccess();
   }
 
-  function savePreviewRecordEdit() {
+  function previewRecordEditSaveDraft() {
     if (!preview || selectedPreviewIndex === null || !selectedPreviewRecord) {
+      return null;
+    }
+    return {
+      currentPreview: preview,
+      editIndex: selectedPreviewIndex,
+      record: selectedPreviewRecord
+    };
+  }
+
+  function savePreviewRecordEdit() {
+    const editDraft = previewRecordEditSaveDraft();
+    if (!editDraft) {
       returnFromMissingPreviewRecordEditSaveDraft();
       return;
     }
-    const recordType = previewRecordEditType(selectedPreviewRecord);
+    const recordType = previewRecordEditType(editDraft.record);
     if (!validatePreviewRecordEditForSave(recordType)) {
       return;
     }
 
     try {
-      const nextRecords = buildPreviewRecordEditChangeRecords(preview, selectedPreviewIndex, recordType);
-      applyPreviewRecordEditChangeAndReturnSuccess(preview, nextRecords);
+      const nextRecords = buildPreviewRecordEditChangeRecords(
+        editDraft.currentPreview,
+        editDraft.editIndex,
+        recordType
+      );
+      applyPreviewRecordEditChangeAndReturnSuccess(editDraft.currentPreview, nextRecords);
     } catch (error) {
       handlePreviewRecordEditFailure(error);
     }
