@@ -3909,6 +3909,16 @@ def main() -> int:
             "function clearSelectedPreviewEditDraft() {\n    setSelectedPreviewIndex(null);\n    clearPreviewEditDraftFields();",
         )
         _assert_contains(
+            "AI candidate edit action clear helper",
+            content,
+            "function clearPreviewEditActionState()",
+        )
+        _assert_contains(
+            "AI candidate edit action clear helper internals",
+            content,
+            "function clearPreviewEditActionState() {\n    clearSelectedPreviewEditDraft();\n    clearDailyRecordEntryMenu();",
+        )
+        _assert_contains(
             "AI candidate edit seed empty now helper",
             content,
             "function seedEmptyPreviewEditStateForNow()",
@@ -4016,7 +4026,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit save success field clear helper binding",
             content,
-            "clearSelectedPreviewEditDraft();\n      clearDailyRecordEntryMenu();",
+            "clearPreviewEditActionState();",
         )
         _assert_contains(
             "AI candidate edit missing draft screen opener fallback",
@@ -4026,7 +4036,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit save success screen opener binding",
             content,
-            "clearSelectedPreviewEditDraft();\n      clearDailyRecordEntryMenu();\n      openPreviewActionReturnScreen();",
+            "clearPreviewEditActionState();\n      openPreviewActionReturnScreen();",
         )
         _assert_contains(
             "AI candidate remove confirm missing pending screen opener fallback",

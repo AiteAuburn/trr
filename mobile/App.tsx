@@ -3366,6 +3366,11 @@ export default function App() {
     clearPreviewEditDraftFields();
   }
 
+  function clearPreviewEditActionState() {
+    clearSelectedPreviewEditDraft();
+    clearDailyRecordEntryMenu();
+  }
+
   function clearDailyRecordEntryMenu() {
     setDailyRecordMenuIndex(null);
   }
@@ -3685,8 +3690,7 @@ export default function App() {
         setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
         setStatus(aiCandidateEditSuccessStatusMessage());
       }
-      clearSelectedPreviewEditDraft();
-      clearDailyRecordEntryMenu();
+      clearPreviewEditActionState();
       openPreviewActionReturnScreen();
     } catch (error) {
       setStatus(aiCandidateEditFailureStatusMessage(error));
