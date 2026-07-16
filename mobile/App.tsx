@@ -3592,6 +3592,12 @@ export default function App() {
     );
   }
 
+  function parserSuccessStatusForPreview(nextPreview: ParsePreviewResponse, voiceSeconds: number) {
+    return voiceSeconds > 0
+      ? parserVoiceQuotaSyncedStatusMessage(nextPreview.records.length, voiceSeconds)
+      : parserSuccessStatusMessage(nextPreview.records.length);
+  }
+
   function removePreviewRecord(index: number) {
     if (!preview) {
       return;
@@ -7366,9 +7372,7 @@ export default function App() {
       reorganizeDailyRecordDraftAfterChange(
         mergedDailyPreview,
         "add",
-        parserVoiceSeconds > 0
-          ? parserVoiceQuotaSyncedStatusMessage(mergedDailyPreview.records.length, parserVoiceSeconds)
-          : parserSuccessStatusMessage(mergedDailyPreview.records.length)
+        parserSuccessStatusForPreview(mergedDailyPreview, parserVoiceSeconds)
       );
       if (parserVoiceSeconds > 0 && account) {
         void loadVoiceQuota(account.id);

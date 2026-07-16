@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1783: Reuse parser preview success status helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `parserSuccessStatusForPreview()` for parse-preview success status selection.
+- Reused the helper from the add-record daily reorganization call.
+- Updated navigation verifier coverage for the helper and add reorganization binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/return behavior/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/request body/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1782: Reuse preview-with-records helper
 
 Status: done
