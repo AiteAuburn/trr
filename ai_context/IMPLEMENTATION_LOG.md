@@ -15,6 +15,36 @@
 
 ## 2026-07-16
 
+### T1887 reuse prepared parser preview submit helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `submitPreparedParserPreview()` for the parser submit request-and-success flow.
+- Reused the helper from `parseTranscript()` while preserving the prepared parser request, same-day merge, success handler, transcript append, AI review open, daily-record reorganization, voice quota refresh, catch, and finish behavior.
+- Updated navigation verifier coverage for the prepared submit helper, request-to-success internals, parse submit binding, and daily-record transcript append marker.
+- 未變更 UI copy/layout、entry menu timing、edit/delete navigation target、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、preview edit/delete data operations、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing parser submit request/success helpers in small behavior-preserving slices.
+
 ### T1886 reuse prepared parser preview success helper
 
 類型：mobile / refactor / verifier / docs
