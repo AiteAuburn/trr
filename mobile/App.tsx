@@ -3550,19 +3550,25 @@ export default function App() {
     return records.filter((_, recordIndex) => recordIndex !== removeIndex);
   }
 
-  function applyAiCandidateRemovePreviewRecords(nextRecords: PendingRecord[]) {
+  function applyPreviewRecords(nextRecords: PendingRecord[]) {
     if (!preview) {
-      return;
+      return false;
     }
     setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
+    return true;
+  }
+
+  function applyAiCandidateRemovePreviewRecords(nextRecords: PendingRecord[]) {
+    if (!applyPreviewRecords(nextRecords)) {
+      return;
+    }
     setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));
   }
 
   function applyAiCandidateEditPreviewRecords(nextRecords: PendingRecord[]) {
-    if (!preview) {
+    if (!applyPreviewRecords(nextRecords)) {
       return;
     }
-    setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));
     setStatus(aiCandidateEditSuccessStatusMessage());
   }
 

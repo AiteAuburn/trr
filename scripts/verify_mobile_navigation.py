@@ -4126,7 +4126,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit apply helper internals",
             content,
-            "function applyAiCandidateEditPreviewRecords(nextRecords: PendingRecord[]) {\n    if (!preview) {\n      return;\n    }\n    setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));\n    setStatus(aiCandidateEditSuccessStatusMessage());",
+            "function applyAiCandidateEditPreviewRecords(nextRecords: PendingRecord[]) {\n    if (!applyPreviewRecords(nextRecords)) {\n      return;\n    }\n    setStatus(aiCandidateEditSuccessStatusMessage());",
+        )
+        _assert_contains(
+            "AI candidate preview records apply helper",
+            content,
+            "function applyPreviewRecords(nextRecords: PendingRecord[])",
+        )
+        _assert_contains(
+            "AI candidate preview records apply helper internals",
+            content,
+            "function applyPreviewRecords(nextRecords: PendingRecord[]) {\n    if (!preview) {\n      return false;\n    }\n    setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));\n    return true;",
         )
         _assert_contains(
             "AI candidate preview edit records update helper",
@@ -4181,7 +4191,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview remove apply helper internals",
             content,
-            "function applyAiCandidateRemovePreviewRecords(nextRecords: PendingRecord[]) {\n    if (!preview) {\n      return;\n    }\n    setPreview(boundParsePreviewResponse({ ...preview, records: nextRecords }));\n    setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));",
+            "function applyAiCandidateRemovePreviewRecords(nextRecords: PendingRecord[]) {\n    if (!applyPreviewRecords(nextRecords)) {\n      return;\n    }\n    setStatus(aiCandidateRemoveResultStatusMessage(nextRecords.length));",
         )
         _assert_contains(
             "AI candidate preview remove apply helper binding",
