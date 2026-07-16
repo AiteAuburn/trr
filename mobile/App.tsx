@@ -3455,12 +3455,16 @@ export default function App() {
   function openPreviewRecordRemoveConfirm(index: number, returnScreen: AppScreen = "aiReview") {
     const record = previewRecordAtIndex(index);
     if (!record) {
-      openScreen(returnScreen);
+      returnFromMissingPreviewRecordRemoveOpen(returnScreen);
       return;
     }
     setPreviewActionReturnTarget(returnScreen);
     selectPreviewRemoveIndex(index);
     openPreviewRemoveConfirmScreen();
+  }
+
+  function returnFromMissingPreviewRecordRemoveOpen(returnScreen: AppScreen) {
+    openScreen(returnScreen);
   }
 
   function openPreviewRemoveConfirmScreen() {

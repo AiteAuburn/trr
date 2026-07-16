@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1849: Reuse preview remove missing-record return helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `returnFromMissingPreviewRecordRemoveOpen()` for the remove-open missing-record fallback.
+- Reused the helper from `openPreviewRecordRemoveConfirm()` while preserving its return-screen navigation and early return behavior.
+- Updated navigation verifier coverage for the fallback helper binding and helper internals.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser endpoint/request semantics/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining preview edit/remove open and return helpers in small behavior-preserving slices.
+
 ### T1848: Reuse preview record lookup helper
 
 Status: done

@@ -4124,6 +4124,21 @@ def main() -> int:
             "function openPreviewRecordRemoveConfirm(index: number, returnScreen: AppScreen = \"aiReview\") {\n    const record = previewRecordAtIndex(index);",
         )
         _assert_contains(
+            "AI candidate remove missing record return helper binding",
+            content,
+            "if (!record) {\n      returnFromMissingPreviewRecordRemoveOpen(returnScreen);\n      return;",
+        )
+        _assert_contains(
+            "AI candidate remove missing record return helper",
+            content,
+            "function returnFromMissingPreviewRecordRemoveOpen(returnScreen: AppScreen)",
+        )
+        _assert_contains(
+            "AI candidate remove missing record return helper internals",
+            content,
+            "function returnFromMissingPreviewRecordRemoveOpen(returnScreen: AppScreen) {\n    openScreen(returnScreen);",
+        )
+        _assert_contains(
             "AI candidate remove confirm screen opener helper",
             content,
             "function openPreviewRemoveConfirmScreen()",
@@ -4136,7 +4151,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove confirm missing record screen opener fallback",
             content,
-            "if (!record) {\n      openScreen(returnScreen);\n      return;",
+            "if (!record) {\n      returnFromMissingPreviewRecordRemoveOpen(returnScreen);\n      return;",
         )
         _assert_contains(
             "AI candidate edit return index clear helper binding",
