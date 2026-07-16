@@ -11344,32 +11344,26 @@ export default function App() {
 
             {selectedRecord.record_type === "medication" ? (
               <>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"💊"} label={"用藥"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.medicationNameInputAccessibility}
-                    value={recordEditFieldValue(recordEditFields, "medicationName")}
-                    onChangeText={updateRecordEditMedicationName}
-                    maxLength={recordEditFieldMaxLength("medicationName")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    placeholder="藥名或胰島素描述"
-                  />
-                </View>
-                <View style={styles.formField}>
-                  <FieldLabel icon={"▣"} label={"劑量"} />
-                  <TextInput
-                    accessibilityLabel={auxiliaryDisplayLabels.medicationDoseInputAccessibility}
-                    value={recordEditFieldValue(recordEditFields, "medicationDose")}
-                    onChangeText={updateRecordEditMedicationDose}
-                    maxLength={recordEditFieldMaxLength("medicationDose")}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    placeholder="例如：1 顆、8u"
-                  />
-                </View>
+                <RecordTextField
+                  icon={"💊"}
+                  label={"用藥"}
+                  accessibilityLabel={auxiliaryDisplayLabels.medicationNameInputAccessibility}
+                  value={recordEditFieldValue(recordEditFields, "medicationName")}
+                  onChangeText={updateRecordEditMedicationName}
+                  maxLength={recordEditFieldMaxLength("medicationName")}
+                  inputStyle={styles.input}
+                  placeholder="藥名或胰島素描述"
+                />
+                <RecordTextField
+                  icon={"▣"}
+                  label={"劑量"}
+                  accessibilityLabel={auxiliaryDisplayLabels.medicationDoseInputAccessibility}
+                  value={recordEditFieldValue(recordEditFields, "medicationDose")}
+                  onChangeText={updateRecordEditMedicationDose}
+                  maxLength={recordEditFieldMaxLength("medicationDose")}
+                  inputStyle={styles.input}
+                  placeholder="例如：1 顆、8u"
+                />
               </>
             ) : null}
 
