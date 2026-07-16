@@ -1288,7 +1288,15 @@ def _assert_text_inputs_use_bounded_state_values(content: str) -> None:
             offenders.append(f"{line_number}:missing value")
             continue
         binding = match.group(1).strip()
-        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)?", binding):
+        is_state_reference = re.fullmatch(
+            r"[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)?",
+            binding,
+        )
+        is_record_edit_field_value = re.fullmatch(
+            r'recordEditFieldValue\((previewEditFields|recordEditFields), "[A-Za-z_][A-Za-z0-9_]*"\)',
+            binding,
+        )
+        if not (is_state_reference or is_record_edit_field_value):
             offenders.append(f"{line_number}:{binding}")
     if offenders:
         raise AssertionError(
@@ -7437,6 +7445,14 @@ def main() -> int:
             ("edit option selected state binding", "accessibilityState={{ selected: optionSelected }}"),
             ("edit option selected style binding", "optionSelected ? styles.segmentActive : null"),
             ("edit option selected text binding", "optionSelected ? styles.segmentTextActive : null"),
+            ("record edit field value helper", "function recordEditFieldValue<K extends keyof RecordEditFields>(fields: RecordEditFields, field: K)"),
+            ("record edit field value helper fields", "return fields[field];"),
+            ("preview edit glucose value helper binding", 'value={recordEditFieldValue(previewEditFields, "glucoseValue")}'),
+            ("preview edit food items helper binding", 'value={recordEditFieldValue(previewEditFields, "foodItems")}'),
+            ("preview edit fallback json helper binding", 'value={recordEditFieldValue(previewEditFields, "fallbackJson")}'),
+            ("record edit glucose value helper binding", 'value={recordEditFieldValue(recordEditFields, "glucoseValue")}'),
+            ("record edit food items helper binding", 'value={recordEditFieldValue(recordEditFields, "foodItems")}'),
+            ("record edit fallback json helper binding", 'value={recordEditFieldValue(recordEditFields, "fallbackJson")}'),
             ("preview edit option target helper", "function previewEditOptionTarget(option: { value: string })"),
             ("preview edit option target helper fields", "return editOptionKey(option);"),
             ("preview edit unit option press handler", "function pressPreviewEditGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>)"),
@@ -7578,6 +7594,12 @@ def main() -> int:
             ("record edit direct glucose timing selected field", "recordEditFields.glucoseTiming === option.value"),
             ("record edit direct meal type selected field", "recordEditFields.mealType === option.value"),
             ("edit option direct label render", "{option.label}"),
+            ("preview edit direct glucose value binding", "value={previewEditFields.glucoseValue}"),
+            ("preview edit direct food items binding", "value={previewEditFields.foodItems}"),
+            ("preview edit direct fallback json binding", "value={previewEditFields.fallbackJson}"),
+            ("record edit direct glucose value binding", "value={recordEditFields.glucoseValue}"),
+            ("record edit direct food items binding", "value={recordEditFields.foodItems}"),
+            ("record edit direct fallback json binding", "value={recordEditFields.fallbackJson}"),
         ):
             _assert_not_contains(label, content, marker)
         _assert_contains(

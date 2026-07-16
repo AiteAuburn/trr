@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1740: Reuse record edit field values
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a shared record edit field value helper for preview-edit and record-edit form fields.
+- Reused the helper in preview-edit and record-edit TextInput value props while preserving field state, update handlers, validation, payload building, save/cancel behavior, and option chip behavior unchanged.
+- Updated navigation verifier coverage and direct value-binding guards for representative edit fields.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining edit/manual form props in small behavior-preserving slices.
+
 ### T1739: Reuse manual confirm preview fields
 
 Status: done

@@ -3500,6 +3500,10 @@ export default function App() {
     return editOptionKey(option) === selectedValue;
   }
 
+  function recordEditFieldValue<K extends keyof RecordEditFields>(fields: RecordEditFields, field: K) {
+    return fields[field];
+  }
+
   function previewEditOptionTarget(option: { value: string }) {
     return editOptionKey(option);
   }
@@ -9047,7 +9051,7 @@ export default function App() {
                   <FieldLabel icon={"💧"} label={"血糖數值"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.glucoseValueInputAccessibility}
-                    value={previewEditFields.glucoseValue}
+                    value={recordEditFieldValue(previewEditFields, "glucoseValue")}
                     onChangeText={updatePreviewEditGlucoseValue}
                     keyboardType="numeric"
                     maxLength={recordEditFieldMaxLength("glucoseValue")}
@@ -9152,7 +9156,7 @@ export default function App() {
                   <FieldLabel icon={"🍽"} label={"飲食內容"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.foodItemsInputAccessibility}
-                    value={previewEditFields.foodItems}
+                    value={recordEditFieldValue(previewEditFields, "foodItems")}
                     onChangeText={updatePreviewEditFoodItems}
                     maxLength={recordEditFieldMaxLength("foodItems")}
                     autoCapitalize="none"
@@ -9171,7 +9175,7 @@ export default function App() {
                   <FieldLabel icon={"🚶"} label={"運動"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.exerciseActivityInputAccessibility}
-                    value={previewEditFields.exerciseActivity}
+                    value={recordEditFieldValue(previewEditFields, "exerciseActivity")}
                     onChangeText={updatePreviewEditExerciseActivity}
                     maxLength={recordEditFieldMaxLength("exerciseActivity")}
                     autoCapitalize="none"
@@ -9184,7 +9188,7 @@ export default function App() {
                   <FieldLabel icon={"⏱"} label={"時長（分鐘）"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.exerciseMinutesInputAccessibility}
-                    value={previewEditFields.exerciseMinutes}
+                    value={recordEditFieldValue(previewEditFields, "exerciseMinutes")}
                     onChangeText={updatePreviewEditExerciseMinutes}
                     keyboardType="numeric"
                     maxLength={recordEditFieldMaxLength("exerciseMinutes")}
@@ -9202,7 +9206,7 @@ export default function App() {
                   <FieldLabel icon={"💊"} label={"用藥"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.medicationNameInputAccessibility}
-                    value={previewEditFields.medicationName}
+                    value={recordEditFieldValue(previewEditFields, "medicationName")}
                     onChangeText={updatePreviewEditMedicationName}
                     maxLength={recordEditFieldMaxLength("medicationName")}
                     autoCapitalize="none"
@@ -9215,7 +9219,7 @@ export default function App() {
                   <FieldLabel icon={"▣"} label={"劑量"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.medicationDoseInputAccessibility}
-                    value={previewEditFields.medicationDose}
+                    value={recordEditFieldValue(previewEditFields, "medicationDose")}
                     onChangeText={updatePreviewEditMedicationDose}
                     maxLength={recordEditFieldMaxLength("medicationDose")}
                     autoCapitalize="none"
@@ -9232,7 +9236,7 @@ export default function App() {
                   <FieldLabel icon={"📝"} label={"備註類型"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.noteKindInputAccessibility}
-                    value={previewEditFields.noteKind}
+                    value={recordEditFieldValue(previewEditFields, "noteKind")}
                     onChangeText={updatePreviewEditNoteKind}
                     maxLength={recordEditFieldMaxLength("noteKind")}
                     autoCapitalize="none"
@@ -9245,7 +9249,7 @@ export default function App() {
                   <FieldLabel icon={"#"} label={"標籤"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.noteTagsInputAccessibility}
-                    value={previewEditFields.noteTags}
+                    value={recordEditFieldValue(previewEditFields, "noteTags")}
                     onChangeText={updatePreviewEditNoteTags}
                     maxLength={recordEditFieldMaxLength("noteTags")}
                     autoCapitalize="none"
@@ -9265,7 +9269,7 @@ export default function App() {
                 <FieldLabel icon={"{}"} label={"payload_json"} />
                 <TextInput
                   accessibilityLabel={auxiliaryDisplayLabels.fallbackJsonInputAccessibility}
-                  value={previewEditFields.fallbackJson}
+                  value={recordEditFieldValue(previewEditFields, "fallbackJson")}
                   onChangeText={updatePreviewEditFallbackJson}
                   maxLength={recordEditFieldMaxLength("fallbackJson")}
                   autoCapitalize="none"
@@ -9908,7 +9912,7 @@ export default function App() {
                   <FieldLabel icon={"💧"} label={"血糖數值"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.glucoseValueInputAccessibility}
-                    value={recordEditFields.glucoseValue}
+                    value={recordEditFieldValue(recordEditFields, "glucoseValue")}
                     onChangeText={updateRecordEditGlucoseValue}
                     keyboardType="numeric"
                     maxLength={recordEditFieldMaxLength("glucoseValue")}
@@ -10014,7 +10018,7 @@ export default function App() {
                   <FieldLabel icon={"🍽"} label={"飲食內容"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.foodItemsInputAccessibility}
-                    value={recordEditFields.foodItems}
+                    value={recordEditFieldValue(recordEditFields, "foodItems")}
                     onChangeText={updateRecordEditFoodItems}
                     maxLength={recordEditFieldMaxLength("foodItems")}
                     autoCapitalize="none"
@@ -10034,7 +10038,7 @@ export default function App() {
                   <FieldLabel icon={"🚶"} label={"運動"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.exerciseActivityInputAccessibility}
-                    value={recordEditFields.exerciseActivity}
+                    value={recordEditFieldValue(recordEditFields, "exerciseActivity")}
                     onChangeText={updateRecordEditExerciseActivity}
                     maxLength={recordEditFieldMaxLength("exerciseActivity")}
                     autoCapitalize="none"
@@ -10047,7 +10051,7 @@ export default function App() {
                   <FieldLabel icon={"⏱"} label={"時長（分鐘）"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.exerciseMinutesInputAccessibility}
-                    value={recordEditFields.exerciseMinutes}
+                    value={recordEditFieldValue(recordEditFields, "exerciseMinutes")}
                     onChangeText={updateRecordEditExerciseMinutes}
                     keyboardType="numeric"
                     maxLength={recordEditFieldMaxLength("exerciseMinutes")}
@@ -10066,7 +10070,7 @@ export default function App() {
                   <FieldLabel icon={"💊"} label={"用藥"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.medicationNameInputAccessibility}
-                    value={recordEditFields.medicationName}
+                    value={recordEditFieldValue(recordEditFields, "medicationName")}
                     onChangeText={updateRecordEditMedicationName}
                     maxLength={recordEditFieldMaxLength("medicationName")}
                     autoCapitalize="none"
@@ -10079,7 +10083,7 @@ export default function App() {
                   <FieldLabel icon={"▣"} label={"劑量"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.medicationDoseInputAccessibility}
-                    value={recordEditFields.medicationDose}
+                    value={recordEditFieldValue(recordEditFields, "medicationDose")}
                     onChangeText={updateRecordEditMedicationDose}
                     maxLength={recordEditFieldMaxLength("medicationDose")}
                     autoCapitalize="none"
@@ -10097,7 +10101,7 @@ export default function App() {
                   <FieldLabel icon={"📝"} label={"備註類型"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.noteKindInputAccessibility}
-                    value={recordEditFields.noteKind}
+                    value={recordEditFieldValue(recordEditFields, "noteKind")}
                     onChangeText={updateRecordEditNoteKind}
                     maxLength={recordEditFieldMaxLength("noteKind")}
                     autoCapitalize="none"
@@ -10110,7 +10114,7 @@ export default function App() {
                   <FieldLabel icon={"#"} label={"標籤"} />
                   <TextInput
                     accessibilityLabel={auxiliaryDisplayLabels.noteTagsInputAccessibility}
-                    value={recordEditFields.noteTags}
+                    value={recordEditFieldValue(recordEditFields, "noteTags")}
                     onChangeText={updateRecordEditNoteTags}
                     maxLength={recordEditFieldMaxLength("noteTags")}
                     autoCapitalize="none"
@@ -10131,7 +10135,7 @@ export default function App() {
                 <FieldLabel icon={"{}"} label={"payload_json"} />
                 <TextInput
                   accessibilityLabel={auxiliaryDisplayLabels.fallbackJsonInputAccessibility}
-                  value={recordEditFields.fallbackJson}
+                  value={recordEditFieldValue(recordEditFields, "fallbackJson")}
                   onChangeText={updateRecordEditFallbackJson}
                   maxLength={recordEditFieldMaxLength("fallbackJson")}
                   autoCapitalize="none"
