@@ -4156,7 +4156,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview edit apply helper binding",
             content,
-            "reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, \"edit\");\n      } else {\n        applyAiCandidateEditPreviewRecords(nextRecords);",
+            "reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), \"edit\");\n      } else {\n        applyAiCandidateEditPreviewRecords(nextRecords);",
+        )
+        _assert_contains(
+            "AI candidate preview with records helper",
+            content,
+            "function previewWithRecords(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[])",
+        )
+        _assert_contains(
+            "AI candidate preview with records helper internals",
+            content,
+            "function previewWithRecords(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[]) {\n    return { ...currentPreview, records: nextRecords };",
         )
         _assert_contains(
             "AI candidate remove confirm missing pending screen opener fallback",
@@ -4196,7 +4206,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate preview remove apply helper binding",
             content,
-            "reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, \"delete\");\n    } else {\n      applyAiCandidateRemovePreviewRecords(nextRecords);",
+            "reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), \"delete\");\n    } else {\n      applyAiCandidateRemovePreviewRecords(nextRecords);",
         )
         _assert_contains(
             "AI candidate remove action clear helper binding",
@@ -6233,10 +6243,10 @@ def main() -> int:
             ("daily record reorganization reason state", "const [dailyRecordOrganizationReason, setDailyRecordOrganizationReason] ="),
             ("daily record reorganization apply helper", "function reorganizeDailyRecordDraftAfterChange("),
             ("daily record reorganization add binding", 'reorganizeDailyRecordDraftAfterChange(\n        mergedDailyPreview,\n        "add",'),
-            ("daily record reorganization edit daily return state binding", 'if (isPreviewActionReturningToDailyRecord) {\n        reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, "edit");'),
-            ("daily record reorganization edit binding", 'reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, "edit");'),
-            ("daily record reorganization delete daily return state binding", 'if (isPreviewActionReturningToDailyRecord) {\n      reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, "delete");'),
-            ("daily record reorganization delete binding", 'reorganizeDailyRecordDraftAfterChange({ ...preview, records: nextRecords }, "delete");'),
+            ("daily record reorganization edit daily return state binding", 'if (isPreviewActionReturningToDailyRecord) {\n        reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), "edit");'),
+            ("daily record reorganization edit binding", 'reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), "edit");'),
+            ("daily record reorganization delete daily return state binding", 'if (isPreviewActionReturningToDailyRecord) {\n      reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), "delete");'),
+            ("daily record reorganization delete binding", 'reorganizeDailyRecordDraftAfterChange(previewWithRecords(preview, nextRecords), "delete");'),
             ("daily record reorganization summary display", "const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayText("),
             ("daily record reorganization summary render", "<Text style={styles.evidence}>{dailyRecordReorganizationDisplay}</Text>"),
             ("daily record save checklist helper binding", "const aiSaveConfirmChecklistItems = aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordDisplayCount);"),
