@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1753: Reuse daily record leave guard state
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added a named daily-record leave-guard state for unsaved daily-record draft protection.
+- Reused it for the header/back action branch and Android BackHandler branch/dependency.
+- Updated navigation verifier coverage with positive leave-guard state bindings and direct draft-guard checks.
+- No UI copy/layout/leave-guard condition/Android back behavior/return guard behavior/navigation target/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1752: Reuse fixed save return disabled state
 
 Status: done

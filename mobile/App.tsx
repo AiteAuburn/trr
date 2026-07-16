@@ -1317,6 +1317,7 @@ export default function App() {
     ? [styles.container, styles.containerWithFixedSaveBar]
     : styles.container;
   const hasUnsavedDailyRecordDraft = dailyRecordDraftScreen.hasUnsavedDraft;
+  const shouldGuardDailyRecordLeave = hasUnsavedDailyRecordDraft;
   const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayTexts();
   const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardDisplay.title;
   const dailyRecordLeaveGuardBodyDisplayText = dailyRecordLeaveGuardDisplay.body;
@@ -3121,7 +3122,7 @@ export default function App() {
       setStatus(busyActionStatusMessage());
       return;
     }
-    if (hasUnsavedDailyRecordDraft) {
+    if (shouldGuardDailyRecordLeave) {
       requestDailyRecordLeaveGuard();
       return;
     }
@@ -8120,14 +8121,14 @@ export default function App() {
 
   useEffect(() => {
     const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
-      if (hasUnsavedDailyRecordDraft) {
+      if (shouldGuardDailyRecordLeave) {
         requestDailyRecordLeaveGuard();
         return true;
       }
       return false;
     });
     return () => subscription.remove();
-  }, [hasUnsavedDailyRecordDraft]);
+  }, [shouldGuardDailyRecordLeave]);
 
   useEffect(() => {
     if (!isRecordingPreview || recordingStartedAt === null) {
