@@ -8489,6 +8489,20 @@ export default function App() {
     return payload;
   }
 
+  function validateSelectedRecordUpdateForSubmit(recordType: string) {
+    const validationError = validateRecordForm(
+      recordType,
+      recordEditFields,
+      recordEditDate,
+      recordEditTime
+    );
+    if (validationError) {
+      setStatus(validationError);
+      return false;
+    }
+    return true;
+  }
+
   async function updateSelectedRecord() {
     if (isBusy || recordUpdateInFlight.current) {
       return;
@@ -8503,14 +8517,7 @@ export default function App() {
     if (!account) {
       return;
     }
-    const validationError = validateRecordForm(
-      selectedRecord.record_type,
-      recordEditFields,
-      recordEditDate,
-      recordEditTime
-    );
-    if (validationError) {
-      setStatus(validationError);
+    if (!validateSelectedRecordUpdateForSubmit(selectedRecord.record_type)) {
       return;
     }
 

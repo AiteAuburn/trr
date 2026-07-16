@@ -5054,6 +5054,21 @@ def main() -> int:
             "const payload = buildSelectedRecordUpdatePayload(selectedRecord.record_type);",
         )
         _assert_contains(
+            "record update validation helper",
+            content,
+            "function validateSelectedRecordUpdateForSubmit(recordType: string)",
+        )
+        _assert_contains(
+            "record update validation helper internals",
+            content,
+            "const validationError = validateRecordForm(\n      recordType,\n      recordEditFields,\n      recordEditDate,\n      recordEditTime\n    );\n    if (validationError) {\n      setStatus(validationError);\n      return false;\n    }\n    return true;",
+        )
+        _assert_contains(
+            "record update validation helper binding",
+            content,
+            "if (!validateSelectedRecordUpdateForSubmit(selectedRecord.record_type)) {\n      return;\n    }",
+        )
+        _assert_contains(
             "manual create result selected record helper state",
             content,
             "setRecords((current) => boundRecordsList([created, ...current]));\n    selectRecordForResult(created);",
