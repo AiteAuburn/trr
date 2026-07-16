@@ -152,7 +152,7 @@ VISUAL_SMOKE_ROUTES = {
     "accountSecurity": [
         'currentScreen === "accountSecurity"',
         "AuthProviderPreviewList",
-        "sessionManagementDisplayItems.map",
+        "SessionManagementPreviewList",
     ],
     "profileSettings": [
         'currentScreen === "profileSettings"',

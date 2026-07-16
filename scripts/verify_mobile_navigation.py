@@ -41,6 +41,7 @@ SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
 SETTINGS_CHOICE_DISPLAY_PATH = REPO_ROOT / "mobile" / "settingsChoiceDisplay.ts"
 SETTINGS_MODEL_CHOICE_SELECTOR_PATH = REPO_ROOT / "mobile" / "settingsModelChoiceSelector.tsx"
 SETTINGS_PROFILE_CHOICE_SELECTOR_PATH = REPO_ROOT / "mobile" / "settingsProfileChoiceSelector.tsx"
+SESSION_MANAGEMENT_PREVIEW_LIST_PATH = REPO_ROOT / "mobile" / "sessionManagementPreviewList.tsx"
 MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "modelTransforms.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
 SUBSCRIPTION_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "subscriptionTransforms.ts"
@@ -1424,6 +1425,7 @@ def main() -> int:
     settings_choice_display_content = SETTINGS_CHOICE_DISPLAY_PATH.read_text(encoding="utf-8")
     settings_model_choice_selector_content = SETTINGS_MODEL_CHOICE_SELECTOR_PATH.read_text(encoding="utf-8")
     settings_profile_choice_selector_content = SETTINGS_PROFILE_CHOICE_SELECTOR_PATH.read_text(encoding="utf-8")
+    session_management_preview_list_content = SESSION_MANAGEMENT_PREVIEW_LIST_PATH.read_text(encoding="utf-8")
     model_transforms_content = MODEL_TRANSFORMS_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
     subscription_transforms_content = SUBSCRIPTION_TRANSFORMS_PATH.read_text(encoding="utf-8")
@@ -9835,6 +9837,23 @@ def main() -> int:
         ):
             _assert_contains(label, auth_provider_preview_list_content, marker)
         for label, marker in (
+            ("session management preview list component", "export function SessionManagementPreviewList"),
+            ("session management preview list wrapper style", "style={styles.aiReviewList}"),
+            ("session management preview list map", "items.map((item) => ("),
+            ("session management preview list accessibility", "accessibilityLabel={item.accessibilityLabel}"),
+            ("session management preview list role", 'accessibilityRole="button"'),
+            ("session management preview list key", "key={item.title}"),
+            ("session management preview list handler", "onPress={() => onSessionPress(item)}"),
+            ("session management preview list fixed icon", "<Text>裝</Text>"),
+            ("session management preview list title", "{item.title}"),
+            ("session management preview list copy", "{item.copy}"),
+            ("session management preview list status", "{item.statusLabel}"),
+            ("session management preview list card style", "aiReviewCard: {"),
+            ("session management preview list text style", "recordContent: {"),
+            ("session management preview list badge style", "previewModeBadge: {"),
+        ):
+            _assert_contains(label, session_management_preview_list_content, marker)
+        for label, marker in (
             ("settings subpage action row component", "export function SettingsSubpageActionRow"),
             ("settings subpage action row return accessibility prop", "accessibilityLabel={returnAccessibilityLabel}"),
             ("settings subpage action row action accessibility prop", "accessibilityLabel={actionAccessibilityLabel}"),
@@ -10931,11 +10950,11 @@ def main() -> int:
             ("subscription management preview status row key binding", "subscriptionManagementDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
             ("privacy control preview status row key binding", "privacyControlDisplayRows.map((row) => (\n                <View key={previewStatusRowKey(row)}"),
             ("production auth readiness preview status row key binding", "productionAuthReadinessDisplayRows.map((item) => (\n                <View key={previewStatusRowKey(item)}"),
-            ("session management preview status row key binding", "sessionManagementDisplayItems.map((item) => (\n                <Pressable\n                  key={previewStatusRowKey(item)}"),
+            ("session management preview list key boundary", "<SessionManagementPreviewList"),
             ("auth provider preview list key boundary", "<AuthProviderPreviewList"),
             ("reminder preview status row key binding", "reminderPreviewDisplayItems.map((item) => (\n                <View key={previewStatusRowKey(item)}"),
             ("auth session display row key binding", "authSessionDisplayItems.map((item) => (\n                  <View key={previewKeyedRowKey(item)}"),
-            ("session management preview accessibility binding", "accessibilityLabel={previewStatusRowAccessibilityLabel(item)}"),
+            ("session management preview list items binding", "items={sessionManagementDisplayItems}"),
             ("preview status row icon binding", "{previewStatusRowIcon(row)}"),
             ("preview status row title binding", "{previewStatusRowTitle(row)}"),
             ("preview status row copy binding", "{previewStatusRowCopy(row)}"),
@@ -10947,9 +10966,7 @@ def main() -> int:
             ("production auth readiness preview status row title binding", "{previewStatusRowTitle(item)}"),
             ("production auth readiness preview status row copy binding", "{previewStatusRowCopy(item)}"),
             ("production auth readiness preview status row status binding", "{previewStatusRowStatusLabel(item)}"),
-            ("session management preview status row title binding", "{previewStatusRowTitle(item)}"),
-            ("session management preview status row copy binding", "{previewStatusRowCopy(item)}"),
-            ("session management preview status row status binding", "{previewStatusRowStatusLabel(item)}"),
+            ("session management preview list handler binding", "onSessionPress={pressAuthSessionManagementPreview}"),
             ("auth session display last used row binding", "{previewLastUsedRowText(item)}"),
             ("reminder preview status row time binding", "{previewTimedRowTime(item)}"),
             ("settings checklist item key helper", "function settingsChecklistItemKey(item: string)"),
@@ -11284,10 +11301,6 @@ def main() -> int:
                 r"productionAuthReadinessDisplayRows\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
             ),
             (
-                "session management preview status rows render block",
-                r"sessionManagementDisplayItems\.map\(\(item\) => \(([\s\S]*?</Pressable>\n\s*)\)\)",
-            ),
-            (
                 "reminder preview status rows render block",
                 r"reminderPreviewDisplayItems\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
             ),
@@ -11449,12 +11462,12 @@ def main() -> int:
             ("auth session management status handler", "function showAuthSessionManagementStatus(actionStatus: string)"),
             (
                 "auth session management action status helper",
-                "function authSessionManagementActionStatus(item: ReturnType<typeof sessionManagementPreviewDisplayItem>)",
+                "function authSessionManagementActionStatus(item: { actionStatus: string })",
             ),
             ("auth session management action status helper fields", "return item.actionStatus;"),
             (
                 "auth session management preview press handler",
-                "function pressAuthSessionManagementPreview(item: ReturnType<typeof sessionManagementPreviewDisplayItem>)",
+                "function pressAuthSessionManagementPreview(item: { actionStatus: string })",
             ),
             (
                 "auth session management action status helper binding",
@@ -11727,8 +11740,8 @@ def main() -> int:
             ("native status display text binding", "const nativeStatusDisplayText = nativeStatusDisplay.native;"),
             ("auth secondary action disabled state", "disabled={isAuthOperationInFlight}"),
             ("auth danger action disabled state", "disabled={isAuthOperationInFlight}"),
-            ("auth session management preview press binding", "onPress={() => pressAuthSessionManagementPreview(item)}"),
-            ("auth session management button role", 'accessibilityRole="button"\n                  style={styles.aiReviewCard}'),
+            ("auth session management preview list binding", "<SessionManagementPreviewList"),
+            ("auth session management preview list handler binding", "onSessionPress={pressAuthSessionManagementPreview}"),
             ("profile edit integration status binding", "onActionPress={showProfileEditIntegrationStatus}"),
             ("settings subpage status display helper binding", "const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayTexts({"),
             ("settings subpage profile action display binding", "const profileActionStatusDisplayText = settingsSubpageStatusDisplay.profileAction;"),
@@ -13111,6 +13124,7 @@ def main() -> int:
             ("direct auth provider preview map", "authProviderDisplayItems.map((item) => ("),
             ("direct auth provider preview binding", "onPress={() => startAuthProviderChallenge(item.provider)}"),
             ("direct auth provider handler target binding", "startAuthProviderChallenge(item.provider);"),
+            ("direct auth session management map", "sessionManagementDisplayItems.map((item) => ("),
             ("direct auth session management status binding", "onPress={() => showAuthSessionManagementStatus(item.actionStatus)}"),
             ("direct auth session management handler status binding", "showAuthSessionManagementStatus(item.actionStatus);"),
             ("direct daily record menu index binding", "setDailyRecordMenuIndex((current) => (current === item.index ? null : item.index));"),

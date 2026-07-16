@@ -282,7 +282,6 @@ import {
   optionDisplayItem,
   optionDisplayItems,
   previewTupleDisplayItem,
-  sessionManagementPreviewDisplayItem,
   valueLabelDisplayItem,
   valueLabelDisplayItems,
   visualSmokeRouteJumpDisplayItem,
@@ -832,6 +831,7 @@ import { SettingsModelChoiceSelector } from "./settingsModelChoiceSelector";
 import { SettingsProfileChoiceSelector } from "./settingsProfileChoiceSelector";
 import { SettingsSubpageActionRow } from "./settingsSubpageActionRow";
 import { SettingsSubpageCloseButton } from "./settingsSubpageCloseButton";
+import { SessionManagementPreviewList } from "./sessionManagementPreviewList";
 import { StoreSearchField } from "./storeSearchField";
 import { SubscriptionSubpageActionRow } from "./subscriptionSubpageActionRow";
 import { SubscriptionSubpageCloseButton } from "./subscriptionSubpageCloseButton";
@@ -4888,11 +4888,11 @@ export default function App() {
     setAuthActionStatus(actionStatus);
   }
 
-  function authSessionManagementActionStatus(item: ReturnType<typeof sessionManagementPreviewDisplayItem>) {
+  function authSessionManagementActionStatus(item: { actionStatus: string }) {
     return item.actionStatus;
   }
 
-  function pressAuthSessionManagementPreview(item: ReturnType<typeof sessionManagementPreviewDisplayItem>) {
+  function pressAuthSessionManagementPreview(item: { actionStatus: string }) {
     showAuthSessionManagementStatus(authSessionManagementActionStatus(item));
   }
 
@@ -12364,26 +12364,10 @@ export default function App() {
                 ))}
               </View>
             ) : null}
-            <View style={styles.aiReviewList}>
-              {sessionManagementDisplayItems.map((item) => (
-                <Pressable
-                  key={previewStatusRowKey(item)}
-                  accessibilityLabel={previewStatusRowAccessibilityLabel(item)}
-                  accessibilityRole="button"
-                  style={styles.aiReviewCard}
-                  onPress={() => pressAuthSessionManagementPreview(item)}
-                >
-                  <View style={styles.iconCircleSmall}>
-                    <Text>裝</Text>
-                  </View>
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{previewStatusRowTitle(item)}</Text>
-                    <Text style={styles.evidence}>{previewStatusRowCopy(item)}</Text>
-                  </View>
-                  <Text style={styles.previewModeBadge}>{previewStatusRowStatusLabel(item)}</Text>
-                </Pressable>
-              ))}
-            </View>
+            <SessionManagementPreviewList
+              items={sessionManagementDisplayItems}
+              onSessionPress={pressAuthSessionManagementPreview}
+            />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authReadiness}</Text>
               <Text style={styles.evidence}>{accountSecurityReadinessBoundaryDisplayText}</Text>
