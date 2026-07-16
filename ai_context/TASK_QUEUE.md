@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1826: Reuse daily record save apply created records helper
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `applyDailyRecordSaveCreatedRecords()` for daily-record save success record insertion and status updates.
+- Reused the helper from `handleDailyRecordSaveSuccess()` while preserving created record ordering, record list bounds, record status message, selected result, Save Success result, achievement sync, and cleanup timing.
+- Updated navigation verifier coverage for the apply-created-records helper internals and success helper binding.
+- No UI copy/layout/entry menu timing/edit/delete navigation target/return behavior/backend/schema/Android signing/daily-record save endpoint/save payload shape/preview edit/delete data operations/token storage/AI/LLM/parser endpoint/request semantics/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily-record / Save Success derived state and preview edit/delete data paths in small behavior-preserving slices.
+
 ### T1825: Reuse daily record save draft clear helper
 
 Status: done

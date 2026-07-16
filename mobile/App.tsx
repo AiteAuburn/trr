@@ -7558,11 +7558,15 @@ export default function App() {
     clearDailyRecordDraftOrganizationState();
   }
 
+  function applyDailyRecordSaveCreatedRecords(createdRecords: RecordItem[]) {
+    setRecords((current) => boundRecordsList([...createdRecords, ...current]));
+    setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));
+  }
+
   function handleDailyRecordSaveSuccess(saveResponse: DailyRecordSaveResponse, savedCount: number) {
     const createdRecords = dailyRecordSaveCreatedRecords(saveResponse);
     clearDailyRecordSaveDraftState();
-    setRecords((current) => boundRecordsList([...createdRecords, ...current]));
-    setRecordsStatus(aiSaveRecordsStatusMessage(createdRecords.length));
+    applyDailyRecordSaveCreatedRecords(createdRecords);
     if (createdRecords[0]) {
       selectRecordForResult(createdRecords[0]);
     }
