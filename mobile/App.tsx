@@ -768,6 +768,7 @@ import {
 import { protectedRequestHeaders } from "./authRequestHeaders";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { AiCandidateActionRow } from "./aiCandidateActionRow";
+import { AiReviewActionRow } from "./aiReviewActionRow";
 import { CoreFlowEntryActionRow } from "./coreFlowEntryActionRow";
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 import { DangerConfirmActionRow } from "./dangerConfirmActionRow";
@@ -9835,38 +9836,20 @@ export default function App() {
                     ))}
                   </View>
                 ) : null}
-                <View style={styles.actionRow}>
-                  <Pressable
-                    accessibilityLabel={coreFlowDisplayLabels.returnEditAccessibility}
-                    accessibilityRole="button"
-                    style={styles.secondaryButton}
-                    onPress={returnToTranscriptEdit}
-                  >
-                    <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.returnEdit}</Text>
-                  </Pressable>
-                  {previewState.isEmpty ? (
-                    <Pressable
-                      accessibilityLabel={coreFlowDisplayLabels.manualAddAccessibility}
-                      accessibilityRole="button"
-                      style={styles.secondaryButton}
-                      onPress={openAiReviewManualRecord}
-                    >
-                      <Text style={styles.secondaryButtonText}>{coreFlowDisplayLabels.manualAdd}</Text>
-                    </Pressable>
-                  ) : null}
-                  {previewState.hasRecords ? (
-                    <Pressable
-                      accessibilityLabel={coreFlowDisplayLabels.enterSaveConfirmAccessibility}
-                      accessibilityRole="button"
-                      accessibilityState={{ disabled: isBusy || !account }}
-                      style={[styles.primaryButton, isBusy || !account ? styles.buttonDisabled : null]}
-                      disabled={isBusy || !account}
-                      onPress={enterAiSaveConfirm}
-                    >
-                      <Text style={styles.primaryButtonText}>{coreFlowDisplayLabels.enterSaveConfirm}</Text>
-                    </Pressable>
-                  ) : null}
-                </View>
+                <AiReviewActionRow
+                  enterSaveAccessibilityLabel={coreFlowDisplayLabels.enterSaveConfirmAccessibility}
+                  enterSaveDisabled={isBusy || !account}
+                  enterSaveLabel={coreFlowDisplayLabels.enterSaveConfirm}
+                  manualAddAccessibilityLabel={coreFlowDisplayLabels.manualAddAccessibility}
+                  manualAddLabel={coreFlowDisplayLabels.manualAdd}
+                  onEnterSavePress={enterAiSaveConfirm}
+                  onManualAddPress={openAiReviewManualRecord}
+                  onReturnEditPress={returnToTranscriptEdit}
+                  returnEditAccessibilityLabel={coreFlowDisplayLabels.returnEditAccessibility}
+                  returnEditLabel={coreFlowDisplayLabels.returnEdit}
+                  showEnterSave={previewState.hasRecords}
+                  showManualAdd={previewState.isEmpty}
+                />
                 {previewState.hasRecords && !account ? (
                   <Text style={styles.warningText}>{aiReviewBackendRequiredDisplayText}</Text>
                 ) : null}

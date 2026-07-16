@@ -54,6 +54,7 @@ SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 AI_CANDIDATE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiCandidateActionRow.tsx"
+AI_REVIEW_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiReviewActionRow.tsx"
 CORE_FLOW_ENTRY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "coreFlowEntryActionRow.tsx"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 DANGER_CONFIRM_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dangerConfirmActionRow.tsx"
@@ -1426,6 +1427,7 @@ def main() -> int:
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     ai_candidate_action_row_content = AI_CANDIDATE_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    ai_review_action_row_content = AI_REVIEW_ACTION_ROW_PATH.read_text(encoding="utf-8")
     core_flow_entry_action_row_content = CORE_FLOW_ENTRY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     danger_confirm_action_row_content = DANGER_CONFIRM_ACTION_ROW_PATH.read_text(encoding="utf-8")
@@ -3340,7 +3342,7 @@ def main() -> int:
         _assert_contains(
             "AI review manual entry binding",
             content,
-            "onPress={openAiReviewManualRecord}",
+            "onManualAddPress={openAiReviewManualRecord}",
         )
         _assert_contains(
             "AI review no-preview return binding",
@@ -3445,7 +3447,7 @@ def main() -> int:
         _assert_contains(
             "AI review enter save confirm binding",
             content,
-            "onPress={enterAiSaveConfirm}",
+            "onEnterSavePress={enterAiSaveConfirm}",
         )
         _assert_contains(
             "AI review checklist helper binding",
@@ -7921,6 +7923,26 @@ def main() -> int:
         ):
             _assert_contains(label, core_flow_entry_action_row_content, marker)
         for label, marker in (
+            ("AI review action row component", "export function AiReviewActionRow"),
+            ("AI review action row return accessibility prop", "accessibilityLabel={returnEditAccessibilityLabel}"),
+            ("AI review action row manual accessibility prop", "accessibilityLabel={manualAddAccessibilityLabel}"),
+            ("AI review action row enter save accessibility prop", "accessibilityLabel={enterSaveAccessibilityLabel}"),
+            ("AI review action row manual visibility prop", "showManualAdd ? ("),
+            ("AI review action row enter save visibility prop", "showEnterSave ? ("),
+            ("AI review action row enter save disabled state", "accessibilityState={{ disabled: enterSaveDisabled }}"),
+            ("AI review action row enter save disabled prop", "disabled={enterSaveDisabled}"),
+            ("AI review action row return handler prop", "onPress={onReturnEditPress}"),
+            ("AI review action row manual handler prop", "onPress={onManualAddPress}"),
+            ("AI review action row enter save handler prop", "onPress={onEnterSavePress}"),
+            ("AI review action row return label prop", "{returnEditLabel}"),
+            ("AI review action row manual label prop", "{manualAddLabel}"),
+            ("AI review action row enter save label prop", "{enterSaveLabel}"),
+            ("AI review action row shell style", "actionRow: {"),
+            ("AI review action row primary style", "primaryButton: {"),
+            ("AI review action row secondary style", "secondaryButton: {"),
+        ):
+            _assert_contains(label, ai_review_action_row_content, marker)
+        for label, marker in (
             ("confirmation return edit accessibility label", 'returnEditAccessibility: boundDisplayText("返回文字修改，保留目前輸入且不重新呼叫 AI", maxDisplayDetailTextLength)'),
             ("confirmation save confirm accessibility label", 'enterSaveConfirmAccessibility: boundDisplayText("進入每日紀錄頁，不儲存也不重新呼叫 AI", maxDisplayDetailTextLength)'),
             ("confirmation return text accessibility label", 'returnTextConfirmAccessibility: boundDisplayText("回文字確認，不送 parser 或寫入資料", maxDisplayDetailTextLength)'),
@@ -7933,8 +7955,8 @@ def main() -> int:
         ):
             _assert_contains(label, first_version_flow_copy_content, marker)
         for label, marker in (
-            ("confirmation return edit accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.returnEditAccessibility}"),
-            ("confirmation enter save accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.enterSaveConfirmAccessibility}"),
+            ("confirmation return edit accessibility binding", "returnEditAccessibilityLabel={coreFlowDisplayLabels.returnEditAccessibility}"),
+            ("confirmation enter save accessibility binding", "enterSaveAccessibilityLabel={coreFlowDisplayLabels.enterSaveConfirmAccessibility}"),
             ("confirmation return text accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.returnTextConfirmAccessibility}"),
             ("confirmation return confirm accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.returnConfirmAccessibility}"),
             ("confirmation submit save accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.submitAiSaveAccessibility}"),
@@ -7946,7 +7968,7 @@ def main() -> int:
             ("confirmation retry accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.retryInputAccessibility}"),
             ("confirmation parse accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.submitTranscriptParseAccessibility}"),
             ("confirmation manual fallback accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.switchManualAddAccessibility}"),
-            ("confirmation save disabled state", "accessibilityState={{ disabled: isBusy || !account }}"),
+            ("confirmation save disabled state", "enterSaveDisabled={isBusy || !account}"),
             ("confirmation transcript parse disabled state", "accessibilityState={{\n                  disabled:\n                    Boolean(transcriptValidationError) ||"),
         ):
             _assert_contains(label, content, marker)
@@ -8485,8 +8507,8 @@ def main() -> int:
             ("save preview batch size state binding", "previewRecordsForSave(currentPreview.records, previewState.recordCount)"),
             ("ai save confirm submit disabled state", "const isAiSaveConfirmSubmitDisabled = isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty;"),
             ("ai review date card preview state binding", "{previewState.hasRecords ? ("),
-            ("ai review manual fallback preview state binding", "{previewState.isEmpty ? ("),
-            ("ai review save confirm preview state binding", "{previewState.hasRecords ? ("),
+            ("ai review manual fallback preview state binding", "showManualAdd={previewState.isEmpty}"),
+            ("ai review save confirm preview state binding", "showEnterSave={previewState.hasRecords}"),
             ("ai review backend warning preview state binding", "{previewState.hasRecords && !account ? ("),
             ("ai save failure return disabled preview state binding", "accessibilityState={{ disabled: previewState.isEmpty }}"),
             ("ai save confirm submit accessibility disabled binding", "disabled: isAiSaveConfirmSubmitDisabled"),
