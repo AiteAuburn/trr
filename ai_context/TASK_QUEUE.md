@@ -34,6 +34,36 @@ None.
 
 ## Done
 
+### T1730: Reuse achievement category section fields
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added shared Achievement category section helpers for section key, label, and display items.
+- Reused the helpers in Achievement category sections while preserving progress-card rendering, category grouping, sync behavior, and future/achievement preview scope unchanged.
+- Updated navigation verifier coverage and scoped direct-binding guards for Achievement category section render blocks.
+- No UI copy/layout/backend/schema/Android signing/token storage/AI/LLM/parser request path/PHI/raw transcript/prompt/output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining option chip and repeated render blocks in small behavior-preserving slices.
+
 ### T1729: Reuse future module requirement fields
 
 Status: done

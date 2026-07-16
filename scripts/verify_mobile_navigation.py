@@ -10274,6 +10274,15 @@ def main() -> int:
             ("achievement progress card detail helper binding", "{achievementProgressCardDetail(displayItem)}"),
             ("achievement progress card fill style helper", "function achievementProgressCardFillStyle(displayItem: (typeof achievementDisplayItems)[number])"),
             ("achievement progress card fill style helper binding", "style={achievementProgressCardFillStyle(displayItem)}"),
+            ("achievement category section key helper", "function achievementCategorySectionKey(section: (typeof achievementCategoryDisplaySections)[number])"),
+            ("achievement category section key helper fields", "return section.key;"),
+            ("achievement category section key binding", "key={achievementCategorySectionKey(section)}"),
+            ("achievement category section label helper", "function achievementCategorySectionLabel(section: (typeof achievementCategoryDisplaySections)[number])"),
+            ("achievement category section label helper fields", "return section.label;"),
+            ("achievement category section label binding", "{achievementCategorySectionLabel(section)}"),
+            ("achievement category section items helper", "function achievementCategorySectionItems(section: (typeof achievementCategoryDisplaySections)[number])"),
+            ("achievement category section items helper fields", "return section.items;"),
+            ("achievement category section items binding", "achievementCategorySectionItems(section).map((displayItem) => {"),
             ("achievement unlocked history endpoint", "`/achievements/unlocks?${query.toString()}`"),
             ("achievement sync status helper binding", "const achievementSyncStatus = achievementSyncStatusMessages({"),
             ("achievement sync unavailable status binding", "setAchievementActionStatus(achievementSyncStatus.unavailable);"),
@@ -10289,7 +10298,7 @@ def main() -> int:
             ("achievement AI daily save transactional response", "const saveResponse = await requestJson<DailyRecordSaveResponse>"),
             ("achievement manual create sync", "setStatus(manualRecordCreateSuccessStatusMessage());\n      syncAchievementsAfterRecordSave();"),
             ("achievement category sections", "achievementCategoryDisplaySections.map"),
-            ("achievement section item render", "section.items.map"),
+            ("achievement section item render", "achievementCategorySectionItems(section).map"),
             ("achievement streak style", "displayItem.kind === \"streak\" ? styles.achievementBadgeStreak : null"),
             ("achievement badge level render", "{achievementUnlockedCardLevel(displayItem)}"),
             ("achievement accessibility binding", "accessibilityLabel={achievementProgressCardAccessibilityLabel(displayItem)}"),
@@ -12004,7 +12013,7 @@ def main() -> int:
                 _assert_not_contains(f"{block_label} {label}", achievement_unlocked_card_render_block, marker)
         achievement_progress_card_render_block = _match_block(
             content,
-            r"section\.items\.map\(\(displayItem\) => \{([\s\S]*?achievementProgressCardFillStyle\(displayItem\)[\s\S]*?</View>)",
+            r"achievementCategorySectionItems\(section\)\.map\(\(displayItem\) => \{([\s\S]*?achievementProgressCardFillStyle\(displayItem\)[\s\S]*?</View>)",
             "achievement progress card render block",
         )
         for label, marker in (
@@ -12022,6 +12031,17 @@ def main() -> int:
             ("direct achievement progress description binding", "displayItem.description"),
         ):
             _assert_not_contains(label, achievement_progress_card_render_block, marker)
+        achievement_category_section_render_block = _match_block(
+            content,
+            r"achievementCategoryDisplaySections\.map\(\(section\) => \(([\s\S]*?achievementCategorySectionItems\(section\)[\s\S]*?</View>\n\s*)\)\)",
+            "achievement category section render block",
+        )
+        for label, marker in (
+            ("direct achievement category section key binding", "key={section.key}"),
+            ("direct achievement category section label binding", "{section.label}"),
+            ("direct achievement category section items binding", "section.items.map"),
+        ):
+            _assert_not_contains(label, achievement_category_section_render_block, marker)
         _assert_not_contains(
             "store redemption direct boundary row key binding",
             content,

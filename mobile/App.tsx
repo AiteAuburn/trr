@@ -5149,6 +5149,18 @@ export default function App() {
     ];
   }
 
+  function achievementCategorySectionKey(section: (typeof achievementCategoryDisplaySections)[number]) {
+    return section.key;
+  }
+
+  function achievementCategorySectionLabel(section: (typeof achievementCategoryDisplaySections)[number]) {
+    return section.label;
+  }
+
+  function achievementCategorySectionItems(section: (typeof achievementCategoryDisplaySections)[number]) {
+    return section.items;
+  }
+
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -12250,9 +12262,9 @@ export default function App() {
               </View>
             ) : null}
             {achievementCategoryDisplaySections.map((section) => (
-              <View key={section.key} style={styles.openSection}>
-                <Text style={styles.label}>{section.label}</Text>
-                {section.items.map((displayItem) => {
+              <View key={achievementCategorySectionKey(section)} style={styles.openSection}>
+                <Text style={styles.label}>{achievementCategorySectionLabel(section)}</Text>
+                {achievementCategorySectionItems(section).map((displayItem) => {
                   return (
                     <View
                       key={achievementProgressCardKey(displayItem)}
