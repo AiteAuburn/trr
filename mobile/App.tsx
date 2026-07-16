@@ -7791,6 +7791,10 @@ export default function App() {
     setStatus(message);
   }
 
+  function isParserBackendUnavailable() {
+    return !protectedBackendReady;
+  }
+
   function isParserModelUnavailable() {
     return !parserModelReady;
   }
@@ -7803,7 +7807,7 @@ export default function App() {
     if (isParserPreviewRequestBlocked()) {
       return;
     }
-    if (!protectedBackendReady) {
+    if (isParserBackendUnavailable()) {
       handleParserBackendUnavailable();
       return;
     }

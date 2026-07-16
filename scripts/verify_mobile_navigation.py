@@ -2684,7 +2684,17 @@ def main() -> int:
         _assert_contains(
             "parser backend unavailable helper binding",
             content,
-            "if (!protectedBackendReady) {\n      handleParserBackendUnavailable();\n      return;",
+            "if (isParserBackendUnavailable()) {\n      handleParserBackendUnavailable();\n      return;",
+        )
+        _assert_contains(
+            "parser backend unavailable guard helper",
+            content,
+            "function isParserBackendUnavailable()",
+        )
+        _assert_contains(
+            "parser backend unavailable guard helper internals",
+            content,
+            "return !protectedBackendReady;",
         )
         _assert_contains(
             "parser model unavailable helper",
@@ -6584,6 +6594,9 @@ def main() -> int:
             ("parse transcript validation error helper", "function handleParserTranscriptValidationError(message: string)"),
             ("parse transcript validation error helper internals", "setStatus(message);"),
             ("parse transcript validation error binding", "handleParserTranscriptValidationError(transcriptValidationError);"),
+            ("parse backend unavailable guard helper", "function isParserBackendUnavailable()"),
+            ("parse backend unavailable guard helper internals", "return !protectedBackendReady;"),
+            ("parse backend unavailable guard binding", "if (isParserBackendUnavailable())"),
             ("parse model unavailable guard helper", "function isParserModelUnavailable()"),
             ("parse model unavailable guard helper internals", "return !parserModelReady;"),
             ("parse model unavailable guard binding", "if (isParserModelUnavailable())"),
