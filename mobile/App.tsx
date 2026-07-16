@@ -3766,12 +3766,19 @@ export default function App() {
     removePreviewRecordDraft(removeDraft);
   }
 
+  function pendingPreviewRecordRemoveConfirmIndex() {
+    return pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord
+      ? null
+      : pendingPreviewRemoveIndex;
+  }
+
   function confirmPreviewRecordRemove() {
-    if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {
+    const removeIndex = pendingPreviewRecordRemoveConfirmIndex();
+    if (removeIndex === null) {
       returnFromMissingPreviewRecordRemoveConfirm();
       return;
     }
-    returnFromPreviewRecordRemoveConfirmSuccess(pendingPreviewRemoveIndex);
+    returnFromPreviewRecordRemoveConfirmSuccess(removeIndex);
   }
 
   function updatePreviewEditField<K extends keyof RecordEditFields>(

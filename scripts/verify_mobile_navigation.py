@@ -4406,7 +4406,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove confirm missing pending return helper binding",
             content,
-            "if (pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord) {\n      returnFromMissingPreviewRecordRemoveConfirm();\n      return;",
+            "const removeIndex = pendingPreviewRecordRemoveConfirmIndex();\n    if (removeIndex === null) {\n      returnFromMissingPreviewRecordRemoveConfirm();\n      return;",
+        )
+        _assert_contains(
+            "AI candidate remove confirm pending index helper",
+            content,
+            "function pendingPreviewRecordRemoveConfirmIndex()",
+        )
+        _assert_contains(
+            "AI candidate remove confirm pending index helper internals",
+            content,
+            "function pendingPreviewRecordRemoveConfirmIndex() {\n    return pendingPreviewRemoveIndex === null || !pendingPreviewRemoveRecord\n      ? null\n      : pendingPreviewRemoveIndex;",
         )
         _assert_contains(
             "AI candidate remove confirm success return helper",
@@ -4416,7 +4426,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove confirm success return helper binding",
             content,
-            "returnFromPreviewRecordRemoveConfirmSuccess(pendingPreviewRemoveIndex);",
+            "returnFromPreviewRecordRemoveConfirmSuccess(removeIndex);",
         )
         _assert_contains(
             "AI candidate preview remove records update helper",
