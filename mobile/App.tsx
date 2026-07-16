@@ -2540,6 +2540,10 @@ export default function App() {
     return item.copy;
   }
 
+  function homeGuidanceRowKey(rowIndex: number) {
+    return `home-guidance-row-${rowIndex}`;
+  }
+
   function homeGuidanceItemKey(item: (typeof homeGuidanceDirections)[number][number]) {
     return item.key;
   }
@@ -8157,7 +8161,7 @@ export default function App() {
               </View>
               <View style={styles.homeGuidancePanel}>
                 {homeGuidanceDirections.map((row, rowIndex) => (
-                  <View key={`home-guidance-row-${rowIndex}`} style={styles.homeGuidanceRow}>
+                  <View key={homeGuidanceRowKey(rowIndex)} style={styles.homeGuidanceRow}>
                     {row.map((item) => (
                       <View key={homeGuidanceItemKey(item)} style={styles.homeGuidanceItem}>
                         <Text style={styles.homeGuidanceIcon}>{homeGuidanceItemIcon(item)}</Text>

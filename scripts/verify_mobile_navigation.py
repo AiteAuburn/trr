@@ -5454,6 +5454,9 @@ def main() -> int:
         ):
             _assert_contains(label, today_home_block, marker)
         for label, marker in (
+            ("guided home row key helper", "function homeGuidanceRowKey(rowIndex: number)"),
+            ("guided home row key helper fields", "return `home-guidance-row-${rowIndex}`;"),
+            ("guided home row key helper binding", "key={homeGuidanceRowKey(rowIndex)}"),
             ("guided home item key helper", "function homeGuidanceItemKey(item: (typeof homeGuidanceDirections)[number][number])"),
             ("guided home item key helper fields", "return item.key;"),
             ("guided home item icon helper", "function homeGuidanceItemIcon(item: (typeof homeGuidanceDirections)[number][number])"),
@@ -5480,6 +5483,11 @@ def main() -> int:
             today_home_block,
             r"row\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
             "home guidance item render block",
+        )
+        _assert_not_contains(
+            "direct home guidance row key binding",
+            today_home_block,
+            "key={`home-guidance-row-${rowIndex}`}",
         )
         for label, marker in (
             ("direct home guidance item key binding", "key={item.key}"),
