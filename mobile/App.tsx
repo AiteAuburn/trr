@@ -3409,7 +3409,7 @@ export default function App() {
   function returnFromPreviewRecordEdit() {
     clearPreviewMenuSelectionIndexes();
     seedEmptyPreviewEditStateForNow();
-    openScreenWithStatus(previewActionReturnScreen, aiCandidateEditCancelStatusMessage());
+    openPreviewActionReturnScreenWithStatus(aiCandidateEditCancelStatusMessage());
   }
 
   function openPreviewRecordRemoveConfirm(index: number, returnScreen: AppScreen = "aiReview") {
@@ -3498,11 +3498,15 @@ export default function App() {
   function returnFromPreviewRemoveConfirm() {
     clearPreviewMenuSelectionIndexes();
     clearPreviewEditDraftFields();
-    openScreenWithStatus(previewActionReturnScreen, aiCandidateRemoveCancelStatusMessage());
+    openPreviewActionReturnScreenWithStatus(aiCandidateRemoveCancelStatusMessage());
   }
 
   function openPreviewActionReturnScreen() {
     openScreen(previewActionReturnScreen);
+  }
+
+  function openPreviewActionReturnScreenWithStatus(statusMessage: string) {
+    openScreenWithStatus(previewActionReturnScreen, statusMessage);
   }
 
   function reorganizeDailyRecordDraftAfterChange(

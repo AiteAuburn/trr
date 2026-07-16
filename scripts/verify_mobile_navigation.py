@@ -3986,7 +3986,7 @@ def main() -> int:
         _assert_contains(
             "AI candidate edit return empty seed helper binding",
             content,
-            "seedEmptyPreviewEditStateForNow();\n    openScreenWithStatus(previewActionReturnScreen, aiCandidateEditCancelStatusMessage());",
+            "seedEmptyPreviewEditStateForNow();\n    openPreviewActionReturnScreenWithStatus(aiCandidateEditCancelStatusMessage());",
         )
         _assert_contains(
             "AI candidate remove return index clear helper binding",
@@ -4001,12 +4001,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove return status helper binding",
             content,
-            "openScreenWithStatus(previewActionReturnScreen, aiCandidateRemoveCancelStatusMessage());",
+            "openPreviewActionReturnScreenWithStatus(aiCandidateRemoveCancelStatusMessage());",
         )
         _assert_contains(
             "preview action return screen helper",
             content,
             "function openPreviewActionReturnScreen() {\n    openScreen(previewActionReturnScreen);\n  }",
+        )
+        _assert_contains(
+            "preview action return screen status helper",
+            content,
+            "function openPreviewActionReturnScreenWithStatus(statusMessage: string) {\n    openScreenWithStatus(previewActionReturnScreen, statusMessage);\n  }",
         )
         _assert_contains(
             "AI candidate edit save success field clear helper binding",
