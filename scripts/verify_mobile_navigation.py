@@ -4521,7 +4521,17 @@ def main() -> int:
         _assert_contains(
             "AI candidate remove confirm success return helper",
             content,
-            "function returnFromPreviewRecordRemoveConfirmSuccess(removeIndex: number) {\n    removePreviewRecord(removeIndex);\n    openPreviewRemoveConfirmReturnScreen();",
+            "function returnFromPreviewRecordRemoveConfirmSuccess(removeIndex: number) {\n    applyPreviewRecordRemoveConfirmSuccess(removeIndex);\n    openPreviewRemoveConfirmReturnScreen();",
+        )
+        _assert_contains(
+            "AI candidate remove confirm success apply helper",
+            content,
+            "function applyPreviewRecordRemoveConfirmSuccess(removeIndex: number)",
+        )
+        _assert_contains(
+            "AI candidate remove confirm success apply helper internals",
+            content,
+            "function applyPreviewRecordRemoveConfirmSuccess(removeIndex: number) {\n    removePreviewRecord(removeIndex);",
         )
         _assert_contains(
             "AI candidate remove confirm success return helper binding",

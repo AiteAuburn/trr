@@ -3588,8 +3588,12 @@ export default function App() {
   }
 
   function returnFromPreviewRecordRemoveConfirmSuccess(removeIndex: number) {
-    removePreviewRecord(removeIndex);
+    applyPreviewRecordRemoveConfirmSuccess(removeIndex);
     openPreviewRemoveConfirmReturnScreen();
+  }
+
+  function applyPreviewRecordRemoveConfirmSuccess(removeIndex: number) {
+    removePreviewRecord(removeIndex);
   }
 
   function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number) {
