@@ -8869,12 +8869,16 @@ export default function App() {
     }
   }
 
+  function openNativeDebugUnavailable() {
+    setNativeStatus(nativeDebugDisabledStatusMessage());
+  }
+
   async function downloadSelectedModel() {
     if (isBusy) {
       return;
     }
     if (!enableDebugTools) {
-      setNativeStatus(nativeDebugDisabledStatusMessage());
+      openNativeDebugUnavailable();
       return;
     }
     setIsBusy(true);
@@ -8905,7 +8909,7 @@ export default function App() {
       return;
     }
     if (!enableDebugTools) {
-      setNativeStatus(nativeDebugDisabledStatusMessage());
+      openNativeDebugUnavailable();
       return;
     }
     setIsBusy(true);
@@ -8925,7 +8929,7 @@ export default function App() {
       return;
     }
     if (!enableDebugTools) {
-      setNativeStatus(nativeDebugDisabledStatusMessage());
+      openNativeDebugUnavailable();
       return;
     }
     if (!whisperModelPath.trim() || !audioPath.trim()) {
@@ -8953,7 +8957,7 @@ export default function App() {
       return;
     }
     if (!enableDebugTools) {
-      setNativeStatus(nativeDebugDisabledStatusMessage());
+      openNativeDebugUnavailable();
       return;
     }
     if (!llamaModelPath.trim() || !transcript.trim()) {
@@ -8981,7 +8985,7 @@ export default function App() {
       return;
     }
     if (!enableDebugTools) {
-      setNativeStatus(nativeDebugDisabledStatusMessage());
+      openNativeDebugUnavailable();
       return;
     }
     setIsBusy(true);
