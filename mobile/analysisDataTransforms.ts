@@ -163,6 +163,38 @@ export function analysisChartRange(points: AnalysisChartPoint[]) {
   };
 }
 
+export function analysisChartPointKey(point: AnalysisChartPoint) {
+  return point.id;
+}
+
+export function analysisChartPointValue(point: AnalysisChartPoint) {
+  return point.value;
+}
+
+export function analysisChartPointLabel(point: AnalysisChartPoint) {
+  return point.label;
+}
+
+export function analysisChartPointOffset(point: AnalysisChartPoint, minimum: number, range: number) {
+  const normalized = (analysisChartPointValue(point) - minimum) / range;
+  return Math.round((1 - normalized) * 104);
+}
+
+export function analysisChartPointIsSelected(index: number, selectedIndex: number | null) {
+  return selectedIndex === index;
+}
+
+export function analysisChartPointAccessibilityLabel(point: AnalysisChartPoint) {
+  return boundDisplayText(
+    `查看分析圖表點：${analysisChartPointLabel(point)}，血糖 ${analysisChartPointValue(point)}`,
+    240
+  );
+}
+
+export function analysisAxisLabel(point: AnalysisChartPoint, index: number, totalCount: number) {
+  return index === 0 || index === totalCount - 1 || index % 3 === 0 ? analysisChartPointLabel(point) : "";
+}
+
 export function selectedAnalysisChartPoint(points: AnalysisChartPoint[], index: number | null) {
   return index === null ? null : points[index] ?? null;
 }

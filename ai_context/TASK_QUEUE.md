@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2177: Move analysis chart accessors
+
+Status: done
+
+Completed:
+
+- Added analysis chart point key, value, label, offset, selected-state, accessibility-label, and axis-label helpers to `analysisDataTransforms.ts`.
+- Removed duplicate analysis chart helper definitions from `App.tsx`.
+- Kept Analysis chart point rendering, offsets, selection state, accessibility label copy, axis labels, and point press behavior unchanged.
+- Updated navigation verifier coverage to require analysis data transform helper exports, App import/render bindings, and no local helper regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2176: Move food community selection accessors
 
 Status: done

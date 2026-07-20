@@ -765,7 +765,13 @@ import {
 } from "./analysisScreenData";
 import {
   afterMealGlucoseCount as countAfterMealGlucose,
+  analysisAxisLabel,
+  analysisChartPointAccessibilityLabel,
+  analysisChartPointIsSelected,
+  analysisChartPointKey,
+  analysisChartPointOffset,
   analysisChartPoints as buildAnalysisChartPoints,
+  analysisChartPointValue,
   analysisChartRange,
   analysisGlucoseRecords as buildAnalysisGlucoseRecords,
   analysisGlucoseValues as buildAnalysisGlucoseValues,
@@ -2572,46 +2578,6 @@ export default function App() {
 
   function pressAnalysisRangeOption(item: AnalysisRangeOption) {
     selectAnalysisRange(analysisRangeTarget(item));
-  }
-
-  function analysisChartPointKey(point: (typeof analysisChartPoints)[number]) {
-    return point.id;
-  }
-
-  function analysisChartPointValue(point: (typeof analysisChartPoints)[number]) {
-    return point.value;
-  }
-
-  function analysisChartPointLabel(point: (typeof analysisChartPoints)[number]) {
-    return point.label;
-  }
-
-  function analysisChartPointOffset(
-    point: (typeof analysisChartPoints)[number],
-    minimum: number,
-    range: number
-  ) {
-    const normalized = (analysisChartPointValue(point) - minimum) / range;
-    return Math.round((1 - normalized) * 104);
-  }
-
-  function analysisChartPointIsSelected(index: number, selectedIndex: number | null) {
-    return selectedIndex === index;
-  }
-
-  function analysisChartPointAccessibilityLabel(point: (typeof analysisChartPoints)[number]) {
-    return boundDisplayText(
-      `查看分析圖表點：${analysisChartPointLabel(point)}，血糖 ${analysisChartPointValue(point)}`,
-      maxDisplayDetailTextLength
-    );
-  }
-
-  function analysisAxisLabel(
-    point: (typeof analysisChartPoints)[number],
-    index: number,
-    totalCount: number
-  ) {
-    return index === 0 || index === totalCount - 1 || index % 3 === 0 ? analysisChartPointLabel(point) : "";
   }
 
   function updateAnalysisCustomStartInput(value: string) {
