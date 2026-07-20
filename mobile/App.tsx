@@ -185,9 +185,11 @@ import {
   foodCommunityItemDisplayItem,
   foodCommunityItemFromApi,
   foodCommunityItemsFromApi,
+  foodCommunityItemsWithShareUpdateFromApi,
   foodCommunityItemsWithDetail,
   foodCommunityItems,
   foodCommunityShareStatusMessages,
+  foodCommunityShareSelectedItemIdFromApi,
   foodCommunitySyncStatusMessages,
   futureModuleCards,
   futureModuleCardDisplayItems,
@@ -5036,14 +5038,6 @@ export default function App() {
     return item.examples.length;
   }
 
-  function foodCommunityShareSelectedItemId(item: { id: string }) {
-    return item.id;
-  }
-
-  function foodCommunityShareRefreshItemId(item: { id: string }) {
-    return item.id;
-  }
-
   function foodCommunityShareFallbackFoodName(item: { title: string }) {
     return item.title;
   }
@@ -6588,13 +6582,8 @@ export default function App() {
           })
         }
       );
-      const updatedFood = foodCommunityItemFromApi(response.food);
-      const updatedFoodId = foodCommunityShareRefreshItemId(updatedFood);
-      setFoodCommunityBackendItems((current) => [
-        updatedFood,
-        ...current.filter((item) => item.id !== updatedFoodId)
-      ].slice(0, maxListItems * 4));
-      setSelectedFoodCommunityItemId(foodCommunityShareSelectedItemId(updatedFood));
+      setFoodCommunityBackendItems((current) => foodCommunityItemsWithShareUpdateFromApi(current, response.food));
+      setSelectedFoodCommunityItemId(foodCommunityShareSelectedItemIdFromApi(response.food));
       setFoodCommunityShareFields(emptyFoodCommunityShareFields());
       setCommunityActionStatus(
         foodCommunityShareStatusMessages({

@@ -12303,13 +12303,8 @@ def main() -> int:
             ("food community share glucose validation binding", "setCommunityActionStatus(shareStatus.invalidGlucose);"),
             ("food community share time validation binding", "timeErrorMessage: error instanceof Error ? error.message : \"食用時間格式不正確。\""),
             ("food community share loading status binding", "setCommunityActionStatus(shareStatus.loading);"),
-            ("food community share selected item helper", "function foodCommunityShareSelectedItemId(item: { id: string })"),
-            ("food community share selected item helper fields", "return item.id;"),
-            ("food community share selected item helper binding", "setSelectedFoodCommunityItemId(foodCommunityShareSelectedItemId(updatedFood));"),
-            ("food community share refresh item helper", "function foodCommunityShareRefreshItemId(item: { id: string })"),
-            ("food community share refresh item helper fields", "return item.id;"),
-            ("food community share refresh item helper binding", "const updatedFoodId = foodCommunityShareRefreshItemId(updatedFood);"),
-            ("food community share refresh item helper filter", "current.filter((item) => item.id !== updatedFoodId)"),
+            ("food community share update helper binding", "setFoodCommunityBackendItems((current) => foodCommunityItemsWithShareUpdateFromApi(current, response.food));"),
+            ("food community share selected id helper binding", "setSelectedFoodCommunityItemId(foodCommunityShareSelectedItemIdFromApi(response.food));"),
             ("food community share success status binding", "setCommunityActionStatus(\n        foodCommunityShareStatusMessages({"),
             ("food community share failure status binding", "setCommunityActionStatus(shareStatus.failure);"),
             ("community public settings status helper binding", "const publicSettingsStatus = communityPublicSettingsStatusMessages({"),
@@ -13920,6 +13915,10 @@ def main() -> int:
             ("food community api item transform helper", "export function foodCommunityItemFromApi(value: FoodCommunityApiItem): FoodCommunityItem"),
             ("food community api items transform helper", "export function foodCommunityItemsFromApi(values: FoodCommunityApiItem[])"),
             ("food community api items transform helper internals", "return values.slice(0, maxListItems * 4).map(foodCommunityItemFromApi);"),
+            ("food community share update transform helper", "export function foodCommunityItemsWithShareUpdateFromApi(current: FoodCommunityItem[], value: FoodCommunityApiItem)"),
+            ("food community share update transform filter", "...current.filter((item) => item.id !== updatedFood.id)"),
+            ("food community share selected id transform helper", "export function foodCommunityShareSelectedItemIdFromApi(value: FoodCommunityApiItem)"),
+            ("food community share selected id transform field", "return foodCommunityItemFromApi(value).id;"),
             ("food community backend share mapping", "examples: (value.shares ?? []).slice(0, 3).map((share) => ({"),
             ("food community share fields type", "export type FoodCommunityShareFields = {"),
             ("food community share food name field", "foodName: string;"),
@@ -14776,9 +14775,29 @@ def main() -> int:
             "setSelectedFoodCommunityItemId(updatedFood.id);",
         )
         _assert_not_contains(
+            "food community share selected item local helper",
+            content,
+            "function foodCommunityShareSelectedItemId(item: { id: string })",
+        )
+        _assert_not_contains(
+            "food community share refresh item local helper",
+            content,
+            "function foodCommunityShareRefreshItemId(item: { id: string })",
+        )
+        _assert_not_contains(
+            "food community direct share response item transform",
+            content,
+            "const updatedFood = foodCommunityItemFromApi(response.food);",
+        )
+        _assert_not_contains(
             "food community direct share refresh item filter",
             content,
             "item.id !== updatedFood.id",
+        )
+        _assert_not_contains(
+            "food community direct share refresh id filter",
+            content,
+            "item.id !== updatedFoodId",
         )
         _assert_not_contains(
             "food community direct share fallback food name binding",

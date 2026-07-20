@@ -1228,6 +1228,18 @@ export function foodCommunityItemsFromApi(values: FoodCommunityApiItem[]) {
   return values.slice(0, maxListItems * 4).map(foodCommunityItemFromApi);
 }
 
+export function foodCommunityItemsWithShareUpdateFromApi(current: FoodCommunityItem[], value: FoodCommunityApiItem) {
+  const updatedFood = foodCommunityItemFromApi(value);
+  return [
+    updatedFood,
+    ...current.filter((item) => item.id !== updatedFood.id)
+  ].slice(0, maxListItems * 4);
+}
+
+export function foodCommunityShareSelectedItemIdFromApi(value: FoodCommunityApiItem) {
+  return foodCommunityItemFromApi(value).id;
+}
+
 export function foodCommunityCategoriesFromApi(values: FoodCommunityApiCategoryRead[]) {
   return values.slice(0, foodCommunityCategories.length).map((category) => ({
     id: mobileFoodCategoryFromApi(category.code),

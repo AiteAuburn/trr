@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2103: Move food community share update transform
+
+Status: done
+
+Completed:
+
+- Added `foodCommunityItemsWithShareUpdateFromApi` and `foodCommunityShareSelectedItemIdFromApi` to `futureModuleDisplay.ts`.
+- Replaced the inline food share success response transform, dedupe filter, selected-item id binding, and list bound in `App.tsx`.
+- Kept food share validation, POST payload, action status handling, store refresh, leaderboard refresh, and failure fallback in `App.tsx`.
+- Updated navigation verifier coverage to require the domain update helpers and reject the old inline share-update transform.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2102: Move ranking leaderboard response transforms
 
 Status: done
