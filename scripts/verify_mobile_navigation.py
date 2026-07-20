@@ -83,6 +83,7 @@ AI_CANDIDATE_LIST_PATH = REPO_ROOT / "mobile" / "aiCandidateList.tsx"
 AI_REVIEW_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiReviewActionRow.tsx"
 AI_SAVE_FAILURE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiSaveFailureActionRow.tsx"
 CORE_FLOW_ENTRY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "coreFlowEntryActionRow.tsx"
+HOME_GUIDANCE_CARD_PATH = REPO_ROOT / "mobile" / "homeGuidanceCard.tsx"
 DAILY_RECORD_ENTRY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordEntryActionRow.tsx"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 DAILY_RECORD_SECTION_LIST_PATH = REPO_ROOT / "mobile" / "dailyRecordSectionList.tsx"
@@ -1495,6 +1496,7 @@ def main() -> int:
     ai_review_action_row_content = AI_REVIEW_ACTION_ROW_PATH.read_text(encoding="utf-8")
     ai_save_failure_action_row_content = AI_SAVE_FAILURE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     core_flow_entry_action_row_content = CORE_FLOW_ENTRY_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    home_guidance_card_content = HOME_GUIDANCE_CARD_PATH.read_text(encoding="utf-8")
     daily_record_entry_action_row_content = DAILY_RECORD_ENTRY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     daily_record_section_list_content = DAILY_RECORD_SECTION_LIST_PATH.read_text(encoding="utf-8")
@@ -7612,12 +7614,8 @@ def main() -> int:
             ("minimal home section style", "styles.homeMinimalSection"),
             ("minimal home mic button style", "styles.homeMicButton"),
             ("minimal home active mic style", "styles.homeMicButtonActive"),
+            ("guided home card component binding", "<HomeGuidanceCard />"),
             ("guided home tagline", "想說什麼就說什麼"),
-            ("guided home tagline cue style", "styles.homeTaglineCue"),
-            ("guided home tagline row style", "styles.homeTaglineRow"),
-            ("guided home info icon style", "styles.homeGuidanceInfoIcon"),
-            ("guided home info icon text", "<Text style={styles.homeGuidanceInfoIconText}>i</Text>"),
-            ("guided home info row style", "styles.homeGuidanceInfoRow"),
             ("guided home non-button copy", "上面這排不是按鈕喔"),
             ("guided home flexible format copy", "想說什麼就說什麼，不用照固定格式"),
             ("guided home examples title", "範例（怎麼說都可以）"),
@@ -7760,7 +7758,14 @@ def main() -> int:
             ("parse profile context binding", "const parserContext = parserProfileContext();\n    if (!hasParserProfileContext(parserContext))"),
             ("parse profile context request account binding", "context.account.id,\n      context.activeProfile.id,"),
         ):
-            _assert_contains(label, content, marker)
+            source = (
+                home_guidance_card_content
+                if label.startswith("guided home")
+                and "example" not in label
+                and label not in {"guided home card component binding"}
+                else content
+            )
+            _assert_contains(label, source, marker)
         for label, marker in (
             ("guided home direction time config", "{ icon: \"🕒\", label: \"時間\" }"),
             ("guided home direction glucose config", "{ icon: \"🩸\", label: \"血糖\" }"),
@@ -7776,16 +7781,7 @@ def main() -> int:
         if today_home_block.count("<Pressable") != 1:
             raise AssertionError("Today/Home render block must contain exactly one Pressable mic control.")
         for label, marker in (
-            ("guided home block tagline row", "styles.homeTaglineRow"),
-            ("guided home block tagline cue", "styles.homeTaglineCue"),
-            ("guided home block tagline", "<Text style={styles.homeTagline}>想說什麼就說什麼</Text>"),
-            ("guided home block direction panel", "styles.homeGuidancePanel"),
-            ("guided home block direction items", "homeGuidanceDirections.map"),
-            ("guided home item key binding", "key={homeGuidanceItemKey(item)}"),
-            ("guided home item icon binding", "{homeGuidanceItemIcon(item)}"),
-            ("guided home item label binding", "{homeGuidanceItemLabel(item)}"),
-            ("guided home block info row", "styles.homeGuidanceInfoRow"),
-            ("guided home block non-button copy", "上面這排不是按鈕喔"),
+            ("guided home block card component", "<HomeGuidanceCard />"),
             ("minimal home block primary hint", "<Text style={styles.homeHint}>按住開始說話記錄</Text>"),
             ("minimal home block secondary hint", "<Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>"),
             ("minimal home block model status", "<Text style={styles.homeModelStatus}>{homeRecordingModelStatusDisplayText}</Text>"),
@@ -7795,6 +7791,19 @@ def main() -> int:
         ):
             _assert_contains(label, today_home_block, marker)
         for label, marker in (
+            ("guided home card component", "export function HomeGuidanceCard"),
+            ("guided home card tagline row", "styles.homeTaglineRow"),
+            ("guided home card tagline cue", "styles.homeTaglineCue"),
+            ("guided home card tagline", "<Text style={styles.homeTagline}>想說什麼就說什麼</Text>"),
+            ("guided home card direction panel", "styles.homeGuidancePanel"),
+            ("guided home card direction items", "homeGuidanceDirections.map"),
+            ("guided home card item key binding", "key={homeGuidanceItemKey(item)}"),
+            ("guided home card item icon binding", "{homeGuidanceItemIcon(item)}"),
+            ("guided home card item label binding", "{homeGuidanceItemLabel(item)}"),
+            ("guided home card info icon", "styles.homeGuidanceInfoIcon"),
+            ("guided home card info icon text", "<Text style={styles.homeGuidanceInfoIconText}>i</Text>"),
+            ("guided home card info row", "styles.homeGuidanceInfoRow"),
+            ("guided home card non-button copy", "上面這排不是按鈕喔"),
             ("guided home row key helper", "function homeGuidanceRowKey(rowIndex: number)"),
             ("guided home row key helper fields", "return `home-guidance-row-${rowIndex}`;"),
             ("guided home row key helper binding", "key={homeGuidanceRowKey(rowIndex)}"),
@@ -7819,15 +7828,21 @@ def main() -> int:
             ("guided home example pagination accessibility helper", "function homeSpeechExamplePaginationAccessibilityLabel(currentIndex: number, totalCount: number)"),
             ("guided home example pagination accessibility helper binding", "accessibilityLabel={homeSpeechExamplePaginationAccessibilityLabel("),
         ):
-            _assert_contains(label, content, marker)
-        home_guidance_row_block = _match_block(
+            source = home_guidance_card_content if "home example" not in label else content
+            _assert_contains(label, source, marker)
+        _assert_not_contains(
+            "direct home guidance directions map in App",
             today_home_block,
+            "homeGuidanceDirections.map",
+        )
+        home_guidance_row_block = _match_block(
+            home_guidance_card_content,
             r"row\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
             "home guidance item render block",
         )
         _assert_not_contains(
             "direct home guidance row key binding",
-            today_home_block,
+            home_guidance_card_content,
             "key={`home-guidance-row-${rowIndex}`}",
         )
         for label, marker in (

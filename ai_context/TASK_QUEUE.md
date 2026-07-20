@@ -34,6 +34,39 @@ None.
 
 ## Done
 
+### T2085: Extract Home guidance card component
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/homeGuidanceCard.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `HomeGuidanceCard` for the Today/Home tagline, non-button record direction panel, information icon row, and flexible-format guidance copy.
+- Moved Home guidance row/item key, icon, label helpers and Home guidance styles out of `App.tsx`.
+- Preserved the same tagline, cue icons, direction labels, non-button explanation copy, direction wrapping, panel spacing, and information icon treatment.
+- Kept recording press/release handlers, model status, elapsed hint, transcript handoff, example carousel state, example pagination, quick-entry affordances, backend calls, STT, parser, and LLM behavior in `App.tsx`.
+- Updated navigation verifier coverage for the component binding, component internals, helper guards, and direct inline guidance map guard.
+- No UI copy/visibility/navigation/backend/schema/Android signing/STT/LLM prompt/parser/token-storage/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue with the next first-version-safe render cluster, preferably Home example carousel or History daily summary surfaces before hidden future modules.
+
 ### T2084: Extract daily record section list component
 
 Status: done

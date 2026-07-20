@@ -15,6 +15,39 @@
 
 ## 2026-07-16
 
+### T2085 extract Home guidance card component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/homeGuidanceCard.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `HomeGuidanceCard` for the Today/Home tagline, non-button record direction panel, information icon row, and flexible-format guidance copy.
+- Moved Home guidance row/item key, icon, label helpers and Home guidance styles out of `App.tsx`.
+- Preserved the same tagline, cue icons, direction labels, non-button explanation copy, direction wrapping, panel spacing, and information icon treatment.
+- Kept recording press/release handlers, model status, elapsed hint, transcript handoff, example carousel state, example pagination, quick-entry affordances, backend calls, STT, parser, and LLM behavior in `App.tsx`.
+- Updated navigation verifier coverage for the component binding, component internals, helper guards, and direct inline guidance map guard.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue with the next first-version-safe render cluster, preferably Home example carousel or History daily summary surfaces before hidden future modules.
+
 ### T2084 extract daily record section list component
 
 類型：mobile / refactor / verifier / docs
