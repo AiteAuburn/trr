@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2175: Move future module requirement accessors
+
+Status: done
+
+Completed:
+
+- Added future module requirement key/text accessors to `futureModuleDisplay.ts`.
+- Removed duplicate future module requirement helper definitions from `App.tsx`.
+- Kept Future Module card/detail requirement bullet rendering, keys, text, routing, and preview behavior unchanged.
+- Updated navigation verifier coverage to require future-module helper exports, App import/render bindings, and no local helper regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2174: Move community ranking preview accessors
 
 Status: done

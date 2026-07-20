@@ -285,6 +285,8 @@ import {
   futureModuleDetailBoundaryCopy,
   futureModuleDetailReturnStatusMessage,
   futureModuleImplementationOrderCopy,
+  futureModuleRequirementKey,
+  futureModuleRequirementText,
   futureModulesOpenStatusMessage,
   futureModulesReturnMenuStatusMessage,
   futurePreviewBoundaryBadgeLabel,
@@ -5241,14 +5243,6 @@ export default function App() {
       return;
     }
     openScreen(target);
-  }
-
-  function futureModuleRequirementKey(requirement: { key: string }) {
-    return requirement.key;
-  }
-
-  function futureModuleRequirementText(requirement: { text: string }) {
-    return requirement.text;
   }
 
   async function loadBasicReportForCurrentRange(mode: "analysis" | "detailed") {

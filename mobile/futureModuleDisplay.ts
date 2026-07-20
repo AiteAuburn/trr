@@ -774,6 +774,16 @@ export function selectedFutureModuleDisplayItem(value: FutureModuleCard | null) 
   };
 }
 
+export type FutureModuleRequirementDisplayItem = ReturnType<typeof futureModuleCardDisplayItem>["requirements"][number];
+
+export function futureModuleRequirementKey(requirement: FutureModuleRequirementDisplayItem) {
+  return requirement.key;
+}
+
+export function futureModuleRequirementText(requirement: FutureModuleRequirementDisplayItem) {
+  return requirement.text;
+}
+
 export function futureModuleDetailBoundaryCopy() {
   return boundDisplayText(
     "這個頁面只整理 UI 入口、工程前置條件與資料安全邊界；目前不呼叫 API、不寫入資料、不啟動背景工作，也不呼叫 AI。",

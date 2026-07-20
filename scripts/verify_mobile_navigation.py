@@ -1981,6 +1981,8 @@ def main() -> int:
             ("history boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("community readiness checklist component binding", "<FutureReadinessChecklist items={communityReadinessChecklistItems} />"),
             ("ranking readiness checklist component binding", "<FutureReadinessChecklist items={rankingReadinessChecklistItems} />"),
+            ("future module requirement key helper import", "futureModuleRequirementKey,"),
+            ("future module requirement text helper import", "futureModuleRequirementText,"),
             ("future module card requirements highlight bullet row", "futureModuleCardRequirements(item).map((requirement) => (\n              <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />"),
             ("future module detail requirements highlight bullet row", "selectedFutureModuleDisplay.requirements.map((requirement) => (\n                <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />"),
         ):
@@ -1994,7 +1996,7 @@ def main() -> int:
                 target_content = manual_record_confirm_footer_actions_content
             elif label.startswith("future module card requirements "):
                 target_content = future_module_card_list_content
-            elif label.startswith(("delete confirm ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ", "tutorial safety ", "detailed report notes ", "subscription readiness ", "subscription management readiness ", "doctor share readiness ", "health integration readiness ", "community readiness ", "ranking readiness ", "store checkout readiness ", "food photo empty result ", "food photo readiness ", "future module detail requirements ")):
+            elif label.startswith(("delete confirm ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ", "tutorial safety ", "detailed report notes ", "subscription readiness ", "subscription management readiness ", "doctor share readiness ", "health integration readiness ", "community readiness ", "ranking readiness ", "store checkout readiness ", "food photo empty result ", "food photo readiness ", "future module requirement ", "future module detail requirements ")):
                 target_content = content
             else:
                 target_content = highlight_bullet_row_content
@@ -14044,6 +14046,11 @@ def main() -> int:
             ("future module selected display helper", "export function selectedFutureModuleDisplayItem(value: FutureModuleCard | null)"),
             ("future module card accessibility item", "accessibilityLabel: boundDisplayText(`查看${futureModuleText(value.title, \"未來模組\", maxDisplayTextLength)}整合狀態`, maxDisplayTextLength)"),
             ("future module requirements display helper", "function futureModuleRequirements(value: string[] | undefined)"),
+            ("future module requirement display item type", 'export type FutureModuleRequirementDisplayItem = ReturnType<typeof futureModuleCardDisplayItem>["requirements"][number];'),
+            ("future module requirement key display helper", "export function futureModuleRequirementKey(requirement: FutureModuleRequirementDisplayItem)"),
+            ("future module requirement key display helper fields", "return requirement.key;"),
+            ("future module requirement text display helper", "export function futureModuleRequirementText(requirement: FutureModuleRequirementDisplayItem)"),
+            ("future module requirement text display helper fields", "return requirement.text;"),
             ("future module detail boundary copy helper", "export function futureModuleDetailBoundaryCopy()"),
             ("future module detail boundary copy", "這個頁面只整理 UI 入口、工程前置條件與資料安全邊界"),
             ("future module implementation order copy helper", "export function futureModuleImplementationOrderCopy()"),
@@ -16074,6 +16081,11 @@ def main() -> int:
             content,
             "openFutureModuleDestination(item.target, item.module);",
         )
+        for label, marker in (
+            ("local future module requirement key helper", "function futureModuleRequirementKey(requirement: { key: string })"),
+            ("local future module requirement text helper", "function futureModuleRequirementText(requirement: { text: string })"),
+        ):
+            _assert_not_contains(label, content, marker)
         product_card_block = _style_block(content, "productCard")
         _assert_contains(
             "store product card wrapping",
