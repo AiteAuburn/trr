@@ -98,11 +98,11 @@ import {
   rejectedPreviewEventReasonText,
   rejectedPreviewEventSourceText,
   recordDetailCardTarget,
-  recordDetailDisplayItem,
   recordEditHeaderTypeLabel,
   recordListDisplayItem,
   recordListDisplayItems,
   recordTypeIcon,
+  selectedRecordDisplayItemForRecord,
   selectedRecordDetailDateLabel,
   selectedRecordDetailDateTimeLabel,
   selectedRecordDetailDisplayRows,
@@ -2126,7 +2126,7 @@ export default function App() {
   const transcriptReviewSampleWarningDisplayText = transcriptReviewDisplay.sampleWarning;
   const transcriptReviewPreflightPassedDisplayText = transcriptReviewDisplay.preflightPassed;
   const previewRecordEditBoundaryDisplayText = previewRecordEditBoundaryCopy();
-  const selectedRecordDisplayItem = selectedRecord ? recordDetailDisplayItem(selectedRecord) : null;
+  const selectedRecordDisplayItem = selectedRecordDisplayItemForRecord(selectedRecord);
   const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayTexts(isBusy);
   const manualRecordConfirmIntroDisplayText = manualRecordConfirmDisplayTextsForState.intro;
   const manualRecordConfirmSubmitDisplayLabel = manualRecordConfirmDisplayTextsForState.submit;

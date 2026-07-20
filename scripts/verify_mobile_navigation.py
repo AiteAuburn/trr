@@ -2726,6 +2726,8 @@ def main() -> int:
             ("record detail selected source helper binding", "sourceValue={selectedRecordDetailSourceLabel(selectedRecordDisplayItem)}"),
             ("record detail selected time helper binding", "timeValue={selectedRecordDetailTimeLabel(selectedRecordDisplayItem)}"),
             ("record detail selected type helper binding", "typeValue={selectedRecordDetailTypeLabel(selectedRecordDisplayItem)}"),
+            ("selected record display item helper import", "selectedRecordDisplayItemForRecord,"),
+            ("selected record display item helper binding", "const selectedRecordDisplayItem = selectedRecordDisplayItemForRecord(selectedRecord);"),
             ("preview edit type label helper import", "previewRecordEditTypeLabel,"),
             ("preview edit type label helper binding", "typeLabel={previewRecordEditTypeLabel(selectedPreviewRecordDisplayItem)}"),
             ("record edit header type label helper binding", "typeLabel={recordEditHeaderTypeLabel(selectedRecordDisplayItem)}"),
@@ -2752,6 +2754,11 @@ def main() -> int:
             "local record detail card target helper",
             content,
             "function recordDetailCardTarget(item: { record: RecordItem })",
+        )
+        _assert_not_contains(
+            "direct selected record display item binding",
+            content,
+            "const selectedRecordDisplayItem = selectedRecord ? recordDetailDisplayItem(selectedRecord) : null;",
         )
         for block_label, pattern, marker in (
             (
@@ -9437,6 +9444,8 @@ def main() -> int:
         )
         for label, marker in (
             ("record detail display item helper", "function recordDetailDisplayItem(record: RecordItem)"),
+            ("selected record display item helper", "function selectedRecordDisplayItemForRecord(record: RecordItem | null)"),
+            ("selected record display item helper internals", "return record ? recordDetailDisplayItem(record) : null;"),
             ("record detail date display helper", "function recordDateDisplay(value?: string)"),
             ("record detail datetime display helper", "function recordDateTimeDisplay(value?: string)"),
             ("record detail source display helper", "function recordSourceDisplay(value?: string)"),

@@ -510,6 +510,10 @@ export function recordDetailDisplayItem(record: RecordItem) {
   };
 }
 
+export function selectedRecordDisplayItemForRecord(record: RecordItem | null) {
+  return record ? recordDetailDisplayItem(record) : null;
+}
+
 type RecordDetailDisplayItem = ReturnType<typeof recordDetailDisplayItem>;
 
 export function selectedRecordDetailDateTimeLabel(item: RecordDetailDisplayItem | null) {
