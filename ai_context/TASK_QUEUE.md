@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2194: Move selected record display bundle
+
+Status: done
+
+Completed:
+
+- Added the selected record display bundle helper to `recordDisplay.ts`.
+- Removed direct selected record detail rows helper assembly from `App.tsx`.
+- Kept selected record display item, record detail rows, delete confirm metadata, and edit header type label behavior unchanged.
+- Updated navigation verifier coverage to require the selected record display bundle, App bundle bindings, and no direct selected record detail rows regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2193: Move selected record display item helper
 
 Status: done

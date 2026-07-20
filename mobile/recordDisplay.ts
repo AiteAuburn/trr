@@ -516,6 +516,15 @@ export function selectedRecordDisplayItemForRecord(record: RecordItem | null) {
 
 type RecordDetailDisplayItem = ReturnType<typeof recordDetailDisplayItem>;
 
+export function selectedRecordDisplayBundleForRecord(record: RecordItem | null) {
+  const displayItem = selectedRecordDisplayItemForRecord(record);
+
+  return {
+    detailRows: selectedRecordDetailDisplayRows(displayItem),
+    displayItem
+  };
+}
+
 export function selectedRecordDetailDateTimeLabel(item: RecordDetailDisplayItem | null) {
   return item?.dateTimeLabel ?? "尚未選擇紀錄";
 }

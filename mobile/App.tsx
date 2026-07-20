@@ -102,10 +102,9 @@ import {
   recordListDisplayItem,
   recordListDisplayItems,
   recordTypeIcon,
-  selectedRecordDisplayItemForRecord,
+  selectedRecordDisplayBundleForRecord,
   selectedRecordDetailDateLabel,
   selectedRecordDetailDateTimeLabel,
-  selectedRecordDetailDisplayRows,
   selectedRecordDetailExerciseSummary,
   selectedRecordDetailMedicationSummary,
   selectedRecordDetailPayloadSummary,
@@ -2126,7 +2125,8 @@ export default function App() {
   const transcriptReviewSampleWarningDisplayText = transcriptReviewDisplay.sampleWarning;
   const transcriptReviewPreflightPassedDisplayText = transcriptReviewDisplay.preflightPassed;
   const previewRecordEditBoundaryDisplayText = previewRecordEditBoundaryCopy();
-  const selectedRecordDisplayItem = selectedRecordDisplayItemForRecord(selectedRecord);
+  const selectedRecordDisplay = selectedRecordDisplayBundleForRecord(selectedRecord);
+  const selectedRecordDisplayItem = selectedRecordDisplay.displayItem;
   const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayTexts(isBusy);
   const manualRecordConfirmIntroDisplayText = manualRecordConfirmDisplayTextsForState.intro;
   const manualRecordConfirmSubmitDisplayLabel = manualRecordConfirmDisplayTextsForState.submit;
@@ -2208,7 +2208,7 @@ export default function App() {
   const yearReviewShareAccessibilityDisplayLabel = yearReviewHeaderDisplay.shareAccessibilityLabel;
   const yearReviewRevokeShareButtonDisplayLabel = yearReviewHeaderDisplay.revokeShareButtonLabel;
   const yearReviewRevokeShareAccessibilityDisplayLabel = yearReviewHeaderDisplay.revokeShareAccessibilityLabel;
-  const selectedRecordDetailRows = selectedRecordDetailDisplayRows(selectedRecordDisplayItem);
+  const selectedRecordDetailRows = selectedRecordDisplay.detailRows;
   const transcriptValidationError = useMemo(
     () => validateTranscriptForParser(transcript),
     [transcript]

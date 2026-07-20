@@ -2718,7 +2718,7 @@ def main() -> int:
             ("record detail mapped detail row binding", "detailRows={selectedRecordDetailRows}"),
             ("record detail source detail row binding", "sourceTitle={coreFlowDisplayLabels.source}"),
             ("record detail selected datetime helper binding", "dateTimeLabel={selectedRecordDetailDateTimeLabel(selectedRecordDisplayItem)}"),
-            ("record detail selected rows helper binding", "const selectedRecordDetailRows = selectedRecordDetailDisplayRows(selectedRecordDisplayItem);"),
+            ("record detail selected rows bundle binding", "const selectedRecordDetailRows = selectedRecordDisplay.detailRows;"),
             ("record detail selected date helper binding", "dateValue={selectedRecordDetailDateLabel(selectedRecordDisplayItem)}"),
             ("record detail selected exercise helper binding", "exerciseValue={selectedRecordDetailExerciseSummary(selectedRecordDisplayItem)}"),
             ("record detail selected medication helper binding", "medicationValue={selectedRecordDetailMedicationSummary(selectedRecordDisplayItem)}"),
@@ -2726,8 +2726,9 @@ def main() -> int:
             ("record detail selected source helper binding", "sourceValue={selectedRecordDetailSourceLabel(selectedRecordDisplayItem)}"),
             ("record detail selected time helper binding", "timeValue={selectedRecordDetailTimeLabel(selectedRecordDisplayItem)}"),
             ("record detail selected type helper binding", "typeValue={selectedRecordDetailTypeLabel(selectedRecordDisplayItem)}"),
-            ("selected record display item helper import", "selectedRecordDisplayItemForRecord,"),
-            ("selected record display item helper binding", "const selectedRecordDisplayItem = selectedRecordDisplayItemForRecord(selectedRecord);"),
+            ("selected record display bundle helper import", "selectedRecordDisplayBundleForRecord,"),
+            ("selected record display bundle helper binding", "const selectedRecordDisplay = selectedRecordDisplayBundleForRecord(selectedRecord);"),
+            ("selected record display item bundle binding", "const selectedRecordDisplayItem = selectedRecordDisplay.displayItem;"),
             ("preview edit type label helper import", "previewRecordEditTypeLabel,"),
             ("preview edit type label helper binding", "typeLabel={previewRecordEditTypeLabel(selectedPreviewRecordDisplayItem)}"),
             ("record edit header type label helper binding", "typeLabel={recordEditHeaderTypeLabel(selectedRecordDisplayItem)}"),
@@ -2759,6 +2760,11 @@ def main() -> int:
             "direct selected record display item binding",
             content,
             "const selectedRecordDisplayItem = selectedRecord ? recordDetailDisplayItem(selectedRecord) : null;",
+        )
+        _assert_not_contains(
+            "direct selected record detail rows binding",
+            content,
+            "const selectedRecordDetailRows = selectedRecordDetailDisplayRows(selectedRecordDisplayItem);",
         )
         for block_label, pattern, marker in (
             (
@@ -9446,6 +9452,10 @@ def main() -> int:
             ("record detail display item helper", "function recordDetailDisplayItem(record: RecordItem)"),
             ("selected record display item helper", "function selectedRecordDisplayItemForRecord(record: RecordItem | null)"),
             ("selected record display item helper internals", "return record ? recordDetailDisplayItem(record) : null;"),
+            ("selected record display bundle helper", "function selectedRecordDisplayBundleForRecord(record: RecordItem | null)"),
+            ("selected record display bundle display item", "const displayItem = selectedRecordDisplayItemForRecord(record);"),
+            ("selected record display bundle detail rows", "detailRows: selectedRecordDetailDisplayRows(displayItem)"),
+            ("selected record display bundle display item field", "displayItem"),
             ("record detail date display helper", "function recordDateDisplay(value?: string)"),
             ("record detail datetime display helper", "function recordDateTimeDisplay(value?: string)"),
             ("record detail source display helper", "function recordSourceDisplay(value?: string)"),
