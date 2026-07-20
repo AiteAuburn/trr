@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2152: Move manual confirm preview helpers
+
+Status: done
+
+Completed:
+
+- Added manual confirm preview item field helpers to `manualRecordConfirmPreviewBlock.tsx`.
+- Removed duplicate manual confirm preview icon, payload summary, source line, and type label helpers from `App.tsx`.
+- Kept manual-record confirmation preview rendering and props unchanged.
+- Updated navigation verifier coverage to require the preview-block helper exports and the App render bindings.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2151: Move manual record type target helper
 
 Status: done

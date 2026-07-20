@@ -829,7 +829,13 @@ import { CommerceReadinessChecklist } from "./commerceReadinessChecklist";
 import { DailyTranscriptList } from "./dailyTranscriptList";
 import { ManualRecordCreatePreviewAction } from "./manualRecordCreatePreviewAction";
 import { ManualRecordConfirmFooterActions } from "./manualRecordConfirmFooterActions";
-import { ManualRecordConfirmPreviewBlock } from "./manualRecordConfirmPreviewBlock";
+import {
+  ManualRecordConfirmPreviewBlock,
+  manualConfirmPreviewIcon,
+  manualConfirmPreviewPayloadSummary,
+  manualConfirmPreviewSourceLine,
+  manualConfirmPreviewTypeLabel
+} from "./manualRecordConfirmPreviewBlock";
 import { ManualRecordDateTimeFields } from "./manualRecordDateTimeFields";
 import { ManualRecordExerciseFields } from "./manualRecordExerciseFields";
 import { ManualRecordGlucoseFields } from "./manualRecordGlucoseFields";
@@ -2373,22 +2379,6 @@ export default function App() {
     model: { runtime?: Parameters<typeof modelRuntimeLabel>[0] } | null | undefined
   ) {
     return modelRuntimeLabel(model?.runtime);
-  }
-
-  function manualConfirmPreviewIcon(item: ReturnType<typeof manualRecordConfirmDisplayItem>) {
-    return item.icon;
-  }
-
-  function manualConfirmPreviewPayloadSummary(item: ReturnType<typeof manualRecordConfirmDisplayItem>) {
-    return item.payloadSummary;
-  }
-
-  function manualConfirmPreviewSourceLine(item: ReturnType<typeof manualRecordConfirmDisplayItem>) {
-    return item.sourceLine;
-  }
-
-  function manualConfirmPreviewTypeLabel(item: ReturnType<typeof manualRecordConfirmDisplayItem>) {
-    return item.typeLabel;
   }
 
   function openTutorialRecordEntry() {

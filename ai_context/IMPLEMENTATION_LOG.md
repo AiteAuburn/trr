@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2152 move manual confirm preview helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/manualRecordConfirmPreviewBlock.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added manual confirm preview item field helpers to `manualRecordConfirmPreviewBlock.tsx`.
+- Removed duplicate manual confirm preview icon, payload summary, source line, and type label helpers from `App.tsx`.
+- Kept manual-record confirmation preview rendering and props unchanged.
+- Updated navigation verifier coverage to require the preview-block helper exports and the App render bindings.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display helper clusters out of `App.tsx` before attempting larger first-version screen component splits.
+
 ### T2151 move manual record type target helper
 
 類型：mobile / refactor / verifier / docs

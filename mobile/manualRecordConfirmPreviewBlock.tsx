@@ -9,6 +9,29 @@ type ManualRecordConfirmPreviewBlockProps = {
   typeLabel: string;
 };
 
+type ManualRecordConfirmPreviewItem = {
+  icon: string;
+  payloadSummary: string;
+  sourceLine: string;
+  typeLabel: string;
+};
+
+export function manualConfirmPreviewIcon(item: ManualRecordConfirmPreviewItem) {
+  return item.icon;
+}
+
+export function manualConfirmPreviewPayloadSummary(item: ManualRecordConfirmPreviewItem) {
+  return item.payloadSummary;
+}
+
+export function manualConfirmPreviewSourceLine(item: ManualRecordConfirmPreviewItem) {
+  return item.sourceLine;
+}
+
+export function manualConfirmPreviewTypeLabel(item: ManualRecordConfirmPreviewItem) {
+  return item.typeLabel;
+}
+
 export function ManualRecordConfirmPreviewBlock({
   badgeLabel,
   icon,
