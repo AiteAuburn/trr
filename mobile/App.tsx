@@ -762,7 +762,8 @@ import {
   boundDownloadedModels,
   downloadedWhisperModelCount,
   downloadedWhisperModelInitialPath,
-  downloadedWhisperModels
+  downloadedWhisperModels,
+  nativeDebugInputValue
 } from "./modelTransforms";
 import {
   boundAuthTokenResponse,
@@ -4524,10 +4525,6 @@ export default function App() {
 
   function selectLlamaNativeDownloadKind() {
     selectNativeDownloadKind("llama");
-  }
-
-  function nativeDebugInputValue(value: string) {
-    return boundNativeDebugInput(value);
   }
 
   function updateNativeModelUrlInput(value: string) {

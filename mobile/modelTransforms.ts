@@ -17,6 +17,10 @@ function boundNativeDebugInput(value: string) {
   return value.slice(0, maxNativeDebugInputLength);
 }
 
+export function nativeDebugInputValue(value: string) {
+  return boundNativeDebugInput(value);
+}
+
 export function boundDownloadedModel<T extends DownloadedModel>(value: T): T {
   return {
     ...value,
