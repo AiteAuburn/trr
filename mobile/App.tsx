@@ -287,7 +287,18 @@ import {
   storeRedemptionUseStatusMessages,
   storeDisplayBundle,
   storeProductsFromApi,
+  storeProductActionAccessibilityLabel,
+  storeProductActionLabel,
+  storeProductActionStatus,
+  storeProductCardBadge,
+  storeProductCardDescription,
+  storeProductCardIcon,
+  storeProductCardKey,
+  storeProductCardPointsCost,
+  storeProductCardTitle,
   storeProductDisplayItem,
+  storeProductRedeemTitle,
+  storeProductRewardId,
   storeProducts,
   storeRedemptionDisplayItem,
   storeRedemptionsFromApi,
@@ -5095,50 +5106,6 @@ export default function App() {
 
   function showStoreProductStatus(actionStatus: string) {
     setStoreActionStatus(actionStatus);
-  }
-
-  function storeProductActionStatus(product: ReturnType<typeof storeProductDisplayItem>) {
-    return product.actionStatus;
-  }
-
-  function storeProductCardKey(product: ReturnType<typeof storeProductDisplayItem>) {
-    return product.id;
-  }
-
-  function storeProductCardIcon(product: ReturnType<typeof storeProductDisplayItem>) {
-    return product.icon;
-  }
-
-  function storeProductCardTitle(product: ReturnType<typeof storeProductDisplayItem>) {
-    return product.title;
-  }
-
-  function storeProductCardBadge(product: ReturnType<typeof storeProductDisplayItem>) {
-    return product.badge;
-  }
-
-  function storeProductCardDescription(product: ReturnType<typeof storeProductDisplayItem>) {
-    return product.description;
-  }
-
-  function storeProductCardPointsCost(product: ReturnType<typeof storeProductDisplayItem>) {
-    return product.pointsCost;
-  }
-
-  function storeProductRewardId(product: ReturnType<typeof storeProductDisplayItem>) {
-    return product.id;
-  }
-
-  function storeProductRedeemTitle(product: ReturnType<typeof storeProductDisplayItem>) {
-    return product.title;
-  }
-
-  function storeProductActionLabel(product: ReturnType<typeof storeProductDisplayItem>) {
-    return product.rewardStatus === "redeemable" ? "兌" : auxiliaryDisplayLabels.productOpenArrow;
-  }
-
-  function storeProductActionAccessibilityLabel(product: ReturnType<typeof storeProductDisplayItem>) {
-    return product.actionAccessibilityLabel;
   }
 
   function storeRedemptionUseId(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {

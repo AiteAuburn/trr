@@ -1372,6 +1372,52 @@ export function storeProductDisplayItems(products: StoreProduct[]) {
   return products.map(storeProductDisplayItem);
 }
 
+export type StoreProductDisplayItem = ReturnType<typeof storeProductDisplayItem>;
+
+export function storeProductActionStatus(product: StoreProductDisplayItem) {
+  return product.actionStatus;
+}
+
+export function storeProductCardKey(product: StoreProductDisplayItem) {
+  return product.id;
+}
+
+export function storeProductCardIcon(product: StoreProductDisplayItem) {
+  return product.icon;
+}
+
+export function storeProductCardTitle(product: StoreProductDisplayItem) {
+  return product.title;
+}
+
+export function storeProductCardBadge(product: StoreProductDisplayItem) {
+  return product.badge;
+}
+
+export function storeProductCardDescription(product: StoreProductDisplayItem) {
+  return product.description;
+}
+
+export function storeProductCardPointsCost(product: StoreProductDisplayItem) {
+  return product.pointsCost;
+}
+
+export function storeProductRewardId(product: StoreProductDisplayItem) {
+  return product.id;
+}
+
+export function storeProductRedeemTitle(product: StoreProductDisplayItem) {
+  return product.title;
+}
+
+export function storeProductActionLabel(product: StoreProductDisplayItem) {
+  return product.rewardStatus === "redeemable" ? "兌" : "›";
+}
+
+export function storeProductActionAccessibilityLabel(product: StoreProductDisplayItem) {
+  return product.actionAccessibilityLabel;
+}
+
 export function visibleStoreProductDisplayItems(
   products: Array<ReturnType<typeof storeProductDisplayItem>>,
   category: StoreCategory,
