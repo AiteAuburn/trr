@@ -137,6 +137,12 @@ export function nativeWhisperMissingInputStatusMessage() {
   return boundUiMessage("請先填 whisper model path 和 audio file path");
 }
 
+export function nativeWhisperMissingInputState() {
+  return {
+    status: nativeWhisperMissingInputStatusMessage()
+  };
+}
+
 export function nativeWhisperProgressStatusMessage() {
   return boundUiMessage("本機 Whisper 轉錄中...");
 }
