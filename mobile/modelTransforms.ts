@@ -1,5 +1,8 @@
 import type { DownloadedModel } from "./modelStorage";
 
+export type NativeModelDownloadKind = "whisper" | "llama";
+export type NativeModelDownloadProgressHandler = (progress: number) => void;
+
 const maxIdentifierTextLength = 128;
 const maxDisplayTextLength = 120;
 const maxNativeDebugInputLength = 1024;
@@ -19,6 +22,22 @@ function boundNativeDebugInput(value: string) {
 
 export function nativeDebugInputValue(value: string) {
   return boundNativeDebugInput(value);
+}
+
+export function nativeModelDownloadRequestArgs({
+  url,
+  kind,
+  onProgress
+}: {
+  url: string;
+  kind: NativeModelDownloadKind;
+  onProgress?: NativeModelDownloadProgressHandler;
+}) {
+  return {
+    url,
+    kind,
+    onProgress
+  };
 }
 
 export function boundDownloadedModel<T extends DownloadedModel>(value: T): T {

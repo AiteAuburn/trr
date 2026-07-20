@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2115: Move native model download request args helper
+
+Status: done
+
+Completed:
+
+- Added typed `nativeModelDownloadRequestArgs` to `modelTransforms.ts`.
+- Removed the same local pure request-args helper from `App.tsx`.
+- Kept native model download status ordering, progress callback, selected download kind, URL state, download call, and success/failure handling in `App.tsx`.
+- Updated navigation verifier coverage to require the model transform helper and reject reintroducing the local App helper.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2114: Reuse native debug input transform in App
 
 Status: done

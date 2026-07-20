@@ -762,7 +762,8 @@ import {
   downloadedWhisperModelCount,
   downloadedWhisperModelInitialPath,
   downloadedWhisperModels,
-  nativeDebugInputValue
+  nativeDebugInputValue,
+  nativeModelDownloadRequestArgs
 } from "./modelTransforms";
 import {
   boundAuthTokenResponse,
@@ -7973,14 +7974,6 @@ export default function App() {
     setNativeStatus(nativeModelDownloadProgressStatusMessage());
   }
 
-  function nativeModelDownloadRequestArgs() {
-    return {
-      url: modelUrl,
-      kind: downloadKind,
-      onProgress: setDownloadProgress
-    };
-  }
-
   function handleNativeModelDownloadFailure(error: unknown) {
     setNativeStatus(nativeModelDownloadFailureStatusMessage(error));
   }
@@ -8022,7 +8015,13 @@ export default function App() {
     startNativeDebugAction();
     startNativeModelDownloadStatus();
     try {
-      const uri = await downloadModel(nativeModelDownloadRequestArgs());
+      const uri = await downloadModel(
+        nativeModelDownloadRequestArgs({
+          url: modelUrl,
+          kind: downloadKind,
+          onProgress: setDownloadProgress
+        })
+      );
       await handleNativeModelDownloadSuccess(uri);
     } catch (error) {
       handleNativeModelDownloadFailure(error);
