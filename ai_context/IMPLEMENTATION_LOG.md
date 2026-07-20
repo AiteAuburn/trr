@@ -15,6 +15,41 @@
 
 ## 2026-07-16
 
+### T2088 extract ranking leaderboard list component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/rankingLeaderboardList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `RankingLeaderboardList` for the ranking preview leaderboard sections and entries.
+- Moved ranking leaderboard section/entry key, label, rank, score, empty-copy helpers and related card/row styles out of `App.tsx`.
+- Preserved the same leaderboard section order, empty-section rendering, rank labels, display names, score labels, readiness checklist, action row, and return behavior.
+- Kept ranking sync state, backend request flow, opt-in actions, status handling, and screen navigation in `App.tsx`.
+- Updated navigation, UI-spec, and visual-smoke verifier coverage for the component binding, helper markers, style markers, and direct inline leaderboard map guard.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue with achievement category rendering or food community list/detail rendering after checking their callback and sync boundaries.
+
 ### T2087 reuse shared checklist for ranking readiness
 
 類型：mobile / refactor / verifier / docs

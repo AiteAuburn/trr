@@ -34,6 +34,41 @@ None.
 
 ## Done
 
+### T2088: Extract ranking leaderboard list component
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/rankingLeaderboardList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `RankingLeaderboardList` for the ranking preview leaderboard sections and entries.
+- Moved ranking leaderboard section/entry key, label, rank, score, empty-copy helpers and related card/row styles out of `App.tsx`.
+- Preserved the same leaderboard section order, empty-section rendering, rank labels, display names, score labels, readiness checklist, action row, and return behavior.
+- Kept ranking sync state, backend request flow, opt-in actions, status handling, and screen navigation in `App.tsx`.
+- Updated navigation, UI-spec, and visual-smoke verifier coverage for the component binding, helper markers, style markers, and direct inline leaderboard map guard.
+- No UI copy/visibility/navigation/backend/schema/Android signing/STT/LLM/parser/token-storage/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue with achievement category rendering or food community list/detail rendering after checking their callback and sync boundaries.
+
 ### T2087: Reuse shared checklist for ranking readiness
 
 Status: done

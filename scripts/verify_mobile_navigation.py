@@ -96,6 +96,7 @@ DOCTOR_SHARE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "doctorShareActionRow.tsx"
 FOOD_PHOTO_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "foodPhotoActionRow.tsx"
 HEALTH_INTEGRATION_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "healthIntegrationActionRow.tsx"
 RANKING_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "rankingActionRow.tsx"
+RANKING_LEADERBOARD_LIST_PATH = REPO_ROOT / "mobile" / "rankingLeaderboardList.tsx"
 HISTORY_CALENDAR_MONTH_PICKER_PATH = REPO_ROOT / "mobile" / "historyCalendarMonthPicker.tsx"
 HISTORY_DAILY_RECORD_SECTION_CARD_PATH = REPO_ROOT / "mobile" / "historyDailyRecordSectionCard.tsx"
 HISTORY_DAILY_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historyDailySummaryCard.tsx"
@@ -1509,6 +1510,7 @@ def main() -> int:
     food_photo_action_row_content = FOOD_PHOTO_ACTION_ROW_PATH.read_text(encoding="utf-8")
     health_integration_action_row_content = HEALTH_INTEGRATION_ACTION_ROW_PATH.read_text(encoding="utf-8")
     ranking_action_row_content = RANKING_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    ranking_leaderboard_list_content = RANKING_LEADERBOARD_LIST_PATH.read_text(encoding="utf-8")
     history_calendar_month_picker_content = HISTORY_CALENDAR_MONTH_PICKER_PATH.read_text(encoding="utf-8")
     history_daily_record_section_card_content = HISTORY_DAILY_RECORD_SECTION_CARD_PATH.read_text(encoding="utf-8")
     history_daily_summary_card_content = HISTORY_DAILY_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
@@ -12106,28 +12108,35 @@ def main() -> int:
             ("ranking streak display text helper fields", "return rankingStreakDisplayLabel(rankingStreakDisplayDays);"),
             ("ranking streak display text helper binding", "{rankingStreakDisplayText()}"),
             ("ranking boundary grid rows binding", "rows={rankingBoundaryRows}"),
-            ("ranking leaderboard section key helper", "function rankingLeaderboardSectionKey(section: (typeof rankingLeaderboardSections)[number])"),
+            ("ranking leaderboard list component binding", "<RankingLeaderboardList sections={rankingLeaderboardSections} />"),
+            ("ranking leaderboard list component", "export function RankingLeaderboardList"),
+            ("ranking leaderboard list sections prop", "sections: readonly CommunityLeaderboardDisplaySection[]"),
+            ("ranking leaderboard section renderer", "sections.map((section) => ("),
+            ("ranking leaderboard section key helper", "function rankingLeaderboardSectionKey(section: CommunityLeaderboardDisplaySection)"),
             ("ranking leaderboard section key helper fields", "return section.type;"),
             ("ranking leaderboard section key helper binding", "key={rankingLeaderboardSectionKey(section)}"),
-            ("ranking leaderboard section label helper", "function rankingLeaderboardSectionLabel(section: (typeof rankingLeaderboardSections)[number])"),
+            ("ranking leaderboard section label helper", "function rankingLeaderboardSectionLabel(section: CommunityLeaderboardDisplaySection)"),
             ("ranking leaderboard section label helper fields", "return section.label;"),
             ("ranking leaderboard section label helper binding", "{rankingLeaderboardSectionLabel(section)}"),
-            ("ranking leaderboard section has entries helper", "function rankingLeaderboardSectionHasEntries(section: (typeof rankingLeaderboardSections)[number])"),
+            ("ranking leaderboard section has entries helper", "function rankingLeaderboardSectionHasEntries(section: CommunityLeaderboardDisplaySection)"),
             ("ranking leaderboard section has entries helper fields", "return section.entries.length > 0;"),
             ("ranking leaderboard section has entries helper binding", "{rankingLeaderboardSectionHasEntries(section) ? ("),
-            ("ranking leaderboard entry key helper", 'function rankingLeaderboardEntryKey(entry: (typeof rankingLeaderboardSections)[number]["entries"][number])'),
+            ("ranking leaderboard section entries helper", "function rankingLeaderboardSectionEntries(section: CommunityLeaderboardDisplaySection)"),
+            ("ranking leaderboard section entries helper fields", "return section.entries;"),
+            ("ranking leaderboard section entries helper binding", "rankingLeaderboardSectionEntries(section).map((entry) => ("),
+            ("ranking leaderboard entry key helper", 'function rankingLeaderboardEntryKey(entry: CommunityLeaderboardDisplaySection["entries"][number])'),
             ("ranking leaderboard entry key helper fields", "return entry.id;"),
             ("ranking leaderboard entry key helper binding", "key={rankingLeaderboardEntryKey(entry)}"),
-            ("ranking leaderboard entry rank label helper", 'function rankingLeaderboardEntryRankLabel(entry: (typeof rankingLeaderboardSections)[number]["entries"][number])'),
+            ("ranking leaderboard entry rank label helper", 'function rankingLeaderboardEntryRankLabel(entry: CommunityLeaderboardDisplaySection["entries"][number])'),
             ("ranking leaderboard entry rank label helper fields", "return entry.rankLabel;"),
             ("ranking leaderboard entry rank label helper binding", "{rankingLeaderboardEntryRankLabel(entry)}"),
-            ("ranking leaderboard entry display name helper", 'function rankingLeaderboardEntryDisplayName(entry: (typeof rankingLeaderboardSections)[number]["entries"][number])'),
+            ("ranking leaderboard entry display name helper", 'function rankingLeaderboardEntryDisplayName(entry: CommunityLeaderboardDisplaySection["entries"][number])'),
             ("ranking leaderboard entry display name helper fields", "return entry.displayName;"),
             ("ranking leaderboard entry display name helper binding", "{rankingLeaderboardEntryDisplayName(entry)}"),
-            ("ranking leaderboard entry score label helper", 'function rankingLeaderboardEntryScoreLabel(entry: (typeof rankingLeaderboardSections)[number]["entries"][number])'),
+            ("ranking leaderboard entry score label helper", 'function rankingLeaderboardEntryScoreLabel(entry: CommunityLeaderboardDisplaySection["entries"][number])'),
             ("ranking leaderboard entry score label helper fields", "return entry.scoreLabel;"),
             ("ranking leaderboard entry score label helper binding", "{rankingLeaderboardEntryScoreLabel(entry)}"),
-            ("ranking leaderboard section empty copy helper", "function rankingLeaderboardSectionEmptyCopy(section: (typeof rankingLeaderboardSections)[number])"),
+            ("ranking leaderboard section empty copy helper", "function rankingLeaderboardSectionEmptyCopy(section: CommunityLeaderboardDisplaySection)"),
             ("ranking leaderboard section empty copy helper fields", "return section.emptyCopy;"),
             ("ranking leaderboard section empty copy helper binding", "{rankingLeaderboardSectionEmptyCopy(section)}"),
             ("ranking readiness section label helper", "function rankingReadinessSectionLabel()"),
@@ -12366,8 +12375,8 @@ def main() -> int:
             ("ranking contribution type", '"contribution"'),
             ("ranking food tester type", '"food_tester"'),
             ("ranking display sections state", "const [rankingLeaderboardSections, setRankingLeaderboardSections]"),
-            ("ranking section render", "rankingLeaderboardSections.map((section) =>"),
-            ("ranking entry render", "section.entries.map((entry) =>"),
+            ("ranking section render", "<RankingLeaderboardList sections={rankingLeaderboardSections} />"),
+            ("ranking entry render", "rankingLeaderboardSectionEntries(section).map((entry) =>"),
             ("ranking public status loads backend", "void loadCommunityLeaderboards();"),
             ("ranking public accessibility binding", "publicAccessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}"),
             ("ranking public button label binding", "publicLabel={rankingPublicActionButtonDisplayLabel}"),
@@ -12378,7 +12387,15 @@ def main() -> int:
             ("future preview return accessibility binding", "accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}"),
             ("future preview secondary CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
-            _assert_contains(label, content, marker)
+            source = (
+                ranking_leaderboard_list_content
+                if (
+                    label.startswith("ranking leaderboard") and label != "ranking leaderboard list component binding"
+                )
+                or label == "ranking entry render"
+                else content
+            )
+            _assert_contains(label, source, marker)
         for label, marker in (
             ("direct settings profile choice map", "profileChoiceDisplayItems.map((profile) => {"),
             ("direct settings profile key binding", "key={profile.id}"),
@@ -14894,6 +14911,11 @@ def main() -> int:
             "ranking direct leaderboard section key binding",
             content,
             "rankingLeaderboardSections.map((section) => (\n              <View key={section.type} style={styles.inlineInfoBlock}>",
+        )
+        _assert_not_contains(
+            "ranking direct leaderboard section map",
+            content,
+            "rankingLeaderboardSections.map((section) => (",
         )
         _assert_not_contains(
             "ranking direct leaderboard section label binding",

@@ -221,6 +221,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "ranking": [
         'currentScreen === "ranking"',
+        "<RankingLeaderboardList sections={rankingLeaderboardSections} />",
         "<FutureReadinessChecklist items={rankingReadinessChecklistItems} />",
         "rows={rankingBoundaryRows}",
         "onPress={rankingReturnFutureModulesPressTarget}",

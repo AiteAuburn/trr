@@ -777,6 +777,7 @@ import { DoctorShareActionRow } from "./doctorShareActionRow";
 import { FoodPhotoActionRow } from "./foodPhotoActionRow";
 import { HealthIntegrationActionRow } from "./healthIntegrationActionRow";
 import { RankingActionRow } from "./rankingActionRow";
+import { RankingLeaderboardList } from "./rankingLeaderboardList";
 import { HomeGuidanceCard } from "./homeGuidanceCard";
 import { HistoryCalendarMonthPicker } from "./historyCalendarMonthPicker";
 import { HistoryDailySummaryTable } from "./historyDailySummaryTable";
@@ -5239,38 +5240,6 @@ export default function App() {
 
   function rankingStreakDisplayText() {
     return rankingStreakDisplayLabel(rankingStreakDisplayDays);
-  }
-
-  function rankingLeaderboardSectionKey(section: (typeof rankingLeaderboardSections)[number]) {
-    return section.type;
-  }
-
-  function rankingLeaderboardSectionLabel(section: (typeof rankingLeaderboardSections)[number]) {
-    return section.label;
-  }
-
-  function rankingLeaderboardSectionHasEntries(section: (typeof rankingLeaderboardSections)[number]) {
-    return section.entries.length > 0;
-  }
-
-  function rankingLeaderboardEntryKey(entry: (typeof rankingLeaderboardSections)[number]["entries"][number]) {
-    return entry.id;
-  }
-
-  function rankingLeaderboardEntryRankLabel(entry: (typeof rankingLeaderboardSections)[number]["entries"][number]) {
-    return entry.rankLabel;
-  }
-
-  function rankingLeaderboardEntryDisplayName(entry: (typeof rankingLeaderboardSections)[number]["entries"][number]) {
-    return entry.displayName;
-  }
-
-  function rankingLeaderboardEntryScoreLabel(entry: (typeof rankingLeaderboardSections)[number]["entries"][number]) {
-    return entry.scoreLabel;
-  }
-
-  function rankingLeaderboardSectionEmptyCopy(section: (typeof rankingLeaderboardSections)[number]) {
-    return section.emptyCopy;
   }
 
   function rankingReadinessSectionLabel() {
@@ -10927,24 +10896,7 @@ export default function App() {
               </View>
             </View>
             <FutureBoundaryGrid rows={rankingBoundaryRows} />
-            {rankingLeaderboardSections.map((section) => (
-              <View key={rankingLeaderboardSectionKey(section)} style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{rankingLeaderboardSectionLabel(section)}</Text>
-                {rankingLeaderboardSectionHasEntries(section) ? (
-                  section.entries.map((entry) => (
-                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>
-                      <Text style={styles.recordType}>{rankingLeaderboardEntryRankLabel(entry)}</Text>
-                      <View style={styles.timelineContent}>
-                        <Text style={styles.recordContent}>{rankingLeaderboardEntryDisplayName(entry)}</Text>
-                        <Text style={styles.evidence}>{rankingLeaderboardEntryScoreLabel(entry)}</Text>
-                      </View>
-                    </View>
-                  ))
-                ) : (
-                  <Text style={styles.evidence}>{rankingLeaderboardSectionEmptyCopy(section)}</Text>
-                )}
-              </View>
-            ))}
+            <RankingLeaderboardList sections={rankingLeaderboardSections} />
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{rankingReadinessSectionLabel()}</Text>
               <FutureReadinessChecklist items={rankingReadinessChecklistItems} />
