@@ -175,6 +175,12 @@ export function nativeWhisperSuccessStatusMessage() {
   return boundUiMessage("Whisper 轉錄完成，已填入文字輸入框");
 }
 
+export function nativeWhisperSuccessState() {
+  return {
+    status: nativeWhisperSuccessStatusMessage()
+  };
+}
+
 export function nativeWhisperFailureStatusMessage(error: unknown) {
   return safeUiError(error, "Whisper failed");
 }
