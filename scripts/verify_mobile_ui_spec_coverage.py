@@ -59,7 +59,7 @@ CANONICAL_SPEC_SCREENS = (
     SpecScreen("4.14.4", "食物社群頁", "community", ("<SegmentSelector\n              options={foodCommunityCategoryDisplayOptions}", "rows={foodCommunityShareFieldRows}")),
     SpecScreen("4.14.5", "排行榜預覽頁", "ranking", ("rankingReadinessChecklistItems.map", "rankingActionStatus")),
     SpecScreen("4.15", "文字確認頁", "transcriptReview", ("items={transcriptReviewCostBoundaryChecklistItems}", "parseTranscript")),
-    SpecScreen("4.16", "AI 整理確認頁", "aiReview", ("previewRecordDisplayItems.map", "rejectedPreviewDisplayItems.map")),
+    SpecScreen("4.16", "AI 整理確認頁", "aiReview", ("items={previewRecordDisplayItems}", "rejectedPreviewDisplayItems.map")),
     SpecScreen("4.16.0", "AI 候選移除確認頁", "aiRemoveConfirm", ("removePreviewRecord", "items={aiCandidateRemoveChecklistItems}")),
     SpecScreen("4.16.1", "AI 儲存確認頁", "aiSaveConfirm", ("savePreviewRecords", "rows={aiSaveConfirmBoundaryRows}")),
     SpecScreen(

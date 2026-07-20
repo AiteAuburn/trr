@@ -79,6 +79,7 @@ SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
 AI_CANDIDATE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiCandidateActionRow.tsx"
+AI_CANDIDATE_LIST_PATH = REPO_ROOT / "mobile" / "aiCandidateList.tsx"
 AI_REVIEW_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiReviewActionRow.tsx"
 AI_SAVE_FAILURE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiSaveFailureActionRow.tsx"
 CORE_FLOW_ENTRY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "coreFlowEntryActionRow.tsx"
@@ -1489,6 +1490,7 @@ def main() -> int:
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     ai_candidate_action_row_content = AI_CANDIDATE_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    ai_candidate_list_content = AI_CANDIDATE_LIST_PATH.read_text(encoding="utf-8")
     ai_review_action_row_content = AI_REVIEW_ACTION_ROW_PATH.read_text(encoding="utf-8")
     ai_save_failure_action_row_content = AI_SAVE_FAILURE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     core_flow_entry_action_row_content = CORE_FLOW_ENTRY_ACTION_ROW_PATH.read_text(encoding="utf-8")
@@ -4356,39 +4358,9 @@ def main() -> int:
             "function editAiCandidateRecord(index: number)",
         )
         _assert_contains(
-            "AI candidate edit action press handler",
-            content,
-            "function pressAiCandidateEditAction(item: ReturnType<typeof pendingRecordDisplayItem>)",
-        )
-        _assert_contains(
-            "AI candidate action target helper",
-            content,
-            "function aiCandidateActionTarget(item: ReturnType<typeof pendingRecordDisplayItem>)",
-        )
-        _assert_contains(
-            "AI candidate action target helper fields",
-            content,
-            "return item.index;",
-        )
-        _assert_contains(
-            "AI candidate edit action target helper binding",
-            content,
-            "editAiCandidateRecord(aiCandidateActionTarget(item));",
-        )
-        _assert_contains(
             "AI candidate remove action handler",
             content,
             "function removeAiCandidateRecord(index: number)",
-        )
-        _assert_contains(
-            "AI candidate remove action press handler",
-            content,
-            "function pressAiCandidateRemoveAction(item: ReturnType<typeof pendingRecordDisplayItem>)",
-        )
-        _assert_contains(
-            "AI candidate remove action target helper binding",
-            content,
-            "removeAiCandidateRecord(aiCandidateActionTarget(item));",
         )
         for label, marker in (
             ("AI candidate display item helper", "function pendingRecordDisplayItem(record: PendingRecord, index: number, keyPrefix = \"candidate\")"),
@@ -4440,6 +4412,26 @@ def main() -> int:
             content,
             'const previewRecordDisplayItems = preview ? pendingRecordDisplayItems(previewState.records, "review") : [];',
         )
+        _assert_contains(
+            "AI review candidate list component binding",
+            content,
+            "<AiCandidateList",
+        )
+        _assert_contains(
+            "AI review candidate list items binding",
+            content,
+            "items={previewRecordDisplayItems}",
+        )
+        _assert_contains(
+            "AI review candidate edit handler binding",
+            content,
+            "onEditCandidate={editAiCandidateRecord}",
+        )
+        _assert_contains(
+            "AI review candidate remove handler binding",
+            content,
+            "onRemoveCandidate={removeAiCandidateRecord}",
+        )
         rejected_preview_render_block = _match_block(
             content,
             r"rejectedPreviewDisplayItems\.map\(\(event\) => \(([\s\S]*?rejectedPreviewEventReasonText\(event\)[\s\S]*?</View>)",
@@ -4466,61 +4458,56 @@ def main() -> int:
             content,
             'preview?.records.map((record, index) => pendingRecordDisplayItem(record, index, "save-confirm"))',
         )
-        _assert_contains(
-            "AI candidate edit action binding",
-            content,
-            "onEditPress={() => pressAiCandidateEditAction(item)}",
-        )
-        _assert_contains(
-            "AI candidate remove action binding",
-            content,
-            "onRemovePress={() => pressAiCandidateRemoveAction(item)}",
-        )
-        _assert_contains(
-            "AI candidate edit accessibility binding",
-            content,
-            "editAccessibilityLabel={aiCandidateEditAccessibilityLabel(item)}",
-        )
-        _assert_contains(
-            "AI candidate remove accessibility binding",
-            content,
-            "removeAccessibilityLabel={aiCandidateRemoveAccessibilityLabel(item)}",
-        )
         for label, marker in (
-            ("AI candidate display key helper", "function aiCandidateDisplayKey(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate list component", "export function AiCandidateList"),
+            ("AI candidate list display item type", "export type AiCandidateDisplayItem ="),
+            ("AI candidate list items prop", "items: readonly AiCandidateDisplayItem[]"),
+            ("AI candidate action target helper", "function aiCandidateActionTarget(item: AiCandidateDisplayItem)"),
+            ("AI candidate action target helper fields", "return item.index;"),
+            ("AI candidate edit action press handler", "function pressAiCandidateEditAction(item: AiCandidateDisplayItem, onEditCandidate: (index: number) => void)"),
+            ("AI candidate edit action target helper binding", "onEditCandidate(aiCandidateActionTarget(item));"),
+            ("AI candidate remove action press handler", "function pressAiCandidateRemoveAction(item: AiCandidateDisplayItem, onRemoveCandidate: (index: number) => void)"),
+            ("AI candidate remove action target helper binding", "onRemoveCandidate(aiCandidateActionTarget(item));"),
+            ("AI candidate edit action binding", "onEditPress={() => pressAiCandidateEditAction(item, onEditCandidate)}"),
+            ("AI candidate remove action binding", "onRemovePress={() => pressAiCandidateRemoveAction(item, onRemoveCandidate)}"),
+            ("AI candidate edit accessibility binding", "editAccessibilityLabel={aiCandidateEditAccessibilityLabel(item)}"),
+            ("AI candidate remove accessibility binding", "removeAccessibilityLabel={aiCandidateRemoveAccessibilityLabel(item)}"),
+            ("AI candidate display key helper", "function aiCandidateDisplayKey(item: AiCandidateDisplayItem)"),
             ("AI candidate display key helper fields", "return item.key;"),
             ("AI candidate display key binding", "key={aiCandidateDisplayKey(item)}"),
-            ("AI candidate display icon helper", "function aiCandidateDisplayIcon(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate display icon helper", "function aiCandidateDisplayIcon(item: AiCandidateDisplayItem)"),
             ("AI candidate display icon helper fields", "return item.icon;"),
             ("AI candidate display icon binding", "{aiCandidateDisplayIcon(item)}"),
-            ("AI candidate display type helper", "function aiCandidateDisplayTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate display type helper", "function aiCandidateDisplayTypeLabel(item: AiCandidateDisplayItem)"),
             ("AI candidate display type helper fields", "return item.typeLabel;"),
             ("AI candidate display type binding", "{aiCandidateDisplayTypeLabel(item)}"),
-            ("AI candidate display payload helper", "function aiCandidateDisplayPayloadSummary(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate display payload helper", "function aiCandidateDisplayPayloadSummary(item: AiCandidateDisplayItem)"),
             ("AI candidate display payload helper fields", "return item.payloadSummary;"),
             ("AI candidate display payload binding", "{aiCandidateDisplayPayloadSummary(item)}"),
-            ("AI candidate display confidence helper", "function aiCandidateDisplayConfidencePercent(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate display confidence helper", "function aiCandidateDisplayConfidencePercent(item: AiCandidateDisplayItem)"),
             ("AI candidate display confidence helper fields", "return item.confidencePercent;"),
             ("AI candidate display confidence binding", "{aiCandidateDisplayConfidencePercent(item)}%"),
-            ("AI candidate display source helper", "function aiCandidateDisplaySourceText(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate display source helper", "function aiCandidateDisplaySourceText(item: AiCandidateDisplayItem)"),
             ("AI candidate display source helper fields", "return item.sourceText;"),
             ("AI candidate display source binding", "{aiCandidateDisplaySourceText(item)}"),
-            ("AI candidate low confidence helper", "function aiCandidateDisplayIsLowConfidence(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate low confidence helper", "function aiCandidateDisplayIsLowConfidence(item: AiCandidateDisplayItem)"),
             ("AI candidate low confidence helper fields", "return item.lowConfidence;"),
             ("AI candidate low confidence binding", "{aiCandidateDisplayIsLowConfidence(item) ? ("),
-            ("AI candidate decision trace helper", "function aiCandidateDisplayDecisionTrace(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate decision trace helper", "function aiCandidateDisplayDecisionTrace(item: AiCandidateDisplayItem)"),
             ("AI candidate decision trace helper fields", "return item.decisionTraceDisplayText;"),
             ("AI candidate decision trace binding", "{aiCandidateDisplayDecisionTrace(item) ? ("),
-            ("AI candidate edit accessibility helper", "function aiCandidateEditAccessibilityLabel(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate edit accessibility helper", "function aiCandidateEditAccessibilityLabel(item: AiCandidateDisplayItem)"),
             ("AI candidate edit accessibility helper fields", "return item.editAccessibilityLabel;"),
-            ("AI candidate remove accessibility helper", "function aiCandidateRemoveAccessibilityLabel(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("AI candidate remove accessibility helper", "function aiCandidateRemoveAccessibilityLabel(item: AiCandidateDisplayItem)"),
             ("AI candidate remove accessibility helper fields", "return item.removeAccessibilityLabel;"),
+            ("AI candidate card stack style", "aiReviewCardStack: {"),
+            ("AI candidate confidence pill style", "confidencePill: {"),
         ):
-            _assert_contains(label, content, marker)
-        ai_candidate_card_render_block = _match_block(
+            _assert_contains(label, ai_candidate_list_content, marker)
+        _assert_not_contains(
+            "direct AI candidate display item map",
             content,
-            r"previewRecordDisplayItems\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
-            "AI candidate card render block",
+            "previewRecordDisplayItems.map((item) =>",
         )
         for label, marker in (
             ("direct AI candidate key binding", "key={item.key}"),
@@ -4535,7 +4522,7 @@ def main() -> int:
             ("direct AI candidate edit accessibility binding", "accessibilityLabel={item.editAccessibilityLabel}"),
             ("direct AI candidate remove accessibility binding", "accessibilityLabel={item.removeAccessibilityLabel}"),
         ):
-            _assert_not_contains(label, ai_candidate_card_render_block, marker)
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "AI candidate edit button role",
             ai_candidate_action_row_content,

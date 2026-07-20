@@ -760,7 +760,7 @@ import {
 } from "./authTransforms";
 import { protectedRequestHeaders } from "./authRequestHeaders";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
-import { AiCandidateActionRow } from "./aiCandidateActionRow";
+import { AiCandidateList } from "./aiCandidateList";
 import { AiFlowChecklist } from "./aiFlowChecklist";
 import { AiReviewActionRow } from "./aiReviewActionRow";
 import { AiSaveFailureActionRow } from "./aiSaveFailureActionRow";
@@ -3474,50 +3474,6 @@ export default function App() {
     openPreviewRecordEdit(index);
   }
 
-  function aiCandidateActionTarget(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.index;
-  }
-
-  function aiCandidateDisplayKey(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.key;
-  }
-
-  function aiCandidateDisplayIcon(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.icon;
-  }
-
-  function aiCandidateDisplayTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.typeLabel;
-  }
-
-  function aiCandidateDisplayPayloadSummary(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.payloadSummary;
-  }
-
-  function aiCandidateDisplayConfidencePercent(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.confidencePercent;
-  }
-
-  function aiCandidateDisplaySourceText(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.sourceText;
-  }
-
-  function aiCandidateDisplayIsLowConfidence(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.lowConfidence;
-  }
-
-  function aiCandidateDisplayDecisionTrace(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.decisionTraceDisplayText;
-  }
-
-  function aiCandidateEditAccessibilityLabel(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.editAccessibilityLabel;
-  }
-
-  function aiCandidateRemoveAccessibilityLabel(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.removeAccessibilityLabel;
-  }
-
   function rejectedPreviewEventKey(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number]) {
     return event.id;
   }
@@ -3530,16 +3486,8 @@ export default function App() {
     return event.reasonDisplayText;
   }
 
-  function pressAiCandidateEditAction(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    editAiCandidateRecord(aiCandidateActionTarget(item));
-  }
-
   function removeAiCandidateRecord(index: number) {
     openPreviewRecordRemoveConfirm(index);
-  }
-
-  function pressAiCandidateRemoveAction(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    removeAiCandidateRecord(aiCandidateActionTarget(item));
   }
 
   function returnFromPreviewRemoveConfirm() {
@@ -9167,41 +9115,14 @@ export default function App() {
                 </View>
               ) : null}
               {previewRecordDisplayItems.length > 0 ? (
-                previewRecordDisplayItems.map((item) => (
-                  <View key={aiCandidateDisplayKey(item)} style={styles.aiReviewCardStack}>
-                    <View style={styles.recordHeader}>
-                      <View style={styles.historyItemTitle}>
-                        <View style={styles.iconCircleSmall}>
-                          <Text>{aiCandidateDisplayIcon(item)}</Text>
-                        </View>
-                        <View style={styles.timelineContent}>
-                          <Text style={styles.confidence}>{aiCandidateDisplayTypeLabel(item)}</Text>
-                          <Text style={styles.recordContent}>{aiCandidateDisplayPayloadSummary(item)}</Text>
-                        </View>
-                      </View>
-                      <View style={styles.confidencePill}>
-                        <Text style={styles.confidence}>
-                          {aiCandidateDisplayConfidencePercent(item)}%
-                        </Text>
-                      </View>
-                    </View>
-                    <Text style={styles.evidence}>{aiCandidateDisplaySourceText(item)}</Text>
-                    {aiCandidateDisplayIsLowConfidence(item) ? (
-                      <Text style={styles.warningText}>{aiReviewLowConfidenceDisplayText}</Text>
-                    ) : null}
-                    {aiCandidateDisplayDecisionTrace(item) ? (
-                      <Text style={styles.evidence}>{aiCandidateDisplayDecisionTrace(item)}</Text>
-                    ) : null}
-                    <AiCandidateActionRow
-                      editAccessibilityLabel={aiCandidateEditAccessibilityLabel(item)}
-                      editLabel={coreFlowDisplayLabels.edit}
-                      onEditPress={() => pressAiCandidateEditAction(item)}
-                      onRemovePress={() => pressAiCandidateRemoveAction(item)}
-                      removeAccessibilityLabel={aiCandidateRemoveAccessibilityLabel(item)}
-                      removeLabel="移除"
-                    />
-                  </View>
-                ))
+                <AiCandidateList
+                  editLabel={coreFlowDisplayLabels.edit}
+                  items={previewRecordDisplayItems}
+                  lowConfidenceText={aiReviewLowConfidenceDisplayText}
+                  onEditCandidate={editAiCandidateRecord}
+                  onRemoveCandidate={removeAiCandidateRecord}
+                  removeLabel="移除"
+                />
               ) : (
                   <View style={styles.emptyStateCard}>
                     <View style={styles.iconCircleMuted}>
@@ -13825,23 +13746,6 @@ const styles = StyleSheet.create({
     gap: 12,
     minHeight: 64,
     padding: 14
-  },
-  aiReviewCardStack: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D6EEE4",
-    borderRadius: 20,
-    borderWidth: 1,
-    gap: 10,
-    padding: 14
-  },
-  confidencePill: {
-    alignItems: "center",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
-    borderRadius: 999,
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 5
   },
   editGlyph: {
     color: "#3FA67F",

@@ -15,6 +15,41 @@
 
 ## 2026-07-16
 
+### T2083 extract AI candidate list component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/aiCandidateList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `AiCandidateList` for AI Review candidate record cards.
+- Moved AI candidate target/key/icon/type/payload/confidence/source/low-confidence/decision/accessibility helpers and card styles out of `App.tsx`.
+- Preserved the same candidate card copy, low-confidence warning text, decision trace text, edit/remove labels, button roles, and empty-state rendering.
+- Kept candidate display item construction, edit/remove screen routing, rejected-event rendering, save-confirm flow, parser flow, backend calls, and daily-record behavior in `App.tsx`.
+- Updated navigation, UI-spec, and visual-smoke route verifier coverage for component bindings, helper guards, card styles, and direct inline-map guards.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、daily-record save endpoint、save payload shape、record sync endpoint/request semantics、token storage behavior、AI/LLM prompt behavior、parser endpoint/request semantics、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue auditing remaining daily record section/detail row clusters without changing first-version scope.
+
 ### T2082 extract daily transcript list component
 
 類型：mobile / refactor / verifier / docs

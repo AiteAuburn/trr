@@ -34,7 +34,7 @@ VISUAL_SMOKE_ROUTES = {
     ],
     "aiReview": [
         'currentScreen === "aiReview"',
-        "previewRecordDisplayItems.map",
+        "items={previewRecordDisplayItems}",
         "coreFlowDisplayLabels.enterSaveConfirm",
     ],
     "editPreviewRecord": [
