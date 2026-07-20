@@ -2946,16 +2946,12 @@ def main() -> int:
         for label, marker in (
             ("deepseek initial llm model state", 'const [llmModelId, setLlmModelId] = useState("deepseek-chat");'),
             (
-                "deepseek preferred model helper",
-                "function preferredLlmModelOption(modelOptions: AiModelOptions)",
+                "deepseek preferred model helper import",
+                "preferredLlmModelOption",
             ),
             (
-                "deepseek preferred model helper priority",
-                'modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??',
-            ),
-            (
-                "default STT model helper",
-                "function defaultSttModelOption(modelOptions: AiModelOptions)",
+                "default STT model helper import",
+                "defaultSttModelOption",
             ),
             (
                 "boot default STT helper binding",
@@ -3004,6 +3000,8 @@ def main() -> int:
             ("record settings direct STT runtime fallback", "modelRuntimeLabel(selectedSttModel?.runtime)"),
             ("local selected model display label helper", "function selectedModelDisplayLabel(model: { label: string } | null | undefined, fallbackId: string)"),
             ("local selected model runtime label helper", "function selectedModelRuntimeDisplayLabel("),
+            ("local default STT model helper", "function defaultSttModelOption(modelOptions: AiModelOptions)"),
+            ("local preferred LLM model helper", "function preferredLlmModelOption(modelOptions: AiModelOptions)"),
         ):
             _assert_not_contains(label, content, marker)
         default_stt_helper_marker = "const defaultStt = defaultSttModelOption(modelOptions);"
@@ -12685,6 +12683,11 @@ def main() -> int:
             ("AI model option availability bool", "available: Boolean(value.available)"),
             ("AI model options list bound", "stt_models: value.stt_models.slice(0, maxMobileModelOptions).map(boundAiModelOption)"),
             ("AI model options LLM list bound", "llm_models: value.llm_models.slice(0, maxMobileModelOptions).map(boundAiModelOption)"),
+            ("default STT model helper", "function defaultSttModelOption<T extends AiModelOptionTransformSource>("),
+            ("default STT model available priority", "return modelOptions.stt_models.find((model) => model.available) ?? modelOptions.stt_models[0];"),
+            ("deepseek preferred model helper", "function preferredLlmModelOption<T extends AiModelOptionTransformSource>("),
+            ("deepseek preferred model helper priority", 'modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??'),
+            ("deepseek preferred model fallback", 'modelOptions.llm_models.find((model) => model.id === "ollama-qwen2.5-1.5b" && model.available) ??'),
         ):
             _assert_contains(label, ai_model_transforms_content, marker)
         for label, marker in (

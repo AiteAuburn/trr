@@ -45,3 +45,20 @@ export function boundAiModelOptions<T extends AiModelOptionTransformSource>(
     llm_models: value.llm_models.slice(0, maxMobileModelOptions).map(boundAiModelOption)
   };
 }
+
+export function defaultSttModelOption<T extends AiModelOptionTransformSource>(
+  modelOptions: AiModelOptionsTransformSource<T>
+) {
+  return modelOptions.stt_models.find((model) => model.available) ?? modelOptions.stt_models[0];
+}
+
+export function preferredLlmModelOption<T extends AiModelOptionTransformSource>(
+  modelOptions: AiModelOptionsTransformSource<T>
+) {
+  return (
+    modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??
+    modelOptions.llm_models.find((model) => model.id === "ollama-qwen2.5-1.5b" && model.available) ??
+    modelOptions.llm_models.find((model) => model.available) ??
+    modelOptions.llm_models[0]
+  );
+}

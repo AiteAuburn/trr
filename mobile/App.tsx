@@ -908,7 +908,7 @@ import {
   startOfCurrentMonth
 } from "./dateTimeTransforms";
 import { boundAccount, boundProfiles } from "./accountTransforms";
-import { boundAiModelOptions } from "./aiModelTransforms";
+import { boundAiModelOptions, defaultSttModelOption, preferredLlmModelOption } from "./aiModelTransforms";
 import {
   appendNativeLlamaBenchmarkResult,
   appendNativeWhisperBenchmarkResult,
@@ -2723,19 +2723,6 @@ export default function App() {
     setSelectedRecord(null);
     clearBasicReportCache();
     setReportStatus(detailedReportResetStatusMessage());
-  }
-
-  function defaultSttModelOption(modelOptions: AiModelOptions) {
-    return modelOptions.stt_models.find((model) => model.available) ?? modelOptions.stt_models[0];
-  }
-
-  function preferredLlmModelOption(modelOptions: AiModelOptions) {
-    return (
-      modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??
-      modelOptions.llm_models.find((model) => model.id === "ollama-qwen2.5-1.5b" && model.available) ??
-      modelOptions.llm_models.find((model) => model.available) ??
-      modelOptions.llm_models[0]
-    );
   }
 
   async function refreshProductionAuthSession() {

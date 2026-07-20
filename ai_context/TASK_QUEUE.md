@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2178: Move AI model selection helpers
+
+Status: done
+
+Completed:
+
+- Added default STT model and preferred LLM model selection helpers to `aiModelTransforms.ts`.
+- Removed duplicate AI model selection helper definitions from `App.tsx`.
+- Kept STT fallback selection, DeepSeek-first LLM preference, Ollama fallback, available-model fallback, boot model initialization, and reconnect model refresh behavior unchanged.
+- Updated navigation verifier coverage to require AI model transform helper exports, App import/usage bindings, and no local helper regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2177: Move analysis chart accessors
 
 Status: done
