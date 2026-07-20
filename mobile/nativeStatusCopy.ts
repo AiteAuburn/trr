@@ -241,6 +241,12 @@ export function nativeLlamaSuccessStatusMessage() {
   return boundUiMessage("llama.cpp constrained JSON 輸出完成；完整輸出未保留在 UI。");
 }
 
+export function nativeLlamaSuccessState() {
+  return {
+    status: nativeLlamaSuccessStatusMessage()
+  };
+}
+
 export function nativeLlamaFailureStatusMessage(error: unknown) {
   return safeUiError(error, "llama.cpp failed");
 }

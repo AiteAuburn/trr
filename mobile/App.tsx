@@ -492,7 +492,7 @@ import {
   nativeLlamaMissingInputState,
   nativeLlamaOutputSummaryMessage,
   nativeLlamaStartState,
-  nativeLlamaSuccessStatusMessage,
+  nativeLlamaSuccessState,
   nativeBenchmarkAccessibilityLabel,
   nativeDownloadKindAccessibilityLabel,
   nativeLlamaRunAccessibilityLabel,
@@ -7897,7 +7897,8 @@ export default function App() {
 
   function handleNativeLlamaSuccess(output: string) {
     setLlamaDebugOutput(nativeLlamaOutputSummaryMessage(output.length));
-    setNativeStatus(nativeLlamaSuccessStatusMessage());
+    const nextState = nativeLlamaSuccessState();
+    setNativeStatus(nextState.status);
   }
 
   function startNativeLlamaStatus() {
