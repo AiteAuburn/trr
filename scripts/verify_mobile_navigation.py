@@ -1963,7 +1963,7 @@ def main() -> int:
             ("manual submit highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("history boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("community readiness checklist component binding", "<FutureReadinessChecklist items={communityReadinessChecklistItems} />"),
-            ("ranking readiness highlight bullet row", "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />"),
+            ("ranking readiness checklist component binding", "<FutureReadinessChecklist items={rankingReadinessChecklistItems} />"),
             ("future module card requirements highlight bullet row", "futureModuleCardRequirements(item).map((requirement) => (\n              <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />"),
             ("future module detail requirements highlight bullet row", "selectedFutureModuleDisplay.requirements.map((requirement) => (\n                <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />"),
         ):
@@ -12133,12 +12133,7 @@ def main() -> int:
             ("ranking readiness section label helper", "function rankingReadinessSectionLabel()"),
             ("ranking readiness section label helper fields", "return futurePreviewDisplayLabels.formalReadiness;"),
             ("ranking readiness section label helper binding", "{rankingReadinessSectionLabel()}"),
-            ("ranking readiness checklist item key helper", "function rankingReadinessChecklistItemKey(item: string)"),
-            ("ranking readiness checklist item key helper fields", "return item;"),
-            ("ranking readiness checklist item key helper binding", "key={rankingReadinessChecklistItemKey(item)}"),
-            ("ranking readiness checklist item text helper", "function rankingReadinessChecklistItemText(item: string)"),
-            ("ranking readiness checklist item text helper fields", "return item;"),
-            ("ranking readiness checklist item text helper binding", "text={rankingReadinessChecklistItemText(item)}"),
+            ("ranking readiness checklist component binding", "<FutureReadinessChecklist items={rankingReadinessChecklistItems} />"),
             ("ranking close accessibility helper", "function rankingCloseAccessibilityLabel()"),
             ("ranking close accessibility helper fields", "return auxiliaryDisplayLabels.closeReturn;"),
             ("ranking close accessibility display label binding", "const rankingCloseAccessibilityDisplayLabel = rankingCloseAccessibilityLabel();"),
@@ -14949,6 +14944,11 @@ def main() -> int:
             "ranking direct readiness checklist item text binding",
             content,
             "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={item} />",
+        )
+        _assert_not_contains(
+            "ranking direct readiness checklist helper binding",
+            content,
+            "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />",
         )
         _assert_not_contains(
             "doctor share direct boundary row map",

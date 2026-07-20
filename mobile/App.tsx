@@ -5277,14 +5277,6 @@ export default function App() {
     return futurePreviewDisplayLabels.formalReadiness;
   }
 
-  function rankingReadinessChecklistItemKey(item: string) {
-    return item;
-  }
-
-  function rankingReadinessChecklistItemText(item: string) {
-    return item;
-  }
-
   function rankingCloseAccessibilityLabel() {
     return auxiliaryDisplayLabels.closeReturn;
   }
@@ -10955,9 +10947,7 @@ export default function App() {
             ))}
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{rankingReadinessSectionLabel()}</Text>
-              {rankingReadinessChecklistItems.map((item) => (
-                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />
-              ))}
+              <FutureReadinessChecklist items={rankingReadinessChecklistItems} />
             </View>
             <RankingActionRow
               onOptInPress={rankingOptInActionPressTarget}
