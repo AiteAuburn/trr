@@ -12248,6 +12248,10 @@ def main() -> int:
             ("reminder integration accessibility display binding", "const reminderIntegrationAccessibilityDisplayLabel = reminderSettingsControlDisplay.integrationAccessibility;"),
             ("privacy integration status binding", "onActionPress={showPrivacyIntegrationStatus}"),
             ("privacy integration accessibility binding", "actionAccessibilityLabel={privacyIntegrationAccessibilityDisplayLabel}"),
+            ("privacy settings control display helper binding", "const privacySettingsControlDisplay = privacySettingsControlDisplayBundle();"),
+            ("privacy settings intro display binding", "const privacySettingsIntroDisplayText = privacySettingsControlDisplay.intro;"),
+            ("privacy integration button display binding", "const privacyIntegrationButtonDisplayLabel = privacySettingsControlDisplay.integrationButton;"),
+            ("privacy integration accessibility display binding", "const privacyIntegrationAccessibilityDisplayLabel = privacySettingsControlDisplay.integrationAccessibility;"),
             ("settings subpage close button binding", "<SettingsSubpageCloseButton"),
             ("settings subpage close accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.closeReturn}"),
             ("settings subpage close handler binding", "onPress={returnFromSettingsSubpage}"),
@@ -12926,6 +12930,9 @@ def main() -> int:
             ("direct reminder settings intro copy binding", "const reminderSettingsIntroDisplayText = reminderSettingsIntroCopy();"),
             ("direct reminder integration button binding", "const reminderIntegrationButtonDisplayLabel = reminderIntegrationButtonLabel();"),
             ("direct reminder integration accessibility binding", "const reminderIntegrationAccessibilityDisplayLabel = reminderIntegrationAccessibilityLabel();"),
+            ("direct privacy settings intro copy binding", "const privacySettingsIntroDisplayText = privacySettingsIntroCopy();"),
+            ("direct privacy integration button binding", "const privacyIntegrationButtonDisplayLabel = privacyIntegrationButtonLabel();"),
+            ("direct privacy integration accessibility binding", "const privacyIntegrationAccessibilityDisplayLabel = privacyIntegrationAccessibilityLabel();"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (
@@ -13164,6 +13171,10 @@ def main() -> int:
             ("reminder readiness permission copy", "系統通知權限請求與拒絕後的替代說明。"),
             ("reminder readiness PHI-safe notification copy", "通知內容不得包含敏感健康數值或完整紀錄。"),
             ("privacy integration accessibility helper", "function privacyIntegrationAccessibilityLabel()"),
+            ("privacy settings control display bundle helper", "function privacySettingsControlDisplayBundle()"),
+            ("privacy settings control intro binding", "intro: privacySettingsIntroCopy()"),
+            ("privacy settings control button binding", "integrationButton: privacyIntegrationButtonLabel()"),
+            ("privacy settings control accessibility binding", "integrationAccessibility: privacyIntegrationAccessibilityLabel()"),
             ("privacy boundary rows helper", "function privacyBoundaryDisplayRows()"),
             ("privacy boundary records row", "健康紀錄"),
             ("privacy boundary notification row", "通知內容"),

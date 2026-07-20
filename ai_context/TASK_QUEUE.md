@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2210: Move privacy settings control display bundle
+
+Status: done
+
+Completed:
+
+- Added the privacy settings control display bundle helper to `settingsCopy.ts`.
+- Removed direct privacy settings intro, integration button label, and integration accessibility label assembly from `App.tsx`.
+- Kept privacy settings copy, privacy integration preview action, and disabled-state behavior unchanged.
+- Updated navigation verifier coverage to require the privacy settings control display bundle, App bundle bindings, and no direct privacy settings control display assembly regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2209: Move reminder settings control display bundle
 
 Status: done

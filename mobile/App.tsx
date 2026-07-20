@@ -785,10 +785,8 @@ import {
   menuReturnStatusMessage,
   modelSelectionBoundaryCopy,
   privacyBoundaryDisplayRows,
-  privacyIntegrationAccessibilityLabel,
-  privacyIntegrationButtonLabel,
   privacyReadinessChecklistDisplayItems,
-  privacySettingsIntroCopy,
+  privacySettingsControlDisplayBundle,
   quotaReadinessChecklistDisplayItems,
   recordingQuotaControlDisplayBundle,
   recordingQuotaDataBoundaryCopy,
@@ -2121,9 +2119,10 @@ export default function App() {
   const reminderSettingsIntroDisplayText = reminderSettingsControlDisplay.intro;
   const reminderIntegrationButtonDisplayLabel = reminderSettingsControlDisplay.integrationButton;
   const reminderIntegrationAccessibilityDisplayLabel = reminderSettingsControlDisplay.integrationAccessibility;
-  const privacySettingsIntroDisplayText = privacySettingsIntroCopy();
-  const privacyIntegrationButtonDisplayLabel = privacyIntegrationButtonLabel();
-  const privacyIntegrationAccessibilityDisplayLabel = privacyIntegrationAccessibilityLabel();
+  const privacySettingsControlDisplay = privacySettingsControlDisplayBundle();
+  const privacySettingsIntroDisplayText = privacySettingsControlDisplay.intro;
+  const privacyIntegrationButtonDisplayLabel = privacySettingsControlDisplay.integrationButton;
+  const privacyIntegrationAccessibilityDisplayLabel = privacySettingsControlDisplay.integrationAccessibility;
   const settingsSubscriptionDisplayLabels = settingsSubscriptionSectionLabels();
   const futureModuleDetailBoundaryDisplayText = futureModuleDetailBoundaryCopy();
   const futureModuleImplementationOrderDisplayText = futureModuleImplementationOrderCopy();

@@ -293,6 +293,14 @@ export function privacyIntegrationAccessibilityLabel() {
   return boundDisplayText("查看隱私整合狀態，不匯出、刪除或公開資料", maxDisplayDetailTextLength);
 }
 
+export function privacySettingsControlDisplayBundle() {
+  return {
+    intro: privacySettingsIntroCopy(),
+    integrationButton: privacyIntegrationButtonLabel(),
+    integrationAccessibility: privacyIntegrationAccessibilityLabel()
+  };
+}
+
 export function privacyBoundaryDisplayRows() {
   return [
     ["健康紀錄", "預設私密"],
