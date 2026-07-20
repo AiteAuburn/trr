@@ -133,6 +133,12 @@ export function historyDailySummaryDisplayItem(dateKey: string, records: RecordI
   };
 }
 
+export function buildHistoryDailySummaryDisplayItems(recordsByDate: Map<string, RecordItem[]>, isLocalPreview: boolean) {
+  return Array.from(recordsByDate.entries())
+    .sort(([left], [right]) => right.localeCompare(left))
+    .map(([dateKey, dateRecords]) => historyDailySummaryDisplayItem(dateKey, dateRecords, isLocalPreview));
+}
+
 export function buildHistoryDailyRecordSectionDisplayItems(records: RecordItem[]) {
   return dailyRecordSectionDefinitions.map((definition) => {
     const entries = records

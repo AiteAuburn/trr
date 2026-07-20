@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2108: Move history daily summary list helper
+
+Status: done
+
+Completed:
+
+- Added `buildHistoryDailySummaryDisplayItems` to `historyScreenData.ts`.
+- Replaced the inline History daily summary `entries()` sort/map in `App.tsx`.
+- Kept History memoization, selected-day summary, selected-day sections, raw transcript display, and table rendering in `App.tsx`.
+- Updated navigation verifier coverage to require the History daily-summary helper and reject the old inline entries sort/map.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2107: Move history date grouping helper
 
 Status: done

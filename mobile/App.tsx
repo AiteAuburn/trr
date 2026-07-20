@@ -585,6 +585,7 @@ import {
 } from "./historyCopy";
 import {
   buildHistoryDailyRecordSectionDisplayItems,
+  buildHistoryDailySummaryDisplayItems,
   historyCalendarDayDisplayItem,
   historyDailySummaryDisplayItem,
   historyDetailModeDisplayItem,
@@ -1247,12 +1248,7 @@ export default function App() {
   }, [historyCalendarMonthStart, historyRecordsByDate, selectedHistoryDate]);
   const selectedHistoryRecords = historyRecordsByDate.get(selectedHistoryDate) ?? [];
   const historyDailySummaryDisplayItems = useMemo(
-    () =>
-      Array.from(historyRecordsByDate.entries())
-        .sort(([left], [right]) => right.localeCompare(left))
-        .map(([dateKey, dateRecords]) =>
-          historyDailySummaryDisplayItem(dateKey, dateRecords, isVisualSmokePreviewMode)
-        ),
+    () => buildHistoryDailySummaryDisplayItems(historyRecordsByDate, isVisualSmokePreviewMode),
     [historyRecordsByDate, isVisualSmokePreviewMode]
   );
   const selectedHistoryDailySummary = useMemo(

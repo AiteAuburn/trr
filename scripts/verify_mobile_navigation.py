@@ -9422,6 +9422,7 @@ def main() -> int:
             ("history detail mode state", 'const [historyDetailMode, setHistoryDetailMode] = useState<HistoryDetailMode>("structured")'),
             ("history calendar date resets structured mode", 'setHistoryDetailMode("structured");'),
             ("history daily summary items", "const historyDailySummaryDisplayItems = useMemo("),
+            ("history daily summary items helper binding", "buildHistoryDailySummaryDisplayItems(historyRecordsByDate, isVisualSmokePreviewMode)"),
             ("history selected daily summary", "const selectedHistoryDailySummary = useMemo("),
             ("history selected daily sections", "const selectedHistoryDailySectionItems = useMemo("),
             ("history raw display items helper binding", "const selectedHistoryRawDisplayItems = useMemo(\n    () => historyRawRecordDisplayItems(selectedHistoryRecords),"),
@@ -9527,6 +9528,9 @@ def main() -> int:
             ("history pending record adapter", "function pendingRecordFromRecordItem(record: RecordItem): PendingRecord"),
             ("history daily sync summary helper", "function historyDailySyncSummary(records: RecordItem[], isLocalPreview: boolean)"),
             ("history daily summary display item", "function historyDailySummaryDisplayItem(dateKey: string, records: RecordItem[], isLocalPreview: boolean)"),
+            ("history daily summary display items helper", "function buildHistoryDailySummaryDisplayItems(recordsByDate: Map<string, RecordItem[]>, isLocalPreview: boolean)"),
+            ("history daily summary display items sort", ".sort(([left], [right]) => right.localeCompare(left))"),
+            ("history daily summary display items map", ".map(([dateKey, dateRecords]) => historyDailySummaryDisplayItem(dateKey, dateRecords, isLocalPreview));"),
             ("history daily section display helper", "function buildHistoryDailyRecordSectionDisplayItems(records: RecordItem[])"),
             ("history daily summary copy", "summaryText: dailyRecordSummaryText(pendingRecords)"),
             ("history daily section record accessibility", "accessibilityLabel: recordListDisplayItem(record, `history-daily-${index}`).accessibilityLabel"),
@@ -9636,6 +9640,11 @@ def main() -> int:
             "history direct records by date map",
             content,
             "const groups = new Map<string, RecordItem[]>();\n    for (const record of recordsForDisplay) {",
+        )
+        _assert_not_contains(
+            "history direct daily summary entries sort",
+            content,
+            "Array.from(historyRecordsByDate.entries())\n        .sort(([left], [right]) => right.localeCompare(left))",
         )
         pending_save_block = _function_block(record_save_transforms_content, "pendingRecordForSave")
         _assert_contains(
