@@ -99,6 +99,7 @@ import {
   rejectedPreviewEventKey,
   rejectedPreviewEventReasonText,
   rejectedPreviewEventSourceText,
+  recordDetailCardTarget,
   recordDetailDisplayItem,
   recordEditHeaderTypeLabel,
   recordListDisplayItem,
@@ -2351,10 +2352,6 @@ export default function App() {
 
   function openTodayRecordDetailCard(record: RecordItem) {
     openTodayRecordDetail(record);
-  }
-
-  function recordDetailCardTarget(item: { record: RecordItem }) {
-    return item.record;
   }
 
   function pressTodayRecordDetailCard(item: ReturnType<typeof recordListDisplayItem>) {

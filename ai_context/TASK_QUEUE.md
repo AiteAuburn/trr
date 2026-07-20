@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2165: Move record detail card target accessor
+
+Status: done
+
+Completed:
+
+- Added record detail card target accessor to `recordDisplay.ts`.
+- Removed the duplicate record detail card target helper definition from `App.tsx`.
+- Kept Today, History, and History daily-section record detail card press behavior unchanged.
+- Updated navigation verifier coverage to require the record-display helper export, App press bindings, and no local helper regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2164: Move selected model display accessors
 
 Status: done

@@ -294,6 +294,10 @@ export function recordListDisplayItems(records: RecordItem[], keyPrefix = "recor
   return records.map((record) => recordListDisplayItem(record, keyPrefix));
 }
 
+export function recordDetailCardTarget(item: { record: RecordItem }) {
+  return item.record;
+}
+
 export function groupedRecordListDisplaySections(groupedRecords: Array<readonly [string, RecordItem[]]>) {
   return groupedRecords.map(([date, sectionRecords], sectionIndex) => ({
     key: `history-section-${boundIdentifier(date)}-${clampNumber(sectionIndex, 0, maxMobileCountValue)}`,

@@ -2746,6 +2746,11 @@ def main() -> int:
             ("record detail direct type fallback binding", 'selectedRecordDisplayItem?.typeLabel ?? "請從今日或歷史紀錄選擇一筆真實紀錄。"'),
         ):
             _assert_not_contains(label, record_detail_screen_block, marker)
+        _assert_not_contains(
+            "local record detail card target helper",
+            content,
+            "function recordDetailCardTarget(item: { record: RecordItem })",
+        )
         for block_label, pattern, marker in (
             (
                 "preview edit type label render block",
@@ -9239,14 +9244,9 @@ def main() -> int:
             "function openTodayRecordDetailCard(record: RecordItem)",
         )
         _assert_contains(
-            "record detail card target helper",
+            "record detail card target helper import",
             content,
-            "function recordDetailCardTarget(item: { record: RecordItem })",
-        )
-        _assert_contains(
-            "record detail card target helper fields",
-            content,
-            "return item.record;",
+            "recordDetailCardTarget,",
         )
         _assert_contains(
             "today record detail card press handler",
@@ -9282,6 +9282,16 @@ def main() -> int:
             "record list display items map",
             record_display_content,
             "return records.map((record) => recordListDisplayItem(record, keyPrefix));",
+        )
+        _assert_contains(
+            "record detail card target helper",
+            record_display_content,
+            "function recordDetailCardTarget(item: { record: RecordItem })",
+        )
+        _assert_contains(
+            "record detail card target helper fields",
+            record_display_content,
+            "return item.record;",
         )
         for label, marker in (
             ("pending remove display item type helper", "type PendingRecordDisplayItem = ReturnType<typeof pendingRecordDisplayItem>;"),
