@@ -110,7 +110,7 @@ import {
 } from "./recordBounds";
 import {
   createClientSaveBatchId,
-  pendingRecordForSave
+  previewRecordsForSave
 } from "./recordSaveTransforms";
 import {
   headerBackTargetForScreen,
@@ -7024,23 +7024,6 @@ export default function App() {
   function finishPreviewSaveRequest() {
     previewSaveInFlight.current = false;
     setIsBusy(false);
-  }
-
-  function previewRecordsForSave(records: PendingRecord[], recordCount: number) {
-    const clientSaveBatchId = createClientSaveBatchId();
-    return records.map((record, index) => {
-      const sanitizedRecord = pendingRecordForSave(record);
-      return {
-        ...sanitizedRecord,
-        metadata_json: {
-          ...(sanitizedRecord.metadata_json ?? {}),
-          client_save_batch_id: clientSaveBatchId,
-          client_save_sequence: index + 1,
-          client_save_batch_size: recordCount,
-          entry_method: "ai_confirmation"
-        }
-      };
-    });
   }
 
   function buildPreviewRecordsForCurrentSave(currentPreview: ParsePreviewResponse) {

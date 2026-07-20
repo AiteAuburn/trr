@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2093: Move preview save batch metadata transform
+
+Status: done
+
+Completed:
+
+- Added `previewRecordsForSave` to `recordSaveTransforms.ts` for AI-confirmation save batch metadata.
+- Kept `App.tsx` responsible only for passing current preview records and `previewState.recordCount`.
+- Preserved manual-form save metadata behavior through the existing `createClientSaveBatchId` call.
+- Updated navigation verifier coverage to require the transform helper outside `App.tsx` and reject the old inline helper.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2092: Extract achievement unlocked card list component
 
 Status: done

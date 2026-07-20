@@ -8406,8 +8406,8 @@ def main() -> int:
             ("daily record save finish helper internals", "previewSaveInFlight.current = false;\n    setIsBusy(false);"),
             ("daily record save finish helper binding", "finishPreviewSaveRequest();"),
             ("daily record save records helper", "function previewRecordsForSave(records: PendingRecord[], recordCount: number)"),
-            ("daily record save records helper internals", "const clientSaveBatchId = createClientSaveBatchId();\n    return records.map((record, index) => {\n      const sanitizedRecord = pendingRecordForSave(record);"),
-            ("daily record save records helper metadata", "client_save_batch_id: clientSaveBatchId,\n          client_save_sequence: index + 1,\n          client_save_batch_size: recordCount,\n          entry_method: \"ai_confirmation\""),
+            ("daily record save records helper internals", "const clientSaveBatchId = createClientSaveBatchId();\n  return records.map((record, index) => {\n    const sanitizedRecord = pendingRecordForSave(record);"),
+            ("daily record save records helper metadata", "client_save_batch_id: clientSaveBatchId,\n        client_save_sequence: index + 1,\n        client_save_batch_size: recordCount,\n        entry_method: \"ai_confirmation\""),
             ("daily record current save records helper", "function buildPreviewRecordsForCurrentSave(currentPreview: ParsePreviewResponse)"),
             ("daily record current save records helper internals", "return previewRecordsForSave(currentPreview.records, previewState.recordCount);"),
             ("daily record save guarded context helper", "function guardedDailyRecordSaveContext()"),
@@ -8463,47 +8463,52 @@ def main() -> int:
             ("daily record fixed save return style disabled", "isDailyRecordFixedSaveReturnDisabled ? styles.buttonDisabled : null"),
             ("daily record fixed save return disabled prop", "disabled={isDailyRecordFixedSaveReturnDisabled}"),
         ):
-            source = (
-                daily_record_section_list_content
-                if (
-                    label.startswith("daily record section display")
-                    or label.startswith("daily record entry display")
-                    or label == "daily record section list component"
-                    or label.startswith("daily record section list sections prop")
-                    or label.startswith("daily record section renderer")
-                    or label.startswith("daily record section key")
-                    or label.startswith("daily record section icon")
-                    or label.startswith("daily record section title")
-                    or label.startswith("daily record section description")
-                    or label.startswith("daily record section count")
-                    or label.startswith("daily record section entries")
-                    or label.startswith("daily record section has")
-                    or label.startswith("daily record section empty")
-                    or label.startswith("daily record detail row")
-                    or label.startswith("daily record entry management handler")
-                    or label.startswith("daily record entry target")
-                    or label.startswith("daily record entry type label")
-                    or label.startswith("daily record entry key")
-                    or label.startswith("daily record entry time")
-                    or label.startswith("daily record entry payload")
-                    or label.startswith("daily record entry accessibility")
-                    or label.startswith("daily record entry manage")
-                    or label.startswith("daily record entry edit accessibility")
-                    or label.startswith("daily record entry edit label")
-                    or label.startswith("daily record entry remove")
-                    or label.startswith("daily record entry detail")
-                    or label.startswith("daily record entry menu open")
-                    or label.startswith("daily record entry management binding")
-                    or label.startswith("daily record entry edit handler")
-                    or label.startswith("daily record entry delete handler")
-                    or label.startswith("daily record entry edit binding")
-                    or label.startswith("daily record entry delete binding")
-                    or label.startswith("daily record section list style")
-                    or label.startswith("daily record section card style")
-                    or label.startswith("daily record entry card style")
-                )
-                else content
-            )
+            if label in {
+                "daily record save records helper",
+                "daily record save records helper internals",
+                "daily record save records helper metadata",
+            }:
+                source = record_save_transforms_content
+            elif (
+                label.startswith("daily record section display")
+                or label.startswith("daily record entry display")
+                or label == "daily record section list component"
+                or label.startswith("daily record section list sections prop")
+                or label.startswith("daily record section renderer")
+                or label.startswith("daily record section key")
+                or label.startswith("daily record section icon")
+                or label.startswith("daily record section title")
+                or label.startswith("daily record section description")
+                or label.startswith("daily record section count")
+                or label.startswith("daily record section entries")
+                or label.startswith("daily record section has")
+                or label.startswith("daily record section empty")
+                or label.startswith("daily record detail row")
+                or label.startswith("daily record entry management handler")
+                or label.startswith("daily record entry target")
+                or label.startswith("daily record entry type label")
+                or label.startswith("daily record entry key")
+                or label.startswith("daily record entry time")
+                or label.startswith("daily record entry payload")
+                or label.startswith("daily record entry accessibility")
+                or label.startswith("daily record entry manage")
+                or label.startswith("daily record entry edit accessibility")
+                or label.startswith("daily record entry edit label")
+                or label.startswith("daily record entry remove")
+                or label.startswith("daily record entry detail")
+                or label.startswith("daily record entry menu open")
+                or label.startswith("daily record entry management binding")
+                or label.startswith("daily record entry edit handler")
+                or label.startswith("daily record entry delete handler")
+                or label.startswith("daily record entry edit binding")
+                or label.startswith("daily record entry delete binding")
+                or label.startswith("daily record section list style")
+                or label.startswith("daily record section card style")
+                or label.startswith("daily record entry card style")
+            ):
+                source = daily_record_section_list_content
+            else:
+                source = content
             _assert_contains(label, source, marker)
         for label, marker in (
             ("daily record transcript list component", "export function DailyTranscriptList"),
@@ -8558,6 +8563,7 @@ def main() -> int:
             ("daily record leave guard direct confirm setters", "setDailyRecordLeaveGuardVisible(false);\n    returnFromAiSaveConfirm();\n    setStatus(dailyRecordLeaveGuardConfirmStatusMessage());"),
             ("daily record leave guard direct cancel label", '<Text style={styles.secondaryButtonText}>取消</Text>'),
             ("daily record leave guard direct confirm label", '<Text style={styles.dangerButtonText}>離開</Text>'),
+            ("inline preview save records helper", "function previewRecordsForSave(records: PendingRecord[], recordCount: number)"),
         ):
             _assert_not_contains(label, content, marker)
         _assert_not_contains(

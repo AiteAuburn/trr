@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2093 move preview save batch metadata transform
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordSaveTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `previewRecordsForSave` to `recordSaveTransforms.ts` for AI-confirmation save batch metadata.
+- Removed the inline `previewRecordsForSave` implementation from `App.tsx`.
+- Kept `buildPreviewRecordsForCurrentSave` in `App.tsx` so the parent still owns preview state access.
+- Preserved manual-form save metadata, daily-record save request flow, backend endpoint usage, parser behavior, transcript handling, and save success/error handling.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving pure daily-record transform helpers out of `App.tsx` where no UI or network side effect is involved.
+
 ### T2092 extract achievement unlocked card list component
 
 類型：mobile / refactor / verifier / docs
