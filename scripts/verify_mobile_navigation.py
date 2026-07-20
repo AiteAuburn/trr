@@ -2961,6 +2961,10 @@ def main() -> int:
                 "boot preferred LLM helper binding",
                 "const preferredLlm = preferredLlmModelOption(modelOptions);",
             ),
+            ("selected STT model helper import", "selectedSttModelOption"),
+            ("selected LLM model helper import", "selectedLlmModelOption"),
+            ("selected STT model helper binding", "const selectedSttModel = selectedSttModelOption(models, sttModelId);"),
+            ("selected LLM model helper binding", "const selectedLlmModel = selectedLlmModelOption(models, llmModelId);"),
             ("deepseek record parse request binding", "function parserPreviewModelIds() {\n    return {\n      sttModelId,\n      llmModelId"),
             ("selected model display label helper import", "selectedModelDisplayLabel,"),
             ("selected model runtime label helper import", "selectedModelRuntimeDisplayLabel,"),
@@ -3002,6 +3006,8 @@ def main() -> int:
             ("local selected model runtime label helper", "function selectedModelRuntimeDisplayLabel("),
             ("local default STT model helper", "function defaultSttModelOption(modelOptions: AiModelOptions)"),
             ("local preferred LLM model helper", "function preferredLlmModelOption(modelOptions: AiModelOptions)"),
+            ("direct selected STT model lookup", "models.stt_models.find((model) => model.id === sttModelId)"),
+            ("direct selected LLM model lookup", "models.llm_models.find((model) => model.id === llmModelId)"),
         ):
             _assert_not_contains(label, content, marker)
         default_stt_helper_marker = "const defaultStt = defaultSttModelOption(modelOptions);"
@@ -12691,6 +12697,10 @@ def main() -> int:
             ("deepseek preferred model helper", "function preferredLlmModelOption<T extends AiModelOptionTransformSource>("),
             ("deepseek preferred model helper priority", 'modelOptions.llm_models.find((model) => model.id === "deepseek-chat" && model.available) ??'),
             ("deepseek preferred model fallback", 'modelOptions.llm_models.find((model) => model.id === "ollama-qwen2.5-1.5b" && model.available) ??'),
+            ("selected STT model helper", "function selectedSttModelOption<T extends AiModelOptionTransformSource>("),
+            ("selected STT model helper fields", "return modelOptions.stt_models.find((model) => model.id === modelId) ?? null;"),
+            ("selected LLM model helper", "function selectedLlmModelOption<T extends AiModelOptionTransformSource>("),
+            ("selected LLM model helper fields", "return modelOptions.llm_models.find((model) => model.id === modelId) ?? null;"),
         ):
             _assert_contains(label, ai_model_transforms_content, marker)
         for label, marker in (

@@ -62,3 +62,17 @@ export function preferredLlmModelOption<T extends AiModelOptionTransformSource>(
     modelOptions.llm_models[0]
   );
 }
+
+export function selectedSttModelOption<T extends AiModelOptionTransformSource>(
+  modelOptions: AiModelOptionsTransformSource<T>,
+  modelId: string
+) {
+  return modelOptions.stt_models.find((model) => model.id === modelId) ?? null;
+}
+
+export function selectedLlmModelOption<T extends AiModelOptionTransformSource>(
+  modelOptions: AiModelOptionsTransformSource<T>,
+  modelId: string
+) {
+  return modelOptions.llm_models.find((model) => model.id === modelId) ?? null;
+}

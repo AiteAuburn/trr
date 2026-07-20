@@ -910,7 +910,13 @@ import {
   startOfCurrentMonth
 } from "./dateTimeTransforms";
 import { boundAccount, boundProfiles } from "./accountTransforms";
-import { boundAiModelOptions, defaultSttModelOption, preferredLlmModelOption } from "./aiModelTransforms";
+import {
+  boundAiModelOptions,
+  defaultSttModelOption,
+  preferredLlmModelOption,
+  selectedLlmModelOption,
+  selectedSttModelOption
+} from "./aiModelTransforms";
 import {
   appendNativeLlamaBenchmarkResult,
   appendNativeWhisperBenchmarkResult,
@@ -1279,8 +1285,8 @@ export default function App() {
 
   const normalizedApiBaseUrl = useMemo(() => normalizeApiBaseUrl(apiBaseUrl), [apiBaseUrl]);
   const activeProfile = profiles.find((profile) => profile.id === activeProfileId) ?? null;
-  const selectedSttModel = models.stt_models.find((model) => model.id === sttModelId) ?? null;
-  const selectedLlmModel = models.llm_models.find((model) => model.id === llmModelId) ?? null;
+  const selectedSttModel = selectedSttModelOption(models, sttModelId);
+  const selectedLlmModel = selectedLlmModelOption(models, llmModelId);
   const parserModelUnavailableMessage = parserModelUnavailableText(selectedLlmModel, selectedSttModel);
   const parserModelReady = parserModelUnavailableMessage.length === 0;
   const accountDisplayName = accountDisplayNameDisplayText(account);
