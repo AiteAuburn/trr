@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2123 move native model download success path helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/modelTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `nativeModelDownloadSuccessPaths` to `modelTransforms.ts`.
+- Replaced the direct `downloadKind` path branch in `App.tsx` with the transform helper result.
+- Kept native model download success state updates, downloaded model refresh, status updates, and download action flow in `App.tsx`.
+- Updated navigation verifier coverage to require the model transform helper and reject reintroducing the direct App path branch.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting native model transforms from `App.tsx` one boundary at a time.
+
 ### T2122 move native benchmark results helper
 
 類型：mobile / refactor / verifier / docs

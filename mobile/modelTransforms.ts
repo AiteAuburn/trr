@@ -59,6 +59,13 @@ export function nativeModelDownloadRequestArgs({
   };
 }
 
+export function nativeModelDownloadSuccessPaths(kind: NativeModelDownloadKind, uri: string) {
+  const nextPath = nativeDebugInputValue(uri);
+  return kind === "llama"
+    ? { llamaModelPath: nextPath, whisperModelPath: "" }
+    : { llamaModelPath: "", whisperModelPath: nextPath };
+}
+
 export function nativeWhisperInput({ audioPath, modelPath }: NativeWhisperInputSource): NativeWhisperInput {
   return {
     audioPath: audioPath.trim(),

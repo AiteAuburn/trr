@@ -772,6 +772,7 @@ import {
   nativeBenchmarkResults,
   nativeLlamaRequestArgs,
   nativeModelDownloadRequestArgs,
+  nativeModelDownloadSuccessPaths,
   nativeWhisperRequestArgs
 } from "./modelTransforms";
 import {
@@ -7945,10 +7946,12 @@ export default function App() {
   }
 
   async function handleNativeModelDownloadSuccess(uri: string) {
-    if (downloadKind === "llama") {
-      setLlamaModelPath(nativeDebugInputValue(uri));
-    } else {
-      setWhisperModelPath(nativeDebugInputValue(uri));
+    const nextPaths = nativeModelDownloadSuccessPaths(downloadKind, uri);
+    if (nextPaths.llamaModelPath) {
+      setLlamaModelPath(nextPaths.llamaModelPath);
+    }
+    if (nextPaths.whisperModelPath) {
+      setWhisperModelPath(nextPaths.whisperModelPath);
     }
     await refreshDownloadedModels();
     setNativeStatus(nativeModelDownloadSuccessStatusMessage());
