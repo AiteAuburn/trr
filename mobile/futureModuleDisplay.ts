@@ -2545,6 +2545,84 @@ export function futurePreviewSectionLabels() {
   };
 }
 
+export type FuturePreviewSectionLabels = ReturnType<typeof futurePreviewSectionLabels>;
+
+export function futurePreviewCloseAccessibilityLabel(label: string) {
+  return label;
+}
+
+export function futurePreviewBoundaryBadgeLabel(display: { badge: string }) {
+  return display.badge;
+}
+
+export function futurePreviewBoundaryCopyText(display: { copy: string }) {
+  return display.copy;
+}
+
+export function communityPostAccessibilityLabel(labels: FuturePreviewSectionLabels) {
+  return labels.communityPostAccessibility;
+}
+
+export function communityPostButtonLabel(labels: FuturePreviewSectionLabels) {
+  return labels.communityPostButton;
+}
+
+export function communityPrivacyAccessibilityLabel(labels: FuturePreviewSectionLabels) {
+  return labels.communityPrivacyAccessibility;
+}
+
+export function communityActionStatusLabel(labels: FuturePreviewSectionLabels) {
+  return labels.communityStatus;
+}
+
+export function communityActionStatusText(text: string) {
+  return text;
+}
+
+export function communityActionStatusVisible(status: string) {
+  return Boolean(status);
+}
+
+export function futurePreviewReadinessSectionLabel(labels: FuturePreviewSectionLabels) {
+  return labels.formalReadiness;
+}
+
+export function futurePreviewReturnAccessibilityLabel(labels: FuturePreviewSectionLabels) {
+  return labels.returnFutureModulesAccessibility;
+}
+
+export function futurePreviewReturnButtonLabel(labels: FuturePreviewSectionLabels) {
+  return labels.returnFutureModules;
+}
+
+export function rankingPublicActionAccessibilityLabel(labels: FuturePreviewSectionLabels) {
+  return labels.rankingPublicAccessibility;
+}
+
+export function rankingPublicActionButtonLabel(labels: FuturePreviewSectionLabels) {
+  return labels.rankingPublicButton;
+}
+
+export function rankingOptInActionAccessibilityLabel(label: string) {
+  return label;
+}
+
+export function rankingOptInActionButtonLabel(label: string) {
+  return label;
+}
+
+export function rankingActionStatusLabel(labels: FuturePreviewSectionLabels) {
+  return labels.rankingStatus;
+}
+
+export function rankingActionStatusText(text: string) {
+  return text;
+}
+
+export function rankingActionStatusVisible(status: string) {
+  return Boolean(status);
+}
+
 export function futurePreviewStatusDisplayTexts(value: {
   futureModuleActionStatus: string;
   doctorShareActionStatus: string;

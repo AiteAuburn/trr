@@ -218,14 +218,20 @@ import {
   commercePreviewReturnStoreStatusMessage,
   communityBoundaryDisplayRows,
   communityActionDisplayTexts,
+  communityActionStatusLabel,
+  communityActionStatusText,
+  communityActionStatusVisible,
   communityHeroIconLabel,
   communityLeaderboardSyncStatusMessages,
   communityLeaderboardDisplaySections,
   communityLeaderboardTypes,
+  communityPostAccessibilityLabel,
+  communityPostButtonLabel,
   communityPublicNamePreviewLabel,
   communityPublicProfileSaveAccessibilityLabel,
   communityPublicProfileSaveButtonLabel,
   communityPublicSettingsStatusMessages,
+  communityPrivacyAccessibilityLabel,
   emptyFoodCommunityShareFields,
   communityReadinessChecklistDisplayItems,
   communityScreenSubtitleCopy,
@@ -281,7 +287,13 @@ import {
   futureModuleImplementationOrderCopy,
   futureModulesOpenStatusMessage,
   futureModulesReturnMenuStatusMessage,
+  futurePreviewBoundaryBadgeLabel,
+  futurePreviewBoundaryCopyText,
+  futurePreviewCloseAccessibilityLabel,
+  futurePreviewReadinessSectionLabel,
   futurePreviewReturnStatusMessage,
+  futurePreviewReturnAccessibilityLabel,
+  futurePreviewReturnButtonLabel,
   futurePreviewSectionLabels,
   futurePreviewStatusDisplayTexts,
   healthIntegrationBoundaryDisplayRows,
@@ -292,12 +304,19 @@ import {
   limitedAchievementDisplayItems,
   localAchievementItemsForRecords,
   privacyPreviewBoundaryDisplayItem,
+  rankingActionStatusLabel,
+  rankingActionStatusText,
+  rankingActionStatusVisible,
   rankingBoundaryDisplayRows,
   rankingCloseButtonLabel,
   rankingHeroIconLabel,
   rankingLocalStreakPreviewLabel,
   rankingLocalPreviewBoundaryCopy,
+  rankingOptInActionAccessibilityLabel,
+  rankingOptInActionButtonLabel,
   rankingPreviewBoundaryDisplayItem,
+  rankingPublicActionAccessibilityLabel,
+  rankingPublicActionButtonLabel,
   rankingReadinessChecklistDisplayItems,
   rankingScreenSubtitleCopy,
   rankingScreenTitleLabel,
@@ -1875,6 +1894,7 @@ export default function App() {
   const reportSourceDisplayLabel = reportSourceDisplay.label;
   const reportSourceDisplayCopy = reportSourceDisplay.copy;
   const reportGeneratedAtDisplayText = reportGeneratedAtDisplayValue(activeAnalysisReport?.generated_at);
+  const auxiliaryDisplayLabels = auxiliarySectionLabels();
   const futurePreviewDisplayLabels = futurePreviewSectionLabels();
   const futurePreviewStatusDisplay = futurePreviewStatusDisplayTexts({
     futureModuleActionStatus,
@@ -1901,17 +1921,17 @@ export default function App() {
   });
   const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;
   const foodCommunityShareAccessibilityDisplayLabel = communityActionDisplay.foodCommunityShareAccessibility;
-  const communityCloseAccessibilityDisplayLabel = communityCloseAccessibilityLabel();
-  const communityPreviewBoundaryBadgeDisplayLabel = communityPreviewBoundaryBadgeLabel();
-  const communityPreviewBoundaryCopyDisplayText = communityPreviewBoundaryCopyText();
-  const communityPostAccessibilityDisplayLabel = communityPostAccessibilityLabel();
-  const communityPostButtonDisplayLabel = communityPostButtonLabel();
-  const communityPrivacyAccessibilityDisplayLabel = communityPrivacyAccessibilityLabel();
-  const communityActionStatusDisplayLabel = communityActionStatusLabel();
-  const communityActionStatusDisplayCopy = communityActionStatusText();
-  const communityReadinessSectionDisplayLabel = communityReadinessSectionLabel();
-  const communityReturnFutureModulesAccessibilityDisplayLabel = communityReturnFutureModulesAccessibilityLabel();
-  const communityReturnFutureModulesButtonDisplayLabel = communityReturnFutureModulesButtonLabel();
+  const communityCloseAccessibilityDisplayLabel = futurePreviewCloseAccessibilityLabel(auxiliaryDisplayLabels.closeReturn);
+  const communityPreviewBoundaryBadgeDisplayLabel = futurePreviewBoundaryBadgeLabel(communityPreviewBoundaryDisplay);
+  const communityPreviewBoundaryCopyDisplayText = futurePreviewBoundaryCopyText(communityPreviewBoundaryDisplay);
+  const communityPostAccessibilityDisplayLabel = communityPostAccessibilityLabel(futurePreviewDisplayLabels);
+  const communityPostButtonDisplayLabel = communityPostButtonLabel(futurePreviewDisplayLabels);
+  const communityPrivacyAccessibilityDisplayLabel = communityPrivacyAccessibilityLabel(futurePreviewDisplayLabels);
+  const communityActionStatusDisplayLabel = communityActionStatusLabel(futurePreviewDisplayLabels);
+  const communityActionStatusDisplayCopy = communityActionStatusText(communityActionStatusDisplayText);
+  const communityReadinessSectionDisplayLabel = futurePreviewReadinessSectionLabel(futurePreviewDisplayLabels);
+  const communityReturnFutureModulesAccessibilityDisplayLabel = futurePreviewReturnAccessibilityLabel(futurePreviewDisplayLabels);
+  const communityReturnFutureModulesButtonDisplayLabel = futurePreviewReturnButtonLabel(futurePreviewDisplayLabels);
   const communityReturnFutureModulesPressTarget = communityReturnFutureModulesPressHandler();
   const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();
   const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();
@@ -1929,13 +1949,13 @@ export default function App() {
   const rankingOptInAccessibilityDisplayLabel = rankingOptInActionAccessibilityLabel(communityActionDisplay.rankingOptInAccessibility);
   const rankingOptInActionPressTarget = rankingOptInActionPressHandler();
   const rankingCloseButtonDisplayLabel = rankingCloseButtonLabel();
-  const rankingCloseAccessibilityDisplayLabel = rankingCloseAccessibilityLabel();
+  const rankingCloseAccessibilityDisplayLabel = futurePreviewCloseAccessibilityLabel(auxiliaryDisplayLabels.closeReturn);
   const rankingClosePressTarget = rankingClosePressHandler();
-  const rankingPublicActionButtonDisplayLabel = rankingPublicActionButtonLabel();
-  const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel();
+  const rankingPublicActionButtonDisplayLabel = rankingPublicActionButtonLabel(futurePreviewDisplayLabels);
+  const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel(futurePreviewDisplayLabels);
   const rankingPublicActionPressTarget = rankingPublicActionPressHandler();
-  const rankingReturnFutureModulesButtonDisplayLabel = rankingReturnFutureModulesButtonLabel();
-  const rankingReturnFutureModulesAccessibilityDisplayLabel = rankingReturnFutureModulesAccessibilityLabel();
+  const rankingReturnFutureModulesButtonDisplayLabel = futurePreviewReturnButtonLabel(futurePreviewDisplayLabels);
+  const rankingReturnFutureModulesAccessibilityDisplayLabel = futurePreviewReturnAccessibilityLabel(futurePreviewDisplayLabels);
   const rankingReturnFutureModulesPressTarget = rankingReturnFutureModulesPressHandler();
   const foodPhotoStatusDisplay = foodPhotoStatusDisplayTexts(foodPhotoActionStatus);
   const foodPhotoActionStatusDisplayText = foodPhotoStatusDisplay.action;
@@ -2103,7 +2123,6 @@ export default function App() {
   );
   const analysisReportButtonDisplayLabel = analysisReportButtonLabel(isReportLoading);
   const coreFlowDisplayLabels = coreFlowSectionLabels();
-  const auxiliaryDisplayLabels = auxiliarySectionLabels();
   const advancedSettingsToggleDisplayLabel = advancedSettingsToggleLabel(showAdvancedSettings);
   const backendReconnectDisplayLabel = backendReconnectButtonLabel(isAnyRequestInFlight);
   const nativeModuleCheckDisplayLabel = nativeModuleCheckButtonLabel(isBusy);
@@ -4754,124 +4773,20 @@ export default function App() {
     return items[0]?.id ?? fallbackId;
   }
 
-  function communityCloseAccessibilityLabel() {
-    return auxiliaryDisplayLabels.closeReturn;
-  }
-
-  function communityPreviewBoundaryBadgeLabel() {
-    return communityPreviewBoundaryDisplay.badge;
-  }
-
-  function communityPreviewBoundaryCopyText() {
-    return communityPreviewBoundaryDisplay.copy;
-  }
-
-  function communityPostAccessibilityLabel() {
-    return futurePreviewDisplayLabels.communityPostAccessibility;
-  }
-
-  function communityPostButtonLabel() {
-    return futurePreviewDisplayLabels.communityPostButton;
-  }
-
-  function communityPrivacyAccessibilityLabel() {
-    return futurePreviewDisplayLabels.communityPrivacyAccessibility;
-  }
-
-  function communityActionStatusLabel() {
-    return futurePreviewDisplayLabels.communityStatus;
-  }
-
-  function communityActionStatusText() {
-    return communityActionStatusDisplayText;
-  }
-
-  function communityActionStatusVisible() {
-    return Boolean(communityActionStatus);
-  }
-
-  function communityReadinessSectionLabel() {
-    return futurePreviewDisplayLabels.formalReadiness;
-  }
-
-  function communityReturnFutureModulesAccessibilityLabel() {
-    return futurePreviewDisplayLabels.returnFutureModulesAccessibility;
-  }
-
-  function communityReturnFutureModulesButtonLabel() {
-    return futurePreviewDisplayLabels.returnFutureModules;
-  }
-
   function communityReturnFutureModulesPressHandler() {
     return returnFromCommunityPreview;
-  }
-
-  function rankingLocalPreviewBoundaryCopyText() {
-    return rankingLocalPreviewBoundaryDisplayText;
-  }
-
-  function rankingReadinessSectionLabel() {
-    return futurePreviewDisplayLabels.formalReadiness;
-  }
-
-  function rankingCloseAccessibilityLabel() {
-    return auxiliaryDisplayLabels.closeReturn;
   }
 
   function rankingClosePressHandler() {
     return returnFromRankingPreview;
   }
 
-  function rankingPreviewBoundaryBadgeLabel() {
-    return rankingPreviewBoundaryDisplay.badge;
-  }
-
-  function rankingPreviewBoundaryCopyText() {
-    return rankingPreviewBoundaryDisplay.copy;
-  }
-
-  function rankingPublicActionAccessibilityLabel() {
-    return futurePreviewDisplayLabels.rankingPublicAccessibility;
-  }
-
-  function rankingPublicActionButtonLabel() {
-    return futurePreviewDisplayLabels.rankingPublicButton;
-  }
-
   function rankingPublicActionPressHandler() {
     return showRankingPublicStatus;
   }
 
-  function rankingOptInActionAccessibilityLabel(label: string) {
-    return label;
-  }
-
-  function rankingOptInActionButtonLabel(label: string) {
-    return label;
-  }
-
   function rankingOptInActionPressHandler() {
     return showRankingOptInStatus;
-  }
-
-  function rankingActionStatusLabel() {
-    return futurePreviewDisplayLabels.rankingStatus;
-  }
-
-  function rankingActionStatusText() {
-    return rankingActionStatusDisplayText;
-  }
-
-  function rankingActionStatusVisible() {
-    return Boolean(rankingActionStatus);
-  }
-
-  function rankingReturnFutureModulesAccessibilityLabel() {
-    return futurePreviewDisplayLabels.returnFutureModulesAccessibility;
-  }
-
-  function rankingReturnFutureModulesButtonLabel() {
-    return futurePreviewDisplayLabels.returnFutureModules;
   }
 
   function rankingReturnFutureModulesPressHandler() {
@@ -10073,7 +9988,7 @@ export default function App() {
               shareAccessibilityLabel={foodCommunityShareAccessibilityDisplayLabel}
               shareLabel={foodCommunityShareButtonDisplayLabel}
             />
-            {communityActionStatusVisible() ? (
+            {communityActionStatusVisible(communityActionStatus) ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>
                 <Text style={styles.evidence}>{communityActionStatusDisplayCopy}</Text>
@@ -10102,8 +10017,8 @@ export default function App() {
               </Pressable>
             </View>
             <View style={styles.inlineInfoBlock}>
-              <Text style={styles.previewModeBadge}>{rankingPreviewBoundaryBadgeLabel()}</Text>
-              <Text style={styles.evidence}>{rankingPreviewBoundaryCopyText()}</Text>
+              <Text style={styles.previewModeBadge}>{futurePreviewBoundaryBadgeLabel(rankingPreviewBoundaryDisplay)}</Text>
+              <Text style={styles.evidence}>{futurePreviewBoundaryCopyText(rankingPreviewBoundaryDisplay)}</Text>
             </View>
             <View style={styles.heroCardFeature}>
               <View style={styles.heroIconBubble}>
@@ -10112,13 +10027,13 @@ export default function App() {
               <View style={styles.timelineContent}>
                 <Text style={styles.evidence}>{rankingLocalStreakPreviewLabel()}</Text>
                 <Text style={styles.heroNumber}>{rankingStreakDisplayText(rankingStreakDisplayDays)}</Text>
-                <Text style={styles.evidence}>{rankingLocalPreviewBoundaryCopyText()}</Text>
+                <Text style={styles.evidence}>{rankingLocalPreviewBoundaryDisplayText}</Text>
               </View>
             </View>
             <FutureBoundaryGrid rows={rankingBoundaryRows} />
             <RankingLeaderboardList sections={rankingLeaderboardSections} />
             <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{rankingReadinessSectionLabel()}</Text>
+              <Text style={styles.label}>{futurePreviewReadinessSectionLabel(futurePreviewDisplayLabels)}</Text>
               <FutureReadinessChecklist items={rankingReadinessChecklistItems} />
             </View>
             <RankingActionRow
@@ -10129,10 +10044,10 @@ export default function App() {
               publicAccessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}
               publicLabel={rankingPublicActionButtonDisplayLabel}
             />
-            {rankingActionStatusVisible() ? (
+            {rankingActionStatusVisible(rankingActionStatus) ? (
               <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{rankingActionStatusLabel()}</Text>
-                <Text style={styles.evidence}>{rankingActionStatusText()}</Text>
+                <Text style={styles.label}>{rankingActionStatusLabel(futurePreviewDisplayLabels)}</Text>
+                <Text style={styles.evidence}>{rankingActionStatusText(rankingActionStatusDisplayText)}</Text>
               </View>
             ) : null}
             <Pressable

@@ -34,6 +34,27 @@ None.
 
 ## Done
 
+### T2174: Move community ranking preview accessors
+
+Status: done
+
+Completed:
+
+- Added shared future-preview boundary/close/readiness/return accessors to `futureModuleDisplay.ts`.
+- Added Community post/privacy/action status accessors to `futureModuleDisplay.ts`.
+- Added Ranking public/opt-in/action status accessors to `futureModuleDisplay.ts`.
+- Removed duplicate Community/Ranking preview accessor helper definitions from `App.tsx`.
+- Kept Community and Ranking preview labels, boundary badge/copy, action status visibility, return buttons, and press handlers unchanged.
+- Updated navigation verifier coverage to require future-module helper exports, App import/render bindings, and no local helper regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2173: Move community ranking static labels
 
 Status: done

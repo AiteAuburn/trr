@@ -15,6 +15,40 @@
 
 ## 2026-07-20
 
+### T2174 move community ranking preview accessors
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added shared future-preview boundary/close/readiness/return accessors to `futureModuleDisplay.ts`.
+- Added Community post/privacy/action status accessors to `futureModuleDisplay.ts`.
+- Added Ranking public/opt-in/action status accessors to `futureModuleDisplay.ts`.
+- Removed duplicate Community/Ranking preview accessor helper definitions from `App.tsx`.
+- Kept Community and Ranking preview labels, boundary badge/copy, action status visibility, return buttons, and press handlers unchanged.
+- Updated navigation verifier coverage to require future-module helper exports, App import/render bindings, and no local helper regressions in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2173 move community ranking static labels
 
 類型：mobile / refactor / verifier / docs
