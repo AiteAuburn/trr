@@ -32,3 +32,15 @@ export function boundDownloadedModel<T extends DownloadedModel>(value: T): T {
 export function boundDownloadedModels<T extends DownloadedModel>(value: T[]) {
   return value.slice(0, maxDownloadedModelRows).map(boundDownloadedModel);
 }
+
+export function downloadedWhisperModels<T extends DownloadedModel>(models: T[]) {
+  return models.filter((model) => model.kind === "whisper" && model.exists);
+}
+
+export function downloadedWhisperModelInitialPath(models: DownloadedModel[]) {
+  return models[0]?.uri ?? "";
+}
+
+export function downloadedWhisperModelCount(models: DownloadedModel[]) {
+  return models.length;
+}

@@ -758,7 +758,12 @@ import {
 } from "./dateTimeTransforms";
 import { boundAccount, boundProfiles } from "./accountTransforms";
 import { boundAiModelOptions } from "./aiModelTransforms";
-import { boundDownloadedModels } from "./modelTransforms";
+import {
+  boundDownloadedModels,
+  downloadedWhisperModelCount,
+  downloadedWhisperModelInitialPath,
+  downloadedWhisperModels
+} from "./modelTransforms";
 import {
   boundAuthTokenResponse,
   boundDeviceFingerprintForRequest,
@@ -4523,18 +4528,6 @@ export default function App() {
 
   function nativeDebugInputValue(value: string) {
     return boundNativeDebugInput(value);
-  }
-
-  function downloadedWhisperModels(models: ReturnType<typeof boundDownloadedModels>) {
-    return models.filter((model) => model.kind === "whisper" && model.exists);
-  }
-
-  function downloadedWhisperModelInitialPath(models: ReturnType<typeof boundDownloadedModels>) {
-    return models[0]?.uri ?? "";
-  }
-
-  function downloadedWhisperModelCount(models: ReturnType<typeof boundDownloadedModels>) {
-    return models.length;
   }
 
   function updateNativeModelUrlInput(value: string) {

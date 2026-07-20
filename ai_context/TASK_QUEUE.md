@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2112: Move downloaded Whisper model helpers
+
+Status: done
+
+Completed:
+
+- Added `downloadedWhisperModels`, `downloadedWhisperModelInitialPath`, and `downloadedWhisperModelCount` to `modelTransforms.ts`.
+- Removed the same local pure helpers from `App.tsx`.
+- Kept downloaded model refresh, auto-select, status handling, and native model download flow in `App.tsx`.
+- Updated navigation verifier coverage to require the model transform helpers and reject reintroducing the local App helpers.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2111: Move preview remove record helpers
 
 Status: done
