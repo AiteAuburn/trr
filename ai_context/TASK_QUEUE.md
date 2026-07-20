@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2100: Move store response transforms
+
+Status: done
+
+Completed:
+
+- Added `storeProductsFromApi` and `storeRedemptionsFromApi` to `futureModuleDisplay.ts`.
+- Replaced the inline store rewards and redemptions response bounding in `App.tsx`.
+- Kept store endpoint requests, points balance bounding, stale-response guard, status handling, and failure fallback in `App.tsx`.
+- Updated navigation verifier coverage to require the domain transform helpers and reject the old inline store response transforms.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2099: Move food community category response transform
 
 Status: done

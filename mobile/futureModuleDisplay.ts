@@ -1367,6 +1367,14 @@ export function storeProductFromApi(value: StoreRewardApiInput): StoreProduct {
   };
 }
 
+export function storeProductsFromApi(values: StoreRewardApiInput[]): StoreProduct[] {
+  return values.slice(0, maxListItems * 2).map(storeProductFromApi);
+}
+
+export function storeRedemptionsFromApi(values: StoreApiRedemption[]): StoreApiRedemption[] {
+  return values.slice(0, maxListItems * 2);
+}
+
 export function storeRedemptionDisplayItem(value: StoreRedemptionDisplayInput) {
   const code = value.fulfillment_code ? boundIdentifier(value.fulfillment_code) : "";
   const rewardCode = boundIdentifier(value.reward_code);

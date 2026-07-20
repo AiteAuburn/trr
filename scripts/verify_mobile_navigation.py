@@ -13399,6 +13399,8 @@ def main() -> int:
             ("store rewards endpoint", 'requestJson<StoreRewardApiInput[]>(normalizedApiBaseUrl, "/store/rewards"'),
             ("store points endpoint", 'requestJson<StoreApiPointsBalance>(normalizedApiBaseUrl, "/store/points"'),
             ("store redemptions endpoint", 'requestJson<StoreApiRedemption[]>(normalizedApiBaseUrl, "/store/redemptions?limit=20"'),
+            ("store products response transform binding", "setStoreBackendProducts(storeProductsFromApi(rewards));"),
+            ("store redemptions response transform binding", "setStoreRedemptions(storeRedemptionsFromApi(redemptions));"),
             ("store redemption wallet helper binding", "const storeRedemptionDisplayItems = storeDisplay.redemptionDisplayItems;"),
             ("store redemption boundary rows helper binding", "const storeRedemptionBoundaryRows = storeDisplay.redemptionBoundaryRows;"),
             ("store redemption post endpoint", '"/store/redemptions"'),
@@ -14038,6 +14040,10 @@ def main() -> int:
             ("store backend special badge mapping", 'if (value === "special_badges")'),
             ("store backend reward product transform helper", "export function storeProductFromApi(value: StoreRewardApiInput): StoreProduct"),
             ("store backend reward fallback title", 'title: boundDisplayText(value.title || "兌換項目", maxDisplayTextLength)'),
+            ("store backend reward products transform helper", "export function storeProductsFromApi(values: StoreRewardApiInput[]): StoreProduct[]"),
+            ("store backend reward products transform bound", "return values.slice(0, maxListItems * 2).map(storeProductFromApi);"),
+            ("store backend redemptions transform helper", "export function storeRedemptionsFromApi(values: StoreApiRedemption[]): StoreApiRedemption[]"),
+            ("store backend redemptions transform bound", "return values.slice(0, maxListItems * 2);"),
             ("store redemption display input type", "export type StoreRedemptionDisplayInput = {"),
             ("store redemption display helper", "export function storeRedemptionDisplayItem(value: StoreRedemptionDisplayInput)"),
             ("store redemption wallet display helper", "export function storeRedemptionWalletDisplayItems(items: StoreRedemptionDisplayInput[])"),
@@ -15399,6 +15405,16 @@ def main() -> int:
             "store product direct action accessibility binding",
             content,
             "accessibilityLabel={product.actionAccessibilityLabel}\n                  accessibilityRole=\"button\"\n                  style={styles.roundActionButton}\n                  onPress={() => pressStoreProductStatus(product)}",
+        )
+        _assert_not_contains(
+            "store products direct response transform",
+            content,
+            "rewards.slice(0, maxListItems * 2).map(storeProductFromApi)",
+        )
+        _assert_not_contains(
+            "store redemptions direct response transform",
+            content,
+            "redemptions.slice(0, maxListItems * 2)",
         )
         store_product_card_render_block = _match_block(
             content,

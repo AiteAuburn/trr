@@ -225,10 +225,11 @@ import {
   storeRedeemStatusMessages,
   storeRedemptionUseStatusMessages,
   storeDisplayBundle,
-  storeProductFromApi,
+  storeProductsFromApi,
   storeProductDisplayItem,
   storeProducts,
   storeRedemptionDisplayItem,
+  storeRedemptionsFromApi,
   yearReviewBoundaryDisplayCopy,
   yearReviewHeaderDisplayTexts,
   yearReviewInsightDisplayTexts,
@@ -6205,13 +6206,13 @@ export default function App() {
       if (latestStoreSyncKey.current !== storeKey) {
         return;
       }
-      setStoreBackendProducts(rewards.slice(0, maxListItems * 2).map(storeProductFromApi));
+      setStoreBackendProducts(storeProductsFromApi(rewards));
       setStorePointsBalance({
         balance: clampNumber(points.balance, 0, maxMobileCountValue),
         lifetime_earned: clampNumber(points.lifetime_earned, 0, maxMobileCountValue),
         lifetime_redeemed: clampNumber(points.lifetime_redeemed, 0, maxMobileCountValue)
       });
-      setStoreRedemptions(redemptions.slice(0, maxListItems * 2));
+      setStoreRedemptions(storeRedemptionsFromApi(redemptions));
       setStoreActionStatus(
         storeCatalogSyncStatusMessages({
           backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
