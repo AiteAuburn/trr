@@ -503,7 +503,7 @@ import {
   nativeModelDownloadSuccessStatusMessage,
   nativeModuleCheckAccessibilityLabel,
   nativeModuleCheckButtonLabel,
-  nativeModuleCheckFailureStatusMessage,
+  nativeModuleCheckFailureState,
   nativeModuleCheckStartState,
   nativeModuleCheckResultStatusMessage,
   nativeStatusDisplayTexts,
@@ -7944,7 +7944,8 @@ export default function App() {
   }
 
   function handleNativeModuleCheckFailure(error: unknown) {
-    setNativeStatus(nativeModuleCheckFailureStatusMessage(error));
+    const nextState = nativeModuleCheckFailureState(error);
+    setNativeStatus(nextState.status);
   }
 
   function handleNativeWhisperFailure(error: unknown) {

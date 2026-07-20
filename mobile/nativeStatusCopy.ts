@@ -139,6 +139,12 @@ export function nativeModuleCheckFailureStatusMessage(error: unknown) {
   return safeUiError(error, "Native module check failed");
 }
 
+export function nativeModuleCheckFailureState(error: unknown) {
+  return {
+    status: nativeModuleCheckFailureStatusMessage(error)
+  };
+}
+
 export function nativeWhisperMissingInputStatusMessage() {
   return boundUiMessage("請先填 whisper model path 和 audio file path");
 }
