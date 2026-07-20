@@ -177,3 +177,13 @@ export function downloadedWhisperModelInitialPath(models: DownloadedModel[]) {
 export function downloadedWhisperModelCount(models: DownloadedModel[]) {
   return models.length;
 }
+
+export function downloadedWhisperModelRefreshResult(models: DownloadedModel[]) {
+  const downloadedModels = boundDownloadedModels(models);
+  const whisperModels = downloadedWhisperModels(downloadedModels);
+  return {
+    downloadedModels,
+    initialWhisperModelPath: downloadedWhisperModelInitialPath(whisperModels),
+    whisperModelCount: downloadedWhisperModelCount(whisperModels)
+  };
+}

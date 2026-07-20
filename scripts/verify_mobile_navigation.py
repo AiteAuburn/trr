@@ -11679,10 +11679,10 @@ def main() -> int:
             ("recording whisper model selector selected path binding", "selectedPath={whisperModelPath}"),
             ("recording model refresh handler", "function refreshRecordingModelsFromSettings()"),
             ("downloaded model boot refresh", "void refreshDownloadedModels();"),
-            ("downloaded model whisper models helper binding", "const whisperModels = downloadedWhisperModels(nextModels);"),
-            ("downloaded model auto whisper path helper binding", "const initialWhisperModelPath = downloadedWhisperModelInitialPath(whisperModels);"),
-            ("downloaded model auto whisper select helper binding", "setWhisperModelPath(nativeDebugInputValue(initialWhisperModelPath));"),
-            ("downloaded model refresh count helper binding", "setStatus(recordingModelRefreshStatusMessage(downloadedWhisperModelCount(whisperModels)));"),
+            ("downloaded model refresh result helper binding", "const refreshResult = downloadedWhisperModelRefreshResult(await listDownloadedModels());"),
+            ("downloaded model refresh result state binding", "setDownloadedModels(refreshResult.downloadedModels);"),
+            ("downloaded model auto whisper select helper binding", "setWhisperModelPath(nativeDebugInputValue(refreshResult.initialWhisperModelPath));"),
+            ("downloaded model refresh count helper binding", "setStatus(recordingModelRefreshStatusMessage(refreshResult.whisperModelCount));"),
             ("native whisper download option handler", "function selectWhisperNativeDownloadKind()"),
             ("native llama download option handler", "function selectLlamaNativeDownloadKind()"),
             ("native model URL input handler", "function updateNativeModelUrlInput(value: string)"),
@@ -12637,6 +12637,9 @@ def main() -> int:
             ("downloaded whisper initial path helper fields", 'return models[0]?.uri ?? "";'),
             ("downloaded whisper model count helper", "function downloadedWhisperModelCount(models: DownloadedModel[])"),
             ("downloaded whisper model count helper fields", "return models.length;"),
+            ("downloaded whisper model refresh result helper", "function downloadedWhisperModelRefreshResult(models: DownloadedModel[])"),
+            ("downloaded whisper model refresh result bounded models", "const downloadedModels = boundDownloadedModels(models);"),
+            ("downloaded whisper model refresh result helper fields", "initialWhisperModelPath: downloadedWhisperModelInitialPath(whisperModels),\n    whisperModelCount: downloadedWhisperModelCount(whisperModels)"),
         ):
             _assert_contains(label, model_transforms_content, marker)
         _assert_contains(

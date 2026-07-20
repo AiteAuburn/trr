@@ -758,12 +758,9 @@ import {
 import { boundAccount, boundProfiles } from "./accountTransforms";
 import { boundAiModelOptions } from "./aiModelTransforms";
 import {
-  boundDownloadedModels,
-  downloadedWhisperModelCount,
-  downloadedWhisperModelInitialPath,
-  downloadedWhisperModels,
   appendNativeLlamaBenchmarkResult,
   appendNativeWhisperBenchmarkResult,
+  downloadedWhisperModelRefreshResult,
   hasNativeLlamaInput,
   hasNativeWhisperInput,
   nativeDebugInputValue,
@@ -7832,15 +7829,13 @@ export default function App() {
 
   async function refreshDownloadedModels(showStatus = false) {
     try {
-      const nextModels = boundDownloadedModels(await listDownloadedModels());
-      setDownloadedModels(nextModels);
-      const whisperModels = downloadedWhisperModels(nextModels);
-      const initialWhisperModelPath = downloadedWhisperModelInitialPath(whisperModels);
-      if (!whisperModelPath.trim() && initialWhisperModelPath) {
-        setWhisperModelPath(nativeDebugInputValue(initialWhisperModelPath));
+      const refreshResult = downloadedWhisperModelRefreshResult(await listDownloadedModels());
+      setDownloadedModels(refreshResult.downloadedModels);
+      if (!whisperModelPath.trim() && refreshResult.initialWhisperModelPath) {
+        setWhisperModelPath(nativeDebugInputValue(refreshResult.initialWhisperModelPath));
       }
       if (showStatus) {
-        setStatus(recordingModelRefreshStatusMessage(downloadedWhisperModelCount(whisperModels)));
+        setStatus(recordingModelRefreshStatusMessage(refreshResult.whisperModelCount));
       }
     } catch (error) {
       handleDownloadedModelsRefreshFailure(error, showStatus);

@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2147: Move downloaded Whisper refresh result transform
+
+Status: done
+
+Completed:
+
+- Added `downloadedWhisperModelRefreshResult` to `modelTransforms.ts`.
+- Moved downloaded-model bounding, available Whisper model filtering, initial Whisper path selection, and Whisper model count shaping out of `App.tsx`.
+- Kept `App.tsx` responsible for local state updates, status updates, and the existing auto-select behavior only.
+- Updated navigation verifier coverage to require the refresh-result helper and the helper-backed downloaded-model refresh binding.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2146: Centralize native status state application
 
 Status: done
