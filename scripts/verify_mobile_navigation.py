@@ -8389,7 +8389,7 @@ def main() -> int:
             ("daily record leave guard cancel helper binding", "hideDailyRecordLeaveGuard(dailyRecordLeaveGuardCancelStatusMessage());"),
             ("daily record leave guard confirm helper binding", "hideDailyRecordLeaveGuard(dailyRecordLeaveGuardConfirmStatusMessage());"),
             ("daily record leave guard visible state", "const [dailyRecordLeaveGuardVisible, setDailyRecordLeaveGuardVisible] = useState(false);"),
-            ("daily record leave guard state alias", "const shouldGuardDailyRecordLeave = hasUnsavedDailyRecordDraft;"),
+            ("daily record leave guard state binding", "const shouldGuardDailyRecordLeave = dailyRecordDraftScreen.shouldGuardLeave;"),
             ("daily record leave guard visible alias", "const shouldShowDailyRecordLeaveGuard = dailyRecordLeaveGuardVisible;"),
             ("daily record leave guard header branch", "if (shouldGuardDailyRecordLeave)"),
             ("daily record leave guard android back import", "BackHandler,"),
@@ -8411,6 +8411,8 @@ def main() -> int:
             ("daily record leave guard confirm label render", "confirmLabel={dailyRecordLeaveGuardConfirmDisplayText}"),
             ("daily record draft screen helper binding", "const dailyRecordDraftScreen = dailyRecordDraftScreenState({"),
             ("daily record fixed save visible helper binding", "const isDailyRecordFixedSaveVisible = dailyRecordDraftScreen.isFixedSaveVisible;"),
+            ("daily record fixed save dock helper binding", "const isDailyRecordFixedSaveDockVisible = dailyRecordDraftScreen.isFixedSaveDockVisible;"),
+            ("daily record fixed save return disabled helper binding", "const isDailyRecordFixedSaveReturnDisabled = dailyRecordDraftScreen.isFixedSaveReturnDisabled;"),
             ("daily record unsaved draft helper binding", "const hasUnsavedDailyRecordDraft = dailyRecordDraftScreen.hasUnsavedDraft;"),
             ("daily record transcript retained state", "const [dailyTranscriptEntries, setDailyTranscriptEntries] = useState<DailyTranscriptEntry[]>([]);"),
             ("daily record parse existing draft capture", "const existingDailyPreview = parserExistingDailyPreview();"),
@@ -8501,8 +8503,8 @@ def main() -> int:
             ("daily record save payload binding", "body: JSON.stringify(dailyRecordSaveRequestBody(nextPreview, recordsToSave))"),
             ("daily record save clears retained transcripts", "clearDailyRecordDraftOrganizationState();"),
             ("daily record fixed save visible flag", "const isDailyRecordFixedSaveVisible = dailyRecordDraftScreen.isFixedSaveVisible;"),
-            ("daily record fixed save dock visible flag", "const isDailyRecordFixedSaveDockVisible = isDailyRecordFixedSaveVisible && Boolean(preview);"),
-            ("daily record fixed save return disabled flag", "const isDailyRecordFixedSaveReturnDisabled = isBusy;"),
+            ("daily record fixed save dock visible flag", "const isDailyRecordFixedSaveDockVisible = dailyRecordDraftScreen.isFixedSaveDockVisible;"),
+            ("daily record fixed save return disabled flag", "const isDailyRecordFixedSaveReturnDisabled = dailyRecordDraftScreen.isFixedSaveReturnDisabled;"),
             ("daily record fixed save scroll padding style", "const mainScrollContainerStyle = isDailyRecordFixedSaveVisible"),
             ("daily record fixed save scroll binding", "contentContainerStyle={mainScrollContainerStyle}"),
             ("daily record fixed save dock render", "{isDailyRecordFixedSaveDockVisible ? ("),
@@ -8595,6 +8597,12 @@ def main() -> int:
             content,
             "{isDailyRecordFixedSaveVisible && preview ? (",
         )
+        for label, marker in (
+            ("daily record fixed save direct dock binding", "const isDailyRecordFixedSaveDockVisible = isDailyRecordFixedSaveVisible && Boolean(preview);"),
+            ("daily record fixed save direct return disabled binding", "const isDailyRecordFixedSaveReturnDisabled = isBusy;"),
+            ("daily record leave guard direct alias binding", "const shouldGuardDailyRecordLeave = hasUnsavedDailyRecordDraft;"),
+        ):
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("daily record fixed save return direct accessibility disabled", "accessibilityState={{ disabled: isBusy }}\n              style={[styles.secondaryButton, isBusy ? styles.buttonDisabled : null]}\n              disabled={isBusy}\n              onPress={requestDailyRecordLeaveGuard}"),
             ("daily record fixed save return direct disabled prop", "disabled={isBusy}\n              onPress={requestDailyRecordLeaveGuard}"),
@@ -8780,8 +8788,11 @@ def main() -> int:
         for label, marker in (
             ("daily record same-day merge helper", "function mergeSameDayParsePreviewDraft("),
             ("daily record draft screen state helper", "function dailyRecordDraftScreenState(value: {"),
-            ("daily record draft fixed save condition", 'isFixedSaveVisible: value.currentScreen === "aiSaveConfirm" && value.hasPreview'),
-            ("daily record draft unsaved condition", 'hasUnsavedDraft: value.currentScreen === "aiSaveConfirm" && value.hasUnsavedPreviewRecords'),
+            ("daily record draft fixed save condition", 'const isFixedSaveVisible = value.currentScreen === "aiSaveConfirm" && value.hasPreview;'),
+            ("daily record draft unsaved condition", 'const hasUnsavedDraft = value.currentScreen === "aiSaveConfirm" && value.hasUnsavedPreviewRecords;'),
+            ("daily record draft dock field", "isFixedSaveDockVisible: isFixedSaveVisible"),
+            ("daily record draft return disabled field", "isFixedSaveReturnDisabled: value.isBusy"),
+            ("daily record draft guard field", "shouldGuardLeave: hasUnsavedDraft"),
             ("daily record same-day merge key current", "const currentKey = dailyRecordKeyFromRecords(current.records);"),
             ("daily record same-day merge key incoming", "const incomingKey = dailyRecordKeyFromRecords(incoming.records);"),
             ("daily record same-day merge records", "records: [...current.records, ...incoming.records].slice(0, maxMobilePreviewRecords)"),

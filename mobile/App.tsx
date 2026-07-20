@@ -1513,16 +1513,17 @@ export default function App() {
   const dailyRecordDraftScreen = dailyRecordDraftScreenState({
     currentScreen,
     hasPreview: Boolean(preview),
-    hasUnsavedPreviewRecords
+    hasUnsavedPreviewRecords,
+    isBusy
   });
   const isDailyRecordFixedSaveVisible = dailyRecordDraftScreen.isFixedSaveVisible;
-  const isDailyRecordFixedSaveDockVisible = isDailyRecordFixedSaveVisible && Boolean(preview);
-  const isDailyRecordFixedSaveReturnDisabled = isBusy;
+  const isDailyRecordFixedSaveDockVisible = dailyRecordDraftScreen.isFixedSaveDockVisible;
+  const isDailyRecordFixedSaveReturnDisabled = dailyRecordDraftScreen.isFixedSaveReturnDisabled;
   const mainScrollContainerStyle = isDailyRecordFixedSaveVisible
     ? [styles.container, styles.containerWithFixedSaveBar]
     : styles.container;
   const hasUnsavedDailyRecordDraft = dailyRecordDraftScreen.hasUnsavedDraft;
-  const shouldGuardDailyRecordLeave = hasUnsavedDailyRecordDraft;
+  const shouldGuardDailyRecordLeave = dailyRecordDraftScreen.shouldGuardLeave;
   const shouldShowDailyRecordLeaveGuard = dailyRecordLeaveGuardVisible;
   const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayTexts();
   const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardDisplay.title;

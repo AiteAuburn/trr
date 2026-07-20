@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2188: Move daily record draft fixed-save state fields
+
+Status: done
+
+Completed:
+
+- Expanded `dailyRecordDraftScreenState` in `dailyTranscriptTransforms.ts` to return fixed-save dock visibility, return-disabled state, and leave-guard state.
+- Removed direct fixed-save dock visibility, return-disabled, and leave-guard alias assembly from `App.tsx`.
+- Kept daily record fixed save bar rendering, return disabled styling, scroll padding, and leave guard behavior unchanged.
+- Updated navigation verifier coverage to require the expanded draft helper fields, App helper bindings, and no direct fixed-save/leave-guard state regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2187: Move AI save confirm state helper
 
 Status: done

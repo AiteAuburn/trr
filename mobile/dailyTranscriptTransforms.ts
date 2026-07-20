@@ -46,10 +46,17 @@ export function dailyRecordDraftScreenState(value: {
   currentScreen: AppScreen;
   hasPreview: boolean;
   hasUnsavedPreviewRecords: boolean;
+  isBusy: boolean;
 }) {
+  const isFixedSaveVisible = value.currentScreen === "aiSaveConfirm" && value.hasPreview;
+  const hasUnsavedDraft = value.currentScreen === "aiSaveConfirm" && value.hasUnsavedPreviewRecords;
+
   return {
-    isFixedSaveVisible: value.currentScreen === "aiSaveConfirm" && value.hasPreview,
-    hasUnsavedDraft: value.currentScreen === "aiSaveConfirm" && value.hasUnsavedPreviewRecords
+    hasUnsavedDraft,
+    isFixedSaveDockVisible: isFixedSaveVisible,
+    isFixedSaveReturnDisabled: value.isBusy,
+    isFixedSaveVisible,
+    shouldGuardLeave: hasUnsavedDraft
   };
 }
 
