@@ -404,6 +404,10 @@ export function pendingRemoveDisplayPayloadSummary(item: PendingRecordDisplayIte
   return item.payloadSummary;
 }
 
+export function previewRecordEditTypeLabel(item: PendingRecordDisplayItem | null) {
+  return item?.typeLabel ?? "紀錄";
+}
+
 export function rejectedReasonLabel(reason?: string) {
   const normalized = reason?.trim().toLowerCase();
   if (!normalized) {

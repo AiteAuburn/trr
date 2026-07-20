@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2163: Move preview edit type label accessor
+
+Status: done
+
+Completed:
+
+- Added preview edit type-label accessor to `recordDisplay.ts`.
+- Removed the duplicate preview edit type-label helper definition from `App.tsx`.
+- Kept edit-preview record header type label fallback and selected preview record display behavior unchanged.
+- Updated navigation verifier coverage to require the record-display helper export, App render binding, and no local helper regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2162: Move pending remove display accessors
 
 Status: done

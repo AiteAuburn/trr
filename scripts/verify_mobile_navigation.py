@@ -2724,8 +2724,7 @@ def main() -> int:
             ("record detail selected source helper binding", "sourceValue={selectedRecordDetailSourceLabel(selectedRecordDisplayItem)}"),
             ("record detail selected time helper binding", "timeValue={selectedRecordDetailTimeLabel(selectedRecordDisplayItem)}"),
             ("record detail selected type helper binding", "typeValue={selectedRecordDetailTypeLabel(selectedRecordDisplayItem)}"),
-            ("preview edit type label helper", "function previewRecordEditTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem> | null)"),
-            ("preview edit type label helper fields", 'return item?.typeLabel ?? "紀錄";'),
+            ("preview edit type label helper import", "previewRecordEditTypeLabel,"),
             ("preview edit type label helper binding", "typeLabel={previewRecordEditTypeLabel(selectedPreviewRecordDisplayItem)}"),
             ("record edit header type label helper binding", "typeLabel={recordEditHeaderTypeLabel(selectedRecordDisplayItem)}"),
         ):
@@ -9292,6 +9291,8 @@ def main() -> int:
             ("pending remove type helper fields", "return item.typeLabel;"),
             ("pending remove payload helper", "function pendingRemoveDisplayPayloadSummary(item: PendingRecordDisplayItem)"),
             ("pending remove payload helper fields", "return item.payloadSummary;"),
+            ("preview edit type label helper", "function previewRecordEditTypeLabel(item: PendingRecordDisplayItem | null)"),
+            ("preview edit type label helper fields", 'return item?.typeLabel ?? "紀錄";'),
         ):
             _assert_contains(label, record_display_content, marker)
         _assert_contains(
@@ -14876,6 +14877,7 @@ def main() -> int:
             ("local pending remove icon helper", "function pendingRemoveDisplayIcon(item: ReturnType<typeof pendingRecordDisplayItem>)"),
             ("local pending remove type helper", "function pendingRemoveDisplayTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem>)"),
             ("local pending remove payload helper", "function pendingRemoveDisplayPayloadSummary(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("local preview edit type label helper", "function previewRecordEditTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem> | null)"),
         ):
             _assert_not_contains(label, content, marker)
         _assert_not_contains(

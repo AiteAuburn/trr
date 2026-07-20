@@ -94,6 +94,7 @@ import {
   pendingRemoveDisplayTypeLabel,
   pendingRecordDisplayItem,
   pendingRecordDisplayItems,
+  previewRecordEditTypeLabel,
   rejectedPreviewDisplayItems as buildRejectedPreviewDisplayItems,
   rejectedPreviewEventKey,
   rejectedPreviewEventReasonText,
@@ -2325,10 +2326,6 @@ export default function App() {
 
   function returnFromRecordDetail() {
     openScreenWithStatus(recordDetailReturnScreen, recordDetailReturnStatusMessage(recordDetailReturnScreen));
-  }
-
-  function previewRecordEditTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem> | null) {
-    return item?.typeLabel ?? "紀錄";
   }
 
   function selectedModelDisplayLabel(model: { label: string } | null | undefined, fallbackId: string) {
