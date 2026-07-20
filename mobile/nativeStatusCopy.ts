@@ -282,6 +282,14 @@ export function nativeBenchmarkResultStatusMessage(
   );
 }
 
+export function nativeBenchmarkResultState(
+  results: Array<{ task: string; ok: boolean; durationMs: number; outputChars: number }>
+) {
+  return {
+    status: nativeBenchmarkResultStatusMessage(results)
+  };
+}
+
 export function nativeStatusDisplayTexts(nativeStatus: string) {
   return {
     native: boundUiMessage(nativeStatus)

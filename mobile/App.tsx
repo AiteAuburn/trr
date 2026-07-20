@@ -483,7 +483,7 @@ import {
 } from "./authStatusCopy";
 import {
   nativeBenchmarkMissingInputState,
-  nativeBenchmarkResultStatusMessage,
+  nativeBenchmarkResultState,
   nativeBenchmarkStartState,
   nativeDebugDefaultStatusMessage,
   nativeDebugDisabledStatusMessage,
@@ -7920,7 +7920,8 @@ export default function App() {
   }
 
   function handleNativeBenchmarkSuccess(results: NativeBenchmarkResult[]) {
-    setNativeStatus(nativeBenchmarkResultStatusMessage(results));
+    const nextState = nativeBenchmarkResultState(results);
+    setNativeStatus(nextState.status);
   }
 
   function startNativeModelDownloadStatus() {
