@@ -722,7 +722,6 @@ import {
   isVoiceQuotaLow,
   membershipStatusReturnSubscriptionStatusMessage,
   menuReturnStatusMessage,
-  modelRuntimeLabel,
   modelSelectionBoundaryCopy,
   privacyBoundaryDisplayRows,
   privacyIntegrationAccessibilityLabel,
@@ -741,6 +740,8 @@ import {
   reminderPreviewDisplayItems as buildReminderPreviewDisplayItems,
   reminderReadinessChecklistDisplayItems,
   reminderSettingsIntroCopy,
+  selectedModelDisplayLabel,
+  selectedModelRuntimeDisplayLabel,
   settingsAccountSecurityOpenStatusMessage,
   settingsSubpageStatusDisplayTexts,
   settingsSubpageReturnStatusMessage
@@ -2326,16 +2327,6 @@ export default function App() {
 
   function returnFromRecordDetail() {
     openScreenWithStatus(recordDetailReturnScreen, recordDetailReturnStatusMessage(recordDetailReturnScreen));
-  }
-
-  function selectedModelDisplayLabel(model: { label: string } | null | undefined, fallbackId: string) {
-    return model?.label ?? fallbackId;
-  }
-
-  function selectedModelRuntimeDisplayLabel(
-    model: { runtime?: Parameters<typeof modelRuntimeLabel>[0] } | null | undefined
-  ) {
-    return modelRuntimeLabel(model?.runtime);
   }
 
   function openTutorialRecordEntry() {

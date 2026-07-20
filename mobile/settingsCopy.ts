@@ -178,6 +178,16 @@ export function modelRuntimeLabel(
   return "尚未載入";
 }
 
+export function selectedModelDisplayLabel(model: { label: string } | null | undefined, fallbackId: string) {
+  return model?.label ?? fallbackId;
+}
+
+export function selectedModelRuntimeDisplayLabel(
+  model: { runtime?: Parameters<typeof modelRuntimeLabel>[0] } | null | undefined
+) {
+  return modelRuntimeLabel(model?.runtime);
+}
+
 export function modelSelectionBoundaryCopy() {
   return boundDisplayText("未啟用模型不可選；雲端 fallback 在 v1 預設停用。", maxDisplayDetailTextLength);
 }

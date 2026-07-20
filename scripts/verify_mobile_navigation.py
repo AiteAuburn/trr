@@ -2959,10 +2959,8 @@ def main() -> int:
                 "const preferredLlm = preferredLlmModelOption(modelOptions);",
             ),
             ("deepseek record parse request binding", "function parserPreviewModelIds() {\n    return {\n      sttModelId,\n      llmModelId"),
-            ("selected model display label helper", "function selectedModelDisplayLabel(model: { label: string } | null | undefined, fallbackId: string)"),
-            ("selected model display label helper fields", "return model?.label ?? fallbackId;"),
-            ("selected model runtime label helper", "function selectedModelRuntimeDisplayLabel("),
-            ("selected model runtime label helper fields", "return modelRuntimeLabel(model?.runtime);"),
+            ("selected model display label helper import", "selectedModelDisplayLabel,"),
+            ("selected model runtime label helper import", "selectedModelRuntimeDisplayLabel,"),
             ("deepseek selected model status render", "LLM：{selectedModelDisplayLabel(selectedLlmModel, llmModelId)}"),
             ("record STT selected model status render", "STT：{selectedModelDisplayLabel(selectedSttModel, sttModelId)}"),
             ("screen opener helper", "function openScreen(screen: AppScreen) {\n    setCurrentScreen(screen);\n  }"),
@@ -2997,6 +2995,8 @@ def main() -> int:
             ("record settings direct LLM runtime fallback", "modelRuntimeLabel(selectedLlmModel?.runtime)"),
             ("record settings direct STT label fallback", "selectedSttModel?.label ?? sttModelId"),
             ("record settings direct STT runtime fallback", "modelRuntimeLabel(selectedSttModel?.runtime)"),
+            ("local selected model display label helper", "function selectedModelDisplayLabel(model: { label: string } | null | undefined, fallbackId: string)"),
+            ("local selected model runtime label helper", "function selectedModelRuntimeDisplayLabel("),
         ):
             _assert_not_contains(label, content, marker)
         default_stt_helper_marker = "const defaultStt = defaultSttModelOption(modelOptions);"
@@ -12897,6 +12897,10 @@ def main() -> int:
             _assert_contains(label, native_status_copy_content, marker)
         for label, marker in (
             ("settings model runtime label helper", "function modelRuntimeLabel("),
+            ("settings selected model display label helper", "function selectedModelDisplayLabel(model: { label: string } | null | undefined, fallbackId: string)"),
+            ("settings selected model display label fields", "return model?.label ?? fallbackId;"),
+            ("settings selected model runtime label helper", "function selectedModelRuntimeDisplayLabel("),
+            ("settings selected model runtime label fields", "return modelRuntimeLabel(model?.runtime);"),
             ("settings model selection boundary helper", "function modelSelectionBoundaryCopy()"),
             ("settings quota data boundary helper", "function recordingQuotaDataBoundaryCopy()"),
             ("settings quota readiness checklist helper", "function quotaReadinessChecklistDisplayItems()"),

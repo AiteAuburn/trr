@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2164: Move selected model display accessors
+
+Status: done
+
+Completed:
+
+- Added selected model label/runtime display accessors to `settingsCopy.ts`.
+- Removed duplicate selected model display helper definitions from `App.tsx`.
+- Kept Home model status line fallbacks and LLM/STT runtime labels unchanged.
+- Updated navigation verifier coverage to require settings-copy helper exports, App render bindings, and no local helper regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2163: Move preview edit type label accessor
 
 Status: done
