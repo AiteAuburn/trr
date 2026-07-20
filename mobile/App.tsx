@@ -839,6 +839,7 @@ import { SubscriptionChecklist } from "./subscriptionChecklist";
 import { SubscriptionComparisonList } from "./subscriptionComparisonList";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
 import { FoodCommunitySearchField } from "./foodCommunitySearchField";
+import { FoodCommunityDetailShareList } from "./foodCommunityDetailShareList";
 import { FoodCommunityItemList } from "./foodCommunityItemList";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
 import { FoodCommunityShareTextFields } from "./foodCommunityShareTextFields";
@@ -5051,10 +5052,6 @@ export default function App() {
     return "個別分享紀錄";
   }
 
-  function foodCommunityDetailIndividualShareEmptyText() {
-    return "尚未有可顯示的個別分享紀錄。";
-  }
-
   function foodCommunityDatabaseSectionLabel() {
     return "食物血糖資料庫";
   }
@@ -5065,22 +5062,6 @@ export default function App() {
 
   function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> }) {
     return item.individualShareDisplayItems;
-  }
-
-  function foodCommunityDetailHasIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> }) {
-    return foodCommunityDetailIndividualShares(item).length > 0;
-  }
-
-  function foodCommunityDetailShareRowId(share: { id: string }) {
-    return share.id;
-  }
-
-  function foodCommunityDetailShareRowSummary(share: { summary: string }) {
-    return share.summary;
-  }
-
-  function foodCommunityDetailShareRowNote(share: { note: string }) {
-    return share.note;
   }
 
   function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
@@ -10646,20 +10627,7 @@ export default function App() {
                   </View>
                 </View>
                 <Text style={styles.label}>{foodCommunityDetailIndividualShareSectionLabel()}</Text>
-                {foodCommunityDetailHasIndividualShares(selectedFoodCommunityItem) ? (
-                  foodCommunityDetailIndividualShares(selectedFoodCommunityItem).map((share) => (
-                    <View key={foodCommunityDetailShareRowId(share)} style={styles.visionResultCard}>
-                      <View style={styles.timelineContent}>
-                        <Text style={styles.recordContent}>{foodCommunityDetailShareRowSummary(share)}</Text>
-                        <Text style={styles.evidence}>{foodCommunityDetailShareRowNote(share)}</Text>
-                      </View>
-                    </View>
-                  ))
-                ) : (
-                  <View style={styles.inlineInfoBlock}>
-                    <Text style={styles.evidence}>{foodCommunityDetailIndividualShareEmptyText()}</Text>
-                  </View>
-                )}
+                <FoodCommunityDetailShareList shares={foodCommunityDetailIndividualShares(selectedFoodCommunityItem)} />
               </View>
             ) : null}
             <View style={styles.inlineInfoBlock}>

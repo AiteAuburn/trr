@@ -95,6 +95,7 @@ DOWNLOADED_MODEL_LIST_PATH = REPO_ROOT / "mobile" / "downloadedModelList.tsx"
 COMMUNITY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "communityActionRow.tsx"
 DOCTOR_SHARE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "doctorShareActionRow.tsx"
 FOOD_PHOTO_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "foodPhotoActionRow.tsx"
+FOOD_COMMUNITY_DETAIL_SHARE_LIST_PATH = REPO_ROOT / "mobile" / "foodCommunityDetailShareList.tsx"
 FOOD_COMMUNITY_ITEM_LIST_PATH = REPO_ROOT / "mobile" / "foodCommunityItemList.tsx"
 HEALTH_INTEGRATION_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "healthIntegrationActionRow.tsx"
 RANKING_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "rankingActionRow.tsx"
@@ -1511,6 +1512,7 @@ def main() -> int:
     community_action_row_content = COMMUNITY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     doctor_share_action_row_content = DOCTOR_SHARE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     food_photo_action_row_content = FOOD_PHOTO_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    food_community_detail_share_list_content = FOOD_COMMUNITY_DETAIL_SHARE_LIST_PATH.read_text(encoding="utf-8")
     food_community_item_list_content = FOOD_COMMUNITY_ITEM_LIST_PATH.read_text(encoding="utf-8")
     health_integration_action_row_content = HEALTH_INTEGRATION_ACTION_ROW_PATH.read_text(encoding="utf-8")
     ranking_action_row_content = RANKING_ACTION_ROW_PATH.read_text(encoding="utf-8")
@@ -11974,7 +11976,11 @@ def main() -> int:
             ("food community maximum rise unit", "{foodCommunityDetailMaximumRiseDisplayText(selectedFoodCommunityItem)}"),
             ("food community minimum rise unit", "{foodCommunityDetailMinimumRiseDisplayText(selectedFoodCommunityItem)}"),
             ("food community individual share section label", "個別分享紀錄"),
-            ("food community individual share render", "foodCommunityDetailIndividualShares(selectedFoodCommunityItem).map((share) =>"),
+            ("food community detail share list component binding", "<FoodCommunityDetailShareList shares={foodCommunityDetailIndividualShares(selectedFoodCommunityItem)} />"),
+            ("food community detail share list component", "export function FoodCommunityDetailShareList"),
+            ("food community detail share list item type", "export type FoodCommunityDetailShareListItem ="),
+            ("food community detail share list shares prop", "shares: readonly FoodCommunityDetailShareListItem[]"),
+            ("food community individual share render", "shares.map((share) =>"),
             ("food community individual share empty state", "尚未有可顯示的個別分享紀錄。"),
             ("food community share eaten date label helper", "function foodCommunityShareEatenDateLabel()"),
             ("food community share eaten date label helper fields", 'return "食用日期";'),
@@ -12043,10 +12049,10 @@ def main() -> int:
             ("food community detail individual share empty text helper binding", "{foodCommunityDetailIndividualShareEmptyText()}"),
             ("food community detail individual shares helper", "function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> })"),
             ("food community detail individual shares helper fields", "return item.individualShareDisplayItems;"),
-            ("food community detail has individual shares helper", "function foodCommunityDetailHasIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> })"),
-            ("food community detail has individual shares helper fields", "return foodCommunityDetailIndividualShares(item).length > 0;"),
-            ("food community detail has individual shares helper binding", "foodCommunityDetailHasIndividualShares(selectedFoodCommunityItem) ? ("),
-            ("food community detail individual shares map helper binding", "foodCommunityDetailIndividualShares(selectedFoodCommunityItem).map((share) =>"),
+            ("food community detail has individual shares helper", "function foodCommunityDetailHasIndividualShares(shares: readonly FoodCommunityDetailShareListItem[])"),
+            ("food community detail has individual shares helper fields", "return shares.length > 0;"),
+            ("food community detail has individual shares helper binding", "foodCommunityDetailHasIndividualShares(shares) ? ("),
+            ("food community detail individual shares map helper binding", "shares.map((share) =>"),
             ("food community detail share row id helper", "function foodCommunityDetailShareRowId(share: { id: string })"),
             ("food community detail share row id helper fields", "return share.id;"),
             ("food community detail share row id helper binding", "key={foodCommunityDetailShareRowId(share)}"),
@@ -12420,6 +12426,17 @@ def main() -> int:
                     or label == "food community selected state"
                     or label == "food community item press binding"
                 )
+                else food_community_detail_share_list_content
+                if (
+                    label.startswith("food community detail share list")
+                    or label.startswith("food community detail has individual shares")
+                    or label == "food community detail individual shares map helper binding"
+                    or label.startswith("food community detail individual share empty")
+                    or label.startswith("food community detail share row")
+                    or label == "food community individual share render"
+                    or label == "food community individual share empty state"
+                )
+                and label != "food community detail share list component binding"
                 else content
             )
             _assert_contains(label, source, marker)
