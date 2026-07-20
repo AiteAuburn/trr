@@ -92,6 +92,9 @@ import {
   pendingRecordDisplayItem,
   pendingRecordDisplayItems,
   rejectedPreviewDisplayItems as buildRejectedPreviewDisplayItems,
+  rejectedPreviewEventKey,
+  rejectedPreviewEventReasonText,
+  rejectedPreviewEventSourceText,
   recordDetailDisplayItem,
   recordEditHeaderTypeLabel,
   recordListDisplayItem,
@@ -3340,18 +3343,6 @@ export default function App() {
 
   function editAiCandidateRecord(index: number) {
     openPreviewRecordEdit(index);
-  }
-
-  function rejectedPreviewEventKey(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number]) {
-    return event.id;
-  }
-
-  function rejectedPreviewEventSourceText(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number]) {
-    return event.sourceText;
-  }
-
-  function rejectedPreviewEventReasonText(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number]) {
-    return event.reasonDisplayText;
   }
 
   function removeAiCandidateRecord(index: number) {

@@ -4411,17 +4411,29 @@ def main() -> int:
         ):
             _assert_contains(label, record_display_content, marker)
         for label, marker in (
-            ("AI rejected preview key helper", "function rejectedPreviewEventKey(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number])"),
+            ("AI rejected preview key helper", "function rejectedPreviewEventKey(event: RejectedPreviewDisplayItem)"),
             ("AI rejected preview key helper fields", "return event.id;"),
-            ("AI rejected preview key helper binding", "key={rejectedPreviewEventKey(event)}"),
-            ("AI rejected preview source helper", "function rejectedPreviewEventSourceText(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number])"),
+            ("AI rejected preview source helper", "function rejectedPreviewEventSourceText(event: RejectedPreviewDisplayItem)"),
             ("AI rejected preview source helper fields", "return event.sourceText;"),
-            ("AI rejected preview source helper binding", "{rejectedPreviewEventSourceText(event)}"),
-            ("AI rejected preview reason helper", "function rejectedPreviewEventReasonText(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number])"),
+            ("AI rejected preview reason helper", "function rejectedPreviewEventReasonText(event: RejectedPreviewDisplayItem)"),
             ("AI rejected preview reason helper fields", "return event.reasonDisplayText;"),
+        ):
+            _assert_contains(label, record_display_content, marker)
+        for label, marker in (
+            ("AI rejected preview key helper import", "rejectedPreviewEventKey,"),
+            ("AI rejected preview key helper binding", "key={rejectedPreviewEventKey(event)}"),
+            ("AI rejected preview source helper import", "rejectedPreviewEventSourceText,"),
+            ("AI rejected preview source helper binding", "{rejectedPreviewEventSourceText(event)}"),
+            ("AI rejected preview reason helper import", "rejectedPreviewEventReasonText,"),
             ("AI rejected preview reason helper binding", "{rejectedPreviewEventReasonText(event)}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("local AI rejected preview key helper", "function rejectedPreviewEventKey(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number])"),
+            ("local AI rejected preview source helper", "function rejectedPreviewEventSourceText(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number])"),
+            ("local AI rejected preview reason helper", "function rejectedPreviewEventReasonText(event: ReturnType<typeof buildRejectedPreviewDisplayItems>[number])"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "AI rejected preview list helper binding",
             content,

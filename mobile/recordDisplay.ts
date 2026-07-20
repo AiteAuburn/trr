@@ -425,6 +425,20 @@ export function rejectedPreviewDisplayItems(events: RejectedEvent[]) {
   });
 }
 
+type RejectedPreviewDisplayItem = ReturnType<typeof rejectedPreviewDisplayItems>[number];
+
+export function rejectedPreviewEventKey(event: RejectedPreviewDisplayItem) {
+  return event.id;
+}
+
+export function rejectedPreviewEventSourceText(event: RejectedPreviewDisplayItem) {
+  return event.sourceText;
+}
+
+export function rejectedPreviewEventReasonText(event: RejectedPreviewDisplayItem) {
+  return event.reasonDisplayText;
+}
+
 export function recordDetailDisplayItem(record: RecordItem) {
   const listItem = recordListDisplayItem(record, "selected");
   return {

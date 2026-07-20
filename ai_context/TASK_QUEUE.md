@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2161: Move rejected preview event accessors
+
+Status: done
+
+Completed:
+
+- Added rejected preview event key/source/reason accessors to `recordDisplay.ts`.
+- Removed duplicate rejected preview event accessor helper definitions from `App.tsx`.
+- Kept AI Review rejected-event card rendering, source text, reason copy, and rejected-event list behavior unchanged.
+- Updated navigation verifier coverage to require record-display helper exports, App render bindings, and no local helper regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2160: Move History target accessors
 
 Status: done
