@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2172 move food community copy accessors
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added food community category/database/share/ranking/points copy accessors to `futureModuleDisplay.ts`.
+- Removed duplicate food community copy/accessor helper definitions from `App.tsx`.
+- Kept Food Community database intro, category summary, share form labels, share submit payload values, ranking section, and points-store bridge copy unchanged.
+- Updated navigation verifier coverage to require future-module helper exports, App import/render/request bindings, and no local/direct-field regressions in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2171 move food community detail accessors
 
 類型：mobile / refactor / verifier / docs

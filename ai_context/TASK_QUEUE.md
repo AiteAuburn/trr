@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2172: Move food community copy accessors
+
+Status: done
+
+Completed:
+
+- Added food community category/database/share/ranking/points copy accessors to `futureModuleDisplay.ts`.
+- Removed duplicate food community copy/accessor helper definitions from `App.tsx`.
+- Kept Food Community database intro, category summary, share form labels, share submit payload values, ranking section, and points-store bridge copy unchanged.
+- Updated navigation verifier coverage to require future-module helper exports, App import/render/request bindings, and no local/direct-field regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2171: Move food community detail accessors
 
 Status: done

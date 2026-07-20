@@ -1147,6 +1147,46 @@ export function foodCommunityDetailStatusExampleCount(item: { examples: unknown[
   return item.examples.length;
 }
 
+export function foodCommunityCategorySummary(category: { summary: string }) {
+  return category.summary;
+}
+
+export function foodCommunityDatabaseSectionLabel() {
+  return "食物血糖資料庫";
+}
+
+export function foodCommunityDatabaseIntroCopy() {
+  return "建立華人使用者真實食物升糖資料庫，以實際食用前後血糖分享取代理論與網路傳言；backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。";
+}
+
+export function foodCommunityShareFallbackFoodName(item: { title: string }) {
+  return item.title;
+}
+
+export function foodCommunityShareCategory(item: { category: FoodCommunityCategory }) {
+  return item.category;
+}
+
+export function foodCommunityShareSectionLabel() {
+  return "食物分享紀錄";
+}
+
+export function foodCommunityShareEatenDateLabel() {
+  return "食用日期";
+}
+
+export function foodCommunityShareEatenTimeLabel() {
+  return "食用時間";
+}
+
+export function foodCommunityRankingSectionLabel() {
+  return "社群排行榜";
+}
+
+export function foodCommunityPointsStoreBridgeCopy() {
+  return "點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。";
+}
+
 export function foodCommunityItemDisplayItems(items: FoodCommunityItem[]) {
   return items.map(foodCommunityItemDisplayItem);
 }

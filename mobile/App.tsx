@@ -231,7 +231,10 @@ import {
   foodCommunityCategoryOptionKey,
   foodCommunityCategoryOptionLabel,
   foodCommunityCategoryOptionSelected,
+  foodCommunityCategorySummary,
   foodCommunityCategoryTarget,
+  foodCommunityDatabaseIntroCopy,
+  foodCommunityDatabaseSectionLabel,
   foodCommunityDetailAverageRiseDisplayText,
   foodCommunityDetailAverageRiseLabel,
   foodCommunityDetailIndividualShares,
@@ -255,6 +258,13 @@ import {
   foodCommunityItemsWithShareUpdateFromApi,
   foodCommunityItemsWithDetail,
   foodCommunityItems,
+  foodCommunityPointsStoreBridgeCopy,
+  foodCommunityRankingSectionLabel,
+  foodCommunityShareCategory,
+  foodCommunityShareEatenDateLabel,
+  foodCommunityShareEatenTimeLabel,
+  foodCommunityShareFallbackFoodName,
+  foodCommunityShareSectionLabel,
   foodCommunityShareStatusMessages,
   foodCommunityShareSelectedItemIdFromApi,
   foodCommunitySyncStatusMessages,
@@ -4730,46 +4740,6 @@ export default function App() {
 
   function foodCommunityListDefaultItemId(items: Array<{ id: string }>, fallbackId: string) {
     return items[0]?.id ?? fallbackId;
-  }
-
-  function foodCommunityCategorySummary(category: { summary: string }) {
-    return category.summary;
-  }
-
-  function foodCommunityDatabaseSectionLabel() {
-    return "食物血糖資料庫";
-  }
-
-  function foodCommunityDatabaseIntroCopy() {
-    return "建立華人使用者真實食物升糖資料庫，以實際食用前後血糖分享取代理論與網路傳言；backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。";
-  }
-
-  function foodCommunityShareFallbackFoodName(item: { title: string }) {
-    return item.title;
-  }
-
-  function foodCommunityShareCategory(item: { category: FoodCommunityCategory }) {
-    return item.category;
-  }
-
-  function foodCommunityShareSectionLabel() {
-    return "食物分享紀錄";
-  }
-
-  function foodCommunityShareEatenDateLabel() {
-    return "食用日期";
-  }
-
-  function foodCommunityShareEatenTimeLabel() {
-    return "食用時間";
-  }
-
-  function foodCommunityRankingSectionLabel() {
-    return "社群排行榜";
-  }
-
-  function foodCommunityPointsStoreBridgeCopy() {
-    return "點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。";
   }
 
   function communityPublicNamePreviewLabel() {
