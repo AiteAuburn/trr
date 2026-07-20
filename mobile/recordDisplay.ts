@@ -394,6 +394,33 @@ export function pendingRecordDisplayItems(records: PendingRecord[], keyPrefix = 
   return records.map((record, index) => pendingRecordDisplayItem(record, index, keyPrefix));
 }
 
+export function previewRecordDisplayBundle(value: {
+  previewExists: boolean;
+  records: PendingRecord[];
+  selectedPreviewIndex: number | null;
+  pendingPreviewRemoveIndex: number | null;
+}) {
+  const selectedPreviewRecord =
+    value.selectedPreviewIndex === null ? null : value.records[value.selectedPreviewIndex] ?? null;
+  const pendingPreviewRemoveRecord =
+    value.pendingPreviewRemoveIndex === null ? null : value.records[value.pendingPreviewRemoveIndex] ?? null;
+
+  return {
+    pendingPreviewRemoveDisplayItem:
+      pendingPreviewRemoveRecord && value.pendingPreviewRemoveIndex !== null
+        ? pendingRecordDisplayItem(pendingPreviewRemoveRecord, value.pendingPreviewRemoveIndex, "remove-preview")
+        : null,
+    pendingPreviewRemoveRecord,
+    previewRecordDisplayItems: value.previewExists ? pendingRecordDisplayItems(value.records, "review") : [],
+    previewSaveConfirmDisplayItems: value.previewExists ? pendingRecordDisplayItems(value.records, "save-confirm") : [],
+    selectedPreviewRecord,
+    selectedPreviewRecordDisplayItem:
+      selectedPreviewRecord && value.selectedPreviewIndex !== null
+        ? pendingRecordDisplayItem(selectedPreviewRecord, value.selectedPreviewIndex, "edit-preview")
+        : null
+  };
+}
+
 type PendingRecordDisplayItem = ReturnType<typeof pendingRecordDisplayItem>;
 
 export function pendingRemoveDisplayIcon(item: PendingRecordDisplayItem) {

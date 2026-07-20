@@ -91,8 +91,7 @@ import {
   pendingRemoveDisplayIcon,
   pendingRemoveDisplayPayloadSummary,
   pendingRemoveDisplayTypeLabel,
-  pendingRecordDisplayItem,
-  pendingRecordDisplayItems,
+  previewRecordDisplayBundle,
   previewRecordEditTypeLabel,
   rejectedPreviewEventKey,
   rejectedPreviewEventReasonText,
@@ -2096,20 +2095,18 @@ export default function App() {
   const rankingBoundaryRows = rankingBoundaryDisplayRows();
   const recordingQuotaBoundaryRows = recordingQuotaBoundaryDisplayRows(voiceQuota, quotaRemainingLow);
   const privacyBoundaryRows = privacyBoundaryDisplayRows();
-  const selectedPreviewRecord =
-    selectedPreviewIndex === null ? null : previewState.records[selectedPreviewIndex] ?? null;
-  const pendingPreviewRemoveRecord =
-    pendingPreviewRemoveIndex === null ? null : previewState.records[pendingPreviewRemoveIndex] ?? null;
-  const previewRecordDisplayItems = preview ? pendingRecordDisplayItems(previewState.records, "review") : [];
-  const previewSaveConfirmDisplayItems = preview ? pendingRecordDisplayItems(previewState.records, "save-confirm") : [];
-  const selectedPreviewRecordDisplayItem =
-    selectedPreviewRecord && selectedPreviewIndex !== null
-      ? pendingRecordDisplayItem(selectedPreviewRecord, selectedPreviewIndex, "edit-preview")
-      : null;
-  const pendingPreviewRemoveDisplayItem =
-    pendingPreviewRemoveRecord && pendingPreviewRemoveIndex !== null
-      ? pendingRecordDisplayItem(pendingPreviewRemoveRecord, pendingPreviewRemoveIndex, "remove-preview")
-      : null;
+  const previewRecordDisplay = previewRecordDisplayBundle({
+    pendingPreviewRemoveIndex,
+    previewExists: Boolean(preview),
+    records: previewState.records,
+    selectedPreviewIndex
+  });
+  const selectedPreviewRecord = previewRecordDisplay.selectedPreviewRecord;
+  const pendingPreviewRemoveRecord = previewRecordDisplay.pendingPreviewRemoveRecord;
+  const previewRecordDisplayItems = previewRecordDisplay.previewRecordDisplayItems;
+  const previewSaveConfirmDisplayItems = previewRecordDisplay.previewSaveConfirmDisplayItems;
+  const selectedPreviewRecordDisplayItem = previewRecordDisplay.selectedPreviewRecordDisplayItem;
+  const pendingPreviewRemoveDisplayItem = previewRecordDisplay.pendingPreviewRemoveDisplayItem;
   const isPreviewActionReturningToDailyRecord = previewActionReturnScreen === "aiSaveConfirm";
   const isDailyRecordRemoveConfirm = isPreviewActionReturningToDailyRecord;
   const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayTexts(

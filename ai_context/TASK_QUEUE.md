@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2191: Move preview record display bundle
+
+Status: done
+
+Completed:
+
+- Added the preview record display bundle helper to `recordDisplay.ts`.
+- Removed direct selected preview record, pending remove record, review list, save-confirm list, and preview action display item assembly from `App.tsx`.
+- Kept AI Review candidate list rendering, AI save confirm candidate list rendering, edit preview record selection, and remove confirmation display behavior unchanged.
+- Updated navigation verifier coverage to require the record display bundle helper, App bundle bindings, and no direct preview record/index display assembly regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2190: Move preview display count state fields
 
 Status: done
