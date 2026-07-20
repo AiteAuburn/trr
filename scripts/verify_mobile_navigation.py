@@ -11693,6 +11693,7 @@ def main() -> int:
             ("native audio path helper binding", "setAudioPath(nativeDebugInputValue(value));"),
             ("native llama path input handler", "function updateLlamaModelPathInput(value: string)"),
             ("native llama path helper binding", "setLlamaModelPath(nativeDebugInputValue(value));"),
+            ("native debug default initial state binding", "const [nativeStatus, setNativeStatus] = useState(() => nativeDebugDefaultState().status);"),
             ("native debug default reset state binding", "const nextNativeState = nativeDebugDefaultState();\n    setNativeStatus(nextNativeState.status);"),
             ("native module check settings handler", "function checkNativeModulesFromSettings()"),
             ("native model download settings handler", "function downloadNativeModelFromSettings()"),

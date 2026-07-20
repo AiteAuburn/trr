@@ -486,7 +486,6 @@ import {
   nativeBenchmarkResultState,
   nativeBenchmarkStartState,
   nativeDebugDefaultState,
-  nativeDebugDefaultStatusMessage,
   nativeDebugUnavailableState,
   nativeDownloadedModelsFailureState,
   nativeLlamaFailureState,
@@ -1089,7 +1088,7 @@ export default function App() {
   const recordingStartInFlight = useRef(false);
   const recordingStopInFlight = useRef(false);
   const visualSmokePreviewActive = useRef(Boolean(initialVisualSmokeScreen));
-  const [nativeStatus, setNativeStatus] = useState(nativeDebugDefaultStatusMessage());
+  const [nativeStatus, setNativeStatus] = useState(() => nativeDebugDefaultState().status);
   const [whisperModelPath, setWhisperModelPath] = useState("");
   const [audioPath, setAudioPath] = useState("");
   const [llamaModelPath, setLlamaModelPath] = useState("");

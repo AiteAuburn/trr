@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2145: Move native debug initial state binding
+
+Status: done
+
+Completed:
+
+- Replaced direct native debug default status initialization in `App.tsx` with the `nativeDebugDefaultState` helper.
+- Removed the direct `nativeDebugDefaultStatusMessage` import from `App.tsx`.
+- Kept native status initial copy, reset copy, session clearing, selected model defaults, local model paths, and downloaded-model state behavior unchanged.
+- Updated navigation verifier coverage to require the helper-backed initial native status binding.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2144: Move native debug default reset state helper
 
 Status: done

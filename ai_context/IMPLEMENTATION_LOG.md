@@ -15,6 +15,37 @@
 
 ## 2026-07-16
 
+### T2145 move native debug initial state binding
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Replaced direct native debug default status initialization in `App.tsx` with the `nativeDebugDefaultState` helper.
+- Removed the direct `nativeDebugDefaultStatusMessage` import from `App.tsx`.
+- Kept native status initial copy, reset copy, session clearing, selected model defaults, local model paths, and downloaded-model state behavior unchanged.
+- Updated navigation verifier coverage to require the helper-backed initial native status binding.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting native status state helpers from `App.tsx` one boundary at a time.
+
 ### T2144 move native debug default reset state helper
 
 類型：mobile / refactor / verifier / docs
