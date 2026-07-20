@@ -4454,9 +4454,9 @@ def main() -> int:
         ):
             _assert_not_contains(label, content, marker)
         _assert_contains(
-            "AI rejected preview list helper binding",
+            "AI rejected preview display bundle binding",
             content,
-            "const rejectedPreviewDisplayItems = preview\n    ? buildRejectedPreviewDisplayItems(previewState.rejectedEvents)\n    : [];",
+            "const rejectedPreviewDisplayItems = aiReviewPreviewDisplay.rejectedItems;",
         )
         _assert_not_contains(
             "AI rejected preview inline event mapping",
@@ -8801,6 +8801,9 @@ def main() -> int:
             ("ai review date label helper", "function aiReviewDateLabel(records: PendingRecord[])"),
             ("ai review date label empty copy", "尚未解析日期時間"),
             ("ai review date label multiple times copy", "等 ${uniqueLabels.length} 個時間"),
+            ("ai review preview display bundle helper", "function aiReviewPreviewDisplayBundle("),
+            ("ai review preview display bundle date", "dateLabel: boundDisplayText(preview ? aiReviewDateLabel(records) : \"\", maxDisplayDetailTextLength)"),
+            ("ai review preview display bundle rejected", "rejectedItems: preview ? buildRejectedPreviewDisplayItems(rejectedEvents) : []"),
             ("daily record date label helper", "function dailyRecordDateLabel(records: PendingRecord[])"),
             ("daily record date label fallback copy", "今日紀錄"),
             ("daily record display bundle helper", "function dailyRecordDisplayBundle(preview: ParsePreviewResponse | null, records: PendingRecord[])"),
@@ -8890,8 +8893,12 @@ def main() -> int:
             ("ai save confirm title state binding", "const aiSaveConfirmTitleDisplayText = aiSaveConfirmDisplay.title;"),
             ("ai save confirm date label state binding", "const aiSaveConfirmDateLabelDisplayText = aiSaveConfirmDisplay.dateLabel;"),
             ("ai save confirm summary label state binding", "const aiSaveConfirmSummaryLabelDisplayText = aiSaveConfirmDisplay.summaryLabel;"),
-            ("preview rejected display items state binding", "buildRejectedPreviewDisplayItems(previewState.rejectedEvents)"),
-            ("ai review date state records binding", "preview ? aiReviewDateLabel(previewState.records) : \"\""),
+            ("ai review preview display bundle helper import", "aiReviewPreviewDisplayBundle,"),
+            ("ai review preview display bundle state binding", "const aiReviewPreviewDisplay = aiReviewPreviewDisplayBundle("),
+            ("ai review preview display bundle records input", "previewState.records,"),
+            ("ai review preview display bundle rejected input", "previewState.rejectedEvents"),
+            ("preview rejected display items state binding", "const rejectedPreviewDisplayItems = aiReviewPreviewDisplay.rejectedItems;"),
+            ("ai review date state records binding", "const aiReviewDateDisplayLabel = aiReviewPreviewDisplay.dateLabel;"),
             ("daily record display bundle helper import", "dailyRecordDisplayBundle,"),
             ("daily record display bundle state binding", "const dailyRecordDisplay = dailyRecordDisplayBundle(preview, previewState.records);"),
             ("daily record date display bundle binding", "const dailyRecordDateDisplayText = dailyRecordDisplay.dateText;"),
@@ -8927,6 +8934,7 @@ def main() -> int:
             ("direct preview unsaved count binding", "const unsavedPreviewRecordCount = preview?.records.length ?? 0;"),
             ("direct preview rejected event count binding", "const rejectedPreviewEventCount = preview?.rejected_events.length ?? 0;"),
             ("direct preview rejected display items binding", "const rejectedPreviewDisplayItems = preview ? buildRejectedPreviewDisplayItems(preview.rejected_events) : [];"),
+            ("direct preview rejected display items state binding", "const rejectedPreviewDisplayItems = preview\n    ? buildRejectedPreviewDisplayItems(previewState.rejectedEvents)\n    : [];"),
             ("direct preview state low confidence filter", "const lowConfidenceRecordCount = records.filter((record) => (record.confidence ?? 1) < 0.7).length;"),
             ("direct preview low confidence state records binding", "previewState.records.filter((record) => (record.confidence ?? 1) < 0.7).length;"),
             ("direct preview low confidence records binding", "preview?.records.filter((record) => (record.confidence ?? 1) < 0.7).length ?? 0"),
@@ -8935,6 +8943,7 @@ def main() -> int:
             ("direct ai save confirm backend block binding", "const isAiSaveConfirmBlockedByBackend = !protectedBackendReady;"),
             ("direct ai save confirm submit disabled const binding", "const isAiSaveConfirmSubmitDisabled = isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty;"),
             ("direct ai review date records binding", "preview ? aiReviewDateLabel(preview.records) : \"\""),
+            ("direct ai review date state records binding", "preview ? aiReviewDateLabel(previewState.records) : \"\""),
             ("direct daily record date records binding", "const dailyRecordDateDisplayText = preview ? dailyRecordDateLabel(preview.records) : \"\";"),
             ("direct daily record summary records binding", "const dailyRecordSummaryDisplayText = preview ? dailyRecordSummaryText(preview.records) : \"\";"),
             ("direct daily record sections records binding", "const dailyRecordSectionItems = preview ? buildDailyRecordSectionDisplayItems(preview.records) : [];"),

@@ -1,6 +1,10 @@
 import { localDateKey } from "./dateTimeTransforms";
 import type { AppScreen } from "./navigationConfig";
-import { buildDailyRecordSectionDisplayItems, dailyRecordSectionDefinitions } from "./recordDisplay";
+import {
+  buildDailyRecordSectionDisplayItems,
+  dailyRecordSectionDefinitions,
+  rejectedPreviewDisplayItems as buildRejectedPreviewDisplayItems
+} from "./recordDisplay";
 import { boundParsePreviewResponse, type ParsePreviewResponse, type PendingRecord, type RecordItem } from "./recordBounds";
 
 const maxListItems = 12;
@@ -131,6 +135,17 @@ export function aiReviewDateLabel(records: PendingRecord[]) {
     ? uniqueLabels[0]
     : `${uniqueLabels[0]} 等 ${uniqueLabels.length} 個時間`;
   return boundDisplayText(label, 80);
+}
+
+export function aiReviewPreviewDisplayBundle(
+  preview: ParsePreviewResponse | null,
+  records: PendingRecord[],
+  rejectedEvents: ParsePreviewResponse["rejected_events"]
+) {
+  return {
+    dateLabel: boundDisplayText(preview ? aiReviewDateLabel(records) : "", maxDisplayDetailTextLength),
+    rejectedItems: preview ? buildRejectedPreviewDisplayItems(rejectedEvents) : []
+  };
 }
 
 export function dailyRecordDateLabel(records: PendingRecord[]) {

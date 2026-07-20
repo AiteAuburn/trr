@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2189: Move AI review preview display bundle
+
+Status: done
+
+Completed:
+
+- Added the AI Review preview date/rejected-events display bundle helper to `dailyTranscriptTransforms.ts`.
+- Removed direct AI Review date label and rejected preview display item preview ternaries from `App.tsx`.
+- Kept AI Review date rendering, rejected-event list rendering, source/reason helpers, and preview state behavior unchanged.
+- Updated navigation verifier coverage to require the AI Review preview display bundle, App bundle bindings, and no direct preview ternary regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2188: Move daily record draft fixed-save state fields
 
 Status: done

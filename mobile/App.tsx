@@ -95,7 +95,6 @@ import {
   pendingRecordDisplayItem,
   pendingRecordDisplayItems,
   previewRecordEditTypeLabel,
-  rejectedPreviewDisplayItems as buildRejectedPreviewDisplayItems,
   rejectedPreviewEventKey,
   rejectedPreviewEventReasonText,
   rejectedPreviewEventSourceText,
@@ -795,7 +794,7 @@ import {
   detailedReportMetricRows as buildDetailedReportMetricRows
 } from "./analysisMetricTransforms";
 import {
-  aiReviewDateLabel,
+  aiReviewPreviewDisplayBundle,
   boundDailyTranscriptEntries,
   buildDailyRecordSaveRequest,
   createDailyTranscriptEntry,
@@ -1460,13 +1459,13 @@ export default function App() {
   const rejectedPreviewEventCount = previewState.rejectedEventCount;
   const lowConfidencePreviewRecordDisplayCount = clampNumber(lowConfidencePreviewRecordCount, 0, maxMobilePreviewRecords);
   const rejectedPreviewEventDisplayCount = clampNumber(rejectedPreviewEventCount, 0, maxMobileRejectedEvents);
-  const rejectedPreviewDisplayItems = preview
-    ? buildRejectedPreviewDisplayItems(previewState.rejectedEvents)
-    : [];
-  const aiReviewDateDisplayLabel = boundDisplayText(
-    preview ? aiReviewDateLabel(previewState.records) : "",
-    maxDisplayDetailTextLength
+  const aiReviewPreviewDisplay = aiReviewPreviewDisplayBundle(
+    preview,
+    previewState.records,
+    previewState.rejectedEvents
   );
+  const rejectedPreviewDisplayItems = aiReviewPreviewDisplay.rejectedItems;
+  const aiReviewDateDisplayLabel = aiReviewPreviewDisplay.dateLabel;
   const aiReviewDisplay = aiReviewDisplayTexts();
   const aiReviewNoCandidateTitleDisplayText = aiReviewDisplay.noCandidateTitle;
   const aiReviewNoCandidateBodyDisplayText = aiReviewDisplay.noCandidateBody;
