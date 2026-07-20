@@ -173,6 +173,12 @@ export function nativeWhisperFailureStatusMessage(error: unknown) {
   return safeUiError(error, "Whisper failed");
 }
 
+export function nativeWhisperFailureState(error: unknown) {
+  return {
+    status: nativeWhisperFailureStatusMessage(error)
+  };
+}
+
 export function recordingModelRefreshStatusMessage(count: number) {
   return boundUiMessage(`已找到 ${clampNumber(count, 0, maxMobileCountValue)} 個本機 Whisper 模型。`);
 }

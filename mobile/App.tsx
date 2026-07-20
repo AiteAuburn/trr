@@ -507,7 +507,7 @@ import {
   nativeModuleCheckStartState,
   nativeModuleCheckResultStatusMessage,
   nativeStatusDisplayTexts,
-  nativeWhisperFailureStatusMessage,
+  nativeWhisperFailureState,
   nativeWhisperMissingInputState,
   nativeWhisperRunAccessibilityLabel,
   nativeWhisperStartState,
@@ -7949,7 +7949,8 @@ export default function App() {
   }
 
   function handleNativeWhisperFailure(error: unknown) {
-    setNativeStatus(nativeWhisperFailureStatusMessage(error));
+    const nextState = nativeWhisperFailureState(error);
+    setNativeStatus(nextState.status);
   }
 
   function handleNativeLlamaFailure(error: unknown) {
