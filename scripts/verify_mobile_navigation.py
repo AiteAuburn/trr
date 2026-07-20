@@ -13534,6 +13534,8 @@ def main() -> int:
             ("achievement category section items helper fields", "return section.items;"),
             ("achievement category section items binding", "achievementCategorySectionItems(section).map((displayItem) => {"),
             ("achievement unlocked history endpoint", "`/achievements/unlocks?${query.toString()}`"),
+            ("achievement summary response transform binding", "const mappedSummaryItems = achievementItemsFromApi(summary.items);"),
+            ("achievement unlock response transform binding", "setAchievementUnlockedItems(achievementUnlocksFromApi(unlocks));"),
             ("achievement sync status helper binding", "const achievementSyncStatus = achievementSyncStatusMessages({"),
             ("achievement sync unavailable status binding", "setAchievementActionStatus(achievementSyncStatus.unavailable);"),
             ("achievement sync in-flight status binding", "setAchievementActionStatus(achievementSyncStatus.inFlight);"),
@@ -13854,6 +13856,10 @@ def main() -> int:
             ("achievement badge summary highest level", ".sort((first, second) => second - first)[0] ?? 0"),
             ("achievement badge summary next remaining", "nextRemaining"),
             ("achievement API transform helper", "export function achievementItemFromApi(value: AchievementApiItem): AchievementItem"),
+            ("achievement API summary transform helper", "export function achievementItemsFromApi(values: AchievementApiItem[]): AchievementItem[]"),
+            ("achievement API summary transform bound", "return values.slice(0, maxListItems * 6).map(achievementItemFromApi);"),
+            ("achievement API unlock transform helper", "export function achievementUnlocksFromApi(values: AchievementApiUnlock[]): AchievementItem[]"),
+            ("achievement API unlock transform bound", "return values.slice(0, maxListItems).map(achievementItemFromApi);"),
             ("achievement unlock date helper", "export function achievementUnlockDisplayDate(value?: string | null)"),
         ):
             _assert_contains(label, future_module_display_content, marker)
@@ -15464,6 +15470,16 @@ def main() -> int:
             ("direct unlocked achievement card map", "achievementUnlockedDisplayItems.map((displayItem) =>"),
         ):
             _assert_not_contains(label, content, marker)
+        _assert_not_contains(
+            "achievement summary direct response transform",
+            content,
+            "summary.items.slice(0, maxListItems * 6).map(achievementItemFromApi)",
+        )
+        _assert_not_contains(
+            "achievement unlock direct response transform",
+            content,
+            "unlocks.slice(0, maxListItems).map(achievementItemFromApi)",
+        )
         achievement_unlocked_card_render_block = _match_block(
             achievement_unlocked_card_list_content,
             r"items\.map\(\(displayItem\) => \(([\s\S]*?achievementUnlockedCardDetail\(displayItem\)[\s\S]*?</View>\n\s*)\)",

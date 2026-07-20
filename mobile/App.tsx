@@ -140,11 +140,12 @@ import {
   achievementDisplayItems as buildAchievementDisplayItems,
   achievementIntegrationButtonAccessibilityLabel,
   achievementIntegrationButtonLabel,
-  achievementItemFromApi,
+  achievementItemsFromApi,
   achievementLocalComputationCopy,
   achievementNextBadgeCopy,
   achievementPreviewBoundaryCopy,
   achievementSyncStatusMessages,
+  achievementUnlocksFromApi,
   backendYearReviewHealthOutcomeDisplayRows,
   backendYearReviewMetricDisplayRows,
   buildAchievementCategoryDisplaySections,
@@ -6273,7 +6274,7 @@ export default function App() {
       if (latestAchievementSyncKey.current !== achievementKey) {
         return;
       }
-      const mappedSummaryItems = summary.items.slice(0, maxListItems * 6).map(achievementItemFromApi);
+      const mappedSummaryItems = achievementItemsFromApi(summary.items);
       setAchievementBackendItems(mappedSummaryItems);
       setAchievementNewlyUnlockedItems(syncUnlocks ? mappedSummaryItems.filter((item) => item.newlyUnlocked) : []);
       let unlockHistoryCopy = "已讀取解鎖紀錄";
@@ -6283,7 +6284,7 @@ export default function App() {
           `/achievements/unlocks?${query.toString()}`,
           { headers: protectedRequestHeaders(account.id, accessToken) }
         );
-        setAchievementUnlockedItems(unlocks.slice(0, maxListItems).map(achievementItemFromApi));
+        setAchievementUnlockedItems(achievementUnlocksFromApi(unlocks));
       } catch {
         setAchievementUnlockedItems([]);
         unlockHistoryCopy = "解鎖紀錄讀取失敗";

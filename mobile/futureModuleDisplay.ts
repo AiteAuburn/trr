@@ -892,6 +892,14 @@ export function achievementItemFromApi(value: AchievementApiItem): AchievementIt
   };
 }
 
+export function achievementItemsFromApi(values: AchievementApiItem[]): AchievementItem[] {
+  return values.slice(0, maxListItems * 6).map(achievementItemFromApi);
+}
+
+export function achievementUnlocksFromApi(values: AchievementApiUnlock[]): AchievementItem[] {
+  return values.slice(0, maxListItems).map(achievementItemFromApi);
+}
+
 export function achievementUnlockDisplayDate(value?: string | null) {
   if (!value) {
     return boundDisplayText("尚未保存解鎖時間", maxDisplayTextLength);

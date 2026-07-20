@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2101 move achievement response transforms
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `achievementItemsFromApi` and `achievementUnlocksFromApi` to `futureModuleDisplay.ts`.
+- Replaced the inline achievement summary and unlock response slice/map transforms in `App.tsx`.
+- Kept achievement endpoint selection, sync/unlock request flow, stale-response guard, unlock history fallback, and status handling in `App.tsx`.
+- Updated navigation verifier coverage to require the domain transform helpers and reject reintroducing the old inline achievement response transforms in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting bounded backend response transforms from `App.tsx` one domain at a time.
+
 ### T2100 move store response transforms
 
 類型：mobile / refactor / verifier / docs
