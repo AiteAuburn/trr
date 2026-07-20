@@ -796,6 +796,7 @@ import { InsightFlowChecklist } from "./insightFlowChecklist";
 import { InsightEmptyActionRow } from "./insightEmptyActionRow";
 import { CommunityPublicDisplayNameField } from "./communityPublicDisplayNameField";
 import { CommerceReadinessChecklist } from "./commerceReadinessChecklist";
+import { DailyTranscriptList } from "./dailyTranscriptList";
 import { ManualRecordCreatePreviewAction } from "./manualRecordCreatePreviewAction";
 import { ManualRecordConfirmFooterActions } from "./manualRecordConfirmFooterActions";
 import { ManualRecordConfirmPreviewBlock } from "./manualRecordConfirmPreviewBlock";
@@ -4331,18 +4332,6 @@ export default function App() {
 
   function openTodayTranscriptText() {
     setStatus(todayTranscriptExpandedStatusMessage());
-  }
-
-  function todayTranscriptItemKey(item: (typeof todayTranscriptDisplayItems)[number]) {
-    return item.key;
-  }
-
-  function todayTranscriptItemTimeLabel(item: (typeof todayTranscriptDisplayItems)[number]) {
-    return item.timeLabel;
-  }
-
-  function todayTranscriptItemSourceText(item: (typeof todayTranscriptDisplayItems)[number]) {
-    return item.sourceText;
   }
 
   function dailyRecordSectionKey(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
@@ -9332,16 +9321,7 @@ export default function App() {
               </View>
               <Text style={styles.countText}>{todayTranscriptCountDisplayText}</Text>
             </Pressable>
-            {todayTranscriptDisplayItems.length > 0 ? (
-              <View style={styles.dailyTranscriptList}>
-                {todayTranscriptDisplayItems.map((item) => (
-                  <View key={todayTranscriptItemKey(item)} style={styles.dailyTranscriptItem}>
-                    <Text style={styles.confidence}>{todayTranscriptItemTimeLabel(item)}</Text>
-                    <Text style={styles.evidence}>{todayTranscriptItemSourceText(item)}</Text>
-                  </View>
-                ))}
-              </View>
-            ) : null}
+            <DailyTranscriptList items={todayTranscriptDisplayItems} />
             <View style={styles.dailyRecordSectionList}>
               {dailyRecordSectionItems.map((section) => (
                 <View key={dailyRecordSectionKey(section)} style={styles.dailyRecordSectionCard}>
@@ -13785,17 +13765,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     minHeight: 68,
     padding: 14
-  },
-  dailyTranscriptList: {
-    gap: 8
-  },
-  dailyTranscriptItem: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
-    borderRadius: 16,
-    borderWidth: 1,
-    gap: 4,
-    padding: 12
   },
   dailyRecordSectionList: {
     gap: 12

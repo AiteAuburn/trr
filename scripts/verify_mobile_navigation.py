@@ -40,6 +40,7 @@ RECORD_EDIT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "recordEditTransforms.ts"
 RECORD_BOUNDS_PATH = REPO_ROOT / "mobile" / "recordBounds.ts"
 RECORD_SAVE_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "recordSaveTransforms.ts"
 DAILY_TRANSCRIPT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dailyTranscriptTransforms.ts"
+DAILY_TRANSCRIPT_LIST_PATH = REPO_ROOT / "mobile" / "dailyTranscriptList.tsx"
 RECORDING_COPY_PATH = REPO_ROOT / "mobile" / "recordingCopy.ts"
 RECORD_WORKFLOW_COPY_PATH = REPO_ROOT / "mobile" / "recordWorkflowCopy.ts"
 RECORD_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "recordStatusCopy.ts"
@@ -1449,6 +1450,7 @@ def main() -> int:
     record_bounds_content = RECORD_BOUNDS_PATH.read_text(encoding="utf-8")
     record_save_transforms_content = RECORD_SAVE_TRANSFORMS_PATH.read_text(encoding="utf-8")
     daily_transcript_content = DAILY_TRANSCRIPT_TRANSFORMS_PATH.read_text(encoding="utf-8")
+    daily_transcript_list_content = DAILY_TRANSCRIPT_LIST_PATH.read_text(encoding="utf-8")
     recording_copy_content = RECORDING_COPY_PATH.read_text(encoding="utf-8")
     record_workflow_copy_content = RECORD_WORKFLOW_COPY_PATH.read_text(encoding="utf-8")
     record_status_copy_content = RECORD_STATUS_COPY_PATH.read_text(encoding="utf-8")
@@ -8342,15 +8344,7 @@ def main() -> int:
             ("daily record transcript title display binding", "const todayTranscriptTitleDisplayText = todayTranscriptDisplay.title;"),
             ("daily record transcript body display binding", "const todayTranscriptBodyDisplayText = todayTranscriptDisplay.body;"),
             ("daily record transcript display accessibility binding", "const todayTranscriptAccessibilityLabel = todayTranscriptDisplay.accessibilityLabel;"),
-            ("daily record transcript item key helper", "function todayTranscriptItemKey(item: (typeof todayTranscriptDisplayItems)[number])"),
-            ("daily record transcript item key helper fields", "return item.key;"),
-            ("daily record transcript item key binding", "key={todayTranscriptItemKey(item)}"),
-            ("daily record transcript item time helper", "function todayTranscriptItemTimeLabel(item: (typeof todayTranscriptDisplayItems)[number])"),
-            ("daily record transcript item time helper fields", "return item.timeLabel;"),
-            ("daily record transcript item time binding", "{todayTranscriptItemTimeLabel(item)}"),
-            ("daily record transcript item source helper", "function todayTranscriptItemSourceText(item: (typeof todayTranscriptDisplayItems)[number])"),
-            ("daily record transcript item source helper fields", "return item.sourceText;"),
-            ("daily record transcript item source binding", "{todayTranscriptItemSourceText(item)}"),
+            ("daily record transcript list binding", "<DailyTranscriptList items={todayTranscriptDisplayItems} />"),
             ("daily record reorganization revision state", "const [dailyRecordOrganizationRevision, setDailyRecordOrganizationRevision] = useState(0);"),
             ("daily record reorganization reason state", "const [dailyRecordOrganizationReason, setDailyRecordOrganizationReason] ="),
             ("daily record reorganization apply helper", "function reorganizeDailyRecordDraftAfterChange("),
@@ -8437,6 +8431,24 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("daily record transcript list component", "export function DailyTranscriptList"),
+            ("daily record transcript list item type", "export type DailyTranscriptDisplayItem ="),
+            ("daily record transcript list items prop", "items: readonly DailyTranscriptDisplayItem[]"),
+            ("daily record transcript list empty guard", "if (items.length === 0)"),
+            ("daily record transcript item key helper", "function todayTranscriptItemKey(item: DailyTranscriptDisplayItem)"),
+            ("daily record transcript item key helper fields", "return item.key;"),
+            ("daily record transcript item key binding", "key={todayTranscriptItemKey(item)}"),
+            ("daily record transcript item time helper", "function todayTranscriptItemTimeLabel(item: DailyTranscriptDisplayItem)"),
+            ("daily record transcript item time helper fields", "return item.timeLabel;"),
+            ("daily record transcript item time binding", "{todayTranscriptItemTimeLabel(item)}"),
+            ("daily record transcript item source helper", "function todayTranscriptItemSourceText(item: DailyTranscriptDisplayItem)"),
+            ("daily record transcript item source helper fields", "return item.sourceText;"),
+            ("daily record transcript item source binding", "{todayTranscriptItemSourceText(item)}"),
+            ("daily record transcript list style", "dailyTranscriptList: {"),
+            ("daily record transcript item style", "dailyTranscriptItem: {"),
+        ):
+            _assert_contains(label, daily_transcript_list_content, marker)
+        for label, marker in (
             ("daily record entry action row component", "export function DailyRecordEntryActionRow"),
             ("daily record entry action row edit accessibility prop", "accessibilityLabel={editAccessibilityLabel}"),
             ("daily record entry action row remove accessibility prop", "accessibilityLabel={removeAccessibilityLabel}"),
@@ -8473,17 +8485,17 @@ def main() -> int:
             ("daily record leave guard direct confirm label", '<Text style={styles.dangerButtonText}>離開</Text>'),
         ):
             _assert_not_contains(label, content, marker)
-        daily_transcript_render_block = _match_block(
+        _assert_not_contains(
+            "direct daily transcript display item map",
             content,
-            r"todayTranscriptDisplayItems\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
-            "daily transcript item render block",
+            "todayTranscriptDisplayItems.map((item) =>",
         )
         for label, marker in (
             ("direct daily transcript item key binding", "key={item.key}"),
             ("direct daily transcript item time binding", "<Text style={styles.confidence}>{item.timeLabel}</Text>"),
             ("direct daily transcript item source binding", "<Text style={styles.evidence}>{item.sourceText}</Text>"),
         ):
-            _assert_not_contains(label, daily_transcript_render_block, marker)
+            _assert_not_contains(label, content, marker)
         daily_record_section_render_block = _match_block(
             content,
             r"dailyRecordSectionItems\.map\(\(section\) => \(([\s\S]*?dailyRecordSectionEmptyCopy\(section\)[\s\S]*?</View>)",

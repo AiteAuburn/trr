@@ -34,6 +34,39 @@ None.
 
 ## Done
 
+### T2082: Extract daily transcript list component
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/dailyTranscriptList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `DailyTranscriptList` for the AI save confirm / daily record transcript rows.
+- Moved daily transcript item key/time/source helpers and transcript list/item styles out of `App.tsx`.
+- Preserved the same Today transcript button, count text, expanded status behavior, transcript row copy, and empty-list behavior.
+- Kept transcript retention, parser append flow, daily-record save payload construction, and daily-record section rendering in `App.tsx`.
+- Updated navigation verifier coverage for component bindings, item helpers, styles, and direct inline-map guards.
+- No UI copy/visibility/navigation/backend/schema/Android signing/daily-record save endpoint/save payload shape/record sync endpoint/request semantics/token storage/AI/LLM prompt behavior/parser endpoint/request semantics/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue auditing remaining daily record section/detail row clusters without changing first-version scope.
+
 ### T2081: Extract yearly highlight list component
 
 Status: done
