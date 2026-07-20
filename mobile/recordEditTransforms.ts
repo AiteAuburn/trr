@@ -67,6 +67,14 @@ export function boundRecordEditField<K extends keyof RecordEditFields>(
   return value.slice(0, recordEditFieldMaxLength(field)) as RecordEditFields[K];
 }
 
+export function recordEditOptionTarget(option: { value: string }) {
+  return option.value;
+}
+
+export function manualRecordOptionTarget(option: { value: string }) {
+  return option.value;
+}
+
 export function emptyRecordEditFields(): RecordEditFields {
   return {
     glucoseValue: "",

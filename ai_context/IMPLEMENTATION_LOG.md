@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2150 move record edit option target helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordEditTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `recordEditOptionTarget` and `manualRecordOptionTarget` to `recordEditTransforms.ts`.
+- Removed duplicate record-edit and manual-record option target helpers from `App.tsx`.
+- Kept glucose unit, glucose timing, and meal type option selection behavior unchanged for both edit and manual-record forms.
+- Updated navigation verifier coverage to require the transform-module target helpers and the App press-handler bindings.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow edit/manual-record helpers out of `App.tsx` before attempting larger first-version screen component splits.
+
 ### T2149 move Settings choice target helpers
 
 類型：mobile / refactor / verifier / docs

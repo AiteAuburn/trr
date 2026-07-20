@@ -90,10 +90,12 @@ import {
   emptyRecordEditFields,
   glucoseTimingOptions,
   glucoseUnitOptions,
+  manualRecordOptionTarget,
   manualRecordTypes,
   mealTypeOptions,
   previewRecordsWithoutRecord,
   previewRecordsWithEditedRecord,
+  recordEditOptionTarget,
   recordEditFieldMaxLength,
   recordPayloadToEditFields,
   validateRecordForm,
@@ -8099,10 +8101,6 @@ export default function App() {
     updateRecordEditField("glucoseUnit", value);
   }
 
-  function recordEditOptionTarget(option: { value: string }) {
-    return editOptionKey(option);
-  }
-
   function pressRecordEditGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>) {
     selectRecordEditGlucoseUnit(recordEditOptionTarget(option));
   }
@@ -8176,10 +8174,6 @@ export default function App() {
 
   function selectManualRecordGlucoseUnit(value: string) {
     updateManualRecordField("glucoseUnit", value);
-  }
-
-  function manualRecordOptionTarget(option: { value: string }) {
-    return editOptionKey(option);
   }
 
   function pressManualRecordGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>) {

@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2150: Move record edit option target helpers
+
+Status: done
+
+Completed:
+
+- Added `recordEditOptionTarget` and `manualRecordOptionTarget` to `recordEditTransforms.ts`.
+- Removed duplicate record-edit and manual-record option target helpers from `App.tsx`.
+- Kept glucose unit, glucose timing, and meal type option selection behavior unchanged for both edit and manual-record forms.
+- Updated navigation verifier coverage to require the transform-module target helpers and the App press-handler bindings.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2149: Move Settings choice target helpers
 
 Status: done
