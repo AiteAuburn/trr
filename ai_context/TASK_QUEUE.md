@@ -34,6 +34,26 @@ None.
 
 ## Done
 
+### T2153: Move record detail display accessors
+
+Status: done
+
+Completed:
+
+- Added selected record-detail fallback/accessor helpers to `recordDisplay.ts`.
+- Moved `recordEditHeaderTypeLabel` to the same record display boundary.
+- Removed duplicate selected record-detail display helper definitions from `App.tsx`.
+- Kept record detail info panel, mapped detail rows, and record edit header labels unchanged.
+- Updated navigation verifier coverage to require the record-display helper exports and App render bindings.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2152: Move manual confirm preview helpers
 
 Status: done

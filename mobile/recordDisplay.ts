@@ -447,6 +447,48 @@ export function recordDetailDisplayItem(record: RecordItem) {
   };
 }
 
+type RecordDetailDisplayItem = ReturnType<typeof recordDetailDisplayItem>;
+
+export function selectedRecordDetailDateTimeLabel(item: RecordDetailDisplayItem | null) {
+  return item?.dateTimeLabel ?? "尚未選擇紀錄";
+}
+
+export function selectedRecordDetailDisplayRows(item: RecordDetailDisplayItem | null) {
+  return item?.detailRows ?? [];
+}
+
+export function selectedRecordDetailDateLabel(item: RecordDetailDisplayItem | null) {
+  return item?.dateLabel ?? "尚無";
+}
+
+export function selectedRecordDetailExerciseSummary(item: RecordDetailDisplayItem | null) {
+  return item?.exerciseSummary ?? "無";
+}
+
+export function selectedRecordDetailMedicationSummary(item: RecordDetailDisplayItem | null) {
+  return item?.medicationSummary ?? "無";
+}
+
+export function selectedRecordDetailPayloadSummary(item: RecordDetailDisplayItem | null) {
+  return item?.payloadSummary ?? "沒有資料";
+}
+
+export function selectedRecordDetailSourceLabel(item: RecordDetailDisplayItem | null) {
+  return item?.sourceLabel ?? "尚無";
+}
+
+export function selectedRecordDetailTimeLabel(item: RecordDetailDisplayItem | null) {
+  return item?.timeLabel ?? "尚無";
+}
+
+export function selectedRecordDetailTypeLabel(item: RecordDetailDisplayItem | null) {
+  return item?.typeLabel ?? "請從今日或歷史紀錄選擇一筆真實紀錄。";
+}
+
+export function recordEditHeaderTypeLabel(item: RecordDetailDisplayItem | null) {
+  return item?.typeLabel ?? "紀錄";
+}
+
 export function manualRecordConfirmDisplayItem(
   recordType: string,
   payload: Record<string, unknown> | null,
