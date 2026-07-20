@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2196 move year review backend AI summary helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the year review backend AI summary text helper to `futureModuleDisplay.ts`.
+- Removed direct backend `ai_summary.find(...)` observation and encouragement extraction from `App.tsx`.
+- Kept Year Review backend AI observation, backend encouragement, local fallback insight copy, and rendered insight text behavior unchanged.
+- Updated navigation verifier coverage to require the backend AI summary helper, App helper bindings, and no direct backend summary find regression in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2195 move analysis report state helper
 
 類型：mobile / refactor / verifier / docs

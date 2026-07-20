@@ -2502,6 +2502,13 @@ export function yearReviewAiEncouragementCopy(recordCount: number) {
   );
 }
 
+export function yearReviewBackendAiSummaryTexts(summary: YearReviewApiResponse | null) {
+  return {
+    encouragement: summary?.ai_summary.find((item) => item.kind === "encouragement")?.text,
+    observation: summary?.ai_summary.find((item) => item.kind === "important_observation")?.text
+  };
+}
+
 export function yearReviewInsightDisplayTexts(value: {
   recordCount: number;
   averageGlucose: number | null;

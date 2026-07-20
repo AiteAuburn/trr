@@ -13889,6 +13889,10 @@ def main() -> int:
             ("year review live calculation display value", "const yearReviewLiveCalculationDisplayText = yearReviewHeaderDisplay.liveCalculation;"),
             ("year review backend metric rows helper binding", "const backendYearMetricRows = backendYearReviewMetricDisplayRows(yearReviewBackendSummary);"),
             ("year review backend health rows helper binding", "const backendYearHealthRows = backendYearReviewHealthOutcomeDisplayRows(yearReviewBackendSummary);"),
+            ("year review backend ai summary helper import", "yearReviewBackendAiSummaryTexts,"),
+            ("year review backend ai summary helper binding", "const backendYearAiSummaryTexts = yearReviewBackendAiSummaryTexts(yearReviewBackendSummary);"),
+            ("year review backend ai observation binding", "const backendYearAiObservation = backendYearAiSummaryTexts.observation;"),
+            ("year review backend ai encouragement binding", "const backendYearAiEncouragement = backendYearAiSummaryTexts.encouragement;"),
             ("year review local metric rows helper binding", "const localYearlyReviewMetricRows = localYearlyReviewMetricDisplayRows("),
             ("year review annual stat rows binding", "rows={yearlyReviewMetricRows}"),
             ("year review local health rows helper binding", "const localYearlyHealthOutcomeRows = localYearlyHealthOutcomeDisplayRows("),
@@ -14716,6 +14720,9 @@ def main() -> int:
             ("year review local highlight streak copy", "最長連續記錄 ${boundedLongestStreakDays} 天。"),
             ("year review ai observation copy helper", "export function yearReviewAiObservationCopy(recordCount: number, averageGlucose: number | null, longestStreak: number)"),
             ("year review ai encouragement copy helper", "export function yearReviewAiEncouragementCopy(recordCount: number)"),
+            ("year review backend ai summary helper", "export function yearReviewBackendAiSummaryTexts(summary: YearReviewApiResponse | null)"),
+            ("year review backend ai summary observation", "observation: summary?.ai_summary.find((item) => item.kind === \"important_observation\")?.text"),
+            ("year review backend ai summary encouragement", "encouragement: summary?.ai_summary.find((item) => item.kind === \"encouragement\")?.text"),
             ("year review insight display helper", "export function yearReviewInsightDisplayTexts(value: {"),
             ("year review insight glucose average evidence", "前一年度血糖紀錄平均值為 ${value.averageGlucose} mg/dL。"),
             ("year review insight backend observation fallback", "value.backendObservation"),
@@ -15104,6 +15111,16 @@ def main() -> int:
             "year review direct highlight item text binding",
             content,
             "yearlyHighlightDisplayTexts.map((item) => (\n                <View key={yearlyHighlightItemKey(item)} style={styles.highlightRow}>\n                  <Text style={styles.recordType}>•</Text>\n                  <Text style={styles.evidence}>{item}</Text>",
+        )
+        _assert_not_contains(
+            "year review direct backend observation find",
+            content,
+            'yearReviewBackendSummary?.ai_summary.find(\n    (item) => item.kind === "important_observation"\n  )?.text',
+        )
+        _assert_not_contains(
+            "year review direct backend encouragement find",
+            content,
+            'yearReviewBackendSummary?.ai_summary.find(\n    (item) => item.kind === "encouragement"\n  )?.text',
         )
         _assert_not_contains(
             "daily record direct detail rows map binding",

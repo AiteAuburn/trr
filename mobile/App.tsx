@@ -372,6 +372,7 @@ import {
   storeRedemptionUseTitle,
   storeRedemptionsFromApi,
   yearReviewBoundaryDisplayCopy,
+  yearReviewBackendAiSummaryTexts,
   yearReviewHeaderDisplayTexts,
   yearReviewInsightDisplayTexts,
   yearReviewShareCardStatusMessages,
@@ -1667,12 +1668,9 @@ export default function App() {
   const yearlyLongestStreakDisplayDays = clampNumber(yearlyRecordStats.longestStreak, 0, maxMobileCountValue);
   const backendYearMetricRows = backendYearReviewMetricDisplayRows(yearReviewBackendSummary);
   const backendYearHealthRows = backendYearReviewHealthOutcomeDisplayRows(yearReviewBackendSummary);
-  const backendYearAiObservation = yearReviewBackendSummary?.ai_summary.find(
-    (item) => item.kind === "important_observation"
-  )?.text;
-  const backendYearAiEncouragement = yearReviewBackendSummary?.ai_summary.find(
-    (item) => item.kind === "encouragement"
-  )?.text;
+  const backendYearAiSummaryTexts = yearReviewBackendAiSummaryTexts(yearReviewBackendSummary);
+  const backendYearAiObservation = backendYearAiSummaryTexts.observation;
+  const backendYearAiEncouragement = backendYearAiSummaryTexts.encouragement;
   const localYearlyReviewMetricRows = localYearlyReviewMetricDisplayRows(
     yearlyRecordDayDisplayCount,
     yearlyGlucoseRecordDisplayCount,

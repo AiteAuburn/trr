@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2196: Move year review backend AI summary helper
+
+Status: done
+
+Completed:
+
+- Added the year review backend AI summary text helper to `futureModuleDisplay.ts`.
+- Removed direct backend `ai_summary.find(...)` observation and encouragement extraction from `App.tsx`.
+- Kept Year Review backend AI observation, backend encouragement, local fallback insight copy, and rendered insight text behavior unchanged.
+- Updated navigation verifier coverage to require the backend AI summary helper, App helper bindings, and no direct backend summary find regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2195: Move analysis report state helper
 
 Status: done
