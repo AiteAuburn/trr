@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2104: Move achievement newly-unlocked filter
+
+Status: done
+
+Completed:
+
+- Added `achievementNewlyUnlockedItemsForSync` to `futureModuleDisplay.ts`.
+- Replaced the inline `mappedSummaryItems` newly-unlocked filter in `App.tsx`.
+- Kept achievement sync flow, backend summary state update, unlock history request, status handling, and count bounding in `App.tsx`.
+- Updated navigation verifier coverage to require the domain filter helper and reject the old inline newly-unlocked filter.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2103: Move food community share update transform
 
 Status: done

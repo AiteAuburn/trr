@@ -902,6 +902,10 @@ export function achievementUnlocksFromApi(values: AchievementApiUnlock[]): Achie
   return values.slice(0, maxListItems).map(achievementItemFromApi);
 }
 
+export function achievementNewlyUnlockedItemsForSync(items: AchievementItem[], syncUnlocks: boolean): AchievementItem[] {
+  return syncUnlocks ? items.filter((item) => item.newlyUnlocked) : [];
+}
+
 export function achievementUnlockDisplayDate(value?: string | null) {
   if (!value) {
     return boundDisplayText("尚未保存解鎖時間", maxDisplayTextLength);

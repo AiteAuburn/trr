@@ -142,6 +142,7 @@ import {
   achievementIntegrationButtonLabel,
   achievementItemsFromApi,
   achievementLocalComputationCopy,
+  achievementNewlyUnlockedItemsForSync,
   achievementNextBadgeCopy,
   achievementPreviewBoundaryCopy,
   achievementSyncStatusMessages,
@@ -6269,7 +6270,7 @@ export default function App() {
       }
       const mappedSummaryItems = achievementItemsFromApi(summary.items);
       setAchievementBackendItems(mappedSummaryItems);
-      setAchievementNewlyUnlockedItems(syncUnlocks ? mappedSummaryItems.filter((item) => item.newlyUnlocked) : []);
+      setAchievementNewlyUnlockedItems(achievementNewlyUnlockedItemsForSync(mappedSummaryItems, syncUnlocks));
       let unlockHistoryCopy = "已讀取解鎖紀錄";
       try {
         const unlocks = await requestJson<AchievementApiUnlock[]>(

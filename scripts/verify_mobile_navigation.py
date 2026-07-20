@@ -13460,7 +13460,7 @@ def main() -> int:
             ("achievement limited display helper binding", "limitedAchievementDisplayItems(achievementNewlyUnlockedItems)"),
             ("achievement save success newly unlocked helper binding", "const saveSuccessNewlyUnlockedDisplayItems = saveSuccessNewlyUnlockedAchievementDisplayItems("),
             ("achievement category sections helper binding", "const achievementCategoryDisplaySections = useMemo("),
-            ("achievement newly unlocked filter", "mappedSummaryItems.filter((item) => item.newlyUnlocked)"),
+            ("achievement newly unlocked helper binding", "setAchievementNewlyUnlockedItems(achievementNewlyUnlockedItemsForSync(mappedSummaryItems, syncUnlocks));"),
             ("achievement newly unlocked section", "本次新解鎖"),
             ("achievement save success newly unlocked section", "新解鎖成就"),
             ("achievement save success newly unlocked render", "items={saveSuccessNewlyUnlockedDisplayItems}"),
@@ -13854,6 +13854,8 @@ def main() -> int:
             ("achievement API summary transform bound", "return values.slice(0, maxListItems * 6).map(achievementItemFromApi);"),
             ("achievement API unlock transform helper", "export function achievementUnlocksFromApi(values: AchievementApiUnlock[]): AchievementItem[]"),
             ("achievement API unlock transform bound", "return values.slice(0, maxListItems).map(achievementItemFromApi);"),
+            ("achievement newly unlocked sync helper", "export function achievementNewlyUnlockedItemsForSync(items: AchievementItem[], syncUnlocks: boolean): AchievementItem[]"),
+            ("achievement newly unlocked sync helper filter", "return syncUnlocks ? items.filter((item) => item.newlyUnlocked) : [];"),
             ("achievement unlock date helper", "export function achievementUnlockDisplayDate(value?: string | null)"),
         ):
             _assert_contains(label, future_module_display_content, marker)
@@ -15511,6 +15513,11 @@ def main() -> int:
             "achievement unlock direct response transform",
             content,
             "unlocks.slice(0, maxListItems).map(achievementItemFromApi)",
+        )
+        _assert_not_contains(
+            "achievement newly unlocked direct filter",
+            content,
+            "mappedSummaryItems.filter((item) => item.newlyUnlocked)",
         )
         achievement_unlocked_card_render_block = _match_block(
             achievement_unlocked_card_list_content,
