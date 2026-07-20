@@ -2,6 +2,10 @@ import type { DownloadedModel } from "./modelStorage";
 
 export type NativeModelDownloadKind = "whisper" | "llama";
 export type NativeModelDownloadProgressHandler = (progress: number) => void;
+export type NativeWhisperInput = {
+  modelPath: string;
+  audioPath: string;
+};
 
 const maxIdentifierTextLength = 128;
 const maxDisplayTextLength = 120;
@@ -38,6 +42,17 @@ export function nativeModelDownloadRequestArgs({
     kind,
     onProgress
   };
+}
+
+export function nativeWhisperRequestArgs(whisperInput: NativeWhisperInput) {
+  return {
+    modelPath: whisperInput.modelPath,
+    audioPath: whisperInput.audioPath
+  };
+}
+
+export function hasNativeWhisperInput(whisperInput: NativeWhisperInput) {
+  return Boolean(whisperInput.modelPath && whisperInput.audioPath);
 }
 
 export function boundDownloadedModel<T extends DownloadedModel>(value: T): T {

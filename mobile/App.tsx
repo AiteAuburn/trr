@@ -762,8 +762,10 @@ import {
   downloadedWhisperModelCount,
   downloadedWhisperModelInitialPath,
   downloadedWhisperModels,
+  hasNativeWhisperInput,
   nativeDebugInputValue,
-  nativeModelDownloadRequestArgs
+  nativeModelDownloadRequestArgs,
+  nativeWhisperRequestArgs
 } from "./modelTransforms";
 import {
   boundAuthTokenResponse,
@@ -7873,17 +7875,6 @@ export default function App() {
       audioPath: audioPath.trim(),
       modelPath: whisperModelPath.trim()
     };
-  }
-
-  function nativeWhisperRequestArgs(whisperInput: ReturnType<typeof nativeWhisperInput>) {
-    return {
-      modelPath: whisperInput.modelPath,
-      audioPath: whisperInput.audioPath
-    };
-  }
-
-  function hasNativeWhisperInput(whisperInput: ReturnType<typeof nativeWhisperInput>) {
-    return Boolean(whisperInput.modelPath && whisperInput.audioPath);
   }
 
   function nativeLlamaInput() {
