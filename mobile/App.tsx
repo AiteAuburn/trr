@@ -482,7 +482,7 @@ import {
   type DevResetResponse
 } from "./authStatusCopy";
 import {
-  nativeBenchmarkMissingInputStatusMessage,
+  nativeBenchmarkMissingInputState,
   nativeBenchmarkResultStatusMessage,
   nativeBenchmarkStartState,
   nativeDebugDefaultStatusMessage,
@@ -7910,7 +7910,8 @@ export default function App() {
   }
 
   function handleNativeBenchmarkMissingInput() {
-    setNativeStatus(nativeBenchmarkMissingInputStatusMessage());
+    const nextState = nativeBenchmarkMissingInputState();
+    setNativeStatus(nextState.status);
   }
 
   function startNativeBenchmarkStatus() {

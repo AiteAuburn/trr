@@ -229,6 +229,12 @@ export function nativeBenchmarkMissingInputStatusMessage() {
   return boundUiMessage("請先填模型與測試輸入後再 benchmark。");
 }
 
+export function nativeBenchmarkMissingInputState() {
+  return {
+    status: nativeBenchmarkMissingInputStatusMessage()
+  };
+}
+
 export function nativeBenchmarkResultStatusMessage(
   results: Array<{ task: string; ok: boolean; durationMs: number; outputChars: number }>
 ) {
