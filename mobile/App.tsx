@@ -769,6 +769,7 @@ import {
   nativeDebugInputValue,
   nativeLlamaInput,
   nativeWhisperInput,
+  nativeBenchmarkResults,
   nativeLlamaRequestArgs,
   nativeModelDownloadRequestArgs,
   nativeWhisperRequestArgs
@@ -7914,15 +7915,6 @@ export default function App() {
     setNativeStatus(nativeBenchmarkResultStatusMessage(results));
   }
 
-  async function nativeBenchmarkResults() {
-    const results: NativeBenchmarkResult[] = [];
-    const whisperInput = nativeWhisperInput({ audioPath, modelPath: whisperModelPath });
-    await appendNativeWhisperBenchmarkResult(results, whisperInput, benchmarkNativeWhisper);
-    const llamaInput = nativeLlamaInput({ modelPath: llamaModelPath, transcript });
-    await appendNativeLlamaBenchmarkResult(results, llamaInput, benchmarkNativeLlama);
-    return results;
-  }
-
   function startNativeModelDownloadStatus() {
     setDownloadProgress(0);
     setNativeStatus(nativeModelDownloadProgressStatusMessage());
@@ -8049,7 +8041,14 @@ export default function App() {
     startNativeDebugAction();
     startNativeBenchmarkStatus();
     try {
-      const results = await nativeBenchmarkResults();
+      const results = await nativeBenchmarkResults({
+        audioPath,
+        whisperModelPath,
+        llamaModelPath,
+        transcript,
+        benchmarkWhisper: benchmarkNativeWhisper,
+        benchmarkLlama: benchmarkNativeLlama
+      });
       if (results.length === 0) {
         handleNativeBenchmarkMissingInput();
         return;

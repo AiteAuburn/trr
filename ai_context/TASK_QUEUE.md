@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2122: Move native benchmark results helper
+
+Status: done
+
+Completed:
+
+- Added `nativeBenchmarkResults` and `NativeBenchmarkResultSource` to `modelTransforms.ts`.
+- Removed the same local benchmark results coordinator from `App.tsx`.
+- Kept native benchmark action readiness, status updates, missing-input handling, runner functions, and success/finally flow in `App.tsx`.
+- Updated navigation verifier coverage to require the model transform helper and reject reintroducing the local App helper.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2121: Move native Llama input shaping helper
 
 Status: done

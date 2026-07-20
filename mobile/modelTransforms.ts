@@ -13,6 +13,14 @@ export type NativeLlamaInput = {
   transcript: string;
 };
 export type NativeLlamaInputSource = NativeLlamaInput;
+export type NativeBenchmarkResultSource = {
+  audioPath: string;
+  whisperModelPath: string;
+  llamaModelPath: string;
+  transcript: string;
+  benchmarkWhisper: (input: ReturnType<typeof nativeWhisperRequestArgs>) => Promise<NativeBenchmarkResult>;
+  benchmarkLlama: (input: ReturnType<typeof nativeLlamaRequestArgs>) => Promise<NativeBenchmarkResult>;
+};
 
 const maxIdentifierTextLength = 128;
 const maxDisplayTextLength = 120;
@@ -105,6 +113,22 @@ export async function appendNativeLlamaBenchmarkResult(
   if (hasNativeLlamaInput(llamaInput)) {
     results.push(await benchmarkLlama(nativeLlamaRequestArgs(llamaInput)));
   }
+}
+
+export async function nativeBenchmarkResults({
+  audioPath,
+  whisperModelPath,
+  llamaModelPath,
+  transcript,
+  benchmarkWhisper,
+  benchmarkLlama
+}: NativeBenchmarkResultSource) {
+  const results: NativeBenchmarkResult[] = [];
+  const whisperInput = nativeWhisperInput({ audioPath, modelPath: whisperModelPath });
+  await appendNativeWhisperBenchmarkResult(results, whisperInput, benchmarkWhisper);
+  const llamaInput = nativeLlamaInput({ modelPath: llamaModelPath, transcript });
+  await appendNativeLlamaBenchmarkResult(results, llamaInput, benchmarkLlama);
+  return results;
 }
 
 export function boundDownloadedModel<T extends DownloadedModel>(value: T): T {
