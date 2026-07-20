@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2154: Move app view state helpers
+
+Status: done
+
+Completed:
+
+- Added `appViewState.ts` for record collection, preview record, and save-success derived UI state helpers.
+- Removed the duplicate top-level view-state helper definitions from `App.tsx`.
+- Kept record sync boundary flags, preview warning/count derivation, AI save-confirm disabled state, and save-success continuation flags unchanged.
+- Updated navigation verifier coverage to require the helper exports in `appViewState.ts`, App import bindings, and no local helper regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2153: Move record detail display accessors
 
 Status: done

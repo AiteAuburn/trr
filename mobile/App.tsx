@@ -42,6 +42,11 @@ import {
   mobileReportQueryLimit,
   sampleText
 } from "./appRuntimeConfig";
+import {
+  previewRecordState,
+  recordCollectionState,
+  saveSuccessState
+} from "./appViewState";
 import { AnalysisCustomDateRangeFields } from "./analysisCustomDateRangeFields";
 import {
   boundDisplayText,
@@ -116,7 +121,6 @@ import {
   boundParsePreviewResponse,
   boundRecordItem,
   boundRecordsList,
-  lowConfidencePendingRecordCount,
   mergeRecordsByCursorOrder,
   recordsListWithoutDeletedRecord,
   recordsListWithUpdatedRecord,
@@ -929,58 +933,6 @@ import type {
 } from "./appTypes";
 
 type NativeBenchmarkResult = Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>;
-
-function recordCollectionState(
-  records: readonly RecordItem[],
-  syncLimit: number,
-  cacheLimit: number,
-  displayLimit: number
-) {
-  const recordCount = records.length;
-
-  return {
-    displayCount: clampNumber(recordCount, 0, displayLimit),
-    hasRecords: recordCount > 0,
-    isEmpty: recordCount === 0,
-    isAtCacheLimit: recordCount >= cacheLimit,
-    isAtSyncBoundary: recordCount >= syncLimit,
-    lastRecord: records[recordCount - 1] ?? null,
-    recordCount
-  };
-}
-
-function previewRecordState(preview: ParsePreviewResponse | null) {
-  const records = preview?.records ?? [];
-  const rejectedEvents = preview?.rejected_events ?? [];
-  const recordCount = records.length;
-  const lowConfidenceRecordCount = lowConfidencePendingRecordCount(records);
-  const rejectedEventCount = rejectedEvents.length;
-
-  return {
-    hasWarnings: lowConfidenceRecordCount > 0 || rejectedEventCount > 0,
-    hasRecords: recordCount > 0,
-    isEmpty: recordCount === 0,
-    lowConfidenceRecordCount,
-    recordCount,
-    records,
-    rejectedEventCount,
-    rejectedEvents
-  };
-}
-
-function saveSuccessState(lastSaveEntryMethod: SaveEntryMethod, hasUnsavedPreviewRecords: boolean) {
-  const isManualSave = lastSaveEntryMethod === "manual";
-
-  return {
-    canContinueManual: isManualSave && !hasUnsavedPreviewRecords,
-    canContinueRecordEntry: !hasUnsavedPreviewRecords,
-    hasManualFallbackWithAiCandidates: isManualSave && hasUnsavedPreviewRecords,
-    hasPartialAiSave: lastSaveEntryMethod === "ai" && hasUnsavedPreviewRecords,
-    hasUnsavedPreviewRecords,
-    isManualSave,
-    shouldPauseEntryActions: hasUnsavedPreviewRecords
-  };
-}
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>(initialVisualSmokeScreen ?? "today");

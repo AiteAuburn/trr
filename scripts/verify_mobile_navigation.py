@@ -12,6 +12,7 @@ APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
 API_CLIENT_PATH = REPO_ROOT / "mobile" / "apiClient.ts"
 APP_TYPES_PATH = REPO_ROOT / "mobile" / "appTypes.ts"
 APP_RUNTIME_CONFIG_PATH = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
+APP_VIEW_STATE_PATH = REPO_ROOT / "mobile" / "appViewState.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 AI_FLOW_CHECKLIST_PATH = REPO_ROOT / "mobile" / "aiFlowChecklist.tsx"
 INSIGHT_FLOW_CHECKLIST_PATH = REPO_ROOT / "mobile" / "insightFlowChecklist.tsx"
@@ -1435,6 +1436,7 @@ def main() -> int:
     api_client_content = API_CLIENT_PATH.read_text(encoding="utf-8")
     app_types_content = APP_TYPES_PATH.read_text(encoding="utf-8")
     app_runtime_config_content = APP_RUNTIME_CONFIG_PATH.read_text(encoding="utf-8")
+    app_view_state_content = APP_VIEW_STATE_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     ai_flow_checklist_content = AI_FLOW_CHECKLIST_PATH.read_text(encoding="utf-8")
     insight_flow_checklist_content = INSIGHT_FLOW_CHECKLIST_PATH.read_text(encoding="utf-8")
@@ -4117,6 +4119,10 @@ def main() -> int:
             ("save success state manual fallback flag", "hasManualFallbackWithAiCandidates: isManualSave && hasUnsavedPreviewRecords"),
             ("save success state partial ai flag", 'hasPartialAiSave: lastSaveEntryMethod === "ai" && hasUnsavedPreviewRecords'),
             ("save success state pause entry flag", "shouldPauseEntryActions: hasUnsavedPreviewRecords"),
+        ):
+            _assert_contains(label, app_view_state_content, marker)
+        for label, marker in (
+            ("save success state helper import", "saveSuccessState\n} from \"./appViewState\";"),
             ("save success state helper binding", "const saveSuccessViewState = saveSuccessState(lastSaveEntryMethod, hasUnsavedPreviewRecords);"),
             ("save success partial ai state binding", "const hasPartialAiSave = saveSuccessViewState.hasPartialAiSave;"),
             ("save success manual fallback state binding", "const hasManualFallbackWithAiCandidates = saveSuccessViewState.hasManualFallbackWithAiCandidates;"),
@@ -4129,6 +4135,11 @@ def main() -> int:
             ("save success unsaved primary state binding", "hasUnsavedPreviewRecords={saveSuccessViewState.hasUnsavedPreviewRecords}"),
         ):
             _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "local save success state helper definition",
+            content,
+            "function saveSuccessState(lastSaveEntryMethod: SaveEntryMethod, hasUnsavedPreviewRecords: boolean)",
+        )
         _assert_contains(
             "result destination accessibility item",
             shared_display_items_content,
@@ -8793,6 +8804,10 @@ def main() -> int:
             ("preview record state low confidence field", "lowConfidenceRecordCount,"),
             ("preview record state rejected event count field", "rejectedEventCount,"),
             ("preview record state rejected events field", "rejectedEvents"),
+        ):
+            _assert_contains(label, app_view_state_content, marker)
+        for label, marker in (
+            ("preview state helper import", "previewRecordState,"),
             ("preview state helper binding", "const previewState = previewRecordState(preview);"),
             ("preview unsaved count state binding", "const unsavedPreviewRecordCount = previewState.recordCount;"),
             ("preview low confidence state count binding", "const lowConfidencePreviewRecordCount = previewState.lowConfidenceRecordCount;"),
@@ -8828,6 +8843,11 @@ def main() -> int:
             ("ai save confirm submit disabled binding", "disabled={isAiSaveConfirmSubmitDisabled}"),
         ):
             _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "local preview record state helper definition",
+            content,
+            "function previewRecordState(preview: ParsePreviewResponse | null)",
+        )
         for label, marker in (
             ("direct preview unsaved count binding", "const unsavedPreviewRecordCount = preview?.records.length ?? 0;"),
             ("direct preview rejected event count binding", "const rejectedPreviewEventCount = preview?.rejected_events.length ?? 0;"),
@@ -8996,6 +9016,9 @@ def main() -> int:
             ("record sync boundary load-more binding", "const canLoadMoreRecords = recordSyncBoundaryDisplay.canLoadMoreRecords;"),
             ("record sync boundary history display binding", "const historySyncBoundaryDisplayText = recordSyncBoundaryDisplay.history;"),
             ("record sync boundary analysis display binding", "const analysisSyncBoundaryDisplayText = recordSyncBoundaryDisplay.analysis;"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
             ("record collection state helper", "function recordCollectionState(\n  records: readonly RecordItem[],\n  syncLimit: number,\n  cacheLimit: number,\n  displayLimit: number\n)"),
             ("record collection display count binding", "displayCount: clampNumber(recordCount, 0, displayLimit)"),
             ("record collection has records flag", "hasRecords: recordCount > 0"),
@@ -9003,6 +9026,10 @@ def main() -> int:
             ("record collection cache limit flag", "isAtCacheLimit: recordCount >= cacheLimit"),
             ("record collection sync boundary flag", "isAtSyncBoundary: recordCount >= syncLimit"),
             ("record collection last record binding", "lastRecord: records[recordCount - 1] ?? null"),
+        ):
+            _assert_contains(label, app_view_state_content, marker)
+        for label, marker in (
+            ("record collection state helper import", "recordCollectionState,"),
             ("today records helper binding", "const todayRecords = useMemo(\n    () => todayRecordItems(recordsForDisplay),"),
             ("record display state helper display limit binding", "const recordDisplayState = recordCollectionState(\n    recordsForDisplay,\n    mobileRecordSyncLimit,\n    maxMobileRecordCacheLimit,\n    maxMobileCountValue\n  );"),
             ("analysis preview mode record state binding", "const analysisPreviewMode = recordDisplayState.isEmpty;"),
@@ -9085,6 +9112,11 @@ def main() -> int:
             ("manual record backend unavailable display binding", "const manualRecordBackendUnavailableDisplayText = manualRecordCreateDisplay.backendUnavailable;"),
         ):
             _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "local record collection state helper definition",
+            content,
+            "function recordCollectionState(\n  records: readonly RecordItem[],\n  syncLimit: number,\n  cacheLimit: number,\n  displayLimit: number\n)",
+        )
         for label, marker in (
             ("analysis preview mode direct records length guard", "const analysisPreviewMode = recordsForDisplay.length === 0;"),
             ("history boundary direct records length guard", "recordsForDisplay.length > 0"),
