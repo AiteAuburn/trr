@@ -522,6 +522,7 @@ import {
   parserBackendUnavailableStatusMessage,
   parserFailureRecoveryMessage,
   parserFailureStatusMessage,
+  parserModelReadyFromMessage,
   parserModelUnavailableText,
   parserModelUnavailableStatusMessage,
   parserProgressStatusMessage,
@@ -1288,7 +1289,7 @@ export default function App() {
   const selectedSttModel = selectedSttModelOption(models, sttModelId);
   const selectedLlmModel = selectedLlmModelOption(models, llmModelId);
   const parserModelUnavailableMessage = parserModelUnavailableText(selectedLlmModel, selectedSttModel);
-  const parserModelReady = parserModelUnavailableMessage.length === 0;
+  const parserModelReady = parserModelReadyFromMessage(parserModelUnavailableMessage);
   const accountDisplayName = accountDisplayNameDisplayText(account);
   const accountEmailDisplayText = accountEmailDisplayValue(account);
   const accountLoginDisplayText = accountLoginDisplayValue(account);

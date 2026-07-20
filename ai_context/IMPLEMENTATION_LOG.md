@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2184 move parser model ready helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the parser model ready predicate to `recordWorkflowCopy.ts`.
+- Removed the direct parser unavailable-message length check from `App.tsx`.
+- Kept parser model unavailable copy, parser guard behavior, transcript review disabled state, and parser submit blocking unchanged.
+- Updated navigation verifier coverage to require the record workflow helper export, App import/usage binding, and no direct parser ready length-check regression in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2183 move active profile lookup helper
 
 類型：mobile / refactor / verifier / docs

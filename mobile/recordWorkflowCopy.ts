@@ -138,6 +138,10 @@ export function parserModelUnavailableText(
   return "";
 }
 
+export function parserModelReadyFromMessage(message: string) {
+  return message.length === 0;
+}
+
 export function parserAvailabilityDisplayMessages(value: {
   parserModelUnavailableMessage: string;
   protectedBackendUnavailableMessage: string;

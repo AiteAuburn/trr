@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2184: Move parser model ready helper
+
+Status: done
+
+Completed:
+
+- Added the parser model ready predicate to `recordWorkflowCopy.ts`.
+- Removed the direct parser unavailable-message length check from `App.tsx`.
+- Kept parser model unavailable copy, parser guard behavior, transcript review disabled state, and parser submit blocking unchanged.
+- Updated navigation verifier coverage to require the record workflow helper export, App import/usage binding, and no direct parser ready length-check regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2183: Move active profile lookup helper
 
 Status: done
