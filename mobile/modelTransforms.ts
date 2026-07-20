@@ -1,4 +1,5 @@
 import type { DownloadedModel } from "./modelStorage";
+import type { NativeBenchmarkResult } from "./nativeLocalModels";
 
 export type NativeModelDownloadKind = "whisper" | "llama";
 export type NativeModelDownloadProgressHandler = (progress: number) => void;
@@ -57,6 +58,16 @@ export function nativeWhisperRequestArgs(whisperInput: NativeWhisperInput) {
 
 export function hasNativeWhisperInput(whisperInput: NativeWhisperInput) {
   return Boolean(whisperInput.modelPath && whisperInput.audioPath);
+}
+
+export async function appendNativeWhisperBenchmarkResult(
+  results: NativeBenchmarkResult[],
+  whisperInput: NativeWhisperInput,
+  benchmarkWhisper: (input: ReturnType<typeof nativeWhisperRequestArgs>) => Promise<NativeBenchmarkResult>
+) {
+  if (hasNativeWhisperInput(whisperInput)) {
+    results.push(await benchmarkWhisper(nativeWhisperRequestArgs(whisperInput)));
+  }
 }
 
 export function nativeLlamaRequestArgs(llamaInput: NativeLlamaInput) {
