@@ -207,6 +207,12 @@ export function nativeBenchmarkProgressStatusMessage() {
   return boundUiMessage("本機模型 benchmark 中...");
 }
 
+export function nativeBenchmarkStartState() {
+  return {
+    status: nativeBenchmarkProgressStatusMessage()
+  };
+}
+
 export function nativeBenchmarkMissingInputStatusMessage() {
   return boundUiMessage("請先填模型與測試輸入後再 benchmark。");
 }
