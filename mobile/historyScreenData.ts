@@ -1,4 +1,4 @@
-import { boundDateInputText, formatLocalDateInput } from "./dateTimeTransforms";
+import { boundDateInputText, formatLocalDateInput, localDateKey } from "./dateTimeTransforms";
 import { dailyRecordSummaryText } from "./dailyTranscriptTransforms";
 import {
   dailyRecordEntryDisplayItem,
@@ -64,6 +64,18 @@ export function historyDetailModeDisplayItem(value: { id: HistoryDetailMode; lab
 
 export function historyDetailModeDisplayItems(values: ReadonlyArray<{ id: HistoryDetailMode; label: string; accessibilityCopy: string }>) {
   return values.map(historyDetailModeDisplayItem);
+}
+
+export function historyRecordsByDateMap(records: RecordItem[]) {
+  const groups = new Map<string, RecordItem[]>();
+  for (const record of records) {
+    const key = localDateKey(record.occurred_at);
+    if (!key) {
+      continue;
+    }
+    groups.set(key, [...(groups.get(key) ?? []), record]);
+  }
+  return groups;
 }
 
 function pendingRecordFromRecordItem(record: RecordItem): PendingRecord {

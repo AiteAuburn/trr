@@ -9431,7 +9431,7 @@ def main() -> int:
             ("history calendar display helper binding", "const historyCalendarDisplay = historyCalendarDisplayTexts(historyCalendarMonthStart, selectedHistoryDate);"),
             ("history calendar title display binding", "const historyCalendarTitle = historyCalendarDisplay.title;"),
             ("history calendar previous month accessibility binding", "const historyPreviousMonthAccessibilityLabel = historyCalendarDisplay.previousMonthAccessibility;"),
-            ("history records by date map", "const historyRecordsByDate = useMemo(() => {"),
+            ("history records by date map", "const historyRecordsByDate = useMemo(() => historyRecordsByDateMap(recordsForDisplay), [recordsForDisplay]);"),
             ("history calendar display items", "const historyCalendarDisplayItems = useMemo(() => {"),
             ("history calendar component binding", "<HistoryCalendarMonthPicker\n              days={historyCalendarDisplayItems}"),
             ("history calendar previous month binding", "onPreviousMonthPress={openPreviousHistoryMonth}"),
@@ -9521,6 +9521,9 @@ def main() -> int:
         ):
             _assert_contains(label, history_copy_content, marker)
         for label, marker in (
+            ("history records by date helper", "function historyRecordsByDateMap(records: RecordItem[])"),
+            ("history records by date helper local key", "const key = localDateKey(record.occurred_at);"),
+            ("history records by date helper skip invalid", "if (!key) {\n      continue;\n    }"),
             ("history pending record adapter", "function pendingRecordFromRecordItem(record: RecordItem): PendingRecord"),
             ("history daily sync summary helper", "function historyDailySyncSummary(records: RecordItem[], isLocalPreview: boolean)"),
             ("history daily summary display item", "function historyDailySummaryDisplayItem(dateKey: string, records: RecordItem[], isLocalPreview: boolean)"),
@@ -9629,6 +9632,11 @@ def main() -> int:
         ):
             if marker in history_block:
                 raise AssertionError(f"History calendar-first render block must not contain {label}.")
+        _assert_not_contains(
+            "history direct records by date map",
+            content,
+            "const groups = new Map<string, RecordItem[]>();\n    for (const record of recordsForDisplay) {",
+        )
         pending_save_block = _function_block(record_save_transforms_content, "pendingRecordForSave")
         _assert_contains(
             "pending save preserves bounded source text",

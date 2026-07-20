@@ -591,6 +591,7 @@ import {
   historyDetailModeDisplayItems,
   historyDetailModes,
   historyRawRecordDisplayItems,
+  historyRecordsByDateMap,
   type HistoryDetailMode
 } from "./historyScreenData";
 import {
@@ -749,7 +750,6 @@ import {
   formatLocalDateInput,
   formatLocalTimeInput,
   isSameLocalDay,
-  localDateKey,
   localDateTimeInputs,
   localDateTimeToIso,
   startOfCurrentMonth
@@ -1229,17 +1229,7 @@ export default function App() {
     maxMobileRecordCacheLimit,
     maxMobileCountValue
   );
-  const historyRecordsByDate = useMemo(() => {
-    const groups = new Map<string, RecordItem[]>();
-    for (const record of recordsForDisplay) {
-      const key = localDateKey(record.occurred_at);
-      if (!key) {
-        continue;
-      }
-      groups.set(key, [...(groups.get(key) ?? []), record]);
-    }
-    return groups;
-  }, [recordsForDisplay]);
+  const historyRecordsByDate = useMemo(() => historyRecordsByDateMap(recordsForDisplay), [recordsForDisplay]);
   const historyCalendarMonthStart = useMemo(() => {
     const selected = new Date(`${selectedHistoryDate}T00:00:00`);
     const base = Number.isNaN(selected.getTime()) ? new Date() : selected;
