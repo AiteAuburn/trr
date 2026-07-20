@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2092: Extract achievement unlocked card list component
+
+Status: done
+
+Completed:
+
+- Added `AchievementUnlockedCardList` for save-success and achievements unlocked-card rows.
+- Moved unlocked-card key, badge, title, level, icon, and detail helpers out of `App.tsx`.
+- Kept achievement state, memoized display data, and navigation flow in `App.tsx`.
+- Updated navigation, UI spec coverage, and visual smoke verifiers to require the extracted component and reject the old inline render maps.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2091: Extract food community detail share list component
 
 Status: done

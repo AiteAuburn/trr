@@ -15,6 +15,40 @@
 
 ## 2026-07-16
 
+### T2092 extract achievement unlocked card list component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/achievementUnlockedCardList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `AchievementUnlockedCardList` for unlocked achievement rows on save-success and achievements screens.
+- Moved unlocked-card key, badge style, icon, level, title, and date detail helpers out of `App.tsx`.
+- Preserved achievement state, display memoization, navigation, copy, unlocked-card order, and category section rendering.
+- Updated navigation, UI-spec, and visual-smoke verifier coverage to require the extracted unlocked-card component and reject the old inline `displayItem` render maps in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting one presentational achievement or future-module UI loop at a time.
+
 ### T2091 extract food community detail share list component
 
 類型：mobile / refactor / verifier / docs

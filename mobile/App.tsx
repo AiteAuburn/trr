@@ -143,7 +143,6 @@ import {
   achievementNextBadgeCopy,
   achievementPreviewBoundaryCopy,
   achievementSyncStatusMessages,
-  achievementUnlockDisplayDate,
   backendYearReviewHealthOutcomeDisplayRows,
   backendYearReviewMetricDisplayRows,
   buildAchievementCategoryDisplaySections,
@@ -758,6 +757,7 @@ import {
 import { protectedRequestHeaders } from "./authRequestHeaders";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
 import { AchievementCategorySectionList } from "./achievementCategorySectionList";
+import { AchievementUnlockedCardList } from "./achievementUnlockedCardList";
 import { AiCandidateList } from "./aiCandidateList";
 import { AiFlowChecklist } from "./aiFlowChecklist";
 import { AiReviewActionRow } from "./aiReviewActionRow";
@@ -5280,34 +5280,6 @@ export default function App() {
     return returnFromRankingPreview;
   }
 
-  function achievementUnlockedCardKey(prefix: string, displayItem: (typeof achievementDisplayItems)[number]) {
-    return `${prefix}-${displayItem.id}`;
-  }
-
-  function achievementUnlockedCardBadgeStyle(displayItem: (typeof achievementDisplayItems)[number]) {
-    return [
-      styles.achievementBadge,
-      displayItem.kind === "streak" ? styles.achievementBadgeStreak : null,
-      { backgroundColor: displayItem.badgeColor }
-    ];
-  }
-
-  function achievementUnlockedCardIcon(displayItem: (typeof achievementDisplayItems)[number]) {
-    return displayItem.icon;
-  }
-
-  function achievementUnlockedCardLevel(displayItem: (typeof achievementDisplayItems)[number]) {
-    return displayItem.level;
-  }
-
-  function achievementUnlockedCardTitle(displayItem: (typeof achievementDisplayItems)[number]) {
-    return displayItem.title;
-  }
-
-  function achievementUnlockedCardDetail(displayItem: (typeof achievementDisplayItems)[number]) {
-    return `${displayItem.kindLabel} · ${achievementUnlockDisplayDate(displayItem.unlockedAt)}`;
-  }
-
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
@@ -9307,22 +9279,12 @@ export default function App() {
               </Text>
             </View>
             {saveSuccessNewlyUnlockedDisplayItems.length > 0 ? (
-              <View style={styles.openSection}>
-                <Text style={styles.label}>新解鎖成就</Text>
-                {saveSuccessNewlyUnlockedDisplayItems.map((displayItem) => (
-                  <View key={achievementUnlockedCardKey("save-success-new-unlock", displayItem)} style={styles.timelineCard}>
-                    <View style={achievementUnlockedCardBadgeStyle(displayItem)}>
-                      <Text style={styles.achievementBadgeIcon}>{achievementUnlockedCardIcon(displayItem)}</Text>
-                      <Text style={styles.achievementBadgeLevel}>{achievementUnlockedCardLevel(displayItem)}</Text>
-                    </View>
-                    <View style={styles.timelineContent}>
-                      <Text style={styles.recordContent}>{achievementUnlockedCardTitle(displayItem)}</Text>
-                      <Text style={styles.evidence}>{achievementUnlockedCardDetail(displayItem)}</Text>
-                    </View>
-                    <Text style={styles.previewModeBadge}>新解鎖</Text>
-                  </View>
-                ))}
-              </View>
+              <AchievementUnlockedCardList
+                badgeLabel="新解鎖"
+                items={saveSuccessNewlyUnlockedDisplayItems}
+                keyPrefix="save-success-new-unlock"
+                title="新解鎖成就"
+              />
             ) : null}
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.saveResult}</Text>
@@ -11335,40 +11297,20 @@ export default function App() {
               </View>
             </View>
             {achievementNewlyUnlockedDisplayItems.length > 0 ? (
-              <View style={styles.openSection}>
-                <Text style={styles.label}>本次新解鎖</Text>
-                {achievementNewlyUnlockedDisplayItems.map((displayItem) => (
-                  <View key={achievementUnlockedCardKey("new-unlock", displayItem)} style={styles.timelineCard}>
-                    <View style={achievementUnlockedCardBadgeStyle(displayItem)}>
-                      <Text style={styles.achievementBadgeIcon}>{achievementUnlockedCardIcon(displayItem)}</Text>
-                      <Text style={styles.achievementBadgeLevel}>{achievementUnlockedCardLevel(displayItem)}</Text>
-                    </View>
-                    <View style={styles.timelineContent}>
-                      <Text style={styles.recordContent}>{achievementUnlockedCardTitle(displayItem)}</Text>
-                      <Text style={styles.evidence}>{achievementUnlockedCardDetail(displayItem)}</Text>
-                    </View>
-                    <Text style={styles.previewModeBadge}>新解鎖</Text>
-                  </View>
-                ))}
-              </View>
+              <AchievementUnlockedCardList
+                badgeLabel="新解鎖"
+                items={achievementNewlyUnlockedDisplayItems}
+                keyPrefix="new-unlock"
+                title="本次新解鎖"
+              />
             ) : null}
             {achievementUnlockedDisplayItems.length > 0 ? (
-              <View style={styles.openSection}>
-                <Text style={styles.label}>已解鎖徽章</Text>
-                {achievementUnlockedDisplayItems.map((displayItem) => (
-                  <View key={achievementUnlockedCardKey("unlock", displayItem)} style={styles.timelineCard}>
-                    <View style={achievementUnlockedCardBadgeStyle(displayItem)}>
-                      <Text style={styles.achievementBadgeIcon}>{achievementUnlockedCardIcon(displayItem)}</Text>
-                      <Text style={styles.achievementBadgeLevel}>{achievementUnlockedCardLevel(displayItem)}</Text>
-                    </View>
-                    <View style={styles.timelineContent}>
-                      <Text style={styles.recordContent}>{achievementUnlockedCardTitle(displayItem)}</Text>
-                      <Text style={styles.evidence}>{achievementUnlockedCardDetail(displayItem)}</Text>
-                    </View>
-                    <Text style={styles.previewModeBadge}>已保存</Text>
-                  </View>
-                ))}
-              </View>
+              <AchievementUnlockedCardList
+                badgeLabel="已保存"
+                items={achievementUnlockedDisplayItems}
+                keyPrefix="unlock"
+                title="已解鎖徽章"
+              />
             ) : null}
             <AchievementCategorySectionList sections={achievementCategoryDisplaySections} />
             <Text style={styles.evidence}>{achievementLocalComputationDisplayText}</Text>
@@ -12965,30 +12907,6 @@ const styles = StyleSheet.create({
   },
   openSection: {
     gap: 10
-  },
-  achievementBadge: {
-    alignItems: "center",
-    borderRadius: 10,
-    height: 58,
-    justifyContent: "center",
-    minWidth: 58,
-    paddingHorizontal: 8
-  },
-  achievementBadgeStreak: {
-    borderRadius: 999,
-    transform: [{ rotate: "-3deg" }]
-  },
-  achievementBadgeIcon: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "900",
-    lineHeight: 18
-  },
-  achievementBadgeLevel: {
-    color: "#FFFFFF",
-    fontSize: 17,
-    fontWeight: "900",
-    lineHeight: 20
   },
   yearBadgeRow: {
     alignItems: "flex-start",
