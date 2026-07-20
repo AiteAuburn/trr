@@ -59,6 +59,12 @@ export function nativeModelDownloadFailureStatusMessage(error: unknown) {
   return safeUiError(error, "模型下載失敗");
 }
 
+export function nativeModelDownloadFailureState(error: unknown) {
+  return {
+    status: nativeModelDownloadFailureStatusMessage(error)
+  };
+}
+
 export function nativeModuleCheckButtonLabel(isRunning: boolean) {
   return boundDisplayText(isRunning ? "處理中..." : "檢查 native modules", maxDisplayTextLength);
 }

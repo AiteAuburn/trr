@@ -498,7 +498,7 @@ import {
   nativeLlamaRunAccessibilityLabel,
   nativeModelDownloadAccessibilityLabel,
   nativeModelDownloadButtonLabel,
-  nativeModelDownloadFailureStatusMessage,
+  nativeModelDownloadFailureState,
   nativeModelDownloadStartState,
   nativeModelDownloadSuccessStatusMessage,
   nativeModuleCheckAccessibilityLabel,
@@ -7930,7 +7930,8 @@ export default function App() {
   }
 
   function handleNativeModelDownloadFailure(error: unknown) {
-    setNativeStatus(nativeModelDownloadFailureStatusMessage(error));
+    const nextState = nativeModelDownloadFailureState(error);
+    setNativeStatus(nextState.status);
   }
 
   function handleNativeModuleCheckSuccess(message: string) {
