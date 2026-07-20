@@ -12010,6 +12010,7 @@ def main() -> int:
             ("food community share eaten time label helper binding", 'timeLabel={foodCommunityShareEatenTimeLabel()}'),
             ("food community detail sync function", "async function loadFoodCommunityDetail(itemId: string)"),
             ("food community detail endpoint", "`/community/foods/${boundedItemId}`"),
+            ("food community list response transform helper binding", "const nextItems = foodCommunityItemsFromApi(foods);"),
             ("food community list default item helper", "function foodCommunityListDefaultItemId(items: Array<{ id: string }>, fallbackId: string)"),
             ("food community list default item helper fields", "return items[0]?.id ?? fallbackId;"),
             ("food community list default item helper binding", "const nextSelectedItemId = foodCommunityListDefaultItemId(nextItems, selectedFoodCommunityItemId);"),
@@ -13905,6 +13906,8 @@ def main() -> int:
             ("food community api item type", "export type FoodCommunityApiItem = {"),
             ("food community api share response type", "export type FoodCommunityApiShareResponse = {"),
             ("food community api item transform helper", "export function foodCommunityItemFromApi(value: FoodCommunityApiItem): FoodCommunityItem"),
+            ("food community api items transform helper", "export function foodCommunityItemsFromApi(values: FoodCommunityApiItem[])"),
+            ("food community api items transform helper internals", "return values.slice(0, maxListItems * 4).map(foodCommunityItemFromApi);"),
             ("food community backend share mapping", "examples: (value.shares ?? []).slice(0, 3).map((share) => ({"),
             ("food community share fields type", "export type FoodCommunityShareFields = {"),
             ("food community share food name field", "foodName: string;"),
@@ -14727,6 +14730,11 @@ def main() -> int:
             "food community direct detail refresh item map",
             content,
             "current.map((item) => (item.id === detailedItemId ? detailedItem : item))",
+        )
+        _assert_not_contains(
+            "food community direct list response map",
+            content,
+            "foods.slice(0, maxListItems * 4).map(foodCommunityItemFromApi)",
         )
         _assert_not_contains(
             "food community direct detail status title binding",

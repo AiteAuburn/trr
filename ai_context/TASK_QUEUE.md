@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2098: Move food community list response transform
+
+Status: done
+
+Completed:
+
+- Added `foodCommunityItemsFromApi` to `futureModuleDisplay.ts`.
+- Replaced the inline food community list response slice/map in `App.tsx`.
+- Kept backend request, stale-response guard, selected item fallback, detail refresh trigger, and status handling in `App.tsx`.
+- Updated navigation verifier coverage to require the domain transform helper and reject the old inline response map.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2097: Move auth session response bounding helper
 
 Status: done

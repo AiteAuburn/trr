@@ -1208,6 +1208,10 @@ export function foodCommunityItemFromApi(value: FoodCommunityApiItem): FoodCommu
   };
 }
 
+export function foodCommunityItemsFromApi(values: FoodCommunityApiItem[]) {
+  return values.slice(0, maxListItems * 4).map(foodCommunityItemFromApi);
+}
+
 export function foodCommunityItemsWithDetail(items: FoodCommunityItem[], detailedItem: FoodCommunityItem) {
   return items.map((item) => (item.id === detailedItem.id ? detailedItem : item));
 }

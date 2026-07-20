@@ -181,6 +181,7 @@ import {
   foodCommunityDisplayBundle,
   foodCommunityItemDisplayItem,
   foodCommunityItemFromApi,
+  foodCommunityItemsFromApi,
   foodCommunityItemsWithDetail,
   foodCommunityItems,
   foodCommunityShareStatusMessages,
@@ -5941,7 +5942,7 @@ export default function App() {
       if (latestCommunitySyncKey.current !== communityKey) {
         return;
       }
-      const nextItems = foods.slice(0, maxListItems * 4).map(foodCommunityItemFromApi);
+      const nextItems = foodCommunityItemsFromApi(foods);
       setFoodCommunityBackendItems(nextItems);
       const nextSelectedItemId = foodCommunityListDefaultItemId(nextItems, selectedFoodCommunityItemId);
       setSelectedFoodCommunityItemId(nextSelectedItemId);
