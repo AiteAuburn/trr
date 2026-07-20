@@ -798,6 +798,13 @@ export function futureModuleImplementationOrderCopy() {
   );
 }
 
+export function futureModuleDetailDisplayBundle() {
+  return {
+    boundary: futureModuleDetailBoundaryCopy(),
+    implementationOrder: futureModuleImplementationOrderCopy()
+  };
+}
+
 export function futureModulesOpenStatusMessage() {
   return boundDisplayText("已開啟未來擴充清單；預覽入口不呼叫 backend、AI、Vision 或 payment。", maxDisplayDetailTextLength);
 }

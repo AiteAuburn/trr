@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2211: Move future module detail display bundle
+
+Status: done
+
+Completed:
+
+- Added the future module detail display bundle helper to `futureModuleDisplay.ts`.
+- Removed direct future module detail boundary and implementation-order copy assembly from `App.tsx`.
+- Kept future module detail screen copy, preview-only behavior, and destination/return behavior unchanged.
+- Updated navigation verifier coverage to require the future module detail display bundle, App bundle bindings, and no direct future module detail display assembly regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2210: Move privacy settings control display bundle
 
 Status: done

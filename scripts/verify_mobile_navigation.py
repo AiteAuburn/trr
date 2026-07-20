@@ -13974,6 +13974,9 @@ def main() -> int:
             ("future modules return menu binding", "onPress={returnFromFutureModulesToMenu}"),
             ("future module detail return binding", "onPress={returnFromFutureModuleDetail}"),
             ("future module destination binding", "onDestinationPress={openFutureModuleDestination}"),
+            ("future module detail display helper binding", "const futureModuleDetailDisplay = futureModuleDetailDisplayBundle();"),
+            ("future module detail boundary display binding", "const futureModuleDetailBoundaryDisplayText = futureModuleDetailDisplay.boundary;"),
+            ("future module implementation order display binding", "const futureModuleImplementationOrderDisplayText = futureModuleDetailDisplay.implementationOrder;"),
             ("doctor share return binding", "onPress={returnFromDoctorSharePreview}"),
             ("health integration return binding", "onPress={returnFromHealthIntegrationPreview}"),
             ("community return binding", "onPress={returnFromCommunityPreview}"),
@@ -14216,6 +14219,11 @@ def main() -> int:
             )
             _assert_contains(label, source, marker)
         for label, marker in (
+            ("direct future module detail boundary copy binding", "const futureModuleDetailBoundaryDisplayText = futureModuleDetailBoundaryCopy();"),
+            ("direct future module implementation order copy binding", "const futureModuleImplementationOrderDisplayText = futureModuleImplementationOrderCopy();"),
+        ):
+            _assert_not_contains(label, content, marker)
+        for label, marker in (
             ("year review highlight list component", "export function YearlyHighlightList"),
             ("year review highlight list items prop", "items: readonly string[]"),
             ("year review highlight item key helper", "function yearlyHighlightItemKey(item: string)"),
@@ -14431,6 +14439,9 @@ def main() -> int:
             ("future module detail boundary copy", "這個頁面只整理 UI 入口、工程前置條件與資料安全邊界"),
             ("future module implementation order copy helper", "export function futureModuleImplementationOrderCopy()"),
             ("future module implementation order copy", "實作順序建議：先完成 production auth、權限模型、schema/source 欄位與 audit trail"),
+            ("future module detail display bundle helper", "export function futureModuleDetailDisplayBundle()"),
+            ("future module detail display boundary binding", "boundary: futureModuleDetailBoundaryCopy()"),
+            ("future module detail display implementation order binding", "implementationOrder: futureModuleImplementationOrderCopy()"),
             ("future modules open status helper", "export function futureModulesOpenStatusMessage()"),
             ("future modules return menu status helper", "export function futureModulesReturnMenuStatusMessage()"),
             ("future module detail return status helper", "export function futureModuleDetailReturnStatusMessage()"),

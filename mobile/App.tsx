@@ -269,9 +269,8 @@ import {
   futureModuleCards,
   futureBoundaryRowsDisplayBundle,
   futureModuleCardDisplayItems,
-  futureModuleDetailBoundaryCopy,
+  futureModuleDetailDisplayBundle,
   futureModuleDetailReturnStatusMessage,
-  futureModuleImplementationOrderCopy,
   futureModuleRequirementKey,
   futureModuleRequirementText,
   futureModulesOpenStatusMessage,
@@ -2124,8 +2123,9 @@ export default function App() {
   const privacyIntegrationButtonDisplayLabel = privacySettingsControlDisplay.integrationButton;
   const privacyIntegrationAccessibilityDisplayLabel = privacySettingsControlDisplay.integrationAccessibility;
   const settingsSubscriptionDisplayLabels = settingsSubscriptionSectionLabels();
-  const futureModuleDetailBoundaryDisplayText = futureModuleDetailBoundaryCopy();
-  const futureModuleImplementationOrderDisplayText = futureModuleImplementationOrderCopy();
+  const futureModuleDetailDisplay = futureModuleDetailDisplayBundle();
+  const futureModuleDetailBoundaryDisplayText = futureModuleDetailDisplay.boundary;
+  const futureModuleImplementationOrderDisplayText = futureModuleDetailDisplay.implementationOrder;
   const achievementPreviewBoundaryDisplayText = achievementPreviewBoundaryCopy();
   const achievementLocalComputationDisplayText = achievementLocalComputationCopy();
   const achievementNextBadgeDisplayText = achievementNextBadgeCopy(nextAchievementDisplayDays);

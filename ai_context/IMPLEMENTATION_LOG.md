@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2211 move future module detail display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the future module detail display bundle helper to `futureModuleDisplay.ts`.
+- Removed direct future module detail boundary and implementation-order copy assembly from `App.tsx`.
+- Kept future module detail screen copy, preview-only behavior, and destination/return behavior unchanged.
+- Updated navigation verifier coverage to require the future module detail display bundle, App bundle bindings, and no direct future module detail display assembly regressions in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2210 move privacy settings control display bundle
 
 類型：mobile / refactor / verifier / docs
