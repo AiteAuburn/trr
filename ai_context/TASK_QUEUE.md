@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2205: Move native action display bundle
+
+Status: done
+
+Completed:
+
+- Added the native action display bundle helper to `nativeStatusCopy.ts`.
+- Removed direct native module check, model download, download-kind accessibility, local run accessibility, benchmark accessibility, and recording model refresh label assembly from `App.tsx`.
+- Kept native debug controls, local model download actions, local Whisper/Llama run actions, benchmark actions, and recording model refresh behavior unchanged.
+- Updated navigation verifier coverage to require the native action display bundle, App bundle bindings, and no direct native action display assembly regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2204: Move food photo display bundle
 
 Status: done

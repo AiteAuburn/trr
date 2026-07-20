@@ -606,27 +606,18 @@ import {
   nativeLlamaOutputSummaryMessage,
   nativeLlamaStartState,
   nativeLlamaSuccessState,
-  nativeBenchmarkAccessibilityLabel,
-  nativeDownloadKindAccessibilityLabel,
-  nativeLlamaRunAccessibilityLabel,
-  nativeModelDownloadAccessibilityLabel,
-  nativeModelDownloadButtonLabel,
+  nativeActionDisplayBundle,
   nativeModelDownloadFailureState,
   nativeModelDownloadStartState,
   nativeModelDownloadSuccessState,
-  nativeModuleCheckAccessibilityLabel,
-  nativeModuleCheckButtonLabel,
   nativeModuleCheckFailureState,
   nativeModuleCheckStartState,
   nativeModuleCheckResultState,
   nativeStatusDisplayTexts,
   nativeWhisperFailureState,
   nativeWhisperMissingInputState,
-  nativeWhisperRunAccessibilityLabel,
   nativeWhisperStartState,
   nativeWhisperSuccessState,
-  recordingModelRefreshAccessibilityLabel,
-  recordingModelRefreshButtonLabel,
   recordingModelRefreshFailureStatusMessage,
   recordingModelRefreshStatusMessage,
   recordingModelSelectedStatusMessage
@@ -2104,17 +2095,22 @@ export default function App() {
   const coreFlowDisplayLabels = coreFlowSectionLabels();
   const advancedSettingsToggleDisplayLabel = advancedSettingsToggleLabel(showAdvancedSettings);
   const backendReconnectDisplayLabel = backendReconnectButtonLabel(isAnyRequestInFlight);
-  const nativeModuleCheckDisplayLabel = nativeModuleCheckButtonLabel(isBusy);
-  const nativeModelDownloadDisplayLabel = nativeModelDownloadButtonLabel(isBusy, downloadProgress);
-  const nativeWhisperDownloadKindAccessibilityDisplayLabel = nativeDownloadKindAccessibilityLabel("whisper", downloadKind);
-  const nativeLlamaDownloadKindAccessibilityDisplayLabel = nativeDownloadKindAccessibilityLabel("llama", downloadKind);
-  const nativeModuleCheckAccessibilityDisplayLabel = nativeModuleCheckAccessibilityLabel(isBusy);
-  const nativeModelDownloadAccessibilityDisplayLabel = nativeModelDownloadAccessibilityLabel(isBusy, downloadProgress);
-  const nativeWhisperRunAccessibilityDisplayLabel = nativeWhisperRunAccessibilityLabel(isBusy);
-  const nativeLlamaRunAccessibilityDisplayLabel = nativeLlamaRunAccessibilityLabel(isBusy);
-  const nativeBenchmarkAccessibilityDisplayLabel = nativeBenchmarkAccessibilityLabel(isBusy);
-  const recordingModelRefreshDisplayLabel = recordingModelRefreshButtonLabel();
-  const recordingModelRefreshAccessibilityDisplayLabel = recordingModelRefreshAccessibilityLabel();
+  const nativeActionDisplay = nativeActionDisplayBundle({
+    isRunning: isBusy,
+    downloadProgress,
+    downloadKind
+  });
+  const nativeModuleCheckDisplayLabel = nativeActionDisplay.moduleCheckLabel;
+  const nativeModelDownloadDisplayLabel = nativeActionDisplay.modelDownloadLabel;
+  const nativeWhisperDownloadKindAccessibilityDisplayLabel = nativeActionDisplay.whisperDownloadKindAccessibility;
+  const nativeLlamaDownloadKindAccessibilityDisplayLabel = nativeActionDisplay.llamaDownloadKindAccessibility;
+  const nativeModuleCheckAccessibilityDisplayLabel = nativeActionDisplay.moduleCheckAccessibility;
+  const nativeModelDownloadAccessibilityDisplayLabel = nativeActionDisplay.modelDownloadAccessibility;
+  const nativeWhisperRunAccessibilityDisplayLabel = nativeActionDisplay.whisperRunAccessibility;
+  const nativeLlamaRunAccessibilityDisplayLabel = nativeActionDisplay.llamaRunAccessibility;
+  const nativeBenchmarkAccessibilityDisplayLabel = nativeActionDisplay.benchmarkAccessibility;
+  const recordingModelRefreshDisplayLabel = nativeActionDisplay.recordingModelRefreshLabel;
+  const recordingModelRefreshAccessibilityDisplayLabel = nativeActionDisplay.recordingModelRefreshAccessibility;
   const downloadedWhisperModelChoiceItems = downloadedWhisperModelDisplayItems(downloadedModels);
   const achievementsReturnButtonDisplayLabel = returnDestinationButtonLabel(achievementsReturnScreen);
   const yearReviewReturnButtonDisplayLabel = returnDestinationButtonLabel(yearReviewReturnScreen);

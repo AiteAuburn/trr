@@ -145,6 +145,26 @@ export function nativeBenchmarkAccessibilityLabel(isRunning: boolean) {
   );
 }
 
+export function nativeActionDisplayBundle(value: {
+  isRunning: boolean;
+  downloadProgress: number;
+  downloadKind: "whisper" | "llama";
+}) {
+  return {
+    moduleCheckLabel: nativeModuleCheckButtonLabel(value.isRunning),
+    modelDownloadLabel: nativeModelDownloadButtonLabel(value.isRunning, value.downloadProgress),
+    whisperDownloadKindAccessibility: nativeDownloadKindAccessibilityLabel("whisper", value.downloadKind),
+    llamaDownloadKindAccessibility: nativeDownloadKindAccessibilityLabel("llama", value.downloadKind),
+    moduleCheckAccessibility: nativeModuleCheckAccessibilityLabel(value.isRunning),
+    modelDownloadAccessibility: nativeModelDownloadAccessibilityLabel(value.isRunning, value.downloadProgress),
+    whisperRunAccessibility: nativeWhisperRunAccessibilityLabel(value.isRunning),
+    llamaRunAccessibility: nativeLlamaRunAccessibilityLabel(value.isRunning),
+    benchmarkAccessibility: nativeBenchmarkAccessibilityLabel(value.isRunning),
+    recordingModelRefreshLabel: recordingModelRefreshButtonLabel(),
+    recordingModelRefreshAccessibility: recordingModelRefreshAccessibilityLabel()
+  };
+}
+
 export function nativeModuleCheckProgressStatusMessage() {
   return boundUiMessage("檢查 native modules...");
 }
