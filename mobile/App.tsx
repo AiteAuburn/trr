@@ -724,6 +724,10 @@ import {
   settingsRowSubpageTarget,
   subscriptionManagementDisplayRows as buildSubscriptionManagementDisplayRows,
   tutorialDisplaySteps as buildTutorialDisplaySteps,
+  tutorialStepDescription,
+  tutorialStepIcon,
+  tutorialStepKey,
+  tutorialStepTitle,
   type SettingsRow
 } from "./settingsScreenData";
 import {
@@ -2309,22 +2313,6 @@ export default function App() {
 
   function openTutorialManualRecord() {
     openManualRecordWithStatus("tutorial", tutorialManualEntryStatusMessage());
-  }
-
-  function tutorialStepKey(step: (typeof tutorialDisplaySteps)[number]) {
-    return step.title;
-  }
-
-  function tutorialStepIcon(step: (typeof tutorialDisplaySteps)[number]) {
-    return step.icon;
-  }
-
-  function tutorialStepTitle(step: (typeof tutorialDisplaySteps)[number]) {
-    return step.title;
-  }
-
-  function tutorialStepDescription(step: (typeof tutorialDisplaySteps)[number]) {
-    return step.description;
   }
 
   function openTodayManualRecord() {

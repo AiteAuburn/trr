@@ -119,6 +119,24 @@ export function tutorialDisplaySteps() {
   return tutorialSteps.map(tutorialStepDisplayItem);
 }
 
+type TutorialStepDisplayItem = ReturnType<typeof tutorialStepDisplayItem>;
+
+export function tutorialStepKey(step: TutorialStepDisplayItem) {
+  return step.title;
+}
+
+export function tutorialStepIcon(step: TutorialStepDisplayItem) {
+  return step.icon;
+}
+
+export function tutorialStepTitle(step: TutorialStepDisplayItem) {
+  return step.title;
+}
+
+export function tutorialStepDescription(step: TutorialStepDisplayItem) {
+  return step.description;
+}
+
 export function settingsRowDisplayItem(value: SettingsRow) {
   const label = boundDisplayText(value.label || "設定", maxDisplayTextLength);
   const helper = value.helper ? boundDisplayText(value.helper, maxDisplayDetailTextLength) : "";

@@ -11347,24 +11347,35 @@ def main() -> int:
             ("tutorial steps config", "export const tutorialSteps = ["),
             ("tutorial display steps helper", "export function tutorialDisplaySteps()"),
             ("tutorial display steps map", "return tutorialSteps.map(tutorialStepDisplayItem);"),
+            ("tutorial step key helper", "function tutorialStepKey(step: TutorialStepDisplayItem)"),
+            ("tutorial step key helper fields", "return step.title;"),
+            ("tutorial step icon helper", "function tutorialStepIcon(step: TutorialStepDisplayItem)"),
+            ("tutorial step icon helper fields", "return step.icon;"),
+            ("tutorial step title helper", "function tutorialStepTitle(step: TutorialStepDisplayItem)"),
+            ("tutorial step title helper fields", "return step.title;"),
+            ("tutorial step description helper", "function tutorialStepDescription(step: TutorialStepDisplayItem)"),
+            ("tutorial step description helper fields", "return step.description;"),
             ("tutorial whisper release copy", "若已選擇本機 Whisper 模型，會先轉成文字並進入確認。"),
         ):
             _assert_contains(label, settings_screen_data_content, marker)
         for label, marker in (
-            ("tutorial step key helper", "function tutorialStepKey(step: (typeof tutorialDisplaySteps)[number])"),
-            ("tutorial step key helper fields", "return step.title;"),
+            ("tutorial step key helper import", "tutorialStepKey,"),
             ("tutorial step key helper binding", "key={tutorialStepKey(step)}"),
-            ("tutorial step icon helper", "function tutorialStepIcon(step: (typeof tutorialDisplaySteps)[number])"),
-            ("tutorial step icon helper fields", "return step.icon;"),
+            ("tutorial step icon helper import", "tutorialStepIcon,"),
             ("tutorial step icon helper binding", "{tutorialStepIcon(step)}"),
-            ("tutorial step title helper", "function tutorialStepTitle(step: (typeof tutorialDisplaySteps)[number])"),
-            ("tutorial step title helper fields", "return step.title;"),
+            ("tutorial step title helper import", "tutorialStepTitle,"),
             ("tutorial step title helper binding", "{tutorialStepTitle(step)}"),
-            ("tutorial step description helper", "function tutorialStepDescription(step: (typeof tutorialDisplaySteps)[number])"),
-            ("tutorial step description helper fields", "return step.description;"),
+            ("tutorial step description helper import", "tutorialStepDescription,"),
             ("tutorial step description helper binding", "{tutorialStepDescription(step)}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("local tutorial step key helper", "function tutorialStepKey(step: (typeof tutorialDisplaySteps)[number])"),
+            ("local tutorial step icon helper", "function tutorialStepIcon(step: (typeof tutorialDisplaySteps)[number])"),
+            ("local tutorial step title helper", "function tutorialStepTitle(step: (typeof tutorialDisplaySteps)[number])"),
+            ("local tutorial step description helper", "function tutorialStepDescription(step: (typeof tutorialDisplaySteps)[number])"),
+        ):
+            _assert_not_contains(label, content, marker)
         tutorial_steps_render_block = _match_block(
             content,
             r"tutorialDisplaySteps\.map\(\(step\) => \(([\s\S]*?</View>\n\s*)\)\)",
