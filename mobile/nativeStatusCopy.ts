@@ -183,6 +183,12 @@ export function nativeLlamaProgressStatusMessage() {
   return boundUiMessage("本機 llama.cpp 解析中...");
 }
 
+export function nativeLlamaStartState() {
+  return {
+    status: nativeLlamaProgressStatusMessage()
+  };
+}
+
 export function nativeLlamaOutputSummaryMessage(outputLength: number) {
   return boundUiMessage(
     `llama.cpp 輸出已產生（${clampNumber(outputLength, 0, maxMobileCountValue)} chars）；為避免保留 raw model output，UI 不顯示完整內容。`

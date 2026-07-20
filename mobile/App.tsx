@@ -491,7 +491,7 @@ import {
   nativeLlamaFailureStatusMessage,
   nativeLlamaMissingInputStatusMessage,
   nativeLlamaOutputSummaryMessage,
-  nativeLlamaProgressStatusMessage,
+  nativeLlamaStartState,
   nativeLlamaSuccessStatusMessage,
   nativeBenchmarkAccessibilityLabel,
   nativeDownloadKindAccessibilityLabel,
@@ -7899,7 +7899,8 @@ export default function App() {
   }
 
   function startNativeLlamaStatus() {
-    setNativeStatus(nativeLlamaProgressStatusMessage());
+    const nextState = nativeLlamaStartState();
+    setNativeStatus(nextState.status);
   }
 
   function handleNativeLlamaMissingInput() {
