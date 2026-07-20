@@ -31,7 +31,15 @@ import {
   writeStoredAuthSession
 } from "./authTokenStorage";
 import { requestJson, requestNoContent } from "./apiClient";
-import { AnalysisRangeSelector } from "./analysisRangeSelector";
+import {
+  AnalysisRangeSelector,
+  analysisRangeOptionAccessibilityLabel,
+  analysisRangeOptionKey,
+  analysisRangeOptionLabel,
+  analysisRangeOptionSelected,
+  analysisRangeTarget,
+  type AnalysisRangeOption
+} from "./analysisRangeSelector";
 import {
   allowMobileDevAuth,
   defaultApiBaseUrl,
@@ -634,7 +642,6 @@ import {
   type AnalysisRange
 } from "./analysisCopy";
 import {
-  analysisRangeDisplayItem,
   analysisRangeDisplayItems,
   analysisRanges,
   basicReportRequestKey
@@ -2466,27 +2473,7 @@ export default function App() {
     clearSelectedAnalysisPoint();
   }
 
-  function analysisRangeTarget(item: ReturnType<typeof analysisRangeDisplayItem>) {
-    return item.value;
-  }
-
-  function analysisRangeOptionKey(item: ReturnType<typeof analysisRangeDisplayItem>) {
-    return analysisRangeTarget(item);
-  }
-
-  function analysisRangeOptionAccessibilityLabel(item: ReturnType<typeof analysisRangeDisplayItem>) {
-    return item.accessibilityLabel;
-  }
-
-  function analysisRangeOptionLabel(item: ReturnType<typeof analysisRangeDisplayItem>) {
-    return item.label;
-  }
-
-  function analysisRangeOptionSelected(item: ReturnType<typeof analysisRangeDisplayItem>, selectedRange: AnalysisRange) {
-    return analysisRangeTarget(item) === selectedRange;
-  }
-
-  function pressAnalysisRangeOption(item: ReturnType<typeof analysisRangeDisplayItem>) {
+  function pressAnalysisRangeOption(item: AnalysisRangeOption) {
     selectAnalysisRange(analysisRangeTarget(item));
   }
 

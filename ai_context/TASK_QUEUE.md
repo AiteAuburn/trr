@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2156: Move analysis range option accessors
+
+Status: done
+
+Completed:
+
+- Added analysis range target/key/accessibility/label/selected helpers to `analysisRangeSelector.tsx`.
+- Removed duplicate analysis range option accessor helper definitions from `App.tsx`.
+- Kept analysis range selection behavior unchanged: pressing a range still updates the selected range and clears the selected chart point.
+- Updated navigation verifier coverage to require selector-module helper exports, App selector bindings, and no local helper regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2155: Move tutorial step display accessors
 
 Status: done

@@ -1,4 +1,11 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import type { AnalysisRange } from "./analysisCopy";
+
+export type AnalysisRangeOption = {
+  accessibilityLabel: string;
+  label: string;
+  value: AnalysisRange;
+};
 
 type AnalysisRangeSelectorProps<TOption> = {
   isSelected: (option: TOption) => boolean;
@@ -39,6 +46,26 @@ export function AnalysisRangeSelector<TOption>({
       })}
     </View>
   );
+}
+
+export function analysisRangeTarget(item: AnalysisRangeOption) {
+  return item.value;
+}
+
+export function analysisRangeOptionKey(item: AnalysisRangeOption) {
+  return analysisRangeTarget(item);
+}
+
+export function analysisRangeOptionAccessibilityLabel(item: AnalysisRangeOption) {
+  return item.accessibilityLabel;
+}
+
+export function analysisRangeOptionLabel(item: AnalysisRangeOption) {
+  return item.label;
+}
+
+export function analysisRangeOptionSelected(item: AnalysisRangeOption, selectedRange: AnalysisRange) {
+  return analysisRangeTarget(item) === selectedRange;
 }
 
 const styles = StyleSheet.create({

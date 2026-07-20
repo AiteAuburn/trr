@@ -9970,22 +9970,22 @@ def main() -> int:
         _assert_contains(
             "analysis range option press handler",
             content,
-            "function pressAnalysisRangeOption(item: ReturnType<typeof analysisRangeDisplayItem>)",
+            "function pressAnalysisRangeOption(item: AnalysisRangeOption)",
         )
         _assert_contains(
             "analysis range target helper",
-            content,
-            "function analysisRangeTarget(item: ReturnType<typeof analysisRangeDisplayItem>)",
+            analysis_range_selector_content,
+            "function analysisRangeTarget(item: AnalysisRangeOption)",
         )
         _assert_contains(
             "analysis range target helper fields",
-            content,
+            analysis_range_selector_content,
             "return item.value;",
         )
         _assert_contains(
             "analysis range option key helper",
-            content,
-            "function analysisRangeOptionKey(item: ReturnType<typeof analysisRangeDisplayItem>)",
+            analysis_range_selector_content,
+            "function analysisRangeOptionKey(item: AnalysisRangeOption)",
         )
         _assert_contains(
             "analysis range option key helper binding",
@@ -9994,12 +9994,12 @@ def main() -> int:
         )
         _assert_contains(
             "analysis range option accessibility helper",
-            content,
-            "function analysisRangeOptionAccessibilityLabel(item: ReturnType<typeof analysisRangeDisplayItem>)",
+            analysis_range_selector_content,
+            "function analysisRangeOptionAccessibilityLabel(item: AnalysisRangeOption)",
         )
         _assert_contains(
             "analysis range option accessibility helper fields",
-            content,
+            analysis_range_selector_content,
             "return item.accessibilityLabel;",
         )
         _assert_contains(
@@ -10009,12 +10009,12 @@ def main() -> int:
         )
         _assert_contains(
             "analysis range option label helper",
-            content,
-            "function analysisRangeOptionLabel(item: ReturnType<typeof analysisRangeDisplayItem>)",
+            analysis_range_selector_content,
+            "function analysisRangeOptionLabel(item: AnalysisRangeOption)",
         )
         _assert_contains(
             "analysis range option label helper fields",
-            content,
+            analysis_range_selector_content,
             "return item.label;",
         )
         _assert_contains(
@@ -10024,12 +10024,12 @@ def main() -> int:
         )
         _assert_contains(
             "analysis range option selected helper",
-            content,
-            "function analysisRangeOptionSelected(item: ReturnType<typeof analysisRangeDisplayItem>, selectedRange: AnalysisRange)",
+            analysis_range_selector_content,
+            "function analysisRangeOptionSelected(item: AnalysisRangeOption, selectedRange: AnalysisRange)",
         )
         _assert_contains(
             "analysis range option selected helper fields",
-            content,
+            analysis_range_selector_content,
             "return analysisRangeTarget(item) === selectedRange;",
         )
         _assert_contains(
@@ -10042,6 +10042,14 @@ def main() -> int:
             content,
             "selectAnalysisRange(analysisRangeTarget(item));",
         )
+        for label, marker in (
+            ("local analysis range target helper", "function analysisRangeTarget(item: ReturnType<typeof analysisRangeDisplayItem>)"),
+            ("local analysis range option key helper", "function analysisRangeOptionKey(item: ReturnType<typeof analysisRangeDisplayItem>)"),
+            ("local analysis range option accessibility helper", "function analysisRangeOptionAccessibilityLabel(item: ReturnType<typeof analysisRangeDisplayItem>)"),
+            ("local analysis range option label helper", "function analysisRangeOptionLabel(item: ReturnType<typeof analysisRangeDisplayItem>)"),
+            ("local analysis range option selected helper", "function analysisRangeOptionSelected(item: ReturnType<typeof analysisRangeDisplayItem>, selectedRange: AnalysisRange)"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_not_contains(
             "analysis direct range item value binding",
             content,
