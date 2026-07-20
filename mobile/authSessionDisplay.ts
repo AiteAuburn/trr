@@ -44,3 +44,13 @@ export function authSessionDisplayItem(value: AuthSessionDisplaySource, index: n
 export function authSessionDisplayListItems(values: AuthSessionDisplaySource[]) {
   return values.slice(0, 20).map(authSessionDisplayItem);
 }
+
+export function boundAuthSessionItems(values: AuthSessionDisplaySource[]): AuthSessionDisplaySource[] {
+  return values.slice(0, 20).map((session) => ({
+    id: boundIdentifier(session.id),
+    created_at: boundDisplayText(session.created_at, 80),
+    expires_at: boundDisplayText(session.expires_at, 80),
+    last_used_at: session.last_used_at ? boundDisplayText(session.last_used_at, 80) : null,
+    has_device_fingerprint: Boolean(session.has_device_fingerprint)
+  }));
+}

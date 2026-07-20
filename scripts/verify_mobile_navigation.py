@@ -11553,6 +11553,7 @@ def main() -> int:
             ("auth provider preview target helper binding", "startAuthProviderChallenge(authProviderPreviewTarget(item));"),
             ("auth refresh handler", "function refreshAuthSessionFromSecurity()"),
             ("auth sessions load handler", "function loadAuthSessionsFromSecurity()"),
+            ("auth sessions source bound helper binding", "const boundedSessions = boundAuthSessionItems(response);"),
             ("auth logout handler", "function logoutAuthSessionFromSecurity()"),
             ("auth logout all handler", "function logoutAllAuthSessionsFromSecurity()"),
             ("auth logout main status binding", "setStatus(authLogoutMainStatusMessage());"),
@@ -12782,6 +12783,11 @@ def main() -> int:
             ("auth session display last used fallback", '"尚無最後使用時間"'),
             ("auth session display list helper", "function authSessionDisplayListItems(values: AuthSessionDisplaySource[])"),
             ("auth session display list limit", "return values.slice(0, 20).map(authSessionDisplayItem);"),
+            ("auth session source bound helper", "function boundAuthSessionItems(values: AuthSessionDisplaySource[]): AuthSessionDisplaySource[]"),
+            ("auth session source bound limit", "return values.slice(0, 20).map((session) => ({"),
+            ("auth session source bound id", "id: boundIdentifier(session.id),"),
+            ("auth session source bound last used", "last_used_at: session.last_used_at ? boundDisplayText(session.last_used_at, 80) : null"),
+            ("auth session source bound fingerprint", "has_device_fingerprint: Boolean(session.has_device_fingerprint)"),
         ):
             _assert_contains(label, auth_session_display_content, marker)
         for label, marker in (
@@ -13173,6 +13179,7 @@ def main() -> int:
             ("direct auth provider handler target binding", "startAuthProviderChallenge(item.provider);"),
             ("direct production auth readiness map", "productionAuthReadinessDisplayRows.map((item) => ("),
             ("direct auth session display map", "authSessionDisplayItems.map((item) => ("),
+            ("direct auth session response bound map", "response.slice(0, 20).map((session) => ({"),
             ("direct auth session management map", "sessionManagementDisplayItems.map((item) => ("),
             ("direct auth session management status binding", "onPress={() => showAuthSessionManagementStatus(item.actionStatus)}"),
             ("direct auth session management handler status binding", "showAuthSessionManagementStatus(item.actionStatus);"),

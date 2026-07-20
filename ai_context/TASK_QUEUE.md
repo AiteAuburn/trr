@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2097: Move auth session response bounding helper
+
+Status: done
+
+Completed:
+
+- Added `boundAuthSessionItems` to `authSessionDisplay.ts`.
+- Replaced the inline backend session response bounding map in `App.tsx`.
+- Kept session loading request, auth operation in-flight state, success count, and failure handling in `App.tsx`.
+- Updated navigation verifier coverage to require the bounded auth session helper and reject the old inline response map.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2096: Move food community detail replacement helper
 
 Status: done

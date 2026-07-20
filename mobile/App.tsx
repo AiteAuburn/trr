@@ -790,6 +790,7 @@ import { HistorySelectedDatePanel } from "./historySelectedDatePanel";
 import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
 import { AccountSecurityActionGrid } from "./accountSecurityActionGrid";
 import { AuthProviderPreviewList } from "./authProviderPreviewList";
+import { boundAuthSessionItems } from "./authSessionDisplay";
 import { AuthSessionDisplayList } from "./authSessionDisplayList";
 import { BackendUrlField } from "./backendUrlField";
 import { HighlightBulletRow } from "./highlightBulletRow";
@@ -2931,13 +2932,7 @@ export default function App() {
       const response = await requestJson<AuthSessionItem[]>(normalizedApiBaseUrl, "/auth/sessions?limit=20", {
         headers: protectedRequestHeaders(currentAccount.id, accessToken)
       });
-      const boundedSessions = response.slice(0, 20).map((session) => ({
-        id: boundIdentifier(session.id),
-        created_at: boundDisplayText(session.created_at, 80),
-        expires_at: boundDisplayText(session.expires_at, 80),
-        last_used_at: session.last_used_at ? boundDisplayText(session.last_used_at, 80) : null,
-        has_device_fingerprint: Boolean(session.has_device_fingerprint)
-      }));
+      const boundedSessions = boundAuthSessionItems(response);
       setAuthSessions(boundedSessions);
       setAuthActionStatus(authSessionsSuccessStatusMessage(boundedSessions.length));
     } catch (error) {

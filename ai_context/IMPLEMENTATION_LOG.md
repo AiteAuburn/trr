@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2097 move auth session response bounding helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/authSessionDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `boundAuthSessionItems` to `authSessionDisplay.ts`.
+- Replaced the inline backend session response bounding map in `App.tsx`.
+- Kept auth sessions request, auth operation in-flight state, success count status, unavailable guards, and failure handling in `App.tsx`.
+- Updated navigation verifier coverage to require the bounded auth session helper and reject reintroducing the old inline response map in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting bounded backend response transforms from `App.tsx` one domain at a time.
+
 ### T2096 move food community detail replacement helper
 
 類型：mobile / refactor / verifier / docs
