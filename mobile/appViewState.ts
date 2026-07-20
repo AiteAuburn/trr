@@ -44,6 +44,20 @@ export function previewRecordState(preview: ParsePreviewResponse | null) {
   };
 }
 
+export function aiSaveConfirmState(value: {
+  isBusy: boolean;
+  protectedBackendReady: boolean;
+  previewState: ReturnType<typeof previewRecordState>;
+}) {
+  const isBlockedByBackend = !value.protectedBackendReady;
+
+  return {
+    hasWarnings: value.previewState.hasWarnings,
+    isBlockedByBackend,
+    isSubmitDisabled: value.isBusy || isBlockedByBackend || value.previewState.isEmpty
+  };
+}
+
 export function saveSuccessState(lastSaveEntryMethod: SaveEntryMethod, hasUnsavedPreviewRecords: boolean) {
   const isManualSave = lastSaveEntryMethod === "manual";
 

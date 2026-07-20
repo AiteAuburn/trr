@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2187: Move AI save confirm state helper
+
+Status: done
+
+Completed:
+
+- Added the AI save confirm view-state helper to `appViewState.ts`.
+- Removed direct AI save confirm warning, backend-blocked, and submit-disabled boolean assembly from `App.tsx`.
+- Kept AI save confirm warning copy, backend-required banner, submit disabled styling, and preview empty/backend guard behavior unchanged.
+- Updated navigation verifier coverage to require the view-state helper, App helper binding, and no direct boolean assembly regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2186: Move daily record display bundle helper
 
 Status: done

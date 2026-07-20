@@ -51,6 +51,7 @@ import {
   sampleText
 } from "./appRuntimeConfig";
 import {
+  aiSaveConfirmState,
   previewRecordState,
   recordCollectionState,
   saveSuccessState
@@ -1476,9 +1477,14 @@ export default function App() {
   const aiReviewLowConfidenceDisplayText = aiReviewDisplay.lowConfidence;
   const aiReviewRejectedEventsDisplayText = aiReviewDisplay.rejectedEvents;
   const aiReviewBackendRequiredDisplayText = aiReviewDisplay.backendRequired;
-  const hasAiSaveConfirmWarnings = previewState.hasWarnings;
-  const isAiSaveConfirmBlockedByBackend = !protectedBackendReady;
-  const isAiSaveConfirmSubmitDisabled = isBusy || isAiSaveConfirmBlockedByBackend || previewState.isEmpty;
+  const aiSaveConfirmViewState = aiSaveConfirmState({
+    isBusy,
+    protectedBackendReady,
+    previewState
+  });
+  const hasAiSaveConfirmWarnings = aiSaveConfirmViewState.hasWarnings;
+  const isAiSaveConfirmBlockedByBackend = aiSaveConfirmViewState.isBlockedByBackend;
+  const isAiSaveConfirmSubmitDisabled = aiSaveConfirmViewState.isSubmitDisabled;
   const aiSaveConfirmDisplay = aiSaveConfirmDisplayTexts(
     isBusy,
     isAiSaveConfirmBlockedByBackend,
