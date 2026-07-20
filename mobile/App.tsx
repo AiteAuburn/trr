@@ -227,6 +227,11 @@ import {
   foodCommunityCategoriesFromApi,
   foodCommunityCategories,
   foodCommunityCategoryDisplayItem,
+  foodCommunityCategoryOptionAccessibilityLabel,
+  foodCommunityCategoryOptionKey,
+  foodCommunityCategoryOptionLabel,
+  foodCommunityCategoryOptionSelected,
+  foodCommunityCategoryTarget,
   foodCommunityDetailStatusMessages,
   foodCommunityDisplayBundle,
   foodCommunityItemDisplayItem,
@@ -4985,26 +4990,6 @@ export default function App() {
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
     setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
-  }
-
-  function foodCommunityCategoryTarget(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
-    return category.value;
-  }
-
-  function foodCommunityCategoryOptionKey(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
-    return category.value;
-  }
-
-  function foodCommunityCategoryOptionAccessibilityLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
-    return category.accessibilityLabel;
-  }
-
-  function foodCommunityCategoryOptionLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
-    return category.label;
-  }
-
-  function foodCommunityCategoryOptionSelected(category: ReturnType<typeof foodCommunityCategoryDisplayItem>, selectedCategory: FoodCommunityCategory) {
-    return selectedCategory === category.value;
   }
 
   function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {

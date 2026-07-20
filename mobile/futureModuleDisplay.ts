@@ -995,6 +995,31 @@ export function foodCommunityCategoryDisplayItems(
   return values.map(foodCommunityCategoryDisplayItem);
 }
 
+export type FoodCommunityCategoryDisplayItem = ReturnType<typeof foodCommunityCategoryDisplayItem>;
+
+export function foodCommunityCategoryTarget(category: FoodCommunityCategoryDisplayItem) {
+  return category.value;
+}
+
+export function foodCommunityCategoryOptionKey(category: FoodCommunityCategoryDisplayItem) {
+  return category.value;
+}
+
+export function foodCommunityCategoryOptionAccessibilityLabel(category: FoodCommunityCategoryDisplayItem) {
+  return category.accessibilityLabel;
+}
+
+export function foodCommunityCategoryOptionLabel(category: FoodCommunityCategoryDisplayItem) {
+  return category.label;
+}
+
+export function foodCommunityCategoryOptionSelected(
+  category: FoodCommunityCategoryDisplayItem,
+  selectedCategory: FoodCommunityCategory
+) {
+  return selectedCategory === category.value;
+}
+
 export function foodCommunityShareDisplayItem(value: FoodCommunityShare) {
   const before = clampNumber(value.beforeGlucose, 0, maxMobileGlucoseValue);
   const after = clampNumber(value.afterGlucose, 0, maxMobileGlucoseValue);
