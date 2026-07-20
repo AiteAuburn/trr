@@ -116,11 +116,7 @@ import {
   boundRecordEditField,
   buildPayloadFromEditFields,
   emptyRecordEditFields,
-  glucoseTimingOptions,
-  glucoseUnitOptions,
   manualRecordOptionTarget,
-  manualRecordTypes,
-  mealTypeOptions,
   previewRecordsWithoutRecord,
   previewRecordsWithEditedRecord,
   recordEditFieldValue,
@@ -417,15 +413,13 @@ import {
   auxiliarySectionLabels,
   boundaryMetricDisplayItem,
   detailPairDisplayItem,
-  manualRecordTypeDisplayItems,
   menuScreenDisplayItems,
   optionDisplayItem,
-  optionDisplayItems,
   previewTupleDisplayItem,
   valueLabelDisplayItem,
-  valueLabelDisplayItems,
   visualSmokeRouteJumpDisplayItems as buildVisualSmokeRouteJumpDisplayItems
 } from "./sharedDisplayItems";
+import { recordFormStaticDisplayBundle } from "./recordFormDisplayBundle";
 import {
   accountDisplayNameDisplayText,
   accountEmailDisplayValue,
@@ -724,8 +718,6 @@ import {
   historyDailySummaryDisplayItem,
   historyDateTarget,
   historyDetailModeDisplayItem,
-  historyDetailModeDisplayItems,
-  historyDetailModes,
   historyDetailModeTarget,
   historyRawRecordDisplayItems,
   historyRecordsByDateMap,
@@ -753,7 +745,6 @@ import {
   type AnalysisRange
 } from "./analysisCopy";
 import {
-  analysisRangeDisplayItems,
   analysisRanges,
   basicReportRequestKey
 } from "./analysisScreenData";
@@ -1801,15 +1792,13 @@ export default function App() {
   const sessionManagementDisplayItems = settingsStaticDisplay.sessionManagementItems;
   const authSessionDisplayItems = settingsChoiceDisplay.authSessionDisplayItems;
   const productionAuthReadinessDisplayRows = settingsStaticDisplay.productionAuthReadinessRows;
-  const glucoseUnitDisplayOptions = useMemo(() => optionDisplayItems(glucoseUnitOptions), []);
-  const glucoseTimingDisplayOptions = useMemo(() => valueLabelDisplayItems(glucoseTimingOptions), []);
-  const mealTypeDisplayOptions = useMemo(() => valueLabelDisplayItems(mealTypeOptions), []);
-  const manualRecordTypeDisplayOptions = useMemo(
-    () => manualRecordTypeDisplayItems(manualRecordTypes),
-    []
-  );
-  const historyDetailModeDisplayOptions = useMemo(() => historyDetailModeDisplayItems(historyDetailModes), []);
-  const analysisRangeDisplayOptions = useMemo(() => analysisRangeDisplayItems(analysisRanges), []);
+  const recordFormStaticDisplay = useMemo(() => recordFormStaticDisplayBundle(), []);
+  const glucoseUnitDisplayOptions = recordFormStaticDisplay.glucoseUnitOptions;
+  const glucoseTimingDisplayOptions = recordFormStaticDisplay.glucoseTimingOptions;
+  const mealTypeDisplayOptions = recordFormStaticDisplay.mealTypeOptions;
+  const manualRecordTypeDisplayOptions = recordFormStaticDisplay.manualRecordTypeOptions;
+  const historyDetailModeDisplayOptions = recordFormStaticDisplay.historyDetailModeOptions;
+  const analysisRangeDisplayOptions = recordFormStaticDisplay.analysisRangeOptions;
   const menuDisplayItems = useMemo(() => menuScreenDisplayItems(menuScreens), []);
   const visualSmokeRouteJumpDisplayItems = useMemo(
     () => buildVisualSmokeRouteJumpDisplayItems(visualSmokeRouteJumps),

@@ -37,6 +37,7 @@ OUTCOME_CHECKLIST_PATH = REPO_ROOT / "mobile" / "outcomeChecklist.tsx"
 AUTH_PROVIDER_PREVIEW_LIST_PATH = REPO_ROOT / "mobile" / "authProviderPreviewList.tsx"
 AUTH_SESSION_DISPLAY_LIST_PATH = REPO_ROOT / "mobile" / "authSessionDisplayList.tsx"
 RECORD_DISPLAY_PATH = REPO_ROOT / "mobile" / "recordDisplay.ts"
+RECORD_FORM_DISPLAY_BUNDLE_PATH = REPO_ROOT / "mobile" / "recordFormDisplayBundle.ts"
 RECORD_EDIT_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "recordEditTransforms.ts"
 RECORD_BOUNDS_PATH = REPO_ROOT / "mobile" / "recordBounds.ts"
 RECORD_SAVE_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "recordSaveTransforms.ts"
@@ -1463,6 +1464,7 @@ def main() -> int:
     auth_provider_preview_list_content = AUTH_PROVIDER_PREVIEW_LIST_PATH.read_text(encoding="utf-8")
     auth_session_display_list_content = AUTH_SESSION_DISPLAY_LIST_PATH.read_text(encoding="utf-8")
     record_display_content = RECORD_DISPLAY_PATH.read_text(encoding="utf-8")
+    record_form_display_bundle_content = RECORD_FORM_DISPLAY_BUNDLE_PATH.read_text(encoding="utf-8")
     record_edit_transforms_content = RECORD_EDIT_TRANSFORMS_PATH.read_text(encoding="utf-8")
     record_bounds_content = RECORD_BOUNDS_PATH.read_text(encoding="utf-8")
     record_save_transforms_content = RECORD_SAVE_TRANSFORMS_PATH.read_text(encoding="utf-8")
@@ -9753,7 +9755,7 @@ def main() -> int:
             ("history daily entry press handler", "function pressHistoryDailyEntry("),
             ("history daily entry binding", "onEntryPress={pressHistoryDailyEntry}"),
             ("history calendar selected state", "onDayPress={pressHistoryCalendarDay}"),
-            ("history detail mode display options helper binding", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModeDisplayItems(historyDetailModes), []);"),
+            ("history detail mode display options helper binding", "const historyDetailModeDisplayOptions = recordFormStaticDisplay.historyDetailModeOptions;"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
@@ -10307,7 +10309,7 @@ def main() -> int:
         _assert_contains(
             "analysis range display options helper binding",
             content,
-            "const analysisRangeDisplayOptions = useMemo(() => analysisRangeDisplayItems(analysisRanges), []);",
+            "const analysisRangeDisplayOptions = recordFormStaticDisplay.analysisRangeOptions;",
         )
         _assert_contains(
             "analysis range selector binding",
@@ -10803,11 +10805,11 @@ def main() -> int:
             ("preview edit option target helper import", "previewEditOptionTarget\n} from \"./recordOptionField\";"),
             ("preview edit unit option press handler", "function pressPreviewEditGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>)"),
             ("preview edit unit option target helper binding", "selectPreviewEditGlucoseUnit(previewEditOptionTarget(option));"),
-            ("glucose unit display options helper binding", "const glucoseUnitDisplayOptions = useMemo(() => optionDisplayItems(glucoseUnitOptions), []);"),
-            ("glucose timing display options helper binding", "const glucoseTimingDisplayOptions = useMemo(() => valueLabelDisplayItems(glucoseTimingOptions), []);"),
+            ("glucose unit display options helper binding", "const glucoseUnitDisplayOptions = recordFormStaticDisplay.glucoseUnitOptions;"),
+            ("glucose timing display options helper binding", "const glucoseTimingDisplayOptions = recordFormStaticDisplay.glucoseTimingOptions;"),
             ("preview edit timing option press handler", "function pressPreviewEditGlucoseTimingOption(option: ReturnType<typeof valueLabelDisplayItem>)"),
             ("preview edit timing option target helper binding", "selectPreviewEditGlucoseTiming(previewEditOptionTarget(option));"),
-            ("meal type display options helper binding", "const mealTypeDisplayOptions = useMemo(() => valueLabelDisplayItems(mealTypeOptions), []);"),
+            ("meal type display options helper binding", "const mealTypeDisplayOptions = recordFormStaticDisplay.mealTypeOptions;"),
             ("preview edit meal type option press handler", "function pressPreviewEditMealTypeOption(option: ReturnType<typeof valueLabelDisplayItem>)"),
             ("preview edit meal type option target helper binding", "selectPreviewEditMealType(previewEditOptionTarget(option));"),
         ):
@@ -10899,7 +10901,7 @@ def main() -> int:
             ("manual record date time fields binding", "<ManualRecordDateTimeFields\n              dateAccessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}"),
             ("manual record date input binding", "onDateChange={updateManualRecordDateInput}"),
             ("manual record time input binding", "onTimeChange={updateManualRecordTimeInput}"),
-            ("manual record type display options helper binding", "const manualRecordTypeDisplayOptions = useMemo(\n    () => manualRecordTypeDisplayItems(manualRecordTypes),"),
+            ("manual record type display options helper binding", "const manualRecordTypeDisplayOptions = recordFormStaticDisplay.manualRecordTypeOptions;"),
             ("menu display items helper binding", "const menuDisplayItems = useMemo(() => menuScreenDisplayItems(menuScreens), []);"),
             ("visual smoke route jump display items helper binding", "const visualSmokeRouteJumpDisplayItems = useMemo(\n    () => buildVisualSmokeRouteJumpDisplayItems(visualSmokeRouteJumps),"),
             ("manual record type selector binding", "<ManualRecordTypeSelector\n              options={manualRecordTypeDisplayOptions}"),
@@ -13138,6 +13140,30 @@ def main() -> int:
             ("result checklist item helper", "function resultChecklistItem(value: string)"),
         ):
             _assert_contains(label, shared_display_items_content, marker)
+        for label, marker in (
+            ("record form static display bundle helper", "function recordFormStaticDisplayBundle()"),
+            ("record form static display bundle glucose unit", "glucoseUnitOptions: optionDisplayItems(glucoseUnitOptions)"),
+            ("record form static display bundle glucose timing", "glucoseTimingOptions: valueLabelDisplayItems(glucoseTimingOptions)"),
+            ("record form static display bundle meal type", "mealTypeOptions: valueLabelDisplayItems(mealTypeOptions)"),
+            ("record form static display bundle manual record type", "manualRecordTypeOptions: manualRecordTypeDisplayItems(manualRecordTypes)"),
+            ("record form static display bundle history detail mode", "historyDetailModeOptions: historyDetailModeDisplayItems(historyDetailModes)"),
+            ("record form static display bundle analysis range", "analysisRangeOptions: analysisRangeDisplayItems(analysisRanges)"),
+        ):
+            _assert_contains(label, record_form_display_bundle_content, marker)
+        for label, marker in (
+            ("record form static display bundle import", "recordFormStaticDisplayBundle"),
+            ("record form static display bundle binding", "const recordFormStaticDisplay = useMemo(() => recordFormStaticDisplayBundle(), []);"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
+            ("direct glucose unit display options binding", "const glucoseUnitDisplayOptions = useMemo(() => optionDisplayItems(glucoseUnitOptions), []);"),
+            ("direct glucose timing display options binding", "const glucoseTimingDisplayOptions = useMemo(() => valueLabelDisplayItems(glucoseTimingOptions), []);"),
+            ("direct meal type display options binding", "const mealTypeDisplayOptions = useMemo(() => valueLabelDisplayItems(mealTypeOptions), []);"),
+            ("direct manual record type display options binding", "const manualRecordTypeDisplayOptions = useMemo(\n    () => manualRecordTypeDisplayItems(manualRecordTypes),"),
+            ("direct history detail mode display options binding", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModeDisplayItems(historyDetailModes), []);"),
+            ("direct analysis range display options binding", "const analysisRangeDisplayOptions = useMemo(() => analysisRangeDisplayItems(analysisRanges), []);"),
+        ):
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("account display name helper", "function accountDisplayNameDisplayText(account: AccountDisplaySource | null)"),
             ("account display name fallback copy", "尚未連線帳號"),
