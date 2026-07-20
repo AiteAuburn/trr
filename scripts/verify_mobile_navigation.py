@@ -8352,14 +8352,11 @@ def main() -> int:
             ("daily record delete confirm display helper binding", "const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayTexts("),
             ("daily record delete confirm title binding", "const aiRemoveConfirmTitleDisplayText = aiRemoveConfirmDisplay.title;"),
             ("daily record delete submit binding", "const aiRemoveConfirmSubmitDisplayText = aiRemoveConfirmDisplay.submit;"),
-            ("pending remove icon helper", "function pendingRemoveDisplayIcon(item: ReturnType<typeof pendingRecordDisplayItem>)"),
-            ("pending remove icon helper fields", "return item.icon;"),
+            ("pending remove icon helper import", "pendingRemoveDisplayIcon,"),
             ("pending remove icon helper binding", "{pendingRemoveDisplayIcon(pendingPreviewRemoveDisplayItem)}"),
-            ("pending remove type helper", "function pendingRemoveDisplayTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem>)"),
-            ("pending remove type helper fields", "return item.typeLabel;"),
+            ("pending remove type helper import", "pendingRemoveDisplayTypeLabel,"),
             ("pending remove type helper binding", "{pendingRemoveDisplayTypeLabel(pendingPreviewRemoveDisplayItem)}"),
-            ("pending remove payload helper", "function pendingRemoveDisplayPayloadSummary(item: ReturnType<typeof pendingRecordDisplayItem>)"),
-            ("pending remove payload helper fields", "return item.payloadSummary;"),
+            ("pending remove payload helper import", "pendingRemoveDisplayPayloadSummary,"),
             ("pending remove payload helper binding", "{pendingRemoveDisplayPayloadSummary(pendingPreviewRemoveDisplayItem)}"),
             ("daily record leave guard request handler", "function requestDailyRecordLeaveGuard()"),
             ("daily record leave guard show helper", "function showDailyRecordLeaveGuard(statusMessage: string)"),
@@ -9287,6 +9284,16 @@ def main() -> int:
             record_display_content,
             "return records.map((record) => recordListDisplayItem(record, keyPrefix));",
         )
+        for label, marker in (
+            ("pending remove display item type helper", "type PendingRecordDisplayItem = ReturnType<typeof pendingRecordDisplayItem>;"),
+            ("pending remove icon helper", "function pendingRemoveDisplayIcon(item: PendingRecordDisplayItem)"),
+            ("pending remove icon helper fields", "return item.icon;"),
+            ("pending remove type helper", "function pendingRemoveDisplayTypeLabel(item: PendingRecordDisplayItem)"),
+            ("pending remove type helper fields", "return item.typeLabel;"),
+            ("pending remove payload helper", "function pendingRemoveDisplayPayloadSummary(item: PendingRecordDisplayItem)"),
+            ("pending remove payload helper fields", "return item.payloadSummary;"),
+        ):
+            _assert_contains(label, record_display_content, marker)
         _assert_contains(
             "grouped history record display sections helper binding",
             content,
@@ -14865,6 +14872,12 @@ def main() -> int:
             ("direct pending remove payload binding", "{pendingPreviewRemoveDisplayItem.payloadSummary}"),
         ):
             _assert_not_contains(label, ai_remove_confirm_block, marker)
+        for label, marker in (
+            ("local pending remove icon helper", "function pendingRemoveDisplayIcon(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("local pending remove type helper", "function pendingRemoveDisplayTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+            ("local pending remove payload helper", "function pendingRemoveDisplayPayloadSummary(item: ReturnType<typeof pendingRecordDisplayItem>)"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_not_contains(
             "food community search direct handler bound input",
             content,

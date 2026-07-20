@@ -89,6 +89,9 @@ import {
   displayTextValue,
   groupedRecordListDisplaySectionsForRecords,
   manualRecordConfirmDisplayItem,
+  pendingRemoveDisplayIcon,
+  pendingRemoveDisplayPayloadSummary,
+  pendingRemoveDisplayTypeLabel,
   pendingRecordDisplayItem,
   pendingRecordDisplayItems,
   rejectedPreviewDisplayItems as buildRejectedPreviewDisplayItems,
@@ -4066,18 +4069,6 @@ export default function App() {
     clearPreviewSelectionState();
     setLastSaveErrorSummary("");
     openScreenWithStatus("aiSaveConfirm", aiSaveConfirmReadyStatusMessage());
-  }
-
-  function pendingRemoveDisplayIcon(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.icon;
-  }
-
-  function pendingRemoveDisplayTypeLabel(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.typeLabel;
-  }
-
-  function pendingRemoveDisplayPayloadSummary(item: ReturnType<typeof pendingRecordDisplayItem>) {
-    return item.payloadSummary;
   }
 
   function openTodayTranscriptText() {

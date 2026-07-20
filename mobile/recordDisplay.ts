@@ -390,6 +390,20 @@ export function pendingRecordDisplayItems(records: PendingRecord[], keyPrefix = 
   return records.map((record, index) => pendingRecordDisplayItem(record, index, keyPrefix));
 }
 
+type PendingRecordDisplayItem = ReturnType<typeof pendingRecordDisplayItem>;
+
+export function pendingRemoveDisplayIcon(item: PendingRecordDisplayItem) {
+  return item.icon;
+}
+
+export function pendingRemoveDisplayTypeLabel(item: PendingRecordDisplayItem) {
+  return item.typeLabel;
+}
+
+export function pendingRemoveDisplayPayloadSummary(item: PendingRecordDisplayItem) {
+  return item.payloadSummary;
+}
+
 export function rejectedReasonLabel(reason?: string) {
   const normalized = reason?.trim().toLowerCase();
   if (!normalized) {
