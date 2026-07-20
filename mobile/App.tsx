@@ -909,7 +909,7 @@ import {
   localDateTimeToIso,
   startOfCurrentMonth
 } from "./dateTimeTransforms";
-import { boundAccount, boundProfiles } from "./accountTransforms";
+import { activeProfileForId, boundAccount, boundProfiles } from "./accountTransforms";
 import {
   boundAiModelOptions,
   defaultSttModelOption,
@@ -1284,7 +1284,7 @@ export default function App() {
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
 
   const normalizedApiBaseUrl = useMemo(() => normalizeApiBaseUrl(apiBaseUrl), [apiBaseUrl]);
-  const activeProfile = profiles.find((profile) => profile.id === activeProfileId) ?? null;
+  const activeProfile = activeProfileForId(profiles, activeProfileId);
   const selectedSttModel = selectedSttModelOption(models, sttModelId);
   const selectedLlmModel = selectedLlmModelOption(models, llmModelId);
   const parserModelUnavailableMessage = parserModelUnavailableText(selectedLlmModel, selectedSttModel);

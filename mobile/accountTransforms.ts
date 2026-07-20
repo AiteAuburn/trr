@@ -46,3 +46,7 @@ export function boundProfile<T extends ProfileTransformSource>(value: T): T {
 export function boundProfiles<T extends ProfileTransformSource>(value: T[]) {
   return value.slice(0, maxMobileProfiles).map(boundProfile);
 }
+
+export function activeProfileForId<T extends ProfileTransformSource>(profiles: T[], profileId: string) {
+  return profiles.find((profile) => profile.id === profileId) ?? null;
+}

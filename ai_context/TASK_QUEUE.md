@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2183: Move active profile lookup helper
+
+Status: done
+
+Completed:
+
+- Added the active profile lookup helper to `accountTransforms.ts`.
+- Removed direct active profile list lookup from `App.tsx`.
+- Kept active profile label display, inline profile text, relationship display, profile selection state, and record sync profile id behavior unchanged.
+- Updated navigation verifier coverage to require the account transform helper export, App import/usage binding, and no direct active profile lookup regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2182: Move selected AI model lookup helpers
 
 Status: done

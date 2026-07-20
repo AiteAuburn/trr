@@ -2963,6 +2963,8 @@ def main() -> int:
             ),
             ("selected STT model helper import", "selectedSttModelOption"),
             ("selected LLM model helper import", "selectedLlmModelOption"),
+            ("active profile helper import", "activeProfileForId,"),
+            ("active profile helper binding", "const activeProfile = activeProfileForId(profiles, activeProfileId);"),
             ("selected STT model helper binding", "const selectedSttModel = selectedSttModelOption(models, sttModelId);"),
             ("selected LLM model helper binding", "const selectedLlmModel = selectedLlmModelOption(models, llmModelId);"),
             ("deepseek record parse request binding", "function parserPreviewModelIds() {\n    return {\n      sttModelId,\n      llmModelId"),
@@ -3006,6 +3008,7 @@ def main() -> int:
             ("local selected model runtime label helper", "function selectedModelRuntimeDisplayLabel("),
             ("local default STT model helper", "function defaultSttModelOption(modelOptions: AiModelOptions)"),
             ("local preferred LLM model helper", "function preferredLlmModelOption(modelOptions: AiModelOptions)"),
+            ("direct active profile lookup", "profiles.find((profile) => profile.id === activeProfileId)"),
             ("direct selected STT model lookup", "models.stt_models.find((model) => model.id === sttModelId)"),
             ("direct selected LLM model lookup", "models.llm_models.find((model) => model.id === llmModelId)"),
         ):
@@ -12964,6 +12967,8 @@ def main() -> int:
             ("account transform profile helper", "function boundProfile<T extends ProfileTransformSource>(value: T): T"),
             ("account transform relationship bound", "relationship: boundDisplayText(value.relationship, 40)"),
             ("account transform profile list bound", "return value.slice(0, maxMobileProfiles).map(boundProfile)"),
+            ("account transform active profile helper", "function activeProfileForId<T extends ProfileTransformSource>(profiles: T[], profileId: string)"),
+            ("account transform active profile helper fields", "return profiles.find((profile) => profile.id === profileId) ?? null;"),
         ):
             _assert_contains(label, account_transforms_content, marker)
         for label, marker in (
