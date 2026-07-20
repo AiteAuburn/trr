@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2105: Move record delete list update helper
+
+Status: done
+
+Completed:
+
+- Added `recordsListWithoutDeletedRecord` to `recordBounds.ts`.
+- Replaced the inline record-delete success list filter in `App.tsx`.
+- Kept delete request, selected record clearing, edit-state reset, delete success navigation, and status handling in `App.tsx`.
+- Updated navigation verifier coverage to require the shared delete-list helper and its App binding.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2104: Move achievement newly-unlocked filter
 
 Status: done

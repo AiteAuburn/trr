@@ -105,6 +105,7 @@ import {
   boundRecordItem,
   boundRecordsList,
   mergeRecordsByCursorOrder,
+  recordsListWithoutDeletedRecord,
   recordsListWithUpdatedRecord,
   type ParsePreviewResponse,
   type PendingRecord,
@@ -7662,7 +7663,7 @@ export default function App() {
   }
 
   function handleSelectedRecordDeleteSuccess(recordId: string) {
-    setRecords((current) => current.filter((record) => record.id !== recordId));
+    setRecords((current) => recordsListWithoutDeletedRecord(current, recordId));
     setSelectedRecord(null);
     seedEmptyRecordEditStateForNow();
     openDeleteSuccessResult(recordDeleteSummaryMessage(1));

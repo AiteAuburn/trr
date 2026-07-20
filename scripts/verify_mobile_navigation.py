@@ -6289,7 +6289,7 @@ def main() -> int:
         _assert_contains(
             "record delete success helper state",
             content,
-            "setRecords((current) => current.filter((record) => record.id !== recordId));\n    setSelectedRecord(null);\n    seedEmptyRecordEditStateForNow();\n    openDeleteSuccessResult(recordDeleteSummaryMessage(1));\n    setStatus(recordDeleteSuccessStatusMessage());",
+            "setRecords((current) => recordsListWithoutDeletedRecord(current, recordId));\n    setSelectedRecord(null);\n    seedEmptyRecordEditStateForNow();\n    openDeleteSuccessResult(recordDeleteSummaryMessage(1));\n    setStatus(recordDeleteSuccessStatusMessage());",
         )
         _assert_contains(
             "record delete success helper binding",
@@ -9313,6 +9313,8 @@ def main() -> int:
             ("record item payload boundary", "payload_json: boundRecordPayload(recordType, value.payload_json)"),
             ("record list update helper", "function recordsListWithUpdatedRecord(current: RecordItem[], updated: RecordItem)"),
             ("record list update helper bounded result", "return boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record)));"),
+            ("record list delete helper", "function recordsListWithoutDeletedRecord(current: RecordItem[], recordId: string)"),
+            ("record list delete helper filter", "return current.filter((record) => record.id !== recordId);"),
         ):
             _assert_contains(label, record_bounds_content, marker)
         _assert_contains(

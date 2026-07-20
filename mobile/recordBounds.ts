@@ -230,6 +230,10 @@ export function recordsListWithUpdatedRecord(current: RecordItem[], updated: Rec
   return boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record)));
 }
 
+export function recordsListWithoutDeletedRecord(current: RecordItem[], recordId: string) {
+  return current.filter((record) => record.id !== recordId);
+}
+
 function boundPendingRecord(value: PendingRecord): PendingRecord {
   return {
     ...value,
