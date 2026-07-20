@@ -4046,12 +4046,12 @@ def main() -> int:
         _assert_contains(
             "health integration boundary rows helper binding",
             content,
-            "const healthIntegrationBoundaryRows = healthIntegrationBoundaryDisplayRows();",
+            "const healthIntegrationBoundaryRows = futureBoundaryRowsDisplay.healthIntegration;",
         )
         _assert_contains(
             "ranking boundary rows helper binding",
             content,
-            "const rankingBoundaryRows = rankingBoundaryDisplayRows();",
+            "const rankingBoundaryRows = futureBoundaryRowsDisplay.ranking;",
         )
         _assert_contains(
             "privacy boundary rows helper binding",
@@ -4086,7 +4086,7 @@ def main() -> int:
         _assert_contains(
             "community boundary rows helper binding",
             content,
-            "const communityBoundaryRows = communityBoundaryDisplayRows(",
+            "const communityBoundaryRows = futureBoundaryRowsDisplay.community;",
         )
         _assert_contains(
             "AI save confirm guarded return binding",
@@ -14727,6 +14727,10 @@ def main() -> int:
             ("ranking readiness moderation copy", "封鎖、檢舉與審核流程"),
             ("ranking readiness dispute copy", "榜單爭議處理與公開名稱違規處置"),
             ("ranking readiness audit copy", "退出排名後的歷史資料撤回與 audit event"),
+            ("future boundary rows display bundle helper", "export function futureBoundaryRowsDisplayBundle(isLeaderboardOptedIn: boolean)"),
+            ("future boundary rows display bundle health integration", "healthIntegration: healthIntegrationBoundaryDisplayRows()"),
+            ("future boundary rows display bundle community", "community: communityBoundaryDisplayRows(isLeaderboardOptedIn)"),
+            ("future boundary rows display bundle ranking", "ranking: rankingBoundaryDisplayRows()"),
             ("reminder preview boundary helper", "export function reminderPreviewBoundaryDisplayItem()"),
             ("privacy preview boundary helper", "export function privacyPreviewBoundaryDisplayItem()"),
             ("future preview boundary display bundle helper", "export function futurePreviewBoundaryDisplayBundle()"),
@@ -14905,6 +14909,21 @@ def main() -> int:
             ("future preview return accessibility label", "returnFutureModulesAccessibility: boundDisplayText(\"返回未來擴充，不建立 future module 資料或呼叫 backend\", maxDisplayDetailTextLength)"),
         ):
             _assert_contains(label, future_module_display_content, marker)
+        for label, marker in (
+            ("future boundary rows display bundle import", "futureBoundaryRowsDisplayBundle,"),
+            ("future boundary rows display bundle binding", "const futureBoundaryRowsDisplay = futureBoundaryRowsDisplayBundle("),
+            ("future boundary rows display bundle opt in input", "communityPublicSettings?.leaderboard_opt_in ?? false"),
+            ("future boundary rows display bundle health binding", "const healthIntegrationBoundaryRows = futureBoundaryRowsDisplay.healthIntegration;"),
+            ("future boundary rows display bundle community binding", "const communityBoundaryRows = futureBoundaryRowsDisplay.community;"),
+            ("future boundary rows display bundle ranking binding", "const rankingBoundaryRows = futureBoundaryRowsDisplay.ranking;"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
+            ("direct health integration boundary rows binding", "const healthIntegrationBoundaryRows = healthIntegrationBoundaryDisplayRows();"),
+            ("direct community boundary rows binding", "const communityBoundaryRows = communityBoundaryDisplayRows("),
+            ("direct ranking boundary rows binding", "const rankingBoundaryRows = rankingBoundaryDisplayRows();"),
+        ):
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("future preview boundary display bundle import", "futurePreviewBoundaryDisplayBundle,"),
             ("future preview boundary display bundle binding", "const futurePreviewBoundaryDisplay = futurePreviewBoundaryDisplayBundle();"),

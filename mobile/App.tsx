@@ -208,7 +208,6 @@ import {
   boundCommunityPublicSettings,
   commercePreviewOpenCartStatusMessage,
   commercePreviewReturnStoreStatusMessage,
-  communityBoundaryDisplayRows,
   communityActionDisplayTexts,
   communityActionStatusLabel,
   communityActionStatusText,
@@ -276,6 +275,7 @@ import {
   foodCommunityShareSelectedItemIdFromApi,
   foodCommunitySyncStatusMessages,
   futureModuleCards,
+  futureBoundaryRowsDisplayBundle,
   futureModuleCardDisplayItems,
   futureModuleDetailBoundaryCopy,
   futureModuleDetailReturnStatusMessage,
@@ -294,7 +294,6 @@ import {
   futurePreviewReturnButtonLabel,
   futurePreviewSectionLabels,
   futurePreviewStatusDisplayTexts,
-  healthIntegrationBoundaryDisplayRows,
   healthIntegrationExternalDataBoundaryCopy,
   healthIntegrationReadinessChecklistDisplayItems,
   achievementYearReviewStatusDisplayTexts,
@@ -303,7 +302,6 @@ import {
   rankingActionStatusLabel,
   rankingActionStatusText,
   rankingActionStatusVisible,
-  rankingBoundaryDisplayRows,
   rankingCloseButtonLabel,
   rankingHeroIconLabel,
   rankingLocalStreakPreviewLabel,
@@ -2053,11 +2051,12 @@ export default function App() {
     mobileReportQueryDisplayLimit
   );
   const doctorShareBoundaryRows = doctorShareBoundaryDisplayRows();
-  const healthIntegrationBoundaryRows = healthIntegrationBoundaryDisplayRows();
-  const communityBoundaryRows = communityBoundaryDisplayRows(
+  const futureBoundaryRowsDisplay = futureBoundaryRowsDisplayBundle(
     communityPublicSettings?.leaderboard_opt_in ?? false
   );
-  const rankingBoundaryRows = rankingBoundaryDisplayRows();
+  const healthIntegrationBoundaryRows = futureBoundaryRowsDisplay.healthIntegration;
+  const communityBoundaryRows = futureBoundaryRowsDisplay.community;
+  const rankingBoundaryRows = futureBoundaryRowsDisplay.ranking;
   const recordingQuotaBoundaryRows = recordingQuotaBoundaryDisplayRows(voiceQuota, quotaRemainingLow);
   const privacyBoundaryRows = privacyBoundaryDisplayRows();
   const previewRecordDisplay = previewRecordDisplayBundle({

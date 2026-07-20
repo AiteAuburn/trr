@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2203: Move future boundary rows display bundle
+
+Status: done
+
+Completed:
+
+- Added the future boundary rows display bundle helper to `futureModuleDisplay.ts`.
+- Removed direct health integration, community, and ranking boundary rows assembly from `App.tsx`.
+- Kept doctor share boundary rows in `accountCopy.ts` and preserved all future boundary grid render bindings.
+- Updated navigation verifier coverage to require the future boundary rows display bundle, App bundle bindings, and no direct future boundary rows assembly regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2202: Move future preview boundary display bundle
 
 Status: done

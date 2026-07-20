@@ -1929,6 +1929,14 @@ export function rankingReadinessChecklistDisplayItems() {
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
+export function futureBoundaryRowsDisplayBundle(isLeaderboardOptedIn: boolean) {
+  return {
+    healthIntegration: healthIntegrationBoundaryDisplayRows(),
+    community: communityBoundaryDisplayRows(isLeaderboardOptedIn),
+    ranking: rankingBoundaryDisplayRows()
+  };
+}
+
 export function reminderPreviewBoundaryDisplayItem() {
   return futurePreviewBoundaryDisplayItem(
     "通知預覽",
