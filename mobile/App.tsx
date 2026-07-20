@@ -750,6 +750,7 @@ import {
 import {
   authProviderDisplayItems as buildAuthProviderDisplayItems,
   authProviderPreviewDisplayItem,
+  authProviderPreviewTarget,
   privacyControlDisplayRows as buildPrivacyControlDisplayRows,
   productionAuthReadinessDisplayRows as buildProductionAuthReadinessDisplayRows,
   sessionManagementDisplayItems as buildSessionManagementDisplayItems,
@@ -4231,10 +4232,6 @@ export default function App() {
 
   function startAuthProviderChallenge(provider: string) {
     beginOidcProviderChallenge(provider);
-  }
-
-  function authProviderPreviewTarget(item: ReturnType<typeof authProviderPreviewDisplayItem>) {
-    return item.provider;
   }
 
   function pressAuthProviderPreview(item: ReturnType<typeof authProviderPreviewDisplayItem>) {

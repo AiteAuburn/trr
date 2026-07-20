@@ -11424,6 +11424,9 @@ def main() -> int:
             ("settings subscription management subpage target", 'return "subscriptionManagement";'),
             ("auth provider preview rows config", "export const authProviderPreviews: ReadonlyArray<AuthProviderPreview> = ["),
             ("auth provider preview display helper", "export function authProviderPreviewDisplayItem(value: AuthProviderPreview)"),
+            ("auth provider preview target item type", "type AuthProviderPreviewDisplayItem = ReturnType<typeof authProviderPreviewDisplayItem>;"),
+            ("auth provider preview target helper", "export function authProviderPreviewTarget(item: AuthProviderPreviewDisplayItem)"),
+            ("auth provider preview target helper fields", "return item.provider;"),
             ("auth provider display items helper", "export function authProviderDisplayItems()"),
             ("auth provider display items map", "return authProviderPreviews.map(authProviderPreviewDisplayItem);"),
             ("auth provider accessibility item", "accessibilityLabel: boundDisplayText(`查看${item.title}登入整合狀態，不保存 provider token`, maxDisplayDetailTextLength)"),
@@ -11755,11 +11758,15 @@ def main() -> int:
             content,
             "onPress={() => pressPrimaryTab(screen.id)}",
         )
+        _assert_not_contains(
+            "local auth provider preview target helper",
+            content,
+            "function authProviderPreviewTarget(item: ReturnType<typeof authProviderPreviewDisplayItem>)",
+        )
         for label, marker in (
             ("settings local clear handler", "function clearLocalSessionFromSettings()"),
             ("auth provider challenge handler", "function startAuthProviderChallenge(provider: string)"),
-            ("auth provider preview target helper", "function authProviderPreviewTarget(item: ReturnType<typeof authProviderPreviewDisplayItem>)"),
-            ("auth provider preview target helper fields", "return item.provider;"),
+            ("auth provider preview target helper import", "authProviderPreviewTarget,"),
             ("auth provider preview press handler", "function pressAuthProviderPreview(item: ReturnType<typeof authProviderPreviewDisplayItem>)"),
             ("auth provider preview target helper binding", "startAuthProviderChallenge(authProviderPreviewTarget(item));"),
             ("auth refresh handler", "function refreshAuthSessionFromSecurity()"),

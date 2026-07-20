@@ -189,6 +189,12 @@ export function authProviderPreviewDisplayItem(value: AuthProviderPreview) {
   };
 }
 
+type AuthProviderPreviewDisplayItem = ReturnType<typeof authProviderPreviewDisplayItem>;
+
+export function authProviderPreviewTarget(item: AuthProviderPreviewDisplayItem) {
+  return item.provider;
+}
+
 export function authProviderDisplayItems() {
   return authProviderPreviews.map(authProviderPreviewDisplayItem);
 }

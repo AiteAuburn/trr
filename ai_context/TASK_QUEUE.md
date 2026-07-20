@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2166: Move auth provider preview target accessor
+
+Status: done
+
+Completed:
+
+- Added auth provider preview target accessor to `settingsScreenData.ts`.
+- Removed the duplicate auth provider preview target helper definition from `App.tsx`.
+- Kept account security provider challenge routing and provider press behavior unchanged.
+- Updated navigation verifier coverage to require the settings-screen helper export, App press binding, and no local helper regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2165: Move record detail card target accessor
 
 Status: done
