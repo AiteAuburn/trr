@@ -349,7 +349,7 @@ import {
   storeRedemptionsFromApi,
   yearReviewBoundaryDisplayCopy,
   yearReviewBackendAiSummaryTexts,
-  yearReviewHeaderDisplayTexts,
+  yearReviewHeaderDisplayBundle,
   yearReviewInsightDisplayTexts,
   yearReviewShareCardStatusMessages,
   yearReviewShareUnavailableStatusMessage,
@@ -2128,7 +2128,7 @@ export default function App() {
   const achievementNextBadgeDisplayText = achievementScreenDisplay.nextBadge;
   const achievementIntegrationButtonDisplayLabel = achievementScreenDisplay.integrationButton;
   const achievementIntegrationAccessibilityDisplayLabel = achievementScreenDisplay.integrationAccessibility;
-  const yearReviewHeaderDisplay = yearReviewHeaderDisplayTexts({
+  const yearReviewHeaderDisplay = yearReviewHeaderDisplayBundle({
     targetYear: yearReviewTargetDisplayYear,
     recordCount: yearlyRecordDisplayCount,
     generationLabel: yearReviewGenerationDisplayText,

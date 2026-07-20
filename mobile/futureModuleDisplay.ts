@@ -2442,6 +2442,16 @@ export function yearReviewHeaderDisplayTexts(value: {
   };
 }
 
+export function yearReviewHeaderDisplayBundle(value: {
+  targetYear: number;
+  recordCount: number;
+  generationLabel: string;
+  summary: YearReviewApiResponse | null;
+  sharePackageId: string;
+}) {
+  return yearReviewHeaderDisplayTexts(value);
+}
+
 export function backendYearReviewMetricDisplayRows(summary: YearReviewApiResponse | null) {
   return summary?.annual_stats.slice(0, 7).map((item) => metricDisplayItem([item.label, String(item.value)] as const)) ?? [];
 }

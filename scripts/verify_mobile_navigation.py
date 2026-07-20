@@ -14098,7 +14098,7 @@ def main() -> int:
             ("achievement accessibility binding", "accessibilityLabel={achievementProgressCardAccessibilityLabel(displayItem)}"),
             ("achievement progress ratio bounded", "return Math.min(1, displayItem.progress / displayItem.target);"),
             ("year review generation display value", "const yearReviewGenerationDisplayText = nextYearReviewGenerationLabel(new Date());"),
-            ("year review header display helper binding", "const yearReviewHeaderDisplay = yearReviewHeaderDisplayTexts({"),
+            ("year review header display bundle binding", "const yearReviewHeaderDisplay = yearReviewHeaderDisplayBundle({"),
             ("year review header target year binding", "targetYear: yearReviewTargetDisplayYear"),
             ("year review header record count binding", "recordCount: yearlyRecordDisplayCount"),
             ("year review header source binding", "summary: yearReviewBackendSummary"),
@@ -14232,6 +14232,7 @@ def main() -> int:
             ("direct achievement next badge copy binding", "const achievementNextBadgeDisplayText = achievementNextBadgeCopy(nextAchievementDisplayDays);"),
             ("direct achievement integration button binding", "const achievementIntegrationButtonDisplayLabel = achievementIntegrationButtonLabel();"),
             ("direct achievement integration accessibility binding", "const achievementIntegrationAccessibilityDisplayLabel = achievementIntegrationButtonAccessibilityLabel();"),
+            ("direct year review header display texts binding", "const yearReviewHeaderDisplay = yearReviewHeaderDisplayTexts({"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (
@@ -14368,6 +14369,8 @@ def main() -> int:
             ("year review header hero title", "heroTitle: yearReviewHeroTitleCopy(value.targetYear)"),
             ("year review header source", "source: yearReviewSourceDisplayCopy(value.summary, value.sharePackageId)"),
             ("year review header share accessibility", "shareAccessibilityLabel: yearReviewShareButtonAccessibilityLabel()"),
+            ("year review header display bundle helper", "export function yearReviewHeaderDisplayBundle(value: {"),
+            ("year review header display bundle delegates", "return yearReviewHeaderDisplayTexts(value);"),
             ("year review backend-saved boundary", "年度回顧由 backend snapshot 保存年度統計、AI-style 觀察與鼓勵；不提供診療建議或療效宣稱。"),
             ("year review backend metric rows helper", "export function backendYearReviewMetricDisplayRows(summary: YearReviewApiResponse | null)"),
             ("year review backend metric rows slice", "summary?.annual_stats.slice(0, 7).map"),

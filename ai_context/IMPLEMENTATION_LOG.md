@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2213 move year review header display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the year review header display bundle helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` year review header display assembly from the raw texts helper to the bundle entrypoint.
+- Kept year review header copy, backend snapshot source copy, share/revoke labels, and share action behavior unchanged.
+- Updated navigation verifier coverage to require the year review header display bundle, App bundle binding, and no direct year review header display texts binding regression in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2212 move achievement screen display bundle
 
 類型：mobile / refactor / verifier / docs
