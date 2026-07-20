@@ -509,8 +509,8 @@ import {
   nativeStatusDisplayTexts,
   nativeWhisperFailureStatusMessage,
   nativeWhisperMissingInputStatusMessage,
-  nativeWhisperProgressStatusMessage,
   nativeWhisperRunAccessibilityLabel,
+  nativeWhisperStartState,
   nativeWhisperSuccessStatusMessage,
   recordingModelRefreshAccessibilityLabel,
   recordingModelRefreshButtonLabel,
@@ -7885,7 +7885,8 @@ export default function App() {
   }
 
   function startNativeWhisperStatus() {
-    setNativeStatus(nativeWhisperProgressStatusMessage());
+    const nextState = nativeWhisperStartState();
+    setNativeStatus(nextState.status);
   }
 
   function handleNativeWhisperMissingInput() {

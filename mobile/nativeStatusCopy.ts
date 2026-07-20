@@ -141,6 +141,12 @@ export function nativeWhisperProgressStatusMessage() {
   return boundUiMessage("本機 Whisper 轉錄中...");
 }
 
+export function nativeWhisperStartState() {
+  return {
+    status: nativeWhisperProgressStatusMessage()
+  };
+}
+
 export function nativeWhisperSuccessStatusMessage() {
   return boundUiMessage("Whisper 轉錄完成，已填入文字輸入框");
 }
