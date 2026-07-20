@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2144: Move native debug default reset state helper
+
+Status: done
+
+Completed:
+
+- Added `nativeDebugDefaultState` to `nativeStatusCopy.ts`.
+- Replaced direct native debug default reset status setup in `App.tsx` with the state helper result.
+- Kept mobile session clearing, auth/session/profile reset, selected model defaults, local model paths, downloaded-model state, and cache clearing in `App.tsx`.
+- Updated navigation verifier coverage to require the native status helper and App reset binding.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2143: Move native downloaded-models failure state helper
 
 Status: done

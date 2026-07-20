@@ -11693,6 +11693,7 @@ def main() -> int:
             ("native audio path helper binding", "setAudioPath(nativeDebugInputValue(value));"),
             ("native llama path input handler", "function updateLlamaModelPathInput(value: string)"),
             ("native llama path helper binding", "setLlamaModelPath(nativeDebugInputValue(value));"),
+            ("native debug default reset state binding", "const nextNativeState = nativeDebugDefaultState();\n    setNativeStatus(nextNativeState.status);"),
             ("native module check settings handler", "function checkNativeModulesFromSettings()"),
             ("native model download settings handler", "function downloadNativeModelFromSettings()"),
             ("native whisper settings handler", "function runNativeWhisperFromSettings()"),
@@ -12681,6 +12682,8 @@ def main() -> int:
         for label, marker in (
             ("native module check button label helper", "function nativeModuleCheckButtonLabel(isRunning: boolean)"),
             ("native model download button label helper", "function nativeModelDownloadButtonLabel(isRunning: boolean, progress: number)"),
+            ("native debug default state helper", "function nativeDebugDefaultState()"),
+            ("native debug default state helper fields", "status: nativeDebugDefaultStatusMessage()"),
             ("native debug unavailable state helper", "function nativeDebugUnavailableState()"),
             ("native debug unavailable state helper fields", "status: nativeDebugDisabledStatusMessage()"),
             ("native downloaded models failure state helper", "function nativeDownloadedModelsFailureState(error: unknown)"),

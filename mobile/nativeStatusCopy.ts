@@ -32,6 +32,12 @@ export function nativeDebugDefaultStatusMessage() {
   return boundUiMessage("Expo Go 可跑 UI；whisper.rn / llama.rn 需要 Dev Client。");
 }
 
+export function nativeDebugDefaultState() {
+  return {
+    status: nativeDebugDefaultStatusMessage()
+  };
+}
+
 export function nativeDebugDisabledStatusMessage() {
   return boundUiMessage("Debug tools are disabled.");
 }

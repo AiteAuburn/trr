@@ -485,6 +485,7 @@ import {
   nativeBenchmarkMissingInputState,
   nativeBenchmarkResultState,
   nativeBenchmarkStartState,
+  nativeDebugDefaultState,
   nativeDebugDefaultStatusMessage,
   nativeDebugUnavailableState,
   nativeDownloadedModelsFailureState,
@@ -2755,7 +2756,8 @@ export default function App() {
     setModels({ stt_models: [], llm_models: [] });
     setSttModelId("browser-web-speech");
     setLlmModelId("deepseek-chat");
-    setNativeStatus(nativeDebugDefaultStatusMessage());
+    const nextNativeState = nativeDebugDefaultState();
+    setNativeStatus(nextNativeState.status);
     setWhisperModelPath("");
     setAudioPath("");
     setLlamaModelPath("");
