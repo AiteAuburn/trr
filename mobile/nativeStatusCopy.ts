@@ -185,6 +185,12 @@ export function nativeLlamaMissingInputStatusMessage() {
   return boundUiMessage("請先填 GGUF model path 和 transcript");
 }
 
+export function nativeLlamaMissingInputState() {
+  return {
+    status: nativeLlamaMissingInputStatusMessage()
+  };
+}
+
 export function nativeLlamaProgressStatusMessage() {
   return boundUiMessage("本機 llama.cpp 解析中...");
 }

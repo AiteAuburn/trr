@@ -489,7 +489,7 @@ import {
   nativeDebugDisabledStatusMessage,
   nativeDownloadedModelsFailureStatusMessage,
   nativeLlamaFailureStatusMessage,
-  nativeLlamaMissingInputStatusMessage,
+  nativeLlamaMissingInputState,
   nativeLlamaOutputSummaryMessage,
   nativeLlamaStartState,
   nativeLlamaSuccessStatusMessage,
@@ -7905,7 +7905,8 @@ export default function App() {
   }
 
   function handleNativeLlamaMissingInput() {
-    setNativeStatus(nativeLlamaMissingInputStatusMessage());
+    const nextState = nativeLlamaMissingInputState();
+    setNativeStatus(nextState.status);
   }
 
   function handleNativeBenchmarkMissingInput() {
