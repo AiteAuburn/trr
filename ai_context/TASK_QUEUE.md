@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2109: Move today record filter helper
+
+Status: done
+
+Completed:
+
+- Added `todayRecordItems` to `recordBounds.ts`.
+- Replaced the inline Today local-day record filter in `App.tsx`.
+- Kept Today memoization, display item generation, record summary copy, and Today screen rendering in `App.tsx`.
+- Updated navigation verifier coverage to require the shared Today record helper and reject the old inline local-day filter.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2108: Move history daily summary list helper
 
 Status: done

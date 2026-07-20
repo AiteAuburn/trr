@@ -9006,6 +9006,7 @@ def main() -> int:
             ("record collection cache limit flag", "isAtCacheLimit: recordCount >= cacheLimit"),
             ("record collection sync boundary flag", "isAtSyncBoundary: recordCount >= syncLimit"),
             ("record collection last record binding", "lastRecord: records[recordCount - 1] ?? null"),
+            ("today records helper binding", "const todayRecords = useMemo(\n    () => todayRecordItems(recordsForDisplay),"),
             ("record display state helper display limit binding", "const recordDisplayState = recordCollectionState(\n    recordsForDisplay,\n    mobileRecordSyncLimit,\n    maxMobileRecordCacheLimit,\n    maxMobileCountValue\n  );"),
             ("analysis preview mode record state binding", "const analysisPreviewMode = recordDisplayState.isEmpty;"),
             ("history boundary record state binding", "recordDisplayState.hasRecords"),
@@ -9318,6 +9319,8 @@ def main() -> int:
             ("record list update helper bounded result", "return boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record)));"),
             ("record list delete helper", "function recordsListWithoutDeletedRecord(current: RecordItem[], recordId: string)"),
             ("record list delete helper filter", "return current.filter((record) => record.id !== recordId);"),
+            ("today record items helper", "function todayRecordItems(records: RecordItem[], now = new Date())"),
+            ("today record items helper date compare", "return records.filter((record) => isSameLocalDay(new Date(record.occurred_at), now));"),
         ):
             _assert_contains(label, record_bounds_content, marker)
         _assert_contains(
@@ -9640,6 +9643,11 @@ def main() -> int:
             "history direct records by date map",
             content,
             "const groups = new Map<string, RecordItem[]>();\n    for (const record of recordsForDisplay) {",
+        )
+        _assert_not_contains(
+            "today records direct local-day filter",
+            content,
+            "recordsForDisplay.filter((record) => {\n        const occurredAt = new Date(record.occurred_at);",
         )
         _assert_not_contains(
             "history direct daily summary entries sort",

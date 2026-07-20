@@ -108,6 +108,7 @@ import {
   mergeRecordsByCursorOrder,
   recordsListWithoutDeletedRecord,
   recordsListWithUpdatedRecord,
+  todayRecordItems,
   type ParsePreviewResponse,
   type PendingRecord,
   type RecordItem
@@ -750,7 +751,6 @@ import {
   boundTimeInputText,
   formatLocalDateInput,
   formatLocalTimeInput,
-  isSameLocalDay,
   localDateTimeInputs,
   localDateTimeToIso,
   startOfCurrentMonth
@@ -1195,12 +1195,7 @@ export default function App() {
     [isVisualSmokePreviewMode, records]
   );
   const todayRecords = useMemo(
-    () =>
-      recordsForDisplay.filter((record) => {
-        const occurredAt = new Date(record.occurred_at);
-        const now = new Date();
-        return isSameLocalDay(occurredAt, now);
-      }),
+    () => todayRecordItems(recordsForDisplay),
     [recordsForDisplay]
   );
   const historyRecords = recordsForDisplay;

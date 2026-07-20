@@ -1,3 +1,5 @@
+import { isSameLocalDay } from "./dateTimeTransforms";
+
 const maxListItems = 12;
 const maxDisplayTextLength = 160;
 const maxIdentifierTextLength = 128;
@@ -236,6 +238,10 @@ export function recordsListWithUpdatedRecord(current: RecordItem[], updated: Rec
 
 export function recordsListWithoutDeletedRecord(current: RecordItem[], recordId: string) {
   return current.filter((record) => record.id !== recordId);
+}
+
+export function todayRecordItems(records: RecordItem[], now = new Date()) {
+  return records.filter((record) => isSameLocalDay(new Date(record.occurred_at), now));
 }
 
 function boundPendingRecord(value: PendingRecord): PendingRecord {
