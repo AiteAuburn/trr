@@ -232,7 +232,22 @@ import {
   foodCommunityCategoryOptionLabel,
   foodCommunityCategoryOptionSelected,
   foodCommunityCategoryTarget,
+  foodCommunityDetailAverageRiseDisplayText,
+  foodCommunityDetailAverageRiseLabel,
+  foodCommunityDetailIndividualShares,
+  foodCommunityDetailIndividualShareSectionLabel,
+  foodCommunityDetailMaximumRiseDisplayText,
+  foodCommunityDetailMaximumRiseLabel,
+  foodCommunityDetailMinimumRiseDisplayText,
+  foodCommunityDetailMinimumRiseLabel,
+  foodCommunityDetailPanelVisible,
+  foodCommunityDetailSelectedItemId,
+  foodCommunityDetailShareCountDisplayText,
+  foodCommunityDetailShareCountLabel,
   foodCommunityDetailStatusMessages,
+  foodCommunityDetailStatusExampleCount,
+  foodCommunityDetailStatusTitle,
+  foodCommunityDetailTitleDisplayText,
   foodCommunityDisplayBundle,
   foodCommunityItemDisplayItem,
   foodCommunityItemFromApi,
@@ -4721,92 +4736,12 @@ export default function App() {
     return category.summary;
   }
 
-  function foodCommunityDetailSelectedItemId(item: { id: string }) {
-    return item.id;
-  }
-
-  function foodCommunityDetailStatusTitle(item: { title: string }) {
-    return item.title;
-  }
-
-  function foodCommunityDetailTitle(item: { title: string }) {
-    return item.title;
-  }
-
-  function foodCommunityDetailTitleDisplayText(item: { title: string }) {
-    return `${foodCommunityDetailTitle(item)} 資料頁`;
-  }
-
-  function foodCommunityDetailPanelVisible(item: ReturnType<typeof foodCommunityItemDisplayItem> | null): item is ReturnType<typeof foodCommunityItemDisplayItem> {
-    return item !== null;
-  }
-
-  function foodCommunityDetailShareCount(item: { shareCount: number }) {
-    return item.shareCount;
-  }
-
-  function foodCommunityDetailShareCountDisplayText(item: { shareCount: number }) {
-    return String(foodCommunityDetailShareCount(item));
-  }
-
-  function foodCommunityDetailShareCountLabel() {
-    return "分享總人數";
-  }
-
-  function foodCommunityDetailAverageRise(item: { averageRise: number }) {
-    return item.averageRise;
-  }
-
-  function foodCommunityDetailAverageRiseDisplayText(item: { averageRise: number }) {
-    return `${foodCommunityDetailAverageRise(item)} mg/dL`;
-  }
-
-  function foodCommunityDetailAverageRiseLabel() {
-    return "實際升糖參考值（平均）";
-  }
-
-  function foodCommunityDetailMaximumRise(item: { maximumRise: number }) {
-    return item.maximumRise;
-  }
-
-  function foodCommunityDetailMaximumRiseDisplayText(item: { maximumRise: number }) {
-    return `${foodCommunityDetailMaximumRise(item)} mg/dL`;
-  }
-
-  function foodCommunityDetailMaximumRiseLabel() {
-    return "最高上升血糖";
-  }
-
-  function foodCommunityDetailMinimumRise(item: { minimumRise: number }) {
-    return item.minimumRise;
-  }
-
-  function foodCommunityDetailMinimumRiseDisplayText(item: { minimumRise: number }) {
-    return `${foodCommunityDetailMinimumRise(item)} mg/dL`;
-  }
-
-  function foodCommunityDetailMinimumRiseLabel() {
-    return "最低上升血糖";
-  }
-
-  function foodCommunityDetailIndividualShareSectionLabel() {
-    return "個別分享紀錄";
-  }
-
   function foodCommunityDatabaseSectionLabel() {
     return "食物血糖資料庫";
   }
 
   function foodCommunityDatabaseIntroCopy() {
     return "建立華人使用者真實食物升糖資料庫，以實際食用前後血糖分享取代理論與網路傳言；backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。";
-  }
-
-  function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> }) {
-    return item.individualShareDisplayItems;
-  }
-
-  function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
-    return item.examples.length;
   }
 
   function foodCommunityShareFallbackFoodName(item: { title: string }) {

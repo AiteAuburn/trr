@@ -1061,6 +1061,92 @@ export function foodCommunityItemDisplayItem(value: FoodCommunityItem) {
   };
 }
 
+export type FoodCommunityItemDisplayItem = ReturnType<typeof foodCommunityItemDisplayItem>;
+
+export function foodCommunityDetailSelectedItemId(item: { id: string }) {
+  return item.id;
+}
+
+export function foodCommunityDetailStatusTitle(item: { title: string }) {
+  return item.title;
+}
+
+export function foodCommunityDetailTitle(item: { title: string }) {
+  return item.title;
+}
+
+export function foodCommunityDetailTitleDisplayText(item: { title: string }) {
+  return `${foodCommunityDetailTitle(item)} 資料頁`;
+}
+
+export function foodCommunityDetailPanelVisible(
+  item: FoodCommunityItemDisplayItem | null
+): item is FoodCommunityItemDisplayItem {
+  return item !== null;
+}
+
+export function foodCommunityDetailShareCount(item: { shareCount: number }) {
+  return item.shareCount;
+}
+
+export function foodCommunityDetailShareCountDisplayText(item: { shareCount: number }) {
+  return String(foodCommunityDetailShareCount(item));
+}
+
+export function foodCommunityDetailShareCountLabel() {
+  return "分享總人數";
+}
+
+export function foodCommunityDetailAverageRise(item: { averageRise: number }) {
+  return item.averageRise;
+}
+
+export function foodCommunityDetailAverageRiseDisplayText(item: { averageRise: number }) {
+  return `${foodCommunityDetailAverageRise(item)} mg/dL`;
+}
+
+export function foodCommunityDetailAverageRiseLabel() {
+  return "實際升糖參考值（平均）";
+}
+
+export function foodCommunityDetailMaximumRise(item: { maximumRise: number }) {
+  return item.maximumRise;
+}
+
+export function foodCommunityDetailMaximumRiseDisplayText(item: { maximumRise: number }) {
+  return `${foodCommunityDetailMaximumRise(item)} mg/dL`;
+}
+
+export function foodCommunityDetailMaximumRiseLabel() {
+  return "最高上升血糖";
+}
+
+export function foodCommunityDetailMinimumRise(item: { minimumRise: number }) {
+  return item.minimumRise;
+}
+
+export function foodCommunityDetailMinimumRiseDisplayText(item: { minimumRise: number }) {
+  return `${foodCommunityDetailMinimumRise(item)} mg/dL`;
+}
+
+export function foodCommunityDetailMinimumRiseLabel() {
+  return "最低上升血糖";
+}
+
+export function foodCommunityDetailIndividualShareSectionLabel() {
+  return "個別分享紀錄";
+}
+
+export function foodCommunityDetailIndividualShares(item: {
+  individualShareDisplayItems: Array<{ id: string; summary: string; note: string }>;
+}) {
+  return item.individualShareDisplayItems;
+}
+
+export function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] }) {
+  return item.examples.length;
+}
+
 export function foodCommunityItemDisplayItems(items: FoodCommunityItem[]) {
   return items.map(foodCommunityItemDisplayItem);
 }

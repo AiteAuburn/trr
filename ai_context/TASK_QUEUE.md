@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2171: Move food community detail accessors
+
+Status: done
+
+Completed:
+
+- Added food community detail title/metric/label/share/status accessors to `futureModuleDisplay.ts`.
+- Removed duplicate food community detail accessor helper definitions from `App.tsx`.
+- Kept Food Community detail panel rendering, metric copy, individual share list binding, selected item updates, and detail sync status inputs unchanged.
+- Updated navigation verifier coverage to require future-module helper exports, App import/render/status bindings, and no local/direct-field regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2170: Move store redemption accessors
 
 Status: done
