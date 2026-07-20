@@ -3994,45 +3994,45 @@ def main() -> int:
             "rows={membershipFeatureRows}",
         )
         _assert_contains(
-            "subscription membership display helper binding",
+            "subscription runtime display bundle binding",
             content,
-            "const subscriptionMembershipDisplay = subscriptionMembershipDisplayTexts(",
+            "const subscriptionRuntimeDisplay = subscriptionRuntimeDisplayBundle({",
         )
         _assert_contains(
             "subscription plan display text binding",
             content,
-            "const subscriptionPlanDisplayText = subscriptionMembershipDisplay.subscriptionPlan;",
+            "const subscriptionPlanDisplayText = subscriptionRuntimeDisplay.subscriptionPlan;",
         )
         _assert_contains(
             "membership trial days display text binding",
             content,
-            "const membershipTrialDaysDisplayText = subscriptionMembershipDisplay.trialDays;",
-        )
-        _assert_contains(
-            "quota display texts helper binding",
-            content,
-            "const quotaDisplay = quotaDisplayTexts(voiceQuota);",
+            "const membershipTrialDaysDisplayText = subscriptionRuntimeDisplay.membershipTrialDays;",
         )
         _assert_contains(
             "quota used display text binding",
             content,
-            "const quotaUsedDisplayText = quotaDisplay.used;",
+            "const quotaUsedDisplayText = subscriptionRuntimeDisplay.quotaUsed;",
         )
         _assert_contains(
             "quota remaining display text binding",
             content,
-            "const quotaRemainingDisplayText = quotaDisplay.remaining;",
+            "const quotaRemainingDisplayText = subscriptionRuntimeDisplay.quotaRemaining;",
         )
         _assert_contains(
             "subscription quota daily limit display text binding",
             content,
-            "const subscriptionQuotaDailyLimitDisplayText = quotaDisplay.subscriptionDailyLimit;",
+            "const subscriptionQuotaDailyLimitDisplayText = subscriptionRuntimeDisplay.subscriptionQuotaDailyLimit;",
         )
         _assert_contains(
             "settings quota helper display text binding",
             content,
-            "const settingsQuotaHelperDisplayText = quotaDisplay.settingsHelper;",
+            "const settingsQuotaHelperDisplayText = subscriptionRuntimeDisplay.settingsQuotaHelper;",
         )
+        for label, marker in (
+            ("direct subscription membership display binding", "const subscriptionMembershipDisplay = subscriptionMembershipDisplayTexts("),
+            ("direct quota display texts binding", "const quotaDisplay = quotaDisplayTexts(voiceQuota);"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "reminder preview display rows helper binding",
             content,
@@ -13372,6 +13372,16 @@ def main() -> int:
         ):
             _assert_contains(label, subscription_copy_content, marker)
         for label, marker in (
+            ("subscription runtime display bundle helper", "function subscriptionRuntimeDisplayBundle(value: {"),
+            ("subscription runtime membership helper boundary", "const membership = subscriptionMembershipDisplayTexts("),
+            ("subscription runtime quota helper boundary", "const quota = quotaDisplayTexts(value.voiceQuota);"),
+            ("subscription runtime action status helper boundary", "const actionStatus = subscriptionActionStatusDisplayTexts({"),
+            ("subscription runtime plan binding", "subscriptionPlan: membership.subscriptionPlan"),
+            ("subscription runtime quota remaining binding", "quotaRemaining: quota.remaining"),
+            ("subscription runtime management unavailable binding", "subscriptionManagementUnavailable: actionStatus.managementUnavailable"),
+        ):
+            _assert_contains(label, subscription_display_bundle_content, marker)
+        for label, marker in (
             ("subscription trial days helper", "function trialDaysLeft(trialEndsAt?: string | null)"),
             ("subscription trial days invalid date guard", "Number.isNaN(end)"),
             ("subscription trial days ceil calculation", "Math.ceil((end - Date.now()) / 86_400_000)"),
@@ -16600,13 +16610,18 @@ def main() -> int:
             ("membership return subscription binding", "onPress={returnFromMembershipStatusToSubscription}"),
             ("membership renewal management binding", "onPress={openMembershipRenewalManagement}"),
             ("membership management binding", "onPress={openMembershipManagement}"),
-            ("subscription action status display helper binding", "const subscriptionActionStatusDisplay = subscriptionActionStatusDisplayTexts({"),
-            ("subscription action status display text binding", "const subscriptionActionStatusDisplayText = subscriptionActionStatusDisplay.subscriptionAction;"),
-            ("subscription management status display text binding", "const subscriptionManagementActionStatusDisplayText = subscriptionActionStatusDisplay.subscriptionManagementAction;"),
-            ("subscription trial integration status binding", "const subscriptionTrialIntegrationStatusMessage = subscriptionActionStatusDisplay.trialIntegration;"),
-            ("subscription management unavailable status binding", "const subscriptionManagementUnavailableStatusMessage = subscriptionActionStatusDisplay.managementUnavailable;"),
+            ("subscription runtime display helper binding", "const subscriptionRuntimeDisplay = subscriptionRuntimeDisplayBundle({"),
+            ("subscription action status display text binding", "const subscriptionActionStatusDisplayText = subscriptionRuntimeDisplay.subscriptionActionStatus;"),
+            ("subscription management status display text binding", "const subscriptionManagementActionStatusDisplayText = subscriptionRuntimeDisplay.subscriptionManagementActionStatus;"),
+            ("subscription trial integration status binding", "const subscriptionTrialIntegrationStatusMessage = subscriptionRuntimeDisplay.subscriptionTrialIntegration;"),
+            ("subscription management unavailable status binding", "const subscriptionManagementUnavailableStatusMessage = subscriptionRuntimeDisplay.subscriptionManagementUnavailable;"),
         ):
             _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "direct subscription action status helper binding",
+            content,
+            "const subscriptionActionStatusDisplay = subscriptionActionStatusDisplayTexts({",
+        )
         for label, marker in (
             ("subscription quota accessibility label", "syncQuotaAccessibility: boundDisplayText(`${syncQuota}會員額度狀態，不建立訂閱或收款`, maxDisplayDetailTextLength)"),
             ("subscription trial accessibility label", "trialIntegrationAccessibility: boundDisplayText(`${trialIntegrationButton}，只顯示付款與 entitlement 邊界`, maxDisplayDetailTextLength)"),

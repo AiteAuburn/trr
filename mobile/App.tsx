@@ -789,7 +789,6 @@ import {
   privacyIntegrationButtonLabel,
   privacyReadinessChecklistDisplayItems,
   privacySettingsIntroCopy,
-  quotaDisplayTexts,
   quotaReadinessChecklistDisplayItems,
   recordingQuotaControlCopy,
   recordingQuotaDataBoundaryCopy,
@@ -822,7 +821,7 @@ import {
   settingsChoiceDisplayBundle
 } from "./settingsChoiceDisplay";
 import { settingsStaticDisplayBundle } from "./settingsStaticDisplayBundle";
-import { subscriptionStaticDisplayBundle } from "./subscriptionDisplayBundle";
+import { subscriptionRuntimeDisplayBundle, subscriptionStaticDisplayBundle } from "./subscriptionDisplayBundle";
 import {
   boundVoiceQuota,
   recordingEffectiveLimitSeconds,
@@ -836,14 +835,12 @@ import {
   profileNoActionBoundaryCopy,
   recordingQuotaBoundaryDisplayRows,
   settingsSubscriptionSectionLabels,
-  subscriptionActionStatusDisplayTexts,
   subscriptionCtaBoundaryCopy,
   subscriptionManagementIntroCopy,
   subscriptionManagementNoActionCopy,
   subscriptionManagementOpenStatusMessage,
   subscriptionManagementReturnSettingsStatusMessage,
   subscriptionManagementSyncButtonLabel,
-  subscriptionMembershipDisplayTexts,
   subscriptionMembershipStatusOpenStatusMessage,
   subscriptionPaymentUnwiredCopy,
   accountSecurityBoundaryDisplayRowsForState,
@@ -1940,36 +1937,33 @@ export default function App() {
   const foodPhotoIntegrationAccessibilityDisplayLabel = foodPhotoDisplay.integrationAccessibility;
   const foodPhotoRetakeAccessibilityDisplayLabel = foodPhotoDisplay.retakeAccessibility;
   const quotaStatusDisplayText = reportStatusDisplay.quota;
-  const subscriptionMembershipDisplay = subscriptionMembershipDisplayTexts(
+  const subscriptionRuntimeDisplay = subscriptionRuntimeDisplayBundle({
     voiceQuota,
     quotaTrialDaysLeft,
-    quotaStatusDisplayText
-  );
-  const subscriptionPlanDisplayText = subscriptionMembershipDisplay.subscriptionPlan;
-  const subscriptionManagementPlanDisplayText = subscriptionMembershipDisplay.managementPlan;
-  const subscriptionStatusDisplayText = subscriptionMembershipDisplay.subscriptionStatus;
-  const subscriptionManagementStatusDisplayText = subscriptionMembershipDisplay.managementStatus;
-  const membershipTrialHeroLabelDisplayText = subscriptionMembershipDisplay.trialHeroLabel;
-  const membershipTrialDaysDisplayText = subscriptionMembershipDisplay.trialDays;
-  const membershipPlanStatusDisplayText = subscriptionMembershipDisplay.planStatus;
-  const quotaDisplay = quotaDisplayTexts(voiceQuota);
-  const quotaUsedDisplayText = quotaDisplay.used;
-  const quotaRemainingDisplayText = quotaDisplay.remaining;
-  const quotaDailyLimitDisplayText = quotaDisplay.dailyLimit;
-  const subscriptionQuotaDailyLimitDisplayText = quotaDisplay.subscriptionDailyLimit;
-  const settingsQuotaHelperDisplayText = quotaDisplay.settingsHelper;
-  const subscriptionActionStatusDisplay = subscriptionActionStatusDisplayTexts({
+    quotaStatusDisplayText,
     subscriptionActionStatus,
     subscriptionManagementActionStatus,
     backendUnavailableMessage: protectedAccountBackendUnavailableMessage
   });
-  const subscriptionActionStatusDisplayText = subscriptionActionStatusDisplay.subscriptionAction;
-  const subscriptionManagementActionStatusDisplayText = subscriptionActionStatusDisplay.subscriptionManagementAction;
-  const subscriptionTrialIntegrationStatusMessage = subscriptionActionStatusDisplay.trialIntegration;
-  const subscriptionRenewalIntegrationStatusMessage = subscriptionActionStatusDisplay.renewalIntegration;
-  const subscriptionManagementSyncingStatusMessage = subscriptionActionStatusDisplay.managementSyncing;
-  const subscriptionManagementUnavailableStatusMessage = subscriptionActionStatusDisplay.managementUnavailable;
-  const subscriptionManagementPaymentStatusMessage = subscriptionActionStatusDisplay.managementPayment;
+  const subscriptionPlanDisplayText = subscriptionRuntimeDisplay.subscriptionPlan;
+  const subscriptionManagementPlanDisplayText = subscriptionRuntimeDisplay.subscriptionManagementPlan;
+  const subscriptionStatusDisplayText = subscriptionRuntimeDisplay.subscriptionStatus;
+  const subscriptionManagementStatusDisplayText = subscriptionRuntimeDisplay.subscriptionManagementStatus;
+  const membershipTrialHeroLabelDisplayText = subscriptionRuntimeDisplay.membershipTrialHeroLabel;
+  const membershipTrialDaysDisplayText = subscriptionRuntimeDisplay.membershipTrialDays;
+  const membershipPlanStatusDisplayText = subscriptionRuntimeDisplay.membershipPlanStatus;
+  const quotaUsedDisplayText = subscriptionRuntimeDisplay.quotaUsed;
+  const quotaRemainingDisplayText = subscriptionRuntimeDisplay.quotaRemaining;
+  const quotaDailyLimitDisplayText = subscriptionRuntimeDisplay.quotaDailyLimit;
+  const subscriptionQuotaDailyLimitDisplayText = subscriptionRuntimeDisplay.subscriptionQuotaDailyLimit;
+  const settingsQuotaHelperDisplayText = subscriptionRuntimeDisplay.settingsQuotaHelper;
+  const subscriptionActionStatusDisplayText = subscriptionRuntimeDisplay.subscriptionActionStatus;
+  const subscriptionManagementActionStatusDisplayText = subscriptionRuntimeDisplay.subscriptionManagementActionStatus;
+  const subscriptionTrialIntegrationStatusMessage = subscriptionRuntimeDisplay.subscriptionTrialIntegration;
+  const subscriptionRenewalIntegrationStatusMessage = subscriptionRuntimeDisplay.subscriptionRenewalIntegration;
+  const subscriptionManagementSyncingStatusMessage = subscriptionRuntimeDisplay.subscriptionManagementSyncing;
+  const subscriptionManagementUnavailableStatusMessage = subscriptionRuntimeDisplay.subscriptionManagementUnavailable;
+  const subscriptionManagementPaymentStatusMessage = subscriptionRuntimeDisplay.subscriptionManagementPayment;
   const authStatusDisplay = authStatusDisplayTexts({
     authActionStatus,
     devResetStatus,
