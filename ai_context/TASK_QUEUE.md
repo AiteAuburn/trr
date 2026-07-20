@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2158: Move Home speech example accessors
+
+Status: done
+
+Completed:
+
+- Added Home speech example label/text/dot-key/dot-active/pagination accessibility helpers to `recordingCopy.ts`.
+- Removed duplicate Home speech example accessor helper definitions from `App.tsx`.
+- Kept Home example carousel copy, pagination dots, active-dot styling, and interval behavior unchanged.
+- Updated navigation verifier coverage to require recording-copy helper exports, App render bindings, and no local helper regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2157: Move edit option accessors
 
 Status: done

@@ -330,6 +330,11 @@ import {
 } from "./accountCopy";
 import {
   homeSpeechExamples,
+  homeSpeechExampleDotIsActive,
+  homeSpeechExampleDotKey,
+  homeSpeechExampleLabel,
+  homeSpeechExamplePaginationAccessibilityLabel,
+  homeSpeechExampleText,
   homeRecordingModelStatusCopy,
   homeRecordingPreviewBoundaryCopy,
   homeRecordingSecondaryHint,
@@ -2584,26 +2589,6 @@ export default function App() {
       return;
     }
     openScreenWithStatus("record", quickEntryTextModeStatusMessage());
-  }
-
-  function homeSpeechExampleLabel(example: (typeof homeSpeechExamples)[number]) {
-    return example.label;
-  }
-
-  function homeSpeechExampleText(example: (typeof homeSpeechExamples)[number]) {
-    return example.text;
-  }
-
-  function homeSpeechExampleDotKey(example: (typeof homeSpeechExamples)[number]) {
-    return `${example.key}-dot`;
-  }
-
-  function homeSpeechExampleDotIsActive(index: number, currentIndex: number) {
-    return index === currentIndex;
-  }
-
-  function homeSpeechExamplePaginationAccessibilityLabel(currentIndex: number, totalCount: number) {
-    return `目前第 ${currentIndex + 1} 個範例，共 ${totalCount} 個`;
   }
 
   function handleRecordQuickEntryMode(mode: QuickEntryMode) {

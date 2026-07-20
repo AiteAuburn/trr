@@ -7834,23 +7834,39 @@ def main() -> int:
             ("guided home item icon helper fields", "return item.icon;"),
             ("guided home item label helper", "function homeGuidanceItemLabel(item: (typeof homeGuidanceDirections)[number][number])"),
             ("guided home item label helper fields", "return item.label;"),
-            ("guided home example label helper", "function homeSpeechExampleLabel(example: (typeof homeSpeechExamples)[number])"),
+            ("guided home example label helper", "function homeSpeechExampleLabel(example: HomeSpeechExample)"),
             ("guided home example label helper fields", "return example.label;"),
-            ("guided home example label helper binding", "{homeSpeechExampleLabel(homeCurrentSpeechExample)}"),
-            ("guided home example text helper", "function homeSpeechExampleText(example: (typeof homeSpeechExamples)[number])"),
+            ("guided home example text helper", "function homeSpeechExampleText(example: HomeSpeechExample)"),
             ("guided home example text helper fields", "return example.text;"),
-            ("guided home example text helper binding", "{homeSpeechExampleText(homeCurrentSpeechExample)}"),
-            ("guided home example dot key helper", "function homeSpeechExampleDotKey(example: (typeof homeSpeechExamples)[number])"),
+            ("guided home example dot key helper", "function homeSpeechExampleDotKey(example: HomeSpeechExample)"),
             ("guided home example dot key helper fields", "return `${example.key}-dot`;"),
-            ("guided home example dot key helper binding", "key={homeSpeechExampleDotKey(example)}"),
             ("guided home example dot active helper", "function homeSpeechExampleDotIsActive(index: number, currentIndex: number)"),
             ("guided home example dot active helper fields", "return index === currentIndex;"),
-            ("guided home example dot active helper binding", "homeSpeechExampleDotIsActive(index, homeExampleIndex) ? styles.homeExampleDotActive : null"),
             ("guided home example pagination accessibility helper", "function homeSpeechExamplePaginationAccessibilityLabel(currentIndex: number, totalCount: number)"),
+        ):
+            source = home_guidance_card_content if "home example" not in label else recording_copy_content
+            _assert_contains(label, source, marker)
+        for label, marker in (
+            ("guided home example label helper import", "homeSpeechExampleLabel,"),
+            ("guided home example label helper binding", "{homeSpeechExampleLabel(homeCurrentSpeechExample)}"),
+            ("guided home example text helper import", "homeSpeechExampleText,"),
+            ("guided home example text helper binding", "{homeSpeechExampleText(homeCurrentSpeechExample)}"),
+            ("guided home example dot key helper import", "homeSpeechExampleDotKey,"),
+            ("guided home example dot key helper binding", "key={homeSpeechExampleDotKey(example)}"),
+            ("guided home example dot active helper import", "homeSpeechExampleDotIsActive,"),
+            ("guided home example dot active helper binding", "homeSpeechExampleDotIsActive(index, homeExampleIndex) ? styles.homeExampleDotActive : null"),
+            ("guided home example pagination accessibility helper import", "homeSpeechExamplePaginationAccessibilityLabel,"),
             ("guided home example pagination accessibility helper binding", "accessibilityLabel={homeSpeechExamplePaginationAccessibilityLabel("),
         ):
-            source = home_guidance_card_content if "home example" not in label else content
-            _assert_contains(label, source, marker)
+            _assert_contains(label, content, marker)
+        for label, marker in (
+            ("local home example label helper", "function homeSpeechExampleLabel(example: (typeof homeSpeechExamples)[number])"),
+            ("local home example text helper", "function homeSpeechExampleText(example: (typeof homeSpeechExamples)[number])"),
+            ("local home example dot key helper", "function homeSpeechExampleDotKey(example: (typeof homeSpeechExamples)[number])"),
+            ("local home example dot active helper", "function homeSpeechExampleDotIsActive(index: number, currentIndex: number)"),
+            ("local home example pagination accessibility helper", "function homeSpeechExamplePaginationAccessibilityLabel(currentIndex: number, totalCount: number)"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_not_contains(
             "direct home guidance directions map in App",
             today_home_block,

@@ -163,6 +163,28 @@ export const homeSpeechExamples = [
   text: boundDisplayText(example, maxDisplayDetailTextLength)
 }));
 
+type HomeSpeechExample = (typeof homeSpeechExamples)[number];
+
+export function homeSpeechExampleLabel(example: HomeSpeechExample) {
+  return example.label;
+}
+
+export function homeSpeechExampleText(example: HomeSpeechExample) {
+  return example.text;
+}
+
+export function homeSpeechExampleDotKey(example: HomeSpeechExample) {
+  return `${example.key}-dot`;
+}
+
+export function homeSpeechExampleDotIsActive(index: number, currentIndex: number) {
+  return index === currentIndex;
+}
+
+export function homeSpeechExamplePaginationAccessibilityLabel(currentIndex: number, totalCount: number) {
+  return `目前第 ${currentIndex + 1} 個範例，共 ${totalCount} 個`;
+}
+
 export function transcriptReviewPreflightPassedCopy() {
   return boundDisplayText("已通過本機長度與數字密度檢查；下一步才會送出 parser 請求。", maxDisplayDetailTextLength);
 }
