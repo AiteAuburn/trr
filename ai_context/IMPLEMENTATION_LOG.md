@@ -15,6 +15,39 @@
 
 ## 2026-07-20
 
+### T2157 move edit option accessors
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordOptionField.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added edit option key/accessibility/label/selected helpers and preview edit option target helper to `recordOptionField.tsx`.
+- Updated `RecordOptionRow` to render through the shared option accessors.
+- Removed duplicate edit option accessor helper definitions from `App.tsx`.
+- Kept preview-edit and record-edit unit/timing/meal option selection behavior unchanged.
+- Updated navigation verifier coverage to require record-option-field helper exports, App press bindings, and no local helper regressions in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow selector/display accessors out of `App.tsx` before larger screen component splits.
+
 ### T2156 move analysis range option accessors
 
 類型：mobile / refactor / verifier / docs

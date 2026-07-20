@@ -34,6 +34,26 @@ None.
 
 ## Done
 
+### T2157: Move edit option accessors
+
+Status: done
+
+Completed:
+
+- Added edit option key/accessibility/label/selected helpers and preview edit option target helper to `recordOptionField.tsx`.
+- Updated `RecordOptionRow` to render through the shared option accessors.
+- Removed duplicate edit option accessor helper definitions from `App.tsx`.
+- Kept preview-edit and record-edit unit/timing/meal option selection behavior unchanged.
+- Updated navigation verifier coverage to require record-option-field helper exports, App press bindings, and no local helper regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2156: Move analysis range option accessors
 
 Status: done

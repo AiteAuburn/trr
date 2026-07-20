@@ -898,7 +898,11 @@ import { RecordResultDestinationGrid } from "./recordResultDestinationGrid";
 import { RecordEditFooterActions } from "./recordEditFooterActions";
 import { RecordEditHeaderFields } from "./recordEditHeaderFields";
 import { RecordJsonField } from "./recordJsonField";
-import { RecordOptionField, RecordOptionRow } from "./recordOptionField";
+import {
+  RecordOptionField,
+  RecordOptionRow,
+  previewEditOptionTarget
+} from "./recordOptionField";
 import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
 import { SaveSuccessActionRow } from "./saveSuccessActionRow";
 import { SettingsBoundaryGrid } from "./settingsBoundaryGrid";
@@ -3865,28 +3869,8 @@ export default function App() {
     updatePreviewEditField("glucoseUnit", value);
   }
 
-  function editOptionKey<T extends string>(option: { value: T }) {
-    return option.value;
-  }
-
-  function editOptionAccessibilityLabel(option: { accessibilityLabel: string }) {
-    return option.accessibilityLabel;
-  }
-
-  function editOptionLabel(option: { label: string }) {
-    return option.label;
-  }
-
-  function editOptionIsSelected(option: { value: string }, selectedValue: string) {
-    return editOptionKey(option) === selectedValue;
-  }
-
   function recordEditFieldValue<K extends keyof RecordEditFields>(fields: RecordEditFields, field: K) {
     return fields[field];
-  }
-
-  function previewEditOptionTarget(option: { value: string }) {
-    return editOptionKey(option);
   }
 
   function pressPreviewEditGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>) {

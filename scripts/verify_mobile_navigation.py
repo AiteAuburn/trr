@@ -10407,7 +10407,7 @@ def main() -> int:
         )
         for label, marker in (
             ("manual type chip accessibility binding", "accessibilityLabel={manualRecordTypeOptionAccessibilityLabel(type)}"),
-            ("shared option chip accessibility binding", "accessibilityLabel={option.accessibilityLabel}"),
+            ("shared option chip accessibility binding", "accessibilityLabel={editOptionAccessibilityLabel(option)}"),
             ("store category accessibility binding", "optionAccessibilityLabel={storeCategoryOptionAccessibilityLabel}"),
             ("analysis range accessibility binding", "optionAccessibilityLabel={analysisRangeOptionAccessibilityLabel}"),
             ("manual type chip button role", 'accessibilityRole="button"'),
@@ -10470,20 +10470,27 @@ def main() -> int:
             ("preview edit header date input binding", "onDateChange={updatePreviewEditDateInput}"),
             ("preview edit header time input binding", "onTimeChange={updatePreviewEditTimeInput}"),
             ("preview edit glucose input binding", "onChangeText={updatePreviewEditGlucoseValue}"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
             ("edit option key helper", "function editOptionKey<T extends string>(option: { value: T })"),
             ("edit option key helper fields", "return option.value;"),
-            ("edit option key helper binding", "key={option.value}"),
+            ("edit option key helper binding", "key={editOptionKey(option)}"),
             ("edit option accessibility helper", "function editOptionAccessibilityLabel(option: { accessibilityLabel: string })"),
             ("edit option accessibility helper fields", "return option.accessibilityLabel;"),
-            ("edit option accessibility helper binding", "accessibilityLabel={option.accessibilityLabel}"),
+            ("edit option accessibility helper binding", "accessibilityLabel={editOptionAccessibilityLabel(option)}"),
             ("edit option label helper", "function editOptionLabel(option: { label: string })"),
             ("edit option label helper fields", "return option.label;"),
-            ("edit option label helper binding", "{option.label}"),
+            ("edit option label helper binding", "{editOptionLabel(option)}"),
             ("edit option selected helper", "function editOptionIsSelected(option: { value: string }, selectedValue: string)"),
-            ("edit option selected helper fields", "const optionSelected = option.value === selectedValue;"),
+            ("edit option selected helper fields", "return editOptionKey(option) === selectedValue;"),
+            ("edit option selected helper binding", "const optionSelected = editOptionIsSelected(option, selectedValue);"),
             ("edit option selected state binding", "accessibilityState={{ selected: optionSelected }}"),
             ("edit option selected style binding", "optionSelected ? styles.segmentActive : null"),
             ("edit option selected text binding", "optionSelected ? styles.segmentTextActive : null"),
+        ):
+            _assert_contains(label, record_option_field_content, marker)
+        for label, marker in (
             ("record edit field value helper", "function recordEditFieldValue<K extends keyof RecordEditFields>(fields: RecordEditFields, field: K)"),
             ("record edit field value helper fields", "return fields[field];"),
             ("preview edit glucose value helper binding", 'value={recordEditFieldValue(previewEditFields, "glucoseValue")}'),
@@ -10524,8 +10531,15 @@ def main() -> int:
             ("record edit meal type option field options", "options={mealTypeDisplayOptions}"),
             ("record edit meal type selected helper binding", 'selectedValue={recordEditFieldValue(recordEditFields, "mealType")}'),
             ("record edit meal type option field press", "onOptionPress={pressRecordEditMealTypeOption}"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
             ("preview edit option target helper", "function previewEditOptionTarget(option: { value: string })"),
             ("preview edit option target helper fields", "return editOptionKey(option);"),
+        ):
+            _assert_contains(label, record_option_field_content, marker)
+        for label, marker in (
+            ("preview edit option target helper import", "previewEditOptionTarget\n} from \"./recordOptionField\";"),
             ("preview edit unit option press handler", "function pressPreviewEditGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>)"),
             ("preview edit unit option target helper binding", "selectPreviewEditGlucoseUnit(previewEditOptionTarget(option));"),
             ("glucose unit display options helper binding", "const glucoseUnitDisplayOptions = useMemo(() => optionDisplayItems(glucoseUnitOptions), []);"),
@@ -10535,6 +10549,17 @@ def main() -> int:
             ("meal type display options helper binding", "const mealTypeDisplayOptions = useMemo(() => valueLabelDisplayItems(mealTypeOptions), []);"),
             ("preview edit meal type option press handler", "function pressPreviewEditMealTypeOption(option: ReturnType<typeof valueLabelDisplayItem>)"),
             ("preview edit meal type option target helper binding", "selectPreviewEditMealType(previewEditOptionTarget(option));"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
+            ("local edit option key helper", "function editOptionKey<T extends string>(option: { value: T })"),
+            ("local edit option accessibility helper", "function editOptionAccessibilityLabel(option: { accessibilityLabel: string })"),
+            ("local edit option label helper", "function editOptionLabel(option: { label: string })"),
+            ("local edit option selected helper", "function editOptionIsSelected(option: { value: string }, selectedValue: string)"),
+            ("local preview edit option target helper", "function previewEditOptionTarget(option: { value: string })"),
+        ):
+            _assert_not_contains(label, content, marker)
+        for label, marker in (
             ("preview edit glucose shared field binding", "<RecordTextField\n                  icon={\"💧\"}"),
             ("preview edit glucose shared field label", 'label={"血糖數值"}'),
             ("preview edit glucose shared field accessibility", "accessibilityLabel={auxiliaryDisplayLabels.glucoseValueInputAccessibility}"),
