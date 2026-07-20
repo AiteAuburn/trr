@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2212: Move achievement screen display bundle
+
+Status: done
+
+Completed:
+
+- Added the achievement screen display bundle helper to `futureModuleDisplay.ts`.
+- Removed direct achievement boundary, local computation, next badge, sync button label, and sync accessibility assembly from `App.tsx`.
+- Kept achievement screen copy, backend sync action, local fallback behavior, and leaderboard/privacy boundary behavior unchanged.
+- Updated navigation verifier coverage to require the achievement screen display bundle, App bundle bindings, and no direct achievement screen display assembly regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2211: Move future module detail display bundle
 
 Status: done

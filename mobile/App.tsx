@@ -178,13 +178,9 @@ import {
 import {
   achievementBadgeSummary,
   achievementDisplayItems as buildAchievementDisplayItems,
-  achievementIntegrationButtonAccessibilityLabel,
-  achievementIntegrationButtonLabel,
   achievementItemsFromApi,
-  achievementLocalComputationCopy,
   achievementNewlyUnlockedItemsForSync,
-  achievementNextBadgeCopy,
-  achievementPreviewBoundaryCopy,
+  achievementScreenDisplayBundle,
   achievementSyncStatusMessages,
   achievementUnlocksFromApi,
   backendYearReviewHealthOutcomeDisplayRows,
@@ -2126,11 +2122,12 @@ export default function App() {
   const futureModuleDetailDisplay = futureModuleDetailDisplayBundle();
   const futureModuleDetailBoundaryDisplayText = futureModuleDetailDisplay.boundary;
   const futureModuleImplementationOrderDisplayText = futureModuleDetailDisplay.implementationOrder;
-  const achievementPreviewBoundaryDisplayText = achievementPreviewBoundaryCopy();
-  const achievementLocalComputationDisplayText = achievementLocalComputationCopy();
-  const achievementNextBadgeDisplayText = achievementNextBadgeCopy(nextAchievementDisplayDays);
-  const achievementIntegrationButtonDisplayLabel = achievementIntegrationButtonLabel();
-  const achievementIntegrationAccessibilityDisplayLabel = achievementIntegrationButtonAccessibilityLabel();
+  const achievementScreenDisplay = achievementScreenDisplayBundle(nextAchievementDisplayDays);
+  const achievementPreviewBoundaryDisplayText = achievementScreenDisplay.previewBoundary;
+  const achievementLocalComputationDisplayText = achievementScreenDisplay.localComputation;
+  const achievementNextBadgeDisplayText = achievementScreenDisplay.nextBadge;
+  const achievementIntegrationButtonDisplayLabel = achievementScreenDisplay.integrationButton;
+  const achievementIntegrationAccessibilityDisplayLabel = achievementScreenDisplay.integrationAccessibility;
   const yearReviewHeaderDisplay = yearReviewHeaderDisplayTexts({
     targetYear: yearReviewTargetDisplayYear,
     recordCount: yearlyRecordDisplayCount,

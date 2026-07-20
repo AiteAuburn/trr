@@ -2250,6 +2250,16 @@ export function achievementIntegrationButtonAccessibilityLabel() {
   return boundDisplayText("同步成就徽章解鎖紀錄，不更新排行榜或公開資料", maxDisplayDetailTextLength);
 }
 
+export function achievementScreenDisplayBundle(nextBadgeRemainingProgress: number) {
+  return {
+    previewBoundary: achievementPreviewBoundaryCopy(),
+    localComputation: achievementLocalComputationCopy(),
+    nextBadge: achievementNextBadgeCopy(nextBadgeRemainingProgress),
+    integrationButton: achievementIntegrationButtonLabel(),
+    integrationAccessibility: achievementIntegrationButtonAccessibilityLabel()
+  };
+}
+
 export function achievementSyncStatusMessages(value: {
   backendUnavailableMessage: string;
   syncUnlocks: boolean;

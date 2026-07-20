@@ -13997,6 +13997,12 @@ def main() -> int:
             ("food photo integration status binding", "onPress={showFoodPhotoIntegrationStatus}"),
             ("food photo retake status binding", "onPress={showFoodPhotoRetakeStatus}"),
             ("achievement integration accessibility binding", "accessibilityLabel={achievementIntegrationAccessibilityDisplayLabel}"),
+            ("achievement screen display helper binding", "const achievementScreenDisplay = achievementScreenDisplayBundle(nextAchievementDisplayDays);"),
+            ("achievement preview boundary display binding", "const achievementPreviewBoundaryDisplayText = achievementScreenDisplay.previewBoundary;"),
+            ("achievement local computation display binding", "const achievementLocalComputationDisplayText = achievementScreenDisplay.localComputation;"),
+            ("achievement next badge display binding", "const achievementNextBadgeDisplayText = achievementScreenDisplay.nextBadge;"),
+            ("achievement integration button display binding", "const achievementIntegrationButtonDisplayLabel = achievementScreenDisplay.integrationButton;"),
+            ("achievement integration accessibility display binding", "const achievementIntegrationAccessibilityDisplayLabel = achievementScreenDisplay.integrationAccessibility;"),
             ("achievement newly unlocked state", "const [achievementNewlyUnlockedItems, setAchievementNewlyUnlockedItems] = useState<AchievementItem[]>([])"),
             ("achievement newly unlocked display items", "const achievementNewlyUnlockedDisplayItems = useMemo("),
             ("achievement limited display helper binding", "limitedAchievementDisplayItems(achievementNewlyUnlockedItems)"),
@@ -14221,6 +14227,11 @@ def main() -> int:
         for label, marker in (
             ("direct future module detail boundary copy binding", "const futureModuleDetailBoundaryDisplayText = futureModuleDetailBoundaryCopy();"),
             ("direct future module implementation order copy binding", "const futureModuleImplementationOrderDisplayText = futureModuleImplementationOrderCopy();"),
+            ("direct achievement preview boundary copy binding", "const achievementPreviewBoundaryDisplayText = achievementPreviewBoundaryCopy();"),
+            ("direct achievement local computation copy binding", "const achievementLocalComputationDisplayText = achievementLocalComputationCopy();"),
+            ("direct achievement next badge copy binding", "const achievementNextBadgeDisplayText = achievementNextBadgeCopy(nextAchievementDisplayDays);"),
+            ("direct achievement integration button binding", "const achievementIntegrationButtonDisplayLabel = achievementIntegrationButtonLabel();"),
+            ("direct achievement integration accessibility binding", "const achievementIntegrationAccessibilityDisplayLabel = achievementIntegrationButtonAccessibilityLabel();"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (
@@ -14933,6 +14944,11 @@ def main() -> int:
             ("achievement integration accessibility helper", "export function achievementIntegrationButtonAccessibilityLabel()"),
             ("achievement sync unlock button label", 'return boundDisplayText("同步徽章解鎖", maxDisplayTextLength);'),
             ("achievement sync unlock accessibility copy", "同步成就徽章解鎖紀錄，不更新排行榜或公開資料"),
+            ("achievement screen display bundle helper", "export function achievementScreenDisplayBundle(nextBadgeRemainingProgress: number)"),
+            ("achievement screen display preview boundary binding", "previewBoundary: achievementPreviewBoundaryCopy()"),
+            ("achievement screen display next badge binding", "nextBadge: achievementNextBadgeCopy(nextBadgeRemainingProgress)"),
+            ("achievement screen display integration button binding", "integrationButton: achievementIntegrationButtonLabel()"),
+            ("achievement screen display integration accessibility binding", "integrationAccessibility: achievementIntegrationButtonAccessibilityLabel()"),
             ("achievement sync status helper", "export function achievementSyncStatusMessages(value: {"),
             ("achievement sync unavailable fallback", "backend 尚未 ready"),
             ("achievement sync loading summary copy", "正在讀取 backend 成就摘要。"),
