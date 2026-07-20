@@ -790,11 +790,8 @@ import {
   privacyReadinessChecklistDisplayItems,
   privacySettingsIntroCopy,
   quotaReadinessChecklistDisplayItems,
-  recordingQuotaControlCopy,
+  recordingQuotaControlDisplayBundle,
   recordingQuotaDataBoundaryCopy,
-  recordingQuotaIntroCopy,
-  recordingQuotaSyncAccessibilityLabel,
-  recordingQuotaSyncButtonLabel,
   reminderIntegrationAccessibilityLabel,
   reminderIntegrationButtonLabel,
   reminderPreviewDisplayItems as buildReminderPreviewDisplayItems,
@@ -2117,10 +2114,11 @@ export default function App() {
   const subscriptionManagementIntroDisplayText = subscriptionActionControlDisplay.managementIntro;
   const subscriptionManagementNoActionDisplayText = subscriptionActionControlDisplay.managementNoAction;
   const subscriptionManagementSyncButtonDisplayLabel = subscriptionActionControlDisplay.managementSyncButton;
-  const recordingQuotaIntroDisplayText = recordingQuotaIntroCopy();
-  const recordingQuotaControlDisplayText = recordingQuotaControlCopy();
-  const recordingQuotaSyncButtonDisplayLabel = recordingQuotaSyncButtonLabel(isQuotaSyncing);
-  const recordingQuotaSyncAccessibilityDisplayLabel = recordingQuotaSyncAccessibilityLabel(isQuotaSyncing);
+  const recordingQuotaControlDisplay = recordingQuotaControlDisplayBundle(isQuotaSyncing);
+  const recordingQuotaIntroDisplayText = recordingQuotaControlDisplay.intro;
+  const recordingQuotaControlDisplayText = recordingQuotaControlDisplay.control;
+  const recordingQuotaSyncButtonDisplayLabel = recordingQuotaControlDisplay.syncButton;
+  const recordingQuotaSyncAccessibilityDisplayLabel = recordingQuotaControlDisplay.syncAccessibility;
   const reminderSettingsIntroDisplayText = reminderSettingsIntroCopy();
   const reminderIntegrationButtonDisplayLabel = reminderIntegrationButtonLabel();
   const reminderIntegrationAccessibilityDisplayLabel = reminderIntegrationAccessibilityLabel();

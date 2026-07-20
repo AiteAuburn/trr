@@ -230,6 +230,15 @@ export function recordingQuotaSyncAccessibilityLabel(isSyncing: boolean) {
   );
 }
 
+export function recordingQuotaControlDisplayBundle(isSyncing: boolean) {
+  return {
+    intro: recordingQuotaIntroCopy(),
+    control: recordingQuotaControlCopy(),
+    syncButton: recordingQuotaSyncButtonLabel(isSyncing),
+    syncAccessibility: recordingQuotaSyncAccessibilityLabel(isSyncing)
+  };
+}
+
 export function reminderSettingsIntroCopy() {
   return boundDisplayText("先規劃提醒 UI；正式通知與背景排程尚未啟用。", maxDisplayDetailTextLength);
 }

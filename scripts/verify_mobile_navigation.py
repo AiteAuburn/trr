@@ -12235,6 +12235,11 @@ def main() -> int:
             ("profile edit accessibility binding", "actionAccessibilityLabel={settingsSubscriptionDisplayLabels.editIntegrationAccessibility}"),
             ("recording quota settings sync binding", "onActionPress={syncRecordingQuotaSettings}"),
             ("recording quota accessibility binding", "actionAccessibilityLabel={recordingQuotaSyncAccessibilityDisplayLabel}"),
+            ("recording quota control display helper binding", "const recordingQuotaControlDisplay = recordingQuotaControlDisplayBundle(isQuotaSyncing);"),
+            ("recording quota intro display binding", "const recordingQuotaIntroDisplayText = recordingQuotaControlDisplay.intro;"),
+            ("recording quota control display binding", "const recordingQuotaControlDisplayText = recordingQuotaControlDisplay.control;"),
+            ("recording quota sync button display binding", "const recordingQuotaSyncButtonDisplayLabel = recordingQuotaControlDisplay.syncButton;"),
+            ("recording quota sync accessibility display binding", "const recordingQuotaSyncAccessibilityDisplayLabel = recordingQuotaControlDisplay.syncAccessibility;"),
             ("reminder integration status binding", "onActionPress={showReminderIntegrationStatus}"),
             ("reminder integration accessibility binding", "actionAccessibilityLabel={reminderIntegrationAccessibilityDisplayLabel}"),
             ("privacy integration status binding", "onActionPress={showPrivacyIntegrationStatus}"),
@@ -12910,6 +12915,13 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("direct recording quota intro copy binding", "const recordingQuotaIntroDisplayText = recordingQuotaIntroCopy();"),
+            ("direct recording quota control copy binding", "const recordingQuotaControlDisplayText = recordingQuotaControlCopy();"),
+            ("direct recording quota sync button binding", "const recordingQuotaSyncButtonDisplayLabel = recordingQuotaSyncButtonLabel(isQuotaSyncing);"),
+            ("direct recording quota sync accessibility binding", "const recordingQuotaSyncAccessibilityDisplayLabel = recordingQuotaSyncAccessibilityLabel(isQuotaSyncing);"),
+        ):
+            _assert_not_contains(label, content, marker)
+        for label, marker in (
             ("downloaded model list component", "export function DownloadedModelList"),
             ("downloaded model list row key helper", "function downloadedModelRowKey(model: DownloadedModel)"),
             ("downloaded model list row key helper fields", "return model.uri;"),
@@ -13025,6 +13037,10 @@ def main() -> int:
             ("quota display texts daily limit", "剩餘 2 分鐘內才提醒使用者。"),
             ("quota display texts subscription daily limit", "剩餘 2 分鐘內才需要提醒使用者。"),
             ("quota display texts settings helper", "settingsHelper: settingsQuotaHelperText(quota)"),
+            ("recording quota control display bundle helper", "function recordingQuotaControlDisplayBundle(isSyncing: boolean)"),
+            ("recording quota control display intro binding", "intro: recordingQuotaIntroCopy()"),
+            ("recording quota control display sync button binding", "syncButton: recordingQuotaSyncButtonLabel(isSyncing)"),
+            ("recording quota control display accessibility binding", "syncAccessibility: recordingQuotaSyncAccessibilityLabel(isSyncing)"),
         ):
             _assert_contains(label, settings_copy_content, marker)
         for label, marker in (
