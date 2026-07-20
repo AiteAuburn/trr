@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2110 move grouped history display sections helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `groupedRecordListDisplaySectionsForRecords` to `recordDisplay.ts`.
+- Replaced the inline grouped History record section `Map` construction in `App.tsx`.
+- Kept History memoization, Today display items, record display state, and History rendering in `App.tsx`.
+- Updated navigation verifier coverage to require the record display grouping helper and reject reintroducing the old inline grouped History block in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting record/date derived-data transforms from `App.tsx` one boundary at a time.
+
 ### T2109 move today record filter helper
 
 類型：mobile / refactor / verifier / docs

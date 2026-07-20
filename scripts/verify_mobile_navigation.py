@@ -9233,12 +9233,22 @@ def main() -> int:
         _assert_contains(
             "grouped history record display sections helper binding",
             content,
-            "const groupedHistoryRecordDisplaySections = useMemo(\n    () => groupedRecordListDisplaySections(groupedHistoryRecords),",
+            "const groupedHistoryRecordDisplaySections = useMemo(\n    () => groupedRecordListDisplaySectionsForRecords(historyRecords),",
         )
         _assert_contains(
             "grouped record list display sections helper",
             record_display_content,
             "function groupedRecordListDisplaySections(groupedRecords: Array<readonly [string, RecordItem[]]>)",
+        )
+        _assert_contains(
+            "grouped record list display sections records helper",
+            record_display_content,
+            "function groupedRecordListDisplaySectionsForRecords(records: RecordItem[])",
+        )
+        _assert_contains(
+            "grouped record list display sections records locale",
+            record_display_content,
+            'new Date(record.occurred_at).toLocaleDateString("zh-TW",',
         )
         _assert_contains(
             "grouped record list section key",
@@ -9643,6 +9653,11 @@ def main() -> int:
             "history direct records by date map",
             content,
             "const groups = new Map<string, RecordItem[]>();\n    for (const record of recordsForDisplay) {",
+        )
+        _assert_not_contains(
+            "history direct grouped display sections map",
+            content,
+            "const groupedHistoryRecords = useMemo(() => {\n    const groups = new Map<string, RecordItem[]>();",
         )
         _assert_not_contains(
             "today records direct local-day filter",

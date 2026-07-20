@@ -75,7 +75,7 @@ import {
   buildDailyRecordSectionDisplayItems,
   displayPayload,
   displayTextValue,
-  groupedRecordListDisplaySections,
+  groupedRecordListDisplaySectionsForRecords,
   manualRecordConfirmDisplayItem,
   pendingRecordDisplayItem,
   pendingRecordDisplayItems,
@@ -1199,25 +1199,13 @@ export default function App() {
     [recordsForDisplay]
   );
   const historyRecords = recordsForDisplay;
-  const groupedHistoryRecords = useMemo(() => {
-    const groups = new Map<string, RecordItem[]>();
-    for (const record of historyRecords) {
-      const key = new Date(record.occurred_at).toLocaleDateString("zh-TW", {
-        month: "numeric",
-        day: "numeric",
-        weekday: "short"
-      });
-      groups.set(key, [...(groups.get(key) ?? []), record]);
-    }
-    return Array.from(groups.entries());
-  }, [historyRecords]);
   const todayRecordDisplayItems = useMemo(
     () => recordListDisplayItems(todayRecords, "today"),
     [todayRecords]
   );
   const groupedHistoryRecordDisplaySections = useMemo(
-    () => groupedRecordListDisplaySections(groupedHistoryRecords),
-    [groupedHistoryRecords]
+    () => groupedRecordListDisplaySectionsForRecords(historyRecords),
+    [historyRecords]
   );
   const recordDisplayState = recordCollectionState(
     recordsForDisplay,

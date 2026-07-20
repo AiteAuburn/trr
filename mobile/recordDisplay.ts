@@ -302,6 +302,19 @@ export function groupedRecordListDisplaySections(groupedRecords: Array<readonly 
   }));
 }
 
+export function groupedRecordListDisplaySectionsForRecords(records: RecordItem[]) {
+  const groups = new Map<string, RecordItem[]>();
+  for (const record of records) {
+    const key = new Date(record.occurred_at).toLocaleDateString("zh-TW", {
+      month: "numeric",
+      day: "numeric",
+      weekday: "short"
+    });
+    groups.set(key, [...(groups.get(key) ?? []), record]);
+  }
+  return groupedRecordListDisplaySections(Array.from(groups.entries()));
+}
+
 export function recordDateDisplay(value?: string) {
   if (!value) {
     return "尚無";
