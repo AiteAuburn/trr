@@ -774,6 +774,7 @@ import {
   analysisChartRange,
   analysisGlucoseRecords as buildAnalysisGlucoseRecords,
   analysisGlucoseValues as buildAnalysisGlucoseValues,
+  analysisReportState,
   analysisRecordsInDateRange,
   averageNumber,
   beforeMealGlucoseCount as countBeforeMealGlucose,
@@ -1902,8 +1903,14 @@ export default function App() {
           mobileReportQueryLimit
         )
       : "";
-  const activeAnalysisReport = basicReportKey === currentBasicReportKey ? basicReport : null;
-  const reportRecordCount = activeAnalysisReport?.record_count ?? analysisRecords.length;
+  const analysisReport = analysisReportState({
+    basicReport,
+    basicReportKey,
+    currentBasicReportKey,
+    localRecordCount: analysisRecords.length
+  });
+  const activeAnalysisReport = analysisReport.activeReport;
+  const reportRecordCount = analysisReport.recordCount;
   const reportSourceDisplay = reportSourceDisplayItem(
     activeAnalysisReport,
     analysisRecords.length,
@@ -2065,7 +2072,7 @@ export default function App() {
     localAfterMealCount: afterMealGlucoseCount
   });
   const analysisMetricRows = buildAnalysisMetricRows(analysisMetricInput);
-  const reportRecordDisplayCount = clampNumber(reportRecordCount, 0, maxMobileCountValue);
+  const reportRecordDisplayCount = analysisReport.recordDisplayCount;
   const detailedReportMetricInput = buildDetailedReportMetricInput({
     report: activeAnalysisReport,
     localAverage: averageGlucose,

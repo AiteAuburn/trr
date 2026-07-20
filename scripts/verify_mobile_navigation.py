@@ -10386,6 +10386,12 @@ def main() -> int:
             ("direct analysis range label binding", "{option.label}"),
         ):
             _assert_not_contains(label, analysis_range_selector_content, marker)
+        for label, marker in (
+            ("direct analysis active report guard", "const activeAnalysisReport = basicReportKey === currentBasicReportKey ? basicReport : null;"),
+            ("direct analysis report count binding", "const reportRecordCount = activeAnalysisReport?.record_count ?? analysisRecords.length;"),
+            ("direct analysis report display count binding", "const reportRecordDisplayCount = clampNumber(reportRecordCount, 0, maxMobileCountValue);"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "analysis custom start input handler",
             content,
@@ -10425,7 +10431,14 @@ def main() -> int:
             ("analysis local records date bounds helper binding", "const analysisRecords = useMemo(\n    () => analysisRecordsInDateRange(recordsForDisplay, analysisSelectedDateBounds),"),
             ("analysis local glucose derives from analysis records", "const analysisGlucoseRecords = useMemo(\n    () => buildAnalysisGlucoseRecords(analysisRecords),"),
             ("analysis local glucose records dependency", "    [analysisRecords]\n  );\n  const analysisGlucoseValues = buildAnalysisGlucoseValues(analysisGlucoseRecords);"),
-            ("analysis active backend report guard", "const activeAnalysisReport = basicReportKey === currentBasicReportKey ? basicReport : null;"),
+            ("analysis report state helper binding", "const analysisReport = analysisReportState({"),
+            ("analysis report state basic report input", "basicReport,"),
+            ("analysis report state key input", "basicReportKey,"),
+            ("analysis report state current key input", "currentBasicReportKey,"),
+            ("analysis report state local count input", "localRecordCount: analysisRecords.length"),
+            ("analysis active backend report guard", "const activeAnalysisReport = analysisReport.activeReport;"),
+            ("analysis report record count binding", "const reportRecordCount = analysisReport.recordCount;"),
+            ("analysis report display count binding", "const reportRecordDisplayCount = analysisReport.recordDisplayCount;"),
             ("analysis backend report auto sync effect", 'if (currentScreen === "analysis") {\n      void loadBasicReportForCurrentRange("analysis");'),
             ("analysis shared report fetch helper", 'async function loadBasicReportForCurrentRange(mode: "analysis" | "detailed")'),
             ("analysis shared report endpoint", "`/reports/basic?${query.toString()}`"),
@@ -11097,6 +11110,10 @@ def main() -> int:
             _assert_contains(label, content, marker)
         for label, marker in (
             ("analysis basic report bound helper", "function boundBasicReport<T extends BasicReportTransformSource>(value: T): T"),
+            ("analysis report state helper", "function analysisReportState<T extends BasicReportTransformSource>(value: {"),
+            ("analysis report state active report", "const activeReport = value.basicReportKey === value.currentBasicReportKey ? value.basicReport : null;"),
+            ("analysis report state record count", "const recordCount = activeReport?.record_count ?? value.localRecordCount;"),
+            ("analysis report state display count", "recordDisplayCount: clampNumber(recordCount, 0, maxMobileCountValue)"),
             ("analysis basic report generated-at bound", "generated_at: boundDisplayText(value.generated_at, 40)"),
             ("analysis basic report latest glucose bound", "latest_value: clampNullableNumber(value.glucose.latest_value, 0, maxMobileGlucoseValue)"),
             ("analysis basic report lifestyle count bound", "note_count: clampNumber(value.lifestyle.note_count, 0, maxMobileCountValue)"),

@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2195: Move analysis report state helper
+
+Status: done
+
+Completed:
+
+- Added the analysis report state helper to `analysisDataTransforms.ts`.
+- Removed direct active report selection, report record count fallback, and report display count clamp from `App.tsx`.
+- Kept Analysis/Detailed Report backend report selection, local fallback counts, report generated-at display, metric inputs, and empty-report behavior unchanged.
+- Updated navigation verifier coverage to require the analysis report state helper, App helper bindings, and no direct report state regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2194: Move selected record display bundle
 
 Status: done

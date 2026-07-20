@@ -103,6 +103,22 @@ export function boundBasicReport<T extends BasicReportTransformSource>(value: T)
   };
 }
 
+export function analysisReportState<T extends BasicReportTransformSource>(value: {
+  basicReport: T | null;
+  basicReportKey: string;
+  currentBasicReportKey: string;
+  localRecordCount: number;
+}) {
+  const activeReport = value.basicReportKey === value.currentBasicReportKey ? value.basicReport : null;
+  const recordCount = activeReport?.record_count ?? value.localRecordCount;
+
+  return {
+    activeReport,
+    recordCount,
+    recordDisplayCount: clampNumber(recordCount, 0, maxMobileCountValue)
+  };
+}
+
 export function normalizedGlucoseTiming(value: unknown) {
   return typeof value === "string" ? value.trim().toLowerCase() : "";
 }
