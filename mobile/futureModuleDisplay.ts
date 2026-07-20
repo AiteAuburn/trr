@@ -1322,6 +1322,28 @@ export function storeCategoryDisplayItems(values: Array<{ id: StoreCategory; lab
   return values.map(storeCategoryDisplayItem);
 }
 
+export type StoreCategoryDisplayItem = ReturnType<typeof storeCategoryDisplayItem>;
+
+export function storeCategoryTarget(category: StoreCategoryDisplayItem) {
+  return category.value;
+}
+
+export function storeCategoryOptionKey(category: StoreCategoryDisplayItem) {
+  return storeCategoryTarget(category);
+}
+
+export function storeCategoryOptionAccessibilityLabel(category: StoreCategoryDisplayItem) {
+  return category.accessibilityLabel;
+}
+
+export function storeCategoryOptionLabel(category: StoreCategoryDisplayItem) {
+  return category.label;
+}
+
+export function storeCategoryOptionSelected(category: StoreCategoryDisplayItem, selectedCategory: StoreCategory) {
+  return storeCategoryTarget(category) === selectedCategory;
+}
+
 export function storeProductDisplayItem(value: StoreProduct) {
   const title = boundDisplayText(value.title || "商品", maxDisplayTextLength);
   const rewardStatus = value.rewardStatus ?? "preview";

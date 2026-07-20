@@ -273,6 +273,11 @@ import {
   saveSuccessNewlyUnlockedAchievementDisplayItems,
   storeCategories,
   storeCategoryDisplayItem,
+  storeCategoryOptionAccessibilityLabel,
+  storeCategoryOptionKey,
+  storeCategoryOptionLabel,
+  storeCategoryOptionSelected,
+  storeCategoryTarget,
   storeCartUnavailableDisplayItem,
   storeCheckoutReadinessChecklistDisplayItems,
   storeEmptySearchDisplayItem,
@@ -5082,26 +5087,6 @@ export default function App() {
 
   function selectStoreCategory(category: StoreCategory) {
     setStoreCategory(category);
-  }
-
-  function storeCategoryTarget(category: ReturnType<typeof storeCategoryDisplayItem>) {
-    return category.value;
-  }
-
-  function storeCategoryOptionKey(category: ReturnType<typeof storeCategoryDisplayItem>) {
-    return storeCategoryTarget(category);
-  }
-
-  function storeCategoryOptionAccessibilityLabel(category: ReturnType<typeof storeCategoryDisplayItem>) {
-    return category.accessibilityLabel;
-  }
-
-  function storeCategoryOptionLabel(category: ReturnType<typeof storeCategoryDisplayItem>) {
-    return category.label;
-  }
-
-  function storeCategoryOptionSelected(category: ReturnType<typeof storeCategoryDisplayItem>, selectedCategory: StoreCategory) {
-    return storeCategoryTarget(category) === selectedCategory;
   }
 
   function pressStoreCategoryOption(category: ReturnType<typeof storeCategoryDisplayItem>) {

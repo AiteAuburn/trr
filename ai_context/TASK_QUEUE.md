@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2168: Move store category option accessors
+
+Status: done
+
+Completed:
+
+- Added store category target/key/accessibility/label/selected accessors to `futureModuleDisplay.ts`.
+- Removed duplicate store category option helper definitions from `App.tsx`.
+- Kept Store category segmented-control rendering, accessibility labels, selected state, and category press behavior unchanged.
+- Updated navigation verifier coverage to require future-module helper exports, App render/press bindings, and no local/direct-field regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2167: Move food community category option accessors
 
 Status: done
