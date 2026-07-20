@@ -2,9 +2,16 @@ import {
   membershipFeatureDisplayRows,
   subscriptionActionStatusDisplayTexts,
   subscriptionComparisonDisplayRows,
+  subscriptionCtaBoundaryCopy,
   subscriptionMembershipDisplayTexts,
+  subscriptionManagementIntroCopy,
+  subscriptionManagementNoActionCopy,
   subscriptionManagementReadinessChecklistDisplayItems,
-  subscriptionReadinessChecklistDisplayItems
+  subscriptionManagementSyncButtonLabel,
+  subscriptionPaymentUnwiredCopy,
+  subscriptionReadinessChecklistDisplayItems,
+  subscriptionSyncButtonLabel,
+  subscriptionTrialBoundaryCopy
 } from "./subscriptionCopy";
 import type { VoiceQuotaTransformSource } from "./subscriptionTransforms";
 import { quotaDisplayTexts } from "./settingsCopy";
@@ -60,5 +67,17 @@ export function subscriptionRuntimeDisplayBundle(value: {
     subscriptionManagementSyncing: actionStatus.managementSyncing,
     subscriptionManagementUnavailable: actionStatus.managementUnavailable,
     subscriptionManagementPayment: actionStatus.managementPayment
+  };
+}
+
+export function subscriptionActionControlDisplayBundle(isQuotaSyncing: boolean) {
+  return {
+    trialBoundary: subscriptionTrialBoundaryCopy(),
+    paymentUnwired: subscriptionPaymentUnwiredCopy(),
+    ctaBoundary: subscriptionCtaBoundaryCopy(),
+    syncButton: subscriptionSyncButtonLabel(isQuotaSyncing),
+    managementIntro: subscriptionManagementIntroCopy(),
+    managementNoAction: subscriptionManagementNoActionCopy(),
+    managementSyncButton: subscriptionManagementSyncButtonLabel(isQuotaSyncing)
   };
 }

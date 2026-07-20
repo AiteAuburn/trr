@@ -13379,6 +13379,11 @@ def main() -> int:
             ("subscription runtime plan binding", "subscriptionPlan: membership.subscriptionPlan"),
             ("subscription runtime quota remaining binding", "quotaRemaining: quota.remaining"),
             ("subscription runtime management unavailable binding", "subscriptionManagementUnavailable: actionStatus.managementUnavailable"),
+            ("subscription action control display bundle helper", "function subscriptionActionControlDisplayBundle(isQuotaSyncing: boolean)"),
+            ("subscription action control trial boundary binding", "trialBoundary: subscriptionTrialBoundaryCopy()"),
+            ("subscription action control cta boundary binding", "ctaBoundary: subscriptionCtaBoundaryCopy()"),
+            ("subscription action control sync button binding", "syncButton: subscriptionSyncButtonLabel(isQuotaSyncing)"),
+            ("subscription action control management sync binding", "managementSyncButton: subscriptionManagementSyncButtonLabel(isQuotaSyncing)"),
         ):
             _assert_contains(label, subscription_display_bundle_content, marker)
         for label, marker in (
@@ -16615,6 +16620,11 @@ def main() -> int:
             ("subscription management status display text binding", "const subscriptionManagementActionStatusDisplayText = subscriptionRuntimeDisplay.subscriptionManagementActionStatus;"),
             ("subscription trial integration status binding", "const subscriptionTrialIntegrationStatusMessage = subscriptionRuntimeDisplay.subscriptionTrialIntegration;"),
             ("subscription management unavailable status binding", "const subscriptionManagementUnavailableStatusMessage = subscriptionRuntimeDisplay.subscriptionManagementUnavailable;"),
+            ("subscription action control display helper binding", "const subscriptionActionControlDisplay = subscriptionActionControlDisplayBundle(isQuotaSyncing);"),
+            ("subscription trial boundary display text binding", "const subscriptionTrialBoundaryDisplayText = subscriptionActionControlDisplay.trialBoundary;"),
+            ("subscription sync button display label binding", "const subscriptionSyncButtonDisplayLabel = subscriptionActionControlDisplay.syncButton;"),
+            ("subscription management intro display text binding", "const subscriptionManagementIntroDisplayText = subscriptionActionControlDisplay.managementIntro;"),
+            ("subscription management sync display label binding", "const subscriptionManagementSyncButtonDisplayLabel = subscriptionActionControlDisplay.managementSyncButton;"),
         ):
             _assert_contains(label, content, marker)
         _assert_not_contains(
@@ -16622,6 +16632,15 @@ def main() -> int:
             content,
             "const subscriptionActionStatusDisplay = subscriptionActionStatusDisplayTexts({",
         )
+        for label, marker in (
+            ("direct subscription trial boundary copy binding", "const subscriptionTrialBoundaryDisplayText = subscriptionTrialBoundaryCopy();"),
+            ("direct subscription payment unwired copy binding", "const subscriptionPaymentUnwiredDisplayText = subscriptionPaymentUnwiredCopy();"),
+            ("direct subscription cta boundary copy binding", "const subscriptionCtaBoundaryDisplayText = subscriptionCtaBoundaryCopy();"),
+            ("direct subscription sync button binding", "const subscriptionSyncButtonDisplayLabel = subscriptionSyncButtonLabel(isQuotaSyncing);"),
+            ("direct subscription management intro copy binding", "const subscriptionManagementIntroDisplayText = subscriptionManagementIntroCopy();"),
+            ("direct subscription management sync button binding", "const subscriptionManagementSyncButtonDisplayLabel = subscriptionManagementSyncButtonLabel(isQuotaSyncing);"),
+        ):
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("subscription quota accessibility label", "syncQuotaAccessibility: boundDisplayText(`${syncQuota}會員額度狀態，不建立訂閱或收款`, maxDisplayDetailTextLength)"),
             ("subscription trial accessibility label", "trialIntegrationAccessibility: boundDisplayText(`${trialIntegrationButton}，只顯示付款與 entitlement 邊界`, maxDisplayDetailTextLength)"),

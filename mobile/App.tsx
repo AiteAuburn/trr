@@ -821,7 +821,11 @@ import {
   settingsChoiceDisplayBundle
 } from "./settingsChoiceDisplay";
 import { settingsStaticDisplayBundle } from "./settingsStaticDisplayBundle";
-import { subscriptionRuntimeDisplayBundle, subscriptionStaticDisplayBundle } from "./subscriptionDisplayBundle";
+import {
+  subscriptionActionControlDisplayBundle,
+  subscriptionRuntimeDisplayBundle,
+  subscriptionStaticDisplayBundle
+} from "./subscriptionDisplayBundle";
 import {
   boundVoiceQuota,
   recordingEffectiveLimitSeconds,
@@ -835,17 +839,10 @@ import {
   profileNoActionBoundaryCopy,
   recordingQuotaBoundaryDisplayRows,
   settingsSubscriptionSectionLabels,
-  subscriptionCtaBoundaryCopy,
-  subscriptionManagementIntroCopy,
-  subscriptionManagementNoActionCopy,
   subscriptionManagementOpenStatusMessage,
   subscriptionManagementReturnSettingsStatusMessage,
-  subscriptionManagementSyncButtonLabel,
   subscriptionMembershipStatusOpenStatusMessage,
-  subscriptionPaymentUnwiredCopy,
   accountSecurityBoundaryDisplayRowsForState,
-  subscriptionSyncButtonLabel,
-  subscriptionTrialBoundaryCopy
 } from "./subscriptionCopy";
 import {
   analysisDateBounds,
@@ -2112,13 +2109,14 @@ export default function App() {
   const foodPhotoReturnButtonDisplayLabel = returnDestinationButtonLabel(foodPhotoReturnScreen);
   const headerActionDisplayAccessibilityLabel = headerActionAccessibilityLabel(currentChrome);
   const recordingButtonDisplayAccessibilityLabel = recordingButtonAccessibilityLabel(isRecordingPreview);
-  const subscriptionTrialBoundaryDisplayText = subscriptionTrialBoundaryCopy();
-  const subscriptionPaymentUnwiredDisplayText = subscriptionPaymentUnwiredCopy();
-  const subscriptionCtaBoundaryDisplayText = subscriptionCtaBoundaryCopy();
-  const subscriptionSyncButtonDisplayLabel = subscriptionSyncButtonLabel(isQuotaSyncing);
-  const subscriptionManagementIntroDisplayText = subscriptionManagementIntroCopy();
-  const subscriptionManagementNoActionDisplayText = subscriptionManagementNoActionCopy();
-  const subscriptionManagementSyncButtonDisplayLabel = subscriptionManagementSyncButtonLabel(isQuotaSyncing);
+  const subscriptionActionControlDisplay = subscriptionActionControlDisplayBundle(isQuotaSyncing);
+  const subscriptionTrialBoundaryDisplayText = subscriptionActionControlDisplay.trialBoundary;
+  const subscriptionPaymentUnwiredDisplayText = subscriptionActionControlDisplay.paymentUnwired;
+  const subscriptionCtaBoundaryDisplayText = subscriptionActionControlDisplay.ctaBoundary;
+  const subscriptionSyncButtonDisplayLabel = subscriptionActionControlDisplay.syncButton;
+  const subscriptionManagementIntroDisplayText = subscriptionActionControlDisplay.managementIntro;
+  const subscriptionManagementNoActionDisplayText = subscriptionActionControlDisplay.managementNoAction;
+  const subscriptionManagementSyncButtonDisplayLabel = subscriptionActionControlDisplay.managementSyncButton;
   const recordingQuotaIntroDisplayText = recordingQuotaIntroCopy();
   const recordingQuotaControlDisplayText = recordingQuotaControlCopy();
   const recordingQuotaSyncButtonDisplayLabel = recordingQuotaSyncButtonLabel(isQuotaSyncing);
