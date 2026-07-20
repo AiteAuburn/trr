@@ -36,6 +36,12 @@ export function nativeDebugDisabledStatusMessage() {
   return boundUiMessage("Debug tools are disabled.");
 }
 
+export function nativeDebugUnavailableState() {
+  return {
+    status: nativeDebugDisabledStatusMessage()
+  };
+}
+
 export function nativeDownloadedModelsFailureStatusMessage(error: unknown) {
   return safeUiError(error, "讀取模型清單失敗");
 }

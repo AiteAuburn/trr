@@ -11699,7 +11699,7 @@ def main() -> int:
             ("native llama settings handler", "function runNativeLlamaFromSettings()"),
             ("native benchmarks settings handler", "function runNativeBenchmarksFromSettings()"),
             ("native debug unavailable helper", "function openNativeDebugUnavailable()"),
-            ("native debug unavailable helper fields", "setNativeStatus(nativeDebugDisabledStatusMessage());"),
+            ("native debug unavailable helper fields", "const nextState = nativeDebugUnavailableState();\n    setNativeStatus(nextState.status);"),
             ("native debug unavailable helper binding", "openNativeDebugUnavailable();"),
             ("native debug action blocked helper", "function isNativeDebugActionBlocked()"),
             ("native debug action blocked helper fields", "return nativeDebugActionBlocked(isBusy);"),
@@ -12681,6 +12681,8 @@ def main() -> int:
         for label, marker in (
             ("native module check button label helper", "function nativeModuleCheckButtonLabel(isRunning: boolean)"),
             ("native model download button label helper", "function nativeModelDownloadButtonLabel(isRunning: boolean, progress: number)"),
+            ("native debug unavailable state helper", "function nativeDebugUnavailableState()"),
+            ("native debug unavailable state helper fields", "status: nativeDebugDisabledStatusMessage()"),
             ("native model download start state helper", "function nativeModelDownloadStartState()"),
             ("native model download start state helper fields", "progress: 0,\n    status: nativeModelDownloadProgressStatusMessage()"),
             ("native model download success state helper", "function nativeModelDownloadSuccessState()"),

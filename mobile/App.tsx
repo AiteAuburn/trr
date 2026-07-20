@@ -486,7 +486,7 @@ import {
   nativeBenchmarkResultState,
   nativeBenchmarkStartState,
   nativeDebugDefaultStatusMessage,
-  nativeDebugDisabledStatusMessage,
+  nativeDebugUnavailableState,
   nativeDownloadedModelsFailureStatusMessage,
   nativeLlamaFailureState,
   nativeLlamaMissingInputState,
@@ -7854,7 +7854,8 @@ export default function App() {
   }
 
   function openNativeDebugUnavailable() {
-    setNativeStatus(nativeDebugDisabledStatusMessage());
+    const nextState = nativeDebugUnavailableState();
+    setNativeStatus(nextState.status);
   }
 
   function isNativeDebugActionBlocked() {
