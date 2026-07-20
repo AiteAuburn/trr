@@ -66,6 +66,14 @@ export function historyDetailModeDisplayItems(values: ReadonlyArray<{ id: Histor
   return values.map(historyDetailModeDisplayItem);
 }
 
+export function historyDateTarget(item: { value: string }) {
+  return item.value;
+}
+
+export function historyDetailModeTarget(item: ReturnType<typeof historyDetailModeDisplayItem>) {
+  return item.value;
+}
+
 export function historyRecordsByDateMap(records: RecordItem[]) {
   const groups = new Map<string, RecordItem[]>();
   for (const record of records) {

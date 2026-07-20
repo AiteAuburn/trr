@@ -628,9 +628,11 @@ import {
   buildHistoryDailySummaryDisplayItems,
   historyCalendarDayDisplayItem,
   historyDailySummaryDisplayItem,
+  historyDateTarget,
   historyDetailModeDisplayItem,
   historyDetailModeDisplayItems,
   historyDetailModes,
+  historyDetailModeTarget,
   historyRawRecordDisplayItems,
   historyRecordsByDateMap,
   type HistoryDetailMode
@@ -2433,10 +2435,6 @@ export default function App() {
     setHistoryDetailMode("structured");
   }
 
-  function historyDateTarget(item: { value: string }) {
-    return item.value;
-  }
-
   function pressHistoryCalendarDay(item: ReturnType<typeof historyCalendarDayDisplayItem>) {
     selectHistoryCalendarDate(historyDateTarget(item));
   }
@@ -2465,10 +2463,6 @@ export default function App() {
 
   function selectHistoryDetailMode(mode: HistoryDetailMode) {
     setHistoryDetailMode(mode);
-  }
-
-  function historyDetailModeTarget(item: ReturnType<typeof historyDetailModeDisplayItem>) {
-    return item.value;
   }
 
   function pressHistoryDetailModeOption(item: ReturnType<typeof historyDetailModeDisplayItem>) {

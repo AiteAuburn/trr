@@ -9520,8 +9520,14 @@ def main() -> int:
             ("history calendar component binding", "<HistoryCalendarMonthPicker\n              days={historyCalendarDisplayItems}"),
             ("history calendar previous month binding", "onPreviousMonthPress={openPreviousHistoryMonth}"),
             ("history calendar next month binding", "onNextMonthPress={openNextHistoryMonth}"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
             ("history date target helper", "function historyDateTarget(item: { value: string })"),
             ("history date target helper fields", "return item.value;"),
+        ):
+            _assert_contains(label, history_screen_data_content, marker)
+        for label, marker in (
             ("history calendar day press handler", "function pressHistoryCalendarDay(item: ReturnType<typeof historyCalendarDayDisplayItem>)"),
             ("history calendar day target helper binding", "selectHistoryCalendarDate(historyDateTarget(item));"),
             ("history calendar day binding", "onDayPress={pressHistoryCalendarDay}"),
@@ -9532,8 +9538,14 @@ def main() -> int:
             ("history daily entry binding", "onEntryPress={pressHistoryDailyEntry}"),
             ("history calendar selected state", "onDayPress={pressHistoryCalendarDay}"),
             ("history detail mode display options helper binding", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModeDisplayItems(historyDetailModes), []);"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
             ("history detail mode target helper", "function historyDetailModeTarget(item: ReturnType<typeof historyDetailModeDisplayItem>)"),
             ("history detail mode target helper fields", "return item.value;"),
+        ):
+            _assert_contains(label, history_screen_data_content, marker)
+        for label, marker in (
             ("history detail mode press handler", "function pressHistoryDetailModeOption(item: ReturnType<typeof historyDetailModeDisplayItem>)"),
             ("history detail mode target helper binding", "selectHistoryDetailMode(historyDetailModeTarget(item));"),
             ("history selected date panel binding", "<HistorySelectedDatePanel\n              detailMode={historyDetailMode}"),
@@ -9549,6 +9561,11 @@ def main() -> int:
             ("history raw records render", "rawItems={selectedHistoryRawDisplayItems}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("local history date target helper", "function historyDateTarget(item: { value: string })"),
+            ("local history detail mode target helper", "function historyDetailModeTarget(item: ReturnType<typeof historyDetailModeDisplayItem>)"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_not_contains(
             "history direct date item value binding",
             content,
