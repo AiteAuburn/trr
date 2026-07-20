@@ -1532,6 +1532,48 @@ export function storeRedemptionDisplayItem(value: StoreRedemptionDisplayInput) {
   };
 }
 
+export type StoreRedemptionDisplayItem = ReturnType<typeof storeRedemptionDisplayItem>;
+
+export function storeRedemptionUseId(redemption: StoreRedemptionDisplayItem) {
+  return redemption.id;
+}
+
+export function storeRedemptionUseTitle(redemption: StoreRedemptionDisplayItem) {
+  return redemption.title;
+}
+
+export function storeRedemptionUseStatusLabel(redemption: StoreRedemptionDisplayItem) {
+  return redemption.statusLabel;
+}
+
+export function storeRedemptionCardKey(redemption: StoreRedemptionDisplayItem) {
+  return redemption.id;
+}
+
+export function storeRedemptionCardTitle(redemption: StoreRedemptionDisplayItem) {
+  return redemption.title;
+}
+
+export function storeRedemptionCardStatusLabel(redemption: StoreRedemptionDisplayItem) {
+  return redemption.statusLabel;
+}
+
+export function storeRedemptionCardSubtitle(redemption: StoreRedemptionDisplayItem) {
+  return redemption.subtitle;
+}
+
+export function storeRedemptionActionDisabled(redemption: StoreRedemptionDisplayItem) {
+  return !redemption.isUsable;
+}
+
+export function storeRedemptionActionLabel(redemption: StoreRedemptionDisplayItem) {
+  return redemption.actionLabel;
+}
+
+export function storeRedemptionActionAccessibilityLabel(redemption: StoreRedemptionDisplayItem) {
+  return redemption.actionAccessibilityLabel;
+}
+
 export function storeRedemptionWalletDisplayItems(items: StoreRedemptionDisplayInput[]) {
   return items.slice(0, maxListItems).map(storeRedemptionDisplayItem);
 }

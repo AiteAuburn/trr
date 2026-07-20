@@ -300,7 +300,17 @@ import {
   storeProductRedeemTitle,
   storeProductRewardId,
   storeProducts,
+  storeRedemptionActionAccessibilityLabel,
+  storeRedemptionActionDisabled,
+  storeRedemptionActionLabel,
+  storeRedemptionCardKey,
+  storeRedemptionCardStatusLabel,
+  storeRedemptionCardSubtitle,
+  storeRedemptionCardTitle,
   storeRedemptionDisplayItem,
+  storeRedemptionUseId,
+  storeRedemptionUseStatusLabel,
+  storeRedemptionUseTitle,
   storeRedemptionsFromApi,
   yearReviewBoundaryDisplayCopy,
   yearReviewHeaderDisplayTexts,
@@ -5106,46 +5116,6 @@ export default function App() {
 
   function showStoreProductStatus(actionStatus: string) {
     setStoreActionStatus(actionStatus);
-  }
-
-  function storeRedemptionUseId(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
-    return redemption.id;
-  }
-
-  function storeRedemptionUseTitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
-    return redemption.title;
-  }
-
-  function storeRedemptionUseStatusLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
-    return redemption.statusLabel;
-  }
-
-  function storeRedemptionCardKey(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
-    return redemption.id;
-  }
-
-  function storeRedemptionCardTitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
-    return redemption.title;
-  }
-
-  function storeRedemptionCardStatusLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
-    return redemption.statusLabel;
-  }
-
-  function storeRedemptionCardSubtitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
-    return redemption.subtitle;
-  }
-
-  function storeRedemptionActionDisabled(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
-    return !redemption.isUsable;
-  }
-
-  function storeRedemptionActionLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
-    return redemption.actionLabel;
-  }
-
-  function storeRedemptionActionAccessibilityLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
-    return redemption.actionAccessibilityLabel;
   }
 
   function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>) {
