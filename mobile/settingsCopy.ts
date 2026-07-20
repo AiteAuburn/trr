@@ -264,6 +264,14 @@ export function reminderIntegrationAccessibilityLabel() {
   return boundDisplayText("查看通知整合狀態，不建立通知或背景排程", maxDisplayDetailTextLength);
 }
 
+export function reminderSettingsControlDisplayBundle() {
+  return {
+    intro: reminderSettingsIntroCopy(),
+    integrationButton: reminderIntegrationButtonLabel(),
+    integrationAccessibility: reminderIntegrationAccessibilityLabel()
+  };
+}
+
 export function reminderReadinessChecklistDisplayItems() {
   return [
     "系統通知權限請求與拒絕後的替代說明。",

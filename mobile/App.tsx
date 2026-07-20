@@ -792,11 +792,9 @@ import {
   quotaReadinessChecklistDisplayItems,
   recordingQuotaControlDisplayBundle,
   recordingQuotaDataBoundaryCopy,
-  reminderIntegrationAccessibilityLabel,
-  reminderIntegrationButtonLabel,
   reminderPreviewDisplayItems as buildReminderPreviewDisplayItems,
   reminderReadinessChecklistDisplayItems,
-  reminderSettingsIntroCopy,
+  reminderSettingsControlDisplayBundle,
   selectedModelDisplayLabel,
   selectedModelRuntimeDisplayLabel,
   settingsAccountSecurityOpenStatusMessage,
@@ -2119,9 +2117,10 @@ export default function App() {
   const recordingQuotaControlDisplayText = recordingQuotaControlDisplay.control;
   const recordingQuotaSyncButtonDisplayLabel = recordingQuotaControlDisplay.syncButton;
   const recordingQuotaSyncAccessibilityDisplayLabel = recordingQuotaControlDisplay.syncAccessibility;
-  const reminderSettingsIntroDisplayText = reminderSettingsIntroCopy();
-  const reminderIntegrationButtonDisplayLabel = reminderIntegrationButtonLabel();
-  const reminderIntegrationAccessibilityDisplayLabel = reminderIntegrationAccessibilityLabel();
+  const reminderSettingsControlDisplay = reminderSettingsControlDisplayBundle();
+  const reminderSettingsIntroDisplayText = reminderSettingsControlDisplay.intro;
+  const reminderIntegrationButtonDisplayLabel = reminderSettingsControlDisplay.integrationButton;
+  const reminderIntegrationAccessibilityDisplayLabel = reminderSettingsControlDisplay.integrationAccessibility;
   const privacySettingsIntroDisplayText = privacySettingsIntroCopy();
   const privacyIntegrationButtonDisplayLabel = privacyIntegrationButtonLabel();
   const privacyIntegrationAccessibilityDisplayLabel = privacyIntegrationAccessibilityLabel();

@@ -12242,6 +12242,10 @@ def main() -> int:
             ("recording quota sync accessibility display binding", "const recordingQuotaSyncAccessibilityDisplayLabel = recordingQuotaControlDisplay.syncAccessibility;"),
             ("reminder integration status binding", "onActionPress={showReminderIntegrationStatus}"),
             ("reminder integration accessibility binding", "actionAccessibilityLabel={reminderIntegrationAccessibilityDisplayLabel}"),
+            ("reminder settings control display helper binding", "const reminderSettingsControlDisplay = reminderSettingsControlDisplayBundle();"),
+            ("reminder settings intro display binding", "const reminderSettingsIntroDisplayText = reminderSettingsControlDisplay.intro;"),
+            ("reminder integration button display binding", "const reminderIntegrationButtonDisplayLabel = reminderSettingsControlDisplay.integrationButton;"),
+            ("reminder integration accessibility display binding", "const reminderIntegrationAccessibilityDisplayLabel = reminderSettingsControlDisplay.integrationAccessibility;"),
             ("privacy integration status binding", "onActionPress={showPrivacyIntegrationStatus}"),
             ("privacy integration accessibility binding", "actionAccessibilityLabel={privacyIntegrationAccessibilityDisplayLabel}"),
             ("settings subpage close button binding", "<SettingsSubpageCloseButton"),
@@ -12919,6 +12923,9 @@ def main() -> int:
             ("direct recording quota control copy binding", "const recordingQuotaControlDisplayText = recordingQuotaControlCopy();"),
             ("direct recording quota sync button binding", "const recordingQuotaSyncButtonDisplayLabel = recordingQuotaSyncButtonLabel(isQuotaSyncing);"),
             ("direct recording quota sync accessibility binding", "const recordingQuotaSyncAccessibilityDisplayLabel = recordingQuotaSyncAccessibilityLabel(isQuotaSyncing);"),
+            ("direct reminder settings intro copy binding", "const reminderSettingsIntroDisplayText = reminderSettingsIntroCopy();"),
+            ("direct reminder integration button binding", "const reminderIntegrationButtonDisplayLabel = reminderIntegrationButtonLabel();"),
+            ("direct reminder integration accessibility binding", "const reminderIntegrationAccessibilityDisplayLabel = reminderIntegrationAccessibilityLabel();"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (
@@ -13145,6 +13152,10 @@ def main() -> int:
             ("settings quota low warning copy", "接近剩餘 2 分鐘才提醒；避免首頁長期顯示倒數造成壓力。"),
             ("recording quota sync accessibility helper", "function recordingQuotaSyncAccessibilityLabel(isSyncing: boolean)"),
             ("reminder integration accessibility helper", "function reminderIntegrationAccessibilityLabel()"),
+            ("reminder settings control display bundle helper", "function reminderSettingsControlDisplayBundle()"),
+            ("reminder settings control intro binding", "intro: reminderSettingsIntroCopy()"),
+            ("reminder settings control button binding", "integrationButton: reminderIntegrationButtonLabel()"),
+            ("reminder settings control accessibility binding", "integrationAccessibility: reminderIntegrationAccessibilityLabel()"),
             ("reminder preview display rows helper", "function reminderPreviewDisplayItems()"),
             ("reminder preview fasting glucose copy", "晨間空腹血糖"),
             ("reminder preview dinner copy", "晚餐後兩小時"),
