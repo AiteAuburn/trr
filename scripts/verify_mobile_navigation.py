@@ -7695,8 +7695,16 @@ def main() -> int:
             ("guided home example pagination", "styles.homeExamplePagination"),
             ("guided home example active pagination dot", "styles.homeExampleDotActive"),
             ("minimal home primary hint", "按住開始說話記錄"),
-            ("minimal home recording seconds display value", "const homeRecordingSecondaryHintDisplayText = homeRecordingSecondaryHint("),
-            ("minimal home recording model status display value", "const homeRecordingModelStatusDisplayText = homeRecordingModelStatusCopy(Boolean(whisperModelPath.trim()));"),
+            ("minimal home recording display bundle import", "homeRecordingDisplayBundle,"),
+            ("minimal home recording display bundle binding", "const homeRecordingDisplay = homeRecordingDisplayBundle({"),
+            ("minimal home recording display bundle index input", "currentExampleIndex: homeExampleIndex,"),
+            ("minimal home recording display bundle seconds input", "elapsedSeconds: recordingElapsedSeconds,"),
+            ("minimal home recording display bundle whisper input", "hasWhisperModel: Boolean(whisperModelPath.trim()),"),
+            ("minimal home recording display bundle recording input", "isRecording: isRecordingPreview"),
+            ("minimal home recording preview display value", "const recordingPreviewDisplayText = homeRecordingDisplay.previewText;"),
+            ("minimal home recording seconds display value", "const homeRecordingSecondaryHintDisplayText = homeRecordingDisplay.secondaryHint;"),
+            ("minimal home recording model status display value", "const homeRecordingModelStatusDisplayText = homeRecordingDisplay.modelStatus;"),
+            ("minimal home current speech example bundle value", "const homeCurrentSpeechExample = homeRecordingDisplay.currentExample;"),
             ("minimal home mic accessibility binding", "accessibilityLabel={recordingButtonDisplayAccessibilityLabel}"),
             ("minimal home mic press in", "onPressIn={startRecordingPreview}"),
             ("minimal home mic press out", "onPressOut={releaseRecordingPreview}"),
@@ -9286,6 +9294,11 @@ def main() -> int:
             _assert_contains(label, report_status_copy_content, marker)
         for label, marker in (
             ("minimal home recording seconds helper", "function homeRecordingSecondaryHint(isRecording: boolean, elapsedSeconds: number)"),
+            ("minimal home recording display bundle helper", "function homeRecordingDisplayBundle(value: {"),
+            ("minimal home recording display bundle current example", "const currentExample = homeSpeechExamples["),
+            ("minimal home recording display bundle model status", "modelStatus: homeRecordingModelStatusCopy(value.hasWhisperModel)"),
+            ("minimal home recording display bundle preview", "previewText: value.isRecording ? recordingActivePreviewCopy(value.elapsedSeconds) : recordingIdlePreviewCopy()"),
+            ("minimal home recording display bundle hint", "secondaryHint: homeRecordingSecondaryHint(value.isRecording, value.elapsedSeconds)"),
             ("minimal home secondary hint", "放開即結束"),
             ("minimal home recording seconds copy", "已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，放開即結束"),
             ("minimal home recording model status helper", "function homeRecordingModelStatusCopy(hasWhisperModel: boolean)"),
@@ -9311,6 +9324,13 @@ def main() -> int:
             content,
             "handleTodayQuickEntryMode(quickEntryModeTarget(item));",
         )
+        for label, marker in (
+            ("direct home recording active preview binding", "const recordingPreviewDisplayText = isRecordingPreview\n    ? recordingActivePreviewCopy(recordingElapsedSeconds)\n    : recordingIdlePreviewCopy();"),
+            ("direct home recording secondary hint binding", "const homeRecordingSecondaryHintDisplayText = homeRecordingSecondaryHint(\n    isRecordingPreview,\n    recordingElapsedSeconds\n  );"),
+            ("direct home recording model status binding", "const homeRecordingModelStatusDisplayText = homeRecordingModelStatusCopy(Boolean(whisperModelPath.trim()));"),
+            ("direct home current speech example index binding", "const homeCurrentSpeechExample = homeSpeechExamples[\n    clampNumber(homeExampleIndex, 0, Math.max(homeSpeechExamples.length - 1, 0))\n  ];"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_not_contains(
             "home quick-entry direct return-screen binding",
             content,

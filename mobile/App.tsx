@@ -445,14 +445,11 @@ import {
   homeSpeechExampleLabel,
   homeSpeechExamplePaginationAccessibilityLabel,
   homeSpeechExampleText,
-  homeRecordingModelStatusCopy,
+  homeRecordingDisplayBundle,
   homeRecordingPreviewBoundaryCopy,
-  homeRecordingSecondaryHint,
   recordPageRecordingPreviewBoundaryCopy,
-  recordingActivePreviewCopy,
   recordingElapsedSecondsCopy,
   recordingFinishedStatusMessage,
-  recordingIdlePreviewCopy,
   recordingLimitCopy,
   recordingLimitReachedStatusMessage,
   recordingPermissionDeniedStatusMessage,
@@ -1725,19 +1722,18 @@ export default function App() {
   const privacyPreviewBoundaryDisplay = privacyPreviewBoundaryDisplayItem();
   const quickRecordIntroDisplayText = quickRecordIntroCopy();
   const quickEntryModeDisplayItemsForRender = quickEntryModeDisplayItems();
-  const recordingPreviewDisplayText = isRecordingPreview
-    ? recordingActivePreviewCopy(recordingElapsedSeconds)
-    : recordingIdlePreviewCopy();
+  const homeRecordingDisplay = homeRecordingDisplayBundle({
+    currentExampleIndex: homeExampleIndex,
+    elapsedSeconds: recordingElapsedSeconds,
+    hasWhisperModel: Boolean(whisperModelPath.trim()),
+    isRecording: isRecordingPreview
+  });
+  const recordingPreviewDisplayText = homeRecordingDisplay.previewText;
   const recordingEffectiveLimitDisplaySeconds = recordingEffectiveLimitSeconds(voiceQuota);
   const recordingLimitDisplayText = recordingLimitCopy(recordingEffectiveLimitDisplaySeconds);
-  const homeRecordingSecondaryHintDisplayText = homeRecordingSecondaryHint(
-    isRecordingPreview,
-    recordingElapsedSeconds
-  );
-  const homeRecordingModelStatusDisplayText = homeRecordingModelStatusCopy(Boolean(whisperModelPath.trim()));
-  const homeCurrentSpeechExample = homeSpeechExamples[
-    clampNumber(homeExampleIndex, 0, Math.max(homeSpeechExamples.length - 1, 0))
-  ];
+  const homeRecordingSecondaryHintDisplayText = homeRecordingDisplay.secondaryHint;
+  const homeRecordingModelStatusDisplayText = homeRecordingDisplay.modelStatus;
+  const homeCurrentSpeechExample = homeRecordingDisplay.currentExample;
   const homeRecordingPreviewBoundaryDisplayText = homeRecordingPreviewBoundaryCopy();
   const recordPageRecordingPreviewBoundaryDisplayText = recordPageRecordingPreviewBoundaryCopy();
   const recordingSimulatedResultDisplayText = recordingSimulatedResultCopy(recordingElapsedSeconds);

@@ -185,6 +185,24 @@ export function homeSpeechExamplePaginationAccessibilityLabel(currentIndex: numb
   return `目前第 ${currentIndex + 1} 個範例，共 ${totalCount} 個`;
 }
 
+export function homeRecordingDisplayBundle(value: {
+  currentExampleIndex: number;
+  elapsedSeconds: number;
+  hasWhisperModel: boolean;
+  isRecording: boolean;
+}) {
+  const currentExample = homeSpeechExamples[
+    clampNumber(value.currentExampleIndex, 0, Math.max(homeSpeechExamples.length - 1, 0))
+  ];
+
+  return {
+    currentExample,
+    modelStatus: homeRecordingModelStatusCopy(value.hasWhisperModel),
+    previewText: value.isRecording ? recordingActivePreviewCopy(value.elapsedSeconds) : recordingIdlePreviewCopy(),
+    secondaryHint: homeRecordingSecondaryHint(value.isRecording, value.elapsedSeconds)
+  };
+}
+
 export function transcriptReviewPreflightPassedCopy() {
   return boundDisplayText("已通過本機長度與數字密度檢查；下一步才會送出 parser 請求。", maxDisplayDetailTextLength);
 }

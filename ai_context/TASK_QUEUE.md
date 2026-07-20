@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2197: Move home recording display bundle
+
+Status: done
+
+Completed:
+
+- Added the home recording display bundle helper to `recordingCopy.ts`.
+- Removed direct home recording preview copy, secondary hint, model status, and current example index assembly from `App.tsx`.
+- Kept home recording hint text, STT model status text, rotating example selection, and recording state display behavior unchanged.
+- Updated navigation verifier coverage to require the home recording display bundle, App bundle bindings, and no direct home recording display assembly regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2196: Move year review backend AI summary helper
 
 Status: done
