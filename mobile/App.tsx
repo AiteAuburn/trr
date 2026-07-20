@@ -762,6 +762,7 @@ import {
   downloadedWhisperModelCount,
   downloadedWhisperModelInitialPath,
   downloadedWhisperModels,
+  appendNativeLlamaBenchmarkResult,
   appendNativeWhisperBenchmarkResult,
   hasNativeLlamaInput,
   hasNativeWhisperInput,
@@ -7925,21 +7926,12 @@ export default function App() {
     setNativeStatus(nativeBenchmarkResultStatusMessage(results));
   }
 
-  async function appendNativeLlamaBenchmarkResult(
-    results: NativeBenchmarkResult[],
-    llamaInput: ReturnType<typeof nativeLlamaInput>
-  ) {
-    if (hasNativeLlamaInput(llamaInput)) {
-      results.push(await benchmarkNativeLlama(nativeLlamaRequestArgs(llamaInput)));
-    }
-  }
-
   async function nativeBenchmarkResults() {
     const results: NativeBenchmarkResult[] = [];
     const whisperInput = nativeWhisperInput();
     await appendNativeWhisperBenchmarkResult(results, whisperInput, benchmarkNativeWhisper);
     const llamaInput = nativeLlamaInput();
-    await appendNativeLlamaBenchmarkResult(results, llamaInput);
+    await appendNativeLlamaBenchmarkResult(results, llamaInput, benchmarkNativeLlama);
     return results;
   }
 

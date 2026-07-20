@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2119: Move native Llama benchmark append helper
+
+Status: done
+
+Completed:
+
+- Added `appendNativeLlamaBenchmarkResult` to `modelTransforms.ts`.
+- Removed the same local benchmark append helper from `App.tsx`.
+- Kept benchmark result state, native benchmark runner, Llama input capture, Whisper benchmark append, benchmark status, and success/failure handling in `App.tsx`.
+- Updated navigation verifier coverage to require the model transform helper and reject reintroducing the local App helper.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2118: Move native Whisper benchmark append helper
 
 Status: done

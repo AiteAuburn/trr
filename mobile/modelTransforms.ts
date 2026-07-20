@@ -81,6 +81,16 @@ export function hasNativeLlamaInput(llamaInput: NativeLlamaInput) {
   return Boolean(llamaInput.modelPath && llamaInput.transcript);
 }
 
+export async function appendNativeLlamaBenchmarkResult(
+  results: NativeBenchmarkResult[],
+  llamaInput: NativeLlamaInput,
+  benchmarkLlama: (input: ReturnType<typeof nativeLlamaRequestArgs>) => Promise<NativeBenchmarkResult>
+) {
+  if (hasNativeLlamaInput(llamaInput)) {
+    results.push(await benchmarkLlama(nativeLlamaRequestArgs(llamaInput)));
+  }
+}
+
 export function boundDownloadedModel<T extends DownloadedModel>(value: T): T {
   return {
     ...value,
