@@ -67,6 +67,10 @@ export function boundRecordEditField<K extends keyof RecordEditFields>(
   return value.slice(0, recordEditFieldMaxLength(field)) as RecordEditFields[K];
 }
 
+export function recordEditFieldValue<K extends keyof RecordEditFields>(fields: RecordEditFields, field: K) {
+  return fields[field];
+}
+
 export function recordEditOptionTarget(option: { value: string }) {
   return option.value;
 }

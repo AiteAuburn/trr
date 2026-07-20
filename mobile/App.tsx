@@ -126,6 +126,7 @@ import {
   mealTypeOptions,
   previewRecordsWithoutRecord,
   previewRecordsWithEditedRecord,
+  recordEditFieldValue,
   recordEditOptionTarget,
   recordEditFieldMaxLength,
   recordPayloadToEditFields,
@@ -3881,10 +3882,6 @@ export default function App() {
 
   function selectPreviewEditGlucoseUnit(value: string) {
     updatePreviewEditField("glucoseUnit", value);
-  }
-
-  function recordEditFieldValue<K extends keyof RecordEditFields>(fields: RecordEditFields, field: K) {
-    return fields[field];
   }
 
   function pressPreviewEditGlucoseUnitOption(option: ReturnType<typeof optionDisplayItem>) {

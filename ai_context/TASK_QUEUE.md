@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2179: Move record edit field value helper
+
+Status: done
+
+Completed:
+
+- Added the record edit field value accessor to `recordEditTransforms.ts`.
+- Removed the duplicate record edit field value helper definition from `App.tsx`.
+- Kept Preview Edit, Manual Record, and Record Edit form value bindings unchanged.
+- Updated navigation verifier coverage to require the record edit transform helper export, App import/render bindings, and no local helper regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2178: Move AI model selection helpers
 
 Status: done

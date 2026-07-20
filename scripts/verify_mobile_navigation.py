@@ -9386,6 +9386,8 @@ def main() -> int:
             ("meal type option config", "export const mealTypeOptions = ["),
             ("record edit field max length helper", "function recordEditFieldMaxLength(field: keyof RecordEditFields)"),
             ("record edit field bound helper", "function boundRecordEditField<K extends keyof RecordEditFields>("),
+            ("record edit field value helper", "function recordEditFieldValue<K extends keyof RecordEditFields>(fields: RecordEditFields, field: K)"),
+            ("record edit field value helper fields", "return fields[field];"),
             ("record edit option target transform helper", "function recordEditOptionTarget(option: { value: string })"),
             ("record edit option target transform helper fields", "return option.value;"),
             ("manual record option target transform helper", "function manualRecordOptionTarget(option: { value: string })"),
@@ -10554,8 +10556,7 @@ def main() -> int:
         ):
             _assert_contains(label, record_option_field_content, marker)
         for label, marker in (
-            ("record edit field value helper", "function recordEditFieldValue<K extends keyof RecordEditFields>(fields: RecordEditFields, field: K)"),
-            ("record edit field value helper fields", "return fields[field];"),
+            ("record edit field value helper import", "recordEditFieldValue,"),
             ("preview edit glucose value helper binding", 'value={recordEditFieldValue(previewEditFields, "glucoseValue")}'),
             ("preview edit food items helper binding", 'value={recordEditFieldValue(previewEditFields, "foodItems")}'),
             ("preview edit fallback json shared field binding", "<RecordJsonField\n                accessibilityLabel={auxiliaryDisplayLabels.fallbackJsonInputAccessibility}"),
@@ -10620,6 +10621,7 @@ def main() -> int:
             ("local edit option label helper", "function editOptionLabel(option: { label: string })"),
             ("local edit option selected helper", "function editOptionIsSelected(option: { value: string }, selectedValue: string)"),
             ("local preview edit option target helper", "function previewEditOptionTarget(option: { value: string })"),
+            ("local record edit field value helper", "function recordEditFieldValue<K extends keyof RecordEditFields>(fields: RecordEditFields, field: K)"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (
