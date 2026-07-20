@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2204: Move food photo display bundle
+
+Status: done
+
+Completed:
+
+- Added the food photo display bundle helper to `futureModuleDisplay.ts`.
+- Removed direct food photo status, intro, upload box, result title, readiness title, and action button label/accessibility assembly from `App.tsx`.
+- Kept food photo preview screen render bindings, unavailable status behavior, and Vision-not-wired boundary copy unchanged.
+- Updated navigation verifier coverage to require the food photo display bundle, App bundle bindings, and no direct food photo display assembly regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2203: Move future boundary rows display bundle
 
 Status: done

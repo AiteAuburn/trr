@@ -2044,6 +2044,21 @@ export function foodPhotoStatusDisplayTexts(actionStatus: string) {
   };
 }
 
+export function foodPhotoDisplayBundle(actionStatus: string) {
+  const status = foodPhotoStatusDisplayTexts(actionStatus);
+  return {
+    status,
+    intro: foodPhotoIntroCopy(),
+    uploadBox: foodPhotoUploadBoxLabel(),
+    resultTitle: foodPhotoResultTitle(),
+    readinessTitle: foodPhotoReadinessTitle(),
+    integrationButton: foodPhotoIntegrationButtonLabel(),
+    retakeButton: foodPhotoRetakeButtonLabel(),
+    integrationAccessibility: foodPhotoIntegrationButtonAccessibilityLabel(),
+    retakeAccessibility: foodPhotoRetakeButtonAccessibilityLabel()
+  };
+}
+
 export function achievementYearReviewStatusDisplayTexts(value: {
   achievementActionStatus: string;
   yearReviewActionStatus: string;

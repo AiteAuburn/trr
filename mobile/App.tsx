@@ -193,16 +193,8 @@ import {
   communityPublicNameBoundaryCopy,
   doctorShareBackendBoundaryCopy,
   foodPhotoEmptyResultChecklistDisplayItems,
-  foodPhotoIntegrationButtonAccessibilityLabel,
-  foodPhotoIntegrationButtonLabel,
-  foodPhotoIntroCopy,
-  foodPhotoReadinessTitle,
+  foodPhotoDisplayBundle,
   foodPhotoReadinessChecklistDisplayItems,
-  foodPhotoResultTitle,
-  foodPhotoRetakeButtonAccessibilityLabel,
-  foodPhotoRetakeButtonLabel,
-  foodPhotoStatusDisplayTexts,
-  foodPhotoUploadBoxLabel,
   foodPhotoVisionBoundaryDisplayItem,
   apiFoodCategoryFromMobile,
   boundCommunityPublicSettings,
@@ -1943,19 +1935,19 @@ export default function App() {
   const rankingReturnFutureModulesButtonDisplayLabel = futurePreviewReturnButtonLabel(futurePreviewDisplayLabels);
   const rankingReturnFutureModulesAccessibilityDisplayLabel = futurePreviewReturnAccessibilityLabel(futurePreviewDisplayLabels);
   const rankingReturnFutureModulesPressTarget = rankingReturnFutureModulesPressHandler();
-  const foodPhotoStatusDisplay = foodPhotoStatusDisplayTexts(foodPhotoActionStatus);
-  const foodPhotoActionStatusDisplayText = foodPhotoStatusDisplay.action;
-  const foodPhotoUploadStatusMessage = foodPhotoStatusDisplay.upload;
-  const foodPhotoIntegrationStatusMessage = foodPhotoStatusDisplay.integration;
-  const foodPhotoRetakeStatusMessage = foodPhotoStatusDisplay.retake;
-  const foodPhotoIntroDisplayText = foodPhotoIntroCopy();
-  const foodPhotoUploadBoxDisplayLabel = foodPhotoUploadBoxLabel();
-  const foodPhotoResultDisplayTitle = foodPhotoResultTitle();
-  const foodPhotoReadinessTitleDisplayText = foodPhotoReadinessTitle();
-  const foodPhotoIntegrationButtonDisplayLabel = foodPhotoIntegrationButtonLabel();
-  const foodPhotoRetakeButtonDisplayLabel = foodPhotoRetakeButtonLabel();
-  const foodPhotoIntegrationAccessibilityDisplayLabel = foodPhotoIntegrationButtonAccessibilityLabel();
-  const foodPhotoRetakeAccessibilityDisplayLabel = foodPhotoRetakeButtonAccessibilityLabel();
+  const foodPhotoDisplay = foodPhotoDisplayBundle(foodPhotoActionStatus);
+  const foodPhotoActionStatusDisplayText = foodPhotoDisplay.status.action;
+  const foodPhotoUploadStatusMessage = foodPhotoDisplay.status.upload;
+  const foodPhotoIntegrationStatusMessage = foodPhotoDisplay.status.integration;
+  const foodPhotoRetakeStatusMessage = foodPhotoDisplay.status.retake;
+  const foodPhotoIntroDisplayText = foodPhotoDisplay.intro;
+  const foodPhotoUploadBoxDisplayLabel = foodPhotoDisplay.uploadBox;
+  const foodPhotoResultDisplayTitle = foodPhotoDisplay.resultTitle;
+  const foodPhotoReadinessTitleDisplayText = foodPhotoDisplay.readinessTitle;
+  const foodPhotoIntegrationButtonDisplayLabel = foodPhotoDisplay.integrationButton;
+  const foodPhotoRetakeButtonDisplayLabel = foodPhotoDisplay.retakeButton;
+  const foodPhotoIntegrationAccessibilityDisplayLabel = foodPhotoDisplay.integrationAccessibility;
+  const foodPhotoRetakeAccessibilityDisplayLabel = foodPhotoDisplay.retakeAccessibility;
   const quotaStatusDisplayText = reportStatusDisplay.quota;
   const subscriptionMembershipDisplay = subscriptionMembershipDisplayTexts(
     voiceQuota,
