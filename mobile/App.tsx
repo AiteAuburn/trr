@@ -181,6 +181,7 @@ import {
   foodCommunityDisplayBundle,
   foodCommunityItemDisplayItem,
   foodCommunityItemFromApi,
+  foodCommunityItemsWithDetail,
   foodCommunityItems,
   foodCommunityShareStatusMessages,
   foodCommunitySyncStatusMessages,
@@ -4953,10 +4954,6 @@ export default function App() {
     return item.id;
   }
 
-  function foodCommunityDetailRefreshItemId(item: { id: string }) {
-    return item.id;
-  }
-
   function foodCommunityDetailStatusTitle(item: { title: string }) {
     return item.title;
   }
@@ -6033,9 +6030,8 @@ export default function App() {
         return;
       }
       const detailedItem = foodCommunityItemFromApi(detail);
-      const detailedItemId = foodCommunityDetailRefreshItemId(detailedItem);
       setFoodCommunityBackendItems((current) =>
-        current.map((item) => (item.id === detailedItemId ? detailedItem : item))
+        foodCommunityItemsWithDetail(current, detailedItem)
       );
       setSelectedFoodCommunityItemId(foodCommunityDetailSelectedItemId(detailedItem));
       setCommunityActionStatus(

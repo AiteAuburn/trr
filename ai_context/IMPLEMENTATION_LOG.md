@@ -15,6 +15,39 @@
 
 ## 2026-07-16
 
+### T2096 move food community detail replacement helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `foodCommunityItemsWithDetail` to `futureModuleDisplay.ts`.
+- Replaced the inline food community detail replacement map in `App.tsx`.
+- Removed the now-unused `foodCommunityDetailRefreshItemId` helper from `App.tsx`.
+- Kept backend detail loading, in-flight key tracking, stale-response guard, selected item update, and community status handling in `App.tsx`.
+- Updated navigation verifier coverage to require the domain helper and reject reintroducing the old inline replacement map in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- With `App.tsx` render-loop and common replacement maps extracted, continue with small pure helper boundaries only when they reduce parent orchestration noise.
+
 ### T2095 move selected record update replacement helper
 
 類型：mobile / refactor / verifier / docs

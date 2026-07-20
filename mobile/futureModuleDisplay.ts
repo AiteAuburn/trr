@@ -1208,6 +1208,10 @@ export function foodCommunityItemFromApi(value: FoodCommunityApiItem): FoodCommu
   };
 }
 
+export function foodCommunityItemsWithDetail(items: FoodCommunityItem[], detailedItem: FoodCommunityItem) {
+  return items.map((item) => (item.id === detailedItem.id ? detailedItem : item));
+}
+
 export function emptyFoodCommunityShareFields(): FoodCommunityShareFields {
   const nowInputs = localDateTimeInputs(new Date());
   return {

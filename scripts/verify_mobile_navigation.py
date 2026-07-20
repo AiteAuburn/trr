@@ -12026,10 +12026,7 @@ def main() -> int:
             ("food community detail selected item helper", "function foodCommunityDetailSelectedItemId(item: { id: string })"),
             ("food community detail selected item helper fields", "return item.id;"),
             ("food community detail selected item helper binding", "setSelectedFoodCommunityItemId(foodCommunityDetailSelectedItemId(detailedItem));"),
-            ("food community detail refresh item helper", "function foodCommunityDetailRefreshItemId(item: { id: string })"),
-            ("food community detail refresh item helper fields", "return item.id;"),
-            ("food community detail refresh item helper binding", "const detailedItemId = foodCommunityDetailRefreshItemId(detailedItem);"),
-            ("food community detail refresh item helper comparison", "current.map((item) => (item.id === detailedItemId ? detailedItem : item))"),
+            ("food community detail refresh items helper binding", "foodCommunityItemsWithDetail(current, detailedItem)"),
             ("food community detail status title helper", "function foodCommunityDetailStatusTitle(item: { title: string })"),
             ("food community detail status title helper fields", "return item.title;"),
             ("food community detail title helper", "function foodCommunityDetailTitle(item: { title: string })"),
@@ -13915,6 +13912,8 @@ def main() -> int:
             ("food community item display helper", "export function foodCommunityItemDisplayItem(value: FoodCommunityItem)"),
             ("food community item display items helper", "export function foodCommunityItemDisplayItems(items: FoodCommunityItem[])"),
             ("food community item display items map", "return items.map(foodCommunityItemDisplayItem);"),
+            ("food community detail refresh items helper", "export function foodCommunityItemsWithDetail(items: FoodCommunityItem[], detailedItem: FoodCommunityItem)"),
+            ("food community detail refresh items helper comparison", "return items.map((item) => (item.id === detailedItem.id ? detailedItem : item));"),
             ("food community backend-ready item accessibility", "同步已載入食物分享統計與個別紀錄"),
             ("food community metric summary reference value", "metricSummary: boundDisplayText(\n      `${shareCount} 人分享，實際升糖參考值 ${averageRise} mg/dL`,"),
             ("food community individual share display items", "individualShareDisplayItems: value.examples.map(foodCommunityShareDisplayItem).slice(0, 3)"),
@@ -14716,6 +14715,11 @@ def main() -> int:
             "food community direct detail refresh item comparison",
             content,
             "item.id === detailedItem.id",
+        )
+        _assert_not_contains(
+            "food community direct detail refresh item map",
+            content,
+            "current.map((item) => (item.id === detailedItemId ? detailedItem : item))",
         )
         _assert_not_contains(
             "food community direct detail status title binding",
