@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2120: Move native Whisper input shaping helper
+
+Status: done
+
+Completed:
+
+- Added typed `nativeWhisperInput` and `NativeWhisperInputSource` to `modelTransforms.ts`.
+- Removed the same local input-shaping helper from `App.tsx`.
+- Kept audio path state, Whisper model path state, missing-input guard, native Whisper run, and native benchmark flow in `App.tsx`.
+- Updated navigation verifier coverage to require the model transform helper and reject reintroducing the local App helper.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2119: Move native Llama benchmark append helper
 
 Status: done

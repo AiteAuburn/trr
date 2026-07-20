@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2120 move native Whisper input shaping helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/modelTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added typed `nativeWhisperInput` and `NativeWhisperInputSource` to `modelTransforms.ts`.
+- Removed the same local input-shaping helper from `App.tsx`.
+- Kept audio path state, Whisper model path state, missing-input guard, native Whisper run, and native benchmark flow in `App.tsx`.
+- Updated navigation verifier coverage to require the model transform helper and reject reintroducing the local App helper.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting native model transforms from `App.tsx` one boundary at a time.
+
 ### T2119 move native Llama benchmark append helper
 
 類型：mobile / refactor / verifier / docs

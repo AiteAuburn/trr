@@ -7,6 +7,7 @@ export type NativeWhisperInput = {
   modelPath: string;
   audioPath: string;
 };
+export type NativeWhisperInputSource = NativeWhisperInput;
 export type NativeLlamaInput = {
   modelPath: string;
   transcript: string;
@@ -46,6 +47,13 @@ export function nativeModelDownloadRequestArgs({
     url,
     kind,
     onProgress
+  };
+}
+
+export function nativeWhisperInput({ audioPath, modelPath }: NativeWhisperInputSource): NativeWhisperInput {
+  return {
+    audioPath: audioPath.trim(),
+    modelPath: modelPath.trim()
   };
 }
 
