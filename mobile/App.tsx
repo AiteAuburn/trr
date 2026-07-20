@@ -499,7 +499,7 @@ import {
   nativeModelDownloadAccessibilityLabel,
   nativeModelDownloadButtonLabel,
   nativeModelDownloadFailureStatusMessage,
-  nativeModelDownloadProgressStatusMessage,
+  nativeModelDownloadStartState,
   nativeModelDownloadSuccessStatusMessage,
   nativeModuleCheckAccessibilityLabel,
   nativeModuleCheckButtonLabel,
@@ -7918,8 +7918,9 @@ export default function App() {
   }
 
   function startNativeModelDownloadStatus() {
-    setDownloadProgress(0);
-    setNativeStatus(nativeModelDownloadProgressStatusMessage());
+    const nextState = nativeModelDownloadStartState();
+    setDownloadProgress(nextState.progress);
+    setNativeStatus(nextState.status);
   }
 
   function handleNativeModelDownloadFailure(error: unknown) {

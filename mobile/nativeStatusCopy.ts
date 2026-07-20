@@ -44,6 +44,13 @@ export function nativeModelDownloadProgressStatusMessage() {
   return boundUiMessage("下載模型中...");
 }
 
+export function nativeModelDownloadStartState() {
+  return {
+    progress: 0,
+    status: nativeModelDownloadProgressStatusMessage()
+  };
+}
+
 export function nativeModelDownloadSuccessStatusMessage() {
   return boundUiMessage("模型已下載，已更新本機模型清單。");
 }

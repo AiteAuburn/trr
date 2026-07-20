@@ -11755,7 +11755,7 @@ def main() -> int:
             ("native benchmark success helper binding", "handleNativeBenchmarkSuccess(results);"),
             ("native benchmark results helper binding", "const results = await nativeBenchmarkResults({\n        audioPath,\n        whisperModelPath,\n        llamaModelPath,\n        transcript,\n        benchmarkWhisper: benchmarkNativeWhisper,\n        benchmarkLlama: benchmarkNativeLlama\n      });"),
             ("native model download start status helper", "function startNativeModelDownloadStatus()"),
-            ("native model download start status helper fields", "setDownloadProgress(0);\n    setNativeStatus(nativeModelDownloadProgressStatusMessage());"),
+            ("native model download start status helper fields", "const nextState = nativeModelDownloadStartState();\n    setDownloadProgress(nextState.progress);\n    setNativeStatus(nextState.status);"),
             ("native model download start status helper binding", "startNativeModelDownloadStatus();"),
             ("native model download request args helper binding", "const uri = await downloadModel(\n        nativeModelDownloadRequestArgs({\n          url: modelUrl,\n          kind: downloadKind,\n          onProgress: setDownloadProgress\n        })\n      );"),
             ("native model download failure helper", "function handleNativeModelDownloadFailure(error: unknown)"),
@@ -12681,6 +12681,8 @@ def main() -> int:
         for label, marker in (
             ("native module check button label helper", "function nativeModuleCheckButtonLabel(isRunning: boolean)"),
             ("native model download button label helper", "function nativeModelDownloadButtonLabel(isRunning: boolean, progress: number)"),
+            ("native model download start state helper", "function nativeModelDownloadStartState()"),
+            ("native model download start state helper fields", "progress: 0,\n    status: nativeModelDownloadProgressStatusMessage()"),
             ("native download kind accessibility helper", 'function nativeDownloadKindAccessibilityLabel(kind: "whisper" | "llama", selectedKind: "whisper" | "llama")'),
             ("native module check accessibility helper", "function nativeModuleCheckAccessibilityLabel(isRunning: boolean)"),
             ("native model download accessibility helper", "function nativeModelDownloadAccessibilityLabel(isRunning: boolean, progress: number)"),
