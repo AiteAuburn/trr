@@ -84,7 +84,6 @@ import {
   type AuthProviderChallenge
 } from "./authProviderChallenge";
 import {
-  buildDailyRecordSectionDisplayItems,
   displayPayload,
   displayTextValue,
   groupedRecordListDisplaySectionsForRecords,
@@ -799,13 +798,12 @@ import {
   boundDailyTranscriptEntries,
   buildDailyRecordSaveRequest,
   createDailyTranscriptEntry,
-  dailyRecordDateLabel,
+  dailyRecordDisplayBundle,
   dailyRecordDraftScreenState,
   dailyRecordEntryMenuOpenStatusMessage,
   dailyRecordKeyFromRecords,
   dailyRecordReorganizationDisplayText,
   dailyRecordReorganizationStatusMessage,
-  dailyRecordSummaryText,
   dailyTranscriptDisplayBundle,
   mergeSameDayParsePreviewDraft,
   parserTranscriptSource,
@@ -1490,13 +1488,14 @@ export default function App() {
   const aiSaveConfirmDateLabelDisplayText = aiSaveConfirmDisplay.dateLabel;
   const aiSaveConfirmSummaryLabelDisplayText = aiSaveConfirmDisplay.summaryLabel;
   const aiSaveConfirmIntroDisplayText = aiSaveConfirmDisplay.intro;
-  const dailyRecordDateDisplayText = preview ? dailyRecordDateLabel(previewState.records) : "";
-  const dailyRecordSummaryDisplayText = preview ? dailyRecordSummaryText(previewState.records) : "";
+  const dailyRecordDisplay = dailyRecordDisplayBundle(preview, previewState.records);
+  const dailyRecordDateDisplayText = dailyRecordDisplay.dateText;
+  const dailyRecordSummaryDisplayText = dailyRecordDisplay.summaryText;
   const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayText(
     dailyRecordOrganizationReason,
     dailyRecordOrganizationRevision
   );
-  const dailyRecordSectionItems = preview ? buildDailyRecordSectionDisplayItems(previewState.records) : [];
+  const dailyRecordSectionItems = dailyRecordDisplay.sectionItems;
   const todayTranscriptDisplay = dailyTranscriptDisplayBundle(preview, dailyTranscriptEntries);
   const todayTranscriptDisplayItems = todayTranscriptDisplay.items;
   const todayTranscriptTitleDisplayText = todayTranscriptDisplay.title;

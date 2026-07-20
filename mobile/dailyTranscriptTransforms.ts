@@ -1,6 +1,6 @@
 import { localDateKey } from "./dateTimeTransforms";
 import type { AppScreen } from "./navigationConfig";
-import { dailyRecordSectionDefinitions } from "./recordDisplay";
+import { buildDailyRecordSectionDisplayItems, dailyRecordSectionDefinitions } from "./recordDisplay";
 import { boundParsePreviewResponse, type ParsePreviewResponse, type PendingRecord, type RecordItem } from "./recordBounds";
 
 const maxListItems = 12;
@@ -166,6 +166,14 @@ export function dailyRecordSummaryText(records: PendingRecord[]) {
     `AI 已整理今天內容：${parts.join("、")}。每次新增、編輯或刪除後，後續會重新整理今日摘要與分類內容。`,
     maxDisplayDetailTextLength
   );
+}
+
+export function dailyRecordDisplayBundle(preview: ParsePreviewResponse | null, records: PendingRecord[]) {
+  return {
+    dateText: preview ? dailyRecordDateLabel(records) : "",
+    summaryText: preview ? dailyRecordSummaryText(records) : "",
+    sectionItems: preview ? buildDailyRecordSectionDisplayItems(records) : []
+  };
 }
 
 export function dailyRecordReorganizationReasonText(reason: DailyRecordReorganizationReason | null) {

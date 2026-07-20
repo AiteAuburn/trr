@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2186 move daily record display bundle helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/dailyTranscriptTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the daily record date, summary, and section display bundle helper to `dailyTranscriptTransforms.ts`.
+- Removed direct daily record date, summary, and section preview ternaries from `App.tsx`.
+- Kept AI save confirm date rendering, summary rendering, section list rendering, daily record reorganization display, and preview state behavior unchanged.
+- Updated navigation verifier coverage to require the daily transcript display bundle helper, App bundle bindings, and no direct preview ternary regressions in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2185 move account public display fallback helper
 
 類型：mobile / refactor / verifier / docs

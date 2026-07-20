@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2186: Move daily record display bundle helper
+
+Status: done
+
+Completed:
+
+- Added the daily record date, summary, and section display bundle helper to `dailyTranscriptTransforms.ts`.
+- Removed direct daily record date, summary, and section preview ternaries from `App.tsx`.
+- Kept AI save confirm date rendering, summary rendering, section list rendering, daily record reorganization display, and preview state behavior unchanged.
+- Updated navigation verifier coverage to require the daily transcript display bundle helper, App bundle bindings, and no direct preview ternary regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2185: Move account public display fallback helper
 
 Status: done
