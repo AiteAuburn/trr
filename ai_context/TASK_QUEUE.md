@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2136: Move native Llama failure state helper
+
+Status: done
+
+Completed:
+
+- Added `nativeLlamaFailureState` to `nativeStatusCopy.ts`.
+- Replaced direct Llama failure status setup in `App.tsx` with the state helper result.
+- Kept native Llama action readiness, missing-input guard, native parse request, output summary handling, and success/failure flow in `App.tsx`.
+- Updated navigation verifier coverage to require the native status helper and App binding.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2135: Move native Whisper failure state helper
 
 Status: done

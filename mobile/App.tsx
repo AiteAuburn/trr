@@ -488,7 +488,7 @@ import {
   nativeDebugDefaultStatusMessage,
   nativeDebugDisabledStatusMessage,
   nativeDownloadedModelsFailureStatusMessage,
-  nativeLlamaFailureStatusMessage,
+  nativeLlamaFailureState,
   nativeLlamaMissingInputState,
   nativeLlamaOutputSummaryMessage,
   nativeLlamaStartState,
@@ -7954,7 +7954,8 @@ export default function App() {
   }
 
   function handleNativeLlamaFailure(error: unknown) {
-    setNativeStatus(nativeLlamaFailureStatusMessage(error));
+    const nextState = nativeLlamaFailureState(error);
+    setNativeStatus(nextState.status);
   }
 
   async function handleNativeModelDownloadSuccess(uri: string) {

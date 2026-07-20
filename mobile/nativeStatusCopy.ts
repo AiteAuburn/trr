@@ -233,6 +233,12 @@ export function nativeLlamaFailureStatusMessage(error: unknown) {
   return safeUiError(error, "llama.cpp failed");
 }
 
+export function nativeLlamaFailureState(error: unknown) {
+  return {
+    status: nativeLlamaFailureStatusMessage(error)
+  };
+}
+
 export function nativeBenchmarkProgressStatusMessage() {
   return boundUiMessage("本機模型 benchmark 中...");
 }
