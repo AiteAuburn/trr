@@ -238,6 +238,7 @@ import {
   communityScreenTitleLabel,
   foodCommunityCategoriesFromApi,
   foodCommunityCategories,
+  foodCommunityCategoryDefaultItemId,
   foodCommunityCategoryDisplayItem,
   foodCommunityCategoryOptionAccessibilityLabel,
   foodCommunityCategoryOptionKey,
@@ -269,7 +270,9 @@ import {
   foodCommunityItemsFromApi,
   foodCommunityItemsWithShareUpdateFromApi,
   foodCommunityItemsWithDetail,
+  foodCommunityItemTarget,
   foodCommunityItems,
+  foodCommunityListDefaultItemId,
   foodCommunityPointsStoreBridgeCopy,
   foodCommunityRankingSectionLabel,
   foodCommunityShareCategory,
@@ -4766,15 +4769,6 @@ export default function App() {
     }));
   }
 
-  function foodCommunityCategoryDefaultItemId(category: FoodCommunityCategory) {
-    const firstMatch = foodCommunityItemsForDisplay.find((item) => item.category === category);
-    return firstMatch?.id ?? "";
-  }
-
-  function foodCommunityListDefaultItemId(items: Array<{ id: string }>, fallbackId: string) {
-    return items[0]?.id ?? fallbackId;
-  }
-
   function communityReturnFutureModulesPressHandler() {
     return returnFromCommunityPreview;
   }
@@ -4797,7 +4791,7 @@ export default function App() {
 
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
     setFoodCommunityCategory(category);
-    setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(category));
+    setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(foodCommunityItemsForDisplay, category));
   }
 
   function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
@@ -4810,10 +4804,6 @@ export default function App() {
     if (foodCommunityBackendItems.some((item) => item.id === boundedItemId)) {
       void loadFoodCommunityDetail(boundedItemId);
     }
-  }
-
-  function foodCommunityItemTarget(item: { id: string }) {
-    return item.id;
   }
 
   function pressFoodCommunityItem(item: { id: string }) {

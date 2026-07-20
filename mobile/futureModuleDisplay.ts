@@ -1197,6 +1197,19 @@ export function foodCommunityPointsStoreBridgeCopy() {
   return "點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。";
 }
 
+export function foodCommunityCategoryDefaultItemId(items: Array<{ id: string; category: FoodCommunityCategory }>, category: FoodCommunityCategory) {
+  const firstMatch = items.find((item) => item.category === category);
+  return firstMatch?.id ?? "";
+}
+
+export function foodCommunityListDefaultItemId(items: Array<{ id: string }>, fallbackId: string) {
+  return items[0]?.id ?? fallbackId;
+}
+
+export function foodCommunityItemTarget(item: { id: string }) {
+  return item.id;
+}
+
 export function foodCommunityItemDisplayItems(items: FoodCommunityItem[]) {
   return items.map(foodCommunityItemDisplayItem);
 }
