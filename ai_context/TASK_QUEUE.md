@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2126: Move native module check start state helper
+
+Status: done
+
+Completed:
+
+- Added `nativeModuleCheckStartState` to `nativeStatusCopy.ts`.
+- Replaced direct module-check status setup in `App.tsx` with the start-state helper result.
+- Kept native module check action readiness, status state update, native module call, and success/failure flow in `App.tsx`.
+- Updated navigation verifier coverage to require the native status helper and App binding.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2125: Move native model download start state helper
 
 Status: done

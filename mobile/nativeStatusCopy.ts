@@ -119,6 +119,12 @@ export function nativeModuleCheckProgressStatusMessage() {
   return boundUiMessage("檢查 native modules...");
 }
 
+export function nativeModuleCheckStartState() {
+  return {
+    status: nativeModuleCheckProgressStatusMessage()
+  };
+}
+
 export function nativeModuleCheckResultStatusMessage(message: string) {
   return boundUiMessage(message);
 }
