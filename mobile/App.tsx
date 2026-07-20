@@ -7849,15 +7849,19 @@ export default function App() {
 
   function handleDownloadedModelsRefreshFailure(error: unknown, showStatus: boolean) {
     const nextState = nativeDownloadedModelsFailureState(error);
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
     if (showStatus) {
       setStatus(recordingModelRefreshFailureStatusMessage(error));
     }
   }
 
+  function applyNativeStatusState(nextState: { status: string }) {
+    setNativeStatus(nextState.status);
+  }
+
   function openNativeDebugUnavailable() {
     const nextState = nativeDebugUnavailableState();
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function isNativeDebugActionBlocked() {
@@ -7885,84 +7889,84 @@ export default function App() {
   function handleNativeWhisperSuccess(text: string) {
     updateTranscriptDraft(text);
     const nextState = nativeWhisperSuccessState();
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function startNativeWhisperStatus() {
     const nextState = nativeWhisperStartState();
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function handleNativeWhisperMissingInput() {
     const nextState = nativeWhisperMissingInputState();
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function handleNativeLlamaSuccess(output: string) {
     setLlamaDebugOutput(nativeLlamaOutputSummaryMessage(output.length));
     const nextState = nativeLlamaSuccessState();
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function startNativeLlamaStatus() {
     const nextState = nativeLlamaStartState();
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function handleNativeLlamaMissingInput() {
     const nextState = nativeLlamaMissingInputState();
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function handleNativeBenchmarkMissingInput() {
     const nextState = nativeBenchmarkMissingInputState();
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function startNativeBenchmarkStatus() {
     const nextState = nativeBenchmarkStartState();
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function handleNativeBenchmarkSuccess(results: NativeBenchmarkResult[]) {
     const nextState = nativeBenchmarkResultState(results);
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function startNativeModelDownloadStatus() {
     const nextState = nativeModelDownloadStartState();
     setDownloadProgress(nextState.progress);
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function handleNativeModelDownloadFailure(error: unknown) {
     const nextState = nativeModelDownloadFailureState(error);
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function handleNativeModuleCheckSuccess(message: string) {
     const nextState = nativeModuleCheckResultState(message);
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function startNativeModuleCheckStatus() {
     const nextState = nativeModuleCheckStartState();
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function handleNativeModuleCheckFailure(error: unknown) {
     const nextState = nativeModuleCheckFailureState(error);
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function handleNativeWhisperFailure(error: unknown) {
     const nextState = nativeWhisperFailureState(error);
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   function handleNativeLlamaFailure(error: unknown) {
     const nextState = nativeLlamaFailureState(error);
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   async function handleNativeModelDownloadSuccess(uri: string) {
@@ -7975,7 +7979,7 @@ export default function App() {
     }
     await refreshDownloadedModels();
     const nextState = nativeModelDownloadSuccessState();
-    setNativeStatus(nextState.status);
+    applyNativeStatusState(nextState);
   }
 
   async function downloadSelectedModel() {

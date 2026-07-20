@@ -13,6 +13,39 @@
 後續:
 ```
 
+## 2026-07-20
+
+### T2146 centralize native status state application
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added an `applyNativeStatusState` helper in `App.tsx` for native debug status-state writes.
+- Replaced repeated `nextState.status` writes across native debug unavailable, downloaded-model refresh failure, Whisper, Llama, benchmark, model-download, and module-check handlers with the helper.
+- Kept native debug status copy helpers, busy-state handling, model path updates, transcript draft updates, benchmark result handling, and downloaded-model refresh behavior unchanged.
+- Updated navigation verifier coverage to require the centralized native status state applier and helper-backed native status handlers.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue shrinking native/debug handler noise or move to the next first-version screen component slice once status-copy boundaries are stable.
+
 ## 2026-07-16
 
 ### T2145 move native debug initial state binding

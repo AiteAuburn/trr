@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2146: Centralize native status state application
+
+Status: done
+
+Completed:
+
+- Added an `applyNativeStatusState` helper in `App.tsx` for native debug status-state writes.
+- Replaced repeated `nextState.status` writes across native debug unavailable, downloaded-model refresh failure, Whisper, Llama, benchmark, model-download, and module-check handlers with the helper.
+- Kept all native debug status copy helpers, busy-state handling, model path updates, transcript draft updates, benchmark result handling, and downloaded-model refresh behavior unchanged.
+- Updated navigation verifier coverage to require the centralized native status state applier and helper-backed native status handlers.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2145: Move native debug initial state binding
 
 Status: done
