@@ -4994,38 +4994,38 @@ def main() -> int:
         )
         _assert_contains(
             "AI candidate preview edit records update helper",
-            content,
+            record_edit_transforms_content,
             "function previewRecordsWithEditedRecord(",
         )
         _assert_contains(
             "AI candidate preview edit records update helper internals",
-            content,
-            "function previewRecordsWithEditedRecord(\n    records: PendingRecord[],\n    editIndex: number,\n    occurredAt: string,\n    payload: Record<string, unknown>",
+            record_edit_transforms_content,
+            "function previewRecordsWithEditedRecord(\n  records: PendingRecord[],\n  editIndex: number,\n  occurredAt: string,\n  payload: Record<string, unknown>",
         )
         _assert_contains(
             "AI candidate preview edit records update helper usage",
-            content,
-            "isPreviewRecordEditTargetIndex(index, editIndex)\n        ? previewRecordWithEditPayload(record, occurredAt, payload)\n        : record",
+            record_edit_transforms_content,
+            "isPreviewRecordEditTargetIndex(index, editIndex)\n      ? previewRecordWithEditPayload(record, occurredAt, payload)\n      : record",
         )
         _assert_contains(
             "AI candidate preview edit target index helper",
-            content,
+            record_edit_transforms_content,
             "function isPreviewRecordEditTargetIndex(recordIndex: number, editIndex: number)",
         )
         _assert_contains(
             "AI candidate preview edit target index helper internals",
-            content,
-            "function isPreviewRecordEditTargetIndex(recordIndex: number, editIndex: number) {\n    return recordIndex === editIndex;",
+            record_edit_transforms_content,
+            "function isPreviewRecordEditTargetIndex(recordIndex: number, editIndex: number) {\n  return recordIndex === editIndex;",
         )
         _assert_contains(
             "AI candidate preview edit single record helper",
-            content,
+            record_edit_transforms_content,
             "function previewRecordWithEditPayload(",
         )
         _assert_contains(
             "AI candidate preview edit single record helper internals",
-            content,
-            "return {\n      ...record,\n      occurred_at: occurredAt,\n      payload_json: payload\n    };",
+            record_edit_transforms_content,
+            "return {\n    ...record,\n    occurred_at: occurredAt,\n    payload_json: payload\n  };",
         )
         _assert_contains(
             "AI candidate preview edit records builder helper",
@@ -8564,6 +8564,9 @@ def main() -> int:
             ("daily record leave guard direct cancel label", '<Text style={styles.secondaryButtonText}>取消</Text>'),
             ("daily record leave guard direct confirm label", '<Text style={styles.dangerButtonText}>離開</Text>'),
             ("inline preview save records helper", "function previewRecordsForSave(records: PendingRecord[], recordCount: number)"),
+            ("inline preview edited records helper", "function previewRecordsWithEditedRecord("),
+            ("inline preview edit target index helper", "function isPreviewRecordEditTargetIndex(recordIndex: number, editIndex: number)"),
+            ("inline preview edit payload helper", "function previewRecordWithEditPayload("),
         ):
             _assert_not_contains(label, content, marker)
         _assert_not_contains(

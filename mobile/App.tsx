@@ -93,6 +93,7 @@ import {
   glucoseUnitOptions,
   manualRecordTypes,
   mealTypeOptions,
+  previewRecordsWithEditedRecord,
   recordEditFieldMaxLength,
   recordPayloadToEditFields,
   validateRecordForm,
@@ -4057,35 +4058,6 @@ export default function App() {
 
   function updatePreviewEditFallbackJson(value: string) {
     updatePreviewEditField("fallbackJson", value);
-  }
-
-  function previewRecordsWithEditedRecord(
-    records: PendingRecord[],
-    editIndex: number,
-    occurredAt: string,
-    payload: Record<string, unknown>
-  ) {
-    return records.map((record, index) =>
-      isPreviewRecordEditTargetIndex(index, editIndex)
-        ? previewRecordWithEditPayload(record, occurredAt, payload)
-        : record
-    );
-  }
-
-  function isPreviewRecordEditTargetIndex(recordIndex: number, editIndex: number) {
-    return recordIndex === editIndex;
-  }
-
-  function previewRecordWithEditPayload(
-    record: PendingRecord,
-    occurredAt: string,
-    payload: Record<string, unknown>
-  ) {
-    return {
-      ...record,
-      occurred_at: occurredAt,
-      payload_json: payload
-    };
   }
 
   function applyPreviewRecordEditChange(currentPreview: ParsePreviewResponse, nextRecords: PendingRecord[]) {

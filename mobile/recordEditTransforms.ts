@@ -1,4 +1,5 @@
 import { parseLocalDateTimeInput } from "./dateTimeTransforms";
+import type { PendingRecord } from "./recordBounds";
 import { textValue } from "./recordDisplay";
 
 export type ManualRecordType = "glucose" | "meal" | "exercise" | "medication" | "note";
@@ -149,6 +150,35 @@ export function recordPayloadToEditFields(record: { record_type: string; payload
   }
 
   return fields;
+}
+
+export function previewRecordsWithEditedRecord(
+  records: PendingRecord[],
+  editIndex: number,
+  occurredAt: string,
+  payload: Record<string, unknown>
+): PendingRecord[] {
+  return records.map((record, index) =>
+    isPreviewRecordEditTargetIndex(index, editIndex)
+      ? previewRecordWithEditPayload(record, occurredAt, payload)
+      : record
+  );
+}
+
+export function isPreviewRecordEditTargetIndex(recordIndex: number, editIndex: number) {
+  return recordIndex === editIndex;
+}
+
+export function previewRecordWithEditPayload(
+  record: PendingRecord,
+  occurredAt: string,
+  payload: Record<string, unknown>
+): PendingRecord {
+  return {
+    ...record,
+    occurred_at: occurredAt,
+    payload_json: payload
+  };
 }
 
 export function splitListText(value: string) {

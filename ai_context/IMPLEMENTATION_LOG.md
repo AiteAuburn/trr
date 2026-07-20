@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2094 move preview edit record replacement transform
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordEditTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `previewRecordsWithEditedRecord`, `isPreviewRecordEditTargetIndex`, and `previewRecordWithEditPayload` to `recordEditTransforms.ts`.
+- Removed the inline edited-record map and per-record payload helper from `App.tsx`.
+- Kept preview edit screen state, validation, occurred-at calculation, daily-record reorganization, AI-candidate return flow, and save success navigation in `App.tsx`.
+- Updated navigation verifier coverage to require the helpers in the transform module and reject reintroducing them inline in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving pure record-list update helpers out of `App.tsx` where they do not own UI or request side effects.
+
 ### T2093 move preview save batch metadata transform
 
 類型：mobile / refactor / verifier / docs
