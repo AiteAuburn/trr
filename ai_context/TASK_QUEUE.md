@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2190: Move preview display count state fields
+
+Status: done
+
+Completed:
+
+- Added clamped preview display count fields to `previewRecordState` in `appViewState.ts`.
+- Removed direct unsaved preview, low-confidence preview, and rejected-event display count clamps from `App.tsx`.
+- Kept AI Review warning counts, AI save confirm checklist counts, save-success copy counts, and save-failure checklist counts unchanged.
+- Updated navigation verifier coverage to require preview display count fields, App state bindings, and no direct preview display count clamp regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2189: Move AI review preview display bundle
 
 Status: done

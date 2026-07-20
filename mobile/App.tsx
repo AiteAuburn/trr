@@ -72,7 +72,6 @@ import {
   maxMobileCountValue,
   maxMobileGlucoseValue,
   maxMobilePreviewRecords,
-  maxMobileRejectedEvents,
   maxNativeDebugInputLength,
   maxStoreSearchTextLength,
   maxTimeInputLength,
@@ -1448,7 +1447,7 @@ export default function App() {
   const isAnyRequestInFlight = isBusy || isQuotaSyncing || isReportLoading || isAuthOperationInFlight;
   const previewState = previewRecordState(preview);
   const unsavedPreviewRecordCount = previewState.recordCount;
-  const unsavedPreviewRecordDisplayCount = clampNumber(unsavedPreviewRecordCount, 0, maxMobilePreviewRecords);
+  const unsavedPreviewRecordDisplayCount = previewState.displayCount;
   const mobileRecordSyncDisplayLimit = clampNumber(mobileRecordSyncLimit, 0, maxMobileCountValue);
   const mobileReportQueryDisplayLimit = clampNumber(mobileReportQueryLimit, 0, maxMobileCountValue);
   const historyNoRealRecordHealthValueDisplayText = noRealRecordHealthValueCopy("history");
@@ -1457,8 +1456,8 @@ export default function App() {
   const analysisBoundaryDataDisplayCopy = analysisBoundaryDataCopy(analysisPreviewMode);
   const lowConfidencePreviewRecordCount = previewState.lowConfidenceRecordCount;
   const rejectedPreviewEventCount = previewState.rejectedEventCount;
-  const lowConfidencePreviewRecordDisplayCount = clampNumber(lowConfidencePreviewRecordCount, 0, maxMobilePreviewRecords);
-  const rejectedPreviewEventDisplayCount = clampNumber(rejectedPreviewEventCount, 0, maxMobileRejectedEvents);
+  const lowConfidencePreviewRecordDisplayCount = previewState.lowConfidenceDisplayCount;
+  const rejectedPreviewEventDisplayCount = previewState.rejectedEventDisplayCount;
   const aiReviewPreviewDisplay = aiReviewPreviewDisplayBundle(
     preview,
     previewState.records,

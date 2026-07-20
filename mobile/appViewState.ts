@@ -1,5 +1,9 @@
 import type { SaveEntryMethod } from "./appTypes";
-import { clampNumber } from "./mobileBounds";
+import {
+  clampNumber,
+  maxMobilePreviewRecords,
+  maxMobileRejectedEvents
+} from "./mobileBounds";
 import {
   lowConfidencePendingRecordCount,
   type ParsePreviewResponse,
@@ -33,12 +37,15 @@ export function previewRecordState(preview: ParsePreviewResponse | null) {
   const rejectedEventCount = rejectedEvents.length;
 
   return {
+    displayCount: clampNumber(recordCount, 0, maxMobilePreviewRecords),
     hasWarnings: lowConfidenceRecordCount > 0 || rejectedEventCount > 0,
     hasRecords: recordCount > 0,
     isEmpty: recordCount === 0,
+    lowConfidenceDisplayCount: clampNumber(lowConfidenceRecordCount, 0, maxMobilePreviewRecords),
     lowConfidenceRecordCount,
     recordCount,
     records,
+    rejectedEventDisplayCount: clampNumber(rejectedEventCount, 0, maxMobileRejectedEvents),
     rejectedEventCount,
     rejectedEvents
   };
