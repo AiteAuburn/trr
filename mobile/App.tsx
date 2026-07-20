@@ -850,7 +850,11 @@ import { PreviewRecordEditActionRow } from "./previewRecordEditActionRow";
 import { ProductionAuthReadinessList } from "./productionAuthReadinessList";
 import { QuickEntryModeRail } from "./quickEntryModeRail";
 import { RecordingResultActionRow } from "./recordingResultActionRow";
-import { RecordingWhisperModelSelector } from "./recordingWhisperModelSelector";
+import {
+  RecordingWhisperModelSelector,
+  recordingWhisperModelPathTarget,
+  recordingWhisperModelStatusLabel
+} from "./recordingWhisperModelSelector";
 import { RecordFlowChecklist } from "./recordFlowChecklist";
 import { RecordDetailActionPanel } from "./recordDetailActionPanel";
 import { RecordDetailInfoPanel } from "./recordDetailInfoPanel";
@@ -4506,14 +4510,6 @@ export default function App() {
 
   function pressSettingsSttModelChoice(model: (typeof sttModelChoiceDisplayItems)[number]) {
     selectSettingsSttModelChoice(settingsModelChoiceTarget(model));
-  }
-
-  function recordingWhisperModelPathTarget(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
-    return item.sourceUri;
-  }
-
-  function recordingWhisperModelStatusLabel(item: (typeof downloadedWhisperModelChoiceItems)[number]) {
-    return item.label;
   }
 
   function selectRecordingWhisperModelChoice(item: (typeof downloadedWhisperModelChoiceItems)[number]) {

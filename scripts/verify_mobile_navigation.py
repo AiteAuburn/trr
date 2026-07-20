@@ -2481,6 +2481,10 @@ def main() -> int:
             _assert_contains(label, recording_result_action_row_content, marker)
         for label, marker in (
             ("recording whisper model selector component", "export function RecordingWhisperModelSelector"),
+            ("recording whisper model path target helper", "function recordingWhisperModelPathTarget(item: RecordingWhisperModelChoiceItem)"),
+            ("recording whisper model path target helper fields", "return item.sourceUri;"),
+            ("recording whisper model status label helper", "function recordingWhisperModelStatusLabel(item: RecordingWhisperModelChoiceItem)"),
+            ("recording whisper model status label helper fields", "return item.label;"),
             ("recording whisper model selector map", "items.map((model) => {"),
             ("recording whisper model selector selected binding", "const modelSelected = model.sourceUri === selectedPath;"),
             ("recording whisper model selector accessibility binding", "accessibilityLabel={model.accessibilityLabel}"),
@@ -11665,10 +11669,6 @@ def main() -> int:
             ("llm model settings target helper binding", "selectSettingsLlmModelChoice(settingsModelChoiceTarget(model));"),
             ("stt model settings option press handler", "function pressSettingsSttModelChoice(model: (typeof sttModelChoiceDisplayItems)[number])"),
             ("stt model settings target helper binding", "selectSettingsSttModelChoice(settingsModelChoiceTarget(model));"),
-            ("recording whisper model path target helper", "function recordingWhisperModelPathTarget(item: (typeof downloadedWhisperModelChoiceItems)[number])"),
-            ("recording whisper model path target helper fields", "return item.sourceUri;"),
-            ("recording whisper model status label helper", "function recordingWhisperModelStatusLabel(item: (typeof downloadedWhisperModelChoiceItems)[number])"),
-            ("recording whisper model status label helper fields", "return item.label;"),
             ("recording whisper model select handler", "function selectRecordingWhisperModelChoice(item: (typeof downloadedWhisperModelChoiceItems)[number])"),
             ("recording whisper model path target helper binding", "setWhisperModelPath(recordingWhisperModelPathTarget(item));"),
             ("recording whisper model status label helper binding", "setStatus(recordingModelSelectedStatusMessage(recordingWhisperModelStatusLabel(item)));"),

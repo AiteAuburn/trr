@@ -8,6 +8,14 @@ export type RecordingWhisperModelChoiceItem = {
   sourceUri: string;
 };
 
+export function recordingWhisperModelPathTarget(item: RecordingWhisperModelChoiceItem) {
+  return item.sourceUri;
+}
+
+export function recordingWhisperModelStatusLabel(item: RecordingWhisperModelChoiceItem) {
+  return item.label;
+}
+
 type RecordingWhisperModelSelectorProps = {
   items: RecordingWhisperModelChoiceItem[];
   onModelPress: (item: RecordingWhisperModelChoiceItem) => void;
