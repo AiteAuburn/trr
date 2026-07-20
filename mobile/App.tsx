@@ -839,6 +839,7 @@ import { SubscriptionChecklist } from "./subscriptionChecklist";
 import { SubscriptionComparisonList } from "./subscriptionComparisonList";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
 import { FoodCommunitySearchField } from "./foodCommunitySearchField";
+import { FoodCommunityItemList } from "./foodCommunityItemList";
 import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
 import { FoodCommunityShareTextFields } from "./foodCommunityShareTextFields";
 import { FutureModuleCardList } from "./futureModuleCardList";
@@ -4970,14 +4971,6 @@ export default function App() {
     return items[0]?.id ?? fallbackId;
   }
 
-  function foodCommunityListItemTitle(item: { title: string }) {
-    return item.title;
-  }
-
-  function foodCommunityListItemMetricSummary(item: { metricSummary: string }) {
-    return item.metricSummary;
-  }
-
   function foodCommunityCategorySummary(category: { summary: string }) {
     return category.summary;
   }
@@ -5068,14 +5061,6 @@ export default function App() {
 
   function foodCommunityDatabaseIntroCopy() {
     return "建立華人使用者真實食物升糖資料庫，以實際食用前後血糖分享取代理論與網路傳言；backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。";
-  }
-
-  function foodCommunityListEmptyTitle() {
-    return "沒有符合的食物";
-  }
-
-  function foodCommunityListEmptyCopy() {
-    return "可清除搜尋文字或切換分類；backend ready 時會依搜尋同步，未連線時只篩選本機預覽。";
   }
 
   function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> }) {
@@ -5379,30 +5364,11 @@ export default function App() {
     }
   }
 
-  function foodCommunityItemTarget(item: ReturnType<typeof foodCommunityItemDisplayItem>) {
+  function foodCommunityItemTarget(item: { id: string }) {
     return item.id;
   }
 
-  function foodCommunityListItemKey(item: ReturnType<typeof foodCommunityItemDisplayItem>) {
-    return item.id;
-  }
-
-  function foodCommunityListItemAccessibilityLabel(item: ReturnType<typeof foodCommunityItemDisplayItem>) {
-    return item.accessibilityLabel;
-  }
-
-  function foodCommunityListItemSelected(
-    item: ReturnType<typeof foodCommunityItemDisplayItem>,
-    selectedItem: ReturnType<typeof foodCommunityItemDisplayItem> | null,
-  ) {
-    return selectedItem?.id === item.id;
-  }
-
-  function foodCommunityListIsEmpty(items: Array<ReturnType<typeof foodCommunityItemDisplayItem>>) {
-    return items.length === 0;
-  }
-
-  function pressFoodCommunityItem(item: ReturnType<typeof foodCommunityItemDisplayItem>) {
+  function pressFoodCommunityItem(item: { id: string }) {
     selectFoodCommunityItem(foodCommunityItemTarget(item));
   }
 
@@ -10653,33 +10619,11 @@ export default function App() {
             {selectedFoodCommunityCategoryDisplay ? (
               <Text style={styles.evidence}>{foodCommunityCategorySummary(selectedFoodCommunityCategoryDisplay)}</Text>
             ) : null}
-            <View style={styles.openSection}>
-              {visibleFoodCommunityItems.map((item) => (
-                <Pressable
-                  key={foodCommunityListItemKey(item)}
-                  accessibilityLabel={foodCommunityListItemAccessibilityLabel(item)}
-                  accessibilityRole="button"
-                  accessibilityState={{ selected: foodCommunityListItemSelected(item, selectedFoodCommunityItem) }}
-                  style={[
-                    styles.recordCard,
-                    foodCommunityListItemSelected(item, selectedFoodCommunityItem) ? styles.recordCardSelected : null
-                  ]}
-                  onPress={() => pressFoodCommunityItem(item)}
-                >
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.recordContent}>{foodCommunityListItemTitle(item)}</Text>
-                    <Text style={styles.evidence}>{foodCommunityListItemMetricSummary(item)}</Text>
-                  </View>
-                  <Text style={styles.recordType}>›</Text>
-                </Pressable>
-              ))}
-              {foodCommunityListIsEmpty(visibleFoodCommunityItems) ? (
-                <View style={styles.inlineInfoBlock}>
-                  <Text style={styles.label}>{foodCommunityListEmptyTitle()}</Text>
-                  <Text style={styles.evidence}>{foodCommunityListEmptyCopy()}</Text>
-                </View>
-              ) : null}
-            </View>
+            <FoodCommunityItemList
+              items={visibleFoodCommunityItems}
+              onSelectItem={pressFoodCommunityItem}
+              selectedItem={selectedFoodCommunityItem}
+            />
             {foodCommunityDetailPanelVisible(selectedFoodCommunityItem) ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{foodCommunityDetailTitleDisplayText(selectedFoodCommunityItem)}</Text>

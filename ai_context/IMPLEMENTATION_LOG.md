@@ -15,6 +15,40 @@
 
 ## 2026-07-16
 
+### T2090 extract food community item list component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/foodCommunityItemList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `FoodCommunityItemList` for the food community visible food cards and empty state.
+- Moved food community list item key/accessibility/selected/title/metric helpers, empty-state copy helpers, list item press wrapper, and list/card styles out of `App.tsx`.
+- Preserved the same visible item order, selected state, card copy, metric summary, chevron, empty title/copy, search/category controls, detail panel, share form, point rows, ranking rows, and community action row.
+- Kept category selection, selected food id state, backend detail refresh, food share submit, community status handling, and all API calls in `App.tsx`.
+- Updated navigation and visual-smoke verifier coverage for the component binding, helper markers, selected-state guards, empty-state guards, and direct inline list map guard.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Re-scan `App.tsx` render maps and continue with remaining non-render state update maps only if they become a maintainability issue.
+
 ### T2089 extract achievement category section list component
 
 類型：mobile / refactor / verifier / docs
