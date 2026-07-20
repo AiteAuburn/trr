@@ -38,6 +38,10 @@ export type DailyRecordSaveResponse = {
   records: RecordItem[];
 };
 
+export function parserTranscriptSource(voiceSeconds: number): DailyTranscriptEntry["source"] {
+  return voiceSeconds > 0 ? "voice" : "text";
+}
+
 export function dailyRecordDraftScreenState(value: {
   currentScreen: AppScreen;
   hasPreview: boolean;

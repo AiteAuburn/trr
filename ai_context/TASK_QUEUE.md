@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2180: Move parser transcript source helper
+
+Status: done
+
+Completed:
+
+- Added the parser transcript source helper to `dailyTranscriptTransforms.ts`.
+- Removed the duplicate parser transcript source helper definition from `App.tsx`.
+- Kept transcript entry creation, voice/text source selection, AI review navigation, daily transcript retention, and parser success flow unchanged.
+- Updated navigation verifier coverage to require the daily transcript transform helper export, App import/usage binding, and no local helper regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2179: Move record edit field value helper
 
 Status: done

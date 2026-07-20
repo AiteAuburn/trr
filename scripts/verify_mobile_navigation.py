@@ -8404,8 +8404,7 @@ def main() -> int:
             ("daily record parse merges same-day draft", "return mergedParserPreviewForResponse(currentPreview, response);"),
             ("daily record transcript append helper", "function appendDailyTranscriptEntry(entry: DailyTranscriptEntry)"),
             ("daily record transcript append helper internals", "setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, entry]));"),
-            ("daily record parser transcript source helper", "function parserTranscriptSource(voiceSeconds: number): DailyTranscriptEntry[\"source\"]"),
-            ("daily record parser transcript source helper internals", "return voiceSeconds > 0 ? \"voice\" : \"text\";"),
+            ("daily record parser transcript source helper import", "parserTranscriptSource,"),
             ("daily record parse appends transcript entry", "handlePreparedParserPreviewSuccess(mergedDailyPreview, text, preparedRequest);"),
             ("daily record parse transcript source binding", "parserTranscriptSource(voiceSeconds)"),
             ("daily record transcript display bundle binding", "const todayTranscriptDisplay = dailyTranscriptDisplayBundle(preview, dailyTranscriptEntries);"),
@@ -8604,6 +8603,7 @@ def main() -> int:
             ("inline preview edit payload helper", "function previewRecordWithEditPayload("),
             ("inline preview remove records helper", "function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number)"),
             ("inline preview remove keep-index helper", "function isPreviewRecordKeptAfterRemove(recordIndex: number, removeIndex: number)"),
+            ("local parser transcript source helper", "function parserTranscriptSource(voiceSeconds: number): DailyTranscriptEntry[\"source\"]"),
             ("inline selected record update replacement map", "current.map((record) => (record.id === updated.id ? updated : record))"),
         ):
             _assert_not_contains(label, content, marker)
@@ -8790,6 +8790,8 @@ def main() -> int:
             _assert_contains(label, daily_transcript_content, marker)
         for label, marker in (
             ("daily record transcript entry type", "type DailyTranscriptEntry = {"),
+            ("daily record parser transcript source helper", "function parserTranscriptSource(voiceSeconds: number): DailyTranscriptEntry[\"source\"]"),
+            ("daily record parser transcript source helper internals", "return voiceSeconds > 0 ? \"voice\" : \"text\";"),
             ("daily record transcript create helper", "function createDailyTranscriptEntry("),
             ("daily record transcript bound helper", "function boundDailyTranscriptEntries(entries: DailyTranscriptEntry[]): DailyTranscriptEntry[]"),
             ("daily record transcript display retained entries", "function dailyTranscriptDisplayItems(\n  preview: ParsePreviewResponse | null,\n  entries: DailyTranscriptEntry[]"),

@@ -807,6 +807,7 @@ import {
   dailyRecordSummaryText,
   dailyTranscriptDisplayBundle,
   mergeSameDayParsePreviewDraft,
+  parserTranscriptSource,
   todayTranscriptExpandedStatusMessage,
   type DailyRecordSaveResponse,
   type DailyRecordReorganizationReason,
@@ -3597,10 +3598,6 @@ export default function App() {
 
   function appendDailyTranscriptEntry(entry: DailyTranscriptEntry) {
     setDailyTranscriptEntries((current) => boundDailyTranscriptEntries([...current, entry]));
-  }
-
-  function parserTranscriptSource(voiceSeconds: number): DailyTranscriptEntry["source"] {
-    return voiceSeconds > 0 ? "voice" : "text";
   }
 
   function appendParserTranscriptEntry(occurredAt: string, text: string, voiceSeconds: number) {
