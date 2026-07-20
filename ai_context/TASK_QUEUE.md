@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2199: Move subscription static display bundle
+
+Status: done
+
+Completed:
+
+- Added the subscription static display bundle helper to `subscriptionDisplayBundle.ts`.
+- Removed direct subscription comparison rows, subscription readiness checklist, subscription management rows, subscription management readiness checklist, and membership feature rows assembly from `App.tsx`.
+- Kept subscription, subscription management, and membership status render bindings unchanged.
+- Updated navigation verifier coverage to require the subscription static display bundle, App bundle bindings, and no direct subscription static display assembly regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2198: Move recording result display bundle
 
 Status: done

@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2199 move subscription static display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/subscriptionDisplayBundle.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the subscription static display bundle helper to `subscriptionDisplayBundle.ts`.
+- Removed direct subscription comparison rows, subscription readiness checklist, subscription management rows, subscription management readiness checklist, and membership feature rows assembly from `App.tsx`.
+- Kept subscription, subscription management, and membership status render bindings unchanged.
+- Updated navigation verifier coverage to require the subscription static display bundle, App bundle bindings, and no direct subscription static display assembly regressions in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2198 move recording result display bundle
 
 類型：mobile / refactor / verifier / docs

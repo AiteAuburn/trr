@@ -65,6 +65,7 @@ SETTINGS_MODEL_CHOICE_SELECTOR_PATH = REPO_ROOT / "mobile" / "settingsModelChoic
 SETTINGS_PROFILE_CHOICE_SELECTOR_PATH = REPO_ROOT / "mobile" / "settingsProfileChoiceSelector.tsx"
 SESSION_MANAGEMENT_PREVIEW_LIST_PATH = REPO_ROOT / "mobile" / "sessionManagementPreviewList.tsx"
 MODEL_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "modelTransforms.ts"
+SUBSCRIPTION_DISPLAY_BUNDLE_PATH = REPO_ROOT / "mobile" / "subscriptionDisplayBundle.ts"
 SUBSCRIPTION_COPY_PATH = REPO_ROOT / "mobile" / "subscriptionCopy.ts"
 SUBSCRIPTION_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "subscriptionTransforms.ts"
 SUBSCRIPTION_SUBPAGE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "subscriptionSubpageActionRow.tsx"
@@ -1489,6 +1490,7 @@ def main() -> int:
     settings_profile_choice_selector_content = SETTINGS_PROFILE_CHOICE_SELECTOR_PATH.read_text(encoding="utf-8")
     session_management_preview_list_content = SESSION_MANAGEMENT_PREVIEW_LIST_PATH.read_text(encoding="utf-8")
     model_transforms_content = MODEL_TRANSFORMS_PATH.read_text(encoding="utf-8")
+    subscription_display_bundle_content = SUBSCRIPTION_DISPLAY_BUNDLE_PATH.read_text(encoding="utf-8")
     subscription_copy_content = SUBSCRIPTION_COPY_PATH.read_text(encoding="utf-8")
     subscription_transforms_content = SUBSCRIPTION_TRANSFORMS_PATH.read_text(encoding="utf-8")
     subscription_subpage_action_row_content = SUBSCRIPTION_SUBPAGE_ACTION_ROW_PATH.read_text(encoding="utf-8")
@@ -3901,22 +3903,22 @@ def main() -> int:
         _assert_contains(
             "subscription readiness checklist helper binding",
             content,
-            "const subscriptionReadinessChecklistItems = subscriptionReadinessChecklistDisplayItems();",
+            "const subscriptionReadinessChecklistItems = subscriptionStaticDisplay.readinessChecklistItems;",
         )
         _assert_contains(
             "subscription comparison display rows helper binding",
             content,
-            "const subscriptionComparisonDisplayRows = useMemo(\n    () => buildSubscriptionComparisonDisplayRows(),",
+            "const subscriptionComparisonDisplayRows = subscriptionStaticDisplay.comparisonRows;",
         )
         _assert_contains(
             "subscription management readiness checklist helper binding",
             content,
-            "subscriptionManagementReadinessChecklistDisplayItems();",
+            "subscriptionStaticDisplay.managementReadinessChecklistItems;",
         )
         _assert_contains(
             "subscription management display rows helper binding",
             content,
-            "const subscriptionManagementDisplayRows = useMemo(\n    () => buildSubscriptionManagementDisplayRows(),",
+            "const subscriptionManagementDisplayRows = subscriptionStaticDisplay.managementRows;",
         )
         _assert_contains(
             "privacy control display rows helper binding",
@@ -3941,8 +3943,30 @@ def main() -> int:
         _assert_contains(
             "membership feature display rows helper binding",
             content,
-            "const membershipFeatureRows = membershipFeatureDisplayRows();",
+            "const membershipFeatureRows = subscriptionStaticDisplay.membershipFeatureRows;",
         )
+        for label, marker in (
+            ("subscription static display bundle helper", "function subscriptionStaticDisplayBundle()"),
+            ("subscription static display bundle comparison rows", "comparisonRows: subscriptionComparisonDisplayRows()"),
+            ("subscription static display bundle readiness checklist", "readinessChecklistItems: subscriptionReadinessChecklistDisplayItems()"),
+            ("subscription static display bundle management rows", "managementRows: subscriptionManagementDisplayRows()"),
+            ("subscription static display bundle management readiness", "managementReadinessChecklistItems: subscriptionManagementReadinessChecklistDisplayItems()"),
+            ("subscription static display bundle membership rows", "membershipFeatureRows: membershipFeatureDisplayRows()"),
+        ):
+            _assert_contains(label, subscription_display_bundle_content, marker)
+        for label, marker in (
+            ("subscription static display bundle import", "subscriptionStaticDisplayBundle"),
+            ("subscription static display bundle binding", "const subscriptionStaticDisplay = useMemo(() => subscriptionStaticDisplayBundle(), []);"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
+            ("direct subscription comparison rows binding", "const subscriptionComparisonDisplayRows = useMemo(\n    () => buildSubscriptionComparisonDisplayRows(),"),
+            ("direct subscription readiness binding", "const subscriptionReadinessChecklistItems = subscriptionReadinessChecklistDisplayItems();"),
+            ("direct subscription management rows binding", "const subscriptionManagementDisplayRows = useMemo(\n    () => buildSubscriptionManagementDisplayRows(),"),
+            ("direct subscription management readiness binding", "subscriptionManagementReadinessChecklistDisplayItems();"),
+            ("direct membership feature rows binding", "const membershipFeatureRows = membershipFeatureDisplayRows();"),
+        ):
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("membership feature list component", "export function MembershipFeatureList"),
             ("membership feature list row type", "export type MembershipFeatureRow ="),

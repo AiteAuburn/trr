@@ -849,7 +849,6 @@ import {
   sessionManagementDisplayItems as buildSessionManagementDisplayItems,
   settingsDisplayRows as buildSettingsDisplayRows,
   settingsRowSubpageTarget,
-  subscriptionManagementDisplayRows as buildSubscriptionManagementDisplayRows,
   tutorialDisplaySteps as buildTutorialDisplaySteps,
   tutorialStepDescription,
   tutorialStepIcon,
@@ -861,6 +860,7 @@ import {
   downloadedWhisperModelDisplayItems,
   settingsChoiceDisplayBundle
 } from "./settingsChoiceDisplay";
+import { subscriptionStaticDisplayBundle } from "./subscriptionDisplayBundle";
 import {
   boundVoiceQuota,
   recordingEffectiveLimitSeconds,
@@ -871,7 +871,6 @@ import {
   accountSecurityProviderBoundaryCopy,
   accountSecurityReadinessBoundaryCopy,
   accountSecuritySessionBoundaryCopy,
-  membershipFeatureDisplayRows,
   profileNoActionBoundaryCopy,
   recordingQuotaBoundaryDisplayRows,
   settingsSubscriptionSectionLabels,
@@ -880,14 +879,11 @@ import {
   subscriptionManagementIntroCopy,
   subscriptionManagementNoActionCopy,
   subscriptionManagementOpenStatusMessage,
-  subscriptionManagementReadinessChecklistDisplayItems,
   subscriptionManagementReturnSettingsStatusMessage,
   subscriptionManagementSyncButtonLabel,
   subscriptionMembershipDisplayTexts,
   subscriptionMembershipStatusOpenStatusMessage,
-  subscriptionComparisonDisplayRows as buildSubscriptionComparisonDisplayRows,
   subscriptionPaymentUnwiredCopy,
-  subscriptionReadinessChecklistDisplayItems,
   accountSecurityBoundaryDisplayRowsForState,
   subscriptionSyncButtonLabel,
   subscriptionTrialBoundaryCopy
@@ -1837,17 +1833,12 @@ export default function App() {
     () => selectedFutureModuleDisplayItem(selectedFutureModule),
     [selectedFutureModule]
   );
-  const subscriptionComparisonDisplayRows = useMemo(
-    () => buildSubscriptionComparisonDisplayRows(),
-    []
-  );
-  const subscriptionReadinessChecklistItems = subscriptionReadinessChecklistDisplayItems();
-  const subscriptionManagementDisplayRows = useMemo(
-    () => buildSubscriptionManagementDisplayRows(),
-    []
-  );
+  const subscriptionStaticDisplay = useMemo(() => subscriptionStaticDisplayBundle(), []);
+  const subscriptionComparisonDisplayRows = subscriptionStaticDisplay.comparisonRows;
+  const subscriptionReadinessChecklistItems = subscriptionStaticDisplay.readinessChecklistItems;
+  const subscriptionManagementDisplayRows = subscriptionStaticDisplay.managementRows;
   const subscriptionManagementReadinessChecklistItems =
-    subscriptionManagementReadinessChecklistDisplayItems();
+    subscriptionStaticDisplay.managementReadinessChecklistItems;
   const privacyControlDisplayRows = useMemo(() => buildPrivacyControlDisplayRows(), []);
   const accountSecurityBoundaryRows = accountSecurityBoundaryDisplayRowsForState({
     account,
@@ -1865,7 +1856,7 @@ export default function App() {
     activeProfileLabel,
     activeProfileRelationshipDisplayText
   });
-  const membershipFeatureRows = membershipFeatureDisplayRows();
+  const membershipFeatureRows = subscriptionStaticDisplay.membershipFeatureRows;
   const authBoundaryChecklistItems = authBoundaryChecklistDisplayItems();
   const profileReadinessChecklistItems = profileReadinessChecklistDisplayItems();
   const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();
