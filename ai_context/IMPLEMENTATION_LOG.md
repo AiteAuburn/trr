@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2198 move recording result display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordingCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the recording result display bundle helper to `recordingCopy.ts`.
+- Removed direct recording result simulated text, elapsed text, body text, and primary action label assembly from `App.tsx`.
+- Kept recording result card copy, elapsed seconds display, re-record/use-text actions, and short-recording fallback behavior unchanged.
+- Updated navigation verifier coverage to require the recording result display bundle, App bundle bindings, and no direct recording result display assembly regressions in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2197 move home recording display bundle
 
 類型：mobile / refactor / verifier / docs

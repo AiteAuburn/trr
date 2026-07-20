@@ -3017,6 +3017,13 @@ def main() -> int:
             "homeRecordingTimer: {",
         )
         for label, marker in (
+            ("direct recording simulated result display binding", "const recordingSimulatedResultDisplayText = recordingSimulatedResultCopy(recordingElapsedSeconds);"),
+            ("direct recording elapsed display binding", "const recordingElapsedSecondsDisplayText = recordingElapsedSecondsCopy(recordingElapsedSeconds);"),
+            ("direct recording result body display binding", "const recordingResultBodyDisplayText = recordingResultBodyCopy(recordingElapsedSeconds);"),
+            ("direct recording result primary action display binding", "const recordingResultPrimaryActionDisplayText = recordingResultPrimaryActionLabel(recordingElapsedSeconds);"),
+        ):
+            _assert_not_contains(label, content, marker)
+        for label, marker in (
             ("record settings direct LLM label fallback", "selectedLlmModel?.label ?? llmModelId"),
             ("record settings direct LLM runtime fallback", "modelRuntimeLabel(selectedLlmModel?.runtime)"),
             ("record settings direct STT label fallback", "selectedSttModel?.label ?? sttModelId"),
@@ -7982,6 +7989,23 @@ def main() -> int:
             recording_copy_content,
             "function recordingElapsedSecondsCopy(elapsedSeconds: number)",
         )
+        for label, marker in (
+            ("recording result display bundle helper", "function recordingResultDisplayBundle(elapsedSeconds: number)"),
+            ("recording result display bundle body", "body: recordingResultBodyCopy(elapsedSeconds)"),
+            ("recording result display bundle elapsed", "elapsed: recordingElapsedSecondsCopy(elapsedSeconds)"),
+            ("recording result display bundle primary", "primaryAction: recordingResultPrimaryActionLabel(elapsedSeconds)"),
+            ("recording result display bundle simulated", "simulatedResult: recordingSimulatedResultCopy(elapsedSeconds)"),
+        ):
+            _assert_contains(label, recording_copy_content, marker)
+        for label, marker in (
+            ("recording result display bundle import", "recordingResultDisplayBundle,"),
+            ("recording result display bundle binding", "const recordingResultDisplay = recordingResultDisplayBundle(recordingElapsedSeconds);"),
+            ("recording result simulated display binding", "const recordingSimulatedResultDisplayText = recordingResultDisplay.simulatedResult;"),
+            ("recording result elapsed display binding", "const recordingElapsedSecondsDisplayText = recordingResultDisplay.elapsed;"),
+            ("recording result body display binding", "const recordingResultBodyDisplayText = recordingResultDisplay.body;"),
+            ("recording result primary action display binding", "const recordingResultPrimaryActionDisplayText = recordingResultDisplay.primaryAction;"),
+        ):
+            _assert_contains(label, content, marker)
         for label, marker in (
             ("transcript review intro copy helper", "function transcriptReviewIntroCopy()"),
             ("transcript review pre-parse guidance helper", "function transcriptReviewPreParseGuidanceCopy()"),

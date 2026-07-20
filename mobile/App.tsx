@@ -448,16 +448,13 @@ import {
   homeRecordingDisplayBundle,
   homeRecordingPreviewBoundaryCopy,
   recordPageRecordingPreviewBoundaryCopy,
-  recordingElapsedSecondsCopy,
   recordingFinishedStatusMessage,
   recordingLimitCopy,
   recordingLimitReachedStatusMessage,
   recordingPermissionDeniedStatusMessage,
   recordingQuotaExhaustedStatusMessage,
   recordingResetStatusMessage,
-  recordingResultBodyCopy,
-  recordingResultPrimaryActionLabel,
-  recordingSimulatedResultCopy,
+  recordingResultDisplayBundle,
   recordingStartedStatusMessage,
   recordingStartFailureStatusMessage,
   recordingStopFailureStatusMessage,
@@ -1736,10 +1733,11 @@ export default function App() {
   const homeCurrentSpeechExample = homeRecordingDisplay.currentExample;
   const homeRecordingPreviewBoundaryDisplayText = homeRecordingPreviewBoundaryCopy();
   const recordPageRecordingPreviewBoundaryDisplayText = recordPageRecordingPreviewBoundaryCopy();
-  const recordingSimulatedResultDisplayText = recordingSimulatedResultCopy(recordingElapsedSeconds);
-  const recordingElapsedSecondsDisplayText = recordingElapsedSecondsCopy(recordingElapsedSeconds);
-  const recordingResultBodyDisplayText = recordingResultBodyCopy(recordingElapsedSeconds);
-  const recordingResultPrimaryActionDisplayText = recordingResultPrimaryActionLabel(recordingElapsedSeconds);
+  const recordingResultDisplay = recordingResultDisplayBundle(recordingElapsedSeconds);
+  const recordingSimulatedResultDisplayText = recordingResultDisplay.simulatedResult;
+  const recordingElapsedSecondsDisplayText = recordingResultDisplay.elapsed;
+  const recordingResultBodyDisplayText = recordingResultDisplay.body;
+  const recordingResultPrimaryActionDisplayText = recordingResultDisplay.primaryAction;
   const storeDisplay = useMemo(
     () =>
       storeDisplayBundle({

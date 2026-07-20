@@ -343,3 +343,12 @@ export function recordingResultPrimaryActionLabel(elapsedSeconds: number) {
   const boundedSeconds = clampNumber(elapsedSeconds, 0, maxMobileCountValue);
   return boundDisplayText(boundedSeconds <= 1 ? "再錄一次" : "使用文字輸入", maxDisplayTextLength);
 }
+
+export function recordingResultDisplayBundle(elapsedSeconds: number) {
+  return {
+    body: recordingResultBodyCopy(elapsedSeconds),
+    elapsed: recordingElapsedSecondsCopy(elapsedSeconds),
+    primaryAction: recordingResultPrimaryActionLabel(elapsedSeconds),
+    simulatedResult: recordingSimulatedResultCopy(elapsedSeconds)
+  };
+}

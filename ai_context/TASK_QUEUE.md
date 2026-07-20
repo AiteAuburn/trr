@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2198: Move recording result display bundle
+
+Status: done
+
+Completed:
+
+- Added the recording result display bundle helper to `recordingCopy.ts`.
+- Removed direct recording result simulated text, elapsed text, body text, and primary action label assembly from `App.tsx`.
+- Kept recording result card copy, elapsed seconds display, re-record/use-text actions, and short-recording fallback behavior unchanged.
+- Updated navigation verifier coverage to require the recording result display bundle, App bundle bindings, and no direct recording result display assembly regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2197: Move home recording display bundle
 
 Status: done
