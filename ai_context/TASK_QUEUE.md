@@ -34,6 +34,38 @@ None.
 
 ## Done
 
+### T2086: Reuse shared checklist for community readiness
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Replaced the community readiness inline `HighlightBulletRow` map with the existing `FutureReadinessChecklist`.
+- Removed community-specific readiness checklist key/text helpers from `App.tsx`.
+- Preserved the same readiness items, section label, bullet row rendering, future preview boundary, community action row, and backend/profile behavior.
+- Updated navigation and visual-smoke verifier coverage for the shared checklist binding and direct inline checklist guards.
+- No UI copy/visibility/navigation/backend/schema/Android signing/STT/LLM/parser/token-storage/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue reducing remaining inline maps in future-only screens, especially ranking and achievement readiness/list clusters.
+
 ### T2085: Extract Home guidance card component
 
 Status: done

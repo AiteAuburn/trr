@@ -1962,7 +1962,7 @@ def main() -> int:
             ("record update highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("manual submit highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("history boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
-            ("community readiness highlight bullet row", "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={communityReadinessChecklistItemText(item)}"),
+            ("community readiness checklist component binding", "<FutureReadinessChecklist items={communityReadinessChecklistItems} />"),
             ("ranking readiness highlight bullet row", "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />"),
             ("future module card requirements highlight bullet row", "futureModuleCardRequirements(item).map((requirement) => (\n              <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />"),
             ("future module detail requirements highlight bullet row", "selectedFutureModuleDisplay.requirements.map((requirement) => (\n                <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />"),
@@ -11902,12 +11902,7 @@ def main() -> int:
             ("community readiness section label helper fields", "return futurePreviewDisplayLabels.formalReadiness;"),
             ("community readiness section label display binding", "const communityReadinessSectionDisplayLabel = communityReadinessSectionLabel();"),
             ("community readiness section label helper binding", "{communityReadinessSectionDisplayLabel}"),
-            ("community readiness checklist item key helper", "function communityReadinessChecklistItemKey(item: string)"),
-            ("community readiness checklist item key helper fields", "return item;"),
-            ("community readiness checklist item key helper binding", "key={communityReadinessChecklistItemKey(item)}"),
-            ("community readiness checklist item text helper", "function communityReadinessChecklistItemText(item: string)"),
-            ("community readiness checklist item text helper fields", "return item;"),
-            ("community readiness checklist item text helper binding", "text={communityReadinessChecklistItemText(item)}"),
+            ("community readiness checklist component binding", "<FutureReadinessChecklist items={communityReadinessChecklistItems} />"),
             ("community return future modules accessibility helper", "function communityReturnFutureModulesAccessibilityLabel()"),
             ("community return future modules accessibility helper fields", "return futurePreviewDisplayLabels.returnFutureModulesAccessibility;"),
             ("community return future modules accessibility display label binding", "const communityReturnFutureModulesAccessibilityDisplayLabel = communityReturnFutureModulesAccessibilityLabel();"),
@@ -15054,6 +15049,11 @@ def main() -> int:
             "community direct readiness checklist item text binding",
             content,
             "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={item}",
+        )
+        _assert_not_contains(
+            "community direct readiness checklist helper binding",
+            content,
+            "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={communityReadinessChecklistItemText(item)}",
         )
         _assert_not_contains(
             "community direct boundary row map",

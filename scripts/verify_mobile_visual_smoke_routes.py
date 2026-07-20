@@ -215,7 +215,7 @@ VISUAL_SMOKE_ROUTES = {
         "visibleFoodCommunityItems.map",
         "rows={foodCommunityShareFieldRows}",
         "rows={foodCommunityPointRows}",
-        "communityReadinessChecklistItems.map",
+        "<FutureReadinessChecklist items={communityReadinessChecklistItems} />",
         "rows={communityBoundaryRows}",
         "onPress={returnFromCommunityPreview}",
     ],

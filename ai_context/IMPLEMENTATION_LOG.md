@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2086 reuse shared checklist for community readiness
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Replaced the community readiness inline `HighlightBulletRow` map with the existing `FutureReadinessChecklist`.
+- Removed community-specific readiness checklist key/text helpers from `App.tsx`.
+- Preserved the same readiness items, section label, bullet row rendering, future preview boundary, community action row, and backend/profile behavior.
+- Updated navigation and visual-smoke verifier coverage for the shared checklist binding and direct inline checklist guards.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue reducing remaining inline maps in future-only screens, especially ranking and achievement readiness/list clusters.
+
 ### T2085 extract Home guidance card component
 
 類型：mobile / refactor / verifier / docs
