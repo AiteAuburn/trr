@@ -61,6 +61,7 @@ ANALYSIS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "analysisScreenData.ts"
 SETTINGS_COPY_PATH = REPO_ROOT / "mobile" / "settingsCopy.ts"
 SETTINGS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "settingsScreenData.ts"
 SETTINGS_CHOICE_DISPLAY_PATH = REPO_ROOT / "mobile" / "settingsChoiceDisplay.ts"
+SETTINGS_STATIC_DISPLAY_BUNDLE_PATH = REPO_ROOT / "mobile" / "settingsStaticDisplayBundle.ts"
 SETTINGS_MODEL_CHOICE_SELECTOR_PATH = REPO_ROOT / "mobile" / "settingsModelChoiceSelector.tsx"
 SETTINGS_PROFILE_CHOICE_SELECTOR_PATH = REPO_ROOT / "mobile" / "settingsProfileChoiceSelector.tsx"
 SESSION_MANAGEMENT_PREVIEW_LIST_PATH = REPO_ROOT / "mobile" / "sessionManagementPreviewList.tsx"
@@ -1486,6 +1487,7 @@ def main() -> int:
     settings_copy_content = SETTINGS_COPY_PATH.read_text(encoding="utf-8")
     settings_screen_data_content = SETTINGS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     settings_choice_display_content = SETTINGS_CHOICE_DISPLAY_PATH.read_text(encoding="utf-8")
+    settings_static_display_bundle_content = SETTINGS_STATIC_DISPLAY_BUNDLE_PATH.read_text(encoding="utf-8")
     settings_model_choice_selector_content = SETTINGS_MODEL_CHOICE_SELECTOR_PATH.read_text(encoding="utf-8")
     settings_profile_choice_selector_content = SETTINGS_PROFILE_CHOICE_SELECTOR_PATH.read_text(encoding="utf-8")
     session_management_preview_list_content = SESSION_MANAGEMENT_PREVIEW_LIST_PATH.read_text(encoding="utf-8")
@@ -3898,7 +3900,7 @@ def main() -> int:
         _assert_contains(
             "tutorial display steps helper binding",
             content,
-            "const tutorialDisplaySteps = useMemo(() => buildTutorialDisplaySteps(), []);",
+            "const tutorialDisplaySteps = settingsStaticDisplay.tutorialSteps;",
         )
         _assert_contains(
             "subscription readiness checklist helper binding",
@@ -3923,22 +3925,22 @@ def main() -> int:
         _assert_contains(
             "privacy control display rows helper binding",
             content,
-            "const privacyControlDisplayRows = useMemo(() => buildPrivacyControlDisplayRows(), []);",
+            "const privacyControlDisplayRows = settingsStaticDisplay.privacyControlRows;",
         )
         _assert_contains(
             "production auth readiness display rows helper binding",
             content,
-            "const productionAuthReadinessDisplayRows = useMemo(\n    () => buildProductionAuthReadinessDisplayRows(),",
+            "const productionAuthReadinessDisplayRows = settingsStaticDisplay.productionAuthReadinessRows;",
         )
         _assert_contains(
             "session management display items helper binding",
             content,
-            "const sessionManagementDisplayItems = useMemo(\n    () => buildSessionManagementDisplayItems(),",
+            "const sessionManagementDisplayItems = settingsStaticDisplay.sessionManagementItems;",
         )
         _assert_contains(
             "auth provider display items helper binding",
             content,
-            "const authProviderDisplayItems = useMemo(() => buildAuthProviderDisplayItems(), []);",
+            "const authProviderDisplayItems = settingsStaticDisplay.authProviderItems;",
         )
         _assert_contains(
             "membership feature display rows helper binding",
@@ -11623,8 +11625,32 @@ def main() -> int:
         _assert_contains(
             "settings display rows helper binding",
             content,
-            "const settingsDisplayRows = useMemo(() => buildSettingsDisplayRows(), []);",
+            "const settingsDisplayRows = settingsStaticDisplay.settingsRows;",
         )
+        for label, marker in (
+            ("settings static display bundle helper", "function settingsStaticDisplayBundle()"),
+            ("settings static display bundle settings rows", "settingsRows: settingsDisplayRows()"),
+            ("settings static display bundle tutorial steps", "tutorialSteps: tutorialDisplaySteps()"),
+            ("settings static display bundle auth provider", "authProviderItems: authProviderDisplayItems()"),
+            ("settings static display bundle session management", "sessionManagementItems: sessionManagementDisplayItems()"),
+            ("settings static display bundle production auth", "productionAuthReadinessRows: productionAuthReadinessDisplayRows()"),
+            ("settings static display bundle privacy", "privacyControlRows: privacyControlDisplayRows()"),
+        ):
+            _assert_contains(label, settings_static_display_bundle_content, marker)
+        for label, marker in (
+            ("settings static display bundle import", "settingsStaticDisplayBundle"),
+            ("settings static display bundle binding", "const settingsStaticDisplay = useMemo(() => settingsStaticDisplayBundle(), []);"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
+            ("direct settings display rows binding", "const settingsDisplayRows = useMemo(() => buildSettingsDisplayRows(), []);"),
+            ("direct tutorial display steps binding", "const tutorialDisplaySteps = useMemo(() => buildTutorialDisplaySteps(), []);"),
+            ("direct auth provider display items binding", "const authProviderDisplayItems = useMemo(() => buildAuthProviderDisplayItems(), []);"),
+            ("direct session management display items binding", "const sessionManagementDisplayItems = useMemo(\n    () => buildSessionManagementDisplayItems(),"),
+            ("direct production auth readiness rows binding", "const productionAuthReadinessDisplayRows = useMemo(\n    () => buildProductionAuthReadinessDisplayRows(),"),
+            ("direct privacy control rows binding", "const privacyControlDisplayRows = useMemo(() => buildPrivacyControlDisplayRows(), []);"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "settings row accessibility item",
             settings_screen_data_content,

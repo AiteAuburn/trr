@@ -841,15 +841,9 @@ import {
   settingsSubpageReturnStatusMessage
 } from "./settingsCopy";
 import {
-  authProviderDisplayItems as buildAuthProviderDisplayItems,
   authProviderPreviewDisplayItem,
   authProviderPreviewTarget,
-  privacyControlDisplayRows as buildPrivacyControlDisplayRows,
-  productionAuthReadinessDisplayRows as buildProductionAuthReadinessDisplayRows,
-  sessionManagementDisplayItems as buildSessionManagementDisplayItems,
-  settingsDisplayRows as buildSettingsDisplayRows,
   settingsRowSubpageTarget,
-  tutorialDisplaySteps as buildTutorialDisplaySteps,
   tutorialStepDescription,
   tutorialStepIcon,
   tutorialStepKey,
@@ -860,6 +854,7 @@ import {
   downloadedWhisperModelDisplayItems,
   settingsChoiceDisplayBundle
 } from "./settingsChoiceDisplay";
+import { settingsStaticDisplayBundle } from "./settingsStaticDisplayBundle";
 import { subscriptionStaticDisplayBundle } from "./subscriptionDisplayBundle";
 import {
   boundVoiceQuota,
@@ -1786,7 +1781,8 @@ export default function App() {
   const foodCommunityRankingRows = foodCommunityDisplay.rankingRows;
   const visibleStoreProducts = storeDisplay.visibleProducts;
   const storeRedemptionBoundaryRows = storeDisplay.redemptionBoundaryRows;
-  const settingsDisplayRows = useMemo(() => buildSettingsDisplayRows(), []);
+  const settingsStaticDisplay = useMemo(() => settingsStaticDisplayBundle(), []);
+  const settingsDisplayRows = settingsStaticDisplay.settingsRows;
   const settingsChoiceDisplay = useMemo(
     () =>
       settingsChoiceDisplayBundle({
@@ -1800,17 +1796,11 @@ export default function App() {
   const profileChoiceDisplayItems = settingsChoiceDisplay.profileChoiceDisplayItems;
   const llmModelChoiceDisplayItems = settingsChoiceDisplay.llmModelChoiceDisplayItems;
   const sttModelChoiceDisplayItems = settingsChoiceDisplay.sttModelChoiceDisplayItems;
-  const tutorialDisplaySteps = useMemo(() => buildTutorialDisplaySteps(), []);
-  const authProviderDisplayItems = useMemo(() => buildAuthProviderDisplayItems(), []);
-  const sessionManagementDisplayItems = useMemo(
-    () => buildSessionManagementDisplayItems(),
-    []
-  );
+  const tutorialDisplaySteps = settingsStaticDisplay.tutorialSteps;
+  const authProviderDisplayItems = settingsStaticDisplay.authProviderItems;
+  const sessionManagementDisplayItems = settingsStaticDisplay.sessionManagementItems;
   const authSessionDisplayItems = settingsChoiceDisplay.authSessionDisplayItems;
-  const productionAuthReadinessDisplayRows = useMemo(
-    () => buildProductionAuthReadinessDisplayRows(),
-    []
-  );
+  const productionAuthReadinessDisplayRows = settingsStaticDisplay.productionAuthReadinessRows;
   const glucoseUnitDisplayOptions = useMemo(() => optionDisplayItems(glucoseUnitOptions), []);
   const glucoseTimingDisplayOptions = useMemo(() => valueLabelDisplayItems(glucoseTimingOptions), []);
   const mealTypeDisplayOptions = useMemo(() => valueLabelDisplayItems(mealTypeOptions), []);
@@ -1839,7 +1829,7 @@ export default function App() {
   const subscriptionManagementDisplayRows = subscriptionStaticDisplay.managementRows;
   const subscriptionManagementReadinessChecklistItems =
     subscriptionStaticDisplay.managementReadinessChecklistItems;
-  const privacyControlDisplayRows = useMemo(() => buildPrivacyControlDisplayRows(), []);
+  const privacyControlDisplayRows = settingsStaticDisplay.privacyControlRows;
   const accountSecurityBoundaryRows = accountSecurityBoundaryDisplayRowsForState({
     account,
     activeProfile,
