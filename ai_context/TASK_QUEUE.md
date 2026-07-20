@@ -34,6 +34,26 @@ None.
 
 ## Done
 
+### T2149: Move Settings choice target helpers
+
+Status: done
+
+Completed:
+
+- Added `settingsProfileChoiceTarget` to `settingsProfileChoiceSelector.tsx`.
+- Added `settingsModelChoiceTarget` to `settingsModelChoiceSelector.tsx`.
+- Removed duplicate Settings profile/model choice target helpers from `App.tsx`.
+- Kept profile, LLM model, and STT model chip selection behavior unchanged.
+- Updated navigation verifier coverage to require the selector-module target helpers and the App press-handler bindings.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2148: Move Recording Whisper selector item helpers
 
 Status: done

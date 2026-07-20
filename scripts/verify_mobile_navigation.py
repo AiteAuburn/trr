@@ -11647,16 +11647,12 @@ def main() -> int:
             ("stt model settings display items helper binding", "const sttModelChoiceDisplayItems = settingsChoiceDisplay.sttModelChoiceDisplayItems;"),
             ("downloaded whisper model display items helper binding", "const downloadedWhisperModelChoiceItems = downloadedWhisperModelDisplayItems(downloadedModels);"),
             ("profile settings option press handler", "function pressSettingsProfileChoice(profile: (typeof profileChoiceDisplayItems)[number])"),
-            ("settings profile choice target helper", "function settingsProfileChoiceTarget(profile: { sourceId: string })"),
-            ("settings profile choice target helper fields", "return profile.sourceId;"),
             ("profile settings target helper binding", "selectSettingsProfileChoice(settingsProfileChoiceTarget(profile));"),
             ("settings profile choice selector binding", "<SettingsProfileChoiceSelector"),
             ("settings profile choice selector active profile binding", "activeProfileId={activeProfileId}"),
             ("settings profile choice selector disabled binding", "disabled={isAnyRequestInFlight}"),
             ("settings profile choice selector items binding", "items={profileChoiceDisplayItems}"),
             ("settings profile choice selector handler binding", "onProfilePress={pressSettingsProfileChoice}"),
-            ("settings model choice target helper", "function settingsModelChoiceTarget(model: { sourceId: string })"),
-            ("settings model choice target helper fields", "return model.sourceId;"),
             ("settings model choice selector binding", "<SettingsModelChoiceSelector"),
             ("settings model choice selector disabled binding", "disabled={isAnyRequestInFlight}"),
             ("settings LLM model choice selector items binding", "items={llmModelChoiceDisplayItems}"),
@@ -12534,6 +12530,8 @@ def main() -> int:
             _assert_contains(label, settings_choice_display_content, marker)
         for label, marker in (
             ("settings profile choice selector component", "export function SettingsProfileChoiceSelector"),
+            ("settings profile choice target helper", "function settingsProfileChoiceTarget(profile: SettingsProfileChoiceItem)"),
+            ("settings profile choice target helper fields", "return profile.sourceId;"),
             ("settings profile choice selector scroll", '<ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false}>'),
             ("settings profile choice selector map", "items.map((profile) => {"),
             ("settings profile choice selector selected binding", "const profileSelected = profile.sourceId === activeProfileId;"),
@@ -12552,6 +12550,8 @@ def main() -> int:
             _assert_contains(label, settings_profile_choice_selector_content, marker)
         for label, marker in (
             ("settings model choice selector component", "export function SettingsModelChoiceSelector"),
+            ("settings model choice target helper", "function settingsModelChoiceTarget(model: SettingsModelChoiceItem)"),
+            ("settings model choice target helper fields", "return model.sourceId;"),
             ("settings model choice selector scroll", '<ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false}>'),
             ("settings model choice selector map", "items.map((model) => {"),
             ("settings model choice selector disabled binding", "const modelDisabled = !model.available || disabled;"),

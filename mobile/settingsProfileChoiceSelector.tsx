@@ -7,6 +7,10 @@ export type SettingsProfileChoiceItem = {
   sourceId: string;
 };
 
+export function settingsProfileChoiceTarget(profile: SettingsProfileChoiceItem) {
+  return profile.sourceId;
+}
+
 type SettingsProfileChoiceSelectorProps = {
   activeProfileId: string;
   disabled: boolean;

@@ -8,6 +8,10 @@ export type SettingsModelChoiceItem = {
   sourceId: string;
 };
 
+export function settingsModelChoiceTarget(model: SettingsModelChoiceItem) {
+  return model.sourceId;
+}
+
 type SettingsModelChoiceSelectorProps<Item extends SettingsModelChoiceItem> = {
   disabled: boolean;
   items: Item[];

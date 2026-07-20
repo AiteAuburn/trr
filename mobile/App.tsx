@@ -878,8 +878,14 @@ import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFi
 import { FoodCommunityShareTextFields } from "./foodCommunityShareTextFields";
 import { FutureModuleCardList } from "./futureModuleCardList";
 import { SegmentSelector } from "./segmentSelector";
-import { SettingsModelChoiceSelector } from "./settingsModelChoiceSelector";
-import { SettingsProfileChoiceSelector } from "./settingsProfileChoiceSelector";
+import {
+  SettingsModelChoiceSelector,
+  settingsModelChoiceTarget
+} from "./settingsModelChoiceSelector";
+import {
+  SettingsProfileChoiceSelector,
+  settingsProfileChoiceTarget
+} from "./settingsProfileChoiceSelector";
 import { SettingsSubpageActionRow } from "./settingsSubpageActionRow";
 import { SettingsSubpageCloseButton } from "./settingsSubpageCloseButton";
 import { SessionManagementPreviewList } from "./sessionManagementPreviewList";
@@ -4484,20 +4490,12 @@ export default function App() {
     selectActiveProfileFromSettings(profileId);
   }
 
-  function settingsProfileChoiceTarget(profile: { sourceId: string }) {
-    return profile.sourceId;
-  }
-
   function pressSettingsProfileChoice(profile: (typeof profileChoiceDisplayItems)[number]) {
     selectSettingsProfileChoice(settingsProfileChoiceTarget(profile));
   }
 
   function selectSettingsLlmModelChoice(modelId: string) {
     selectLlmModelFromSettings(modelId);
-  }
-
-  function settingsModelChoiceTarget(model: { sourceId: string }) {
-    return model.sourceId;
   }
 
   function pressSettingsLlmModelChoice(model: (typeof llmModelChoiceDisplayItems)[number]) {
