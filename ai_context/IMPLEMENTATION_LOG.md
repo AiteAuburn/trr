@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2095 move selected record update replacement helper
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordBounds.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `recordsListWithUpdatedRecord` to `recordBounds.ts`.
+- Replaced the inline selected-record update replacement map in `App.tsx`.
+- Kept record update request, backend PATCH endpoint, selected-result routing, update success summary, and status handling in `App.tsx`.
+- Updated navigation verifier coverage to require the bounded helper in `recordBounds.ts` and reject reintroducing the inline replacement map in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting pure data/state helper boundaries while leaving request and screen flow orchestration in `App.tsx`.
+
 ### T2094 move preview edit record replacement transform
 
 類型：mobile / refactor / verifier / docs

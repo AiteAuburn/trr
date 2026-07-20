@@ -105,6 +105,7 @@ import {
   boundRecordItem,
   boundRecordsList,
   mergeRecordsByCursorOrder,
+  recordsListWithUpdatedRecord,
   type ParsePreviewResponse,
   type PendingRecord,
   type RecordItem
@@ -7562,7 +7563,7 @@ export default function App() {
   }
 
   function handleSelectedRecordUpdateSuccess(updated: RecordItem) {
-    setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));
+    setRecords((current) => recordsListWithUpdatedRecord(current, updated));
     selectRecordForResult(updated);
     openUpdateSuccessResult(recordUpdateSummaryMessage(1));
     setStatus(recordUpdateSuccessStatusMessage());

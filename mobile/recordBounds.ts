@@ -226,6 +226,10 @@ export function boundRecordsList(value: RecordItem[], limit = maxMobileRecordCac
   return value.slice(0, limit).map(boundRecordItem);
 }
 
+export function recordsListWithUpdatedRecord(current: RecordItem[], updated: RecordItem) {
+  return boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record)));
+}
+
 function boundPendingRecord(value: PendingRecord): PendingRecord {
   return {
     ...value,

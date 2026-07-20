@@ -5729,7 +5729,7 @@ def main() -> int:
         _assert_contains(
             "record update result selected record helper state",
             content,
-            "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n    selectRecordForResult(updated);",
+            "setRecords((current) => recordsListWithUpdatedRecord(current, updated));\n    selectRecordForResult(updated);",
         )
         _assert_contains(
             "record update request helper",
@@ -5764,7 +5764,7 @@ def main() -> int:
         _assert_contains(
             "record update success helper state",
             content,
-            "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n    selectRecordForResult(updated);\n    openUpdateSuccessResult(recordUpdateSummaryMessage(1));\n    setStatus(recordUpdateSuccessStatusMessage());",
+            "setRecords((current) => recordsListWithUpdatedRecord(current, updated));\n    selectRecordForResult(updated);\n    openUpdateSuccessResult(recordUpdateSummaryMessage(1));\n    setStatus(recordUpdateSuccessStatusMessage());",
         )
         _assert_contains(
             "record update success helper binding",
@@ -6194,7 +6194,7 @@ def main() -> int:
         _assert_contains(
             "record update success result helper state",
             content,
-            "setRecords((current) => boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record))));\n    selectRecordForResult(updated);\n    openUpdateSuccessResult(recordUpdateSummaryMessage(1));",
+            "setRecords((current) => recordsListWithUpdatedRecord(current, updated));\n    selectRecordForResult(updated);\n    openUpdateSuccessResult(recordUpdateSummaryMessage(1));",
         )
         _assert_contains(
             "record update start helper",
@@ -8567,6 +8567,7 @@ def main() -> int:
             ("inline preview edited records helper", "function previewRecordsWithEditedRecord("),
             ("inline preview edit target index helper", "function isPreviewRecordEditTargetIndex(recordIndex: number, editIndex: number)"),
             ("inline preview edit payload helper", "function previewRecordWithEditPayload("),
+            ("inline selected record update replacement map", "current.map((record) => (record.id === updated.id ? updated : record))"),
         ):
             _assert_not_contains(label, content, marker)
         _assert_not_contains(
@@ -9310,6 +9311,8 @@ def main() -> int:
             ("record glucose value clamp", 'if (recordType === "glucose" && typeof result.value === "number")'),
             ("record exercise minutes clamp", 'if (recordType === "exercise" && typeof result.minutes === "number")'),
             ("record item payload boundary", "payload_json: boundRecordPayload(recordType, value.payload_json)"),
+            ("record list update helper", "function recordsListWithUpdatedRecord(current: RecordItem[], updated: RecordItem)"),
+            ("record list update helper bounded result", "return boundRecordsList(current.map((record) => (record.id === updated.id ? updated : record)));"),
         ):
             _assert_contains(label, record_bounds_content, marker)
         _assert_contains(
