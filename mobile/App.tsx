@@ -837,7 +837,10 @@ import { ManualRecordHeaderIntro } from "./manualRecordHeaderIntro";
 import { ManualRecordMealFields } from "./manualRecordMealFields";
 import { ManualRecordMedicationFields } from "./manualRecordMedicationFields";
 import { ManualRecordNoteFields } from "./manualRecordNoteFields";
-import { ManualRecordTypeSelector } from "./manualRecordTypeSelector";
+import {
+  ManualRecordTypeSelector,
+  manualRecordTypeTarget
+} from "./manualRecordTypeSelector";
 import { MenuDestinationGrid } from "./menuDestinationGrid";
 import { MembershipFeatureList } from "./membershipFeatureList";
 import { MetricGrid } from "./metricGrid";
@@ -2493,10 +2496,6 @@ export default function App() {
 
   function selectManualRecordType(type: ManualRecordType) {
     setManualRecordType(type);
-  }
-
-  function manualRecordTypeTarget(type: (typeof manualRecordTypeDisplayOptions)[number]) {
-    return editOptionKey(type);
   }
 
   function pressManualRecordTypeOption(type: (typeof manualRecordTypeDisplayOptions)[number]) {

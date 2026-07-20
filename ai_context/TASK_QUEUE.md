@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2151: Move manual record type target helper
+
+Status: done
+
+Completed:
+
+- Exported `ManualRecordTypeOption` and `manualRecordTypeTarget` from `manualRecordTypeSelector.tsx`.
+- Removed the duplicate manual-record type target helper from `App.tsx`.
+- Kept manual-record type chip selection behavior unchanged and preserved the option value type through the selector helper.
+- Updated navigation verifier coverage to require the selector-module target helper and the App press-handler binding.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2150: Move record edit option target helpers
 
 Status: done

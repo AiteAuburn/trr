@@ -2288,6 +2288,8 @@ def main() -> int:
             ("manual record type selector options map", "options.map((type) => {"),
             ("manual record type selector key helper", "function manualRecordTypeOptionKey(type: ManualRecordTypeOption)"),
             ("manual record type selector key helper fields", "return type.value;"),
+            ("manual record type target helper", "function manualRecordTypeTarget<T extends ManualRecordTypeOption>(type: T): T[\"value\"]"),
+            ("manual record type target helper fields", "return type.value;"),
             ("manual record type selector accessibility helper", "function manualRecordTypeOptionAccessibilityLabel(type: ManualRecordTypeOption)"),
             ("manual record type selector accessibility helper fields", "return type.accessibilityLabel;"),
             ("manual record type selector label helper", "function manualRecordTypeOptionLabel(type: ManualRecordTypeOption)"),
@@ -9897,16 +9899,6 @@ def main() -> int:
             "manual record type option press handler",
             content,
             "function pressManualRecordTypeOption(type: (typeof manualRecordTypeDisplayOptions)[number])",
-        )
-        _assert_contains(
-            "manual record type target helper",
-            content,
-            "function manualRecordTypeTarget(type: (typeof manualRecordTypeDisplayOptions)[number])",
-        )
-        _assert_contains(
-            "manual record type target helper fields",
-            content,
-            "return editOptionKey(type);",
         )
         _assert_contains(
             "manual record type target helper binding",

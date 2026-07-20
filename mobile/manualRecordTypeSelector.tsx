@@ -1,9 +1,9 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-type ManualRecordTypeOption = {
+export type ManualRecordTypeOption<T extends string = string> = {
   accessibilityLabel: string;
   label: string;
-  value: string;
+  value: T;
 };
 
 type ManualRecordTypeSelectorProps<T extends ManualRecordTypeOption> = {
@@ -13,6 +13,10 @@ type ManualRecordTypeSelectorProps<T extends ManualRecordTypeOption> = {
 };
 
 function manualRecordTypeOptionKey(type: ManualRecordTypeOption) {
+  return type.value;
+}
+
+export function manualRecordTypeTarget<T extends ManualRecordTypeOption>(type: T): T["value"] {
   return type.value;
 }
 
