@@ -78,6 +78,7 @@ AUTH_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "authStatusCopy.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
+ACHIEVEMENT_CATEGORY_SECTION_LIST_PATH = REPO_ROOT / "mobile" / "achievementCategorySectionList.tsx"
 AI_CANDIDATE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiCandidateActionRow.tsx"
 AI_CANDIDATE_LIST_PATH = REPO_ROOT / "mobile" / "aiCandidateList.tsx"
 AI_REVIEW_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiReviewActionRow.tsx"
@@ -1492,6 +1493,7 @@ def main() -> int:
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
+    achievement_category_section_list_content = ACHIEVEMENT_CATEGORY_SECTION_LIST_PATH.read_text(encoding="utf-8")
     ai_candidate_action_row_content = AI_CANDIDATE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     ai_candidate_list_content = AI_CANDIDATE_LIST_PATH.read_text(encoding="utf-8")
     ai_review_action_row_content = AI_REVIEW_ACTION_ROW_PATH.read_text(encoding="utf-8")
@@ -13414,31 +13416,44 @@ def main() -> int:
             ("achievement save-success unlocked card key binding", 'achievementUnlockedCardKey("save-success-new-unlock", displayItem)'),
             ("achievement newly unlocked card key binding", 'achievementUnlockedCardKey("new-unlock", displayItem)'),
             ("achievement unlocked card key binding", 'achievementUnlockedCardKey("unlock", displayItem)'),
-            ("achievement progress card key helper", "function achievementProgressCardKey(displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement category section list component binding", "<AchievementCategorySectionList sections={achievementCategoryDisplaySections} />"),
+            ("achievement category section list component", "export function AchievementCategorySectionList"),
+            ("achievement category section list item type", "export type AchievementCategoryDisplaySectionListItem ="),
+            ("achievement category section list sections prop", "sections: readonly AchievementCategoryDisplaySectionListItem[]"),
+            ("achievement category section renderer", "sections.map((section) => ("),
+            ("achievement progress card key helper", "function achievementProgressCardKey(displayItem: AchievementDisplayItem)"),
             ("achievement progress card key helper binding", "key={achievementProgressCardKey(displayItem)}"),
-            ("achievement progress card accessibility helper", "function achievementProgressCardAccessibilityLabel(displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement progress card accessibility helper", "function achievementProgressCardAccessibilityLabel(displayItem: AchievementDisplayItem)"),
             ("achievement progress card accessibility helper binding", "accessibilityLabel={achievementProgressCardAccessibilityLabel(displayItem)}"),
-            ("achievement progress card unlocked helper", "function achievementProgressCardIsUnlocked(displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement progress card unlocked helper", "function achievementProgressCardIsUnlocked(displayItem: AchievementDisplayItem)"),
             ("achievement progress card unlocked helper fields", "return displayItem.progress >= displayItem.target;"),
-            ("achievement progress card ratio helper", "function achievementProgressCardRatio(displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement progress card ratio helper", "function achievementProgressCardRatio(displayItem: AchievementDisplayItem)"),
             ("achievement progress card ratio helper fields", "return Math.min(1, displayItem.progress / displayItem.target);"),
-            ("achievement progress card style helper", "function achievementProgressCardStyle(displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement progress card style helper", "function achievementProgressCardStyle(displayItem: AchievementDisplayItem)"),
             ("achievement progress card style helper binding", "style={achievementProgressCardStyle(displayItem)}"),
-            ("achievement progress card status style helper", "function achievementProgressCardStatusStyle(displayItem: (typeof achievementDisplayItems)[number])"),
-            ("achievement progress card status text helper", "function achievementProgressCardStatusText(displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement progress card status style helper", "function achievementProgressCardStatusStyle(displayItem: AchievementDisplayItem)"),
+            ("achievement progress card status text helper", "function achievementProgressCardStatusText(displayItem: AchievementDisplayItem)"),
             ("achievement progress card status binding", "{achievementProgressCardStatusText(displayItem)}"),
-            ("achievement progress card detail helper", "function achievementProgressCardDetail(displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement progress card detail helper", "function achievementProgressCardDetail(displayItem: AchievementDisplayItem)"),
             ("achievement progress card detail helper fields", "return `${displayItem.kindLabel} · ${displayItem.description}`;"),
             ("achievement progress card detail helper binding", "{achievementProgressCardDetail(displayItem)}"),
-            ("achievement progress card fill style helper", "function achievementProgressCardFillStyle(displayItem: (typeof achievementDisplayItems)[number])"),
+            ("achievement progress card fill style helper", "function achievementProgressCardFillStyle(displayItem: AchievementDisplayItem)"),
             ("achievement progress card fill style helper binding", "style={achievementProgressCardFillStyle(displayItem)}"),
-            ("achievement category section key helper", "function achievementCategorySectionKey(section: (typeof achievementCategoryDisplaySections)[number])"),
+            ("achievement progress card badge style helper", "function achievementProgressCardBadgeStyle(displayItem: AchievementDisplayItem)"),
+            ("achievement progress card badge style binding", "style={achievementProgressCardBadgeStyle(displayItem)}"),
+            ("achievement progress card icon helper", "function achievementProgressCardIcon(displayItem: AchievementDisplayItem)"),
+            ("achievement progress card icon binding", "{achievementProgressCardIcon(displayItem)}"),
+            ("achievement progress card level helper", "function achievementProgressCardLevel(displayItem: AchievementDisplayItem)"),
+            ("achievement progress card level binding", "{achievementProgressCardLevel(displayItem)}"),
+            ("achievement progress card title helper", "function achievementProgressCardTitle(displayItem: AchievementDisplayItem)"),
+            ("achievement progress card title binding", "{achievementProgressCardTitle(displayItem)}"),
+            ("achievement category section key helper", "function achievementCategorySectionKey(section: AchievementCategoryDisplaySectionListItem)"),
             ("achievement category section key helper fields", "return section.key;"),
             ("achievement category section key binding", "key={achievementCategorySectionKey(section)}"),
-            ("achievement category section label helper", "function achievementCategorySectionLabel(section: (typeof achievementCategoryDisplaySections)[number])"),
+            ("achievement category section label helper", "function achievementCategorySectionLabel(section: AchievementCategoryDisplaySectionListItem)"),
             ("achievement category section label helper fields", "return section.label;"),
             ("achievement category section label binding", "{achievementCategorySectionLabel(section)}"),
-            ("achievement category section items helper", "function achievementCategorySectionItems(section: (typeof achievementCategoryDisplaySections)[number])"),
+            ("achievement category section items helper", "function achievementCategorySectionItems(section: AchievementCategoryDisplaySectionListItem)"),
             ("achievement category section items helper fields", "return section.items;"),
             ("achievement category section items binding", "achievementCategorySectionItems(section).map((displayItem) => {"),
             ("achievement unlocked history endpoint", "`/achievements/unlocks?${query.toString()}`"),
@@ -13455,7 +13470,7 @@ def main() -> int:
             ("achievement AI save success sync", "setStatus(aiSaveSuccessStatusMessage());\n    syncAchievementsAfterRecordSave();"),
             ("achievement AI daily save transactional response", "const saveResponse = await requestDailyRecordSave(saveContext.account.id, saveContext.preview, recordsToSave);"),
             ("achievement manual create sync", "setStatus(manualRecordCreateSuccessStatusMessage());\n    syncAchievementsAfterRecordSave();"),
-            ("achievement category sections", "achievementCategoryDisplaySections.map"),
+            ("achievement category sections", "<AchievementCategorySectionList sections={achievementCategoryDisplaySections} />"),
             ("achievement section item render", "achievementCategorySectionItems(section).map"),
             ("achievement streak style", "displayItem.kind === \"streak\" ? styles.achievementBadgeStreak : null"),
             ("achievement badge level render", "{achievementUnlockedCardLevel(displayItem)}"),
@@ -13547,7 +13562,24 @@ def main() -> int:
             ("future commerce secondary CTA button role", 'accessibilityRole="button"\n              style={styles.secondaryButton}'),
             ("future commerce action row CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
-            _assert_contains(label, content, marker)
+            source = (
+                achievement_category_section_list_content
+                if (
+                    label.startswith("achievement progress")
+                    or label.startswith("achievement category section key")
+                    or label.startswith("achievement category section label")
+                    or label.startswith("achievement category section items")
+                    or label.startswith("achievement category section list")
+                    or label == "achievement category section renderer"
+                    or label == "achievement section item render"
+                    or label == "achievement streak style"
+                    or label == "achievement accessibility binding"
+                    or label == "achievement progress ratio bounded"
+                )
+                and label != "achievement category section list component binding"
+                else content
+            )
+            _assert_contains(label, source, marker)
         for label, marker in (
             ("year review highlight list component", "export function YearlyHighlightList"),
             ("year review highlight list items prop", "items: readonly string[]"),
@@ -15316,7 +15348,7 @@ def main() -> int:
             ):
                 _assert_not_contains(f"{block_label} {label}", achievement_unlocked_card_render_block, marker)
         achievement_progress_card_render_block = _match_block(
-            content,
+            achievement_category_section_list_content,
             r"achievementCategorySectionItems\(section\)\.map\(\(displayItem\) => \{([\s\S]*?achievementProgressCardFillStyle\(displayItem\)[\s\S]*?</View>)",
             "achievement progress card render block",
         )
@@ -15335,9 +15367,14 @@ def main() -> int:
             ("direct achievement progress description binding", "displayItem.description"),
         ):
             _assert_not_contains(label, achievement_progress_card_render_block, marker)
-        achievement_category_section_render_block = _match_block(
+        _assert_not_contains(
+            "direct achievement category section map in App",
             content,
-            r"achievementCategoryDisplaySections\.map\(\(section\) => \(([\s\S]*?achievementCategorySectionItems\(section\)[\s\S]*?</View>\n\s*)\)\)",
+            "achievementCategoryDisplaySections.map((section) =>",
+        )
+        achievement_category_section_render_block = _match_block(
+            achievement_category_section_list_content,
+            r"sections\.map\(\(section\) => \(([\s\S]*?achievementCategorySectionItems\(section\)[\s\S]*?</View>\n\s*)\)\)",
             "achievement category section render block",
         )
         for label, marker in (
@@ -15387,7 +15424,7 @@ def main() -> int:
             product_card_block,
             'backgroundColor: "#FFFFFF"',
         )
-        achievement_card_block = _style_block(content, "achievementCard")
+        achievement_card_block = _style_block(achievement_category_section_list_content, "achievementCard")
         _assert_contains(
             "achievement card wrapping",
             achievement_card_block,

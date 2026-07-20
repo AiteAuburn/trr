@@ -142,7 +142,6 @@ import {
   achievementLocalComputationCopy,
   achievementNextBadgeCopy,
   achievementPreviewBoundaryCopy,
-  achievementStreakBadgeColor,
   achievementSyncStatusMessages,
   achievementUnlockDisplayDate,
   backendYearReviewHealthOutcomeDisplayRows,
@@ -758,6 +757,7 @@ import {
 } from "./authTransforms";
 import { protectedRequestHeaders } from "./authRequestHeaders";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
+import { AchievementCategorySectionList } from "./achievementCategorySectionList";
 import { AiCandidateList } from "./aiCandidateList";
 import { AiFlowChecklist } from "./aiFlowChecklist";
 import { AiReviewActionRow } from "./aiReviewActionRow";
@@ -5340,58 +5340,6 @@ export default function App() {
 
   function achievementUnlockedCardDetail(displayItem: (typeof achievementDisplayItems)[number]) {
     return `${displayItem.kindLabel} · ${achievementUnlockDisplayDate(displayItem.unlockedAt)}`;
-  }
-
-  function achievementProgressCardKey(displayItem: (typeof achievementDisplayItems)[number]) {
-    return displayItem.id;
-  }
-
-  function achievementProgressCardAccessibilityLabel(displayItem: (typeof achievementDisplayItems)[number]) {
-    return displayItem.accessibilityLabel;
-  }
-
-  function achievementProgressCardIsUnlocked(displayItem: (typeof achievementDisplayItems)[number]) {
-    return displayItem.progress >= displayItem.target;
-  }
-
-  function achievementProgressCardRatio(displayItem: (typeof achievementDisplayItems)[number]) {
-    return Math.min(1, displayItem.progress / displayItem.target);
-  }
-
-  function achievementProgressCardStyle(displayItem: (typeof achievementDisplayItems)[number]) {
-    return [styles.achievementCard, achievementProgressCardIsUnlocked(displayItem) ? styles.achievementUnlocked : null];
-  }
-
-  function achievementProgressCardStatusStyle(displayItem: (typeof achievementDisplayItems)[number]) {
-    return achievementProgressCardIsUnlocked(displayItem) ? styles.recordType : styles.confidence;
-  }
-
-  function achievementProgressCardStatusText(displayItem: (typeof achievementDisplayItems)[number]) {
-    return achievementProgressCardIsUnlocked(displayItem) ? "完成" : displayItem.progressLabel;
-  }
-
-  function achievementProgressCardDetail(displayItem: (typeof achievementDisplayItems)[number]) {
-    return `${displayItem.kindLabel} · ${displayItem.description}`;
-  }
-
-  function achievementProgressCardFillStyle(displayItem: (typeof achievementDisplayItems)[number]) {
-    return [
-      styles.achievementProgressFill,
-      displayItem.kind === "streak" ? styles.achievementProgressFillStreak : null,
-      { width: `${Math.round(achievementProgressCardRatio(displayItem) * 100)}%` as const }
-    ];
-  }
-
-  function achievementCategorySectionKey(section: (typeof achievementCategoryDisplaySections)[number]) {
-    return section.key;
-  }
-
-  function achievementCategorySectionLabel(section: (typeof achievementCategoryDisplaySections)[number]) {
-    return section.label;
-  }
-
-  function achievementCategorySectionItems(section: (typeof achievementCategoryDisplaySections)[number]) {
-    return section.items;
   }
 
   function selectFoodCommunityCategory(category: FoodCommunityCategory) {
@@ -11510,35 +11458,7 @@ export default function App() {
                 ))}
               </View>
             ) : null}
-            {achievementCategoryDisplaySections.map((section) => (
-              <View key={achievementCategorySectionKey(section)} style={styles.openSection}>
-                <Text style={styles.label}>{achievementCategorySectionLabel(section)}</Text>
-                {achievementCategorySectionItems(section).map((displayItem) => {
-                  return (
-                    <View
-                      key={achievementProgressCardKey(displayItem)}
-                      accessibilityLabel={achievementProgressCardAccessibilityLabel(displayItem)}
-                      style={achievementProgressCardStyle(displayItem)}
-                    >
-                      <View style={achievementUnlockedCardBadgeStyle(displayItem)}>
-                        <Text style={styles.achievementBadgeIcon}>{achievementUnlockedCardIcon(displayItem)}</Text>
-                        <Text style={styles.achievementBadgeLevel}>{achievementUnlockedCardLevel(displayItem)}</Text>
-                      </View>
-                      <View style={styles.timelineContent}>
-                        <View style={styles.sectionHeader}>
-                          <Text style={styles.recordContent}>{achievementUnlockedCardTitle(displayItem)}</Text>
-                          <Text style={achievementProgressCardStatusStyle(displayItem)}>{achievementProgressCardStatusText(displayItem)}</Text>
-                        </View>
-                        <Text style={styles.evidence}>{achievementProgressCardDetail(displayItem)}</Text>
-                        <View style={styles.achievementProgressTrack}>
-                          <View style={achievementProgressCardFillStyle(displayItem)} />
-                        </View>
-                      </View>
-                    </View>
-                  );
-                })}
-              </View>
-            ))}
+            <AchievementCategorySectionList sections={achievementCategoryDisplaySections} />
             <Text style={styles.evidence}>{achievementLocalComputationDisplayText}</Text>
             <Pressable
               accessibilityLabel={achievementIntegrationAccessibilityDisplayLabel}
@@ -13131,21 +13051,6 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     lineHeight: 36
   },
-  achievementCard: {
-    alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
-    borderRadius: 24,
-    borderWidth: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 14,
-    padding: 16
-  },
-  achievementUnlocked: {
-    borderColor: "#9EDBC4",
-    backgroundColor: "#F7FCFA"
-  },
   openSection: {
     gap: 10
   },
@@ -13172,21 +13077,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "900",
     lineHeight: 20
-  },
-  achievementProgressTrack: {
-    backgroundColor: "#EAF6F1",
-    borderRadius: 999,
-    height: 8,
-    marginTop: 8,
-    overflow: "hidden"
-  },
-  achievementProgressFill: {
-    backgroundColor: "#3FA67F",
-    borderRadius: 999,
-    height: 8
-  },
-  achievementProgressFillStreak: {
-    backgroundColor: achievementStreakBadgeColor
   },
   yearBadgeRow: {
     alignItems: "flex-start",

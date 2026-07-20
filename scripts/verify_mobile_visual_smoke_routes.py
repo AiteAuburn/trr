@@ -230,7 +230,7 @@ VISUAL_SMOKE_ROUTES = {
         'currentScreen === "achievements"',
         "成就榜",
         "achievementNewlyUnlockedDisplayItems",
-        "achievementCategoryDisplaySections.map",
+        "<AchievementCategorySectionList sections={achievementCategoryDisplaySections} />",
         "achievementUnlockedCardLevel(displayItem)",
         "achievementsReturnButtonDisplayLabel",
         "onPress={returnFromAchievements}",

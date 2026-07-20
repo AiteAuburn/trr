@@ -34,6 +34,41 @@ None.
 
 ## Done
 
+### T2089: Extract achievement category section list component
+
+Status: done
+
+Files:
+
+- `mobile/App.tsx`
+- `mobile/achievementCategorySectionList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+Summary:
+
+- Added `AchievementCategorySectionList` for achievement category sections and progress cards.
+- Moved achievement category section helpers, progress-card key/accessibility/status/detail/fill helpers, and progress-card styles out of `App.tsx`.
+- Preserved the same category order, section labels, badge icon/level rendering, unlocked styling, progress status, progress bar fill, local preview copy, action button, and return behavior.
+- Kept achievement sync state, backend summary/unlock requests, post-save achievement sync, newly-unlocked cards, saved-unlock cards, and navigation in `App.tsx`.
+- Updated navigation, UI-spec, and visual-smoke verifier coverage for the component binding, helper markers, progress-card guards, and direct inline category map guard.
+- No UI copy/visibility/navigation/backend/schema/Android signing/STT/LLM/parser/token-storage/PHI/raw transcript/raw model output/secret changes.
+
+Verification:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+Follow-up:
+
+- Continue with the remaining food community list/detail render cluster after checking selection and detail-sync callback boundaries.
+
 ### T2088: Extract ranking leaderboard list component
 
 Status: done

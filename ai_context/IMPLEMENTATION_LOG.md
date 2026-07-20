@@ -15,6 +15,41 @@
 
 ## 2026-07-16
 
+### T2089 extract achievement category section list component
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/achievementCategorySectionList.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `AchievementCategorySectionList` for achievement category sections and progress cards.
+- Moved achievement category section helpers, progress-card key/accessibility/status/detail/fill helpers, and progress-card styles out of `App.tsx`.
+- Preserved the same category order, section labels, badge icon/level rendering, unlocked styling, progress status, progress bar fill, local preview copy, action button, and return behavior.
+- Kept achievement sync state, backend summary/unlock requests, post-save achievement sync, newly-unlocked cards, saved-unlock cards, and navigation in `App.tsx`.
+- Updated navigation, UI-spec, and visual-smoke verifier coverage for the component binding, helper markers, progress-card guards, and direct inline category map guard.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue with the remaining food community list/detail render cluster after checking selection and detail-sync callback boundaries.
+
 ### T2088 extract ranking leaderboard list component
 
 類型：mobile / refactor / verifier / docs
