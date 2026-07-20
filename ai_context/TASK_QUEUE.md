@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2143: Move native downloaded-models failure state helper
+
+Status: done
+
+Completed:
+
+- Added `nativeDownloadedModelsFailureState` to `nativeStatusCopy.ts`.
+- Replaced direct downloaded-models native failure status setup in `App.tsx` with the state helper result.
+- Kept downloaded-model refresh behavior, optional user-facing status update, model count status, and refresh failure handling in `App.tsx`.
+- Updated navigation verifier coverage to require the native status helper and App binding.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2142: Move native debug unavailable state helper
 
 Status: done

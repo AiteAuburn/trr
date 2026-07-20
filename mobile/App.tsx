@@ -487,7 +487,7 @@ import {
   nativeBenchmarkStartState,
   nativeDebugDefaultStatusMessage,
   nativeDebugUnavailableState,
-  nativeDownloadedModelsFailureStatusMessage,
+  nativeDownloadedModelsFailureState,
   nativeLlamaFailureState,
   nativeLlamaMissingInputState,
   nativeLlamaOutputSummaryMessage,
@@ -7847,7 +7847,8 @@ export default function App() {
   }
 
   function handleDownloadedModelsRefreshFailure(error: unknown, showStatus: boolean) {
-    setNativeStatus(nativeDownloadedModelsFailureStatusMessage(error));
+    const nextState = nativeDownloadedModelsFailureState(error);
+    setNativeStatus(nextState.status);
     if (showStatus) {
       setStatus(recordingModelRefreshFailureStatusMessage(error));
     }

@@ -46,6 +46,12 @@ export function nativeDownloadedModelsFailureStatusMessage(error: unknown) {
   return safeUiError(error, "讀取模型清單失敗");
 }
 
+export function nativeDownloadedModelsFailureState(error: unknown) {
+  return {
+    status: nativeDownloadedModelsFailureStatusMessage(error)
+  };
+}
+
 export function nativeModelDownloadProgressStatusMessage() {
   return boundUiMessage("下載模型中...");
 }
