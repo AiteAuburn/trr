@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2202: Move future preview boundary display bundle
+
+Status: done
+
+Completed:
+
+- Added the future preview boundary display bundle helper to `futureModuleDisplay.ts`.
+- Removed direct doctor share, health integration, community, ranking, reminder, and privacy preview boundary item assembly from `App.tsx`.
+- Kept future module, doctor share, health integration, community, ranking, reminder, and privacy boundary copy render bindings unchanged.
+- Updated navigation verifier coverage to require the future preview boundary display bundle, App bundle bindings, and no direct future preview boundary item assembly regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2201: Move record form static display bundle
 
 Status: done

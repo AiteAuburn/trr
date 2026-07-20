@@ -191,9 +191,7 @@ import {
   backendYearReviewMetricDisplayRows,
   buildAchievementCategoryDisplaySections,
   communityPublicNameBoundaryCopy,
-  communityPreviewBoundaryDisplayItem,
   doctorShareBackendBoundaryCopy,
-  doctorSharePreviewBoundaryDisplayItem,
   foodPhotoEmptyResultChecklistDisplayItems,
   foodPhotoIntegrationButtonAccessibilityLabel,
   foodPhotoIntegrationButtonLabel,
@@ -286,6 +284,7 @@ import {
   futureModuleRequirementText,
   futureModulesOpenStatusMessage,
   futureModulesReturnMenuStatusMessage,
+  futurePreviewBoundaryDisplayBundle,
   futurePreviewBoundaryBadgeLabel,
   futurePreviewBoundaryCopyText,
   futurePreviewCloseAccessibilityLabel,
@@ -297,12 +296,10 @@ import {
   futurePreviewStatusDisplayTexts,
   healthIntegrationBoundaryDisplayRows,
   healthIntegrationExternalDataBoundaryCopy,
-  healthIntegrationPreviewBoundaryDisplayItem,
   healthIntegrationReadinessChecklistDisplayItems,
   achievementYearReviewStatusDisplayTexts,
   limitedAchievementDisplayItems,
   localAchievementItemsForRecords,
-  privacyPreviewBoundaryDisplayItem,
   rankingActionStatusLabel,
   rankingActionStatusText,
   rankingActionStatusVisible,
@@ -313,14 +310,12 @@ import {
   rankingLocalPreviewBoundaryCopy,
   rankingOptInActionAccessibilityLabel,
   rankingOptInActionButtonLabel,
-  rankingPreviewBoundaryDisplayItem,
   rankingPublicActionAccessibilityLabel,
   rankingPublicActionButtonLabel,
   rankingReadinessChecklistDisplayItems,
   rankingScreenSubtitleCopy,
   rankingScreenTitleLabel,
   rankingStreakDisplayText,
-  reminderPreviewBoundaryDisplayItem,
   selectedFutureModuleDisplayItem,
   localYearlyHealthOutcomeDisplayRows,
   localYearlyHighlightDisplayItems,
@@ -1682,13 +1677,14 @@ export default function App() {
   const yearReviewActionStatusDisplayText = achievementYearReviewStatusDisplay.yearReviewAction;
   const yearReviewShareStatusMessage = yearReviewShareUnavailableStatusMessage();
   const yearReviewBoundaryDisplayText = yearReviewBoundaryDisplayCopy();
-  const doctorSharePreviewBoundaryDisplay = doctorSharePreviewBoundaryDisplayItem();
+  const futurePreviewBoundaryDisplay = futurePreviewBoundaryDisplayBundle();
+  const doctorSharePreviewBoundaryDisplay = futurePreviewBoundaryDisplay.doctorShare;
   const doctorShareBackendBoundaryDisplayText = doctorShareBackendBoundaryCopy();
-  const healthIntegrationPreviewBoundaryDisplay = healthIntegrationPreviewBoundaryDisplayItem();
+  const healthIntegrationPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.healthIntegration;
   const healthIntegrationExternalDataBoundaryDisplayText = healthIntegrationExternalDataBoundaryCopy();
-  const communityPreviewBoundaryDisplay = communityPreviewBoundaryDisplayItem();
+  const communityPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.community;
   const communityPublicNameBoundaryDisplayText = communityPublicNameBoundaryCopy();
-  const rankingPreviewBoundaryDisplay = rankingPreviewBoundaryDisplayItem();
+  const rankingPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.ranking;
   const rankingLocalPreviewBoundaryDisplayText = rankingLocalPreviewBoundaryCopy();
   const modelSelectionBoundaryDisplayText = modelSelectionBoundaryCopy();
   const accountSecurityProviderBoundaryDisplayText = accountSecurityProviderBoundaryCopy();
@@ -1697,8 +1693,8 @@ export default function App() {
   const accountSecurityNoActionBoundaryDisplayText = accountSecurityNoActionBoundaryCopy();
   const profileNoActionBoundaryDisplayText = profileNoActionBoundaryCopy();
   const recordingQuotaDataBoundaryDisplayText = recordingQuotaDataBoundaryCopy();
-  const reminderPreviewBoundaryDisplay = reminderPreviewBoundaryDisplayItem();
-  const privacyPreviewBoundaryDisplay = privacyPreviewBoundaryDisplayItem();
+  const reminderPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.reminder;
+  const privacyPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.privacy;
   const quickRecordIntroDisplayText = quickRecordIntroCopy();
   const quickEntryModeDisplayItemsForRender = quickEntryModeDisplayItems();
   const homeRecordingDisplay = homeRecordingDisplayBundle({

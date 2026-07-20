@@ -1943,6 +1943,17 @@ export function privacyPreviewBoundaryDisplayItem() {
   );
 }
 
+export function futurePreviewBoundaryDisplayBundle() {
+  return {
+    doctorShare: doctorSharePreviewBoundaryDisplayItem(),
+    healthIntegration: healthIntegrationPreviewBoundaryDisplayItem(),
+    community: communityPreviewBoundaryDisplayItem(),
+    ranking: rankingPreviewBoundaryDisplayItem(),
+    reminder: reminderPreviewBoundaryDisplayItem(),
+    privacy: privacyPreviewBoundaryDisplayItem()
+  };
+}
+
 export function foodPhotoVisionBoundaryDisplayItem() {
   return {
     badge: boundDisplayText("Vision 未串接", 24),

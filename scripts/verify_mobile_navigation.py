@@ -14729,6 +14729,13 @@ def main() -> int:
             ("ranking readiness audit copy", "退出排名後的歷史資料撤回與 audit event"),
             ("reminder preview boundary helper", "export function reminderPreviewBoundaryDisplayItem()"),
             ("privacy preview boundary helper", "export function privacyPreviewBoundaryDisplayItem()"),
+            ("future preview boundary display bundle helper", "export function futurePreviewBoundaryDisplayBundle()"),
+            ("future preview boundary display bundle doctor share", "doctorShare: doctorSharePreviewBoundaryDisplayItem()"),
+            ("future preview boundary display bundle health integration", "healthIntegration: healthIntegrationPreviewBoundaryDisplayItem()"),
+            ("future preview boundary display bundle community", "community: communityPreviewBoundaryDisplayItem()"),
+            ("future preview boundary display bundle ranking", "ranking: rankingPreviewBoundaryDisplayItem()"),
+            ("future preview boundary display bundle reminder", "reminder: reminderPreviewBoundaryDisplayItem()"),
+            ("future preview boundary display bundle privacy", "privacy: privacyPreviewBoundaryDisplayItem()"),
             ("food photo vision boundary helper", "export function foodPhotoVisionBoundaryDisplayItem()"),
             ("food photo vision boundary copy", "相機、圖片上傳、影像模型與營養估算尚未啟用"),
             ("food photo checklist helper", "export function foodPhotoEmptyResultChecklistDisplayItems()"),
@@ -14898,6 +14905,26 @@ def main() -> int:
             ("future preview return accessibility label", "returnFutureModulesAccessibility: boundDisplayText(\"返回未來擴充，不建立 future module 資料或呼叫 backend\", maxDisplayDetailTextLength)"),
         ):
             _assert_contains(label, future_module_display_content, marker)
+        for label, marker in (
+            ("future preview boundary display bundle import", "futurePreviewBoundaryDisplayBundle,"),
+            ("future preview boundary display bundle binding", "const futurePreviewBoundaryDisplay = futurePreviewBoundaryDisplayBundle();"),
+            ("future preview boundary display bundle doctor share binding", "const doctorSharePreviewBoundaryDisplay = futurePreviewBoundaryDisplay.doctorShare;"),
+            ("future preview boundary display bundle health integration binding", "const healthIntegrationPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.healthIntegration;"),
+            ("future preview boundary display bundle community binding", "const communityPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.community;"),
+            ("future preview boundary display bundle ranking binding", "const rankingPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.ranking;"),
+            ("future preview boundary display bundle reminder binding", "const reminderPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.reminder;"),
+            ("future preview boundary display bundle privacy binding", "const privacyPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.privacy;"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, marker in (
+            ("direct doctor share preview boundary item binding", "const doctorSharePreviewBoundaryDisplay = doctorSharePreviewBoundaryDisplayItem();"),
+            ("direct health integration preview boundary item binding", "const healthIntegrationPreviewBoundaryDisplay = healthIntegrationPreviewBoundaryDisplayItem();"),
+            ("direct community preview boundary item binding", "const communityPreviewBoundaryDisplay = communityPreviewBoundaryDisplayItem();"),
+            ("direct ranking preview boundary item binding", "const rankingPreviewBoundaryDisplay = rankingPreviewBoundaryDisplayItem();"),
+            ("direct reminder preview boundary item binding", "const reminderPreviewBoundaryDisplay = reminderPreviewBoundaryDisplayItem();"),
+            ("direct privacy preview boundary item binding", "const privacyPreviewBoundaryDisplay = privacyPreviewBoundaryDisplayItem();"),
+        ):
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("food community stale future store bridge copy", "點數未來可串接商城兌換優惠券、商品折扣、特殊徽章與會員福利。"),
             ("store stale empty wallet coupon-only copy", "尚未同步兌換券；完成食物分享取得點數後可兌換優惠券或折扣碼。"),
