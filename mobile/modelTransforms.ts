@@ -12,6 +12,7 @@ export type NativeLlamaInput = {
   modelPath: string;
   transcript: string;
 };
+export type NativeLlamaInputSource = NativeLlamaInput;
 
 const maxIdentifierTextLength = 128;
 const maxDisplayTextLength = 120;
@@ -82,6 +83,13 @@ export function nativeLlamaRequestArgs(llamaInput: NativeLlamaInput) {
   return {
     modelPath: llamaInput.modelPath,
     transcript: llamaInput.transcript
+  };
+}
+
+export function nativeLlamaInput({ modelPath, transcript }: NativeLlamaInputSource): NativeLlamaInput {
+  return {
+    modelPath: modelPath.trim(),
+    transcript: transcript.trim()
   };
 }
 

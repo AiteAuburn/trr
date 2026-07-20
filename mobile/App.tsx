@@ -767,6 +767,7 @@ import {
   hasNativeLlamaInput,
   hasNativeWhisperInput,
   nativeDebugInputValue,
+  nativeLlamaInput,
   nativeWhisperInput,
   nativeLlamaRequestArgs,
   nativeModelDownloadRequestArgs,
@@ -7875,13 +7876,6 @@ export default function App() {
     return true;
   }
 
-  function nativeLlamaInput() {
-    return {
-      modelPath: llamaModelPath.trim(),
-      transcript: transcript.trim()
-    };
-  }
-
   function handleNativeWhisperSuccess(text: string) {
     updateTranscriptDraft(text);
     setNativeStatus(nativeWhisperSuccessStatusMessage());
@@ -7924,7 +7918,7 @@ export default function App() {
     const results: NativeBenchmarkResult[] = [];
     const whisperInput = nativeWhisperInput({ audioPath, modelPath: whisperModelPath });
     await appendNativeWhisperBenchmarkResult(results, whisperInput, benchmarkNativeWhisper);
-    const llamaInput = nativeLlamaInput();
+    const llamaInput = nativeLlamaInput({ modelPath: llamaModelPath, transcript });
     await appendNativeLlamaBenchmarkResult(results, llamaInput, benchmarkNativeLlama);
     return results;
   }
@@ -8031,7 +8025,7 @@ export default function App() {
     if (!isNativeDebugActionReady()) {
       return;
     }
-    const llamaInput = nativeLlamaInput();
+    const llamaInput = nativeLlamaInput({ modelPath: llamaModelPath, transcript });
     if (!hasNativeLlamaInput(llamaInput)) {
       handleNativeLlamaMissingInput();
       return;
