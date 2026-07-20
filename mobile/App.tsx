@@ -762,8 +762,10 @@ import {
   downloadedWhisperModelCount,
   downloadedWhisperModelInitialPath,
   downloadedWhisperModels,
+  hasNativeLlamaInput,
   hasNativeWhisperInput,
   nativeDebugInputValue,
+  nativeLlamaRequestArgs,
   nativeModelDownloadRequestArgs,
   nativeWhisperRequestArgs
 } from "./modelTransforms";
@@ -7882,17 +7884,6 @@ export default function App() {
       modelPath: llamaModelPath.trim(),
       transcript: transcript.trim()
     };
-  }
-
-  function nativeLlamaRequestArgs(llamaInput: ReturnType<typeof nativeLlamaInput>) {
-    return {
-      modelPath: llamaInput.modelPath,
-      transcript: llamaInput.transcript
-    };
-  }
-
-  function hasNativeLlamaInput(llamaInput: ReturnType<typeof nativeLlamaInput>) {
-    return Boolean(llamaInput.modelPath && llamaInput.transcript);
   }
 
   function handleNativeWhisperSuccess(text: string) {

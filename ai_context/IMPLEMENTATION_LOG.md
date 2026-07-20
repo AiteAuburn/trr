@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2117 move native Llama request helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/modelTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added typed `NativeLlamaInput`, `nativeLlamaRequestArgs`, and `hasNativeLlamaInput` to `modelTransforms.ts`.
+- Removed the same local pure request/predicate helpers from `App.tsx`.
+- Kept native Llama input capture, missing-input guard, parse call, benchmark append behavior, and success/failure handling in `App.tsx`.
+- Updated navigation verifier coverage to require the model transform helpers and reject reintroducing the local App helpers.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting native model transforms from `App.tsx` one boundary at a time.
+
 ### T2116 move native Whisper request helpers
 
 類型：mobile / refactor / verifier / docs

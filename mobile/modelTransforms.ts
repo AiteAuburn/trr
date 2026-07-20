@@ -6,6 +6,10 @@ export type NativeWhisperInput = {
   modelPath: string;
   audioPath: string;
 };
+export type NativeLlamaInput = {
+  modelPath: string;
+  transcript: string;
+};
 
 const maxIdentifierTextLength = 128;
 const maxDisplayTextLength = 120;
@@ -53,6 +57,17 @@ export function nativeWhisperRequestArgs(whisperInput: NativeWhisperInput) {
 
 export function hasNativeWhisperInput(whisperInput: NativeWhisperInput) {
   return Boolean(whisperInput.modelPath && whisperInput.audioPath);
+}
+
+export function nativeLlamaRequestArgs(llamaInput: NativeLlamaInput) {
+  return {
+    modelPath: llamaInput.modelPath,
+    transcript: llamaInput.transcript
+  };
+}
+
+export function hasNativeLlamaInput(llamaInput: NativeLlamaInput) {
+  return Boolean(llamaInput.modelPath && llamaInput.transcript);
 }
 
 export function boundDownloadedModel<T extends DownloadedModel>(value: T): T {

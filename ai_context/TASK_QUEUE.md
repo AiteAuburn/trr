@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2117: Move native Llama request helpers
+
+Status: done
+
+Completed:
+
+- Added typed `NativeLlamaInput`, `nativeLlamaRequestArgs`, and `hasNativeLlamaInput` to `modelTransforms.ts`.
+- Removed the same local pure request/predicate helpers from `App.tsx`.
+- Kept native Llama input capture, missing-input guard, parse call, benchmark append behavior, and success/failure handling in `App.tsx`.
+- Updated navigation verifier coverage to require the model transform helpers and reject reintroducing the local App helpers.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2116: Move native Whisper request helpers
 
 Status: done
