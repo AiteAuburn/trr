@@ -432,7 +432,7 @@ import {
   accountDisplayNameDisplayText,
   accountEmailDisplayValue,
   accountLoginDisplayValue,
-  accountPublicDisplayNameText,
+  accountPublicDisplayNameForSettings,
   accountSecurityAuthModeDisplayTexts,
   doctorShareAccountBoundaryText,
   doctorShareBoundaryDisplayRows,
@@ -1297,7 +1297,7 @@ export default function App() {
   const activeProfileLabel = activeProfileLabelText(activeProfile, profiles.length);
   const activeProfileInlineDisplayText = activeProfileInlineText(activeProfileLabel);
   const activeProfileRelationshipDisplayText = activeProfileRelationshipText(activeProfile);
-  const accountPublicDisplayNameDisplayText = communityPublicSettings?.display_name ?? accountPublicDisplayNameText(account);
+  const accountPublicDisplayNameDisplayText = accountPublicDisplayNameForSettings(communityPublicSettings, account);
   const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayTexts({
     allowMobileDevAuth,
     accountDisplayName,

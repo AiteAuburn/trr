@@ -29,6 +29,13 @@ export function accountPublicDisplayNameText(account: AccountDisplaySource | nul
   return account ? accountDisplayNameDisplayText(account) : boundDisplayText("尚未設定");
 }
 
+export function accountPublicDisplayNameForSettings(
+  publicSettings: { display_name?: string | null } | null,
+  account: AccountDisplaySource | null
+) {
+  return publicSettings?.display_name ?? accountPublicDisplayNameText(account);
+}
+
 export function doctorShareAccountBoundaryText(account: AccountDisplaySource | null) {
   return boundDisplayText(
     account
