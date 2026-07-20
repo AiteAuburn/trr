@@ -34,6 +34,26 @@ None.
 
 ## Done
 
+### T2159: Move navigation display accessors
+
+Status: done
+
+Completed:
+
+- Added primary-tab target/key/label/accessibility/current/locked helpers to `navigationConfig.ts`.
+- Added MVP flow step key/label/active/done/indicator helpers to `navigationConfig.ts`.
+- Removed duplicate primary-tab and MVP flow step accessor helper definitions from `App.tsx`.
+- Kept primary tab press behavior, request-lock disabled state, selected state, and MVP flow step rendering unchanged.
+- Updated navigation verifier coverage to require navigation-config helper exports, App render bindings, and no local helper regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2158: Move Home speech example accessors
 
 Status: done

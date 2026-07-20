@@ -149,10 +149,21 @@ import {
   isVisualSmokeSettingsMenuScreen,
   isVisualSmokeSubscriptionStatusScreen,
   menuScreens,
+  mvpFlowStepIndicatorText,
+  mvpFlowStepIsActive,
+  mvpFlowStepIsDone,
+  mvpFlowStepKey,
+  mvpFlowStepLabel,
   mvpFlowSteps,
   mvpFlowStepperState,
+  primaryTabAccessibilityText,
+  primaryTabIsCurrent,
+  primaryTabIsLocked,
+  primaryTabKey,
+  primaryTabLabel,
   primaryScreens,
   primaryTabNavigationState,
+  primaryTabTarget,
   screenChrome,
   transcriptReviewReturnTargetForScreen,
   visualSmokeBootIgnoredDisplayMessages,
@@ -577,7 +588,6 @@ import {
   deleteSuccessDestinationDisplayItems,
   headerActionAccessibilityLabel,
   previewActionClearStatusMessage,
-  primaryTabAccessibilityLabel,
   quickEntryModeDisplayItems,
   quickEntryTextModeStatusMessage,
   quickEntryVoicePromptStatusMessage,
@@ -4434,50 +4444,6 @@ export default function App() {
       return;
     }
     openScreen(target);
-  }
-
-  function primaryTabTarget(screen: { id: AppScreen }) {
-    return screen.id;
-  }
-
-  function primaryTabKey(screen: { id: AppScreen }) {
-    return primaryTabTarget(screen);
-  }
-
-  function primaryTabLabel(screen: { label: string }) {
-    return screen.label;
-  }
-
-  function primaryTabAccessibilityText(screen: { label: string }) {
-    return primaryTabAccessibilityLabel(primaryTabLabel(screen));
-  }
-
-  function primaryTabIsCurrent(screen: { isCurrent: boolean }) {
-    return screen.isCurrent;
-  }
-
-  function primaryTabIsLocked(screen: { isLocked: boolean }) {
-    return screen.isLocked;
-  }
-
-  function mvpFlowStepKey(step: (typeof mvpFlowSteps)[number]) {
-    return step.id;
-  }
-
-  function mvpFlowStepLabel(step: (typeof mvpFlowSteps)[number]) {
-    return step.label;
-  }
-
-  function mvpFlowStepIsActive(index: number, stepIndex: number) {
-    return index === stepIndex;
-  }
-
-  function mvpFlowStepIsDone(index: number, stepIndex: number) {
-    return index < stepIndex;
-  }
-
-  function mvpFlowStepIndicatorText(index: number, isDone: boolean) {
-    return isDone ? "✓" : String(index + 1);
   }
 
   function pressPrimaryTab(screen: { id: AppScreen }) {

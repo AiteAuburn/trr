@@ -1,4 +1,4 @@
-import { boundUiMessage } from "./mobileBounds";
+import { boundDisplayText, boundUiMessage, maxDisplayDetailTextLength } from "./mobileBounds";
 
 export type AppScreen =
   | "today"
@@ -303,6 +303,51 @@ function primaryTabNavigationState(value: { currentScreen: AppScreen; isAnyReque
   };
 }
 
+function primaryTabTarget(screen: { id: AppScreen }) {
+  return screen.id;
+}
+
+function primaryTabKey(screen: { id: AppScreen }) {
+  return primaryTabTarget(screen);
+}
+
+function primaryTabLabel(screen: { label: string }) {
+  return screen.label;
+}
+
+function primaryTabAccessibilityText(screen: { label: string }) {
+  const safeLabel = boundDisplayText(primaryTabLabel(screen) || "分頁", 60);
+  return boundDisplayText(`前往${safeLabel}分頁，只切換 App 內頁面`, maxDisplayDetailTextLength);
+}
+
+function primaryTabIsCurrent(screen: { isCurrent: boolean }) {
+  return screen.isCurrent;
+}
+
+function primaryTabIsLocked(screen: { isLocked: boolean }) {
+  return screen.isLocked;
+}
+
+function mvpFlowStepKey(step: (typeof mvpFlowSteps)[number]) {
+  return step.id;
+}
+
+function mvpFlowStepLabel(step: (typeof mvpFlowSteps)[number]) {
+  return step.label;
+}
+
+function mvpFlowStepIsActive(index: number, stepIndex: number) {
+  return index === stepIndex;
+}
+
+function mvpFlowStepIsDone(index: number, stepIndex: number) {
+  return index < stepIndex;
+}
+
+function mvpFlowStepIndicatorText(index: number, isDone: boolean) {
+  return isDone ? "✓" : String(index + 1);
+}
+
 function transcriptReviewReturnTargetForScreen(currentScreen: AppScreen) {
   return currentScreen === "today" ? "today" : "record";
 }
@@ -359,11 +404,22 @@ function visualSmokeDeepLinkStatusMessage(route: AppScreen) {
 export {
   menuScreens,
   mvpFlowSteps,
+  mvpFlowStepIndicatorText,
+  mvpFlowStepIsActive,
+  mvpFlowStepIsDone,
+  mvpFlowStepKey,
+  mvpFlowStepLabel,
   headerBackTargetForScreen,
   mvpFlowStepperState,
   normalizeVisualSmokeInitialRoute,
   primaryScreens,
+  primaryTabAccessibilityText,
+  primaryTabIsCurrent,
+  primaryTabIsLocked,
+  primaryTabKey,
+  primaryTabLabel,
   primaryTabNavigationState,
+  primaryTabTarget,
   screenChrome,
   transcriptReviewReturnTargetForScreen,
   visualSmokeBootIgnoredDisplayMessages,

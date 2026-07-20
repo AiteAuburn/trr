@@ -11596,12 +11596,12 @@ def main() -> int:
         )
         _assert_contains(
             "primary tab target helper",
-            content,
+            navigation_content,
             "function primaryTabTarget(screen: { id: AppScreen })",
         )
         _assert_contains(
             "primary tab target helper fields",
-            content,
+            navigation_content,
             "return screen.id;",
         )
         _assert_contains(
@@ -11611,35 +11611,62 @@ def main() -> int:
         )
         for label, marker in (
             ("primary tab key helper", "function primaryTabKey(screen: { id: AppScreen })"),
-            ("primary tab key helper binding", "key={primaryTabKey(screen)}"),
             ("primary tab label helper", "function primaryTabLabel(screen: { label: string })"),
             ("primary tab label helper fields", "return screen.label;"),
-            ("primary tab label helper binding", "{primaryTabLabel(screen)}"),
             ("primary tab accessibility display helper", "function primaryTabAccessibilityText(screen: { label: string })"),
-            ("primary tab accessibility display helper fields", "return primaryTabAccessibilityLabel(primaryTabLabel(screen));"),
-            ("primary tab accessibility display helper binding", "const primaryTabAccessibility = primaryTabAccessibilityText(screen);"),
+            ("primary tab accessibility display helper fields", "return boundDisplayText(`前往${safeLabel}分頁，只切換 App 內頁面`, maxDisplayDetailTextLength);"),
             ("primary tab current state helper", "function primaryTabIsCurrent(screen: { isCurrent: boolean })"),
             ("primary tab current state helper fields", "return screen.isCurrent;"),
-            ("primary tab current state helper binding", "const isCurrentPrimaryTab = primaryTabIsCurrent(screen);"),
             ("primary tab locked state helper", "function primaryTabIsLocked(screen: { isLocked: boolean })"),
             ("primary tab locked state helper fields", "return screen.isLocked;"),
-            ("primary tab locked state helper binding", "const isPrimaryTabLocked = primaryTabIsLocked(screen);"),
             ("MVP flow step key helper", "function mvpFlowStepKey(step: (typeof mvpFlowSteps)[number])"),
             ("MVP flow step key helper fields", "return step.id;"),
-            ("MVP flow step key helper binding", "key={mvpFlowStepKey(step)}"),
             ("MVP flow step label helper", "function mvpFlowStepLabel(step: (typeof mvpFlowSteps)[number])"),
             ("MVP flow step label helper fields", "return step.label;"),
-            ("MVP flow step label helper binding", "{mvpFlowStepLabel(step)}"),
             ("MVP flow step active helper", "function mvpFlowStepIsActive(index: number, stepIndex: number)"),
             ("MVP flow step active helper fields", "return index === stepIndex;"),
-            ("MVP flow step active helper binding", "const isActive = mvpFlowStepIsActive(index, mvpFlowStepIndex);"),
             ("MVP flow step done helper", "function mvpFlowStepIsDone(index: number, stepIndex: number)"),
             ("MVP flow step done helper fields", "return index < stepIndex;"),
-            ("MVP flow step done helper binding", "const isDone = mvpFlowStepIsDone(index, mvpFlowStepIndex);"),
             ("MVP flow step indicator helper", "function mvpFlowStepIndicatorText(index: number, isDone: boolean)"),
+        ):
+            _assert_contains(label, navigation_content, marker)
+        for label, marker in (
+            ("primary tab key helper import", "primaryTabKey,"),
+            ("primary tab key helper binding", "key={primaryTabKey(screen)}"),
+            ("primary tab label helper import", "primaryTabLabel,"),
+            ("primary tab label helper binding", "{primaryTabLabel(screen)}"),
+            ("primary tab accessibility display helper import", "primaryTabAccessibilityText,"),
+            ("primary tab accessibility display helper binding", "const primaryTabAccessibility = primaryTabAccessibilityText(screen);"),
+            ("primary tab current state helper import", "primaryTabIsCurrent,"),
+            ("primary tab current state helper binding", "const isCurrentPrimaryTab = primaryTabIsCurrent(screen);"),
+            ("primary tab locked state helper import", "primaryTabIsLocked,"),
+            ("primary tab locked state helper binding", "const isPrimaryTabLocked = primaryTabIsLocked(screen);"),
+            ("MVP flow step key helper import", "mvpFlowStepKey,"),
+            ("MVP flow step key helper binding", "key={mvpFlowStepKey(step)}"),
+            ("MVP flow step label helper import", "mvpFlowStepLabel,"),
+            ("MVP flow step label helper binding", "{mvpFlowStepLabel(step)}"),
+            ("MVP flow step active helper import", "mvpFlowStepIsActive,"),
+            ("MVP flow step active helper binding", "const isActive = mvpFlowStepIsActive(index, mvpFlowStepIndex);"),
+            ("MVP flow step done helper import", "mvpFlowStepIsDone,"),
+            ("MVP flow step done helper binding", "const isDone = mvpFlowStepIsDone(index, mvpFlowStepIndex);"),
+            ("MVP flow step indicator helper import", "mvpFlowStepIndicatorText,"),
             ("MVP flow step indicator helper binding", "{mvpFlowStepIndicatorText(index, isDone)}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("local primary tab target helper", "function primaryTabTarget(screen: { id: AppScreen })"),
+            ("local primary tab key helper", "function primaryTabKey(screen: { id: AppScreen })"),
+            ("local primary tab label helper", "function primaryTabLabel(screen: { label: string })"),
+            ("local primary tab accessibility helper", "function primaryTabAccessibilityText(screen: { label: string })"),
+            ("local primary tab current helper", "function primaryTabIsCurrent(screen: { isCurrent: boolean })"),
+            ("local primary tab locked helper", "function primaryTabIsLocked(screen: { isLocked: boolean })"),
+            ("local MVP flow step key helper", "function mvpFlowStepKey(step: (typeof mvpFlowSteps)[number])"),
+            ("local MVP flow step label helper", "function mvpFlowStepLabel(step: (typeof mvpFlowSteps)[number])"),
+            ("local MVP flow step active helper", "function mvpFlowStepIsActive(index: number, stepIndex: number)"),
+            ("local MVP flow step done helper", "function mvpFlowStepIsDone(index: number, stepIndex: number)"),
+            ("local MVP flow step indicator helper", "function mvpFlowStepIndicatorText(index: number, isDone: boolean)"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "primary tab button role",
             content,
