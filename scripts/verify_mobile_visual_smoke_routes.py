@@ -52,7 +52,7 @@ VISUAL_SMOKE_ROUTES = {
     "aiSaveConfirm": [
         'currentScreen === "aiSaveConfirm"',
         "rows={aiSaveConfirmBoundaryRows}",
-        "dailyRecordSectionItems.map",
+        "sections={dailyRecordSectionItems}",
         "aiSaveConfirmSummaryLabelDisplayText",
         "todayTranscriptTitleDisplayText",
     ],

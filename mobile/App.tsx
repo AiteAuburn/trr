@@ -73,7 +73,6 @@ import {
 } from "./authProviderChallenge";
 import {
   buildDailyRecordSectionDisplayItems,
-  dailyRecordEntryDisplayItem,
   displayPayload,
   displayTextValue,
   groupedRecordListDisplaySections,
@@ -765,8 +764,7 @@ import { AiFlowChecklist } from "./aiFlowChecklist";
 import { AiReviewActionRow } from "./aiReviewActionRow";
 import { AiSaveFailureActionRow } from "./aiSaveFailureActionRow";
 import { CoreFlowEntryActionRow } from "./coreFlowEntryActionRow";
-import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
-import { DailyRecordEntryActionRow } from "./dailyRecordEntryActionRow";
+import { DailyRecordSectionList } from "./dailyRecordSectionList";
 import { DangerConfirmActionRow } from "./dangerConfirmActionRow";
 import { DeleteConfirmPreviewBlock } from "./deleteConfirmPreviewBlock";
 import { DeleteSuccessActionRow } from "./deleteSuccessActionRow";
@@ -4282,133 +4280,21 @@ export default function App() {
     setStatus(todayTranscriptExpandedStatusMessage());
   }
 
-  function dailyRecordSectionKey(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
-    return section.id;
-  }
-
-  function dailyRecordSectionIcon(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
-    return section.icon;
-  }
-
-  function dailyRecordSectionTitle(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
-    return section.title;
-  }
-
-  function dailyRecordSectionDescription(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
-    return section.description;
-  }
-
-  function dailyRecordSectionCountLabel(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
-    return section.countLabel;
-  }
-
-  function dailyRecordSectionEntries(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
-    return section.entries;
-  }
-
-  function dailyRecordSectionHasEntries(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
-    return dailyRecordSectionEntries(section).length > 0;
-  }
-
-  function dailyRecordSectionEmptyCopy(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number]) {
-    return section.emptyCopy;
-  }
-
-  function dailyRecordEntryTarget(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    return item.index;
-  }
-
   function dailyRecordEntryReturnScreen(): AppScreen {
     return "aiSaveConfirm";
   }
 
-  function dailyRecordEntryTypeLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    return item.typeLabel;
+  function openDailyRecordEntryMenu(index: number, typeLabel: string) {
+    setDailyRecordMenuIndex((current) => (current === index ? null : index));
+    setStatus(dailyRecordEntryMenuOpenStatusMessage(typeLabel));
   }
 
-  function dailyRecordEntryKey(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    return item.key;
+  function editDailyRecordEntry(index: number) {
+    openPreviewRecordEdit(index, dailyRecordEntryReturnScreen());
   }
 
-  function dailyRecordEntryTimeLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    return item.timeLabel;
-  }
-
-  function dailyRecordEntryPayloadSummary(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    return item.payloadSummary;
-  }
-
-  function dailyRecordEntryAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    return item.accessibilityLabel;
-  }
-
-  function dailyRecordEntryManageLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    return item.manageLabel;
-  }
-
-  function dailyRecordEntryEditAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    return item.editAccessibilityLabel;
-  }
-
-  function dailyRecordEntryEditLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    return item.editLabel;
-  }
-
-  function dailyRecordEntryRemoveAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    return item.removeAccessibilityLabel;
-  }
-
-  function dailyRecordEntryRemoveLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    return item.removeLabel;
-  }
-
-  function dailyRecordEntryDetailRows(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    return item.detailRows;
-  }
-
-  function isDailyRecordEntryMenuOpen(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    return dailyRecordMenuIndex === dailyRecordEntryTarget(item);
-  }
-
-  function dailyRecordDetailRowKey(
-    item: ReturnType<typeof dailyRecordEntryDisplayItem>,
-    row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number]
-  ) {
-    return `${item.key}-${row.label}`;
-  }
-
-  function dailyRecordDetailRowLabel(row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number]) {
-    return row.label;
-  }
-
-  function dailyRecordDetailRowValue(row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number]) {
-    return row.value;
-  }
-
-  function openDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    const target = dailyRecordEntryTarget(item);
-    setDailyRecordMenuIndex((current) => (current === target ? null : target));
-    setStatus(dailyRecordEntryMenuOpenStatusMessage(dailyRecordEntryTypeLabel(item)));
-  }
-
-  function pressDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    openDailyRecordEntryMenu(item);
-  }
-
-  function editDailyRecordEntry(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    openPreviewRecordEdit(dailyRecordEntryTarget(item), dailyRecordEntryReturnScreen());
-  }
-
-  function pressDailyRecordEntryEdit(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    editDailyRecordEntry(item);
-  }
-
-  function deleteDailyRecordEntry(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    openPreviewRecordRemoveConfirm(dailyRecordEntryTarget(item), dailyRecordEntryReturnScreen());
-  }
-
-  function pressDailyRecordEntryDelete(item: ReturnType<typeof dailyRecordEntryDisplayItem>) {
-    deleteDailyRecordEntry(item);
+  function deleteDailyRecordEntry(index: number) {
+    openPreviewRecordRemoveConfirm(index, dailyRecordEntryReturnScreen());
   }
 
   function clearPreviewSelectionState() {
@@ -9243,61 +9129,13 @@ export default function App() {
               <Text style={styles.countText}>{todayTranscriptCountDisplayText}</Text>
             </Pressable>
             <DailyTranscriptList items={todayTranscriptDisplayItems} />
-            <View style={styles.dailyRecordSectionList}>
-              {dailyRecordSectionItems.map((section) => (
-                <View key={dailyRecordSectionKey(section)} style={styles.dailyRecordSectionCard}>
-                  <View style={styles.recordHeader}>
-                    <View style={styles.historyItemTitle}>
-                      <View style={styles.iconCircleSmall}>
-                        <Text>{dailyRecordSectionIcon(section)}</Text>
-                      </View>
-                      <View style={styles.timelineContent}>
-                        <Text style={styles.label}>{dailyRecordSectionTitle(section)}</Text>
-                        <Text style={styles.evidence}>{dailyRecordSectionDescription(section)}</Text>
-                      </View>
-                    </View>
-                    <Text style={styles.countText}>{dailyRecordSectionCountLabel(section)}</Text>
-                  </View>
-                  {dailyRecordSectionHasEntries(section) ? (
-                    dailyRecordSectionEntries(section).map((item) => (
-                      <View key={dailyRecordEntryKey(item)} style={styles.dailyRecordEntryCard}>
-                        <View style={styles.recordHeader}>
-                          <View style={styles.timelineContent}>
-                            <Text style={styles.confidence}>{dailyRecordEntryTimeLabel(item)}</Text>
-                            <Text style={styles.recordContent}>{dailyRecordEntryPayloadSummary(item)}</Text>
-                          </View>
-                          <Pressable
-                            accessibilityLabel={dailyRecordEntryAccessibilityLabel(item)}
-                            accessibilityRole="button"
-                            style={styles.roundActionButton}
-                            onPress={() => pressDailyRecordEntryMenu(item)}
-                          >
-                            <Text style={styles.editGlyph}>{dailyRecordEntryManageLabel(item)}</Text>
-                          </Pressable>
-                        </View>
-                        <View style={styles.detailRows}>
-                          {dailyRecordEntryDetailRows(item).map((row) => (
-                            <DailyRecordDetailRow key={dailyRecordDetailRowKey(item, row)} label={dailyRecordDetailRowLabel(row)} value={dailyRecordDetailRowValue(row)} />
-                          ))}
-                        </View>
-                        {isDailyRecordEntryMenuOpen(item) ? (
-                          <DailyRecordEntryActionRow
-                            editAccessibilityLabel={dailyRecordEntryEditAccessibilityLabel(item)}
-                            editLabel={dailyRecordEntryEditLabel(item)}
-                            onEditPress={() => pressDailyRecordEntryEdit(item)}
-                            onRemovePress={() => pressDailyRecordEntryDelete(item)}
-                            removeAccessibilityLabel={dailyRecordEntryRemoveAccessibilityLabel(item)}
-                            removeLabel={dailyRecordEntryRemoveLabel(item)}
-                          />
-                        ) : null}
-                      </View>
-                    ))
-                  ) : (
-                    <Text style={styles.evidence}>{dailyRecordSectionEmptyCopy(section)}</Text>
-                  )}
-                </View>
-              ))}
-            </View>
+            <DailyRecordSectionList
+              menuIndex={dailyRecordMenuIndex}
+              onEditEntry={editDailyRecordEntry}
+              onManageEntry={openDailyRecordEntryMenu}
+              onRemoveEntry={deleteDailyRecordEntry}
+              sections={dailyRecordSectionItems}
+            />
             {lowConfidencePreviewRecordCount > 0 ? (
               <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{coreFlowDisplayLabels.lowConfidenceWarning}</Text>
@@ -13687,25 +13525,6 @@ const styles = StyleSheet.create({
     minHeight: 68,
     padding: 14
   },
-  dailyRecordSectionList: {
-    gap: 12
-  },
-  dailyRecordSectionCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D6EEE4",
-    borderRadius: 20,
-    borderWidth: 1,
-    gap: 12,
-    padding: 14
-  },
-  dailyRecordEntryCard: {
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
-    borderRadius: 18,
-    borderWidth: 1,
-    gap: 10,
-    padding: 12
-  },
   dailyLeaveGuardCard: {
     backgroundColor: "#FFF7F1",
     borderColor: "#F3C9BA",
@@ -13746,11 +13565,6 @@ const styles = StyleSheet.create({
     gap: 12,
     minHeight: 64,
     padding: 14
-  },
-  editGlyph: {
-    color: "#3FA67F",
-    fontSize: 18,
-    fontWeight: "900"
   },
   postSaveGrid: {
     gap: 10

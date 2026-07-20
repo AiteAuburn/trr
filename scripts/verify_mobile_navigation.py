@@ -85,6 +85,7 @@ AI_SAVE_FAILURE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiSaveFailureActionRow
 CORE_FLOW_ENTRY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "coreFlowEntryActionRow.tsx"
 DAILY_RECORD_ENTRY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordEntryActionRow.tsx"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
+DAILY_RECORD_SECTION_LIST_PATH = REPO_ROOT / "mobile" / "dailyRecordSectionList.tsx"
 DANGER_CONFIRM_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dangerConfirmActionRow.tsx"
 DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreviewBlock.tsx"
 DELETE_SUCCESS_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "deleteSuccessActionRow.tsx"
@@ -1496,6 +1497,7 @@ def main() -> int:
     core_flow_entry_action_row_content = CORE_FLOW_ENTRY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     daily_record_entry_action_row_content = DAILY_RECORD_ENTRY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
+    daily_record_section_list_content = DAILY_RECORD_SECTION_LIST_PATH.read_text(encoding="utf-8")
     danger_confirm_action_row_content = DANGER_CONFIRM_ACTION_ROW_PATH.read_text(encoding="utf-8")
     delete_confirm_preview_block_content = DELETE_CONFIRM_PREVIEW_BLOCK_PATH.read_text(encoding="utf-8")
     delete_success_action_row_content = DELETE_SUCCESS_ACTION_ROW_PATH.read_text(encoding="utf-8")
@@ -8181,93 +8183,108 @@ def main() -> int:
             ("daily record transcript body binding", "{todayTranscriptBodyDisplayText}"),
             ("daily record transcript handler", "function openTodayTranscriptText()"),
             ("daily record transcript expanded status binding", "setStatus(todayTranscriptExpandedStatusMessage());"),
-            ("daily record section renderer", "dailyRecordSectionItems.map"),
-            ("daily record section key helper", "function dailyRecordSectionKey(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
-            ("daily record section key helper fields", "return section.id;"),
-            ("daily record section key binding", "key={dailyRecordSectionKey(section)}"),
-            ("daily record section icon helper", "function dailyRecordSectionIcon(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
-            ("daily record section icon helper fields", "return section.icon;"),
-            ("daily record section icon binding", "{dailyRecordSectionIcon(section)}"),
-            ("daily record section title helper", "function dailyRecordSectionTitle(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
-            ("daily record section title helper fields", "return section.title;"),
-            ("daily record section title binding", "{dailyRecordSectionTitle(section)}"),
-            ("daily record section description helper", "function dailyRecordSectionDescription(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
-            ("daily record section description helper fields", "return section.description;"),
-            ("daily record section description binding", "{dailyRecordSectionDescription(section)}"),
-            ("daily record section count helper", "function dailyRecordSectionCountLabel(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
-            ("daily record section count helper fields", "return section.countLabel;"),
-            ("daily record section count binding", "{dailyRecordSectionCountLabel(section)}"),
-            ("daily record section entries helper", "function dailyRecordSectionEntries(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
-            ("daily record section entries helper fields", "return section.entries;"),
-            ("daily record section entries binding", "dailyRecordSectionEntries(section).map((item) => ("),
-            ("daily record section has entries helper", "function dailyRecordSectionHasEntries(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
-            ("daily record section has entries helper fields", "return dailyRecordSectionEntries(section).length > 0;"),
-            ("daily record section has entries binding", "dailyRecordSectionHasEntries(section) ? ("),
-            ("daily record section empty helper", "function dailyRecordSectionEmptyCopy(section: ReturnType<typeof buildDailyRecordSectionDisplayItems>[number])"),
-            ("daily record section empty helper fields", "return section.emptyCopy;"),
-            ("daily record section empty binding", "{dailyRecordSectionEmptyCopy(section)}"),
-            ("daily record detail row component binding", "dailyRecordEntryDetailRows(item).map((row) => (\n                            <DailyRecordDetailRow key={dailyRecordDetailRowKey(item, row)} label={dailyRecordDetailRowLabel(row)} value={dailyRecordDetailRowValue(row)} />"),
-            ("daily record entry management handler", "function pressDailyRecordEntryMenu(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
-            ("daily record entry target helper", "function dailyRecordEntryTarget(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
-            ("daily record entry target helper fields", "return item.index;"),
+            ("daily record section list component binding", "<DailyRecordSectionList"),
+            ("daily record section list sections binding", "sections={dailyRecordSectionItems}"),
+            ("daily record section list menu index binding", "menuIndex={dailyRecordMenuIndex}"),
+            ("daily record section list manage binding", "onManageEntry={openDailyRecordEntryMenu}"),
+            ("daily record section list edit binding", "onEditEntry={editDailyRecordEntry}"),
+            ("daily record section list remove binding", "onRemoveEntry={deleteDailyRecordEntry}"),
             ("daily record entry return screen helper", "function dailyRecordEntryReturnScreen(): AppScreen"),
             ("daily record entry return screen helper target", 'return "aiSaveConfirm";'),
-            ("daily record entry type label helper", "function dailyRecordEntryTypeLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry menu app open helper", "function openDailyRecordEntryMenu(index: number, typeLabel: string)"),
+            ("daily record entry menu index binding", "setDailyRecordMenuIndex((current) => (current === index ? null : index));"),
+            ("daily record entry menu status binding", "setStatus(dailyRecordEntryMenuOpenStatusMessage(typeLabel));"),
+            ("daily record app entry edit handler", "function editDailyRecordEntry(index: number)"),
+            ("daily record app entry delete handler", "function deleteDailyRecordEntry(index: number)"),
+            ("daily record app entry edit return target", "openPreviewRecordEdit(index, dailyRecordEntryReturnScreen())"),
+            ("daily record app entry delete return target", "openPreviewRecordRemoveConfirm(index, dailyRecordEntryReturnScreen())"),
+            ("daily record section list component", "export function DailyRecordSectionList"),
+            ("daily record section display list item type", "export type DailyRecordSectionDisplayListItem ="),
+            ("daily record entry display list item type", "export type DailyRecordEntryDisplayListItem ="),
+            ("daily record section list sections prop", "sections: readonly DailyRecordSectionDisplayListItem[]"),
+            ("daily record section renderer", "sections.map((section) => ("),
+            ("daily record section key helper", "function dailyRecordSectionKey(section: DailyRecordSectionDisplayListItem)"),
+            ("daily record section key helper fields", "return section.id;"),
+            ("daily record section key binding", "key={dailyRecordSectionKey(section)}"),
+            ("daily record section icon helper", "function dailyRecordSectionIcon(section: DailyRecordSectionDisplayListItem)"),
+            ("daily record section icon helper fields", "return section.icon;"),
+            ("daily record section icon binding", "{dailyRecordSectionIcon(section)}"),
+            ("daily record section title helper", "function dailyRecordSectionTitle(section: DailyRecordSectionDisplayListItem)"),
+            ("daily record section title helper fields", "return section.title;"),
+            ("daily record section title binding", "{dailyRecordSectionTitle(section)}"),
+            ("daily record section description helper", "function dailyRecordSectionDescription(section: DailyRecordSectionDisplayListItem)"),
+            ("daily record section description helper fields", "return section.description;"),
+            ("daily record section description binding", "{dailyRecordSectionDescription(section)}"),
+            ("daily record section count helper", "function dailyRecordSectionCountLabel(section: DailyRecordSectionDisplayListItem)"),
+            ("daily record section count helper fields", "return section.countLabel;"),
+            ("daily record section count binding", "{dailyRecordSectionCountLabel(section)}"),
+            ("daily record section entries helper", "function dailyRecordSectionEntries(section: DailyRecordSectionDisplayListItem)"),
+            ("daily record section entries helper fields", "return section.entries;"),
+            ("daily record section entries binding", "dailyRecordSectionEntries(section).map((item) => ("),
+            ("daily record section has entries helper", "function dailyRecordSectionHasEntries(section: DailyRecordSectionDisplayListItem)"),
+            ("daily record section has entries helper fields", "return dailyRecordSectionEntries(section).length > 0;"),
+            ("daily record section has entries binding", "dailyRecordSectionHasEntries(section) ? ("),
+            ("daily record section empty helper", "function dailyRecordSectionEmptyCopy(section: DailyRecordSectionDisplayListItem)"),
+            ("daily record section empty helper fields", "return section.emptyCopy;"),
+            ("daily record section empty binding", "{dailyRecordSectionEmptyCopy(section)}"),
+            ("daily record detail row component binding", "dailyRecordEntryDetailRows(item).map((row) => ("),
+            ("daily record entry management handler", "function pressDailyRecordEntryMenu("),
+            ("daily record entry target helper", "function dailyRecordEntryTarget(item: DailyRecordEntryDisplayListItem)"),
+            ("daily record entry target helper fields", "return item.index;"),
+            ("daily record entry type label helper", "function dailyRecordEntryTypeLabel(item: DailyRecordEntryDisplayListItem)"),
             ("daily record entry type label helper fields", "return item.typeLabel;"),
-            ("daily record entry key helper", "function dailyRecordEntryKey(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry key helper", "function dailyRecordEntryKey(item: DailyRecordEntryDisplayListItem)"),
             ("daily record entry key helper fields", "return item.key;"),
             ("daily record entry key binding", "key={dailyRecordEntryKey(item)}"),
-            ("daily record entry time helper", "function dailyRecordEntryTimeLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry time helper", "function dailyRecordEntryTimeLabel(item: DailyRecordEntryDisplayListItem)"),
             ("daily record entry time helper fields", "return item.timeLabel;"),
             ("daily record entry time binding", "{dailyRecordEntryTimeLabel(item)}"),
-            ("daily record entry payload helper", "function dailyRecordEntryPayloadSummary(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry payload helper", "function dailyRecordEntryPayloadSummary(item: DailyRecordEntryDisplayListItem)"),
             ("daily record entry payload helper fields", "return item.payloadSummary;"),
             ("daily record entry payload binding", "{dailyRecordEntryPayloadSummary(item)}"),
-            ("daily record entry accessibility helper", "function dailyRecordEntryAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry accessibility helper", "function dailyRecordEntryAccessibilityLabel(item: DailyRecordEntryDisplayListItem)"),
             ("daily record entry accessibility helper fields", "return item.accessibilityLabel;"),
             ("daily record entry accessibility binding", "accessibilityLabel={dailyRecordEntryAccessibilityLabel(item)}"),
-            ("daily record entry manage label helper", "function dailyRecordEntryManageLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry manage label helper", "function dailyRecordEntryManageLabel(item: DailyRecordEntryDisplayListItem)"),
             ("daily record entry manage label helper fields", "return item.manageLabel;"),
             ("daily record entry manage label binding", "{dailyRecordEntryManageLabel(item)}"),
-            ("daily record entry edit accessibility helper", "function dailyRecordEntryEditAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry edit accessibility helper", "function dailyRecordEntryEditAccessibilityLabel(item: DailyRecordEntryDisplayListItem)"),
             ("daily record entry edit accessibility helper fields", "return item.editAccessibilityLabel;"),
             ("daily record entry edit accessibility binding", "editAccessibilityLabel={dailyRecordEntryEditAccessibilityLabel(item)}"),
-            ("daily record entry edit label helper", "function dailyRecordEntryEditLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry edit label helper", "function dailyRecordEntryEditLabel(item: DailyRecordEntryDisplayListItem)"),
             ("daily record entry edit label helper fields", "return item.editLabel;"),
             ("daily record entry edit label binding", "editLabel={dailyRecordEntryEditLabel(item)}"),
-            ("daily record entry remove accessibility helper", "function dailyRecordEntryRemoveAccessibilityLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry remove accessibility helper", "function dailyRecordEntryRemoveAccessibilityLabel(item: DailyRecordEntryDisplayListItem)"),
             ("daily record entry remove accessibility helper fields", "return item.removeAccessibilityLabel;"),
             ("daily record entry remove accessibility binding", "removeAccessibilityLabel={dailyRecordEntryRemoveAccessibilityLabel(item)}"),
-            ("daily record entry remove label helper", "function dailyRecordEntryRemoveLabel(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry remove label helper", "function dailyRecordEntryRemoveLabel(item: DailyRecordEntryDisplayListItem)"),
             ("daily record entry remove label helper fields", "return item.removeLabel;"),
             ("daily record entry remove label binding", "removeLabel={dailyRecordEntryRemoveLabel(item)}"),
-            ("daily record entry detail rows helper", "function dailyRecordEntryDetailRows(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
+            ("daily record entry detail rows helper", "function dailyRecordEntryDetailRows(item: DailyRecordEntryDisplayListItem)"),
             ("daily record entry detail rows helper fields", "return item.detailRows;"),
             ("daily record entry detail rows helper binding", "dailyRecordEntryDetailRows(item).map((row) => ("),
-            ("daily record entry menu open helper", "function isDailyRecordEntryMenuOpen(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
-            ("daily record entry menu open helper target binding", "return dailyRecordMenuIndex === dailyRecordEntryTarget(item);"),
-            ("daily record entry menu open binding", "isDailyRecordEntryMenuOpen(item) ? ("),
+            ("daily record entry menu open helper", "function isDailyRecordEntryMenuOpen(item: DailyRecordEntryDisplayListItem, menuIndex: number | null)"),
+            ("daily record entry menu open helper target binding", "return menuIndex === dailyRecordEntryTarget(item);"),
+            ("daily record entry menu open binding", "isDailyRecordEntryMenuOpen(item, menuIndex) ? ("),
             ("daily record detail row key helper", "function dailyRecordDetailRowKey("),
-            ("daily record detail row key helper item type", "item: ReturnType<typeof dailyRecordEntryDisplayItem>,"),
-            ("daily record detail row key helper row type", 'row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number]'),
+            ("daily record detail row key helper item type", "item: DailyRecordEntryDisplayListItem,"),
+            ("daily record detail row key helper row type", "row: DailyRecordEntryDetailRowItem"),
             ("daily record detail row key helper fields", "return `${item.key}-${row.label}`;"),
             ("daily record detail row key helper binding", "key={dailyRecordDetailRowKey(item, row)}"),
-            ("daily record detail row label helper", 'function dailyRecordDetailRowLabel(row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number])'),
+            ("daily record detail row label helper", "function dailyRecordDetailRowLabel(row: DailyRecordEntryDetailRowItem)"),
             ("daily record detail row label helper fields", "return row.label;"),
             ("daily record detail row label helper binding", "label={dailyRecordDetailRowLabel(row)}"),
-            ("daily record detail row value helper", 'function dailyRecordDetailRowValue(row: ReturnType<typeof dailyRecordEntryDisplayItem>["detailRows"][number])'),
+            ("daily record detail row value helper", "function dailyRecordDetailRowValue(row: DailyRecordEntryDetailRowItem)"),
             ("daily record detail row value helper fields", "return row.value;"),
             ("daily record detail row value helper binding", "value={dailyRecordDetailRowValue(row)}"),
-            ("daily record entry menu target helper binding", "const target = dailyRecordEntryTarget(item);"),
-            ("daily record entry menu index target binding", "setDailyRecordMenuIndex((current) => (current === target ? null : target));"),
-            ("daily record entry menu open status binding", "setStatus(dailyRecordEntryMenuOpenStatusMessage(dailyRecordEntryTypeLabel(item)));"),
-            ("daily record entry management binding", "onPress={() => pressDailyRecordEntryMenu(item)}"),
-            ("daily record entry edit handler", "function pressDailyRecordEntryEdit(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
-            ("daily record entry delete handler", "function pressDailyRecordEntryDelete(item: ReturnType<typeof dailyRecordEntryDisplayItem>)"),
-            ("daily record entry edit binding", "onEditPress={() => pressDailyRecordEntryEdit(item)}"),
-            ("daily record entry delete binding", "onRemovePress={() => pressDailyRecordEntryDelete(item)}"),
-            ("daily record entry edit return target", "openPreviewRecordEdit(dailyRecordEntryTarget(item), dailyRecordEntryReturnScreen())"),
-            ("daily record entry delete return target", "openPreviewRecordRemoveConfirm(dailyRecordEntryTarget(item), dailyRecordEntryReturnScreen())"),
+            ("daily record entry management binding", "onPress={() => pressDailyRecordEntryMenu(item, onManageEntry)}"),
+            ("daily record entry edit handler", "function pressDailyRecordEntryEdit(item: DailyRecordEntryDisplayListItem, onEditEntry: (index: number) => void)"),
+            ("daily record entry delete handler", "function pressDailyRecordEntryDelete(item: DailyRecordEntryDisplayListItem, onRemoveEntry: (index: number) => void)"),
+            ("daily record entry edit binding", "onEditPress={() => pressDailyRecordEntryEdit(item, onEditEntry)}"),
+            ("daily record entry delete binding", "onRemovePress={() => pressDailyRecordEntryDelete(item, onRemoveEntry)}"),
+            ("daily record section list style", "dailyRecordSectionList: {"),
+            ("daily record section card style", "dailyRecordSectionCard: {"),
+            ("daily record entry card style", "dailyRecordEntryCard: {"),
             ("daily record delete confirm display helper binding", "const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayTexts("),
             ("daily record delete confirm title binding", "const aiRemoveConfirmTitleDisplayText = aiRemoveConfirmDisplay.title;"),
             ("daily record delete submit binding", "const aiRemoveConfirmSubmitDisplayText = aiRemoveConfirmDisplay.submit;"),
@@ -8416,7 +8433,48 @@ def main() -> int:
             ("daily record fixed save return style disabled", "isDailyRecordFixedSaveReturnDisabled ? styles.buttonDisabled : null"),
             ("daily record fixed save return disabled prop", "disabled={isDailyRecordFixedSaveReturnDisabled}"),
         ):
-            _assert_contains(label, content, marker)
+            source = (
+                daily_record_section_list_content
+                if (
+                    label.startswith("daily record section display")
+                    or label.startswith("daily record entry display")
+                    or label == "daily record section list component"
+                    or label.startswith("daily record section list sections prop")
+                    or label.startswith("daily record section renderer")
+                    or label.startswith("daily record section key")
+                    or label.startswith("daily record section icon")
+                    or label.startswith("daily record section title")
+                    or label.startswith("daily record section description")
+                    or label.startswith("daily record section count")
+                    or label.startswith("daily record section entries")
+                    or label.startswith("daily record section has")
+                    or label.startswith("daily record section empty")
+                    or label.startswith("daily record detail row")
+                    or label.startswith("daily record entry management handler")
+                    or label.startswith("daily record entry target")
+                    or label.startswith("daily record entry type label")
+                    or label.startswith("daily record entry key")
+                    or label.startswith("daily record entry time")
+                    or label.startswith("daily record entry payload")
+                    or label.startswith("daily record entry accessibility")
+                    or label.startswith("daily record entry manage")
+                    or label.startswith("daily record entry edit accessibility")
+                    or label.startswith("daily record entry edit label")
+                    or label.startswith("daily record entry remove")
+                    or label.startswith("daily record entry detail")
+                    or label.startswith("daily record entry menu open")
+                    or label.startswith("daily record entry management binding")
+                    or label.startswith("daily record entry edit handler")
+                    or label.startswith("daily record entry delete handler")
+                    or label.startswith("daily record entry edit binding")
+                    or label.startswith("daily record entry delete binding")
+                    or label.startswith("daily record section list style")
+                    or label.startswith("daily record section card style")
+                    or label.startswith("daily record entry card style")
+                )
+                else content
+            )
+            _assert_contains(label, source, marker)
         for label, marker in (
             ("daily record transcript list component", "export function DailyTranscriptList"),
             ("daily record transcript list item type", "export type DailyTranscriptDisplayItem ="),
@@ -8483,10 +8541,10 @@ def main() -> int:
             ("direct daily transcript item source binding", "<Text style={styles.evidence}>{item.sourceText}</Text>"),
         ):
             _assert_not_contains(label, content, marker)
-        daily_record_section_render_block = _match_block(
+        _assert_not_contains(
+            "direct daily record section item map",
             content,
-            r"dailyRecordSectionItems\.map\(\(section\) => \(([\s\S]*?dailyRecordSectionEmptyCopy\(section\)[\s\S]*?</View>)",
-            "daily record section render block",
+            "dailyRecordSectionItems.map((section) =>",
         )
         for label, marker in (
             ("direct daily record section key binding", "key={section.id}"),
@@ -8494,15 +8552,13 @@ def main() -> int:
             ("direct daily record section title binding", "{section.title}"),
             ("direct daily record section description literal", "<Text style={styles.evidence}>欄位依分類顯示；沒有提到的欄位保持空白。</Text>"),
             ("direct daily record section count binding", "{section.countLabel}"),
-            ("direct daily record section entries length binding", "section.entries.length"),
-            ("direct daily record section entries map binding", "section.entries.map"),
             ("direct daily record section empty copy binding", "{section.emptyCopy}"),
         ):
-            _assert_not_contains(label, daily_record_section_render_block, marker)
-        daily_record_entry_render_block = _match_block(
+            _assert_not_contains(label, content, marker)
+        _assert_not_contains(
+            "direct daily record section entries map",
             content,
-            r"dailyRecordSectionEntries\(section\)\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
-            "daily record entry render block",
+            "dailyRecordSectionEntries(section).map((item) =>",
         )
         for label, marker in (
             ("direct daily record entry key binding", "key={item.key}"),
@@ -8516,7 +8572,7 @@ def main() -> int:
             ("direct daily record entry remove accessibility binding", "accessibilityLabel={item.removeAccessibilityLabel}"),
             ("direct daily record entry remove label literal", "<Text style={styles.dangerButtonText}>刪除</Text>"),
         ):
-            _assert_not_contains(label, daily_record_entry_render_block, marker)
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("AI review no-candidate title helper", "function aiReviewNoCandidateTitleCopy()"),
             ("AI review no-candidate body helper", "function aiReviewNoCandidateBodyCopy()"),
@@ -9579,7 +9635,7 @@ def main() -> int:
         )
         _assert_contains(
             "history daily record detail card style",
-            content,
+            history_daily_record_section_card_content,
             "style={styles.dailyRecordEntryCard}",
         )
         for label, marker in (

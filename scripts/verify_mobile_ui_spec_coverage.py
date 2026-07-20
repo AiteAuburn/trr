@@ -66,7 +66,7 @@ CANONICAL_SPEC_SCREENS = (
         "4.17",
         "每日紀錄頁（AI 整理完成頁）",
         "aiSaveConfirm",
-        ("dailyRecordSectionItems.map", "todayTranscriptTitleDisplayText", "fixedSaveBar"),
+        ("sections={dailyRecordSectionItems}", "todayTranscriptTitleDisplayText", "fixedSaveBar"),
     ),
     SpecScreen("4.16.2", "AI 儲存失敗頁", "aiSaveFailure", ("items={aiSaveFailureChecklistItems}", "openManualRecord")),
 )
