@@ -55,6 +55,12 @@ export function nativeModelDownloadSuccessStatusMessage() {
   return boundUiMessage("模型已下載，已更新本機模型清單。");
 }
 
+export function nativeModelDownloadSuccessState() {
+  return {
+    status: nativeModelDownloadSuccessStatusMessage()
+  };
+}
+
 export function nativeModelDownloadFailureStatusMessage(error: unknown) {
   return safeUiError(error, "模型下載失敗");
 }

@@ -500,7 +500,7 @@ import {
   nativeModelDownloadButtonLabel,
   nativeModelDownloadFailureState,
   nativeModelDownloadStartState,
-  nativeModelDownloadSuccessStatusMessage,
+  nativeModelDownloadSuccessState,
   nativeModuleCheckAccessibilityLabel,
   nativeModuleCheckButtonLabel,
   nativeModuleCheckFailureState,
@@ -7971,7 +7971,8 @@ export default function App() {
       setWhisperModelPath(nextPaths.whisperModelPath);
     }
     await refreshDownloadedModels();
-    setNativeStatus(nativeModelDownloadSuccessStatusMessage());
+    const nextState = nativeModelDownloadSuccessState();
+    setNativeStatus(nextState.status);
   }
 
   async function downloadSelectedModel() {

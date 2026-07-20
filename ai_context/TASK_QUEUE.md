@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2141: Move native model download success state helper
+
+Status: done
+
+Completed:
+
+- Added `nativeModelDownloadSuccessState` to `nativeStatusCopy.ts`.
+- Replaced direct model-download success status setup in `App.tsx` with the state helper result.
+- Kept native model download path updates, downloaded-model refresh, action readiness, progress callback, download request, and failure flow in `App.tsx`.
+- Updated navigation verifier coverage to require the native status helper and App binding.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2140: Move native Llama success state helper
 
 Status: done
