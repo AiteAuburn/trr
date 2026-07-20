@@ -5324,23 +5324,23 @@ def main() -> int:
         )
         _assert_contains(
             "AI candidate preview remove records update helper",
-            content,
+            record_edit_transforms_content,
             "function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number)",
         )
         _assert_contains(
             "AI candidate preview remove records update helper internals",
-            content,
-            "function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number) {\n    return records.filter((_, recordIndex) => isPreviewRecordKeptAfterRemove(recordIndex, removeIndex));",
+            record_edit_transforms_content,
+            "function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number) {\n  return records.filter((_, recordIndex) => isPreviewRecordKeptAfterRemove(recordIndex, removeIndex));",
         )
         _assert_contains(
             "AI candidate preview remove keep-index helper",
-            content,
+            record_edit_transforms_content,
             "function isPreviewRecordKeptAfterRemove(recordIndex: number, removeIndex: number)",
         )
         _assert_contains(
             "AI candidate preview remove keep-index helper internals",
-            content,
-            "function isPreviewRecordKeptAfterRemove(recordIndex: number, removeIndex: number) {\n    return recordIndex !== removeIndex;",
+            record_edit_transforms_content,
+            "function isPreviewRecordKeptAfterRemove(recordIndex: number, removeIndex: number) {\n  return recordIndex !== removeIndex;",
         )
         _assert_contains(
             "AI candidate preview remove records update helper binding",
@@ -8567,6 +8567,8 @@ def main() -> int:
             ("inline preview edited records helper", "function previewRecordsWithEditedRecord("),
             ("inline preview edit target index helper", "function isPreviewRecordEditTargetIndex(recordIndex: number, editIndex: number)"),
             ("inline preview edit payload helper", "function previewRecordWithEditPayload("),
+            ("inline preview remove records helper", "function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number)"),
+            ("inline preview remove keep-index helper", "function isPreviewRecordKeptAfterRemove(recordIndex: number, removeIndex: number)"),
             ("inline selected record update replacement map", "current.map((record) => (record.id === updated.id ? updated : record))"),
         ):
             _assert_not_contains(label, content, marker)

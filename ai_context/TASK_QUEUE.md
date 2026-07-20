@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2111: Move preview remove record helpers
+
+Status: done
+
+Completed:
+
+- Added `previewRecordsWithoutRecord` and `isPreviewRecordKeptAfterRemove` to `recordEditTransforms.ts`.
+- Removed the same local pure helpers from `App.tsx`.
+- Kept preview remove draft flow, return handling, status messages, and preview application in `App.tsx`.
+- Updated navigation verifier coverage to require the transform helpers in `recordEditTransforms.ts` and reject reintroducing the inline App helpers.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2110: Move grouped history display sections helper
 
 Status: done

@@ -169,6 +169,14 @@ export function isPreviewRecordEditTargetIndex(recordIndex: number, editIndex: n
   return recordIndex === editIndex;
 }
 
+export function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number) {
+  return records.filter((_, recordIndex) => isPreviewRecordKeptAfterRemove(recordIndex, removeIndex));
+}
+
+export function isPreviewRecordKeptAfterRemove(recordIndex: number, removeIndex: number) {
+  return recordIndex !== removeIndex;
+}
+
 export function previewRecordWithEditPayload(
   record: PendingRecord,
   occurredAt: string,

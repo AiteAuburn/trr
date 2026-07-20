@@ -15,6 +15,38 @@
 
 ## 2026-07-16
 
+### T2111 move preview remove record helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordEditTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `previewRecordsWithoutRecord` and `isPreviewRecordKeptAfterRemove` to `recordEditTransforms.ts`.
+- Removed the same local pure helpers from `App.tsx`.
+- Kept preview remove draft flow, return handling, status messages, and preview application in `App.tsx`.
+- Updated navigation verifier coverage to require the transform helpers in `recordEditTransforms.ts` and reject reintroducing the inline App helpers.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue extracting preview record transforms from `App.tsx` one boundary at a time.
+
 ### T2110 move grouped history display sections helper
 
 類型：mobile / refactor / verifier / docs

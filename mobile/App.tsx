@@ -93,6 +93,7 @@ import {
   glucoseUnitOptions,
   manualRecordTypes,
   mealTypeOptions,
+  previewRecordsWithoutRecord,
   previewRecordsWithEditedRecord,
   recordEditFieldMaxLength,
   recordPayloadToEditFields,
@@ -3501,14 +3502,6 @@ export default function App() {
 
   function applyPreviewRecordRemoveConfirmSuccess(removeIndex: number) {
     removePreviewRecord(removeIndex);
-  }
-
-  function previewRecordsWithoutRecord(records: PendingRecord[], removeIndex: number) {
-    return records.filter((_, recordIndex) => isPreviewRecordKeptAfterRemove(recordIndex, removeIndex));
-  }
-
-  function isPreviewRecordKeptAfterRemove(recordIndex: number, removeIndex: number) {
-    return recordIndex !== removeIndex;
   }
 
   function applyPreviewRecords(nextRecords: PendingRecord[]) {
