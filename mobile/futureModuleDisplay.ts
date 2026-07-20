@@ -1212,6 +1212,18 @@ export function foodCommunityItemsFromApi(values: FoodCommunityApiItem[]) {
   return values.slice(0, maxListItems * 4).map(foodCommunityItemFromApi);
 }
 
+export function foodCommunityCategoriesFromApi(values: FoodCommunityApiCategoryRead[]) {
+  return values.slice(0, foodCommunityCategories.length).map((category) => ({
+    id: mobileFoodCategoryFromApi(category.code),
+    label: boundDisplayText(category.label || "分類", maxDisplayTextLength),
+    foodCount: clampNumber(category.food_count ?? 0, 0, maxMobileCountValue),
+    sampleFoods: (category.sample_foods ?? [])
+      .slice(0, 3)
+      .map((food) => boundDisplayText(food, 40))
+      .filter(Boolean)
+  }));
+}
+
 export function foodCommunityItemsWithDetail(items: FoodCommunityItem[], detailedItem: FoodCommunityItem) {
   return items.map((item) => (item.id === detailedItem.id ? detailedItem : item));
 }

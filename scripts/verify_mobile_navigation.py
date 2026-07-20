@@ -571,8 +571,8 @@ def _verify_food_community_category_contract(content: str, future_module_display
     )
     _assert_contains("food community category count response", backend_api_content, "select(FoodItem.category, func.count(FoodItem.id)).group_by(FoodItem.category)")
     _assert_contains("food community category sample response", backend_api_content, "sample_foods=sample_foods_by_category.get(code, [])")
-    _assert_contains("food community mobile category count state", content, "foodCount: clampNumber(category.food_count ?? 0, 0, maxMobileCountValue)")
-    _assert_contains("food community mobile category samples state", content, "sampleFoods: (category.sample_foods ?? [])")
+    _assert_contains("food community mobile category count state", future_module_display_content, "foodCount: clampNumber(category.food_count ?? 0, 0, maxMobileCountValue)")
+    _assert_contains("food community mobile category samples state", future_module_display_content, "sampleFoods: (category.sample_foods ?? [])")
     _assert_contains("food community category summary render", content, "{foodCommunityCategorySummary(selectedFoodCommunityCategoryDisplay)}")
     _assert_contains(
         "food community detail newest eaten share ordering",
@@ -12253,6 +12253,7 @@ def main() -> int:
             ("food community backend category options", "const foodCommunityCategoriesForDisplay = foodCommunityDisplay.categoriesForDisplay;"),
             ("food community category sync function", "async function loadFoodCommunityCategories()"),
             ("food community category endpoint", '"/community/foods/categories"'),
+            ("food community category response transform binding", "const mappedCategories = foodCommunityCategoriesFromApi(categories);"),
             ("food community category open sync", "void loadFoodCommunityCategories();"),
             ("food community display bundle helper binding", "const foodCommunityDisplay = useMemo("),
             ("food community display bundle backend categories", "backendCategories: foodCommunityBackendCategories"),
@@ -13916,6 +13917,9 @@ def main() -> int:
             ("food community category display helper", "export function foodCommunityCategoryDisplayItem(value: { id: FoodCommunityCategory; label: string; foodCount?: number; sampleFoods?: string[] })"),
             ("food community category display items helper", "export function foodCommunityCategoryDisplayItems("),
             ("food community category display items map", "return values.map(foodCommunityCategoryDisplayItem);"),
+            ("food community api categories transform helper", "export function foodCommunityCategoriesFromApi(values: FoodCommunityApiCategoryRead[])"),
+            ("food community api categories transform helper limit", "return values.slice(0, foodCommunityCategories.length).map((category) => ({"),
+            ("food community api categories sample food limit", ".slice(0, 3)\n      .map((food) => boundDisplayText(food, 40))\n      .filter(Boolean)"),
             ("food community category accessibility copy", "accessibilityLabel: boundDisplayText(`切換食物分類：${label}，${summary}`, maxDisplayDetailTextLength)"),
             ("food community share display helper", "export function foodCommunityShareDisplayItem(value: FoodCommunityShare)"),
             ("food community share display summary", "summary: boundDisplayText(`食用前 ${before}，食用後 ${after}，血糖變化 ${rise} mg/dL`, maxDisplayDetailTextLength)"),
@@ -14735,6 +14739,11 @@ def main() -> int:
             "food community direct list response map",
             content,
             "foods.slice(0, maxListItems * 4).map(foodCommunityItemFromApi)",
+        )
+        _assert_not_contains(
+            "food community direct category response map",
+            content,
+            "categories.slice(0, foodCommunityCategories.length).map((category) => ({",
         )
         _assert_not_contains(
             "food community direct detail status title binding",

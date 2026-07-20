@@ -175,6 +175,7 @@ import {
   communityPublicSettingsStatusMessages,
   emptyFoodCommunityShareFields,
   communityReadinessChecklistDisplayItems,
+  foodCommunityCategoriesFromApi,
   foodCommunityCategories,
   foodCommunityCategoryDisplayItem,
   foodCommunityDetailStatusMessages,
@@ -203,7 +204,6 @@ import {
   achievementYearReviewStatusDisplayTexts,
   limitedAchievementDisplayItems,
   localAchievementItemsForRecords,
-  mobileFoodCategoryFromApi,
   privacyPreviewBoundaryDisplayItem,
   rankingBoundaryDisplayRows,
   rankingLocalPreviewBoundaryCopy,
@@ -5978,15 +5978,7 @@ export default function App() {
         "/community/foods/categories",
         { headers: protectedRequestHeaders(account.id, accessToken) }
       );
-      const mappedCategories = categories.slice(0, foodCommunityCategories.length).map((category) => ({
-        id: mobileFoodCategoryFromApi(category.code),
-        label: boundDisplayText(category.label || "分類", maxDisplayTextLength),
-        foodCount: clampNumber(category.food_count ?? 0, 0, maxMobileCountValue),
-        sampleFoods: (category.sample_foods ?? [])
-          .slice(0, 3)
-          .map((food) => boundDisplayText(food, 40))
-          .filter(Boolean)
-      }));
+      const mappedCategories = foodCommunityCategoriesFromApi(categories);
       setFoodCommunityBackendCategories(mappedCategories.length > 0 ? mappedCategories : []);
     } catch {
       setFoodCommunityBackendCategories([]);

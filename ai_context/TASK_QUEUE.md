@@ -34,6 +34,26 @@ None.
 
 ## Done
 
+### T2099: Move food community category response transform
+
+Status: done
+
+Completed:
+
+- Added `foodCommunityCategoriesFromApi` to `futureModuleDisplay.ts`.
+- Replaced the inline food community category response slice/map in `App.tsx`.
+- Removed the now-unused `mobileFoodCategoryFromApi` import from `App.tsx`.
+- Kept category request, backend category state update, and failure fallback in `App.tsx`.
+- Updated navigation verifier coverage to require the domain transform helper and reject the old inline category response map.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2098: Move food community list response transform
 
 Status: done
