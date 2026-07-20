@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2192: Move preview action return state helper
+
+Status: done
+
+Completed:
+
+- Added the preview action return state helper to `appViewState.ts`.
+- Removed direct preview return-screen boolean assembly from `App.tsx`.
+- Kept AI candidate edit/delete return behavior, daily-record draft reorganization branching, and remove confirmation display behavior unchanged.
+- Updated navigation verifier coverage to require the return state helper, App helper bindings, and no direct return-screen boolean regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2191: Move preview record display bundle
 
 Status: done

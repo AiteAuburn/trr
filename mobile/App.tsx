@@ -52,6 +52,7 @@ import {
 } from "./appRuntimeConfig";
 import {
   aiSaveConfirmState,
+  previewActionReturnState,
   previewRecordState,
   recordCollectionState,
   saveSuccessState
@@ -2107,8 +2108,9 @@ export default function App() {
   const previewSaveConfirmDisplayItems = previewRecordDisplay.previewSaveConfirmDisplayItems;
   const selectedPreviewRecordDisplayItem = previewRecordDisplay.selectedPreviewRecordDisplayItem;
   const pendingPreviewRemoveDisplayItem = previewRecordDisplay.pendingPreviewRemoveDisplayItem;
-  const isPreviewActionReturningToDailyRecord = previewActionReturnScreen === "aiSaveConfirm";
-  const isDailyRecordRemoveConfirm = isPreviewActionReturningToDailyRecord;
+  const previewActionReturn = previewActionReturnState(previewActionReturnScreen);
+  const isPreviewActionReturningToDailyRecord = previewActionReturn.isReturningToDailyRecord;
+  const isDailyRecordRemoveConfirm = previewActionReturn.isDailyRecordRemoveConfirm;
   const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayTexts(
     isDailyRecordRemoveConfirm,
     pendingPreviewRemoveDisplayItem?.confidencePercent ?? null

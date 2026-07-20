@@ -4,6 +4,7 @@ import {
   maxMobilePreviewRecords,
   maxMobileRejectedEvents
 } from "./mobileBounds";
+import type { AppScreen } from "./navigationConfig";
 import {
   lowConfidencePendingRecordCount,
   type ParsePreviewResponse,
@@ -62,6 +63,15 @@ export function aiSaveConfirmState(value: {
     hasWarnings: value.previewState.hasWarnings,
     isBlockedByBackend,
     isSubmitDisabled: value.isBusy || isBlockedByBackend || value.previewState.isEmpty
+  };
+}
+
+export function previewActionReturnState(returnScreen: AppScreen) {
+  const isReturningToDailyRecord = returnScreen === "aiSaveConfirm";
+
+  return {
+    isDailyRecordRemoveConfirm: isReturningToDailyRecord,
+    isReturningToDailyRecord
   };
 }
 
