@@ -46,7 +46,6 @@ import { AnalysisCustomDateRangeFields } from "./analysisCustomDateRangeFields";
 import {
   boundDisplayText,
   boundIdentifier,
-  boundNativeDebugInput,
   boundStoreSearchText,
   boundUiMessage,
   clampNullableNumber,
@@ -3194,8 +3193,8 @@ export default function App() {
     sourceAudioPath: string,
     voiceSeconds: number
   ) {
-    const safeAudioPath = boundNativeDebugInput(sourceAudioPath.trim());
-    const safeModelPath = boundNativeDebugInput(whisperModelPath.trim());
+    const safeAudioPath = nativeDebugInputValue(sourceAudioPath.trim());
+    const safeModelPath = nativeDebugInputValue(whisperModelPath.trim());
     if (!safeAudioPath) {
       setStatus(recordingTextFallbackStatusMessage());
       return false;
@@ -3276,7 +3275,7 @@ export default function App() {
       if (recording) {
         await recording.stopAndUnloadAsync();
         const uri = recording.getURI();
-        capturedAudioPath = uri ? boundNativeDebugInput(uri) : "";
+        capturedAudioPath = uri ? nativeDebugInputValue(uri) : "";
         setAudioPath(capturedAudioPath);
       }
       await Audio.setAudioModeAsync({
@@ -8008,9 +8007,9 @@ export default function App() {
 
   async function handleNativeModelDownloadSuccess(uri: string) {
     if (downloadKind === "llama") {
-      setLlamaModelPath(boundNativeDebugInput(uri));
+      setLlamaModelPath(nativeDebugInputValue(uri));
     } else {
-      setWhisperModelPath(boundNativeDebugInput(uri));
+      setWhisperModelPath(nativeDebugInputValue(uri));
     }
     await refreshDownloadedModels();
     setNativeStatus(nativeModelDownloadSuccessStatusMessage());

@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2114: Reuse native debug input transform in App
+
+Status: done
+
+Completed:
+
+- Replaced remaining direct `boundNativeDebugInput` calls in `App.tsx` with `nativeDebugInputValue`.
+- Removed the `boundNativeDebugInput` import from `App.tsx`.
+- Kept local Whisper input bounding, recording URI capture, downloaded model auto-select, native debug text inputs, and native model download success behavior unchanged.
+- Updated navigation verifier coverage to require the transform helper usage and reject direct App-level `boundNativeDebugInput` calls.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2113: Move native debug input helper
 
 Status: done
