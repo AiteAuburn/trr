@@ -218,12 +218,18 @@ import {
   commercePreviewReturnStoreStatusMessage,
   communityBoundaryDisplayRows,
   communityActionDisplayTexts,
+  communityHeroIconLabel,
   communityLeaderboardSyncStatusMessages,
   communityLeaderboardDisplaySections,
   communityLeaderboardTypes,
+  communityPublicNamePreviewLabel,
+  communityPublicProfileSaveAccessibilityLabel,
+  communityPublicProfileSaveButtonLabel,
   communityPublicSettingsStatusMessages,
   emptyFoodCommunityShareFields,
   communityReadinessChecklistDisplayItems,
+  communityScreenSubtitleCopy,
+  communityScreenTitleLabel,
   foodCommunityCategoriesFromApi,
   foodCommunityCategories,
   foodCommunityCategoryDisplayItem,
@@ -287,9 +293,15 @@ import {
   localAchievementItemsForRecords,
   privacyPreviewBoundaryDisplayItem,
   rankingBoundaryDisplayRows,
+  rankingCloseButtonLabel,
+  rankingHeroIconLabel,
+  rankingLocalStreakPreviewLabel,
   rankingLocalPreviewBoundaryCopy,
   rankingPreviewBoundaryDisplayItem,
   rankingReadinessChecklistDisplayItems,
+  rankingScreenSubtitleCopy,
+  rankingScreenTitleLabel,
+  rankingStreakDisplayText,
   reminderPreviewBoundaryDisplayItem,
   selectedFutureModuleDisplayItem,
   localYearlyHealthOutcomeDisplayRows,
@@ -4742,22 +4754,6 @@ export default function App() {
     return items[0]?.id ?? fallbackId;
   }
 
-  function communityPublicNamePreviewLabel() {
-    return "公開顯示名稱預覽";
-  }
-
-  function communityHeroIconLabel() {
-    return "群";
-  }
-
-  function communityPublicProfileSaveAccessibilityLabel() {
-    return "儲存社群公開顯示名稱，不公開健康數值";
-  }
-
-  function communityPublicProfileSaveButtonLabel() {
-    return "儲存公開名稱";
-  }
-
   function communityCloseAccessibilityLabel() {
     return auxiliaryDisplayLabels.closeReturn;
   }
@@ -4810,40 +4806,8 @@ export default function App() {
     return returnFromCommunityPreview;
   }
 
-  function communityScreenTitleLabel() {
-    return "食物社群";
-  }
-
-  function communityScreenSubtitleCopy() {
-    return "同步真實食物升糖分享、點數與公開排行榜；貼文留言治理仍待正式開放。";
-  }
-
-  function rankingScreenTitleLabel() {
-    return "社群排行";
-  }
-
-  function rankingScreenSubtitleCopy() {
-    return "同步分享次數、貢獻度與食物測試達人公開榜單；只顯示 opt-in 使用者的非敏感分數。";
-  }
-
-  function rankingLocalStreakPreviewLabel() {
-    return "本機連續記錄預覽";
-  }
-
   function rankingLocalPreviewBoundaryCopyText() {
     return rankingLocalPreviewBoundaryDisplayText;
-  }
-
-  function rankingHeroIconLabel() {
-    return "榜";
-  }
-
-  function rankingStreakDisplayLabel(days: number) {
-    return `${days} 天`;
-  }
-
-  function rankingStreakDisplayText() {
-    return rankingStreakDisplayLabel(rankingStreakDisplayDays);
   }
 
   function rankingReadinessSectionLabel() {
@@ -4852,10 +4816,6 @@ export default function App() {
 
   function rankingCloseAccessibilityLabel() {
     return auxiliaryDisplayLabels.closeReturn;
-  }
-
-  function rankingCloseButtonLabel() {
-    return "×";
   }
 
   function rankingClosePressHandler() {
@@ -10151,7 +10111,7 @@ export default function App() {
               </View>
               <View style={styles.timelineContent}>
                 <Text style={styles.evidence}>{rankingLocalStreakPreviewLabel()}</Text>
-                <Text style={styles.heroNumber}>{rankingStreakDisplayText()}</Text>
+                <Text style={styles.heroNumber}>{rankingStreakDisplayText(rankingStreakDisplayDays)}</Text>
                 <Text style={styles.evidence}>{rankingLocalPreviewBoundaryCopyText()}</Text>
               </View>
             </View>

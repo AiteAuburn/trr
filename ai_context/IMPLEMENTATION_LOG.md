@@ -15,6 +15,39 @@
 
 ## 2026-07-20
 
+### T2173 move community ranking static labels
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added Community public-name/profile/screen static display labels to `futureModuleDisplay.ts`.
+- Added Ranking screen/streak/hero/close static display labels to `futureModuleDisplay.ts`.
+- Removed duplicate Community/Ranking static helper definitions from `App.tsx`.
+- Kept Community public profile save controls, Food Community screen title/subtitle, Ranking hero text, close button text, and ranking preview copy unchanged.
+- Updated navigation verifier coverage to require future-module helper exports, App import/render bindings, and no local helper regressions in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2172 move food community copy accessors
 
 類型：mobile / refactor / verifier / docs

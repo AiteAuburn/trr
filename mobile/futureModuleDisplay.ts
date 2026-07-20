@@ -1796,6 +1796,30 @@ export function communityPreviewBoundaryDisplayItem() {
   );
 }
 
+export function communityPublicNamePreviewLabel() {
+  return "公開顯示名稱預覽";
+}
+
+export function communityHeroIconLabel() {
+  return "群";
+}
+
+export function communityPublicProfileSaveAccessibilityLabel() {
+  return "儲存社群公開顯示名稱，不公開健康數值";
+}
+
+export function communityPublicProfileSaveButtonLabel() {
+  return "儲存公開名稱";
+}
+
+export function communityScreenTitleLabel() {
+  return "食物社群";
+}
+
+export function communityScreenSubtitleCopy() {
+  return "同步真實食物升糖分享、點數與公開排行榜；貼文留言治理仍待正式開放。";
+}
+
 export function communityPublicNameBoundaryCopy() {
   return boundDisplayText(
     "公開名稱與排行榜 opt-in 已可同步 backend；健康紀錄仍預設私密，貼文與留言需另行 opt-in。",
@@ -1828,6 +1852,34 @@ export function rankingPreviewBoundaryDisplayItem() {
     "公開榜單",
     "一般操作路徑只讀取 opt-in 公開榜單與非敏感統計；不公開健康數值、不上傳 streak、不呼叫 AI。"
   );
+}
+
+export function rankingScreenTitleLabel() {
+  return "社群排行";
+}
+
+export function rankingScreenSubtitleCopy() {
+  return "同步分享次數、貢獻度與食物測試達人公開榜單；只顯示 opt-in 使用者的非敏感分數。";
+}
+
+export function rankingLocalStreakPreviewLabel() {
+  return "本機連續記錄預覽";
+}
+
+export function rankingHeroIconLabel() {
+  return "榜";
+}
+
+export function rankingStreakDisplayLabel(days: number) {
+  return `${days} 天`;
+}
+
+export function rankingStreakDisplayText(days: number) {
+  return rankingStreakDisplayLabel(days);
+}
+
+export function rankingCloseButtonLabel() {
+  return "×";
 }
 
 export function rankingLocalPreviewBoundaryCopy() {

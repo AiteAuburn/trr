@@ -34,6 +34,26 @@ None.
 
 ## Done
 
+### T2173: Move community ranking static labels
+
+Status: done
+
+Completed:
+
+- Added Community public-name/profile/screen static display labels to `futureModuleDisplay.ts`.
+- Added Ranking screen/streak/hero/close static display labels to `futureModuleDisplay.ts`.
+- Removed duplicate Community/Ranking static helper definitions from `App.tsx`.
+- Kept Community public profile save controls, Food Community screen title/subtitle, Ranking hero text, close button text, and ranking preview copy unchanged.
+- Updated navigation verifier coverage to require future-module helper exports, App import/render bindings, and no local helper regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2172: Move food community copy accessors
 
 Status: done
