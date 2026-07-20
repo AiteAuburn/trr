@@ -505,7 +505,7 @@ import {
   nativeModuleCheckButtonLabel,
   nativeModuleCheckFailureState,
   nativeModuleCheckStartState,
-  nativeModuleCheckResultStatusMessage,
+  nativeModuleCheckResultState,
   nativeStatusDisplayTexts,
   nativeWhisperFailureState,
   nativeWhisperMissingInputState,
@@ -7935,7 +7935,8 @@ export default function App() {
   }
 
   function handleNativeModuleCheckSuccess(message: string) {
-    setNativeStatus(nativeModuleCheckResultStatusMessage(message));
+    const nextState = nativeModuleCheckResultState(message);
+    setNativeStatus(nextState.status);
   }
 
   function startNativeModuleCheckStatus() {

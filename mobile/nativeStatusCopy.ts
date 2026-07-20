@@ -135,6 +135,12 @@ export function nativeModuleCheckResultStatusMessage(message: string) {
   return boundUiMessage(message);
 }
 
+export function nativeModuleCheckResultState(message: string) {
+  return {
+    status: nativeModuleCheckResultStatusMessage(message)
+  };
+}
+
 export function nativeModuleCheckFailureStatusMessage(error: unknown) {
   return safeUiError(error, "Native module check failed");
 }
