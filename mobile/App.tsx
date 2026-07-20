@@ -104,6 +104,7 @@ import {
   boundParsePreviewResponse,
   boundRecordItem,
   boundRecordsList,
+  lowConfidencePendingRecordCount,
   mergeRecordsByCursorOrder,
   recordsListWithoutDeletedRecord,
   recordsListWithUpdatedRecord,
@@ -904,7 +905,7 @@ function previewRecordState(preview: ParsePreviewResponse | null) {
   const records = preview?.records ?? [];
   const rejectedEvents = preview?.rejected_events ?? [];
   const recordCount = records.length;
-  const lowConfidenceRecordCount = records.filter((record) => (record.confidence ?? 1) < 0.7).length;
+  const lowConfidenceRecordCount = lowConfidencePendingRecordCount(records);
   const rejectedEventCount = rejectedEvents.length;
 
   return {

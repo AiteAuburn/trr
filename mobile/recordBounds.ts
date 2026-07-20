@@ -203,6 +203,10 @@ export function boundRecordItem(value: RecordItem): RecordItem {
   };
 }
 
+export function lowConfidencePendingRecordCount(records: PendingRecord[]) {
+  return records.filter((record) => (record.confidence ?? 1) < 0.7).length;
+}
+
 export function mergeRecordsByCursorOrder(current: RecordItem[], incoming: RecordItem[]) {
   const byId = new Map<string, RecordItem>();
   for (const record of [...current, ...incoming].map(boundRecordItem)) {
