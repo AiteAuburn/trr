@@ -101,6 +101,8 @@ export type CommunityLeaderboardDisplaySection = {
   emptyCopy: string;
 };
 
+export const communityLeaderboardTypes: CommunityLeaderboardType[] = ["share_count", "contribution", "food_tester"];
+
 export type CommunityPublicSettings = {
   display_name: string;
   leaderboard_opt_in: boolean;
@@ -933,7 +935,7 @@ export function communityLeaderboardScoreLabel(value: CommunityLeaderboardType, 
 }
 
 export function communityLeaderboardDisplaySection(value: CommunityLeaderboardApiResponse): CommunityLeaderboardDisplaySection {
-  const type = ["share_count", "contribution", "food_tester"].includes(value.leaderboard_type)
+  const type = communityLeaderboardTypes.includes(value.leaderboard_type)
     ? value.leaderboard_type
     : "share_count";
   const label = communityLeaderboardLabel(type);
@@ -948,6 +950,12 @@ export function communityLeaderboardDisplaySection(value: CommunityLeaderboardAp
     })),
     emptyCopy: boundDisplayText("目前沒有 opt-in 的公開榜單資料。", maxDisplayDetailTextLength)
   };
+}
+
+export function communityLeaderboardDisplaySections(
+  values: CommunityLeaderboardApiResponse[]
+): CommunityLeaderboardDisplaySection[] {
+  return values.map(communityLeaderboardDisplaySection);
 }
 
 export function boundCommunityPublicSettings(value: CommunityPublicSettings): CommunityPublicSettings {

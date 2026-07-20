@@ -12409,9 +12409,8 @@ def main() -> int:
             ("ranking sync success status binding", "setRankingActionStatus(\n        communityLeaderboardSyncStatusMessages({"),
             ("ranking sync failure status binding", "setRankingActionStatus(leaderboardSyncStatus.failure);"),
             ("ranking backend endpoint", "`/community/leaderboards?${query.toString()}`"),
-            ("ranking share count type", '"share_count"'),
-            ("ranking contribution type", '"contribution"'),
-            ("ranking food tester type", '"food_tester"'),
+            ("ranking types helper binding", "communityLeaderboardTypes.map((leaderboardType) => {"),
+            ("ranking display sections helper binding", "const displaySections = communityLeaderboardDisplaySections(sections);"),
             ("ranking display sections state", "const [rankingLeaderboardSections, setRankingLeaderboardSections]"),
             ("ranking section render", "<RankingLeaderboardList sections={rankingLeaderboardSections} />"),
             ("ranking entry render", "rankingLeaderboardSectionEntries(section).map((entry) =>"),
@@ -13900,7 +13899,11 @@ def main() -> int:
             ("community leaderboard type", 'export type CommunityLeaderboardType = "share_count" | "contribution" | "food_tester";'),
             ("community leaderboard api response type", "export type CommunityLeaderboardApiResponse = {"),
             ("community leaderboard display section type", "export type CommunityLeaderboardDisplaySection = {"),
+            ("community leaderboard types helper", 'export const communityLeaderboardTypes: CommunityLeaderboardType[] = ["share_count", "contribution", "food_tester"];'),
             ("ranking display section helper", "export function communityLeaderboardDisplaySection(value: CommunityLeaderboardApiResponse): CommunityLeaderboardDisplaySection"),
+            ("ranking display section type guard", "const type = communityLeaderboardTypes.includes(value.leaderboard_type)"),
+            ("ranking display sections helper", "export function communityLeaderboardDisplaySections("),
+            ("ranking display sections helper map", "return values.map(communityLeaderboardDisplaySection);"),
             ("ranking contribution label", "return \"貢獻度排行\";"),
             ("ranking food tester label", "return \"食物測試達人排行\";"),
             ("ranking share count label", "return \"分享次數排行\";"),
@@ -15081,6 +15084,16 @@ def main() -> int:
             "ranking direct leaderboard section map",
             content,
             "rankingLeaderboardSections.map((section) => (",
+        )
+        _assert_not_contains(
+            "ranking direct leaderboard type array",
+            content,
+            'const rankingTypes: CommunityLeaderboardType[] = ["share_count", "contribution", "food_tester"];',
+        )
+        _assert_not_contains(
+            "ranking direct display section response map",
+            content,
+            "sections.map(communityLeaderboardDisplaySection)",
         )
         _assert_not_contains(
             "ranking direct leaderboard section label binding",

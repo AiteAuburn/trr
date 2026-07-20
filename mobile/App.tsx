@@ -172,7 +172,8 @@ import {
   communityBoundaryDisplayRows,
   communityActionDisplayTexts,
   communityLeaderboardSyncStatusMessages,
-  communityLeaderboardDisplaySection,
+  communityLeaderboardDisplaySections,
+  communityLeaderboardTypes,
   communityPublicSettingsStatusMessages,
   emptyFoodCommunityShareFields,
   communityReadinessChecklistDisplayItems,
@@ -245,7 +246,6 @@ import {
   type AchievementItem,
   type CommunityLeaderboardApiResponse,
   type CommunityLeaderboardDisplaySection,
-  type CommunityLeaderboardType,
   type CommunityPublicSettings,
   type FoodCommunityApiCategoryRead,
   type FoodCommunityApiItem,
@@ -6128,7 +6128,6 @@ export default function App() {
       setRankingActionStatus(leaderboardSyncStatus.unavailable);
       return;
     }
-    const rankingTypes: CommunityLeaderboardType[] = ["share_count", "contribution", "food_tester"];
     const rankingKey = [normalizedApiBaseUrl, account.id, communityPublicSettings?.leaderboard_opt_in ?? false].join(":");
     latestRankingSyncKey.current = rankingKey;
     if (rankingSyncInFlightKeys.current.has(rankingKey)) {
@@ -6139,7 +6138,7 @@ export default function App() {
     setRankingActionStatus(leaderboardSyncStatus.loading);
     try {
       const sections = await Promise.all(
-        rankingTypes.map((leaderboardType) => {
+        communityLeaderboardTypes.map((leaderboardType) => {
           const query = new URLSearchParams({ leaderboard_type: leaderboardType, limit: "10" });
           return requestJson<CommunityLeaderboardApiResponse>(
             normalizedApiBaseUrl,
@@ -6151,7 +6150,7 @@ export default function App() {
       if (latestRankingSyncKey.current !== rankingKey) {
         return;
       }
-      const displaySections = sections.map(communityLeaderboardDisplaySection);
+      const displaySections = communityLeaderboardDisplaySections(sections);
       const entryCount = displaySections.reduce((total, section) => total + section.entries.length, 0);
       setRankingLeaderboardSections(displaySections);
       setRankingActionStatus(
