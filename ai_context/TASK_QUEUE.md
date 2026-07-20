@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2124: Move native debug readiness predicates
+
+Status: done
+
+Completed:
+
+- Added `nativeDebugActionBlocked`, `nativeDebugActionReady`, and `NativeDebugActionReadySource` to `modelTransforms.ts`.
+- Reused those predicates from `App.tsx` while keeping unavailable-status side effects and busy state updates in `App.tsx`.
+- Preserved the busy-first readiness behavior so disabled-tool status is only shown when the action is not already busy.
+- Updated navigation verifier coverage to require the model transform predicates and reject reintroducing the direct App predicate bodies.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2123: Move native model download success path helper
 
 Status: done

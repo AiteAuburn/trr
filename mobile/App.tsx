@@ -770,6 +770,8 @@ import {
   nativeLlamaInput,
   nativeWhisperInput,
   nativeBenchmarkResults,
+  nativeDebugActionBlocked,
+  nativeDebugActionReady,
   nativeLlamaRequestArgs,
   nativeModelDownloadRequestArgs,
   nativeModelDownloadSuccessPaths,
@@ -7856,7 +7858,7 @@ export default function App() {
   }
 
   function isNativeDebugActionBlocked() {
-    return isBusy;
+    return nativeDebugActionBlocked(isBusy);
   }
 
   function startNativeDebugAction() {
@@ -7868,11 +7870,10 @@ export default function App() {
   }
 
   function isNativeDebugActionReady() {
-    if (isNativeDebugActionBlocked()) {
-      return false;
-    }
-    if (!enableDebugTools) {
-      openNativeDebugUnavailable();
+    if (!nativeDebugActionReady({ isBusy, enableDebugTools })) {
+      if (!isNativeDebugActionBlocked() && !enableDebugTools) {
+        openNativeDebugUnavailable();
+      }
       return false;
     }
     return true;

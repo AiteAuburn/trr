@@ -21,6 +21,10 @@ export type NativeBenchmarkResultSource = {
   benchmarkWhisper: (input: ReturnType<typeof nativeWhisperRequestArgs>) => Promise<NativeBenchmarkResult>;
   benchmarkLlama: (input: ReturnType<typeof nativeLlamaRequestArgs>) => Promise<NativeBenchmarkResult>;
 };
+export type NativeDebugActionReadySource = {
+  isBusy: boolean;
+  enableDebugTools: boolean;
+};
 
 const maxIdentifierTextLength = 128;
 const maxDisplayTextLength = 120;
@@ -41,6 +45,14 @@ function boundNativeDebugInput(value: string) {
 
 export function nativeDebugInputValue(value: string) {
   return boundNativeDebugInput(value);
+}
+
+export function nativeDebugActionBlocked(isBusy: boolean) {
+  return isBusy;
+}
+
+export function nativeDebugActionReady({ isBusy, enableDebugTools }: NativeDebugActionReadySource) {
+  return !nativeDebugActionBlocked(isBusy) && enableDebugTools;
 }
 
 export function nativeModelDownloadRequestArgs({
