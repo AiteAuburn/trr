@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2181: Move auth session action status accessor
+
+Status: done
+
+Completed:
+
+- Added the auth session management action status accessor to `authSessionDisplay.ts`.
+- Removed the duplicate auth session management action status helper definition from `App.tsx`.
+- Kept Account Security session management preview presses and auth action status updates unchanged.
+- Updated navigation verifier coverage to require the auth session display helper export, App import/usage binding, and no local helper regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2180: Move parser transcript source helper
 
 Status: done

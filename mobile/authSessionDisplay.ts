@@ -45,6 +45,10 @@ export function authSessionDisplayListItems(values: AuthSessionDisplaySource[]) 
   return values.slice(0, 20).map(authSessionDisplayItem);
 }
 
+export function authSessionManagementActionStatus(item: { actionStatus: string }) {
+  return item.actionStatus;
+}
+
 export function boundAuthSessionItems(values: AuthSessionDisplaySource[]): AuthSessionDisplaySource[] {
   return values.slice(0, 20).map((session) => ({
     id: boundIdentifier(session.id),

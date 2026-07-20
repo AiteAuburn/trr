@@ -969,7 +969,7 @@ import { HistorySelectedDatePanel } from "./historySelectedDatePanel";
 import { HistorySyncBoundaryBlock } from "./historySyncBoundaryBlock";
 import { AccountSecurityActionGrid } from "./accountSecurityActionGrid";
 import { AuthProviderPreviewList } from "./authProviderPreviewList";
-import { boundAuthSessionItems } from "./authSessionDisplay";
+import { authSessionManagementActionStatus, boundAuthSessionItems } from "./authSessionDisplay";
 import { AuthSessionDisplayList } from "./authSessionDisplayList";
 import { BackendUrlField } from "./backendUrlField";
 import { HighlightBulletRow } from "./highlightBulletRow";
@@ -4295,10 +4295,6 @@ export default function App() {
 
   function showAuthSessionManagementStatus(actionStatus: string) {
     setAuthActionStatus(actionStatus);
-  }
-
-  function authSessionManagementActionStatus(item: { actionStatus: string }) {
-    return item.actionStatus;
   }
 
   function pressAuthSessionManagementPreview(item: { actionStatus: string }) {
