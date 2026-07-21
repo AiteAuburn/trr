@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2214: Move record edit status display bundle
+
+Status: done
+
+Completed:
+
+- Added the record edit status display bundle helper to `recordStatusCopy.ts`.
+- Removed direct selected-record edit and preview-record edit validation display assembly from `App.tsx`.
+- Kept record edit intro copy, selected-record validation, preview-record validation, and edit/update behavior unchanged.
+- Updated navigation verifier coverage to require the record edit status display bundle, App bundle bindings, and no direct record edit display assembly regressions in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2213: Move year review header display bundle
 
 Status: done

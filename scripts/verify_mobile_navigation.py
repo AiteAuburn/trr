@@ -9168,6 +9168,11 @@ def main() -> int:
             ("record edit display texts intro binding", "intro: recordEditIntroCopy()"),
             ("record edit display texts validation binding", 'validation: boundUiMessage(validationError || "")'),
             ("preview record edit validation display helper", "function previewRecordEditValidationDisplayText(validationError: string | null)"),
+            ("record edit status display bundle helper", "function recordEditStatusDisplayBundle(value: {"),
+            ("record edit status display selected helper binding", "const selected = recordEditDisplayTexts(value.selectedValidationError);"),
+            ("record edit status display intro binding", "intro: selected.intro"),
+            ("record edit status display selected validation binding", "selectedValidation: selected.validation"),
+            ("record edit status display preview validation binding", "previewValidation: previewRecordEditValidationDisplayText(value.previewValidationError)"),
             ("record edit open status helper", "function recordEditOpenStatusMessage()"),
             ("record edit cancel status helper", "function recordEditCancelStatusMessage()"),
             ("record sync boundary display texts helper", "function recordSyncBoundaryDisplayTexts(value: {"),
@@ -9203,10 +9208,10 @@ def main() -> int:
             ("delete confirm preview record meta binding", "recordMetaText={deleteConfirmRecordMetaDisplayText}"),
             ("delete confirm preview record summary binding", "recordSummary={selectedRecordDisplayItem.payloadSummary}"),
             ("delete confirm preview record type binding", "recordTypeLabel={selectedRecordDisplayItem.typeLabel}"),
-            ("record edit display helper binding", "const recordEditDisplay = recordEditDisplayTexts(selectedRecordEditValidationError);"),
-            ("record edit intro display binding", "const recordEditIntroDisplayText = recordEditDisplay.intro;"),
-            ("record edit validation display binding", "const selectedRecordEditValidationDisplayText = recordEditDisplay.validation;"),
-            ("preview record edit validation display helper binding", "const previewRecordEditValidationDisplay = previewRecordEditValidationDisplayText(previewRecordEditValidationError);"),
+            ("record edit status display helper binding", "const recordEditStatusDisplay = recordEditStatusDisplayBundle({"),
+            ("record edit intro display binding", "const recordEditIntroDisplayText = recordEditStatusDisplay.intro;"),
+            ("record edit validation display binding", "const selectedRecordEditValidationDisplayText = recordEditStatusDisplay.selectedValidation;"),
+            ("preview record edit validation display helper binding", "const previewRecordEditValidationDisplay = recordEditStatusDisplay.previewValidation;"),
             ("preview record edit validation render binding", "{previewRecordEditValidationDisplay}"),
             ("record sync boundary display helper binding", "const recordSyncBoundaryDisplay = recordSyncBoundaryDisplayTexts({"),
             ("record sync boundary records-at-limit binding", "const recordsAtCacheLimit = recordSyncBoundaryDisplay.recordsAtCacheLimit;"),
@@ -9215,6 +9220,11 @@ def main() -> int:
             ("record sync boundary analysis display binding", "const analysisSyncBoundaryDisplayText = recordSyncBoundaryDisplay.analysis;"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("direct record edit display helper binding", "const recordEditDisplay = recordEditDisplayTexts(selectedRecordEditValidationError);"),
+            ("direct preview record edit validation helper binding", "const previewRecordEditValidationDisplay = previewRecordEditValidationDisplayText(previewRecordEditValidationError);"),
+        ):
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("record collection state helper", "function recordCollectionState(\n  records: readonly RecordItem[],\n  syncLimit: number,\n  cacheLimit: number,\n  displayLimit: number\n)"),
             ("record collection display count binding", "displayCount: clampNumber(recordCount, 0, displayLimit)"),

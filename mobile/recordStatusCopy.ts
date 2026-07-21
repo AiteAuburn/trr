@@ -210,6 +210,18 @@ export function previewRecordEditValidationDisplayText(validationError: string |
   return boundUiMessage(validationError || "");
 }
 
+export function recordEditStatusDisplayBundle(value: {
+  selectedValidationError: string | null;
+  previewValidationError: string | null;
+}) {
+  const selected = recordEditDisplayTexts(value.selectedValidationError);
+  return {
+    intro: selected.intro,
+    selectedValidation: selected.validation,
+    previewValidation: previewRecordEditValidationDisplayText(value.previewValidationError)
+  };
+}
+
 export function recordEditOpenStatusMessage() {
   return boundUiMessage("正在編輯這筆紀錄；按下儲存修改前不會送出 update request。");
 }

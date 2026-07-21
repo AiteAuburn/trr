@@ -516,15 +516,14 @@ import {
   manualRecordCreateSuccessStatusMessage,
   manualRecordCreateSummaryMessage,
   manualRecordCreateUnavailableStatusMessage,
-  previewRecordEditValidationDisplayText,
   recordDeleteFailureStatusMessage,
   recordDeleteProgressStatusMessage,
   recordDeleteSuccessStatusMessage,
   recordDeleteSummaryMessage,
   recordDeleteUnavailableStatusMessage,
   recordEditCancelStatusMessage,
-  recordEditDisplayTexts,
   recordEditOpenStatusMessage,
+  recordEditStatusDisplayBundle,
   recordResultDestinationStatusMessage,
   recordSyncBoundaryDisplayTexts,
   recordSyncFailureStatusMessage,
@@ -2209,10 +2208,13 @@ export default function App() {
     backendUnavailableMessage: protectedBackendUnavailableDisplayMessage
   });
   const manualRecordValidationDisplayText = manualRecordCreateDisplay.validation;
-  const recordEditDisplay = recordEditDisplayTexts(selectedRecordEditValidationError);
-  const recordEditIntroDisplayText = recordEditDisplay.intro;
-  const selectedRecordEditValidationDisplayText = recordEditDisplay.validation;
-  const previewRecordEditValidationDisplay = previewRecordEditValidationDisplayText(previewRecordEditValidationError);
+  const recordEditStatusDisplay = recordEditStatusDisplayBundle({
+    selectedValidationError: selectedRecordEditValidationError,
+    previewValidationError: previewRecordEditValidationError
+  });
+  const recordEditIntroDisplayText = recordEditStatusDisplay.intro;
+  const selectedRecordEditValidationDisplayText = recordEditStatusDisplay.selectedValidation;
+  const previewRecordEditValidationDisplay = recordEditStatusDisplay.previewValidation;
   const parserRecoveryDisplayText = transcriptStatusDisplay.parserRecovery;
   const saveResultDisplay = saveResultDisplayTexts({
     lastSavedSummary,
