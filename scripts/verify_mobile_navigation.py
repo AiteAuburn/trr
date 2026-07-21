@@ -9195,6 +9195,8 @@ def main() -> int:
             ("manual record create display texts helper", "function manualRecordCreateDisplayTexts(value: {"),
             ("manual record create validation display binding", 'validation: boundUiMessage(value.validationError || "")'),
             ("manual record create backend unavailable display binding", "backendUnavailable: boundUiMessage(`${value.backendUnavailableMessage}，才可建立手動紀錄。`)"),
+            ("manual record create display bundle helper", "function manualRecordCreateDisplayBundle(value: {"),
+            ("manual record create display bundle delegates", "return manualRecordCreateDisplayTexts(value);"),
         ):
             _assert_contains(label, record_status_copy_content, marker)
         for label, marker in (
@@ -9314,11 +9316,16 @@ def main() -> int:
             ("initial record sync start and complete helper binding", "await startAndCompleteInitialRecordSyncRequest(syncContext);"),
             ("records status display helper binding", "const recordsStatusDisplay = recordsStatusDisplayTexts(recordsStatus);"),
             ("records status display text binding", "const recordsStatusDisplayText = recordsStatusDisplay.records;"),
-            ("manual record create display helper binding", "const manualRecordCreateDisplay = manualRecordCreateDisplayTexts({"),
+            ("manual record create display helper binding", "const manualRecordCreateDisplay = manualRecordCreateDisplayBundle({"),
             ("manual record validation display binding", "const manualRecordValidationDisplayText = manualRecordCreateDisplay.validation;"),
             ("manual record backend unavailable display binding", "const manualRecordBackendUnavailableDisplayText = manualRecordCreateDisplay.backendUnavailable;"),
         ):
             _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "direct manual record create display texts binding",
+            content,
+            "const manualRecordCreateDisplay = manualRecordCreateDisplayTexts({",
+        )
         _assert_not_contains(
             "local record collection state helper definition",
             content,

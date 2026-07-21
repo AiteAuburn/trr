@@ -291,6 +291,13 @@ export function manualRecordCreateDisplayTexts(value: {
   };
 }
 
+export function manualRecordCreateDisplayBundle(value: {
+  validationError: string | null;
+  backendUnavailableMessage: string;
+}) {
+  return manualRecordCreateDisplayTexts(value);
+}
+
 export function manualRecordCreateProgressStatusMessage() {
   return boundUiMessage("建立手動紀錄...");
 }

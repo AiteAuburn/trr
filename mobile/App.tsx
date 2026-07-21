@@ -510,7 +510,7 @@ import {
   deleteConfirmReadyStatusMessage,
   deleteConfirmReturnStatusMessage,
   deleteConfirmChecklistDisplayItems,
-  manualRecordCreateDisplayTexts,
+  manualRecordCreateDisplayBundle,
   manualRecordCreateFailureStatusMessage,
   manualRecordCreateProgressStatusMessage,
   manualRecordCreateSuccessStatusMessage,
@@ -2203,7 +2203,7 @@ export default function App() {
   });
   const transcriptValidationDisplayText = transcriptStatusDisplay.transcriptValidation;
   const transcriptReviewValidationDisplayText = transcriptStatusDisplay.transcriptReviewValidation;
-  const manualRecordCreateDisplay = manualRecordCreateDisplayTexts({
+  const manualRecordCreateDisplay = manualRecordCreateDisplayBundle({
     validationError: manualRecordValidationError,
     backendUnavailableMessage: protectedBackendUnavailableDisplayMessage
   });

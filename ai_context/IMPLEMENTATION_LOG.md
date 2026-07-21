@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2215 move manual record create display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the manual record create display bundle helper to `recordStatusCopy.ts`.
+- Moved `App.tsx` manual record create validation and backend-unavailable display assembly from the raw texts helper to the bundle entrypoint.
+- Kept manual record validation copy, backend unavailable copy, create action behavior, and backend boundary behavior unchanged.
+- Updated navigation verifier coverage to require the manual record create display bundle, App bundle binding, and no direct manual record create display texts binding regression in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2214 move record edit status display bundle
 
 類型：mobile / refactor / verifier / docs
