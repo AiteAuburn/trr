@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2216 move save result display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the save result display bundle helper to `recordWorkflowCopy.ts`.
+- Moved `App.tsx` save result summary, warning, and backend-blocked display assembly from the raw texts helper to the bundle entrypoint.
+- Kept save success/failure copy, low-confidence/rejected-event warnings, and backend-blocked save behavior unchanged.
+- Updated navigation verifier coverage to require the save result display bundle, App bundle binding, and no direct save result display texts binding regression in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2215 move manual record create display bundle
 
 類型：mobile / refactor / verifier / docs

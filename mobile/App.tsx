@@ -499,7 +499,7 @@ import {
   recordDetailBoundaryChecklistDisplayItems,
   recordDetailReturnStatusMessage,
   recordEntrySettingsChecklistDisplayItems,
-  saveResultDisplayTexts,
+  saveResultDisplayBundle,
   saveSuccessBoundaryChecklistDisplayItems,
   tutorialManualEntryStatusMessage,
   tutorialRecordEntryStatusMessage
@@ -2216,7 +2216,7 @@ export default function App() {
   const selectedRecordEditValidationDisplayText = recordEditStatusDisplay.selectedValidation;
   const previewRecordEditValidationDisplay = recordEditStatusDisplay.previewValidation;
   const parserRecoveryDisplayText = transcriptStatusDisplay.parserRecovery;
-  const saveResultDisplay = saveResultDisplayTexts({
+  const saveResultDisplay = saveResultDisplayBundle({
     lastSavedSummary,
     lastSaveErrorSummary,
     lowConfidenceCount: lowConfidencePreviewRecordDisplayCount,

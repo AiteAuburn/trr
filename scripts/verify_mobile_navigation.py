@@ -3815,9 +3815,9 @@ def main() -> int:
             "saveSuccessViewState.hasUnsavedPreviewRecords,\n    unsavedPreviewRecordDisplayCount,",
         )
         _assert_contains(
-            "save result display helper binding",
+            "save result display bundle binding",
             content,
-            "const saveResultDisplay = saveResultDisplayTexts({",
+            "const saveResultDisplay = saveResultDisplayBundle({",
         )
         _assert_contains(
             "last saved summary display binding",
@@ -3828,6 +3828,11 @@ def main() -> int:
             "AI save backend blocked display binding",
             content,
             "const aiSaveBackendBlockedDisplayText = saveResultDisplay.aiSaveBackendBlocked;",
+        )
+        _assert_not_contains(
+            "direct save result display texts binding",
+            content,
+            "const saveResultDisplay = saveResultDisplayTexts({",
         )
         _assert_contains(
             "analysis boundary checklist helper binding",
@@ -8796,6 +8801,8 @@ def main() -> int:
             ("save result display default saved summary", "lastSavedSummary: boundUiMessage(value.lastSavedSummary || \"紀錄已加入今日紀錄與歷史紀錄。\")"),
             ("save result display rejected warning", "rejectedPreviewWarning: boundUiMessage("),
             ("save result display backend blocked", "aiSaveBackendBlocked: boundUiMessage("),
+            ("save result display bundle helper", "function saveResultDisplayBundle(value: {"),
+            ("save result display bundle delegates", "return saveResultDisplayTexts(value);"),
             ("save success boundary checklist helper", "function saveSuccessBoundaryChecklistDisplayItems("),
             ("save success no retry copy", "沒有未儲存候選需要自動重試；下一步只做頁面導覽。"),
             ("save success no backend request copy", "成功頁不新增 backend request，除非使用者主動進入其他頁面觸發既有同步。"),

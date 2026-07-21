@@ -115,6 +115,16 @@ export function saveResultDisplayTexts(value: {
   };
 }
 
+export function saveResultDisplayBundle(value: {
+  lastSavedSummary: string;
+  lastSaveErrorSummary: string;
+  lowConfidenceCount: number;
+  rejectedEventCount: number;
+  backendUnavailableMessage: string;
+}) {
+  return saveResultDisplayTexts(value);
+}
+
 export function parserBackendUnavailableStatusMessage(message: string) {
   return boundUiMessage(`${message || "backend 尚未 ready"}；目前不送出 parser 請求，避免無效重試與額外成本。`);
 }
