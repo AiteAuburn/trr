@@ -477,7 +477,7 @@ import {
   aiSaveUnavailableStatusMessage,
   dailyRecordLeaveGuardCancelStatusMessage,
   dailyRecordLeaveGuardConfirmStatusMessage,
-  dailyRecordLeaveGuardDisplayTexts,
+  dailyRecordLeaveGuardDisplayBundle,
   dailyRecordLeaveGuardPromptStatusMessage,
   manualRecordConfirmDisplayTexts,
   manualRecordConfirmReadyStatusMessage,
@@ -1457,7 +1457,7 @@ export default function App() {
   const hasUnsavedDailyRecordDraft = dailyRecordDraftScreen.hasUnsavedDraft;
   const shouldGuardDailyRecordLeave = dailyRecordDraftScreen.shouldGuardLeave;
   const shouldShowDailyRecordLeaveGuard = dailyRecordLeaveGuardVisible;
-  const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayTexts();
+  const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayBundle();
   const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardDisplay.title;
   const dailyRecordLeaveGuardBodyDisplayText = dailyRecordLeaveGuardDisplay.body;
   const dailyRecordLeaveGuardQuestionDisplayText = dailyRecordLeaveGuardDisplay.question;
