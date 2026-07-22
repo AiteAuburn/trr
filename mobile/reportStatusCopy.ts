@@ -108,16 +108,19 @@ export function reportGeneratedAtDisplayText(generatedAt?: string | null) {
 export function reportStatusDisplayTexts(value: {
   reportStatus: string;
   quotaStatus: string;
+  generatedAt?: string | null;
 }) {
   return {
     report: boundUiMessage(value.reportStatus),
-    quota: boundUiMessage(value.quotaStatus)
+    quota: boundUiMessage(value.quotaStatus),
+    generatedAt: reportGeneratedAtDisplayText(value.generatedAt)
   };
 }
 
 export function reportStatusDisplayBundle(value: {
   reportStatus: string;
   quotaStatus: string;
+  generatedAt?: string | null;
 }) {
   return reportStatusDisplayTexts(value);
 }

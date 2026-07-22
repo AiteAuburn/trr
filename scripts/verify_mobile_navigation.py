@@ -9532,6 +9532,7 @@ def main() -> int:
             ("report status display bundle delegates", "return reportStatusDisplayTexts(value);"),
             ("report status display report binding", "report: boundUiMessage(value.reportStatus)"),
             ("quota status display binding", "quota: boundUiMessage(value.quotaStatus)"),
+            ("report generated-at display bundle binding", "generatedAt: reportGeneratedAtDisplayText(value.generatedAt)"),
         ):
             _assert_contains(label, report_status_copy_content, marker)
         for label, marker in (
@@ -10731,15 +10732,21 @@ def main() -> int:
             ("analysis report start bound", "const startAt = analysisSelectedDateBounds.start.toISOString();"),
             ("analysis report end bound", "const endAt = analysisSelectedDateBounds.end.toISOString();"),
             ("analysis report status display helper binding", "const reportStatusDisplay = reportStatusDisplayBundle({"),
+            ("analysis report generated-at bundle input", "generatedAt: activeAnalysisReport?.generated_at"),
             ("analysis report status display text binding", "const reportStatusDisplayText = reportStatusDisplay.report;"),
             ("voice quota status display text binding", "const quotaStatusDisplayText = reportStatusDisplay.quota;"),
-            ("report generated-at display helper binding", "const reportGeneratedAtDisplayText = reportGeneratedAtDisplayValue(activeAnalysisReport?.generated_at);"),
+            ("report generated-at display bundle binding", "const reportGeneratedAtDisplayText = reportStatusDisplay.generatedAt;"),
         ):
             _assert_contains(label, content, marker)
         _assert_not_contains(
             "direct report status display texts binding",
             content,
             "const reportStatusDisplay = reportStatusDisplayTexts({",
+        )
+        _assert_not_contains(
+            "direct report generated-at display helper binding",
+            content,
+            "const reportGeneratedAtDisplayText = reportGeneratedAtDisplayValue(activeAnalysisReport?.generated_at);",
         )
         _assert_contains(
             "analysis current report key helper",

@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2258: Move report generated-at display bundle
+
+Status: done
+
+Completed:
+
+- Added generated-at display output to the report status display bundle in `reportStatusCopy.ts`.
+- Moved `App.tsx` report generated-at display assembly from a direct helper alias call to the report status bundle result.
+- Kept report status text, quota status text, source display copy, generated-at fallback copy, and analysis rendering unchanged.
+- Updated navigation verifier coverage to require generated-at display bundle input/output and no direct generated-at helper binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2257: Move core accessibility display bundle
 
 Status: done

@@ -610,7 +610,6 @@ import {
   detailedReportResetStatusMessage,
   detailedReportSuccessStatusMessage,
   detailedReportUnavailableStatusMessage,
-  reportGeneratedAtDisplayText as reportGeneratedAtDisplayValue,
   reportStatusDisplayBundle,
   reportSourceDisplayItem,
   voiceQuotaInitialStatusMessage,
@@ -1813,12 +1812,13 @@ export default function App() {
   );
   const reportStatusDisplay = reportStatusDisplayBundle({
     reportStatus,
-    quotaStatus
+    quotaStatus,
+    generatedAt: activeAnalysisReport?.generated_at
   });
   const reportStatusDisplayText = reportStatusDisplay.report;
+  const reportGeneratedAtDisplayText = reportStatusDisplay.generatedAt;
   const reportSourceDisplayLabel = reportSourceDisplay.label;
   const reportSourceDisplayCopy = reportSourceDisplay.copy;
-  const reportGeneratedAtDisplayText = reportGeneratedAtDisplayValue(activeAnalysisReport?.generated_at);
   const auxiliaryDisplayLabels = auxiliarySectionLabels();
   const futurePreviewDisplayLabels = futurePreviewSectionLabels();
   const futurePreviewStatusDisplay = futurePreviewStatusDisplayBundle({

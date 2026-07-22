@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2258 move report generated-at display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/reportStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added generated-at display output to the report status display bundle in `reportStatusCopy.ts`.
+- Moved `App.tsx` report generated-at display assembly from a direct helper alias call to the report status bundle result.
+- Kept report status text, quota status text, source display copy, generated-at fallback copy, and analysis rendering unchanged.
+- Updated navigation verifier coverage to require generated-at display bundle input/output and no direct generated-at helper binding regression in `App.tsx`.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2257 move core accessibility display bundle
 
 類型：mobile / refactor / verifier / docs
