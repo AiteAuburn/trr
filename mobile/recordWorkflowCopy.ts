@@ -596,10 +596,17 @@ export function recordWorkflowRuntimeChecklistDisplayBundle(value: {
   parserModelReady: boolean;
   parserModelUnavailableMessage: string;
   recordSyncLimit: number;
+  lowConfidenceRecordCount: number;
+  rejectedPreviewEventCount: number;
   unsavedPreviewRecordCount: number;
 }) {
   return {
     aiSaveConfirmItems: aiSaveConfirmChecklistDisplayItems(value.unsavedPreviewRecordCount),
+    aiSaveConfirmBoundaryRows: aiSaveConfirmBoundaryDisplayRows(
+      value.unsavedPreviewRecordCount,
+      value.lowConfidenceRecordCount,
+      value.rejectedPreviewEventCount
+    ),
     transcriptReviewCostBoundaryItems: transcriptReviewCostBoundaryChecklistDisplayItems(
       value.protectedBackendReady,
       value.parserModelReady,

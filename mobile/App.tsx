@@ -427,7 +427,6 @@ import {
   aiPartialSaveSummaryMessage,
   aiReviewDisplayBundle,
   aiRemoveConfirmDisplayBundle,
-  aiSaveConfirmBoundaryDisplayRows,
   aiSaveConfirmDisplayBundle,
   aiSaveConfirmReadyStatusMessage,
   aiSaveConfirmReturnStatusMessage,
@@ -1412,6 +1411,8 @@ export default function App() {
     parserModelReady,
     parserModelUnavailableMessage: parserModelUnavailableDisplayMessage,
     recordSyncLimit: mobileRecordSyncDisplayLimit,
+    lowConfidenceRecordCount: lowConfidencePreviewRecordDisplayCount,
+    rejectedPreviewEventCount: rejectedPreviewEventDisplayCount,
     unsavedPreviewRecordCount: unsavedPreviewRecordDisplayCount
   });
   const aiSaveConfirmChecklistItems = recordWorkflowRuntimeChecklistDisplay.aiSaveConfirmItems;
@@ -1982,11 +1983,7 @@ export default function App() {
     localMedicationCount: recordTypeCount(analysisRecords, "medication")
   });
   const detailedReportMetricRows = buildDetailedReportMetricRows(detailedReportMetricInput);
-  const aiSaveConfirmBoundaryRows = aiSaveConfirmBoundaryDisplayRows(
-    unsavedPreviewRecordDisplayCount,
-    lowConfidencePreviewRecordDisplayCount,
-    rejectedPreviewEventDisplayCount
-  );
+  const aiSaveConfirmBoundaryRows = recordWorkflowRuntimeChecklistDisplay.aiSaveConfirmBoundaryRows;
   const detailedReportBoundaryRows = analysisRuntimeBoundaryDisplay.detailedReportBoundaryRows;
   const doctorShareBoundaryRows = doctorShareStaticDisplay.boundaryRows;
   const futureBoundaryRowsDisplay = futureBoundaryRowsDisplayBundle(

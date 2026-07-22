@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2292: Move AI save confirm boundary row assembly
+
+Status: done
+
+Completed:
+
+- Extended `recordWorkflowRuntimeChecklistDisplayBundle` with AI save confirm boundary rows.
+- Moved `App.tsx` AI save confirm boundary row assembly behind the runtime bundle.
+- Kept unsaved candidate count, low-confidence count, rejected-event count, and boundary row copy unchanged.
+- Updated navigation verifier coverage to require the bundled boundary rows and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2291: Move history boundary display assembly
 
 Status: done

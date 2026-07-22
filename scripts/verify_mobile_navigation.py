@@ -3964,6 +3964,16 @@ def main() -> int:
             "unsavedPreviewRecordCount: unsavedPreviewRecordDisplayCount",
         )
         _assert_contains(
+            "record workflow runtime checklist low confidence input",
+            content,
+            "lowConfidenceRecordCount: lowConfidencePreviewRecordDisplayCount",
+        )
+        _assert_contains(
+            "record workflow runtime checklist rejected event input",
+            content,
+            "rejectedPreviewEventCount: rejectedPreviewEventDisplayCount",
+        )
+        _assert_contains(
             "record workflow runtime checklist record sync limit input",
             content,
             "recordSyncLimit: mobileRecordSyncDisplayLimit",
@@ -4317,10 +4327,15 @@ def main() -> int:
             "const detailedReportBoundaryRows = analysisRuntimeBoundaryDisplay.detailedReportBoundaryRows;",
         )
         _assert_contains(
-            "AI save confirm boundary rows helper binding",
+            "AI save confirm boundary rows runtime bundle binding",
             content,
-            "const aiSaveConfirmBoundaryRows = aiSaveConfirmBoundaryDisplayRows(",
+            "const aiSaveConfirmBoundaryRows = recordWorkflowRuntimeChecklistDisplay.aiSaveConfirmBoundaryRows;",
         )
+        for label, marker in (
+            ("direct AI save confirm boundary rows binding", "const aiSaveConfirmBoundaryRows = aiSaveConfirmBoundaryDisplayRows("),
+            ("direct AI save confirm boundary rows import", "  aiSaveConfirmBoundaryDisplayRows,"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "recording quota boundary rows runtime display binding",
             content,
@@ -9167,6 +9182,9 @@ def main() -> int:
             ("AI save failure manual fallback copy", "若 backend 持續不可用，可改用手動新增單筆明確紀錄。"),
             ("record workflow runtime checklist bundle helper", "function recordWorkflowRuntimeChecklistDisplayBundle(value: {"),
             ("record workflow runtime checklist bundle save confirm", "aiSaveConfirmItems: aiSaveConfirmChecklistDisplayItems(value.unsavedPreviewRecordCount)"),
+            ("record workflow runtime checklist bundle save confirm rows", "aiSaveConfirmBoundaryRows: aiSaveConfirmBoundaryDisplayRows("),
+            ("record workflow runtime checklist bundle low confidence rows", "value.lowConfidenceRecordCount,"),
+            ("record workflow runtime checklist bundle rejected rows", "value.rejectedPreviewEventCount"),
             ("record workflow runtime checklist bundle transcript review", "transcriptReviewCostBoundaryItems: transcriptReviewCostBoundaryChecklistDisplayItems("),
             ("record workflow runtime checklist bundle parser ready", "value.parserModelReady,"),
             ("record workflow runtime checklist bundle parser unavailable", "value.parserModelUnavailableMessage"),
