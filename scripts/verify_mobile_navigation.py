@@ -9331,7 +9331,7 @@ def main() -> int:
             ("initial record sync start and complete helper", "async function startAndCompleteInitialRecordSyncRequest(syncContext: {\n    account: Account;\n    activeProfileId: string;\n    syncKey: string;"),
             ("initial record sync start and complete helper internals", "if (!startInitialRecordSyncRequest(syncContext)) {\n      return;\n    }\n    await completeInitialRecordSyncRequest(syncContext);"),
             ("initial record sync start and complete helper binding", "await startAndCompleteInitialRecordSyncRequest(syncContext);"),
-            ("records status display helper binding", "const recordsStatusDisplay = recordsStatusDisplayTexts(recordsStatus);"),
+            ("records status display helper binding", "const recordsStatusDisplay = recordsStatusDisplayBundle(recordsStatus);"),
             ("records status display text binding", "const recordsStatusDisplayText = recordsStatusDisplay.records;"),
             ("manual record create display helper binding", "const manualRecordCreateDisplay = manualRecordCreateDisplayBundle({"),
             ("manual record validation display binding", "const manualRecordValidationDisplayText = manualRecordCreateDisplay.validation;"),
@@ -9342,6 +9342,11 @@ def main() -> int:
             "direct manual record create display texts binding",
             content,
             "const manualRecordCreateDisplay = manualRecordCreateDisplayTexts({",
+        )
+        _assert_not_contains(
+            "direct records status display texts binding",
+            content,
+            "const recordsStatusDisplay = recordsStatusDisplayTexts(recordsStatus);",
         )
         _assert_not_contains(
             "local record collection state helper definition",
@@ -9361,6 +9366,8 @@ def main() -> int:
             _assert_not_contains(label, content, marker)
         for label, marker in (
             ("records status display texts helper", "function recordsStatusDisplayTexts(recordsStatus: string)"),
+            ("records status display bundle helper", "function recordsStatusDisplayBundle(recordsStatus: string)"),
+            ("records status display bundle delegates", "return recordsStatusDisplayTexts(recordsStatus);"),
             ("records status display binding", "records: boundUiMessage(recordsStatus)"),
         ):
             _assert_contains(label, record_status_copy_content, marker)

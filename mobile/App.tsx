@@ -533,7 +533,7 @@ import {
   recordSyncPageSuccessStatusMessage,
   recordSyncSuccessStatusMessage,
   recordSyncUnavailableStatusMessage,
-  recordsStatusDisplayTexts,
+  recordsStatusDisplayBundle,
   recordUpdateChecklistDisplayItems,
   recordUpdateFailureStatusMessage,
   recordUpdateProgressStatusMessage,
@@ -1974,7 +1974,7 @@ export default function App() {
   const recordingQuotaUnavailableStatusMessage = settingsSubpageStatusDisplay.recordingQuotaUnavailable;
   const reminderIntegrationStatusMessage = settingsSubpageStatusDisplay.reminderIntegration;
   const privacyIntegrationStatusMessage = settingsSubpageStatusDisplay.privacyIntegration;
-  const recordsStatusDisplay = recordsStatusDisplayTexts(recordsStatus);
+  const recordsStatusDisplay = recordsStatusDisplayBundle(recordsStatus);
   const recordsStatusDisplayText = recordsStatusDisplay.records;
   const todayRecordSummaryDisplayText = todayRecordSummaryText(todayRecords.length);
   const historyRecordDisplayCount = recordDisplayState.displayCount;
