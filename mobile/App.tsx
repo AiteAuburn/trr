@@ -175,6 +175,7 @@ import {
   achievementDisplayItems as buildAchievementDisplayItems,
   achievementItemsFromApi,
   achievementNewlyUnlockedItemsForSync,
+  achievementSaveSuccessDisplayBundle,
   achievementScreenDisplayBundle,
   achievementSyncStatusMessages,
   achievementUnlocksFromApi,
@@ -279,7 +280,6 @@ import {
   localYearlyHealthOutcomeDisplayRows,
   localYearlyHighlightDisplayItems,
   localYearlyReviewMetricDisplayRows,
-  saveSuccessNewlyUnlockedAchievementDisplayItems,
   storeCategories,
   storeCategoryDisplayItem,
   storeCategoryOptionAccessibilityLabel,
@@ -1486,9 +1486,8 @@ export default function App() {
     () => limitedAchievementDisplayItems(achievementNewlyUnlockedItems),
     [achievementNewlyUnlockedItems]
   );
-  const saveSuccessNewlyUnlockedDisplayItems = saveSuccessNewlyUnlockedAchievementDisplayItems(
-    achievementNewlyUnlockedDisplayItems
-  );
+  const achievementSaveSuccessDisplay = achievementSaveSuccessDisplayBundle(achievementNewlyUnlockedDisplayItems);
+  const saveSuccessNewlyUnlockedDisplayItems = achievementSaveSuccessDisplay.newlyUnlockedItems;
   const achievementCategoryDisplaySections = useMemo(
     () => buildAchievementCategoryDisplaySections(achievementDisplayItems),
     [achievementDisplayItems]

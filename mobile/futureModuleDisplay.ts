@@ -861,6 +861,12 @@ export function saveSuccessNewlyUnlockedAchievementDisplayItems(items: Achieveme
   return items.slice(0, 3);
 }
 
+export function achievementSaveSuccessDisplayBundle(items: AchievementDisplayItem[]) {
+  return {
+    newlyUnlockedItems: saveSuccessNewlyUnlockedAchievementDisplayItems(items)
+  };
+}
+
 export function buildAchievementCategoryDisplaySections(items: AchievementDisplayItem[]) {
   return achievementCategoryDefinitions.map((definition) => ({
     key: boundIdentifier(`achievement-section-${definition.id}`),

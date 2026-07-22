@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2296 move achievement save-success display assembly
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `achievementSaveSuccessDisplayBundle` to `futureModuleDisplay.ts`.
+- Moved `App.tsx` save-success newly unlocked achievement item assembly behind the bundle.
+- Kept newly unlocked display item limiting, save-success achievement rendering, and achievement copy unchanged.
+- Updated navigation verifier coverage to require the bundled achievement save-success output and reject old direct App-level helper calls/imports.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2295 move downloaded Whisper choice display assembly
 
 類型：mobile / refactor / verifier / docs

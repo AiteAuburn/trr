@@ -14565,6 +14565,9 @@ def main() -> int:
             ("achievement integration status handler", "function showAchievementIntegrationStatus()"),
             ("year review share status handler", "function showYearReviewShareStatus()"),
             ("achievement display items helper binding", "const achievementDisplayItems = useMemo(() => buildAchievementDisplayItems(achievements), [achievements]);"),
+            ("achievement save success display bundle import", "achievementSaveSuccessDisplayBundle,"),
+            ("achievement save success display bundle binding", "const achievementSaveSuccessDisplay = achievementSaveSuccessDisplayBundle(achievementNewlyUnlockedDisplayItems);"),
+            ("achievement save success newly unlocked bundle field binding", "const saveSuccessNewlyUnlockedDisplayItems = achievementSaveSuccessDisplay.newlyUnlockedItems;"),
             ("achievement badge summary helper binding", "const achievementBadgeDisplaySummary = achievementBadgeSummary(achievementDisplayItems);"),
             ("achievement unlocked summary binding", "achievementBadgeDisplaySummary.unlockedCount"),
             ("achievement next remaining summary binding", "achievementBadgeDisplaySummary.nextRemaining"),
@@ -14735,7 +14738,7 @@ def main() -> int:
             ("achievement newly unlocked state", "const [achievementNewlyUnlockedItems, setAchievementNewlyUnlockedItems] = useState<AchievementItem[]>([])"),
             ("achievement newly unlocked display items", "const achievementNewlyUnlockedDisplayItems = useMemo("),
             ("achievement limited display helper binding", "limitedAchievementDisplayItems(achievementNewlyUnlockedItems)"),
-            ("achievement save success newly unlocked helper binding", "const saveSuccessNewlyUnlockedDisplayItems = saveSuccessNewlyUnlockedAchievementDisplayItems("),
+            ("achievement save success newly unlocked bundle field binding", "const saveSuccessNewlyUnlockedDisplayItems = achievementSaveSuccessDisplay.newlyUnlockedItems;"),
             ("achievement category sections helper binding", "const achievementCategoryDisplaySections = useMemo("),
             ("achievement newly unlocked helper binding", "setAchievementNewlyUnlockedItems(achievementNewlyUnlockedItemsForSync(mappedSummaryItems, syncUnlocks));"),
             ("achievement newly unlocked section", "本次新解鎖"),
@@ -15039,6 +15042,11 @@ def main() -> int:
             ("future module card list destination binding", "onDestinationPress={openFutureModuleDestination}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("direct achievement save success newly unlocked helper binding", "const saveSuccessNewlyUnlockedDisplayItems = saveSuccessNewlyUnlockedAchievementDisplayItems("),
+            ("direct achievement save success newly unlocked helper import", "  saveSuccessNewlyUnlockedAchievementDisplayItems,"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_not_contains(
             "direct year review share filename bound display binding",
             content,
@@ -15153,6 +15161,8 @@ def main() -> int:
             ("achievement limited display slice", "return items.slice(0, maxListItems).map(achievementDisplayItem);"),
             ("achievement save success newly unlocked helper", "export function saveSuccessNewlyUnlockedAchievementDisplayItems(items: AchievementDisplayItem[])"),
             ("achievement save success newly unlocked slice", "return items.slice(0, 3);"),
+            ("achievement save success display bundle helper", "export function achievementSaveSuccessDisplayBundle(items: AchievementDisplayItem[])"),
+            ("achievement save success display bundle newly unlocked binding", "newlyUnlockedItems: saveSuccessNewlyUnlockedAchievementDisplayItems(items)"),
             ("achievement category sections helper", "export function buildAchievementCategoryDisplaySections(items: AchievementDisplayItem[])"),
             ("achievement category section key", "key: boundIdentifier(`achievement-section-${definition.id}`),"),
             ("achievement category section filter", "items: items.filter((item) => item.category === definition.id)"),
