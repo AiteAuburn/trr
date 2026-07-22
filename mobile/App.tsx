@@ -335,7 +335,7 @@ import {
   storeRedemptionUseStatusLabel,
   storeRedemptionUseTitle,
   storeRedemptionsFromApi,
-  yearReviewBoundaryDisplayCopy,
+  yearReviewBoundaryCopyBundle,
   yearReviewBackendAiSummaryTexts,
   yearReviewHeaderDisplayBundle,
   yearReviewInsightDisplayTexts,
@@ -344,7 +344,6 @@ import {
   yearReviewRevokeStatusMessages,
   yearReviewSyncStatusMessages,
   yearReviewTargetYear,
-  nextYearReviewGenerationLabel,
   type AchievementApiSummary,
   type AchievementApiUnlock,
   type AchievementItem,
@@ -1544,7 +1543,8 @@ export default function App() {
   const achievementActionStatusDisplayText = achievementYearReviewStatusDisplay.achievementAction;
   const currentYear = new Date().getFullYear();
   const yearReviewTargetDisplayYear = yearReviewTargetYear(new Date());
-  const yearReviewGenerationDisplayText = nextYearReviewGenerationLabel(new Date());
+  const yearReviewBoundaryCopy = yearReviewBoundaryCopyBundle(new Date());
+  const yearReviewGenerationDisplayText = yearReviewBoundaryCopy.generationLabel;
   const yearlyRecordStats = useMemo(
     () => yearlyReviewRecordStats(records, yearReviewTargetDisplayYear),
     [records, yearReviewTargetDisplayYear]
@@ -1608,7 +1608,7 @@ export default function App() {
   const yearlyAiEncouragementDisplayText = yearlyInsightDisplayTexts.aiEncouragement;
   const yearReviewActionStatusDisplayText = achievementYearReviewStatusDisplay.yearReviewAction;
   const yearReviewShareStatusMessage = yearReviewShareUnavailableStatusMessage();
-  const yearReviewBoundaryDisplayText = yearReviewBoundaryDisplayCopy();
+  const yearReviewBoundaryDisplayText = yearReviewBoundaryCopy.boundaryCopy;
   const futurePreviewBoundaryDisplay = futurePreviewBoundaryDisplayBundle();
   const futurePreviewBoundaryCopy = futurePreviewBoundaryCopyBundle();
   const doctorSharePreviewBoundaryDisplay = futurePreviewBoundaryDisplay.doctorShare;
