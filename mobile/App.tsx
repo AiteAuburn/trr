@@ -722,7 +722,6 @@ import {
   isVoiceQuotaLow,
   membershipStatusReturnSubscriptionStatusMessage,
   menuReturnStatusMessage,
-  privacyBoundaryDisplayRows,
   privacySettingsControlDisplayBundle,
   recordingQuotaControlDisplayBundle,
   reminderSettingsControlDisplayBundle,
@@ -2001,7 +2000,7 @@ export default function App() {
   const communityBoundaryRows = futureBoundaryRowsDisplay.community;
   const rankingBoundaryRows = futureBoundaryRowsDisplay.ranking;
   const recordingQuotaBoundaryRows = recordingQuotaBoundaryDisplayRows(voiceQuota, quotaRemainingLow);
-  const privacyBoundaryRows = privacyBoundaryDisplayRows();
+  const privacyBoundaryRows = settingsStaticDisplay.privacyBoundaryRows;
   const previewRecordDisplay = previewRecordDisplayBundle({
     pendingPreviewRemoveIndex,
     previewExists: Boolean(preview),

@@ -4212,9 +4212,9 @@ def main() -> int:
             "const rankingBoundaryRows = futureBoundaryRowsDisplay.ranking;",
         )
         _assert_contains(
-            "privacy boundary rows helper binding",
+            "privacy boundary rows static display binding",
             content,
-            "const privacyBoundaryRows = privacyBoundaryDisplayRows();",
+            "const privacyBoundaryRows = settingsStaticDisplay.privacyBoundaryRows;",
         )
         _assert_contains(
             "detailed report boundary rows helper binding",
@@ -12028,6 +12028,7 @@ def main() -> int:
             ("settings static display bundle quota readiness checklist", "quotaReadinessChecklistItems: quotaReadinessChecklistDisplayItems()"),
             ("settings static display bundle reminder preview", "reminderPreviewItems: reminderPreviewDisplayItems()"),
             ("settings static display bundle reminder readiness checklist", "reminderReadinessChecklistItems: reminderReadinessChecklistDisplayItems()"),
+            ("settings static display bundle privacy boundary rows", "privacyBoundaryRows: privacyBoundaryDisplayRows()"),
             ("settings static display bundle privacy readiness checklist", "privacyReadinessChecklistItems: privacyReadinessChecklistDisplayItems()"),
             ("settings static display bundle tutorial safety checklist", "tutorialSafetyChecklistItems: tutorialSafetyChecklistDisplayItems()"),
         ):
@@ -12049,6 +12050,7 @@ def main() -> int:
             ("direct quota readiness checklist binding", "const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();"),
             ("direct reminder preview rows binding", "const reminderPreviewDisplayItems = buildReminderPreviewDisplayItems();"),
             ("direct reminder readiness checklist binding", "const reminderReadinessChecklistItems = reminderReadinessChecklistDisplayItems();"),
+            ("direct privacy boundary rows binding", "const privacyBoundaryRows = privacyBoundaryDisplayRows();"),
             ("direct privacy readiness checklist binding", "const privacyReadinessChecklistItems = privacyReadinessChecklistDisplayItems();"),
             ("direct tutorial safety checklist binding", "const tutorialSafetyChecklistItems = tutorialSafetyChecklistDisplayItems();"),
             ("direct auth boundary checklist import", "  authBoundaryChecklistDisplayItems,"),
@@ -12056,6 +12058,7 @@ def main() -> int:
             ("direct quota readiness checklist import", "  quotaReadinessChecklistDisplayItems,"),
             ("direct reminder preview rows import", "  reminderPreviewDisplayItems as buildReminderPreviewDisplayItems,"),
             ("direct reminder readiness checklist import", "  reminderReadinessChecklistDisplayItems,"),
+            ("direct privacy boundary rows import", "  privacyBoundaryDisplayRows,"),
             ("direct privacy readiness checklist import", "  privacyReadinessChecklistDisplayItems,"),
             ("direct tutorial safety checklist import", "  tutorialSafetyChecklistDisplayItems,"),
         ):
