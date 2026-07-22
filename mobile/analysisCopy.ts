@@ -177,6 +177,22 @@ export function detailedReportBoundaryDisplayRows(reportSourceLabel: string, que
   }));
 }
 
+export function analysisRuntimeBoundaryDisplayBundle(value: {
+  dataBoundaryCopy: string;
+  recordCacheLimit: number;
+  reportQueryLimit: number;
+  reportSourceLabel: string;
+}) {
+  return {
+    boundaryChecklistItems: analysisBoundaryChecklistDisplayItems(
+      value.dataBoundaryCopy,
+      value.recordCacheLimit,
+      value.reportQueryLimit
+    ),
+    detailedReportBoundaryRows: detailedReportBoundaryDisplayRows(value.reportSourceLabel, value.reportQueryLimit)
+  };
+}
+
 export function analysisCustomApplyStatusMessage() {
   return boundUiMessage("已套用自訂日期區間並同步 bounded report；不呼叫 AI 或 LLM。");
 }

@@ -645,7 +645,6 @@ import {
   type HistoryDetailMode
 } from "./historyScreenData";
 import {
-  analysisBoundaryChecklistDisplayItems,
   analysisCustomApplyStatusMessage,
   analysisDataBoundaryDisplayBundle,
   analysisDetailedReportStatusMessage,
@@ -653,8 +652,8 @@ import {
   analysisManualEntryStatusMessage,
   analysisRangeDisplayBundle,
   analysisReturnTodayStatusMessage,
+  analysisRuntimeBoundaryDisplayBundle,
   analysisSummaryActionDisplayBundle,
-  detailedReportBoundaryDisplayRows,
   detailedReportNoteDisplayItems,
   detailedReportManualEntryStatusMessage,
   detailedReportReturnAnalysisStatusMessage,
@@ -1446,11 +1445,6 @@ export default function App() {
   const recordStatusStaticChecklistDisplay = recordStatusStaticChecklistDisplayBundle();
   const deleteConfirmChecklistItems = recordStatusStaticChecklistDisplay.deleteConfirmItems;
   const recordUpdateChecklistItems = recordStatusStaticChecklistDisplay.recordUpdateItems;
-  const analysisBoundaryChecklistItems = analysisBoundaryChecklistDisplayItems(
-    analysisBoundaryDataDisplayCopy,
-    maxMobileRecordCacheLimit,
-    mobileReportQueryDisplayLimit
-  );
   const saveSuccessDestinationItems = saveSuccessDestinationDisplayItems(
     saveSuccessViewState.hasUnsavedPreviewRecords
   );
@@ -1804,6 +1798,13 @@ export default function App() {
   const reportStatusDisplayText = reportStatusDisplay.report;
   const reportGeneratedAtDisplayText = reportStatusDisplay.generatedAt;
   const reportSourceDisplayLabel = reportSourceDisplay.label;
+  const analysisRuntimeBoundaryDisplay = analysisRuntimeBoundaryDisplayBundle({
+    dataBoundaryCopy: analysisBoundaryDataDisplayCopy,
+    recordCacheLimit: maxMobileRecordCacheLimit,
+    reportQueryLimit: mobileReportQueryDisplayLimit,
+    reportSourceLabel: reportSourceDisplayLabel
+  });
+  const analysisBoundaryChecklistItems = analysisRuntimeBoundaryDisplay.boundaryChecklistItems;
   const reportSourceDisplayCopy = reportSourceDisplay.copy;
   const auxiliaryDisplayLabels = auxiliarySectionLabels();
   const futurePreviewDisplayLabels = futurePreviewSectionLabels();
@@ -1990,10 +1991,7 @@ export default function App() {
     lowConfidencePreviewRecordDisplayCount,
     rejectedPreviewEventDisplayCount
   );
-  const detailedReportBoundaryRows = detailedReportBoundaryDisplayRows(
-    reportSourceDisplayLabel,
-    mobileReportQueryDisplayLimit
-  );
+  const detailedReportBoundaryRows = analysisRuntimeBoundaryDisplay.detailedReportBoundaryRows;
   const doctorShareBoundaryRows = doctorShareStaticDisplay.boundaryRows;
   const futureBoundaryRowsDisplay = futureBoundaryRowsDisplayBundle(
     communityPublicSettings?.leaderboard_opt_in ?? false

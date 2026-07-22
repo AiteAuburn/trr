@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2287: Move analysis runtime boundary display assembly
+
+Status: done
+
+Completed:
+
+- Added `analysisRuntimeBoundaryDisplayBundle` to `analysisCopy.ts`.
+- Moved `App.tsx` analysis boundary checklist and detailed report boundary row assembly behind the bundle.
+- Kept analysis data boundary copy, record cache limit, report query limit, report source label, and report rendering unchanged.
+- Updated navigation verifier coverage to require the bundled analysis boundary outputs and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2286: Move record workflow runtime checklist assembly
 
 Status: done

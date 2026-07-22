@@ -3984,10 +3984,27 @@ def main() -> int:
             "const saveResultDisplay = saveResultDisplayTexts({",
         )
         _assert_contains(
-            "analysis boundary checklist helper binding",
+            "analysis runtime boundary bundle binding",
             content,
-            "const analysisBoundaryChecklistItems = analysisBoundaryChecklistDisplayItems(",
+            "const analysisRuntimeBoundaryDisplay = analysisRuntimeBoundaryDisplayBundle({",
         )
+        _assert_contains(
+            "analysis runtime boundary bundle import",
+            content,
+            "analysisRuntimeBoundaryDisplayBundle,",
+        )
+        _assert_contains(
+            "analysis boundary checklist runtime bundle binding",
+            content,
+            "const analysisBoundaryChecklistItems = analysisRuntimeBoundaryDisplay.boundaryChecklistItems;",
+        )
+        for label, marker in (
+            ("direct analysis boundary checklist binding", "const analysisBoundaryChecklistItems = analysisBoundaryChecklistDisplayItems("),
+            ("direct detailed report boundary rows binding", "const detailedReportBoundaryRows = detailedReportBoundaryDisplayRows("),
+            ("direct analysis boundary checklist import", "  analysisBoundaryChecklistDisplayItems,"),
+            ("direct detailed report boundary rows import", "  detailedReportBoundaryDisplayRows,"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "history boundary checklist helper binding",
             content,
@@ -4250,9 +4267,9 @@ def main() -> int:
             "const privacyBoundaryRows = settingsStaticDisplay.privacyBoundaryRows;",
         )
         _assert_contains(
-            "detailed report boundary rows helper binding",
+            "detailed report boundary rows runtime bundle binding",
             content,
-            "const detailedReportBoundaryRows = detailedReportBoundaryDisplayRows(",
+            "const detailedReportBoundaryRows = analysisRuntimeBoundaryDisplay.detailedReportBoundaryRows;",
         )
         _assert_contains(
             "AI save confirm boundary rows helper binding",
@@ -10974,6 +10991,9 @@ def main() -> int:
             ("detailed report boundary source row", "資料來源"),
             ("detailed report boundary query cap row", "最多 ${boundedLimit} 筆"),
             ("detailed report boundary no medical advice row", "醫療建議"),
+            ("analysis runtime boundary display bundle helper", "function analysisRuntimeBoundaryDisplayBundle(value: {"),
+            ("analysis runtime boundary display checklist binding", "boundaryChecklistItems: analysisBoundaryChecklistDisplayItems("),
+            ("analysis runtime boundary display detailed report binding", "detailedReportBoundaryRows: detailedReportBoundaryDisplayRows(value.reportSourceLabel, value.reportQueryLimit)"),
             ("analysis custom apply status", "已套用自訂日期區間並同步 bounded report；不呼叫 AI 或 LLM。"),
         ):
             _assert_contains(label, analysis_copy_content, marker)
