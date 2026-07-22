@@ -320,6 +320,12 @@ function primaryTabAccessibilityText(screen: { label: string }) {
   return boundDisplayText(`前往${safeLabel}分頁，只切換 App 內頁面`, maxDisplayDetailTextLength);
 }
 
+function primaryTabDisplayBundle(screen: { label: string }) {
+  return {
+    accessibilityLabel: primaryTabAccessibilityText(screen)
+  };
+}
+
 function primaryTabIsCurrent(screen: { isCurrent: boolean }) {
   return screen.isCurrent;
 }
@@ -413,7 +419,7 @@ export {
   mvpFlowStepperState,
   normalizeVisualSmokeInitialRoute,
   primaryScreens,
-  primaryTabAccessibilityText,
+  primaryTabDisplayBundle,
   primaryTabIsCurrent,
   primaryTabIsLocked,
   primaryTabKey,

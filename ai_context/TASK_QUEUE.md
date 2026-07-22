@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2263: Move primary tab display bundle
+
+Status: done
+
+Completed:
+
+- Added the primary tab display bundle helper to `navigationConfig.ts`.
+- Moved `App.tsx` primary tab accessibility assembly from a direct helper call to the bundle entrypoint.
+- Kept primary tab target, key, label, current/locked state, press handling, and accessibility copy unchanged.
+- Updated navigation verifier coverage to require the primary tab display bundle and no direct primary tab accessibility binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2262: Move analysis chart point display bundle
 
 Status: done

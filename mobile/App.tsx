@@ -158,7 +158,7 @@ import {
   mvpFlowStepLabel,
   mvpFlowSteps,
   mvpFlowStepperState,
-  primaryTabAccessibilityText,
+  primaryTabDisplayBundle,
   primaryTabIsCurrent,
   primaryTabIsLocked,
   primaryTabKey,
@@ -7743,7 +7743,8 @@ export default function App() {
             {primaryTabItems.map((screen) => {
               const isCurrentPrimaryTab = primaryTabIsCurrent(screen);
               const isPrimaryTabLocked = primaryTabIsLocked(screen);
-              const primaryTabAccessibility = primaryTabAccessibilityText(screen);
+              const primaryTabDisplay = primaryTabDisplayBundle(screen);
+              const primaryTabAccessibility = primaryTabDisplay.accessibilityLabel;
 
               return (
                 <Pressable
