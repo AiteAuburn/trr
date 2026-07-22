@@ -340,6 +340,7 @@ import {
   yearReviewHeaderDisplayBundle,
   yearReviewInsightDisplayTexts,
   yearReviewShareCardStatusMessages,
+  yearReviewShareFilenameDisplayText,
   yearReviewShareUnavailableStatusMessage,
   yearReviewRevokeStatusMessages,
   yearReviewSyncStatusMessages,
@@ -5707,7 +5708,7 @@ export default function App() {
           body: JSON.stringify({ privacy_acknowledged: true })
         }
       );
-      const shareFilename = boundDisplayText(shareAsset.filename, maxDisplayTextLength);
+      const shareFilename = yearReviewShareFilenameDisplayText(shareAsset.filename);
       const checksumShort = boundIdentifier(sharePackage.asset.checksum_sha256).slice(0, 8);
       const confirmedSharePackageId = boundIdentifier(sharePackage.share_package_id);
       if (!confirmedSharePackageId) {

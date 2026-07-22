@@ -2364,6 +2364,10 @@ export function yearReviewShareUnavailableStatusMessage() {
   return boundUiMessage("visual smoke 或 backend unavailable 時不啟動外部分享；backend ready 時可準備隱私遮罩分享卡並開啟原生分享。");
 }
 
+export function yearReviewShareFilenameDisplayText(filename: string) {
+  return boundDisplayText(filename, maxDisplayTextLength);
+}
+
 export function yearReviewShareCardStatusMessages(value: {
   backendUnavailableMessage: string;
   shareFilename: string;

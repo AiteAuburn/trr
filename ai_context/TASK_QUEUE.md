@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2264: Move year review share filename display helper
+
+Status: done
+
+Completed:
+
+- Added the year review share filename display helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` year review share filename bounding from inline `boundDisplayText` to the helper entrypoint.
+- Kept share asset filename input, native share title, share-card status payload, checksum handling, and share result flow unchanged.
+- Updated navigation verifier coverage to require the year review share filename helper and no direct share filename `boundDisplayText` binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2263: Move primary tab display bundle
 
 Status: done

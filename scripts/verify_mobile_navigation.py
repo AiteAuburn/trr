@@ -14536,6 +14536,7 @@ def main() -> int:
             ("year review share asset endpoint", "`/year-reviews/${targetYear}/share-card/asset?${query.toString()}`"),
             ("year review share confirm endpoint", "`/year-reviews/${targetYear}/share-card/confirm?${query.toString()}`"),
             ("year review privacy acknowledgement payload", "body: JSON.stringify({ privacy_acknowledged: true })"),
+            ("year review bounded share filename helper binding", "const shareFilename = yearReviewShareFilenameDisplayText(shareAsset.filename);"),
             ("year review bounded share package id", "const confirmedSharePackageId = boundIdentifier(sharePackage.share_package_id);"),
             ("year review invalid share package guard", 'throw new Error("invalid_year_review_share_package_id");'),
             ("year review share asset uri prepared", "const shareAssetUri = await writeYearReviewShareAssetFile(shareAsset);"),
@@ -14697,6 +14698,11 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         _assert_not_contains(
+            "direct year review share filename bound display binding",
+            content,
+            "const shareFilename = boundDisplayText(shareAsset.filename, maxDisplayTextLength);",
+        )
+        _assert_not_contains(
             "direct future module display cards map",
             content,
             "futureModuleDisplayCards.map((item) => (",
@@ -14772,6 +14778,8 @@ def main() -> int:
             ("year review backend health rows slice", "summary?.health_outcomes.slice(0, 3).map"),
             ("year review share unavailable status helper", "export function yearReviewShareUnavailableStatusMessage()"),
             ("year review backend-aware share fallback", "backend ready 時可準備隱私遮罩分享卡並開啟原生分享。"),
+            ("year review share filename display helper", "export function yearReviewShareFilenameDisplayText(filename: string)"),
+            ("year review share filename display helper binding", "return boundDisplayText(filename, maxDisplayTextLength);"),
             ("year review share card status helper", "export function yearReviewShareCardStatusMessages(value: {"),
             ("year review share card unavailable fallback", "backend 尚未 ready"),
             ("year review share card loading copy", "正在準備隱私遮罩後的年度分享卡。"),
