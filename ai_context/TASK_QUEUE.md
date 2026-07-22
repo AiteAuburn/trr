@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2225: Move community action display bundle
+
+Status: done
+
+Completed:
+
+- Added the community action display bundle helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` food community share and ranking opt-in button display assembly from the raw texts helper to the bundle entrypoint.
+- Kept community action copy, leaderboard opt-in label selection, food share accessibility copy, backend sync behavior, and posting/privacy preview behavior unchanged.
+- Updated navigation verifier coverage to require the community action display bundle, App bundle binding, and no direct community action display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2224: Move store preview display bundle
 
 Status: done

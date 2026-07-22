@@ -2779,6 +2779,12 @@ export function communityActionDisplayTexts(value: {
   };
 }
 
+export function communityActionDisplayBundle(value: {
+  leaderboardOptIn: boolean;
+}) {
+  return communityActionDisplayTexts(value);
+}
+
 export function foodCommunitySyncStatusMessages(value: {
   backendUnavailableMessage: string;
   itemCount: number;

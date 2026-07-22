@@ -196,7 +196,7 @@ import {
   boundCommunityPublicSettings,
   commercePreviewOpenCartStatusMessage,
   commercePreviewReturnStoreStatusMessage,
-  communityActionDisplayTexts,
+  communityActionDisplayBundle,
   communityActionStatusLabel,
   communityActionStatusText,
   communityActionStatusVisible,
@@ -1866,7 +1866,7 @@ export default function App() {
   const communityPostingStatusMessage = futurePreviewStatusDisplay.communityPosting;
   const communityPrivacyStatusMessage = futurePreviewStatusDisplay.communityPrivacy;
   const foodCommunityShareStatusMessage = futurePreviewStatusDisplay.foodCommunityShare;
-  const communityActionDisplay = communityActionDisplayTexts({
+  const communityActionDisplay = communityActionDisplayBundle({
     leaderboardOptIn: communityPublicSettings?.leaderboard_opt_in ?? false
   });
   const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;
