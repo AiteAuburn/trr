@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2270 move community input max-length display helpers
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added food community share food-name, share-note, and community public display-name max-length helpers to `futureModuleDisplay.ts`.
+- Moved `App.tsx` community input max-length props from direct `mobileBounds` display constants to helper entrypoints.
+- Kept the field components, input values, update handlers, date/time max lengths, and backend payload flow unchanged.
+- Updated navigation verifier coverage to require the max-length helpers and reject the old direct App-level display constant bindings.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2269 move year review share message display helper
 
 類型：mobile / refactor / verifier / docs

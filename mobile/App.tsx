@@ -67,8 +67,6 @@ import {
   clampNumber,
   maxBackendUrlLength,
   maxDateInputLength,
-  maxDisplayDetailTextLength,
-  maxDisplayTextLength,
   maxListItems,
   maxMobileCountValue,
   maxMobileGlucoseValue,
@@ -201,6 +199,7 @@ import {
   communityLeaderboardDisplaySections,
   communityLeaderboardTypes,
   communityPreviewLabelDisplayBundle,
+  communityPublicDisplayNameMaxLength,
   communityPublicDisplayNameDraftInputValue,
   communityPublicNamePreviewLabel,
   communityPublicSettingsStatusMessages,
@@ -252,7 +251,9 @@ import {
   foodCommunityShareEatenTimeLabel,
   foodCommunityShareFoodNameDisplayText,
   foodCommunityShareFoodNameInputValue,
+  foodCommunityShareFoodNameMaxLength,
   foodCommunityShareNoteInputValue,
+  foodCommunityShareNoteMaxLength,
   foodCommunityShareSectionLabel,
   foodCommunityShareStatusMessages,
   foodCommunityShareSelectedItemIdFromApi,
@@ -9802,7 +9803,7 @@ export default function App() {
               <FoodCommunityShareTextFields
                 foodNameAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}
                 foodNameValue={foodCommunityShareFields.foodName}
-                foodNameMaxLength={maxDisplayTextLength}
+                foodNameMaxLength={foodCommunityShareFoodNameMaxLength()}
                 dateTimeFields={
                   <FoodCommunityShareDateTimeFields
                     dateAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}
@@ -9823,7 +9824,7 @@ export default function App() {
                 afterGlucoseValue={foodCommunityShareFields.afterGlucose}
                 noteAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}
                 noteValue={foodCommunityShareFields.note}
-                noteMaxLength={maxDisplayDetailTextLength}
+                noteMaxLength={foodCommunityShareNoteMaxLength()}
                 onFoodNameChange={updateFoodCommunityFoodName}
                 onBeforeGlucoseChange={updateFoodCommunityBeforeGlucose}
                 onAfterGlucoseChange={updateFoodCommunityAfterGlucose}
@@ -9849,7 +9850,7 @@ export default function App() {
                   accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}
                   value={communityPublicDisplayNameDraft}
                   onChangeText={updateCommunityPublicDisplayNameDraft}
-                  maxLength={maxDisplayTextLength}
+                  maxLength={communityPublicDisplayNameMaxLength()}
                 />
                 <Pressable
                   accessibilityLabel={communityPublicProfileSaveAccessibilityDisplayLabel}

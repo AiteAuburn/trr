@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2270: Move community input max-length display helpers
+
+Status: done
+
+Completed:
+
+- Added food community share food-name, share-note, and community public display-name max-length helpers to `futureModuleDisplay.ts`.
+- Moved `App.tsx` community input max-length props from direct `mobileBounds` display constants to helper entrypoints.
+- Kept the field components, input values, update handlers, date/time max lengths, and backend payload flow unchanged.
+- Updated navigation verifier coverage to require the max-length helpers and reject the old direct App-level display constant bindings.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2269: Move year review share message display helper
 
 Status: done
