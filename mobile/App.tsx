@@ -743,9 +743,7 @@ import {
   type DailyTranscriptEntry
 } from "./dailyTranscriptTransforms";
 import {
-  activeProfileInlineText,
-  activeProfileLabelText,
-  activeProfileRelationshipText,
+  activeProfileDisplayBundle,
   captureVoiceQuotaCopy,
   isVoiceQuotaLow,
   membershipStatusReturnSubscriptionStatusMessage,
@@ -1196,9 +1194,10 @@ export default function App() {
   const accountEmailDisplayText = accountDisplay.email;
   const accountLoginDisplayText = accountDisplay.login;
   const doctorShareAccountBoundaryDisplayText = accountDisplay.doctorShareBoundary;
-  const activeProfileLabel = activeProfileLabelText(activeProfile, profiles.length);
-  const activeProfileInlineDisplayText = activeProfileInlineText(activeProfileLabel);
-  const activeProfileRelationshipDisplayText = activeProfileRelationshipText(activeProfile);
+  const activeProfileDisplay = activeProfileDisplayBundle(activeProfile, profiles.length);
+  const activeProfileLabel = activeProfileDisplay.label;
+  const activeProfileInlineDisplayText = activeProfileDisplay.inline;
+  const activeProfileRelationshipDisplayText = activeProfileDisplay.relationship;
   const accountPublicDisplayNameDisplayText = accountPublicDisplayNameForSettings(communityPublicSettings, account);
   const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayBundle({
     allowMobileDevAuth,

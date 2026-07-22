@@ -42,6 +42,15 @@ export function activeProfileRelationshipText(activeProfile: ActiveProfileDispla
   return boundDisplayText(activeProfile?.relationship ?? "未載入", 40);
 }
 
+export function activeProfileDisplayBundle(activeProfile: ActiveProfileDisplaySource | null, profileCount: number) {
+  const label = activeProfileLabelText(activeProfile, profileCount);
+  return {
+    label,
+    inline: activeProfileInlineText(label),
+    relationship: activeProfileRelationshipText(activeProfile)
+  };
+}
+
 export function formatVoiceMinutes(seconds: number) {
   const safeSeconds = Math.max(0, Math.min(3600, seconds));
   const minutes = Math.floor(safeSeconds / 60);

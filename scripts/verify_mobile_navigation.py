@@ -11612,6 +11612,10 @@ def main() -> int:
             ("account email bundle field binding", "const accountEmailDisplayText = accountDisplay.email;"),
             ("account login bundle field binding", "const accountLoginDisplayText = accountDisplay.login;"),
             ("doctor share account boundary bundle field binding", "const doctorShareAccountBoundaryDisplayText = accountDisplay.doctorShareBoundary;"),
+            ("active profile display bundle binding", "const activeProfileDisplay = activeProfileDisplayBundle(activeProfile, profiles.length);"),
+            ("active profile label bundle field binding", "const activeProfileLabel = activeProfileDisplay.label;"),
+            ("active profile inline bundle field binding", "const activeProfileInlineDisplayText = activeProfileDisplay.inline;"),
+            ("active profile relationship bundle field binding", "const activeProfileRelationshipDisplayText = activeProfileDisplay.relationship;"),
             ("settings account security auth mode display helper binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayBundle({"),
             ("settings account security auth mode label binding", "const authModeDisplayLabel = accountSecurityAuthModeDisplay.label;"),
             ("settings account security auth mode copy binding", "const authModeDisplayCopy = accountSecurityAuthModeDisplay.copy;"),
@@ -13250,6 +13254,10 @@ def main() -> int:
             ("active profile inline copy", "目前對象：${activeProfileLabel}"),
             ("active profile relationship helper", "function activeProfileRelationshipText(activeProfile: ActiveProfileDisplaySource | null)"),
             ("active profile relationship fallback", "未載入"),
+            ("active profile display bundle helper", "function activeProfileDisplayBundle(activeProfile: ActiveProfileDisplaySource | null, profileCount: number)"),
+            ("active profile display bundle label binding", "const label = activeProfileLabelText(activeProfile, profileCount);"),
+            ("active profile display bundle inline binding", "inline: activeProfileInlineText(label)"),
+            ("active profile display bundle relationship binding", "relationship: activeProfileRelationshipText(activeProfile)"),
             ("settings subpage status display texts helper", "function settingsSubpageStatusDisplayTexts(value: {"),
             ("settings subpage status display bundle helper", "function settingsSubpageStatusDisplayBundle(value: {"),
             ("settings subpage status display bundle delegates", "return settingsSubpageStatusDisplayTexts(value);"),
@@ -13501,6 +13509,9 @@ def main() -> int:
             ("direct account email display binding", "const accountEmailDisplayText = accountEmailDisplayValue(account);"),
             ("direct account login display binding", "const accountLoginDisplayText = accountLoginDisplayValue(account);"),
             ("direct doctor share account boundary binding", "const doctorShareAccountBoundaryDisplayText = doctorShareAccountBoundaryText(account);"),
+            ("direct active profile label binding", "const activeProfileLabel = activeProfileLabelText(activeProfile, profiles.length);"),
+            ("direct active profile inline binding", "const activeProfileInlineDisplayText = activeProfileInlineText(activeProfileLabel);"),
+            ("direct active profile relationship binding", "const activeProfileRelationshipDisplayText = activeProfileRelationshipText(activeProfile);"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (
