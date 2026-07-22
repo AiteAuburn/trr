@@ -2741,6 +2741,13 @@ def main() -> int:
             ("record edit header type label helper binding", "typeLabel={recordEditHeaderTypeLabel(selectedRecordDisplayItem)}"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("direct delete confirm checklist binding", "const deleteConfirmChecklistItems = deleteConfirmChecklistDisplayItems();"),
+            ("direct record update checklist binding", "const recordUpdateChecklistItems = recordUpdateChecklistDisplayItems();"),
+            ("direct delete confirm checklist import", "  deleteConfirmChecklistDisplayItems,"),
+            ("direct record update checklist import", "  recordUpdateChecklistDisplayItems,"),
+        ):
+            _assert_not_contains(label, content, marker)
         record_detail_screen_block = _match_block(
             content,
             r'(currentScreen === "recordDetail"[\s\S]*?<RecordDetailActionPanel)',
@@ -9450,6 +9457,9 @@ def main() -> int:
             ("record update checklist helper", "function recordUpdateChecklistDisplayItems()"),
             ("record update checklist single record copy", "只會更新目前選取的這一筆紀錄。"),
             ("record update checklist payload copy", "只送出確認後的結構化 payload，不批次載入完整歷史。"),
+            ("record status static checklist bundle helper", "function recordStatusStaticChecklistDisplayBundle()"),
+            ("record status static checklist bundle delete confirm", "deleteConfirmItems: deleteConfirmChecklistDisplayItems()"),
+            ("record status static checklist bundle record update", "recordUpdateItems: recordUpdateChecklistDisplayItems()"),
             ("record result destination status helper", 'function recordResultDestinationStatusMessage(kind: "delete" | "update", target: AppScreen)'),
             ("delete success boundary checklist helper", "function deleteSuccessBoundaryChecklistDisplayItems(recordSyncLimit: number)"),
             ("update success boundary checklist helper", "function updateSuccessBoundaryChecklistDisplayItems(recordSyncLimit: number)"),
@@ -9466,7 +9476,9 @@ def main() -> int:
         ):
             _assert_contains(label, record_status_copy_content, marker)
         for label, marker in (
-            ("delete confirm checklist helper binding", "const deleteConfirmChecklistItems = deleteConfirmChecklistDisplayItems();"),
+            ("record status static checklist bundle import", "recordStatusStaticChecklistDisplayBundle,"),
+            ("record status static checklist bundle binding", "const recordStatusStaticChecklistDisplay = recordStatusStaticChecklistDisplayBundle();"),
+            ("delete confirm checklist static bundle binding", "const deleteConfirmChecklistItems = recordStatusStaticChecklistDisplay.deleteConfirmItems;"),
             ("delete confirm display helper binding", "const deleteConfirmDisplay = deleteConfirmDisplayBundle(selectedRecordDisplayItem, isBusy);"),
             ("delete confirm intro display binding", "const deleteConfirmIntroDisplayText = deleteConfirmDisplay.intro;"),
             ("delete confirm record meta display binding", "const deleteConfirmRecordMetaDisplayText = deleteConfirmDisplay.recordMeta;"),
@@ -11285,7 +11297,7 @@ def main() -> int:
             ("record edit header fields binding", "<RecordEditHeaderFields\n              dateAccessibilityLabel={auxiliaryDisplayLabels.dateInputAccessibility}"),
             ("record edit date input binding", "onDateChange={updateRecordEditDateInput}"),
             ("record edit time input binding", "onTimeChange={updateRecordEditTimeInput}"),
-            ("record edit checklist helper binding", "const recordUpdateChecklistItems = recordUpdateChecklistDisplayItems();"),
+            ("record edit checklist static bundle binding", "const recordUpdateChecklistItems = recordStatusStaticChecklistDisplay.recordUpdateItems;"),
             ("record edit footer actions binding", "<RecordEditFooterActions\n              cancelAccessibilityLabel={coreFlowDisplayLabels.recordEditReturnAccessibility}"),
             ("record edit glucose shared field binding", "<RecordTextField\n                  icon={\"💧\"}"),
             ("record edit glucose shared field label", 'label={"血糖數值"}'),

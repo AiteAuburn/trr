@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2282: Move record status static checklist assembly
+
+Status: done
+
+Completed:
+
+- Added `recordStatusStaticChecklistDisplayBundle` to `recordStatusCopy.ts`.
+- Moved `App.tsx` delete confirm and record update checklist assembly behind the bundle.
+- Kept delete/update display text, status messages, success checklist limits, and record edit flow unchanged.
+- Updated navigation verifier coverage to require the bundled record status outputs and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2281: Move record workflow static checklist assembly
 
 Status: done

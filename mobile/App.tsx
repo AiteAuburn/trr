@@ -472,7 +472,6 @@ import {
   deleteConfirmDisplayBundle,
   deleteConfirmReadyStatusMessage,
   deleteConfirmReturnStatusMessage,
-  deleteConfirmChecklistDisplayItems,
   manualRecordCreateDisplayBundle,
   manualRecordCreateFailureStatusMessage,
   manualRecordCreateProgressStatusMessage,
@@ -496,8 +495,8 @@ import {
   recordSyncPageSuccessStatusMessage,
   recordSyncSuccessStatusMessage,
   recordSyncUnavailableStatusMessage,
+  recordStatusStaticChecklistDisplayBundle,
   recordsStatusDisplayBundle,
-  recordUpdateChecklistDisplayItems,
   recordUpdateFailureStatusMessage,
   recordUpdateProgressStatusMessage,
   recordUpdateSuccessStatusMessage,
@@ -1445,8 +1444,9 @@ export default function App() {
     maxMobileRecordCacheLimit,
     recordDisplayState.hasRecords
   );
-  const deleteConfirmChecklistItems = deleteConfirmChecklistDisplayItems();
-  const recordUpdateChecklistItems = recordUpdateChecklistDisplayItems();
+  const recordStatusStaticChecklistDisplay = recordStatusStaticChecklistDisplayBundle();
+  const deleteConfirmChecklistItems = recordStatusStaticChecklistDisplay.deleteConfirmItems;
+  const recordUpdateChecklistItems = recordStatusStaticChecklistDisplay.recordUpdateItems;
   const analysisBoundaryChecklistItems = analysisBoundaryChecklistDisplayItems(
     analysisBoundaryDataDisplayCopy,
     maxMobileRecordCacheLimit,

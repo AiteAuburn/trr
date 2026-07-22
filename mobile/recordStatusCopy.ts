@@ -261,6 +261,13 @@ export function recordUpdateChecklistDisplayItems() {
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
+export function recordStatusStaticChecklistDisplayBundle() {
+  return {
+    deleteConfirmItems: deleteConfirmChecklistDisplayItems(),
+    recordUpdateItems: recordUpdateChecklistDisplayItems()
+  };
+}
+
 export function recordResultDestinationStatusMessage(kind: "delete" | "update", target: AppScreen) {
   const kindLabel = kind === "delete" ? "刪除完成" : "更新完成";
   const targetLabel =
