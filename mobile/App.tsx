@@ -201,6 +201,7 @@ import {
   communityLeaderboardDisplaySections,
   communityLeaderboardTypes,
   communityPreviewLabelDisplayBundle,
+  communityPublicDisplayNameDraftInputValue,
   communityPublicNamePreviewLabel,
   communityPublicSettingsStatusMessages,
   emptyFoodCommunityShareFields,
@@ -5377,7 +5378,7 @@ export default function App() {
   }
 
   function updateCommunityPublicDisplayNameDraft(value: string) {
-    setCommunityPublicDisplayNameDraft(boundDisplayText(value, maxDisplayTextLength));
+    setCommunityPublicDisplayNameDraft(communityPublicDisplayNameDraftInputValue(value));
   }
 
   async function saveCommunityPublicSettings(nextOptIn?: boolean) {

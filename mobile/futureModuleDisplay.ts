@@ -986,6 +986,10 @@ export function boundCommunityPublicSettings(value: CommunityPublicSettings): Co
   };
 }
 
+export function communityPublicDisplayNameDraftInputValue(value: string) {
+  return boundDisplayText(value, maxDisplayTextLength);
+}
+
 export function foodCommunityCategoryDisplayItem(value: { id: FoodCommunityCategory; label: string; foodCount?: number; sampleFoods?: string[] }) {
   const label = boundDisplayText(value.label || "分類", 60);
   const foodCount = clampNumber(value.foodCount ?? 0, 0, maxMobileCountValue);

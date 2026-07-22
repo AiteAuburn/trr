@@ -12950,6 +12950,7 @@ def main() -> int:
             ("community public settings visual-smoke binding", "setCommunityActionStatus(publicSettingsStatus.visualSmoke);"),
             ("community public settings unavailable binding", "setCommunityActionStatus(publicSettingsStatus.unavailable);"),
             ("community public settings missing name binding", "setCommunityActionStatus(publicSettingsStatus.missingDisplayName);"),
+            ("community public display name draft input helper binding", "setCommunityPublicDisplayNameDraft(communityPublicDisplayNameDraftInputValue(value));"),
             ("community public settings success binding", "setCommunityActionStatus(\n        communityPublicSettingsStatusMessages({"),
             ("community public settings failure binding", "setCommunityActionStatus(publicSettingsStatus.failure);"),
             ("food community search input handler", "function updateFoodCommunitySearchInput(value: string)"),
@@ -13262,6 +13263,11 @@ def main() -> int:
             "direct food community share food name input bound display binding",
             content,
             "foodName: boundDisplayText(value, maxDisplayTextLength)",
+        )
+        _assert_not_contains(
+            "direct community public display name draft bound display binding",
+            content,
+            "setCommunityPublicDisplayNameDraft(boundDisplayText(value, maxDisplayTextLength));",
         )
         for label, marker in (
             ("direct recording quota intro copy binding", "const recordingQuotaIntroDisplayText = recordingQuotaIntroCopy();"),
@@ -14898,6 +14904,8 @@ def main() -> int:
             ("community public settings bound helper", "export function boundCommunityPublicSettings(value: CommunityPublicSettings): CommunityPublicSettings"),
             ("community public display name fallback", 'display_name: boundDisplayText(value.display_name || "糖友", maxDisplayTextLength)'),
             ("community public leaderboard opt-in boolean", "leaderboard_opt_in: Boolean(value.leaderboard_opt_in)"),
+            ("community public display name draft input helper", "export function communityPublicDisplayNameDraftInputValue(value: string)"),
+            ("community public display name draft input helper binding", "return boundDisplayText(value, maxDisplayTextLength);"),
             ("food community category type", "export type FoodCommunityCategory ="),
             ("food community item type", "export type FoodCommunityItem = {"),
             ("food community api item type", "export type FoodCommunityApiItem = {"),

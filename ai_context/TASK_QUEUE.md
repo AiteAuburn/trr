@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2267: Move community public display-name draft input helper
+
+Status: done
+
+Completed:
+
+- Added the community public display-name draft input helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` community public display-name draft bounding from inline `boundDisplayText` to the helper entrypoint.
+- Kept public settings load/save flow, draft state shape, fallback display name, opt-in status, and backend payload flow unchanged.
+- Updated navigation verifier coverage to require the community display-name draft input helper and no direct draft input `boundDisplayText` binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2266: Move food community share food-name input helper
 
 Status: done
