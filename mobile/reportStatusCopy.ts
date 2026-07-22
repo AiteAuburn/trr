@@ -114,3 +114,10 @@ export function reportStatusDisplayTexts(value: {
     quota: boundUiMessage(value.quotaStatus)
   };
 }
+
+export function reportStatusDisplayBundle(value: {
+  reportStatus: string;
+  quotaStatus: string;
+}) {
+  return reportStatusDisplayTexts(value);
+}

@@ -9381,6 +9381,8 @@ def main() -> int:
             ("report generated-at record datetime binding", "recordDateTimeDisplay(generatedAt)"),
             ("report generated-at fallback copy", "以 mobile 目前已載入資料計算。"),
             ("report status display texts helper", "function reportStatusDisplayTexts(value: {"),
+            ("report status display bundle helper", "function reportStatusDisplayBundle(value: {"),
+            ("report status display bundle delegates", "return reportStatusDisplayTexts(value);"),
             ("report status display report binding", "report: boundUiMessage(value.reportStatus)"),
             ("quota status display binding", "quota: boundUiMessage(value.quotaStatus)"),
         ):
@@ -10566,12 +10568,17 @@ def main() -> int:
             ("voice quota failure clear helper binding", "clearVoiceQuotaStatus(voiceQuotaSyncFailureStatusMessage());"),
             ("analysis report start bound", "const startAt = analysisSelectedDateBounds.start.toISOString();"),
             ("analysis report end bound", "const endAt = analysisSelectedDateBounds.end.toISOString();"),
-            ("analysis report status display helper binding", "const reportStatusDisplay = reportStatusDisplayTexts({"),
+            ("analysis report status display helper binding", "const reportStatusDisplay = reportStatusDisplayBundle({"),
             ("analysis report status display text binding", "const reportStatusDisplayText = reportStatusDisplay.report;"),
             ("voice quota status display text binding", "const quotaStatusDisplayText = reportStatusDisplay.quota;"),
             ("report generated-at display helper binding", "const reportGeneratedAtDisplayText = reportGeneratedAtDisplayValue(activeAnalysisReport?.generated_at);"),
         ):
             _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "direct report status display texts binding",
+            content,
+            "const reportStatusDisplay = reportStatusDisplayTexts({",
+        )
         _assert_contains(
             "analysis current report key helper",
             analysis_screen_data_content,

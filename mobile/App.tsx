@@ -629,7 +629,7 @@ import {
   detailedReportSuccessStatusMessage,
   detailedReportUnavailableStatusMessage,
   reportGeneratedAtDisplayText as reportGeneratedAtDisplayValue,
-  reportStatusDisplayTexts,
+  reportStatusDisplayBundle,
   reportSourceDisplayItem,
   voiceQuotaInitialStatusMessage,
   voiceQuotaSyncFailureStatusMessage,
@@ -1836,7 +1836,7 @@ export default function App() {
     analysisRecords.length,
     mobileReportQueryDisplayLimit
   );
-  const reportStatusDisplay = reportStatusDisplayTexts({
+  const reportStatusDisplay = reportStatusDisplayBundle({
     reportStatus,
     quotaStatus
   });
