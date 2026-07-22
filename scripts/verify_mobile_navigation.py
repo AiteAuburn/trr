@@ -12275,7 +12275,7 @@ def main() -> int:
             ("auth session management preview list binding", "<SessionManagementPreviewList"),
             ("auth session management preview list handler binding", "onSessionPress={pressAuthSessionManagementPreview}"),
             ("profile edit integration status binding", "onActionPress={showProfileEditIntegrationStatus}"),
-            ("settings subpage status display helper binding", "const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayTexts({"),
+            ("settings subpage status display helper binding", "const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayBundle({"),
             ("settings subpage profile action display binding", "const profileActionStatusDisplayText = settingsSubpageStatusDisplay.profileAction;"),
             ("settings subpage quota unavailable binding", "const recordingQuotaUnavailableStatusMessage = settingsSubpageStatusDisplay.recordingQuotaUnavailable;"),
             ("settings subpage reminder integration binding", "const reminderIntegrationStatusMessage = settingsSubpageStatusDisplay.reminderIntegration;"),
@@ -12861,6 +12861,7 @@ def main() -> int:
             )
             _assert_contains(label, source, marker)
         for label, marker in (
+            ("direct settings subpage status display texts binding", "const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayTexts({"),
             ("direct settings profile choice map", "profileChoiceDisplayItems.map((profile) => {"),
             ("direct settings profile key binding", "key={profile.id}"),
             ("direct settings profile accessibility binding", "accessibilityLabel={profile.accessibilityLabel}"),
@@ -13072,6 +13073,8 @@ def main() -> int:
             ("active profile relationship helper", "function activeProfileRelationshipText(activeProfile: ActiveProfileDisplaySource | null)"),
             ("active profile relationship fallback", "未載入"),
             ("settings subpage status display texts helper", "function settingsSubpageStatusDisplayTexts(value: {"),
+            ("settings subpage status display bundle helper", "function settingsSubpageStatusDisplayBundle(value: {"),
+            ("settings subpage status display bundle delegates", "return settingsSubpageStatusDisplayTexts(value);"),
             ("settings subpage profile action status binding", "profileAction: boundUiMessage(value.profileActionStatus)"),
             ("settings subpage quota action status binding", "recordingQuotaAction: boundUiMessage(value.recordingQuotaActionStatus)"),
             ("settings subpage profile edit integration copy", "個人資料編輯尚未啟用；需完成 production auth、profile update API、權限檢查與 rollback 流程。"),

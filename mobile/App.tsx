@@ -790,7 +790,7 @@ import {
   selectedModelDisplayLabel,
   selectedModelRuntimeDisplayLabel,
   settingsAccountSecurityOpenStatusMessage,
-  settingsSubpageStatusDisplayTexts,
+  settingsSubpageStatusDisplayBundle,
   settingsSubpageReturnStatusMessage
 } from "./settingsCopy";
 import {
@@ -1958,7 +1958,7 @@ export default function App() {
   const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);
   const nativeStatusDisplayText = nativeStatusDisplay.native;
   const devResetStatusDisplayText = authStatusDisplay.devReset;
-  const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayTexts({
+  const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayBundle({
     profileActionStatus,
     recordingQuotaActionStatus,
     reminderActionStatus,

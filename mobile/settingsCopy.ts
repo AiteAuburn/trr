@@ -157,6 +157,16 @@ export function settingsSubpageStatusDisplayTexts(value: {
   };
 }
 
+export function settingsSubpageStatusDisplayBundle(value: {
+  profileActionStatus: string;
+  recordingQuotaActionStatus: string;
+  reminderActionStatus: string;
+  privacyActionStatus: string;
+  backendUnavailableMessage: string;
+}) {
+  return settingsSubpageStatusDisplayTexts(value);
+}
+
 export function modelRuntimeLabel(
   runtime?: "local" | "browser" | "server_stub" | "server_api" | "cloud_disabled"
 ) {

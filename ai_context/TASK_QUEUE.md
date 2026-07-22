@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2221: Move settings subpage status display bundle
+
+Status: done
+
+Completed:
+
+- Added the settings subpage status display bundle helper to `settingsCopy.ts`.
+- Moved `App.tsx` profile, recording quota, reminder, and privacy subpage status display assembly from the raw texts helper to the bundle entrypoint.
+- Kept settings subpage copy, quota sync copy, reminder/privacy integration copy, and backend readiness behavior unchanged.
+- Updated navigation verifier coverage to require the settings subpage status display bundle, App bundle binding, and no direct settings subpage status display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2220: Move report status display bundle
 
 Status: done
