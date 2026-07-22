@@ -1187,6 +1187,10 @@ export function foodCommunityShareFoodNameDisplayText(
   return boundDisplayText(fields.foodName || foodCommunityShareFallbackFoodName(item), maxDisplayTextLength).trim();
 }
 
+export function foodCommunityShareFoodNameInputValue(value: string) {
+  return boundDisplayText(value, maxDisplayTextLength);
+}
+
 export function foodCommunityShareCategory(item: { category: FoodCommunityCategory }) {
   return item.category;
 }

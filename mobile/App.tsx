@@ -250,6 +250,7 @@ import {
   foodCommunityShareEatenDateLabel,
   foodCommunityShareEatenTimeLabel,
   foodCommunityShareFoodNameDisplayText,
+  foodCommunityShareFoodNameInputValue,
   foodCommunityShareSectionLabel,
   foodCommunityShareStatusMessages,
   foodCommunityShareSelectedItemIdFromApi,
@@ -4656,7 +4657,7 @@ export default function App() {
   function updateFoodCommunityFoodName(value: string) {
     setFoodCommunityShareFields((current) => ({
       ...current,
-      foodName: boundDisplayText(value, maxDisplayTextLength)
+      foodName: foodCommunityShareFoodNameInputValue(value)
     }));
   }
 

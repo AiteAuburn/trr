@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2266: Move food community share food-name input helper
+
+Status: done
+
+Completed:
+
+- Added the food community share food-name input helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` food community share food-name input bounding from inline `boundDisplayText` to the helper entrypoint.
+- Kept share field state shape, input handler, max length, missing-name guard, and API payload flow unchanged.
+- Updated navigation verifier coverage to require the food-name input helper and no direct food-name input `boundDisplayText` binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2265: Move food community share food-name display helper
 
 Status: done
