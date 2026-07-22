@@ -479,7 +479,7 @@ import {
   dailyRecordLeaveGuardConfirmStatusMessage,
   dailyRecordLeaveGuardDisplayBundle,
   dailyRecordLeaveGuardPromptStatusMessage,
-  manualRecordConfirmDisplayTexts,
+  manualRecordConfirmDisplayBundle,
   manualRecordConfirmReadyStatusMessage,
   manualRecordConfirmReturnStatusMessage,
   manualRecordReturnStatusMessage,
@@ -2052,7 +2052,7 @@ export default function App() {
   const previewRecordEditBoundaryDisplayText = previewRecordEditBoundaryCopy();
   const selectedRecordDisplay = selectedRecordDisplayBundleForRecord(selectedRecord);
   const selectedRecordDisplayItem = selectedRecordDisplay.displayItem;
-  const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayTexts(isBusy);
+  const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayBundle(isBusy);
   const manualRecordConfirmIntroDisplayText = manualRecordConfirmDisplayTextsForState.intro;
   const manualRecordConfirmSubmitDisplayLabel = manualRecordConfirmDisplayTextsForState.submit;
   const deleteConfirmDisplay = deleteConfirmDisplayTexts(selectedRecordDisplayItem, isBusy);

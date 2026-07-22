@@ -455,6 +455,10 @@ export function manualRecordConfirmDisplayTexts(isBusy: boolean) {
   };
 }
 
+export function manualRecordConfirmDisplayBundle(isBusy: boolean) {
+  return manualRecordConfirmDisplayTexts(isBusy);
+}
+
 export function manualSubmitChecklistDisplayItems() {
   return [
     "不會呼叫 AI 或 LLM，成本為 0。",
