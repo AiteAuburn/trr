@@ -734,7 +734,6 @@ import {
   type SettingsRow
 } from "./settingsScreenData";
 import {
-  downloadedWhisperModelDisplayItems,
   settingsChoiceDisplayBundle
 } from "./settingsChoiceDisplay";
 import { settingsStaticDisplayBundle } from "./settingsStaticDisplayBundle";
@@ -1683,9 +1682,10 @@ export default function App() {
         profiles,
         llmModels: models.llm_models,
         sttModels: models.stt_models,
-        authSessions
+        authSessions,
+        downloadedModels
       }),
-    [authSessions, models.llm_models, models.stt_models, profiles]
+    [authSessions, downloadedModels, models.llm_models, models.stt_models, profiles]
   );
   const profileChoiceDisplayItems = settingsChoiceDisplay.profileChoiceDisplayItems;
   const llmModelChoiceDisplayItems = settingsChoiceDisplay.llmModelChoiceDisplayItems;
@@ -2070,7 +2070,7 @@ export default function App() {
   const nativeBenchmarkAccessibilityDisplayLabel = nativeActionDisplay.benchmarkAccessibility;
   const recordingModelRefreshDisplayLabel = nativeActionDisplay.recordingModelRefreshLabel;
   const recordingModelRefreshAccessibilityDisplayLabel = nativeActionDisplay.recordingModelRefreshAccessibility;
-  const downloadedWhisperModelChoiceItems = downloadedWhisperModelDisplayItems(downloadedModels);
+  const downloadedWhisperModelChoiceItems = settingsChoiceDisplay.downloadedWhisperModelChoiceItems;
   const returnDestinationButtonDisplay = returnDestinationButtonDisplayBundle({
     achievementsReturnScreen,
     yearReviewReturnScreen,

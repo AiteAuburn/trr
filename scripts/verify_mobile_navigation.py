@@ -12628,12 +12628,13 @@ def main() -> int:
             ("settings choice display bundle llm models", "llmModels: models.llm_models"),
             ("settings choice display bundle stt models", "sttModels: models.stt_models"),
             ("settings choice display bundle auth sessions", "authSessions"),
+            ("settings choice display bundle downloaded models", "downloadedModels"),
             ("profile settings display items helper binding", "const profileChoiceDisplayItems = settingsChoiceDisplay.profileChoiceDisplayItems;"),
             ("llm model settings option handler", "function selectSettingsLlmModelChoice(modelId: string)"),
             ("stt model settings option handler", "function selectSettingsSttModelChoice(modelId: string)"),
             ("llm model settings display items helper binding", "const llmModelChoiceDisplayItems = settingsChoiceDisplay.llmModelChoiceDisplayItems;"),
             ("stt model settings display items helper binding", "const sttModelChoiceDisplayItems = settingsChoiceDisplay.sttModelChoiceDisplayItems;"),
-            ("downloaded whisper model display items helper binding", "const downloadedWhisperModelChoiceItems = downloadedWhisperModelDisplayItems(downloadedModels);"),
+            ("downloaded whisper model display items bundle binding", "const downloadedWhisperModelChoiceItems = settingsChoiceDisplay.downloadedWhisperModelChoiceItems;"),
             ("profile settings option press handler", "function pressSettingsProfileChoice(profile: (typeof profileChoiceDisplayItems)[number])"),
             ("profile settings target helper binding", "selectSettingsProfileChoice(settingsProfileChoiceTarget(profile));"),
             ("settings profile choice selector binding", "<SettingsProfileChoiceSelector"),
@@ -13481,6 +13482,8 @@ def main() -> int:
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (
+            ("direct downloaded whisper model display helper binding", "const downloadedWhisperModelChoiceItems = downloadedWhisperModelDisplayItems(downloadedModels);"),
+            ("direct downloaded whisper model display helper import", "  downloadedWhisperModelDisplayItems,"),
             ("direct recording Whisper model map", "downloadedWhisperModelChoiceItems.map((model) => {"),
             ("direct recording Whisper model selected binding", "model.sourceUri === whisperModelPath"),
             ("direct recording Whisper model key binding", "key={model.sourceUri}"),
@@ -13505,6 +13508,7 @@ def main() -> int:
             ("settings choice display bundle llm items", 'llmModelChoiceDisplayItems: settingsModelChoiceDisplayItems(value.llmModels, "LLM")'),
             ("settings choice display bundle stt items", 'sttModelChoiceDisplayItems: settingsModelChoiceDisplayItems(value.sttModels, "STT")'),
             ("settings choice display bundle auth sessions", "authSessionDisplayItems: authSessionDisplayListItems(value.authSessions)"),
+            ("settings choice display bundle downloaded whisper models", "downloadedWhisperModelChoiceItems: downloadedWhisperModelDisplayItems(value.downloadedModels)"),
             ("downloaded model display label helper", "function downloadedModelDisplayLabel(value: DownloadedModelDisplaySource)"),
             ("downloaded model checksum copy", "md5 ${boundIdentifier(value.md5).slice(0, 12)}"),
             ("downloaded whisper model display helper", "function downloadedWhisperModelDisplayItem(value: DownloadedModelDisplaySource)"),

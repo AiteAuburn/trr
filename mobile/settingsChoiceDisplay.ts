@@ -97,12 +97,14 @@ export function settingsChoiceDisplayBundle<
   llmModels: LlmModel[];
   sttModels: SttModel[];
   authSessions: AuthSessionDisplaySource[];
+  downloadedModels: DownloadedModelDisplaySource[];
 }) {
   return {
     profileChoiceDisplayItems: settingsProfileChoiceDisplayItems(value.profiles),
     llmModelChoiceDisplayItems: settingsModelChoiceDisplayItems(value.llmModels, "LLM"),
     sttModelChoiceDisplayItems: settingsModelChoiceDisplayItems(value.sttModels, "STT"),
-    authSessionDisplayItems: authSessionDisplayListItems(value.authSessions)
+    authSessionDisplayItems: authSessionDisplayListItems(value.authSessions),
+    downloadedWhisperModelChoiceItems: downloadedWhisperModelDisplayItems(value.downloadedModels)
   };
 }
 
