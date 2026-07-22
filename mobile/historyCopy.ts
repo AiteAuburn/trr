@@ -92,6 +92,7 @@ export function historyNoRangeRecordsBodyCopy() {
 
 export function historyEmptyStateDisplayBundle() {
   return {
+    noRealRecordHealthValue: noRealRecordHealthValueCopy("history"),
     noRecordsTitle: historyNoRecordsTitleCopy(),
     noRecordsBody: historyNoRecordsBodyCopy(),
     noRangeRecordsTitle: historyNoRangeRecordsTitleCopy(),

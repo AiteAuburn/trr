@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2241 move history no-real-record empty value into display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/historyCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the history no-real-record health value display text to `historyEmptyStateDisplayBundle()` in `historyCopy.ts`.
+- Moved `App.tsx` history no-real-record status body display assembly from the raw scoped copy helper to the History empty-state bundle entrypoint.
+- Kept History no-real-record copy, empty-state rendering, loaded-record boundary checklist behavior, record sync behavior, and History navigation unchanged.
+- Updated navigation verifier coverage to require the bundled no-real-record history copy and no direct scoped history no-real-record copy binding regression in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2240 move analysis data boundary display bundle
 
 類型：mobile / refactor / verifier / docs

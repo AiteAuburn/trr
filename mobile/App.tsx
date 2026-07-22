@@ -675,8 +675,7 @@ import {
   historyEmptyStateDisplayBundle,
   historyManualEntryStatusMessage,
   historyRecordDetailStatusMessage,
-  historyReturnTodayStatusMessage,
-  noRealRecordHealthValueCopy
+  historyReturnTodayStatusMessage
 } from "./historyCopy";
 import {
   buildHistoryDailyRecordSectionDisplayItems,
@@ -1378,7 +1377,6 @@ export default function App() {
   const unsavedPreviewRecordDisplayCount = previewState.displayCount;
   const mobileRecordSyncDisplayLimit = clampNumber(mobileRecordSyncLimit, 0, maxMobileCountValue);
   const mobileReportQueryDisplayLimit = clampNumber(mobileReportQueryLimit, 0, maxMobileCountValue);
-  const historyNoRealRecordHealthValueDisplayText = noRealRecordHealthValueCopy("history");
   const analysisDataBoundaryDisplay = analysisDataBoundaryDisplayBundle(analysisPreviewMode);
   const analysisNoDataStatusDisplayLabel = analysisDataBoundaryDisplay.noDataStatus;
   const analysisNoDataDisplayCopy = analysisDataBoundaryDisplay.noDataCopy;
@@ -2055,6 +2053,7 @@ export default function App() {
   const deleteConfirmRecordMetaDisplayText = deleteConfirmDisplay.recordMeta;
   const deleteConfirmSubmitDisplayLabel = deleteConfirmDisplay.submit;
   const historyEmptyStateDisplay = historyEmptyStateDisplayBundle();
+  const historyNoRealRecordHealthValueDisplayText = historyEmptyStateDisplay.noRealRecordHealthValue;
   const historyNoRecordsTitleDisplayText = historyEmptyStateDisplay.noRecordsTitle;
   const historyNoRecordsBodyDisplayText = historyEmptyStateDisplay.noRecordsBody;
   const historyNoRangeRecordsTitleDisplayText = historyEmptyStateDisplay.noRangeRecordsTitle;

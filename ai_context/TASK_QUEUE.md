@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2241: Move history no-real-record empty value into display bundle
+
+Status: done
+
+Completed:
+
+- Added the history no-real-record health value display text to `historyEmptyStateDisplayBundle()` in `historyCopy.ts`.
+- Moved `App.tsx` history no-real-record status body display assembly from the raw scoped copy helper to the History empty-state bundle entrypoint.
+- Kept History no-real-record copy, empty-state rendering, loaded-record boundary checklist behavior, record sync behavior, and History navigation unchanged.
+- Updated navigation verifier coverage to require the bundled no-real-record history copy and no direct scoped history no-real-record copy binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2240: Move analysis data boundary display bundle
 
 Status: done
