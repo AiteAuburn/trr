@@ -371,9 +371,8 @@ import {
 } from "./sharedDisplayItems";
 import { recordFormStaticDisplayBundle } from "./recordFormDisplayBundle";
 import {
-  accountDisplayBundle,
   accountPublicDisplayNameForSettings,
-  accountSecurityAuthModeDisplayBundle,
+  accountRuntimeDisplayBundle,
   doctorShareStaticDisplayBundle,
   profileSettingsBoundaryDisplayRowsForState
 } from "./accountCopy";
@@ -1147,7 +1146,11 @@ export default function App() {
   });
   const parserModelUnavailableMessage = parserModelAvailabilityDisplay.unavailableMessage;
   const parserModelReady = parserModelAvailabilityDisplay.ready;
-  const accountDisplay = accountDisplayBundle(account);
+  const accountRuntimeDisplay = accountRuntimeDisplayBundle({
+    account,
+    allowMobileDevAuth
+  });
+  const accountDisplay = accountRuntimeDisplay.account;
   const accountDisplayName = accountDisplay.displayName;
   const accountEmailDisplayText = accountDisplay.email;
   const accountLoginDisplayText = accountDisplay.login;
@@ -1157,11 +1160,7 @@ export default function App() {
   const activeProfileInlineDisplayText = activeProfileDisplay.inline;
   const activeProfileRelationshipDisplayText = activeProfileDisplay.relationship;
   const accountPublicDisplayNameDisplayText = accountPublicDisplayNameForSettings(communityPublicSettings, account);
-  const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayBundle({
-    allowMobileDevAuth,
-    accountDisplayName,
-    accountLoginDisplayText
-  });
+  const accountSecurityAuthModeDisplay = accountRuntimeDisplay.authMode;
   const authModeDisplayLabel = accountSecurityAuthModeDisplay.label;
   const authModeDisplayCopy = accountSecurityAuthModeDisplay.copy;
   const accountSecurityCardAccessibilityLabel = accountSecurityAuthModeDisplay.cardAccessibilityLabel;

@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2299: Move account runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `accountRuntimeDisplayBundle` to `accountCopy.ts`.
+- Moved `App.tsx` account display and account-security auth mode display assembly behind the runtime bundle.
+- Kept account display name, email, login, doctor-share boundary copy, dev-auth label, and account-security accessibility copy unchanged.
+- Updated navigation verifier coverage to require the bundled account runtime display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2298: Move year review row display assembly
 
 Status: done

@@ -11957,7 +11957,10 @@ def main() -> int:
             "const accountSecurityCardAccessibilityLabel = accountSecurityAuthModeDisplay.cardAccessibilityLabel;",
         )
         for label, marker in (
-            ("account display bundle binding", "const accountDisplay = accountDisplayBundle(account);"),
+            ("account runtime display bundle import", "accountRuntimeDisplayBundle,"),
+            ("account runtime display bundle binding", "const accountRuntimeDisplay = accountRuntimeDisplayBundle({"),
+            ("account runtime display bundle account input", "account,\n    allowMobileDevAuth"),
+            ("account display runtime bundle field binding", "const accountDisplay = accountRuntimeDisplay.account;"),
             ("account display name bundle field binding", "const accountDisplayName = accountDisplay.displayName;"),
             ("account email bundle field binding", "const accountEmailDisplayText = accountDisplay.email;"),
             ("account login bundle field binding", "const accountLoginDisplayText = accountDisplay.login;"),
@@ -11970,12 +11973,16 @@ def main() -> int:
             ("active profile label bundle field binding", "const activeProfileLabel = activeProfileDisplay.label;"),
             ("active profile inline bundle field binding", "const activeProfileInlineDisplayText = activeProfileDisplay.inline;"),
             ("active profile relationship bundle field binding", "const activeProfileRelationshipDisplayText = activeProfileDisplay.relationship;"),
-            ("settings account security auth mode display helper binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayBundle({"),
+            ("settings account security auth mode runtime field binding", "const accountSecurityAuthModeDisplay = accountRuntimeDisplay.authMode;"),
             ("settings account security auth mode label binding", "const authModeDisplayLabel = accountSecurityAuthModeDisplay.label;"),
             ("settings account security auth mode copy binding", "const authModeDisplayCopy = accountSecurityAuthModeDisplay.copy;"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("direct account display bundle binding", "const accountDisplay = accountDisplayBundle(account);"),
+            ("direct account display bundle import", "  accountDisplayBundle,"),
+            ("direct account auth mode display bundle binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayBundle({"),
+            ("direct account auth mode display bundle import", "  accountSecurityAuthModeDisplayBundle,"),
             ("direct doctor share boundary rows binding", "const doctorShareBoundaryRows = doctorShareBoundaryDisplayRows();"),
             ("direct doctor share readiness binding", "const doctorShareReadinessChecklistItems = doctorShareReadinessChecklistDisplayItems();"),
             ("direct doctor share boundary rows import", "  doctorShareBoundaryDisplayRows,"),
@@ -13969,6 +13976,9 @@ def main() -> int:
             ("account security auth mode display helper", "function accountSecurityAuthModeDisplayTexts(value: {"),
             ("account security auth mode display bundle helper", "function accountSecurityAuthModeDisplayBundle(value: {"),
             ("account security auth mode display bundle delegates", "return accountSecurityAuthModeDisplayTexts(value);"),
+            ("account runtime display bundle helper", "function accountRuntimeDisplayBundle(value: {"),
+            ("account runtime display account binding", "const accountDisplay = accountDisplayBundle(value.account);"),
+            ("account runtime display auth mode binding", "authMode: accountSecurityAuthModeDisplayBundle({"),
             ("account security dev auth label", 'const label = value.allowMobileDevAuth ? "Dev Auth" : "Production Auth Required";'),
             ("account security auth mode label binding", "label: displayLabel"),
             ("account security auth mode accessibility binding", "cardAccessibilityLabel: boundDisplayText("),
