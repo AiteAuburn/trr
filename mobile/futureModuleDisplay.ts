@@ -1180,6 +1180,13 @@ export function foodCommunityShareFallbackFoodName(item: { title: string }) {
   return item.title;
 }
 
+export function foodCommunityShareFoodNameDisplayText(
+  fields: { foodName: string },
+  item: { title: string }
+) {
+  return boundDisplayText(fields.foodName || foodCommunityShareFallbackFoodName(item), maxDisplayTextLength).trim();
+}
+
 export function foodCommunityShareCategory(item: { category: FoodCommunityCategory }) {
   return item.category;
 }

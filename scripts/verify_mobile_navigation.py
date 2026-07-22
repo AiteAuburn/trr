@@ -12774,8 +12774,8 @@ def main() -> int:
             ("food community detail loading status binding", "setCommunityActionStatus(detailStatus.loading);"),
             ("food community detail success status binding", "setCommunityActionStatus(\n        foodCommunityDetailStatusMessages({"),
             ("food community detail failure status binding", "setCommunityActionStatus(detailStatus.failure);"),
-            ("food community share fallback food name helper import", "foodCommunityShareFallbackFoodName,"),
-            ("food community share fallback food name helper binding", "foodCommunityShareFields.foodName || foodCommunityShareFallbackFoodName(selectedFoodCommunityItem),"),
+            ("food community share food name display helper import", "foodCommunityShareFoodNameDisplayText,"),
+            ("food community share food name display helper binding", "const foodName = foodCommunityShareFoodNameDisplayText(foodCommunityShareFields, selectedFoodCommunityItem);"),
             ("food community share category helper import", "foodCommunityShareCategory,"),
             ("food community share category helper binding", "category: apiFoodCategoryFromMobile(foodCommunityShareCategory(selectedFoodCommunityItem)),"),
             ("food community share section label helper import", "foodCommunityShareSectionLabel,"),
@@ -13252,6 +13252,11 @@ def main() -> int:
             ("downloaded model list models binding", "models={downloadedModels}"),
         ):
             _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "direct food community share food name bound display binding",
+            content,
+            "const foodName = boundDisplayText(",
+        )
         for label, marker in (
             ("direct recording quota intro copy binding", "const recordingQuotaIntroDisplayText = recordingQuotaIntroCopy();"),
             ("direct recording quota control copy binding", "const recordingQuotaControlDisplayText = recordingQuotaControlCopy();"),
@@ -14974,6 +14979,8 @@ def main() -> int:
             ("food community database intro copy helper fields", "建立華人使用者真實食物升糖資料庫，以實際食用前後血糖分享取代理論與網路傳言"),
             ("food community share fallback food name helper", "export function foodCommunityShareFallbackFoodName(item: { title: string })"),
             ("food community share fallback food name helper fields", "return item.title;"),
+            ("food community share food name display helper", "export function foodCommunityShareFoodNameDisplayText("),
+            ("food community share food name display helper binding", "return boundDisplayText(fields.foodName || foodCommunityShareFallbackFoodName(item), maxDisplayTextLength).trim();"),
             ("food community share category helper", "export function foodCommunityShareCategory(item: { category: FoodCommunityCategory })"),
             ("food community share category helper fields", "return item.category;"),
             ("food community share section label helper", "export function foodCommunityShareSectionLabel()"),

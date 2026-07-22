@@ -249,7 +249,7 @@ import {
   foodCommunityShareCategory,
   foodCommunityShareEatenDateLabel,
   foodCommunityShareEatenTimeLabel,
-  foodCommunityShareFallbackFoodName,
+  foodCommunityShareFoodNameDisplayText,
   foodCommunityShareSectionLabel,
   foodCommunityShareStatusMessages,
   foodCommunityShareSelectedItemIdFromApi,
@@ -5846,10 +5846,7 @@ export default function App() {
     }
     const beforeGlucose = Number(foodCommunityShareFields.beforeGlucose);
     const afterGlucose = Number(foodCommunityShareFields.afterGlucose);
-    const foodName = boundDisplayText(
-      foodCommunityShareFields.foodName || foodCommunityShareFallbackFoodName(selectedFoodCommunityItem),
-      maxDisplayTextLength
-    ).trim();
+    const foodName = foodCommunityShareFoodNameDisplayText(foodCommunityShareFields, selectedFoodCommunityItem);
     if (!foodName) {
       setCommunityActionStatus(shareStatus.missingFoodName);
       return;
