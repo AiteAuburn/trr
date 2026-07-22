@@ -181,10 +181,8 @@ import {
   backendYearReviewHealthOutcomeDisplayRows,
   backendYearReviewMetricDisplayRows,
   buildAchievementCategoryDisplaySections,
-  foodPhotoEmptyResultChecklistDisplayItems,
   foodPhotoDisplayBundle,
-  foodPhotoReadinessChecklistDisplayItems,
-  foodPhotoVisionBoundaryDisplayItem,
+  foodPhotoPreviewStaticDisplayBundle,
   apiFoodCategoryFromMobile,
   boundCommunityPublicSettings,
   commercePreviewOpenCartStatusMessage,
@@ -1778,9 +1776,10 @@ export default function App() {
   const storePreviewStaticDisplay = storePreviewStaticDisplayBundle();
   const storeCheckoutReadinessChecklistItems = storePreviewStaticDisplay.checkoutReadinessItems;
   const storeCartUnavailableDisplay = storePreviewStaticDisplay.cartUnavailable;
-  const foodPhotoVisionBoundaryDisplay = foodPhotoVisionBoundaryDisplayItem();
-  const foodPhotoEmptyResultChecklistItems = foodPhotoEmptyResultChecklistDisplayItems();
-  const foodPhotoReadinessChecklistItems = foodPhotoReadinessChecklistDisplayItems();
+  const foodPhotoPreviewStaticDisplay = foodPhotoPreviewStaticDisplayBundle();
+  const foodPhotoVisionBoundaryDisplay = foodPhotoPreviewStaticDisplay.visionBoundary;
+  const foodPhotoEmptyResultChecklistItems = foodPhotoPreviewStaticDisplay.emptyResultItems;
+  const foodPhotoReadinessChecklistItems = foodPhotoPreviewStaticDisplay.readinessItems;
   const currentBasicReportKey =
     account && activeProfile
       ? basicReportRequestKey(

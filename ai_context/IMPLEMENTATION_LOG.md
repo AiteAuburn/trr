@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2277 move food photo static display bundle assembly
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `foodPhotoPreviewStaticDisplayBundle` to `futureModuleDisplay.ts`.
+- Moved `App.tsx` food photo vision boundary, empty result checklist, and readiness checklist assembly behind the bundle.
+- Kept food photo upload status, action labels, result rendering, readiness UI, and backend/vision flow unchanged.
+- Updated navigation verifier coverage to require the static bundle and reject the old direct App-level food photo helper calls/imports.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2276 move store static display bundle assembly
 
 類型：mobile / refactor / verifier / docs

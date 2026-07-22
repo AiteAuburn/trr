@@ -3976,9 +3976,24 @@ def main() -> int:
             "const storeCheckoutReadinessChecklistItems = storePreviewStaticDisplay.checkoutReadinessItems;",
         )
         _assert_contains(
-            "food photo readiness checklist helper binding",
+            "food photo static display bundle binding",
             content,
-            "const foodPhotoReadinessChecklistItems = foodPhotoReadinessChecklistDisplayItems();",
+            "const foodPhotoPreviewStaticDisplay = foodPhotoPreviewStaticDisplayBundle();",
+        )
+        _assert_contains(
+            "food photo vision boundary static display binding",
+            content,
+            "const foodPhotoVisionBoundaryDisplay = foodPhotoPreviewStaticDisplay.visionBoundary;",
+        )
+        _assert_contains(
+            "food photo empty result static display binding",
+            content,
+            "const foodPhotoEmptyResultChecklistItems = foodPhotoPreviewStaticDisplay.emptyResultItems;",
+        )
+        _assert_contains(
+            "food photo readiness static display binding",
+            content,
+            "const foodPhotoReadinessChecklistItems = foodPhotoPreviewStaticDisplay.readinessItems;",
         )
         _assert_contains(
             "quota readiness checklist helper binding",
@@ -15352,6 +15367,10 @@ def main() -> int:
             ("food photo checklist no mock result", "這裡不使用固定範例數字，避免把 mock 結果誤認為實際 AI 分析。"),
             ("food photo intro copy helper", "export function foodPhotoIntroCopy()"),
             ("food photo readiness checklist helper", "export function foodPhotoReadinessChecklistDisplayItems()"),
+            ("food photo preview static display bundle helper", "export function foodPhotoPreviewStaticDisplayBundle()"),
+            ("food photo preview static display bundle vision boundary", "visionBoundary: foodPhotoVisionBoundaryDisplayItem()"),
+            ("food photo preview static display bundle empty result", "emptyResultItems: foodPhotoEmptyResultChecklistDisplayItems()"),
+            ("food photo preview static display bundle readiness", "readinessItems: foodPhotoReadinessChecklistDisplayItems()"),
             ("food photo readiness permission copy", "相機 / 相簿權限與圖片壓縮上限"),
             ("food photo readiness privacy copy", "圖片儲存、刪除與隱私遮罩策略"),
             ("food photo readiness cost copy", "Vision 成本上限、rate limit 與重試規則"),
@@ -15615,6 +15634,7 @@ def main() -> int:
             _assert_not_contains(label, content, marker)
         for label, marker in (
             ("food photo display bundle import", "foodPhotoDisplayBundle,"),
+            ("food photo preview static display bundle import", "foodPhotoPreviewStaticDisplayBundle,"),
             ("food photo display bundle binding", "const foodPhotoDisplay = foodPhotoDisplayBundle(foodPhotoActionStatus);"),
             ("food photo display bundle action binding", "const foodPhotoActionStatusDisplayText = foodPhotoDisplay.status.action;"),
             ("food photo display bundle upload binding", "const foodPhotoUploadStatusMessage = foodPhotoDisplay.status.upload;"),
@@ -15640,6 +15660,12 @@ def main() -> int:
             ("direct food photo retake button binding", "const foodPhotoRetakeButtonDisplayLabel = foodPhotoRetakeButtonLabel();"),
             ("direct food photo integration accessibility binding", "const foodPhotoIntegrationAccessibilityDisplayLabel = foodPhotoIntegrationButtonAccessibilityLabel();"),
             ("direct food photo retake accessibility binding", "const foodPhotoRetakeAccessibilityDisplayLabel = foodPhotoRetakeButtonAccessibilityLabel();"),
+            ("direct food photo vision boundary binding", "const foodPhotoVisionBoundaryDisplay = foodPhotoVisionBoundaryDisplayItem();"),
+            ("direct food photo empty result checklist binding", "const foodPhotoEmptyResultChecklistItems = foodPhotoEmptyResultChecklistDisplayItems();"),
+            ("direct food photo readiness checklist binding", "const foodPhotoReadinessChecklistItems = foodPhotoReadinessChecklistDisplayItems();"),
+            ("direct food photo vision boundary import", "  foodPhotoVisionBoundaryDisplayItem,"),
+            ("direct food photo empty result checklist import", "  foodPhotoEmptyResultChecklistDisplayItems,"),
+            ("direct food photo readiness checklist import", "  foodPhotoReadinessChecklistDisplayItems,"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (

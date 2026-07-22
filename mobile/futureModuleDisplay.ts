@@ -2062,6 +2062,14 @@ export function foodPhotoReadinessChecklistDisplayItems() {
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
+export function foodPhotoPreviewStaticDisplayBundle() {
+  return {
+    visionBoundary: foodPhotoVisionBoundaryDisplayItem(),
+    emptyResultItems: foodPhotoEmptyResultChecklistDisplayItems(),
+    readinessItems: foodPhotoReadinessChecklistDisplayItems()
+  };
+}
+
 export function foodPhotoIntegrationButtonLabel() {
   return boundDisplayText("查看拍照整合狀態", maxDisplayTextLength);
 }
