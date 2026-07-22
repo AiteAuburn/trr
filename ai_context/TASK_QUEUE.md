@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2271: Remove stale App display helper imports
+
+Status: done
+
+Completed:
+
+- Removed stale `boundDisplayText`, `boundUiMessage`, and `displayTextValue` imports from `App.tsx`.
+- Moved the verifier's legacy App-local helper assertions to the canonical `mobileBounds.ts` source.
+- Added navigation verifier guards so the stale display helper imports do not return to `App.tsx`.
+- Kept all runtime display helpers, state flow, UI rendering, and backend calls unchanged.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2270: Move community input max-length display helpers
 
 Status: done

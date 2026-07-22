@@ -59,10 +59,8 @@ import {
 } from "./appViewState";
 import { AnalysisCustomDateRangeFields } from "./analysisCustomDateRangeFields";
 import {
-  boundDisplayText,
   boundIdentifier,
   boundStoreSearchText,
-  boundUiMessage,
   clampNullableNumber,
   clampNumber,
   maxBackendUrlLength,
@@ -84,7 +82,6 @@ import {
 } from "./authProviderChallenge";
 import {
   displayPayload,
-  displayTextValue,
   groupedRecordListDisplaySectionsForRecords,
   manualRecordConfirmDisplayItem,
   pendingRemoveDisplayIcon,

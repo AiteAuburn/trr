@@ -15,6 +15,36 @@
 
 ## 2026-07-20
 
+### T2271 remove stale App display helper imports
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Removed stale `boundDisplayText`, `boundUiMessage`, and `displayTextValue` imports from `App.tsx`.
+- Moved the verifier's legacy App-local helper assertions to the canonical `mobileBounds.ts` source.
+- Added navigation verifier guards so the stale display helper imports do not return to `App.tsx`.
+- Kept all runtime display helpers, state flow, UI rendering, and backend calls unchanged.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2270 move community input max-length display helpers
 
 類型：mobile / refactor / verifier / docs

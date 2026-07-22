@@ -1508,6 +1508,7 @@ def main() -> int:
     auth_status_copy_content = AUTH_STATUS_COPY_PATH.read_text(encoding="utf-8")
     shared_display_items_content = SHARED_DISPLAY_ITEMS_PATH.read_text(encoding="utf-8")
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
+    mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
     achievement_category_section_list_content = ACHIEVEMENT_CATEGORY_SECTION_LIST_PATH.read_text(encoding="utf-8")
     achievement_unlocked_card_list_content = ACHIEVEMENT_UNLOCKED_CARD_LIST_PATH.read_text(encoding="utf-8")
@@ -2815,10 +2816,13 @@ def main() -> int:
             "export type DailyRecordSaveResponse = {",
         )
         for label, marker in (
-            ("app local api url normalizer", "function normalizeApiBaseUrl(value: string)"),
-            ("app local ui message bound", "function boundUiMessage(value: string)"),
-            ("app local display bound", "function boundDisplayText(value: string, maxLength = maxDisplayTextLength)"),
-            ("app local number clamp", "function clampNumber(value: number, min: number, max: number)"),
+            ("mobile bounds api url normalizer", "export function normalizeApiBaseUrl(value: string)"),
+            ("mobile bounds ui message bound", "export function boundUiMessage(value: string)"),
+            ("mobile bounds display bound", "export function boundDisplayText(value: string, maxLength = maxDisplayTextLength)"),
+            ("mobile bounds number clamp", "export function clampNumber(value: number, min: number, max: number)"),
+        ):
+            _assert_contains(label, mobile_bounds_content, marker)
+        for label, marker in (
             ("app local auxiliary labels helper", "function auxiliarySectionLabels()"),
             ("app local account type block", "type Account = {\n  id: string;"),
             ("app local profile type block", "type Profile = {\n  id: string;"),
@@ -3011,6 +3015,12 @@ def main() -> int:
             ("home recording secondary hint render", "<Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("app stale bound display text import", "  boundDisplayText,"),
+            ("app stale bound ui message import", "  boundUiMessage,"),
+            ("app stale display text value import", "  displayTextValue,"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "home recording secondary hint active copy",
             recording_copy_content,
