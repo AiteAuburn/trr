@@ -2757,6 +2757,17 @@ export function futurePreviewStatusDisplayTexts(value: {
   };
 }
 
+export function futurePreviewStatusDisplayBundle(value: {
+  futureModuleActionStatus: string;
+  doctorShareActionStatus: string;
+  healthIntegrationActionStatus: string;
+  communityActionStatus: string;
+  rankingActionStatus: string;
+  reportLimit: number;
+}) {
+  return futurePreviewStatusDisplayTexts(value);
+}
+
 export function communityActionDisplayTexts(value: {
   leaderboardOptIn: boolean;
 }) {

@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2226: Move future preview status display bundle
+
+Status: done
+
+Completed:
+
+- Added the future preview status display bundle helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` future module, doctor share, health integration, community, and ranking preview status display assembly from the raw texts helper to the bundle entrypoint.
+- Kept future preview status copy, bounded detailed-report limit copy, preview route behavior, and future module integration behavior unchanged.
+- Updated navigation verifier coverage to require the future preview status display bundle, App bundle binding, and no direct future preview status display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2225: Move community action display bundle
 
 Status: done

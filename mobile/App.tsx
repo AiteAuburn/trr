@@ -280,7 +280,7 @@ import {
   futurePreviewReturnAccessibilityLabel,
   futurePreviewReturnButtonLabel,
   futurePreviewSectionLabels,
-  futurePreviewStatusDisplayTexts,
+  futurePreviewStatusDisplayBundle,
   healthIntegrationExternalDataBoundaryCopy,
   healthIntegrationReadinessChecklistDisplayItems,
   achievementYearReviewStatusDisplayTexts,
@@ -1846,7 +1846,7 @@ export default function App() {
   const reportGeneratedAtDisplayText = reportGeneratedAtDisplayValue(activeAnalysisReport?.generated_at);
   const auxiliaryDisplayLabels = auxiliarySectionLabels();
   const futurePreviewDisplayLabels = futurePreviewSectionLabels();
-  const futurePreviewStatusDisplay = futurePreviewStatusDisplayTexts({
+  const futurePreviewStatusDisplay = futurePreviewStatusDisplayBundle({
     futureModuleActionStatus,
     doctorShareActionStatus,
     healthIntegrationActionStatus,
