@@ -2908,9 +2908,13 @@ export function futurePreviewStatusDisplayBundle(value: {
   healthIntegrationActionStatus: string;
   communityActionStatus: string;
   rankingActionStatus: string;
+  leaderboardOptIn: boolean;
   reportLimit: number;
 }) {
-  return futurePreviewStatusDisplayTexts(value);
+  return {
+    ...futurePreviewStatusDisplayTexts(value),
+    boundaryRows: futureBoundaryRowsDisplayBundle(value.leaderboardOptIn)
+  };
 }
 
 export function communityActionDisplayTexts(value: {

@@ -252,7 +252,6 @@ import {
   foodCommunityShareSelectedItemIdFromApi,
   foodCommunitySyncStatusMessages,
   futureModuleCards,
-  futureBoundaryRowsDisplayBundle,
   futureModuleCardDisplayItems,
   futureModuleDetailDisplayBundle,
   futureModuleDetailReturnStatusMessage,
@@ -1811,6 +1810,7 @@ export default function App() {
     healthIntegrationActionStatus,
     communityActionStatus,
     rankingActionStatus,
+    leaderboardOptIn: communityPublicSettings?.leaderboard_opt_in ?? false,
     reportLimit: mobileReportQueryDisplayLimit
   });
   const futureModuleActionStatusDisplayText = futurePreviewStatusDisplay.futureModuleAction;
@@ -1986,9 +1986,7 @@ export default function App() {
   const aiSaveConfirmBoundaryRows = recordWorkflowRuntimeChecklistDisplay.aiSaveConfirmBoundaryRows;
   const detailedReportBoundaryRows = analysisRuntimeBoundaryDisplay.detailedReportBoundaryRows;
   const doctorShareBoundaryRows = doctorShareStaticDisplay.boundaryRows;
-  const futureBoundaryRowsDisplay = futureBoundaryRowsDisplayBundle(
-    communityPublicSettings?.leaderboard_opt_in ?? false
-  );
+  const futureBoundaryRowsDisplay = futurePreviewStatusDisplay.boundaryRows;
   const healthIntegrationBoundaryRows = futureBoundaryRowsDisplay.healthIntegration;
   const communityBoundaryRows = futureBoundaryRowsDisplay.community;
   const rankingBoundaryRows = futureBoundaryRowsDisplay.ranking;

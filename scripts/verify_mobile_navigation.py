@@ -14517,6 +14517,7 @@ def main() -> int:
             ("future module destination fallback screen opener binding", "if (openFutureModuleTargetRoute(target)) {\n      return;\n    }\n    openScreen(target);"),
             ("future module display card helper binding", "const futureModuleDisplayCards = useMemo(\n    () => futureModuleCardDisplayItems(futureModuleCards),"),
             ("future preview status display helper binding", "const futurePreviewStatusDisplay = futurePreviewStatusDisplayBundle({"),
+            ("future preview status leaderboard input", "leaderboardOptIn: communityPublicSettings?.leaderboard_opt_in ?? false"),
             ("future preview status future action binding", "const futureModuleActionStatusDisplayText = futurePreviewStatusDisplay.futureModuleAction;"),
             ("future preview status doctor token binding", "const doctorShareTokenStatusMessage = futurePreviewStatusDisplay.doctorShareToken;"),
             ("future preview status health permission binding", "const healthIntegrationPermissionStatusMessage = futurePreviewStatusDisplay.healthIntegrationPermission;"),
@@ -15195,7 +15196,8 @@ def main() -> int:
             ("future preview return status helper", "export function futurePreviewReturnStatusMessage(target: AppScreen)"),
             ("future preview status display texts helper", "export function futurePreviewStatusDisplayTexts(value: {"),
             ("future preview status display bundle helper", "export function futurePreviewStatusDisplayBundle(value: {"),
-            ("future preview status display bundle delegates", "return futurePreviewStatusDisplayTexts(value);"),
+            ("future preview status display bundle text spread", "...futurePreviewStatusDisplayTexts(value),"),
+            ("future preview status display bundle boundary rows", "boundaryRows: futureBoundaryRowsDisplayBundle(value.leaderboardOptIn)"),
             ("future preview status action binding", "futureModuleAction: boundUiMessage(value.futureModuleActionStatus)"),
             ("future preview doctor token status copy", "授權碼尚未啟用；目前不會建立 profile grant、share token、QR code 或醫師端 session。"),
             ("future preview doctor report status copy", "回診摘要可沿用 bounded detailed report 設計，最多 ${boundedReportLimit} 筆"),
@@ -15850,9 +15852,7 @@ def main() -> int:
         ):
             _assert_contains(label, future_module_display_content, marker)
         for label, marker in (
-            ("future boundary rows display bundle import", "futureBoundaryRowsDisplayBundle,"),
-            ("future boundary rows display bundle binding", "const futureBoundaryRowsDisplay = futureBoundaryRowsDisplayBundle("),
-            ("future boundary rows display bundle opt in input", "communityPublicSettings?.leaderboard_opt_in ?? false"),
+            ("future boundary rows runtime display binding", "const futureBoundaryRowsDisplay = futurePreviewStatusDisplay.boundaryRows;"),
             ("future boundary rows display bundle health binding", "const healthIntegrationBoundaryRows = futureBoundaryRowsDisplay.healthIntegration;"),
             ("future boundary rows display bundle community binding", "const communityBoundaryRows = futureBoundaryRowsDisplay.community;"),
             ("future boundary rows display bundle ranking binding", "const rankingBoundaryRows = futureBoundaryRowsDisplay.ranking;"),
@@ -15863,6 +15863,11 @@ def main() -> int:
             ("future preview readiness static display bundle ranking binding", "const rankingReadinessChecklistItems = futurePreviewReadinessStaticDisplay.rankingItems;"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("direct future boundary rows display bundle import", "  futureBoundaryRowsDisplayBundle,"),
+            ("direct future boundary rows display bundle binding", "const futureBoundaryRowsDisplay = futureBoundaryRowsDisplayBundle("),
+        ):
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("direct health integration boundary rows binding", "const healthIntegrationBoundaryRows = healthIntegrationBoundaryDisplayRows();"),
             ("direct community boundary rows binding", "const communityBoundaryRows = communityBoundaryDisplayRows("),
