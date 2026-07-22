@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2290 move save success runtime checklist assembly
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Extended `recordWorkflowRuntimeChecklistDisplayBundle` with save success boundary checklist output.
+- Moved `App.tsx` save success boundary checklist assembly behind the runtime bundle.
+- Kept save-entry method gating, unsaved candidate gating/count, record sync limit, and checklist copy unchanged.
+- Updated navigation verifier coverage to require the bundled save success checklist output and reject old direct App-level helper calls/imports.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2289 move transcript review runtime checklist assembly
 
 類型：mobile / refactor / verifier / docs

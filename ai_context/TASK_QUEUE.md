@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2290: Move save success runtime checklist assembly
+
+Status: done
+
+Completed:
+
+- Extended `recordWorkflowRuntimeChecklistDisplayBundle` with save success boundary checklist output.
+- Moved `App.tsx` save success boundary checklist assembly behind the runtime bundle.
+- Kept save-entry method gating, unsaved candidate gating/count, record sync limit, and checklist copy unchanged.
+- Updated navigation verifier coverage to require the bundled save success checklist output and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2289: Move transcript review runtime checklist assembly
 
 Status: done

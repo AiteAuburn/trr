@@ -460,7 +460,6 @@ import {
   recordWorkflowRuntimeChecklistDisplayBundle,
   recordWorkflowStaticChecklistDisplayBundle,
   saveResultDisplayBundle,
-  saveSuccessBoundaryChecklistDisplayItems,
   tutorialManualEntryStatusMessage,
   tutorialRecordEntryStatusMessage
 } from "./recordWorkflowCopy";
@@ -1407,9 +1406,12 @@ export default function App() {
   const hasManualFallbackWithAiCandidates = saveSuccessViewState.hasManualFallbackWithAiCandidates;
   const recordWorkflowStaticChecklistDisplay = recordWorkflowStaticChecklistDisplayBundle();
   const recordWorkflowRuntimeChecklistDisplay = recordWorkflowRuntimeChecklistDisplayBundle({
+    lastSaveEntryMethod,
+    hasUnsavedPreviewRecords: saveSuccessViewState.hasUnsavedPreviewRecords,
     protectedBackendReady,
     parserModelReady,
     parserModelUnavailableMessage: parserModelUnavailableDisplayMessage,
+    recordSyncLimit: mobileRecordSyncDisplayLimit,
     unsavedPreviewRecordCount: unsavedPreviewRecordDisplayCount
   });
   const aiSaveConfirmChecklistItems = recordWorkflowRuntimeChecklistDisplay.aiSaveConfirmItems;
@@ -1417,12 +1419,7 @@ export default function App() {
     recordWorkflowStaticChecklistDisplay.aiReviewCostBoundaryItems;
   const transcriptReviewCostBoundaryChecklistItems =
     recordWorkflowRuntimeChecklistDisplay.transcriptReviewCostBoundaryItems;
-  const saveSuccessBoundaryChecklistItems = saveSuccessBoundaryChecklistDisplayItems(
-    lastSaveEntryMethod,
-    saveSuccessViewState.hasUnsavedPreviewRecords,
-    unsavedPreviewRecordDisplayCount,
-    mobileRecordSyncDisplayLimit
-  );
+  const saveSuccessBoundaryChecklistItems = recordWorkflowRuntimeChecklistDisplay.saveSuccessBoundaryItems;
   const recordStatusSuccessChecklistDisplay =
     recordStatusSuccessChecklistDisplayBundle(mobileRecordSyncDisplayLimit);
   const deleteSuccessBoundaryChecklistItems = recordStatusSuccessChecklistDisplay.deleteSuccessItems;

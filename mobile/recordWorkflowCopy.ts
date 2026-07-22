@@ -590,9 +590,12 @@ export function aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordCount: nu
 }
 
 export function recordWorkflowRuntimeChecklistDisplayBundle(value: {
+  lastSaveEntryMethod: SaveEntryMethod;
+  hasUnsavedPreviewRecords: boolean;
   protectedBackendReady: boolean;
   parserModelReady: boolean;
   parserModelUnavailableMessage: string;
+  recordSyncLimit: number;
   unsavedPreviewRecordCount: number;
 }) {
   return {
@@ -601,6 +604,12 @@ export function recordWorkflowRuntimeChecklistDisplayBundle(value: {
       value.protectedBackendReady,
       value.parserModelReady,
       value.parserModelUnavailableMessage
+    ),
+    saveSuccessBoundaryItems: saveSuccessBoundaryChecklistDisplayItems(
+      value.lastSaveEntryMethod,
+      value.hasUnsavedPreviewRecords,
+      value.unsavedPreviewRecordCount,
+      value.recordSyncLimit
     ),
     recordEntrySettingsItems: recordEntrySettingsChecklistDisplayItems(value.protectedBackendReady),
     aiSaveFailureItems: aiSaveFailureChecklistDisplayItems(value.unsavedPreviewRecordCount)

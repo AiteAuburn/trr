@@ -3934,6 +3934,16 @@ def main() -> int:
             "const recordWorkflowRuntimeChecklistDisplay = recordWorkflowRuntimeChecklistDisplayBundle({",
         )
         _assert_contains(
+            "record workflow runtime checklist save entry input",
+            content,
+            "lastSaveEntryMethod,",
+        )
+        _assert_contains(
+            "record workflow runtime checklist unsaved preview input",
+            content,
+            "hasUnsavedPreviewRecords: saveSuccessViewState.hasUnsavedPreviewRecords",
+        )
+        _assert_contains(
             "record workflow runtime checklist backend input",
             content,
             "protectedBackendReady,",
@@ -3952,6 +3962,11 @@ def main() -> int:
             "record workflow runtime checklist unsaved count input",
             content,
             "unsavedPreviewRecordCount: unsavedPreviewRecordDisplayCount",
+        )
+        _assert_contains(
+            "record workflow runtime checklist record sync limit input",
+            content,
+            "recordSyncLimit: mobileRecordSyncDisplayLimit",
         )
         _assert_not_contains(
             "direct transcript review checklist helper binding",
@@ -3974,14 +3989,9 @@ def main() -> int:
             "const aiSaveFailureChecklistItems = recordWorkflowRuntimeChecklistDisplay.aiSaveFailureItems;",
         )
         _assert_contains(
-            "save success checklist helper binding",
+            "save success checklist runtime bundle binding",
             content,
-            "const saveSuccessBoundaryChecklistItems = saveSuccessBoundaryChecklistDisplayItems(",
-        )
-        _assert_contains(
-            "save success checklist view-state input",
-            content,
-            "saveSuccessViewState.hasUnsavedPreviewRecords,\n    unsavedPreviewRecordDisplayCount,",
+            "const saveSuccessBoundaryChecklistItems = recordWorkflowRuntimeChecklistDisplay.saveSuccessBoundaryItems;",
         )
         _assert_contains(
             "save result display bundle binding",
@@ -4622,6 +4632,8 @@ def main() -> int:
             ("save success direct unsaved summary condition", ": hasUnsavedPreviewRecords\n                    ? `已有部分紀錄儲存成功"),
             ("save success direct unsaved primary condition", "{hasUnsavedPreviewRecords ? (\n                <Pressable"),
             ("save success direct checklist unsaved input", "saveSuccessBoundaryChecklistDisplayItems(\n    lastSaveEntryMethod,\n    hasUnsavedPreviewRecords,"),
+            ("save success direct checklist helper binding", "const saveSuccessBoundaryChecklistItems = saveSuccessBoundaryChecklistDisplayItems("),
+            ("save success direct checklist helper import", "  saveSuccessBoundaryChecklistDisplayItems,"),
             ("save success direct destination unsaved input", "saveSuccessDestinationDisplayItems(hasUnsavedPreviewRecords);"),
         ):
             _assert_not_contains(label, content, marker)
@@ -9143,6 +9155,10 @@ def main() -> int:
             ("record workflow runtime checklist bundle transcript review", "transcriptReviewCostBoundaryItems: transcriptReviewCostBoundaryChecklistDisplayItems("),
             ("record workflow runtime checklist bundle parser ready", "value.parserModelReady,"),
             ("record workflow runtime checklist bundle parser unavailable", "value.parserModelUnavailableMessage"),
+            ("record workflow runtime checklist bundle save success", "saveSuccessBoundaryItems: saveSuccessBoundaryChecklistDisplayItems("),
+            ("record workflow runtime checklist bundle save entry", "value.lastSaveEntryMethod,"),
+            ("record workflow runtime checklist bundle unsaved preview", "value.hasUnsavedPreviewRecords,"),
+            ("record workflow runtime checklist bundle sync limit", "value.recordSyncLimit"),
             ("record workflow runtime checklist bundle record entry", "recordEntrySettingsItems: recordEntrySettingsChecklistDisplayItems(value.protectedBackendReady)"),
             ("record workflow runtime checklist bundle save failure", "aiSaveFailureItems: aiSaveFailureChecklistDisplayItems(value.unsavedPreviewRecordCount)"),
             ("save result display helper", "function saveResultDisplayTexts(value: {"),
