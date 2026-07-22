@@ -9,6 +9,7 @@ import {
   subscriptionManagementReadinessChecklistDisplayItems,
   subscriptionManagementSyncButtonLabel,
   subscriptionPaymentUnwiredCopy,
+  recordingQuotaBoundaryDisplayRows,
   subscriptionReadinessChecklistDisplayItems,
   subscriptionSyncButtonLabel,
   subscriptionTrialBoundaryCopy
@@ -34,6 +35,7 @@ export function subscriptionRuntimeDisplayBundle(value: {
   subscriptionActionStatus: string;
   subscriptionManagementActionStatus: string;
   backendUnavailableMessage: string;
+  quotaRemainingLow: boolean;
 }) {
   const membership = subscriptionMembershipDisplayTexts(
     value.voiceQuota,
@@ -66,7 +68,8 @@ export function subscriptionRuntimeDisplayBundle(value: {
     subscriptionRenewalIntegration: actionStatus.renewalIntegration,
     subscriptionManagementSyncing: actionStatus.managementSyncing,
     subscriptionManagementUnavailable: actionStatus.managementUnavailable,
-    subscriptionManagementPayment: actionStatus.managementPayment
+    subscriptionManagementPayment: actionStatus.managementPayment,
+    recordingQuotaBoundaryRows: recordingQuotaBoundaryDisplayRows(value.voiceQuota, value.quotaRemainingLow)
   };
 }
 

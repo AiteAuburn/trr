@@ -761,7 +761,6 @@ import {
 import {
   accountSecurityBoundaryCopyBundle,
   profileSettingsBoundaryCopyBundle,
-  recordingQuotaBoundaryDisplayRows,
   settingsSubscriptionSectionLabels,
   subscriptionManagementOpenStatusMessage,
   subscriptionManagementReturnSettingsStatusMessage,
@@ -1907,7 +1906,8 @@ export default function App() {
     quotaStatusDisplayText,
     subscriptionActionStatus,
     subscriptionManagementActionStatus,
-    backendUnavailableMessage: protectedAccountBackendUnavailableMessage
+    backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
+    quotaRemainingLow
   });
   const subscriptionPlanDisplayText = subscriptionRuntimeDisplay.subscriptionPlan;
   const subscriptionManagementPlanDisplayText = subscriptionRuntimeDisplay.subscriptionManagementPlan;
@@ -1999,7 +1999,7 @@ export default function App() {
   const healthIntegrationBoundaryRows = futureBoundaryRowsDisplay.healthIntegration;
   const communityBoundaryRows = futureBoundaryRowsDisplay.community;
   const rankingBoundaryRows = futureBoundaryRowsDisplay.ranking;
-  const recordingQuotaBoundaryRows = recordingQuotaBoundaryDisplayRows(voiceQuota, quotaRemainingLow);
+  const recordingQuotaBoundaryRows = subscriptionRuntimeDisplay.recordingQuotaBoundaryRows;
   const privacyBoundaryRows = settingsStaticDisplay.privacyBoundaryRows;
   const previewRecordDisplay = previewRecordDisplayBundle({
     pendingPreviewRemoveIndex,

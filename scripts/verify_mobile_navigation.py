@@ -4157,6 +4157,11 @@ def main() -> int:
             "const subscriptionRuntimeDisplay = subscriptionRuntimeDisplayBundle({",
         )
         _assert_contains(
+            "subscription runtime display quota remaining low input",
+            content,
+            "quotaRemainingLow",
+        )
+        _assert_contains(
             "subscription plan display text binding",
             content,
             "const subscriptionPlanDisplayText = subscriptionRuntimeDisplay.subscriptionPlan;",
@@ -4189,6 +4194,8 @@ def main() -> int:
         for label, marker in (
             ("direct subscription membership display binding", "const subscriptionMembershipDisplay = subscriptionMembershipDisplayTexts("),
             ("direct quota display texts binding", "const quotaDisplay = quotaDisplayTexts(voiceQuota);"),
+            ("direct recording quota boundary rows binding", "const recordingQuotaBoundaryRows = recordingQuotaBoundaryDisplayRows(voiceQuota, quotaRemainingLow);"),
+            ("direct recording quota boundary rows import", "  recordingQuotaBoundaryDisplayRows,"),
         ):
             _assert_not_contains(label, content, marker)
         _assert_contains(
@@ -4227,9 +4234,9 @@ def main() -> int:
             "const aiSaveConfirmBoundaryRows = aiSaveConfirmBoundaryDisplayRows(",
         )
         _assert_contains(
-            "recording quota boundary rows helper binding",
+            "recording quota boundary rows runtime display binding",
             content,
-            "const recordingQuotaBoundaryRows = recordingQuotaBoundaryDisplayRows(voiceQuota, quotaRemainingLow);",
+            "const recordingQuotaBoundaryRows = subscriptionRuntimeDisplay.recordingQuotaBoundaryRows;",
         )
         _assert_contains(
             "account security boundary rows helper binding",
@@ -13975,6 +13982,7 @@ def main() -> int:
             ("subscription runtime plan binding", "subscriptionPlan: membership.subscriptionPlan"),
             ("subscription runtime quota remaining binding", "quotaRemaining: quota.remaining"),
             ("subscription runtime management unavailable binding", "subscriptionManagementUnavailable: actionStatus.managementUnavailable"),
+            ("subscription runtime recording quota boundary rows binding", "recordingQuotaBoundaryRows: recordingQuotaBoundaryDisplayRows(value.voiceQuota, value.quotaRemainingLow)"),
             ("subscription action control display bundle helper", "function subscriptionActionControlDisplayBundle(isQuotaSyncing: boolean)"),
             ("subscription action control trial boundary binding", "trialBoundary: subscriptionTrialBoundaryCopy()"),
             ("subscription action control cta boundary binding", "ctaBoundary: subscriptionCtaBoundaryCopy()"),
