@@ -643,7 +643,7 @@ import {
   todayManualEntryStatusMessage,
   todayRecordDetailStatusMessage,
   todayRecordEntryStatusMessage,
-  todayRecordSummaryText,
+  todayRecordSummaryDisplayBundle,
   transcriptReviewManualEntryStatusMessage,
   tutorialSafetyChecklistDisplayItems,
   updateSuccessDestinationDisplayItems,
@@ -1963,7 +1963,8 @@ export default function App() {
   const privacyIntegrationStatusMessage = settingsSubpageStatusDisplay.privacyIntegration;
   const recordsStatusDisplay = recordsStatusDisplayBundle(recordsStatus);
   const recordsStatusDisplayText = recordsStatusDisplay.records;
-  const todayRecordSummaryDisplayText = todayRecordSummaryText(todayRecords.length);
+  const todayRecordSummaryDisplay = todayRecordSummaryDisplayBundle(todayRecords.length);
+  const todayRecordSummaryDisplayText = todayRecordSummaryDisplay.summary;
   const historyRecordDisplayCount = recordDisplayState.displayCount;
   const rankingStreakDisplayDays = clampNumber(currentRecordStreakDays(records), 0, maxMobileCountValue);
   const analysisMetricInput = buildAnalysisMetricInput({

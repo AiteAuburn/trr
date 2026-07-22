@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2259 move today record summary display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/firstVersionFlowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the today record summary display bundle helper to `firstVersionFlowCopy.ts`.
+- Moved `App.tsx` Today record summary assembly from a direct helper call to the bundle entrypoint.
+- Kept Today record count input, empty/count copy, summary pill rendering, and loaded-record state unchanged.
+- Updated navigation verifier coverage to require the Today summary display bundle and no direct Today summary helper binding regression in `App.tsx`.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2258 move report generated-at display bundle
 
 類型：mobile / refactor / verifier / docs

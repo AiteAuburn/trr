@@ -8264,6 +8264,8 @@ def main() -> int:
             ("busy action status copy", "目前仍在處理上一個動作，請稍候"),
             ("preview action clear status helper", "function previewActionClearStatusMessage()"),
             ("today record summary helper", "function todayRecordSummaryText(recordCount: number)"),
+            ("today record summary display bundle helper", "function todayRecordSummaryDisplayBundle(recordCount: number)"),
+            ("today record summary display bundle binding", "summary: todayRecordSummaryText(recordCount)"),
             ("today record summary empty copy", "今日尚未載入紀錄"),
             ("today record summary count copy", "今日已記錄 ${clampNumber(recordCount, 0, maxMobileCountValue)} 筆"),
             ("AI save failure back AI review status helper", "function aiSaveFailureBackAiReviewStatusMessage()"),
@@ -8286,6 +8288,21 @@ def main() -> int:
             ("AI save failure no retry copy", "不會自動重試或重新呼叫 AI"),
         ):
             _assert_contains(label, first_version_flow_copy_content, marker)
+        _assert_contains(
+            "today record summary display bundle App binding",
+            content,
+            "const todayRecordSummaryDisplay = todayRecordSummaryDisplayBundle(todayRecords.length);",
+        )
+        _assert_contains(
+            "today record summary display text bundle binding",
+            content,
+            "const todayRecordSummaryDisplayText = todayRecordSummaryDisplay.summary;",
+        )
+        _assert_not_contains(
+            "direct today record summary text binding",
+            content,
+            "const todayRecordSummaryDisplayText = todayRecordSummaryText(todayRecords.length);",
+        )
         _assert_contains(
             "record quick-entry rail render",
             content,

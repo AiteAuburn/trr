@@ -38,6 +38,12 @@ export function todayRecordSummaryText(recordCount: number) {
   return boundDisplayText(`今日已記錄 ${clampNumber(recordCount, 0, maxMobileCountValue)} 筆`, 80);
 }
 
+export function todayRecordSummaryDisplayBundle(recordCount: number) {
+  return {
+    summary: todayRecordSummaryText(recordCount)
+  };
+}
+
 export function coreFlowSectionLabels() {
   return {
     recordSyncStatus: boundDisplayText("紀錄同步狀態", maxDisplayTextLength),

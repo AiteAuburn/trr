@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2259: Move today record summary display bundle
+
+Status: done
+
+Completed:
+
+- Added the today record summary display bundle helper to `firstVersionFlowCopy.ts`.
+- Moved `App.tsx` Today record summary assembly from a direct helper call to the bundle entrypoint.
+- Kept Today record count input, empty/count copy, summary pill rendering, and loaded-record state unchanged.
+- Updated navigation verifier coverage to require the Today summary display bundle and no direct Today summary helper binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2258: Move report generated-at display bundle
 
 Status: done
