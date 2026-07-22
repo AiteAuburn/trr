@@ -3951,19 +3951,24 @@ def main() -> int:
             "const doctorShareReadinessChecklistItems = doctorShareReadinessChecklistDisplayItems();",
         )
         _assert_contains(
-            "health integration readiness checklist helper binding",
+            "future preview readiness static display bundle binding",
             content,
-            "healthIntegrationReadinessChecklistDisplayItems();",
+            "const futurePreviewReadinessStaticDisplay = futurePreviewReadinessStaticDisplayBundle();",
         )
         _assert_contains(
-            "community readiness checklist helper binding",
+            "health integration readiness static display binding",
             content,
-            "const communityReadinessChecklistItems = communityReadinessChecklistDisplayItems();",
+            "futurePreviewReadinessStaticDisplay.healthIntegrationItems;",
         )
         _assert_contains(
-            "ranking readiness checklist helper binding",
+            "community readiness static display binding",
             content,
-            "const rankingReadinessChecklistItems = rankingReadinessChecklistDisplayItems();",
+            "const communityReadinessChecklistItems = futurePreviewReadinessStaticDisplay.communityItems;",
+        )
+        _assert_contains(
+            "ranking readiness static display binding",
+            content,
+            "const rankingReadinessChecklistItems = futurePreviewReadinessStaticDisplay.rankingItems;",
         )
         _assert_contains(
             "store static display bundle binding",
@@ -15369,6 +15374,10 @@ def main() -> int:
             ("ranking readiness moderation copy", "封鎖、檢舉與審核流程"),
             ("ranking readiness dispute copy", "榜單爭議處理與公開名稱違規處置"),
             ("ranking readiness audit copy", "退出排名後的歷史資料撤回與 audit event"),
+            ("future preview readiness static display bundle helper", "export function futurePreviewReadinessStaticDisplayBundle()"),
+            ("future preview readiness static display bundle health", "healthIntegrationItems: healthIntegrationReadinessChecklistDisplayItems()"),
+            ("future preview readiness static display bundle community", "communityItems: communityReadinessChecklistDisplayItems()"),
+            ("future preview readiness static display bundle ranking", "rankingItems: rankingReadinessChecklistDisplayItems()"),
             ("future boundary rows display bundle helper", "export function futureBoundaryRowsDisplayBundle(isLeaderboardOptedIn: boolean)"),
             ("future boundary rows display bundle health integration", "healthIntegration: healthIntegrationBoundaryDisplayRows()"),
             ("future boundary rows display bundle community", "community: communityBoundaryDisplayRows(isLeaderboardOptedIn)"),
@@ -15615,12 +15624,23 @@ def main() -> int:
             ("future boundary rows display bundle health binding", "const healthIntegrationBoundaryRows = futureBoundaryRowsDisplay.healthIntegration;"),
             ("future boundary rows display bundle community binding", "const communityBoundaryRows = futureBoundaryRowsDisplay.community;"),
             ("future boundary rows display bundle ranking binding", "const rankingBoundaryRows = futureBoundaryRowsDisplay.ranking;"),
+            ("future preview readiness static display bundle import", "futurePreviewReadinessStaticDisplayBundle,"),
+            ("future preview readiness static display bundle binding", "const futurePreviewReadinessStaticDisplay = futurePreviewReadinessStaticDisplayBundle();"),
+            ("future preview readiness static display bundle health binding", "futurePreviewReadinessStaticDisplay.healthIntegrationItems;"),
+            ("future preview readiness static display bundle community binding", "const communityReadinessChecklistItems = futurePreviewReadinessStaticDisplay.communityItems;"),
+            ("future preview readiness static display bundle ranking binding", "const rankingReadinessChecklistItems = futurePreviewReadinessStaticDisplay.rankingItems;"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
             ("direct health integration boundary rows binding", "const healthIntegrationBoundaryRows = healthIntegrationBoundaryDisplayRows();"),
             ("direct community boundary rows binding", "const communityBoundaryRows = communityBoundaryDisplayRows("),
             ("direct ranking boundary rows binding", "const rankingBoundaryRows = rankingBoundaryDisplayRows();"),
+            ("direct health integration readiness binding", "healthIntegrationReadinessChecklistDisplayItems();"),
+            ("direct community readiness binding", "const communityReadinessChecklistItems = communityReadinessChecklistDisplayItems();"),
+            ("direct ranking readiness binding", "const rankingReadinessChecklistItems = rankingReadinessChecklistDisplayItems();"),
+            ("direct health integration readiness import", "  healthIntegrationReadinessChecklistDisplayItems,"),
+            ("direct community readiness import", "  communityReadinessChecklistDisplayItems,"),
+            ("direct ranking readiness import", "  rankingReadinessChecklistDisplayItems,"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (

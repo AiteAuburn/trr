@@ -198,7 +198,6 @@ import {
   communityPublicNamePreviewLabel,
   communityPublicSettingsStatusMessages,
   emptyFoodCommunityShareFields,
-  communityReadinessChecklistDisplayItems,
   communityScreenSubtitleCopy,
   communityScreenTitleLabel,
   foodCommunityCategoriesFromApi,
@@ -263,10 +262,10 @@ import {
   futureModulesReturnMenuStatusMessage,
   futurePreviewBoundaryCopyBundle,
   futurePreviewBoundaryDisplayBundle,
+  futurePreviewReadinessStaticDisplayBundle,
   futurePreviewReturnStatusMessage,
   futurePreviewSectionLabels,
   futurePreviewStatusDisplayBundle,
-  healthIntegrationReadinessChecklistDisplayItems,
   achievementYearReviewStatusDisplayBundle,
   limitedAchievementDisplayItems,
   localAchievementItemsForRecords,
@@ -274,7 +273,6 @@ import {
   rankingHeroIconLabel,
   rankingLocalStreakPreviewLabel,
   rankingPreviewDisplayBundle,
-  rankingReadinessChecklistDisplayItems,
   rankingScreenSubtitleCopy,
   rankingScreenTitleLabel,
   rankingStreakDisplayText,
@@ -1762,10 +1760,11 @@ export default function App() {
   const privacyReadinessChecklistItems = settingsStaticDisplay.privacyReadinessChecklistItems;
   const tutorialSafetyChecklistItems = settingsStaticDisplay.tutorialSafetyChecklistItems;
   const doctorShareReadinessChecklistItems = doctorShareReadinessChecklistDisplayItems();
+  const futurePreviewReadinessStaticDisplay = futurePreviewReadinessStaticDisplayBundle();
   const healthIntegrationReadinessChecklistItems =
-    healthIntegrationReadinessChecklistDisplayItems();
-  const communityReadinessChecklistItems = communityReadinessChecklistDisplayItems();
-  const rankingReadinessChecklistItems = rankingReadinessChecklistDisplayItems();
+    futurePreviewReadinessStaticDisplay.healthIntegrationItems;
+  const communityReadinessChecklistItems = futurePreviewReadinessStaticDisplay.communityItems;
+  const rankingReadinessChecklistItems = futurePreviewReadinessStaticDisplay.rankingItems;
   const storePreviewStaticDisplay = storePreviewStaticDisplayBundle();
   const storeCheckoutReadinessChecklistItems = storePreviewStaticDisplay.checkoutReadinessItems;
   const storeCartUnavailableDisplay = storePreviewStaticDisplay.cartUnavailable;

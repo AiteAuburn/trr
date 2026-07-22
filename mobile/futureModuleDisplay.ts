@@ -1976,6 +1976,14 @@ export function rankingReadinessChecklistDisplayItems() {
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
+export function futurePreviewReadinessStaticDisplayBundle() {
+  return {
+    healthIntegrationItems: healthIntegrationReadinessChecklistDisplayItems(),
+    communityItems: communityReadinessChecklistDisplayItems(),
+    rankingItems: rankingReadinessChecklistDisplayItems()
+  };
+}
+
 export function futureBoundaryRowsDisplayBundle(isLeaderboardOptedIn: boolean) {
   return {
     healthIntegration: healthIntegrationBoundaryDisplayRows(),
