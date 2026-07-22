@@ -9181,6 +9181,8 @@ def main() -> int:
             ("delete confirm display texts intro binding", "intro: deleteConfirmIntroCopy()"),
             ("delete confirm display texts record meta binding", "deleteConfirmRecordMetaCopy(selectedRecordDisplayItem.dateTimeLabel, selectedRecordDisplayItem.sourceLabel)"),
             ("delete confirm display texts submit binding", "submit: deleteConfirmSubmitLabel(isBusy)"),
+            ("delete confirm display bundle helper", "function deleteConfirmDisplayBundle("),
+            ("delete confirm display bundle delegates", "return deleteConfirmDisplayTexts(selectedRecordDisplayItem, isBusy);"),
             ("delete confirm ready status helper", "function deleteConfirmReadyStatusMessage()"),
             ("delete confirm return status helper", "function deleteConfirmReturnStatusMessage()"),
             ("delete confirm checklist helper", "function deleteConfirmChecklistDisplayItems()"),
@@ -9229,7 +9231,7 @@ def main() -> int:
             _assert_contains(label, record_status_copy_content, marker)
         for label, marker in (
             ("delete confirm checklist helper binding", "const deleteConfirmChecklistItems = deleteConfirmChecklistDisplayItems();"),
-            ("delete confirm display helper binding", "const deleteConfirmDisplay = deleteConfirmDisplayTexts(selectedRecordDisplayItem, isBusy);"),
+            ("delete confirm display helper binding", "const deleteConfirmDisplay = deleteConfirmDisplayBundle(selectedRecordDisplayItem, isBusy);"),
             ("delete confirm intro display binding", "const deleteConfirmIntroDisplayText = deleteConfirmDisplay.intro;"),
             ("delete confirm record meta display binding", "const deleteConfirmRecordMetaDisplayText = deleteConfirmDisplay.recordMeta;"),
             ("delete confirm submit display binding", "const deleteConfirmSubmitDisplayLabel = deleteConfirmDisplay.submit;"),
@@ -12893,6 +12895,7 @@ def main() -> int:
             ("direct transcript review display texts binding", "const transcriptReviewDisplay = transcriptReviewDisplayTexts();"),
             ("direct manual record confirm display texts binding", "const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayTexts(isBusy);"),
             ("direct AI remove confirm display texts binding", "const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayTexts("),
+            ("direct delete confirm display texts binding", "const deleteConfirmDisplay = deleteConfirmDisplayTexts(selectedRecordDisplayItem, isBusy);"),
             ("direct settings profile choice map", "profileChoiceDisplayItems.map((profile) => {"),
             ("direct settings profile key binding", "key={profile.id}"),
             ("direct settings profile accessibility binding", "accessibilityLabel={profile.accessibilityLabel}"),

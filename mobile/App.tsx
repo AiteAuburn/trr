@@ -506,7 +506,7 @@ import {
 } from "./recordWorkflowCopy";
 import {
   deleteSuccessBoundaryChecklistDisplayItems,
-  deleteConfirmDisplayTexts,
+  deleteConfirmDisplayBundle,
   deleteConfirmReadyStatusMessage,
   deleteConfirmReturnStatusMessage,
   deleteConfirmChecklistDisplayItems,
@@ -2055,7 +2055,7 @@ export default function App() {
   const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayBundle(isBusy);
   const manualRecordConfirmIntroDisplayText = manualRecordConfirmDisplayTextsForState.intro;
   const manualRecordConfirmSubmitDisplayLabel = manualRecordConfirmDisplayTextsForState.submit;
-  const deleteConfirmDisplay = deleteConfirmDisplayTexts(selectedRecordDisplayItem, isBusy);
+  const deleteConfirmDisplay = deleteConfirmDisplayBundle(selectedRecordDisplayItem, isBusy);
   const deleteConfirmIntroDisplayText = deleteConfirmDisplay.intro;
   const deleteConfirmRecordMetaDisplayText = deleteConfirmDisplay.recordMeta;
   const deleteConfirmSubmitDisplayLabel = deleteConfirmDisplay.submit;

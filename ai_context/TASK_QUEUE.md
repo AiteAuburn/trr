@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2237: Move delete confirm display bundle
+
+Status: done
+
+Completed:
+
+- Added the delete confirm display bundle helper to `recordStatusCopy.ts`.
+- Moved `App.tsx` saved-record delete confirm intro, record meta, and submit label display assembly from the raw texts helper to the bundle entrypoint.
+- Kept delete-confirm copy, selected record meta display, busy-state label, delete request timing, and cancel/confirm delete behavior unchanged.
+- Updated navigation verifier coverage to require the delete confirm display bundle, App bundle binding, and no direct delete confirm display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2236: Move AI remove confirm display bundle
 
 Status: done

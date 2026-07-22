@@ -186,6 +186,13 @@ export function deleteConfirmDisplayTexts(
   };
 }
 
+export function deleteConfirmDisplayBundle(
+  selectedRecordDisplayItem: { dateTimeLabel: string; sourceLabel: string } | null,
+  isBusy: boolean
+) {
+  return deleteConfirmDisplayTexts(selectedRecordDisplayItem, isBusy);
+}
+
 export function deleteConfirmReadyStatusMessage() {
   return boundUiMessage("請確認是否刪除這筆紀錄；按下確認刪除前不會送出 delete request。");
 }
