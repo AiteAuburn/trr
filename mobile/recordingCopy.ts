@@ -343,6 +343,14 @@ export function recordingLimitCopy(limitSeconds: number) {
   return boundDisplayText(`單次最多 ${clampNumber(limitSeconds, 1, mobileSingleRecordingLimitSeconds)} 秒`, 80);
 }
 
+export function recordingBoundaryDisplayBundle(limitSeconds: number) {
+  return {
+    limit: recordingLimitCopy(limitSeconds),
+    homeBoundary: homeRecordingPreviewBoundaryCopy(),
+    recordPageBoundary: recordPageRecordingPreviewBoundaryCopy()
+  };
+}
+
 export function recordingResultBodyCopy(elapsedSeconds: number) {
   const boundedSeconds = clampNumber(elapsedSeconds, 0, maxMobileCountValue);
   return boundDisplayText(

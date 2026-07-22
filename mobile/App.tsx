@@ -420,10 +420,8 @@ import {
   homeSpeechExamplePaginationAccessibilityLabel,
   homeSpeechExampleText,
   homeRecordingDisplayBundle,
-  homeRecordingPreviewBoundaryCopy,
-  recordPageRecordingPreviewBoundaryCopy,
+  recordingBoundaryDisplayBundle,
   recordingFinishedStatusMessage,
-  recordingLimitCopy,
   recordingLimitReachedStatusMessage,
   recordingPermissionDeniedStatusMessage,
   recordingQuotaExhaustedStatusMessage,
@@ -1660,12 +1658,13 @@ export default function App() {
   });
   const recordingPreviewDisplayText = homeRecordingDisplay.previewText;
   const recordingEffectiveLimitDisplaySeconds = recordingEffectiveLimitSeconds(voiceQuota);
-  const recordingLimitDisplayText = recordingLimitCopy(recordingEffectiveLimitDisplaySeconds);
+  const recordingBoundaryDisplay = recordingBoundaryDisplayBundle(recordingEffectiveLimitDisplaySeconds);
+  const recordingLimitDisplayText = recordingBoundaryDisplay.limit;
   const homeRecordingSecondaryHintDisplayText = homeRecordingDisplay.secondaryHint;
   const homeRecordingModelStatusDisplayText = homeRecordingDisplay.modelStatus;
   const homeCurrentSpeechExample = homeRecordingDisplay.currentExample;
-  const homeRecordingPreviewBoundaryDisplayText = homeRecordingPreviewBoundaryCopy();
-  const recordPageRecordingPreviewBoundaryDisplayText = recordPageRecordingPreviewBoundaryCopy();
+  const homeRecordingPreviewBoundaryDisplayText = recordingBoundaryDisplay.homeBoundary;
+  const recordPageRecordingPreviewBoundaryDisplayText = recordingBoundaryDisplay.recordPageBoundary;
   const recordingResultDisplay = recordingResultDisplayBundle(recordingElapsedSeconds);
   const recordingSimulatedResultDisplayText = recordingResultDisplay.simulatedResult;
   const recordingElapsedSecondsDisplayText = recordingResultDisplay.elapsed;
