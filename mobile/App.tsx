@@ -693,9 +693,9 @@ import {
 import {
   analysisBoundaryChecklistDisplayItems,
   analysisBoundaryDataCopy,
-  analysisChartEmptyCopy,
   analysisCustomApplyStatusMessage,
   analysisDetailedReportStatusMessage,
+  analysisEmptyStateDisplayBundle,
   analysisManualEntryStatusMessage,
   analysisNoDataCopy,
   analysisNoDataStatusLabel,
@@ -703,7 +703,6 @@ import {
   analysisRangeSummaryCopy,
   analysisReportButtonLabel,
   analysisReturnTodayStatusMessage,
-  analysisSafetyIntroCopy,
   detailedReportBoundaryDisplayRows,
   detailedReportNoteDisplayItems,
   detailedReportManualEntryStatusMessage,
@@ -2061,8 +2060,9 @@ export default function App() {
   const historyNoRecordsBodyDisplayText = historyEmptyStateDisplay.noRecordsBody;
   const historyNoRangeRecordsTitleDisplayText = historyEmptyStateDisplay.noRangeRecordsTitle;
   const historyNoRangeRecordsBodyDisplayText = historyEmptyStateDisplay.noRangeRecordsBody;
-  const analysisSafetyIntroDisplayText = analysisSafetyIntroCopy();
-  const analysisChartEmptyDisplayText = analysisChartEmptyCopy();
+  const analysisEmptyStateDisplay = analysisEmptyStateDisplayBundle();
+  const analysisSafetyIntroDisplayText = analysisEmptyStateDisplay.safetyIntro;
+  const analysisChartEmptyDisplayText = analysisEmptyStateDisplay.chartEmpty;
   const analysisRangeSummaryDisplayText = analysisRangeSummaryCopy(
     analysisMetricInput.glucoseCount,
     analysisPreviewMode

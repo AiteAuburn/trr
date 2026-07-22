@@ -37,6 +37,13 @@ export function analysisChartEmptyCopy() {
   return boundDisplayText("目前範圍沒有血糖資料", maxDisplayTextLength);
 }
 
+export function analysisEmptyStateDisplayBundle() {
+  return {
+    safetyIntro: analysisSafetyIntroCopy(),
+    chartEmpty: analysisChartEmptyCopy()
+  };
+}
+
 export function analysisNoDataStatusLabel() {
   return boundDisplayText("尚無資料", 24);
 }

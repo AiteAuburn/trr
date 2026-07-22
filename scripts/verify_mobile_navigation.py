@@ -10561,6 +10561,7 @@ def main() -> int:
         )
         for label, marker in (
             ("analysis default month range state", 'const [analysisRange, setAnalysisRange] = useState<AnalysisRange>("month");'),
+            ("analysis empty state display helper binding", "const analysisEmptyStateDisplay = analysisEmptyStateDisplayBundle();"),
             ("analysis range display helper binding", "const analysisRangeDisplay = analysisRangeDisplayBundle("),
             ("analysis range display label binding", "const analysisRangeDisplayLabel = analysisRangeDisplay.label;"),
             ("analysis custom range status display binding", "const analysisCustomRangeStatusDisplayText = analysisRangeDisplay.customRangeStatus;"),
@@ -10624,6 +10625,9 @@ def main() -> int:
             _assert_contains(label, date_time_transforms_content, marker)
         for label, marker in (
             ("analysis no-data status helper", "function analysisNoDataStatusLabel()"),
+            ("analysis empty state display bundle helper", "function analysisEmptyStateDisplayBundle()"),
+            ("analysis empty state safety intro binding", "safetyIntro: analysisSafetyIntroCopy()"),
+            ("analysis empty state chart empty binding", "chartEmpty: analysisChartEmptyCopy()"),
             ("analysis no-data copy helper", "function analysisNoDataCopy()"),
             ("analysis boundary data copy helper", "function analysisBoundaryDataCopy(isPreviewMode: boolean)"),
             ("analysis boundary checklist helper", "function analysisBoundaryChecklistDisplayItems("),
@@ -12898,6 +12902,8 @@ def main() -> int:
             ("direct history no records body copy binding", "const historyNoRecordsBodyDisplayText = historyNoRecordsBodyCopy();"),
             ("direct history no range records title copy binding", "const historyNoRangeRecordsTitleDisplayText = historyNoRangeRecordsTitleCopy();"),
             ("direct history no range records body copy binding", "const historyNoRangeRecordsBodyDisplayText = historyNoRangeRecordsBodyCopy();"),
+            ("direct analysis safety intro copy binding", "const analysisSafetyIntroDisplayText = analysisSafetyIntroCopy();"),
+            ("direct analysis chart empty copy binding", "const analysisChartEmptyDisplayText = analysisChartEmptyCopy();"),
             ("direct analysis range display texts binding", "const analysisRangeDisplay = analysisRangeDisplayTexts("),
             ("direct AI review display texts binding", "const aiReviewDisplay = aiReviewDisplayTexts();"),
             ("direct AI save confirm display texts binding", "const aiSaveConfirmDisplay = aiSaveConfirmDisplayTexts("),

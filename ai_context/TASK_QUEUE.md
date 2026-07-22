@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2239: Move analysis empty state display bundle
+
+Status: done
+
+Completed:
+
+- Added the analysis empty state display bundle helper to `analysisCopy.ts`.
+- Moved `App.tsx` analysis safety intro and chart-empty display assembly from two raw copy helpers to the bundle entrypoint.
+- Kept Analysis safety copy, chart-empty copy, range summary, chart data, backend bounded report behavior, and detailed report behavior unchanged.
+- Updated navigation verifier coverage to require the analysis empty state display bundle, App bundle binding, and no direct analysis empty-state copy binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2238: Move history empty state display bundle
 
 Status: done
