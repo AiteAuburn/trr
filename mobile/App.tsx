@@ -692,13 +692,11 @@ import {
 } from "./historyScreenData";
 import {
   analysisBoundaryChecklistDisplayItems,
-  analysisBoundaryDataCopy,
   analysisCustomApplyStatusMessage,
+  analysisDataBoundaryDisplayBundle,
   analysisDetailedReportStatusMessage,
   analysisEmptyStateDisplayBundle,
   analysisManualEntryStatusMessage,
-  analysisNoDataCopy,
-  analysisNoDataStatusLabel,
   analysisRangeDisplayBundle,
   analysisRangeSummaryCopy,
   analysisReportButtonLabel,
@@ -1381,9 +1379,10 @@ export default function App() {
   const mobileRecordSyncDisplayLimit = clampNumber(mobileRecordSyncLimit, 0, maxMobileCountValue);
   const mobileReportQueryDisplayLimit = clampNumber(mobileReportQueryLimit, 0, maxMobileCountValue);
   const historyNoRealRecordHealthValueDisplayText = noRealRecordHealthValueCopy("history");
-  const analysisNoDataStatusDisplayLabel = analysisNoDataStatusLabel();
-  const analysisNoDataDisplayCopy = analysisNoDataCopy();
-  const analysisBoundaryDataDisplayCopy = analysisBoundaryDataCopy(analysisPreviewMode);
+  const analysisDataBoundaryDisplay = analysisDataBoundaryDisplayBundle(analysisPreviewMode);
+  const analysisNoDataStatusDisplayLabel = analysisDataBoundaryDisplay.noDataStatus;
+  const analysisNoDataDisplayCopy = analysisDataBoundaryDisplay.noDataCopy;
+  const analysisBoundaryDataDisplayCopy = analysisDataBoundaryDisplay.boundaryData;
   const lowConfidencePreviewRecordCount = previewState.lowConfidenceRecordCount;
   const rejectedPreviewEventCount = previewState.rejectedEventCount;
   const lowConfidencePreviewRecordDisplayCount = previewState.lowConfidenceDisplayCount;

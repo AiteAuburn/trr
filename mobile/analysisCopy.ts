@@ -64,6 +64,14 @@ export function analysisBoundaryDataCopy(isPreviewMode: boolean) {
   );
 }
 
+export function analysisDataBoundaryDisplayBundle(isPreviewMode: boolean) {
+  return {
+    noDataStatus: analysisNoDataStatusLabel(),
+    noDataCopy: analysisNoDataCopy(),
+    boundaryData: analysisBoundaryDataCopy(isPreviewMode)
+  };
+}
+
 export function analysisBoundaryChecklistDisplayItems(
   dataBoundaryCopy: string,
   recordCacheLimit: number,

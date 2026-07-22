@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2240: Move analysis data boundary display bundle
+
+Status: done
+
+Completed:
+
+- Added the analysis data boundary display bundle helper to `analysisCopy.ts`.
+- Moved `App.tsx` analysis no-data status, no-data copy, and analysis boundary data copy display assembly from three raw helpers to the bundle entrypoint.
+- Kept Analysis no-data copy, backend bounded report boundary copy, chart data, local metric calculation, report query behavior, and detailed report behavior unchanged.
+- Updated navigation verifier coverage to require the analysis data boundary display bundle, App bundle binding, and no direct analysis no-data/boundary copy binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2239: Move analysis empty state display bundle
 
 Status: done
