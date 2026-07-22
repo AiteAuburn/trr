@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2231: Move AI review display bundle
+
+Status: done
+
+Completed:
+
+- Added the AI review display bundle helper to `recordWorkflowCopy.ts`.
+- Moved `App.tsx` AI review no-candidate, no-preview, intro, low-confidence, rejected-events, and backend-required display assembly from the raw texts helper to the bundle entrypoint.
+- Kept AI review copy, parser candidate behavior, edit/remove flow, save-confirm navigation, backend requirements, and AI call boundaries unchanged.
+- Updated navigation verifier coverage to require the AI review display bundle, App bundle binding, and no direct AI review display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2230: Move analysis range display bundle
 
 Status: done

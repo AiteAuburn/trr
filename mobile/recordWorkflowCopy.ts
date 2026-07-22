@@ -246,6 +246,10 @@ export function aiReviewDisplayTexts() {
   };
 }
 
+export function aiReviewDisplayBundle() {
+  return aiReviewDisplayTexts();
+}
+
 export function aiReviewCostBoundaryChecklistDisplayItems() {
   return [
     "此頁只顯示 parser 已回傳的候選紀錄。",

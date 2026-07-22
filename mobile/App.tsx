@@ -461,7 +461,7 @@ import {
   aiPartialSaveRecordsStatusMessage,
   aiPartialSaveSummaryMessage,
   aiReviewCostBoundaryChecklistDisplayItems,
-  aiReviewDisplayTexts,
+  aiReviewDisplayBundle,
   aiRemoveConfirmDisplayTexts,
   aiSaveConfirmBoundaryDisplayRows,
   aiSaveConfirmChecklistDisplayItems,
@@ -1399,7 +1399,7 @@ export default function App() {
   );
   const rejectedPreviewDisplayItems = aiReviewPreviewDisplay.rejectedItems;
   const aiReviewDateDisplayLabel = aiReviewPreviewDisplay.dateLabel;
-  const aiReviewDisplay = aiReviewDisplayTexts();
+  const aiReviewDisplay = aiReviewDisplayBundle();
   const aiReviewNoCandidateTitleDisplayText = aiReviewDisplay.noCandidateTitle;
   const aiReviewNoCandidateBodyDisplayText = aiReviewDisplay.noCandidateBody;
   const aiReviewNoCandidateBoundaryDisplayText = aiReviewDisplay.noCandidateBoundary;

@@ -3716,7 +3716,7 @@ def main() -> int:
         _assert_contains(
             "AI review display helper binding",
             content,
-            "const aiReviewDisplay = aiReviewDisplayTexts();",
+            "const aiReviewDisplay = aiReviewDisplayBundle();",
         )
         _assert_contains(
             "AI review no candidate title display binding",
@@ -8775,6 +8775,8 @@ def main() -> int:
             ("AI review rejected reason helper", "function aiReviewRejectedReasonCopy(reasonLabel: string)"),
             ("AI review backend-required helper", "function aiReviewBackendRequiredCopy()"),
             ("AI review display texts helper", "function aiReviewDisplayTexts()"),
+            ("AI review display bundle helper", "function aiReviewDisplayBundle()"),
+            ("AI review display bundle delegates", "return aiReviewDisplayTexts();"),
             ("AI review display texts no candidate title binding", "noCandidateTitle: aiReviewNoCandidateTitleCopy()"),
             ("AI review display texts no preview body binding", "noPreviewBody: aiReviewNoPreviewBodyCopy()"),
             ("AI review display texts rejected events binding", "rejectedEvents: aiReviewRejectedEventsCopy()"),
@@ -12875,6 +12877,7 @@ def main() -> int:
             ("direct account security auth mode display texts binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayTexts({"),
             ("direct history calendar display texts binding", "const historyCalendarDisplay = historyCalendarDisplayTexts(historyCalendarMonthStart, selectedHistoryDate);"),
             ("direct analysis range display texts binding", "const analysisRangeDisplay = analysisRangeDisplayTexts("),
+            ("direct AI review display texts binding", "const aiReviewDisplay = aiReviewDisplayTexts();"),
             ("direct settings profile choice map", "profileChoiceDisplayItems.map((profile) => {"),
             ("direct settings profile key binding", "key={profile.id}"),
             ("direct settings profile accessibility binding", "accessibilityLabel={profile.accessibilityLabel}"),
