@@ -433,6 +433,10 @@ export function aiRemoveConfirmDisplayTexts(isDailyRecordDelete: boolean, confid
   };
 }
 
+export function aiRemoveConfirmDisplayBundle(isDailyRecordDelete: boolean, confidencePercent: number | null) {
+  return aiRemoveConfirmDisplayTexts(isDailyRecordDelete, confidencePercent);
+}
+
 export function previewRecordEditBoundaryCopy() {
   return boundDisplayText("這裡只修改待確認候選紀錄；按下確認儲存前不會寫入資料庫。", maxDisplayDetailTextLength);
 }

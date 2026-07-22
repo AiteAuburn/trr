@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2236: Move AI remove confirm display bundle
+
+Status: done
+
+Completed:
+
+- Added the AI remove confirm display bundle helper to `recordWorkflowCopy.ts`.
+- Moved `App.tsx` AI candidate and daily-record remove confirm title, submit label, boundary label, boundary copy, and source display assembly from the raw texts helper to the bundle entrypoint.
+- Kept remove-confirm copy, candidate confidence display, daily-record delete branch, modal behavior, and remove/delete action flow unchanged.
+- Updated navigation verifier coverage to require the AI remove confirm display bundle, App bundle binding, and no direct AI remove confirm display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2235: Move manual record confirm display bundle
 
 Status: done

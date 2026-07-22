@@ -462,7 +462,7 @@ import {
   aiPartialSaveSummaryMessage,
   aiReviewCostBoundaryChecklistDisplayItems,
   aiReviewDisplayBundle,
-  aiRemoveConfirmDisplayTexts,
+  aiRemoveConfirmDisplayBundle,
   aiSaveConfirmBoundaryDisplayRows,
   aiSaveConfirmChecklistDisplayItems,
   aiSaveConfirmDisplayBundle,
@@ -2035,7 +2035,7 @@ export default function App() {
   const previewActionReturn = previewActionReturnState(previewActionReturnScreen);
   const isPreviewActionReturningToDailyRecord = previewActionReturn.isReturningToDailyRecord;
   const isDailyRecordRemoveConfirm = previewActionReturn.isDailyRecordRemoveConfirm;
-  const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayTexts(
+  const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayBundle(
     isDailyRecordRemoveConfirm,
     pendingPreviewRemoveDisplayItem?.confidencePercent ?? null
   );
