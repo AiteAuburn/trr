@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2257: Move core accessibility display bundle
+
+Status: done
+
+Completed:
+
+- Added the core accessibility display bundle helper to `firstVersionFlowCopy.ts`.
+- Moved `App.tsx` header action and recording preview accessibility label assembly from direct helper calls to the bundle entrypoint.
+- Kept header chrome selection, recording preview state, existing copy, and JSX accessibility bindings unchanged.
+- Updated navigation verifier coverage to require the core accessibility display bundle and no direct core accessibility helper binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2256: Move year review boundary copy bundle
 
 Status: done

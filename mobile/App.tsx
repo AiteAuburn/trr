@@ -624,15 +624,14 @@ import {
   aiSaveFailureReturnSaveConfirmStatusMessage,
   aiReviewManualEntryStatusMessage,
   busyActionStatusMessage,
+  coreAccessibilityDisplayBundle,
   coreFlowSectionLabels,
   deleteSuccessDestinationDisplayItems,
-  headerActionAccessibilityLabel,
   previewActionClearStatusMessage,
   quickEntryModeDisplayItems,
   quickEntryTextModeStatusMessage,
   quickEntryVoicePromptStatusMessage,
   quickRecordIntroDisplayBundle,
-  recordingButtonAccessibilityLabel,
   recordManualEntryStatusMessage,
   returnDestinationButtonDisplayBundle,
   saveSuccessDestinationDisplayItems,
@@ -2098,8 +2097,12 @@ export default function App() {
   const yearReviewReturnButtonDisplayLabel = returnDestinationButtonDisplay.yearReview;
   const storeReturnButtonDisplayLabel = returnDestinationButtonDisplay.store;
   const foodPhotoReturnButtonDisplayLabel = returnDestinationButtonDisplay.foodPhoto;
-  const headerActionDisplayAccessibilityLabel = headerActionAccessibilityLabel(currentChrome);
-  const recordingButtonDisplayAccessibilityLabel = recordingButtonAccessibilityLabel(isRecordingPreview);
+  const coreAccessibilityDisplay = coreAccessibilityDisplayBundle({
+    chrome: currentChrome,
+    isRecordingPreview
+  });
+  const headerActionDisplayAccessibilityLabel = coreAccessibilityDisplay.headerAction;
+  const recordingButtonDisplayAccessibilityLabel = coreAccessibilityDisplay.recordingButton;
   const subscriptionActionControlDisplay = subscriptionActionControlDisplayBundle(isQuotaSyncing);
   const subscriptionTrialBoundaryDisplayText = subscriptionActionControlDisplay.trialBoundary;
   const subscriptionPaymentUnwiredDisplayText = subscriptionActionControlDisplay.paymentUnwired;

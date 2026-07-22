@@ -173,6 +173,16 @@ export function recordingButtonAccessibilityLabel(isRecording: boolean) {
   return boundDisplayText(isRecording ? "錄音預覽進行中，放開結束" : "按住開始錄音預覽", maxDisplayTextLength);
 }
 
+export function coreAccessibilityDisplayBundle(value: {
+  chrome: { actionLabel?: string };
+  isRecordingPreview: boolean;
+}) {
+  return {
+    headerAction: headerActionAccessibilityLabel(value.chrome),
+    recordingButton: recordingButtonAccessibilityLabel(value.isRecordingPreview)
+  };
+}
+
 export function primaryTabAccessibilityLabel(label: string) {
   const safeLabel = boundDisplayText(label || "分頁", 60);
   return boundDisplayText(`前往${safeLabel}分頁，只切換 App 內頁面`, maxDisplayDetailTextLength);

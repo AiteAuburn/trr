@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2257 move core accessibility display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/firstVersionFlowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the core accessibility display bundle helper to `firstVersionFlowCopy.ts`.
+- Moved `App.tsx` header action and recording preview accessibility label assembly from direct helper calls to the bundle entrypoint.
+- Kept header chrome selection, recording preview state, existing copy, and JSX accessibility bindings unchanged.
+- Updated navigation verifier coverage to require the core accessibility display bundle and no direct core accessibility helper binding regression in `App.tsx`.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2256 move year review boundary copy bundle
 
 類型：mobile / refactor / verifier / docs

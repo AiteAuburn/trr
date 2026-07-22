@@ -3178,12 +3178,37 @@ def main() -> int:
             first_version_flow_copy_content,
             "function headerActionAccessibilityLabel(chrome: { actionLabel?: string })",
         )
+        _assert_contains(
+            "core accessibility display bundle helper",
+            first_version_flow_copy_content,
+            "function coreAccessibilityDisplayBundle(value: {",
+        )
+        _assert_contains(
+            "core accessibility display bundle header binding",
+            first_version_flow_copy_content,
+            "headerAction: headerActionAccessibilityLabel(value.chrome)",
+        )
+        _assert_contains(
+            "core accessibility display bundle recording binding",
+            first_version_flow_copy_content,
+            "recordingButton: recordingButtonAccessibilityLabel(value.isRecordingPreview)",
+        )
         for label, marker in (
             ("header accessibility close copy", "關閉目前頁面"),
             ("header accessibility back copy", "返回上一頁"),
             ("header accessibility menu copy", "開啟功能選單"),
         ):
             _assert_contains(label, first_version_flow_copy_content, marker)
+        _assert_contains(
+            "core accessibility display bundle binding",
+            content,
+            "const coreAccessibilityDisplay = coreAccessibilityDisplayBundle({",
+        )
+        _assert_contains(
+            "header accessibility label bundle binding",
+            content,
+            "const headerActionDisplayAccessibilityLabel = coreAccessibilityDisplay.headerAction;",
+        )
         _assert_contains(
             "header accessibility label binding",
             content,
@@ -3286,6 +3311,22 @@ def main() -> int:
             content,
             "accessibilityLabel={recordingButtonDisplayAccessibilityLabel}",
         )
+        _assert_contains(
+            "recording accessibility label bundle binding",
+            content,
+            "const recordingButtonDisplayAccessibilityLabel = coreAccessibilityDisplay.recordingButton;",
+        )
+        for label, marker in (
+            (
+                "direct header accessibility helper binding regression",
+                "const headerActionDisplayAccessibilityLabel = headerActionAccessibilityLabel(currentChrome);",
+            ),
+            (
+                "direct recording accessibility helper binding regression",
+                "const recordingButtonDisplayAccessibilityLabel = recordingButtonAccessibilityLabel(isRecordingPreview);",
+            ),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "recording result primary action helper",
             content,
