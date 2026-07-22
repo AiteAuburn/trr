@@ -189,7 +189,8 @@ export function analysisRuntimeBoundaryDisplayBundle(value: {
       value.recordCacheLimit,
       value.reportQueryLimit
     ),
-    detailedReportBoundaryRows: detailedReportBoundaryDisplayRows(value.reportSourceLabel, value.reportQueryLimit)
+    detailedReportBoundaryRows: detailedReportBoundaryDisplayRows(value.reportSourceLabel, value.reportQueryLimit),
+    detailedReportNoteItems: detailedReportNoteDisplayItems(value.reportQueryLimit)
   };
 }
 

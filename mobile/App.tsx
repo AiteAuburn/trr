@@ -648,7 +648,6 @@ import {
   analysisReturnTodayStatusMessage,
   analysisRuntimeBoundaryDisplayBundle,
   analysisSummaryActionDisplayBundle,
-  detailedReportNoteDisplayItems,
   detailedReportManualEntryStatusMessage,
   detailedReportReturnAnalysisStatusMessage,
   detailedReportReturnTodayStatusMessage,
@@ -2234,7 +2233,7 @@ export default function App() {
   const canLoadMoreRecords = recordSyncBoundaryDisplay.canLoadMoreRecords;
   const historySyncBoundaryDisplayText = recordSyncBoundaryDisplay.history;
   const analysisSyncBoundaryDisplayText = recordSyncBoundaryDisplay.analysis;
-  const detailedReportNoteItems = detailedReportNoteDisplayItems(mobileReportQueryDisplayLimit);
+  const detailedReportNoteItems = analysisRuntimeBoundaryDisplay.detailedReportNoteItems;
 
   function openTranscriptReview() {
     if (isBusy) {

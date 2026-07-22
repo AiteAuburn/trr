@@ -4038,11 +4038,18 @@ def main() -> int:
             content,
             "const analysisBoundaryChecklistItems = analysisRuntimeBoundaryDisplay.boundaryChecklistItems;",
         )
+        _assert_contains(
+            "detailed report note items runtime bundle binding",
+            content,
+            "const detailedReportNoteItems = analysisRuntimeBoundaryDisplay.detailedReportNoteItems;",
+        )
         for label, marker in (
             ("direct analysis boundary checklist binding", "const analysisBoundaryChecklistItems = analysisBoundaryChecklistDisplayItems("),
             ("direct detailed report boundary rows binding", "const detailedReportBoundaryRows = detailedReportBoundaryDisplayRows("),
+            ("direct detailed report note items binding", "const detailedReportNoteItems = detailedReportNoteDisplayItems("),
             ("direct analysis boundary checklist import", "  analysisBoundaryChecklistDisplayItems,"),
             ("direct detailed report boundary rows import", "  detailedReportBoundaryDisplayRows,"),
+            ("direct detailed report note items import", "  detailedReportNoteDisplayItems,"),
         ):
             _assert_not_contains(label, content, marker)
         _assert_contains(
@@ -11094,6 +11101,7 @@ def main() -> int:
             ("analysis runtime boundary display bundle helper", "function analysisRuntimeBoundaryDisplayBundle(value: {"),
             ("analysis runtime boundary display checklist binding", "boundaryChecklistItems: analysisBoundaryChecklistDisplayItems("),
             ("analysis runtime boundary display detailed report binding", "detailedReportBoundaryRows: detailedReportBoundaryDisplayRows(value.reportSourceLabel, value.reportQueryLimit)"),
+            ("analysis runtime boundary display note binding", "detailedReportNoteItems: detailedReportNoteDisplayItems(value.reportQueryLimit)"),
             ("analysis custom apply status", "已套用自訂日期區間並同步 bounded report；不呼叫 AI 或 LLM。"),
         ):
             _assert_contains(label, analysis_copy_content, marker)
