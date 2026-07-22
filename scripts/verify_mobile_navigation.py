@@ -9192,6 +9192,8 @@ def main() -> int:
             ("record sync boundary display texts helper", "function recordSyncBoundaryDisplayTexts(value: {"),
             ("record sync boundary cache limit binding", "recordsAtCacheLimit = boundedRecordCount >= boundedCacheLimit"),
             ("record sync boundary load-more binding", "canLoadMoreRecords:"),
+            ("record sync boundary display bundle helper", "function recordSyncBoundaryDisplayBundle(value: {"),
+            ("record sync boundary display bundle delegates", "return recordSyncBoundaryDisplayTexts(value);"),
             ("record sync boundary history cache-limit copy", "已達本機紀錄上限 ${boundedCacheLimit} 筆"),
             ("record sync boundary history pagination copy", "目前已同步 ${boundedRecordCount} 筆；可用 cursor pagination 載入更早紀錄。"),
             ("record sync boundary analysis copy", "本機分析使用目前已同步紀錄，最多保留 ${boundedCacheLimit} 筆"),
@@ -9229,7 +9231,7 @@ def main() -> int:
             ("record edit validation display binding", "const selectedRecordEditValidationDisplayText = recordEditStatusDisplay.selectedValidation;"),
             ("preview record edit validation display helper binding", "const previewRecordEditValidationDisplay = recordEditStatusDisplay.previewValidation;"),
             ("preview record edit validation render binding", "{previewRecordEditValidationDisplay}"),
-            ("record sync boundary display helper binding", "const recordSyncBoundaryDisplay = recordSyncBoundaryDisplayTexts({"),
+            ("record sync boundary display helper binding", "const recordSyncBoundaryDisplay = recordSyncBoundaryDisplayBundle({"),
             ("record sync boundary records-at-limit binding", "const recordsAtCacheLimit = recordSyncBoundaryDisplay.recordsAtCacheLimit;"),
             ("record sync boundary load-more binding", "const canLoadMoreRecords = recordSyncBoundaryDisplay.canLoadMoreRecords;"),
             ("record sync boundary history display binding", "const historySyncBoundaryDisplayText = recordSyncBoundaryDisplay.history;"),
@@ -9239,6 +9241,7 @@ def main() -> int:
         for label, marker in (
             ("direct record edit display helper binding", "const recordEditDisplay = recordEditDisplayTexts(selectedRecordEditValidationError);"),
             ("direct preview record edit validation helper binding", "const previewRecordEditValidationDisplay = previewRecordEditValidationDisplayText(previewRecordEditValidationError);"),
+            ("direct record sync boundary display texts binding", "const recordSyncBoundaryDisplay = recordSyncBoundaryDisplayTexts({"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (

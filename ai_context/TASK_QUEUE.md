@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2218: Move record sync boundary display bundle
+
+Status: done
+
+Completed:
+
+- Added the record sync boundary display bundle helper to `recordStatusCopy.ts`.
+- Moved `App.tsx` record sync boundary display assembly from the raw texts helper to the bundle entrypoint.
+- Kept history load-more availability, cache-limit copy, analysis boundary copy, and record sync behavior unchanged.
+- Updated navigation verifier coverage to require the record sync boundary display bundle, App bundle binding, and no direct record sync boundary display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2217: Move transcript review status display bundle
 
 Status: done

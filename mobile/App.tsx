@@ -525,7 +525,7 @@ import {
   recordEditOpenStatusMessage,
   recordEditStatusDisplayBundle,
   recordResultDestinationStatusMessage,
-  recordSyncBoundaryDisplayTexts,
+  recordSyncBoundaryDisplayBundle,
   recordSyncFailureStatusMessage,
   recordSyncInitialStatusMessage,
   recordSyncLoadingStatusMessage,
@@ -2231,7 +2231,7 @@ export default function App() {
   const transcriptBackendUnavailableDisplayText = transcriptStatusDisplay.backendUnavailable;
   const transcriptModelUnavailableDisplayText = transcriptStatusDisplay.modelUnavailable;
   const manualRecordBackendUnavailableDisplayText = manualRecordCreateDisplay.backendUnavailable;
-  const recordSyncBoundaryDisplay = recordSyncBoundaryDisplayTexts({
+  const recordSyncBoundaryDisplay = recordSyncBoundaryDisplayBundle({
     recordCount: recordDisplayState.recordCount,
     cacheLimit: maxMobileRecordCacheLimit,
     hasMore: recordsHasMore,

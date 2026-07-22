@@ -87,6 +87,16 @@ export function recordSyncBoundaryDisplayTexts(value: {
   };
 }
 
+export function recordSyncBoundaryDisplayBundle(value: {
+  recordCount: number;
+  cacheLimit: number;
+  hasMore: boolean;
+  isBackendReady: boolean;
+  isBusy: boolean;
+}) {
+  return recordSyncBoundaryDisplayTexts(value);
+}
+
 export function recordsStatusDisplayTexts(recordsStatus: string) {
   return {
     records: boundUiMessage(recordsStatus)
