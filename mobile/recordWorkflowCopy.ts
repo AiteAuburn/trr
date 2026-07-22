@@ -569,6 +569,15 @@ export function aiCandidateRemoveChecklistDisplayItems() {
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
+export function recordWorkflowStaticChecklistDisplayBundle() {
+  return {
+    aiReviewCostBoundaryItems: aiReviewCostBoundaryChecklistDisplayItems(),
+    manualSubmitItems: manualSubmitChecklistDisplayItems(),
+    recordDetailBoundaryItems: recordDetailBoundaryChecklistDisplayItems(),
+    aiCandidateRemoveItems: aiCandidateRemoveChecklistDisplayItems()
+  };
+}
+
 export function aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordCount: number) {
   const boundedCount = clampNumber(unsavedPreviewRecordCount, 0, maxMobileCountValue);
   return [

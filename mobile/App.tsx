@@ -421,13 +421,11 @@ import {
   aiCandidateEditOpenStatusMessage,
   aiCandidateEditSuccessStatusMessage,
   aiCandidateRemoveCancelStatusMessage,
-  aiCandidateRemoveChecklistDisplayItems,
   aiCandidateRemoveConfirmStatusMessage,
   aiCandidateRemoveResultStatusMessage,
   aiPartialSaveFailureStatusMessage,
   aiPartialSaveRecordsStatusMessage,
   aiPartialSaveSummaryMessage,
-  aiReviewCostBoundaryChecklistDisplayItems,
   aiReviewDisplayBundle,
   aiRemoveConfirmDisplayBundle,
   aiSaveConfirmBoundaryDisplayRows,
@@ -450,7 +448,6 @@ import {
   manualRecordConfirmReadyStatusMessage,
   manualRecordConfirmReturnStatusMessage,
   manualRecordReturnStatusMessage,
-  manualSubmitChecklistDisplayItems,
   parserAvailabilityDisplayMessages,
   parserBackendUnavailableStatusMessage,
   parserFailureRecoveryMessage,
@@ -462,9 +459,9 @@ import {
   parserSuccessStatusMessage,
   parserVoiceQuotaSyncedStatusMessage,
   previewRecordEditBoundaryDisplayBundle,
-  recordDetailBoundaryChecklistDisplayItems,
   recordDetailReturnStatusMessage,
   recordEntrySettingsChecklistDisplayItems,
+  recordWorkflowStaticChecklistDisplayBundle,
   saveResultDisplayBundle,
   saveSuccessBoundaryChecklistDisplayItems,
   tutorialManualEntryStatusMessage,
@@ -1418,8 +1415,10 @@ export default function App() {
   const saveSuccessViewState = saveSuccessState(lastSaveEntryMethod, hasUnsavedPreviewRecords);
   const hasPartialAiSave = saveSuccessViewState.hasPartialAiSave;
   const hasManualFallbackWithAiCandidates = saveSuccessViewState.hasManualFallbackWithAiCandidates;
+  const recordWorkflowStaticChecklistDisplay = recordWorkflowStaticChecklistDisplayBundle();
   const aiSaveConfirmChecklistItems = aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordDisplayCount);
-  const aiReviewCostBoundaryChecklistItems = aiReviewCostBoundaryChecklistDisplayItems();
+  const aiReviewCostBoundaryChecklistItems =
+    recordWorkflowStaticChecklistDisplay.aiReviewCostBoundaryItems;
   const transcriptReviewCostBoundaryChecklistItems = transcriptReviewCostBoundaryChecklistDisplayItems(
     protectedBackendReady,
     parserModelReady,
@@ -1435,10 +1434,11 @@ export default function App() {
     deleteSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit);
   const updateSuccessBoundaryChecklistItems =
     updateSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit);
-  const manualSubmitChecklistItems = manualSubmitChecklistDisplayItems();
-  const recordDetailBoundaryChecklistItems = recordDetailBoundaryChecklistDisplayItems();
+  const manualSubmitChecklistItems = recordWorkflowStaticChecklistDisplay.manualSubmitItems;
+  const recordDetailBoundaryChecklistItems =
+    recordWorkflowStaticChecklistDisplay.recordDetailBoundaryItems;
   const recordEntrySettingsChecklistItems = recordEntrySettingsChecklistDisplayItems(protectedBackendReady);
-  const aiCandidateRemoveChecklistItems = aiCandidateRemoveChecklistDisplayItems();
+  const aiCandidateRemoveChecklistItems = recordWorkflowStaticChecklistDisplay.aiCandidateRemoveItems;
   const aiSaveFailureChecklistItems = aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordDisplayCount);
   const historyBoundaryChecklistItems = historyBoundaryChecklistDisplayItems(
     mobileRecordSyncDisplayLimit,

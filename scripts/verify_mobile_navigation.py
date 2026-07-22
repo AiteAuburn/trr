@@ -2720,7 +2720,7 @@ def main() -> int:
         ):
             _assert_contains(label, manual_record_confirm_preview_block_content, marker)
         for label, marker in (
-            ("record detail checklist helper binding", "const recordDetailBoundaryChecklistItems = recordDetailBoundaryChecklistDisplayItems();"),
+            ("record detail checklist static bundle binding", "const recordDetailBoundaryChecklistItems =\n    recordWorkflowStaticChecklistDisplay.recordDetailBoundaryItems;"),
             ("record detail info panel binding", "<RecordDetailInfoPanel\n              boundaryItems={recordDetailBoundaryChecklistItems}"),
             ("record detail mapped detail row binding", "detailRows={selectedRecordDetailRows}"),
             ("record detail source detail row binding", "sourceTitle={coreFlowDisplayLabels.source}"),
@@ -3795,15 +3795,36 @@ def main() -> int:
             "onEnterSavePress={enterAiSaveConfirm}",
         )
         _assert_contains(
-            "AI review checklist helper binding",
+            "record workflow static checklist bundle binding",
             content,
-            "const aiReviewCostBoundaryChecklistItems = aiReviewCostBoundaryChecklistDisplayItems();",
+            "const recordWorkflowStaticChecklistDisplay = recordWorkflowStaticChecklistDisplayBundle();",
+        )
+        _assert_contains(
+            "record workflow static checklist bundle import",
+            content,
+            "recordWorkflowStaticChecklistDisplayBundle,",
+        )
+        _assert_contains(
+            "AI review checklist static bundle binding",
+            content,
+            "recordWorkflowStaticChecklistDisplay.aiReviewCostBoundaryItems;",
         )
         _assert_contains(
             "AI review display helper binding",
             content,
             "const aiReviewDisplay = aiReviewDisplayBundle();",
         )
+        for label, marker in (
+            ("direct AI review cost checklist binding", "const aiReviewCostBoundaryChecklistItems = aiReviewCostBoundaryChecklistDisplayItems();"),
+            ("direct manual submit checklist binding", "const manualSubmitChecklistItems = manualSubmitChecklistDisplayItems();"),
+            ("direct record detail checklist binding", "const recordDetailBoundaryChecklistItems = recordDetailBoundaryChecklistDisplayItems();"),
+            ("direct AI candidate remove checklist binding", "const aiCandidateRemoveChecklistItems = aiCandidateRemoveChecklistDisplayItems();"),
+            ("direct AI review cost checklist import", "  aiReviewCostBoundaryChecklistDisplayItems,"),
+            ("direct manual submit checklist import", "  manualSubmitChecklistDisplayItems,"),
+            ("direct record detail checklist import", "  recordDetailBoundaryChecklistDisplayItems,"),
+            ("direct AI candidate remove checklist import", "  aiCandidateRemoveChecklistDisplayItems,"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "AI review no candidate title display binding",
             content,
@@ -4854,9 +4875,9 @@ def main() -> int:
             "onCancelPress={returnFromPreviewRemoveConfirm}",
         )
         _assert_contains(
-            "AI candidate remove checklist helper binding",
+            "AI candidate remove checklist static bundle binding",
             content,
-            "const aiCandidateRemoveChecklistItems = aiCandidateRemoveChecklistDisplayItems();",
+            "const aiCandidateRemoveChecklistItems = recordWorkflowStaticChecklistDisplay.aiCandidateRemoveItems;",
         )
         _assert_contains(
             "AI candidate edit return handler",
@@ -9044,6 +9065,11 @@ def main() -> int:
             ("AI candidate remove checklist helper", "function aiCandidateRemoveChecklistDisplayItems()"),
             ("AI candidate remove checklist scope copy", "只影響目前 AI 整理確認清單。"),
             ("AI candidate remove checklist saved record copy", "已經儲存的正式紀錄不受影響。"),
+            ("record workflow static checklist bundle helper", "function recordWorkflowStaticChecklistDisplayBundle()"),
+            ("record workflow static checklist bundle ai review", "aiReviewCostBoundaryItems: aiReviewCostBoundaryChecklistDisplayItems()"),
+            ("record workflow static checklist bundle manual submit", "manualSubmitItems: manualSubmitChecklistDisplayItems()"),
+            ("record workflow static checklist bundle record detail", "recordDetailBoundaryItems: recordDetailBoundaryChecklistDisplayItems()"),
+            ("record workflow static checklist bundle candidate remove", "aiCandidateRemoveItems: aiCandidateRemoveChecklistDisplayItems()"),
             ("daily record delete confirm copy", "確定要刪除這筆紀錄嗎？"),
             ("daily record delete irreversible copy", "刪除後無法復原。"),
             ("AI remove confirm source marker", "source: AI candidate"),
@@ -11252,7 +11278,7 @@ def main() -> int:
             ("manual record confirm preview payload binding", "payloadSummary={manualConfirmPreviewPayloadSummary(manualRecordConfirmDisplay)}"),
             ("manual record confirm preview source binding", "sourceLine={manualConfirmPreviewSourceLine(manualRecordConfirmDisplay)}"),
             ("manual record confirm preview type binding", "typeLabel={manualConfirmPreviewTypeLabel(manualRecordConfirmDisplay)}"),
-            ("manual record confirm checklist helper binding", "const manualSubmitChecklistItems = manualSubmitChecklistDisplayItems();"),
+            ("manual record confirm checklist static bundle binding", "const manualSubmitChecklistItems = recordWorkflowStaticChecklistDisplay.manualSubmitItems;"),
             ("manual record confirm footer actions binding", "<ManualRecordConfirmFooterActions\n              checklistItems={manualSubmitChecklistItems}"),
             ("record edit date input handler", "function updateRecordEditDateInput(value: string)"),
             ("record edit time input handler", "function updateRecordEditTimeInput(value: string)"),
