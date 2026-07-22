@@ -2745,6 +2745,24 @@ export function rankingOptInActionButtonLabel(label: string) {
   return label;
 }
 
+export function rankingPreviewLabelDisplayBundle(value: {
+  labels: FuturePreviewSectionLabels;
+  closeLabel: string;
+  optInButton: string;
+  optInAccessibility: string;
+}) {
+  return {
+    optInButton: rankingOptInActionButtonLabel(value.optInButton),
+    optInAccessibility: rankingOptInActionAccessibilityLabel(value.optInAccessibility),
+    closeButton: rankingCloseButtonLabel(),
+    closeAccessibility: futurePreviewCloseAccessibilityLabel(value.closeLabel),
+    publicButton: rankingPublicActionButtonLabel(value.labels),
+    publicAccessibility: rankingPublicActionAccessibilityLabel(value.labels),
+    returnButton: futurePreviewReturnButtonLabel(value.labels),
+    returnAccessibility: futurePreviewReturnAccessibilityLabel(value.labels)
+  };
+}
+
 export function rankingActionStatusLabel(labels: FuturePreviewSectionLabels) {
   return labels.rankingStatus;
 }

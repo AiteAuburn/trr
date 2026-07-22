@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2253 move ranking preview label display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the ranking preview label display bundle helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` ranking opt-in, close, public action, and return label/accessibility assembly from direct helper calls to the bundle entrypoint.
+- Kept ranking preview press handlers, opt-in status flow, public leaderboard action, return CTA, and ranking screen rendering unchanged.
+- Updated navigation verifier coverage to require the ranking preview label display bundle and no direct ranking preview label binding regression in `App.tsx`.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2252 move community preview label display bundle
 
 類型：mobile / refactor / verifier / docs

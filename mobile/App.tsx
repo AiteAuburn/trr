@@ -284,10 +284,7 @@ import {
   rankingCloseButtonLabel,
   rankingHeroIconLabel,
   rankingLocalStreakPreviewLabel,
-  rankingOptInActionAccessibilityLabel,
-  rankingOptInActionButtonLabel,
-  rankingPublicActionAccessibilityLabel,
-  rankingPublicActionButtonLabel,
+  rankingPreviewLabelDisplayBundle,
   rankingReadinessChecklistDisplayItems,
   rankingScreenSubtitleCopy,
   rankingScreenTitleLabel,
@@ -1883,17 +1880,23 @@ export default function App() {
   const storeCartIntroDisplayText = storePreviewDisplay.cartIntro;
   const storeCheckoutReadinessTitleDisplayText = storePreviewDisplay.checkoutReadinessTitle;
   const storeCartReturnButtonDisplayLabel = storePreviewDisplay.cartReturnButton;
-  const rankingOptInButtonDisplayLabel = rankingOptInActionButtonLabel(communityActionDisplay.rankingOptInButton);
-  const rankingOptInAccessibilityDisplayLabel = rankingOptInActionAccessibilityLabel(communityActionDisplay.rankingOptInAccessibility);
+  const rankingPreviewLabelDisplay = rankingPreviewLabelDisplayBundle({
+    labels: futurePreviewDisplayLabels,
+    closeLabel: auxiliaryDisplayLabels.closeReturn,
+    optInButton: communityActionDisplay.rankingOptInButton,
+    optInAccessibility: communityActionDisplay.rankingOptInAccessibility
+  });
+  const rankingOptInButtonDisplayLabel = rankingPreviewLabelDisplay.optInButton;
+  const rankingOptInAccessibilityDisplayLabel = rankingPreviewLabelDisplay.optInAccessibility;
   const rankingOptInActionPressTarget = rankingOptInActionPressHandler();
-  const rankingCloseButtonDisplayLabel = rankingCloseButtonLabel();
-  const rankingCloseAccessibilityDisplayLabel = futurePreviewCloseAccessibilityLabel(auxiliaryDisplayLabels.closeReturn);
+  const rankingCloseButtonDisplayLabel = rankingPreviewLabelDisplay.closeButton;
+  const rankingCloseAccessibilityDisplayLabel = rankingPreviewLabelDisplay.closeAccessibility;
   const rankingClosePressTarget = rankingClosePressHandler();
-  const rankingPublicActionButtonDisplayLabel = rankingPublicActionButtonLabel(futurePreviewDisplayLabels);
-  const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel(futurePreviewDisplayLabels);
+  const rankingPublicActionButtonDisplayLabel = rankingPreviewLabelDisplay.publicButton;
+  const rankingPublicActionAccessibilityDisplayLabel = rankingPreviewLabelDisplay.publicAccessibility;
   const rankingPublicActionPressTarget = rankingPublicActionPressHandler();
-  const rankingReturnFutureModulesButtonDisplayLabel = futurePreviewReturnButtonLabel(futurePreviewDisplayLabels);
-  const rankingReturnFutureModulesAccessibilityDisplayLabel = futurePreviewReturnAccessibilityLabel(futurePreviewDisplayLabels);
+  const rankingReturnFutureModulesButtonDisplayLabel = rankingPreviewLabelDisplay.returnButton;
+  const rankingReturnFutureModulesAccessibilityDisplayLabel = rankingPreviewLabelDisplay.returnAccessibility;
   const rankingReturnFutureModulesPressTarget = rankingReturnFutureModulesPressHandler();
   const foodPhotoDisplay = foodPhotoDisplayBundle(foodPhotoActionStatus);
   const foodPhotoActionStatusDisplayText = foodPhotoDisplay.status.action;
