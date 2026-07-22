@@ -761,8 +761,6 @@ import {
   activeProfileInlineText,
   activeProfileLabelText,
   activeProfileRelationshipText,
-  advancedSettingsToggleLabel,
-  backendReconnectButtonLabel,
   captureVoiceQuotaCopy,
   isVoiceQuotaLow,
   membershipStatusReturnSubscriptionStatusMessage,
@@ -780,6 +778,7 @@ import {
   selectedModelDisplayLabel,
   selectedModelRuntimeDisplayLabel,
   settingsAccountSecurityOpenStatusMessage,
+  settingsControlDisplayBundle,
   settingsSubpageStatusDisplayBundle,
   settingsSubpageReturnStatusMessage
 } from "./settingsCopy";
@@ -2069,8 +2068,12 @@ export default function App() {
   const analysisRangeSummaryDisplayText = analysisSummaryActionDisplay.summary;
   const analysisReportButtonDisplayLabel = analysisSummaryActionDisplay.reportButton;
   const coreFlowDisplayLabels = coreFlowSectionLabels();
-  const advancedSettingsToggleDisplayLabel = advancedSettingsToggleLabel(showAdvancedSettings);
-  const backendReconnectDisplayLabel = backendReconnectButtonLabel(isAnyRequestInFlight);
+  const settingsControlDisplay = settingsControlDisplayBundle({
+    isAdvancedExpanded: showAdvancedSettings,
+    isBackendConnecting: isAnyRequestInFlight
+  });
+  const advancedSettingsToggleDisplayLabel = settingsControlDisplay.advancedToggle;
+  const backendReconnectDisplayLabel = settingsControlDisplay.backendReconnect;
   const nativeActionDisplay = nativeActionDisplayBundle({
     isRunning: isBusy,
     downloadProgress,

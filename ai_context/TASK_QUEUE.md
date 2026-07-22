@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2247: Move settings control display bundle
+
+Status: done
+
+Completed:
+
+- Added the settings control display bundle helper to `settingsCopy.ts`.
+- Moved `App.tsx` advanced settings toggle and backend reconnect label display assembly from direct helper calls to the bundle entrypoint.
+- Kept advanced settings expanded/collapsed copy, backend reconnect busy copy, press handlers, and disabled behavior unchanged.
+- Updated navigation verifier coverage to require the settings control display bundle and no direct settings control helper binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2246: Move return destination button display bundle
 
 Status: done

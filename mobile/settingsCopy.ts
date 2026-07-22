@@ -112,6 +112,13 @@ export function backendReconnectButtonLabel(isConnecting: boolean) {
   return boundDisplayText(isConnecting ? "連線中..." : "重新連線", maxDisplayTextLength);
 }
 
+export function settingsControlDisplayBundle(value: { isAdvancedExpanded: boolean; isBackendConnecting: boolean }) {
+  return {
+    advancedToggle: advancedSettingsToggleLabel(value.isAdvancedExpanded),
+    backendReconnect: backendReconnectButtonLabel(value.isBackendConnecting)
+  };
+}
+
 export function settingsAccountSecurityOpenStatusMessage() {
   return boundUiMessage("已前往帳號與登入安全；本頁不呼叫 AI，也不寫入健康紀錄。");
 }

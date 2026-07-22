@@ -13218,12 +13218,33 @@ def main() -> int:
             ("quota display texts daily limit", "剩餘 2 分鐘內才提醒使用者。"),
             ("quota display texts subscription daily limit", "剩餘 2 分鐘內才需要提醒使用者。"),
             ("quota display texts settings helper", "settingsHelper: settingsQuotaHelperText(quota)"),
+            ("advanced settings toggle helper", "function advancedSettingsToggleLabel(isExpanded: boolean)"),
+            ("backend reconnect button helper", "function backendReconnectButtonLabel(isConnecting: boolean)"),
+            ("settings control display bundle helper", "function settingsControlDisplayBundle(value: {"),
+            ("settings control display advanced toggle binding", "advancedToggle: advancedSettingsToggleLabel(value.isAdvancedExpanded)"),
+            ("settings control display backend reconnect binding", "backendReconnect: backendReconnectButtonLabel(value.isBackendConnecting)"),
             ("recording quota control display bundle helper", "function recordingQuotaControlDisplayBundle(isSyncing: boolean)"),
             ("recording quota control display intro binding", "intro: recordingQuotaIntroCopy()"),
             ("recording quota control display sync button binding", "syncButton: recordingQuotaSyncButtonLabel(isSyncing)"),
             ("recording quota control display accessibility binding", "syncAccessibility: recordingQuotaSyncAccessibilityLabel(isSyncing)"),
         ):
             _assert_contains(label, settings_copy_content, marker)
+        _assert_contains(
+            "settings control display bundle binding",
+            content,
+            "const settingsControlDisplay = settingsControlDisplayBundle({",
+        )
+        for label, marker in (
+            (
+                "direct advanced settings toggle display label binding",
+                "const advancedSettingsToggleDisplayLabel = advancedSettingsToggleLabel(showAdvancedSettings);",
+            ),
+            (
+                "direct backend reconnect display label binding",
+                "const backendReconnectDisplayLabel = backendReconnectButtonLabel(isAnyRequestInFlight);",
+            ),
+        ):
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("native module check button label helper", "function nativeModuleCheckButtonLabel(isRunning: boolean)"),
             ("native model download button label helper", "function nativeModelDownloadButtonLabel(isRunning: boolean, progress: number)"),
