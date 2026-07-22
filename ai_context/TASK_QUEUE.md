@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2298: Move year review row display assembly
+
+Status: done
+
+Completed:
+
+- Added `yearReviewRowsDisplayBundle` to `futureModuleDisplay.ts`.
+- Moved `App.tsx` backend/local year review metric and health row assembly behind the bundle.
+- Kept yearly display counts, backend summary fallback priority, metric rows, health rows, and rendering unchanged.
+- Updated navigation verifier coverage to require the bundled year review rows and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2297: Move achievement category display assembly
 
 Status: done

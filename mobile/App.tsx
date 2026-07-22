@@ -180,8 +180,6 @@ import {
   achievementScreenDisplayBundle,
   achievementSyncStatusMessages,
   achievementUnlocksFromApi,
-  backendYearReviewHealthOutcomeDisplayRows,
-  backendYearReviewMetricDisplayRows,
   foodPhotoDisplayBundle,
   foodPhotoPreviewStaticDisplayBundle,
   apiFoodCategoryFromMobile,
@@ -277,9 +275,7 @@ import {
   rankingScreenTitleLabel,
   rankingStreakDisplayText,
   selectedFutureModuleDisplayItem,
-  localYearlyHealthOutcomeDisplayRows,
   localYearlyHighlightDisplayItems,
-  localYearlyReviewMetricDisplayRows,
   storeCategories,
   storeCategoryDisplayItem,
   storeCategoryOptionAccessibilityLabel,
@@ -323,6 +319,7 @@ import {
   yearReviewBackendAiSummaryTexts,
   yearReviewHeaderDisplayBundle,
   yearReviewInsightDisplayTexts,
+  yearReviewRowsDisplayBundle,
   yearReviewShareCardStatusMessages,
   yearReviewShareFilenameDisplayText,
   yearReviewShareMessageDisplayText,
@@ -1537,27 +1534,24 @@ export default function App() {
   const yearlyExerciseRecordDisplayCount = clampNumber(yearlyRecordStats.typeCounts.get("exercise") ?? 0, 0, maxMobileCountValue);
   const yearlyMealRecordDisplayCount = clampNumber(yearlyRecordStats.typeCounts.get("meal") ?? 0, 0, maxMobileCountValue);
   const yearlyLongestStreakDisplayDays = clampNumber(yearlyRecordStats.longestStreak, 0, maxMobileCountValue);
-  const backendYearMetricRows = backendYearReviewMetricDisplayRows(yearReviewBackendSummary);
-  const backendYearHealthRows = backendYearReviewHealthOutcomeDisplayRows(yearReviewBackendSummary);
   const backendYearAiSummaryTexts = yearReviewBackendAiSummaryTexts(yearReviewBackendSummary);
   const backendYearAiObservation = backendYearAiSummaryTexts.observation;
   const backendYearAiEncouragement = backendYearAiSummaryTexts.encouragement;
-  const localYearlyReviewMetricRows = localYearlyReviewMetricDisplayRows(
+  const yearReviewRowsDisplay = yearReviewRowsDisplayBundle({
+    backendSummary: yearReviewBackendSummary,
     yearlyRecordDayDisplayCount,
     yearlyGlucoseRecordDisplayCount,
     yearlyMealRecordDisplayCount,
     yearlyExerciseRecordDisplayCount,
     yearlyLongestStreakDisplayDays,
     yearlyUnlockedBadgeDisplayCount,
-    yearlyHighestBadgeDisplayLevel
-  );
-  const yearlyReviewMetricRows = backendYearMetricRows.length > 0 ? backendYearMetricRows : localYearlyReviewMetricRows;
-  const localYearlyHealthOutcomeRows = localYearlyHealthOutcomeDisplayRows(
+    yearlyHighestBadgeDisplayLevel,
     yearlyGlucoseAverageDisplayValue,
     yearlyGlucoseHighestDisplayValue,
     yearlyGlucoseLowestDisplayValue
-  );
-  const yearlyHealthOutcomeRows = backendYearHealthRows.length > 0 ? backendYearHealthRows : localYearlyHealthOutcomeRows;
+  });
+  const yearlyReviewMetricRows = yearReviewRowsDisplay.metricRows;
+  const yearlyHealthOutcomeRows = yearReviewRowsDisplay.healthRows;
   const yearlyHighlightDisplayTexts = localYearlyHighlightDisplayItems(
     yearlyRecordDisplayCount,
     yearReviewTargetDisplayYear,

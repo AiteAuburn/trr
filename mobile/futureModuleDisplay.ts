@@ -2594,6 +2594,41 @@ export function localYearlyHealthOutcomeDisplayRows(
   ] as const).map(metricDisplayItem);
 }
 
+export function yearReviewRowsDisplayBundle(value: {
+  backendSummary: YearReviewApiResponse | null;
+  yearlyRecordDayDisplayCount: number;
+  yearlyGlucoseRecordDisplayCount: number;
+  yearlyMealRecordDisplayCount: number;
+  yearlyExerciseRecordDisplayCount: number;
+  yearlyLongestStreakDisplayDays: number;
+  yearlyUnlockedBadgeDisplayCount: number;
+  yearlyHighestBadgeDisplayLevel: number;
+  yearlyGlucoseAverageDisplayValue: number | null;
+  yearlyGlucoseHighestDisplayValue: number | null;
+  yearlyGlucoseLowestDisplayValue: number | null;
+}) {
+  const backendMetricRows = backendYearReviewMetricDisplayRows(value.backendSummary);
+  const backendHealthRows = backendYearReviewHealthOutcomeDisplayRows(value.backendSummary);
+  const localMetricRows = localYearlyReviewMetricDisplayRows(
+    value.yearlyRecordDayDisplayCount,
+    value.yearlyGlucoseRecordDisplayCount,
+    value.yearlyMealRecordDisplayCount,
+    value.yearlyExerciseRecordDisplayCount,
+    value.yearlyLongestStreakDisplayDays,
+    value.yearlyUnlockedBadgeDisplayCount,
+    value.yearlyHighestBadgeDisplayLevel
+  );
+  const localHealthRows = localYearlyHealthOutcomeDisplayRows(
+    value.yearlyGlucoseAverageDisplayValue,
+    value.yearlyGlucoseHighestDisplayValue,
+    value.yearlyGlucoseLowestDisplayValue
+  );
+  return {
+    metricRows: backendMetricRows.length > 0 ? backendMetricRows : localMetricRows,
+    healthRows: backendHealthRows.length > 0 ? backendHealthRows : localHealthRows
+  };
+}
+
 export function localYearlyHighlightDisplayItems(
   recordCount: number,
   targetYear: number,
