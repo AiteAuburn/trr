@@ -649,7 +649,7 @@ import {
   quickEntryModeDisplayItems,
   quickEntryTextModeStatusMessage,
   quickEntryVoicePromptStatusMessage,
-  quickRecordIntroCopy,
+  quickRecordIntroDisplayBundle,
   recordingButtonAccessibilityLabel,
   recordManualEntryStatusMessage,
   returnDestinationButtonLabel,
@@ -1649,7 +1649,8 @@ export default function App() {
   const recordingQuotaDataBoundaryDisplayText = recordingQuotaDataBoundaryCopy();
   const reminderPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.reminder;
   const privacyPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.privacy;
-  const quickRecordIntroDisplayText = quickRecordIntroCopy();
+  const quickRecordIntroDisplay = quickRecordIntroDisplayBundle();
+  const quickRecordIntroDisplayText = quickRecordIntroDisplay.intro;
   const quickEntryModeDisplayItemsForRender = quickEntryModeDisplayItems();
   const homeRecordingDisplay = homeRecordingDisplayBundle({
     currentExampleIndex: homeExampleIndex,

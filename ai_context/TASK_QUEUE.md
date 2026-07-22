@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2244: Move quick record intro display bundle
+
+Status: done
+
+Completed:
+
+- Added the quick record intro display bundle helper to `firstVersionFlowCopy.ts`.
+- Moved `App.tsx` quick record intro display assembly from the raw copy helper to the bundle entrypoint.
+- Kept Home/Record quick-entry copy, quick-entry modes, recording behavior, transcript confirmation flow, and manual-entry behavior unchanged.
+- Updated navigation verifier coverage to require the quick record intro display bundle and no direct quick record intro copy binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2243: Move analysis summary action display bundle
 
 Status: done

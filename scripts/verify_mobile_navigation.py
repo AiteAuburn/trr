@@ -8122,6 +8122,16 @@ def main() -> int:
             first_version_flow_copy_content,
             "function quickEntryModeDisplayItems()",
         )
+        _assert_contains(
+            "quick record intro display bundle helper",
+            first_version_flow_copy_content,
+            "function quickRecordIntroDisplayBundle()",
+        )
+        _assert_contains(
+            "quick record intro display bundle binding",
+            first_version_flow_copy_content,
+            "intro: quickRecordIntroCopy()",
+        )
         for label in ("語音預覽", "文字整理", "手動新增"):
             _assert_contains(
                 f"record quick-entry {label}",
@@ -12922,6 +12932,7 @@ def main() -> int:
             ("direct preview record edit boundary copy binding", "const previewRecordEditBoundaryDisplayText = previewRecordEditBoundaryCopy();"),
             ("direct analysis range summary copy binding", "const analysisRangeSummaryDisplayText = analysisRangeSummaryCopy("),
             ("direct analysis report button label binding", "const analysisReportButtonDisplayLabel = analysisReportButtonLabel(isReportLoading);"),
+            ("direct quick record intro copy binding", "const quickRecordIntroDisplayText = quickRecordIntroCopy();"),
             ("direct analysis range display texts binding", "const analysisRangeDisplay = analysisRangeDisplayTexts("),
             ("direct AI review display texts binding", "const aiReviewDisplay = aiReviewDisplayTexts();"),
             ("direct AI save confirm display texts binding", "const aiSaveConfirmDisplay = aiSaveConfirmDisplayTexts("),

@@ -192,6 +192,12 @@ export function quickRecordIntroCopy() {
   return boundDisplayText("首頁只保留按住錄音；文字整理與手動新增請從記錄頁進入，整理前都會先進文字確認。", maxDisplayDetailTextLength);
 }
 
+export function quickRecordIntroDisplayBundle() {
+  return {
+    intro: quickRecordIntroCopy()
+  };
+}
+
 export function quickEntryModeDisplayItems() {
   return [
     {
