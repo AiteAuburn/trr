@@ -3936,14 +3936,14 @@ def main() -> int:
             "const historyBoundaryChecklistItems = historyBoundaryChecklistDisplayItems(",
         )
         _assert_contains(
-            "auth boundary checklist helper binding",
+            "auth boundary checklist static display binding",
             content,
-            "const authBoundaryChecklistItems = authBoundaryChecklistDisplayItems();",
+            "const authBoundaryChecklistItems = settingsStaticDisplay.authBoundaryChecklistItems;",
         )
         _assert_contains(
-            "profile readiness checklist helper binding",
+            "profile readiness checklist static display binding",
             content,
-            "const profileReadinessChecklistItems = profileReadinessChecklistDisplayItems();",
+            "const profileReadinessChecklistItems = settingsStaticDisplay.profileReadinessChecklistItems;",
         )
         _assert_contains(
             "doctor share readiness checklist helper binding",
@@ -3996,24 +3996,24 @@ def main() -> int:
             "const foodPhotoReadinessChecklistItems = foodPhotoPreviewStaticDisplay.readinessItems;",
         )
         _assert_contains(
-            "quota readiness checklist helper binding",
+            "quota readiness checklist static display binding",
             content,
-            "const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();",
+            "const quotaReadinessChecklistItems = settingsStaticDisplay.quotaReadinessChecklistItems;",
         )
         _assert_contains(
-            "reminder readiness checklist helper binding",
+            "reminder readiness checklist static display binding",
             content,
-            "const reminderReadinessChecklistItems = reminderReadinessChecklistDisplayItems();",
+            "const reminderReadinessChecklistItems = settingsStaticDisplay.reminderReadinessChecklistItems;",
         )
         _assert_contains(
-            "privacy readiness checklist helper binding",
+            "privacy readiness checklist static display binding",
             content,
-            "const privacyReadinessChecklistItems = privacyReadinessChecklistDisplayItems();",
+            "const privacyReadinessChecklistItems = settingsStaticDisplay.privacyReadinessChecklistItems;",
         )
         _assert_contains(
-            "tutorial safety checklist helper binding",
+            "tutorial safety checklist static display binding",
             content,
-            "const tutorialSafetyChecklistItems = tutorialSafetyChecklistDisplayItems();",
+            "const tutorialSafetyChecklistItems = settingsStaticDisplay.tutorialSafetyChecklistItems;",
         )
         _assert_contains(
             "tutorial display steps helper binding",
@@ -4150,9 +4150,9 @@ def main() -> int:
         ):
             _assert_not_contains(label, content, marker)
         _assert_contains(
-            "reminder preview display rows helper binding",
+            "reminder preview display rows static display binding",
             content,
-            "const reminderPreviewDisplayItems = buildReminderPreviewDisplayItems();",
+            "const reminderPreviewDisplayItems = settingsStaticDisplay.reminderPreviewItems;",
         )
         _assert_contains(
             "doctor share boundary rows helper binding",
@@ -11950,6 +11950,13 @@ def main() -> int:
             ("settings static display bundle session management", "sessionManagementItems: sessionManagementDisplayItems()"),
             ("settings static display bundle production auth", "productionAuthReadinessRows: productionAuthReadinessDisplayRows()"),
             ("settings static display bundle privacy", "privacyControlRows: privacyControlDisplayRows()"),
+            ("settings static display bundle auth boundary checklist", "authBoundaryChecklistItems: authBoundaryChecklistDisplayItems()"),
+            ("settings static display bundle profile readiness checklist", "profileReadinessChecklistItems: profileReadinessChecklistDisplayItems()"),
+            ("settings static display bundle quota readiness checklist", "quotaReadinessChecklistItems: quotaReadinessChecklistDisplayItems()"),
+            ("settings static display bundle reminder preview", "reminderPreviewItems: reminderPreviewDisplayItems()"),
+            ("settings static display bundle reminder readiness checklist", "reminderReadinessChecklistItems: reminderReadinessChecklistDisplayItems()"),
+            ("settings static display bundle privacy readiness checklist", "privacyReadinessChecklistItems: privacyReadinessChecklistDisplayItems()"),
+            ("settings static display bundle tutorial safety checklist", "tutorialSafetyChecklistItems: tutorialSafetyChecklistDisplayItems()"),
         ):
             _assert_contains(label, settings_static_display_bundle_content, marker)
         for label, marker in (
@@ -11964,6 +11971,20 @@ def main() -> int:
             ("direct session management display items binding", "const sessionManagementDisplayItems = useMemo(\n    () => buildSessionManagementDisplayItems(),"),
             ("direct production auth readiness rows binding", "const productionAuthReadinessDisplayRows = useMemo(\n    () => buildProductionAuthReadinessDisplayRows(),"),
             ("direct privacy control rows binding", "const privacyControlDisplayRows = useMemo(() => buildPrivacyControlDisplayRows(), []);"),
+            ("direct auth boundary checklist binding", "const authBoundaryChecklistItems = authBoundaryChecklistDisplayItems();"),
+            ("direct profile readiness checklist binding", "const profileReadinessChecklistItems = profileReadinessChecklistDisplayItems();"),
+            ("direct quota readiness checklist binding", "const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();"),
+            ("direct reminder preview rows binding", "const reminderPreviewDisplayItems = buildReminderPreviewDisplayItems();"),
+            ("direct reminder readiness checklist binding", "const reminderReadinessChecklistItems = reminderReadinessChecklistDisplayItems();"),
+            ("direct privacy readiness checklist binding", "const privacyReadinessChecklistItems = privacyReadinessChecklistDisplayItems();"),
+            ("direct tutorial safety checklist binding", "const tutorialSafetyChecklistItems = tutorialSafetyChecklistDisplayItems();"),
+            ("direct auth boundary checklist import", "  authBoundaryChecklistDisplayItems,"),
+            ("direct profile readiness checklist import", "  profileReadinessChecklistDisplayItems"),
+            ("direct quota readiness checklist import", "  quotaReadinessChecklistDisplayItems,"),
+            ("direct reminder preview rows import", "  reminderPreviewDisplayItems as buildReminderPreviewDisplayItems,"),
+            ("direct reminder readiness checklist import", "  reminderReadinessChecklistDisplayItems,"),
+            ("direct privacy readiness checklist import", "  privacyReadinessChecklistDisplayItems,"),
+            ("direct tutorial safety checklist import", "  tutorialSafetyChecklistDisplayItems,"),
         ):
             _assert_not_contains(label, content, marker)
         _assert_contains(

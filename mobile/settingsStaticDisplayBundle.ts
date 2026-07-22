@@ -1,3 +1,12 @@
+import { profileReadinessChecklistDisplayItems } from "./accountCopy";
+import { authBoundaryChecklistDisplayItems } from "./authStatusCopy";
+import { tutorialSafetyChecklistDisplayItems } from "./firstVersionFlowCopy";
+import {
+  privacyReadinessChecklistDisplayItems,
+  quotaReadinessChecklistDisplayItems,
+  reminderPreviewDisplayItems,
+  reminderReadinessChecklistDisplayItems
+} from "./settingsCopy";
 import {
   authProviderDisplayItems,
   privacyControlDisplayRows,
@@ -14,6 +23,13 @@ export function settingsStaticDisplayBundle() {
     authProviderItems: authProviderDisplayItems(),
     sessionManagementItems: sessionManagementDisplayItems(),
     productionAuthReadinessRows: productionAuthReadinessDisplayRows(),
-    privacyControlRows: privacyControlDisplayRows()
+    privacyControlRows: privacyControlDisplayRows(),
+    authBoundaryChecklistItems: authBoundaryChecklistDisplayItems(),
+    profileReadinessChecklistItems: profileReadinessChecklistDisplayItems(),
+    quotaReadinessChecklistItems: quotaReadinessChecklistDisplayItems(),
+    reminderPreviewItems: reminderPreviewDisplayItems(),
+    reminderReadinessChecklistItems: reminderReadinessChecklistDisplayItems(),
+    privacyReadinessChecklistItems: privacyReadinessChecklistDisplayItems(),
+    tutorialSafetyChecklistItems: tutorialSafetyChecklistDisplayItems()
   };
 }

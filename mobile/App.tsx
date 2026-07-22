@@ -382,8 +382,7 @@ import {
   accountSecurityAuthModeDisplayBundle,
   doctorShareBoundaryDisplayRows,
   doctorShareReadinessChecklistDisplayItems,
-  profileSettingsBoundaryDisplayRowsForState,
-  profileReadinessChecklistDisplayItems
+  profileSettingsBoundaryDisplayRowsForState
 } from "./accountCopy";
 import {
   homeSpeechExamples,
@@ -523,7 +522,6 @@ import {
   authLogoutProgressStatusMessage,
   authLogoutSuccessStatusMessage,
   authOperationBusyStatusMessage,
-  authBoundaryChecklistDisplayItems,
   authProviderCallbackRejectedStatusMessage,
   authProviderChallengeCreatedStatusMessage,
   authProviderChallengeFailureStatusMessage,
@@ -633,7 +631,6 @@ import {
   todayRecordEntryStatusMessage,
   todayRecordSummaryDisplayBundle,
   transcriptReviewManualEntryStatusMessage,
-  tutorialSafetyChecklistDisplayItems,
   updateSuccessDestinationDisplayItems,
   type QuickEntryMode
 } from "./firstVersionFlowCopy";
@@ -734,12 +731,8 @@ import {
   membershipStatusReturnSubscriptionStatusMessage,
   menuReturnStatusMessage,
   privacyBoundaryDisplayRows,
-  privacyReadinessChecklistDisplayItems,
   privacySettingsControlDisplayBundle,
-  quotaReadinessChecklistDisplayItems,
   recordingQuotaControlDisplayBundle,
-  reminderPreviewDisplayItems as buildReminderPreviewDisplayItems,
-  reminderReadinessChecklistDisplayItems,
   reminderSettingsControlDisplayBundle,
   selectedModelDisplayLabel,
   selectedModelRuntimeDisplayLabel,
@@ -1761,13 +1754,13 @@ export default function App() {
     activeProfileRelationshipDisplayText
   });
   const membershipFeatureRows = subscriptionStaticDisplay.membershipFeatureRows;
-  const authBoundaryChecklistItems = authBoundaryChecklistDisplayItems();
-  const profileReadinessChecklistItems = profileReadinessChecklistDisplayItems();
-  const quotaReadinessChecklistItems = quotaReadinessChecklistDisplayItems();
-  const reminderPreviewDisplayItems = buildReminderPreviewDisplayItems();
-  const reminderReadinessChecklistItems = reminderReadinessChecklistDisplayItems();
-  const privacyReadinessChecklistItems = privacyReadinessChecklistDisplayItems();
-  const tutorialSafetyChecklistItems = tutorialSafetyChecklistDisplayItems();
+  const authBoundaryChecklistItems = settingsStaticDisplay.authBoundaryChecklistItems;
+  const profileReadinessChecklistItems = settingsStaticDisplay.profileReadinessChecklistItems;
+  const quotaReadinessChecklistItems = settingsStaticDisplay.quotaReadinessChecklistItems;
+  const reminderPreviewDisplayItems = settingsStaticDisplay.reminderPreviewItems;
+  const reminderReadinessChecklistItems = settingsStaticDisplay.reminderReadinessChecklistItems;
+  const privacyReadinessChecklistItems = settingsStaticDisplay.privacyReadinessChecklistItems;
+  const tutorialSafetyChecklistItems = settingsStaticDisplay.tutorialSafetyChecklistItems;
   const doctorShareReadinessChecklistItems = doctorShareReadinessChecklistDisplayItems();
   const healthIntegrationReadinessChecklistItems =
     healthIntegrationReadinessChecklistDisplayItems();
