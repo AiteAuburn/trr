@@ -265,8 +265,6 @@ import {
   futureModulesReturnMenuStatusMessage,
   futurePreviewBoundaryCopyBundle,
   futurePreviewBoundaryDisplayBundle,
-  futurePreviewBoundaryBadgeLabel,
-  futurePreviewBoundaryCopyText,
   futurePreviewCloseAccessibilityLabel,
   futurePreviewReturnStatusMessage,
   futurePreviewReturnAccessibilityLabel,
@@ -1880,12 +1878,15 @@ export default function App() {
   const storeCartReturnButtonDisplayLabel = storePreviewDisplay.cartReturnButton;
   const rankingPreviewDisplay = rankingPreviewDisplayBundle({
     labels: futurePreviewDisplayLabels,
+    boundaryDisplay: rankingPreviewBoundaryDisplay,
     closeLabel: auxiliaryDisplayLabels.closeReturn,
     optInButton: communityActionDisplay.rankingOptInButton,
     optInAccessibility: communityActionDisplay.rankingOptInAccessibility,
     actionStatusText: rankingActionStatusDisplayText
   });
   const rankingPreviewLabelDisplay = rankingPreviewDisplay.labels;
+  const rankingPreviewBoundaryBadgeDisplayLabel = rankingPreviewDisplay.boundaryBadge;
+  const rankingPreviewBoundaryCopyDisplayText = rankingPreviewDisplay.boundaryCopy;
   const rankingOptInButtonDisplayLabel = rankingPreviewLabelDisplay.optInButton;
   const rankingOptInAccessibilityDisplayLabel = rankingPreviewLabelDisplay.optInAccessibility;
   const rankingOptInActionPressTarget = rankingOptInActionPressHandler();
@@ -9907,8 +9908,8 @@ export default function App() {
               </Pressable>
             </View>
             <View style={styles.inlineInfoBlock}>
-              <Text style={styles.previewModeBadge}>{futurePreviewBoundaryBadgeLabel(rankingPreviewBoundaryDisplay)}</Text>
-              <Text style={styles.evidence}>{futurePreviewBoundaryCopyText(rankingPreviewBoundaryDisplay)}</Text>
+              <Text style={styles.previewModeBadge}>{rankingPreviewBoundaryBadgeDisplayLabel}</Text>
+              <Text style={styles.evidence}>{rankingPreviewBoundaryCopyDisplayText}</Text>
             </View>
             <View style={styles.heroCardFeature}>
               <View style={styles.heroIconBubble}>

@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2274 move ranking preview boundary display bindings
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added ranking preview boundary badge/copy outputs to `rankingPreviewDisplayBundle`.
+- Moved `App.tsx` ranking preview boundary badge/copy rendering from direct shared helper calls to the ranking bundle outputs.
+- Kept ranking preview boundary source, action handlers, status visibility, leaderboard state, and backend flow unchanged.
+- Updated navigation verifier coverage to require bundle-provided boundary text and reject the old direct App-level helper calls/imports.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2273 move ranking preview display bundle assembly
 
 類型：mobile / refactor / verifier / docs

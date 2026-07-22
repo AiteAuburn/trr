@@ -2811,6 +2811,7 @@ export function rankingPreviewLabelDisplayBundle(value: {
 
 export function rankingPreviewDisplayBundle(value: {
   labels: FuturePreviewSectionLabels;
+  boundaryDisplay: { badge: string; copy: string };
   closeLabel: string;
   optInButton: string;
   optInAccessibility: string;
@@ -2818,6 +2819,8 @@ export function rankingPreviewDisplayBundle(value: {
 }) {
   return {
     labels: rankingPreviewLabelDisplayBundle(value),
+    boundaryBadge: futurePreviewBoundaryBadgeLabel(value.boundaryDisplay),
+    boundaryCopy: futurePreviewBoundaryCopyText(value.boundaryDisplay),
     readinessSection: futurePreviewReadinessSectionLabel(value.labels),
     actionStatusLabel: rankingActionStatusLabel(value.labels),
     actionStatusCopy: rankingActionStatusText(value.actionStatusText)

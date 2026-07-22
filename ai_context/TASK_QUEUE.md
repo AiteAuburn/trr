@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2274: Move ranking preview boundary display bindings
+
+Status: done
+
+Completed:
+
+- Added ranking preview boundary badge/copy outputs to `rankingPreviewDisplayBundle`.
+- Moved `App.tsx` ranking preview boundary badge/copy rendering from direct shared helper calls to the ranking bundle outputs.
+- Kept ranking preview boundary source, action handlers, status visibility, leaderboard state, and backend flow unchanged.
+- Updated navigation verifier coverage to require bundle-provided boundary text and reject the old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2273: Move ranking preview display bundle assembly
 
 Status: done

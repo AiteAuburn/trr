@@ -12852,7 +12852,10 @@ def main() -> int:
             ("ranking readiness checklist component binding", "<FutureReadinessChecklist items={rankingReadinessChecklistItems} />"),
             ("ranking preview display bundle import", "rankingPreviewDisplayBundle,"),
             ("ranking preview display bundle binding", "const rankingPreviewDisplay = rankingPreviewDisplayBundle({"),
+            ("ranking preview display boundary input", "boundaryDisplay: rankingPreviewBoundaryDisplay"),
             ("ranking preview display labels binding", "const rankingPreviewLabelDisplay = rankingPreviewDisplay.labels;"),
+            ("ranking preview boundary badge display binding", "const rankingPreviewBoundaryBadgeDisplayLabel = rankingPreviewDisplay.boundaryBadge;"),
+            ("ranking preview boundary copy display binding", "const rankingPreviewBoundaryCopyDisplayText = rankingPreviewDisplay.boundaryCopy;"),
             ("ranking close accessibility display label binding", "const rankingCloseAccessibilityDisplayLabel = rankingPreviewLabelDisplay.closeAccessibility;"),
             ("ranking close accessibility helper binding", "accessibilityLabel={rankingCloseAccessibilityDisplayLabel}"),
             ("ranking close button display label binding", "const rankingCloseButtonDisplayLabel = rankingPreviewLabelDisplay.closeButton;"),
@@ -12861,8 +12864,8 @@ def main() -> int:
             ("ranking close press helper fields", "return returnFromRankingPreview;"),
             ("ranking close press target binding", "const rankingClosePressTarget = rankingClosePressHandler();"),
             ("ranking close press helper binding", "onPress={rankingClosePressTarget}"),
-            ("ranking preview boundary badge helper binding", "{futurePreviewBoundaryBadgeLabel(rankingPreviewBoundaryDisplay)}"),
-            ("ranking preview boundary copy helper binding", "{futurePreviewBoundaryCopyText(rankingPreviewBoundaryDisplay)}"),
+            ("ranking preview boundary badge helper binding", "{rankingPreviewBoundaryBadgeDisplayLabel}"),
+            ("ranking preview boundary copy helper binding", "{rankingPreviewBoundaryCopyDisplayText}"),
             ("ranking public action accessibility display label binding", "const rankingPublicActionAccessibilityDisplayLabel = rankingPreviewLabelDisplay.publicAccessibility;"),
             ("ranking public action accessibility helper binding", "publicAccessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}"),
             ("ranking public action button display label binding", "const rankingPublicActionButtonDisplayLabel = rankingPreviewLabelDisplay.publicButton;"),
@@ -15534,6 +15537,8 @@ def main() -> int:
             ("ranking preview label display bundle return accessibility", "returnAccessibility: futurePreviewReturnAccessibilityLabel(value.labels)"),
             ("ranking preview display bundle helper", "export function rankingPreviewDisplayBundle(value: {"),
             ("ranking preview display bundle labels binding", "labels: rankingPreviewLabelDisplayBundle(value),"),
+            ("ranking preview display bundle boundary badge binding", "boundaryBadge: futurePreviewBoundaryBadgeLabel(value.boundaryDisplay),"),
+            ("ranking preview display bundle boundary copy binding", "boundaryCopy: futurePreviewBoundaryCopyText(value.boundaryDisplay),"),
             ("ranking preview display bundle readiness binding", "readinessSection: futurePreviewReadinessSectionLabel(value.labels),"),
             ("ranking preview display bundle status label binding", "actionStatusLabel: rankingActionStatusLabel(value.labels),"),
             ("ranking preview display bundle status copy binding", "actionStatusCopy: rankingActionStatusText(value.actionStatusText)"),
@@ -16937,6 +16942,26 @@ def main() -> int:
             "ranking direct readiness helper render",
             content,
             "{futurePreviewReadinessSectionLabel(futurePreviewDisplayLabels)}",
+        )
+        _assert_not_contains(
+            "ranking direct boundary badge helper render",
+            content,
+            "{futurePreviewBoundaryBadgeLabel(rankingPreviewBoundaryDisplay)}",
+        )
+        _assert_not_contains(
+            "ranking direct boundary copy helper render",
+            content,
+            "{futurePreviewBoundaryCopyText(rankingPreviewBoundaryDisplay)}",
+        )
+        _assert_not_contains(
+            "ranking stale boundary badge helper import",
+            content,
+            "  futurePreviewBoundaryBadgeLabel,",
+        )
+        _assert_not_contains(
+            "ranking stale boundary copy helper import",
+            content,
+            "  futurePreviewBoundaryCopyText,",
         )
         _assert_not_contains(
             "ranking direct preview label display bundle binding",
