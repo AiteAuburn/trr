@@ -4118,6 +4118,22 @@ def main() -> int:
             "const accountSecurityBoundaryRows = accountSecurityBoundaryDisplayRowsForState({",
         )
         _assert_contains(
+            "settings boundary copy bundle binding",
+            content,
+            "const settingsBoundaryCopy = settingsBoundaryCopyBundle();",
+        )
+        for label, marker in (
+            (
+                "direct model selection boundary copy binding",
+                "const modelSelectionBoundaryDisplayText = modelSelectionBoundaryCopy();",
+            ),
+            (
+                "direct recording quota data boundary copy binding",
+                "const recordingQuotaDataBoundaryDisplayText = recordingQuotaDataBoundaryCopy();",
+            ),
+        ):
+            _assert_not_contains(label, content, marker)
+        _assert_contains(
             "account security boundary copy bundle binding",
             content,
             "const accountSecurityBoundaryCopy = accountSecurityBoundaryCopyBundle();",
@@ -13365,6 +13381,9 @@ def main() -> int:
             ("settings selected model runtime label fields", "return modelRuntimeLabel(model?.runtime);"),
             ("settings model selection boundary helper", "function modelSelectionBoundaryCopy()"),
             ("settings quota data boundary helper", "function recordingQuotaDataBoundaryCopy()"),
+            ("settings boundary copy bundle helper", "function settingsBoundaryCopyBundle()"),
+            ("settings boundary copy bundle model selection binding", "modelSelection: modelSelectionBoundaryCopy()"),
+            ("settings boundary copy bundle recording quota binding", "recordingQuotaData: recordingQuotaDataBoundaryCopy()"),
             ("settings quota readiness checklist helper", "function quotaReadinessChecklistDisplayItems()"),
             ("settings model local runtime copy", "本地模型"),
             ("settings model fallback disabled copy", "雲端 fallback 在 v1 預設停用"),

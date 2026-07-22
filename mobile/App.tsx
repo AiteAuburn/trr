@@ -762,19 +762,18 @@ import {
   isVoiceQuotaLow,
   membershipStatusReturnSubscriptionStatusMessage,
   menuReturnStatusMessage,
-  modelSelectionBoundaryCopy,
   privacyBoundaryDisplayRows,
   privacyReadinessChecklistDisplayItems,
   privacySettingsControlDisplayBundle,
   quotaReadinessChecklistDisplayItems,
   recordingQuotaControlDisplayBundle,
-  recordingQuotaDataBoundaryCopy,
   reminderPreviewDisplayItems as buildReminderPreviewDisplayItems,
   reminderReadinessChecklistDisplayItems,
   reminderSettingsControlDisplayBundle,
   selectedModelDisplayLabel,
   selectedModelRuntimeDisplayLabel,
   settingsAccountSecurityOpenStatusMessage,
+  settingsBoundaryCopyBundle,
   settingsControlDisplayBundle,
   settingsSubpageStatusDisplayBundle,
   settingsSubpageReturnStatusMessage
@@ -1632,14 +1631,15 @@ export default function App() {
   const communityPublicNameBoundaryDisplayText = futurePreviewBoundaryCopy.communityPublicName;
   const rankingPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.ranking;
   const rankingLocalPreviewBoundaryDisplayText = futurePreviewBoundaryCopy.rankingLocalPreview;
-  const modelSelectionBoundaryDisplayText = modelSelectionBoundaryCopy();
+  const settingsBoundaryCopy = settingsBoundaryCopyBundle();
+  const modelSelectionBoundaryDisplayText = settingsBoundaryCopy.modelSelection;
   const accountSecurityBoundaryCopy = accountSecurityBoundaryCopyBundle();
   const accountSecurityProviderBoundaryDisplayText = accountSecurityBoundaryCopy.provider;
   const accountSecuritySessionBoundaryDisplayText = accountSecurityBoundaryCopy.session;
   const accountSecurityReadinessBoundaryDisplayText = accountSecurityBoundaryCopy.readiness;
   const accountSecurityNoActionBoundaryDisplayText = accountSecurityBoundaryCopy.noAction;
   const profileNoActionBoundaryDisplayText = profileNoActionBoundaryCopy();
-  const recordingQuotaDataBoundaryDisplayText = recordingQuotaDataBoundaryCopy();
+  const recordingQuotaDataBoundaryDisplayText = settingsBoundaryCopy.recordingQuotaData;
   const reminderPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.reminder;
   const privacyPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.privacy;
   const quickRecordIntroDisplay = quickRecordIntroDisplayBundle();

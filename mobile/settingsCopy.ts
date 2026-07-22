@@ -216,6 +216,13 @@ export function recordingQuotaDataBoundaryCopy() {
   );
 }
 
+export function settingsBoundaryCopyBundle() {
+  return {
+    modelSelection: modelSelectionBoundaryCopy(),
+    recordingQuotaData: recordingQuotaDataBoundaryCopy()
+  };
+}
+
 export function recordingQuotaIntroCopy() {
   return boundDisplayText("顯示今日語音用量；平時不打擾，接近上限才提醒。", maxDisplayDetailTextLength);
 }
