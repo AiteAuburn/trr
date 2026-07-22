@@ -3946,9 +3946,14 @@ def main() -> int:
             "const profileReadinessChecklistItems = settingsStaticDisplay.profileReadinessChecklistItems;",
         )
         _assert_contains(
-            "doctor share readiness checklist helper binding",
+            "doctor share static display bundle binding",
             content,
-            "const doctorShareReadinessChecklistItems = doctorShareReadinessChecklistDisplayItems();",
+            "const doctorShareStaticDisplay = doctorShareStaticDisplayBundle();",
+        )
+        _assert_contains(
+            "doctor share readiness static display binding",
+            content,
+            "const doctorShareReadinessChecklistItems = doctorShareStaticDisplay.readinessChecklistItems;",
         )
         _assert_contains(
             "future preview readiness static display bundle binding",
@@ -4160,9 +4165,9 @@ def main() -> int:
             "const reminderPreviewDisplayItems = settingsStaticDisplay.reminderPreviewItems;",
         )
         _assert_contains(
-            "doctor share boundary rows helper binding",
+            "doctor share boundary rows static display binding",
             content,
-            "const doctorShareBoundaryRows = doctorShareBoundaryDisplayRows();",
+            "const doctorShareBoundaryRows = doctorShareStaticDisplay.boundaryRows;",
         )
         _assert_contains(
             "health integration boundary rows helper binding",
@@ -11740,6 +11745,10 @@ def main() -> int:
             ("account email bundle field binding", "const accountEmailDisplayText = accountDisplay.email;"),
             ("account login bundle field binding", "const accountLoginDisplayText = accountDisplay.login;"),
             ("doctor share account boundary bundle field binding", "const doctorShareAccountBoundaryDisplayText = accountDisplay.doctorShareBoundary;"),
+            ("doctor share static display bundle import", "doctorShareStaticDisplayBundle,"),
+            ("doctor share static display bundle binding", "const doctorShareStaticDisplay = doctorShareStaticDisplayBundle();"),
+            ("doctor share static display readiness binding", "const doctorShareReadinessChecklistItems = doctorShareStaticDisplay.readinessChecklistItems;"),
+            ("doctor share static display boundary rows binding", "const doctorShareBoundaryRows = doctorShareStaticDisplay.boundaryRows;"),
             ("active profile display bundle binding", "const activeProfileDisplay = activeProfileDisplayBundle(activeProfile, profiles.length);"),
             ("active profile label bundle field binding", "const activeProfileLabel = activeProfileDisplay.label;"),
             ("active profile inline bundle field binding", "const activeProfileInlineDisplayText = activeProfileDisplay.inline;"),
@@ -11749,6 +11758,13 @@ def main() -> int:
             ("settings account security auth mode copy binding", "const authModeDisplayCopy = accountSecurityAuthModeDisplay.copy;"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("direct doctor share boundary rows binding", "const doctorShareBoundaryRows = doctorShareBoundaryDisplayRows();"),
+            ("direct doctor share readiness binding", "const doctorShareReadinessChecklistItems = doctorShareReadinessChecklistDisplayItems();"),
+            ("direct doctor share boundary rows import", "  doctorShareBoundaryDisplayRows,"),
+            ("direct doctor share readiness import", "  doctorShareReadinessChecklistDisplayItems,"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "settings account security accessibility binding",
             content,
@@ -13751,6 +13767,9 @@ def main() -> int:
             ("doctor share readiness token copy", "share token / authorization grant 產生、到期與撤銷"),
             ("doctor share readiness grant scope copy", "doctor grant 僅允許 profile:read / profile:export 的明確授權範圍"),
             ("doctor share readiness audit copy", "所有分享、查看、匯出與撤銷都必須寫入 audit log"),
+            ("doctor share static display bundle helper", "function doctorShareStaticDisplayBundle()"),
+            ("doctor share static display boundary binding", "boundaryRows: doctorShareBoundaryDisplayRows()"),
+            ("doctor share static display readiness binding", "readinessChecklistItems: doctorShareReadinessChecklistDisplayItems()"),
         ):
             _assert_contains(label, account_copy_content, marker)
         for label, marker in (

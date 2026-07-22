@@ -378,8 +378,7 @@ import {
   accountDisplayBundle,
   accountPublicDisplayNameForSettings,
   accountSecurityAuthModeDisplayBundle,
-  doctorShareBoundaryDisplayRows,
-  doctorShareReadinessChecklistDisplayItems,
+  doctorShareStaticDisplayBundle,
   profileSettingsBoundaryDisplayRowsForState
 } from "./accountCopy";
 import {
@@ -1759,7 +1758,8 @@ export default function App() {
   const reminderReadinessChecklistItems = settingsStaticDisplay.reminderReadinessChecklistItems;
   const privacyReadinessChecklistItems = settingsStaticDisplay.privacyReadinessChecklistItems;
   const tutorialSafetyChecklistItems = settingsStaticDisplay.tutorialSafetyChecklistItems;
-  const doctorShareReadinessChecklistItems = doctorShareReadinessChecklistDisplayItems();
+  const doctorShareStaticDisplay = doctorShareStaticDisplayBundle();
+  const doctorShareReadinessChecklistItems = doctorShareStaticDisplay.readinessChecklistItems;
   const futurePreviewReadinessStaticDisplay = futurePreviewReadinessStaticDisplayBundle();
   const healthIntegrationReadinessChecklistItems =
     futurePreviewReadinessStaticDisplay.healthIntegrationItems;
@@ -1994,7 +1994,7 @@ export default function App() {
     reportSourceDisplayLabel,
     mobileReportQueryDisplayLimit
   );
-  const doctorShareBoundaryRows = doctorShareBoundaryDisplayRows();
+  const doctorShareBoundaryRows = doctorShareStaticDisplay.boundaryRows;
   const futureBoundaryRowsDisplay = futureBoundaryRowsDisplayBundle(
     communityPublicSettings?.leaderboard_opt_in ?? false
   );

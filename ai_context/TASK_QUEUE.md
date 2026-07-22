@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2280: Move doctor share static display assembly
+
+Status: done
+
+Completed:
+
+- Added `doctorShareStaticDisplayBundle` to `accountCopy.ts`.
+- Moved `App.tsx` doctor share boundary rows and readiness checklist assembly behind the bundle.
+- Kept doctor share preview rendering, account boundary copy, readiness text, and future-module flow unchanged.
+- Updated navigation verifier coverage to require the bundled doctor share outputs and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2279: Move future preview readiness display assembly
 
 Status: done

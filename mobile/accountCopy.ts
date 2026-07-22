@@ -142,3 +142,10 @@ export function doctorShareReadinessChecklistDisplayItems() {
     "所有分享、查看、匯出與撤銷都必須寫入 audit log"
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
+
+export function doctorShareStaticDisplayBundle() {
+  return {
+    boundaryRows: doctorShareBoundaryDisplayRows(),
+    readinessChecklistItems: doctorShareReadinessChecklistDisplayItems()
+  };
+}
