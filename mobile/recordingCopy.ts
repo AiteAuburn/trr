@@ -244,6 +244,16 @@ export function transcriptReviewStatusDisplayTexts(value: {
   };
 }
 
+export function transcriptReviewStatusDisplayBundle(value: {
+  transcriptValidationError: string | null;
+  transcript: string;
+  protectedBackendUnavailableMessage: string;
+  parserModelUnavailableMessage: string;
+  parserRecoveryMessage: string;
+}) {
+  return transcriptReviewStatusDisplayTexts(value);
+}
+
 export function transcriptReviewCostBoundaryChecklistDisplayItems(
   isBackendReady: boolean,
   isParserModelReady: boolean,

@@ -442,7 +442,7 @@ import {
   transcriptClearedStatusMessage,
   transcriptReviewCostBoundaryChecklistDisplayItems,
   transcriptReviewDisplayTexts,
-  transcriptReviewStatusDisplayTexts,
+  transcriptReviewStatusDisplayBundle,
   transcriptReturnEditStatusMessage,
   transcriptReviewBackStatusMessage,
   transcriptReviewReadyStatusMessage,
@@ -2194,7 +2194,7 @@ export default function App() {
         : null,
     [previewEditDate, previewEditFields, previewEditTime, selectedPreviewRecord]
   );
-  const transcriptStatusDisplay = transcriptReviewStatusDisplayTexts({
+  const transcriptStatusDisplay = transcriptReviewStatusDisplayBundle({
     transcriptValidationError,
     transcript,
     protectedBackendUnavailableMessage: protectedBackendUnavailableDisplayMessage,

@@ -3754,7 +3754,12 @@ def main() -> int:
             "const transcriptReviewDisplay = transcriptReviewDisplayTexts();",
         )
         _assert_contains(
-            "transcript status display helper binding",
+            "transcript status display bundle binding",
+            content,
+            "const transcriptStatusDisplay = transcriptReviewStatusDisplayBundle({",
+        )
+        _assert_not_contains(
+            "direct transcript status display texts binding",
             content,
             "const transcriptStatusDisplay = transcriptReviewStatusDisplayTexts({",
         )
@@ -8056,6 +8061,8 @@ def main() -> int:
             ("transcript review status parser recovery binding", "parserRecovery: boundUiMessage(value.parserRecoveryMessage)"),
             ("transcript review status backend unavailable binding", "backendUnavailable: boundUiMessage(`${value.protectedBackendUnavailableMessage}，才可送出 parser。`)"),
             ("transcript review status model unavailable binding", "modelUnavailable: boundUiMessage(`${value.parserModelUnavailableMessage}，請先在設定選擇可用模型。`)"),
+            ("transcript review status display bundle helper", "function transcriptReviewStatusDisplayBundle(value: {"),
+            ("transcript review status display bundle delegates", "return transcriptReviewStatusDisplayTexts(value);"),
             ("transcript review cost boundary checklist helper", "function transcriptReviewCostBoundaryChecklistDisplayItems("),
             ("transcript review empty parser guard copy", "空文字、過長文字或範例文字不會送 parser。"),
             ("transcript review no batch history copy", "下一步整理只送目前這段文字一次，不會批次載入歷史紀錄。"),
