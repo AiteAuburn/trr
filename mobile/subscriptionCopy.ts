@@ -164,6 +164,15 @@ export function accountSecurityNoActionBoundaryCopy() {
   );
 }
 
+export function accountSecurityBoundaryCopyBundle() {
+  return {
+    provider: accountSecurityProviderBoundaryCopy(),
+    session: accountSecuritySessionBoundaryCopy(),
+    readiness: accountSecurityReadinessBoundaryCopy(),
+    noAction: accountSecurityNoActionBoundaryCopy()
+  };
+}
+
 export function accountSecurityBoundaryDisplayRows(
   hasAccount: boolean,
   hasActiveProfile: boolean,

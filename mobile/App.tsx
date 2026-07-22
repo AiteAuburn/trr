@@ -805,10 +805,7 @@ import {
   trialDaysLeft
 } from "./subscriptionTransforms";
 import {
-  accountSecurityNoActionBoundaryCopy,
-  accountSecurityProviderBoundaryCopy,
-  accountSecurityReadinessBoundaryCopy,
-  accountSecuritySessionBoundaryCopy,
+  accountSecurityBoundaryCopyBundle,
   profileNoActionBoundaryCopy,
   recordingQuotaBoundaryDisplayRows,
   settingsSubscriptionSectionLabels,
@@ -1636,10 +1633,11 @@ export default function App() {
   const rankingPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.ranking;
   const rankingLocalPreviewBoundaryDisplayText = futurePreviewBoundaryCopy.rankingLocalPreview;
   const modelSelectionBoundaryDisplayText = modelSelectionBoundaryCopy();
-  const accountSecurityProviderBoundaryDisplayText = accountSecurityProviderBoundaryCopy();
-  const accountSecuritySessionBoundaryDisplayText = accountSecuritySessionBoundaryCopy();
-  const accountSecurityReadinessBoundaryDisplayText = accountSecurityReadinessBoundaryCopy();
-  const accountSecurityNoActionBoundaryDisplayText = accountSecurityNoActionBoundaryCopy();
+  const accountSecurityBoundaryCopy = accountSecurityBoundaryCopyBundle();
+  const accountSecurityProviderBoundaryDisplayText = accountSecurityBoundaryCopy.provider;
+  const accountSecuritySessionBoundaryDisplayText = accountSecurityBoundaryCopy.session;
+  const accountSecurityReadinessBoundaryDisplayText = accountSecurityBoundaryCopy.readiness;
+  const accountSecurityNoActionBoundaryDisplayText = accountSecurityBoundaryCopy.noAction;
   const profileNoActionBoundaryDisplayText = profileNoActionBoundaryCopy();
   const recordingQuotaDataBoundaryDisplayText = recordingQuotaDataBoundaryCopy();
   const reminderPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.reminder;

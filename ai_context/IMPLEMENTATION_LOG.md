@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2249 move account security boundary copy bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/subscriptionCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the account security boundary copy bundle helper to `subscriptionCopy.ts`.
+- Moved `App.tsx` account security provider, session, readiness, and no-action boundary copy assembly from direct helper calls to the bundle entrypoint.
+- Kept account security boundary text, SecureStore/session copy, provider readiness messaging, rows, and account security screen rendering unchanged.
+- Updated navigation verifier coverage to require the account security boundary copy bundle and no direct account security boundary copy binding regression in `App.tsx`.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2248 move future preview boundary copy bundle
 
 類型：mobile / refactor / verifier / docs

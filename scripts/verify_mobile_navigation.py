@@ -4118,6 +4118,30 @@ def main() -> int:
             "const accountSecurityBoundaryRows = accountSecurityBoundaryDisplayRowsForState({",
         )
         _assert_contains(
+            "account security boundary copy bundle binding",
+            content,
+            "const accountSecurityBoundaryCopy = accountSecurityBoundaryCopyBundle();",
+        )
+        for label, marker in (
+            (
+                "direct account security provider boundary copy binding",
+                "const accountSecurityProviderBoundaryDisplayText = accountSecurityProviderBoundaryCopy();",
+            ),
+            (
+                "direct account security session boundary copy binding",
+                "const accountSecuritySessionBoundaryDisplayText = accountSecuritySessionBoundaryCopy();",
+            ),
+            (
+                "direct account security readiness boundary copy binding",
+                "const accountSecurityReadinessBoundaryDisplayText = accountSecurityReadinessBoundaryCopy();",
+            ),
+            (
+                "direct account security no action boundary copy binding",
+                "const accountSecurityNoActionBoundaryDisplayText = accountSecurityNoActionBoundaryCopy();",
+            ),
+        ):
+            _assert_not_contains(label, content, marker)
+        _assert_contains(
             "profile settings boundary rows helper binding",
             content,
             "const profileSettingsBoundaryRows = profileSettingsBoundaryDisplayRowsForState({",
@@ -13578,6 +13602,15 @@ def main() -> int:
             ("recording quota boundary warning row", "提醒規則"),
             ("recording quota boundary ai cost row", "0 次呼叫"),
             ("account security boundary rows helper", "function accountSecurityBoundaryDisplayRows("),
+            ("account security provider boundary copy helper", "function accountSecurityProviderBoundaryCopy()"),
+            ("account security session boundary copy helper", "function accountSecuritySessionBoundaryCopy()"),
+            ("account security readiness boundary copy helper", "function accountSecurityReadinessBoundaryCopy()"),
+            ("account security no action boundary copy helper", "function accountSecurityNoActionBoundaryCopy()"),
+            ("account security boundary copy bundle helper", "function accountSecurityBoundaryCopyBundle()"),
+            ("account security boundary copy bundle provider binding", "provider: accountSecurityProviderBoundaryCopy()"),
+            ("account security boundary copy bundle session binding", "session: accountSecuritySessionBoundaryCopy()"),
+            ("account security boundary copy bundle readiness binding", "readiness: accountSecurityReadinessBoundaryCopy()"),
+            ("account security boundary copy bundle no action binding", "noAction: accountSecurityNoActionBoundaryCopy()"),
             ("account security boundary rows state helper", "function accountSecurityBoundaryDisplayRowsForState(value: {"),
             ("account security boundary rows state boolean account", "Boolean(value.account)"),
             ("account security boundary rows state session count", "value.authSessionCount"),
