@@ -54,6 +54,10 @@ export function historyCalendarDisplayTexts(monthStart: Date, selectedDate: stri
   };
 }
 
+export function historyCalendarDisplayBundle(monthStart: Date, selectedDate: string) {
+  return historyCalendarDisplayTexts(monthStart, selectedDate);
+}
+
 export function historyBoundaryChecklistDisplayItems(
   recordSyncLimit: number,
   recordCacheLimit: number,

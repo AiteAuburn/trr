@@ -671,7 +671,7 @@ import {
 } from "./firstVersionFlowCopy";
 import {
   historyBoundaryChecklistDisplayItems,
-  historyCalendarDisplayTexts,
+  historyCalendarDisplayBundle,
   historyManualEntryStatusMessage,
   historyNoRangeRecordsBodyCopy,
   historyNoRangeRecordsTitleCopy,
@@ -1298,7 +1298,7 @@ export default function App() {
     const base = Number.isNaN(selected.getTime()) ? new Date() : selected;
     return new Date(base.getFullYear(), base.getMonth(), 1);
   }, [selectedHistoryDate]);
-  const historyCalendarDisplay = historyCalendarDisplayTexts(historyCalendarMonthStart, selectedHistoryDate);
+  const historyCalendarDisplay = historyCalendarDisplayBundle(historyCalendarMonthStart, selectedHistoryDate);
   const historyCalendarTitle = historyCalendarDisplay.title;
   const historyCalendarDisplayItems = useMemo(() => {
     const year = historyCalendarMonthStart.getFullYear();

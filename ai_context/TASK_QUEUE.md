@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2229: Move history calendar display bundle
+
+Status: done
+
+Completed:
+
+- Added the history calendar display bundle helper to `historyCopy.ts`.
+- Moved `App.tsx` history calendar title, selected date, previous/next month labels, and accessibility display assembly from the raw texts helper to the bundle entrypoint.
+- Kept history calendar copy, selected-date behavior, month navigation, record grouping, and backend/AI side-effect boundaries unchanged.
+- Updated navigation verifier coverage to require the history calendar display bundle, App bundle binding, and no direct history calendar display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2228: Move account security auth mode display bundle
 
 Status: done

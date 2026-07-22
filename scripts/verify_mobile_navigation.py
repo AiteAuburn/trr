@@ -9773,7 +9773,7 @@ def main() -> int:
             ("history calendar month offset handler", "function selectHistoryCalendarMonthOffset(offset: number)"),
             ("history calendar previous month handler", "function openPreviousHistoryMonth()"),
             ("history calendar next month handler", "function openNextHistoryMonth()"),
-            ("history calendar display helper binding", "const historyCalendarDisplay = historyCalendarDisplayTexts(historyCalendarMonthStart, selectedHistoryDate);"),
+            ("history calendar display helper binding", "const historyCalendarDisplay = historyCalendarDisplayBundle(historyCalendarMonthStart, selectedHistoryDate);"),
             ("history calendar title display binding", "const historyCalendarTitle = historyCalendarDisplay.title;"),
             ("history calendar previous month accessibility binding", "const historyPreviousMonthAccessibilityLabel = historyCalendarDisplay.previousMonthAccessibility;"),
             ("history records by date map", "const historyRecordsByDate = useMemo(() => historyRecordsByDateMap(recordsForDisplay), [recordsForDisplay]);"),
@@ -9839,6 +9839,8 @@ def main() -> int:
         )
         for label, marker in (
             ("history calendar display helper", "function historyCalendarDisplayTexts(monthStart: Date, selectedDate: string)"),
+            ("history calendar display bundle helper", "function historyCalendarDisplayBundle(monthStart: Date, selectedDate: string)"),
+            ("history calendar display bundle delegates", "return historyCalendarDisplayTexts(monthStart, selectedDate);"),
             ("history calendar display title", "title: boundDisplayText(`${monthStart.getFullYear()} 年 ${monthStart.getMonth() + 1} 月`, 40)"),
             ("history calendar display selected date", "selectedDate: boundDisplayText(selectedDate, 40)"),
             ("history calendar previous month label", 'previousMonthLabel: boundDisplayText("上一月", 20)'),
@@ -12869,6 +12871,7 @@ def main() -> int:
             ("direct future preview status display texts binding", "const futurePreviewStatusDisplay = futurePreviewStatusDisplayTexts({"),
             ("direct achievement year review status display texts binding", "const achievementYearReviewStatusDisplay = achievementYearReviewStatusDisplayTexts({"),
             ("direct account security auth mode display texts binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayTexts({"),
+            ("direct history calendar display texts binding", "const historyCalendarDisplay = historyCalendarDisplayTexts(historyCalendarMonthStart, selectedHistoryDate);"),
             ("direct settings profile choice map", "profileChoiceDisplayItems.map((profile) => {"),
             ("direct settings profile key binding", "key={profile.id}"),
             ("direct settings profile accessibility binding", "accessibilityLabel={profile.accessibilityLabel}"),
