@@ -2076,6 +2076,13 @@ export function achievementYearReviewStatusDisplayTexts(value: {
   };
 }
 
+export function achievementYearReviewStatusDisplayBundle(value: {
+  achievementActionStatus: string;
+  yearReviewActionStatus: string;
+}) {
+  return achievementYearReviewStatusDisplayTexts(value);
+}
+
 export function storeCartUnavailableDisplayItem() {
   return {
     title: boundDisplayText("購物車尚未啟用", maxDisplayTextLength),

@@ -283,7 +283,7 @@ import {
   futurePreviewStatusDisplayBundle,
   healthIntegrationExternalDataBoundaryCopy,
   healthIntegrationReadinessChecklistDisplayItems,
-  achievementYearReviewStatusDisplayTexts,
+  achievementYearReviewStatusDisplayBundle,
   limitedAchievementDisplayItems,
   localAchievementItemsForRecords,
   rankingActionStatusLabel,
@@ -1567,7 +1567,7 @@ export default function App() {
     0,
     maxMobileCountValue
   );
-  const achievementYearReviewStatusDisplay = achievementYearReviewStatusDisplayTexts({
+  const achievementYearReviewStatusDisplay = achievementYearReviewStatusDisplayBundle({
     achievementActionStatus,
     yearReviewActionStatus
   });

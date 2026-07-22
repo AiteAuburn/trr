@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2227: Move achievement year review status display bundle
+
+Status: done
+
+Completed:
+
+- Added the achievement/year review status display bundle helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` achievement and year review action status display assembly from the raw texts helper to the bundle entrypoint.
+- Kept achievement status copy, year review status copy, sync/open route behavior, and year review generation/revoke behavior unchanged.
+- Updated navigation verifier coverage to require the achievement/year review status display bundle, App bundle binding, and no direct achievement/year review status display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2226: Move future preview status display bundle
 
 Status: done

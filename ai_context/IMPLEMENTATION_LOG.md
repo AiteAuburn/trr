@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2227 move achievement year review status display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the achievement/year review status display bundle helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` achievement and year review action status display assembly from the raw texts helper to the bundle entrypoint.
+- Kept achievement status copy, year review status copy, sync/open route behavior, and year review generation/revoke behavior unchanged.
+- Updated navigation verifier coverage to require the achievement/year review status display bundle, App bundle binding, and no direct achievement/year review status display texts binding regression in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2226 move future preview status display bundle
 
 類型：mobile / refactor / verifier / docs
