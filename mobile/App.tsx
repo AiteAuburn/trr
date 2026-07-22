@@ -344,6 +344,7 @@ import {
   yearReviewInsightDisplayTexts,
   yearReviewShareCardStatusMessages,
   yearReviewShareFilenameDisplayText,
+  yearReviewShareMessageDisplayText,
   yearReviewShareUnavailableStatusMessage,
   yearReviewRevokeStatusMessages,
   yearReviewSyncStatusMessages,
@@ -5722,7 +5723,7 @@ export default function App() {
       const shareAssetUri = await writeYearReviewShareAssetFile(shareAsset);
       const shareResult = await Share.share({
         title: shareFilename,
-        message: boundDisplayText(sharePackage.share_text, maxDisplayDetailTextLength),
+        message: yearReviewShareMessageDisplayText(sharePackage.share_text),
         url: shareAssetUri
       });
       const shareResultKind = shareResult.action === Share.sharedAction ? "opened" : "dismissed";

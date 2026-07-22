@@ -14564,7 +14564,7 @@ def main() -> int:
             ("year review invalid share package guard", 'throw new Error("invalid_year_review_share_package_id");'),
             ("year review share asset uri prepared", "const shareAssetUri = await writeYearReviewShareAssetFile(shareAsset);"),
             ("year review native share call", "const shareResult = await Share.share({"),
-            ("year review bounded share text", "message: boundDisplayText(sharePackage.share_text, maxDisplayDetailTextLength)"),
+            ("year review bounded share message helper binding", "message: yearReviewShareMessageDisplayText(sharePackage.share_text)"),
             ("year review native share asset url", "url: shareAssetUri"),
             ("year review share result mapping", 'const shareResultKind = shareResult.action === Share.sharedAction ? "opened" : "dismissed";'),
             ("year review share result endpoint", "`/year-reviews/share-packages/${confirmedSharePackageId}/result`"),
@@ -14803,6 +14803,8 @@ def main() -> int:
             ("year review backend-aware share fallback", "backend ready 時可準備隱私遮罩分享卡並開啟原生分享。"),
             ("year review share filename display helper", "export function yearReviewShareFilenameDisplayText(filename: string)"),
             ("year review share filename display helper binding", "return boundDisplayText(filename, maxDisplayTextLength);"),
+            ("year review share message display helper", "export function yearReviewShareMessageDisplayText(message: string)"),
+            ("year review share message display helper binding", "return boundDisplayText(message, maxDisplayDetailTextLength);"),
             ("year review share card status helper", "export function yearReviewShareCardStatusMessages(value: {"),
             ("year review share card unavailable fallback", "backend 尚未 ready"),
             ("year review share card loading copy", "正在準備隱私遮罩後的年度分享卡。"),
@@ -15677,6 +15679,11 @@ def main() -> int:
         )
         _assert_contains(
             "year review share message is masked text only",
+            year_review_share_block,
+            "message: yearReviewShareMessageDisplayText(sharePackage.share_text)",
+        )
+        _assert_not_contains(
+            "year review share message direct bound display binding",
             year_review_share_block,
             "message: boundDisplayText(sharePackage.share_text, maxDisplayDetailTextLength)",
         )

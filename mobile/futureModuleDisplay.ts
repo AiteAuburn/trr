@@ -2387,6 +2387,10 @@ export function yearReviewShareFilenameDisplayText(filename: string) {
   return boundDisplayText(filename, maxDisplayTextLength);
 }
 
+export function yearReviewShareMessageDisplayText(message: string) {
+  return boundDisplayText(message, maxDisplayDetailTextLength);
+}
+
 export function yearReviewShareCardStatusMessages(value: {
   backendUnavailableMessage: string;
   shareFilename: string;

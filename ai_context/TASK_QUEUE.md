@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2269: Move year review share message display helper
+
+Status: done
+
+Completed:
+
+- Added the year review share message display helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` native share message bounding from inline `boundDisplayText` to the helper entrypoint.
+- Kept share text input, native share title/url, package id, checksum handling, share result mapping, and report flow unchanged.
+- Updated navigation verifier coverage to require the helper and reject the old inline share message binding.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2268: Move food community share note input helper
 
 Status: done
