@@ -12268,7 +12268,7 @@ def main() -> int:
             ("AI save confirm boundary grid rows binding", "rows={aiSaveConfirmBoundaryRows}"),
             ("privacy boundary grid rows binding", "rows={privacyBoundaryRows}"),
             ("dev reset status display text binding", "const devResetStatusDisplayText = authStatusDisplay.devReset;"),
-            ("native status display helper binding", "const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);"),
+            ("native status display helper binding", "const nativeStatusDisplay = nativeStatusDisplayBundle(nativeStatus);"),
             ("native status display text binding", "const nativeStatusDisplayText = nativeStatusDisplay.native;"),
             ("auth secondary action disabled state", "disabled={isAuthOperationInFlight}"),
             ("auth danger action disabled state", "disabled={isAuthOperationInFlight}"),
@@ -12862,6 +12862,7 @@ def main() -> int:
             _assert_contains(label, source, marker)
         for label, marker in (
             ("direct auth status display texts binding", "const authStatusDisplay = authStatusDisplayTexts({"),
+            ("direct native status display texts binding", "const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);"),
             ("direct settings subpage status display texts binding", "const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayTexts({"),
             ("direct settings profile choice map", "profileChoiceDisplayItems.map((profile) => {"),
             ("direct settings profile key binding", "key={profile.id}"),
@@ -13171,6 +13172,8 @@ def main() -> int:
             ("native action display bundle refresh label", "recordingModelRefreshLabel: recordingModelRefreshButtonLabel()"),
             ("native action display bundle refresh accessibility", "recordingModelRefreshAccessibility: recordingModelRefreshAccessibilityLabel()"),
             ("native status display texts helper", "function nativeStatusDisplayTexts(nativeStatus: string)"),
+            ("native status display bundle helper", "function nativeStatusDisplayBundle(nativeStatus: string)"),
+            ("native status display bundle delegates", "return nativeStatusDisplayTexts(nativeStatus);"),
             ("native status display binding", "native: boundUiMessage(nativeStatus)"),
             ("native module check button copy", "檢查 native modules"),
             ("native model no cloud AI copy", "不呼叫雲端 AI"),

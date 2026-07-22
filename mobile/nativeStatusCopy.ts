@@ -351,3 +351,7 @@ export function nativeStatusDisplayTexts(nativeStatus: string) {
     native: boundUiMessage(nativeStatus)
   };
 }
+
+export function nativeStatusDisplayBundle(nativeStatus: string) {
+  return nativeStatusDisplayTexts(nativeStatus);
+}

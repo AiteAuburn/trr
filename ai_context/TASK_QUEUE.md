@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2223: Move native status display bundle
+
+Status: done
+
+Completed:
+
+- Added the native status display bundle helper to `nativeStatusCopy.ts`.
+- Moved `App.tsx` native status display assembly from the raw texts helper to the bundle entrypoint.
+- Kept native status copy, native module checks, model download controls, Whisper/Llama debug actions, and recording model refresh behavior unchanged.
+- Updated navigation verifier coverage to require the native status display bundle, App bundle binding, and no direct native status display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2222: Move auth status display bundle
 
 Status: done

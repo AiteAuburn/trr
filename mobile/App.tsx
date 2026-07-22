@@ -607,7 +607,7 @@ import {
   nativeModuleCheckFailureState,
   nativeModuleCheckStartState,
   nativeModuleCheckResultState,
-  nativeStatusDisplayTexts,
+  nativeStatusDisplayBundle,
   nativeWhisperFailureState,
   nativeWhisperMissingInputState,
   nativeWhisperStartState,
@@ -1955,7 +1955,7 @@ export default function App() {
   });
   const authActionStatusDisplayText = authStatusDisplay.authAction;
   const tokenStorageStatusDisplayText = authStatusDisplay.tokenStorage;
-  const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);
+  const nativeStatusDisplay = nativeStatusDisplayBundle(nativeStatus);
   const nativeStatusDisplayText = nativeStatusDisplay.native;
   const devResetStatusDisplayText = authStatusDisplay.devReset;
   const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayBundle({
