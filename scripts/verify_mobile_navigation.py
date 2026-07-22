@@ -3873,9 +3873,9 @@ def main() -> int:
             "const aiSaveConfirmSubmitDisplayLabel = aiSaveConfirmDisplay.submit;",
         )
         _assert_contains(
-            "transcript review checklist helper binding",
+            "transcript review checklist runtime bundle binding",
             content,
-            "const transcriptReviewCostBoundaryChecklistItems = transcriptReviewCostBoundaryChecklistDisplayItems(",
+            "const transcriptReviewCostBoundaryChecklistItems =\n    recordWorkflowRuntimeChecklistDisplay.transcriptReviewCostBoundaryItems;",
         )
         _assert_contains(
             "transcript review display helper binding",
@@ -3939,9 +3939,29 @@ def main() -> int:
             "protectedBackendReady,",
         )
         _assert_contains(
+            "record workflow runtime checklist parser ready input",
+            content,
+            "parserModelReady,",
+        )
+        _assert_contains(
+            "record workflow runtime checklist parser unavailable input",
+            content,
+            "parserModelUnavailableMessage: parserModelUnavailableDisplayMessage",
+        )
+        _assert_contains(
             "record workflow runtime checklist unsaved count input",
             content,
             "unsavedPreviewRecordCount: unsavedPreviewRecordDisplayCount",
+        )
+        _assert_not_contains(
+            "direct transcript review checklist helper binding",
+            content,
+            "const transcriptReviewCostBoundaryChecklistItems = transcriptReviewCostBoundaryChecklistDisplayItems(",
+        )
+        _assert_not_contains(
+            "direct transcript review checklist helper import",
+            content,
+            "  transcriptReviewCostBoundaryChecklistDisplayItems,",
         )
         _assert_contains(
             "record entry settings checklist runtime bundle binding",
@@ -9120,6 +9140,9 @@ def main() -> int:
             ("AI save failure manual fallback copy", "若 backend 持續不可用，可改用手動新增單筆明確紀錄。"),
             ("record workflow runtime checklist bundle helper", "function recordWorkflowRuntimeChecklistDisplayBundle(value: {"),
             ("record workflow runtime checklist bundle save confirm", "aiSaveConfirmItems: aiSaveConfirmChecklistDisplayItems(value.unsavedPreviewRecordCount)"),
+            ("record workflow runtime checklist bundle transcript review", "transcriptReviewCostBoundaryItems: transcriptReviewCostBoundaryChecklistDisplayItems("),
+            ("record workflow runtime checklist bundle parser ready", "value.parserModelReady,"),
+            ("record workflow runtime checklist bundle parser unavailable", "value.parserModelUnavailableMessage"),
             ("record workflow runtime checklist bundle record entry", "recordEntrySettingsItems: recordEntrySettingsChecklistDisplayItems(value.protectedBackendReady)"),
             ("record workflow runtime checklist bundle save failure", "aiSaveFailureItems: aiSaveFailureChecklistDisplayItems(value.unsavedPreviewRecordCount)"),
             ("save result display helper", "function saveResultDisplayTexts(value: {"),

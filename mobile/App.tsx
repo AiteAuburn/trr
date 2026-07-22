@@ -407,7 +407,6 @@ import {
   recordingWhisperSuccessStatusMessage,
   shouldOpenTodayRecordingTranscriptReview,
   transcriptClearedStatusMessage,
-  transcriptReviewCostBoundaryChecklistDisplayItems,
   transcriptReviewDisplayBundle,
   transcriptReviewStatusDisplayBundle,
   transcriptReturnEditStatusMessage,
@@ -1409,16 +1408,15 @@ export default function App() {
   const recordWorkflowStaticChecklistDisplay = recordWorkflowStaticChecklistDisplayBundle();
   const recordWorkflowRuntimeChecklistDisplay = recordWorkflowRuntimeChecklistDisplayBundle({
     protectedBackendReady,
+    parserModelReady,
+    parserModelUnavailableMessage: parserModelUnavailableDisplayMessage,
     unsavedPreviewRecordCount: unsavedPreviewRecordDisplayCount
   });
   const aiSaveConfirmChecklistItems = recordWorkflowRuntimeChecklistDisplay.aiSaveConfirmItems;
   const aiReviewCostBoundaryChecklistItems =
     recordWorkflowStaticChecklistDisplay.aiReviewCostBoundaryItems;
-  const transcriptReviewCostBoundaryChecklistItems = transcriptReviewCostBoundaryChecklistDisplayItems(
-    protectedBackendReady,
-    parserModelReady,
-    parserModelUnavailableDisplayMessage
-  );
+  const transcriptReviewCostBoundaryChecklistItems =
+    recordWorkflowRuntimeChecklistDisplay.transcriptReviewCostBoundaryItems;
   const saveSuccessBoundaryChecklistItems = saveSuccessBoundaryChecklistDisplayItems(
     lastSaveEntryMethod,
     saveSuccessViewState.hasUnsavedPreviewRecords,

@@ -1,5 +1,6 @@
 import type { SaveEntryMethod } from "./appTypes";
 import type { AppScreen } from "./navigationConfig";
+import { transcriptReviewCostBoundaryChecklistDisplayItems } from "./recordingCopy";
 
 const maxUiMessageLength = 300;
 const maxDisplayTextLength = 120;
@@ -590,10 +591,17 @@ export function aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordCount: nu
 
 export function recordWorkflowRuntimeChecklistDisplayBundle(value: {
   protectedBackendReady: boolean;
+  parserModelReady: boolean;
+  parserModelUnavailableMessage: string;
   unsavedPreviewRecordCount: number;
 }) {
   return {
     aiSaveConfirmItems: aiSaveConfirmChecklistDisplayItems(value.unsavedPreviewRecordCount),
+    transcriptReviewCostBoundaryItems: transcriptReviewCostBoundaryChecklistDisplayItems(
+      value.protectedBackendReady,
+      value.parserModelReady,
+      value.parserModelUnavailableMessage
+    ),
     recordEntrySettingsItems: recordEntrySettingsChecklistDisplayItems(value.protectedBackendReady),
     aiSaveFailureItems: aiSaveFailureChecklistDisplayItems(value.unsavedPreviewRecordCount)
   };
