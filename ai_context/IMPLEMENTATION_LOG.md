@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2273 move ranking preview display bundle assembly
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `rankingPreviewDisplayBundle` to `futureModuleDisplay.ts`.
+- Moved `App.tsx` ranking preview label, readiness label, and action status copy assembly behind the helper.
+- Kept ranking action handlers, leaderboard opt-in labels, close/return labels, visibility condition, and backend flow unchanged.
+- Updated navigation verifier coverage to require the combined ranking bundle and reject the old direct App-level helper assembly.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2272 move community preview display bundle assembly
 
 類型：mobile / refactor / verifier / docs

@@ -2809,6 +2809,21 @@ export function rankingPreviewLabelDisplayBundle(value: {
   };
 }
 
+export function rankingPreviewDisplayBundle(value: {
+  labels: FuturePreviewSectionLabels;
+  closeLabel: string;
+  optInButton: string;
+  optInAccessibility: string;
+  actionStatusText: string;
+}) {
+  return {
+    labels: rankingPreviewLabelDisplayBundle(value),
+    readinessSection: futurePreviewReadinessSectionLabel(value.labels),
+    actionStatusLabel: rankingActionStatusLabel(value.labels),
+    actionStatusCopy: rankingActionStatusText(value.actionStatusText)
+  };
+}
+
 export function rankingActionStatusLabel(labels: FuturePreviewSectionLabels) {
   return labels.rankingStatus;
 }

@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2273: Move ranking preview display bundle assembly
+
+Status: done
+
+Completed:
+
+- Added `rankingPreviewDisplayBundle` to `futureModuleDisplay.ts`.
+- Moved `App.tsx` ranking preview label, readiness label, and action status copy assembly behind the helper.
+- Kept ranking action handlers, leaderboard opt-in labels, close/return labels, visibility condition, and backend flow unchanged.
+- Updated navigation verifier coverage to require the combined ranking bundle and reject the old direct App-level helper assembly.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2272: Move community preview display bundle assembly
 
 Status: done

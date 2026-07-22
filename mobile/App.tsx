@@ -268,7 +268,6 @@ import {
   futurePreviewBoundaryBadgeLabel,
   futurePreviewBoundaryCopyText,
   futurePreviewCloseAccessibilityLabel,
-  futurePreviewReadinessSectionLabel,
   futurePreviewReturnStatusMessage,
   futurePreviewReturnAccessibilityLabel,
   futurePreviewReturnButtonLabel,
@@ -278,13 +277,10 @@ import {
   achievementYearReviewStatusDisplayBundle,
   limitedAchievementDisplayItems,
   localAchievementItemsForRecords,
-  rankingActionStatusLabel,
-  rankingActionStatusText,
   rankingActionStatusVisible,
-  rankingCloseButtonLabel,
   rankingHeroIconLabel,
   rankingLocalStreakPreviewLabel,
-  rankingPreviewLabelDisplayBundle,
+  rankingPreviewDisplayBundle,
   rankingReadinessChecklistDisplayItems,
   rankingScreenSubtitleCopy,
   rankingScreenTitleLabel,
@@ -1882,12 +1878,14 @@ export default function App() {
   const storeCartIntroDisplayText = storePreviewDisplay.cartIntro;
   const storeCheckoutReadinessTitleDisplayText = storePreviewDisplay.checkoutReadinessTitle;
   const storeCartReturnButtonDisplayLabel = storePreviewDisplay.cartReturnButton;
-  const rankingPreviewLabelDisplay = rankingPreviewLabelDisplayBundle({
+  const rankingPreviewDisplay = rankingPreviewDisplayBundle({
     labels: futurePreviewDisplayLabels,
     closeLabel: auxiliaryDisplayLabels.closeReturn,
     optInButton: communityActionDisplay.rankingOptInButton,
-    optInAccessibility: communityActionDisplay.rankingOptInAccessibility
+    optInAccessibility: communityActionDisplay.rankingOptInAccessibility,
+    actionStatusText: rankingActionStatusDisplayText
   });
+  const rankingPreviewLabelDisplay = rankingPreviewDisplay.labels;
   const rankingOptInButtonDisplayLabel = rankingPreviewLabelDisplay.optInButton;
   const rankingOptInAccessibilityDisplayLabel = rankingPreviewLabelDisplay.optInAccessibility;
   const rankingOptInActionPressTarget = rankingOptInActionPressHandler();
@@ -1897,6 +1895,9 @@ export default function App() {
   const rankingPublicActionButtonDisplayLabel = rankingPreviewLabelDisplay.publicButton;
   const rankingPublicActionAccessibilityDisplayLabel = rankingPreviewLabelDisplay.publicAccessibility;
   const rankingPublicActionPressTarget = rankingPublicActionPressHandler();
+  const rankingReadinessSectionDisplayLabel = rankingPreviewDisplay.readinessSection;
+  const rankingActionStatusDisplayLabel = rankingPreviewDisplay.actionStatusLabel;
+  const rankingActionStatusDisplayCopy = rankingPreviewDisplay.actionStatusCopy;
   const rankingReturnFutureModulesButtonDisplayLabel = rankingPreviewLabelDisplay.returnButton;
   const rankingReturnFutureModulesAccessibilityDisplayLabel = rankingPreviewLabelDisplay.returnAccessibility;
   const rankingReturnFutureModulesPressTarget = rankingReturnFutureModulesPressHandler();
@@ -9922,7 +9923,7 @@ export default function App() {
             <FutureBoundaryGrid rows={rankingBoundaryRows} />
             <RankingLeaderboardList sections={rankingLeaderboardSections} />
             <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{futurePreviewReadinessSectionLabel(futurePreviewDisplayLabels)}</Text>
+              <Text style={styles.label}>{rankingReadinessSectionDisplayLabel}</Text>
               <FutureReadinessChecklist items={rankingReadinessChecklistItems} />
             </View>
             <RankingActionRow
@@ -9935,8 +9936,8 @@ export default function App() {
             />
             {rankingActionStatusVisible(rankingActionStatus) ? (
               <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{rankingActionStatusLabel(futurePreviewDisplayLabels)}</Text>
-                <Text style={styles.evidence}>{rankingActionStatusText(rankingActionStatusDisplayText)}</Text>
+                <Text style={styles.label}>{rankingActionStatusDisplayLabel}</Text>
+                <Text style={styles.evidence}>{rankingActionStatusDisplayCopy}</Text>
               </View>
             ) : null}
             <Pressable

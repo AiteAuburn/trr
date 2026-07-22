@@ -12847,10 +12847,12 @@ def main() -> int:
             ("ranking leaderboard section empty copy helper", "function rankingLeaderboardSectionEmptyCopy(section: CommunityLeaderboardDisplaySection)"),
             ("ranking leaderboard section empty copy helper fields", "return section.emptyCopy;"),
             ("ranking leaderboard section empty copy helper binding", "{rankingLeaderboardSectionEmptyCopy(section)}"),
-            ("ranking readiness section label helper binding", "{futurePreviewReadinessSectionLabel(futurePreviewDisplayLabels)}"),
+            ("ranking readiness display label binding", "const rankingReadinessSectionDisplayLabel = rankingPreviewDisplay.readinessSection;"),
+            ("ranking readiness display label render", "{rankingReadinessSectionDisplayLabel}"),
             ("ranking readiness checklist component binding", "<FutureReadinessChecklist items={rankingReadinessChecklistItems} />"),
-            ("ranking preview label display bundle import", "rankingPreviewLabelDisplayBundle,"),
-            ("ranking preview label display bundle binding", "const rankingPreviewLabelDisplay = rankingPreviewLabelDisplayBundle({"),
+            ("ranking preview display bundle import", "rankingPreviewDisplayBundle,"),
+            ("ranking preview display bundle binding", "const rankingPreviewDisplay = rankingPreviewDisplayBundle({"),
+            ("ranking preview display labels binding", "const rankingPreviewLabelDisplay = rankingPreviewDisplay.labels;"),
             ("ranking close accessibility display label binding", "const rankingCloseAccessibilityDisplayLabel = rankingPreviewLabelDisplay.closeAccessibility;"),
             ("ranking close accessibility helper binding", "accessibilityLabel={rankingCloseAccessibilityDisplayLabel}"),
             ("ranking close button display label binding", "const rankingCloseButtonDisplayLabel = rankingPreviewLabelDisplay.closeButton;"),
@@ -12875,10 +12877,10 @@ def main() -> int:
             ("ranking opt-in action press helper fields", "return showRankingOptInStatus;"),
             ("ranking opt-in action press target binding", "const rankingOptInActionPressTarget = rankingOptInActionPressHandler();"),
             ("ranking opt-in action press helper binding", "onOptInPress={rankingOptInActionPressTarget}"),
-            ("ranking action status label helper import", "rankingActionStatusLabel,"),
-            ("ranking action status label helper binding", "{rankingActionStatusLabel(futurePreviewDisplayLabels)}"),
-            ("ranking action status text helper import", "rankingActionStatusText,"),
-            ("ranking action status text helper binding", "{rankingActionStatusText(rankingActionStatusDisplayText)}"),
+            ("ranking action status display label binding", "const rankingActionStatusDisplayLabel = rankingPreviewDisplay.actionStatusLabel;"),
+            ("ranking action status display label render", "{rankingActionStatusDisplayLabel}"),
+            ("ranking action status display copy binding", "const rankingActionStatusDisplayCopy = rankingPreviewDisplay.actionStatusCopy;"),
+            ("ranking action status display copy render", "{rankingActionStatusDisplayCopy}"),
             ("ranking action status visible helper import", "rankingActionStatusVisible,"),
             ("ranking action status visible helper binding", "{rankingActionStatusVisible(rankingActionStatus) ? ("),
             ("ranking return future modules accessibility display label binding", "const rankingReturnFutureModulesAccessibilityDisplayLabel = rankingPreviewLabelDisplay.returnAccessibility;"),
@@ -13132,6 +13134,9 @@ def main() -> int:
             ("direct ranking public accessibility binding", "const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel(futurePreviewDisplayLabels);"),
             ("direct ranking return button binding", "const rankingReturnFutureModulesButtonDisplayLabel = futurePreviewReturnButtonLabel(futurePreviewDisplayLabels);"),
             ("direct ranking return accessibility binding", "const rankingReturnFutureModulesAccessibilityDisplayLabel = futurePreviewReturnAccessibilityLabel(futurePreviewDisplayLabels);"),
+            ("direct ranking readiness section binding", "const rankingReadinessSectionDisplayLabel = futurePreviewReadinessSectionLabel(futurePreviewDisplayLabels);"),
+            ("direct ranking action status label binding", "const rankingActionStatusDisplayLabel = rankingActionStatusLabel(futurePreviewDisplayLabels);"),
+            ("direct ranking action status copy binding", "const rankingActionStatusDisplayCopy = rankingActionStatusText(rankingActionStatusDisplayText);"),
             ("direct year review generation label binding", "const yearReviewGenerationDisplayText = nextYearReviewGenerationLabel(new Date());"),
             ("direct year review boundary copy binding", "const yearReviewBoundaryDisplayText = yearReviewBoundaryDisplayCopy();"),
             ("direct future preview status display texts binding", "const futurePreviewStatusDisplay = futurePreviewStatusDisplayTexts({"),
@@ -15527,6 +15532,11 @@ def main() -> int:
             ("ranking preview label display bundle public accessibility", "publicAccessibility: rankingPublicActionAccessibilityLabel(value.labels)"),
             ("ranking preview label display bundle return button", "returnButton: futurePreviewReturnButtonLabel(value.labels)"),
             ("ranking preview label display bundle return accessibility", "returnAccessibility: futurePreviewReturnAccessibilityLabel(value.labels)"),
+            ("ranking preview display bundle helper", "export function rankingPreviewDisplayBundle(value: {"),
+            ("ranking preview display bundle labels binding", "labels: rankingPreviewLabelDisplayBundle(value),"),
+            ("ranking preview display bundle readiness binding", "readinessSection: futurePreviewReadinessSectionLabel(value.labels),"),
+            ("ranking preview display bundle status label binding", "actionStatusLabel: rankingActionStatusLabel(value.labels),"),
+            ("ranking preview display bundle status copy binding", "actionStatusCopy: rankingActionStatusText(value.actionStatusText)"),
             ("ranking action status label helper", "export function rankingActionStatusLabel(labels: FuturePreviewSectionLabels)"),
             ("ranking action status label helper fields", "return labels.rankingStatus;"),
             ("ranking action status text helper", "export function rankingActionStatusText(text: string)"),
@@ -16912,6 +16922,46 @@ def main() -> int:
             "ranking direct action status text binding",
             content,
             "{rankingActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingActionStatusLabel()}</Text>\n                <Text style={styles.evidence}>{rankingActionStatusDisplayText}</Text>",
+        )
+        _assert_not_contains(
+            "ranking direct action status label helper render",
+            content,
+            "{rankingActionStatusLabel(futurePreviewDisplayLabels)}",
+        )
+        _assert_not_contains(
+            "ranking direct action status text helper render",
+            content,
+            "{rankingActionStatusText(rankingActionStatusDisplayText)}",
+        )
+        _assert_not_contains(
+            "ranking direct readiness helper render",
+            content,
+            "{futurePreviewReadinessSectionLabel(futurePreviewDisplayLabels)}",
+        )
+        _assert_not_contains(
+            "ranking direct preview label display bundle binding",
+            content,
+            "const rankingPreviewLabelDisplay = rankingPreviewLabelDisplayBundle({",
+        )
+        _assert_not_contains(
+            "ranking stale preview label display bundle import",
+            content,
+            "  rankingPreviewLabelDisplayBundle,",
+        )
+        _assert_not_contains(
+            "ranking stale action status label import",
+            content,
+            "  rankingActionStatusLabel,",
+        )
+        _assert_not_contains(
+            "ranking stale action status text import",
+            content,
+            "  rankingActionStatusText,",
+        )
+        _assert_not_contains(
+            "ranking stale readiness section import",
+            content,
+            "  futurePreviewReadinessSectionLabel,",
         )
         _assert_not_contains(
             "ranking direct action status visibility binding",
