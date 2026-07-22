@@ -495,7 +495,7 @@ import {
   parserSampleBlockedStatusMessage,
   parserSuccessStatusMessage,
   parserVoiceQuotaSyncedStatusMessage,
-  previewRecordEditBoundaryCopy,
+  previewRecordEditBoundaryDisplayBundle,
   recordDetailBoundaryChecklistDisplayItems,
   recordDetailReturnStatusMessage,
   recordEntrySettingsChecklistDisplayItems,
@@ -2042,7 +2042,8 @@ export default function App() {
   const transcriptReviewPreParseGuidanceDisplayText = transcriptReviewDisplay.preParseGuidance;
   const transcriptReviewSampleWarningDisplayText = transcriptReviewDisplay.sampleWarning;
   const transcriptReviewPreflightPassedDisplayText = transcriptReviewDisplay.preflightPassed;
-  const previewRecordEditBoundaryDisplayText = previewRecordEditBoundaryCopy();
+  const previewRecordEditBoundaryDisplay = previewRecordEditBoundaryDisplayBundle();
+  const previewRecordEditBoundaryDisplayText = previewRecordEditBoundaryDisplay.boundary;
   const selectedRecordDisplay = selectedRecordDisplayBundleForRecord(selectedRecord);
   const selectedRecordDisplayItem = selectedRecordDisplay.displayItem;
   const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayBundle(isBusy);

@@ -441,6 +441,12 @@ export function previewRecordEditBoundaryCopy() {
   return boundDisplayText("這裡只修改待確認候選紀錄；按下確認儲存前不會寫入資料庫。", maxDisplayDetailTextLength);
 }
 
+export function previewRecordEditBoundaryDisplayBundle() {
+  return {
+    boundary: previewRecordEditBoundaryCopy()
+  };
+}
+
 export function manualRecordConfirmIntroCopy() {
   return boundDisplayText(
     "這筆紀錄不經 AI parser，送出後會透過後端驗證、權限與 audit 路徑建立。",

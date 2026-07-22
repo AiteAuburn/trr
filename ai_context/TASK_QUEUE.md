@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2242: Move preview record edit boundary display bundle
+
+Status: done
+
+Completed:
+
+- Added the preview record edit boundary display bundle helper to `recordWorkflowCopy.ts`.
+- Moved `App.tsx` preview-record edit boundary display assembly from the raw boundary copy helper to the bundle entrypoint.
+- Kept preview edit boundary copy, candidate edit draft behavior, save-confirm boundary behavior, parser behavior, and database write timing unchanged.
+- Updated navigation verifier coverage to require the preview record edit boundary display bundle and no direct preview record edit boundary copy binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2241: Move history no-real-record empty value into display bundle
 
 Status: done
