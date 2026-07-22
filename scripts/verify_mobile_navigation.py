@@ -11474,7 +11474,7 @@ def main() -> int:
             "const accountSecurityCardAccessibilityLabel = accountSecurityAuthModeDisplay.cardAccessibilityLabel;",
         )
         for label, marker in (
-            ("settings account security auth mode display helper binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayTexts({"),
+            ("settings account security auth mode display helper binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayBundle({"),
             ("settings account security auth mode label binding", "const authModeDisplayLabel = accountSecurityAuthModeDisplay.label;"),
             ("settings account security auth mode copy binding", "const authModeDisplayCopy = accountSecurityAuthModeDisplay.copy;"),
         ):
@@ -12868,6 +12868,7 @@ def main() -> int:
             ("direct community action display texts binding", "const communityActionDisplay = communityActionDisplayTexts({"),
             ("direct future preview status display texts binding", "const futurePreviewStatusDisplay = futurePreviewStatusDisplayTexts({"),
             ("direct achievement year review status display texts binding", "const achievementYearReviewStatusDisplay = achievementYearReviewStatusDisplayTexts({"),
+            ("direct account security auth mode display texts binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayTexts({"),
             ("direct settings profile choice map", "profileChoiceDisplayItems.map((profile) => {"),
             ("direct settings profile key binding", "key={profile.id}"),
             ("direct settings profile accessibility binding", "accessibilityLabel={profile.accessibilityLabel}"),
@@ -13318,6 +13319,8 @@ def main() -> int:
             ("doctor share connected copy", "已連線帳號；正式分享仍需 production auth、權限與授權碼流程。"),
             ("doctor share disconnected copy", "尚未連線帳號；不可建立任何外部分享。"),
             ("account security auth mode display helper", "function accountSecurityAuthModeDisplayTexts(value: {"),
+            ("account security auth mode display bundle helper", "function accountSecurityAuthModeDisplayBundle(value: {"),
+            ("account security auth mode display bundle delegates", "return accountSecurityAuthModeDisplayTexts(value);"),
             ("account security dev auth label", 'const label = value.allowMobileDevAuth ? "Dev Auth" : "Production Auth Required";'),
             ("account security auth mode label binding", "label: displayLabel"),
             ("account security auth mode accessibility binding", "cardAccessibilityLabel: boundDisplayText("),

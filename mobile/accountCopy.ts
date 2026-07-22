@@ -65,6 +65,14 @@ export function accountSecurityAuthModeDisplayTexts(value: {
   };
 }
 
+export function accountSecurityAuthModeDisplayBundle(value: {
+  allowMobileDevAuth: boolean;
+  accountDisplayName: string;
+  accountLoginDisplayText: string;
+}) {
+  return accountSecurityAuthModeDisplayTexts(value);
+}
+
 export function doctorShareBoundaryDisplayRows() {
   return [
     ["授權碼", "未產生"],

@@ -405,7 +405,7 @@ import {
   accountEmailDisplayValue,
   accountLoginDisplayValue,
   accountPublicDisplayNameForSettings,
-  accountSecurityAuthModeDisplayTexts,
+  accountSecurityAuthModeDisplayBundle,
   doctorShareAccountBoundaryText,
   doctorShareBoundaryDisplayRows,
   doctorShareReadinessChecklistDisplayItems,
@@ -1229,7 +1229,7 @@ export default function App() {
   const activeProfileInlineDisplayText = activeProfileInlineText(activeProfileLabel);
   const activeProfileRelationshipDisplayText = activeProfileRelationshipText(activeProfile);
   const accountPublicDisplayNameDisplayText = accountPublicDisplayNameForSettings(communityPublicSettings, account);
-  const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayTexts({
+  const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayBundle({
     allowMobileDevAuth,
     accountDisplayName,
     accountLoginDisplayText
