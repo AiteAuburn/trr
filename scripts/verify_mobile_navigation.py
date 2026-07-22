@@ -10541,7 +10541,7 @@ def main() -> int:
         )
         for label, marker in (
             ("analysis default month range state", 'const [analysisRange, setAnalysisRange] = useState<AnalysisRange>("month");'),
-            ("analysis range display helper binding", "const analysisRangeDisplay = analysisRangeDisplayTexts("),
+            ("analysis range display helper binding", "const analysisRangeDisplay = analysisRangeDisplayBundle("),
             ("analysis range display label binding", "const analysisRangeDisplayLabel = analysisRangeDisplay.label;"),
             ("analysis custom range status display binding", "const analysisCustomRangeStatusDisplayText = analysisRangeDisplay.customRangeStatus;"),
             ("analysis selected date bounds", "const analysisSelectedDateBounds = useMemo("),
@@ -10614,6 +10614,8 @@ def main() -> int:
             ("analysis detailed report query cap copy", "詳細報告會使用 ${boundedReportQueryLimit} 筆上限查詢，避免一次載入過多資料。"),
             ("analysis custom range status helper", "function analysisCustomRangeStatusCopy(range: AnalysisRange, customStart: string, customEnd: string)"),
             ("analysis range display texts helper", "function analysisRangeDisplayTexts("),
+            ("analysis range display bundle helper", "function analysisRangeDisplayBundle("),
+            ("analysis range display bundle delegates", "return analysisRangeDisplayTexts(range, customStart, customEnd, ranges);"),
             ("analysis range display texts custom label", "range === \"custom\""),
             ("analysis range display texts fallback label", 'ranges.find((item) => item.id === range)?.label ?? "本月"'),
             ("analysis range display texts custom status", "customRangeStatus: analysisCustomRangeStatusCopy(range, customStart, customEnd)"),
@@ -12872,6 +12874,7 @@ def main() -> int:
             ("direct achievement year review status display texts binding", "const achievementYearReviewStatusDisplay = achievementYearReviewStatusDisplayTexts({"),
             ("direct account security auth mode display texts binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayTexts({"),
             ("direct history calendar display texts binding", "const historyCalendarDisplay = historyCalendarDisplayTexts(historyCalendarMonthStart, selectedHistoryDate);"),
+            ("direct analysis range display texts binding", "const analysisRangeDisplay = analysisRangeDisplayTexts("),
             ("direct settings profile choice map", "profileChoiceDisplayItems.map((profile) => {"),
             ("direct settings profile key binding", "key={profile.id}"),
             ("direct settings profile accessibility binding", "accessibilityLabel={profile.accessibilityLabel}"),

@@ -702,7 +702,7 @@ import {
   analysisManualEntryStatusMessage,
   analysisNoDataCopy,
   analysisNoDataStatusLabel,
-  analysisRangeDisplayTexts,
+  analysisRangeDisplayBundle,
   analysisRangeSummaryCopy,
   analysisReportButtonLabel,
   analysisReturnTodayStatusMessage,
@@ -1349,7 +1349,7 @@ export default function App() {
   );
   const analysisGlucoseValues = buildAnalysisGlucoseValues(analysisGlucoseRecords);
   const analysisPreviewMode = recordDisplayState.isEmpty;
-  const analysisRangeDisplay = analysisRangeDisplayTexts(
+  const analysisRangeDisplay = analysisRangeDisplayBundle(
     analysisRange,
     analysisCustomStart,
     analysisCustomEnd,

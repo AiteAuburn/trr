@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2230 move analysis range display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the analysis range display bundle helper to `analysisCopy.ts`.
+- Moved `App.tsx` analysis range label and custom-range status display assembly from the raw texts helper to the bundle entrypoint.
+- Kept analysis range copy, custom date validation copy, date-bound calculation, report fetching behavior, and analysis data behavior unchanged.
+- Updated navigation verifier coverage to require the analysis range display bundle, App bundle binding, and no direct analysis range display texts binding regression in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2229 move history calendar display bundle
 
 類型：mobile / refactor / verifier / docs

@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2230: Move analysis range display bundle
+
+Status: done
+
+Completed:
+
+- Added the analysis range display bundle helper to `analysisCopy.ts`.
+- Moved `App.tsx` analysis range label and custom-range status display assembly from the raw texts helper to the bundle entrypoint.
+- Kept analysis range copy, custom date validation copy, date-bound calculation, report fetching behavior, and analysis data behavior unchanged.
+- Updated navigation verifier coverage to require the analysis range display bundle, App bundle binding, and no direct analysis range display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2229: Move history calendar display bundle
 
 Status: done

@@ -116,6 +116,15 @@ export function analysisRangeDisplayTexts(
   };
 }
 
+export function analysisRangeDisplayBundle(
+  range: AnalysisRange,
+  customStart: string,
+  customEnd: string,
+  ranges: ReadonlyArray<{ id: AnalysisRange; label: string }>
+) {
+  return analysisRangeDisplayTexts(range, customStart, customEnd, ranges);
+}
+
 export function analysisReportButtonLabel(isLoading: boolean) {
   return boundDisplayText(isLoading ? "報告載入中..." : "查看詳細報告", maxDisplayTextLength);
 }
