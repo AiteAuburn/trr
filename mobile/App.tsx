@@ -650,7 +650,7 @@ import {
   quickRecordIntroDisplayBundle,
   recordingButtonAccessibilityLabel,
   recordManualEntryStatusMessage,
-  returnDestinationButtonLabel,
+  returnDestinationButtonDisplayBundle,
   saveSuccessDestinationDisplayItems,
   saveSuccessDestinationStatusMessage,
   saveSuccessManualContinueStatusMessage,
@@ -2088,10 +2088,16 @@ export default function App() {
   const recordingModelRefreshDisplayLabel = nativeActionDisplay.recordingModelRefreshLabel;
   const recordingModelRefreshAccessibilityDisplayLabel = nativeActionDisplay.recordingModelRefreshAccessibility;
   const downloadedWhisperModelChoiceItems = downloadedWhisperModelDisplayItems(downloadedModels);
-  const achievementsReturnButtonDisplayLabel = returnDestinationButtonLabel(achievementsReturnScreen);
-  const yearReviewReturnButtonDisplayLabel = returnDestinationButtonLabel(yearReviewReturnScreen);
-  const storeReturnButtonDisplayLabel = returnDestinationButtonLabel(storeReturnScreen);
-  const foodPhotoReturnButtonDisplayLabel = returnDestinationButtonLabel(foodPhotoReturnScreen);
+  const returnDestinationButtonDisplay = returnDestinationButtonDisplayBundle({
+    achievementsReturnScreen,
+    yearReviewReturnScreen,
+    storeReturnScreen,
+    foodPhotoReturnScreen
+  });
+  const achievementsReturnButtonDisplayLabel = returnDestinationButtonDisplay.achievements;
+  const yearReviewReturnButtonDisplayLabel = returnDestinationButtonDisplay.yearReview;
+  const storeReturnButtonDisplayLabel = returnDestinationButtonDisplay.store;
+  const foodPhotoReturnButtonDisplayLabel = returnDestinationButtonDisplay.foodPhoto;
   const headerActionDisplayAccessibilityLabel = headerActionAccessibilityLabel(currentChrome);
   const recordingButtonDisplayAccessibilityLabel = recordingButtonAccessibilityLabel(isRecordingPreview);
   const subscriptionActionControlDisplay = subscriptionActionControlDisplayBundle(isQuotaSyncing);

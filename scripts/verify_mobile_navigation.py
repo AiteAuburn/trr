@@ -3117,17 +3117,46 @@ def main() -> int:
             first_version_flow_copy_content,
             "function returnDestinationButtonLabel(destination: AppScreen)",
         )
+        _assert_contains(
+            "destination-aware return display bundle",
+            first_version_flow_copy_content,
+            "function returnDestinationButtonDisplayBundle(value: {",
+        )
+        for label, marker in (
+            (
+                "destination return achievements bundle label",
+                "achievements: returnDestinationButtonLabel(value.achievementsReturnScreen)",
+            ),
+            (
+                "destination return year review bundle label",
+                "yearReview: returnDestinationButtonLabel(value.yearReviewReturnScreen)",
+            ),
+            (
+                "destination return store bundle label",
+                "store: returnDestinationButtonLabel(value.storeReturnScreen)",
+            ),
+            (
+                "destination return food photo bundle label",
+                "foodPhoto: returnDestinationButtonLabel(value.foodPhotoReturnScreen)",
+            ),
+        ):
+            _assert_contains(label, first_version_flow_copy_content, marker)
         for label, marker in (
             ("destination return future modules label", "返回未來擴充"),
             ("destination return menu label", "返回功能選單"),
             ("destination return previous label", "返回上一頁"),
         ):
             _assert_contains(label, first_version_flow_copy_content, marker)
+        _assert_contains(
+            "return destination display bundle binding",
+            content,
+            "const returnDestinationButtonDisplay = returnDestinationButtonDisplayBundle({",
+        )
         for screen in sorted(EXPECTED_PREVIEW_RETURN_CTA_SCREENS):
             label_name = f"{screen}ReturnButtonDisplayLabel"
             return_state_name = f"{screen}ReturnScreen"
-            _assert_contains(
-                f"{screen} return label",
+            _assert_not_contains(
+                f"{screen} direct return label binding",
                 content,
                 f"const {label_name} = returnDestinationButtonLabel({return_state_name});",
             )

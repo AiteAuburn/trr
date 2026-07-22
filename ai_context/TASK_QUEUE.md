@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2246: Move return destination button display bundle
+
+Status: done
+
+Completed:
+
+- Added the return destination button display bundle helper to `firstVersionFlowCopy.ts`.
+- Moved `App.tsx` achievements, yearly review, store, and food photo return label display assembly from direct helper calls to the bundle entrypoint.
+- Kept preview return destinations, return handlers, menu/future-module return copy, and all CTA render labels unchanged.
+- Updated navigation verifier coverage to require the return destination button display bundle and no direct return destination helper binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2245: Move recording boundary display bundle
 
 Status: done

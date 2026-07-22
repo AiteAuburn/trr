@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2246 move return destination button display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/firstVersionFlowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the return destination button display bundle helper to `firstVersionFlowCopy.ts`.
+- Moved `App.tsx` achievements, yearly review, store, and food photo return label display assembly from direct helper calls to the bundle entrypoint.
+- Kept preview return destinations, return handlers, menu/future-module return copy, and all CTA render labels unchanged.
+- Updated navigation verifier coverage to require the return destination button display bundle and no direct return destination helper binding regression in `App.tsx`.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2245 move recording boundary display bundle
 
 類型：mobile / refactor / verifier / docs

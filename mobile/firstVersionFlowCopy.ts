@@ -188,6 +188,20 @@ export function returnDestinationButtonLabel(destination: AppScreen) {
   return boundDisplayText("返回上一頁", maxDisplayTextLength);
 }
 
+export function returnDestinationButtonDisplayBundle(value: {
+  achievementsReturnScreen: AppScreen;
+  yearReviewReturnScreen: AppScreen;
+  storeReturnScreen: AppScreen;
+  foodPhotoReturnScreen: AppScreen;
+}) {
+  return {
+    achievements: returnDestinationButtonLabel(value.achievementsReturnScreen),
+    yearReview: returnDestinationButtonLabel(value.yearReviewReturnScreen),
+    store: returnDestinationButtonLabel(value.storeReturnScreen),
+    foodPhoto: returnDestinationButtonLabel(value.foodPhotoReturnScreen)
+  };
+}
+
 export function quickRecordIntroCopy() {
   return boundDisplayText("首頁只保留按住錄音；文字整理與手動新增請從記錄頁進入，整理前都會先進文字確認。", maxDisplayDetailTextLength);
 }
