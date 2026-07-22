@@ -2694,6 +2694,29 @@ export function communityActionStatusVisible(status: string) {
   return Boolean(status);
 }
 
+export function communityPreviewLabelDisplayBundle(value: {
+  labels: FuturePreviewSectionLabels;
+  boundaryDisplay: { badge: string; copy: string };
+  closeLabel: string;
+  actionStatusText: string;
+}) {
+  return {
+    closeAccessibility: futurePreviewCloseAccessibilityLabel(value.closeLabel),
+    boundaryBadge: futurePreviewBoundaryBadgeLabel(value.boundaryDisplay),
+    boundaryCopy: futurePreviewBoundaryCopyText(value.boundaryDisplay),
+    postAccessibility: communityPostAccessibilityLabel(value.labels),
+    postButton: communityPostButtonLabel(value.labels),
+    privacyAccessibility: communityPrivacyAccessibilityLabel(value.labels),
+    actionStatusLabel: communityActionStatusLabel(value.labels),
+    actionStatusCopy: communityActionStatusText(value.actionStatusText),
+    readinessSection: futurePreviewReadinessSectionLabel(value.labels),
+    returnAccessibility: futurePreviewReturnAccessibilityLabel(value.labels),
+    returnButton: futurePreviewReturnButtonLabel(value.labels),
+    publicProfileSaveAccessibility: communityPublicProfileSaveAccessibilityLabel(),
+    publicProfileSaveButton: communityPublicProfileSaveButtonLabel()
+  };
+}
+
 export function futurePreviewReadinessSectionLabel(labels: FuturePreviewSectionLabels) {
   return labels.formalReadiness;
 }

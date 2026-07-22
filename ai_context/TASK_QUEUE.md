@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2252: Move community preview label display bundle
+
+Status: done
+
+Completed:
+
+- Added the community preview label display bundle helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` community close, boundary badge/copy, post/privacy/status, readiness, return, and public-profile-save label assembly from direct helper calls to the bundle entrypoint.
+- Kept community preview status visibility, press handlers, boundary text, public profile save controls, return CTA, and food community rendering unchanged.
+- Updated navigation verifier coverage to require the community preview label display bundle and no direct community preview label binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2251: Move profile settings boundary copy bundle
 
 Status: done

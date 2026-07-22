@@ -195,20 +195,14 @@ import {
   commercePreviewOpenCartStatusMessage,
   commercePreviewReturnStoreStatusMessage,
   communityActionDisplayBundle,
-  communityActionStatusLabel,
-  communityActionStatusText,
   communityActionStatusVisible,
   communityHeroIconLabel,
   communityLeaderboardSyncStatusMessages,
   communityLeaderboardDisplaySections,
   communityLeaderboardTypes,
-  communityPostAccessibilityLabel,
-  communityPostButtonLabel,
+  communityPreviewLabelDisplayBundle,
   communityPublicNamePreviewLabel,
-  communityPublicProfileSaveAccessibilityLabel,
-  communityPublicProfileSaveButtonLabel,
   communityPublicSettingsStatusMessages,
-  communityPrivacyAccessibilityLabel,
   emptyFoodCommunityShareFields,
   communityReadinessChecklistDisplayItems,
   communityScreenSubtitleCopy,
@@ -1859,20 +1853,26 @@ export default function App() {
   });
   const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;
   const foodCommunityShareAccessibilityDisplayLabel = communityActionDisplay.foodCommunityShareAccessibility;
-  const communityCloseAccessibilityDisplayLabel = futurePreviewCloseAccessibilityLabel(auxiliaryDisplayLabels.closeReturn);
-  const communityPreviewBoundaryBadgeDisplayLabel = futurePreviewBoundaryBadgeLabel(communityPreviewBoundaryDisplay);
-  const communityPreviewBoundaryCopyDisplayText = futurePreviewBoundaryCopyText(communityPreviewBoundaryDisplay);
-  const communityPostAccessibilityDisplayLabel = communityPostAccessibilityLabel(futurePreviewDisplayLabels);
-  const communityPostButtonDisplayLabel = communityPostButtonLabel(futurePreviewDisplayLabels);
-  const communityPrivacyAccessibilityDisplayLabel = communityPrivacyAccessibilityLabel(futurePreviewDisplayLabels);
-  const communityActionStatusDisplayLabel = communityActionStatusLabel(futurePreviewDisplayLabels);
-  const communityActionStatusDisplayCopy = communityActionStatusText(communityActionStatusDisplayText);
-  const communityReadinessSectionDisplayLabel = futurePreviewReadinessSectionLabel(futurePreviewDisplayLabels);
-  const communityReturnFutureModulesAccessibilityDisplayLabel = futurePreviewReturnAccessibilityLabel(futurePreviewDisplayLabels);
-  const communityReturnFutureModulesButtonDisplayLabel = futurePreviewReturnButtonLabel(futurePreviewDisplayLabels);
+  const communityPreviewLabelDisplay = communityPreviewLabelDisplayBundle({
+    labels: futurePreviewDisplayLabels,
+    boundaryDisplay: communityPreviewBoundaryDisplay,
+    closeLabel: auxiliaryDisplayLabels.closeReturn,
+    actionStatusText: communityActionStatusDisplayText
+  });
+  const communityCloseAccessibilityDisplayLabel = communityPreviewLabelDisplay.closeAccessibility;
+  const communityPreviewBoundaryBadgeDisplayLabel = communityPreviewLabelDisplay.boundaryBadge;
+  const communityPreviewBoundaryCopyDisplayText = communityPreviewLabelDisplay.boundaryCopy;
+  const communityPostAccessibilityDisplayLabel = communityPreviewLabelDisplay.postAccessibility;
+  const communityPostButtonDisplayLabel = communityPreviewLabelDisplay.postButton;
+  const communityPrivacyAccessibilityDisplayLabel = communityPreviewLabelDisplay.privacyAccessibility;
+  const communityActionStatusDisplayLabel = communityPreviewLabelDisplay.actionStatusLabel;
+  const communityActionStatusDisplayCopy = communityPreviewLabelDisplay.actionStatusCopy;
+  const communityReadinessSectionDisplayLabel = communityPreviewLabelDisplay.readinessSection;
+  const communityReturnFutureModulesAccessibilityDisplayLabel = communityPreviewLabelDisplay.returnAccessibility;
+  const communityReturnFutureModulesButtonDisplayLabel = communityPreviewLabelDisplay.returnButton;
   const communityReturnFutureModulesPressTarget = communityReturnFutureModulesPressHandler();
-  const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();
-  const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();
+  const communityPublicProfileSaveAccessibilityDisplayLabel = communityPreviewLabelDisplay.publicProfileSaveAccessibility;
+  const communityPublicProfileSaveButtonDisplayLabel = communityPreviewLabelDisplay.publicProfileSaveButton;
   const storePreviewDisplay = storePreviewDisplayBundle(storeActionStatus);
   const storeActionStatusDisplayText = storePreviewDisplay.actionStatus;
   const storePreviewBoundaryDisplayText = storePreviewDisplay.previewBoundary;
