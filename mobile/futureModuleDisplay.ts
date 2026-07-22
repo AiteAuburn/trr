@@ -875,6 +875,12 @@ export function buildAchievementCategoryDisplaySections(items: AchievementDispla
   }));
 }
 
+export function achievementCategoryDisplayBundle(items: AchievementDisplayItem[]) {
+  return {
+    categorySections: buildAchievementCategoryDisplaySections(items)
+  };
+}
+
 export function achievementBadgeSummary(items: AchievementDisplayItem[]) {
   const unlockedItems = items.filter((item) => item.progress >= item.target);
   const nextRemaining =

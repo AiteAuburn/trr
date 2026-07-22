@@ -14739,7 +14739,10 @@ def main() -> int:
             ("achievement newly unlocked display items", "const achievementNewlyUnlockedDisplayItems = useMemo("),
             ("achievement limited display helper binding", "limitedAchievementDisplayItems(achievementNewlyUnlockedItems)"),
             ("achievement save success newly unlocked bundle field binding", "const saveSuccessNewlyUnlockedDisplayItems = achievementSaveSuccessDisplay.newlyUnlockedItems;"),
-            ("achievement category sections helper binding", "const achievementCategoryDisplaySections = useMemo("),
+            ("achievement category display bundle import", "achievementCategoryDisplayBundle,"),
+            ("achievement category display bundle binding", "const achievementCategoryDisplay = useMemo("),
+            ("achievement category display bundle invocation", "() => achievementCategoryDisplayBundle(achievementDisplayItems),"),
+            ("achievement category sections bundle field binding", "const achievementCategoryDisplaySections = achievementCategoryDisplay.categorySections;"),
             ("achievement newly unlocked helper binding", "setAchievementNewlyUnlockedItems(achievementNewlyUnlockedItemsForSync(mappedSummaryItems, syncUnlocks));"),
             ("achievement newly unlocked section", "本次新解鎖"),
             ("achievement save success newly unlocked section", "新解鎖成就"),
@@ -15045,6 +15048,8 @@ def main() -> int:
         for label, marker in (
             ("direct achievement save success newly unlocked helper binding", "const saveSuccessNewlyUnlockedDisplayItems = saveSuccessNewlyUnlockedAchievementDisplayItems("),
             ("direct achievement save success newly unlocked helper import", "  saveSuccessNewlyUnlockedAchievementDisplayItems,"),
+            ("direct achievement category sections helper binding", "buildAchievementCategoryDisplaySections(achievementDisplayItems)"),
+            ("direct achievement category sections helper import", "  buildAchievementCategoryDisplaySections,"),
         ):
             _assert_not_contains(label, content, marker)
         _assert_not_contains(
@@ -15164,6 +15169,8 @@ def main() -> int:
             ("achievement save success display bundle helper", "export function achievementSaveSuccessDisplayBundle(items: AchievementDisplayItem[])"),
             ("achievement save success display bundle newly unlocked binding", "newlyUnlockedItems: saveSuccessNewlyUnlockedAchievementDisplayItems(items)"),
             ("achievement category sections helper", "export function buildAchievementCategoryDisplaySections(items: AchievementDisplayItem[])"),
+            ("achievement category display bundle helper", "export function achievementCategoryDisplayBundle(items: AchievementDisplayItem[])"),
+            ("achievement category display bundle sections binding", "categorySections: buildAchievementCategoryDisplaySections(items)"),
             ("achievement category section key", "key: boundIdentifier(`achievement-section-${definition.id}`),"),
             ("achievement category section filter", "items: items.filter((item) => item.category === definition.id)"),
             ("achievement badge summary helper", "export function achievementBadgeSummary(items: AchievementDisplayItem[])"),

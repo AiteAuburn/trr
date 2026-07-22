@@ -172,6 +172,7 @@ import {
 } from "./navigationConfig";
 import {
   achievementBadgeSummary,
+  achievementCategoryDisplayBundle,
   achievementDisplayItems as buildAchievementDisplayItems,
   achievementItemsFromApi,
   achievementNewlyUnlockedItemsForSync,
@@ -181,7 +182,6 @@ import {
   achievementUnlocksFromApi,
   backendYearReviewHealthOutcomeDisplayRows,
   backendYearReviewMetricDisplayRows,
-  buildAchievementCategoryDisplaySections,
   foodPhotoDisplayBundle,
   foodPhotoPreviewStaticDisplayBundle,
   apiFoodCategoryFromMobile,
@@ -1488,10 +1488,11 @@ export default function App() {
   );
   const achievementSaveSuccessDisplay = achievementSaveSuccessDisplayBundle(achievementNewlyUnlockedDisplayItems);
   const saveSuccessNewlyUnlockedDisplayItems = achievementSaveSuccessDisplay.newlyUnlockedItems;
-  const achievementCategoryDisplaySections = useMemo(
-    () => buildAchievementCategoryDisplaySections(achievementDisplayItems),
+  const achievementCategoryDisplay = useMemo(
+    () => achievementCategoryDisplayBundle(achievementDisplayItems),
     [achievementDisplayItems]
   );
+  const achievementCategoryDisplaySections = achievementCategoryDisplay.categorySections;
   const achievementBadgeDisplaySummary = achievementBadgeSummary(achievementDisplayItems);
   const unlockedAchievementDisplayCount = clampNumber(
     achievementBadgeDisplaySummary.unlockedCount,
