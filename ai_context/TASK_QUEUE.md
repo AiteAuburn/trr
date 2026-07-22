@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2300: Move settings profile runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `settingsProfileRuntimeDisplayBundle` to `settingsCopy.ts`.
+- Moved `App.tsx` active profile display assembly behind the runtime bundle.
+- Kept active profile label, inline text, relationship fallback, and profile-count handling unchanged.
+- Updated navigation verifier coverage to require the bundled settings profile display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2299: Move account runtime display assembly
 
 Status: done

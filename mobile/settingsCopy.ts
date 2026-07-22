@@ -51,6 +51,15 @@ export function activeProfileDisplayBundle(activeProfile: ActiveProfileDisplaySo
   };
 }
 
+export function settingsProfileRuntimeDisplayBundle(value: {
+  activeProfile: ActiveProfileDisplaySource | null;
+  profileCount: number;
+}) {
+  return {
+    activeProfile: activeProfileDisplayBundle(value.activeProfile, value.profileCount)
+  };
+}
+
 export function formatVoiceMinutes(seconds: number) {
   const safeSeconds = Math.max(0, Math.min(3600, seconds));
   const minutes = Math.floor(safeSeconds / 60);

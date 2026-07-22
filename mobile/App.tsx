@@ -703,7 +703,6 @@ import {
   type DailyTranscriptEntry
 } from "./dailyTranscriptTransforms";
 import {
-  activeProfileDisplayBundle,
   captureVoiceQuotaCopy,
   isVoiceQuotaLow,
   membershipStatusReturnSubscriptionStatusMessage,
@@ -716,6 +715,7 @@ import {
   settingsAccountSecurityOpenStatusMessage,
   settingsBoundaryCopyBundle,
   settingsControlDisplayBundle,
+  settingsProfileRuntimeDisplayBundle,
   settingsSubpageStatusDisplayBundle,
   settingsSubpageReturnStatusMessage
 } from "./settingsCopy";
@@ -1155,7 +1155,11 @@ export default function App() {
   const accountEmailDisplayText = accountDisplay.email;
   const accountLoginDisplayText = accountDisplay.login;
   const doctorShareAccountBoundaryDisplayText = accountDisplay.doctorShareBoundary;
-  const activeProfileDisplay = activeProfileDisplayBundle(activeProfile, profiles.length);
+  const settingsProfileRuntimeDisplay = settingsProfileRuntimeDisplayBundle({
+    activeProfile,
+    profileCount: profiles.length
+  });
+  const activeProfileDisplay = settingsProfileRuntimeDisplay.activeProfile;
   const activeProfileLabel = activeProfileDisplay.label;
   const activeProfileInlineDisplayText = activeProfileDisplay.inline;
   const activeProfileRelationshipDisplayText = activeProfileDisplay.relationship;

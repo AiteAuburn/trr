@@ -11969,7 +11969,10 @@ def main() -> int:
             ("doctor share static display bundle binding", "const doctorShareStaticDisplay = doctorShareStaticDisplayBundle();"),
             ("doctor share static display readiness binding", "const doctorShareReadinessChecklistItems = doctorShareStaticDisplay.readinessChecklistItems;"),
             ("doctor share static display boundary rows binding", "const doctorShareBoundaryRows = doctorShareStaticDisplay.boundaryRows;"),
-            ("active profile display bundle binding", "const activeProfileDisplay = activeProfileDisplayBundle(activeProfile, profiles.length);"),
+            ("settings profile runtime display bundle import", "settingsProfileRuntimeDisplayBundle,"),
+            ("settings profile runtime display bundle binding", "const settingsProfileRuntimeDisplay = settingsProfileRuntimeDisplayBundle({"),
+            ("settings profile runtime display active profile input", "activeProfile,\n    profileCount: profiles.length"),
+            ("active profile runtime bundle field binding", "const activeProfileDisplay = settingsProfileRuntimeDisplay.activeProfile;"),
             ("active profile label bundle field binding", "const activeProfileLabel = activeProfileDisplay.label;"),
             ("active profile inline bundle field binding", "const activeProfileInlineDisplayText = activeProfileDisplay.inline;"),
             ("active profile relationship bundle field binding", "const activeProfileRelationshipDisplayText = activeProfileDisplay.relationship;"),
@@ -11979,6 +11982,8 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("direct active profile display bundle binding", "const activeProfileDisplay = activeProfileDisplayBundle(activeProfile, profiles.length);"),
+            ("direct active profile display bundle import", "  activeProfileDisplayBundle,"),
             ("direct account display bundle binding", "const accountDisplay = accountDisplayBundle(account);"),
             ("direct account display bundle import", "  accountDisplayBundle,"),
             ("direct account auth mode display bundle binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayBundle({"),
@@ -13698,6 +13703,8 @@ def main() -> int:
             ("active profile display bundle label binding", "const label = activeProfileLabelText(activeProfile, profileCount);"),
             ("active profile display bundle inline binding", "inline: activeProfileInlineText(label)"),
             ("active profile display bundle relationship binding", "relationship: activeProfileRelationshipText(activeProfile)"),
+            ("settings profile runtime display bundle helper", "function settingsProfileRuntimeDisplayBundle(value: {"),
+            ("settings profile runtime display bundle active profile binding", "activeProfile: activeProfileDisplayBundle(value.activeProfile, value.profileCount)"),
             ("settings subpage status display texts helper", "function settingsSubpageStatusDisplayTexts(value: {"),
             ("settings subpage status display bundle helper", "function settingsSubpageStatusDisplayBundle(value: {"),
             ("settings subpage status display bundle delegates", "return settingsSubpageStatusDisplayTexts(value);"),
