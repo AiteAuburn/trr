@@ -89,3 +89,12 @@ export function historyNoRangeRecordsTitleCopy() {
 export function historyNoRangeRecordsBodyCopy() {
   return boundDisplayText("可以切換時間範圍，或回到今日頁新增新的紀錄。", maxDisplayDetailTextLength);
 }
+
+export function historyEmptyStateDisplayBundle() {
+  return {
+    noRecordsTitle: historyNoRecordsTitleCopy(),
+    noRecordsBody: historyNoRecordsBodyCopy(),
+    noRangeRecordsTitle: historyNoRangeRecordsTitleCopy(),
+    noRangeRecordsBody: historyNoRangeRecordsBodyCopy()
+  };
+}

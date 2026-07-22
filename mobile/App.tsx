@@ -672,11 +672,8 @@ import {
 import {
   historyBoundaryChecklistDisplayItems,
   historyCalendarDisplayBundle,
+  historyEmptyStateDisplayBundle,
   historyManualEntryStatusMessage,
-  historyNoRangeRecordsBodyCopy,
-  historyNoRangeRecordsTitleCopy,
-  historyNoRecordsBodyCopy,
-  historyNoRecordsTitleCopy,
   historyRecordDetailStatusMessage,
   historyReturnTodayStatusMessage,
   noRealRecordHealthValueCopy
@@ -2059,10 +2056,11 @@ export default function App() {
   const deleteConfirmIntroDisplayText = deleteConfirmDisplay.intro;
   const deleteConfirmRecordMetaDisplayText = deleteConfirmDisplay.recordMeta;
   const deleteConfirmSubmitDisplayLabel = deleteConfirmDisplay.submit;
-  const historyNoRecordsTitleDisplayText = historyNoRecordsTitleCopy();
-  const historyNoRecordsBodyDisplayText = historyNoRecordsBodyCopy();
-  const historyNoRangeRecordsTitleDisplayText = historyNoRangeRecordsTitleCopy();
-  const historyNoRangeRecordsBodyDisplayText = historyNoRangeRecordsBodyCopy();
+  const historyEmptyStateDisplay = historyEmptyStateDisplayBundle();
+  const historyNoRecordsTitleDisplayText = historyEmptyStateDisplay.noRecordsTitle;
+  const historyNoRecordsBodyDisplayText = historyEmptyStateDisplay.noRecordsBody;
+  const historyNoRangeRecordsTitleDisplayText = historyEmptyStateDisplay.noRangeRecordsTitle;
+  const historyNoRangeRecordsBodyDisplayText = historyEmptyStateDisplay.noRangeRecordsBody;
   const analysisSafetyIntroDisplayText = analysisSafetyIntroCopy();
   const analysisChartEmptyDisplayText = analysisChartEmptyCopy();
   const analysisRangeSummaryDisplayText = analysisRangeSummaryCopy(

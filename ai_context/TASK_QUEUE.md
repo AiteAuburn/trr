@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2238: Move history empty state display bundle
+
+Status: done
+
+Completed:
+
+- Added the history empty state display bundle helper to `historyCopy.ts`.
+- Moved `App.tsx` history no-records and no-range title/body display assembly from four raw copy helpers to the bundle entrypoint.
+- Kept History empty-state copy, no-range copy, calendar behavior, record sync behavior, and History rendering unchanged.
+- Updated navigation verifier coverage to require the history empty state display bundle, App bundle binding, and no direct history empty-state copy binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2237: Move delete confirm display bundle
 
 Status: done
