@@ -292,11 +292,9 @@ import {
   storeCategoryOptionLabel,
   storeCategoryOptionSelected,
   storeCategoryTarget,
-  storeCartUnavailableDisplayItem,
-  storeCheckoutReadinessChecklistDisplayItems,
-  storeEmptySearchDisplayItem,
   storeCatalogSyncStatusMessages,
   storePreviewDisplayBundle,
+  storePreviewStaticDisplayBundle,
   storeRedeemStatusMessages,
   storeRedemptionUseStatusMessages,
   storeDisplayBundle,
@@ -1777,8 +1775,9 @@ export default function App() {
     healthIntegrationReadinessChecklistDisplayItems();
   const communityReadinessChecklistItems = communityReadinessChecklistDisplayItems();
   const rankingReadinessChecklistItems = rankingReadinessChecklistDisplayItems();
-  const storeCheckoutReadinessChecklistItems = storeCheckoutReadinessChecklistDisplayItems();
-  const storeCartUnavailableDisplay = storeCartUnavailableDisplayItem();
+  const storePreviewStaticDisplay = storePreviewStaticDisplayBundle();
+  const storeCheckoutReadinessChecklistItems = storePreviewStaticDisplay.checkoutReadinessItems;
+  const storeCartUnavailableDisplay = storePreviewStaticDisplay.cartUnavailable;
   const foodPhotoVisionBoundaryDisplay = foodPhotoVisionBoundaryDisplayItem();
   const foodPhotoEmptyResultChecklistItems = foodPhotoEmptyResultChecklistDisplayItems();
   const foodPhotoReadinessChecklistItems = foodPhotoReadinessChecklistDisplayItems();
@@ -1866,7 +1865,7 @@ export default function App() {
   const storePreviewDisplay = storePreviewDisplayBundle(storeActionStatus);
   const storeActionStatusDisplayText = storePreviewDisplay.actionStatus;
   const storePreviewBoundaryDisplayText = storePreviewDisplay.previewBoundary;
-  const storeEmptySearchDisplay = storeEmptySearchDisplayItem();
+  const storeEmptySearchDisplay = storePreviewStaticDisplay.emptySearch;
   const storeCartButtonDisplayLabel = storePreviewDisplay.cartButton;
   const storeCartButtonAccessibilityDisplayLabel = storePreviewDisplay.cartButtonAccessibility;
   const storeLocalBoundaryDisplayText = storePreviewDisplay.localBoundary;

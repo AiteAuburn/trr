@@ -3966,9 +3966,14 @@ def main() -> int:
             "const rankingReadinessChecklistItems = rankingReadinessChecklistDisplayItems();",
         )
         _assert_contains(
+            "store static display bundle binding",
+            content,
+            "const storePreviewStaticDisplay = storePreviewStaticDisplayBundle();",
+        )
+        _assert_contains(
             "store checkout readiness checklist helper binding",
             content,
-            "const storeCheckoutReadinessChecklistItems = storeCheckoutReadinessChecklistDisplayItems();",
+            "const storeCheckoutReadinessChecklistItems = storePreviewStaticDisplay.checkoutReadinessItems;",
         )
         _assert_contains(
             "food photo readiness checklist helper binding",
@@ -14611,6 +14616,9 @@ def main() -> int:
             ("year review revoke failure status binding", "setYearReviewActionStatus(revokeStatus.failure);"),
             ("store product button role", 'accessibilityRole="button"\n                  style={styles.roundActionButton}'),
             ("store preview display helper binding", "const storePreviewDisplay = storePreviewDisplayBundle(storeActionStatus);"),
+            ("store static display bundle import", "storePreviewStaticDisplayBundle,"),
+            ("store cart unavailable display binding", "const storeCartUnavailableDisplay = storePreviewStaticDisplay.cartUnavailable;"),
+            ("store empty search display binding", "const storeEmptySearchDisplay = storePreviewStaticDisplay.emptySearch;"),
             ("store action status display binding", "const storeActionStatusDisplayText = storePreviewDisplay.actionStatus;"),
             ("store preview boundary display binding", "const storePreviewBoundaryDisplayText = storePreviewDisplay.previewBoundary;"),
             ("store cart accessibility display binding", "const storeCartButtonAccessibilityDisplayLabel = storePreviewDisplay.cartButtonAccessibility;"),
@@ -15369,6 +15377,10 @@ def main() -> int:
             ("store cart unavailable copy", "目前不建立訂單、不保留購物車內容，也不處理付款或折價券。"),
             ("store cart backend order flow evidence", "需等購物車、庫存、出貨、付款與退款規則完成後再接 backend order flow。"),
             ("store checkout readiness checklist helper", "export function storeCheckoutReadinessChecklistDisplayItems()"),
+            ("store preview static display bundle helper", "export function storePreviewStaticDisplayBundle()"),
+            ("store preview static checkout binding", "checkoutReadinessItems: storeCheckoutReadinessChecklistDisplayItems()"),
+            ("store preview static cart unavailable binding", "cartUnavailable: storeCartUnavailableDisplayItem()"),
+            ("store preview static empty search binding", "emptySearch: storeEmptySearchDisplayItem()"),
             ("store checkout readiness catalog copy", "商品目錄、庫存與價格來源"),
             ("store checkout readiness inventory rollback copy", "購物車持久化、庫存 reservation 與 rollback 規則"),
             ("store checkout readiness payment copy", "付款金流、receipt validation 與退款流程"),
@@ -17002,6 +17014,36 @@ def main() -> int:
             "future preview stale return button import",
             content,
             "  futurePreviewReturnButtonLabel,",
+        )
+        _assert_not_contains(
+            "store direct checkout readiness helper binding",
+            content,
+            "const storeCheckoutReadinessChecklistItems = storeCheckoutReadinessChecklistDisplayItems();",
+        )
+        _assert_not_contains(
+            "store direct cart unavailable helper binding",
+            content,
+            "const storeCartUnavailableDisplay = storeCartUnavailableDisplayItem();",
+        )
+        _assert_not_contains(
+            "store direct empty search helper binding",
+            content,
+            "const storeEmptySearchDisplay = storeEmptySearchDisplayItem();",
+        )
+        _assert_not_contains(
+            "store stale cart unavailable helper import",
+            content,
+            "  storeCartUnavailableDisplayItem,",
+        )
+        _assert_not_contains(
+            "store stale checkout readiness helper import",
+            content,
+            "  storeCheckoutReadinessChecklistDisplayItems,",
+        )
+        _assert_not_contains(
+            "store stale empty search helper import",
+            content,
+            "  storeEmptySearchDisplayItem,",
         )
         _assert_not_contains(
             "ranking direct action status visibility binding",

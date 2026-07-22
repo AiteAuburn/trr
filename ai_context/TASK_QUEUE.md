@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2276: Move store static display bundle assembly
+
+Status: done
+
+Completed:
+
+- Added `storePreviewStaticDisplayBundle` to `futureModuleDisplay.ts`.
+- Moved `App.tsx` store checkout readiness items, cart unavailable display, and empty search display assembly behind the bundle.
+- Kept store search/category/product rendering, cart preview UI, checkout disabled state, and backend flow unchanged.
+- Updated navigation verifier coverage to require the static bundle and reject the old direct App-level store helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2275: Remove stale future preview helper imports
 
 Status: done

@@ -2180,6 +2180,14 @@ export function storeCheckoutReadinessChecklistDisplayItems() {
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
+export function storePreviewStaticDisplayBundle() {
+  return {
+    checkoutReadinessItems: storeCheckoutReadinessChecklistDisplayItems(),
+    cartUnavailable: storeCartUnavailableDisplayItem(),
+    emptySearch: storeEmptySearchDisplayItem()
+  };
+}
+
 export function storeCartReturnButtonLabel() {
   return boundDisplayText("返回商城", maxDisplayTextLength);
 }
