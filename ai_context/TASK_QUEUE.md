@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2248: Move future preview boundary copy bundle
+
+Status: done
+
+Completed:
+
+- Added the future preview boundary copy bundle helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` doctor share backend, health integration external data, community public name, and ranking local preview boundary copy assembly from direct helper calls to the bundle entrypoint.
+- Kept future preview boundary text, badges, return CTAs, readiness sections, and future module navigation unchanged.
+- Updated navigation verifier coverage to require the future preview boundary copy bundle and no direct future preview boundary copy binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2247: Move settings control display bundle
 
 Status: done

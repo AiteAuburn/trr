@@ -15036,6 +15036,11 @@ def main() -> int:
             ("ranking close button helper fields", 'return "×";'),
             ("ranking local preview boundary copy helper", "export function rankingLocalPreviewBoundaryCopy()"),
             ("ranking local preview boundary copy", "本機連續天數僅供自己查看；公開榜單只使用 backend 已聚合的 opt-in 社群統計"),
+            ("future preview boundary copy bundle helper", "export function futurePreviewBoundaryCopyBundle()"),
+            ("future preview boundary copy bundle doctor share", "doctorShareBackend: doctorShareBackendBoundaryCopy()"),
+            ("future preview boundary copy bundle health integration", "healthIntegrationExternalData: healthIntegrationExternalDataBoundaryCopy()"),
+            ("future preview boundary copy bundle community", "communityPublicName: communityPublicNameBoundaryCopy()"),
+            ("future preview boundary copy bundle ranking", "rankingLocalPreview: rankingLocalPreviewBoundaryCopy()"),
             ("ranking boundary rows helper", "export function rankingBoundaryDisplayRows()"),
             ("ranking boundary public row", "公開排名"),
             ("ranking boundary data row", "非敏感統計"),
@@ -15262,6 +15267,12 @@ def main() -> int:
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (
+            ("future preview boundary copy bundle import", "futurePreviewBoundaryCopyBundle,"),
+            ("future preview boundary copy bundle binding", "const futurePreviewBoundaryCopy = futurePreviewBoundaryCopyBundle();"),
+            ("future preview boundary copy bundle doctor share binding", "const doctorShareBackendBoundaryDisplayText = futurePreviewBoundaryCopy.doctorShareBackend;"),
+            ("future preview boundary copy bundle health integration binding", "const healthIntegrationExternalDataBoundaryDisplayText = futurePreviewBoundaryCopy.healthIntegrationExternalData;"),
+            ("future preview boundary copy bundle community binding", "const communityPublicNameBoundaryDisplayText = futurePreviewBoundaryCopy.communityPublicName;"),
+            ("future preview boundary copy bundle ranking binding", "const rankingLocalPreviewBoundaryDisplayText = futurePreviewBoundaryCopy.rankingLocalPreview;"),
             ("future preview boundary display bundle import", "futurePreviewBoundaryDisplayBundle,"),
             ("future preview boundary display bundle binding", "const futurePreviewBoundaryDisplay = futurePreviewBoundaryDisplayBundle();"),
             ("future preview boundary display bundle doctor share binding", "const doctorSharePreviewBoundaryDisplay = futurePreviewBoundaryDisplay.doctorShare;"),
@@ -15273,6 +15284,10 @@ def main() -> int:
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("direct doctor share backend boundary copy binding", "const doctorShareBackendBoundaryDisplayText = doctorShareBackendBoundaryCopy();"),
+            ("direct health integration external boundary copy binding", "const healthIntegrationExternalDataBoundaryDisplayText = healthIntegrationExternalDataBoundaryCopy();"),
+            ("direct community public name boundary copy binding", "const communityPublicNameBoundaryDisplayText = communityPublicNameBoundaryCopy();"),
+            ("direct ranking local preview boundary copy binding", "const rankingLocalPreviewBoundaryDisplayText = rankingLocalPreviewBoundaryCopy();"),
             ("direct doctor share preview boundary item binding", "const doctorSharePreviewBoundaryDisplay = doctorSharePreviewBoundaryDisplayItem();"),
             ("direct health integration preview boundary item binding", "const healthIntegrationPreviewBoundaryDisplay = healthIntegrationPreviewBoundaryDisplayItem();"),
             ("direct community preview boundary item binding", "const communityPreviewBoundaryDisplay = communityPreviewBoundaryDisplayItem();"),

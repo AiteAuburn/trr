@@ -1916,6 +1916,15 @@ export function rankingLocalPreviewBoundaryCopy() {
   return boundDisplayText("本機連續天數僅供自己查看；公開榜單只使用 backend 已聚合的 opt-in 社群統計。", maxDisplayDetailTextLength);
 }
 
+export function futurePreviewBoundaryCopyBundle() {
+  return {
+    doctorShareBackend: doctorShareBackendBoundaryCopy(),
+    healthIntegrationExternalData: healthIntegrationExternalDataBoundaryCopy(),
+    communityPublicName: communityPublicNameBoundaryCopy(),
+    rankingLocalPreview: rankingLocalPreviewBoundaryCopy()
+  };
+}
+
 export function rankingBoundaryDisplayRows() {
   return [
     ["公開排名", "預設關閉"],

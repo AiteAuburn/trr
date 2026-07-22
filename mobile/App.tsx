@@ -186,8 +186,6 @@ import {
   backendYearReviewHealthOutcomeDisplayRows,
   backendYearReviewMetricDisplayRows,
   buildAchievementCategoryDisplaySections,
-  communityPublicNameBoundaryCopy,
-  doctorShareBackendBoundaryCopy,
   foodPhotoEmptyResultChecklistDisplayItems,
   foodPhotoDisplayBundle,
   foodPhotoReadinessChecklistDisplayItems,
@@ -271,6 +269,7 @@ import {
   futureModuleRequirementText,
   futureModulesOpenStatusMessage,
   futureModulesReturnMenuStatusMessage,
+  futurePreviewBoundaryCopyBundle,
   futurePreviewBoundaryDisplayBundle,
   futurePreviewBoundaryBadgeLabel,
   futurePreviewBoundaryCopyText,
@@ -281,7 +280,6 @@ import {
   futurePreviewReturnButtonLabel,
   futurePreviewSectionLabels,
   futurePreviewStatusDisplayBundle,
-  healthIntegrationExternalDataBoundaryCopy,
   healthIntegrationReadinessChecklistDisplayItems,
   achievementYearReviewStatusDisplayBundle,
   limitedAchievementDisplayItems,
@@ -292,7 +290,6 @@ import {
   rankingCloseButtonLabel,
   rankingHeroIconLabel,
   rankingLocalStreakPreviewLabel,
-  rankingLocalPreviewBoundaryCopy,
   rankingOptInActionAccessibilityLabel,
   rankingOptInActionButtonLabel,
   rankingPublicActionAccessibilityLabel,
@@ -1629,14 +1626,15 @@ export default function App() {
   const yearReviewShareStatusMessage = yearReviewShareUnavailableStatusMessage();
   const yearReviewBoundaryDisplayText = yearReviewBoundaryDisplayCopy();
   const futurePreviewBoundaryDisplay = futurePreviewBoundaryDisplayBundle();
+  const futurePreviewBoundaryCopy = futurePreviewBoundaryCopyBundle();
   const doctorSharePreviewBoundaryDisplay = futurePreviewBoundaryDisplay.doctorShare;
-  const doctorShareBackendBoundaryDisplayText = doctorShareBackendBoundaryCopy();
+  const doctorShareBackendBoundaryDisplayText = futurePreviewBoundaryCopy.doctorShareBackend;
   const healthIntegrationPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.healthIntegration;
-  const healthIntegrationExternalDataBoundaryDisplayText = healthIntegrationExternalDataBoundaryCopy();
+  const healthIntegrationExternalDataBoundaryDisplayText = futurePreviewBoundaryCopy.healthIntegrationExternalData;
   const communityPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.community;
-  const communityPublicNameBoundaryDisplayText = communityPublicNameBoundaryCopy();
+  const communityPublicNameBoundaryDisplayText = futurePreviewBoundaryCopy.communityPublicName;
   const rankingPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.ranking;
-  const rankingLocalPreviewBoundaryDisplayText = rankingLocalPreviewBoundaryCopy();
+  const rankingLocalPreviewBoundaryDisplayText = futurePreviewBoundaryCopy.rankingLocalPreview;
   const modelSelectionBoundaryDisplayText = modelSelectionBoundaryCopy();
   const accountSecurityProviderBoundaryDisplayText = accountSecurityProviderBoundaryCopy();
   const accountSecuritySessionBoundaryDisplayText = accountSecuritySessionBoundaryCopy();
