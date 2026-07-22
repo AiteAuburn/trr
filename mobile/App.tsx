@@ -692,7 +692,7 @@ import {
 import {
   afterMealGlucoseCount as countAfterMealGlucose,
   analysisAxisLabel,
-  analysisChartPointAccessibilityLabel,
+  analysisChartPointDisplayBundle,
   analysisChartPointIsSelected,
   analysisChartPointKey,
   analysisChartPointOffset,
@@ -9145,7 +9145,8 @@ export default function App() {
                       {analysisChartPoints.map((point, index) => {
                         const pointOffset = analysisChartPointOffset(point, chartMinimum, chartRange);
                         const isSelected = analysisChartPointIsSelected(index, selectedAnalysisPointIndex);
-                        const pointAccessibilityLabel = analysisChartPointAccessibilityLabel(point);
+                        const pointDisplay = analysisChartPointDisplayBundle(point);
+                        const pointAccessibilityLabel = pointDisplay.accessibilityLabel;
                         return (
                           <Pressable
                             key={analysisChartPointKey(point)}

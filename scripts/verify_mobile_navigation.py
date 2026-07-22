@@ -11397,12 +11397,18 @@ def main() -> int:
             ("analysis chart point offset binding", "const pointOffset = analysisChartPointOffset(point, chartMinimum, chartRange);"),
             ("analysis chart point selected helper import", "analysisChartPointIsSelected,"),
             ("analysis chart point selected helper binding", "const isSelected = analysisChartPointIsSelected(index, selectedAnalysisPointIndex);"),
-            ("analysis chart point accessibility helper import", "analysisChartPointAccessibilityLabel,"),
-            ("analysis chart point accessibility helper binding", "const pointAccessibilityLabel = analysisChartPointAccessibilityLabel(point);"),
+            ("analysis chart point display bundle helper import", "analysisChartPointDisplayBundle,"),
+            ("analysis chart point display bundle binding", "const pointDisplay = analysisChartPointDisplayBundle(point);"),
+            ("analysis chart point accessibility label bundle binding", "const pointAccessibilityLabel = pointDisplay.accessibilityLabel;"),
             ("analysis axis label helper import", "analysisAxisLabel,"),
             ("analysis axis label helper binding", "{analysisAxisLabel(point, index, analysisChartPoints.length)}"),
         ):
             _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "direct analysis chart point accessibility helper binding",
+            content,
+            "const pointAccessibilityLabel = analysisChartPointAccessibilityLabel(point);",
+        )
         _assert_contains(
             "detailed report metric input helper binding",
             content,
@@ -11492,6 +11498,8 @@ def main() -> int:
             ("analysis chart point selected helper fields", "return selectedIndex === index;"),
             ("analysis chart point accessibility helper", "export function analysisChartPointAccessibilityLabel(point: AnalysisChartPoint)"),
             ("analysis chart point accessibility helper copy", "`查看分析圖表點：${analysisChartPointLabel(point)}，血糖 ${analysisChartPointValue(point)}`"),
+            ("analysis chart point display bundle helper", "export function analysisChartPointDisplayBundle(point: AnalysisChartPoint)"),
+            ("analysis chart point display bundle binding", "accessibilityLabel: analysisChartPointAccessibilityLabel(point)"),
             ("analysis axis label helper", "export function analysisAxisLabel(point: AnalysisChartPoint, index: number, totalCount: number)"),
             ("analysis axis label helper fields", "return index === 0 || index === totalCount - 1 || index % 3 === 0 ? analysisChartPointLabel(point) : \"\";"),
             ("record current streak helper", "export function currentRecordStreakDays(records: RecordItem[])"),

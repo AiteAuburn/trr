@@ -207,6 +207,12 @@ export function analysisChartPointAccessibilityLabel(point: AnalysisChartPoint) 
   );
 }
 
+export function analysisChartPointDisplayBundle(point: AnalysisChartPoint) {
+  return {
+    accessibilityLabel: analysisChartPointAccessibilityLabel(point)
+  };
+}
+
 export function analysisAxisLabel(point: AnalysisChartPoint, index: number, totalCount: number) {
   return index === 0 || index === totalCount - 1 || index % 3 === 0 ? analysisChartPointLabel(point) : "";
 }

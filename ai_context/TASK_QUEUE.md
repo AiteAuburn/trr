@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2262: Move analysis chart point display bundle
+
+Status: done
+
+Completed:
+
+- Added the analysis chart point display bundle helper to `analysisDataTransforms.ts`.
+- Moved `App.tsx` chart point accessibility label assembly from a direct helper call to the bundle entrypoint.
+- Kept chart point offset, key, selection state, press handling, axis label rendering, and accessibility copy unchanged.
+- Updated navigation verifier coverage to require the chart point display bundle and no direct chart point accessibility helper binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2261: Move daily reorganization display bundle
 
 Status: done
