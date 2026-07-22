@@ -189,13 +189,12 @@ import {
   boundCommunityPublicSettings,
   commercePreviewOpenCartStatusMessage,
   commercePreviewReturnStoreStatusMessage,
-  communityActionDisplayBundle,
   communityActionStatusVisible,
   communityHeroIconLabel,
   communityLeaderboardSyncStatusMessages,
   communityLeaderboardDisplaySections,
   communityLeaderboardTypes,
-  communityPreviewLabelDisplayBundle,
+  communityPreviewDisplayBundle,
   communityPublicDisplayNameMaxLength,
   communityPublicDisplayNameDraftInputValue,
   communityPublicNamePreviewLabel,
@@ -1848,17 +1847,17 @@ export default function App() {
   const communityPostingStatusMessage = futurePreviewStatusDisplay.communityPosting;
   const communityPrivacyStatusMessage = futurePreviewStatusDisplay.communityPrivacy;
   const foodCommunityShareStatusMessage = futurePreviewStatusDisplay.foodCommunityShare;
-  const communityActionDisplay = communityActionDisplayBundle({
-    leaderboardOptIn: communityPublicSettings?.leaderboard_opt_in ?? false
-  });
-  const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;
-  const foodCommunityShareAccessibilityDisplayLabel = communityActionDisplay.foodCommunityShareAccessibility;
-  const communityPreviewLabelDisplay = communityPreviewLabelDisplayBundle({
+  const communityPreviewDisplay = communityPreviewDisplayBundle({
     labels: futurePreviewDisplayLabels,
     boundaryDisplay: communityPreviewBoundaryDisplay,
     closeLabel: auxiliaryDisplayLabels.closeReturn,
-    actionStatusText: communityActionStatusDisplayText
+    actionStatusText: communityActionStatusDisplayText,
+    leaderboardOptIn: communityPublicSettings?.leaderboard_opt_in ?? false
   });
+  const communityActionDisplay = communityPreviewDisplay.actions;
+  const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;
+  const foodCommunityShareAccessibilityDisplayLabel = communityActionDisplay.foodCommunityShareAccessibility;
+  const communityPreviewLabelDisplay = communityPreviewDisplay.labels;
   const communityCloseAccessibilityDisplayLabel = communityPreviewLabelDisplay.closeAccessibility;
   const communityPreviewBoundaryBadgeDisplayLabel = communityPreviewLabelDisplay.boundaryBadge;
   const communityPreviewBoundaryCopyDisplayText = communityPreviewLabelDisplay.boundaryCopy;

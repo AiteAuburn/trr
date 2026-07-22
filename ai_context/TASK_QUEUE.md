@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2272: Move community preview display bundle assembly
+
+Status: done
+
+Completed:
+
+- Added `communityPreviewDisplayBundle` to `futureModuleDisplay.ts`.
+- Moved `App.tsx` community preview label/action display assembly behind the combined helper.
+- Kept community action status text, leaderboard opt-in label choice, return labels, public profile labels, handlers, and backend flow unchanged.
+- Updated navigation verifier coverage to require the combined bundle and reject the old direct App-level helper assembly.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2271: Remove stale App display helper imports
 
 Status: done

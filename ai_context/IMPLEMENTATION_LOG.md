@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2272 move community preview display bundle assembly
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `communityPreviewDisplayBundle` to `futureModuleDisplay.ts`.
+- Moved `App.tsx` community preview label/action display assembly behind the combined helper.
+- Kept community action status text, leaderboard opt-in label choice, return labels, public profile labels, handlers, and backend flow unchanged.
+- Updated navigation verifier coverage to require the combined bundle and reject the old direct App-level helper assembly.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2271 remove stale App display helper imports
 
 類型：mobile / refactor / verifier / docs

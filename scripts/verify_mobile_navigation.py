@@ -12639,8 +12639,9 @@ def main() -> int:
             ("doctor share report status handler", "function showDoctorShareReportBoundaryStatus()"),
             ("health integration permission status handler", "function showHealthIntegrationPermissionStatus()"),
             ("health integration meter status handler", "function showHealthIntegrationMeterStatus()"),
-            ("community preview label display bundle import", "communityPreviewLabelDisplayBundle,"),
-            ("community preview label display bundle binding", "const communityPreviewLabelDisplay = communityPreviewLabelDisplayBundle({"),
+            ("community preview display bundle import", "communityPreviewDisplayBundle,"),
+            ("community preview display bundle binding", "const communityPreviewDisplay = communityPreviewDisplayBundle({"),
+            ("community preview display label binding", "const communityPreviewLabelDisplay = communityPreviewDisplay.labels;"),
             ("community close accessibility display label binding", "const communityCloseAccessibilityDisplayLabel = communityPreviewLabelDisplay.closeAccessibility;"),
             ("community close accessibility helper binding", "accessibilityLabel={communityCloseAccessibilityDisplayLabel}"),
             ("community preview boundary badge display label binding", "const communityPreviewBoundaryBadgeDisplayLabel = communityPreviewLabelDisplay.boundaryBadge;"),
@@ -12921,7 +12922,7 @@ def main() -> int:
             ("food community share field rows helper binding", "const foodCommunityShareFieldRows = foodCommunityDisplay.shareFieldRows;"),
             ("food community point rows helper binding", "const foodCommunityPointRows = foodCommunityDisplay.pointRows;"),
             ("food community ranking rows helper binding", "const foodCommunityRankingRows = foodCommunityDisplay.rankingRows;"),
-            ("community action display helper binding", "const communityActionDisplay = communityActionDisplayBundle({"),
+            ("community action display helper binding", "const communityActionDisplay = communityPreviewDisplay.actions;"),
             ("food community share bounded button label", "const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;"),
             ("food community share bounded accessibility label", "const foodCommunityShareAccessibilityDisplayLabel = communityActionDisplay.foodCommunityShareAccessibility;"),
             ("food community backend-aware leaderboard label", "{foodCommunityRankingSectionLabel()}"),
@@ -15064,6 +15065,9 @@ def main() -> int:
             ("community action display texts helper", "export function communityActionDisplayTexts(value: {"),
             ("community action display bundle helper", "export function communityActionDisplayBundle(value: {"),
             ("community action display bundle delegates", "return communityActionDisplayTexts(value);"),
+            ("community preview display bundle helper", "export function communityPreviewDisplayBundle(value: {"),
+            ("community preview display bundle labels binding", "labels: communityPreviewLabelDisplayBundle(value),"),
+            ("community preview display bundle actions binding", "actions: communityActionDisplayBundle({"),
             ("community action share button binding", "foodCommunityShareButton,"),
             ("community action share accessibility binding", "foodCommunityShareAccessibility: boundDisplayText("),
             ("community action ranking button binding", "rankingOptInButton,"),
@@ -16338,6 +16342,26 @@ def main() -> int:
             "food community direct share food name max length binding",
             content,
             "foodNameMaxLength={maxDisplayTextLength}",
+        )
+        _assert_not_contains(
+            "community direct action display bundle binding",
+            content,
+            "const communityActionDisplay = communityActionDisplayBundle({",
+        )
+        _assert_not_contains(
+            "community stale action display bundle import",
+            content,
+            "  communityActionDisplayBundle,",
+        )
+        _assert_not_contains(
+            "community direct preview label display bundle binding",
+            content,
+            "const communityPreviewLabelDisplay = communityPreviewLabelDisplayBundle({",
+        )
+        _assert_not_contains(
+            "community stale preview label display bundle import",
+            content,
+            "  communityPreviewLabelDisplayBundle,",
         )
         _assert_not_contains(
             "food community direct share note max length binding",

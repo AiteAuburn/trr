@@ -2899,6 +2899,21 @@ export function communityActionDisplayBundle(value: {
   return communityActionDisplayTexts(value);
 }
 
+export function communityPreviewDisplayBundle(value: {
+  labels: FuturePreviewSectionLabels;
+  boundaryDisplay: { badge: string; copy: string };
+  closeLabel: string;
+  actionStatusText: string;
+  leaderboardOptIn: boolean;
+}) {
+  return {
+    labels: communityPreviewLabelDisplayBundle(value),
+    actions: communityActionDisplayBundle({
+      leaderboardOptIn: value.leaderboardOptIn
+    })
+  };
+}
+
 export function foodCommunitySyncStatusMessages(value: {
   backendUnavailableMessage: string;
   itemCount: number;
