@@ -566,7 +566,7 @@ import {
   authSessionsProgressStatusMessage,
   authSessionsSuccessStatusMessage,
   authSessionsUnavailableStatusMessage,
-  authStatusDisplayTexts,
+  authStatusDisplayBundle,
   backendReconnectFailureDisplayMessages,
   backendReconnectProgressStatusMessage,
   backendReconnectSuccessStatusMessage,
@@ -1948,7 +1948,7 @@ export default function App() {
   const subscriptionManagementSyncingStatusMessage = subscriptionRuntimeDisplay.subscriptionManagementSyncing;
   const subscriptionManagementUnavailableStatusMessage = subscriptionRuntimeDisplay.subscriptionManagementUnavailable;
   const subscriptionManagementPaymentStatusMessage = subscriptionRuntimeDisplay.subscriptionManagementPayment;
-  const authStatusDisplay = authStatusDisplayTexts({
+  const authStatusDisplay = authStatusDisplayBundle({
     authActionStatus,
     devResetStatus,
     tokenStorageStatus

@@ -12257,7 +12257,7 @@ def main() -> int:
             ("auth logout local label binding", "logoutLocalLabel={settingsSubscriptionDisplayLabels.logoutLocal}"),
             ("auth logout all label binding", "logoutAllLabel={settingsSubscriptionDisplayLabels.logoutAll}"),
             ("settings local clear accessibility binding", "actionAccessibilityLabel={settingsSubscriptionDisplayLabels.localClearAccessibility}"),
-            ("auth status display helper binding", "const authStatusDisplay = authStatusDisplayTexts({"),
+            ("auth status display helper binding", "const authStatusDisplay = authStatusDisplayBundle({"),
             ("auth action status display text binding", "const authActionStatusDisplayText = authStatusDisplay.authAction;"),
             ("auth token storage status display text binding", "const tokenStorageStatusDisplayText = authStatusDisplay.tokenStorage;"),
             ("auth token storage render display binding", "<Text style={styles.evidence}>{tokenStorageStatusDisplayText}</Text>"),
@@ -12861,6 +12861,7 @@ def main() -> int:
             )
             _assert_contains(label, source, marker)
         for label, marker in (
+            ("direct auth status display texts binding", "const authStatusDisplay = authStatusDisplayTexts({"),
             ("direct settings subpage status display texts binding", "const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayTexts({"),
             ("direct settings profile choice map", "profileChoiceDisplayItems.map((profile) => {"),
             ("direct settings profile key binding", "key={profile.id}"),
@@ -13379,6 +13380,8 @@ def main() -> int:
             ("dev reset deleted count key cap", ".slice(0, maxDevResetDeletedCountKeys)"),
             ("dev reset deleted count clamp", "clampNumber(count, 0, maxMobileCountValue)"),
             ("auth status display texts helper", "function authStatusDisplayTexts(value: {"),
+            ("auth status display bundle helper", "function authStatusDisplayBundle(value: {"),
+            ("auth status display bundle delegates", "return authStatusDisplayTexts(value);"),
             ("auth status display auth action binding", "authAction: boundUiMessage(value.authActionStatus)"),
             ("auth status display dev reset binding", "devReset: boundUiMessage(value.devResetStatus)"),
             ("auth status display token storage binding", "tokenStorage: boundUiMessage(value.tokenStorageStatus)"),

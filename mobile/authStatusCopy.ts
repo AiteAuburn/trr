@@ -148,6 +148,14 @@ export function authStatusDisplayTexts(value: {
   };
 }
 
+export function authStatusDisplayBundle(value: {
+  authActionStatus: string;
+  devResetStatus: string;
+  tokenStorageStatus: string;
+}) {
+  return authStatusDisplayTexts(value);
+}
+
 export function authOperationBusyStatusMessage() {
   return boundUiMessage("Auth 操作仍在處理中，請稍後再試。");
 }

@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2222: Move auth status display bundle
+
+Status: done
+
+Completed:
+
+- Added the auth status display bundle helper to `authStatusCopy.ts`.
+- Moved `App.tsx` auth action, dev reset, and token storage status display assembly from the raw texts helper to the bundle entrypoint.
+- Kept auth status copy, dev reset status copy, token storage status copy, login/session behavior, and secure token storage behavior unchanged.
+- Updated navigation verifier coverage to require the auth status display bundle, App bundle binding, and no direct auth status display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2221: Move settings subpage status display bundle
 
 Status: done
