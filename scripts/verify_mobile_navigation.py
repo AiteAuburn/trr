@@ -4163,6 +4163,16 @@ def main() -> int:
             "const profileSettingsBoundaryRows = profileSettingsBoundaryDisplayRowsForState({",
         )
         _assert_contains(
+            "profile settings boundary copy bundle binding",
+            content,
+            "const profileSettingsBoundaryCopy = profileSettingsBoundaryCopyBundle();",
+        )
+        _assert_not_contains(
+            "direct profile no action boundary copy binding",
+            content,
+            "const profileNoActionBoundaryDisplayText = profileNoActionBoundaryCopy();",
+        )
+        _assert_contains(
             "community boundary rows helper binding",
             content,
             "const communityBoundaryRows = futureBoundaryRowsDisplay.community;",
@@ -13636,6 +13646,9 @@ def main() -> int:
             ("account security boundary token guard row", "Token guard"),
             ("account security boundary session list row", "Session list"),
             ("account security boundary protected API row", "保護 API"),
+            ("profile no action boundary copy helper", "function profileNoActionBoundaryCopy()"),
+            ("profile settings boundary copy bundle helper", "function profileSettingsBoundaryCopyBundle()"),
+            ("profile settings boundary copy bundle no action binding", "noAction: profileNoActionBoundaryCopy()"),
             ("subscription status summary helper", "function subscriptionStatusSummaryText("),
             ("subscription status summary trial copy", "試用剩 ${clampNumber(trialDays, 0, maxMobileCountValue)} 天"),
             ("subscription readiness checklist helper", "function subscriptionReadinessChecklistDisplayItems()"),

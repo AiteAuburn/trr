@@ -227,6 +227,12 @@ export function profileNoActionBoundaryCopy() {
   );
 }
 
+export function profileSettingsBoundaryCopyBundle() {
+  return {
+    noAction: profileNoActionBoundaryCopy()
+  };
+}
+
 export function subscriptionTrialBoundaryCopy() {
   return boundDisplayText("7天免費試用，正式付款串接前不會啟動試用或自動轉年費。", maxDisplayDetailTextLength);
 }

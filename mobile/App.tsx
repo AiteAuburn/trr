@@ -805,7 +805,7 @@ import {
 } from "./subscriptionTransforms";
 import {
   accountSecurityBoundaryCopyBundle,
-  profileNoActionBoundaryCopy,
+  profileSettingsBoundaryCopyBundle,
   recordingQuotaBoundaryDisplayRows,
   settingsSubscriptionSectionLabels,
   subscriptionManagementOpenStatusMessage,
@@ -1638,7 +1638,8 @@ export default function App() {
   const accountSecuritySessionBoundaryDisplayText = accountSecurityBoundaryCopy.session;
   const accountSecurityReadinessBoundaryDisplayText = accountSecurityBoundaryCopy.readiness;
   const accountSecurityNoActionBoundaryDisplayText = accountSecurityBoundaryCopy.noAction;
-  const profileNoActionBoundaryDisplayText = profileNoActionBoundaryCopy();
+  const profileSettingsBoundaryCopy = profileSettingsBoundaryCopyBundle();
+  const profileNoActionBoundaryDisplayText = profileSettingsBoundaryCopy.noAction;
   const recordingQuotaDataBoundaryDisplayText = settingsBoundaryCopy.recordingQuotaData;
   const reminderPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.reminder;
   const privacyPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.privacy;

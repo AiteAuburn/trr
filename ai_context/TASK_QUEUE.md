@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2251: Move profile settings boundary copy bundle
+
+Status: done
+
+Completed:
+
+- Added the profile settings boundary copy bundle helper to `subscriptionCopy.ts`.
+- Moved `App.tsx` profile no-action boundary copy assembly from the direct helper call to the bundle entrypoint.
+- Kept profile no-action copy, profile settings boundary rows, profile readiness checklist, and profile settings screen rendering unchanged.
+- Updated navigation verifier coverage to require the profile settings boundary copy bundle and no direct profile no-action boundary copy binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2250: Move settings boundary copy bundle
 
 Status: done
