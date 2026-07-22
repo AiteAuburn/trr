@@ -16989,6 +16989,21 @@ def main() -> int:
             "  futurePreviewReadinessSectionLabel,",
         )
         _assert_not_contains(
+            "future preview stale close accessibility import",
+            content,
+            "  futurePreviewCloseAccessibilityLabel,",
+        )
+        _assert_not_contains(
+            "future preview stale return accessibility import",
+            content,
+            "  futurePreviewReturnAccessibilityLabel,",
+        )
+        _assert_not_contains(
+            "future preview stale return button import",
+            content,
+            "  futurePreviewReturnButtonLabel,",
+        )
+        _assert_not_contains(
             "ranking direct action status visibility binding",
             content,
             "{rankingActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingActionStatusLabel()}</Text>\n                <Text style={styles.evidence}>{rankingActionStatusText()}</Text>",

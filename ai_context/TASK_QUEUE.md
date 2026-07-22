@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2275: Remove stale future preview helper imports
+
+Status: done
+
+Completed:
+
+- Removed stale `futurePreviewCloseAccessibilityLabel`, `futurePreviewReturnAccessibilityLabel`, and `futurePreviewReturnButtonLabel` imports from `App.tsx`.
+- Kept the helper implementations in `futureModuleDisplay.ts`, where preview bundles still delegate to them.
+- Added navigation verifier guards so those stale imports do not return to `App.tsx`.
+- Kept all preview labels, return/close accessibility text, routing, and backend flow unchanged.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2274: Move ranking preview boundary display bindings
 
 Status: done
