@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2291: Move history boundary display assembly
+
+Status: done
+
+Completed:
+
+- Added `historyBoundaryDisplayBundle` to `historyCopy.ts`.
+- Moved `App.tsx` history boundary checklist assembly behind the bundle.
+- Kept record sync limit, record cache limit, loaded-record state, and history boundary copy unchanged.
+- Updated navigation verifier coverage to require the bundled history boundary output and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2290: Move save success runtime checklist assembly
 
 Status: done

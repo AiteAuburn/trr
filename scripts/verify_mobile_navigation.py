@@ -4036,10 +4036,25 @@ def main() -> int:
         ):
             _assert_not_contains(label, content, marker)
         _assert_contains(
-            "history boundary checklist helper binding",
+            "history boundary display bundle binding",
             content,
-            "const historyBoundaryChecklistItems = historyBoundaryChecklistDisplayItems(",
+            "const historyBoundaryDisplay = historyBoundaryDisplayBundle({",
         )
+        _assert_contains(
+            "history boundary display bundle import",
+            content,
+            "historyBoundaryDisplayBundle,",
+        )
+        _assert_contains(
+            "history boundary checklist bundle field binding",
+            content,
+            "const historyBoundaryChecklistItems = historyBoundaryDisplay.boundaryChecklistItems;",
+        )
+        for label, marker in (
+            ("direct history boundary checklist binding", "const historyBoundaryChecklistItems = historyBoundaryChecklistDisplayItems("),
+            ("direct history boundary checklist import", "  historyBoundaryChecklistDisplayItems,"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_contains(
             "auth boundary checklist static display binding",
             content,
@@ -10286,6 +10301,8 @@ def main() -> int:
         )
         for label, marker in (
             ("history boundary checklist helper", "function historyBoundaryChecklistDisplayItems("),
+            ("history boundary display bundle helper", "function historyBoundaryDisplayBundle(value: {"),
+            ("history boundary display bundle checklist binding", "boundaryChecklistItems: historyBoundaryChecklistDisplayItems("),
             ("history calendar loaded-only copy", "月曆選取日期只套用在 mobile 目前已載入的紀錄。"),
             ("history cursor pagination copy", "載入更多使用 backend cursor pagination，只追加更早紀錄並以 id 去重。"),
             ("history loaded record action copy", "點擊真實紀錄可查看詳情並進行編輯或刪除。"),

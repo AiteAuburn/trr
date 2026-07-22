@@ -621,7 +621,7 @@ import {
   type QuickEntryMode
 } from "./firstVersionFlowCopy";
 import {
-  historyBoundaryChecklistDisplayItems,
+  historyBoundaryDisplayBundle,
   historyCalendarDisplayBundle,
   historyEmptyStateDisplayBundle,
   historyManualEntryStatusMessage,
@@ -1430,11 +1430,12 @@ export default function App() {
   const recordEntrySettingsChecklistItems = recordWorkflowRuntimeChecklistDisplay.recordEntrySettingsItems;
   const aiCandidateRemoveChecklistItems = recordWorkflowStaticChecklistDisplay.aiCandidateRemoveItems;
   const aiSaveFailureChecklistItems = recordWorkflowRuntimeChecklistDisplay.aiSaveFailureItems;
-  const historyBoundaryChecklistItems = historyBoundaryChecklistDisplayItems(
-    mobileRecordSyncDisplayLimit,
-    maxMobileRecordCacheLimit,
-    recordDisplayState.hasRecords
-  );
+  const historyBoundaryDisplay = historyBoundaryDisplayBundle({
+    recordSyncLimit: mobileRecordSyncDisplayLimit,
+    recordCacheLimit: maxMobileRecordCacheLimit,
+    hasLoadedRecords: recordDisplayState.hasRecords
+  });
+  const historyBoundaryChecklistItems = historyBoundaryDisplay.boundaryChecklistItems;
   const recordStatusStaticChecklistDisplay = recordStatusStaticChecklistDisplayBundle();
   const deleteConfirmChecklistItems = recordStatusStaticChecklistDisplay.deleteConfirmItems;
   const recordUpdateChecklistItems = recordStatusStaticChecklistDisplay.recordUpdateItems;

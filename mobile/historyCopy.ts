@@ -74,6 +74,20 @@ export function historyBoundaryChecklistDisplayItems(
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
+export function historyBoundaryDisplayBundle(value: {
+  recordSyncLimit: number;
+  recordCacheLimit: number;
+  hasLoadedRecords: boolean;
+}) {
+  return {
+    boundaryChecklistItems: historyBoundaryChecklistDisplayItems(
+      value.recordSyncLimit,
+      value.recordCacheLimit,
+      value.hasLoadedRecords
+    )
+  };
+}
+
 export function historyNoRecordsTitleCopy() {
   return boundDisplayText("還沒有可顯示的歷史紀錄", maxDisplayTextLength);
 }
