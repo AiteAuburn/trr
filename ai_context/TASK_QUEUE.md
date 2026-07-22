@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2260: Move parser model availability display bundle
+
+Status: done
+
+Completed:
+
+- Added the parser model availability display bundle helper to `recordWorkflowCopy.ts`.
+- Moved `App.tsx` parser unavailable message and parser ready assembly from direct helper calls to the bundle entrypoint.
+- Kept selected LLM/STT model inputs, unavailable copy, ready semantics, parser recovery handling, and transcript display inputs unchanged.
+- Updated navigation verifier coverage to require the parser model availability bundle and no direct parser model availability helper binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2259: Move today record summary display bundle
 
 Status: done

@@ -152,6 +152,17 @@ export function parserModelReadyFromMessage(message: string) {
   return message.length === 0;
 }
 
+export function parserModelAvailabilityDisplayBundle(value: {
+  llmModel: ParserModelAvailabilitySource | null;
+  sttModel: ParserModelAvailabilitySource | null;
+}) {
+  const unavailableMessage = parserModelUnavailableText(value.llmModel, value.sttModel);
+  return {
+    unavailableMessage,
+    ready: parserModelReadyFromMessage(unavailableMessage)
+  };
+}
+
 export function parserAvailabilityDisplayMessages(value: {
   parserModelUnavailableMessage: string;
   protectedBackendUnavailableMessage: string;

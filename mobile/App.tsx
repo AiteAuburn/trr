@@ -470,8 +470,7 @@ import {
   parserBackendUnavailableStatusMessage,
   parserFailureRecoveryMessage,
   parserFailureStatusMessage,
-  parserModelReadyFromMessage,
-  parserModelUnavailableText,
+  parserModelAvailabilityDisplayBundle,
   parserModelUnavailableStatusMessage,
   parserProgressStatusMessage,
   parserSampleBlockedStatusMessage,
@@ -1184,8 +1183,12 @@ export default function App() {
   const activeProfile = activeProfileForId(profiles, activeProfileId);
   const selectedSttModel = selectedSttModelOption(models, sttModelId);
   const selectedLlmModel = selectedLlmModelOption(models, llmModelId);
-  const parserModelUnavailableMessage = parserModelUnavailableText(selectedLlmModel, selectedSttModel);
-  const parserModelReady = parserModelReadyFromMessage(parserModelUnavailableMessage);
+  const parserModelAvailabilityDisplay = parserModelAvailabilityDisplayBundle({
+    llmModel: selectedLlmModel,
+    sttModel: selectedSttModel
+  });
+  const parserModelUnavailableMessage = parserModelAvailabilityDisplay.unavailableMessage;
+  const parserModelReady = parserModelAvailabilityDisplay.ready;
   const accountDisplay = accountDisplayBundle(account);
   const accountDisplayName = accountDisplay.displayName;
   const accountEmailDisplayText = accountDisplay.email;
