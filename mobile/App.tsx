@@ -468,7 +468,6 @@ import {
   tutorialRecordEntryStatusMessage
 } from "./recordWorkflowCopy";
 import {
-  deleteSuccessBoundaryChecklistDisplayItems,
   deleteConfirmDisplayBundle,
   deleteConfirmReadyStatusMessage,
   deleteConfirmReturnStatusMessage,
@@ -495,6 +494,7 @@ import {
   recordSyncPageSuccessStatusMessage,
   recordSyncSuccessStatusMessage,
   recordSyncUnavailableStatusMessage,
+  recordStatusSuccessChecklistDisplayBundle,
   recordStatusStaticChecklistDisplayBundle,
   recordsStatusDisplayBundle,
   recordUpdateFailureStatusMessage,
@@ -502,7 +502,6 @@ import {
   recordUpdateSuccessStatusMessage,
   recordUpdateSummaryMessage,
   recordUpdateUnavailableStatusMessage,
-  updateSuccessBoundaryChecklistDisplayItems,
   visualSmokeRecordSyncStatusMessage
 } from "./recordStatusCopy";
 import {
@@ -1429,10 +1428,10 @@ export default function App() {
     unsavedPreviewRecordDisplayCount,
     mobileRecordSyncDisplayLimit
   );
-  const deleteSuccessBoundaryChecklistItems =
-    deleteSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit);
-  const updateSuccessBoundaryChecklistItems =
-    updateSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit);
+  const recordStatusSuccessChecklistDisplay =
+    recordStatusSuccessChecklistDisplayBundle(mobileRecordSyncDisplayLimit);
+  const deleteSuccessBoundaryChecklistItems = recordStatusSuccessChecklistDisplay.deleteSuccessItems;
+  const updateSuccessBoundaryChecklistItems = recordStatusSuccessChecklistDisplay.updateSuccessItems;
   const manualSubmitChecklistItems = recordWorkflowStaticChecklistDisplay.manualSubmitItems;
   const recordDetailBoundaryChecklistItems =
     recordWorkflowStaticChecklistDisplay.recordDetailBoundaryItems;

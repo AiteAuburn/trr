@@ -2744,8 +2744,12 @@ def main() -> int:
         for label, marker in (
             ("direct delete confirm checklist binding", "const deleteConfirmChecklistItems = deleteConfirmChecklistDisplayItems();"),
             ("direct record update checklist binding", "const recordUpdateChecklistItems = recordUpdateChecklistDisplayItems();"),
+            ("direct delete success checklist binding", "deleteSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit)"),
+            ("direct update success checklist binding", "updateSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit)"),
             ("direct delete confirm checklist import", "  deleteConfirmChecklistDisplayItems,"),
             ("direct record update checklist import", "  recordUpdateChecklistDisplayItems,"),
+            ("direct delete success checklist import", "  deleteSuccessBoundaryChecklistDisplayItems,"),
+            ("direct update success checklist import", "  updateSuccessBoundaryChecklistDisplayItems,"),
         ):
             _assert_not_contains(label, content, marker)
         record_detail_screen_block = _match_block(
@@ -6961,9 +6965,14 @@ def main() -> int:
             "const deleteSuccessDestinationItems = deleteSuccessDestinationDisplayItems();",
         )
         _assert_contains(
-            "delete success checklist helper binding",
+            "record status success checklist bundle binding",
             content,
-            "deleteSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit)",
+            "recordStatusSuccessChecklistDisplayBundle(mobileRecordSyncDisplayLimit)",
+        )
+        _assert_contains(
+            "delete success checklist bundle field binding",
+            content,
+            "const deleteSuccessBoundaryChecklistItems = recordStatusSuccessChecklistDisplay.deleteSuccessItems;",
         )
         _assert_contains("delete success destination grid items binding", content, "items={deleteSuccessDestinationItems}")
         _assert_contains(
@@ -6982,9 +6991,9 @@ def main() -> int:
             "const updateSuccessDestinationItems = updateSuccessDestinationDisplayItems(Boolean(selectedRecord));",
         )
         _assert_contains(
-            "update success checklist helper binding",
+            "update success checklist bundle field binding",
             content,
-            "updateSuccessBoundaryChecklistDisplayItems(mobileRecordSyncDisplayLimit)",
+            "const updateSuccessBoundaryChecklistItems = recordStatusSuccessChecklistDisplay.updateSuccessItems;",
         )
         _assert_contains("update success destination grid items binding", content, "items={updateSuccessDestinationItems}")
         _assert_not_contains(
@@ -9463,6 +9472,9 @@ def main() -> int:
             ("record result destination status helper", 'function recordResultDestinationStatusMessage(kind: "delete" | "update", target: AppScreen)'),
             ("delete success boundary checklist helper", "function deleteSuccessBoundaryChecklistDisplayItems(recordSyncLimit: number)"),
             ("update success boundary checklist helper", "function updateSuccessBoundaryChecklistDisplayItems(recordSyncLimit: number)"),
+            ("record status success checklist bundle helper", "function recordStatusSuccessChecklistDisplayBundle(recordSyncLimit: number)"),
+            ("record status success checklist bundle delete success", "deleteSuccessItems: deleteSuccessBoundaryChecklistDisplayItems(recordSyncLimit)"),
+            ("record status success checklist bundle update success", "updateSuccessItems: updateSuccessBoundaryChecklistDisplayItems(recordSyncLimit)"),
             ("record edit intro copy", "欄位會轉成後端結構化 payload"),
             ("record edit no update copy", "按下儲存修改前不會送出 update request"),
             ("record result destination no retry copy", "不會重新送出 backend request 或呼叫 AI"),
@@ -9477,7 +9489,9 @@ def main() -> int:
             _assert_contains(label, record_status_copy_content, marker)
         for label, marker in (
             ("record status static checklist bundle import", "recordStatusStaticChecklistDisplayBundle,"),
+            ("record status success checklist bundle import", "recordStatusSuccessChecklistDisplayBundle,"),
             ("record status static checklist bundle binding", "const recordStatusStaticChecklistDisplay = recordStatusStaticChecklistDisplayBundle();"),
+            ("record status success checklist bundle binding", "const recordStatusSuccessChecklistDisplay =\n    recordStatusSuccessChecklistDisplayBundle(mobileRecordSyncDisplayLimit);"),
             ("delete confirm checklist static bundle binding", "const deleteConfirmChecklistItems = recordStatusStaticChecklistDisplay.deleteConfirmItems;"),
             ("delete confirm display helper binding", "const deleteConfirmDisplay = deleteConfirmDisplayBundle(selectedRecordDisplayItem, isBusy);"),
             ("delete confirm intro display binding", "const deleteConfirmIntroDisplayText = deleteConfirmDisplay.intro;"),

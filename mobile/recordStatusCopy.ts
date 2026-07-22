@@ -305,6 +305,13 @@ export function updateSuccessBoundaryChecklistDisplayItems(recordSyncLimit: numb
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
+export function recordStatusSuccessChecklistDisplayBundle(recordSyncLimit: number) {
+  return {
+    deleteSuccessItems: deleteSuccessBoundaryChecklistDisplayItems(recordSyncLimit),
+    updateSuccessItems: updateSuccessBoundaryChecklistDisplayItems(recordSyncLimit)
+  };
+}
+
 export function manualRecordCreateUnavailableStatusMessage(message: string) {
   return boundUiMessage(`${message || "backend 尚未 ready"}；目前不會送出手動紀錄建立請求。`);
 }
