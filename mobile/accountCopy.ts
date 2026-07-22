@@ -45,6 +45,15 @@ export function doctorShareAccountBoundaryText(account: AccountDisplaySource | n
   );
 }
 
+export function accountDisplayBundle(account: AccountDisplaySource | null) {
+  return {
+    displayName: accountDisplayNameDisplayText(account),
+    email: accountEmailDisplayValue(account),
+    login: accountLoginDisplayValue(account),
+    doctorShareBoundary: doctorShareAccountBoundaryText(account)
+  };
+}
+
 export function accountSecurityAuthModeDisplayTexts(value: {
   allowMobileDevAuth: boolean;
   accountDisplayName: string;

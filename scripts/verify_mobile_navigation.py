@@ -11607,6 +11607,11 @@ def main() -> int:
             "const accountSecurityCardAccessibilityLabel = accountSecurityAuthModeDisplay.cardAccessibilityLabel;",
         )
         for label, marker in (
+            ("account display bundle binding", "const accountDisplay = accountDisplayBundle(account);"),
+            ("account display name bundle field binding", "const accountDisplayName = accountDisplay.displayName;"),
+            ("account email bundle field binding", "const accountEmailDisplayText = accountDisplay.email;"),
+            ("account login bundle field binding", "const accountLoginDisplayText = accountDisplay.login;"),
+            ("doctor share account boundary bundle field binding", "const doctorShareAccountBoundaryDisplayText = accountDisplay.doctorShareBoundary;"),
             ("settings account security auth mode display helper binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayBundle({"),
             ("settings account security auth mode label binding", "const authModeDisplayLabel = accountSecurityAuthModeDisplay.label;"),
             ("settings account security auth mode copy binding", "const authModeDisplayCopy = accountSecurityAuthModeDisplay.copy;"),
@@ -13492,6 +13497,10 @@ def main() -> int:
             ("direct manual record type display options binding", "const manualRecordTypeDisplayOptions = useMemo(\n    () => manualRecordTypeDisplayItems(manualRecordTypes),"),
             ("direct history detail mode display options binding", "const historyDetailModeDisplayOptions = useMemo(() => historyDetailModeDisplayItems(historyDetailModes), []);"),
             ("direct analysis range display options binding", "const analysisRangeDisplayOptions = useMemo(() => analysisRangeDisplayItems(analysisRanges), []);"),
+            ("direct account display name binding", "const accountDisplayName = accountDisplayNameDisplayText(account);"),
+            ("direct account email display binding", "const accountEmailDisplayText = accountEmailDisplayValue(account);"),
+            ("direct account login display binding", "const accountLoginDisplayText = accountLoginDisplayValue(account);"),
+            ("direct doctor share account boundary binding", "const doctorShareAccountBoundaryDisplayText = doctorShareAccountBoundaryText(account);"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (
@@ -13508,6 +13517,11 @@ def main() -> int:
             ("doctor share account boundary helper", "function doctorShareAccountBoundaryText(account: AccountDisplaySource | null)"),
             ("doctor share connected copy", "已連線帳號；正式分享仍需 production auth、權限與授權碼流程。"),
             ("doctor share disconnected copy", "尚未連線帳號；不可建立任何外部分享。"),
+            ("account display bundle helper", "function accountDisplayBundle(account: AccountDisplaySource | null)"),
+            ("account display bundle name binding", "displayName: accountDisplayNameDisplayText(account)"),
+            ("account display bundle email binding", "email: accountEmailDisplayValue(account)"),
+            ("account display bundle login binding", "login: accountLoginDisplayValue(account)"),
+            ("account display bundle doctor share binding", "doctorShareBoundary: doctorShareAccountBoundaryText(account)"),
             ("account security auth mode display helper", "function accountSecurityAuthModeDisplayTexts(value: {"),
             ("account security auth mode display bundle helper", "function accountSecurityAuthModeDisplayBundle(value: {"),
             ("account security auth mode display bundle delegates", "return accountSecurityAuthModeDisplayTexts(value);"),

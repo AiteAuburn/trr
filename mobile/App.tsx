@@ -389,12 +389,9 @@ import {
 } from "./sharedDisplayItems";
 import { recordFormStaticDisplayBundle } from "./recordFormDisplayBundle";
 import {
-  accountDisplayNameDisplayText,
-  accountEmailDisplayValue,
-  accountLoginDisplayValue,
+  accountDisplayBundle,
   accountPublicDisplayNameForSettings,
   accountSecurityAuthModeDisplayBundle,
-  doctorShareAccountBoundaryText,
   doctorShareBoundaryDisplayRows,
   doctorShareReadinessChecklistDisplayItems,
   profileSettingsBoundaryDisplayRowsForState,
@@ -1194,10 +1191,11 @@ export default function App() {
   const selectedLlmModel = selectedLlmModelOption(models, llmModelId);
   const parserModelUnavailableMessage = parserModelUnavailableText(selectedLlmModel, selectedSttModel);
   const parserModelReady = parserModelReadyFromMessage(parserModelUnavailableMessage);
-  const accountDisplayName = accountDisplayNameDisplayText(account);
-  const accountEmailDisplayText = accountEmailDisplayValue(account);
-  const accountLoginDisplayText = accountLoginDisplayValue(account);
-  const doctorShareAccountBoundaryDisplayText = doctorShareAccountBoundaryText(account);
+  const accountDisplay = accountDisplayBundle(account);
+  const accountDisplayName = accountDisplay.displayName;
+  const accountEmailDisplayText = accountDisplay.email;
+  const accountLoginDisplayText = accountDisplay.login;
+  const doctorShareAccountBoundaryDisplayText = accountDisplay.doctorShareBoundary;
   const activeProfileLabel = activeProfileLabelText(activeProfile, profiles.length);
   const activeProfileInlineDisplayText = activeProfileInlineText(activeProfileLabel);
   const activeProfileRelationshipDisplayText = activeProfileRelationshipText(activeProfile);

@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2254 move account display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/accountCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the account display bundle helper to `accountCopy.ts`.
+- Moved `App.tsx` account display name, email, login, and doctor-share account boundary display assembly from direct helper calls to the bundle entrypoint.
+- Kept account fallback copy, account security auth mode inputs, doctor share account boundary copy, and account/profile screen rendering unchanged.
+- Updated navigation verifier coverage to require the account display bundle and no direct account display helper binding regression in `App.tsx`.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2253 move ranking preview label display bundle
 
 類型：mobile / refactor / verifier / docs

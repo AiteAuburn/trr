@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2254: Move account display bundle
+
+Status: done
+
+Completed:
+
+- Added the account display bundle helper to `accountCopy.ts`.
+- Moved `App.tsx` account display name, email, login, and doctor-share account boundary display assembly from direct helper calls to the bundle entrypoint.
+- Kept account fallback copy, account security auth mode inputs, doctor share account boundary copy, and account/profile screen rendering unchanged.
+- Updated navigation verifier coverage to require the account display bundle and no direct account display helper binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2253: Move ranking preview label display bundle
 
 Status: done
