@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2286 move record workflow runtime checklist assembly
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `recordWorkflowRuntimeChecklistDisplayBundle` to `recordWorkflowCopy.ts`.
+- Moved `App.tsx` AI save confirm, record entry settings, and AI save failure checklist assembly behind the bundle.
+- Kept backend-ready gating, unsaved candidate count bounding, save confirmation, and failure rendering unchanged.
+- Updated navigation verifier coverage to require the bundled runtime checklist outputs and reject old direct App-level helper calls/imports.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2285 move recording quota boundary rows display assembly
 
 類型：mobile / refactor / verifier / docs

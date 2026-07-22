@@ -588,6 +588,17 @@ export function aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordCount: nu
   ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
+export function recordWorkflowRuntimeChecklistDisplayBundle(value: {
+  protectedBackendReady: boolean;
+  unsavedPreviewRecordCount: number;
+}) {
+  return {
+    aiSaveConfirmItems: aiSaveConfirmChecklistDisplayItems(value.unsavedPreviewRecordCount),
+    recordEntrySettingsItems: recordEntrySettingsChecklistDisplayItems(value.protectedBackendReady),
+    aiSaveFailureItems: aiSaveFailureChecklistDisplayItems(value.unsavedPreviewRecordCount)
+  };
+}
+
 export function aiCandidateRemoveResultStatusMessage(count: number) {
   const boundedCount = clampNumber(count, 0, maxMobileCountValue);
   return boundedCount === 0 ? boundUiMessage("已移除所有候選紀錄") : boundUiMessage(`剩餘 ${boundedCount} 筆候選紀錄`);

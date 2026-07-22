@@ -3816,6 +3816,11 @@ def main() -> int:
             "recordWorkflowStaticChecklistDisplayBundle,",
         )
         _assert_contains(
+            "record workflow runtime checklist bundle import",
+            content,
+            "recordWorkflowRuntimeChecklistDisplayBundle,",
+        )
+        _assert_contains(
             "AI review checklist static bundle binding",
             content,
             "recordWorkflowStaticChecklistDisplay.aiReviewCostBoundaryItems;",
@@ -3830,10 +3835,16 @@ def main() -> int:
             ("direct manual submit checklist binding", "const manualSubmitChecklistItems = manualSubmitChecklistDisplayItems();"),
             ("direct record detail checklist binding", "const recordDetailBoundaryChecklistItems = recordDetailBoundaryChecklistDisplayItems();"),
             ("direct AI candidate remove checklist binding", "const aiCandidateRemoveChecklistItems = aiCandidateRemoveChecklistDisplayItems();"),
+            ("direct AI save confirm checklist binding", "const aiSaveConfirmChecklistItems = aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordDisplayCount);"),
+            ("direct record entry settings checklist binding", "const recordEntrySettingsChecklistItems = recordEntrySettingsChecklistDisplayItems(protectedBackendReady);"),
+            ("direct AI save failure checklist binding", "const aiSaveFailureChecklistItems = aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordDisplayCount);"),
             ("direct AI review cost checklist import", "  aiReviewCostBoundaryChecklistDisplayItems,"),
             ("direct manual submit checklist import", "  manualSubmitChecklistDisplayItems,"),
             ("direct record detail checklist import", "  recordDetailBoundaryChecklistDisplayItems,"),
             ("direct AI candidate remove checklist import", "  aiCandidateRemoveChecklistDisplayItems,"),
+            ("direct AI save confirm checklist import", "  aiSaveConfirmChecklistDisplayItems,"),
+            ("direct record entry settings checklist import", "  recordEntrySettingsChecklistDisplayItems,"),
+            ("direct AI save failure checklist import", "  aiSaveFailureChecklistDisplayItems,"),
         ):
             _assert_not_contains(label, content, marker)
         _assert_contains(
@@ -3918,14 +3929,29 @@ def main() -> int:
             "const transcriptReviewPreflightPassedDisplayText = transcriptReviewDisplay.preflightPassed;",
         )
         _assert_contains(
-            "record entry settings checklist helper binding",
+            "record workflow runtime checklist bundle binding",
             content,
-            "const recordEntrySettingsChecklistItems = recordEntrySettingsChecklistDisplayItems(protectedBackendReady);",
+            "const recordWorkflowRuntimeChecklistDisplay = recordWorkflowRuntimeChecklistDisplayBundle({",
         )
         _assert_contains(
-            "AI save failure checklist helper binding",
+            "record workflow runtime checklist backend input",
             content,
-            "const aiSaveFailureChecklistItems = aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordDisplayCount);",
+            "protectedBackendReady,",
+        )
+        _assert_contains(
+            "record workflow runtime checklist unsaved count input",
+            content,
+            "unsavedPreviewRecordCount: unsavedPreviewRecordDisplayCount",
+        )
+        _assert_contains(
+            "record entry settings checklist runtime bundle binding",
+            content,
+            "const recordEntrySettingsChecklistItems = recordWorkflowRuntimeChecklistDisplay.recordEntrySettingsItems;",
+        )
+        _assert_contains(
+            "AI save failure checklist runtime bundle binding",
+            content,
+            "const aiSaveFailureChecklistItems = recordWorkflowRuntimeChecklistDisplay.aiSaveFailureItems;",
         )
         _assert_contains(
             "save success checklist helper binding",
@@ -8779,7 +8805,7 @@ def main() -> int:
             ("daily record reorganization summary display bundle", "const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayBundle("),
             ("daily record reorganization summary text binding", "const dailyRecordReorganizationDisplayText = dailyRecordReorganizationDisplay.summary;"),
             ("daily record reorganization summary render", "<Text style={styles.evidence}>{dailyRecordReorganizationDisplayText}</Text>"),
-            ("daily record save checklist helper binding", "const aiSaveConfirmChecklistItems = aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordDisplayCount);"),
+            ("daily record save checklist runtime bundle binding", "const aiSaveConfirmChecklistItems = recordWorkflowRuntimeChecklistDisplay.aiSaveConfirmItems;"),
             ("daily record save unavailable confirm helper binding", "openAiSaveConfirmWithStatus(aiSaveUnavailableStatusMessage(protectedBackendUnavailableMessage));"),
             ("daily record save start helper", "function startPreviewSaveRequest()"),
             ("daily record save start helper internals", "previewSaveInFlight.current = true;\n    setIsBusy(true);\n    setStatus(aiSaveProgressStatusMessage());"),
@@ -9049,6 +9075,10 @@ def main() -> int:
             ("AI save failure checklist helper", "function aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordCount: number)"),
             ("AI save failure no retry copy", "系統不會自動重試，也不會重新呼叫 parser / AI。"),
             ("AI save failure manual fallback copy", "若 backend 持續不可用，可改用手動新增單筆明確紀錄。"),
+            ("record workflow runtime checklist bundle helper", "function recordWorkflowRuntimeChecklistDisplayBundle(value: {"),
+            ("record workflow runtime checklist bundle save confirm", "aiSaveConfirmItems: aiSaveConfirmChecklistDisplayItems(value.unsavedPreviewRecordCount)"),
+            ("record workflow runtime checklist bundle record entry", "recordEntrySettingsItems: recordEntrySettingsChecklistDisplayItems(value.protectedBackendReady)"),
+            ("record workflow runtime checklist bundle save failure", "aiSaveFailureItems: aiSaveFailureChecklistDisplayItems(value.unsavedPreviewRecordCount)"),
             ("save result display helper", "function saveResultDisplayTexts(value: {"),
             ("save result display default saved summary", "lastSavedSummary: boundUiMessage(value.lastSavedSummary || \"紀錄已加入今日紀錄與歷史紀錄。\")"),
             ("save result display rejected warning", "rejectedPreviewWarning: boundUiMessage("),

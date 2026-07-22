@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2286: Move record workflow runtime checklist assembly
+
+Status: done
+
+Completed:
+
+- Added `recordWorkflowRuntimeChecklistDisplayBundle` to `recordWorkflowCopy.ts`.
+- Moved `App.tsx` AI save confirm, record entry settings, and AI save failure checklist assembly behind the bundle.
+- Kept backend-ready gating, unsaved candidate count bounding, save confirmation, and failure rendering unchanged.
+- Updated navigation verifier coverage to require the bundled runtime checklist outputs and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2285: Move recording quota boundary rows display assembly
 
 Status: done
