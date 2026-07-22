@@ -3751,7 +3751,7 @@ def main() -> int:
         _assert_contains(
             "transcript review display helper binding",
             content,
-            "const transcriptReviewDisplay = transcriptReviewDisplayTexts();",
+            "const transcriptReviewDisplay = transcriptReviewDisplayBundle();",
         )
         _assert_contains(
             "transcript status display bundle binding",
@@ -8054,6 +8054,8 @@ def main() -> int:
             ("transcript review display texts guidance binding", "preParseGuidance: transcriptReviewPreParseGuidanceCopy()"),
             ("transcript review display texts warning binding", "sampleWarning: transcriptReviewSampleWarningCopy()"),
             ("transcript review display texts preflight binding", "preflightPassed: transcriptReviewPreflightPassedCopy()"),
+            ("transcript review display bundle helper", "function transcriptReviewDisplayBundle()"),
+            ("transcript review display bundle delegates", "return transcriptReviewDisplayTexts();"),
             ("transcript review status display texts helper", "function transcriptReviewStatusDisplayTexts(value: {"),
             ("transcript review status validation binding", "transcriptValidation: boundUiMessage("),
             ("transcript review empty status copy", "請先輸入文字，或按「填入範例」查看確認 UI；範例不會送 parser。"),
@@ -12884,6 +12886,7 @@ def main() -> int:
             ("direct AI review display texts binding", "const aiReviewDisplay = aiReviewDisplayTexts();"),
             ("direct AI save confirm display texts binding", "const aiSaveConfirmDisplay = aiSaveConfirmDisplayTexts("),
             ("direct daily record leave guard display texts binding", "const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayTexts();"),
+            ("direct transcript review display texts binding", "const transcriptReviewDisplay = transcriptReviewDisplayTexts();"),
             ("direct settings profile choice map", "profileChoiceDisplayItems.map((profile) => {"),
             ("direct settings profile key binding", "key={profile.id}"),
             ("direct settings profile accessibility binding", "accessibilityLabel={profile.accessibilityLabel}"),

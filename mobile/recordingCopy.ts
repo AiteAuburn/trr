@@ -216,6 +216,10 @@ export function transcriptReviewDisplayTexts() {
   };
 }
 
+export function transcriptReviewDisplayBundle() {
+  return transcriptReviewDisplayTexts();
+}
+
 export function transcriptReviewStatusDisplayTexts(value: {
   transcriptValidationError: string | null;
   transcript: string;

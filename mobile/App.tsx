@@ -441,7 +441,7 @@ import {
   shouldOpenTodayRecordingTranscriptReview,
   transcriptClearedStatusMessage,
   transcriptReviewCostBoundaryChecklistDisplayItems,
-  transcriptReviewDisplayTexts,
+  transcriptReviewDisplayBundle,
   transcriptReviewStatusDisplayBundle,
   transcriptReturnEditStatusMessage,
   transcriptReviewBackStatusMessage,
@@ -2044,7 +2044,7 @@ export default function App() {
   const aiRemoveConfirmBoundaryDisplayLabel = aiRemoveConfirmDisplay.boundaryLabel;
   const aiRemoveConfirmBoundaryDisplayText = aiRemoveConfirmDisplay.boundary;
   const aiRemoveConfirmSourceDisplayText = aiRemoveConfirmDisplay.source;
-  const transcriptReviewDisplay = transcriptReviewDisplayTexts();
+  const transcriptReviewDisplay = transcriptReviewDisplayBundle();
   const transcriptReviewIntroDisplayText = transcriptReviewDisplay.intro;
   const transcriptReviewPreParseGuidanceDisplayText = transcriptReviewDisplay.preParseGuidance;
   const transcriptReviewSampleWarningDisplayText = transcriptReviewDisplay.sampleWarning;

@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2234: Move transcript review display bundle
+
+Status: done
+
+Completed:
+
+- Added the transcript review display bundle helper to `recordingCopy.ts`.
+- Moved `App.tsx` transcript review intro, pre-parse guidance, sample warning, and preflight passed display assembly from the raw texts helper to the bundle entrypoint.
+- Kept transcript review copy, TextInput behavior, parser submit flow, STT behavior, backend readiness behavior, and AI parser behavior unchanged.
+- Updated navigation verifier coverage to require the transcript review display bundle, App bundle binding, and no direct transcript review display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2233: Move daily record leave guard display bundle
 
 Status: done
