@@ -317,7 +317,7 @@ import {
   storeCheckoutReadinessChecklistDisplayItems,
   storeEmptySearchDisplayItem,
   storeCatalogSyncStatusMessages,
-  storePreviewDisplayTexts,
+  storePreviewDisplayBundle,
   storeRedeemStatusMessages,
   storeRedemptionUseStatusMessages,
   storeDisplayBundle,
@@ -1885,7 +1885,7 @@ export default function App() {
   const communityReturnFutureModulesPressTarget = communityReturnFutureModulesPressHandler();
   const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();
   const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();
-  const storePreviewDisplay = storePreviewDisplayTexts(storeActionStatus);
+  const storePreviewDisplay = storePreviewDisplayBundle(storeActionStatus);
   const storeActionStatusDisplayText = storePreviewDisplay.actionStatus;
   const storePreviewBoundaryDisplayText = storePreviewDisplay.previewBoundary;
   const storeEmptySearchDisplay = storeEmptySearchDisplayItem();

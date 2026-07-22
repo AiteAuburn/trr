@@ -2150,6 +2150,10 @@ export function storePreviewDisplayTexts(actionStatus: string) {
   };
 }
 
+export function storePreviewDisplayBundle(actionStatus: string) {
+  return storePreviewDisplayTexts(actionStatus);
+}
+
 export function storeCatalogSyncStatusMessages(value: {
   backendUnavailableMessage: string;
   redemptionCount: number;

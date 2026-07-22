@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2224: Move store preview display bundle
+
+Status: done
+
+Completed:
+
+- Added the store preview display bundle helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` store preview status, boundary, cart button, cart intro, and checkout readiness display assembly from the raw texts helper to the bundle entrypoint.
+- Kept store preview copy, cart integration boundary copy, catalog sync behavior, redemption behavior, and payment/order preview behavior unchanged.
+- Updated navigation verifier coverage to require the store preview display bundle, App bundle binding, and no direct store preview display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2223: Move native status display bundle
 
 Status: done
