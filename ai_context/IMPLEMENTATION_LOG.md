@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2243 move analysis summary action display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the analysis summary action display bundle helper to `analysisCopy.ts`.
+- Moved `App.tsx` analysis range summary and detailed-report button label display assembly from two raw helpers to the bundle entrypoint.
+- Kept Analysis summary copy, report button loading label, chart data, local metric calculation, backend bounded report behavior, and detailed report navigation unchanged.
+- Updated navigation verifier coverage to require the analysis summary action display bundle and no direct analysis summary/report button helper binding regression in `App.tsx`.
+- 未變更 UI copy、visibility、navigation、backend runtime、database schema、Android signing config、STT behavior、LLM prompt behavior、parser endpoint/request semantics、token storage behavior、PHI logging、raw transcript logging、raw model output logging、secret 或 token。
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck` passed.
+- `cd mobile && rtk npm run verify:navigation` passed.
+- `cd mobile && rtk npm run quality` passed.
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py` passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue moving narrow display/accessor helpers out of `App.tsx` before larger screen component splits.
+
 ### T2242 move preview record edit boundary display bundle
 
 類型：mobile / refactor / verifier / docs

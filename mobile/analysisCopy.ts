@@ -144,6 +144,17 @@ export function analysisReportButtonLabel(isLoading: boolean) {
   return boundDisplayText(isLoading ? "報告載入中..." : "查看詳細報告", maxDisplayTextLength);
 }
 
+export function analysisSummaryActionDisplayBundle(value: {
+  recordCount: number;
+  isPreviewMode: boolean;
+  isReportLoading: boolean;
+}) {
+  return {
+    summary: analysisRangeSummaryCopy(value.recordCount, value.isPreviewMode),
+    reportButton: analysisReportButtonLabel(value.isReportLoading)
+  };
+}
+
 export function detailedReportNoteDisplayItems(queryLimit: number) {
   const boundedLimit = clampNumber(queryLimit, 0, maxMobileCountValue);
   return [

@@ -697,9 +697,8 @@ import {
   analysisEmptyStateDisplayBundle,
   analysisManualEntryStatusMessage,
   analysisRangeDisplayBundle,
-  analysisRangeSummaryCopy,
-  analysisReportButtonLabel,
   analysisReturnTodayStatusMessage,
+  analysisSummaryActionDisplayBundle,
   detailedReportBoundaryDisplayRows,
   detailedReportNoteDisplayItems,
   detailedReportManualEntryStatusMessage,
@@ -2062,11 +2061,13 @@ export default function App() {
   const analysisEmptyStateDisplay = analysisEmptyStateDisplayBundle();
   const analysisSafetyIntroDisplayText = analysisEmptyStateDisplay.safetyIntro;
   const analysisChartEmptyDisplayText = analysisEmptyStateDisplay.chartEmpty;
-  const analysisRangeSummaryDisplayText = analysisRangeSummaryCopy(
-    analysisMetricInput.glucoseCount,
-    analysisPreviewMode
-  );
-  const analysisReportButtonDisplayLabel = analysisReportButtonLabel(isReportLoading);
+  const analysisSummaryActionDisplay = analysisSummaryActionDisplayBundle({
+    recordCount: analysisMetricInput.glucoseCount,
+    isPreviewMode: analysisPreviewMode,
+    isReportLoading
+  });
+  const analysisRangeSummaryDisplayText = analysisSummaryActionDisplay.summary;
+  const analysisReportButtonDisplayLabel = analysisSummaryActionDisplay.reportButton;
   const coreFlowDisplayLabels = coreFlowSectionLabels();
   const advancedSettingsToggleDisplayLabel = advancedSettingsToggleLabel(showAdvancedSettings);
   const backendReconnectDisplayLabel = backendReconnectButtonLabel(isAnyRequestInFlight);
