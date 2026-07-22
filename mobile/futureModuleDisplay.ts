@@ -1195,6 +1195,10 @@ export function foodCommunityShareFoodNameInputValue(value: string) {
   return boundDisplayText(value, maxDisplayTextLength);
 }
 
+export function foodCommunityShareNoteInputValue(value: string) {
+  return boundDisplayText(value, maxDisplayDetailTextLength);
+}
+
 export function foodCommunityShareCategory(item: { category: FoodCommunityCategory }) {
   return item.category;
 }

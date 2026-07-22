@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2268: Move food community share note input helper
+
+Status: done
+
+Completed:
+
+- Added the food community share note input helper to `futureModuleDisplay.ts`.
+- Moved `App.tsx` food community share note bounding from inline `boundDisplayText` to the helper entrypoint.
+- Kept share field state shape, note input handler, max detail length, API payload, and share flow unchanged.
+- Updated navigation verifier coverage to require the note input helper and no direct note input `boundDisplayText` binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2267: Move community public display-name draft input helper
 
 Status: done

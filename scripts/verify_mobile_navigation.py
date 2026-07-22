@@ -12923,6 +12923,7 @@ def main() -> int:
             ("food community share eaten time input", "timeAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
             ("food community share before glucose input", "beforeGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}"),
             ("food community share after glucose input", "afterGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareAfterGlucoseAccessibility}"),
+            ("food community share note input helper binding", "note: foodCommunityShareNoteInputValue(value)"),
             ("food community share note input", "noteAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}"),
             ("food community share eaten date binding", "onDateChange={updateFoodCommunityEatenDate}"),
             ("food community share eaten time binding", "onTimeChange={updateFoodCommunityEatenTime}"),
@@ -13268,6 +13269,11 @@ def main() -> int:
             "direct community public display name draft bound display binding",
             content,
             "setCommunityPublicDisplayNameDraft(boundDisplayText(value, maxDisplayTextLength));",
+        )
+        _assert_not_contains(
+            "direct food community share note bound display binding",
+            content,
+            "note: boundDisplayText(value, maxDisplayDetailTextLength)",
         )
         for label, marker in (
             ("direct recording quota intro copy binding", "const recordingQuotaIntroDisplayText = recordingQuotaIntroCopy();"),
@@ -14997,6 +15003,8 @@ def main() -> int:
             ("food community share food name display helper binding", "return boundDisplayText(fields.foodName || foodCommunityShareFallbackFoodName(item), maxDisplayTextLength).trim();"),
             ("food community share food name input helper", "export function foodCommunityShareFoodNameInputValue(value: string)"),
             ("food community share food name input helper binding", "return boundDisplayText(value, maxDisplayTextLength);"),
+            ("food community share note input helper", "export function foodCommunityShareNoteInputValue(value: string)"),
+            ("food community share note input helper binding", "return boundDisplayText(value, maxDisplayDetailTextLength);"),
             ("food community share category helper", "export function foodCommunityShareCategory(item: { category: FoodCommunityCategory })"),
             ("food community share category helper fields", "return item.category;"),
             ("food community share section label helper", "export function foodCommunityShareSectionLabel()"),
