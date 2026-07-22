@@ -3731,7 +3731,7 @@ def main() -> int:
         _assert_contains(
             "AI save confirm display helper binding",
             content,
-            "const aiSaveConfirmDisplay = aiSaveConfirmDisplayTexts(",
+            "const aiSaveConfirmDisplay = aiSaveConfirmDisplayBundle(",
         )
         _assert_contains(
             "AI save confirm intro display binding",
@@ -8792,6 +8792,8 @@ def main() -> int:
             ("AI save confirm return status helper", "function aiSaveConfirmReturnStatusMessage()"),
             ("AI save confirm submit label helper", "function aiSaveConfirmSubmitLabel(isBusy: boolean, isBlockedByBackend: boolean, hasWarnings: boolean)"),
             ("AI save confirm display texts helper", "function aiSaveConfirmDisplayTexts(isBusy: boolean, isBlockedByBackend: boolean, hasWarnings: boolean)"),
+            ("AI save confirm display bundle helper", "function aiSaveConfirmDisplayBundle(isBusy: boolean, isBlockedByBackend: boolean, hasWarnings: boolean)"),
+            ("AI save confirm display bundle delegates", "return aiSaveConfirmDisplayTexts(isBusy, isBlockedByBackend, hasWarnings);"),
             ("AI save confirm display texts title binding", "title: boundDisplayText(\"每日紀錄\", maxDisplayTextLength)"),
             ("AI save confirm display texts date label binding", "dateLabel: boundDisplayText(\"記錄日期\", maxDisplayTextLength)"),
             ("AI save confirm display texts summary label binding", "summaryLabel: boundDisplayText(\"AI今日摘要\", maxDisplayTextLength)"),
@@ -12878,6 +12880,7 @@ def main() -> int:
             ("direct history calendar display texts binding", "const historyCalendarDisplay = historyCalendarDisplayTexts(historyCalendarMonthStart, selectedHistoryDate);"),
             ("direct analysis range display texts binding", "const analysisRangeDisplay = analysisRangeDisplayTexts("),
             ("direct AI review display texts binding", "const aiReviewDisplay = aiReviewDisplayTexts();"),
+            ("direct AI save confirm display texts binding", "const aiSaveConfirmDisplay = aiSaveConfirmDisplayTexts("),
             ("direct settings profile choice map", "profileChoiceDisplayItems.map((profile) => {"),
             ("direct settings profile key binding", "key={profile.id}"),
             ("direct settings profile accessibility binding", "accessibilityLabel={profile.accessibilityLabel}"),

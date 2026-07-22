@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2232: Move AI save confirm display bundle
+
+Status: done
+
+Completed:
+
+- Added the AI save confirm display bundle helper to `recordWorkflowCopy.ts`.
+- Moved `App.tsx` AI save confirm title, date label, summary label, intro, and submit label display assembly from the raw texts helper to the bundle entrypoint.
+- Kept save-confirm copy, submit disabled state, warning handling, backend blocked state, candidate payload behavior, and save API behavior unchanged.
+- Updated navigation verifier coverage to require the AI save confirm display bundle, App bundle binding, and no direct AI save confirm display texts binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2231: Move AI review display bundle
 
 Status: done

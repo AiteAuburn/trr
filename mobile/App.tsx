@@ -465,7 +465,7 @@ import {
   aiRemoveConfirmDisplayTexts,
   aiSaveConfirmBoundaryDisplayRows,
   aiSaveConfirmChecklistDisplayItems,
-  aiSaveConfirmDisplayTexts,
+  aiSaveConfirmDisplayBundle,
   aiSaveConfirmReadyStatusMessage,
   aiSaveConfirmReturnStatusMessage,
   aiSaveFailureChecklistDisplayItems,
@@ -1417,7 +1417,7 @@ export default function App() {
   const hasAiSaveConfirmWarnings = aiSaveConfirmViewState.hasWarnings;
   const isAiSaveConfirmBlockedByBackend = aiSaveConfirmViewState.isBlockedByBackend;
   const isAiSaveConfirmSubmitDisabled = aiSaveConfirmViewState.isSubmitDisabled;
-  const aiSaveConfirmDisplay = aiSaveConfirmDisplayTexts(
+  const aiSaveConfirmDisplay = aiSaveConfirmDisplayBundle(
     isBusy,
     isAiSaveConfirmBlockedByBackend,
     hasAiSaveConfirmWarnings

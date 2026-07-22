@@ -310,6 +310,10 @@ export function aiSaveConfirmDisplayTexts(isBusy: boolean, isBlockedByBackend: b
   };
 }
 
+export function aiSaveConfirmDisplayBundle(isBusy: boolean, isBlockedByBackend: boolean, hasWarnings: boolean) {
+  return aiSaveConfirmDisplayTexts(isBusy, isBlockedByBackend, hasWarnings);
+}
+
 export function aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordCount: number) {
   const boundedCount = clampNumber(unsavedPreviewRecordCount, 0, maxMobileCountValue);
   return [
