@@ -243,6 +243,15 @@ export function dailyRecordReorganizationDisplayText(
   );
 }
 
+export function dailyRecordReorganizationDisplayBundle(
+  reason: DailyRecordReorganizationReason | null,
+  revision: number
+) {
+  return {
+    summary: dailyRecordReorganizationDisplayText(reason, revision)
+  };
+}
+
 export function todayTranscriptExpandedStatusMessage() {
   return boundDisplayText("今日錄音文字已在下方展開；不重新呼叫 STT、AI 或 backend。", maxUiMessageLength);
 }

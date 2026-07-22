@@ -8692,8 +8692,9 @@ def main() -> int:
             ("daily record reorganization edit binding", 'reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "edit");'),
             ("daily record reorganization delete daily return state binding", 'if (isPreviewActionReturningToDailyRecord) {\n      reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "delete");'),
             ("daily record reorganization delete binding", 'reorganizeDailyRecordDraftAfterChange(previewWithRecords(currentPreview, nextRecords), "delete");'),
-            ("daily record reorganization summary display", "const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayText("),
-            ("daily record reorganization summary render", "<Text style={styles.evidence}>{dailyRecordReorganizationDisplay}</Text>"),
+            ("daily record reorganization summary display bundle", "const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayBundle("),
+            ("daily record reorganization summary text binding", "const dailyRecordReorganizationDisplayText = dailyRecordReorganizationDisplay.summary;"),
+            ("daily record reorganization summary render", "<Text style={styles.evidence}>{dailyRecordReorganizationDisplayText}</Text>"),
             ("daily record save checklist helper binding", "const aiSaveConfirmChecklistItems = aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordDisplayCount);"),
             ("daily record save unavailable confirm helper binding", "openAiSaveConfirmWithStatus(aiSaveUnavailableStatusMessage(protectedBackendUnavailableMessage));"),
             ("daily record save start helper", "function startPreviewSaveRequest()"),
@@ -9079,6 +9080,8 @@ def main() -> int:
             ("daily record reorganization status count bound", "maxMobilePreviewRecords"),
             ("daily record reorganization status ui bound", "maxUiMessageLength"),
             ("daily record reorganization display helper", "function dailyRecordReorganizationDisplayText("),
+            ("daily record reorganization display bundle helper", "function dailyRecordReorganizationDisplayBundle("),
+            ("daily record reorganization display bundle binding", "summary: dailyRecordReorganizationDisplayText(reason, revision)"),
             ("daily record transcript expanded status helper", "function todayTranscriptExpandedStatusMessage()"),
             ("daily record transcript expanded status copy", "今日錄音文字已在下方展開；不重新呼叫 STT、AI 或 backend。"),
             ("daily record entry menu open status helper", "function dailyRecordEntryMenuOpenStatusMessage(typeLabel: string)"),
@@ -9174,9 +9177,12 @@ def main() -> int:
             ("preview rejected display items state binding", "const rejectedPreviewDisplayItems = aiReviewPreviewDisplay.rejectedItems;"),
             ("ai review date state records binding", "const aiReviewDateDisplayLabel = aiReviewPreviewDisplay.dateLabel;"),
             ("daily record display bundle helper import", "dailyRecordDisplayBundle,"),
+            ("daily record reorganization display bundle helper import", "dailyRecordReorganizationDisplayBundle,"),
             ("daily record display bundle state binding", "const dailyRecordDisplay = dailyRecordDisplayBundle(preview, previewState.records);"),
             ("daily record date display bundle binding", "const dailyRecordDateDisplayText = dailyRecordDisplay.dateText;"),
             ("daily record summary display bundle binding", "const dailyRecordSummaryDisplayText = dailyRecordDisplay.summaryText;"),
+            ("daily record reorganization display bundle binding", "const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayBundle("),
+            ("daily record reorganization display text binding", "const dailyRecordReorganizationDisplayText = dailyRecordReorganizationDisplay.summary;"),
             ("daily record sections display bundle binding", "const dailyRecordSectionItems = dailyRecordDisplay.sectionItems;"),
             ("preview record display bundle helper import", "previewRecordDisplayBundle,"),
             ("preview record display bundle state binding", "const previewRecordDisplay = previewRecordDisplayBundle({"),
@@ -9208,6 +9214,11 @@ def main() -> int:
             ("ai save confirm submit disabled binding", "disabled={isAiSaveConfirmSubmitDisabled}"),
         ):
             _assert_contains(label, content, marker)
+        _assert_not_contains(
+            "direct daily record reorganization display helper binding",
+            content,
+            "const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayText(",
+        )
         _assert_not_contains(
             "local preview record state helper definition",
             content,

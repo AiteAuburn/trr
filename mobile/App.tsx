@@ -728,7 +728,7 @@ import {
   dailyRecordDraftScreenState,
   dailyRecordEntryMenuOpenStatusMessage,
   dailyRecordKeyFromRecords,
-  dailyRecordReorganizationDisplayText,
+  dailyRecordReorganizationDisplayBundle,
   dailyRecordReorganizationStatusMessage,
   dailyTranscriptDisplayBundle,
   mergeSameDayParsePreviewDraft,
@@ -1399,10 +1399,11 @@ export default function App() {
   const dailyRecordDisplay = dailyRecordDisplayBundle(preview, previewState.records);
   const dailyRecordDateDisplayText = dailyRecordDisplay.dateText;
   const dailyRecordSummaryDisplayText = dailyRecordDisplay.summaryText;
-  const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayText(
+  const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayBundle(
     dailyRecordOrganizationReason,
     dailyRecordOrganizationRevision
   );
+  const dailyRecordReorganizationDisplayText = dailyRecordReorganizationDisplay.summary;
   const dailyRecordSectionItems = dailyRecordDisplay.sectionItems;
   const todayTranscriptDisplay = dailyTranscriptDisplayBundle(preview, dailyTranscriptEntries);
   const todayTranscriptDisplayItems = todayTranscriptDisplay.items;
@@ -8091,7 +8092,7 @@ export default function App() {
             <View style={styles.dailySummaryCard}>
               <Text style={styles.previewModeBadge}>{aiSaveConfirmSummaryLabelDisplayText}</Text>
               <Text style={styles.recordContent}>{dailyRecordSummaryDisplayText}</Text>
-              <Text style={styles.evidence}>{dailyRecordReorganizationDisplay}</Text>
+              <Text style={styles.evidence}>{dailyRecordReorganizationDisplayText}</Text>
             </View>
             <Pressable
               accessibilityLabel={todayTranscriptAccessibilityLabel}

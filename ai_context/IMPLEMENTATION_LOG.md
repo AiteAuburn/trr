@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2261 move daily reorganization display bundle
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/dailyTranscriptTransforms.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added the daily record reorganization display bundle helper to `dailyTranscriptTransforms.ts`.
+- Moved `App.tsx` daily reorganization summary assembly from a direct helper call to the bundle entrypoint.
+- Kept reorganization reason, revision count, summary copy, evidence rendering, and draft reorganization flow unchanged.
+- Updated navigation verifier coverage to require the daily reorganization display bundle and no direct reorganization display helper binding regression in `App.tsx`.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2260 move parser model availability display bundle
 
 類型：mobile / refactor / verifier / docs

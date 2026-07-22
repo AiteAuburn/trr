@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2261: Move daily reorganization display bundle
+
+Status: done
+
+Completed:
+
+- Added the daily record reorganization display bundle helper to `dailyTranscriptTransforms.ts`.
+- Moved `App.tsx` daily reorganization summary assembly from a direct helper call to the bundle entrypoint.
+- Kept reorganization reason, revision count, summary copy, evidence rendering, and draft reorganization flow unchanged.
+- Updated navigation verifier coverage to require the daily reorganization display bundle and no direct reorganization display helper binding regression in `App.tsx`.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2260: Move parser model availability display bundle
 
 Status: done
