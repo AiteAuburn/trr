@@ -4432,10 +4432,25 @@ def main() -> int:
             "function openSaveSuccessDestinationCard(target: AppScreen)",
         )
         _assert_contains(
-            "save success destination helper binding",
+            "success destination display bundle binding",
             content,
-            "const saveSuccessDestinationItems = saveSuccessDestinationDisplayItems(\n    saveSuccessViewState.hasUnsavedPreviewRecords\n  );",
+            "const successDestinationDisplay = successDestinationDisplayBundle({",
         )
+        _assert_contains(
+            "success destination display bundle import",
+            content,
+            "successDestinationDisplayBundle,",
+        )
+        _assert_contains(
+            "save success destination bundle field binding",
+            content,
+            "const saveSuccessDestinationItems = successDestinationDisplay.saveSuccessItems;",
+        )
+        for label, marker in (
+            ("direct save success destination helper binding", "const saveSuccessDestinationItems = saveSuccessDestinationDisplayItems("),
+            ("direct save success destination helper import", "  saveSuccessDestinationDisplayItems,"),
+        ):
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("save success state helper", "function saveSuccessState(lastSaveEntryMethod: SaveEntryMethod, hasUnsavedPreviewRecords: boolean)"),
             ("save success state manual flag", 'const isManualSave = lastSaveEntryMethod === "manual";'),
@@ -7010,9 +7025,9 @@ def main() -> int:
             "onDestinationPress={openDeleteSuccessDestinationCard}",
         )
         _assert_contains(
-            "delete success destination helper binding",
+            "delete success destination bundle field binding",
             content,
-            "const deleteSuccessDestinationItems = deleteSuccessDestinationDisplayItems();",
+            "const deleteSuccessDestinationItems = successDestinationDisplay.deleteSuccessItems;",
         )
         _assert_contains(
             "record status success checklist bundle binding",
@@ -7036,9 +7051,9 @@ def main() -> int:
             "onDestinationPress={openUpdateSuccessDestinationCard}",
         )
         _assert_contains(
-            "update success destination helper binding",
+            "update success destination bundle field binding",
             content,
-            "const updateSuccessDestinationItems = updateSuccessDestinationDisplayItems(Boolean(selectedRecord));",
+            "const updateSuccessDestinationItems = successDestinationDisplay.updateSuccessItems;",
         )
         _assert_contains(
             "update success checklist bundle field binding",
@@ -7046,6 +7061,13 @@ def main() -> int:
             "const updateSuccessBoundaryChecklistItems = recordStatusSuccessChecklistDisplay.updateSuccessItems;",
         )
         _assert_contains("update success destination grid items binding", content, "items={updateSuccessDestinationItems}")
+        for label, marker in (
+            ("direct delete success destination helper binding", "const deleteSuccessDestinationItems = deleteSuccessDestinationDisplayItems();"),
+            ("direct update success destination helper binding", "const updateSuccessDestinationItems = updateSuccessDestinationDisplayItems("),
+            ("direct delete success destination helper import", "  deleteSuccessDestinationDisplayItems,"),
+            ("direct update success destination helper import", "  updateSuccessDestinationDisplayItems,"),
+        ):
+            _assert_not_contains(label, content, marker)
         _assert_not_contains(
             "delete success direct destination card press binding",
             content,
@@ -8414,6 +8436,10 @@ def main() -> int:
             ("update success destination display helper", "function updateSuccessDestinationDisplayItems(hasSelectedRecord: boolean)"),
             ("update success detail destination guard", 'target !== "recordDetail" || hasSelectedRecord'),
             ("update success analysis destination copy", "查看摘要是否更新"),
+            ("success destination display bundle helper", "function successDestinationDisplayBundle(value: {"),
+            ("success destination display save binding", "saveSuccessItems: saveSuccessDestinationDisplayItems(value.hasUnsavedPreviewRecords)"),
+            ("success destination display delete binding", "deleteSuccessItems: deleteSuccessDestinationDisplayItems()"),
+            ("success destination display update binding", "updateSuccessItems: updateSuccessDestinationDisplayItems(value.hasSelectedRecord)"),
             ("save success manual continue status helper", "function saveSuccessManualContinueStatusMessage()"),
             ("save success record entry status helper", "function saveSuccessRecordEntryStatusMessage()"),
             ("save success view detail status helper", "function saveSuccessViewDetailStatusMessage()"),

@@ -601,7 +601,6 @@ import {
   busyActionStatusMessage,
   coreAccessibilityDisplayBundle,
   coreFlowSectionLabels,
-  deleteSuccessDestinationDisplayItems,
   previewActionClearStatusMessage,
   quickEntryModeDisplayItems,
   quickEntryTextModeStatusMessage,
@@ -609,19 +608,18 @@ import {
   quickRecordIntroDisplayBundle,
   recordManualEntryStatusMessage,
   returnDestinationButtonDisplayBundle,
-  saveSuccessDestinationDisplayItems,
   saveSuccessDestinationStatusMessage,
   saveSuccessManualContinueStatusMessage,
   saveSuccessProcessUnsavedStatusMessage,
   saveSuccessRecordEntryStatusMessage,
   saveSuccessViewDetailStatusMessage,
+  successDestinationDisplayBundle,
   todayAnalysisStatusMessage,
   todayManualEntryStatusMessage,
   todayRecordDetailStatusMessage,
   todayRecordEntryStatusMessage,
   todayRecordSummaryDisplayBundle,
   transcriptReviewManualEntryStatusMessage,
-  updateSuccessDestinationDisplayItems,
   type QuickEntryMode
 } from "./firstVersionFlowCopy";
 import {
@@ -1445,11 +1443,13 @@ export default function App() {
   const recordStatusStaticChecklistDisplay = recordStatusStaticChecklistDisplayBundle();
   const deleteConfirmChecklistItems = recordStatusStaticChecklistDisplay.deleteConfirmItems;
   const recordUpdateChecklistItems = recordStatusStaticChecklistDisplay.recordUpdateItems;
-  const saveSuccessDestinationItems = saveSuccessDestinationDisplayItems(
-    saveSuccessViewState.hasUnsavedPreviewRecords
-  );
-  const deleteSuccessDestinationItems = deleteSuccessDestinationDisplayItems();
-  const updateSuccessDestinationItems = updateSuccessDestinationDisplayItems(Boolean(selectedRecord));
+  const successDestinationDisplay = successDestinationDisplayBundle({
+    hasUnsavedPreviewRecords: saveSuccessViewState.hasUnsavedPreviewRecords,
+    hasSelectedRecord: Boolean(selectedRecord)
+  });
+  const saveSuccessDestinationItems = successDestinationDisplay.saveSuccessItems;
+  const deleteSuccessDestinationItems = successDestinationDisplay.deleteSuccessItems;
+  const updateSuccessDestinationItems = successDestinationDisplay.updateSuccessItems;
   const currentChrome = screenChrome[currentScreen];
   const headerBackTarget = headerBackTargetForScreen(currentScreen, currentChrome, {
     menuReturnScreen,

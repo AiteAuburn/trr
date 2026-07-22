@@ -349,6 +349,17 @@ export function updateSuccessDestinationDisplayItems(hasSelectedRecord: boolean)
     .map(destinationCardDisplayItem);
 }
 
+export function successDestinationDisplayBundle(value: {
+  hasUnsavedPreviewRecords: boolean;
+  hasSelectedRecord: boolean;
+}) {
+  return {
+    saveSuccessItems: saveSuccessDestinationDisplayItems(value.hasUnsavedPreviewRecords),
+    deleteSuccessItems: deleteSuccessDestinationDisplayItems(),
+    updateSuccessItems: updateSuccessDestinationDisplayItems(value.hasSelectedRecord)
+  };
+}
+
 export function saveSuccessManualContinueStatusMessage() {
   return boundUiMessage("已從儲存完成繼續手動新增；沿用原返回目標，不會呼叫 AI、LLM 或 STT。");
 }
