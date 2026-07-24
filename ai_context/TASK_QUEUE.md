@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2301: Move settings runtime controls display assembly
+
+Status: done
+
+Completed:
+
+- Added `settingsRuntimeControlsDisplayBundle` to `settingsCopy.ts`.
+- Moved `App.tsx` settings controls, recording quota, reminder, and privacy control display assembly behind the runtime bundle.
+- Kept advanced settings toggle, backend reconnect, quota sync, reminder integration, and privacy integration copy unchanged.
+- Updated navigation verifier coverage to require the bundled settings runtime controls display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2300: Move settings profile runtime display assembly
 
 Status: done

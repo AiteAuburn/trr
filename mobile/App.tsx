@@ -707,15 +707,12 @@ import {
   isVoiceQuotaLow,
   membershipStatusReturnSubscriptionStatusMessage,
   menuReturnStatusMessage,
-  privacySettingsControlDisplayBundle,
-  recordingQuotaControlDisplayBundle,
-  reminderSettingsControlDisplayBundle,
   selectedModelDisplayLabel,
   selectedModelRuntimeDisplayLabel,
   settingsAccountSecurityOpenStatusMessage,
   settingsBoundaryCopyBundle,
-  settingsControlDisplayBundle,
   settingsProfileRuntimeDisplayBundle,
+  settingsRuntimeControlsDisplayBundle,
   settingsSubpageStatusDisplayBundle,
   settingsSubpageReturnStatusMessage
 } from "./settingsCopy";
@@ -2045,10 +2042,12 @@ export default function App() {
   const analysisRangeSummaryDisplayText = analysisSummaryActionDisplay.summary;
   const analysisReportButtonDisplayLabel = analysisSummaryActionDisplay.reportButton;
   const coreFlowDisplayLabels = coreFlowSectionLabels();
-  const settingsControlDisplay = settingsControlDisplayBundle({
+  const settingsRuntimeControlsDisplay = settingsRuntimeControlsDisplayBundle({
     isAdvancedExpanded: showAdvancedSettings,
-    isBackendConnecting: isAnyRequestInFlight
+    isBackendConnecting: isAnyRequestInFlight,
+    isQuotaSyncing
   });
+  const settingsControlDisplay = settingsRuntimeControlsDisplay.settings;
   const advancedSettingsToggleDisplayLabel = settingsControlDisplay.advancedToggle;
   const backendReconnectDisplayLabel = settingsControlDisplay.backendReconnect;
   const nativeActionDisplay = nativeActionDisplayBundle({
@@ -2092,16 +2091,16 @@ export default function App() {
   const subscriptionManagementIntroDisplayText = subscriptionActionControlDisplay.managementIntro;
   const subscriptionManagementNoActionDisplayText = subscriptionActionControlDisplay.managementNoAction;
   const subscriptionManagementSyncButtonDisplayLabel = subscriptionActionControlDisplay.managementSyncButton;
-  const recordingQuotaControlDisplay = recordingQuotaControlDisplayBundle(isQuotaSyncing);
+  const recordingQuotaControlDisplay = settingsRuntimeControlsDisplay.recordingQuota;
   const recordingQuotaIntroDisplayText = recordingQuotaControlDisplay.intro;
   const recordingQuotaControlDisplayText = recordingQuotaControlDisplay.control;
   const recordingQuotaSyncButtonDisplayLabel = recordingQuotaControlDisplay.syncButton;
   const recordingQuotaSyncAccessibilityDisplayLabel = recordingQuotaControlDisplay.syncAccessibility;
-  const reminderSettingsControlDisplay = reminderSettingsControlDisplayBundle();
+  const reminderSettingsControlDisplay = settingsRuntimeControlsDisplay.reminder;
   const reminderSettingsIntroDisplayText = reminderSettingsControlDisplay.intro;
   const reminderIntegrationButtonDisplayLabel = reminderSettingsControlDisplay.integrationButton;
   const reminderIntegrationAccessibilityDisplayLabel = reminderSettingsControlDisplay.integrationAccessibility;
-  const privacySettingsControlDisplay = privacySettingsControlDisplayBundle();
+  const privacySettingsControlDisplay = settingsRuntimeControlsDisplay.privacy;
   const privacySettingsIntroDisplayText = privacySettingsControlDisplay.intro;
   const privacyIntegrationButtonDisplayLabel = privacySettingsControlDisplay.integrationButton;
   const privacyIntegrationAccessibilityDisplayLabel = privacySettingsControlDisplay.integrationAccessibility;

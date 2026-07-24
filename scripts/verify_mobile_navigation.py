@@ -12827,20 +12827,24 @@ def main() -> int:
             ("profile edit accessibility binding", "actionAccessibilityLabel={settingsSubscriptionDisplayLabels.editIntegrationAccessibility}"),
             ("recording quota settings sync binding", "onActionPress={syncRecordingQuotaSettings}"),
             ("recording quota accessibility binding", "actionAccessibilityLabel={recordingQuotaSyncAccessibilityDisplayLabel}"),
-            ("recording quota control display helper binding", "const recordingQuotaControlDisplay = recordingQuotaControlDisplayBundle(isQuotaSyncing);"),
+            ("settings runtime controls display import", "settingsRuntimeControlsDisplayBundle,"),
+            ("settings runtime controls display binding", "const settingsRuntimeControlsDisplay = settingsRuntimeControlsDisplayBundle({"),
+            ("settings runtime controls display quota input", "isBackendConnecting: isAnyRequestInFlight,\n    isQuotaSyncing"),
+            ("settings control runtime field binding", "const settingsControlDisplay = settingsRuntimeControlsDisplay.settings;"),
+            ("recording quota runtime field binding", "const recordingQuotaControlDisplay = settingsRuntimeControlsDisplay.recordingQuota;"),
             ("recording quota intro display binding", "const recordingQuotaIntroDisplayText = recordingQuotaControlDisplay.intro;"),
             ("recording quota control display binding", "const recordingQuotaControlDisplayText = recordingQuotaControlDisplay.control;"),
             ("recording quota sync button display binding", "const recordingQuotaSyncButtonDisplayLabel = recordingQuotaControlDisplay.syncButton;"),
             ("recording quota sync accessibility display binding", "const recordingQuotaSyncAccessibilityDisplayLabel = recordingQuotaControlDisplay.syncAccessibility;"),
             ("reminder integration status binding", "onActionPress={showReminderIntegrationStatus}"),
             ("reminder integration accessibility binding", "actionAccessibilityLabel={reminderIntegrationAccessibilityDisplayLabel}"),
-            ("reminder settings control display helper binding", "const reminderSettingsControlDisplay = reminderSettingsControlDisplayBundle();"),
+            ("reminder settings runtime field binding", "const reminderSettingsControlDisplay = settingsRuntimeControlsDisplay.reminder;"),
             ("reminder settings intro display binding", "const reminderSettingsIntroDisplayText = reminderSettingsControlDisplay.intro;"),
             ("reminder integration button display binding", "const reminderIntegrationButtonDisplayLabel = reminderSettingsControlDisplay.integrationButton;"),
             ("reminder integration accessibility display binding", "const reminderIntegrationAccessibilityDisplayLabel = reminderSettingsControlDisplay.integrationAccessibility;"),
             ("privacy integration status binding", "onActionPress={showPrivacyIntegrationStatus}"),
             ("privacy integration accessibility binding", "actionAccessibilityLabel={privacyIntegrationAccessibilityDisplayLabel}"),
-            ("privacy settings control display helper binding", "const privacySettingsControlDisplay = privacySettingsControlDisplayBundle();"),
+            ("privacy settings runtime field binding", "const privacySettingsControlDisplay = settingsRuntimeControlsDisplay.privacy;"),
             ("privacy settings intro display binding", "const privacySettingsIntroDisplayText = privacySettingsControlDisplay.intro;"),
             ("privacy integration button display binding", "const privacyIntegrationButtonDisplayLabel = privacySettingsControlDisplay.integrationButton;"),
             ("privacy integration accessibility display binding", "const privacyIntegrationAccessibilityDisplayLabel = privacySettingsControlDisplay.integrationAccessibility;"),
@@ -13603,6 +13607,9 @@ def main() -> int:
             ("direct recording quota control copy binding", "const recordingQuotaControlDisplayText = recordingQuotaControlCopy();"),
             ("direct recording quota sync button binding", "const recordingQuotaSyncButtonDisplayLabel = recordingQuotaSyncButtonLabel(isQuotaSyncing);"),
             ("direct recording quota sync accessibility binding", "const recordingQuotaSyncAccessibilityDisplayLabel = recordingQuotaSyncAccessibilityLabel(isQuotaSyncing);"),
+            ("direct recording quota control display bundle binding", "const recordingQuotaControlDisplay = recordingQuotaControlDisplayBundle(isQuotaSyncing);"),
+            ("direct reminder settings control display bundle binding", "const reminderSettingsControlDisplay = reminderSettingsControlDisplayBundle();"),
+            ("direct privacy settings control display bundle binding", "const privacySettingsControlDisplay = privacySettingsControlDisplayBundle();"),
             ("direct reminder settings intro copy binding", "const reminderSettingsIntroDisplayText = reminderSettingsIntroCopy();"),
             ("direct reminder integration button binding", "const reminderIntegrationButtonDisplayLabel = reminderIntegrationButtonLabel();"),
             ("direct reminder integration accessibility binding", "const reminderIntegrationAccessibilityDisplayLabel = reminderIntegrationAccessibilityLabel();"),
@@ -13740,6 +13747,11 @@ def main() -> int:
             ("settings control display bundle helper", "function settingsControlDisplayBundle(value: {"),
             ("settings control display advanced toggle binding", "advancedToggle: advancedSettingsToggleLabel(value.isAdvancedExpanded)"),
             ("settings control display backend reconnect binding", "backendReconnect: backendReconnectButtonLabel(value.isBackendConnecting)"),
+            ("settings runtime controls display bundle helper", "function settingsRuntimeControlsDisplayBundle(value: {"),
+            ("settings runtime controls display settings delegate", "settings: settingsControlDisplayBundle({"),
+            ("settings runtime controls display quota delegate", "recordingQuota: recordingQuotaControlDisplayBundle(value.isQuotaSyncing)"),
+            ("settings runtime controls display reminder delegate", "reminder: reminderSettingsControlDisplayBundle()"),
+            ("settings runtime controls display privacy delegate", "privacy: privacySettingsControlDisplayBundle()"),
             ("recording quota control display bundle helper", "function recordingQuotaControlDisplayBundle(isSyncing: boolean)"),
             ("recording quota control display intro binding", "intro: recordingQuotaIntroCopy()"),
             ("recording quota control display sync button binding", "syncButton: recordingQuotaSyncButtonLabel(isSyncing)"),
@@ -13749,7 +13761,7 @@ def main() -> int:
         _assert_contains(
             "settings control display bundle binding",
             content,
-            "const settingsControlDisplay = settingsControlDisplayBundle({",
+            "const settingsControlDisplay = settingsRuntimeControlsDisplay.settings;",
         )
         for label, marker in (
             (
@@ -13759,6 +13771,26 @@ def main() -> int:
             (
                 "direct backend reconnect display label binding",
                 "const backendReconnectDisplayLabel = backendReconnectButtonLabel(isAnyRequestInFlight);",
+            ),
+            (
+                "direct settings control display bundle binding",
+                "const settingsControlDisplay = settingsControlDisplayBundle({",
+            ),
+            (
+                "direct settings control display bundle import",
+                "  settingsControlDisplayBundle,",
+            ),
+            (
+                "direct recording quota control display bundle import",
+                "  recordingQuotaControlDisplayBundle,",
+            ),
+            (
+                "direct reminder settings control display bundle import",
+                "  reminderSettingsControlDisplayBundle,",
+            ),
+            (
+                "direct privacy settings control display bundle import",
+                "  privacySettingsControlDisplayBundle,",
             ),
         ):
             _assert_not_contains(label, content, marker)

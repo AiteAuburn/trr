@@ -137,6 +137,22 @@ export function settingsControlDisplayBundle(value: { isAdvancedExpanded: boolea
   };
 }
 
+export function settingsRuntimeControlsDisplayBundle(value: {
+  isAdvancedExpanded: boolean;
+  isBackendConnecting: boolean;
+  isQuotaSyncing: boolean;
+}) {
+  return {
+    settings: settingsControlDisplayBundle({
+      isAdvancedExpanded: value.isAdvancedExpanded,
+      isBackendConnecting: value.isBackendConnecting
+    }),
+    recordingQuota: recordingQuotaControlDisplayBundle(value.isQuotaSyncing),
+    reminder: reminderSettingsControlDisplayBundle(),
+    privacy: privacySettingsControlDisplayBundle()
+  };
+}
+
 export function settingsAccountSecurityOpenStatusMessage() {
   return boundUiMessage("已前往帳號與登入安全；本頁不呼叫 AI，也不寫入健康紀錄。");
 }
