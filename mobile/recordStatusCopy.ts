@@ -107,6 +107,12 @@ export function recordsStatusDisplayBundle(recordsStatus: string) {
   return recordsStatusDisplayTexts(recordsStatus);
 }
 
+export function recordStatusOverviewRuntimeDisplayBundle(value: { recordsStatus: string }) {
+  return {
+    recordsStatus: recordsStatusDisplayBundle(value.recordsStatus)
+  };
+}
+
 export function recordSyncFailureStatusMessage() {
   return boundUiMessage("紀錄暫時無法同步；目前只顯示已載入資料或範例。");
 }

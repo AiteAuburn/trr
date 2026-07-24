@@ -9875,7 +9875,8 @@ def main() -> int:
             ("initial record sync start and complete helper", "async function startAndCompleteInitialRecordSyncRequest(syncContext: {\n    account: Account;\n    activeProfileId: string;\n    syncKey: string;"),
             ("initial record sync start and complete helper internals", "if (!startInitialRecordSyncRequest(syncContext)) {\n      return;\n    }\n    await completeInitialRecordSyncRequest(syncContext);"),
             ("initial record sync start and complete helper binding", "await startAndCompleteInitialRecordSyncRequest(syncContext);"),
-            ("records status display helper binding", "const recordsStatusDisplay = recordsStatusDisplayBundle(recordsStatus);"),
+            ("record status overview runtime display bundle binding", "const recordStatusOverviewRuntimeDisplay = recordStatusOverviewRuntimeDisplayBundle({ recordsStatus });"),
+            ("records status runtime field binding", "const recordsStatusDisplay = recordStatusOverviewRuntimeDisplay.recordsStatus;"),
             ("records status display text binding", "const recordsStatusDisplayText = recordsStatusDisplay.records;"),
             ("manual record create display helper binding", "const manualRecordCreateDisplay = manualRecordCreateDisplayBundle({"),
             ("manual record validation display binding", "const manualRecordValidationDisplayText = manualRecordCreateDisplay.validation;"),
@@ -9891,6 +9892,16 @@ def main() -> int:
             "direct records status display texts binding",
             content,
             "const recordsStatusDisplay = recordsStatusDisplayTexts(recordsStatus);",
+        )
+        _assert_not_contains(
+            "direct records status display bundle binding",
+            content,
+            "const recordsStatusDisplay = recordsStatusDisplayBundle(recordsStatus);",
+        )
+        _assert_not_contains(
+            "direct records status display bundle import",
+            content,
+            "  recordsStatusDisplayBundle,",
         )
         _assert_not_contains(
             "local record collection state helper definition",
@@ -9912,6 +9923,8 @@ def main() -> int:
             ("records status display texts helper", "function recordsStatusDisplayTexts(recordsStatus: string)"),
             ("records status display bundle helper", "function recordsStatusDisplayBundle(recordsStatus: string)"),
             ("records status display bundle delegates", "return recordsStatusDisplayTexts(recordsStatus);"),
+            ("record status overview runtime display bundle helper", "function recordStatusOverviewRuntimeDisplayBundle(value: { recordsStatus: string })"),
+            ("record status overview runtime records status binding", "recordsStatus: recordsStatusDisplayBundle(value.recordsStatus)"),
             ("records status display binding", "records: boundUiMessage(recordsStatus)"),
         ):
             _assert_contains(label, record_status_copy_content, marker)

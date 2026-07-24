@@ -478,9 +478,9 @@ import {
   recordSyncPageSuccessStatusMessage,
   recordSyncSuccessStatusMessage,
   recordSyncUnavailableStatusMessage,
+  recordStatusOverviewRuntimeDisplayBundle,
   recordStatusRuntimeChecklistDisplayBundle,
   recordStatusRuntimeDisplayBundle,
-  recordsStatusDisplayBundle,
   recordUpdateFailureStatusMessage,
   recordUpdateProgressStatusMessage,
   recordUpdateSuccessStatusMessage,
@@ -1951,7 +1951,8 @@ export default function App() {
   const recordingQuotaUnavailableStatusMessage = settingsSubpageStatusDisplay.recordingQuotaUnavailable;
   const reminderIntegrationStatusMessage = settingsSubpageStatusDisplay.reminderIntegration;
   const privacyIntegrationStatusMessage = settingsSubpageStatusDisplay.privacyIntegration;
-  const recordsStatusDisplay = recordsStatusDisplayBundle(recordsStatus);
+  const recordStatusOverviewRuntimeDisplay = recordStatusOverviewRuntimeDisplayBundle({ recordsStatus });
+  const recordsStatusDisplay = recordStatusOverviewRuntimeDisplay.recordsStatus;
   const recordsStatusDisplayText = recordsStatusDisplay.records;
   const todayRecordSummaryDisplay = todayRecordSummaryDisplayBundle(todayRecords.length);
   const todayRecordSummaryDisplayText = todayRecordSummaryDisplay.summary;
