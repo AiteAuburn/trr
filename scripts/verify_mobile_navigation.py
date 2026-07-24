@@ -4504,14 +4504,19 @@ def main() -> int:
             "function openSaveSuccessDestinationCard(target: AppScreen)",
         )
         _assert_contains(
-            "success destination display bundle binding",
+            "success destination runtime display bundle binding",
             content,
-            "const successDestinationDisplay = successDestinationDisplayBundle({",
+            "const successDestinationRuntimeDisplay = successDestinationRuntimeDisplayBundle({",
         )
         _assert_contains(
-            "success destination display bundle import",
+            "success destination runtime display bundle import",
             content,
-            "successDestinationDisplayBundle,",
+            "successDestinationRuntimeDisplayBundle,",
+        )
+        _assert_contains(
+            "success destination runtime field binding",
+            content,
+            "const successDestinationDisplay = successDestinationRuntimeDisplay.destinations;",
         )
         _assert_contains(
             "save success destination bundle field binding",
@@ -4521,6 +4526,8 @@ def main() -> int:
         for label, marker in (
             ("direct save success destination helper binding", "const saveSuccessDestinationItems = saveSuccessDestinationDisplayItems("),
             ("direct save success destination helper import", "  saveSuccessDestinationDisplayItems,"),
+            ("direct success destination display bundle binding", "const successDestinationDisplay = successDestinationDisplayBundle({"),
+            ("direct success destination display bundle import", "  successDestinationDisplayBundle,"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (
@@ -8514,6 +8521,8 @@ def main() -> int:
             ("success destination display save binding", "saveSuccessItems: saveSuccessDestinationDisplayItems(value.hasUnsavedPreviewRecords)"),
             ("success destination display delete binding", "deleteSuccessItems: deleteSuccessDestinationDisplayItems()"),
             ("success destination display update binding", "updateSuccessItems: updateSuccessDestinationDisplayItems(value.hasSelectedRecord)"),
+            ("success destination runtime display bundle helper", "function successDestinationRuntimeDisplayBundle(value: {"),
+            ("success destination runtime display bundle delegates", "destinations: successDestinationDisplayBundle(value)"),
             ("save success manual continue status helper", "function saveSuccessManualContinueStatusMessage()"),
             ("save success record entry status helper", "function saveSuccessRecordEntryStatusMessage()"),
             ("save success view detail status helper", "function saveSuccessViewDetailStatusMessage()"),

@@ -360,6 +360,15 @@ export function successDestinationDisplayBundle(value: {
   };
 }
 
+export function successDestinationRuntimeDisplayBundle(value: {
+  hasUnsavedPreviewRecords: boolean;
+  hasSelectedRecord: boolean;
+}) {
+  return {
+    destinations: successDestinationDisplayBundle(value)
+  };
+}
+
 export function saveSuccessManualContinueStatusMessage() {
   return boundUiMessage("已從儲存完成繼續手動新增；沿用原返回目標，不會呼叫 AI、LLM 或 STT。");
 }

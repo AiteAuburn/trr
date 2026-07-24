@@ -604,7 +604,7 @@ import {
   saveSuccessProcessUnsavedStatusMessage,
   saveSuccessRecordEntryStatusMessage,
   saveSuccessViewDetailStatusMessage,
-  successDestinationDisplayBundle,
+  successDestinationRuntimeDisplayBundle,
   todayAnalysisStatusMessage,
   todayManualEntryStatusMessage,
   todayRecordDetailStatusMessage,
@@ -1438,10 +1438,11 @@ export default function App() {
   const recordStatusStaticChecklistDisplay = recordStatusRuntimeChecklistDisplay.static;
   const deleteConfirmChecklistItems = recordStatusStaticChecklistDisplay.deleteConfirmItems;
   const recordUpdateChecklistItems = recordStatusStaticChecklistDisplay.recordUpdateItems;
-  const successDestinationDisplay = successDestinationDisplayBundle({
+  const successDestinationRuntimeDisplay = successDestinationRuntimeDisplayBundle({
     hasUnsavedPreviewRecords: saveSuccessViewState.hasUnsavedPreviewRecords,
     hasSelectedRecord: Boolean(selectedRecord)
   });
+  const successDestinationDisplay = successDestinationRuntimeDisplay.destinations;
   const saveSuccessDestinationItems = successDestinationDisplay.saveSuccessItems;
   const deleteSuccessDestinationItems = successDestinationDisplay.deleteSuccessItems;
   const updateSuccessDestinationItems = successDestinationDisplay.updateSuccessItems;
