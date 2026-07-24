@@ -1996,6 +1996,12 @@ export function futurePreviewReadinessStaticDisplayBundle() {
   };
 }
 
+export function futurePreviewReadinessRuntimeDisplayBundle() {
+  return {
+    readiness: futurePreviewReadinessStaticDisplayBundle()
+  };
+}
+
 export function futureBoundaryRowsDisplayBundle(isLeaderboardOptedIn: boolean) {
   return {
     healthIntegration: healthIntegrationBoundaryDisplayRows(),

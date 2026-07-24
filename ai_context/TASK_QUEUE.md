@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2318: Move future preview readiness runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `futurePreviewReadinessRuntimeDisplayBundle` to `futureModuleDisplay.ts`.
+- Moved `App.tsx` future preview readiness static display assembly behind the runtime bundle.
+- Kept health integration, community, and ranking readiness checklist content unchanged.
+- Updated navigation verifier coverage to require the bundled future preview readiness runtime display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2317: Move quick record runtime display assembly
 
 Status: done

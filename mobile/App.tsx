@@ -260,7 +260,7 @@ import {
   futureModulesReturnMenuStatusMessage,
   futurePreviewBoundaryCopyBundle,
   futurePreviewBoundaryDisplayBundle,
-  futurePreviewReadinessStaticDisplayBundle,
+  futurePreviewReadinessRuntimeDisplayBundle,
   futurePreviewReturnStatusMessage,
   futurePreviewSectionLabels,
   futurePreviewStatusDisplayBundle,
@@ -1747,7 +1747,8 @@ export default function App() {
   const tutorialSafetyChecklistItems = settingsStaticDisplay.tutorialSafetyChecklistItems;
   const doctorShareStaticDisplay = doctorShareStaticDisplayBundle();
   const doctorShareReadinessChecklistItems = doctorShareStaticDisplay.readinessChecklistItems;
-  const futurePreviewReadinessStaticDisplay = futurePreviewReadinessStaticDisplayBundle();
+  const futurePreviewReadinessRuntimeDisplay = futurePreviewReadinessRuntimeDisplayBundle();
+  const futurePreviewReadinessStaticDisplay = futurePreviewReadinessRuntimeDisplay.readiness;
   const healthIntegrationReadinessChecklistItems =
     futurePreviewReadinessStaticDisplay.healthIntegrationItems;
   const communityReadinessChecklistItems = futurePreviewReadinessStaticDisplay.communityItems;

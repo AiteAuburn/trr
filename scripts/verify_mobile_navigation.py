@@ -4142,9 +4142,14 @@ def main() -> int:
             "const doctorShareReadinessChecklistItems = doctorShareStaticDisplay.readinessChecklistItems;",
         )
         _assert_contains(
-            "future preview readiness static display bundle binding",
+            "future preview readiness runtime display bundle binding",
             content,
-            "const futurePreviewReadinessStaticDisplay = futurePreviewReadinessStaticDisplayBundle();",
+            "const futurePreviewReadinessRuntimeDisplay = futurePreviewReadinessRuntimeDisplayBundle();",
+        )
+        _assert_contains(
+            "future preview readiness runtime field binding",
+            content,
+            "const futurePreviewReadinessStaticDisplay = futurePreviewReadinessRuntimeDisplay.readiness;",
         )
         _assert_contains(
             "health integration readiness static display binding",
@@ -15917,6 +15922,8 @@ def main() -> int:
             ("future preview readiness static display bundle health", "healthIntegrationItems: healthIntegrationReadinessChecklistDisplayItems()"),
             ("future preview readiness static display bundle community", "communityItems: communityReadinessChecklistDisplayItems()"),
             ("future preview readiness static display bundle ranking", "rankingItems: rankingReadinessChecklistDisplayItems()"),
+            ("future preview readiness runtime display bundle helper", "export function futurePreviewReadinessRuntimeDisplayBundle()"),
+            ("future preview readiness runtime display bundle binding", "readiness: futurePreviewReadinessStaticDisplayBundle()"),
             ("future boundary rows display bundle helper", "export function futureBoundaryRowsDisplayBundle(isLeaderboardOptedIn: boolean)"),
             ("future boundary rows display bundle health integration", "healthIntegration: healthIntegrationBoundaryDisplayRows()"),
             ("future boundary rows display bundle community", "community: communityBoundaryDisplayRows(isLeaderboardOptedIn)"),
@@ -16166,14 +16173,17 @@ def main() -> int:
             ("future boundary rows display bundle health binding", "const healthIntegrationBoundaryRows = futureBoundaryRowsDisplay.healthIntegration;"),
             ("future boundary rows display bundle community binding", "const communityBoundaryRows = futureBoundaryRowsDisplay.community;"),
             ("future boundary rows display bundle ranking binding", "const rankingBoundaryRows = futureBoundaryRowsDisplay.ranking;"),
-            ("future preview readiness static display bundle import", "futurePreviewReadinessStaticDisplayBundle,"),
-            ("future preview readiness static display bundle binding", "const futurePreviewReadinessStaticDisplay = futurePreviewReadinessStaticDisplayBundle();"),
+            ("future preview readiness runtime display bundle import", "futurePreviewReadinessRuntimeDisplayBundle,"),
+            ("future preview readiness runtime display bundle binding", "const futurePreviewReadinessRuntimeDisplay = futurePreviewReadinessRuntimeDisplayBundle();"),
+            ("future preview readiness runtime field binding", "const futurePreviewReadinessStaticDisplay = futurePreviewReadinessRuntimeDisplay.readiness;"),
             ("future preview readiness static display bundle health binding", "futurePreviewReadinessStaticDisplay.healthIntegrationItems;"),
             ("future preview readiness static display bundle community binding", "const communityReadinessChecklistItems = futurePreviewReadinessStaticDisplay.communityItems;"),
             ("future preview readiness static display bundle ranking binding", "const rankingReadinessChecklistItems = futurePreviewReadinessStaticDisplay.rankingItems;"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("direct future preview readiness static display bundle import", "  futurePreviewReadinessStaticDisplayBundle,"),
+            ("direct future preview readiness static display bundle binding", "const futurePreviewReadinessStaticDisplay = futurePreviewReadinessStaticDisplayBundle();"),
             ("direct future boundary rows display bundle import", "  futureBoundaryRowsDisplayBundle,"),
             ("direct future boundary rows display bundle binding", "const futureBoundaryRowsDisplay = futureBoundaryRowsDisplayBundle("),
         ):

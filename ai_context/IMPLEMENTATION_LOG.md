@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2318 move future preview readiness runtime display assembly
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/futureModuleDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `futurePreviewReadinessRuntimeDisplayBundle` to `futureModuleDisplay.ts`.
+- Moved `App.tsx` future preview readiness static display assembly behind the runtime bundle.
+- Kept health integration, community, and ranking readiness checklist content unchanged.
+- Updated navigation verifier coverage to require the bundled future preview readiness runtime display and reject old direct App-level helper calls/imports.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2317 move quick record runtime display assembly
 
 類型：mobile / refactor / verifier / docs
