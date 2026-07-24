@@ -418,9 +418,8 @@ import {
   aiPartialSaveFailureStatusMessage,
   aiPartialSaveRecordsStatusMessage,
   aiPartialSaveSummaryMessage,
-  aiReviewDisplayBundle,
+  aiReviewRuntimeDisplayBundle,
   aiRemoveConfirmDisplayBundle,
-  aiSaveConfirmDisplayBundle,
   aiSaveConfirmReadyStatusMessage,
   aiSaveConfirmReturnStatusMessage,
   aiSaveFailureStatusMessage,
@@ -1324,7 +1323,20 @@ export default function App() {
   );
   const rejectedPreviewDisplayItems = aiReviewPreviewDisplay.rejectedItems;
   const aiReviewDateDisplayLabel = aiReviewPreviewDisplay.dateLabel;
-  const aiReviewDisplay = aiReviewDisplayBundle();
+  const aiSaveConfirmViewState = aiSaveConfirmState({
+    isBusy,
+    protectedBackendReady,
+    previewState
+  });
+  const hasAiSaveConfirmWarnings = aiSaveConfirmViewState.hasWarnings;
+  const isAiSaveConfirmBlockedByBackend = aiSaveConfirmViewState.isBlockedByBackend;
+  const isAiSaveConfirmSubmitDisabled = aiSaveConfirmViewState.isSubmitDisabled;
+  const aiReviewRuntimeDisplay = aiReviewRuntimeDisplayBundle({
+    isBusy,
+    isSaveConfirmBlockedByBackend: isAiSaveConfirmBlockedByBackend,
+    hasSaveConfirmWarnings: hasAiSaveConfirmWarnings
+  });
+  const aiReviewDisplay = aiReviewRuntimeDisplay.review;
   const aiReviewNoCandidateTitleDisplayText = aiReviewDisplay.noCandidateTitle;
   const aiReviewNoCandidateBodyDisplayText = aiReviewDisplay.noCandidateBody;
   const aiReviewNoCandidateBoundaryDisplayText = aiReviewDisplay.noCandidateBoundary;
@@ -1334,19 +1346,7 @@ export default function App() {
   const aiReviewLowConfidenceDisplayText = aiReviewDisplay.lowConfidence;
   const aiReviewRejectedEventsDisplayText = aiReviewDisplay.rejectedEvents;
   const aiReviewBackendRequiredDisplayText = aiReviewDisplay.backendRequired;
-  const aiSaveConfirmViewState = aiSaveConfirmState({
-    isBusy,
-    protectedBackendReady,
-    previewState
-  });
-  const hasAiSaveConfirmWarnings = aiSaveConfirmViewState.hasWarnings;
-  const isAiSaveConfirmBlockedByBackend = aiSaveConfirmViewState.isBlockedByBackend;
-  const isAiSaveConfirmSubmitDisabled = aiSaveConfirmViewState.isSubmitDisabled;
-  const aiSaveConfirmDisplay = aiSaveConfirmDisplayBundle(
-    isBusy,
-    isAiSaveConfirmBlockedByBackend,
-    hasAiSaveConfirmWarnings
-  );
+  const aiSaveConfirmDisplay = aiReviewRuntimeDisplay.saveConfirm;
   const aiSaveConfirmTitleDisplayText = aiSaveConfirmDisplay.title;
   const aiSaveConfirmDateLabelDisplayText = aiSaveConfirmDisplay.dateLabel;
   const aiSaveConfirmSummaryLabelDisplayText = aiSaveConfirmDisplay.summaryLabel;

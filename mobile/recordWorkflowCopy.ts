@@ -338,6 +338,21 @@ export function aiSaveConfirmDisplayBundle(isBusy: boolean, isBlockedByBackend: 
   return aiSaveConfirmDisplayTexts(isBusy, isBlockedByBackend, hasWarnings);
 }
 
+export function aiReviewRuntimeDisplayBundle(value: {
+  isBusy: boolean;
+  isSaveConfirmBlockedByBackend: boolean;
+  hasSaveConfirmWarnings: boolean;
+}) {
+  return {
+    review: aiReviewDisplayBundle(),
+    saveConfirm: aiSaveConfirmDisplayBundle(
+      value.isBusy,
+      value.isSaveConfirmBlockedByBackend,
+      value.hasSaveConfirmWarnings
+    )
+  };
+}
+
 export function aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordCount: number) {
   const boundedCount = clampNumber(unsavedPreviewRecordCount, 0, maxMobileCountValue);
   return [

@@ -3831,9 +3831,19 @@ def main() -> int:
             "recordWorkflowStaticChecklistDisplay.aiReviewCostBoundaryItems;",
         )
         _assert_contains(
-            "AI review display helper binding",
+            "AI review runtime display helper binding",
             content,
-            "const aiReviewDisplay = aiReviewDisplayBundle();",
+            "const aiReviewRuntimeDisplay = aiReviewRuntimeDisplayBundle({",
+        )
+        _assert_contains(
+            "AI review runtime display save-confirm blocked input",
+            content,
+            "isSaveConfirmBlockedByBackend: isAiSaveConfirmBlockedByBackend",
+        )
+        _assert_contains(
+            "AI review display runtime field binding",
+            content,
+            "const aiReviewDisplay = aiReviewRuntimeDisplay.review;",
         )
         for label, marker in (
             ("direct AI review cost checklist binding", "const aiReviewCostBoundaryChecklistItems = aiReviewCostBoundaryChecklistDisplayItems();"),
@@ -3843,6 +3853,8 @@ def main() -> int:
             ("direct AI save confirm checklist binding", "const aiSaveConfirmChecklistItems = aiSaveConfirmChecklistDisplayItems(unsavedPreviewRecordDisplayCount);"),
             ("direct record entry settings checklist binding", "const recordEntrySettingsChecklistItems = recordEntrySettingsChecklistDisplayItems(protectedBackendReady);"),
             ("direct AI save failure checklist binding", "const aiSaveFailureChecklistItems = aiSaveFailureChecklistDisplayItems(unsavedPreviewRecordDisplayCount);"),
+            ("direct AI review display bundle binding", "const aiReviewDisplay = aiReviewDisplayBundle();"),
+            ("direct AI save confirm display bundle binding", "const aiSaveConfirmDisplay = aiSaveConfirmDisplayBundle("),
             ("direct AI review cost checklist import", "  aiReviewCostBoundaryChecklistDisplayItems,"),
             ("direct manual submit checklist import", "  manualSubmitChecklistDisplayItems,"),
             ("direct record detail checklist import", "  recordDetailBoundaryChecklistDisplayItems,"),
@@ -3850,6 +3862,8 @@ def main() -> int:
             ("direct AI save confirm checklist import", "  aiSaveConfirmChecklistDisplayItems,"),
             ("direct record entry settings checklist import", "  recordEntrySettingsChecklistDisplayItems,"),
             ("direct AI save failure checklist import", "  aiSaveFailureChecklistDisplayItems,"),
+            ("direct AI review display bundle import", "  aiReviewDisplayBundle,"),
+            ("direct AI save confirm display bundle import", "  aiSaveConfirmDisplayBundle,"),
         ):
             _assert_not_contains(label, content, marker)
         _assert_contains(
@@ -3863,9 +3877,9 @@ def main() -> int:
             "const aiReviewBackendRequiredDisplayText = aiReviewDisplay.backendRequired;",
         )
         _assert_contains(
-            "AI save confirm display helper binding",
+            "AI save confirm runtime field binding",
             content,
-            "const aiSaveConfirmDisplay = aiSaveConfirmDisplayBundle(",
+            "const aiSaveConfirmDisplay = aiReviewRuntimeDisplay.saveConfirm;",
         )
         _assert_contains(
             "AI save confirm intro display binding",
@@ -9201,6 +9215,9 @@ def main() -> int:
             ("AI save confirm display texts helper", "function aiSaveConfirmDisplayTexts(isBusy: boolean, isBlockedByBackend: boolean, hasWarnings: boolean)"),
             ("AI save confirm display bundle helper", "function aiSaveConfirmDisplayBundle(isBusy: boolean, isBlockedByBackend: boolean, hasWarnings: boolean)"),
             ("AI save confirm display bundle delegates", "return aiSaveConfirmDisplayTexts(isBusy, isBlockedByBackend, hasWarnings);"),
+            ("AI review runtime display bundle helper", "function aiReviewRuntimeDisplayBundle(value: {"),
+            ("AI review runtime display review binding", "review: aiReviewDisplayBundle()"),
+            ("AI review runtime display save confirm binding", "saveConfirm: aiSaveConfirmDisplayBundle("),
             ("AI save confirm display texts title binding", "title: boundDisplayText(\"每日紀錄\", maxDisplayTextLength)"),
             ("AI save confirm display texts date label binding", "dateLabel: boundDisplayText(\"記錄日期\", maxDisplayTextLength)"),
             ("AI save confirm display texts summary label binding", "summaryLabel: boundDisplayText(\"AI今日摘要\", maxDisplayTextLength)"),
