@@ -369,7 +369,7 @@ import {
   valueLabelDisplayItem,
   visualSmokeRouteJumpDisplayItems as buildVisualSmokeRouteJumpDisplayItems
 } from "./sharedDisplayItems";
-import { recordFormStaticDisplayBundle } from "./recordFormDisplayBundle";
+import { recordFormRuntimeDisplayBundle } from "./recordFormDisplayBundle";
 import {
   accountPublicDisplayNameForSettings,
   accountRuntimeDisplayBundle,
@@ -1695,7 +1695,8 @@ export default function App() {
   const sessionManagementDisplayItems = settingsStaticDisplay.sessionManagementItems;
   const authSessionDisplayItems = settingsChoiceDisplay.authSessionDisplayItems;
   const productionAuthReadinessDisplayRows = settingsStaticDisplay.productionAuthReadinessRows;
-  const recordFormStaticDisplay = useMemo(() => recordFormStaticDisplayBundle(), []);
+  const recordFormRuntimeDisplay = useMemo(() => recordFormRuntimeDisplayBundle(), []);
+  const recordFormStaticDisplay = recordFormRuntimeDisplay.form;
   const glucoseUnitDisplayOptions = recordFormStaticDisplay.glucoseUnitOptions;
   const glucoseTimingDisplayOptions = recordFormStaticDisplay.glucoseTimingOptions;
   const mealTypeDisplayOptions = recordFormStaticDisplay.mealTypeOptions;

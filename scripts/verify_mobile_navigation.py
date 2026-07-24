@@ -14208,14 +14208,19 @@ def main() -> int:
             ("record form static display bundle manual record type", "manualRecordTypeOptions: manualRecordTypeDisplayItems(manualRecordTypes)"),
             ("record form static display bundle history detail mode", "historyDetailModeOptions: historyDetailModeDisplayItems(historyDetailModes)"),
             ("record form static display bundle analysis range", "analysisRangeOptions: analysisRangeDisplayItems(analysisRanges)"),
+            ("record form runtime display bundle helper", "function recordFormRuntimeDisplayBundle()"),
+            ("record form runtime display bundle binding", "form: recordFormStaticDisplayBundle()"),
         ):
             _assert_contains(label, record_form_display_bundle_content, marker)
         for label, marker in (
-            ("record form static display bundle import", "recordFormStaticDisplayBundle"),
-            ("record form static display bundle binding", "const recordFormStaticDisplay = useMemo(() => recordFormStaticDisplayBundle(), []);"),
+            ("record form runtime display bundle import", "recordFormRuntimeDisplayBundle"),
+            ("record form runtime display bundle binding", "const recordFormRuntimeDisplay = useMemo(() => recordFormRuntimeDisplayBundle(), []);"),
+            ("record form runtime field binding", "const recordFormStaticDisplay = recordFormRuntimeDisplay.form;"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("direct record form static display bundle import", "recordFormStaticDisplayBundle"),
+            ("direct record form static display bundle binding", "const recordFormStaticDisplay = useMemo(() => recordFormStaticDisplayBundle(), []);"),
             ("direct glucose unit display options binding", "const glucoseUnitDisplayOptions = useMemo(() => optionDisplayItems(glucoseUnitOptions), []);"),
             ("direct glucose timing display options binding", "const glucoseTimingDisplayOptions = useMemo(() => valueLabelDisplayItems(glucoseTimingOptions), []);"),
             ("direct meal type display options binding", "const mealTypeDisplayOptions = useMemo(() => valueLabelDisplayItems(mealTypeOptions), []);"),

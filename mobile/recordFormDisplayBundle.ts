@@ -22,3 +22,9 @@ export function recordFormStaticDisplayBundle() {
     analysisRangeOptions: analysisRangeDisplayItems(analysisRanges)
   };
 }
+
+export function recordFormRuntimeDisplayBundle() {
+  return {
+    form: recordFormStaticDisplayBundle()
+  };
+}

@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2323: Move record form runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `recordFormRuntimeDisplayBundle` to `recordFormDisplayBundle.ts`.
+- Moved `App.tsx` record form static display assembly behind the runtime bundle.
+- Kept glucose, meal, manual record type, history detail mode, and analysis range option display content unchanged.
+- Updated navigation verifier coverage to require the bundled record form runtime display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2322: Move doctor share runtime display assembly
 
 Status: done
