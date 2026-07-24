@@ -226,7 +226,7 @@ import {
   foodCommunityDetailStatusExampleCount,
   foodCommunityDetailStatusTitle,
   foodCommunityDetailTitleDisplayText,
-  foodCommunityDisplayBundle,
+  foodCommunityRuntimeDisplayBundle,
   foodCommunityItemDisplayItem,
   foodCommunityItemFromApi,
   foodCommunityItemsFromApi,
@@ -1643,9 +1643,9 @@ export default function App() {
   const storeProductDisplayItems = storeDisplay.productDisplayItems;
   const storeRedemptionDisplayItems = storeDisplay.redemptionDisplayItems;
   const storeCategoryDisplayOptions = storeDisplay.categoryDisplayOptions;
-  const foodCommunityDisplay = useMemo(
+  const foodCommunityRuntimeDisplay = useMemo(
     () =>
-      foodCommunityDisplayBundle({
+      foodCommunityRuntimeDisplayBundle({
         backendCategories: foodCommunityBackendCategories,
         fallbackCategories: foodCommunityCategories,
         backendItems: foodCommunityBackendItems,
@@ -1666,6 +1666,7 @@ export default function App() {
       storePointsBalance
     ]
   );
+  const foodCommunityDisplay = foodCommunityRuntimeDisplay.community;
   const foodCommunityCategoriesForDisplay = foodCommunityDisplay.categoriesForDisplay;
   const foodCommunityCategoryDisplayOptions = foodCommunityDisplay.categoryDisplayOptions;
   const selectedFoodCommunityCategoryDisplay = foodCommunityDisplay.selectedCategoryDisplay;

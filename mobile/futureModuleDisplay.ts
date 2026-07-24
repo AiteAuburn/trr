@@ -1335,6 +1335,12 @@ export function foodCommunityDisplayBundle(value: {
   };
 }
 
+export function foodCommunityRuntimeDisplayBundle(value: Parameters<typeof foodCommunityDisplayBundle>[0]) {
+  return {
+    community: foodCommunityDisplayBundle(value)
+  };
+}
+
 export function foodCommunityShareFieldDisplayRows(
   fields: FoodCommunityShareFields,
   selectedFoodTitle: string | null | undefined

@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2328: Move food community runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `foodCommunityRuntimeDisplayBundle` to `futureModuleDisplay.ts`.
+- Moved `App.tsx` food community categories, item lists, selected item, share rows, point rows, and ranking rows display assembly behind the runtime bundle.
+- Kept backend/fallback category selection, backend/fallback item selection, search filtering, selected item fallback, share field rows, point rows, and ranking rows unchanged.
+- Updated navigation verifier coverage to require the bundled food community runtime display and reject old direct App-level food community display bundle calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2327: Move store runtime display assembly
 
 Status: done
