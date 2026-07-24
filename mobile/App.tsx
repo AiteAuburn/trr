@@ -719,7 +719,7 @@ import {
 import {
   settingsChoiceDisplayBundle
 } from "./settingsChoiceDisplay";
-import { settingsStaticDisplayBundle } from "./settingsStaticDisplayBundle";
+import { settingsRuntimeDisplayBundle } from "./settingsStaticDisplayBundle";
 import {
   subscriptionActionControlDisplayBundle,
   subscriptionRuntimeDisplayBundle,
@@ -1674,7 +1674,8 @@ export default function App() {
   const foodCommunityRankingRows = foodCommunityDisplay.rankingRows;
   const visibleStoreProducts = storeDisplay.visibleProducts;
   const storeRedemptionBoundaryRows = storeDisplay.redemptionBoundaryRows;
-  const settingsStaticDisplay = useMemo(() => settingsStaticDisplayBundle(), []);
+  const settingsRuntimeDisplay = useMemo(() => settingsRuntimeDisplayBundle(), []);
+  const settingsStaticDisplay = settingsRuntimeDisplay.settings;
   const settingsDisplayRows = settingsStaticDisplay.settingsRows;
   const settingsChoiceDisplay = useMemo(
     () =>

@@ -35,3 +35,9 @@ export function settingsStaticDisplayBundle() {
     tutorialSafetyChecklistItems: tutorialSafetyChecklistDisplayItems()
   };
 }
+
+export function settingsRuntimeDisplayBundle() {
+  return {
+    settings: settingsStaticDisplayBundle()
+  };
+}

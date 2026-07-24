@@ -12421,14 +12421,19 @@ def main() -> int:
             ("settings static display bundle privacy boundary rows", "privacyBoundaryRows: privacyBoundaryDisplayRows()"),
             ("settings static display bundle privacy readiness checklist", "privacyReadinessChecklistItems: privacyReadinessChecklistDisplayItems()"),
             ("settings static display bundle tutorial safety checklist", "tutorialSafetyChecklistItems: tutorialSafetyChecklistDisplayItems()"),
+            ("settings runtime display bundle helper", "function settingsRuntimeDisplayBundle()"),
+            ("settings runtime display bundle binding", "settings: settingsStaticDisplayBundle()"),
         ):
             _assert_contains(label, settings_static_display_bundle_content, marker)
         for label, marker in (
-            ("settings static display bundle import", "settingsStaticDisplayBundle"),
-            ("settings static display bundle binding", "const settingsStaticDisplay = useMemo(() => settingsStaticDisplayBundle(), []);"),
+            ("settings runtime display bundle import", "settingsRuntimeDisplayBundle"),
+            ("settings runtime display bundle binding", "const settingsRuntimeDisplay = useMemo(() => settingsRuntimeDisplayBundle(), []);"),
+            ("settings runtime field binding", "const settingsStaticDisplay = settingsRuntimeDisplay.settings;"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("direct settings static display bundle import", "  settingsStaticDisplayBundle,"),
+            ("direct settings static display bundle binding", "const settingsStaticDisplay = useMemo(() => settingsStaticDisplayBundle(), []);"),
             ("direct settings display rows binding", "const settingsDisplayRows = useMemo(() => buildSettingsDisplayRows(), []);"),
             ("direct tutorial display steps binding", "const tutorialDisplaySteps = useMemo(() => buildTutorialDisplaySteps(), []);"),
             ("direct auth provider display items binding", "const authProviderDisplayItems = useMemo(() => buildAuthProviderDisplayItems(), []);"),

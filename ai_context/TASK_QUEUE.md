@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2324: Move settings runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `settingsRuntimeDisplayBundle` to `settingsStaticDisplayBundle.ts`.
+- Moved `App.tsx` settings static display assembly behind the runtime bundle.
+- Kept settings rows, tutorial steps, auth/session rows, privacy rows, readiness checklist, and tutorial safety content unchanged.
+- Updated navigation verifier coverage to require the bundled settings runtime display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2323: Move record form runtime display assembly
 
 Status: done
