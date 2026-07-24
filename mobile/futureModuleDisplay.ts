@@ -1667,6 +1667,12 @@ export function storeDisplayBundle(value: {
   };
 }
 
+export function storeRuntimeDisplayBundle(value: Parameters<typeof storeDisplayBundle>[0]) {
+  return {
+    store: storeDisplayBundle(value)
+  };
+}
+
 export function storeCategoryFromApi(value: StoreRewardApiCategory): StoreCategory {
   if (value === "supplement_discounts") {
     return "supplementDiscounts";

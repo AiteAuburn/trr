@@ -287,7 +287,7 @@ import {
   storePreviewRuntimeDisplayBundle,
   storeRedeemStatusMessages,
   storeRedemptionUseStatusMessages,
-  storeDisplayBundle,
+  storeRuntimeDisplayBundle,
   storeProductsFromApi,
   storeProductActionAccessibilityLabel,
   storeProductActionLabel,
@@ -1625,9 +1625,9 @@ export default function App() {
   const recordingElapsedSecondsDisplayText = recordingResultDisplay.elapsed;
   const recordingResultBodyDisplayText = recordingResultDisplay.body;
   const recordingResultPrimaryActionDisplayText = recordingResultDisplay.primaryAction;
-  const storeDisplay = useMemo(
+  const storeRuntimeDisplay = useMemo(
     () =>
-      storeDisplayBundle({
+      storeRuntimeDisplayBundle({
         backendProducts: storeBackendProducts,
         fallbackProducts: storeProducts,
         categories: storeCategories,
@@ -1638,6 +1638,7 @@ export default function App() {
       }),
     [storeBackendProducts, storeCategory, storePointsBalance, storeRedemptions, storeSearchText]
   );
+  const storeDisplay = storeRuntimeDisplay.store;
   const storeProductsForDisplay = storeDisplay.productsForDisplay;
   const storeProductDisplayItems = storeDisplay.productDisplayItems;
   const storeRedemptionDisplayItems = storeDisplay.redemptionDisplayItems;
