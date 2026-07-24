@@ -250,7 +250,7 @@ import {
   foodCommunityShareSelectedItemIdFromApi,
   foodCommunitySyncStatusMessages,
   futureModuleCards,
-  futureModuleCardDisplayItems,
+  futureModuleCardsRuntimeDisplayBundle,
   futureModuleDetailDisplayBundle,
   futureModuleDetailReturnStatusMessage,
   futureModuleRequirementKey,
@@ -1714,10 +1714,11 @@ export default function App() {
     () => buildVisualSmokeRouteJumpDisplayItems(visualSmokeRouteJumps),
     []
   );
-  const futureModuleDisplayCards = useMemo(
-    () => futureModuleCardDisplayItems(futureModuleCards),
+  const futureModuleCardsRuntimeDisplay = useMemo(
+    () => futureModuleCardsRuntimeDisplayBundle({ cards: futureModuleCards }),
     []
   );
+  const futureModuleDisplayCards = futureModuleCardsRuntimeDisplay.cards;
   const selectedFutureModuleRuntimeDisplay = useMemo(
     () => selectedFutureModuleRuntimeDisplayBundle({ selectedModule: selectedFutureModule }),
     [selectedFutureModule]

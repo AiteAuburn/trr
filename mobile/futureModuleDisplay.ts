@@ -758,6 +758,12 @@ export function futureModuleCardDisplayItems(values: FutureModuleCard[]) {
   return values.map(futureModuleCardDisplayItem);
 }
 
+export function futureModuleCardsRuntimeDisplayBundle(value: { cards: FutureModuleCard[] }) {
+  return {
+    cards: futureModuleCardDisplayItems(value.cards)
+  };
+}
+
 export function selectedFutureModuleDisplayItem(value: FutureModuleCard | null) {
   const id = value?.id ?? "none";
   return {

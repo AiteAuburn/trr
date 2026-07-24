@@ -14844,7 +14844,10 @@ def main() -> int:
             ("future module destination handler", "function openFutureModuleDestination(target: AppScreen | undefined, module: FutureModuleCard)"),
             ("future module target route helper binding", "if (openFutureModuleTargetRoute(target)) {"),
             ("future module destination fallback screen opener binding", "if (openFutureModuleTargetRoute(target)) {\n      return;\n    }\n    openScreen(target);"),
-            ("future module display card helper binding", "const futureModuleDisplayCards = useMemo(\n    () => futureModuleCardDisplayItems(futureModuleCards),"),
+            ("future module cards runtime display import", "futureModuleCardsRuntimeDisplayBundle,"),
+            ("future module cards runtime display binding", "const futureModuleCardsRuntimeDisplay = useMemo("),
+            ("future module cards runtime display invocation", "() => futureModuleCardsRuntimeDisplayBundle({ cards: futureModuleCards }),"),
+            ("future module cards runtime display field binding", "const futureModuleDisplayCards = futureModuleCardsRuntimeDisplay.cards;"),
             ("selected future module runtime display import", "selectedFutureModuleRuntimeDisplayBundle,"),
             ("selected future module runtime display binding", "const selectedFutureModuleRuntimeDisplay = useMemo("),
             ("selected future module runtime display invocation", "() => selectedFutureModuleRuntimeDisplayBundle({ selectedModule: selectedFutureModule }),"),
@@ -15403,6 +15406,11 @@ def main() -> int:
             "futureModuleDisplayCards.map((item) => (",
         )
         for label, marker in (
+            ("direct future module card display items import", "futureModuleCardDisplayItems,"),
+            ("direct future module card display items binding", "() => futureModuleCardDisplayItems(futureModuleCards),"),
+        ):
+            _assert_not_contains(label, content, marker)
+        for label, marker in (
             ("direct selected future module display import", "selectedFutureModuleDisplayItem,"),
             ("direct selected future module display invocation", "() => selectedFutureModuleDisplayItem(selectedFutureModule),"),
         ):
@@ -15552,6 +15560,8 @@ def main() -> int:
             ("future module display card helper", "export function futureModuleCardDisplayItem(value: FutureModuleCard)"),
             ("future module display card list helper", "export function futureModuleCardDisplayItems(values: FutureModuleCard[])"),
             ("future module display card list map", "return values.map(futureModuleCardDisplayItem);"),
+            ("future module cards runtime display helper", "export function futureModuleCardsRuntimeDisplayBundle(value: { cards: FutureModuleCard[] })"),
+            ("future module cards runtime display field", "cards: futureModuleCardDisplayItems(value.cards)"),
             ("future module selected display helper", "export function selectedFutureModuleDisplayItem(value: FutureModuleCard | null)"),
             ("selected future module runtime display helper", "export function selectedFutureModuleRuntimeDisplayBundle(value: { selectedModule: FutureModuleCard | null })"),
             ("selected future module runtime display field", "selectedModule: selectedFutureModuleDisplayItem(value.selectedModule)"),
