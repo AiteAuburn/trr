@@ -193,6 +193,15 @@ export function deleteConfirmDisplayBundle(
   return deleteConfirmDisplayTexts(selectedRecordDisplayItem, isBusy);
 }
 
+export function recordStatusRuntimeDisplayBundle(value: {
+  isBusy: boolean;
+  selectedRecordDisplayItem: { dateTimeLabel: string; sourceLabel: string } | null;
+}) {
+  return {
+    deleteConfirm: deleteConfirmDisplayBundle(value.selectedRecordDisplayItem, value.isBusy)
+  };
+}
+
 export function deleteConfirmReadyStatusMessage() {
   return boundUiMessage("請確認是否刪除這筆紀錄；按下確認刪除前不會送出 delete request。");
 }

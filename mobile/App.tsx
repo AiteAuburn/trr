@@ -453,7 +453,6 @@ import {
   tutorialRecordEntryStatusMessage
 } from "./recordWorkflowCopy";
 import {
-  deleteConfirmDisplayBundle,
   deleteConfirmReadyStatusMessage,
   deleteConfirmReturnStatusMessage,
   manualRecordCreateDisplayBundle,
@@ -480,6 +479,7 @@ import {
   recordSyncSuccessStatusMessage,
   recordSyncUnavailableStatusMessage,
   recordStatusRuntimeChecklistDisplayBundle,
+  recordStatusRuntimeDisplayBundle,
   recordsStatusDisplayBundle,
   recordUpdateFailureStatusMessage,
   recordUpdateProgressStatusMessage,
@@ -2027,7 +2027,11 @@ export default function App() {
   const manualRecordConfirmDisplayTextsForState = recordWorkflowActionRuntimeDisplay.manualRecordConfirm;
   const manualRecordConfirmIntroDisplayText = manualRecordConfirmDisplayTextsForState.intro;
   const manualRecordConfirmSubmitDisplayLabel = manualRecordConfirmDisplayTextsForState.submit;
-  const deleteConfirmDisplay = deleteConfirmDisplayBundle(selectedRecordDisplayItem, isBusy);
+  const recordStatusRuntimeDisplay = recordStatusRuntimeDisplayBundle({
+    isBusy,
+    selectedRecordDisplayItem
+  });
+  const deleteConfirmDisplay = recordStatusRuntimeDisplay.deleteConfirm;
   const deleteConfirmIntroDisplayText = deleteConfirmDisplay.intro;
   const deleteConfirmRecordMetaDisplayText = deleteConfirmDisplay.recordMeta;
   const deleteConfirmSubmitDisplayLabel = deleteConfirmDisplay.submit;
