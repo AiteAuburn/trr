@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2302 move empty-state runtime display assembly
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/emptyStateRuntimeDisplay.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `emptyStateRuntimeDisplayBundle` in `emptyStateRuntimeDisplay.ts`.
+- Moved `App.tsx` History and Analysis empty-state display assembly behind the runtime bundle.
+- Kept history no-record/no-range copy and analysis safety/chart-empty copy unchanged.
+- Updated navigation verifier coverage to require the empty-state runtime display and reject old direct App-level helper calls/imports.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2301 move settings runtime controls display assembly
 
 類型：mobile / refactor / verifier / docs

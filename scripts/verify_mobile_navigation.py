@@ -50,6 +50,7 @@ REPORT_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "reportStatusCopy.ts"
 NATIVE_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "nativeStatusCopy.ts"
 FIRST_VERSION_FLOW_COPY_PATH = REPO_ROOT / "mobile" / "firstVersionFlowCopy.ts"
 HISTORY_COPY_PATH = REPO_ROOT / "mobile" / "historyCopy.ts"
+EMPTY_STATE_RUNTIME_DISPLAY_PATH = REPO_ROOT / "mobile" / "emptyStateRuntimeDisplay.ts"
 HISTORY_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "historyScreenData.ts"
 ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
 ANALYSIS_DATA_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisDataTransforms.ts"
@@ -1477,6 +1478,7 @@ def main() -> int:
     native_status_copy_content = NATIVE_STATUS_COPY_PATH.read_text(encoding="utf-8")
     first_version_flow_copy_content = FIRST_VERSION_FLOW_COPY_PATH.read_text(encoding="utf-8")
     history_copy_content = HISTORY_COPY_PATH.read_text(encoding="utf-8")
+    empty_state_runtime_display_content = EMPTY_STATE_RUNTIME_DISPLAY_PATH.read_text(encoding="utf-8")
     history_screen_data_content = HISTORY_SCREEN_DATA_PATH.read_text(encoding="utf-8")
     analysis_copy_content = ANALYSIS_COPY_PATH.read_text(encoding="utf-8")
     analysis_data_content = ANALYSIS_DATA_TRANSFORMS_PATH.read_text(encoding="utf-8")
@@ -10214,7 +10216,9 @@ def main() -> int:
             ("history calendar previous month handler", "function openPreviousHistoryMonth()"),
             ("history calendar next month handler", "function openNextHistoryMonth()"),
             ("history calendar display helper binding", "const historyCalendarDisplay = historyCalendarDisplayBundle(historyCalendarMonthStart, selectedHistoryDate);"),
-            ("history empty state display helper binding", "const historyEmptyStateDisplay = historyEmptyStateDisplayBundle();"),
+            ("empty state runtime display import", 'import { emptyStateRuntimeDisplayBundle } from "./emptyStateRuntimeDisplay";'),
+            ("empty state runtime display helper binding", "const emptyStateRuntimeDisplay = emptyStateRuntimeDisplayBundle();"),
+            ("history empty state runtime field binding", "const historyEmptyStateDisplay = emptyStateRuntimeDisplay.history;"),
             ("history calendar title display binding", "const historyCalendarTitle = historyCalendarDisplay.title;"),
             ("history calendar previous month accessibility binding", "const historyPreviousMonthAccessibilityLabel = historyCalendarDisplay.previousMonthAccessibility;"),
             ("history records by date map", "const historyRecordsByDate = useMemo(() => historyRecordsByDateMap(recordsForDisplay), [recordsForDisplay]);"),
@@ -10990,7 +10994,7 @@ def main() -> int:
         )
         for label, marker in (
             ("analysis default month range state", 'const [analysisRange, setAnalysisRange] = useState<AnalysisRange>("month");'),
-            ("analysis empty state display helper binding", "const analysisEmptyStateDisplay = analysisEmptyStateDisplayBundle();"),
+            ("analysis empty state runtime field binding", "const analysisEmptyStateDisplay = emptyStateRuntimeDisplay.analysis;"),
             ("analysis range display helper binding", "const analysisRangeDisplay = analysisRangeDisplayBundle("),
             ("analysis range display label binding", "const analysisRangeDisplayLabel = analysisRangeDisplay.label;"),
             ("analysis custom range status display binding", "const analysisCustomRangeStatusDisplayText = analysisRangeDisplay.customRangeStatus;"),
@@ -11105,6 +11109,12 @@ def main() -> int:
             ("analysis custom apply status", "已套用自訂日期區間並同步 bounded report；不呼叫 AI 或 LLM。"),
         ):
             _assert_contains(label, analysis_copy_content, marker)
+        for label, marker in (
+            ("empty state runtime display helper", "function emptyStateRuntimeDisplayBundle()"),
+            ("empty state runtime history delegate", "history: historyEmptyStateDisplayBundle()"),
+            ("empty state runtime analysis delegate", "analysis: analysisEmptyStateDisplayBundle()"),
+        ):
+            _assert_contains(label, empty_state_runtime_display_content, marker)
         _assert_not_contains(
             "analysis stale independent glucose records memo",
             content,
@@ -13445,11 +13455,15 @@ def main() -> int:
             ("direct achievement year review status display texts binding", "const achievementYearReviewStatusDisplay = achievementYearReviewStatusDisplayTexts({"),
             ("direct account security auth mode display texts binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayTexts({"),
             ("direct history calendar display texts binding", "const historyCalendarDisplay = historyCalendarDisplayTexts(historyCalendarMonthStart, selectedHistoryDate);"),
+            ("direct history empty state display bundle binding", "const historyEmptyStateDisplay = historyEmptyStateDisplayBundle();"),
+            ("direct history empty state display bundle import", "  historyEmptyStateDisplayBundle,"),
             ("direct history no-real-record health value copy binding", 'const historyNoRealRecordHealthValueDisplayText = noRealRecordHealthValueCopy("history");'),
             ("direct history no records title copy binding", "const historyNoRecordsTitleDisplayText = historyNoRecordsTitleCopy();"),
             ("direct history no records body copy binding", "const historyNoRecordsBodyDisplayText = historyNoRecordsBodyCopy();"),
             ("direct history no range records title copy binding", "const historyNoRangeRecordsTitleDisplayText = historyNoRangeRecordsTitleCopy();"),
             ("direct history no range records body copy binding", "const historyNoRangeRecordsBodyDisplayText = historyNoRangeRecordsBodyCopy();"),
+            ("direct analysis empty state display bundle binding", "const analysisEmptyStateDisplay = analysisEmptyStateDisplayBundle();"),
+            ("direct analysis empty state display bundle import", "  analysisEmptyStateDisplayBundle,"),
             ("direct analysis safety intro copy binding", "const analysisSafetyIntroDisplayText = analysisSafetyIntroCopy();"),
             ("direct analysis chart empty copy binding", "const analysisChartEmptyDisplayText = analysisChartEmptyCopy();"),
             ("direct analysis no-data status binding", "const analysisNoDataStatusDisplayLabel = analysisNoDataStatusLabel();"),

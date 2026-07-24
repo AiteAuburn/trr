@@ -617,7 +617,6 @@ import {
 import {
   historyBoundaryDisplayBundle,
   historyCalendarDisplayBundle,
-  historyEmptyStateDisplayBundle,
   historyManualEntryStatusMessage,
   historyRecordDetailStatusMessage,
   historyReturnTodayStatusMessage
@@ -638,7 +637,6 @@ import {
   analysisCustomApplyStatusMessage,
   analysisDataBoundaryDisplayBundle,
   analysisDetailedReportStatusMessage,
-  analysisEmptyStateDisplayBundle,
   analysisManualEntryStatusMessage,
   analysisRangeDisplayBundle,
   analysisReturnTodayStatusMessage,
@@ -649,6 +647,7 @@ import {
   detailedReportReturnTodayStatusMessage,
   type AnalysisRange
 } from "./analysisCopy";
+import { emptyStateRuntimeDisplayBundle } from "./emptyStateRuntimeDisplay";
 import {
   analysisRanges,
   basicReportRequestKey
@@ -2025,13 +2024,14 @@ export default function App() {
   const deleteConfirmIntroDisplayText = deleteConfirmDisplay.intro;
   const deleteConfirmRecordMetaDisplayText = deleteConfirmDisplay.recordMeta;
   const deleteConfirmSubmitDisplayLabel = deleteConfirmDisplay.submit;
-  const historyEmptyStateDisplay = historyEmptyStateDisplayBundle();
+  const emptyStateRuntimeDisplay = emptyStateRuntimeDisplayBundle();
+  const historyEmptyStateDisplay = emptyStateRuntimeDisplay.history;
   const historyNoRealRecordHealthValueDisplayText = historyEmptyStateDisplay.noRealRecordHealthValue;
   const historyNoRecordsTitleDisplayText = historyEmptyStateDisplay.noRecordsTitle;
   const historyNoRecordsBodyDisplayText = historyEmptyStateDisplay.noRecordsBody;
   const historyNoRangeRecordsTitleDisplayText = historyEmptyStateDisplay.noRangeRecordsTitle;
   const historyNoRangeRecordsBodyDisplayText = historyEmptyStateDisplay.noRangeRecordsBody;
-  const analysisEmptyStateDisplay = analysisEmptyStateDisplayBundle();
+  const analysisEmptyStateDisplay = emptyStateRuntimeDisplay.analysis;
   const analysisSafetyIntroDisplayText = analysisEmptyStateDisplay.safetyIntro;
   const analysisChartEmptyDisplayText = analysisEmptyStateDisplay.chartEmpty;
   const analysisSummaryActionDisplay = analysisSummaryActionDisplayBundle({

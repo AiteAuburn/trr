@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2302: Move empty-state runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `emptyStateRuntimeDisplayBundle` in `emptyStateRuntimeDisplay.ts`.
+- Moved `App.tsx` History and Analysis empty-state display assembly behind the runtime bundle.
+- Kept history no-record/no-range copy and analysis safety/chart-empty copy unchanged.
+- Updated navigation verifier coverage to require the empty-state runtime display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2301: Move settings runtime controls display assembly
 
 Status: done
