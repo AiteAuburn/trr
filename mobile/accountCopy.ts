@@ -164,3 +164,9 @@ export function doctorShareStaticDisplayBundle() {
     readinessChecklistItems: doctorShareReadinessChecklistDisplayItems()
   };
 }
+
+export function doctorShareRuntimeDisplayBundle() {
+  return {
+    doctorShare: doctorShareStaticDisplayBundle()
+  };
+}

@@ -4132,9 +4132,14 @@ def main() -> int:
             "const profileReadinessChecklistItems = settingsStaticDisplay.profileReadinessChecklistItems;",
         )
         _assert_contains(
-            "doctor share static display bundle binding",
+            "doctor share runtime display bundle binding",
             content,
-            "const doctorShareStaticDisplay = doctorShareStaticDisplayBundle();",
+            "const doctorShareRuntimeDisplay = doctorShareRuntimeDisplayBundle();",
+        )
+        _assert_contains(
+            "doctor share runtime field binding",
+            content,
+            "const doctorShareStaticDisplay = doctorShareRuntimeDisplay.doctorShare;",
         )
         _assert_contains(
             "doctor share readiness static display binding",
@@ -12170,8 +12175,9 @@ def main() -> int:
             ("account email bundle field binding", "const accountEmailDisplayText = accountDisplay.email;"),
             ("account login bundle field binding", "const accountLoginDisplayText = accountDisplay.login;"),
             ("doctor share account boundary bundle field binding", "const doctorShareAccountBoundaryDisplayText = accountDisplay.doctorShareBoundary;"),
-            ("doctor share static display bundle import", "doctorShareStaticDisplayBundle,"),
-            ("doctor share static display bundle binding", "const doctorShareStaticDisplay = doctorShareStaticDisplayBundle();"),
+            ("doctor share runtime display bundle import", "doctorShareRuntimeDisplayBundle,"),
+            ("doctor share runtime display bundle binding", "const doctorShareRuntimeDisplay = doctorShareRuntimeDisplayBundle();"),
+            ("doctor share runtime field binding", "const doctorShareStaticDisplay = doctorShareRuntimeDisplay.doctorShare;"),
             ("doctor share static display readiness binding", "const doctorShareReadinessChecklistItems = doctorShareStaticDisplay.readinessChecklistItems;"),
             ("doctor share static display boundary rows binding", "const doctorShareBoundaryRows = doctorShareStaticDisplay.boundaryRows;"),
             ("settings profile runtime display bundle import", "settingsProfileRuntimeDisplayBundle,"),
@@ -12195,8 +12201,10 @@ def main() -> int:
             ("direct account auth mode display bundle import", "  accountSecurityAuthModeDisplayBundle,"),
             ("direct doctor share boundary rows binding", "const doctorShareBoundaryRows = doctorShareBoundaryDisplayRows();"),
             ("direct doctor share readiness binding", "const doctorShareReadinessChecklistItems = doctorShareReadinessChecklistDisplayItems();"),
+            ("direct doctor share static display bundle binding", "const doctorShareStaticDisplay = doctorShareStaticDisplayBundle();"),
             ("direct doctor share boundary rows import", "  doctorShareBoundaryDisplayRows,"),
             ("direct doctor share readiness import", "  doctorShareReadinessChecklistDisplayItems,"),
+            ("direct doctor share static display bundle import", "  doctorShareStaticDisplayBundle,"),
         ):
             _assert_not_contains(label, content, marker)
         _assert_contains(
@@ -14273,6 +14281,8 @@ def main() -> int:
             ("doctor share static display bundle helper", "function doctorShareStaticDisplayBundle()"),
             ("doctor share static display boundary binding", "boundaryRows: doctorShareBoundaryDisplayRows()"),
             ("doctor share static display readiness binding", "readinessChecklistItems: doctorShareReadinessChecklistDisplayItems()"),
+            ("doctor share runtime display bundle helper", "function doctorShareRuntimeDisplayBundle()"),
+            ("doctor share runtime display bundle binding", "doctorShare: doctorShareStaticDisplayBundle()"),
         ):
             _assert_contains(label, account_copy_content, marker)
         for label, marker in (

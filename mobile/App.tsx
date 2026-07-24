@@ -373,7 +373,7 @@ import { recordFormStaticDisplayBundle } from "./recordFormDisplayBundle";
 import {
   accountPublicDisplayNameForSettings,
   accountRuntimeDisplayBundle,
-  doctorShareStaticDisplayBundle,
+  doctorShareRuntimeDisplayBundle,
   profileSettingsBoundaryDisplayRowsForState
 } from "./accountCopy";
 import {
@@ -1746,7 +1746,8 @@ export default function App() {
   const reminderReadinessChecklistItems = settingsStaticDisplay.reminderReadinessChecklistItems;
   const privacyReadinessChecklistItems = settingsStaticDisplay.privacyReadinessChecklistItems;
   const tutorialSafetyChecklistItems = settingsStaticDisplay.tutorialSafetyChecklistItems;
-  const doctorShareStaticDisplay = doctorShareStaticDisplayBundle();
+  const doctorShareRuntimeDisplay = doctorShareRuntimeDisplayBundle();
+  const doctorShareStaticDisplay = doctorShareRuntimeDisplay.doctorShare;
   const doctorShareReadinessChecklistItems = doctorShareStaticDisplay.readinessChecklistItems;
   const futurePreviewReadinessRuntimeDisplay = futurePreviewReadinessRuntimeDisplayBundle();
   const futurePreviewReadinessStaticDisplay = futurePreviewReadinessRuntimeDisplay.readiness;

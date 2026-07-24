@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2322: Move doctor share runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `doctorShareRuntimeDisplayBundle` to `accountCopy.ts`.
+- Moved `App.tsx` doctor share static display assembly behind the runtime bundle.
+- Kept doctor share boundary rows and readiness checklist content unchanged.
+- Updated navigation verifier coverage to require the bundled doctor share runtime display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2321: Move food photo preview runtime display assembly
 
 Status: done
