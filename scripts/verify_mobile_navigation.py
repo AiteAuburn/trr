@@ -4182,9 +4182,14 @@ def main() -> int:
             "const storeCheckoutReadinessChecklistItems = storePreviewStaticDisplay.checkoutReadinessItems;",
         )
         _assert_contains(
-            "food photo static display bundle binding",
+            "food photo preview runtime display bundle binding",
             content,
-            "const foodPhotoPreviewStaticDisplay = foodPhotoPreviewStaticDisplayBundle();",
+            "const foodPhotoPreviewRuntimeDisplay = foodPhotoPreviewRuntimeDisplayBundle();",
+        )
+        _assert_contains(
+            "food photo preview runtime field binding",
+            content,
+            "const foodPhotoPreviewStaticDisplay = foodPhotoPreviewRuntimeDisplay.preview;",
         )
         _assert_contains(
             "food photo vision boundary static display binding",
@@ -15956,6 +15961,8 @@ def main() -> int:
             ("food photo preview static display bundle vision boundary", "visionBoundary: foodPhotoVisionBoundaryDisplayItem()"),
             ("food photo preview static display bundle empty result", "emptyResultItems: foodPhotoEmptyResultChecklistDisplayItems()"),
             ("food photo preview static display bundle readiness", "readinessItems: foodPhotoReadinessChecklistDisplayItems()"),
+            ("food photo preview runtime display bundle helper", "export function foodPhotoPreviewRuntimeDisplayBundle()"),
+            ("food photo preview runtime display bundle binding", "preview: foodPhotoPreviewStaticDisplayBundle()"),
             ("food photo readiness permission copy", "相機 / 相簿權限與圖片壓縮上限"),
             ("food photo readiness privacy copy", "圖片儲存、刪除與隱私遮罩策略"),
             ("food photo readiness cost copy", "Vision 成本上限、rate limit 與重試規則"),
@@ -16246,7 +16253,9 @@ def main() -> int:
             _assert_not_contains(label, content, marker)
         for label, marker in (
             ("food photo display bundle import", "foodPhotoDisplayBundle,"),
-            ("food photo preview static display bundle import", "foodPhotoPreviewStaticDisplayBundle,"),
+            ("food photo preview runtime display bundle import", "foodPhotoPreviewRuntimeDisplayBundle,"),
+            ("food photo preview runtime display bundle binding", "const foodPhotoPreviewRuntimeDisplay = foodPhotoPreviewRuntimeDisplayBundle();"),
+            ("food photo preview runtime field binding", "const foodPhotoPreviewStaticDisplay = foodPhotoPreviewRuntimeDisplay.preview;"),
             ("food photo display bundle binding", "const foodPhotoDisplay = foodPhotoDisplayBundle(foodPhotoActionStatus);"),
             ("food photo display bundle action binding", "const foodPhotoActionStatusDisplayText = foodPhotoDisplay.status.action;"),
             ("food photo display bundle upload binding", "const foodPhotoUploadStatusMessage = foodPhotoDisplay.status.upload;"),
@@ -16275,9 +16284,11 @@ def main() -> int:
             ("direct food photo vision boundary binding", "const foodPhotoVisionBoundaryDisplay = foodPhotoVisionBoundaryDisplayItem();"),
             ("direct food photo empty result checklist binding", "const foodPhotoEmptyResultChecklistItems = foodPhotoEmptyResultChecklistDisplayItems();"),
             ("direct food photo readiness checklist binding", "const foodPhotoReadinessChecklistItems = foodPhotoReadinessChecklistDisplayItems();"),
+            ("direct food photo preview static display bundle binding", "const foodPhotoPreviewStaticDisplay = foodPhotoPreviewStaticDisplayBundle();"),
             ("direct food photo vision boundary import", "  foodPhotoVisionBoundaryDisplayItem,"),
             ("direct food photo empty result checklist import", "  foodPhotoEmptyResultChecklistDisplayItems,"),
             ("direct food photo readiness checklist import", "  foodPhotoReadinessChecklistDisplayItems,"),
+            ("direct food photo preview static display bundle import", "  foodPhotoPreviewStaticDisplayBundle,"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (

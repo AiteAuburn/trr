@@ -2102,6 +2102,12 @@ export function foodPhotoPreviewStaticDisplayBundle() {
   };
 }
 
+export function foodPhotoPreviewRuntimeDisplayBundle() {
+  return {
+    preview: foodPhotoPreviewStaticDisplayBundle()
+  };
+}
+
 export function foodPhotoIntegrationButtonLabel() {
   return boundDisplayText("查看拍照整合狀態", maxDisplayTextLength);
 }

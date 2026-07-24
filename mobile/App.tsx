@@ -181,7 +181,7 @@ import {
   achievementSyncStatusMessages,
   achievementUnlocksFromApi,
   foodPhotoDisplayBundle,
-  foodPhotoPreviewStaticDisplayBundle,
+  foodPhotoPreviewRuntimeDisplayBundle,
   apiFoodCategoryFromMobile,
   boundCommunityPublicSettings,
   commercePreviewOpenCartStatusMessage,
@@ -1758,7 +1758,8 @@ export default function App() {
   const storePreviewStaticDisplay = storePreviewRuntimeDisplay.preview;
   const storeCheckoutReadinessChecklistItems = storePreviewStaticDisplay.checkoutReadinessItems;
   const storeCartUnavailableDisplay = storePreviewStaticDisplay.cartUnavailable;
-  const foodPhotoPreviewStaticDisplay = foodPhotoPreviewStaticDisplayBundle();
+  const foodPhotoPreviewRuntimeDisplay = foodPhotoPreviewRuntimeDisplayBundle();
+  const foodPhotoPreviewStaticDisplay = foodPhotoPreviewRuntimeDisplay.preview;
   const foodPhotoVisionBoundaryDisplay = foodPhotoPreviewStaticDisplay.visionBoundary;
   const foodPhotoEmptyResultChecklistItems = foodPhotoPreviewStaticDisplay.emptyResultItems;
   const foodPhotoReadinessChecklistItems = foodPhotoPreviewStaticDisplay.readinessItems;
