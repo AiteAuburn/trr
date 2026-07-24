@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2319: Move future preview boundary runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `futurePreviewBoundaryRuntimeDisplayBundle` to `futureModuleDisplay.ts`.
+- Moved `App.tsx` future preview boundary display assembly behind the runtime bundle.
+- Kept doctor share, health integration, community, ranking, reminder, and privacy preview boundary display content unchanged.
+- Updated navigation verifier coverage to require the bundled future preview boundary runtime display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2318: Move future preview readiness runtime display assembly
 
 Status: done

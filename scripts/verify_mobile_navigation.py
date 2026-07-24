@@ -15937,6 +15937,8 @@ def main() -> int:
             ("future preview boundary display bundle ranking", "ranking: rankingPreviewBoundaryDisplayItem()"),
             ("future preview boundary display bundle reminder", "reminder: reminderPreviewBoundaryDisplayItem()"),
             ("future preview boundary display bundle privacy", "privacy: privacyPreviewBoundaryDisplayItem()"),
+            ("future preview boundary runtime display bundle helper", "export function futurePreviewBoundaryRuntimeDisplayBundle()"),
+            ("future preview boundary runtime display bundle binding", "boundary: futurePreviewBoundaryDisplayBundle()"),
             ("food photo vision boundary helper", "export function foodPhotoVisionBoundaryDisplayItem()"),
             ("food photo vision boundary copy", "相機、圖片上傳、影像模型與營養估算尚未啟用"),
             ("food photo checklist helper", "export function foodPhotoEmptyResultChecklistDisplayItems()"),
@@ -16207,8 +16209,9 @@ def main() -> int:
             ("future preview boundary copy bundle health integration binding", "const healthIntegrationExternalDataBoundaryDisplayText = futurePreviewBoundaryCopy.healthIntegrationExternalData;"),
             ("future preview boundary copy bundle community binding", "const communityPublicNameBoundaryDisplayText = futurePreviewBoundaryCopy.communityPublicName;"),
             ("future preview boundary copy bundle ranking binding", "const rankingLocalPreviewBoundaryDisplayText = futurePreviewBoundaryCopy.rankingLocalPreview;"),
-            ("future preview boundary display bundle import", "futurePreviewBoundaryDisplayBundle,"),
-            ("future preview boundary display bundle binding", "const futurePreviewBoundaryDisplay = futurePreviewBoundaryDisplayBundle();"),
+            ("future preview boundary runtime display bundle import", "futurePreviewBoundaryRuntimeDisplayBundle,"),
+            ("future preview boundary runtime display bundle binding", "const futurePreviewBoundaryRuntimeDisplay = futurePreviewBoundaryRuntimeDisplayBundle();"),
+            ("future preview boundary runtime field binding", "const futurePreviewBoundaryDisplay = futurePreviewBoundaryRuntimeDisplay.boundary;"),
             ("future preview boundary display bundle doctor share binding", "const doctorSharePreviewBoundaryDisplay = futurePreviewBoundaryDisplay.doctorShare;"),
             ("future preview boundary display bundle health integration binding", "const healthIntegrationPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.healthIntegration;"),
             ("future preview boundary display bundle community binding", "const communityPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.community;"),
@@ -16228,6 +16231,8 @@ def main() -> int:
             ("direct ranking preview boundary item binding", "const rankingPreviewBoundaryDisplay = rankingPreviewBoundaryDisplayItem();"),
             ("direct reminder preview boundary item binding", "const reminderPreviewBoundaryDisplay = reminderPreviewBoundaryDisplayItem();"),
             ("direct privacy preview boundary item binding", "const privacyPreviewBoundaryDisplay = privacyPreviewBoundaryDisplayItem();"),
+            ("direct future preview boundary display bundle import", "  futurePreviewBoundaryDisplayBundle,"),
+            ("direct future preview boundary display bundle binding", "const futurePreviewBoundaryDisplay = futurePreviewBoundaryDisplayBundle();"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (

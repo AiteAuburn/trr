@@ -259,7 +259,7 @@ import {
   futureModulesOpenStatusMessage,
   futureModulesReturnMenuStatusMessage,
   futurePreviewBoundaryCopyBundle,
-  futurePreviewBoundaryDisplayBundle,
+  futurePreviewBoundaryRuntimeDisplayBundle,
   futurePreviewReadinessRuntimeDisplayBundle,
   futurePreviewReturnStatusMessage,
   futurePreviewSectionLabels,
@@ -1573,7 +1573,8 @@ export default function App() {
   const yearReviewActionStatusDisplayText = achievementYearReviewStatusDisplay.yearReviewAction;
   const yearReviewShareStatusMessage = yearReviewShareUnavailableStatusMessage();
   const yearReviewBoundaryDisplayText = yearReviewBoundaryCopy.boundaryCopy;
-  const futurePreviewBoundaryDisplay = futurePreviewBoundaryDisplayBundle();
+  const futurePreviewBoundaryRuntimeDisplay = futurePreviewBoundaryRuntimeDisplayBundle();
+  const futurePreviewBoundaryDisplay = futurePreviewBoundaryRuntimeDisplay.boundary;
   const futurePreviewBoundaryCopy = futurePreviewBoundaryCopyBundle();
   const doctorSharePreviewBoundaryDisplay = futurePreviewBoundaryDisplay.doctorShare;
   const doctorShareBackendBoundaryDisplayText = futurePreviewBoundaryCopy.doctorShareBackend;

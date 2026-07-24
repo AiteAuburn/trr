@@ -2035,6 +2035,12 @@ export function futurePreviewBoundaryDisplayBundle() {
   };
 }
 
+export function futurePreviewBoundaryRuntimeDisplayBundle() {
+  return {
+    boundary: futurePreviewBoundaryDisplayBundle()
+  };
+}
+
 export function foodPhotoVisionBoundaryDisplayItem() {
   return {
     badge: boundDisplayText("Vision 未串接", 24),
