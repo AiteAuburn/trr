@@ -220,6 +220,12 @@ export function transcriptReviewDisplayBundle() {
   return transcriptReviewDisplayTexts();
 }
 
+export function transcriptReviewRuntimeDisplayBundle() {
+  return {
+    review: transcriptReviewDisplayBundle()
+  };
+}
+
 export function transcriptReviewStatusDisplayTexts(value: {
   transcriptValidationError: string | null;
   transcript: string;

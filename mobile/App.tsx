@@ -400,7 +400,7 @@ import {
   recordingWhisperSuccessStatusMessage,
   shouldOpenTodayRecordingTranscriptReview,
   transcriptClearedStatusMessage,
-  transcriptReviewDisplayBundle,
+  transcriptReviewRuntimeDisplayBundle,
   transcriptReviewStatusDisplayBundle,
   transcriptReturnEditStatusMessage,
   transcriptReviewBackStatusMessage,
@@ -2015,7 +2015,8 @@ export default function App() {
   const aiRemoveConfirmBoundaryDisplayLabel = aiRemoveConfirmDisplay.boundaryLabel;
   const aiRemoveConfirmBoundaryDisplayText = aiRemoveConfirmDisplay.boundary;
   const aiRemoveConfirmSourceDisplayText = aiRemoveConfirmDisplay.source;
-  const transcriptReviewDisplay = transcriptReviewDisplayBundle();
+  const transcriptReviewRuntimeDisplay = transcriptReviewRuntimeDisplayBundle();
+  const transcriptReviewDisplay = transcriptReviewRuntimeDisplay.review;
   const transcriptReviewIntroDisplayText = transcriptReviewDisplay.intro;
   const transcriptReviewPreParseGuidanceDisplayText = transcriptReviewDisplay.preParseGuidance;
   const transcriptReviewSampleWarningDisplayText = transcriptReviewDisplay.sampleWarning;

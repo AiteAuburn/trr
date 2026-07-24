@@ -3902,9 +3902,14 @@ def main() -> int:
             "const transcriptReviewCostBoundaryChecklistItems =\n    recordWorkflowRuntimeChecklistDisplay.transcriptReviewCostBoundaryItems;",
         )
         _assert_contains(
-            "transcript review display helper binding",
+            "transcript review runtime display helper binding",
             content,
-            "const transcriptReviewDisplay = transcriptReviewDisplayBundle();",
+            "const transcriptReviewRuntimeDisplay = transcriptReviewRuntimeDisplayBundle();",
+        )
+        _assert_contains(
+            "transcript review runtime field binding",
+            content,
+            "const transcriptReviewDisplay = transcriptReviewRuntimeDisplay.review;",
         )
         _assert_contains(
             "transcript status display bundle binding",
@@ -8426,6 +8431,8 @@ def main() -> int:
             "function recordingElapsedSecondsCopy(elapsedSeconds: number)",
         )
         for label, marker in (
+            ("transcript review runtime display bundle helper", "function transcriptReviewRuntimeDisplayBundle()"),
+            ("transcript review runtime display review binding", "review: transcriptReviewDisplayBundle()"),
             ("recording result display bundle helper", "function recordingResultDisplayBundle(elapsedSeconds: number)"),
             ("recording result display bundle body", "body: recordingResultBodyCopy(elapsedSeconds)"),
             ("recording result display bundle elapsed", "elapsed: recordingElapsedSecondsCopy(elapsedSeconds)"),
@@ -13601,6 +13608,8 @@ def main() -> int:
             ("direct recording limit copy binding", "const recordingLimitDisplayText = recordingLimitCopy(recordingEffectiveLimitDisplaySeconds);"),
             ("direct home recording preview boundary copy binding", "const homeRecordingPreviewBoundaryDisplayText = homeRecordingPreviewBoundaryCopy();"),
             ("direct record page recording preview boundary copy binding", "const recordPageRecordingPreviewBoundaryDisplayText = recordPageRecordingPreviewBoundaryCopy();"),
+            ("direct transcript review display bundle binding", "const transcriptReviewDisplay = transcriptReviewDisplayBundle();"),
+            ("direct transcript review display bundle import", "  transcriptReviewDisplayBundle,"),
             ("direct analysis range display texts binding", "const analysisRangeDisplay = analysisRangeDisplayTexts("),
             ("direct AI review display texts binding", "const aiReviewDisplay = aiReviewDisplayTexts();"),
             ("direct AI save confirm display texts binding", "const aiSaveConfirmDisplay = aiSaveConfirmDisplayTexts("),
