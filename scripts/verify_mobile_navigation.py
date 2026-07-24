@@ -3826,6 +3826,11 @@ def main() -> int:
             "recordWorkflowRuntimeChecklistDisplayBundle,",
         )
         _assert_contains(
+            "record workflow guard runtime display bundle import",
+            content,
+            "recordWorkflowGuardRuntimeDisplayBundle,",
+        )
+        _assert_contains(
             "AI review checklist static bundle binding",
             content,
             "recordWorkflowStaticChecklistDisplay.aiReviewCostBoundaryItems;",
@@ -8928,7 +8933,8 @@ def main() -> int:
             ("daily record leave guard action row binding", "<DangerConfirmActionRow"),
             ("daily record leave guard cancel binding", "onCancelPress={cancelDailyRecordLeaveGuard}"),
             ("daily record leave guard confirm binding", "onConfirmPress={confirmDailyRecordLeaveGuard}"),
-            ("daily record leave guard display helper binding", "const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayBundle();"),
+            ("daily record leave guard runtime display bundle binding", "const recordWorkflowGuardRuntimeDisplay = recordWorkflowGuardRuntimeDisplayBundle();"),
+            ("daily record leave guard runtime field binding", "const dailyRecordLeaveGuardDisplay = recordWorkflowGuardRuntimeDisplay.dailyRecordLeaveGuard;"),
             ("daily record leave guard title display binding", "const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardDisplay.title;"),
             ("daily record leave guard cancel display binding", "const dailyRecordLeaveGuardCancelDisplayText = dailyRecordLeaveGuardDisplay.cancel;"),
             ("daily record leave guard cancel accessibility binding", "const dailyRecordLeaveGuardCancelAccessibilityLabel = dailyRecordLeaveGuardDisplay.cancelAccessibility;"),
@@ -9285,6 +9291,8 @@ def main() -> int:
             ("daily record leave guard display helper", "function dailyRecordLeaveGuardDisplayTexts()"),
             ("daily record leave guard display bundle helper", "function dailyRecordLeaveGuardDisplayBundle()"),
             ("daily record leave guard display bundle delegates", "return dailyRecordLeaveGuardDisplayTexts();"),
+            ("record workflow guard runtime display bundle helper", "function recordWorkflowGuardRuntimeDisplayBundle()"),
+            ("record workflow guard runtime display leave guard binding", "dailyRecordLeaveGuard: dailyRecordLeaveGuardDisplayBundle()"),
             ("daily record leave guard display cancel label", "cancel: boundDisplayText(\"取消\", maxDisplayTextLength)"),
             ("daily record leave guard display cancel accessibility", "cancelAccessibility: boundDisplayText(\"取消離開，保留每日紀錄草稿\", maxDisplayDetailTextLength)"),
             ("daily record leave guard display confirm label", "confirm: boundDisplayText(\"離開\", maxDisplayTextLength)"),
@@ -13590,6 +13598,8 @@ def main() -> int:
             ("direct AI review display texts binding", "const aiReviewDisplay = aiReviewDisplayTexts();"),
             ("direct AI save confirm display texts binding", "const aiSaveConfirmDisplay = aiSaveConfirmDisplayTexts("),
             ("direct daily record leave guard display texts binding", "const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayTexts();"),
+            ("direct daily record leave guard display bundle binding", "const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayBundle();"),
+            ("direct daily record leave guard display bundle import", "  dailyRecordLeaveGuardDisplayBundle,"),
             ("direct transcript review display texts binding", "const transcriptReviewDisplay = transcriptReviewDisplayTexts();"),
             ("direct manual record confirm display texts binding", "const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayTexts(isBusy);"),
             ("direct AI remove confirm display texts binding", "const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayTexts("),

@@ -432,6 +432,12 @@ export function dailyRecordLeaveGuardDisplayBundle() {
   return dailyRecordLeaveGuardDisplayTexts();
 }
 
+export function recordWorkflowGuardRuntimeDisplayBundle() {
+  return {
+    dailyRecordLeaveGuard: dailyRecordLeaveGuardDisplayBundle()
+  };
+}
+
 export function dailyRecordLeaveGuardPromptStatusMessage() {
   return boundUiMessage("尚未儲存今天的紀錄；請先選擇取消或離開。");
 }

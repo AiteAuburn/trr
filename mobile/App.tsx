@@ -429,7 +429,6 @@ import {
   aiSaveUnavailableStatusMessage,
   dailyRecordLeaveGuardCancelStatusMessage,
   dailyRecordLeaveGuardConfirmStatusMessage,
-  dailyRecordLeaveGuardDisplayBundle,
   dailyRecordLeaveGuardPromptStatusMessage,
   manualRecordConfirmReadyStatusMessage,
   manualRecordConfirmReturnStatusMessage,
@@ -446,6 +445,7 @@ import {
   parserVoiceQuotaSyncedStatusMessage,
   recordDetailReturnStatusMessage,
   recordWorkflowActionRuntimeDisplayBundle,
+  recordWorkflowGuardRuntimeDisplayBundle,
   recordWorkflowRuntimeChecklistDisplayBundle,
   recordWorkflowStaticChecklistDisplayBundle,
   saveResultDisplayBundle,
@@ -1385,7 +1385,8 @@ export default function App() {
   const hasUnsavedDailyRecordDraft = dailyRecordDraftScreen.hasUnsavedDraft;
   const shouldGuardDailyRecordLeave = dailyRecordDraftScreen.shouldGuardLeave;
   const shouldShowDailyRecordLeaveGuard = dailyRecordLeaveGuardVisible;
-  const dailyRecordLeaveGuardDisplay = dailyRecordLeaveGuardDisplayBundle();
+  const recordWorkflowGuardRuntimeDisplay = recordWorkflowGuardRuntimeDisplayBundle();
+  const dailyRecordLeaveGuardDisplay = recordWorkflowGuardRuntimeDisplay.dailyRecordLeaveGuard;
   const dailyRecordLeaveGuardTitleDisplayText = dailyRecordLeaveGuardDisplay.title;
   const dailyRecordLeaveGuardBodyDisplayText = dailyRecordLeaveGuardDisplay.body;
   const dailyRecordLeaveGuardQuestionDisplayText = dailyRecordLeaveGuardDisplay.question;
