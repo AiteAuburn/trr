@@ -285,7 +285,7 @@ import {
   storeCategoryTarget,
   storeCatalogSyncStatusMessages,
   storePreviewDisplayBundle,
-  storePreviewStaticDisplayBundle,
+  storePreviewRuntimeDisplayBundle,
   storeRedeemStatusMessages,
   storeRedemptionUseStatusMessages,
   storeDisplayBundle,
@@ -1754,7 +1754,8 @@ export default function App() {
     futurePreviewReadinessStaticDisplay.healthIntegrationItems;
   const communityReadinessChecklistItems = futurePreviewReadinessStaticDisplay.communityItems;
   const rankingReadinessChecklistItems = futurePreviewReadinessStaticDisplay.rankingItems;
-  const storePreviewStaticDisplay = storePreviewStaticDisplayBundle();
+  const storePreviewRuntimeDisplay = storePreviewRuntimeDisplayBundle();
+  const storePreviewStaticDisplay = storePreviewRuntimeDisplay.preview;
   const storeCheckoutReadinessChecklistItems = storePreviewStaticDisplay.checkoutReadinessItems;
   const storeCartUnavailableDisplay = storePreviewStaticDisplay.cartUnavailable;
   const foodPhotoPreviewStaticDisplay = foodPhotoPreviewStaticDisplayBundle();

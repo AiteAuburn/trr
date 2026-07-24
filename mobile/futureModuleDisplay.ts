@@ -2228,6 +2228,12 @@ export function storePreviewStaticDisplayBundle() {
   };
 }
 
+export function storePreviewRuntimeDisplayBundle() {
+  return {
+    preview: storePreviewStaticDisplayBundle()
+  };
+}
+
 export function storeCartReturnButtonLabel() {
   return boundDisplayText("返回商城", maxDisplayTextLength);
 }

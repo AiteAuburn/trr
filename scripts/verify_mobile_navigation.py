@@ -4167,9 +4167,14 @@ def main() -> int:
             "const rankingReadinessChecklistItems = futurePreviewReadinessStaticDisplay.rankingItems;",
         )
         _assert_contains(
-            "store static display bundle binding",
+            "store preview runtime display bundle binding",
             content,
-            "const storePreviewStaticDisplay = storePreviewStaticDisplayBundle();",
+            "const storePreviewRuntimeDisplay = storePreviewRuntimeDisplayBundle();",
+        )
+        _assert_contains(
+            "store preview runtime field binding",
+            content,
+            "const storePreviewStaticDisplay = storePreviewRuntimeDisplay.preview;",
         )
         _assert_contains(
             "store checkout readiness checklist helper binding",
@@ -15178,7 +15183,9 @@ def main() -> int:
             ("year review revoke failure status binding", "setYearReviewActionStatus(revokeStatus.failure);"),
             ("store product button role", 'accessibilityRole="button"\n                  style={styles.roundActionButton}'),
             ("store preview display helper binding", "const storePreviewDisplay = storePreviewDisplayBundle(storeActionStatus);"),
-            ("store static display bundle import", "storePreviewStaticDisplayBundle,"),
+            ("store preview runtime display bundle import", "storePreviewRuntimeDisplayBundle,"),
+            ("store preview runtime display bundle binding", "const storePreviewRuntimeDisplay = storePreviewRuntimeDisplayBundle();"),
+            ("store preview runtime field binding", "const storePreviewStaticDisplay = storePreviewRuntimeDisplay.preview;"),
             ("store cart unavailable display binding", "const storeCartUnavailableDisplay = storePreviewStaticDisplay.cartUnavailable;"),
             ("store empty search display binding", "const storeEmptySearchDisplay = storePreviewStaticDisplay.emptySearch;"),
             ("store action status display binding", "const storeActionStatusDisplayText = storePreviewDisplay.actionStatus;"),
@@ -15978,6 +15985,8 @@ def main() -> int:
             ("store preview static checkout binding", "checkoutReadinessItems: storeCheckoutReadinessChecklistDisplayItems()"),
             ("store preview static cart unavailable binding", "cartUnavailable: storeCartUnavailableDisplayItem()"),
             ("store preview static empty search binding", "emptySearch: storeEmptySearchDisplayItem()"),
+            ("store preview runtime display bundle helper", "export function storePreviewRuntimeDisplayBundle()"),
+            ("store preview runtime display bundle binding", "preview: storePreviewStaticDisplayBundle()"),
             ("store checkout readiness catalog copy", "商品目錄、庫存與價格來源"),
             ("store checkout readiness inventory rollback copy", "購物車持久化、庫存 reservation 與 rollback 規則"),
             ("store checkout readiness payment copy", "付款金流、receipt validation 與退款流程"),
@@ -17658,6 +17667,16 @@ def main() -> int:
             "store direct empty search helper binding",
             content,
             "const storeEmptySearchDisplay = storeEmptySearchDisplayItem();",
+        )
+        _assert_not_contains(
+            "store direct static display bundle binding",
+            content,
+            "const storePreviewStaticDisplay = storePreviewStaticDisplayBundle();",
+        )
+        _assert_not_contains(
+            "store stale static display bundle import",
+            content,
+            "  storePreviewStaticDisplayBundle,",
         )
         _assert_not_contains(
             "store stale cart unavailable helper import",
