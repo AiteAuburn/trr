@@ -58,6 +58,17 @@ export function historyCalendarDisplayBundle(monthStart: Date, selectedDate: str
   return historyCalendarDisplayTexts(monthStart, selectedDate);
 }
 
+export function historyRuntimeDisplayBundle(value: {
+  monthStart: Date;
+  selectedDate: string;
+  selectedRecordCount: number;
+}) {
+  return {
+    calendar: historyCalendarDisplayBundle(value.monthStart, value.selectedDate),
+    selectedRecordDisplayCount: clampNumber(value.selectedRecordCount, 0, maxMobileCountValue)
+  };
+}
+
 export function historyBoundaryChecklistDisplayItems(
   recordSyncLimit: number,
   recordCacheLimit: number,

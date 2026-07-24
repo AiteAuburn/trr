@@ -616,10 +616,10 @@ import {
 } from "./firstVersionFlowCopy";
 import {
   historyBoundaryDisplayBundle,
-  historyCalendarDisplayBundle,
   historyManualEntryStatusMessage,
   historyRecordDetailStatusMessage,
-  historyReturnTodayStatusMessage
+  historyReturnTodayStatusMessage,
+  historyRuntimeDisplayBundle
 } from "./historyCopy";
 import {
   buildHistoryDailyRecordSectionDisplayItems,
@@ -1225,8 +1225,6 @@ export default function App() {
     const base = Number.isNaN(selected.getTime()) ? new Date() : selected;
     return new Date(base.getFullYear(), base.getMonth(), 1);
   }, [selectedHistoryDate]);
-  const historyCalendarDisplay = historyCalendarDisplayBundle(historyCalendarMonthStart, selectedHistoryDate);
-  const historyCalendarTitle = historyCalendarDisplay.title;
   const historyCalendarDisplayItems = useMemo(() => {
     const year = historyCalendarMonthStart.getFullYear();
     const month = historyCalendarMonthStart.getMonth();
@@ -1252,11 +1250,14 @@ export default function App() {
     () => historyRawRecordDisplayItems(selectedHistoryRecords),
     [selectedHistoryRecords]
   );
-  const selectedHistoryRecordDisplayCount = clampNumber(
-    selectedHistoryRecords.length,
-    0,
-    maxMobileCountValue
-  );
+  const historyRuntimeDisplay = historyRuntimeDisplayBundle({
+    monthStart: historyCalendarMonthStart,
+    selectedDate: selectedHistoryDate,
+    selectedRecordCount: selectedHistoryRecords.length
+  });
+  const historyCalendarDisplay = historyRuntimeDisplay.calendar;
+  const selectedHistoryRecordDisplayCount = historyRuntimeDisplay.selectedRecordDisplayCount;
+  const historyCalendarTitle = historyCalendarDisplay.title;
   const selectedHistoryDateDisplayText = historyCalendarDisplay.selectedDate;
   const historyPreviousMonthButtonLabel = historyCalendarDisplay.previousMonthLabel;
   const historyNextMonthButtonLabel = historyCalendarDisplay.nextMonthLabel;

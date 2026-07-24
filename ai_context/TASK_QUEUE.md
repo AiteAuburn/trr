@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2303: Move history runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `historyRuntimeDisplayBundle` to `historyCopy.ts`.
+- Moved `App.tsx` History calendar display and selected-date record-count display assembly behind the runtime bundle.
+- Kept month title, selected date label, month navigation labels/accessibility, and selected-record count bounding unchanged.
+- Updated navigation verifier coverage to require the bundled history runtime display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2302: Move empty-state runtime display assembly
 
 Status: done
