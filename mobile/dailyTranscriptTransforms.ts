@@ -348,6 +348,23 @@ export function dailyTranscriptDisplayBundle(
   };
 }
 
+export function dailyRecordRuntimeDisplayBundle(value: {
+  preview: ParsePreviewResponse | null;
+  records: PendingRecord[];
+  reorganizationReason: DailyRecordReorganizationReason | null;
+  reorganizationRevision: number;
+  transcriptEntries: DailyTranscriptEntry[];
+}) {
+  return {
+    dailyRecord: dailyRecordDisplayBundle(value.preview, value.records),
+    reorganization: dailyRecordReorganizationDisplayBundle(
+      value.reorganizationReason,
+      value.reorganizationRevision
+    ),
+    transcript: dailyTranscriptDisplayBundle(value.preview, value.transcriptEntries)
+  };
+}
+
 export function dailyTranscriptEntriesForSave(
   preview: ParsePreviewResponse,
   entries: DailyTranscriptEntry[]

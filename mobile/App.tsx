@@ -686,13 +686,11 @@ import {
   boundDailyTranscriptEntries,
   buildDailyRecordSaveRequest,
   createDailyTranscriptEntry,
-  dailyRecordDisplayBundle,
   dailyRecordDraftScreenState,
   dailyRecordEntryMenuOpenStatusMessage,
   dailyRecordKeyFromRecords,
-  dailyRecordReorganizationDisplayBundle,
   dailyRecordReorganizationStatusMessage,
-  dailyTranscriptDisplayBundle,
+  dailyRecordRuntimeDisplayBundle,
   mergeSameDayParsePreviewDraft,
   parserTranscriptSource,
   todayTranscriptExpandedStatusMessage,
@@ -1356,16 +1354,20 @@ export default function App() {
   const aiSaveConfirmDateLabelDisplayText = aiSaveConfirmDisplay.dateLabel;
   const aiSaveConfirmSummaryLabelDisplayText = aiSaveConfirmDisplay.summaryLabel;
   const aiSaveConfirmIntroDisplayText = aiSaveConfirmDisplay.intro;
-  const dailyRecordDisplay = dailyRecordDisplayBundle(preview, previewState.records);
+  const dailyRecordRuntimeDisplay = dailyRecordRuntimeDisplayBundle({
+    preview,
+    records: previewState.records,
+    reorganizationReason: dailyRecordOrganizationReason,
+    reorganizationRevision: dailyRecordOrganizationRevision,
+    transcriptEntries: dailyTranscriptEntries
+  });
+  const dailyRecordDisplay = dailyRecordRuntimeDisplay.dailyRecord;
   const dailyRecordDateDisplayText = dailyRecordDisplay.dateText;
   const dailyRecordSummaryDisplayText = dailyRecordDisplay.summaryText;
-  const dailyRecordReorganizationDisplay = dailyRecordReorganizationDisplayBundle(
-    dailyRecordOrganizationReason,
-    dailyRecordOrganizationRevision
-  );
+  const dailyRecordReorganizationDisplay = dailyRecordRuntimeDisplay.reorganization;
   const dailyRecordReorganizationDisplayText = dailyRecordReorganizationDisplay.summary;
   const dailyRecordSectionItems = dailyRecordDisplay.sectionItems;
-  const todayTranscriptDisplay = dailyTranscriptDisplayBundle(preview, dailyTranscriptEntries);
+  const todayTranscriptDisplay = dailyRecordRuntimeDisplay.transcript;
   const todayTranscriptDisplayItems = todayTranscriptDisplay.items;
   const todayTranscriptTitleDisplayText = todayTranscriptDisplay.title;
   const todayTranscriptBodyDisplayText = todayTranscriptDisplay.body;
