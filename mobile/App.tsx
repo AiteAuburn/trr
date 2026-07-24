@@ -592,7 +592,7 @@ import {
   quickEntryModeDisplayItems,
   quickEntryTextModeStatusMessage,
   quickEntryVoicePromptStatusMessage,
-  quickRecordIntroDisplayBundle,
+  quickRecordRuntimeDisplayBundle,
   recordManualEntryStatusMessage,
   returnDestinationButtonDisplayBundle,
   saveSuccessDestinationStatusMessage,
@@ -1595,7 +1595,8 @@ export default function App() {
   const recordingQuotaDataBoundaryDisplayText = settingsBoundaryCopy.recordingQuotaData;
   const reminderPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.reminder;
   const privacyPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.privacy;
-  const quickRecordIntroDisplay = quickRecordIntroDisplayBundle();
+  const quickRecordRuntimeDisplay = quickRecordRuntimeDisplayBundle();
+  const quickRecordIntroDisplay = quickRecordRuntimeDisplay.intro;
   const quickRecordIntroDisplayText = quickRecordIntroDisplay.intro;
   const quickEntryModeDisplayItemsForRender = quickEntryModeDisplayItems();
   const recordingEffectiveLimitDisplaySeconds = recordingEffectiveLimitSeconds(voiceQuota);

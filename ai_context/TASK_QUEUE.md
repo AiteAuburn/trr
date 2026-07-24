@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2317: Move quick record runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `quickRecordRuntimeDisplayBundle` to `firstVersionFlowCopy.ts`.
+- Moved `App.tsx` quick record intro display assembly behind the runtime bundle.
+- Kept quick record intro copy unchanged.
+- Updated navigation verifier coverage to require the bundled quick record runtime display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2316: Move first-version overview runtime display assembly
 
 Status: done

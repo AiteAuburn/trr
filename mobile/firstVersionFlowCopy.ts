@@ -234,6 +234,12 @@ export function quickRecordIntroDisplayBundle() {
   };
 }
 
+export function quickRecordRuntimeDisplayBundle() {
+  return {
+    intro: quickRecordIntroDisplayBundle()
+  };
+}
+
 export function quickEntryModeDisplayItems() {
   return [
     {

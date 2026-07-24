@@ -8545,6 +8545,26 @@ def main() -> int:
             first_version_flow_copy_content,
             "intro: quickRecordIntroCopy()",
         )
+        _assert_contains(
+            "quick record runtime display bundle helper",
+            first_version_flow_copy_content,
+            "function quickRecordRuntimeDisplayBundle()",
+        )
+        _assert_contains(
+            "quick record runtime display intro binding",
+            first_version_flow_copy_content,
+            "intro: quickRecordIntroDisplayBundle()",
+        )
+        _assert_contains(
+            "quick record runtime display bundle App binding",
+            content,
+            "const quickRecordRuntimeDisplay = quickRecordRuntimeDisplayBundle();",
+        )
+        _assert_contains(
+            "quick record intro runtime field binding",
+            content,
+            "const quickRecordIntroDisplay = quickRecordRuntimeDisplay.intro;",
+        )
         for label in ("語音預覽", "文字整理", "手動新增"):
             _assert_contains(
                 f"record quick-entry {label}",
@@ -13640,6 +13660,8 @@ def main() -> int:
             ("direct analysis range summary copy binding", "const analysisRangeSummaryDisplayText = analysisRangeSummaryCopy("),
             ("direct analysis report button label binding", "const analysisReportButtonDisplayLabel = analysisReportButtonLabel(isReportLoading);"),
             ("direct quick record intro copy binding", "const quickRecordIntroDisplayText = quickRecordIntroCopy();"),
+            ("direct quick record intro display bundle binding", "const quickRecordIntroDisplay = quickRecordIntroDisplayBundle();"),
+            ("direct quick record intro display bundle import", "  quickRecordIntroDisplayBundle,"),
             ("direct recording limit copy binding", "const recordingLimitDisplayText = recordingLimitCopy(recordingEffectiveLimitDisplaySeconds);"),
             ("direct home recording preview boundary copy binding", "const homeRecordingPreviewBoundaryDisplayText = homeRecordingPreviewBoundaryCopy();"),
             ("direct record page recording preview boundary copy binding", "const recordPageRecordingPreviewBoundaryDisplayText = recordPageRecordingPreviewBoundaryCopy();"),
