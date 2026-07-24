@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2305 move parser runtime display assembly
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `parserRuntimeDisplayBundle` to `recordWorkflowCopy.ts`.
+- Moved `App.tsx` parser model availability display assembly behind the runtime bundle.
+- Kept LLM/STT unavailable copy, ready-state derivation, and parser guard behavior unchanged.
+- Updated navigation verifier coverage to require the bundled parser runtime display and reject old direct App-level helper calls/imports.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2304 move analysis runtime display assembly
 
 類型：mobile / refactor / verifier / docs

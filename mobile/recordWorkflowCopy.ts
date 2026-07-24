@@ -164,6 +164,18 @@ export function parserModelAvailabilityDisplayBundle(value: {
   };
 }
 
+export function parserRuntimeDisplayBundle(value: {
+  llmModel: ParserModelAvailabilitySource | null;
+  sttModel: ParserModelAvailabilitySource | null;
+}) {
+  return {
+    modelAvailability: parserModelAvailabilityDisplayBundle({
+      llmModel: value.llmModel,
+      sttModel: value.sttModel
+    })
+  };
+}
+
 export function parserAvailabilityDisplayMessages(value: {
   parserModelUnavailableMessage: string;
   protectedBackendUnavailableMessage: string;

@@ -443,9 +443,9 @@ import {
   parserBackendUnavailableStatusMessage,
   parserFailureRecoveryMessage,
   parserFailureStatusMessage,
-  parserModelAvailabilityDisplayBundle,
   parserModelUnavailableStatusMessage,
   parserProgressStatusMessage,
+  parserRuntimeDisplayBundle,
   parserSampleBlockedStatusMessage,
   parserSuccessStatusMessage,
   parserVoiceQuotaSyncedStatusMessage,
@@ -1135,10 +1135,11 @@ export default function App() {
   const activeProfile = activeProfileForId(profiles, activeProfileId);
   const selectedSttModel = selectedSttModelOption(models, sttModelId);
   const selectedLlmModel = selectedLlmModelOption(models, llmModelId);
-  const parserModelAvailabilityDisplay = parserModelAvailabilityDisplayBundle({
+  const parserRuntimeDisplay = parserRuntimeDisplayBundle({
     llmModel: selectedLlmModel,
     sttModel: selectedSttModel
   });
+  const parserModelAvailabilityDisplay = parserRuntimeDisplay.modelAvailability;
   const parserModelUnavailableMessage = parserModelAvailabilityDisplay.unavailableMessage;
   const parserModelReady = parserModelAvailabilityDisplay.ready;
   const accountRuntimeDisplay = accountRuntimeDisplayBundle({
