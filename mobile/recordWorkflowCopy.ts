@@ -508,6 +508,21 @@ export function manualRecordConfirmDisplayBundle(isBusy: boolean) {
   return manualRecordConfirmDisplayTexts(isBusy);
 }
 
+export function recordWorkflowActionRuntimeDisplayBundle(value: {
+  isBusy: boolean;
+  isDailyRecordRemoveConfirm: boolean;
+  pendingPreviewRemoveConfidencePercent: number | null;
+}) {
+  return {
+    aiRemoveConfirm: aiRemoveConfirmDisplayBundle(
+      value.isDailyRecordRemoveConfirm,
+      value.pendingPreviewRemoveConfidencePercent
+    ),
+    previewRecordEditBoundary: previewRecordEditBoundaryDisplayBundle(),
+    manualRecordConfirm: manualRecordConfirmDisplayBundle(value.isBusy)
+  };
+}
+
 export function manualSubmitChecklistDisplayItems() {
   return [
     "不會呼叫 AI 或 LLM，成本為 0。",

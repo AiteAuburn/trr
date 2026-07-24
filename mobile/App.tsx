@@ -419,7 +419,6 @@ import {
   aiPartialSaveRecordsStatusMessage,
   aiPartialSaveSummaryMessage,
   aiReviewRuntimeDisplayBundle,
-  aiRemoveConfirmDisplayBundle,
   aiSaveConfirmReadyStatusMessage,
   aiSaveConfirmReturnStatusMessage,
   aiSaveFailureStatusMessage,
@@ -432,7 +431,6 @@ import {
   dailyRecordLeaveGuardConfirmStatusMessage,
   dailyRecordLeaveGuardDisplayBundle,
   dailyRecordLeaveGuardPromptStatusMessage,
-  manualRecordConfirmDisplayBundle,
   manualRecordConfirmReadyStatusMessage,
   manualRecordConfirmReturnStatusMessage,
   manualRecordReturnStatusMessage,
@@ -446,8 +444,8 @@ import {
   parserSampleBlockedStatusMessage,
   parserSuccessStatusMessage,
   parserVoiceQuotaSyncedStatusMessage,
-  previewRecordEditBoundaryDisplayBundle,
   recordDetailReturnStatusMessage,
+  recordWorkflowActionRuntimeDisplayBundle,
   recordWorkflowRuntimeChecklistDisplayBundle,
   recordWorkflowStaticChecklistDisplayBundle,
   saveResultDisplayBundle,
@@ -2005,10 +2003,12 @@ export default function App() {
   const previewActionReturn = previewActionReturnState(previewActionReturnScreen);
   const isPreviewActionReturningToDailyRecord = previewActionReturn.isReturningToDailyRecord;
   const isDailyRecordRemoveConfirm = previewActionReturn.isDailyRecordRemoveConfirm;
-  const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayBundle(
+  const recordWorkflowActionRuntimeDisplay = recordWorkflowActionRuntimeDisplayBundle({
+    isBusy,
     isDailyRecordRemoveConfirm,
-    pendingPreviewRemoveDisplayItem?.confidencePercent ?? null
-  );
+    pendingPreviewRemoveConfidencePercent: pendingPreviewRemoveDisplayItem?.confidencePercent ?? null
+  });
+  const aiRemoveConfirmDisplay = recordWorkflowActionRuntimeDisplay.aiRemoveConfirm;
   const aiRemoveConfirmTitleDisplayText = aiRemoveConfirmDisplay.title;
   const aiRemoveConfirmSubmitDisplayText = aiRemoveConfirmDisplay.submit;
   const aiRemoveConfirmBoundaryDisplayLabel = aiRemoveConfirmDisplay.boundaryLabel;
@@ -2019,11 +2019,11 @@ export default function App() {
   const transcriptReviewPreParseGuidanceDisplayText = transcriptReviewDisplay.preParseGuidance;
   const transcriptReviewSampleWarningDisplayText = transcriptReviewDisplay.sampleWarning;
   const transcriptReviewPreflightPassedDisplayText = transcriptReviewDisplay.preflightPassed;
-  const previewRecordEditBoundaryDisplay = previewRecordEditBoundaryDisplayBundle();
+  const previewRecordEditBoundaryDisplay = recordWorkflowActionRuntimeDisplay.previewRecordEditBoundary;
   const previewRecordEditBoundaryDisplayText = previewRecordEditBoundaryDisplay.boundary;
   const selectedRecordDisplay = selectedRecordDisplayBundleForRecord(selectedRecord);
   const selectedRecordDisplayItem = selectedRecordDisplay.displayItem;
-  const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayBundle(isBusy);
+  const manualRecordConfirmDisplayTextsForState = recordWorkflowActionRuntimeDisplay.manualRecordConfirm;
   const manualRecordConfirmIntroDisplayText = manualRecordConfirmDisplayTextsForState.intro;
   const manualRecordConfirmSubmitDisplayLabel = manualRecordConfirmDisplayTextsForState.submit;
   const deleteConfirmDisplay = deleteConfirmDisplayBundle(selectedRecordDisplayItem, isBusy);

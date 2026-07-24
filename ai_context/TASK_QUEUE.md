@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2311: Move record workflow action runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `recordWorkflowActionRuntimeDisplayBundle` to `recordWorkflowCopy.ts`.
+- Moved `App.tsx` AI candidate remove confirm, preview record edit boundary, and manual record confirm display assembly behind the runtime bundle.
+- Kept remove-confirm copy, edit-boundary copy, and manual-confirm submit label behavior unchanged.
+- Updated navigation verifier coverage to require the bundled record workflow action runtime display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2310: Move AI review runtime display assembly
 
 Status: done

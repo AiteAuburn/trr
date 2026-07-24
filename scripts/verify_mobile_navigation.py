@@ -3948,6 +3948,26 @@ def main() -> int:
             "const transcriptReviewPreflightPassedDisplayText = transcriptReviewDisplay.preflightPassed;",
         )
         _assert_contains(
+            "record workflow action runtime display bundle binding",
+            content,
+            "const recordWorkflowActionRuntimeDisplay = recordWorkflowActionRuntimeDisplayBundle({",
+        )
+        _assert_contains(
+            "record workflow action runtime display busy input",
+            content,
+            "isBusy,",
+        )
+        _assert_contains(
+            "record workflow action runtime display remove mode input",
+            content,
+            "isDailyRecordRemoveConfirm,",
+        )
+        _assert_contains(
+            "record workflow action runtime display confidence input",
+            content,
+            "pendingPreviewRemoveConfidencePercent: pendingPreviewRemoveDisplayItem?.confidencePercent ?? null",
+        )
+        _assert_contains(
             "record workflow runtime checklist bundle binding",
             content,
             "const recordWorkflowRuntimeChecklistDisplay = recordWorkflowRuntimeChecklistDisplayBundle({",
@@ -8874,7 +8894,7 @@ def main() -> int:
             ("daily record section list style", "dailyRecordSectionList: {"),
             ("daily record section card style", "dailyRecordSectionCard: {"),
             ("daily record entry card style", "dailyRecordEntryCard: {"),
-            ("daily record delete confirm display helper binding", "const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayBundle("),
+            ("daily record delete confirm runtime field binding", "const aiRemoveConfirmDisplay = recordWorkflowActionRuntimeDisplay.aiRemoveConfirm;"),
             ("daily record delete confirm title binding", "const aiRemoveConfirmTitleDisplayText = aiRemoveConfirmDisplay.title;"),
             ("daily record delete submit binding", "const aiRemoveConfirmSubmitDisplayText = aiRemoveConfirmDisplay.submit;"),
             ("pending remove icon helper import", "pendingRemoveDisplayIcon,"),
@@ -9303,6 +9323,10 @@ def main() -> int:
             ("manual record confirm display texts submit binding", "submit: manualRecordConfirmSubmitLabel(isBusy)"),
             ("manual record confirm display bundle helper", "function manualRecordConfirmDisplayBundle(isBusy: boolean)"),
             ("manual record confirm display bundle delegates", "return manualRecordConfirmDisplayTexts(isBusy);"),
+            ("record workflow action runtime display bundle helper", "function recordWorkflowActionRuntimeDisplayBundle(value: {"),
+            ("record workflow action runtime display remove binding", "aiRemoveConfirm: aiRemoveConfirmDisplayBundle("),
+            ("record workflow action runtime display edit binding", "previewRecordEditBoundary: previewRecordEditBoundaryDisplayBundle()"),
+            ("record workflow action runtime display manual binding", "manualRecordConfirm: manualRecordConfirmDisplayBundle(value.isBusy)"),
             ("manual record confirm ready status helper", "function manualRecordConfirmReadyStatusMessage()"),
             ("manual record confirm return status helper", "function manualRecordConfirmReturnStatusMessage()"),
             ("manual record return status helper", "function manualRecordReturnStatusMessage(target: AppScreen)"),
@@ -11551,7 +11575,7 @@ def main() -> int:
             ("manual record create preview action press binding", "onPress={enterManualRecordConfirm}"),
             ("manual record confirm preview block binding", "<ManualRecordConfirmPreviewBlock\n              badgeLabel={auxiliaryDisplayLabels.preSaveConfirmBadge}"),
             ("manual record confirm preview icon binding", "icon={manualConfirmPreviewIcon(manualRecordConfirmDisplay)}"),
-            ("manual record confirm display helper binding", "const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayBundle(isBusy);"),
+            ("manual record confirm runtime field binding", "const manualRecordConfirmDisplayTextsForState = recordWorkflowActionRuntimeDisplay.manualRecordConfirm;"),
             ("manual record confirm intro display binding", "const manualRecordConfirmIntroDisplayText = manualRecordConfirmDisplayTextsForState.intro;"),
             ("manual record confirm submit display binding", "const manualRecordConfirmSubmitDisplayLabel = manualRecordConfirmDisplayTextsForState.submit;"),
             ("manual record confirm preview intro binding", "introText={manualRecordConfirmIntroDisplayText}"),
@@ -13569,6 +13593,12 @@ def main() -> int:
             ("direct transcript review display texts binding", "const transcriptReviewDisplay = transcriptReviewDisplayTexts();"),
             ("direct manual record confirm display texts binding", "const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayTexts(isBusy);"),
             ("direct AI remove confirm display texts binding", "const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayTexts("),
+            ("direct AI remove confirm display bundle binding", "const aiRemoveConfirmDisplay = aiRemoveConfirmDisplayBundle("),
+            ("direct AI remove confirm display bundle import", "  aiRemoveConfirmDisplayBundle,"),
+            ("direct preview record edit boundary display bundle binding", "const previewRecordEditBoundaryDisplay = previewRecordEditBoundaryDisplayBundle();"),
+            ("direct preview record edit boundary display bundle import", "  previewRecordEditBoundaryDisplayBundle,"),
+            ("direct manual record confirm display bundle binding", "const manualRecordConfirmDisplayTextsForState = manualRecordConfirmDisplayBundle(isBusy);"),
+            ("direct manual record confirm display bundle import", "  manualRecordConfirmDisplayBundle,"),
             ("direct delete confirm display texts binding", "const deleteConfirmDisplay = deleteConfirmDisplayTexts(selectedRecordDisplayItem, isBusy);"),
             ("direct settings profile choice map", "profileChoiceDisplayItems.map((profile) => {"),
             ("direct settings profile key binding", "key={profile.id}"),
