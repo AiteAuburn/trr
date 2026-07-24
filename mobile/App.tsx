@@ -635,12 +635,11 @@ import {
 } from "./historyScreenData";
 import {
   analysisCustomApplyStatusMessage,
-  analysisDataBoundaryDisplayBundle,
   analysisDetailedReportStatusMessage,
   analysisManualEntryStatusMessage,
-  analysisRangeDisplayBundle,
   analysisReturnTodayStatusMessage,
   analysisRuntimeBoundaryDisplayBundle,
+  analysisRuntimeDisplayBundle,
   analysisSummaryActionDisplayBundle,
   detailedReportManualEntryStatusMessage,
   detailedReportReturnAnalysisStatusMessage,
@@ -1277,12 +1276,14 @@ export default function App() {
   );
   const analysisGlucoseValues = buildAnalysisGlucoseValues(analysisGlucoseRecords);
   const analysisPreviewMode = recordDisplayState.isEmpty;
-  const analysisRangeDisplay = analysisRangeDisplayBundle(
-    analysisRange,
-    analysisCustomStart,
-    analysisCustomEnd,
-    analysisRanges
-  );
+  const analysisRuntimeDisplay = analysisRuntimeDisplayBundle({
+    range: analysisRange,
+    customStart: analysisCustomStart,
+    customEnd: analysisCustomEnd,
+    ranges: analysisRanges,
+    isPreviewMode: analysisPreviewMode
+  });
+  const analysisRangeDisplay = analysisRuntimeDisplay.range;
   const analysisRangeDisplayLabel = analysisRangeDisplay.label;
   const analysisCustomRangeStatusDisplayText = analysisRangeDisplay.customRangeStatus;
   const analysisChartPoints = useMemo(
@@ -1312,7 +1313,7 @@ export default function App() {
   const unsavedPreviewRecordDisplayCount = previewState.displayCount;
   const mobileRecordSyncDisplayLimit = clampNumber(mobileRecordSyncLimit, 0, maxMobileCountValue);
   const mobileReportQueryDisplayLimit = clampNumber(mobileReportQueryLimit, 0, maxMobileCountValue);
-  const analysisDataBoundaryDisplay = analysisDataBoundaryDisplayBundle(analysisPreviewMode);
+  const analysisDataBoundaryDisplay = analysisRuntimeDisplay.dataBoundary;
   const analysisNoDataStatusDisplayLabel = analysisDataBoundaryDisplay.noDataStatus;
   const analysisNoDataDisplayCopy = analysisDataBoundaryDisplay.noDataCopy;
   const analysisBoundaryDataDisplayCopy = analysisDataBoundaryDisplay.boundaryData;

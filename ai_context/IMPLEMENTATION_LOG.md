@@ -15,6 +15,38 @@
 
 ## 2026-07-20
 
+### T2304 move analysis runtime display assembly
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/analysisCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `analysisRuntimeDisplayBundle` to `analysisCopy.ts`.
+- Moved `App.tsx` Analysis range display and data-boundary display assembly behind the runtime bundle.
+- Kept analysis range labels, custom-range status, no-data copy, and backend bounded-report boundary copy unchanged.
+- Kept summary action count semantics unchanged by leaving the backend-aware summary action assembly in place.
+- Updated navigation verifier coverage to require the bundled analysis runtime display and reject old direct App-level helper calls/imports.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2303 move history runtime display assembly
 
 類型：mobile / refactor / verifier / docs

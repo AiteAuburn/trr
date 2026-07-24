@@ -155,6 +155,24 @@ export function analysisSummaryActionDisplayBundle(value: {
   };
 }
 
+export function analysisRuntimeDisplayBundle(value: {
+  range: AnalysisRange;
+  customStart: string;
+  customEnd: string;
+  ranges: ReadonlyArray<{ id: AnalysisRange; label: string }>;
+  isPreviewMode: boolean;
+}) {
+  return {
+    range: analysisRangeDisplayBundle(
+      value.range,
+      value.customStart,
+      value.customEnd,
+      value.ranges
+    ),
+    dataBoundary: analysisDataBoundaryDisplayBundle(value.isPreviewMode)
+  };
+}
+
 export function detailedReportNoteDisplayItems(queryLimit: number) {
   const boundedLimit = clampNumber(queryLimit, 0, maxMobileCountValue);
   return [

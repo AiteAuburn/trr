@@ -34,6 +34,26 @@ None.
 
 ## Done
 
+### T2304: Move analysis runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `analysisRuntimeDisplayBundle` to `analysisCopy.ts`.
+- Moved `App.tsx` Analysis range display and data-boundary display assembly behind the runtime bundle.
+- Kept analysis range labels, custom-range status, no-data copy, and backend bounded-report boundary copy unchanged.
+- Kept summary action count semantics unchanged by leaving the backend-aware summary action assembly in place.
+- Updated navigation verifier coverage to require the bundled analysis runtime display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2303: Move history runtime display assembly
 
 Status: done
