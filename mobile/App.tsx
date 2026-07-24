@@ -273,7 +273,7 @@ import {
   rankingScreenSubtitleCopy,
   rankingScreenTitleLabel,
   rankingStreakDisplayText,
-  selectedFutureModuleDisplayItem,
+  selectedFutureModuleRuntimeDisplayBundle,
   localYearlyHighlightDisplayItems,
   storeCategories,
   storeCategoryDisplayItem,
@@ -1718,10 +1718,11 @@ export default function App() {
     () => futureModuleCardDisplayItems(futureModuleCards),
     []
   );
-  const selectedFutureModuleDisplay = useMemo(
-    () => selectedFutureModuleDisplayItem(selectedFutureModule),
+  const selectedFutureModuleRuntimeDisplay = useMemo(
+    () => selectedFutureModuleRuntimeDisplayBundle({ selectedModule: selectedFutureModule }),
     [selectedFutureModule]
   );
+  const selectedFutureModuleDisplay = selectedFutureModuleRuntimeDisplay.selectedModule;
   const subscriptionStaticRuntimeDisplay = useMemo(() => subscriptionStaticRuntimeDisplayBundle(), []);
   const subscriptionStaticDisplay = subscriptionStaticRuntimeDisplay.subscription;
   const subscriptionComparisonDisplayRows = subscriptionStaticDisplay.comparisonRows;

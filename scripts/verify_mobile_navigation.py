@@ -14845,6 +14845,10 @@ def main() -> int:
             ("future module target route helper binding", "if (openFutureModuleTargetRoute(target)) {"),
             ("future module destination fallback screen opener binding", "if (openFutureModuleTargetRoute(target)) {\n      return;\n    }\n    openScreen(target);"),
             ("future module display card helper binding", "const futureModuleDisplayCards = useMemo(\n    () => futureModuleCardDisplayItems(futureModuleCards),"),
+            ("selected future module runtime display import", "selectedFutureModuleRuntimeDisplayBundle,"),
+            ("selected future module runtime display binding", "const selectedFutureModuleRuntimeDisplay = useMemo("),
+            ("selected future module runtime display invocation", "() => selectedFutureModuleRuntimeDisplayBundle({ selectedModule: selectedFutureModule }),"),
+            ("selected future module runtime display field binding", "const selectedFutureModuleDisplay = selectedFutureModuleRuntimeDisplay.selectedModule;"),
             ("future preview status display helper binding", "const futurePreviewStatusDisplay = futurePreviewStatusDisplayBundle({"),
             ("future preview status leaderboard input", "leaderboardOptIn: communityPublicSettings?.leaderboard_opt_in ?? false"),
             ("future preview status future action binding", "const futureModuleActionStatusDisplayText = futurePreviewStatusDisplay.futureModuleAction;"),
@@ -15398,6 +15402,11 @@ def main() -> int:
             content,
             "futureModuleDisplayCards.map((item) => (",
         )
+        for label, marker in (
+            ("direct selected future module display import", "selectedFutureModuleDisplayItem,"),
+            ("direct selected future module display invocation", "() => selectedFutureModuleDisplayItem(selectedFutureModule),"),
+        ):
+            _assert_not_contains(label, content, marker)
         future_module_detail_requirement_block = _match_block(
             content,
             r"selectedFutureModuleDisplay\.requirements\.map\(\(requirement\) => \(([\s\S]*?<HighlightBulletRow[^>]*/>)",
@@ -15544,6 +15553,8 @@ def main() -> int:
             ("future module display card list helper", "export function futureModuleCardDisplayItems(values: FutureModuleCard[])"),
             ("future module display card list map", "return values.map(futureModuleCardDisplayItem);"),
             ("future module selected display helper", "export function selectedFutureModuleDisplayItem(value: FutureModuleCard | null)"),
+            ("selected future module runtime display helper", "export function selectedFutureModuleRuntimeDisplayBundle(value: { selectedModule: FutureModuleCard | null })"),
+            ("selected future module runtime display field", "selectedModule: selectedFutureModuleDisplayItem(value.selectedModule)"),
             ("future module card accessibility item", "accessibilityLabel: boundDisplayText(`查看${futureModuleText(value.title, \"未來模組\", maxDisplayTextLength)}整合狀態`, maxDisplayTextLength)"),
             ("future module requirements display helper", "function futureModuleRequirements(value: string[] | undefined)"),
             ("future module requirement display item type", 'export type FutureModuleRequirementDisplayItem = ReturnType<typeof futureModuleCardDisplayItem>["requirements"][number];'),

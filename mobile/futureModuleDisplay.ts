@@ -774,6 +774,12 @@ export function selectedFutureModuleDisplayItem(value: FutureModuleCard | null) 
   };
 }
 
+export function selectedFutureModuleRuntimeDisplayBundle(value: { selectedModule: FutureModuleCard | null }) {
+  return {
+    selectedModule: selectedFutureModuleDisplayItem(value.selectedModule)
+  };
+}
+
 export type FutureModuleRequirementDisplayItem = ReturnType<typeof futureModuleCardDisplayItem>["requirements"][number];
 
 export function futureModuleRequirementKey(requirement: FutureModuleRequirementDisplayItem) {
