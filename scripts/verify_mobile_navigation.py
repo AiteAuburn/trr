@@ -8558,6 +8558,8 @@ def main() -> int:
             ("today record summary helper", "function todayRecordSummaryText(recordCount: number)"),
             ("today record summary display bundle helper", "function todayRecordSummaryDisplayBundle(recordCount: number)"),
             ("today record summary display bundle binding", "summary: todayRecordSummaryText(recordCount)"),
+            ("first version overview runtime display bundle helper", "function firstVersionOverviewRuntimeDisplayBundle(value: { todayRecordCount: number })"),
+            ("first version overview runtime today summary binding", "todayRecordSummary: todayRecordSummaryDisplayBundle(value.todayRecordCount)"),
             ("today record summary empty copy", "今日尚未載入紀錄"),
             ("today record summary count copy", "今日已記錄 ${clampNumber(recordCount, 0, maxMobileCountValue)} 筆"),
             ("AI save failure back AI review status helper", "function aiSaveFailureBackAiReviewStatusMessage()"),
@@ -8587,9 +8589,19 @@ def main() -> int:
         ):
             _assert_contains(label, first_version_flow_copy_content, marker)
         _assert_contains(
-            "today record summary display bundle App binding",
+            "first version overview runtime display bundle App binding",
             content,
-            "const todayRecordSummaryDisplay = todayRecordSummaryDisplayBundle(todayRecords.length);",
+            "const firstVersionOverviewRuntimeDisplay = firstVersionOverviewRuntimeDisplayBundle({",
+        )
+        _assert_contains(
+            "first version overview runtime today record count input",
+            content,
+            "todayRecordCount: todayRecords.length",
+        )
+        _assert_contains(
+            "today record summary runtime field binding",
+            content,
+            "const todayRecordSummaryDisplay = firstVersionOverviewRuntimeDisplay.todayRecordSummary;",
         )
         _assert_contains(
             "today record summary display text bundle binding",
@@ -8600,6 +8612,16 @@ def main() -> int:
             "direct today record summary text binding",
             content,
             "const todayRecordSummaryDisplayText = todayRecordSummaryText(todayRecords.length);",
+        )
+        _assert_not_contains(
+            "direct today record summary display bundle binding",
+            content,
+            "const todayRecordSummaryDisplay = todayRecordSummaryDisplayBundle(todayRecords.length);",
+        )
+        _assert_not_contains(
+            "direct today record summary display bundle import",
+            content,
+            "  todayRecordSummaryDisplayBundle,",
         )
         _assert_contains(
             "record quick-entry rail render",

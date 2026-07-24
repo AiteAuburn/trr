@@ -44,6 +44,12 @@ export function todayRecordSummaryDisplayBundle(recordCount: number) {
   };
 }
 
+export function firstVersionOverviewRuntimeDisplayBundle(value: { todayRecordCount: number }) {
+  return {
+    todayRecordSummary: todayRecordSummaryDisplayBundle(value.todayRecordCount)
+  };
+}
+
 export function coreFlowSectionLabels() {
   return {
     recordSyncStatus: boundDisplayText("紀錄同步狀態", maxDisplayTextLength),

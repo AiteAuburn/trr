@@ -587,6 +587,7 @@ import {
   busyActionStatusMessage,
   coreAccessibilityDisplayBundle,
   coreFlowSectionLabels,
+  firstVersionOverviewRuntimeDisplayBundle,
   previewActionClearStatusMessage,
   quickEntryModeDisplayItems,
   quickEntryTextModeStatusMessage,
@@ -604,7 +605,6 @@ import {
   todayManualEntryStatusMessage,
   todayRecordDetailStatusMessage,
   todayRecordEntryStatusMessage,
-  todayRecordSummaryDisplayBundle,
   transcriptReviewManualEntryStatusMessage,
   type QuickEntryMode
 } from "./firstVersionFlowCopy";
@@ -1954,7 +1954,10 @@ export default function App() {
   const recordStatusOverviewRuntimeDisplay = recordStatusOverviewRuntimeDisplayBundle({ recordsStatus });
   const recordsStatusDisplay = recordStatusOverviewRuntimeDisplay.recordsStatus;
   const recordsStatusDisplayText = recordsStatusDisplay.records;
-  const todayRecordSummaryDisplay = todayRecordSummaryDisplayBundle(todayRecords.length);
+  const firstVersionOverviewRuntimeDisplay = firstVersionOverviewRuntimeDisplayBundle({
+    todayRecordCount: todayRecords.length
+  });
+  const todayRecordSummaryDisplay = firstVersionOverviewRuntimeDisplay.todayRecordSummary;
   const todayRecordSummaryDisplayText = todayRecordSummaryDisplay.summary;
   const historyRecordDisplayCount = recordDisplayState.displayCount;
   const rankingStreakDisplayDays = clampNumber(currentRecordStreakDays(records), 0, maxMobileCountValue);

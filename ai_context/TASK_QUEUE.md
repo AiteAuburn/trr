@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2316: Move first-version overview runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `firstVersionOverviewRuntimeDisplayBundle` to `firstVersionFlowCopy.ts`.
+- Moved `App.tsx` today record summary display assembly behind the runtime bundle.
+- Kept empty/count summary copy and record-count behavior unchanged.
+- Updated navigation verifier coverage to require the bundled first-version overview runtime display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2315: Move record status overview runtime display assembly
 
 Status: done
