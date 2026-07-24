@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2325: Move subscription static runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `subscriptionStaticRuntimeDisplayBundle` to `subscriptionDisplayBundle.ts`.
+- Moved `App.tsx` subscription static display assembly behind the runtime bundle.
+- Kept comparison rows, readiness checklist items, management rows, management readiness checklist items, and membership feature rows unchanged.
+- Updated navigation verifier coverage to require the bundled subscription static runtime display and reject the old direct App-level static bundle binding.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2324: Move settings runtime display assembly
 
 Status: done

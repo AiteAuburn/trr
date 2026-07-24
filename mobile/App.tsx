@@ -723,7 +723,7 @@ import { settingsRuntimeDisplayBundle } from "./settingsStaticDisplayBundle";
 import {
   subscriptionActionControlDisplayBundle,
   subscriptionRuntimeDisplayBundle,
-  subscriptionStaticDisplayBundle
+  subscriptionStaticRuntimeDisplayBundle
 } from "./subscriptionDisplayBundle";
 import {
   boundVoiceQuota,
@@ -1717,7 +1717,8 @@ export default function App() {
     () => selectedFutureModuleDisplayItem(selectedFutureModule),
     [selectedFutureModule]
   );
-  const subscriptionStaticDisplay = useMemo(() => subscriptionStaticDisplayBundle(), []);
+  const subscriptionStaticRuntimeDisplay = useMemo(() => subscriptionStaticRuntimeDisplayBundle(), []);
+  const subscriptionStaticDisplay = subscriptionStaticRuntimeDisplay.subscription;
   const subscriptionComparisonDisplayRows = subscriptionStaticDisplay.comparisonRows;
   const subscriptionReadinessChecklistItems = subscriptionStaticDisplay.readinessChecklistItems;
   const subscriptionManagementDisplayRows = subscriptionStaticDisplay.managementRows;

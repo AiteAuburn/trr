@@ -28,6 +28,12 @@ export function subscriptionStaticDisplayBundle() {
   };
 }
 
+export function subscriptionStaticRuntimeDisplayBundle() {
+  return {
+    subscription: subscriptionStaticDisplayBundle()
+  };
+}
+
 export function subscriptionRuntimeDisplayBundle(value: {
   voiceQuota: VoiceQuotaTransformSource | null;
   quotaTrialDaysLeft: number | null;

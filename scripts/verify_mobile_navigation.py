@@ -4288,14 +4288,19 @@ def main() -> int:
             ("subscription static display bundle management rows", "managementRows: subscriptionManagementDisplayRows()"),
             ("subscription static display bundle management readiness", "managementReadinessChecklistItems: subscriptionManagementReadinessChecklistDisplayItems()"),
             ("subscription static display bundle membership rows", "membershipFeatureRows: membershipFeatureDisplayRows()"),
+            ("subscription static runtime display bundle helper", "function subscriptionStaticRuntimeDisplayBundle()"),
+            ("subscription static runtime display bundle binding", "subscription: subscriptionStaticDisplayBundle()"),
         ):
             _assert_contains(label, subscription_display_bundle_content, marker)
         for label, marker in (
-            ("subscription static display bundle import", "subscriptionStaticDisplayBundle"),
-            ("subscription static display bundle binding", "const subscriptionStaticDisplay = useMemo(() => subscriptionStaticDisplayBundle(), []);"),
+            ("subscription static runtime display bundle import", "subscriptionStaticRuntimeDisplayBundle"),
+            ("subscription static runtime display bundle binding", "const subscriptionStaticRuntimeDisplay = useMemo(() => subscriptionStaticRuntimeDisplayBundle(), []);"),
+            ("subscription static runtime display field binding", "const subscriptionStaticDisplay = subscriptionStaticRuntimeDisplay.subscription;"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
+            ("direct subscription static display bundle import", "  subscriptionStaticDisplayBundle"),
+            ("direct subscription static display bundle binding", "const subscriptionStaticDisplay = useMemo(() => subscriptionStaticDisplayBundle(), []);"),
             ("direct subscription comparison rows binding", "const subscriptionComparisonDisplayRows = useMemo(\n    () => buildSubscriptionComparisonDisplayRows(),"),
             ("direct subscription readiness binding", "const subscriptionReadinessChecklistItems = subscriptionReadinessChecklistDisplayItems();"),
             ("direct subscription management rows binding", "const subscriptionManagementDisplayRows = useMemo(\n    () => buildSubscriptionManagementDisplayRows(),"),
