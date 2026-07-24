@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2326: Move achievement runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `achievementRuntimeDisplayBundle` to `futureModuleDisplay.ts`.
+- Moved `App.tsx` achievement save-success and category-section display assembly behind the runtime bundle.
+- Kept achievement display items, newly unlocked limiting, category sections, badge summary, and screen copy behavior unchanged.
+- Updated navigation verifier coverage to require the bundled achievement runtime display and reject old direct App-level save/category bundle calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2325: Move subscription static runtime display assembly
 
 Status: done

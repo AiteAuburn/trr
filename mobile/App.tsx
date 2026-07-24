@@ -172,11 +172,10 @@ import {
 } from "./navigationConfig";
 import {
   achievementBadgeSummary,
-  achievementCategoryDisplayBundle,
   achievementDisplayItems as buildAchievementDisplayItems,
   achievementItemsFromApi,
   achievementNewlyUnlockedItemsForSync,
-  achievementSaveSuccessDisplayBundle,
+  achievementRuntimeDisplayBundle,
   achievementScreenDisplayBundle,
   achievementSyncStatusMessages,
   achievementUnlocksFromApi,
@@ -1485,12 +1484,16 @@ export default function App() {
     () => limitedAchievementDisplayItems(achievementNewlyUnlockedItems),
     [achievementNewlyUnlockedItems]
   );
-  const achievementSaveSuccessDisplay = achievementSaveSuccessDisplayBundle(achievementNewlyUnlockedDisplayItems);
-  const saveSuccessNewlyUnlockedDisplayItems = achievementSaveSuccessDisplay.newlyUnlockedItems;
-  const achievementCategoryDisplay = useMemo(
-    () => achievementCategoryDisplayBundle(achievementDisplayItems),
-    [achievementDisplayItems]
+  const achievementRuntimeDisplay = useMemo(
+    () =>
+      achievementRuntimeDisplayBundle({
+        displayItems: achievementDisplayItems,
+        newlyUnlockedDisplayItems: achievementNewlyUnlockedDisplayItems
+      }),
+    [achievementDisplayItems, achievementNewlyUnlockedDisplayItems]
   );
+  const saveSuccessNewlyUnlockedDisplayItems = achievementRuntimeDisplay.saveSuccess.newlyUnlockedItems;
+  const achievementCategoryDisplay = achievementRuntimeDisplay.categories;
   const achievementCategoryDisplaySections = achievementCategoryDisplay.categorySections;
   const achievementBadgeDisplaySummary = achievementBadgeSummary(achievementDisplayItems);
   const unlockedAchievementDisplayCount = clampNumber(
