@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2307: Move record status runtime checklist display assembly
+
+Status: done
+
+Completed:
+
+- Added `recordStatusRuntimeChecklistDisplayBundle` to `recordStatusCopy.ts`.
+- Moved `App.tsx` record status static and success checklist display assembly behind the runtime bundle.
+- Kept delete-confirm, record-update, delete-success, and update-success checklist copy unchanged.
+- Updated navigation verifier coverage to require the bundled record status runtime checklist display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2306: Move daily record runtime display assembly
 
 Status: done

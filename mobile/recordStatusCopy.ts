@@ -312,6 +312,13 @@ export function recordStatusSuccessChecklistDisplayBundle(recordSyncLimit: numbe
   };
 }
 
+export function recordStatusRuntimeChecklistDisplayBundle(recordSyncLimit: number) {
+  return {
+    static: recordStatusStaticChecklistDisplayBundle(),
+    success: recordStatusSuccessChecklistDisplayBundle(recordSyncLimit)
+  };
+}
+
 export function manualRecordCreateUnavailableStatusMessage(message: string) {
   return boundUiMessage(`${message || "backend 尚未 ready"}；目前不會送出手動紀錄建立請求。`);
 }

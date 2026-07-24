@@ -15,6 +15,37 @@
 
 ## 2026-07-20
 
+### T2307 move record status runtime checklist display assembly
+
+類型：mobile / refactor / verifier / docs
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/recordStatusCopy.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Added `recordStatusRuntimeChecklistDisplayBundle` to `recordStatusCopy.ts`.
+- Moved `App.tsx` record status static and success checklist display assembly behind the runtime bundle.
+- Kept delete-confirm, record-update, delete-success, and update-success checklist copy unchanged.
+- Updated navigation verifier coverage to require the bundled record status runtime checklist display and reject old direct App-level helper calls/imports.
+
+驗證：
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
+後續：
+
+- Continue moving one App-level display/copy assembly cluster at a time behind focused helper boundaries.
+
 ### T2306 move daily record runtime display assembly
 
 類型：mobile / refactor / verifier / docs

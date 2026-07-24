@@ -484,8 +484,7 @@ import {
   recordSyncPageSuccessStatusMessage,
   recordSyncSuccessStatusMessage,
   recordSyncUnavailableStatusMessage,
-  recordStatusSuccessChecklistDisplayBundle,
-  recordStatusStaticChecklistDisplayBundle,
+  recordStatusRuntimeChecklistDisplayBundle,
   recordsStatusDisplayBundle,
   recordUpdateFailureStatusMessage,
   recordUpdateProgressStatusMessage,
@@ -1419,8 +1418,9 @@ export default function App() {
   const transcriptReviewCostBoundaryChecklistItems =
     recordWorkflowRuntimeChecklistDisplay.transcriptReviewCostBoundaryItems;
   const saveSuccessBoundaryChecklistItems = recordWorkflowRuntimeChecklistDisplay.saveSuccessBoundaryItems;
-  const recordStatusSuccessChecklistDisplay =
-    recordStatusSuccessChecklistDisplayBundle(mobileRecordSyncDisplayLimit);
+  const recordStatusRuntimeChecklistDisplay =
+    recordStatusRuntimeChecklistDisplayBundle(mobileRecordSyncDisplayLimit);
+  const recordStatusSuccessChecklistDisplay = recordStatusRuntimeChecklistDisplay.success;
   const deleteSuccessBoundaryChecklistItems = recordStatusSuccessChecklistDisplay.deleteSuccessItems;
   const updateSuccessBoundaryChecklistItems = recordStatusSuccessChecklistDisplay.updateSuccessItems;
   const manualSubmitChecklistItems = recordWorkflowStaticChecklistDisplay.manualSubmitItems;
@@ -1435,7 +1435,7 @@ export default function App() {
     hasLoadedRecords: recordDisplayState.hasRecords
   });
   const historyBoundaryChecklistItems = historyBoundaryDisplay.boundaryChecklistItems;
-  const recordStatusStaticChecklistDisplay = recordStatusStaticChecklistDisplayBundle();
+  const recordStatusStaticChecklistDisplay = recordStatusRuntimeChecklistDisplay.static;
   const deleteConfirmChecklistItems = recordStatusStaticChecklistDisplay.deleteConfirmItems;
   const recordUpdateChecklistItems = recordStatusStaticChecklistDisplay.recordUpdateItems;
   const successDestinationDisplay = successDestinationDisplayBundle({
