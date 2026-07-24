@@ -374,3 +374,22 @@ export function recordingResultDisplayBundle(elapsedSeconds: number) {
     simulatedResult: recordingSimulatedResultCopy(elapsedSeconds)
   };
 }
+
+export function recordingRuntimeDisplayBundle(value: {
+  currentExampleIndex: number;
+  elapsedSeconds: number;
+  hasWhisperModel: boolean;
+  isRecording: boolean;
+  limitSeconds: number;
+}) {
+  return {
+    home: homeRecordingDisplayBundle({
+      currentExampleIndex: value.currentExampleIndex,
+      elapsedSeconds: value.elapsedSeconds,
+      hasWhisperModel: value.hasWhisperModel,
+      isRecording: value.isRecording
+    }),
+    boundary: recordingBoundaryDisplayBundle(value.limitSeconds),
+    result: recordingResultDisplayBundle(value.elapsedSeconds)
+  };
+}

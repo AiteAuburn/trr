@@ -8096,12 +8096,14 @@ def main() -> int:
             ("guided home example pagination", "styles.homeExamplePagination"),
             ("guided home example active pagination dot", "styles.homeExampleDotActive"),
             ("minimal home primary hint", "按住開始說話記錄"),
-            ("minimal home recording display bundle import", "homeRecordingDisplayBundle,"),
-            ("minimal home recording display bundle binding", "const homeRecordingDisplay = homeRecordingDisplayBundle({"),
-            ("minimal home recording display bundle index input", "currentExampleIndex: homeExampleIndex,"),
-            ("minimal home recording display bundle seconds input", "elapsedSeconds: recordingElapsedSeconds,"),
-            ("minimal home recording display bundle whisper input", "hasWhisperModel: Boolean(whisperModelPath.trim()),"),
-            ("minimal home recording display bundle recording input", "isRecording: isRecordingPreview"),
+            ("recording runtime display bundle import", "recordingRuntimeDisplayBundle,"),
+            ("recording runtime display bundle binding", "const recordingRuntimeDisplay = recordingRuntimeDisplayBundle({"),
+            ("recording runtime display bundle index input", "currentExampleIndex: homeExampleIndex,"),
+            ("recording runtime display bundle seconds input", "elapsedSeconds: recordingElapsedSeconds,"),
+            ("recording runtime display bundle whisper input", "hasWhisperModel: Boolean(whisperModelPath.trim()),"),
+            ("recording runtime display bundle recording input", "isRecording: isRecordingPreview,"),
+            ("recording runtime display bundle limit input", "limitSeconds: recordingEffectiveLimitDisplaySeconds"),
+            ("minimal home recording runtime field binding", "const homeRecordingDisplay = recordingRuntimeDisplay.home;"),
             ("minimal home recording preview display value", "const recordingPreviewDisplayText = homeRecordingDisplay.previewText;"),
             ("minimal home recording seconds display value", "const homeRecordingSecondaryHintDisplayText = homeRecordingDisplay.secondaryHint;"),
             ("minimal home recording model status display value", "const homeRecordingModelStatusDisplayText = homeRecordingDisplay.modelStatus;"),
@@ -8115,7 +8117,7 @@ def main() -> int:
             ("native audio recording ref", "const audioRecordingRef = useRef<Audio.Recording | null>(null);"),
             ("native recording start guard", "const recordingStartInFlight = useRef(false);"),
             ("native recording stop guard", "const recordingStopInFlight = useRef(false);"),
-            ("recording boundary display bundle binding", "const recordingBoundaryDisplay = recordingBoundaryDisplayBundle(recordingEffectiveLimitDisplaySeconds);"),
+            ("recording boundary runtime field binding", "const recordingBoundaryDisplay = recordingRuntimeDisplay.boundary;"),
             ("recording limit display bundle value", "const recordingLimitDisplayText = recordingBoundaryDisplay.limit;"),
             ("recording limit rendered in record page", "<Text style={styles.evidence}>{recordingLimitDisplayText}</Text>"),
             ("recording interval limit clamp", "setRecordingElapsedSeconds(clampNumber(nextElapsedSeconds, 0, limitSeconds));"),
@@ -8393,14 +8395,22 @@ def main() -> int:
         ):
             _assert_contains(label, recording_copy_content, marker)
         for label, marker in (
-            ("recording result display bundle import", "recordingResultDisplayBundle,"),
-            ("recording result display bundle binding", "const recordingResultDisplay = recordingResultDisplayBundle(recordingElapsedSeconds);"),
+            ("recording result runtime field binding", "const recordingResultDisplay = recordingRuntimeDisplay.result;"),
             ("recording result simulated display binding", "const recordingSimulatedResultDisplayText = recordingResultDisplay.simulatedResult;"),
             ("recording result elapsed display binding", "const recordingElapsedSecondsDisplayText = recordingResultDisplay.elapsed;"),
             ("recording result body display binding", "const recordingResultBodyDisplayText = recordingResultDisplay.body;"),
             ("recording result primary action display binding", "const recordingResultPrimaryActionDisplayText = recordingResultDisplay.primaryAction;"),
         ):
             _assert_contains(label, content, marker)
+        for label, marker in (
+            ("direct home recording display bundle binding", "const homeRecordingDisplay = homeRecordingDisplayBundle({"),
+            ("direct home recording display bundle import", "  homeRecordingDisplayBundle,"),
+            ("direct recording boundary display bundle binding", "const recordingBoundaryDisplay = recordingBoundaryDisplayBundle(recordingEffectiveLimitDisplaySeconds);"),
+            ("direct recording boundary display bundle import", "  recordingBoundaryDisplayBundle,"),
+            ("direct recording result display bundle binding", "const recordingResultDisplay = recordingResultDisplayBundle(recordingElapsedSeconds);"),
+            ("direct recording result display bundle import", "  recordingResultDisplayBundle,"),
+        ):
+            _assert_not_contains(label, content, marker)
         for label, marker in (
             ("transcript review intro copy helper", "function transcriptReviewIntroCopy()"),
             ("transcript review pre-parse guidance helper", "function transcriptReviewPreParseGuidanceCopy()"),
@@ -9868,6 +9878,10 @@ def main() -> int:
             ("recording boundary display bundle limit", "limit: recordingLimitCopy(limitSeconds)"),
             ("recording boundary display bundle home boundary", "homeBoundary: homeRecordingPreviewBoundaryCopy()"),
             ("recording boundary display bundle record boundary", "recordPageBoundary: recordPageRecordingPreviewBoundaryCopy()"),
+            ("recording runtime display bundle helper", "function recordingRuntimeDisplayBundle(value: {"),
+            ("recording runtime display bundle home binding", "home: homeRecordingDisplayBundle({"),
+            ("recording runtime display bundle boundary binding", "boundary: recordingBoundaryDisplayBundle(value.limitSeconds)"),
+            ("recording runtime display bundle result binding", "result: recordingResultDisplayBundle(value.elapsedSeconds)"),
             ("minimal home recording display bundle preview", "previewText: value.isRecording ? recordingActivePreviewCopy(value.elapsedSeconds) : recordingIdlePreviewCopy()"),
             ("minimal home recording display bundle hint", "secondaryHint: homeRecordingSecondaryHint(value.isRecording, value.elapsedSeconds)"),
             ("minimal home secondary hint", "放開即結束"),

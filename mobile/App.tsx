@@ -383,14 +383,12 @@ import {
   homeSpeechExampleLabel,
   homeSpeechExamplePaginationAccessibilityLabel,
   homeSpeechExampleText,
-  homeRecordingDisplayBundle,
-  recordingBoundaryDisplayBundle,
   recordingFinishedStatusMessage,
   recordingLimitReachedStatusMessage,
   recordingPermissionDeniedStatusMessage,
   recordingQuotaExhaustedStatusMessage,
   recordingResetStatusMessage,
-  recordingResultDisplayBundle,
+  recordingRuntimeDisplayBundle,
   recordingStartedStatusMessage,
   recordingStartFailureStatusMessage,
   recordingStopFailureStatusMessage,
@@ -1601,22 +1599,24 @@ export default function App() {
   const quickRecordIntroDisplay = quickRecordIntroDisplayBundle();
   const quickRecordIntroDisplayText = quickRecordIntroDisplay.intro;
   const quickEntryModeDisplayItemsForRender = quickEntryModeDisplayItems();
-  const homeRecordingDisplay = homeRecordingDisplayBundle({
+  const recordingEffectiveLimitDisplaySeconds = recordingEffectiveLimitSeconds(voiceQuota);
+  const recordingRuntimeDisplay = recordingRuntimeDisplayBundle({
     currentExampleIndex: homeExampleIndex,
     elapsedSeconds: recordingElapsedSeconds,
     hasWhisperModel: Boolean(whisperModelPath.trim()),
-    isRecording: isRecordingPreview
+    isRecording: isRecordingPreview,
+    limitSeconds: recordingEffectiveLimitDisplaySeconds
   });
+  const homeRecordingDisplay = recordingRuntimeDisplay.home;
   const recordingPreviewDisplayText = homeRecordingDisplay.previewText;
-  const recordingEffectiveLimitDisplaySeconds = recordingEffectiveLimitSeconds(voiceQuota);
-  const recordingBoundaryDisplay = recordingBoundaryDisplayBundle(recordingEffectiveLimitDisplaySeconds);
+  const recordingBoundaryDisplay = recordingRuntimeDisplay.boundary;
   const recordingLimitDisplayText = recordingBoundaryDisplay.limit;
   const homeRecordingSecondaryHintDisplayText = homeRecordingDisplay.secondaryHint;
   const homeRecordingModelStatusDisplayText = homeRecordingDisplay.modelStatus;
   const homeCurrentSpeechExample = homeRecordingDisplay.currentExample;
   const homeRecordingPreviewBoundaryDisplayText = recordingBoundaryDisplay.homeBoundary;
   const recordPageRecordingPreviewBoundaryDisplayText = recordingBoundaryDisplay.recordPageBoundary;
-  const recordingResultDisplay = recordingResultDisplayBundle(recordingElapsedSeconds);
+  const recordingResultDisplay = recordingRuntimeDisplay.result;
   const recordingSimulatedResultDisplayText = recordingResultDisplay.simulatedResult;
   const recordingElapsedSecondsDisplayText = recordingResultDisplay.elapsed;
   const recordingResultBodyDisplayText = recordingResultDisplay.body;

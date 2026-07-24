@@ -34,6 +34,25 @@ None.
 
 ## Done
 
+### T2309: Move recording runtime display assembly
+
+Status: done
+
+Completed:
+
+- Added `recordingRuntimeDisplayBundle` to `recordingCopy.ts`.
+- Moved `App.tsx` home recording, recording boundary, and recording result display assembly behind the runtime bundle.
+- Kept recording preview text, secondary elapsed hint, model status, limit copy, and result action copy unchanged.
+- Updated navigation verifier coverage to require the bundled recording runtime display and reject old direct App-level helper calls/imports.
+
+Validation:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+
 ### T2308: Move success destination runtime display assembly
 
 Status: done
