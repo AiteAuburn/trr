@@ -30,7 +30,27 @@ Current design baseline:
 
 ## Active
 
-None.
+### T2331: Move future module detail runtime display assembly
+
+Status: active
+
+Goal:
+
+- Add a focused `futureModuleDetailRuntimeDisplayBundle` boundary in `mobile/futureModuleDisplay.ts`.
+- Move the `App.tsx` future-module detail boundary and implementation-order display assembly behind that runtime bundle.
+- Preserve all visible copy, navigation, readiness/safety behavior, backend boundaries, and first-version menu scope.
+- Update `scripts/verify_mobile_navigation.py` to require the runtime bundle binding and reject the old direct `futureModuleDetailDisplayBundle` import/invocation in `App.tsx`.
+- Record the completed slice in this queue and `ai_context/IMPLEMENTATION_LOG.md`.
+
+Completion evidence:
+
+- `cd mobile && rtk npm run typecheck`
+- `cd mobile && rtk npm run verify:navigation`
+- `cd mobile && rtk npm run quality`
+- `rtk python3 -m py_compile scripts/verify_mobile_navigation.py scripts/verify_mobile_ui_spec_coverage.py scripts/verify_mobile_visual_smoke_routes.py`
+- `rtk git diff --check`
+- Intended files only are staged; `mobile/.expo/devices.json` remains untouched.
+- The completed slice is committed and pushed with `main...origin/main = 0 0`.
 
 ## Done
 

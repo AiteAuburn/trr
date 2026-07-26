@@ -13,6 +13,36 @@
 後續:
 ```
 
+## 2026-07-26
+
+### T2331 define future module detail runtime display assembly
+
+類型：planning / mobile / refactor / verifier / docs
+
+檔案：
+
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Inspected the live branch, recent refactor commits, refactor roadmap, current `App.tsx` display assembly, and navigation verifier coverage.
+- Selected the direct `futureModuleDetailDisplayBundle()` binding as the next narrow behavior-preserving runtime-display slice after T2330.
+- Defined the implementation boundary, preserved-behavior constraints, verifier requirements, validation chain, clean staging rule, and commit/push completion evidence as active task T2331.
+- Left the unrelated `mobile/.expo/devices.json` device-history change untouched.
+
+驗證：
+
+- `main` and `origin/main` were aligned at `8937e88` before this planning update.
+- `Active` was empty before T2331 was selected.
+- The live `App.tsx` still imports and directly invokes `futureModuleDetailDisplayBundle()`.
+- The navigation verifier currently asserts that direct binding, so it must be migrated with the implementation slice.
+- `rtk git diff --check`
+
+後續：
+
+- Implement T2331 exactly as scoped, run the full mobile validation chain, then commit and push the isolated slice.
+
 ## 2026-07-20
 
 ### T2330 move future module cards runtime display assembly
