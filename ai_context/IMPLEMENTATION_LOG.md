@@ -15,6 +15,48 @@
 
 ## 2026-07-26
 
+### T2332 require automatic CI release gates
+
+類型：production-hardening / CI / security / test / docs
+
+檔案：
+
+- `.github/workflows/ci.yml`
+- `scripts/verify_deployment_config.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+問題與風險：
+
+- The sole CI workflow only used `workflow_dispatch`, so pushes and pull requests could bypass the repository's test, migration, build, and security jobs.
+- The workflow granted `security-events: write` globally even though no current step uploads SARIF.
+- Severity is high because release inputs were not automatically gated and the workflow token exceeded least privilege.
+
+變更：
+
+- Added `push` and `pull_request` triggers for `main` while retaining manual dispatch.
+- Reduced workflow permissions to read-only repository contents.
+- Extended the deployment verifier to require the automatic triggers, manual fallback, and least-privilege permission posture.
+- Deferred the previously selected T2331 display-only refactor behind this production-readiness fix.
+
+相容性：
+
+- No public API, data format, database schema, runtime configuration, UI workflow, or expected output changes.
+- CI usage increases because changes targeting `main` now run the existing quality and security jobs automatically.
+
+驗證：
+
+- `rtk python3 scripts/verify_deployment_config.py` passed.
+- `rtk python3 -m py_compile scripts/verify_deployment_config.py` passed.
+- `.github/workflows/ci.yml` parsed successfully and exposed the `quality` / `security` jobs.
+- A temporary negative fixture with the pull-request trigger removed was rejected by the verifier.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue the full production-readiness audit after this isolated CI gate is verified and pushed.
+
 ### T2331 define future module detail runtime display assembly
 
 類型：planning / mobile / refactor / verifier / docs

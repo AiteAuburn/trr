@@ -12,6 +12,7 @@ LOCAL_ENV = REPO_ROOT / ".env.example"
 MINIMAL_ENV = REPO_ROOT / "infra" / "minimal" / ".env.example"
 K8S_CONFIGMAP = REPO_ROOT / "infra" / "k8s" / "configmap.yaml"
 K8S_SECRET_EXAMPLE = REPO_ROOT / "infra" / "k8s" / "secret.example.yaml"
+CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 
 
 def _parse_env_file(path: Path) -> dict[str, str]:
@@ -84,6 +85,23 @@ def _require_not_contains(
         errors.append(f"{label}: {key} must not contain {forbidden!r}")
 
 
+def _verify_ci_workflow(errors: list[str]) -> None:
+    workflow = CI_WORKFLOW.read_text(encoding="utf-8")
+    required_markers = (
+        "\n  push:\n    branches:\n      - main\n",
+        "\n  pull_request:\n    branches:\n      - main\n",
+        "\n  workflow_dispatch:\n",
+        "\npermissions:\n  contents: read\n",
+    )
+    for marker in required_markers:
+        if marker not in workflow:
+            errors.append(f".github/workflows/ci.yml: missing required CI guard {marker.strip()!r}")
+    if "security-events: write" in workflow:
+        errors.append(
+            ".github/workflows/ci.yml: security-events write permission is unused and must remain disabled"
+        )
+
+
 def main() -> int:
     errors: list[str] = []
     local_env = _parse_env_file(LOCAL_ENV)
@@ -146,6 +164,8 @@ def main() -> int:
         errors.append("infra/k8s/secret.example.yaml should include AUTH_JWT_SECRET")
     if "app:app@db" in k8s_secret:
         errors.append("infra/k8s/secret.example.yaml must not copy local Compose DB credentials")
+
+    _verify_ci_workflow(errors)
 
     if errors:
         for error in errors:

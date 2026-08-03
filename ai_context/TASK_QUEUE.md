@@ -30,9 +30,22 @@ Current design baseline:
 
 ## Active
 
-### T2331: Move future module detail runtime display assembly
+### T2333: Complete production-readiness review and safe hardening
 
 Status: active
+
+Goal:
+
+- Audit the complete backend, web, mobile, deployment, configuration, migration, security, observability, performance, and test surfaces against the production-readiness brief.
+- Implement confirmed, high-confidence improvements as isolated changes with regression coverage.
+- Keep uncertain architectural work as explicit recommendations rather than speculative rewrites.
+- Produce the requested severity-ranked findings, change summary, compatibility notes, remaining risks, operational guidance, exact validation evidence, release checklist, and final readiness status.
+
+## Next Up
+
+### T2331: Move future module detail runtime display assembly
+
+Status: queued
 
 Goal:
 
@@ -53,6 +66,32 @@ Completion evidence:
 - The completed slice is committed and pushed with `main...origin/main = 0 0`.
 
 ## Done
+
+### T2332: Require automatic CI release gates
+
+Status: done
+
+Problem / impact:
+
+- CI only ran through `workflow_dispatch`, allowing pushes and pull requests to bypass test, migration, build, and security jobs.
+- The workflow granted unused global `security-events: write` permission.
+- Severity: high.
+
+Completed:
+
+- Added `push` and `pull_request` triggers for `main` while retaining manual dispatch.
+- Reduced workflow permissions to read-only repository contents.
+- Extended `scripts/verify_deployment_config.py` with automatic-trigger and least-privilege regression guards.
+- Updated the production-hardening audit and implementation log.
+- No public API, schema, data format, runtime configuration, or UI workflow changed.
+
+Validation:
+
+- `rtk python3 scripts/verify_deployment_config.py` passed.
+- `rtk python3 -m py_compile scripts/verify_deployment_config.py` passed.
+- `.github/workflows/ci.yml` parsed successfully and exposed `quality` / `security` jobs.
+- A temporary negative fixture with the pull-request trigger removed was rejected by the verifier.
+- `rtk git diff --check` passed.
 
 ### T2330: Move future module cards runtime display assembly
 
