@@ -69,7 +69,6 @@ from app.schemas.ai import (
     CommandProposalRequest,
     ParsedRecordPreview,
     ParsePreviewRequest,
-    ParsePreviewResponse,
     TranscriptSegment,
 )
 from app.schemas.ai import (

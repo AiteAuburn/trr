@@ -15,6 +15,82 @@
 
 ## 2026-07-26
 
+### T2335 isolate deterministic year-review tests from developer AI config
+
+類型：test / reliability / production-hardening
+
+檔案：
+
+- `backend/tests/test_community_store_year_review.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+問題與風險：
+
+- The deterministic year-review regression test inherited configured DeepSeek credentials and endpoint values from the developer environment.
+- It issued a real external request, asserted fallback text against provider-generated text, and contributed to a long-running test suite.
+- Severity is high for test reliability and PHI-safe operations: backend tests must not make unmocked AI/network calls or depend on local secrets.
+
+變更：
+
+- Explicitly disabled the DeepSeek provider through the test's monkeypatched settings boundary.
+- Applied that boundary as an autouse module fixture so every test is network-free by default and only the explicit fake-client provider test opts in.
+- Updated the batch-generation regression to follow the production scheduler contract across bounded pages until no missing snapshots remain, so repeated runs on a populated test database stay deterministic.
+- Kept the separate configured-provider test, which uses a fake HTTP client, unchanged for AI-path coverage.
+
+相容性：
+
+- No production code, API, schema, configuration, data, or runtime behavior changes.
+
+驗證：
+
+- Focused deterministic and configured-provider year-review tests passed: `2 passed`.
+- Focused batch scheduler regression passed: `1 passed`.
+- Full backend pytest suite passed: `317 passed in 25.51s`.
+- Full backend Ruff gate passed after the duplicate-import fix.
+- Full strict mypy remains red with 163 errors across 12 files and is tracked as open T2333 production-readiness debt; it was not weakened or excluded.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue separating remaining runtime-test failures from the existing strict-mypy backlog.
+
+### T2334 remove duplicate AI pipeline test import
+
+類型：test / production-hardening
+
+檔案：
+
+- `backend/tests/test_ai_pipeline.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+問題與風險：
+
+- The documented full backend lint gate failed with Ruff `F811` because `ParsePreviewResponse` was imported twice in `tests/test_ai_pipeline.py`.
+- Severity is medium: runtime behavior was unaffected, but the release-quality job could not pass, preventing trustworthy automated release evidence.
+
+變更：
+
+- Removed only the duplicate import and preserved all test behavior and production code.
+
+相容性：
+
+- No public API, schema, data, configuration, workflow, or runtime behavior changes.
+
+驗證：
+
+- `rtk docker compose run --rm backend ruff check .` passed.
+- `rtk docker compose run --rm backend mypy .` exposed 163 existing strict-type errors across 12 files; this remains open under T2333.
+- `rtk docker compose run --rm backend pytest -q` passed after the T2335 isolation fix: `317 passed`.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue T2333 using the full gate results to identify the next confirmed production risk.
+
 ### T2332 require automatic CI release gates
 
 類型：production-hardening / CI / security / test / docs

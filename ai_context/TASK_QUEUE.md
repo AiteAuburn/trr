@@ -67,6 +67,51 @@ Completion evidence:
 
 ## Done
 
+### T2335: Isolate deterministic year-review tests from developer AI config
+
+Status: done
+
+Problem / impact:
+
+- The deterministic year-review test inherited local DeepSeek configuration, made an unmocked external request, produced non-deterministic output, and slowed the suite.
+- Severity: high for test reliability and safe operational boundaries.
+
+Completed:
+
+- Monkeypatched the fallback test's settings boundary to disable DeepSeek explicitly.
+- Applied the guard module-wide and made the batch-generation test drain bounded scheduler pages before asserting snapshots and idempotency.
+- Preserved the configured-provider test with its fake HTTP client.
+- No production behavior changed.
+
+Validation:
+
+- Focused fallback/configured-provider tests passed: `2 passed`.
+- Focused batch scheduler regression passed: `1 passed`.
+- Full backend pytest passed: `317 passed in 25.51s`.
+- Full backend Ruff passed.
+- Full strict mypy remains open under T2333 with 163 errors across 12 files; no check was weakened or excluded.
+- `rtk git diff --check` passed.
+
+### T2334: Remove duplicate AI pipeline test import
+
+Status: done
+
+Problem / impact:
+
+- Full backend Ruff validation failed with `F811` because `ParsePreviewResponse` was imported twice in `backend/tests/test_ai_pipeline.py`.
+- Severity: medium. Runtime behavior was unaffected, but the documented release gate was red.
+
+Completed:
+
+- Removed only the duplicate import, preserving test and runtime behavior.
+
+Validation:
+
+- `rtk docker compose run --rm backend ruff check .` passed.
+- `rtk docker compose run --rm backend mypy .` exposed 163 existing strict-type errors and remains open under T2333.
+- `rtk docker compose run --rm backend pytest -q` passed after T2335: `317 passed`.
+- `rtk git diff --check` passed.
+
 ### T2332: Require automatic CI release gates
 
 Status: done

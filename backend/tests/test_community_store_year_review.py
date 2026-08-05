@@ -4,7 +4,7 @@ from datetime import UTC, datetime, timedelta
 from uuid import UUID, uuid4
 
 from fastapi.testclient import TestClient
-from pytest import raises
+from pytest import MonkeyPatch, fixture, raises
 from sqlalchemy import select
 
 from app.core.config import get_settings
@@ -26,6 +26,19 @@ from app.services.year_review_snapshots import (
     validate_completed_year_review_year,
 )
 from tests.helpers import create_account_and_profile, create_record
+
+
+@fixture(autouse=True)
+def disable_unmocked_year_review_ai(monkeypatch: MonkeyPatch) -> None:
+    from app.services import year_review_snapshots
+
+    monkeypatch.setattr(
+        year_review_snapshots,
+        "get_settings",
+        lambda: get_settings().model_copy(
+            update={"deepseek_parser_url": "", "deepseek_api_key": ""}
+        ),
+    )
 
 
 def test_year_review_scheduler_defaults_to_previous_calendar_year() -> None:
@@ -2246,12 +2259,19 @@ def test_year_review_batch_generation_creates_missing_snapshots_once() -> None:
     )
 
     with SessionLocal() as db:
-        created_count, scanned_count = generate_missing_year_review_snapshots(
-            year=2024,
-            db=db,
-            batch_size=500,
-        )
-        db.commit()
+        created_count = 0
+        scanned_count = 0
+        while True:
+            batch_created_count, batch_scanned_count = generate_missing_year_review_snapshots(
+                year=2024,
+                db=db,
+                batch_size=500,
+            )
+            db.commit()
+            created_count += batch_created_count
+            scanned_count += batch_scanned_count
+            if batch_scanned_count == 0:
+                break
         first_snapshot = db.scalar(
             select(YearReviewSnapshot).where(
                 YearReviewSnapshot.profile_id == UUID(first_profile_id),
