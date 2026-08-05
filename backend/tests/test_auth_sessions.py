@@ -1,3 +1,4 @@
+import hashlib
 from datetime import UTC, datetime, timedelta
 from uuid import UUID, uuid4
 
@@ -34,7 +35,7 @@ def test_token_hash_rejects_oversized_value_before_hashing(
     def fail_hash(_: bytes) -> object:
         raise AssertionError("oversized token should not be hashed")
 
-    monkeypatch.setattr(auth_sessions.hashlib, "sha256", fail_hash)
+    monkeypatch.setattr(hashlib, "sha256", fail_hash)
 
     with raises(ValueError, match="token"):
         token_hash("t" * (MAX_AUTH_TOKEN_HASH_INPUT_LENGTH + 1))
@@ -134,6 +135,7 @@ def test_refresh_session_stores_hashes_only_and_can_be_found_by_token() -> None:
         assert found_session.refresh_token_hash == token_hash(refresh_token)
         assert found_session.device_fingerprint_hash == optional_fingerprint_hash(device_fingerprint)
         assert refresh_token not in found_session.refresh_token_hash
+        assert found_session.device_fingerprint_hash is not None
         assert device_fingerprint not in found_session.device_fingerprint_hash
 
 

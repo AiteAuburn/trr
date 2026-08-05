@@ -13,6 +13,57 @@
 後續:
 ```
 
+## 2026-08-05
+
+### T2337 restore strict typing across backend tests
+
+類型：test / typing / production-hardening
+
+檔案：
+
+- `backend/tests/test_ai_pipeline.py`
+- `backend/tests/test_auth_refresh.py`
+- `backend/tests/test_auth_sessions.py`
+- `backend/tests/test_community_store_year_review.py`
+- `backend/tests/test_config.py`
+- `backend/tests/test_health.py`
+- `backend/tests/test_profiles.py`
+- `backend/tests/test_records.py`
+- `backend/tests/test_reports.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+問題與風險：
+
+- After production sources were clean, strict mypy still reported 79 errors across eight test files.
+- The errors came from untyped pytest fixtures, imprecise fake context-manager return types, invariant test dictionaries, Pydantic invalid-input constructors, SQLAlchemy table metadata typing, ASGI message types, and optional-value assertions.
+- Severity is medium: runtime behavior was covered, but a red static gate prevented trustworthy release automation and obscured test-double contracts.
+
+變更：
+
+- Added precise `MonkeyPatch`, `Literal[False]`, ASGI `Message` / `Scope`, SQLAlchemy `Table` / `UniqueConstraint`, schema-model, and optional-value types.
+- Routed intentionally invalid schema inputs through `model_validate` so runtime validation remains tested without lying to the static type checker.
+- Added a typed settings factory for dynamic production configuration test dictionaries.
+- Replaced module-private dependency attribute access in monkeypatches with explicit standard-library / package module targets.
+- Kept strict mypy enabled for the full repository; no exclusions, ignores, or relaxed rules were added.
+
+相容性：
+
+- Test typing and test-double declarations only; no API, schema, production data, configuration, query, network, or user-visible behavior changes.
+
+驗證：
+
+- `rtk docker compose run --rm backend mypy tests` passed: 19 source files.
+- `rtk docker compose run --rm backend mypy .` passed: 118 source files.
+- `rtk docker compose run --rm backend ruff check tests` passed.
+- `rtk docker compose run --rm backend pytest -q` passed: `317 passed in 30.16s`.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Continue T2333 with dependency/security scans and remaining release-readiness deliverables.
+
 ## 2026-07-26
 
 ### T2336 restore production-code strict typing
@@ -89,7 +140,7 @@
 - Focused batch scheduler regression passed: `1 passed`.
 - Full backend pytest suite passed: `317 passed in 25.51s`.
 - Full backend Ruff gate passed after the duplicate-import fix.
-- Full strict mypy remains red with 163 errors across 12 files and is tracked as open T2333 production-readiness debt; it was not weakened or excluded.
+- Full strict mypy initially exposed 163 errors across 12 files; T2336 and T2337 subsequently resolved them without weakening or excluding checks.
 - `rtk git diff --check` passed.
 
 後續：
@@ -123,7 +174,7 @@
 驗證：
 
 - `rtk docker compose run --rm backend ruff check .` passed.
-- `rtk docker compose run --rm backend mypy .` exposed 163 existing strict-type errors across 12 files; this remains open under T2333.
+- `rtk docker compose run --rm backend mypy .` initially exposed 163 strict-type errors; T2336 and T2337 subsequently restored a clean full-repository gate.
 - `rtk docker compose run --rm backend pytest -q` passed after the T2335 isolation fix: `317 passed`.
 - `rtk git diff --check` passed.
 

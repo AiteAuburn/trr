@@ -2,6 +2,7 @@ import asyncio
 import json
 
 from fastapi.testclient import TestClient
+from starlette.types import Message, Scope
 
 from app.core.metrics import MAX_METRIC_LABEL_VALUE_LENGTH, http_metrics
 from app.main import (
@@ -19,9 +20,9 @@ async def _post_ai_parse_preview_raw(
     body_chunks: list[bytes],
 ) -> tuple[int, dict[str, str], bytes]:
     sent_chunks = 0
-    events: list[dict[str, object]] = []
+    events: list[Message] = []
 
-    async def receive() -> dict[str, object]:
+    async def receive() -> Message:
         nonlocal sent_chunks
         if sent_chunks < len(body_chunks):
             body = body_chunks[sent_chunks]
@@ -33,11 +34,10 @@ async def _post_ai_parse_preview_raw(
             }
         return {"type": "http.request", "body": b"", "more_body": False}
 
-    async def send(message: dict[str, object]) -> None:
+    async def send(message: Message) -> None:
         events.append(message)
 
-    await app(
-        {
+    scope: Scope = {
             "type": "http",
             "asgi": {"version": "3.0"},
             "http_version": "1.1",
@@ -49,10 +49,8 @@ async def _post_ai_parse_preview_raw(
             "headers": headers,
             "client": ("testclient", 50000),
             "server": ("testserver", 80),
-        },
-        receive,
-        send,
-    )
+    }
+    await app(scope, receive, send)
 
     start = next(event for event in events if event["type"] == "http.response.start")
     body = b"".join(

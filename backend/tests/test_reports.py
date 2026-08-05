@@ -3,13 +3,19 @@ from uuid import UUID
 
 from fastapi.testclient import TestClient
 from pydantic import ValidationError
-from pytest import raises
+from pytest import MonkeyPatch, raises
 from sqlalchemy import select
 
 from app.db.session import SessionLocal
 from app.main import app
 from app.models import Record
-from app.schemas.report import GlucoseSummary, MAX_BASIC_REPORT_RECORDS, ReportSummary
+from app.schemas.report import (
+    GlucoseSummary,
+    LifestyleSummary,
+    MAX_BASIC_REPORT_RECORDS,
+    MealSummary,
+    ReportSummary,
+)
 from app.services.record_validation import MAX_GLUCOSE_VALUE, MIN_GLUCOSE_VALUE
 from tests.helpers import create_account_and_profile, create_record
 
@@ -125,13 +131,13 @@ def test_basic_report_response_schema_bounds_counts_and_glucose_values() -> None
                 latest_value=None,
                 latest_recorded_at=None,
             ),
-            meals={"count": 0},
-            lifestyle={
-                "exercise_count": 0,
-                "medication_count": 0,
-                "lifestyle_count": 0,
-                "note_count": 0,
-            },
+            meals=MealSummary(count=0),
+            lifestyle=LifestyleSummary(
+                exercise_count=0,
+                medication_count=0,
+                lifestyle_count=0,
+                note_count=0,
+            ),
         )
 
 
@@ -226,7 +232,7 @@ def test_basic_report_supports_date_window() -> None:
 
 
 def test_basic_report_rejects_invalid_date_window_before_permission_lookup(
-    monkeypatch,
+    monkeypatch: MonkeyPatch,
 ) -> None:
     from app.api import reports as reports_api
 
@@ -255,7 +261,7 @@ def test_basic_report_rejects_invalid_date_window_before_permission_lookup(
 
 
 def test_basic_report_rejects_naive_window_before_permission_lookup(
-    monkeypatch,
+    monkeypatch: MonkeyPatch,
 ) -> None:
     from app.api import reports as reports_api
 

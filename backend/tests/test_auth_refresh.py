@@ -1,3 +1,4 @@
+import hashlib
 from datetime import UTC, datetime, timedelta
 from uuid import UUID, uuid4
 
@@ -71,11 +72,13 @@ def test_auth_response_schemas_bound_token_and_session_metadata() -> None:
             expires_in=900,
         )
     with raises(ValidationError):
-        RefreshTokenResponse(
-            access_token="access-token",
-            refresh_token=f"refresh-response-token-{uuid4()}",
-            token_type="basic",
-            expires_in=900,
+        RefreshTokenResponse.model_validate(
+            {
+                "access_token": "access-token",
+                "refresh_token": f"refresh-response-token-{uuid4()}",
+                "token_type": "basic",
+                "expires_in": 900,
+            }
         )
     with raises(ValidationError):
         RefreshTokenResponse(
@@ -101,7 +104,7 @@ def test_rate_limit_key_hash_rejects_oversized_value_before_hashing(
     def fail_hash(_: bytes) -> object:
         raise AssertionError("oversized rate-limit key should not be hashed")
 
-    monkeypatch.setattr(rate_limits.hashlib, "sha256", fail_hash)
+    monkeypatch.setattr(hashlib, "sha256", fail_hash)
 
     with raises(ValueError, match="rate limit key"):
         rate_limit_key_hash("k" * (MAX_RATE_LIMIT_KEY_LENGTH + 1))

@@ -67,6 +67,30 @@ Completion evidence:
 
 ## Done
 
+### T2337: Restore strict typing across backend tests
+
+Status: done
+
+Problem / impact:
+
+- Strict mypy still reported 79 errors in eight test files after production sources were clean.
+- Severity: medium. The release typecheck remained red and test-double contracts were imprecise.
+
+Completed:
+
+- Added precise pytest fixture, context-manager, schema, SQLAlchemy metadata, ASGI message, dynamic settings, and optional-value typing.
+- Preserved invalid-input runtime validation through `model_validate`.
+- Removed private dependency-attribute monkeypatch access.
+- Kept full strict mode and all test files in scope; added no ignores or exclusions.
+
+Validation:
+
+- `rtk docker compose run --rm backend mypy tests` passed: 19 source files.
+- `rtk docker compose run --rm backend mypy .` passed: 118 source files.
+- `rtk docker compose run --rm backend ruff check tests` passed.
+- `rtk docker compose run --rm backend pytest -q` passed: `317 passed in 30.16s`.
+- `rtk git diff --check` passed.
+
 ### T2336: Restore production-code strict typing
 
 Status: done
@@ -111,7 +135,7 @@ Validation:
 - Focused batch scheduler regression passed: `1 passed`.
 - Full backend pytest passed: `317 passed in 25.51s`.
 - Full backend Ruff passed.
-- Full strict mypy remains open under T2333 with 163 errors across 12 files; no check was weakened or excluded.
+- Full strict mypy initially exposed 163 errors; T2336 and T2337 subsequently resolved the complete backlog without weakening or excluding checks.
 - `rtk git diff --check` passed.
 
 ### T2334: Remove duplicate AI pipeline test import
@@ -130,7 +154,7 @@ Completed:
 Validation:
 
 - `rtk docker compose run --rm backend ruff check .` passed.
-- `rtk docker compose run --rm backend mypy .` exposed 163 existing strict-type errors and remains open under T2333.
+- `rtk docker compose run --rm backend mypy .` initially exposed 163 strict-type errors; T2336 and T2337 subsequently restored a clean full-repository gate.
 - `rtk docker compose run --rm backend pytest -q` passed after T2335: `317 passed`.
 - `rtk git diff --check` passed.
 

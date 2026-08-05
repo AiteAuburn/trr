@@ -2,6 +2,7 @@ import json
 from collections.abc import Iterator
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from typing import Literal
 from uuid import UUID
 
 import httpx
@@ -165,7 +166,7 @@ def test_list_ai_models() -> None:
     assert "ollama-llama3.2-1b" in llm_model_ids
 
 
-def test_deepseek_system_prompt_can_be_customized(monkeypatch) -> None:
+def test_deepseek_system_prompt_can_be_customized(monkeypatch: pytest.MonkeyPatch) -> None:
     custom_prompt = "中文測試：嚴格抽取，非 JSON 不要回傳。"
     custom_addendum = "若不確定直接拒絕，不做猜測。"
     monkeypatch.setenv("DEEPSEEK_SYSTEM_PROMPT", custom_prompt)
@@ -363,7 +364,7 @@ def test_ai_rate_limit_detail_bounds_retry_after_seconds() -> None:
     )
 
 
-def test_ollama_model_ids_cache_uses_ttl_and_returns_copy(monkeypatch) -> None:
+def test_ollama_model_ids_cache_uses_ttl_and_returns_copy(monkeypatch: pytest.MonkeyPatch) -> None:
     _clear_ollama_model_cache_for_tests()
     calls: list[str] = []
 
@@ -371,7 +372,7 @@ def test_ollama_model_ids_cache_uses_ttl_and_returns_copy(monkeypatch) -> None:
         def __enter__(self) -> "FakeResponse":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def raise_for_status(self) -> None:
@@ -387,7 +388,7 @@ def test_ollama_model_ids_cache_uses_ttl_and_returns_copy(monkeypatch) -> None:
         def __enter__(self) -> "FakeClient":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def stream(self, method: str, url: str) -> FakeResponse:
@@ -408,9 +409,9 @@ def test_ollama_model_ids_cache_uses_ttl_and_returns_copy(monkeypatch) -> None:
     _clear_ollama_model_cache_for_tests()
 
 
-def test_ollama_model_ids_cache_refreshes_after_ttl(monkeypatch) -> None:
+def test_ollama_model_ids_cache_refreshes_after_ttl(monkeypatch: pytest.MonkeyPatch) -> None:
     _clear_ollama_model_cache_for_tests()
-    payloads = [
+    payloads: list[dict[str, object]] = [
         {"models": [{"name": "qwen2.5:1.5b"}]},
         {"models": [{"name": "qwen2.5:1.5b"}, {"name": "gemma3:1b"}]},
     ]
@@ -422,7 +423,7 @@ def test_ollama_model_ids_cache_refreshes_after_ttl(monkeypatch) -> None:
         def __enter__(self) -> "FakeResponse":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def raise_for_status(self) -> None:
@@ -438,7 +439,7 @@ def test_ollama_model_ids_cache_refreshes_after_ttl(monkeypatch) -> None:
         def __enter__(self) -> "FakeClient":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def stream(self, method: str, url: str) -> FakeResponse:
@@ -461,14 +462,14 @@ def test_ollama_model_ids_cache_refreshes_after_ttl(monkeypatch) -> None:
     _clear_ollama_model_cache_for_tests()
 
 
-def test_ollama_model_ids_cache_falls_back_to_stale_on_fetch_error(monkeypatch) -> None:
+def test_ollama_model_ids_cache_falls_back_to_stale_on_fetch_error(monkeypatch: pytest.MonkeyPatch) -> None:
     _clear_ollama_model_cache_for_tests()
 
     class FakeResponse:
         def __enter__(self) -> "FakeResponse":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def raise_for_status(self) -> None:
@@ -484,7 +485,7 @@ def test_ollama_model_ids_cache_falls_back_to_stale_on_fetch_error(monkeypatch) 
         def __enter__(self) -> "SuccessfulClient":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def stream(self, method: str, url: str) -> FakeResponse:
@@ -499,7 +500,7 @@ def test_ollama_model_ids_cache_falls_back_to_stale_on_fetch_error(monkeypatch) 
         def __enter__(self) -> "FailingClient":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def stream(self, method: str, url: str) -> FakeResponse:
@@ -521,7 +522,7 @@ def test_ollama_model_ids_cache_falls_back_to_stale_on_fetch_error(monkeypatch) 
     _clear_ollama_model_cache_for_tests()
 
 
-def test_ollama_model_ids_rejects_oversized_tags_response_before_json_parse(monkeypatch) -> None:
+def test_ollama_model_ids_rejects_oversized_tags_response_before_json_parse(monkeypatch: pytest.MonkeyPatch) -> None:
     _clear_ollama_model_cache_for_tests()
     oversized_response = '{"models":[' + ("x" * OLLAMA_TAGS_HTTP_RESPONSE_CHAR_BUDGET)
 
@@ -529,7 +530,7 @@ def test_ollama_model_ids_rejects_oversized_tags_response_before_json_parse(monk
         def __enter__(self) -> "FakeResponse":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def raise_for_status(self) -> None:
@@ -546,7 +547,7 @@ def test_ollama_model_ids_rejects_oversized_tags_response_before_json_parse(monk
         def __enter__(self) -> "FakeClient":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def stream(self, method: str, url: str) -> FakeResponse:
@@ -561,7 +562,7 @@ def test_ollama_model_ids_rejects_oversized_tags_response_before_json_parse(monk
     _clear_ollama_model_cache_for_tests()
 
 
-def test_ollama_model_ids_bounds_model_id_values_and_count(monkeypatch) -> None:
+def test_ollama_model_ids_bounds_model_id_values_and_count(monkeypatch: pytest.MonkeyPatch) -> None:
     _clear_ollama_model_cache_for_tests()
     valid_models = [{"name": f"model-{index}"} for index in range(OLLAMA_TAGS_MAX_MODEL_IDS + 10)]
     payload = {
@@ -577,7 +578,7 @@ def test_ollama_model_ids_bounds_model_id_values_and_count(monkeypatch) -> None:
         def __enter__(self) -> "FakeResponse":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def raise_for_status(self) -> None:
@@ -593,7 +594,7 @@ def test_ollama_model_ids_bounds_model_id_values_and_count(monkeypatch) -> None:
         def __enter__(self) -> "FakeClient":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def stream(self, method: str, url: str) -> FakeResponse:
@@ -679,7 +680,7 @@ def test_parse_preview_enforces_voice_quota_from_entitlements() -> None:
     assert denied_response.json()["detail"]["remaining_seconds"] == 0
 
 
-def test_parse_preview_rate_limit_blocks_before_quota_and_parser(monkeypatch) -> None:
+def test_parse_preview_rate_limit_blocks_before_quota_and_parser(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.api import ai as ai_api
 
     monkeypatch.setenv("AI_PARSE_RATE_LIMIT_COUNT", "1")
@@ -740,7 +741,7 @@ def test_parse_preview_rate_limit_blocks_before_quota_and_parser(monkeypatch) ->
     get_settings.cache_clear()
 
 
-def test_parse_preview_rejects_too_many_segments_before_quota_and_parser(monkeypatch) -> None:
+def test_parse_preview_rejects_too_many_segments_before_quota_and_parser(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.api import ai as ai_api
 
     client = TestClient(app)
@@ -783,7 +784,7 @@ def test_parse_preview_rejects_too_many_segments_before_quota_and_parser(monkeyp
 
 
 def test_parse_preview_rejects_too_many_segments_before_runtime_model_lookup(
-    monkeypatch,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     from app.services import ai_pipeline
 
@@ -815,7 +816,7 @@ def test_parse_preview_rejects_too_many_segments_before_runtime_model_lookup(
 
 
 def test_parse_preview_rejects_too_many_numeric_values_before_quota_and_parser(
-    monkeypatch,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     from app.api import ai as ai_api
     from app.services import ai_pipeline
@@ -868,7 +869,7 @@ def test_parse_preview_rejects_too_many_numeric_values_before_quota_and_parser(
 
 
 def test_parse_preview_rejects_invalid_stt_before_transcript_budget(
-    monkeypatch,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     from app.api import ai as ai_api
 
@@ -904,7 +905,7 @@ def test_parse_preview_rejects_invalid_stt_before_transcript_budget(
 
 
 def test_parse_preview_rejects_future_occurred_at_before_profile_and_parser(
-    monkeypatch,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     from app.api import ai as ai_api
 
@@ -941,7 +942,7 @@ def test_parse_preview_rejects_future_occurred_at_before_profile_and_parser(
 
 
 def test_parse_preview_rejects_too_many_segments_before_profile_lookup(
-    monkeypatch,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     from app.api import ai as ai_api
 
@@ -1461,7 +1462,7 @@ def test_local_parser_response_size_guard_omits_phi_content() -> None:
     assert str(LOCAL_LLM_RESPONSE_CHAR_BUDGET) in message
 
 
-def test_ollama_response_size_guard_runs_before_json_parsing(monkeypatch) -> None:
+def test_ollama_response_size_guard_runs_before_json_parsing(monkeypatch: pytest.MonkeyPatch) -> None:
     oversized_content = "空腹血糖 188" + ("x" * LOCAL_LLM_RESPONSE_CHAR_BUDGET)
     response_text = json.dumps({"message": {"content": oversized_content}})
 
@@ -1469,7 +1470,7 @@ def test_ollama_response_size_guard_runs_before_json_parsing(monkeypatch) -> Non
         def __enter__(self) -> "FakeResponse":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def raise_for_status(self) -> None:
@@ -1485,7 +1486,7 @@ def test_ollama_response_size_guard_runs_before_json_parsing(monkeypatch) -> Non
         def __enter__(self) -> "FakeClient":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def stream(self, method: str, url: str, json: dict[str, object]) -> FakeResponse:
@@ -1514,14 +1515,14 @@ def test_ollama_response_size_guard_runs_before_json_parsing(monkeypatch) -> Non
     assert "Content omitted for PHI safety" in message
 
 
-def test_local_parser_http_response_size_guard_runs_before_json_parsing(monkeypatch) -> None:
+def test_local_parser_http_response_size_guard_runs_before_json_parsing(monkeypatch: pytest.MonkeyPatch) -> None:
     oversized_response = '{"choices":[{"message":{"content":"' + ("x" * LOCAL_LLM_HTTP_RESPONSE_CHAR_BUDGET)
 
     class FakeResponse:
         def __enter__(self) -> "FakeResponse":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def raise_for_status(self) -> None:
@@ -1538,7 +1539,7 @@ def test_local_parser_http_response_size_guard_runs_before_json_parsing(monkeypa
         def __enter__(self) -> "FakeClient":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def stream(self, method: str, url: str, json: dict[str, object]) -> FakeResponse:
@@ -1723,7 +1724,7 @@ def test_parse_progress_stream_reports_atomic_events_and_contextual_glucose() ->
     assert quota_response.json()["used_seconds_today"] == 12
 
 
-def test_parse_progress_stream_error_event_omits_phi_content(monkeypatch) -> None:
+def test_parse_progress_stream_error_event_omits_phi_content(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.services import ai_pipeline
 
     client = TestClient(app)
@@ -1841,7 +1842,7 @@ def test_parse_debug_stream_is_disabled_by_default() -> None:
     assert response.status_code == 404
 
 
-def test_local_parser_debug_stream_omits_raw_http_errors(monkeypatch) -> None:
+def test_local_parser_debug_stream_omits_raw_http_errors(monkeypatch: pytest.MonkeyPatch) -> None:
     class FailingClient:
         def __init__(self, *, timeout: object) -> None:
             _ = timeout
@@ -1849,7 +1850,7 @@ def test_local_parser_debug_stream_omits_raw_http_errors(monkeypatch) -> None:
         def __enter__(self) -> "FailingClient":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def stream(self, method: str, url: str, json: object) -> object:
@@ -1875,7 +1876,7 @@ def test_local_parser_debug_stream_omits_raw_http_errors(monkeypatch) -> None:
     assert "ollama" not in output
 
 
-def test_local_parser_debug_stream_rejects_oversized_line_before_json_parse(monkeypatch) -> None:
+def test_local_parser_debug_stream_rejects_oversized_line_before_json_parse(monkeypatch: pytest.MonkeyPatch) -> None:
     oversized_line = (
         '{"message":{"content":"'
         + ("空腹血糖 188 " * ((LOCAL_LLM_STREAM_LINE_CHAR_BUDGET // 8) + 1))
@@ -1886,7 +1887,7 @@ def test_local_parser_debug_stream_rejects_oversized_line_before_json_parse(monk
         def __enter__(self) -> "FakeResponse":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def raise_for_status(self) -> None:
@@ -1902,7 +1903,7 @@ def test_local_parser_debug_stream_rejects_oversized_line_before_json_parse(monk
         def __enter__(self) -> "FakeClient":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def stream(self, method: str, url: str, json: object) -> FakeResponse:
@@ -2048,7 +2049,7 @@ def test_parse_preview_gemma4_requires_local_endpoint() -> None:
     }
 
 
-def test_deepseek_model_option_requires_endpoint_and_key(monkeypatch) -> None:
+def test_deepseek_model_option_requires_endpoint_and_key(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.services import ai_pipeline
 
     monkeypatch.setattr(ai_pipeline, "_installed_ollama_model_ids", lambda _: set())
@@ -2071,7 +2072,7 @@ def test_deepseek_model_option_requires_endpoint_and_key(monkeypatch) -> None:
     assert "DeepSeek chat endpoint ready." in deepseek.description
 
 
-def test_deepseek_system_prompt_includes_configured_prompt_analysis_and_base(monkeypatch) -> None:
+def test_deepseek_system_prompt_includes_configured_prompt_analysis_and_base(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.services import ai_pipeline
 
     monkeypatch.setattr(
@@ -2093,7 +2094,7 @@ def test_deepseek_system_prompt_includes_configured_prompt_analysis_and_base(mon
     assert "Do not provide medical advice" in prompt
 
 
-def test_deepseek_request_body_sends_prompt_as_system_message(monkeypatch) -> None:
+def test_deepseek_request_body_sends_prompt_as_system_message(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.services import ai_pipeline
 
     monkeypatch.setattr(
@@ -2143,7 +2144,7 @@ def test_local_openai_compatible_request_body_keeps_local_keep_alive() -> None:
     assert body["keep_alive"] == "30m"
 
 
-def test_parse_preview_accepts_static_llm_without_runtime_model_lookup(monkeypatch) -> None:
+def test_parse_preview_accepts_static_llm_without_runtime_model_lookup(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.services import ai_pipeline
 
     client = TestClient(app)
@@ -2170,7 +2171,7 @@ def test_parse_preview_accepts_static_llm_without_runtime_model_lookup(monkeypat
 
 
 def test_parse_preview_rejects_unknown_llm_before_runtime_and_profile_lookup(
-    monkeypatch,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     from app.api import ai as ai_api
 
@@ -2206,7 +2207,7 @@ def test_parse_preview_rejects_unknown_llm_before_runtime_and_profile_lookup(
     }
 
 
-def test_parse_preview_rejects_runtime_unavailable_ollama_before_parser(monkeypatch) -> None:
+def test_parse_preview_rejects_runtime_unavailable_ollama_before_parser(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.api import ai as ai_api
 
     client = TestClient(app)
@@ -2244,7 +2245,7 @@ def test_parse_preview_rejects_runtime_unavailable_ollama_before_parser(monkeypa
     }
 
 
-def test_parse_preview_rejects_unavailable_model_before_profile_lookup(monkeypatch) -> None:
+def test_parse_preview_rejects_unavailable_model_before_profile_lookup(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.api import ai as ai_api
 
     client = TestClient(app)
@@ -2275,14 +2276,14 @@ def test_parse_preview_rejects_unavailable_model_before_profile_lookup(monkeypat
     }
 
 
-def test_parse_preview_local_parser_failure_returns_non_phi_detail(monkeypatch) -> None:
+def test_parse_preview_local_parser_failure_returns_non_phi_detail(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.api import ai as ai_api
 
     client = TestClient(app)
     account_id, profile_id = create_account_and_profile(client, "ai-parser-error")
 
     def fail_parse_preview(**_: object) -> None:
-        raise ai_api.LocalParserError(
+        raise LocalParserError(
             'Local parser content was not valid JSON. Raw content: {"evidence":"空腹血糖 188"}'
         )
 
@@ -2315,7 +2316,7 @@ def test_parse_preview_local_parser_failure_returns_non_phi_detail(monkeypatch) 
     assert quota_response.json()["used_seconds_today"] == 0
 
 
-def test_parse_preview_records_phi_safe_parser_failure_metric(monkeypatch) -> None:
+def test_parse_preview_records_phi_safe_parser_failure_metric(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.services import ai_pipeline
 
     http_metrics.reset()
@@ -2419,7 +2420,7 @@ def test_command_proposal_create_record_does_not_save_directly() -> None:
     assert list_response.json() == []
 
 
-def test_command_proposal_uses_deepseek_parser_for_record_candidates(monkeypatch) -> None:
+def test_command_proposal_uses_deepseek_parser_for_record_candidates(monkeypatch: pytest.MonkeyPatch) -> None:
     from app.services import ai_pipeline
 
     client = TestClient(app)

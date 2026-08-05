@@ -51,7 +51,7 @@ def test_jwt_id_hash_rejects_oversized_value_before_hashing(
     def fail_hash(_: bytes) -> object:
         raise AssertionError("oversized jti should not be hashed")
 
-    monkeypatch.setattr(token_revocation.hashlib, "sha256", fail_hash)
+    monkeypatch.setattr(hashlib, "sha256", fail_hash)
 
     try:
         jwt_id_hash("j" * (MAX_JWT_ID_LENGTH + 1))
@@ -92,7 +92,7 @@ def _jwt_for_account(
     include_jti: bool = True,
     extra_claims: dict[str, object] | None = None,
 ) -> str:
-    header = {"alg": "HS256", "typ": "JWT"}
+    header: dict[str, object] = {"alg": "HS256", "typ": "JWT"}
     issued_at = int(time())
     payload = {
         "sub": account_id,
@@ -221,15 +221,17 @@ def test_profile_response_schemas_bound_public_text_and_grant_scopes() -> None:
         )
 
     with raises(ValidationError):
-        SharedProfileRead(
-            profile_id=UUID(int=2),
-            display_name="媽媽",
-            relationship="mother",
-            grant_id=UUID(int=1),
-            grant_type="caregiver",
-            scopes=["profile:unknown"],
-            expires_at=None,
-            created_at=datetime(2026, 4, 30, 8, 0, tzinfo=UTC),
+        SharedProfileRead.model_validate(
+            {
+                "profile_id": UUID(int=2),
+                "display_name": "媽媽",
+                "relationship": "mother",
+                "grant_id": UUID(int=1),
+                "grant_type": "caregiver",
+                "scopes": ["profile:unknown"],
+                "expires_at": None,
+                "created_at": datetime(2026, 4, 30, 8, 0, tzinfo=UTC),
+            }
         )
 
 

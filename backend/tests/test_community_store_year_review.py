@@ -1,11 +1,13 @@
 import json
 from copy import deepcopy
 from datetime import UTC, datetime, timedelta
+from typing import Literal, cast
 from uuid import UUID, uuid4
 
+import httpx
 from fastapi.testclient import TestClient
 from pytest import MonkeyPatch, fixture, raises
-from sqlalchemy import select
+from sqlalchemy import Table, UniqueConstraint, select
 
 from app.core.config import get_settings
 from app.db.session import SessionLocal
@@ -1563,20 +1565,29 @@ def test_store_redemption_list_limits_to_latest_records() -> None:
 
 
 def test_store_redemption_wallet_index_is_declared_on_redemption_model() -> None:
+    redemption_table = cast(Table, StoreRedemption.__table__)
+    food_item_table = cast(Table, FoodItem.__table__)
     index = next(
         index
-        for index in StoreRedemption.__table__.indexes
+        for index in redemption_table.indexes
         if index.name == "ix_store_redemptions_account_created_id"
     )
     assert [column.name for column in index.columns] == ["account_id", "created_at", "id"]
-    assert all(index.name != "ix_store_redemptions_account_created_id" for index in FoodItem.__table__.indexes)
+    assert all(
+        index.name != "ix_store_redemptions_account_created_id"
+        for index in food_item_table.indexes
+    )
 
 
 def test_community_point_ledger_declares_unique_source_constraint() -> None:
-    constraint = next(
-        constraint
-        for constraint in CommunityPointLedger.__table__.constraints
+    ledger_table = cast(Table, CommunityPointLedger.__table__)
+    constraint = cast(
+        UniqueConstraint,
+        next(
+            constraint
+        for constraint in ledger_table.constraints
         if constraint.name == "uq_community_point_ledger_source"
+        ),
     )
     assert [column.name for column in constraint.columns] == ["source_type", "source_id"]
 
@@ -1589,8 +1600,10 @@ def test_year_review_share_package_constraints_are_declared_on_share_package_mod
         "ck_year_review_share_packages_status",
         "ck_year_review_share_packages_last_result",
     }
-    share_package_constraints = {constraint.name for constraint in YearReviewSharePackage.__table__.constraints}
-    snapshot_constraints = {constraint.name for constraint in YearReviewSnapshot.__table__.constraints}
+    share_package_table = cast(Table, YearReviewSharePackage.__table__)
+    snapshot_table = cast(Table, YearReviewSnapshot.__table__)
+    share_package_constraints = {constraint.name for constraint in share_package_table.constraints}
+    snapshot_constraints = {constraint.name for constraint in snapshot_table.constraints}
 
     assert expected_constraints.issubset(share_package_constraints)
     assert expected_constraints.isdisjoint(snapshot_constraints)
@@ -1959,7 +1972,9 @@ def test_year_review_summarizes_previous_year_records() -> None:
     assert revoked_update_response.json()["detail"]["code"] == "share_package_revoked"
 
 
-def test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured(monkeypatch) -> None:
+def test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured(
+    monkeypatch: MonkeyPatch,
+) -> None:
     from app.services import year_review_snapshots
 
     captured_requests: list[dict[str, object]] = []
@@ -1968,7 +1983,7 @@ def test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured(monkey
         def __enter__(self) -> "FakeResponse":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def raise_for_status(self) -> None:
@@ -2003,7 +2018,7 @@ def test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured(monkey
         def __enter__(self) -> "FakeClient":
             return self
 
-        def __exit__(self, *args: object) -> bool:
+        def __exit__(self, *args: object) -> Literal[False]:
             return False
 
         def stream(self, method: str, url: str, **kwargs: object) -> FakeResponse:
@@ -2023,7 +2038,7 @@ def test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured(monkey
             }
         ),
     )
-    monkeypatch.setattr(year_review_snapshots.httpx, "Client", FakeClient)
+    monkeypatch.setattr(httpx, "Client", FakeClient)
 
     client = TestClient(app)
     account_id, profile_id = create_account_and_profile(client, "year-review-deepseek")

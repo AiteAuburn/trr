@@ -2,6 +2,7 @@ from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
 from fastapi.testclient import TestClient
+from pytest import MonkeyPatch
 from sqlalchemy import select
 
 from app.db.session import SessionLocal
@@ -148,7 +149,9 @@ def test_record_list_cursor_uses_created_at_tie_breaker() -> None:
     assert [item["id"] for item in next_page.json()] == [created_ids[0]]
 
 
-def test_record_list_rejects_incomplete_cursor_before_permission_lookup(monkeypatch) -> None:
+def test_record_list_rejects_incomplete_cursor_before_permission_lookup(
+    monkeypatch: MonkeyPatch,
+) -> None:
     from app.api import records as records_api
 
     client = TestClient(app)
@@ -174,7 +177,9 @@ def test_record_list_rejects_incomplete_cursor_before_permission_lookup(monkeypa
     }
 
 
-def test_record_list_rejects_naive_cursor_before_permission_lookup(monkeypatch) -> None:
+def test_record_list_rejects_naive_cursor_before_permission_lookup(
+    monkeypatch: MonkeyPatch,
+) -> None:
     from app.api import records as records_api
 
     client = TestClient(app)
@@ -198,7 +203,9 @@ def test_record_list_rejects_naive_cursor_before_permission_lookup(monkeypatch) 
     }
 
 
-def test_record_create_rejects_future_occurred_at_before_permission_lookup(monkeypatch) -> None:
+def test_record_create_rejects_future_occurred_at_before_permission_lookup(
+    monkeypatch: MonkeyPatch,
+) -> None:
     from app.api import records as records_api
 
     client = TestClient(app)
@@ -228,7 +235,9 @@ def test_record_create_rejects_future_occurred_at_before_permission_lookup(monke
     }
 
 
-def test_record_update_rejects_future_occurred_at_before_record_lookup(monkeypatch) -> None:
+def test_record_update_rejects_future_occurred_at_before_record_lookup(
+    monkeypatch: MonkeyPatch,
+) -> None:
     from app.api import records as records_api
 
     client = TestClient(app)
@@ -252,7 +261,9 @@ def test_record_update_rejects_future_occurred_at_before_record_lookup(monkeypat
     }
 
 
-def test_record_create_rejects_oversized_metadata_before_permission_lookup(monkeypatch) -> None:
+def test_record_create_rejects_oversized_metadata_before_permission_lookup(
+    monkeypatch: MonkeyPatch,
+) -> None:
     from app.api import records as records_api
 
     client = TestClient(app)
@@ -284,7 +295,9 @@ def test_record_create_rejects_oversized_metadata_before_permission_lookup(monke
     }
 
 
-def test_record_update_rejects_oversized_payload_before_record_lookup(monkeypatch) -> None:
+def test_record_update_rejects_oversized_payload_before_record_lookup(
+    monkeypatch: MonkeyPatch,
+) -> None:
     from app.api import records as records_api
 
     client = TestClient(app)
@@ -315,7 +328,9 @@ def test_record_update_rejects_oversized_payload_before_record_lookup(monkeypatc
     }
 
 
-def test_record_create_rejects_wide_payload_before_permission_lookup(monkeypatch) -> None:
+def test_record_create_rejects_wide_payload_before_permission_lookup(
+    monkeypatch: MonkeyPatch,
+) -> None:
     from app.api import records as records_api
 
     client = TestClient(app)
@@ -349,7 +364,9 @@ def test_record_create_rejects_wide_payload_before_permission_lookup(monkeypatch
     }
 
 
-def test_record_update_rejects_wide_metadata_before_record_lookup(monkeypatch) -> None:
+def test_record_update_rejects_wide_metadata_before_record_lookup(
+    monkeypatch: MonkeyPatch,
+) -> None:
     from app.api import records as records_api
 
     client = TestClient(app)

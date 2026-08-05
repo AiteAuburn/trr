@@ -15,6 +15,10 @@ from app.core.config import (
 from app.core.logging import MAX_LOG_STRING_LENGTH, PhiSafeJsonFormatter, configure_logging
 
 
+def settings_from_values(**values: object) -> Settings:
+    return Settings.model_validate(values)
+
+
 def test_local_defaults_enable_dev_auth() -> None:
     settings = Settings(allow_dev_auth=None)
 
@@ -64,17 +68,17 @@ def test_production_requires_issuer_and_audience_when_jwt_secret_is_configured()
     }
 
     with pytest.raises(ValidationError, match="AUTH_JWT_ISSUER"):
-        Settings(**base_settings)
+        settings_from_values(**base_settings)
     with pytest.raises(ValidationError, match="AUTH_JWT_AUDIENCE"):
-        Settings(**base_settings, auth_jwt_issuer="https://issuer.example.com")
+        settings_from_values(**base_settings, auth_jwt_issuer="https://issuer.example.com")
     with pytest.raises(ValidationError, match="AUTH_JWT_REQUIRE_JTI"):
-        Settings(
+        settings_from_values(
             **base_settings,
             auth_jwt_issuer="https://issuer.example.com",
             auth_jwt_audience="bloodsugar-api",
         )
 
-    settings = Settings(
+    settings = settings_from_values(
         **base_settings,
         auth_jwt_issuer="  https://issuer.example.com  ",
         auth_jwt_audience="  bloodsugar-api  ",
@@ -131,11 +135,11 @@ def test_production_jwks_requires_https_issuer_audience_and_revocable_jti() -> N
     }
 
     with pytest.raises(ValidationError, match="AUTH_JWT_ISSUER"):
-        Settings(**base_settings)
+        settings_from_values(**base_settings)
     with pytest.raises(ValidationError, match="AUTH_JWT_AUDIENCE"):
-        Settings(**base_settings, auth_jwt_issuer="https://issuer.example.com")
+        settings_from_values(**base_settings, auth_jwt_issuer="https://issuer.example.com")
     with pytest.raises(ValidationError, match="AUTH_JWT_REQUIRE_JTI"):
-        Settings(
+        settings_from_values(
             **base_settings,
             auth_jwt_issuer="https://issuer.example.com",
             auth_jwt_audience="bloodsugar-api",
@@ -151,7 +155,7 @@ def test_production_jwks_requires_https_issuer_audience_and_revocable_jti() -> N
             auth_jwt_require_jti=True,
         )
 
-    settings = Settings(
+    settings = settings_from_values(
         **base_settings,
         auth_jwt_issuer="https://issuer.example.com",
         auth_jwt_audience="bloodsugar-api",
@@ -199,11 +203,11 @@ def test_production_oidc_login_requires_https_claim_config_and_app_token_secret(
     }
 
     with pytest.raises(ValidationError, match="AUTH_OIDC_ISSUER"):
-        Settings(**base_settings)
+        settings_from_values(**base_settings)
     with pytest.raises(ValidationError, match="AUTH_OIDC_AUDIENCE"):
-        Settings(**base_settings, auth_oidc_issuer="https://accounts.example.com")
+        settings_from_values(**base_settings, auth_oidc_issuer="https://accounts.example.com")
     with pytest.raises(ValidationError, match="AUTH_JWT_SECRET"):
-        Settings(
+        settings_from_values(
             **base_settings,
             auth_oidc_issuer="https://accounts.example.com",
             auth_oidc_audience="bloodsugar-mobile",
@@ -222,7 +226,7 @@ def test_production_oidc_login_requires_https_claim_config_and_app_token_secret(
             backend_cors_origins="https://app.example.com",
         )
 
-    settings = Settings(
+    settings = settings_from_values(
         **base_settings,
         auth_oidc_issuer="https://accounts.example.com",
         auth_oidc_audience="bloodsugar-mobile",
