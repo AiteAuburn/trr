@@ -258,7 +258,6 @@ def list_foods(
 ) -> list[FoodItemRead]:
     _ = account
     statement = select(FoodItem)
-    order_by_clauses = [FoodItem.created_at.desc(), FoodItem.id.desc()]
     if category is not None:
         statement = statement.where(FoodItem.category == category)
     if query is not None:
@@ -274,7 +273,7 @@ def list_foods(
         escaped_query_value = _escape_like_query(normalized_query_value)
         normalized_query = f"%{escaped_query_value}%"
         statement = statement.where(FoodItem.normalized_name.ilike(normalized_query, escape="\\"))
-        order_by_clauses = [
+        statement = statement.order_by(
             case(
                 (FoodItem.normalized_name == normalized_query_value, 0),
                 (FoodItem.normalized_name.like(f"{escaped_query_value}%", escape="\\"), 1),
@@ -282,8 +281,10 @@ def list_foods(
             ),
             FoodItem.created_at.desc(),
             FoodItem.id.desc(),
-        ]
-    statement = statement.order_by(*order_by_clauses).limit(limit)
+        )
+    else:
+        statement = statement.order_by(FoodItem.created_at.desc(), FoodItem.id.desc())
+    statement = statement.limit(limit)
     items = list(db.scalars(statement))
     stats_by_food_id = _food_stats_for_items(db, [item.id for item in items])
     return [_food_read_with_stats(item, stats_by_food_id.get(item.id, _empty_food_stats())) for item in items]

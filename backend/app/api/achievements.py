@@ -35,8 +35,8 @@ def _longest_streak(days: set[date]) -> int:
     return longest
 
 
-def _achievement_progress(records: list[Record]) -> list[tuple[dict[str, object], int, int]]:
-    progress: list[tuple[dict[str, object], int, int]] = []
+def _achievement_progress(records: list[Record]) -> list[tuple[dict[str, str], int, int]]:
+    progress: list[tuple[dict[str, str], int, int]] = []
     for definition in ACHIEVEMENT_CATEGORY_DEFINITIONS:
         record_type = str(definition["record_type"])
         cumulative_progress = sum(1 for record in records if record.record_type == record_type)

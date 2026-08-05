@@ -15,6 +15,46 @@
 
 ## 2026-07-26
 
+### T2336 restore production-code strict typing
+
+類型：bugfix / typing / production-hardening
+
+檔案：
+
+- `backend/app/api/achievements.py`
+- `backend/app/api/community.py`
+- `backend/app/services/ai_pipeline.py`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+問題與風險：
+
+- Strict mypy found production-code errors in achievement definition typing, mixed SQLAlchemy food-search ordering expressions, and an untyped `httpx.Client.stream` kwargs dictionary.
+- Severity is medium: runtime tests passed, but imprecise types hid request and query contracts and kept the release typecheck red.
+
+變更：
+
+- Typed achievement definitions according to their actual string-only catalog shape.
+- Split default and relevance-ranked food ordering into explicit SQLAlchemy branches.
+- Replaced the untyped stream kwargs dictionary with explicit header/no-header calls while preserving the existing omission of the `headers` keyword when absent.
+
+相容性：
+
+- No API, schema, data, ordering semantics, HTTP payload, or user-visible behavior changes.
+- The no-header local parser call shape remains unchanged, as confirmed by focused fake-client regressions.
+
+驗證：
+
+- `rtk docker compose run --rm backend mypy app` passed: 68 source files.
+- Focused AI request-call and community/year-review tests passed: `32 passed in 4.82s`.
+- Full backend Ruff and pytest gates.
+- `rtk git diff --check`.
+
+後續：
+
+- Continue T2333 by repairing strict typing in tests without excluding or weakening them.
+
 ### T2335 isolate deterministic year-review tests from developer AI config
 
 類型：test / reliability / production-hardening

@@ -2092,10 +2092,11 @@ def _read_bounded_local_parser_response_text(
 ) -> str:
     chunks: list[str] = []
     total_chars = 0
-    stream_kwargs: dict[str, object] = {"json": body}
-    if headers is not None:
-        stream_kwargs["headers"] = headers
-    with client.stream("POST", parser_url, **stream_kwargs) as response:
+    if headers is None:
+        response_stream = client.stream("POST", parser_url, json=body)
+    else:
+        response_stream = client.stream("POST", parser_url, json=body, headers=headers)
+    with response_stream as response:
         response.raise_for_status()
         for chunk in response.iter_text():
             if not chunk:

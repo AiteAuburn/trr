@@ -67,6 +67,28 @@ Completion evidence:
 
 ## Done
 
+### T2336: Restore production-code strict typing
+
+Status: done
+
+Problem / impact:
+
+- Strict mypy reported production errors in achievement typing, food-search SQL ordering, and local-parser HTTP stream kwargs.
+- Severity: medium.
+
+Completed:
+
+- Matched achievement tuple typing to the string-only catalog.
+- Kept food search ordering semantics while using explicit SQLAlchemy order branches.
+- Replaced an untyped HTTP kwargs dictionary with explicit header/no-header stream calls and preserved the prior no-header invocation shape.
+
+Validation:
+
+- `rtk docker compose run --rm backend mypy app` passed: 68 source files.
+- Focused affected regressions passed: `32 passed in 4.82s`.
+- Full backend Ruff and pytest gates.
+- `rtk git diff --check`.
+
 ### T2335: Isolate deterministic year-review tests from developer AI config
 
 Status: done
