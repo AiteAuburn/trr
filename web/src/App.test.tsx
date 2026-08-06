@@ -12,7 +12,7 @@ import {
 
 describe("App", () => {
   it("renders the product name and primary recording action", () => {
-    const html = renderToString(<App />);
+    const html = renderToString(<App />).replaceAll("<!-- -->", "");
 
     expect(html).toContain("糖錄錄");
     expect(html).toContain("首頁 · 快速記錄");

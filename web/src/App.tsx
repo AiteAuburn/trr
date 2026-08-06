@@ -521,14 +521,17 @@ function stripBlockedKeys(value: unknown, blockedKeys: Set<string>): unknown {
   return value;
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
 export function sanitizePendingRecordForCreate(pendingRecord: PendingRecord): PendingRecord {
   const payload = stripBlockedKeys(pendingRecord.payload_json, payloadTextKeys);
   const metadata = stripBlockedKeys(pendingRecord.metadata_json ?? {}, metadataTextKeys);
   return {
     ...pendingRecord,
-    payload_json: payload && typeof payload === "object" && !Array.isArray(payload) ? payload : {},
-    metadata_json:
-      metadata && typeof metadata === "object" && !Array.isArray(metadata) ? metadata : {},
+    payload_json: isRecord(payload) ? payload : {},
+    metadata_json: isRecord(metadata) ? metadata : {},
   };
 }
 

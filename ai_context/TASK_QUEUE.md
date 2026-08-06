@@ -30,16 +30,7 @@ Current design baseline:
 
 ## Active
 
-### T2333: Complete production-readiness review and safe hardening
-
-Status: active
-
-Goal:
-
-- Audit the complete backend, web, mobile, deployment, configuration, migration, security, observability, performance, and test surfaces against the production-readiness brief.
-- Implement confirmed, high-confidence improvements as isolated changes with regression coverage.
-- Keep uncertain architectural work as explicit recommendations rather than speculative rewrites.
-- Produce the requested severity-ranked findings, change summary, compatibility notes, remaining risks, operational guidance, exact validation evidence, release checklist, and final readiness status.
+None.
 
 ## Next Up
 
@@ -66,6 +57,109 @@ Completion evidence:
 - The completed slice is committed and pushed with `main...origin/main = 0 0`.
 
 ## Done
+
+### T2333: Complete production-readiness review and safe hardening
+
+Status: done
+
+Completed:
+
+- Audited backend, web, mobile, deployment, configuration, migrations, dependencies, containers, security, observability, performance, testing, and operational support.
+- Implemented isolated CI trigger/permission, deterministic test, strict typing, dependency, runtime-image, and release-scan improvements with regression validation.
+- Remediated every discovered fixed high/critical backend, web, mobile, and release-image dependency finding; 16 moderate Expo build-tool advisories remain documented behind a passing high-severity gate.
+- Produced `ai_context/PRODUCTION_READINESS_REVIEW.md` with the requested executive summary, severity-ranked issues, changes, compatibility, remaining risks, deploy/migrate/rollback/operations guidance, exact validation evidence, checklist, and final status.
+
+Final status:
+
+- **Not ready for production** until real provider callbacks/end-user auth flows, operated managed-data recovery, release governance, and staging/device deployment evidence are complete.
+
+### T2340: Harden and scan actual production container images
+
+Status: done
+
+Problem / impact:
+
+- CI scanned development images rather than the deployable production Dockerfiles.
+- Trivy found fixed high-severity backend build-tool packages and 33 high/critical findings in the old nginx 1.27 Alpine web runtime.
+- The minimal proxy used the same vulnerable nginx base but had no image scan.
+
+Completed:
+
+- CI now builds and scans explicit backend, web, and proxy release images.
+- Removed setuptools from the production backend runtime after dependency installation and added bounded pip retries.
+- Upgraded nginx-unprivileged to 1.29 Alpine, upgrades fixed Alpine packages during image build, and added a hardened minimal-proxy Dockerfile.
+- Configured Trivy to use the final-filesystem inventory rather than stale parent-image OCI SBOM package lists.
+- Extended the deployment verifier with release-image scan markers.
+
+Validation:
+
+- All three production images built successfully and run non-root.
+- Fresh Trivy scans report zero fixed high/critical findings for backend, web, and proxy release images.
+- Minimal production Compose configuration and all deployment verifiers pass.
+- `rtk git diff --check` passes.
+
+### T2339: Remediate high-severity client dependency findings
+
+Status: done
+
+Problem / impact:
+
+- Web dependency audit reported four high-severity findings in Node-only transitive packages pulled by the browser speech dependency.
+- Mobile dependency audit reported 15 high and one critical finding in the Expo 52 build toolchain.
+- CI scanned web dependencies but did not scan the mobile lockfile.
+
+Completed:
+
+- Refreshed both client lockfiles with non-breaking audit fixes.
+- Added reviewed root overrides for fixed `adm-zip` and `sharp` releases used only by the Transformers Node path, while preserving the browser WebGPU/WASM speech bundle.
+- Added reviewed root overrides for fixed `@xmldom/xmldom`, `postcss`, and `tar` releases in the Expo build toolchain.
+- Added a mobile high-severity dependency audit to CI.
+- Added a plain-object type guard exposed by the clean web install and made the SSR test resilient to React hydration comments without weakening its visible-copy checks.
+
+Compatibility / migration:
+
+- No intentional API, schema, data, environment-variable, or user-workflow change.
+- Clean dependency installation is required before build or deployment.
+- Expo SDK 52 remains overdue for a separately tested migration to SDK 57; 16 moderate build-tool advisories remain until that breaking upgrade is completed.
+
+Validation:
+
+- Clean `npm ci` for web and mobile.
+- Web lint, typecheck, six tests, and production build.
+- Mobile full quality gate and Expo public-config resolution.
+- Web audit reports zero vulnerabilities; mobile audit passes the high-severity gate with only 16 moderate build-tool findings.
+- `rtk git diff --check`.
+
+### T2338: Upgrade vulnerable backend dependency pins
+
+Status: done
+
+Problem / impact:
+
+- `pip-audit` found 25 known vulnerabilities across pinned `cryptography 46.0.3`, `pydantic-settings 2.14.1`, `PyJWT 2.10.1`, and `starlette 1.1.0`.
+- Severity: critical because the affected packages participate in cryptography, JWT authentication, configuration, and HTTP request handling.
+
+Completed:
+
+- Resolved a compatible set before editing constraints.
+- Upgraded `cryptography` to `50.0.0`, `pydantic-settings` to `2.14.2`, `PyJWT` to `2.13.0`, `FastAPI` to `0.141.1`, and `Starlette` to `1.4.1`.
+- Lengthened the negative HS256/JWKS test's throwaway key so PyJWT no longer emits an unrelated weak-key warning.
+- Kept all other reviewed pins unchanged.
+
+Compatibility / migration:
+
+- Dependency-only change; no intentional API, schema, data, configuration, or user-workflow change.
+- Rebuild backend images before deployment; no database migration is introduced by this slice.
+
+Validation:
+
+- Backend constraints verifier.
+- Clean backend image build and package-version inspection.
+- Alembic upgrade to head.
+- Full Ruff, strict mypy, and pytest gates.
+- `pip-audit` with zero known vulnerabilities.
+- The upstream Starlette `httpx` test-client deprecation warning is documented for a separate `httpx2` compatibility review rather than suppressed.
+- `rtk git diff --check`.
 
 ### T2337: Restore strict typing across backend tests
 

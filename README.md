@@ -114,7 +114,11 @@ Detailed runbooks:
 - `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`
 - `ai_context/REPO_QUALITY_WORKFLOW.md`
 
-Production blocker: real auth is not implemented yet. Do not expose the current API to real users until JWT/OIDC validation and profile permission scopes replace local development auth.
+Production blocker: backend JWT/JWKS validation, provider-neutral OIDC exchange,
+refresh sessions, revocation, and secure mobile token storage exist, but actual
+Apple / Google / Email native callbacks and the end-user permission/session UX
+are not complete. Do not expose the API to real users until those callbacks and
+scoped profile flows pass production end-to-end validation.
 
 ## Mobile Preview
 
@@ -152,8 +156,9 @@ npm run start
 ```
 
 With `EXPO_PUBLIC_ALLOW_DEV_AUTH=false`, the mobile app will not call
-`/auth/dev-login`; protected actions remain unavailable until production
-JWT/OIDC login and secure token storage are connected.
+`/auth/dev-login`; protected actions remain unavailable until a real provider
+callback completes the configured OIDC exchange. Successful exchanged sessions
+are stored through the existing SecureStore boundary.
 Mobile dev auth is opt-in, so omitting `EXPO_PUBLIC_ALLOW_DEV_AUTH=true` has
 the same fail-closed behavior.
 

@@ -15,6 +15,148 @@
 
 ## 2026-08-05
 
+### T2340 harden and scan actual production container images
+
+類型：security / containers / CI / production-hardening
+
+檔案：
+
+- `backend/Dockerfile`
+- `backend/Dockerfile.prod`
+- `backend/constraints.txt`
+- `web/Dockerfile.prod`
+- `infra/minimal/Dockerfile.proxy`
+- `infra/minimal/docker-compose.yml`
+- `.github/workflows/ci.yml`
+- `scripts/verify_deployment_config.py`
+- `README.md`
+- `ai_context/PRODUCTION_READINESS_REVIEW.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+問題與風險：
+
+- Container scans targeted development images instead of deployable production images.
+- Trivy found fixed high findings in backend build tooling and 33 high/critical findings in the nginx 1.27 Alpine runtime.
+- The production proxy reused the vulnerable base without a dedicated scan.
+
+變更：
+
+- Build and scan explicit backend, web, and proxy release images in CI.
+- Remove setuptools after production backend dependency installation and add bounded pip retries after a real package-host timeout.
+- Upgrade nginx-unprivileged to 1.29 Alpine and apply current fixed Alpine package revisions during web/proxy builds.
+- Add the hardened proxy Dockerfile and final-filesystem Trivy inventory policy.
+- Add release-image markers to the deployment verifier and correct stale auth-readiness documentation.
+
+相容性：
+
+- No API, schema, data, or user-flow change.
+- Production runtime base changes from nginx-unprivileged 1.27 to 1.29; rebuild all release images.
+
+驗證：
+
+- Backend, web, and proxy production image builds passed.
+- Fresh Trivy high/critical scans report zero findings for all three release images.
+- Runtime user checks confirm backend `app` and nginx `101` non-root users.
+- Minimal Compose config and backend-constraint, deployment-config, backup/restore, and Kubernetes verifiers passed.
+- `rtk git diff --check` passed.
+
+後續：
+
+- Enforce the two GitHub Actions jobs through branch protection and promote scanned images by immutable digest.
+- Complete the release blockers in `ai_context/PRODUCTION_READINESS_REVIEW.md` before real-user deployment.
+
+### T2339 remediate high-severity client dependency findings
+
+類型：security / dependencies / CI / production-hardening
+
+檔案：
+
+- `web/package.json`
+- `web/package-lock.json`
+- `web/src/App.tsx`
+- `web/src/App.test.tsx`
+- `mobile/package.json`
+- `mobile/package-lock.json`
+- `.github/workflows/ci.yml`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+問題與風險：
+
+- Web audit reported four high-severity findings in Node-only transitive packages from the Transformers speech dependency.
+- Mobile audit reported 15 high and one critical finding in the Expo 52 build toolchain.
+- CI had no mobile dependency audit gate.
+
+變更：
+
+- Applied non-breaking lockfile audit updates.
+- Overrode the affected Node-only web transitive packages to fixed `adm-zip 0.6.0` and `sharp 0.35.3` releases; the production browser build still emits the WebGPU/WASM Transformers speech chunk.
+- Overrode affected Expo build-tool transitive packages to fixed `@xmldom/xmldom 0.9.10`, `postcss 8.5.26`, and `tar 7.5.22` releases.
+- Added the mobile high-severity dependency audit to CI.
+- Added an explicit plain-object type guard exposed by the clean web install and normalized React hydration comments in the SSR visible-copy test.
+
+相容性：
+
+- No intentional API, schema, data, environment-variable, or user-flow change.
+- Clean installs are required before build or deployment.
+
+驗證：
+
+- Clean `npm ci` completed for both clients.
+- Web lint, typecheck, six tests, and production build passed.
+- Mobile full quality gate and Expo public-config resolution passed.
+- Web audit reports zero vulnerabilities.
+- Mobile `--audit-level=high` passes; 16 moderate Expo build-tool advisories remain.
+
+後續：
+
+- Migrate Expo SDK 52 to SDK 57 as an isolated breaking change and remove temporary overrides after upstream dependency ranges are fixed.
+- Continue T2333 with container scans and the consolidated production-readiness report.
+
+### T2338 upgrade vulnerable backend dependency pins
+
+類型：security / dependencies / production-hardening
+
+檔案：
+
+- `backend/constraints.txt`
+- `ai_context/TASK_QUEUE.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+- `ai_context/PRODUCTION_HARDENING_AUDIT.md`
+
+問題與風險：
+
+- `pip-audit` reported 25 advisories across `cryptography 46.0.3`, `pydantic-settings 2.14.1`, `PyJWT 2.10.1`, and `starlette 1.1.0`.
+- Severity is critical because these packages are in authentication, cryptography, configuration, and HTTP request boundaries.
+
+變更：
+
+- Used pip dry-run resolution to select a compatible upgrade set before editing pins.
+- Pinned `cryptography 50.0.0`, `pydantic-settings 2.14.2`, `PyJWT 2.13.0`, `FastAPI 0.141.1`, and `Starlette 1.4.1`.
+- Updated the negative HS256/JWKS test fixture to use a sufficiently long throwaway key, eliminating PyJWT's unrelated short-HMAC-key warning while preserving algorithm-rejection coverage.
+- Left unrelated dependency pins unchanged.
+
+相容性：
+
+- No intentional API, schema, data, environment-variable, or user-flow change.
+- Backend images must be rebuilt; no new database migration is required.
+
+驗證：
+
+- Backend constraints verifier.
+- Clean backend image build and resolved-version inspection.
+- Alembic upgrade to head.
+- Full Ruff, strict mypy, and pytest gates.
+- `pip-audit` with zero known vulnerabilities.
+- Full pytest reports the upstream Starlette `httpx` test-client deprecation warning; migration to `httpx2` requires a separate compatibility review and is not hidden or suppressed.
+- `rtk git diff --check`.
+
+後續：
+
+- Audit web and mobile lockfiles and container images, then continue the T2333 release-readiness report.
+
 ### T2337 restore strict typing across backend tests
 
 類型：test / typing / production-hardening

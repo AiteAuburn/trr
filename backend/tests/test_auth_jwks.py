@@ -69,7 +69,7 @@ def test_claims_from_jwks_bearer_token_rejects_hs256_before_key_lookup() -> None
             "exp": int(time()) + 300,
             "jti": f"jwt-{uuid4()}",
         },
-        "not-used-for-jwks",
+        "not-used-for-jwks-but-32-bytes-minimum",
         algorithm="HS256",
         headers={"kid": "symmetric-key"},
     )

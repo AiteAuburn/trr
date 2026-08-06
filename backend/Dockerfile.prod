@@ -9,7 +9,8 @@ WORKDIR /app
 RUN addgroup --system app && adduser --system --ingroup app app
 
 COPY pyproject.toml constraints.txt ./
-RUN pip install --no-cache-dir --prefer-binary --timeout 120 \
+RUN pip install --no-cache-dir --prefer-binary --timeout 120 --retries 5 "setuptools==80.9.0" \
+    && pip install --no-cache-dir --prefer-binary --timeout 120 --retries 5 \
       -c constraints.txt \
       "alembic>=1.17.0" \
       "email-validator>=2.3.0" \
@@ -18,7 +19,8 @@ RUN pip install --no-cache-dir --prefer-binary --timeout 120 \
       "psycopg[binary]>=3.3.0" \
       "pydantic-settings>=2.6.0" \
       "sqlalchemy>=2.0.44,<2.1" \
-      "uvicorn[standard]>=0.32.0"
+      "uvicorn[standard]>=0.32.0" \
+    && pip uninstall --yes setuptools
 
 COPY app ./app
 COPY alembic ./alembic

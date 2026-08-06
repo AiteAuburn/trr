@@ -6,7 +6,9 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 COPY pyproject.toml constraints.txt ./
-RUN pip install --no-cache-dir --timeout 120 --retries 5 --upgrade pip \
+RUN pip install --no-cache-dir --timeout 120 --retries 5 --upgrade \
+      pip \
+      "setuptools==80.9.0" \
     && pip install --no-cache-dir --timeout 120 --retries 5 -c constraints.txt -e ".[dev]"
 
 COPY app ./app
