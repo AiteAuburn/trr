@@ -30,31 +30,7 @@ Current design baseline:
 
 ## Active
 
-### T2345: Add API and migration compatibility guardrails
-
-Status: active
-
-Problem / impact:
-
-- Rolling deploys and long-lived mobile clients need a machine-checked API compatibility window.
-- Future Alembic changes need explicit expand/contract classification so destructive contraction cannot ride with ordinary deployment.
-
-Proposed change:
-
-- Add versioned API compatibility metadata and a verifier for additive-vs-breaking contract changes.
-- Add migration policy metadata/checks that require expand migrations to remain downgrade-safe for the previous app and isolate contract migrations.
-- Refresh the production-readiness report with final evidence and remaining external blockers.
-
-Compatibility / migration:
-
-- Guardrail-only by default; no current schema migration or API removal.
-- Existing signed clients remain supported under API contract version 1.
-
-Completion evidence:
-
-- API/migration/release/deployment verifiers and full relevant tests pass.
-- Final report clearly separates completed engineering controls from external launch blockers.
-- Changes are committed and pushed without staging `mobile/.expo/devices.json`.
+No active task. Production-foundation goal slices T2341-T2345 are complete; external launch blockers remain tracked in `ai_context/PRODUCTION_READINESS_REVIEW.md`.
 
 ## Next Up
 
@@ -81,6 +57,25 @@ Completion evidence:
 - The completed slice is committed and pushed with `main...origin/main = 0 0`.
 
 ## Done
+
+### T2345: Add API and migration compatibility guardrails
+
+Status: done
+
+Completed:
+
+- Added a machine-readable API contract support range with current/minimum/maximum contract version 1.
+- Locked the reviewed Alembic legacy baseline at `20260430_0030` and require every later migration to declare expand phase and previous-app rollback compatibility.
+- Added CI rejection for multiple heads, revision-chain problems, unclassified migrations, contract migrations, and schema drops in expand upgrades.
+- Refreshed production readiness to reflect Expo SDK 57, native build evidence, release/flag/auth/migration controls, and the current no-fixed-version Metro advisory.
+
+Validation:
+
+- Backend full suite: 320 passed with one known upstream Starlette test-client warning.
+- Web lint/typecheck/9 tests/production build pass; existing large Transformers chunk warning remains.
+- Mobile full quality gate passes.
+- Backend constraint, backup/restore, Kubernetes, deployment, release, feature flag, and API/migration verifiers pass.
+- `git diff --check` passes.
 
 ### T2344: Harden auth, session, and permission boundaries
 

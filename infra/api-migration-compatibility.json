@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "api": {
+    "current_contract": "1",
+    "minimum_supported_contract": "1",
+    "maximum_supported_contract": "1",
+    "breaking_change_requires_new_contract": true
+  },
+  "database": {
+    "legacy_baseline_head": "20260430_0030",
+    "required_new_migration_phase": "expand",
+    "require_previous_app_rollback_compatibility": true,
+    "allow_contract_migrations": false
+  }
+}

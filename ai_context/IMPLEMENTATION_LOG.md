@@ -15,6 +15,33 @@
 
 ## 2026-08-06
 
+### T2345 API and Alembic compatibility guardrails
+
+類型：api / database / migrations / CI / readiness
+
+變更：
+
+- Added a reviewed machine-readable API support range for contract version 1.
+- Established Alembic `20260430_0030` as the legacy baseline; later revisions must be linear, `migration_phase='expand'`, and `rollback_compatible=True`.
+- Added CI enforcement that blocks multiple heads, unclassified post-baseline migrations, contract migrations, and `op.drop_*` operations in expand upgrades.
+- Linked the compatibility policy from the zero-downtime runbook and refreshed the production-readiness report with current evidence and remaining external blockers.
+
+相容性：
+
+- Guardrail and documentation change only; no current schema migration, endpoint removal, or signed-client behavior change.
+
+驗證：
+
+- Backend full suite: 320 passed; one known upstream Starlette test-client warning.
+- Web lint, typecheck, 9 tests, and production build passed; existing large Transformers chunk warning remains.
+- Mobile full quality gate passed.
+- Backend constraint, backup/restore, Kubernetes, deployment, release, feature flag, and API/migration verifiers passed.
+- `git diff --check` passed.
+
+後續：
+
+- External launch blockers remain: real provider callbacks/device E2E, operated managed database/PITR drill, cloud/IAM/TLS/alerts, branch/environment governance, load/failure testing, and upstream Metro advisory remediation.
+
 ### T2344 auth, session, and permission boundary hardening
 
 類型：security / auth / permissions / test

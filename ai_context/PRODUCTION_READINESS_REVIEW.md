@@ -1,6 +1,6 @@
 # Production Readiness Review
 
-Review date: 2026-08-05 (America/New_York)
+Review date: 2026-08-06 (America/New_York)
 
 Scope: backend, database and migrations, web, mobile, configuration, CI,
 containers, minimal Compose, Kubernetes manifests, security, observability,
@@ -9,12 +9,16 @@ performance, testing, deployment, recovery, and operational support.
 ## 1. Executive summary
 
 The repository is materially safer and more reproducible than at the start of
-this review. Backend lint, strict typing, 317 tests, migrations, deployment
+this review. Backend lint, strict typing, tests, migrations, deployment
 verifiers, web checks, mobile checks, dependency audits, production builds, and
 release-image scans pass. CI now runs automatically on `main` pushes and pull
 requests, uses read-only repository permissions, scans mobile dependencies, and
 builds and scans the actual release images. Known high/critical dependency and
-container findings discovered during this review were remediated.
+container findings discovered during the original review were remediated. The
+mobile platform is now on Expo SDK 57 / React Native 0.86 with a successful
+four-ABI Android native build. Release identity, zero-downtime rollout/rollback,
+fail-closed feature flags, route-auth coverage, and API/migration compatibility
+are now machine-verified CI contracts.
 
 The release decision is still **Not ready for production**. The backend has
 production-grade token validation and session primitives, but actual Apple,
@@ -54,10 +58,12 @@ to real users or real health data.
    test.** Production signing, provider login, token refresh/revoke, record
    create/read/update, offline/retry behavior, and upgrade/rollback must be
    exercised against staging before release.
-3. **Expo SDK 52 is overdue for a breaking upgrade.** Reviewed overrides remove
-   all high/critical audit findings, but 16 moderate build-tool advisories remain
-   and upstream remediation requires Expo SDK 57. Treat the migration as an
-   isolated compatibility project with native-device regression testing.
+3. **A current Metro build-time advisory has no fixed dependency release.** The
+   Expo SDK 57 graph reaches `image-size` through Metro, and npm reports parser
+   denial-of-service advisories across all published `image-size` versions.
+   Forced remediation proposes an unsafe Expo downgrade. Keep untrusted image
+   inputs out of the build pipeline and adopt the upstream Expo/Metro fix when
+   published.
 4. **Cloud deployment is descriptive, not operated.** Provider-neutral
    Kubernetes and minimal Compose artifacts exist, but there is no reviewed
    Terraform/Helm/IAM implementation, production DNS/TLS setup, alert routing,
@@ -242,24 +248,32 @@ All listed results were actually observed.
   managed backup/PITR, load, chaos, or disaster-recovery test was performed.
 - Branch-protection and cloud/IAM state were not accessible from this checkout.
 
+Current 2026-08-06 validation refresh:
+
+- Backend full suite: 320 passed; one upstream Starlette test-client deprecation warning.
+- Web lint/typecheck/9 tests/production build passed; the documented large Transformers chunk warning remains.
+- Mobile SDK 57 quality gate and four-ABI Android debug build passed.
+- Release, feature-flag, route-auth, API/migration, deployment, Kubernetes, backup/restore, and dependency-constraint verifiers passed.
+
 ## 8. Release-readiness checklist
 
 - [x] Backend lint, strict typing, tests, and migration-to-head pass.
 - [x] Web lint, typing, tests, and production build pass.
 - [x] Mobile typecheck and repository quality verifiers pass.
 - [x] Backend and web dependency audits have no known findings.
-- [x] Mobile dependency audit has no high/critical findings.
+- [ ] Mobile dependency audit has no high/critical findings; Metro currently carries a no-fixed-version build-time `image-size` advisory.
 - [x] Backend, web, and proxy release images have no fixed high/critical Trivy findings.
 - [x] Production images run as non-root users.
 - [x] Production configuration, Kubernetes, Compose, and backup-script static verifiers pass.
 - [x] CI runs automatically and includes quality, dependency, secret, and release-image gates.
+- [x] Expo SDK 57 native Android build, release contract, feature-flag parity, route-auth coverage, and API/migration compatibility gates pass.
 - [ ] Real provider callbacks and production auth/session/profile UX pass end to end.
 - [ ] Production-signed mobile artifacts pass real-device staging tests.
 - [ ] Managed database, secrets, TLS, IAM, registry, and alerting are provisioned from reviewed IaC.
 - [ ] Managed backup/PITR restore drill meets approved RPO/RTO.
 - [ ] Required branch checks, protected environment, approvals, and immutable release promotion are enforced.
 - [ ] Load/capacity and failure-recovery tests meet approved service objectives.
-- [ ] Expo SDK migration removes remaining moderate build-tool advisories.
+- [ ] Upstream Expo/Metro publishes and the project adopts a fixed `image-size` dependency path.
 
 ## 9. Final status
 

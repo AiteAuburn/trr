@@ -29,5 +29,6 @@ This contract applies to backend, web, database migrations, and server compatibi
 ## Mobile compatibility
 
 - Server responses may add optional fields, but cannot remove or change fields used by supported signed builds during their support window.
+- `infra/api-migration-compatibility.json` is the reviewed API support range. A breaking response or behavior change requires a new contract version and an explicit client migration window.
 - Native SDK changes require a new signed binary. Feature exposure must be independently controllable so the server can disable a feature without forcing a binary rollback.
 - Store rollback means re-promoting a previously signed build or reviewed update channel; therefore backend API compatibility is the primary no-downtime protection.

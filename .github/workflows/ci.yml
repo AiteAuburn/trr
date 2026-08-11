@@ -42,6 +42,9 @@ jobs:
       - name: Verify centralized feature flags
         run: python scripts/verify_feature_flags.py
 
+      - name: Verify API and migration compatibility
+        run: python scripts/verify_api_migration_compatibility.py
+
       - name: Build dependency-scan images
         run: docker compose build backend web
 
