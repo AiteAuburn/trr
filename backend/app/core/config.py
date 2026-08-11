@@ -28,6 +28,10 @@ class Settings(BaseSettings):
     release_id: str = Field(default="local", min_length=1, max_length=MAX_RELEASE_METADATA_LENGTH)
     git_sha: str = Field(default="unknown", min_length=1, max_length=64)
     api_contract_version: str = Field(default="1", pattern=r"^[1-9][0-9]{0,8}$")
+    feature_food_photo_analysis: bool = False
+    feature_health_integrations: bool = False
+    feature_community_sharing: bool = False
+    feature_store_redemptions: bool = False
     database_url: str = Field(
         default="postgresql+psycopg://app:app@db:5432/bloodsugar",
         max_length=MAX_CONFIG_URL_LENGTH,

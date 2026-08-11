@@ -30,30 +30,30 @@ Current design baseline:
 
 ## Active
 
-### T2343: Add centralized feature flags with safe defaults
+### T2344: Harden auth, session, and permission boundaries
 
 Status: active
 
 Problem / impact:
 
-- Future features currently rely on scattered environment variables or UI-specific readiness logic.
-- Production needs one typed, deny-by-default control plane so a risky feature can be disabled independently of application rollback.
+- Production auth has strong component tests but still needs a consolidated boundary audit across login exchange, refresh rotation, logout/revocation, profile grants, and client token handling.
+- Future features must reuse one authorization vocabulary rather than adding route-specific permission shortcuts.
 
 Proposed change:
 
-- Define centralized backend and client feature flag contracts with bounded names, safe defaults, and environment overrides.
-- Expose only public, non-sensitive flags to clients and keep authorization enforcement server-side.
-- Add verifier/test coverage proving unknown or malformed flags fail closed.
+- Audit live auth/session/grant code and tests for fail-open paths, inconsistent scopes, missing revocation, and unsafe client persistence.
+- Add the smallest reusable policy/verifier changes needed to make future endpoint authorization consistent.
+- Preserve current provider and development-auth behavior outside production.
 
 Compatibility / migration:
 
-- Flags change feature exposure only; they do not grant authorization or bypass entitlements.
-- Default behavior remains unchanged unless a flag is explicitly enabled.
+- No intentional login UX or existing API response change.
+- Feature flags and entitlements must never substitute for server authorization.
 
 Completion evidence:
 
-- Backend/client flag tests and repository verifier pass.
-- Production example configuration keeps unreleased features disabled.
+- Backend auth/config tests and mobile secure-storage verifier pass.
+- New permission-policy verifier covers every protected router.
 - Changes are committed and pushed without staging `mobile/.expo/devices.json`.
 
 ## Next Up
@@ -81,6 +81,24 @@ Completion evidence:
 - The completed slice is committed and pushed with `main...origin/main = 0 0`.
 
 ## Done
+
+### T2343: Add centralized feature flags with safe defaults
+
+Status: done
+
+Completed:
+
+- Added a typed backend registry for food photo analysis, health integrations, community sharing, and store redemptions.
+- Added a public `/feature-flags` contract with versioning and a 60-second refresh hint; all flags default disabled in local, minimal production, and Kubernetes examples.
+- Added matching web/mobile contracts, fail-closed parsers, and refresh helpers that disable features on network, HTTP, schema, version, unknown-name, or non-boolean failures.
+- Added a parity/default verifier to CI so backend, web, and mobile flag names cannot drift.
+
+Validation:
+
+- Feature flag and deployment-config verifiers pass.
+- Mobile and web TypeScript checks pass.
+- Web feature-flag tests pass: 3 passed.
+- Backend health/config tests pass: 44 passed with one known upstream Starlette test-client warning.
 
 ### T2342: Establish zero-downtime release and rollback contracts
 

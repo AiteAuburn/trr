@@ -98,6 +98,7 @@ def _verify_ci_workflow(errors: list[str]) -> None:
         "bloodsugar-proxy-release",
         "TRIVY_SBOM_SOURCES: rekor",
         "python scripts/verify_release_contract.py",
+        "python scripts/verify_feature_flags.py",
     )
     for marker in required_markers:
         if marker not in workflow:

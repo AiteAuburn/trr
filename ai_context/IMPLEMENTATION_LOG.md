@@ -15,6 +15,33 @@
 
 ## 2026-08-06
 
+### T2343 centralized fail-closed feature flags
+
+類型：feature / release-control / backend / web / mobile
+
+變更：
+
+- Added a typed four-flag backend registry and versioned public `/feature-flags` endpoint with a bounded refresh interval.
+- Kept every new feature disabled by default across backend settings, local examples, minimal production, Kubernetes, web, and mobile.
+- Added web/mobile parsing and refresh helpers that accept only explicit boolean `true` values under contract version 1 and otherwise fail closed.
+- Added CI parity/default verification across all three runtimes.
+
+相容性：
+
+- Additive public endpoint only; no existing response, schema, navigation, entitlement, or authorization change.
+- Flags control exposure and availability only; backend authorization remains mandatory.
+
+驗證：
+
+- Feature flag and deployment configuration verifiers passed.
+- Mobile/web TypeScript passed; web flag tests 3 passed.
+- Backend health/config suite 44 passed with one known upstream Starlette test-client warning.
+
+後續：
+
+- Wire individual flags into features only when those features move beyond preview, with a product-owned rollout plan and metrics.
+- Continue consolidated auth/session/permission boundary hardening.
+
 ### T2342 zero-downtime release and rollback contracts
 
 類型：infra / release / compatibility / operations

@@ -30,6 +30,7 @@ from app.api import (
 from app.core.config import get_settings
 from app.core.logging import configure_logging
 from app.core.metrics import http_metrics
+from app.services.feature_flags import PublicFeatureFlagPayload, public_feature_flag_payload
 from app.db.session import engine
 
 settings = get_settings()
@@ -370,3 +371,8 @@ def version() -> dict[str, str]:
         "git_sha": settings.git_sha,
         "api_contract_version": settings.api_contract_version,
     }
+
+
+@app.get("/feature-flags")
+def feature_flags() -> PublicFeatureFlagPayload:
+    return public_feature_flag_payload(settings)

@@ -39,6 +39,9 @@ jobs:
       - name: Verify zero-downtime release contract
         run: python scripts/verify_release_contract.py
 
+      - name: Verify centralized feature flags
+        run: python scripts/verify_feature_flags.py
+
       - name: Build dependency-scan images
         run: docker compose build backend web
 

@@ -366,6 +366,24 @@ def test_version_exposes_phi_safe_release_identity() -> None:
     }
 
 
+def test_feature_flags_fail_closed_by_default() -> None:
+    client = TestClient(app)
+
+    response = client.get("/feature-flags")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "contract_version": "1",
+        "refresh_after_seconds": 60,
+        "flags": {
+            "food_photo_analysis": False,
+            "health_integrations": False,
+            "community_sharing": False,
+            "store_redemptions": False,
+        },
+    }
+
+
 def test_metrics_endpoint_exposes_phi_safe_route_metrics() -> None:
     http_metrics.reset()
     client = TestClient(app)
