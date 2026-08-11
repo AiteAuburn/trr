@@ -16,7 +16,10 @@
     "android": {
       "package": "app.bloodsugar.mobile"
     },
-    "plugins": [],
+    "plugins": [
+      "expo-audio",
+      "expo-asset"
+    ],
     "extra": {
       "apiBaseUrl": "http://localhost:8000"
     }

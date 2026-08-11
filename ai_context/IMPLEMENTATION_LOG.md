@@ -13,6 +13,45 @@
 後續:
 ```
 
+## 2026-08-06
+
+### T2341 Expo SDK 57 upgrade
+
+類型：dependencies / mobile / production-foundation
+
+問題與風險：
+
+- Expo SDK 52 / React Native 0.76 is five SDK generations behind the supported SDK 57 baseline.
+- The old build toolchain retains moderate dependency advisories and would make future auth, notification, health, camera, and local-model native work increasingly expensive to upgrade.
+
+變更：
+
+- Upgraded Expo to 57.0.12, React Native to 0.86.2, React to 19.2.3, TypeScript to 6, and aligned all Expo native modules.
+- Replaced `expo-av` with `expo-audio`; used the documented FileSystem legacy entry point to preserve the existing download/share behavior during the platform upgrade.
+- Regenerated and applied the SDK 57 Android native baseline, including Gradle 9.3.1, Expo autolinking, React Native bootstrap, Audio service permissions, and new-architecture settings.
+- Added `verify_mobile_native_config.py` so app identity, scheme, orientation, audio plugin output, autolinking, and native bootstrap drift fail the mobile quality gate.
+- Updated existing navigation verification for the new recording/FileSystem contracts and added a TypeScript resolution bridge for `whisper.rn` package metadata.
+
+相容性：
+
+- Requires a newly built mobile binary; not eligible for OTA-only delivery.
+- No intentional API, schema, stored health-data, navigation, or visible-copy change.
+
+驗證：
+
+- `npx expo install --check`: pass.
+- `npx expo-doctor`: 18/19; only the pre-existing tracked `mobile/.expo` warning remains, and `mobile/.expo/devices.json` was intentionally not changed or staged.
+- `npm run quality`: pass, including the new native-config verifier.
+- Windows Gradle `:app:assembleDebug --no-daemon`: pass; Expo modules plus `llama.rn` and `whisper.rn` compiled for arm64-v8a, armeabi-v7a, x86, and x86_64.
+- Android APK script verifier: pass.
+- `npm audit --audit-level=high`: reports 11 paths to Metro's `image-size` parser DoS advisory; no fixed package version is published, and npm's suggested force fix downgrades Expo, so no unsafe override was retained.
+
+後續：
+
+- Remove the FileSystem legacy bridge in a separate behavior-tested storage refactor.
+- Untrack the historical `.expo` files only with explicit repository-owner approval; future `.expo` files are ignored.
+- Monitor the Expo/Metro patch that adopts a fixed `image-size` release and remove the remaining temporary transitive overrides when upstream ranges permit it.
+
 ## 2026-08-05
 
 ### T2340 harden and scan actual production container images

@@ -2868,7 +2868,7 @@ def main() -> int:
             ("app local record cache limit", "const maxMobileRecordCacheLimit = 500;"),
             ("app local report query limit", "const mobileReportQueryLimit = 500;"),
             ("app local year review share file helper", "async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset)"),
-            ("app local filesystem import", 'import * as FileSystem from "expo-file-system";'),
+            ("app local filesystem compatibility import", 'import * as FileSystem from "expo-file-system/legacy";'),
         ):
             _assert_not_contains(label, content, marker)
         _verify_daily_record_contract(content, daily_transcript_content)
@@ -8182,8 +8182,9 @@ def main() -> int:
             ("minimal home mic press out", "onPressOut={releaseRecordingPreview}"),
             ("recording release wrapper", "function releaseRecordingPreview()"),
             ("minimal home conditional subtitle", "{currentChrome.subtitle ? <Text style={styles.subtitle}>{currentChrome.subtitle}</Text> : null}"),
-            ("native audio import", 'import { Audio } from "expo-av";'),
-            ("native audio recording ref", "const audioRecordingRef = useRef<Audio.Recording | null>(null);"),
+            ("native audio recorder hook import", "useAudioRecorder,"),
+            ("native audio recording preset", "const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);"),
+            ("native audio recording ref", "const audioRecordingRef = useRef<AudioRecorder | null>(null);"),
             ("native recording start guard", "const recordingStartInFlight = useRef(false);"),
             ("native recording stop guard", "const recordingStopInFlight = useRef(false);"),
             ("recording boundary runtime field binding", "const recordingBoundaryDisplay = recordingRuntimeDisplay.boundary;"),
@@ -8192,12 +8193,13 @@ def main() -> int:
             ("recording interval limit clamp", "setRecordingElapsedSeconds(clampNumber(nextElapsedSeconds, 0, limitSeconds));"),
             ("recording interval auto stop", 'void finishRecordingPreview("limit");'),
             ("recording finish effective limit clamp", "recordingEffectiveLimitSeconds(voiceQuota)"),
-            ("native microphone permission request", "await Audio.requestPermissionsAsync();"),
-            ("native recording mode", "await Audio.setAudioModeAsync({"),
-            ("native recording instance", "const recording = new Audio.Recording();"),
-            ("native recording options", "Audio.RecordingOptionsPresets.HIGH_QUALITY"),
-            ("native recording start", "await recording.startAsync();"),
-            ("native recording stop unload", "await recording.stopAndUnloadAsync();"),
+            ("native microphone permission request", "await requestRecordingPermissionsAsync();"),
+            ("native recording mode", "await setAudioModeAsync({"),
+            ("native recording preparation", "await audioRecorder.prepareToRecordAsync();"),
+            ("native recording start", "audioRecorder.record();"),
+            ("native recording ref assignment", "audioRecordingRef.current = audioRecorder;"),
+            ("native recording stop", "await recording.stop();"),
+            ("native recording uri", "const uri = recording.uri;"),
             ("native recording uri bounded", "capturedAudioPath = uri ? nativeDebugInputValue(uri) : \"\";"),
             ("native recording transcribe helper", "async function transcribeRecordingToReview("),
             ("native recording whisper call", "const text = await transcribeWithNativeWhisper({"),
@@ -15426,7 +15428,7 @@ def main() -> int:
         ):
             _assert_not_contains(label, future_module_detail_requirement_block, marker)
         for label, marker in (
-            ("year review file system import", 'import * as FileSystem from "expo-file-system";'),
+            ("year review file system compatibility import", 'import * as FileSystem from "expo-file-system/legacy";'),
             ("year review share asset cache helper", "export async function writeYearReviewShareAssetFile(asset: YearReviewApiShareAsset)"),
             ("year review share asset cache directory guard", "if (!FileSystem.cacheDirectory)"),
             ("year review share asset filename sanitizer", "safeYearReviewShareAssetFileName(asset.filename)"),

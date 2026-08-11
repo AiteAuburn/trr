@@ -10,6 +10,7 @@ __pycache__/
 htmlcov/
 
 node_modules/
+mobile/.expo/
 dist/
 coverage/
 

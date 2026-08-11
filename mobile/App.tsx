@@ -15,7 +15,13 @@ import {
   TextInput,
   View
 } from "react-native";
-import { Audio } from "expo-av";
+import {
+  RecordingPresets,
+  requestRecordingPermissionsAsync,
+  setAudioModeAsync,
+  useAudioRecorder,
+  type AudioRecorder,
+} from "expo-audio";
 import {
   benchmarkNativeLlama,
   benchmarkNativeWhisper,
@@ -922,6 +928,7 @@ import type {
 type NativeBenchmarkResult = Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>;
 
 export default function App() {
+  const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const [currentScreen, setCurrentScreen] = useState<AppScreen>(initialVisualSmokeScreen ?? "today");
   const [apiBaseUrl, setApiBaseUrl] = useState(defaultApiBaseUrl);
   const [account, setAccount] = useState<Account | null>(null);
@@ -1051,7 +1058,7 @@ export default function App() {
   const latestYearReviewSyncKey = useRef("");
   const foodShareInFlight = useRef(false);
   const storeRedemptionInFlight = useRef(false);
-  const audioRecordingRef = useRef<Audio.Recording | null>(null);
+  const audioRecordingRef = useRef<AudioRecorder | null>(null);
   const recordingStartInFlight = useRef(false);
   const recordingStopInFlight = useRef(false);
   const visualSmokePreviewActive = useRef(Boolean(initialVisualSmokeScreen));
@@ -3054,21 +3061,20 @@ export default function App() {
     }
     recordingStartInFlight.current = true;
     try {
-      const permission = await Audio.requestPermissionsAsync();
+      const permission = await requestRecordingPermissionsAsync();
       if (!permission.granted) {
         setStatus(recordingPermissionDeniedStatusMessage());
         return;
       }
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-        staysActiveInBackground: false,
-        shouldDuckAndroid: true
+      await setAudioModeAsync({
+        allowsRecording: true,
+        playsInSilentMode: true,
+        shouldPlayInBackground: false,
+        interruptionMode: "duckOthers"
       });
-      const recording = new Audio.Recording();
-      await recording.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
-      await recording.startAsync();
-      audioRecordingRef.current = recording;
+      await audioRecorder.prepareToRecordAsync();
+      audioRecorder.record();
+      audioRecordingRef.current = audioRecorder;
       const now = Date.now();
       setIsRecordingPreview(true);
       setRecordingStartedAt(now);
@@ -3182,16 +3188,16 @@ export default function App() {
     audioRecordingRef.current = null;
     try {
       if (recording) {
-        await recording.stopAndUnloadAsync();
-        const uri = recording.getURI();
+        await recording.stop();
+        const uri = recording.uri;
         capturedAudioPath = uri ? nativeDebugInputValue(uri) : "";
         setAudioPath(capturedAudioPath);
       }
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
-        playsInSilentModeIOS: true,
-        staysActiveInBackground: false,
-        shouldDuckAndroid: true
+      await setAudioModeAsync({
+        allowsRecording: false,
+        playsInSilentMode: true,
+        shouldPlayInBackground: false,
+        interruptionMode: "duckOthers"
       });
       setStatus(
         reason === "limit"

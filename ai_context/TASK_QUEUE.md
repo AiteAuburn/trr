@@ -30,7 +30,31 @@ Current design baseline:
 
 ## Active
 
-None.
+### T2342: Establish zero-downtime release and rollback contracts
+
+Status: active
+
+Problem / impact:
+
+- Production promotion and rollback are documented but not yet encoded as a versioned, machine-verifiable contract.
+- Future mobile/web/backend features need compatibility windows so a rolling deploy or rollback does not break in-flight customers.
+
+Proposed change:
+
+- Add explicit build/version metadata and release compatibility policy for web, backend, and mobile.
+- Add machine-verifiable health/readiness and migration-expansion/contraction guardrails for rolling promotion and rollback.
+- Document an operator runbook for canary/rolling deploy, abort, and rollback without customer-visible downtime.
+
+Compatibility / migration:
+
+- No intentional customer workflow change.
+- Database contraction and incompatible API removal remain separate, delayed release steps.
+
+Completion evidence:
+
+- Release contract verifier and existing deployment/migration/backup verifiers pass.
+- Runbook names exact promote, observe, abort, rollback, and delayed-cleanup gates.
+- Changes are committed and pushed without staging `mobile/.expo/devices.json`.
 
 ## Next Up
 
@@ -57,6 +81,25 @@ Completion evidence:
 - The completed slice is committed and pushed with `main...origin/main = 0 0`.
 
 ## Done
+
+### T2341: Upgrade mobile from Expo SDK 52 to SDK 57
+
+Status: done
+
+Completed:
+
+- Upgraded to Expo 57.0.12, React Native 0.86.2, React 19.2.3, TypeScript 6, and the current SDK 57 Expo package patches.
+- Replaced deprecated `expo-av` recording with `expo-audio`; retained legacy FileSystem entry points as an explicit behavior-preserving bridge.
+- Applied a clean SDK 57 Android native baseline while preserving package identity, embedded release bundle behavior, signing configuration, and local-model assets.
+- Added a native-config drift verifier to the mobile quality gate and a TypeScript path bridge for `whisper.rn`'s incomplete root export metadata.
+- Added future `.expo` ignore protection without staging or changing the pre-existing `mobile/.expo/devices.json`.
+
+Validation:
+
+- Expo dependency check passes; Expo Doctor passes 18/19 checks, with only the pre-existing tracked `.expo` state warning intentionally left untouched.
+- Full mobile quality gate passes.
+- Windows Gradle `:app:assembleDebug` succeeds for SDK 57 with `llama.rn` and `whisper.rn` native compilation across four ABIs.
+- `npm audit` reports a newly disclosed no-fixed-version `image-size` parser DoS advisory through Metro; forced remediation would downgrade Expo and is not applied.
 
 ### T2333: Complete production-readiness review and safe hardening
 

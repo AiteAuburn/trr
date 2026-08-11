@@ -39,7 +39,7 @@ function boundProvider(value: string): AuthChallengeProvider | "" {
   return "";
 }
 
-function getSecureRandomValues(bytes: Uint8Array) {
+function getSecureRandomValues(bytes: Uint8Array<ArrayBuffer>) {
   const cryptoLike = globalThis.crypto;
   if (!cryptoLike || typeof cryptoLike.getRandomValues !== "function") {
     return false;
@@ -51,7 +51,7 @@ function getSecureRandomValues(bytes: Uint8Array) {
 function createSecureChallengeValue() {
   let value = "";
   while (value.length < authChallengeValueLength) {
-    const bytes = new Uint8Array(authChallengeValueLength);
+    const bytes = new Uint8Array(new ArrayBuffer(authChallengeValueLength));
     if (!getSecureRandomValues(bytes)) {
       return "";
     }

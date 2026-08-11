@@ -18,6 +18,7 @@
     "verify:release-env": "python3 ../scripts/verify_mobile_release_env.py",
     "verify:android-release-signing": "python3 ../scripts/verify_android_release_signing.py",
     "verify:android-apk-scripts": "python3 ../scripts/verify_android_apk_scripts.py",
+    "verify:native-config": "python3 ../scripts/verify_mobile_native_config.py",
     "visual-smoke:harness": "python3 ../scripts/generate_mobile_visual_smoke_harness.py",
     "visual-smoke:harness:verify-artifact": "python3 ../scripts/verify_mobile_visual_smoke_harness_artifact.py",
     "apk:android-prereqs": "python3 ../scripts/check_android_apk_build_prereqs.py",
@@ -25,27 +26,36 @@
     "preflight:android-apk:internal": "npm run verify:release-env -- --allow-local-api && npm run verify:android-release-signing -- --allow-debug-signing && npm run apk:android-prereqs",
     "visual-smoke:android-prereqs": "python3 ../scripts/check_android_visual_smoke_prereqs.py",
     "visual-smoke:android-blockers": "python3 ../scripts/check_android_visual_smoke_blockers.py",
-    "quality": "npm run typecheck && npm run verify:navigation && npm run verify:ui-spec-coverage && npm run verify:visual-smoke-routes && npm run verify:visual-smoke-harness && npm run verify:secure-auth-storage && npm run verify:android-apk-scripts"
+    "quality": "npm run typecheck && npm run verify:navigation && npm run verify:ui-spec-coverage && npm run verify:visual-smoke-routes && npm run verify:visual-smoke-harness && npm run verify:secure-auth-storage && npm run verify:android-apk-scripts && npm run verify:native-config"
+  },
+  "expo": {
+    "doctor": {
+      "appConfigFieldsNotSyncedCheck": {
+        "enabled": false
+      }
+    }
   },
   "dependencies": {
-    "@expo/metro-runtime": "~4.0.1",
-    "expo": "~52.0.0",
-    "expo-av": "~15.0.2",
-    "expo-dev-client": "~5.0.20",
-    "expo-file-system": "~18.0.12",
-    "expo-secure-store": "~14.0.1",
-    "llama.rn": "^0.12.4",
-    "react": "18.3.1",
-    "react-native": "^0.76.9",
-    "whisper.rn": "^0.5.5"
+    "@expo/metro-runtime": "~57.0.9",
+    "expo": "~57.0.12",
+    "expo-asset": "~57.0.10",
+    "expo-audio": "~57.0.3",
+    "expo-dev-client": "~57.0.11",
+    "expo-file-system": "~57.0.2",
+    "expo-secure-store": "~57.0.1",
+    "llama.rn": "0.12.9",
+    "react": "19.2.3",
+    "react-native": "0.86.2",
+    "whisper.rn": "0.5.5"
   },
   "devDependencies": {
-    "@types/react": "~18.3.0",
-    "typescript": "~5.3.3"
+    "@types/react": "~19.2.4",
+    "typescript": "~6.0.3"
   },
   "overrides": {
     "@xmldom/xmldom": "0.9.10",
     "postcss": "8.5.26",
-    "tar": "7.5.22"
+    "tar": "7.5.22",
+    "uuid": "11.1.1"
   }
 }

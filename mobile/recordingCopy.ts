@@ -322,14 +322,14 @@ export function homeRecordingModelStatusCopy(hasWhisperModel: boolean) {
 
 export function homeRecordingPreviewBoundaryCopy() {
   return boundDisplayText(
-    "首頁按住會使用 expo-av 擷取本機音檔；放開只停止錄音，不自動呼叫 STT、AI、LLM 或寫入 backend。",
+    "首頁按住會使用 expo-audio 擷取本機音檔；放開只停止錄音，不自動呼叫 STT、AI、LLM 或寫入 backend。",
     maxDisplayDetailTextLength
   );
 }
 
 export function recordPageRecordingPreviewBoundaryCopy() {
   return boundDisplayText(
-    "按住會使用 expo-av 擷取本機音檔；若已設定 Whisper model path，可轉文字後進入確認，儲存前仍必須先文字確認。",
+    "按住會使用 expo-audio 擷取本機音檔；若已設定 Whisper model path，可轉文字後進入確認，儲存前仍必須先文字確認。",
     maxDisplayDetailTextLength
   );
 }

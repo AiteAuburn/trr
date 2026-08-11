@@ -1,4 +1,4 @@
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 
 export type DownloadedModel = {
   kind: "whisper" | "llama";
@@ -38,7 +38,7 @@ export async function listDownloadedModels(): Promise<DownloadedModel[]> {
   const models = await Promise.all(
     files.map(async (fileName) => {
       const uri = `${directory}${fileName}`;
-      const info = await FileSystem.getInfoAsync(uri, { md5: true, size: true });
+      const info = await FileSystem.getInfoAsync(uri, { md5: true });
       return {
         kind: fileName.endsWith(".gguf") ? "llama" : "whisper",
         fileName,
@@ -86,7 +86,7 @@ export async function downloadModel({
   if (!result?.uri) {
     throw new Error("Model download did not finish.");
   }
-  const info = await FileSystem.getInfoAsync(result.uri, { md5: true, size: true });
+  const info = await FileSystem.getInfoAsync(result.uri, { md5: true });
   if (!info.exists) {
     throw new Error("Downloaded model is missing.");
   }
