@@ -30,30 +30,30 @@ Current design baseline:
 
 ## Active
 
-### T2342: Establish zero-downtime release and rollback contracts
+### T2343: Add centralized feature flags with safe defaults
 
 Status: active
 
 Problem / impact:
 
-- Production promotion and rollback are documented but not yet encoded as a versioned, machine-verifiable contract.
-- Future mobile/web/backend features need compatibility windows so a rolling deploy or rollback does not break in-flight customers.
+- Future features currently rely on scattered environment variables or UI-specific readiness logic.
+- Production needs one typed, deny-by-default control plane so a risky feature can be disabled independently of application rollback.
 
 Proposed change:
 
-- Add explicit build/version metadata and release compatibility policy for web, backend, and mobile.
-- Add machine-verifiable health/readiness and migration-expansion/contraction guardrails for rolling promotion and rollback.
-- Document an operator runbook for canary/rolling deploy, abort, and rollback without customer-visible downtime.
+- Define centralized backend and client feature flag contracts with bounded names, safe defaults, and environment overrides.
+- Expose only public, non-sensitive flags to clients and keep authorization enforcement server-side.
+- Add verifier/test coverage proving unknown or malformed flags fail closed.
 
 Compatibility / migration:
 
-- No intentional customer workflow change.
-- Database contraction and incompatible API removal remain separate, delayed release steps.
+- Flags change feature exposure only; they do not grant authorization or bypass entitlements.
+- Default behavior remains unchanged unless a flag is explicitly enabled.
 
 Completion evidence:
 
-- Release contract verifier and existing deployment/migration/backup verifiers pass.
-- Runbook names exact promote, observe, abort, rollback, and delayed-cleanup gates.
+- Backend/client flag tests and repository verifier pass.
+- Production example configuration keeps unreleased features disabled.
 - Changes are committed and pushed without staging `mobile/.expo/devices.json`.
 
 ## Next Up
@@ -81,6 +81,24 @@ Completion evidence:
 - The completed slice is committed and pushed with `main...origin/main = 0 0`.
 
 ## Done
+
+### T2342: Establish zero-downtime release and rollback contracts
+
+Status: done
+
+Completed:
+
+- Added PHI-safe backend release identity (`release_id`, Git SHA, API contract version) to `/version`.
+- Added a versioned machine-readable release contract for immutable artifacts, expand/contract migrations, readiness-gated rolling updates, and application-first rollback.
+- Hardened the Kubernetes backend rollout with `maxUnavailable: 0`, `minReadySeconds`, progress deadline, and graceful termination window.
+- Added an operator runbook covering canary promotion, observation/abort gates, rollback, database rules, and signed-mobile compatibility.
+- Added a CI release-contract verifier and bound migration/backend image references to the same artifact contract.
+
+Validation:
+
+- Release-contract, deployment-config, and Kubernetes manifest verifiers pass.
+- Backend health/config tests pass: 43 passed; one known upstream Starlette test-client deprecation warning remains.
+- Python compile and git diff checks pass.
 
 ### T2341: Upgrade mobile from Expo SDK 52 to SDK 57
 

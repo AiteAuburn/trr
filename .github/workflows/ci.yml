@@ -36,6 +36,9 @@ jobs:
       - name: Verify deployment config examples
         run: python scripts/verify_deployment_config.py
 
+      - name: Verify zero-downtime release contract
+        run: python scripts/verify_release_contract.py
+
       - name: Build dependency-scan images
         run: docker compose build backend web
 

@@ -351,6 +351,21 @@ def test_readyz() -> None:
     assert response.json() == {"status": "ready", "service": "backend"}
 
 
+def test_version_exposes_phi_safe_release_identity() -> None:
+    client = TestClient(app)
+
+    response = client.get("/version")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "service": "backend",
+        "version": "0.1.0",
+        "release_id": "local",
+        "git_sha": "unknown",
+        "api_contract_version": "1",
+    }
+
+
 def test_metrics_endpoint_exposes_phi_safe_route_metrics() -> None:
     http_metrics.reset()
     client = TestClient(app)

@@ -366,4 +366,7 @@ def version() -> dict[str, str]:
     return {
         "service": "backend",
         "version": app.version,
+        "release_id": settings.release_id,
+        "git_sha": settings.git_sha,
+        "api_contract_version": settings.api_contract_version,
     }

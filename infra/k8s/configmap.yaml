@@ -5,6 +5,9 @@ metadata:
   namespace: bloodsugar
 data:
   APP_ENV: "production"
+  RELEASE_ID: "replace-with-immutable-release-id"
+  GIT_SHA: "replace-with-full-git-sha"
+  API_CONTRACT_VERSION: "1"
   LOG_LEVEL: "info"
   ENABLE_DEBUG_TOOLS: "false"
   ALLOW_DEV_AUTH: "false"

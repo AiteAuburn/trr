@@ -8,6 +8,8 @@ metadata:
     app.kubernetes.io/component: backend
 spec:
   replicas: 2
+  minReadySeconds: 10
+  progressDeadlineSeconds: 300
   revisionHistoryLimit: 3
   strategy:
     type: RollingUpdate
@@ -24,6 +26,7 @@ spec:
         app.kubernetes.io/name: bloodsugar
         app.kubernetes.io/component: backend
     spec:
+      terminationGracePeriodSeconds: 30
       serviceAccountName: bloodsugar-backend
       securityContext:
         runAsNonRoot: true

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "api_contract_version": "1",
+  "artifact_policy": {
+    "build_once": true,
+    "promote_by_immutable_digest": true,
+    "backend_and_migration_use_same_digest": true
+  },
+  "database_policy": {
+    "strategy": "expand-contract",
+    "automatic_downgrade": false,
+    "contract_after_supported_clients_expire": true
+  },
+  "rollout_policy": {
+    "strategy": "canary-then-rolling",
+    "max_unavailable": 0,
+    "readiness_path": "/readyz",
+    "liveness_path": "/healthz",
+    "release_identity_path": "/version",
+    "minimum_observation_minutes": 15
+  },
+  "rollback_policy": {
+    "application_first": true,
+    "database_downgrade": false,
+    "require_previous_artifact_digest": true
+  }
+}

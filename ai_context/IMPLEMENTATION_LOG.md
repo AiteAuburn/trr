@@ -15,6 +15,34 @@
 
 ## 2026-08-06
 
+### T2342 zero-downtime release and rollback contracts
+
+類型：infra / release / compatibility / operations
+
+變更：
+
+- Added bounded release identity settings and exposed release ID, full Git SHA, and API contract version from the PHI-safe `/version` endpoint.
+- Added `infra/release-contract.json` as the machine-readable source for immutable artifact, expand/contract migration, canary/rolling rollout, and application-first rollback policy.
+- Hardened Kubernetes rollout timing with `minReadySeconds`, `progressDeadlineSeconds`, and a graceful termination window while retaining `maxUnavailable: 0` and readiness gating.
+- Added `ZERO_DOWNTIME_RELEASE_RUNBOOK.md` with exact promote, observe, abort, rollback, database, and mobile compatibility rules.
+- Added `verify_release_contract.py` to CI and required backend/migration manifests to reference the same release artifact.
+
+相容性：
+
+- `/version` adds optional response fields; existing fields and health/readiness responses are unchanged.
+- No database migration, API removal, customer workflow, or authorization change.
+
+驗證：
+
+- Release-contract, deployment-config, and Kubernetes manifest verifiers passed.
+- Targeted backend health/config suite: 43 passed with one known upstream Starlette test-client warning.
+- Python compilation and `git diff --check` passed.
+
+後續：
+
+- Promotion automation must replace release metadata and image placeholders with immutable CI-produced values.
+- Add centralized feature flags so risky feature exposure can be stopped without application rollback.
+
 ### T2341 Expo SDK 57 upgrade
 
 類型：dependencies / mobile / production-foundation
