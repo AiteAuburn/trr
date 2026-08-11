@@ -268,7 +268,7 @@ def stream_progress_with_success_voice_quota(
 
 
 @router.get("/models", response_model=AiModelOptionsResponse)
-def list_ai_models() -> AiModelOptionsResponse:
+def list_ai_models(_account: Account = Depends(get_current_account)) -> AiModelOptionsResponse:
     return AiModelOptionsResponse(stt_models=STT_MODELS, llm_models=runtime_llm_models())
 
 

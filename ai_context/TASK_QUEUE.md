@@ -30,30 +30,30 @@ Current design baseline:
 
 ## Active
 
-### T2344: Harden auth, session, and permission boundaries
+### T2345: Add API and migration compatibility guardrails
 
 Status: active
 
 Problem / impact:
 
-- Production auth has strong component tests but still needs a consolidated boundary audit across login exchange, refresh rotation, logout/revocation, profile grants, and client token handling.
-- Future features must reuse one authorization vocabulary rather than adding route-specific permission shortcuts.
+- Rolling deploys and long-lived mobile clients need a machine-checked API compatibility window.
+- Future Alembic changes need explicit expand/contract classification so destructive contraction cannot ride with ordinary deployment.
 
 Proposed change:
 
-- Audit live auth/session/grant code and tests for fail-open paths, inconsistent scopes, missing revocation, and unsafe client persistence.
-- Add the smallest reusable policy/verifier changes needed to make future endpoint authorization consistent.
-- Preserve current provider and development-auth behavior outside production.
+- Add versioned API compatibility metadata and a verifier for additive-vs-breaking contract changes.
+- Add migration policy metadata/checks that require expand migrations to remain downgrade-safe for the previous app and isolate contract migrations.
+- Refresh the production-readiness report with final evidence and remaining external blockers.
 
 Compatibility / migration:
 
-- No intentional login UX or existing API response change.
-- Feature flags and entitlements must never substitute for server authorization.
+- Guardrail-only by default; no current schema migration or API removal.
+- Existing signed clients remain supported under API contract version 1.
 
 Completion evidence:
 
-- Backend auth/config tests and mobile secure-storage verifier pass.
-- New permission-policy verifier covers every protected router.
+- API/migration/release/deployment verifiers and full relevant tests pass.
+- Final report clearly separates completed engineering controls from external launch blockers.
 - Changes are committed and pushed without staging `mobile/.expo/devices.json`.
 
 ## Next Up
@@ -81,6 +81,23 @@ Completion evidence:
 - The completed slice is committed and pushed with `main...origin/main = 0 0`.
 
 ## Done
+
+### T2344: Harden auth, session, and permission boundaries
+
+Status: done
+
+Completed:
+
+- Added an explicit reviewed-public route registry with a reason for every unauthenticated/token-exchange endpoint.
+- Added route graph coverage that makes every future product API require `get_current_account` unless deliberately added to that registry.
+- Found and fixed the only unreviewed route: `/ai/models` now requires authenticated account identity instead of anonymously exposing deployed model capabilities.
+- Preserved the existing refresh/logout token boundary, provider login, development reset gates, profile scopes, session rotation/revocation, and mobile secure storage behavior.
+
+Validation:
+
+- Auth/session/OIDC/JWKS/profile/permission/route/security suite passes: 110 passed.
+- Focused AI model-route and policy tests pass.
+- One known upstream Starlette test-client deprecation warning remains.
 
 ### T2343: Add centralized feature flags with safe defaults
 

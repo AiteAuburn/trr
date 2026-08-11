@@ -15,6 +15,36 @@
 
 ## 2026-08-06
 
+### T2344 auth, session, and permission boundary hardening
+
+類型：security / auth / permissions / test
+
+問題與風險：
+
+- Authentication, refresh rotation, revocation, grants, and secure client storage had extensive component coverage but no route-level fail-closed inventory.
+- Audit found `/ai/models` as the only product route without account authentication or an explicit public-route decision.
+
+變更：
+
+- Added a reviewed public/token-exchange route policy with a required rationale for every exception.
+- Added route graph coverage that fails any newly added API lacking `get_current_account` unless explicitly reviewed as public.
+- Required authenticated account identity for `/ai/models` and updated its test setup.
+
+相容性：
+
+- `/ai/models` now requires the same identity header/bearer boundary as other AI APIs; authenticated clients are unchanged.
+- Login, refresh, logout, provider exchange, session rotation/revocation, profile scope semantics, and mobile token persistence are unchanged.
+
+驗證：
+
+- Auth/session/OIDC/JWKS/profile/permission/route/security suite: 110 passed.
+- Focused route policy plus AI model test: 2 passed.
+- One known upstream Starlette test-client warning remains.
+
+後續：
+
+- Add API/mobile compatibility and Alembic expand/contract metadata before the final readiness refresh.
+
 ### T2343 centralized fail-closed feature flags
 
 類型：feature / release-control / backend / web / mobile

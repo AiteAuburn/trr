@@ -144,8 +144,9 @@ def _exercise_minutes(records: list[dict[str, object]]) -> set[int]:
 
 def test_list_ai_models() -> None:
     client = TestClient(app)
+    account_id, _ = create_account_and_profile(client, "ai-model-options")
 
-    response = client.get("/ai/models")
+    response = client.get("/ai/models", headers={"X-Account-Id": account_id})
 
     assert response.status_code == 200
     models = response.json()
