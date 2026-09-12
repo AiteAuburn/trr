@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
@@ -7,7 +7,7 @@ apt-get install -y --no-install-recommends ca-certificates curl git
 curl -fsSL https://get.docker.com | sh
 systemctl enable --now docker
 
-if ! swapon --show | grep -q /swapfile; then
+if [ -z "$(swapon --show=NAME --noheadings)" ]; then
   fallocate -l 2G /swapfile
   chmod 600 /swapfile
   mkswap /swapfile

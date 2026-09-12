@@ -22,8 +22,9 @@ ECS/RDS production path are complete.
 2. Run `bootstrap.sh` as root through Lightsail SSH.
 3. Upload the repository to `/opt/bloodsugar` without `.git`, `.env`, caches,
    local devices, or credentials.
-4. Create `infra/lightsail/.env` on the server with mode `0600`. Enter the new
-   DeepSeek key only on that server.
+4. Run `initialize-env.sh DOMAIN` once to generate the database/JWT secrets and
+   server `.env` with mode `0600`. Run `set-deepseek-key.sh` interactively to
+   enter the rotated DeepSeek key only on that server.
 5. Run migrations with the backend image, then start `compose.yml`.
 6. Verify `https://DOMAIN/healthz`, `https://DOMAIN/readyz`, and a bounded
    DeepSeek parser smoke test without real health data.

@@ -13,6 +13,8 @@ MINIMAL_ENV = REPO_ROOT / "infra" / "minimal" / ".env.example"
 K8S_CONFIGMAP = REPO_ROOT / "infra" / "k8s" / "configmap.yaml"
 K8S_SECRET_EXAMPLE = REPO_ROOT / "infra" / "k8s" / "secret.example.yaml"
 CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
+BACKEND_PROJECT = REPO_ROOT / "backend" / "pyproject.toml"
+BACKEND_PROD_DOCKERFILE = REPO_ROOT / "backend" / "Dockerfile.prod"
 AWS_TERRAFORM_MAIN = REPO_ROOT / "infra" / "aws" / "terraform" / "main.tf"
 AWS_TERRAFORM_VARIABLES = REPO_ROOT / "infra" / "aws" / "terraform" / "variables.tf"
 AWS_TERRAFORM_EXAMPLE = REPO_ROOT / "infra" / "aws" / "terraform" / "terraform.tfvars.example"
@@ -20,6 +22,8 @@ LIGHTSAIL_COMPOSE = REPO_ROOT / "infra" / "lightsail" / "compose.yml"
 LIGHTSAIL_ENV = REPO_ROOT / "infra" / "lightsail" / ".env.example"
 LIGHTSAIL_CADDY = REPO_ROOT / "infra" / "lightsail" / "Caddyfile"
 LIGHTSAIL_BUDGET = REPO_ROOT / "infra" / "lightsail" / "create-budget.ps1"
+LIGHTSAIL_INITIALIZE_ENV = REPO_ROOT / "infra" / "lightsail" / "initialize-env.sh"
+LIGHTSAIL_SET_DEEPSEEK_KEY = REPO_ROOT / "infra" / "lightsail" / "set-deepseek-key.sh"
 
 
 def _parse_env_file(path: Path) -> dict[str, str]:
@@ -117,6 +121,27 @@ def _verify_ci_workflow(errors: list[str]) -> None:
         )
 
 
+def _verify_backend_production_dependencies(errors: list[str]) -> None:
+    project = BACKEND_PROJECT.read_text(encoding="utf-8")
+    dockerfile = BACKEND_PROD_DOCKERFILE.read_text(encoding="utf-8")
+    required_runtime_packages = (
+        "alembic",
+        "email-validator",
+        "fastapi",
+        "httpx",
+        "psycopg",
+        "PyJWT",
+        "pydantic-settings",
+        "sqlalchemy",
+        "uvicorn",
+    )
+    for package in required_runtime_packages:
+        if package.lower() not in project.lower():
+            errors.append(f"backend/pyproject.toml: missing required runtime package {package}")
+        if package.lower() not in dockerfile.lower():
+            errors.append(f"backend/Dockerfile.prod: missing required runtime package {package}")
+
+
 def _verify_aws_terraform(errors: list[str]) -> None:
     paths = (AWS_TERRAFORM_MAIN, AWS_TERRAFORM_VARIABLES, AWS_TERRAFORM_EXAMPLE)
     for path in paths:
@@ -153,7 +178,14 @@ def _verify_aws_terraform(errors: list[str]) -> None:
 
 
 def _verify_lightsail_staging(errors: list[str]) -> None:
-    paths = (LIGHTSAIL_COMPOSE, LIGHTSAIL_ENV, LIGHTSAIL_CADDY, LIGHTSAIL_BUDGET)
+    paths = (
+        LIGHTSAIL_COMPOSE,
+        LIGHTSAIL_ENV,
+        LIGHTSAIL_CADDY,
+        LIGHTSAIL_BUDGET,
+        LIGHTSAIL_INITIALIZE_ENV,
+        LIGHTSAIL_SET_DEEPSEEK_KEY,
+    )
     for path in paths:
         if not path.is_file():
             errors.append(f"{path.relative_to(REPO_ROOT)}: required Lightsail file is missing")
@@ -183,6 +215,12 @@ def _verify_lightsail_staging(errors: list[str]) -> None:
     for marker in ('Amount = "10"', 'NotificationType = "ACTUAL"', 'Threshold = 80', 'NotificationType = "FORECASTED"'):
         if marker not in budget:
             errors.append(f"Lightsail budget script: missing guard {marker!r}")
+    initialize_env = LIGHTSAIL_INITIALIZE_ENV.read_text(encoding="utf-8")
+    set_deepseek_key = LIGHTSAIL_SET_DEEPSEEK_KEY.read_text(encoding="utf-8")
+    if "openssl rand -hex 24" not in initialize_env or "chmod 600" not in initialize_env:
+        errors.append("Lightsail environment initializer must generate and restrict server secrets")
+    if "read -r -s deepseek_key" not in set_deepseek_key or "DEEPSEEK_API_KEY=%s" not in set_deepseek_key:
+        errors.append("Lightsail DeepSeek helper must accept the key without echoing it")
 
 
 def main() -> int:
@@ -249,6 +287,7 @@ def main() -> int:
         errors.append("infra/k8s/secret.example.yaml must not copy local Compose DB credentials")
 
     _verify_ci_workflow(errors)
+    _verify_backend_production_dependencies(errors)
     _verify_aws_terraform(errors)
     _verify_lightsail_staging(errors)
 

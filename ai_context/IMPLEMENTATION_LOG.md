@@ -36,6 +36,9 @@
 - Added a PowerShell AWS Budget helper for a USD 10 monthly account budget with actual 80% and forecasted 100% email notifications.
 - Used `deepseek-v4-flash` as the hosted provider model while preserving the application's internal DeepSeek parser selection contract.
 - Marked the deployment as staging with development authentication explicitly enabled only for one-user APK testing; it is not a production/customer topology.
+- Made the bootstrap compatible with Lightsail cloud-init's `/bin/sh` wrapper by avoiding the unsupported `pipefail` shell option; the script remains directly executable with Bash.
+- Added server-side environment initialization that generates database/JWT secrets without displaying them, plus an interactive no-echo DeepSeek key updater so the provider credential never passes through chat or Git.
+- Fixed the production backend image dependency list to install `PyJWT[crypto]`, which is required by the imported authentication module; added a deployment verifier guard that keeps the explicit production image list aligned with required runtime packages.
 
 驗證：
 
