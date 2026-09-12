@@ -13,6 +13,43 @@
 後續:
 ```
 
+## 2026-09-12
+
+### Lightsail single-user APK staging deployment foundation
+
+類型：infra / deployment / security / cost
+
+檔案：
+
+- `infra/lightsail/compose.yml`
+- `infra/lightsail/Caddyfile`
+- `infra/lightsail/.env.example`
+- `infra/lightsail/bootstrap.sh`
+- `infra/lightsail/create-budget.ps1`
+- `infra/lightsail/README.md`
+- `scripts/verify_deployment_config.py`
+
+摘要：
+
+- Added a 1 GB Lightsail staging topology limited to Caddy HTTPS, FastAPI, and PostgreSQL, with a 2 GB host swap file and no local LLM container.
+- Kept the DeepSeek credential server-only and supplied through the untracked server `.env`; no credential, health payload, transcript, prompt, model output, or token was added to source control.
+- Added a PowerShell AWS Budget helper for a USD 10 monthly account budget with actual 80% and forecasted 100% email notifications.
+- Used `deepseek-v4-flash` as the hosted provider model while preserving the application's internal DeepSeek parser selection contract.
+- Marked the deployment as staging with development authentication explicitly enabled only for one-user APK testing; it is not a production/customer topology.
+
+驗證：
+
+- `docker compose --env-file infra/lightsail/.env.example -f infra/lightsail/compose.yml config --quiet` passed.
+- `bash -n infra/lightsail/bootstrap.sh` passed.
+- `python3 scripts/verify_deployment_config.py` passed.
+- `python3 -m py_compile scripts/verify_deployment_config.py` passed.
+- `git diff --check` passed.
+
+後續：
+
+- Requires an authenticated AWS identity, notification email, chosen region, and explicit creation of the paid Lightsail resources.
+- Enter the rotated DeepSeek key only on the instance, then verify remote HTTPS, migrations, bounded synthetic DeepSeek parsing, and an APK built against that endpoint.
+
 ## 2026-08-06
 
 ### T2345 API and Alembic compatibility guardrails

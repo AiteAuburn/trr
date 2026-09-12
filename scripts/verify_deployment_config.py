@@ -13,6 +13,13 @@ MINIMAL_ENV = REPO_ROOT / "infra" / "minimal" / ".env.example"
 K8S_CONFIGMAP = REPO_ROOT / "infra" / "k8s" / "configmap.yaml"
 K8S_SECRET_EXAMPLE = REPO_ROOT / "infra" / "k8s" / "secret.example.yaml"
 CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
+AWS_TERRAFORM_MAIN = REPO_ROOT / "infra" / "aws" / "terraform" / "main.tf"
+AWS_TERRAFORM_VARIABLES = REPO_ROOT / "infra" / "aws" / "terraform" / "variables.tf"
+AWS_TERRAFORM_EXAMPLE = REPO_ROOT / "infra" / "aws" / "terraform" / "terraform.tfvars.example"
+LIGHTSAIL_COMPOSE = REPO_ROOT / "infra" / "lightsail" / "compose.yml"
+LIGHTSAIL_ENV = REPO_ROOT / "infra" / "lightsail" / ".env.example"
+LIGHTSAIL_CADDY = REPO_ROOT / "infra" / "lightsail" / "Caddyfile"
+LIGHTSAIL_BUDGET = REPO_ROOT / "infra" / "lightsail" / "create-budget.ps1"
 
 
 def _parse_env_file(path: Path) -> dict[str, str]:
@@ -110,6 +117,74 @@ def _verify_ci_workflow(errors: list[str]) -> None:
         )
 
 
+def _verify_aws_terraform(errors: list[str]) -> None:
+    paths = (AWS_TERRAFORM_MAIN, AWS_TERRAFORM_VARIABLES, AWS_TERRAFORM_EXAMPLE)
+    for path in paths:
+        if not path.is_file():
+            errors.append(f"{path.relative_to(REPO_ROOT)}: required AWS Terraform file is missing")
+            return
+
+    main = AWS_TERRAFORM_MAIN.read_text(encoding="utf-8")
+    variables = AWS_TERRAFORM_VARIABLES.read_text(encoding="utf-8")
+    example = AWS_TERRAFORM_EXAMPLE.read_text(encoding="utf-8")
+    required_main_markers = (
+        'manage_master_user_password = true',
+        'publicly_accessible         = false',
+        'storage_encrypted           = true',
+        'image_tag_mutability = "IMMUTABLE"',
+        'scan_on_push = true',
+        'valueFrom = "${aws_secretsmanager_secret.runtime.arn}:${key}::"',
+        'value = "https://api.deepseek.com/v1/chat/completions"',
+        'var.desired_count == 0 || var.certificate_arn != ""',
+        'assign_public_ip = false',
+    )
+    for marker in required_main_markers:
+        if marker not in main:
+            errors.append(f"infra/aws/terraform/main.tf: missing security marker {marker!r}")
+
+    if "DEEPSEEK_API_KEY" not in main:
+        errors.append("infra/aws/terraform/main.tf: DeepSeek secret injection is missing")
+    if re.search(r'name\s*=\s*"DEEPSEEK_API_KEY"\s*,?\s*value\s*=', main):
+        errors.append("infra/aws/terraform/main.tf: DeepSeek key must not be a plaintext environment value")
+    if "DEEPSEEK_API_KEY" in variables or "DEEPSEEK_API_KEY" in example:
+        errors.append("AWS Terraform inputs must not accept the DeepSeek API key as Terraform state")
+    if 'desired_count          = 0' not in example:
+        errors.append("terraform.tfvars.example must bootstrap with desired_count=0")
+
+
+def _verify_lightsail_staging(errors: list[str]) -> None:
+    paths = (LIGHTSAIL_COMPOSE, LIGHTSAIL_ENV, LIGHTSAIL_CADDY, LIGHTSAIL_BUDGET)
+    for path in paths:
+        if not path.is_file():
+            errors.append(f"{path.relative_to(REPO_ROOT)}: required Lightsail file is missing")
+            return
+
+    compose = LIGHTSAIL_COMPOSE.read_text(encoding="utf-8")
+    env_example = LIGHTSAIL_ENV.read_text(encoding="utf-8")
+    caddy = LIGHTSAIL_CADDY.read_text(encoding="utf-8")
+    budget = LIGHTSAIL_BUDGET.read_text(encoding="utf-8")
+    required_compose_markers = (
+        "APP_ENV: staging",
+        'DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}',
+        "https://api.deepseek.com/v1/chat/completions",
+        'read_only: true',
+        'no-new-privileges:true',
+        'internal: true',
+    )
+    for marker in required_compose_markers:
+        if marker not in compose:
+            errors.append(f"infra/lightsail/compose.yml: missing guard {marker!r}")
+    if "REPLACE_ON_SERVER_ONLY" not in env_example:
+        errors.append("Lightsail env example must use a non-secret DeepSeek placeholder")
+    if re.search(r"DEEPSEEK_API_KEY=(sk-|[A-Za-z0-9]{24,})", env_example):
+        errors.append("Lightsail env example must not contain a plausible DeepSeek secret")
+    if "{$DOMAIN}" not in caddy or "reverse_proxy backend:8000" not in caddy:
+        errors.append("Lightsail Caddyfile must terminate HTTPS and proxy to backend")
+    for marker in ('Amount = "10"', 'NotificationType = "ACTUAL"', 'Threshold = 80', 'NotificationType = "FORECASTED"'):
+        if marker not in budget:
+            errors.append(f"Lightsail budget script: missing guard {marker!r}")
+
+
 def main() -> int:
     errors: list[str] = []
     local_env = _parse_env_file(LOCAL_ENV)
@@ -174,6 +249,8 @@ def main() -> int:
         errors.append("infra/k8s/secret.example.yaml must not copy local Compose DB credentials")
 
     _verify_ci_workflow(errors)
+    _verify_aws_terraform(errors)
+    _verify_lightsail_staging(errors)
 
     if errors:
         for error in errors:

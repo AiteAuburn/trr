@@ -1,0 +1,10 @@
+aws_region            = "us-east-1"
+name                  = "bloodsugar"
+environment           = "production"
+image_tag              = "REPLACE_WITH_GIT_SHA"
+desired_count          = 0
+backend_cors_origins   = "https://app.example.com"
+auth_jwt_issuer        = "https://auth.example.com"
+auth_jwt_audience      = "bloodsugar-api"
+certificate_arn        = ""
+database_instance_class = "db.t4g.micro"
