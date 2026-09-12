@@ -54,7 +54,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    networks: [private]
+    # The public network provides outbound HTTPS/DNS for DeepSeek. Port 8000 is
+    # still only exposed to peer containers and is not published on the host.
+    networks: [public, private]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/readyz', timeout=2)"]
       interval: 30s

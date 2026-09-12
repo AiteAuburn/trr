@@ -39,6 +39,11 @@
 - Made the bootstrap compatible with Lightsail cloud-init's `/bin/sh` wrapper by avoiding the unsupported `pipefail` shell option; the script remains directly executable with Bash.
 - Added server-side environment initialization that generates database/JWT secrets without displaying them, plus an interactive no-echo DeepSeek key updater so the provider credential never passes through chat or Git.
 - Fixed the production backend image dependency list to install `PyJWT[crypto]`, which is required by the imported authentication module; added a deployment verifier guard that keeps the explicit production image list aligned with required runtime packages.
+- Created `bloodsugar-staging` in `us-east-1` on the Lightsail 1 GB plan, attached static IPv4 `54.145.41.106`, restricted SSH to the operator IP, and exposed only Caddy ports 80/443 publicly.
+- Attached the backend to both Docker networks: the internal network retains isolated database access, while the non-published public network provides outbound DNS/HTTPS for DeepSeek. Backend port 8000 remains unavailable on the host.
+- Created and provider-verified the USD 10 monthly AWS Budget with email subscribers on both the actual 80% and forecasted 100% notification rules.
+- Deployed the database/backend/Caddy stack, applied Alembic migrations through `20260430_0030`, installed the DeepSeek credential only in the server `.env` with mode `0600`, and obtained a valid HTTPS certificate for the staging hostname.
+- Built and installed a standalone internal release APK with the staging HTTPS endpoint embedded; Metro is not required for this artifact.
 
 驗證：
 
@@ -47,11 +52,19 @@
 - `python3 scripts/verify_deployment_config.py` passed.
 - `python3 -m py_compile scripts/verify_deployment_config.py` passed.
 - `git diff --check` passed.
+- Remote `https://54-145-41-106.sslip.io/healthz` and `/readyz` both returned healthy JSON responses over a valid TLS connection.
+- Remote Compose status showed PostgreSQL and backend healthy and Caddy running; the backend host port remained unpublished.
+- A bounded synthetic DeepSeek request returned HTTP 200 from model `deepseek-v4-flash`; the application-level authenticated `/ai/parse-preview` flow returned HTTP 200 and one parsed synthetic record using internal model ID `deepseek-chat`.
+- AWS APIs returned the USD 10 monthly budget, both notification thresholds, and the configured email subscriber for each notification.
+- Mobile TypeScript and internal debug-signing verification passed; Windows `assembleRelease` completed successfully with the staging endpoint present in the embedded JS bundle.
+- `app-release.apk` SHA-256: `1cd42daeb83d4f66242f2a5ba45a3869344106b0b5acacdf6fb1ea36b77f95db` (178 MB).
+- `adb install -r` succeeded on `emulator-5556`; the app process stayed alive, rendered the main Chinese recording screen, and the bounded crash log query returned no AndroidRuntime or ReactNativeJS errors.
 
 後續：
 
-- Requires an authenticated AWS identity, notification email, chosen region, and explicit creation of the paid Lightsail resources.
-- Enter the rotated DeepSeek key only on the instance, then verify remote HTTPS, migrations, bounded synthetic DeepSeek parsing, and an APK built against that endpoint.
+- This remains a single-instance staging deployment: configure automated database backups/restore drills and operational monitoring before storing real health data.
+- Replace dev authentication and debug APK signing with a real OIDC provider flow and production release keystore before customer or store distribution.
+- Replace the temporary `sslip.io` hostname with a project-controlled domain before production launch.
 
 ## 2026-08-06
 

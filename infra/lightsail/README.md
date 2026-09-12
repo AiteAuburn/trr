@@ -3,6 +3,9 @@
 This is the low-cost, single-user staging path. It runs Caddy, the FastAPI
 backend, and PostgreSQL on one 1 GB Lightsail instance with a 2 GB swap file.
 DeepSeek remains a hosted API; no local LLM container runs on this host.
+The backend joins the private database network and a public Docker network for
+outbound DeepSeek HTTPS/DNS, but port 8000 is not published on the host; inbound
+API traffic still enters only through Caddy on ports 80/443.
 
 This topology is intentionally not high availability. Do not use real customer
 traffic until authentication, backups, restore testing, monitoring, and the

@@ -206,6 +206,11 @@ def _verify_lightsail_staging(errors: list[str]) -> None:
     for marker in required_compose_markers:
         if marker not in compose:
             errors.append(f"infra/lightsail/compose.yml: missing guard {marker!r}")
+    backend_block = compose.split("  backend:", maxsplit=1)[-1].split("\n  db:", maxsplit=1)[0]
+    if "networks: [public, private]" not in backend_block:
+        errors.append(
+            "Lightsail backend must retain private database access and public outbound DeepSeek access"
+        )
     if "REPLACE_ON_SERVER_ONLY" not in env_example:
         errors.append("Lightsail env example must use a non-secret DeepSeek placeholder")
     if re.search(r"DEEPSEEK_API_KEY=(sk-|[A-Za-z0-9]{24,})", env_example):
