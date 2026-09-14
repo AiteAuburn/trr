@@ -20,6 +20,7 @@ MAX_RELEASE_METADATA_LENGTH = 128
 DATABASE_URL_ALLOWED_DRIVERS = frozenset({"postgresql", "postgresql+psycopg"})
 MODEL_ID_PATTERN = re.compile(r"^[A-Za-z0-9._:/+-]+$")
 KEEP_ALIVE_PATTERN = re.compile(r"^(-1|0|[0-9]{1,6}(ms|s|m|h))$")
+ADMIN_USERNAME_PATTERN = re.compile(r"^[A-Za-z0-9_.-]{1,64}$")
 
 
 class Settings(BaseSettings):
@@ -62,6 +63,12 @@ class Settings(BaseSettings):
     auth_refresh_client_rate_limit_window_seconds: int = Field(default=60, ge=1, le=86_400)
     auth_logout_client_rate_limit_count: int = Field(default=120, ge=1, le=10_000)
     auth_logout_client_rate_limit_window_seconds: int = Field(default=60, ge=1, le=86_400)
+    admin_username: str = Field(default="", max_length=64)
+    admin_password_hash: str = Field(default="", max_length=512)
+    admin_session_secret: str = Field(default="", max_length=4096)
+    admin_session_seconds: int = Field(default=28_800, ge=300, le=86_400)
+    admin_login_rate_limit_count: int = Field(default=5, ge=1, le=100)
+    admin_login_rate_limit_window_seconds: int = Field(default=300, ge=60, le=86_400)
     ai_parse_rate_limit_count: int = Field(default=120, ge=1, le=10_000)
     ai_parse_rate_limit_window_seconds: int = Field(default=60, ge=1, le=86_400)
     max_request_body_bytes: int = Field(default=1_048_576, ge=1_024, le=10_485_760)
@@ -207,8 +214,32 @@ class Settings(BaseSettings):
     def normalize_deepseek_prompt(cls, value: str) -> str:
         return value.strip()
 
+    @field_validator("admin_username")
+    @classmethod
+    def normalize_admin_username(cls, value: str) -> str:
+        normalized = value.strip()
+        if normalized and ADMIN_USERNAME_PATTERN.fullmatch(normalized) is None:
+            raise ValueError("ADMIN_USERNAME contains unsupported characters")
+        return normalized
+
+    @field_validator("admin_password_hash", "admin_session_secret")
+    @classmethod
+    def normalize_admin_secret_config(cls, value: str) -> str:
+        return value.strip()
+
     @model_validator(mode="after")
     def validate_production_defaults(self) -> "Settings":
+        admin_values = (
+            bool(self.admin_username),
+            bool(self.admin_password_hash),
+            bool(self.admin_session_secret),
+        )
+        if any(admin_values) and not all(admin_values):
+            raise ValueError(
+                "ADMIN_USERNAME, ADMIN_PASSWORD_HASH, and ADMIN_SESSION_SECRET must be configured together"
+            )
+        if self.admin_session_secret and len(self.admin_session_secret) < 32:
+            raise ValueError("ADMIN_SESSION_SECRET must be at least 32 characters")
         if self.app_env == "production":
             if self.allow_dev_auth:
                 raise ValueError("ALLOW_DEV_AUTH must be false in production")

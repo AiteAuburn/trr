@@ -52,6 +52,7 @@ import {
   enableDebugTools,
   initialVisualSmokeScreen,
   maxMobileRecordCacheLimit,
+  mobileDevAuthEmail,
   mobileRecordSyncLimit,
   mobileReportQueryLimit,
   sampleText
@@ -2856,7 +2857,9 @@ export default function App() {
     if (latestBootKey.current !== bootKey) {
       return boundedAccount;
     }
-    const modelOptionsResponse = await requestJson<AiModelOptions>(bootKey, "/ai/models");
+    const modelOptionsResponse = await requestJson<AiModelOptions>(bootKey, "/ai/models", {
+      headers: protectedRequestHeaders(boundedAccount.id, tokenForHeaders)
+    });
     if (latestBootKey.current !== bootKey) {
       return boundedAccount;
     }
@@ -6073,7 +6076,7 @@ export default function App() {
       const login = await requestJson<Account>(bootKey, "/auth/dev-login", {
         method: "POST",
         body: JSON.stringify({
-          email: "mobile-dev@example.com",
+          email: mobileDevAuthEmail,
           display_name: "Mobile Dev"
         })
       });
@@ -6087,7 +6090,9 @@ export default function App() {
       if (latestBootKey.current !== bootKey) {
         return;
       }
-      const modelOptionsResponse = await requestJson<AiModelOptions>(bootKey, "/ai/models");
+      const modelOptionsResponse = await requestJson<AiModelOptions>(bootKey, "/ai/models", {
+        headers: protectedRequestHeaders(boundedLogin.id, accessToken)
+      });
       if (latestBootKey.current !== bootKey) {
         return;
       }

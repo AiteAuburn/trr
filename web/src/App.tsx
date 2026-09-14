@@ -234,6 +234,7 @@ type SpeechRecognitionLike = {
 type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+const devAuthEmail = import.meta.env.VITE_DEV_AUTH_EMAIL ?? "owner@example.com";
 const enableDebugTools = import.meta.env.VITE_ENABLE_DEBUG_TOOLS === "true";
 const voicePlan = import.meta.env.VITE_VOICE_PLAN === "paid" ? "paid" : "trial";
 const trialDailyVoiceSeconds = Number(import.meta.env.VITE_TRIAL_DAILY_VOICE_SECONDS ?? 300);
@@ -969,26 +970,20 @@ export function App() {
   }, []);
 
   useEffect(() => {
-    requestJson<AiModelOptions>("/ai/models")
-      .then((models) => {
-        setAiModels(models);
-        setSelectedSttModel(models.stt_models.find((model) => model.available)?.id ?? "");
-        setSelectedLlmModel(pickInitialLlmModel(models.llm_models));
-      })
-      .catch((err: unknown) => {
-        setRecordStatus(err instanceof Error ? err.message : "AI 模型列表載入失敗");
-      });
-  }, []);
-
-  useEffect(() => {
     async function loadProfiles() {
       try {
         const login = await requestJson<Account>("/auth/dev-login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: "demo@example.com", display_name: "Demo User" }),
+          body: JSON.stringify({ email: devAuthEmail, display_name: "Owner" }),
         });
         setAccount(login);
+        const models = await requestJson<AiModelOptions>("/ai/models", {
+          headers: { "X-Account-Id": login.id },
+        });
+        setAiModels(models);
+        setSelectedSttModel(models.stt_models.find((model) => model.available)?.id ?? "");
+        setSelectedLlmModel(pickInitialLlmModel(models.llm_models));
         const quota = await getVoiceQuota(login.id);
         setVoiceQuota(quota);
         setVoiceSecondsUsedToday(quota.used_seconds_today);
@@ -1004,7 +999,7 @@ export function App() {
 
         setProfiles(nextProfiles);
         setActiveProfileId((current) => current || nextProfiles[0]?.id || "");
-        setProfileStatus("已連到本機開發 API");
+        setProfileStatus("已連到 API");
       } catch (err: unknown) {
         setProfileStatus(err instanceof Error ? err.message : "紀錄對象載入失敗");
       }

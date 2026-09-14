@@ -21,6 +21,7 @@ from app.schemas.year_review import (
 )
 from app.services.achievement_catalog import ACHIEVEMENT_CATEGORY_DEFINITIONS, achievement_levels_for_progress
 from app.services.audit import write_audit_event
+from app.services.usage_analytics import safe_record_ai_token_usage
 
 YEAR_REVIEW_GENERATION_BATCH_SIZE = 500
 YEAR_REVIEW_AI_RESPONSE_CHAR_BUDGET = 4000
@@ -338,6 +339,7 @@ def deepseek_year_review_ai_summary(
         "stream": False,
     }
     headers = {"Authorization": f"Bearer {settings.deepseek_api_key}"}
+    usage_recorded = False
     try:
         with httpx.Client(timeout=settings.local_llm_timeout_seconds) as client:
             response_text = _read_bounded_year_review_ai_response_text(
@@ -347,9 +349,24 @@ def deepseek_year_review_ai_summary(
                 headers=headers,
             )
         response_payload = json.loads(response_text)
+        usage = response_payload.get("usage") if isinstance(response_payload, dict) else None
+        safe_record_ai_token_usage(
+            provider="deepseek",
+            model_id=settings.deepseek_model_id,
+            succeeded=True,
+            usage=usage,
+        )
+        usage_recorded = True
         content = _extract_openai_compatible_message_content(response_payload)
         summary_payload = json.loads(content)
     except (httpx.HTTPError, json.JSONDecodeError, ValueError):
+        if not usage_recorded:
+            safe_record_ai_token_usage(
+                provider="deepseek",
+                model_id=settings.deepseek_model_id,
+                succeeded=False,
+                usage=None,
+            )
         return None
 
     if not isinstance(summary_payload, dict):

@@ -15,6 +15,7 @@ from starlette.types import Message, Receive
 
 from app.api import (
     achievements,
+    admin,
     ai,
     auth,
     community,
@@ -32,6 +33,7 @@ from app.core.logging import configure_logging
 from app.core.metrics import http_metrics
 from app.services.feature_flags import PublicFeatureFlagPayload, public_feature_flag_payload
 from app.db.session import engine
+from app.services.usage_analytics import safe_record_api_usage
 
 settings = get_settings()
 configure_logging(settings.log_level)
@@ -39,6 +41,7 @@ logger = logging.getLogger("app.request")
 
 JSON_BODY_METHODS = {"PATCH", "POST"}
 JSON_BODY_PREFIXES = (
+    "/admin/",
     "/ai/",
     "/auth/",
     "/community/",
@@ -78,6 +81,7 @@ app.add_middleware(
 
 app.include_router(ai.router)
 app.include_router(achievements.router)
+app.include_router(admin.router)
 app.include_router(auth.router)
 app.include_router(community.router)
 app.include_router(daily_records.router)
@@ -310,6 +314,12 @@ async def log_requests(
         method=request.method,
         route=route,
         status=response.status_code,
+        duration_seconds=duration_seconds,
+    )
+    safe_record_api_usage(
+        method=request.method,
+        route=route,
+        status_code=response.status_code,
         duration_seconds=duration_seconds,
     )
     logger.info(

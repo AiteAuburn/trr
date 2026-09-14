@@ -59,6 +59,24 @@ def test_production_rejects_weak_jwt_secret() -> None:
         )
 
 
+def test_admin_config_is_all_or_nothing_and_requires_strong_session_secret() -> None:
+    with pytest.raises(ValidationError, match="configured together"):
+        Settings(admin_username="admin")
+    with pytest.raises(ValidationError, match="ADMIN_SESSION_SECRET"):
+        Settings(
+            admin_username="admin",
+            admin_password_hash="pbkdf2_sha256:310000:salt:digest",
+            admin_session_secret="short",
+        )
+
+    settings = Settings(
+        admin_username="  admin  ",
+        admin_password_hash="pbkdf2_sha256:310000:salt:digest",
+        admin_session_secret="s" * 32,
+    )
+    assert settings.admin_username == "admin"
+
+
 def test_production_requires_issuer_and_audience_when_jwt_secret_is_configured() -> None:
     base_settings = {
         "app_env": "production",

@@ -25,6 +25,9 @@ umask 077
   printf 'AUTH_JWT_SECRET=%s\n' "${jwt_secret}"
   printf 'AUTH_JWT_ISSUER=https://%s\n' "${domain}"
   printf 'AUTH_JWT_AUDIENCE=bloodsugar-api\n'
+  printf 'ADMIN_USERNAME=\n'
+  printf 'ADMIN_PASSWORD_HASH=\n'
+  printf 'ADMIN_SESSION_SECRET=\n'
   printf 'DEEPSEEK_API_KEY=\n'
   printf 'DEEPSEEK_MODEL_ID=deepseek-v4-flash\n'
 } > "${env_file}"

@@ -14,7 +14,9 @@ services:
     depends_on:
       backend:
         condition: service_healthy
-    networks: [public, private]
+      web:
+        condition: service_started
+    networks: [public, private, frontend]
     mem_limit: 96m
     cpus: 0.25
 
@@ -44,6 +46,9 @@ services:
       AUTH_LOGIN_CLIENT_RATE_LIMIT_WINDOW_SECONDS: 60
       AUTH_LOGOUT_CLIENT_RATE_LIMIT_COUNT: 60
       AUTH_LOGOUT_CLIENT_RATE_LIMIT_WINDOW_SECONDS: 60
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}
+      ADMIN_SESSION_SECRET: ${ADMIN_SESSION_SECRET:-}
       DEEPSEEK_PARSER_URL: https://api.deepseek.com/v1/chat/completions
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
       DEEPSEEK_MODEL_ID: ${DEEPSEEK_MODEL_ID:-deepseek-v4-flash}
@@ -65,6 +70,25 @@ services:
       start_period: 30s
     mem_limit: 384m
     cpus: 1.0
+
+  web:
+    build:
+      context: ../../web
+      dockerfile: Dockerfile.prod
+      args:
+        VITE_API_BASE_URL: /api
+        VITE_DEV_AUTH_EMAIL: owner@example.com
+        VITE_ENABLE_DEBUG_TOOLS: "false"
+    restart: unless-stopped
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    expose: ["8080"]
+    networks: [frontend]
+    mem_limit: 64m
+    cpus: 0.25
 
   db:
     image: postgres:16-alpine
@@ -91,6 +115,8 @@ services:
 networks:
   public:
   private:
+    internal: true
+  frontend:
     internal: true
 
 volumes:

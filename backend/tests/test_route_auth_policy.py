@@ -2,6 +2,7 @@ from fastapi.routing import APIRoute
 
 from app.api import (
     achievements,
+    admin,
     ai,
     auth,
     community,
@@ -15,12 +16,14 @@ from app.api import (
     year_reviews,
 )
 from app.api.deps import get_current_account
+from app.api.admin import get_current_admin
 from app.main import app
 from app.services.route_auth_policy import PUBLIC_ROUTE_REASONS
 
 
 ROUTERS = (
     achievements.router,
+    admin.router,
     ai.router,
     auth.router,
     community.router,
@@ -41,8 +44,11 @@ def route_key(route: APIRoute) -> tuple[str, str]:
     return next(iter(methods)), route.path
 
 
-def has_current_account_dependency(route: APIRoute) -> bool:
-    return any(dependency.call is get_current_account for dependency in route.dependant.dependencies)
+def has_required_auth_dependency(route: APIRoute) -> bool:
+    protected_dependencies = {get_current_account, get_current_admin}
+    return any(
+        dependency.call in protected_dependencies for dependency in route.dependant.dependencies
+    )
 
 
 def test_every_api_route_is_authenticated_or_explicitly_reviewed_public() -> None:
@@ -60,7 +66,7 @@ def test_every_api_route_is_authenticated_or_explicitly_reviewed_public() -> Non
         key = route_key(route)
         if key in PUBLIC_ROUTE_REASONS:
             actual_public.add(key)
-        elif not has_current_account_dependency(route):
+        elif not has_required_auth_dependency(route):
             unprotected.append(key)
 
     assert unprotected == []

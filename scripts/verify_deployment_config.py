@@ -24,6 +24,11 @@ LIGHTSAIL_CADDY = REPO_ROOT / "infra" / "lightsail" / "Caddyfile"
 LIGHTSAIL_BUDGET = REPO_ROOT / "infra" / "lightsail" / "create-budget.ps1"
 LIGHTSAIL_INITIALIZE_ENV = REPO_ROOT / "infra" / "lightsail" / "initialize-env.sh"
 LIGHTSAIL_SET_DEEPSEEK_KEY = REPO_ROOT / "infra" / "lightsail" / "set-deepseek-key.sh"
+LIGHTSAIL_SET_ADMIN_CREDENTIALS = REPO_ROOT / "infra" / "lightsail" / "set-admin-credentials.sh"
+WEB_APP = REPO_ROOT / "web" / "src" / "App.tsx"
+WEB_PROD_DOCKERFILE = REPO_ROOT / "web" / "Dockerfile.prod"
+MOBILE_RUNTIME_CONFIG = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
+MOBILE_ENV_EXAMPLE = REPO_ROOT / "mobile" / ".env.example"
 
 
 def _parse_env_file(path: Path) -> dict[str, str]:
@@ -185,6 +190,7 @@ def _verify_lightsail_staging(errors: list[str]) -> None:
         LIGHTSAIL_BUDGET,
         LIGHTSAIL_INITIALIZE_ENV,
         LIGHTSAIL_SET_DEEPSEEK_KEY,
+        LIGHTSAIL_SET_ADMIN_CREDENTIALS,
     )
     for path in paths:
         if not path.is_file():
@@ -202,11 +208,13 @@ def _verify_lightsail_staging(errors: list[str]) -> None:
         'read_only: true',
         'no-new-privileges:true',
         'internal: true',
+        'VITE_API_BASE_URL: /api',
+        'ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}',
     )
     for marker in required_compose_markers:
         if marker not in compose:
             errors.append(f"infra/lightsail/compose.yml: missing guard {marker!r}")
-    backend_block = compose.split("  backend:", maxsplit=1)[-1].split("\n  db:", maxsplit=1)[0]
+    backend_block = compose.split("  backend:", maxsplit=1)[-1].split("\n  web:", maxsplit=1)[0]
     if "networks: [public, private]" not in backend_block:
         errors.append(
             "Lightsail backend must retain private database access and public outbound DeepSeek access"
@@ -215,17 +223,67 @@ def _verify_lightsail_staging(errors: list[str]) -> None:
         errors.append("Lightsail env example must use a non-secret DeepSeek placeholder")
     if re.search(r"DEEPSEEK_API_KEY=(sk-|[A-Za-z0-9]{24,})", env_example):
         errors.append("Lightsail env example must not contain a plausible DeepSeek secret")
-    if "{$DOMAIN}" not in caddy or "reverse_proxy backend:8000" not in caddy:
+    if (
+        "{$DOMAIN}" not in caddy
+        or "handle_path /api/*" not in caddy
+        or "reverse_proxy backend:8000" not in caddy
+        or "reverse_proxy web:8080" not in caddy
+    ):
         errors.append("Lightsail Caddyfile must terminate HTTPS and proxy to backend")
     for marker in ('Amount = "10"', 'NotificationType = "ACTUAL"', 'Threshold = 80', 'NotificationType = "FORECASTED"'):
         if marker not in budget:
             errors.append(f"Lightsail budget script: missing guard {marker!r}")
     initialize_env = LIGHTSAIL_INITIALIZE_ENV.read_text(encoding="utf-8")
     set_deepseek_key = LIGHTSAIL_SET_DEEPSEEK_KEY.read_text(encoding="utf-8")
+    set_admin_credentials = LIGHTSAIL_SET_ADMIN_CREDENTIALS.read_text(encoding="utf-8")
     if "openssl rand -hex 24" not in initialize_env or "chmod 600" not in initialize_env:
         errors.append("Lightsail environment initializer must generate and restrict server secrets")
     if "read -r -s deepseek_key" not in set_deepseek_key or "DEEPSEEK_API_KEY=%s" not in set_deepseek_key:
         errors.append("Lightsail DeepSeek helper must accept the key without echoing it")
+    if (
+        "read -r -s admin_password" not in set_admin_credentials
+        or "hash_admin_password" not in set_admin_credentials
+        or "ADMIN_PASSWORD_HASH=" not in set_admin_credentials
+    ):
+        errors.append("Lightsail admin helper must hash a no-echo password before storage")
+    plaintext_admin_assignment = re.compile(
+        r"(?im)^\s*ADMIN_PASSWORD(?!_HASH)\s*[:=]\s*[\"']?[^$\s][^\n]*$"
+    )
+    for label, content in (
+        ("infra/lightsail/compose.yml", compose),
+        ("infra/lightsail/.env.example", env_example),
+        ("infra/lightsail/set-admin-credentials.sh", set_admin_credentials),
+    ):
+        if plaintext_admin_assignment.search(content):
+            errors.append(f"{label}: must never store a plaintext admin password assignment")
+
+
+def _verify_shared_dev_account(local_env: dict[str, str], errors: list[str]) -> None:
+    web_email = local_env.get("VITE_DEV_AUTH_EMAIL", "").strip()
+    mobile_email = local_env.get("EXPO_PUBLIC_DEV_AUTH_EMAIL", "").strip()
+    if not web_email or web_email != mobile_email:
+        errors.append(".env.example: Web and mobile must use the same non-empty dev account email")
+        return
+    local_part, separator, domain = web_email.rpartition("@")
+    if (
+        separator != "@"
+        or not local_part
+        or "." not in domain
+        or domain.lower().endswith((".local", ".test", ".invalid"))
+    ):
+        errors.append(".env.example: shared dev account must use an EmailStr-compatible domain")
+        return
+    for path in (
+        WEB_APP,
+        WEB_PROD_DOCKERFILE,
+        LIGHTSAIL_COMPOSE,
+        MOBILE_RUNTIME_CONFIG,
+        MOBILE_ENV_EXAMPLE,
+    ):
+        if web_email not in path.read_text(encoding="utf-8"):
+            errors.append(
+                f"{path.relative_to(REPO_ROOT)}: shared dev account must match .env.example"
+            )
 
 
 def main() -> int:
@@ -295,6 +353,7 @@ def main() -> int:
     _verify_backend_production_dependencies(errors)
     _verify_aws_terraform(errors)
     _verify_lightsail_staging(errors)
+    _verify_shared_dev_account(local_env, errors)
 
     if errors:
         for error in errors:

@@ -13,7 +13,89 @@
 後續:
 ```
 
+## 2026-09-14
+
+### Shared website, admin analytics, and APK staging rollout
+
+類型：deployment / validation / security
+
+檔案：
+
+- `ai_context/IMPLEMENTATION_LOG.md`
+- `mobile/.env`（untracked deployment input）
+- `infra/lightsail/compose.yml`
+- `infra/lightsail/Caddyfile`
+
+摘要：
+
+- Deployed the shared Web/API topology to the existing one-user Lightsail staging host; the website uses `/`, admin uses `/admin`, new clients use `/api`, and legacy root API paths remain available for the previously installed APK.
+- Applied expand-only migration `20260912_0031`; created the administrator password hash and session secret through the server-side no-echo helper. No plaintext password or cloud/provider credential was written to the repository.
+- Replaced the rejected `.local` development email with a valid reserved example-domain address after the live validator returned 422; Web and APK now resolve the same development account and database.
+- Ran one bounded synthetic DeepSeek parse solely to validate model/token aggregation; no raw transcript, prompt, response, credential, account identifier, or health payload is recorded here.
+- Built and installed a standalone internal APK with the staging `/api` URL and shared development account embedded. This remains an internal staging artifact with dev auth and debug signing, not a production-store artifact.
+
+驗證：
+
+- Pre-deployment PostgreSQL custom-format backup created on the server with mode-restricted backup directory; migration reached single Alembic head `20260912_0031`.
+- Backend, PostgreSQL, Web, and Caddy containers reported healthy/running after the switch.
+- HTTPS `/`, `/admin`, `/api/healthz`, and legacy `/healthz` passed; unauthenticated admin session returned 401.
+- Admin login/session/logout passed. The dashboard returned API endpoint aggregates and recorded one `deepseek-v4-flash` request with provider-reported input/output/total token counts.
+- Shared account login, protected profiles, and protected AI-model-list calls passed through `/api`; live route aggregates included app bootstrap endpoints.
+- Analytics storage remained compact after smoke traffic: `api_usage_daily` and `ai_token_usage_daily` were each 24 kB.
+- Web TypeScript, 11 tests, and production build passed after the valid-email fix; Mobile TypeScript passed.
+- Windows `assembleRelease` passed. APK size: 186,600,605 bytes; SHA-256: `b1ba62d7afdf9cec7aa8170d74b7368fc75f6976b9812798626f8fdc5786647a`.
+- APK embedded API/account markers passed, `adb install -r` succeeded on `emulator-5556`, the Chinese home screen rendered, the process stayed alive, and the bounded crash log was clean.
+
+後續：
+
+- Replace staging dev auth and debug signing with OIDC plus a protected production keystore before customer/store distribution.
+- Add managed off-host backups/PITR and monitoring before storing real health data; the current host backup is local to the single Lightsail instance.
+
 ## 2026-09-12
+
+### Shared web/APK API base and compact admin analytics
+
+類型：feature / security / database / infra
+
+檔案：
+
+- `backend/app/api/admin.py`
+- `backend/app/models/analytics.py`
+- `backend/app/services/admin_auth.py`
+- `backend/app/services/usage_analytics.py`
+- `backend/alembic/versions/20260912_0031_admin_usage_analytics.py`
+- `backend/app/services/ai_pipeline.py`
+- `backend/app/services/year_review_snapshots.py`
+- `web/src/AdminApp.tsx`
+- `web/src/admin.css`
+- `mobile/App.tsx`
+- `mobile/appRuntimeConfig.ts`
+- `infra/lightsail/compose.yml`
+- `infra/lightsail/Caddyfile`
+- `infra/lightsail/set-admin-credentials.sh`
+
+摘要：
+
+- 將正式 Web 與新版 APK 對齊到同一個 `/api` backend 與單一開發測試帳戶；Caddy 暫時保留舊 API 路徑，讓已安裝 APK 在切換期間仍可使用。
+- 新增 `/admin` 獨立管理介面及 server-side 管理員 session；密碼只以 PBKDF2-SHA256 hash 保存在未追蹤的 server `.env`，cookie 為 HttpOnly、Secure、SameSite Strict，登入套用資料庫型 rate limit。
+- 新增每日聚合 API 使用表與 AI token 使用表，只保存日期、route template、method、status class、provider、model ID、計數與延遲/token 合計，不保存 request body、prompt、response、帳戶或健康資料。
+- DeepSeek parser 與年度回顧會累計 provider 回報的 input/output/total token；管理頁可依 7、30、90 天檢視請求量、錯誤率、常見 API、延遲、每日趨勢、模型編號與 token 數。
+- Web 管理介面採 lazy-load，開啟 `/admin` 不載入主 App 與 browser AI 模組；正式 Web container 限制為 64 MB 並只位於內部 frontend network。
+- 管理帳密與 session secret 不寫入 Git、implementation log 或部署指令；由 server 上的 no-echo 互動工具建立。
+
+驗證：
+
+- Backend Ruff passed；完整 backend suite `327 passed`，僅有既有 Starlette/httpx deprecation warning。
+- Web ESLint、TypeScript、`11 passed` tests 與 production build passed；管理頁 JS chunk 約 6.5 KB，既有 Transformers chunk size warning 保留。
+- Mobile full quality gate passed。
+- Alembic migration upgraded to single head `20260912_0031` and API/migration compatibility checks passed。
+- Lightsail Compose config、deployment verifier、shell syntax 與 Caddy config validation passed。
+- Production Web image built and returned the Chinese SPA entry from a read-only one-shot container.
+
+後續：
+
+- 在 Lightsail 上互動設定管理員密碼 hash、套用 migration、重建 backend/Web/Caddy，然後重新建立並安裝指向 `/api` 的 APK。
+- 正式公開給顧客前仍需改用正式 OIDC、受管資料庫備份/PITR、監控告警與正式 release keystore。
 
 ### Lightsail single-user APK staging deployment foundation
 

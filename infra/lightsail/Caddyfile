@@ -1,13 +1,34 @@
 {$DOMAIN} {
-  encode zstd gzip
+	encode zstd gzip
 
-  header {
-    Strict-Transport-Security "max-age=31536000; includeSubDomains"
-    X-Content-Type-Options "nosniff"
-    X-Frame-Options "DENY"
-    Referrer-Policy "no-referrer"
-    -Server
-  }
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "no-referrer"
+		-Server
+	}
 
-  reverse_proxy backend:8000
+	route {
+		# New web/mobile API base. handle_path removes the /api prefix before FastAPI.
+		handle_path /api/* {
+			reverse_proxy backend:8000
+		}
+
+		# Temporary compatibility for the already-installed APK and existing probes.
+		@legacy_api path /health /healthz /readyz /metrics /version /feature-flags /auth/* /profiles /profiles/* /records /records/* /ai/* /achievements/* /community/* /daily-records /daily-records/* /reports/* /store/* /subscriptions/* /year-reviews/*
+		handle @legacy_api {
+			reverse_proxy backend:8000
+		}
+
+		# The browser keeps /admin in its address bar while receiving the SPA entry.
+		handle /admin* {
+			rewrite * /
+			reverse_proxy web:8080
+		}
+
+		handle {
+			reverse_proxy web:8080
+		}
+	}
 }

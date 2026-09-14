@@ -4,6 +4,8 @@ export const defaultApiBaseUrl =
   process.env.EXPO_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 export const enableDebugTools = process.env.EXPO_PUBLIC_ENABLE_DEBUG_TOOLS === "true";
 export const allowMobileDevAuth = process.env.EXPO_PUBLIC_ALLOW_DEV_AUTH === "true";
+export const mobileDevAuthEmail =
+  process.env.EXPO_PUBLIC_DEV_AUTH_EMAIL ?? "owner@example.com";
 export const visualSmokeInitialRoute = process.env.EXPO_PUBLIC_VISUAL_SMOKE_INITIAL_ROUTE ?? "";
 
 export const sampleText =

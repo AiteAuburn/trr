@@ -1,5 +1,6 @@
 from app.models.account import Account
 from app.models.achievement import AchievementUnlock
+from app.models.analytics import AiTokenUsageDaily, ApiUsageDaily
 from app.models.audit_log import AuditLog
 from app.models.auth_session import AuthSession
 from app.models.community import CommunityPointLedger, CommunityPublicProfile, FoodItem, FoodShare, StoreRedemption
@@ -15,6 +16,8 @@ from app.models.year_review import YearReviewSharePackage, YearReviewSnapshot
 __all__ = [
     "Account",
     "AchievementUnlock",
+    "AiTokenUsageDaily",
+    "ApiUsageDaily",
     "AuditLog",
     "AuthSession",
     "CommunityPointLedger",

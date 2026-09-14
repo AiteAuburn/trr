@@ -32,6 +32,7 @@ from app.services.record_sanitization import (
 )
 from app.services.record_schema_registry import validate_payload_with_registry
 from app.services.record_validation import RecordType
+from app.services.usage_analytics import safe_record_ai_token_usage
 
 GEMMA4_LLM_MODEL_ID = "gemma-4-e2b-local-pending"
 OLLAMA_QWEN25_LLM_MODEL_ID = "ollama-qwen2.5-1.5b"
@@ -1997,6 +1998,8 @@ def _request_local_parser_json(
     timeout_seconds: float,
     batch_number: int,
     headers: dict[str, str] | None = None,
+    usage_provider: str | None = None,
+    usage_model_id: str | None = None,
 ) -> object:
     try:
         with httpx.Client(timeout=timeout_seconds) as client:
@@ -2008,11 +2011,34 @@ def _request_local_parser_json(
                 parser_name="Local parser",
             )
     except httpx.HTTPError as exc:
+        if usage_provider and usage_model_id:
+            safe_record_ai_token_usage(
+                provider=usage_provider,
+                model_id=usage_model_id,
+                succeeded=False,
+                usage=None,
+            )
         raise LocalParserError(f"Local parser request failed on batch {batch_number}: {exc}") from exc
     try:
         payload = json.loads(response_text)
     except json.JSONDecodeError as exc:
+        if usage_provider and usage_model_id:
+            safe_record_ai_token_usage(
+                provider=usage_provider,
+                model_id=usage_model_id,
+                succeeded=False,
+                usage=None,
+            )
         raise LocalParserError("Local parser returned non-JSON HTTP response") from exc
+
+    if usage_provider and usage_model_id:
+        usage = payload.get("usage") if isinstance(payload, dict) else None
+        safe_record_ai_token_usage(
+            provider=usage_provider,
+            model_id=usage_model_id,
+            succeeded=True,
+            usage=usage,
+        )
 
     content = _extract_openai_compatible_content(payload)
     validate_local_parser_response_size(content, parser_name="Local parser")
@@ -2156,6 +2182,8 @@ def _call_openai_compatible_local_parser(
                 timeout_seconds=timeout_seconds,
                 batch_number=batch_number,
                 headers=headers,
+                usage_provider="deepseek" if llm_model_id == DEEPSEEK_LLM_MODEL_ID else None,
+                usage_model_id=model_id if llm_model_id == DEEPSEEK_LLM_MODEL_ID else None,
             )
             compact_candidate = _normalize_compact_ir_candidate(
                 parsed,

@@ -14,5 +14,7 @@ PUBLIC_ROUTE_REASONS: dict[tuple[str, str], str] = {
     ("POST", "/auth/oidc-login"): "rate-limited identity-token exchange",
     ("POST", "/auth/refresh"): "rate-limited rotating refresh-token exchange",
     ("POST", "/auth/logout"): "rate-limited refresh-token revocation",
+    ("POST", "/admin/login"): "rate-limited admin credential exchange for an HttpOnly session",
+    ("POST", "/admin/logout"): "idempotent admin session-cookie deletion",
     ("POST", "/dev/reset-data"): "environment-and-confirmation-gated development reset",
 }
