@@ -144,16 +144,15 @@ Icon：
 
 ```text
 使用者進入首頁
--> 首頁只顯示大型麥克風按鈕與「按住開始說話記錄」「放開即結束」提示
--> 使用者按住首頁麥克風開始錄音 preview
--> 放開麥克風結束錄音；辨識成功才進入文字確認，過短或空白則在原頁顯示清楚提示
+-> 首頁顯示日期、「想記什麼，直接說出來」、大型麥克風與「點一下開始說話」「說完再點一下，或停 3 秒自動結束」提示
+-> 使用者點一下麥克風開始錄音；說話時文字即時出現在畫面上，按鈕下方顯示經過時間
+-> 再點一下、停頓 3 秒或達到 60 秒上限即結束錄音；過短或空白則在原頁顯示清楚提示
 -> 網站可從常駐主要導覽切換記錄、今日、歷史與分析；Android 原生版沿用漢堡選單進入歷史與基本分析。成就榜、商城、食物社群與其他未來功能先隱藏於一般使用者選單外
--> 使用者說出紀錄內容
--> 系統顯示語音文字稿，使用者可修正
--> 點擊下一步整理
--> AI 整理成日期時間、血糖、飲食、運動等項目
--> 使用者確認後點擊確認儲存
--> 紀錄加入今日紀錄與歷史紀錄
+-> 辨識成功後直接交給 AI 整理（整理中畫面顯示「你說的」文字與「正在幫你整理」，不顯示假百分比）；整理中可按「取消」回到文字確認頁，晚到的結果會被忽略
+-> AI 整理確認頁同時顯示「你說：…」文字（可按「改文字」修正）與整理好的卡片；沒聽清楚的卡片用琥珀色標示
+-> 使用者按「存起來（N 筆）」才寫入；或按「重新說一次」放棄這次結果
+-> 存好後顯示「存好了」，主按鈕「再說一筆」回首頁，次按鈕「看今天的紀錄」開今天時間軸
+-> 若整理前檢查未通過（離線、無模型、文字不合規），停在文字確認頁並顯示原因
 ```
 
 所有寫入動作都必須經過使用者確認，不可由 AI 直接寫入資料庫。
@@ -178,7 +177,7 @@ Store preview 商品資料即使目前是本機常數，id、category、badge、
 Store category tabs 必須在 render 前轉成 bounded display options；raw category id 只可用於篩選與選取狀態，label 不可直接從 `storeCategories` raw config render。
 Store search input 必須走 dedicated bounded handler；不可在 JSX TextInput callback 內直接呼叫 `setStoreSearchText(boundStoreSearchText(value))`，避免未來接 backend 商品目錄時搜尋字串繞過長度界線。
 
-Record 頁的 quick-entry mode 卡必須是可操作 Pressable，不可只是展示文字。每個 quick-entry item 的 key、label、copy、icon 與 accessibility label 都必須在 render 前 bounded；handler 必須共用 bounded mode action，語音只提示按住大型錄音按鈕、文字切到 record 流程、手動新增進入 manual record，不可在 quick-entry handler 內呼叫 AI / STT / Vision、建立紀錄、寫入資料或假造錄音結果。Home 頁不得顯示 quick-entry mode 卡。
+Record 頁的 quick-entry mode 卡必須是可操作 Pressable，不可只是展示文字。每個 quick-entry item 的 key、label、copy、icon 與 accessibility label 都必須在 render 前 bounded；handler 必須共用 bounded mode action，語音只提示點一下大型錄音按鈕、文字切到 record 流程、手動新增進入 manual record，不可在 quick-entry handler 內呼叫 AI / STT / Vision、建立紀錄、寫入資料或假造錄音結果。Home 頁不得顯示 quick-entry mode 卡。
 Record quick-entry card 的來源頁選擇必須走 dedicated wrapper；不可在 JSX callback 內直接呼叫 `handleQuickEntryMode(item.key, "today")` 或 `handleQuickEntryMode(item.key, "record")`。Quick-entry card JSX `onPress` 必須呼叫 item press wrapper，不直接呼叫底層來源頁 quick-entry handler 並傳入 `item.key`。
 
 Settings row 與 tutorial step 這類本機導覽資料在渲染前也必須轉成 bounded display item；id、label/title、helper/description 與 icon 都有固定長度上限，避免未來改由 config 載入時造成 UI 文字過長。
@@ -237,8 +236,8 @@ AI Review 候選卡的修改與移除按鈕必須有 render 前 bounded accessib
 AI 候選編輯頁的 header 返回、底部取消與套用修改 CTA 必須有 render 前 bounded accessibility label、`accessibilityRole="button"` 與 validation disabled accessibility state；label 必須說明候選修改仍未寫入正式紀錄、不送 backend save request、不呼叫 delete API。
 
 Recording 與 header busy guard 的 quota exhausted、permission denied、recording started、reset、finished、too-short、start/stop failure、Whisper progress/success/empty/failure 與 busy UI status 必須透過 bounded display helper 產生；錄音秒數只可用於狀態判斷，若進入顯示文案前必須先 clamp。Mobile hold-to-record 必須使用 `expo-av` / `Audio.Recording` 擷取本機音檔，URI 只可 bounded 後寫入 native debug audio path；Whisper 轉錄結果只可進入 bounded transcript draft 和文字確認頁，不得保存 raw prompt 或 raw model output。
-Mobile 單次錄音上限為 60 秒，且若 backend voice quota remaining 更低，單次上限必須使用較低值。錄音 timer 顯示、auto-stop、`voice_seconds` pending value 都必須 clamp 到 effective limit；到上限時自動停止錄音，不等使用者放開按鈕。
-Record 錄音結果主按鈕必須走 dedicated handler；不可在 JSX Pressable callback 內直接呼叫 `handleRecordingResultPrimaryAction("today")` 或 `handleRecordingResultPrimaryAction("record")`。handler 可在已設定 Whisper model path 且有 bounded audio URI 時轉文字並進入文字確認；仍不可跳過文字確認、不可直接呼叫 AI/parser 或寫入紀錄。Home 頁 mic 放開不顯示錄音結果主按鈕；若已有 Whisper model path，可直接轉文字後進文字確認，否則只保留本機 audio URI。
+Mobile 單次錄音上限為 60 秒，且若 backend voice quota remaining 更低，單次上限必須使用較低值。錄音 timer 顯示、auto-stop、`voice_seconds` pending value 都必須 clamp 到 effective limit；到上限時自動停止錄音，不等使用者再點一下。
+Record 錄音結果主按鈕必須走 dedicated handler；不可在 JSX Pressable callback 內直接呼叫 `handleRecordingResultPrimaryAction("today")` 或 `handleRecordingResultPrimaryAction("record")`。handler 可在已設定 Whisper model path 且有 bounded audio URI 時轉文字並進入文字確認；仍不可跳過文字確認、不可直接呼叫 AI/parser 或寫入紀錄。Home 頁錄音結束後不顯示錄音結果主按鈕；若已有 Whisper model path，可直接轉文字後進文字確認，否則只保留本機 audio URI。
 Whisper 產生的 transcript 必須保留 bounded `transcriptVoiceSeconds`，送 `/ai/parse-preview` 時以 `voice_seconds` 傳給 backend；手動輸入、範例文字、重輸入、清除 session 與儲存成功都必須清為 0。Parser 成功後立即清掉 pending voice seconds 並刷新 backend voice quota；parser 失敗時保留 pending seconds，讓重試成功時才扣 backend quota。
 
 核心記錄流程、AI 確認/儲存、手動新增/確認、儲存/更新/刪除結果、歷史、詳情、編輯、分析與詳細報告的 section/action labels 必須透過 bounded display helper 產生；不可在 JSX 中直接寫 repeated core-flow labels。
@@ -304,12 +303,13 @@ AI 候選編輯、手動新增與正式紀錄編輯的日期、時間、欄位�
 - 標題：「糖錄錄」。
 - 右上角：圓角方形 menu 按鈕，內含三條橫線 icon。
 - 首頁保留單一大型麥克風操作，不顯示今日摘要、同步狀態、文字輸入、手動新增、紀錄列表、分析 CTA、primary tabs 或 MVP flow stepper。
-- 麥克風上方顯示第二版新手引導：主標語「想說什麼就說什麼」左右需有小型提示 icon 強化視覺提示，但不可放大成操作控制；非按鈕提示區顯示「時間 / 血糖 / 飲食 / 運動 / 用藥紀錄 / 身體狀況」，以及帶獨立資訊 icon 的說明 row：「上面這排不是按鈕喔。如果不知道從哪開始，可以參考這些記錄方向；想說什麼就說什麼，不用照固定格式。」提示區必須是淡色背景、無陰影、無凸起感、無 Pressable / button affordance，只作為記錄方向提示；資訊 icon 也不可是 Pressable。
-- 引導說明文字需靠近 Icon 區，並與麥克風保持較大距離，讓提示區與操作區明確分開。Icon 不可可點擊；首頁 render block 仍只能有一個 Pressable，也就是大型麥克風。
-- 麥克風按鈕仍為第一操作重心；下方顯示淺色提示字：「按住開始說話記錄」與「放開即結束」。按住錄音時，第二行提示可在同一個 `homeHintSecondary` 位置改顯示「已錄音 X 秒，放開即結束」。第二行下方可顯示一行很小的目前語音識別模式：已選本機 Whisper 時顯示「目前語音識別：本機 Whisper」，未選模型時顯示「目前語音識別：內建文字確認」；此文字不可是 Pressable，不可觸發 STT/AI/backend。
-- 麥克風下方顯示範例輪播區，標題為「範例（怎麼說都可以）」，自動輪播自然聊天型、簡潔紀錄型、想到什麼說什麼型、生活日記型等說話方式。範例區標題、序號與內文都必須左對齊，並顯示 pagination dots 讓使用者知道目前是哪一個範例；不可是 CTA，不可觸發 AI / STT / backend，也不可讓使用者誤認為必須照固定格式念。
-- Mobile navigation verifier 必須從 Today/Home render block 內確認引導標語、非按鈕提示區、說明文字、範例輪播與兩行錄音提示存在，不能只用全檔文字 marker 間接判斷；也必須守住按住時的秒數提示由 bounded helper 產生。Verifier 也必須確認首頁 render block 只有一個 Pressable 麥克風控制，不含 primary/secondary button、section title、status/evidence copy、inline info block 或 record/timeline card surface，且 `homeMicButton` 維持大型圓形尺寸，不可縮成一般 CTA。Today/Home chrome 必須保留空 subtitle 且不可設定 `backTo` 或 `actionLabel` 覆蓋 header fallback；右上角 header button 必須使用 `☰` fallback 開啟功能選單。
-- 首頁按住麥克風使用 `expo-audio` 啟動本機錄音；放開停止錄音並保留 bounded audio URI。辨識成功才進入文字確認。過短、缺音檔、空白辨識、缺模型與權限/錄音錯誤須顯示不受 debug 開關影響的可見提示，不可只寫入首頁隱藏的 status，也不可把舊草稿當作本次辨識結果。權限或準備尚未完成就放開時，必須取消或隨即停止錄音。不可直接呼叫 AI / LLM parser、不中途建立紀錄、不寫入 backend。
+- 麥克風上方顯示日期（例：11月4日 星期三）、右側「今天 N 筆」chip（開今天時間軸）與大標「想記什麼，直接說出來」。舊版的引導 icon 列已移除。
+- 今天時間軸是首頁的另一個檢視（`homeView`，不是獨立 AppScreen）：日期、「今天的紀錄」、三格摘要（最近血糖值與時間、今天記了 N 筆、運動總分鐘）、由早到晚的紀錄時間軸（24 小時制時間，點卡片開紀錄詳情）、「說話記一筆」（切回麥克風並直接開始錄音）與「看全部歷史」。從主要分頁或「再說一筆」回首頁時一律回到麥克風檢視。
+- 錄音中改顯示「正在聽你說」、右側「取消」按鈕，以及大字即時辨識文字（尚無文字時顯示「請開始說話…」）。
+- 麥克風按鈕仍為第一操作重心（直徑至少 200）。點一下開始、再點一下結束；停頓 3 秒（`recordingSilenceAutoStopMs`）或語音服務自行結束時自動停止。待機時下方顯示「點一下開始說話」與「說完再點一下，或停 3 秒自動結束」；錄音中按鈕改為停止方塊，下方顯示 `0:12` 計時與「說完點一下按鈕 · 最多 1 分鐘」。debug 模式下可額外顯示目前語音識別模式，不可是 Pressable。
+- 待機時麥克風下方顯示淡綠底範例輪播區（標題「可以這樣說」，左對齊、含 pagination dots，不可是 CTA），以及文字連結「不方便說話？改用打字」進入記錄頁。
+- Mobile navigation verifier 必須從 Today/Home render block 內確認：只有一個錄音麥克風控制（以錄音 accessibility label 計），點擊切換錄音、取消、今天 chip、打字 fallback、計時與兩行提示存在；不含 primary/secondary button、section title、evidence copy、inline info block 或紀錄卡；`homeMicButton` 維持大型圓形尺寸。Today/Home chrome 必須保留空 subtitle 且右上角 header button 使用 `☰` fallback 開啟功能選單。
+- 錄音使用手機語音服務（`expo-speech-recognition`，interim results 即時回傳文字），本機 Whisper 模型存在時優先轉寫。過短、空白辨識、權限與錄音錯誤須顯示不受 debug 開關影響的可見提示，不可把舊草稿當作本次辨識結果。麥克風尚未準備好就再點一下時，必須在準備完成後隨即停止。錄音流程本身不呼叫 AI parser、不建立紀錄；辨識成功後由獨立 effect 交給 parser，寫入仍需使用者在確認頁按「存起來」。
 - 測試版可在首頁 header 下方的獨立開發工具區顯示「測試：填入預設文字」；正式版仍維持單一麥克風操作重心。錄音提示支援 accessibility live region，並能在畫面上方看到。
 - 第一版功能入口只保留今日錄音、歷史紀錄、基本分析與必要設定；成就榜、年度回顧、商城、食物社群、社群排行與未來擴充入口不可出現在一般使用者 menu。未來 route 可保留給 debug / visual-smoke，但必須在 `enableDebugTools` 下才可見。
 - Primary tabs 只可保留今日、記錄與選單；歷史紀錄與基本分析不可出現在 primary tabs，必須透過右上角漢堡選單進入。History / Analysis screen chrome 必須維持 hamburger fallback，不可改成 back arrow 或 close action 取代 menu 入口。
@@ -333,8 +333,8 @@ AI 候選編輯、手動新增與正式紀錄編輯的日期、時間、欄位�
 
 - 首頁不顯示今日紀錄列表；今日/歷史資料瀏覽從漢堡選單進入歷史紀錄或其他資料頁。
 - 有真實紀錄時不可在首頁顯示 timeline card，避免首頁偏離單一錄音入口。
-- 無真實紀錄時也不可在首頁顯示空狀態、手動新增或文字記錄 CTA。
-- Mobile navigation verifier 必須檢查 Today/Home JSX render block 不含 quick-entry rail、quick-entry press wrapper、TextInput、分析 CTA、手動新增 CTA、record entry CTA 或今日紀錄卡；Record 頁可保留 quick-entry。
+- 無真實紀錄時也不可在首頁顯示空狀態或手動新增 CTA；「今天 N 筆」chip 顯示 0 筆即可。
+- Mobile navigation verifier 必須檢查 Today/Home JSX render block 不含 quick-entry rail、quick-entry press wrapper、TextInput、分析 CTA、手動新增 CTA 或今日紀錄卡；唯一的文字入口是「不方便說話？改用打字」連結。Record 頁可保留 quick-entry。
 - 若保留內部 Today 相關 handler 給非首頁路徑或既有返回流程使用，首頁 render block 仍不可呈現手動新增、文字記錄、紀錄詳情卡或查看分析 CTA；任何資料瀏覽或分析入口都必須從漢堡選單或對應內容頁進入。
 - 今日紀錄摘要與無真實紀錄 fallback copy 必須透過 bounded display helper 產生；顯示筆數必須先 clamp，不可在 JSX 內直接組 `records.length` 或固定 no-data 文案。
 - 紀錄卡片顯示時間、類型、摘要與 icon。
@@ -347,8 +347,8 @@ AI 候選編輯、手動新增與正式紀錄編輯的日期、時間、欄位�
 互動：
 
 - 點擊右上 menu 開啟功能選單。
-- 按住大型麥克風開始本機錄音，放開即結束。
-- 首頁錄音區平時不顯示精確剩餘分鐘；首頁也不顯示文字輸入或手動新增 fallback。
+- 點一下大型麥克風開始錄音，再點一下、停 3 秒或到 60 秒即結束。
+- 首頁錄音區平時不顯示精確剩餘分鐘；首頁不顯示文字輸入或手動新增 fallback，只保留「改用打字」連結。
 
 ### 4.2 歷史紀錄頁
 
@@ -1195,8 +1195,8 @@ Dev-only visual smoke route jump：
 
 教學卡片：
 
-- 按住說話：麥克風 icon，說明「按住首頁或記錄頁的大按鈕開始錄音預覽。」。
-- 放開結束：手掌 icon，說明「若已選擇本機 Whisper 模型，會先轉成文字並進入確認。」。
+- 點一下說話：麥克風 icon，說明「點一下首頁或記錄頁的大按鈕開始錄音。」。
+- 再點一下結束：手掌 icon，說明「說完再點一下，或停 3 秒自動結束；轉成文字後交給 AI 整理。」。
 - 確認內容：清單 icon，說明「檢查文字與 AI 候選紀錄，確認前不會儲存。」。
 - 儲存完成：勾勾 icon，說明「確認後送出，即可加入今日紀錄。」。
 
@@ -2044,7 +2044,7 @@ Visual style:
 Clean modern iOS design, white background, soft mint green accents, dark forest green headings, rounded cards, gentle shadows, large spacing, friendly health focused style. Use Traditional Chinese text. Use pill tabs, circular icon backgrounds, soft green gradient buttons, and rounded white cards only for real scannable objects such as records, metrics, product rows, forms, charts, and action surfaces. Use open inline boundary text for disabled, preview-only, privacy, cost, entitlement, and integration-status explanations; do not wrap those explanations in banner cards or nested panels.
 
 Main screens:
-1. Today home showing only the app title/header menu, an icon-only large hold-to-record microphone button, and light hint text「按住開始說話記錄」「放開即結束」.
+1. Today home showing only the app title/header menu, the date, the 「想記什麼，直接說出來」 heading, an icon-only large tap-to-talk microphone button, and light hint text「點一下開始說話」「說完再點一下，或停 3 秒自動結束」.
 2. History screen with month calendar mode, lit dates for days with records, dim dates for empty days, selected-date AI-organized records first, and an original speech-to-text view.
 3. Analytics screen with 本週／本月／自訂日期區間 tabs, bounded custom start/end date inputs, blood glucose trend line chart, summary cards for highest glucose, lowest glucose, average glucose, total glucose measurements, before-meal count, after-meal count, and bounded detailed-report view that shows data source, AI cost 0, query limit, and no-medical-advice boundary.
 4. Subscription screen with trial and yearly membership plan, feature comparison table, inline payment-disconnected boundary text, and「查看試用整合狀態」button until store payment is wired.

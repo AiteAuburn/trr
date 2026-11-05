@@ -42,13 +42,13 @@ export function recordingStartedStatusMessage(isLowQuota: boolean, usingPhoneSpe
   if (usingPhoneSpeech) {
     return boundUiMessage(isLowQuota
       ? "錄音中，使用手機語音服務；今日額度剩餘不到 2 分鐘。"
-      : "錄音中，使用手機語音服務；辨識是否需要網路依手機設定。放開即結束。");
+      : "錄音中，使用手機語音服務；辨識是否需要網路依手機設定。說完點一下即結束。");
   }
-  return boundUiMessage(isLowQuota ? "錄音中；今日錄音額度剩餘不到 2 分鐘。" : "錄音中，放開即結束。");
+  return boundUiMessage(isLowQuota ? "錄音中；今日錄音額度剩餘不到 2 分鐘。" : "錄音中，說完點一下即結束。");
 }
 
 export function recordingResetStatusMessage() {
-  return boundUiMessage("可重新按住錄音，或直接使用文字輸入。");
+  return boundUiMessage("可重新點一下麥克風錄音，或直接使用文字輸入。");
 }
 
 export function recordingTextFallbackStatusMessage() {
@@ -75,7 +75,7 @@ export function recordingFinishedStatusMessage(elapsedSeconds: number) {
   const boundedSeconds = clampNumber(elapsedSeconds, 0, maxMobileCountValue);
   return boundUiMessage(
     boundedSeconds <= 1
-      ? "這次沒有收到可用的語音。請按住按鈕，說完後再放開。"
+      ? "這次沒有收到可用的語音。請點一下麥克風，說完再點一下。"
       : "錄音已結束，正在整理辨識文字。"
   );
 }
@@ -288,21 +288,39 @@ export function validateTranscriptForParser(value: string) {
 }
 
 export function recordingIdlePreviewCopy() {
-  return boundDisplayText("放開後由 Whisper 或手機語音服務轉成文字，再進入確認。", maxDisplayDetailTextLength);
+  return boundDisplayText("說完後由 Whisper 或手機語音服務轉成文字，再交給 AI 整理。", maxDisplayDetailTextLength);
 }
 
 export function recordingActivePreviewCopy(elapsedSeconds: number) {
-  return boundDisplayText(`${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒 · 放開結束`, 80);
+  return boundDisplayText(`${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒 · 點一下結束`, 80);
 }
 
 export function homeRecordingSecondaryHint(isRecording: boolean, elapsedSeconds: number) {
   if (!isRecording) {
-    return boundDisplayText("放開即結束", 40);
+    return boundDisplayText("說完再點一下，或停 3 秒自動結束", 40);
   }
   return boundDisplayText(
-    `已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，放開即結束`,
+    `已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，說完點一下按鈕`,
     80
   );
+}
+
+const homeWeekdayLabels = ["日", "一", "二", "三", "四", "五", "六"] as const;
+
+/** "11月4日 星期三" for the home header. */
+export function homeDateDisplayText(value: Date) {
+  return boundDisplayText(
+    `${value.getMonth() + 1}月${value.getDate()}日 星期${homeWeekdayLabels[value.getDay()]}`,
+    40
+  );
+}
+
+/** "0:12" style elapsed time for the recording button. */
+export function recordingClockDisplayText(elapsedSeconds: number) {
+  const seconds = clampNumber(Math.floor(elapsedSeconds), 0, mobileSingleRecordingLimitSeconds * 60);
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
+  return `${minutes}:${rest < 10 ? "0" : ""}${rest}`;
 }
 
 export function homeRecordingModelStatusCopy(hasWhisperModel: boolean) {
@@ -316,14 +334,14 @@ export function homeRecordingModelStatusCopy(hasWhisperModel: boolean) {
 
 export function homeRecordingPreviewBoundaryCopy() {
   return boundDisplayText(
-    "按住時由手機語音服務辨識並暫存音檔；若本機 Whisper 可用則優先使用，否則採用手機結果。手機服務可能使用網路；確認前不會呼叫 AI 或儲存紀錄。",
+    "錄音時由手機語音服務辨識並暫存音檔；若本機 Whisper 可用則優先使用，否則採用手機結果。手機服務可能使用網路；整理結果確認前不會儲存紀錄。",
     maxDisplayDetailTextLength
   );
 }
 
 export function recordPageRecordingPreviewBoundaryCopy() {
   return boundDisplayText(
-    "按住時由手機語音服務辨識並暫存音檔；本機 Whisper 可用時優先使用。手機服務可能使用網路；辨識文字需先確認，才會整理或儲存。",
+    "錄音時由手機語音服務辨識並暫存音檔；本機 Whisper 可用時優先使用。手機服務可能使用網路；整理結果需先確認，才會儲存。",
     maxDisplayDetailTextLength
   );
 }
@@ -355,7 +373,7 @@ export function recordingResultBodyCopy(elapsedSeconds: number) {
   const boundedSeconds = clampNumber(elapsedSeconds, 0, maxMobileCountValue);
   return boundDisplayText(
     boundedSeconds <= 1
-      ? "錄音時間太短，建議重新按住錄音。"
+      ? "錄音時間太短，建議重新點一下麥克風錄音。"
       : "錄音已結束；Whisper 或手機語音服務會提供辨識文字，確認後再交給 AI 整理。",
     maxDisplayDetailTextLength
   );

@@ -63,12 +63,30 @@ async function main() {
   await cancelled.release();
   assert.equal(abortCalls, 1);
 
+  // Tap-to-talk: live text reaches the UI, and a recognizer that ends by itself notifies once.
+  const liveTexts = [];
+  let endNotices = 0;
+  const live = await loadedModule.exports.startPhoneSpeechCapture({
+    onTranscript: (text) => liveTexts.push(text),
+    onEnd: () => { endNotices++; }
+  });
+  for (const listener of listeners.get("result") ?? []) {
+    listener({ results: [{ transcript: "早上空腹" }], isFinal: true });
+    listener({ results: [{ transcript: "一百一十二" }], isFinal: false });
+  }
+  assert.deepEqual(liveTexts, ["早上空腹", "早上空腹 一百一十二"]);
+  for (const listener of listeners.get("end") ?? []) listener();
+  assert.equal(endNotices, 1);
+  const liveResult = await live.stop();
+  assert.equal(liveResult.transcript, "早上空腹 一百一十二");
+  assert.equal(endNotices, 1, "stopping after the recognizer ended must not notify again");
+
   platform.Version = 32;
   const olderAndroid = await loadedModule.exports.startPhoneSpeechCapture();
   assert.equal(startOptions.continuous, false);
   assert.equal(startOptions.recordingOptions, undefined);
   await olderAndroid.release();
-  console.log("Phone speech fallback verified: native capture, final transcript/audio URI, stop, and listener cleanup.");
+  console.log("Phone speech fallback verified: native capture, final transcript/audio URI, live transcript and self-end callbacks, stop, and listener cleanup.");
 }
 
 main().catch((error) => {

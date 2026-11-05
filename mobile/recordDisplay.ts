@@ -118,6 +118,9 @@ export function displayPayload(recordType: string, payload: Record<string, unkno
         return boundDisplayText(`飲食：${names.join("、")}`);
       }
     }
+    if (payload.meal_type) {
+      return boundDisplayText(`飲食：${mealTypeLabel(payload.meal_type)}`);
+    }
   }
 
   if (recordType === "exercise") {

@@ -1,9 +1,10 @@
 import { palette } from "./designTokens";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Animated, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Animated, Pressable, StyleSheet, Text, View } from "react-native";
 import { useBreathingMotion } from "./interfaceMotion";
 
-export function ParserLoadingView() {
+export function ParserLoadingView({ transcript = "", onCancel }: { transcript?: string; onCancel?: () => void }) {
+  const spokenText = transcript.trim().slice(0, 400);
   const progress = useBreathingMotion(true);
   const [takingLonger, setTakingLonger] = useState(false);
   useEffect(() => {
@@ -18,15 +19,21 @@ export function ParserLoadingView() {
       accessibilityValue={{ text: "處理中" }}
       style={styles.shell}
     >
+      {spokenText ? (
+        <View style={styles.spokenCard}>
+          <Text style={styles.spokenLabel}>你說的</Text>
+          <Text style={styles.spokenText}>{spokenText}</Text>
+        </View>
+      ) : null}
       <Animated.View style={[styles.glow, { opacity: progress.interpolate({ inputRange: [0, 1], outputRange: [0.5, 0.85] }), transform: [{ scale: progress.interpolate({ inputRange: [0, 1], outputRange: [0.9, 1.05] }) }] }]} />
       <View style={styles.card}>
         <View style={styles.orb}>
           <ActivityIndicator color={palette.surface} size="large" />
         </View>
         <Text style={styles.eyebrow}>把日常，整理成紀錄</Text>
-        <Text style={styles.title}>正在讀懂這段紀錄</Text>
+        <Text style={styles.title}>正在幫你整理</Text>
         <Text style={styles.body}>
-          血糖、餐點、運動與用藥，會各自找到位置。整理好後，再由你確認。
+          通常幾秒鐘。血糖、餐點、運動與用藥會各自整理好，先給你看過再存。
         </Text>
 
         <View style={styles.lockPill}>
@@ -37,6 +44,16 @@ export function ParserLoadingView() {
       <Text accessibilityLiveRegion="polite" style={styles.footnote}>
         {takingLonger ? "這次整理需要多一點時間，請稍候" : "稍等一下，正在為你整理"}
       </Text>
+      {onCancel ? (
+        <Pressable
+          accessibilityLabel="取消這次整理，回到文字"
+          accessibilityRole="button"
+          style={styles.cancelButton}
+          onPress={onCancel}
+        >
+          <Text style={styles.cancelButtonText}>取消</Text>
+        </Pressable>
+      ) : null}
     </View>
   );
 }
@@ -77,6 +94,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 4,
     width: 92
+  },
+  spokenCard: {
+    alignSelf: "stretch",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
+    borderRadius: 20,
+    borderWidth: 1,
+    gap: 6,
+    marginBottom: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 16
+  },
+  spokenLabel: {
+    color: palette.secondary,
+    fontSize: 13,
+    fontWeight: "700",
+    lineHeight: 19
+  },
+  spokenText: {
+    color: palette.text,
+    fontSize: 17,
+    lineHeight: 27
   },
   eyebrow: {
     color: palette.brand,
@@ -120,6 +159,21 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "800",
     lineHeight: 18
+  },
+  cancelButton: {
+    alignItems: "center",
+    borderColor: palette.border,
+    borderRadius: 999,
+    borderWidth: 1,
+    justifyContent: "center",
+    marginTop: 14,
+    minHeight: 44,
+    paddingHorizontal: 28
+  },
+  cancelButtonText: {
+    color: palette.secondary,
+    fontSize: 15,
+    fontWeight: "700"
   },
   footnote: {
     color: "#7E8E88",

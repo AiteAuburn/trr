@@ -31,7 +31,14 @@ export async function discardPhoneSpeechAudio(audioUri: string | null) {
   }
 }
 
-export async function startPhoneSpeechCapture(): Promise<PhoneSpeechCapture> {
+export type PhoneSpeechCaptureOptions = {
+  /** Called with the running transcript (final segments plus the current partial). */
+  onTranscript?: (transcript: string) => void;
+  /** Called once if the recognizer ends on its own (silence timeout, single-utterance mode). */
+  onEnd?: () => void;
+};
+
+export async function startPhoneSpeechCapture(options: PhoneSpeechCaptureOptions = {}): Promise<PhoneSpeechCapture> {
   const { ExpoSpeechRecognitionModule } = await import("expo-speech-recognition");
   let finished = false;
   let ended = false;
@@ -53,6 +60,9 @@ export async function startPhoneSpeechCapture(): Promise<PhoneSpeechCapture> {
     } else {
       partialTranscript = nextTranscript;
     }
+    if (!finished) {
+      options.onTranscript?.([...finalTranscripts, partialTranscript].filter(Boolean).join(" ").trim());
+    }
   });
   const audioEndSubscription = ExpoSpeechRecognitionModule.addListener("audioend", (event: SpeechAudioEndEvent) => {
     audioUri = event.uri ?? audioUri;
@@ -63,6 +73,7 @@ export async function startPhoneSpeechCapture(): Promise<PhoneSpeechCapture> {
   const endSubscription = ExpoSpeechRecognitionModule.addListener("end", () => {
     ended = true;
     resolveEnded?.();
+    if (!finished) options.onEnd?.();
   });
 
   const removeListeners = () => {

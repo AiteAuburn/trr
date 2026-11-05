@@ -88,10 +88,8 @@ ACHIEVEMENT_CATEGORY_SECTION_LIST_PATH = REPO_ROOT / "mobile" / "achievementCate
 ACHIEVEMENT_UNLOCKED_CARD_LIST_PATH = REPO_ROOT / "mobile" / "achievementUnlockedCardList.tsx"
 AI_CANDIDATE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiCandidateActionRow.tsx"
 AI_CANDIDATE_LIST_PATH = REPO_ROOT / "mobile" / "aiCandidateList.tsx"
-AI_REVIEW_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiReviewActionRow.tsx"
 AI_SAVE_FAILURE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiSaveFailureActionRow.tsx"
 CORE_FLOW_ENTRY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "coreFlowEntryActionRow.tsx"
-HOME_GUIDANCE_CARD_PATH = REPO_ROOT / "mobile" / "homeGuidanceCard.tsx"
 DAILY_RECORD_ENTRY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordEntryActionRow.tsx"
 DAILY_RECORD_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "dailyRecordDetailRow.tsx"
 DAILY_RECORD_SECTION_LIST_PATH = REPO_ROOT / "mobile" / "dailyRecordSectionList.tsx"
@@ -1519,10 +1517,8 @@ def main() -> int:
     achievement_unlocked_card_list_content = ACHIEVEMENT_UNLOCKED_CARD_LIST_PATH.read_text(encoding="utf-8")
     ai_candidate_action_row_content = AI_CANDIDATE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     ai_candidate_list_content = AI_CANDIDATE_LIST_PATH.read_text(encoding="utf-8")
-    ai_review_action_row_content = AI_REVIEW_ACTION_ROW_PATH.read_text(encoding="utf-8")
     ai_save_failure_action_row_content = AI_SAVE_FAILURE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     core_flow_entry_action_row_content = CORE_FLOW_ENTRY_ACTION_ROW_PATH.read_text(encoding="utf-8")
-    home_guidance_card_content = HOME_GUIDANCE_CARD_PATH.read_text(encoding="utf-8")
     daily_record_entry_action_row_content = DAILY_RECORD_ENTRY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     daily_record_detail_row_content = DAILY_RECORD_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     daily_record_section_list_content = DAILY_RECORD_SECTION_LIST_PATH.read_text(encoding="utf-8")
@@ -2945,9 +2941,9 @@ def main() -> int:
             'value.currentScreen !== "today" &&',
         )
         _assert_contains(
-            "MVP flow manual save success condition",
+            "MVP flow stepper hidden on the single voice confirm and saved pages",
             navigation_content,
-            'value.currentScreen !== "saveSuccess" || value.lastSaveEntryMethod !== "manual" || value.hasUnsavedPreviewRecords',
+            'value.currentScreen !== "aiReview" &&\n      value.currentScreen !== "saveSuccess"',
         )
         _assert_contains(
             "primary tab navigation state helper",
@@ -3031,7 +3027,8 @@ def main() -> int:
             ("home recording timer interval", "const timer = setInterval(() => {"),
             ("home recording timer clamp", "setRecordingElapsedSeconds(clampNumber(nextElapsedSeconds, 0, limitSeconds));"),
             ("home recording auto stop at limit", 'void finishRecordingPreview("limit");'),
-            ("home recording secondary hint render", "<Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>"),
+            ("home recording secondary hint render", '{isRecordingPreview ? "說完點一下按鈕 · 最多 1 分鐘" : homeRecordingSecondaryHintDisplayText}'),
+            ("home recording silence auto stop", "Date.now() - lastSpeechAt >= recordingSilenceAutoStopMs"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
@@ -3043,7 +3040,7 @@ def main() -> int:
         _assert_contains(
             "home recording secondary hint active copy",
             recording_copy_content,
-            "已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，放開即結束",
+            "已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，說完點一下按鈕",
         )
         _assert_not_contains(
             "home recording must not render a third timer line",
@@ -3339,8 +3336,8 @@ def main() -> int:
             "function recordingButtonAccessibilityLabel(isRecording: boolean)",
         )
         for label, marker in (
-            ("recording active accessibility copy", "錄音預覽進行中，放開結束"),
-            ("recording idle accessibility copy", "按住開始錄音預覽"),
+            ("recording active accessibility copy", "錄音中，點一下結束"),
+            ("recording idle accessibility copy", "點一下開始說話記錄"),
         ):
             _assert_contains(label, first_version_flow_copy_content, marker)
         _assert_contains(
@@ -3708,7 +3705,7 @@ def main() -> int:
         _assert_contains(
             "AI review manual entry binding",
             content,
-            "onManualAddPress={openAiReviewManualRecord}",
+            "onPress={openAiReviewManualRecord}",
         )
         _assert_contains(
             "AI review no-preview return binding",
@@ -3811,9 +3808,9 @@ def main() -> int:
             "function returnFromAiSaveConfirm()",
         )
         _assert_contains(
-            "AI review enter save confirm binding",
+            "AI review saves directly from the single confirm page",
             content,
-            "onEnterSavePress={enterAiSaveConfirm}",
+            "onPress={submitAiSaveConfirm}",
         )
         _assert_contains(
             "record workflow static checklist bundle binding",
@@ -5003,10 +5000,8 @@ def main() -> int:
             ("AI candidate display payload binding", "{aiCandidateDisplayPayloadSummary(item)}"),
             ("AI candidate display confidence helper", "function aiCandidateDisplayConfidencePercent(item: AiCandidateDisplayItem)"),
             ("AI candidate display confidence helper fields", "return item.confidencePercent;"),
-            ("AI candidate display confidence binding", "{aiCandidateDisplayConfidencePercent(item)}%"),
             ("AI candidate display source helper", "function aiCandidateDisplaySourceText(item: AiCandidateDisplayItem)"),
             ("AI candidate display source helper fields", "return item.sourceText;"),
-            ("AI candidate display source binding", "{aiCandidateDisplaySourceText(item)}"),
             ("AI candidate low confidence helper", "function aiCandidateDisplayIsLowConfidence(item: AiCandidateDisplayItem)"),
             ("AI candidate low confidence helper fields", "return item.lowConfidence;"),
             ("AI candidate low confidence binding", "{aiCandidateDisplayIsLowConfidence(item) ? ("),
@@ -5018,7 +5013,7 @@ def main() -> int:
             ("AI candidate remove accessibility helper", "function aiCandidateRemoveAccessibilityLabel(item: AiCandidateDisplayItem)"),
             ("AI candidate remove accessibility helper fields", "return item.removeAccessibilityLabel;"),
             ("AI candidate card stack style", "aiReviewCardStack: {"),
-            ("AI candidate confidence pill style", "confidencePill: {"),
+            ("AI candidate uncertain card style", "aiReviewCardUncertain: {"),
         ):
             _assert_contains(label, ai_candidate_list_content, marker)
         _assert_not_contains(
@@ -8129,15 +8124,15 @@ def main() -> int:
             ("minimal home section style", "styles.homeMinimalSection"),
             ("minimal home mic button style", "styles.homeMicButton"),
             ("minimal home active mic style", "styles.homeMicButtonActive"),
-            ("guided home card component binding", "<HomeGuidanceCard />"),
-            ("guided home tagline", "想說什麼就說什麼"),
-            ("guided home examples title", "你可以這樣說"),
+            ("home live transcript binding", "{liveTranscript || \"請開始說話…\"}"),
+            ("home title", "想記什麼，\\n直接說出來"),
+            ("home examples title", "可以這樣說"),
             ("guided home example carousel state", "const [homeExampleIndex, setHomeExampleIndex] = useState(0);"),
             ("guided home example carousel interval", "setHomeExampleIndex((value) => (value + 1) % homeSpeechExamples.length);"),
             ("guided home example meta row", "styles.homeExampleMetaRow"),
             ("guided home example pagination", "styles.homeExamplePagination"),
             ("guided home example active pagination dot", "styles.homeExampleDotActive"),
-            ("minimal home primary hint", "按住開始說話記錄"),
+            ("minimal home primary hint", "點一下開始說話"),
             ("recording runtime display bundle import", "recordingRuntimeDisplayBundle,"),
             ("recording runtime display bundle binding", "const recordingRuntimeDisplay = recordingRuntimeDisplayBundle({"),
             ("recording runtime display bundle index input", "currentExampleIndex: homeExampleIndex,"),
@@ -8151,8 +8146,8 @@ def main() -> int:
             ("minimal home recording model status display value", "const homeRecordingModelStatusDisplayText = homeRecordingDisplay.modelStatus;"),
             ("minimal home current speech example bundle value", "const homeCurrentSpeechExample = homeRecordingDisplay.currentExample;"),
             ("minimal home mic accessibility binding", "accessibilityLabel={recordingButtonDisplayAccessibilityLabel}"),
-            ("minimal home mic press in", "onPressIn={startRecordingPreview}"),
-            ("minimal home mic press out", "onPressOut={releaseRecordingPreview}"),
+            ("minimal home mic tap toggle", "onPress={toggleRecordingPreview}"),
+            ("tap to talk toggle handler", "function toggleRecordingPreview()"),
             ("recording release wrapper", "function releaseRecordingPreview()"),
             ("debug-only chrome subtitle", "{enableDebugTools && currentChrome.subtitle ? ("),
             ("phone speech capture helper import", "startPhoneSpeechCapture"),
@@ -8167,7 +8162,8 @@ def main() -> int:
             ("recording finish effective limit clamp", "recordingEffectiveLimitSeconds(voiceQuota)"),
             ("native microphone permission request", "await requestRecordingPermissionsAsync();"),
             ("native recording mode", "await setAudioModeAsync({"),
-            ("phone speech recording start", "const capture = await startPhoneSpeechCapture();"),
+            ("phone speech recording start", "const capture = await startPhoneSpeechCapture({"),
+            ("phone speech live transcript", "setLiveTranscript(text.slice(0, maxTranscriptTextLength));"),
             ("phone speech recording ref assignment", "audioRecordingRef.current = capture;"),
             ("phone speech recording stop", "const result = await recording.stop();"),
             ("native recording transcribe helper", "async function transcribeRecordingToReview("),
@@ -8197,9 +8193,11 @@ def main() -> int:
             ("parse prepared request helper", "function requestPreparedParserPreview("),
             ("parse prepared request helper internals", "return requestMergedParserPreviewForContext(\n      context,\n      text,\n      preparedRequest.parseOccurredAt,\n      preparedRequest.parserVoiceSeconds,\n      preparedRequest.existingDailyPreview"),
             ("parse submit prepared helper", "async function submitPreparedParserPreview("),
-            ("parse submit prepared helper internals", "const mergedDailyPreview = await requestPreparedParserPreview(context, text, preparedRequest);\n    handlePreparedParserPreviewSuccess(mergedDailyPreview, text, preparedRequest);"),
+            ("parse submit prepared helper internals", "const mergedDailyPreview = await requestPreparedParserPreview(context, text, preparedRequest);\n    if (requestGeneration !== parsePreviewGeneration.current) {\n      return;\n    }\n    handlePreparedParserPreviewSuccess(mergedDailyPreview, text, preparedRequest);"),
+            ("parse cancel helper", "function cancelParserPreview() {"),
+            ("parse cancel ignores late response", "parsePreviewGeneration.current += 1;\n    autoParseAfterVoiceRef.current = false;\n    finishParserPreviewRequest();"),
             ("parse complete prepared helper", "async function completePreparedParserPreviewRequest("),
-            ("parse complete prepared helper internals", "try {\n      await submitPreparedParserPreview(context, text, preparedRequest);\n    } catch (error) {\n      handleParserPreviewFailure(error);\n    } finally {\n      finishParserPreviewRequest();"),
+            ("parse complete prepared helper internals", "try {\n      await submitPreparedParserPreview(context, text, preparedRequest);\n    } catch (error) {\n      if (requestGeneration === parsePreviewGeneration.current) {\n        handleParserPreviewFailure(error);\n      }\n    } finally {\n      if (requestGeneration === parsePreviewGeneration.current) {\n        finishParserPreviewRequest();"),
             ("parse start and complete helper", "async function startAndCompleteParserPreviewRequest(context: {"),
             ("parse start and complete helper internals", "const preparedRequest = startPreparedParserPreviewRequest();\n    await completePreparedParserPreviewRequest(context, parserTranscriptText(), preparedRequest);"),
             ("parse request helper binding", "await startAndCompleteParserPreviewRequest(parserContext);"),
@@ -8280,14 +8278,7 @@ def main() -> int:
             ("parse profile context binding", "const parserContext = parserProfileContext();\n    if (!hasParserProfileContext(parserContext))"),
             ("parse profile context request account binding", "context.account.id,\n      context.activeProfile.id,"),
         ):
-            source = (
-                home_guidance_card_content
-                if label.startswith("guided home")
-                and "example" not in label
-                and label not in {"guided home card component binding"}
-                else content
-            )
-            _assert_contains(label, source, marker)
+            _assert_contains(label, content, marker)
         for label, marker in (
             ("guided home direction time config", "{ icon: \"🕒\", label: \"時間\" }"),
             ("guided home direction glucose config", "{ icon: \"🩸\", label: \"血糖\" }"),
@@ -8300,37 +8291,21 @@ def main() -> int:
         ):
             _assert_contains(label, recording_copy_content, marker)
         today_home_block = _today_home_render_block(content)
-        if today_home_block.count("<Pressable") != 1:
-            raise AssertionError("Today/Home render block must contain exactly one Pressable mic control.")
+        if today_home_block.count("accessibilityLabel={recordingButtonDisplayAccessibilityLabel}") != 1:
+            raise AssertionError("Today/Home render block must contain exactly one recording mic control.")
         for label, marker in (
-            ("guided home block card component", "<HomeGuidanceCard />"),
-            ("minimal home block primary hint", "<Text style={styles.homeHint}>按住開始說話記錄</Text>"),
-            ("minimal home block secondary hint", "<Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>"),
+            ("home block today chip", "styles.homeTodayChip"),
+            ("home block cancel recording", "onPress={cancelRecordingPreview}"),
+            ("home block typing fallback", "onPress={openTodayRecordEntry}"),
+            ("minimal home block primary hint", "<Text style={styles.homeHint}>點一下開始說話</Text>"),
+            ("minimal home block recording clock", "{recordingClockDisplayText(recordingElapsedSeconds)}"),
             ("minimal home block model status", "<Text style={styles.homeModelStatus}>{homeRecordingModelStatusDisplayText}</Text>"),
             ("guided home block example panel", "styles.homeExamplePanel"),
-            ("guided home block example title", "<Text style={styles.homeExampleTitle}>你可以這樣說</Text>"),
+            ("guided home block example title", "<Text style={styles.homeExampleTitle}>可以這樣說</Text>"),
             ("guided home block example pagination", "styles.homeExamplePagination"),
         ):
             _assert_contains(label, today_home_block, marker)
         for label, marker in (
-            ("guided home card component", "export function HomeGuidanceCard"),
-            ("guided home card tagline row", "styles.homeTaglineRow"),
-            ("guided home card tagline cue", "styles.homeTaglineCue"),
-            ("guided home card tagline", "<Text style={styles.homeTagline}>想說什麼就說什麼</Text>"),
-            ("guided home card direction panel", "styles.homeGuidancePanel"),
-            ("guided home card direction items", "homeGuidanceDirections.map"),
-            ("guided home card item key binding", "key={homeGuidanceItemKey(item)}"),
-            ("guided home card item icon binding", "{homeGuidanceItemIcon(item)}"),
-            ("guided home card item label binding", "{homeGuidanceItemLabel(item)}"),
-            ("guided home row key helper", "function homeGuidanceRowKey(rowIndex: number)"),
-            ("guided home row key helper fields", "return `home-guidance-row-${rowIndex}`;"),
-            ("guided home row key helper binding", "key={homeGuidanceRowKey(rowIndex)}"),
-            ("guided home item key helper", "function homeGuidanceItemKey(item: (typeof homeGuidanceDirections)[number][number])"),
-            ("guided home item key helper fields", "return item.key;"),
-            ("guided home item icon helper", "function homeGuidanceItemIcon(item: (typeof homeGuidanceDirections)[number][number])"),
-            ("guided home item icon helper fields", "return item.icon;"),
-            ("guided home item label helper", "function homeGuidanceItemLabel(item: (typeof homeGuidanceDirections)[number][number])"),
-            ("guided home item label helper fields", "return item.label;"),
             ("guided home example label helper", "function homeSpeechExampleLabel(example: HomeSpeechExample)"),
             ("guided home example label helper fields", "return example.label;"),
             ("guided home example text helper", "function homeSpeechExampleText(example: HomeSpeechExample)"),
@@ -8341,18 +8316,7 @@ def main() -> int:
             ("guided home example dot active helper fields", "return index === currentIndex;"),
             ("guided home example pagination accessibility helper", "function homeSpeechExamplePaginationAccessibilityLabel(currentIndex: number, totalCount: number)"),
         ):
-            source = home_guidance_card_content if "home example" not in label else recording_copy_content
-            _assert_contains(label, source, marker)
-        _assert_not_contains(
-            "guided home removed instructional paragraph",
-            home_guidance_card_content,
-            "上面這排不是按鈕喔",
-        )
-        _assert_not_contains(
-            "guided home removed info icon",
-            home_guidance_card_content,
-            "homeGuidanceInfoIcon",
-        )
+            _assert_contains(label, recording_copy_content, marker)
         for label, marker in (
             ("guided home example label helper import", "homeSpeechExampleLabel,"),
             ("guided home example label helper binding", "{homeSpeechExampleLabel(homeCurrentSpeechExample)}"),
@@ -8379,22 +8343,6 @@ def main() -> int:
             today_home_block,
             "homeGuidanceDirections.map",
         )
-        home_guidance_row_block = _match_block(
-            home_guidance_card_content,
-            r"row\.map\(\(item\) => \(([\s\S]*?</View>\n\s*)\)\)",
-            "home guidance item render block",
-        )
-        _assert_not_contains(
-            "direct home guidance row key binding",
-            home_guidance_card_content,
-            "key={`home-guidance-row-${rowIndex}`}",
-        )
-        for label, marker in (
-            ("direct home guidance item key binding", "key={item.key}"),
-            ("direct home guidance item icon binding", "<Text style={styles.homeGuidanceIcon}>{item.icon}</Text>"),
-            ("direct home guidance item label binding", "<Text style={styles.homeGuidanceLabel}>{item.label}</Text>"),
-        ):
-            _assert_not_contains(label, home_guidance_row_block, marker)
         home_example_block = _match_block(
             today_home_block,
             r"<View style=\{styles\.homeExamplePanel\}>([\s\S]*?homeSpeechExampleText\(homeCurrentSpeechExample\)[\s\S]*?</View>)",
@@ -8409,7 +8357,7 @@ def main() -> int:
         ):
             _assert_not_contains(label, home_example_block, marker)
         _assert_contains("minimal home starts near top", _style_block(content, "homeMinimalSection"), 'justifyContent: "flex-start"')
-        _assert_contains("minimal home reduced top padding", _style_block(content, "homeMinimalSection"), "paddingTop: 16")
+        _assert_contains("minimal home reduced top padding", _style_block(content, "homeMinimalSection"), "paddingTop: 8")
         _assert_contains("minimal home model status style", _style_block(content, "homeModelStatus"), "fontSize: 12")
         for style_name in ("homeExampleTitle", "homeExampleIndex", "homeExampleText"):
             _assert_contains(
@@ -8417,11 +8365,6 @@ def main() -> int:
                 _style_block(content, style_name),
                 'textAlign: "left"',
             )
-        _assert_not_contains(
-            "minimal home block no active recording timer condition",
-            today_home_block,
-            "isRecordingPreview ? (",
-        )
         _assert_not_contains(
             "minimal home block no separate recording timer binding",
             today_home_block,
@@ -8494,7 +8437,6 @@ def main() -> int:
             ("minimal home no text input", "<TextInput"),
             ("minimal home no analysis CTA", "openTodayAnalysis"),
             ("minimal home no manual CTA", "openTodayManualEntry"),
-            ("minimal home no record entry CTA", "openTodayRecordEntry"),
             ("minimal home no quick-entry press wrapper", "pressTodayQuickEntryItem"),
             ("minimal home no record cards", "todayRecordDisplayItems.map"),
             ("minimal home no primary button", "styles.primaryButton"),
@@ -8752,26 +8694,6 @@ def main() -> int:
         ):
             _assert_contains(label, core_flow_entry_action_row_content, marker)
         for label, marker in (
-            ("AI review action row component", "export function AiReviewActionRow"),
-            ("AI review action row return accessibility prop", "accessibilityLabel={returnEditAccessibilityLabel}"),
-            ("AI review action row manual accessibility prop", "accessibilityLabel={manualAddAccessibilityLabel}"),
-            ("AI review action row enter save accessibility prop", "accessibilityLabel={enterSaveAccessibilityLabel}"),
-            ("AI review action row manual visibility prop", "showManualAdd ? ("),
-            ("AI review action row enter save visibility prop", "showEnterSave ? ("),
-            ("AI review action row enter save disabled state", "accessibilityState={{ disabled: enterSaveDisabled }}"),
-            ("AI review action row enter save disabled prop", "disabled={enterSaveDisabled}"),
-            ("AI review action row return handler prop", "onPress={onReturnEditPress}"),
-            ("AI review action row manual handler prop", "onPress={onManualAddPress}"),
-            ("AI review action row enter save handler prop", "onPress={onEnterSavePress}"),
-            ("AI review action row return label prop", "{returnEditLabel}"),
-            ("AI review action row manual label prop", "{manualAddLabel}"),
-            ("AI review action row enter save label prop", "{enterSaveLabel}"),
-            ("AI review action row shell style", "actionRow: {"),
-            ("AI review action row primary style", "primaryButton: {"),
-            ("AI review action row secondary style", "secondaryButton: {"),
-        ):
-            _assert_contains(label, ai_review_action_row_content, marker)
-        for label, marker in (
             ("AI save failure action row component", "export function AiSaveFailureActionRow"),
             ("AI save failure action row back accessibility prop", "accessibilityLabel={backAccessibilityLabel}"),
             ("AI save failure action row manual accessibility prop", "accessibilityLabel={manualAddAccessibilityLabel}"),
@@ -8852,7 +8774,7 @@ def main() -> int:
             ("parser loading state binding", 'const isParserPreviewLoading ='),
             ("parser loading request ref binding", 'currentScreen === "transcriptReview" && isBusy && parsePreviewInFlight.current'),
             ("parser loading keyboard dismissal", "Keyboard.dismiss();"),
-            ("parser loading screen render", "{isParserPreviewLoading ? <ParserLoadingView /> : null}"),
+            ("parser loading screen render", "{isParserPreviewLoading ? <ParserLoadingView transcript={transcript} onCancel={cancelParserPreview} /> : null}"),
             ("parser loading transcript form lock", 'currentScreen === "transcriptReview" && !isParserPreviewLoading'),
             ("parser loading Android back lock", "if (isParserPreviewLoading) {\n        return true;"),
         ):
@@ -8870,8 +8792,8 @@ def main() -> int:
         ):
             _assert_contains(label, first_version_flow_copy_content, marker)
         for label, marker in (
-            ("confirmation return edit accessibility binding", "returnEditAccessibilityLabel={coreFlowDisplayLabels.returnEditAccessibility}"),
-            ("confirmation enter save accessibility binding", "enterSaveAccessibilityLabel={coreFlowDisplayLabels.enterSaveConfirmAccessibility}"),
+            ("confirmation return edit binding", "onPress={returnToTranscriptEdit}"),
+            ("confirmation save accessibility binding", "accessibilityLabel={`把這 ${unsavedPreviewRecordDisplayCount} 筆存起來`}"),
             ("confirmation return text accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.returnTextConfirmAccessibility}"),
             ("confirmation return confirm accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.returnConfirmAccessibility}"),
             ("confirmation submit save accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.submitAiSaveAccessibility}"),
@@ -8883,7 +8805,7 @@ def main() -> int:
             ("confirmation retry accessibility binding", "retryAccessibilityLabel={coreFlowDisplayLabels.retryInputAccessibility}"),
             ("confirmation parse accessibility binding", "submitAccessibilityLabel={coreFlowDisplayLabels.submitTranscriptParseAccessibility}"),
             ("confirmation manual fallback accessibility binding", "accessibilityLabel={coreFlowDisplayLabels.switchManualAddAccessibility}"),
-            ("confirmation save disabled state", "enterSaveDisabled={isBusy || !account}"),
+            ("confirmation save disabled state", "disabled={isBusy || !account}"),
             ("confirmation transcript parse disabled state", "isSubmitDisabled={\n                Boolean(transcriptValidationError) ||"),
         ):
             _assert_contains(label, content, marker)
@@ -9624,8 +9546,8 @@ def main() -> int:
             ("save preview records preview state guard", "if (!preview || previewState.isEmpty)"),
             ("save preview batch size state binding", "previewRecordsForSave(currentPreview.records, previewState.recordCount)"),
             ("ai review date card preview state binding", "{previewState.hasRecords ? ("),
-            ("ai review manual fallback preview state binding", "showManualAdd={previewState.isEmpty}"),
-            ("ai review save confirm preview state binding", "showEnterSave={previewState.hasRecords}"),
+            ("ai review save button only with records", "{previewState.hasRecords ? (\n                  <Pressable"),
+            ("ai review redo voice binding", "onPress={restartVoiceFromReview}"),
             ("ai review backend warning preview state binding", "{previewState.hasRecords && !account ? ("),
             ("ai save failure return disabled preview state binding", "returnSaveDisabled={previewState.isEmpty}"),
             ("ai save confirm submit accessibility disabled binding", "disabled: isAiSaveConfirmSubmitDisabled"),
@@ -10048,8 +9970,8 @@ def main() -> int:
             ("recording runtime display bundle result binding", "result: recordingResultDisplayBundle(value.elapsedSeconds)"),
             ("minimal home recording display bundle preview", "previewText: value.isRecording ? recordingActivePreviewCopy(value.elapsedSeconds) : recordingIdlePreviewCopy()"),
             ("minimal home recording display bundle hint", "secondaryHint: homeRecordingSecondaryHint(value.isRecording, value.elapsedSeconds)"),
-            ("minimal home secondary hint", "放開即結束"),
-            ("minimal home recording seconds copy", "已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，放開即結束"),
+            ("minimal home secondary hint", "說完再點一下，或停 3 秒自動結束"),
+            ("minimal home recording seconds copy", "已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，說完點一下按鈕"),
             ("minimal home recording model status helper", "function homeRecordingModelStatusCopy(hasWhisperModel: boolean)"),
             ("minimal home recording model whisper copy", "語音辨識：本機 Whisper 優先；手機備援可能需要網路"),
             ("minimal home recording model fallback copy", "語音辨識：手機內建服務，可能需要網路"),
@@ -10333,8 +10255,8 @@ def main() -> int:
             content,
             "onPress={openTodayManualRecord}",
         )
-        _assert_not_contains(
-            "today record entry binding",
+        _assert_contains(
+            "home typing fallback binding",
             content,
             "onPress={openTodayRecordEntry}",
         )
@@ -12527,7 +12449,7 @@ def main() -> int:
             ("tutorial step title helper fields", "return step.title;"),
             ("tutorial step description helper", "function tutorialStepDescription(step: TutorialStepDisplayItem)"),
             ("tutorial step description helper fields", "return step.description;"),
-            ("tutorial whisper release copy", "若已選擇本機 Whisper 模型，會先轉成文字並進入確認。"),
+            ("tutorial tap to stop copy", "說完再點一下，或停 3 秒自動結束；轉成文字後交給 AI 整理。"),
         ):
             _assert_contains(label, settings_screen_data_content, marker)
         for label, marker in (

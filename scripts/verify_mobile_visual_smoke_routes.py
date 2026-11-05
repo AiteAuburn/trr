@@ -20,7 +20,7 @@ VISUAL_SMOKE_ROUTES = {
         'currentScreen === "today"',
         "styles.homeMinimalSection",
         "styles.homeMicButton",
-        "按住開始說話記錄",
+        "點一下開始說話",
     ],
     "record": [
         'currentScreen === "record"',
@@ -35,7 +35,7 @@ VISUAL_SMOKE_ROUTES = {
     "aiReview": [
         'currentScreen === "aiReview"',
         "items={previewRecordDisplayItems}",
-        "coreFlowDisplayLabels.enterSaveConfirm",
+        "onPress={submitAiSaveConfirm}",
     ],
     "editPreviewRecord": [
         'currentScreen === "editPreviewRecord"',
@@ -275,10 +275,10 @@ VISUAL_SMOKE_ROUTES = {
 }
 
 VISUAL_SMOKE_ROUTE_IDENTITIES = {
-    "today": "按住開始說話記錄",
+    "today": "點一下開始說話",
     "record": "快速記錄",
     "transcriptReview": "確認文字內容",
-    "aiReview": "AI 整理確認",
+    "aiReview": "對嗎？",
     "editPreviewRecord": "修改整理結果",
     "aiRemoveConfirm": "aiRemoveConfirmTitleDisplayText",
     "aiSaveConfirm": "aiSaveConfirmTitleDisplayText",

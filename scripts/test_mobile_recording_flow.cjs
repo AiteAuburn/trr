@@ -15,6 +15,7 @@ const names = new Set([
   "finishRecordingPreview", "releaseRecordingPreview", "openWhisperModelDownloadPrompt",
   "downloadWhisperModelFromSettings", "fillDevelopmentTranscript",
   "updateTranscriptDraft", "clearParserPreviewState", "isParserSampleTranscriptBlocked",
+  "toggleRecordingPreview", "cancelRecordingPreview",
 ]);
 const handlers = [];
 function collect(node) {
@@ -37,6 +38,8 @@ function harness(overrides = {}) {
     isAnyRequestInFlight: false, isRecordingPreview: false, isBusy: false,
     recordingStartInFlight: { current: false }, recordingStopInFlight: { current: false },
     recordingPressReleased: { current: false }, recordingStartedAtRef: { current: null },
+    recordingLastSpeechAtRef: { current: null }, recordingAutoStopRef: { current: () => {} },
+    autoParseAfterVoiceRef: { current: false }, liveTranscript: "",
     audioRecordingRef: { current: null }, recordingAudioUriRef: { current: null },
     recordingNativeTranscriptRef: { current: "" }, recordingWhisperModelPathRef: { current: "" },
     recordingElapsedSeconds: 0,
@@ -73,6 +76,7 @@ function harness(overrides = {}) {
     setStatus: "status", setAudioPath: "audioPath", setIsBusy: "isBusy",
     setTranscript: "transcript", setIsTranscriptSample: "isTranscriptSample",
     setTranscriptVoiceSeconds: "transcriptVoiceSeconds", setTranscriptReviewReturnScreen: "returnScreen",
+    setLiveTranscript: "liveTranscript",
   })) ctx[setter] = (value) => { ctx[field] = value; };
   ctx.openScreen = (screen) => { ctx.currentScreen = screen; };
   ctx.openScreenWithStatus = (screen, status) => { ctx.currentScreen = screen; ctx.status = status; };
@@ -158,11 +162,13 @@ function callsVisibleWithoutDebug() {
     appText.includes('accessibilityRole="alert" accessibilityLiveRegion="polite"');
 }
 
-test("successful speech opens confirmation but never parses or saves automatically", async () => {
+test("successful speech hands off to AI parsing but never parses or saves inside the recorder", async () => {
   const { ctx } = harness({ whisperModelPath: "/synthetic/model.bin",
     transcribeWithNativeWhisper: async () => "今天散步三十分鐘。" });
   assert.equal(await ctx.transcribeRecordingToReview("today", "file:///capture.wav", "", "/synthetic/model.bin", 3), true);
   assert.equal(ctx.currentScreen, "transcriptReview");
+  // The auto-parse effect picks this up; the recorder itself never calls the parser or save.
+  assert.equal(ctx.autoParseAfterVoiceRef.current, true);
   assert.equal(ctx.transcriptVoiceSeconds, 3);
   assert.equal(ctx.isTranscriptSample, false);
   assert.equal(ctx.recordingFeedback, "");
@@ -250,4 +256,52 @@ test("production and busy states reject development text; static UI samples stay
   assert.equal(ctx.isParserSampleTranscriptBlocked(), true);
   assert.ok(appText.includes('const enableDevTranscriptSample = allowMobileDevAuth && (enableDevServerSwitcher || enableDebugTools);'));
   assert.ok(appText.includes('{enableDevTranscriptSample ? ('));
+});
+
+test("tap-to-talk: first tap starts, second tap stops, and live text streams in", async () => {
+  let onTranscript = null;
+  const { ctx, calls } = harness({
+    startPhoneSpeechCapture: async (options) => {
+      onTranscript = options.onTranscript;
+      return {
+        stop: async () => { calls.stop++; return { audioUri: null, transcript: "早上空腹 112" }; },
+        release: async () => { calls.release++; }
+      };
+    }
+  });
+  ctx.toggleRecordingPreview();
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(calls.record, 1);
+  assert.equal(ctx.isRecordingPreview, true);
+  onTranscript("早上空腹 112");
+  assert.equal(ctx.liveTranscript, "早上空腹 112");
+  assert.equal(ctx.recordingLastSpeechAtRef.current, ctx.now);
+  ctx.now += 4000;
+  ctx.toggleRecordingPreview();
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(calls.stop, 1);
+  assert.equal(ctx.isRecordingPreview, false);
+});
+
+test("tap while the microphone is still starting stops it as soon as it is ready", async () => {
+  let grant;
+  const { ctx, calls } = harness({
+    requestRecordingPermissionsAsync: () => new Promise((resolve) => { grant = resolve; })
+  });
+  const started = ctx.startRecordingPreview();
+  ctx.toggleRecordingPreview();
+  assert.equal(ctx.recordingPressReleased.current, true);
+  grant({ granted: true });
+  await started;
+  assert.equal(calls.record, 0);
+});
+
+test("cancel discards the recording without opening review", async () => {
+  const { ctx, calls } = harness();
+  await ctx.startRecordingPreview();
+  ctx.cancelRecordingPreview();
+  assert.equal(calls.release, 1);
+  assert.equal(ctx.isRecordingPreview, false);
+  assert.equal(ctx.liveTranscript, "");
+  assert.equal(ctx.currentScreen, "today");
 });

@@ -88,24 +88,24 @@ export function AiCandidateList({
   return (
     <>
       {items.map((item) => (
-        <View key={aiCandidateDisplayKey(item)} style={styles.aiReviewCardStack}>
+        <View
+          key={aiCandidateDisplayKey(item)}
+          style={[styles.aiReviewCardStack, aiCandidateDisplayIsLowConfidence(item) ? styles.aiReviewCardUncertain : null]}
+        >
           <View style={styles.recordHeader}>
-            <View style={styles.historyItemTitle}>
-              <View style={styles.iconCircleSmall}>
-                <Text>{aiCandidateDisplayIcon(item)}</Text>
-              </View>
-              <View style={styles.timelineContent}>
-                <Text style={styles.confidence}>{aiCandidateDisplayTypeLabel(item)}</Text>
-                <Text style={styles.recordContent}>{aiCandidateDisplayPayloadSummary(item)}</Text>
-              </View>
+            <View style={styles.iconCircleSmall}>
+              <Text>{aiCandidateDisplayIcon(item)}</Text>
             </View>
-            <View style={styles.confidencePill}>
-              <Text style={styles.confidence}>{aiCandidateDisplayConfidencePercent(item)}%</Text>
+            <View style={styles.timelineContent}>
+              <Text style={styles.confidence}>{aiCandidateDisplayTypeLabel(item)}</Text>
+              <Text style={styles.recordContent}>{aiCandidateDisplayPayloadSummary(item)}</Text>
             </View>
           </View>
-          <Text style={styles.evidence}>{aiCandidateDisplaySourceText(item)}</Text>
           {aiCandidateDisplayIsLowConfidence(item) ? (
-            <Text style={styles.warningText}>{lowConfidenceText}</Text>
+            <View style={styles.uncertainRow}>
+              <Text style={styles.uncertainIcon}>!</Text>
+              <Text style={styles.warningText}>{lowConfidenceText}</Text>
+            </View>
           ) : null}
           {aiCandidateDisplayDecisionTrace(item) ? (
             <Text style={styles.evidence}>{aiCandidateDisplayDecisionTrace(item)}</Text>
@@ -127,26 +127,21 @@ export function AiCandidateList({
 const styles = StyleSheet.create({
   aiReviewCardStack: {
     backgroundColor: palette.surface,
-    borderColor: palette.accentBorder,
+    borderColor: palette.border,
     borderRadius: 20,
     borderWidth: 1,
     gap: 10,
-    padding: 14
+    padding: 16
+  },
+  aiReviewCardUncertain: {
+    backgroundColor: palette.warningWash,
+    borderColor: palette.warningBorder
   },
   confidence: {
     color: palette.secondary,
     flexShrink: 1,
-    fontSize: 12,
-    fontWeight: "700"
-  },
-  confidencePill: {
-    alignItems: "center",
-    backgroundColor: palette.subtle,
-    borderColor: palette.accentBorder,
-    borderRadius: 999,
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 5
+    fontSize: 13,
+    lineHeight: 19
   },
   evidence: {
     color: palette.secondary,
@@ -154,42 +149,52 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 19
   },
-  historyItemTitle: {
-    alignItems: "center",
-    flex: 1,
-    flexDirection: "row",
-    gap: 10
-  },
   iconCircleSmall: {
     alignItems: "center",
     backgroundColor: palette.wash,
     borderRadius: 999,
-    height: 40,
+    height: 44,
     justifyContent: "center",
-    width: 40
+    width: 44
   },
   recordContent: {
-    color: palette.text,
+    color: palette.ink,
     flexShrink: 1,
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "700",
-    lineHeight: 22
+    lineHeight: 28
   },
   recordHeader: {
-    alignItems: "flex-start",
+    alignItems: "center",
     flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
-    justifyContent: "space-between"
+    gap: 12
   },
   timelineContent: {
     flex: 1,
-    gap: 3
+    gap: 2,
+    minWidth: 0
+  },
+  uncertainIcon: {
+    borderColor: palette.warning,
+    borderRadius: 9,
+    borderWidth: 1.5,
+    color: palette.warning,
+    fontSize: 12,
+    fontWeight: "800",
+    height: 18,
+    lineHeight: 15,
+    textAlign: "center",
+    width: 18
+  },
+  uncertainRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 8
   },
   warningText: {
-    color: palette.danger,
-    fontSize: 13,
-    fontWeight: "800",
-    lineHeight: 19
+    color: palette.warning,
+    flexShrink: 1,
+    fontSize: 14,
+    lineHeight: 21
   }
 });

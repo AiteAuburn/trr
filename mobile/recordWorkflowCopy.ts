@@ -243,7 +243,7 @@ export function aiReviewIntroCopy() {
 }
 
 export function aiReviewLowConfidenceCopy() {
-  return boundDisplayText("信心偏低，請仔細確認後再儲存。", maxDisplayDetailTextLength);
+  return boundDisplayText("這筆沒聽得很清楚，請確認內容和時間，不對就按「修改」。", maxDisplayDetailTextLength);
 }
 
 export function aiReviewRejectedEventsCopy() {

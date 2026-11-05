@@ -44,14 +44,14 @@ ROUTES: tuple[RoutePreview, ...] = (
     RoutePreview(
         route="today",
         title="糖錄錄",
-        subtitle="按住開始說話記錄。",
+        subtitle="點一下開始說話記錄。",
         icon="🎙",
         sections=(
-            ("大型麥克風", "首頁第一視覺只保留按住錄音入口。"),
-            ("提示文字", "下方固定顯示「按住開始說話記錄」與「放開即結束」。"),
+            ("大型麥克風", "首頁第一視覺只保留點一下錄音入口。"),
+            ("提示文字", "下方固定顯示「點一下開始說話」與「說完再點一下，或停 3 秒自動結束」。"),
             ("選單入口", "其他 MVP 功能從右上角漢堡選單進入。"),
         ),
-        cta="按住錄音",
+        cta="點一下錄音",
         note="Today harness mirrors the minimal MVP home screen; no lists, text input, stats, or secondary CTAs.",
     ),
     RoutePreview(
@@ -60,7 +60,7 @@ ROUTES: tuple[RoutePreview, ...] = (
         subtitle="用語音或文字快速新增紀錄。",
         icon="錄",
         sections=(
-            ("按住錄音", "放開結束；靜音裁切後才送轉錄"),
+            ("點一下錄音", "再點一下或停 3 秒結束；轉成文字後交給 AI 整理"),
             ("文字輸入", "自然語言與語音後段共用同一條 parse pipeline"),
             ("低成本路徑", "手動新增可完全避開 parser / LLM"),
         ),

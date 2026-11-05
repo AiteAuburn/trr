@@ -281,10 +281,13 @@ function mvpFlowStepperState(value: {
   const stepIndex = mvpFlowSteps.findIndex((step) => step.id === currentFlowScreen);
   return {
     stepIndex,
+    // The voice flow is a single confirm page (aiReview) and a short saved page; the five-step
+    // stepper only remains on the fallback text-confirm / save-confirm screens.
     show:
       stepIndex >= 0 &&
       value.currentScreen !== "today" &&
-      (value.currentScreen !== "saveSuccess" || value.lastSaveEntryMethod !== "manual" || value.hasUnsavedPreviewRecords)
+      value.currentScreen !== "aiReview" &&
+      value.currentScreen !== "saveSuccess"
   };
 }
 

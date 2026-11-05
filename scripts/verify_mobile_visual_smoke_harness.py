@@ -101,7 +101,7 @@ REQUIRED_HARNESS_TITLES = {
 }
 
 REQUIRED_HARNESS_CTAS = {
-    "today": "按住錄音",
+    "today": "點一下錄音",
     "record": "整理紀錄",
     "history": "查看紀錄詳情",
     "analysis": "查看詳細報告",

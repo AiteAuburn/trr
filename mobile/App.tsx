@@ -426,7 +426,9 @@ import {
   transcriptReturnEditStatusMessage,
   transcriptReviewBackStatusMessage,
   transcriptReviewReadyStatusMessage,
-  validateTranscriptForParser
+  validateTranscriptForParser,
+  homeDateDisplayText,
+  recordingClockDisplayText
 } from "./recordingCopy";
 import {
   aiCandidateEditCancelStatusMessage,
@@ -807,7 +809,6 @@ import { AchievementCategorySectionList } from "./achievementCategorySectionList
 import { AchievementUnlockedCardList } from "./achievementUnlockedCardList";
 import { AiCandidateList } from "./aiCandidateList";
 import { AiFlowChecklist } from "./aiFlowChecklist";
-import { AiReviewActionRow } from "./aiReviewActionRow";
 import { AiSaveFailureActionRow } from "./aiSaveFailureActionRow";
 import { CoreFlowEntryActionRow } from "./coreFlowEntryActionRow";
 import { DailyRecordSectionList } from "./dailyRecordSectionList";
@@ -825,7 +826,6 @@ import { FoodPhotoActionRow } from "./foodPhotoActionRow";
 import { HealthIntegrationActionRow } from "./healthIntegrationActionRow";
 import { RankingActionRow } from "./rankingActionRow";
 import { RankingLeaderboardList } from "./rankingLeaderboardList";
-import { HomeGuidanceCard } from "./homeGuidanceCard";
 import { HistoryCalendarMonthPicker } from "./historyCalendarMonthPicker";
 import { HistoryDailySummaryTable } from "./historyDailySummaryTable";
 import { HistoryIntroStatusBlocks } from "./historyIntroStatusBlocks";
@@ -904,6 +904,8 @@ import { SubscriptionChecklist } from "./subscriptionChecklist";
 import { SubscriptionComparisonList } from "./subscriptionComparisonList";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
 import { ParserLoadingView } from "./parserLoadingView";
+import { TodayTimeline } from "./todayTimeline";
+import { todayTimelineDisplayItems, todayTimelineSummary } from "./todayTimelineTransforms";
 import { FoodCommunitySearchField } from "./foodCommunitySearchField";
 import { FoodCommunityDetailShareList } from "./foodCommunityDetailShareList";
 import { FoodCommunityItemList } from "./foodCommunityItemList";
@@ -943,6 +945,9 @@ import type {
 type NativeBenchmarkResult = Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>;
 
 type MainScrollHandle = ScrollView;
+
+/** Tap-to-talk stops by itself after this long without new recognized speech. */
+const recordingSilenceAutoStopMs = 3000;
 
 export default function App() {
   const mainScrollRef = useRef<MainScrollHandle>(null);
@@ -1058,6 +1063,8 @@ export default function App() {
   const latestRecordSyncKey = useRef("");
   const pendingOidcChallenge = useRef<AuthProviderChallenge | null>(null);
   const parsePreviewInFlight = useRef(false);
+  // Bumped when the user cancels a parse, so a late response is ignored.
+  const parsePreviewGeneration = useRef(0);
   const previewSaveInFlight = useRef(false);
   const recordUpdateInFlight = useRef(false);
   const recordDeleteInFlight = useRef(false);
@@ -1084,6 +1091,13 @@ export default function App() {
   const recordingStopInFlight = useRef(false);
   const recordingPressReleased = useRef(false);
   const recordingStartedAtRef = useRef<number | null>(null);
+  // Tap-to-talk: live text while speaking, and the last time new speech arrived (for silence auto-stop).
+  const recordingLastSpeechAtRef = useRef<number | null>(null);
+  const recordingAutoStopRef = useRef<() => void>(() => undefined);
+  // After voice transcription succeeds, hand the text straight to AI parsing (one confirm page).
+  const autoParseAfterVoiceRef = useRef(false);
+  const [liveTranscript, setLiveTranscript] = useState("");
+  const [homeView, setHomeView] = useState<"mic" | "timeline">("mic");
   const [recordingFeedback, setRecordingFeedback] = useState("");
   const enableDevTranscriptSample = allowMobileDevAuth && (enableDevServerSwitcher || enableDebugTools);
   const visualSmokePreviewActive = useRef(Boolean(initialVisualSmokeScreen));
@@ -1240,6 +1254,8 @@ export default function App() {
     () => recordListDisplayItems(todayRecords, "today"),
     [todayRecords]
   );
+  const todayTimelineItems = useMemo(() => todayTimelineDisplayItems(todayRecords), [todayRecords]);
+  const todayTimelineStats = useMemo(() => todayTimelineSummary(todayRecords), [todayRecords]);
   const groupedHistoryRecordDisplaySections = useMemo(
     () => groupedRecordListDisplaySectionsForRecords(historyRecords),
     [historyRecords]
@@ -1437,6 +1453,9 @@ export default function App() {
   const dailyRecordLeaveGuardConfirmAccessibilityLabel = dailyRecordLeaveGuardDisplay.confirmAccessibility;
   const saveSuccessViewState = saveSuccessState(lastSaveEntryMethod, hasUnsavedPreviewRecords);
   const hasPartialAiSave = saveSuccessViewState.hasPartialAiSave;
+  // A complete voice/AI save: show the short "存好了 → 再說一筆" layout.
+  const isPlainVoiceSaveSuccess =
+    !hasPartialAiSave && !saveSuccessViewState.isManualSave && !saveSuccessViewState.hasUnsavedPreviewRecords;
   const hasManualFallbackWithAiCandidates = saveSuccessViewState.hasManualFallbackWithAiCandidates;
   const recordWorkflowStaticChecklistDisplay = recordWorkflowStaticChecklistDisplayBundle();
   const recordWorkflowRuntimeChecklistDisplay = recordWorkflowRuntimeChecklistDisplayBundle({
@@ -2318,6 +2337,31 @@ export default function App() {
     openScreenWithStatus("transcriptReview", transcriptReturnEditStatusMessage());
   }
 
+  function openTodayHistory() {
+    openPrimaryTab("history");
+  }
+
+  function openTodayTimeline() {
+    setHomeView("timeline");
+    openScreen("today");
+  }
+
+  function speakFromTodayTimeline() {
+    setHomeView("mic");
+    void startRecordingPreview();
+  }
+
+  function openTodayTimelineRecord(record: RecordItem) {
+    openRecordDetail(record, "today");
+  }
+
+  /** Drop this parse result without saving and go back to the mic. */
+  function restartVoiceFromReview() {
+    setPreview(null);
+    clearSelectedPreviewEditDraft();
+    openScreenWithStatus("today", recordingResetStatusMessage());
+  }
+
   function returnFromTranscriptReviewWithStatus(statusMessage: string) {
     clearParserPreviewState();
     clearPreviewSelectionState();
@@ -2737,6 +2781,7 @@ export default function App() {
     latestRecordSyncKey.current = "";
     recordSyncInFlightKeys.current.clear();
     pendingOidcChallenge.current = null;
+    parsePreviewGeneration.current += 1;
     parsePreviewInFlight.current = false;
     previewSaveInFlight.current = false;
     setPreview(null);
@@ -3139,6 +3184,8 @@ export default function App() {
     recordingWhisperModelPathRef.current = installedWhisperModel;
     recordingStartInFlight.current = true;
     recordingPressReleased.current = false;
+    recordingLastSpeechAtRef.current = null;
+    setLiveTranscript("");
     setRecordingFeedback("");
     try {
       const permission = await requestRecordingPermissionsAsync();
@@ -3156,7 +3203,13 @@ export default function App() {
         shouldPlayInBackground: false,
         interruptionMode: "duckOthers"
       });
-      const capture = await startPhoneSpeechCapture();
+      const capture = await startPhoneSpeechCapture({
+        onTranscript: (text) => {
+          recordingLastSpeechAtRef.current = Date.now();
+          setLiveTranscript(text.slice(0, maxTranscriptTextLength));
+        },
+        onEnd: () => recordingAutoStopRef.current()
+      });
       audioRecordingRef.current = capture;
       const now = Date.now();
       recordingStartedAtRef.current = now;
@@ -3200,6 +3253,22 @@ export default function App() {
     setRecordingStartedAt(null);
     setRecordingElapsedSeconds(elapsedSeconds);
     recordingStartedAtRef.current = null;
+    recordingLastSpeechAtRef.current = null;
+  }
+
+  /** Tap-to-talk: the first tap starts recording, the next tap finishes it. */
+  function toggleRecordingPreview() {
+    if (recordingStartInFlight.current || isRecordingPreview || audioRecordingRef.current) {
+      // Second tap. If the microphone is still starting, it stops as soon as it is ready.
+      releaseRecordingPreview();
+      return;
+    }
+    void startRecordingPreview();
+  }
+
+  function cancelRecordingPreview() {
+    setLiveTranscript("");
+    resetRecordingPreview();
   }
 
   function resetRecordingPreview() {
@@ -3248,6 +3317,7 @@ export default function App() {
       clearRecordingPreviewRuntime();
       setPreview(null);
       setTranscriptReviewReturnScreen(returnScreen);
+      autoParseAfterVoiceRef.current = true;
       openScreenWithStatus(
         "transcriptReview",
         whisperFailed || !safeModelPath || !sourceAudioUri
@@ -3381,6 +3451,13 @@ export default function App() {
     if (recordingStartInFlight.current) return;
     void finishRecordingPreview();
   }
+
+  // The recognizer can end by itself (long pause, single-utterance Android); finish with the latest state.
+  recordingAutoStopRef.current = () => {
+    if (audioRecordingRef.current && !recordingStopInFlight.current) {
+      void finishRecordingPreview();
+    }
+  };
 
   function setPreviewEditDateTimeInputs(dateTime: { date: string; time: string }) {
     setPreviewEditDate(dateTime.date);
@@ -3889,8 +3966,23 @@ export default function App() {
     text: string,
     preparedRequest: ReturnType<typeof prepareParserPreviewRequest>
   ) {
+    const requestGeneration = parsePreviewGeneration.current;
     const mergedDailyPreview = await requestPreparedParserPreview(context, text, preparedRequest);
+    if (requestGeneration !== parsePreviewGeneration.current) {
+      return;
+    }
     handlePreparedParserPreviewSuccess(mergedDailyPreview, text, preparedRequest);
+  }
+
+  /** Stop waiting for the parser; the transcript stays so the user can edit or resend it. */
+  function cancelParserPreview() {
+    if (!parsePreviewInFlight.current) {
+      return;
+    }
+    parsePreviewGeneration.current += 1;
+    autoParseAfterVoiceRef.current = false;
+    finishParserPreviewRequest();
+    setStatus("已取消整理，文字還在，可以修改後再送出。");
   }
 
   async function completePreparedParserPreviewRequest(
@@ -3901,12 +3993,17 @@ export default function App() {
     text: string,
     preparedRequest: ReturnType<typeof prepareParserPreviewRequest>
   ) {
+    const requestGeneration = parsePreviewGeneration.current;
     try {
       await submitPreparedParserPreview(context, text, preparedRequest);
     } catch (error) {
-      handleParserPreviewFailure(error);
+      if (requestGeneration === parsePreviewGeneration.current) {
+        handleParserPreviewFailure(error);
+      }
     } finally {
-      finishParserPreviewRequest();
+      if (requestGeneration === parsePreviewGeneration.current) {
+        finishParserPreviewRequest();
+      }
     }
   }
 
@@ -4307,6 +4404,7 @@ export default function App() {
   }
 
   function returnFromSaveSuccessToToday() {
+    setHomeView("mic");
     openSaveSuccessDestination("today");
   }
 
@@ -4577,6 +4675,9 @@ export default function App() {
   }
 
   function pressPrimaryTab(screen: { id: AppScreen }) {
+    if (primaryTabTarget(screen) === "today") {
+      setHomeView("mic");
+    }
     openPrimaryTab(primaryTabTarget(screen));
   }
 
@@ -7783,6 +7884,25 @@ export default function App() {
     void discardPhoneSpeechAudio(recordingAudioUriRef.current);
   }, []);
 
+  // Voice flow: skip the separate text-confirm step and parse right away. If a preflight check
+  // fails (offline, no model, invalid text), the user stays on the text page with that warning.
+  useEffect(() => {
+    if (!autoParseAfterVoiceRef.current) {
+      return;
+    }
+    if (currentScreen !== "transcriptReview") {
+      // The user left before parsing started; do not parse later behind their back.
+      autoParseAfterVoiceRef.current = false;
+      return;
+    }
+    // Transcription clears isBusy in its finally block; wait for that so the parse guard passes.
+    if (isBusy || !transcript.trim()) {
+      return;
+    }
+    autoParseAfterVoiceRef.current = false;
+    submitTranscriptParse();
+  }, [currentScreen, transcript, isBusy]);
+
   useEffect(() => {
     const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
       if (isParserPreviewLoading) {
@@ -7807,6 +7927,11 @@ export default function App() {
       setRecordingElapsedSeconds(clampNumber(nextElapsedSeconds, 0, limitSeconds));
       if (nextElapsedSeconds >= limitSeconds) {
         void finishRecordingPreview("limit");
+        return;
+      }
+      const lastSpeechAt = recordingLastSpeechAtRef.current;
+      if (lastSpeechAt !== null && Date.now() - lastSpeechAt >= recordingSilenceAutoStopMs) {
+        void finishRecordingPreview();
       }
     }, 500);
     return () => clearInterval(timer);
@@ -8033,30 +8158,85 @@ export default function App() {
         ) : null}
 
         {currentScreen === "today" ? (
-          <View style={styles.homeMinimalSection}>
-            <HomeGuidanceCard />
-            <Pressable
-              accessibilityLabel={recordingButtonDisplayAccessibilityLabel}
-              accessibilityRole="button"
-              accessibilityState={{ disabled: isAnyRequestInFlight }}
+          homeView === "timeline" && !isRecordingPreview ? (
+            <TodayTimeline
+              dateLabel={homeDateDisplayText(new Date())}
               disabled={isAnyRequestInFlight}
-              style={[
-                styles.homeMicButton,
-                isAnyRequestInFlight ? styles.buttonDisabled : null,
-                isRecordingPreview ? styles.homeMicButtonActive : null
-              ]}
-              onPressIn={startRecordingPreview}
-              onPressOut={releaseRecordingPreview}
-            >
-              <RecordingGlyph active={isRecordingPreview} />
-            </Pressable>
-            <Text style={styles.homeHint}>按住開始說話記錄</Text>
-            <Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>
+              items={todayTimelineItems}
+              summary={todayTimelineStats}
+              onItemPress={openTodayTimelineRecord}
+              onOpenHistory={openTodayHistory}
+              onSpeak={speakFromTodayTimeline}
+            />
+          ) : (
+          <View style={styles.homeMinimalSection}>
+            {isRecordingPreview ? (
+              <View style={styles.homeListeningHeader}>
+                <View style={styles.homeListeningLabelRow}>
+                  <View style={styles.homeListeningDot} />
+                  <Text style={styles.homeListeningLabel}>正在聽你說</Text>
+                </View>
+                <Pressable
+                  accessibilityLabel="取消這次錄音"
+                  accessibilityRole="button"
+                  style={styles.homeCancelButton}
+                  onPress={cancelRecordingPreview}
+                >
+                  <Text style={styles.homeCancelButtonText}>取消</Text>
+                </Pressable>
+              </View>
+            ) : (
+              <View style={styles.homeIntro}>
+                <View style={styles.homeIntroTopRow}>
+                  <Text style={styles.homeDate}>{homeDateDisplayText(new Date())}</Text>
+                  <Pressable
+                    accessibilityLabel={`查看今天的紀錄，共 ${todayRecords.length} 筆`}
+                    accessibilityRole="button"
+                    style={styles.homeTodayChip}
+                    onPress={openTodayTimeline}
+                  >
+                    <Text style={styles.homeTodayChipText}>今天 {todayRecords.length} 筆</Text>
+                  </Pressable>
+                </View>
+                <Text accessibilityRole="header" style={styles.homeTitle}>{"想記什麼，\n直接說出來"}</Text>
+              </View>
+            )}
+            {isRecordingPreview ? (
+              <Text accessibilityLiveRegion="polite" style={liveTranscript ? styles.homeLiveTranscript : styles.homeLiveTranscriptPlaceholder}>
+                {liveTranscript || "請開始說話…"}
+              </Text>
+            ) : null}
+            <View style={[styles.homeMicHalo, isRecordingPreview ? styles.homeMicHaloActive : null]}>
+              <Pressable
+                accessibilityLabel={recordingButtonDisplayAccessibilityLabel}
+                accessibilityRole="button"
+                accessibilityState={{ disabled: isAnyRequestInFlight }}
+                disabled={isAnyRequestInFlight}
+                style={[
+                  styles.homeMicButton,
+                  isAnyRequestInFlight ? styles.buttonDisabled : null,
+                  isRecordingPreview ? styles.homeMicButtonActive : null
+                ]}
+                onPress={toggleRecordingPreview}
+              >
+                {isRecordingPreview ? <View style={styles.homeStopSquare} /> : <RecordingGlyph active={false} />}
+              </Pressable>
+            </View>
+            {isRecordingPreview ? (
+              <Text style={styles.homeClock}>{recordingClockDisplayText(recordingElapsedSeconds)}</Text>
+            ) : (
+              <Text style={styles.homeHint}>點一下開始說話</Text>
+            )}
+            <Text style={styles.homeHintSecondary}>
+              {isRecordingPreview ? "說完點一下按鈕 · 最多 1 分鐘" : homeRecordingSecondaryHintDisplayText}
+            </Text>
             {enableDebugTools ? (
               <Text style={styles.homeModelStatus}>{homeRecordingModelStatusDisplayText}</Text>
             ) : null}
+            {!isRecordingPreview ? (
+            <>
             <View style={styles.homeExamplePanel}>
-              <Text style={styles.homeExampleTitle}>你可以這樣說</Text>
+              <Text style={styles.homeExampleTitle}>可以這樣說</Text>
               <View style={styles.homeExampleMetaRow}>
                 <Text style={styles.homeExampleIndex}>{homeSpeechExampleLabel(homeCurrentSpeechExample)}</Text>
                 <View
@@ -8079,7 +8259,20 @@ export default function App() {
               </View>
               <Text style={styles.homeExampleText}>{homeSpeechExampleText(homeCurrentSpeechExample)}</Text>
             </View>
+            <Pressable
+              accessibilityLabel="改用打字輸入紀錄"
+              accessibilityRole="button"
+              accessibilityState={{ disabled: isAnyRequestInFlight }}
+              disabled={isAnyRequestInFlight}
+              style={styles.homeTypeLink}
+              onPress={openTodayRecordEntry}
+            >
+              <Text style={styles.homeTypeLinkText}>不方便說話？改用打字</Text>
+            </Pressable>
+            </>
+            ) : null}
           </View>
+          )
         ) : null}
 
         {currentScreen === "record" ? (
@@ -8112,12 +8305,11 @@ export default function App() {
                     styles.recordHoldButton,
                     isRecordingPreview ? styles.recordHoldButtonActive : null
                   ]}
-                  onPressIn={startRecordingPreview}
-                  onPressOut={releaseRecordingPreview}
+                  onPress={toggleRecordingPreview}
                 >
                   <Text style={styles.recordHoldIcon}>🎙</Text>
                   <Text style={styles.recordHoldText}>
-                    {isRecordingPreview ? "錄音中" : "按住錄音"}
+                    {isRecordingPreview ? "點一下結束" : "點一下錄音"}
                   </Text>
                 </Pressable>
                 <View style={styles.timelineContent}>
@@ -8183,26 +8375,28 @@ export default function App() {
 
         {currentScreen === "aiReview" && preview ? (
           <View style={styles.pageSection}>
-            <View style={styles.sectionHeader}>
-              <View>
-                <Text style={styles.sectionTitle}>AI 整理確認</Text>
-                <Text style={styles.evidence}>{aiReviewIntroDisplayText}</Text>
-              </View>
-              <Text style={styles.countText}>{unsavedPreviewRecordDisplayCount} 筆</Text>
+            <View style={styles.reviewHeading}>
+              <Text accessibilityRole="header" style={styles.reviewTitle}>
+                {previewState.hasRecords ? `整理成 ${unsavedPreviewRecordDisplayCount} 筆，對嗎？` : "這次沒有整理出紀錄"}
+              </Text>
+              <Text style={styles.evidence}>按「存起來」之前，什麼都不會存。{aiReviewDateDisplayLabel ? ` 日期：${aiReviewDateDisplayLabel}` : ""}</Text>
             </View>
+            {transcript.trim() ? (
+              <View style={styles.reviewTranscriptChip}>
+                <Text numberOfLines={2} style={styles.reviewTranscriptText}>你說：{transcript.trim()}</Text>
+                <Pressable
+                  accessibilityLabel="修改辨識出來的文字"
+                  accessibilityRole="button"
+                  accessibilityState={{ disabled: isBusy }}
+                  disabled={isBusy}
+                  style={styles.reviewTranscriptEdit}
+                  onPress={returnToTranscriptEdit}
+                >
+                  <Text style={styles.reviewTranscriptEditText}>改文字</Text>
+                </Pressable>
+              </View>
+            ) : null}
             <View style={styles.aiReviewList}>
-              {previewState.hasRecords ? (
-                <View style={styles.aiReviewCard}>
-                  <View style={styles.iconCircleSmall}>
-                    <Text>📅</Text>
-                  </View>
-                  <View style={styles.timelineContent}>
-                    <Text style={styles.confidence}>{auxiliaryDisplayLabels.candidateDateTime}</Text>
-                    <Text style={styles.recordContent}>{aiReviewDateDisplayLabel}</Text>
-                  </View>
-                  <Text style={styles.confidence}>{auxiliaryDisplayLabels.confirmStatus}</Text>
-                </View>
-              ) : null}
               {previewRecordDisplayItems.length > 0 ? (
                 <AiCandidateList
                   editLabel={coreFlowDisplayLabels.edit}
@@ -8237,20 +8431,38 @@ export default function App() {
                     ))}
                   </View>
                 ) : null}
-                <AiReviewActionRow
-                  enterSaveAccessibilityLabel={coreFlowDisplayLabels.enterSaveConfirmAccessibility}
-                  enterSaveDisabled={isBusy || !account}
-                  enterSaveLabel={coreFlowDisplayLabels.enterSaveConfirm}
-                  manualAddAccessibilityLabel={coreFlowDisplayLabels.manualAddAccessibility}
-                  manualAddLabel={coreFlowDisplayLabels.manualAdd}
-                  onEnterSavePress={enterAiSaveConfirm}
-                  onManualAddPress={openAiReviewManualRecord}
-                  onReturnEditPress={returnToTranscriptEdit}
-                  returnEditAccessibilityLabel={coreFlowDisplayLabels.returnEditAccessibility}
-                  returnEditLabel={coreFlowDisplayLabels.returnEdit}
-                  showEnterSave={previewState.hasRecords}
-                  showManualAdd={previewState.isEmpty}
-                />
+                {previewState.hasRecords ? (
+                  <Pressable
+                    accessibilityLabel={`把這 ${unsavedPreviewRecordDisplayCount} 筆存起來`}
+                    accessibilityRole="button"
+                    accessibilityState={{ disabled: isBusy || !account }}
+                    disabled={isBusy || !account}
+                    style={[styles.reviewSaveButton, isBusy || !account ? styles.buttonDisabled : null]}
+                    onPress={submitAiSaveConfirm}
+                  >
+                    {isBusy ? <ActivityIndicator color={palette.onBrand} /> : null}
+                    <Text style={styles.reviewSaveButtonText}>存起來（{unsavedPreviewRecordDisplayCount} 筆）</Text>
+                  </Pressable>
+                ) : (
+                  <Pressable
+                    accessibilityLabel={coreFlowDisplayLabels.manualAddAccessibility}
+                    accessibilityRole="button"
+                    style={styles.reviewSaveButton}
+                    onPress={openAiReviewManualRecord}
+                  >
+                    <Text style={styles.reviewSaveButtonText}>{coreFlowDisplayLabels.manualAdd}</Text>
+                  </Pressable>
+                )}
+                <Pressable
+                  accessibilityLabel="放棄這次整理，回首頁重新說"
+                  accessibilityRole="button"
+                  accessibilityState={{ disabled: isBusy }}
+                  disabled={isBusy}
+                  style={styles.reviewRedoButton}
+                  onPress={restartVoiceFromReview}
+                >
+                  <Text style={styles.reviewRedoButtonText}>重新說一次</Text>
+                </Pressable>
                 {previewState.hasRecords && !account ? (
                   <Text style={styles.warningText}>{aiReviewBackendRequiredDisplayText}</Text>
                 ) : null}
@@ -8441,7 +8653,7 @@ export default function App() {
           </View>
         ) : null}
 
-        {isParserPreviewLoading ? <ParserLoadingView /> : null}
+        {isParserPreviewLoading ? <ParserLoadingView transcript={transcript} onCancel={cancelParserPreview} /> : null}
 
         {currentScreen === "transcriptReview" && !isParserPreviewLoading ? (
           <View style={styles.pageSection}>
@@ -8693,15 +8905,15 @@ export default function App() {
           <View style={styles.pageSection}>
             <View style={styles.successHero}>
               <SuccessMark />
-              <Text style={styles.sectionTitle}>
+              <Text style={styles.savedTitle}>
                 {hasPartialAiSave
                   ? "部分儲存完成"
                   : saveSuccessViewState.isManualSave
                     ? "手動儲存完成"
-                    : "儲存完成"}
+                    : "存好了"}
               </Text>
               <Text style={styles.evidence}>
-                {lastSavedSummaryDisplayText}
+                {isPlainVoiceSaveSuccess ? `今天一共 ${todayRecords.length} 筆紀錄` : lastSavedSummaryDisplayText}
               </Text>
             </View>
             {saveSuccessNewlyUnlockedDisplayItems.length > 0 ? (
@@ -8712,6 +8924,27 @@ export default function App() {
                 title="新解鎖成就"
               />
             ) : null}
+            {isPlainVoiceSaveSuccess ? (
+              <View style={styles.savedActions}>
+                <Pressable
+                  accessibilityLabel="回首頁，再說一筆"
+                  accessibilityRole="button"
+                  style={styles.reviewSaveButton}
+                  onPress={returnFromSaveSuccessToToday}
+                >
+                  <Text style={styles.reviewSaveButtonText}>再說一筆</Text>
+                </Pressable>
+                <Pressable
+                  accessibilityLabel="查看今天的紀錄"
+                  accessibilityRole="button"
+                  style={styles.reviewRedoButton}
+                  onPress={openTodayTimeline}
+                >
+                  <Text style={styles.reviewRedoButtonText}>看今天的紀錄</Text>
+                </Pressable>
+              </View>
+            ) : (
+            <>
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.saveResult}</Text>
               <Text style={styles.evidence}>
@@ -8758,6 +8991,8 @@ export default function App() {
               showDetail={Boolean(selectedRecord) && !saveSuccessViewState.hasUnsavedPreviewRecords}
               voiceTextLabel={coreFlowDisplayLabels.voiceText}
             />
+            </>
+            )}
           </View>
         ) : null}
 
@@ -11447,26 +11682,153 @@ const styles = StyleSheet.create({
     gap: 8,
     justifyContent: "flex-start",
     paddingBottom: 20,
-    paddingTop: 16
+    paddingTop: 8
+  },
+  homeIntro: {
+    alignSelf: "stretch",
+    gap: 16
+  },
+  homeIntroTopRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 12,
+    justifyContent: "space-between"
+  },
+  homeDate: {
+    color: palette.secondary,
+    flexShrink: 1,
+    fontSize: 15,
+    lineHeight: 22
+  },
+  homeTodayChip: {
+    alignItems: "center",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
+    borderRadius: 22,
+    borderWidth: 1,
+    justifyContent: "center",
+    minHeight: 44,
+    paddingHorizontal: 16
+  },
+  homeTodayChipText: {
+    color: palette.ink,
+    fontSize: 15,
+    fontWeight: "500",
+    lineHeight: 22
+  },
+  homeTitle: {
+    color: palette.ink,
+    fontSize: 32,
+    fontWeight: "700",
+    lineHeight: 42
+  },
+  homeListeningHeader: {
+    alignItems: "center",
+    alignSelf: "stretch",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  homeListeningLabelRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 8
+  },
+  homeListeningDot: {
+    backgroundColor: palette.brand,
+    borderRadius: 5,
+    height: 10,
+    width: 10
+  },
+  homeListeningLabel: {
+    color: palette.brand,
+    fontSize: 15,
+    fontWeight: "700",
+    lineHeight: 22
+  },
+  homeCancelButton: {
+    alignItems: "center",
+    borderColor: palette.border,
+    borderRadius: 22,
+    borderWidth: 1,
+    justifyContent: "center",
+    minHeight: 44,
+    paddingHorizontal: 16
+  },
+  homeCancelButtonText: {
+    color: palette.text,
+    fontSize: 15,
+    lineHeight: 22
+  },
+  homeLiveTranscript: {
+    alignSelf: "stretch",
+    color: palette.ink,
+    fontSize: 24,
+    fontWeight: "500",
+    lineHeight: 38,
+    marginTop: 12,
+    minHeight: 160
+  },
+  homeLiveTranscriptPlaceholder: {
+    alignSelf: "stretch",
+    color: palette.secondary,
+    fontSize: 24,
+    lineHeight: 38,
+    marginTop: 12,
+    minHeight: 160
+  },
+  homeMicHalo: {
+    alignItems: "center",
+    backgroundColor: palette.wash,
+    borderRadius: 999,
+    height: 264,
+    justifyContent: "center",
+    marginTop: 20,
+    width: 264
+  },
+  homeMicHaloActive: {
+    marginTop: 8
   },
   homeMicButton: {
     alignItems: "center",
     backgroundColor: palette.brand,
-    borderColor: palette.accentBorder,
     borderRadius: 999,
-    borderWidth: 8,
-    height: 220,
+    height: 200,
     justifyContent: "center",
-    marginTop: 28,
-    shadowColor: palette.ink,
-    shadowOffset: { width: 0, height: 16 },
-    shadowOpacity: 0.12,
-    shadowRadius: 22,
-    width: 220
+    shadowColor: palette.brand,
+    shadowOffset: { width: 0, height: 14 },
+    shadowOpacity: 0.28,
+    shadowRadius: 24,
+    width: 200
   },
   homeMicButtonActive: {
-    backgroundColor: palette.ink,
-    transform: [{ scale: 0.98 }]
+    backgroundColor: palette.brand
+  },
+  homeStopSquare: {
+    backgroundColor: palette.onBrand,
+    borderRadius: 10,
+    height: 48,
+    width: 48
+  },
+  homeClock: {
+    color: palette.ink,
+    fontSize: 28,
+    fontVariant: ["tabular-nums"],
+    fontWeight: "700",
+    lineHeight: 36,
+    marginTop: 16
+  },
+  homeTypeLink: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 8,
+    minHeight: 44,
+    paddingHorizontal: 12
+  },
+  homeTypeLinkText: {
+    color: palette.brand,
+    fontSize: 15,
+    fontWeight: "500",
+    lineHeight: 22
   },
   homeMicIcon: {
     color: palette.surface,
@@ -11498,10 +11860,8 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   homeExamplePanel: {
-    backgroundColor: palette.surface,
-    borderColor: palette.border,
-    borderRadius: 18,
-    borderWidth: 1,
+    backgroundColor: palette.wash,
+    borderRadius: 20,
     gap: 4,
     marginTop: 24,
     maxWidth: 360,
@@ -11510,10 +11870,10 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   homeExampleTitle: {
-    color: palette.ink,
-    fontSize: 15,
+    color: palette.brand,
+    fontSize: 13,
     fontWeight: "700",
-    lineHeight: 22,
+    lineHeight: 20,
     textAlign: "left"
   },
   homeExampleIndex: {
@@ -12581,6 +12941,89 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     paddingHorizontal: 24,
     paddingTop: 10
+  },
+  reviewHeading: {
+    gap: 4
+  },
+  savedTitle: {
+    color: palette.ink,
+    fontSize: 30,
+    fontWeight: "700",
+    lineHeight: 40,
+    textAlign: "center"
+  },
+  savedActions: {
+    gap: 12,
+    marginTop: 8
+  },
+  reviewTitle: {
+    color: palette.ink,
+    fontSize: 26,
+    fontWeight: "700",
+    lineHeight: 35
+  },
+  reviewTranscriptChip: {
+    alignItems: "center",
+    backgroundColor: palette.wash,
+    borderRadius: 16,
+    flexDirection: "row",
+    gap: 12,
+    paddingLeft: 16,
+    paddingRight: 8,
+    paddingVertical: 8
+  },
+  reviewTranscriptText: {
+    color: palette.text,
+    flex: 1,
+    fontSize: 14,
+    lineHeight: 21,
+    minWidth: 0
+  },
+  reviewTranscriptEdit: {
+    alignItems: "center",
+    backgroundColor: palette.surface,
+    borderRadius: 12,
+    justifyContent: "center",
+    minHeight: 44,
+    paddingHorizontal: 14
+  },
+  reviewTranscriptEditText: {
+    color: palette.brand,
+    fontSize: 14,
+    fontWeight: "700",
+    lineHeight: 20
+  },
+  reviewSaveButton: {
+    alignItems: "center",
+    backgroundColor: palette.brand,
+    borderRadius: 20,
+    flexDirection: "row",
+    gap: 10,
+    justifyContent: "center",
+    minHeight: 60,
+    paddingHorizontal: 20
+  },
+  reviewSaveButtonText: {
+    color: palette.onBrand,
+    fontSize: 19,
+    fontWeight: "700",
+    lineHeight: 26
+  },
+  reviewRedoButton: {
+    alignItems: "center",
+    backgroundColor: palette.surface,
+    borderColor: palette.accentBorder,
+    borderRadius: 16,
+    borderWidth: 1,
+    justifyContent: "center",
+    minHeight: 48,
+    paddingHorizontal: 16
+  },
+  reviewRedoButtonText: {
+    color: palette.brand,
+    fontSize: 16,
+    fontWeight: "500",
+    lineHeight: 22
   },
   aiReviewList: {
     gap: 10

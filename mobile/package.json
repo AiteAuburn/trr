@@ -25,6 +25,7 @@
     "test:phone-speech": "node ../scripts/test_mobile_phone_speech_capture.cjs",
     "test:whisper-pcm": "node ../scripts/test_mobile_whisper_pcm.cjs",
     "test:model-storage": "node ../scripts/test_mobile_model_storage.cjs",
+    "test:today-timeline": "node ../scripts/test_mobile_today_timeline.cjs",
     "visual-smoke:harness": "python3 ../scripts/generate_mobile_visual_smoke_harness.py",
     "visual-smoke:harness:verify-artifact": "python3 ../scripts/verify_mobile_visual_smoke_harness_artifact.py",
     "apk:android-prereqs": "python3 ../scripts/check_android_apk_build_prereqs.py",
@@ -32,7 +33,7 @@
     "preflight:android-apk:internal": "npm run verify:release-env -- --allow-local-api && npm run verify:android-release-signing -- --allow-debug-signing && npm run apk:android-prereqs",
     "visual-smoke:android-prereqs": "python3 ../scripts/check_android_visual_smoke_prereqs.py",
     "visual-smoke:android-blockers": "python3 ../scripts/check_android_visual_smoke_blockers.py",
-    "quality": "npm run typecheck && npm run verify:navigation && npm run verify:ui-spec-coverage && npm run verify:visual-smoke-routes && npm run verify:visual-smoke-harness && npm run verify:secure-auth-storage && npm run verify:android-apk-scripts && npm run verify:native-config && npm run verify:design-tokens && npm run test:recording-flow && npm run test:phone-speech && npm run test:whisper-pcm && npm run test:model-storage"
+    "quality": "npm run typecheck && npm run verify:navigation && npm run verify:ui-spec-coverage && npm run verify:visual-smoke-routes && npm run verify:visual-smoke-harness && npm run verify:secure-auth-storage && npm run verify:android-apk-scripts && npm run verify:native-config && npm run verify:design-tokens && npm run test:recording-flow && npm run test:phone-speech && npm run test:whisper-pcm && npm run test:model-storage && npm run test:today-timeline"
   },
   "expo": {
     "doctor": {

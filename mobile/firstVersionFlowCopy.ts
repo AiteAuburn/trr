@@ -181,7 +181,7 @@ export function headerActionAccessibilityLabel(chrome: { actionLabel?: string })
 }
 
 export function recordingButtonAccessibilityLabel(isRecording: boolean) {
-  return boundDisplayText(isRecording ? "錄音預覽進行中，放開結束" : "按住開始錄音預覽", maxDisplayTextLength);
+  return boundDisplayText(isRecording ? "錄音中，點一下結束" : "點一下開始說話記錄", maxDisplayTextLength);
 }
 
 export function coreAccessibilityDisplayBundle(value: {
@@ -224,7 +224,7 @@ export function returnDestinationButtonDisplayBundle(value: {
 }
 
 export function quickRecordIntroCopy() {
-  return boundDisplayText("首頁只保留按住錄音；文字整理與手動新增請從記錄頁進入，整理前都會先進文字確認。", maxDisplayDetailTextLength);
+  return boundDisplayText("首頁只保留點一下錄音；文字整理與手動新增請從記錄頁進入，整理結果確認後才會儲存。", maxDisplayDetailTextLength);
 }
 
 export function quickRecordIntroDisplayBundle() {
@@ -245,8 +245,8 @@ export function quickEntryModeDisplayItems() {
       key: "voice" as QuickEntryMode,
       icon: boundDisplayText("🎙", 4),
       label: boundDisplayText("語音預覽", maxDisplayTextLength),
-      copy: boundDisplayText("按住錄音，放開結束", maxDisplayTextLength),
-      accessibilityLabel: boundDisplayText("語音預覽，請按住下方麥克風開始", maxDisplayTextLength)
+      copy: boundDisplayText("點一下錄音，再點一下結束", maxDisplayTextLength),
+      accessibilityLabel: boundDisplayText("語音記錄，請點一下下方麥克風開始", maxDisplayTextLength)
     },
     {
       key: "text" as QuickEntryMode,
@@ -266,7 +266,7 @@ export function quickEntryModeDisplayItems() {
 }
 
 export function quickEntryVoicePromptStatusMessage() {
-  return boundUiMessage("請按住下方大型麥克風按鈕開始錄音預覽；放開後才會結束。");
+  return boundUiMessage("請點一下下方大型麥克風開始說話；說完再點一下，或停 3 秒自動結束。");
 }
 
 export function quickEntryTextModeStatusMessage() {

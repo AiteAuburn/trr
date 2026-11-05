@@ -15,6 +15,51 @@
 
 ## 2026-11-05
 
+### 手機版新增今天時間軸、整理中取消
+
+類型：feature / test / docs
+
+檔案：`mobile/App.tsx`、`mobile/todayTimeline.tsx`（新增）、`mobile/todayTimelineTransforms.ts`（新增）、`mobile/parserLoadingView.tsx`、`mobile/recordDisplay.ts`、`mobile/aiReviewActionRow.tsx`（刪除）、`mobile/package.json`、`scripts/test_mobile_today_timeline.cjs`（新增）、`scripts/verify_mobile_navigation.py`、`ai_context/UI_UX_SPEC.md`。
+
+摘要：
+
+- 依設計稿新增「今天」時間軸：首頁「今天 N 筆」chip 與存好頁「看今天的紀錄」改開時間軸（首頁的第二個檢視，不新增 AppScreen），含三格摘要、24 小時制時間軸、「說話記一筆」與「看全部歷史」。
+- 整理中畫面新增「取消」：以 request generation 計數讓晚到的 parser 回應與錯誤被忽略，解除鎖定並保留文字。後端請求本身不會中止。
+- 飲食紀錄沒有食物項目時顯示「飲食：早餐」等餐別，不再顯示原始 JSON（歷史頁同樣受益）。
+- 刪除已不使用的 `AiReviewActionRow` 元件與對應驗證。
+
+驗證：
+
+- `npm run quality` 全部通過，新增 today timeline 測試 5 項。Android 模擬器（visual smoke 示範資料）確認時間軸、摘要與「說話記一筆」進入錄音。
+
+後續：
+
+- 整理中取消尚未在模擬器上實際觸發（visual smoke 模式下不會送 parser）；真機語音流程仍待驗證。
+
+### 手機版改為「點一下說話、一頁確認」的語音記錄流程
+
+類型：feature / test / docs
+
+檔案：`mobile/App.tsx`、`mobile/phoneSpeechCapture.ts`、`mobile/aiCandidateList.tsx`、`mobile/parserLoadingView.tsx`、`mobile/recordingCopy.ts`、`mobile/recordWorkflowCopy.ts`、`mobile/firstVersionFlowCopy.ts`、`mobile/settingsScreenData.ts`、`mobile/homeGuidanceCard.tsx`（刪除）、`scripts/verify_mobile_navigation.py`、`scripts/verify_mobile_visual_smoke_routes.py`、`scripts/verify_mobile_visual_smoke_harness.py`、`scripts/generate_mobile_visual_smoke_harness.py`、`scripts/test_mobile_recording_flow.cjs`、`scripts/test_mobile_phone_speech_capture.cjs`、`ai_context/UI_UX_SPEC.md`。
+
+摘要：
+
+- 依 Claude Design 稿調整首頁：日期、「今天 N 筆」chip、「想記什麼，直接說出來」、200px 麥克風；按住改為點一下開始／再點一下結束，停頓 3 秒或語音服務自行結束時自動停止；錄音中顯示即時辨識文字、計時與取消；新增「不方便說話？改用打字」。
+- 語音辨識成功後直接交給 AI 整理（effect 等轉寫結束才送出，使用者離開頁面即放棄）；整理中畫面顯示「你說的」文字。前置檢查未通過時停在文字確認頁並顯示原因。
+- AI 整理確認頁改為唯一確認頁：顯示「你說：…」與「改文字」、較大的候選卡、低信心卡片改琥珀色提示；「存起來（N 筆）」直接儲存，「重新說一次」放棄結果回首頁。存檔仍只在使用者按下後發生。
+- 存好頁（一般 AI 儲存）改為「存好了」「今天一共 N 筆紀錄」，主按鈕「再說一筆」、次按鈕「看今天的紀錄」；部分儲存與手動儲存保留原本動作列。
+- 全面替換「按住／放開」文案；移除不再使用的首頁引導卡元件。
+- 驗證腳本與 UI 規格同步更新為新行為（首頁只允許一個錄音麥克風控制，允許取消、今天 chip、打字連結與錄音計時）。
+
+驗證：
+
+- `npm run quality` 全部通過（含 TypeScript；本機補裝 `expo-speech-recognition`，lockfile 未變更）。recording flow 17 項（新增點一下開始／結束、啟動中再點、取消 3 項），phone speech 測試新增即時文字與自行結束回呼。
+
+後續：
+
+- 今天時間軸與整理中取消已於同日後續實作（見上一筆）。
+- 真機上的語音辨識、自動停止與整段流程仍待 Android 裝置驗證。
+
 ### 新增 make check 本機品質檢查
 
 類型：infra
