@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 import { achievementUnlockDisplayDate, type AchievementDisplayItem } from "./futureModuleDisplay";
 
@@ -72,15 +73,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8
   },
   achievementBadgeIcon: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 16,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 18
   },
   achievementBadgeLevel: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 17,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 20
   },
   achievementBadgeStreak: {
@@ -88,13 +89,13 @@ const styles = StyleSheet.create({
     transform: [{ rotate: "-3deg" }]
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
   },
   label: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   },
@@ -103,17 +104,17 @@ const styles = StyleSheet.create({
   },
   previewModeBadge: {
     alignSelf: "flex-start",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     overflow: "hidden",
     paddingHorizontal: 10,
     paddingVertical: 4
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",
@@ -121,8 +122,8 @@ const styles = StyleSheet.create({
   },
   timelineCard: {
     alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 24,
     borderWidth: 1,
     flexDirection: "row",

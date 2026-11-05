@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, TextInput } from "react-native";
 
 type NativeDebugTextFieldProps = {
@@ -35,11 +36,11 @@ export function NativeDebugTextField({
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: "#ffffff",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
-    color: "#1E1E1E",
+    color: palette.text,
     fontSize: 16,
     minHeight: 52,
     paddingHorizontal: 14,

@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 import type { QuickEntryMode } from "./firstVersionFlowCopy";
 
 export type QuickEntryModeDisplayItem = {
@@ -66,20 +68,20 @@ const styles = StyleSheet.create({
     opacity: 0.55
   },
   quickEntryCopy: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 11,
     fontWeight: "700",
     lineHeight: 16
   },
   quickEntryIcon: {
-    color: "#3FA67F",
+    color: palette.brand,
     fontSize: 18,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   quickEntryItem: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
     flexGrow: 1,
@@ -89,9 +91,9 @@ const styles = StyleSheet.create({
     padding: 12
   },
   quickEntryLabel: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 13,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 18
   },
   quickEntryRail: {

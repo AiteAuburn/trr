@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 type DeleteConfirmPreviewBlockProps = {
@@ -38,7 +39,7 @@ export function DeleteConfirmPreviewBlock({
 const styles = StyleSheet.create({
   dangerIconCircle: {
     alignItems: "center",
-    backgroundColor: "#C85D5D",
+    backgroundColor: palette.danger,
     borderRadius: 999,
     height: 64,
     justifyContent: "center",
@@ -46,8 +47,8 @@ const styles = StyleSheet.create({
   },
   emptyStateCard: {
     alignItems: "flex-start",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 24,
     borderWidth: 1,
     flexDirection: "row",
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     padding: 16
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
@@ -67,33 +68,33 @@ const styles = StyleSheet.create({
   },
   previewModeBadge: {
     alignSelf: "flex-start",
-    backgroundColor: "#EAF6F1",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.wash,
+    borderColor: palette.accentBorder,
     borderRadius: 999,
     borderWidth: 1,
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     paddingHorizontal: 10,
     paddingVertical: 5
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",
     lineHeight: 22
   },
   recordType: {
-    color: "#3FA67F",
+    color: palette.brand,
     flexShrink: 1,
     fontSize: 13,
     fontWeight: "800"
   },
   successIconText: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 32,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   timelineContent: {
     flex: 1,

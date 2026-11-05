@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 type TranscriptReviewActionRowProps = {
   isSubmitDisabled: boolean;
@@ -55,29 +57,29 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     alignItems: "center",
-    backgroundColor: "#3FA67F",
-    borderRadius: 22,
+    backgroundColor: palette.brand,
+    borderRadius: 16,
     justifyContent: "center",
-    minHeight: 44,
+    minHeight: 52,
     paddingHorizontal: 16,
     paddingVertical: 14
   },
   primaryButtonText: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 14,
     fontWeight: "800"
   },
   secondaryButton: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
-    borderRadius: 22,
+    backgroundColor: palette.wash,
+    borderRadius: 16,
     justifyContent: "center",
-    minHeight: 44,
+    minHeight: 52,
     paddingHorizontal: 16,
     paddingVertical: 14
   },
   secondaryButtonText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   }

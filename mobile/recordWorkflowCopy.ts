@@ -1,6 +1,5 @@
 import type { SaveEntryMethod } from "./appTypes";
 import type { AppScreen } from "./navigationConfig";
-import { transcriptReviewCostBoundaryChecklistDisplayItems } from "./recordingCopy";
 
 const maxUiMessageLength = 300;
 const maxDisplayTextLength = 120;
@@ -209,11 +208,14 @@ export function parserVoiceQuotaSyncedStatusMessage(count: number, voiceSeconds:
 }
 
 export function parserFailureStatusMessage(error: unknown) {
+  if (error instanceof Error && error.message === "/ai/parse-preview failed: 502") {
+    return boundUiMessage("AI 整理服務暫時無法完成，請稍後再試");
+  }
   return safeUiError(error, "Parser 失敗");
 }
 
 export function parserFailureRecoveryMessage(message: string) {
-  return boundUiMessage(`${message}。可以修改文字後再整理，或改用手動新增避免再次呼叫 parser。`);
+  return boundUiMessage(`${message}。原文字已保留；你可以稍後重新整理，或先改用手動新增。`);
 }
 
 export function aiReviewNoCandidateTitleCopy() {
@@ -253,7 +255,7 @@ export function aiReviewRejectedReasonCopy(reasonLabel: string) {
 }
 
 export function aiReviewBackendRequiredCopy() {
-  return boundDisplayText("請先連線 backend，才可儲存候選紀錄。", maxDisplayDetailTextLength);
+  return boundDisplayText("目前尚未連線，請稍後重試。整理內容會留在這裡。", maxDisplayDetailTextLength);
 }
 
 export function aiReviewDisplayTexts() {
@@ -272,16 +274,6 @@ export function aiReviewDisplayTexts() {
 
 export function aiReviewDisplayBundle() {
   return aiReviewDisplayTexts();
-}
-
-export function aiReviewCostBoundaryChecklistDisplayItems() {
-  return [
-    "此頁只顯示 parser 已回傳的候選紀錄。",
-    "逐筆編輯、移除或進入儲存確認都不會重新呼叫 AI。",
-    "未建立片段不會自動儲存，也不會自動重跑 parser。",
-    "返回修改後，只有再次按下一步整理才會產生新的 parser / AI 成本。",
-    "mobile 不保留 raw prompt、raw model output 或模型 debug trace。"
-  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
 }
 
 export function recordEntrySettingsChecklistDisplayItems(isBackendReady: boolean) {
@@ -316,7 +308,7 @@ export function aiSaveConfirmSubmitLabel(isBusy: boolean, isBlockedByBackend: bo
     isBusy
       ? "儲存中..."
       : isBlockedByBackend
-        ? "等待 backend 連線"
+        ? "等待連線"
         : hasWarnings
           ? "了解提醒並儲存今日紀錄"
           : "儲存今日紀錄",
@@ -457,8 +449,8 @@ export function aiRemoveConfirmBoundaryLabel(isDailyRecordDelete = false) {
 export function aiRemoveConfirmBoundaryCopy(isDailyRecordDelete = false) {
   return boundDisplayText(
     isDailyRecordDelete
-      ? "刪除後無法復原。這會先從每日紀錄草稿移除，儲存前不會送出刪除 API，也不會重新呼叫 AI。"
-      : "這筆 AI 整理結果尚未寫入資料庫；移除後不會送出刪除 API，也不會重新呼叫 AI。",
+      ? "刪除後無法復原。這筆內容會從目前草稿移除，已儲存的其他紀錄不會改變。"
+      : "這筆整理內容還沒儲存。移除只會影響這次草稿，不會刪除已有的紀錄。",
     maxDisplayDetailTextLength
   );
 }
@@ -494,7 +486,7 @@ export function previewRecordEditBoundaryDisplayBundle() {
 
 export function manualRecordConfirmIntroCopy() {
   return boundDisplayText(
-    "這筆紀錄不經 AI parser，送出後會透過後端驗證、權限與 audit 路徑建立。",
+    "確認日期與內容是否正確，按下確認建立後才會儲存。",
     maxDisplayDetailTextLength
   );
 }
@@ -620,7 +612,6 @@ export function aiCandidateRemoveChecklistDisplayItems() {
 
 export function recordWorkflowStaticChecklistDisplayBundle() {
   return {
-    aiReviewCostBoundaryItems: aiReviewCostBoundaryChecklistDisplayItems(),
     manualSubmitItems: manualSubmitChecklistDisplayItems(),
     recordDetailBoundaryItems: recordDetailBoundaryChecklistDisplayItems(),
     aiCandidateRemoveItems: aiCandidateRemoveChecklistDisplayItems()
@@ -641,8 +632,6 @@ export function recordWorkflowRuntimeChecklistDisplayBundle(value: {
   lastSaveEntryMethod: SaveEntryMethod;
   hasUnsavedPreviewRecords: boolean;
   protectedBackendReady: boolean;
-  parserModelReady: boolean;
-  parserModelUnavailableMessage: string;
   recordSyncLimit: number;
   lowConfidenceRecordCount: number;
   rejectedPreviewEventCount: number;
@@ -654,11 +643,6 @@ export function recordWorkflowRuntimeChecklistDisplayBundle(value: {
       value.unsavedPreviewRecordCount,
       value.lowConfidenceRecordCount,
       value.rejectedPreviewEventCount
-    ),
-    transcriptReviewCostBoundaryItems: transcriptReviewCostBoundaryChecklistDisplayItems(
-      value.protectedBackendReady,
-      value.parserModelReady,
-      value.parserModelUnavailableMessage
     ),
     saveSuccessBoundaryItems: saveSuccessBoundaryChecklistDisplayItems(
       value.lastSaveEntryMethod,

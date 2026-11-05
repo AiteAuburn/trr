@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 type ManualRecordCreatePreviewActionProps = {
   accessibilityLabel: string;
@@ -38,20 +40,20 @@ const styles = StyleSheet.create({
   },
   primaryButtonFull: {
     alignItems: "center",
-    backgroundColor: "#3FA67F",
-    borderRadius: 24,
+    backgroundColor: palette.brand,
+    borderRadius: 16,
     justifyContent: "center",
     minHeight: 58,
     paddingHorizontal: 20,
     paddingVertical: 16
   },
   primaryButtonText: {
-    color: "#ffffff",
+    color: palette.surface,
     fontSize: 15,
     fontWeight: "800"
   },
   warningText: {
-    color: "#C85D5D",
+    color: palette.danger,
     fontSize: 13,
     fontWeight: "800",
     lineHeight: 19

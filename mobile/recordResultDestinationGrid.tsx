@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 import type { AppScreen } from "./navigationConfig";
 
 export type RecordResultDestinationItem = {
@@ -69,7 +71,7 @@ export function RecordResultDestinationGrid({
 
 const styles = StyleSheet.create({
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
@@ -82,15 +84,15 @@ const styles = StyleSheet.create({
   },
   iconCircleSmall: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     height: 40,
     justifyContent: "center",
     width: 40
   },
   postSaveCard: {
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 18,
     borderWidth: 1,
     gap: 4,
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
     gap: 10
   },
   recordType: {
-    color: "#3FA67F",
+    color: palette.brand,
     flexShrink: 1,
     fontSize: 13,
     fontWeight: "800"

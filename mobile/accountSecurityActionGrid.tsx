@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 type AccountSecurityActionGridProps = {
   disabled: boolean;
@@ -108,29 +110,29 @@ const styles = StyleSheet.create({
   },
   dangerButton: {
     alignItems: "center",
-    backgroundColor: "#FCEEEE",
-    borderRadius: 22,
+    backgroundColor: palette.dangerWash,
+    borderRadius: 16,
     justifyContent: "center",
-    minHeight: 44,
+    minHeight: 52,
     paddingHorizontal: 16,
     paddingVertical: 14
   },
   dangerButtonText: {
-    color: "#C85D5D",
+    color: palette.danger,
     fontSize: 14,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   secondaryButton: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
-    borderRadius: 22,
+    backgroundColor: palette.wash,
+    borderRadius: 16,
     justifyContent: "center",
-    minHeight: 44,
+    minHeight: 52,
     paddingHorizontal: 16,
     paddingVertical: 14
   },
   secondaryButtonText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   }

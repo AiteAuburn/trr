@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 import type { AppScreen } from "./navigationConfig";
 
 export type VisualSmokeRouteJumpItem = {
@@ -48,8 +50,8 @@ export function VisualSmokeRouteJumpGrid({ items, onRoutePress }: VisualSmokeRou
 
 const styles = StyleSheet.create({
   visualSmokeRouteChip: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 999,
     borderWidth: 1,
     minHeight: 40,
@@ -57,7 +59,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8
   },
   visualSmokeRouteChipText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800",
     lineHeight: 20

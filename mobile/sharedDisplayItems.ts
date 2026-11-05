@@ -236,7 +236,6 @@ export function auxiliarySectionLabels() {
     productOpenArrow: boundDisplayText("›", maxDisplayTextLength),
     devOnly: boundDisplayText("DEV ONLY", maxDisplayTextLength),
     reservedArchitecture: boundDisplayText("預留架構", maxDisplayTextLength),
-    costBoundaryBadge: boundDisplayText("成本邊界", maxDisplayTextLength),
     preSaveConfirmBadge: boundDisplayText("儲存前確認", maxDisplayTextLength),
     dangerOperation: boundDisplayText("危險操作", maxDisplayTextLength),
     quotaControl: boundDisplayText("額度控制", maxDisplayTextLength),

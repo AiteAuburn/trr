@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 type AiCandidateActionRowProps = {
   editAccessibilityLabel: string;
@@ -48,29 +50,29 @@ const styles = StyleSheet.create({
   },
   dangerButton: {
     alignItems: "center",
-    backgroundColor: "#C85D5D",
-    borderRadius: 22,
+    backgroundColor: palette.danger,
+    borderRadius: 16,
     justifyContent: "center",
-    minHeight: 44,
+    minHeight: 52,
     paddingHorizontal: 16,
     paddingVertical: 14
   },
   dangerButtonText: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 14,
     fontWeight: "800"
   },
   secondaryButton: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
-    borderRadius: 22,
+    backgroundColor: palette.wash,
+    borderRadius: 16,
     justifyContent: "center",
-    minHeight: 44,
+    minHeight: 52,
     paddingHorizontal: 16,
     paddingVertical: 14
   },
   secondaryButtonText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   }

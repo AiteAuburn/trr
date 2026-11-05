@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 type HistoryRawTranscriptCardProps = {
@@ -29,13 +30,13 @@ export function HistoryRawTranscriptCard({
 
 const styles = StyleSheet.create({
   confidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 12,
     fontWeight: "700"
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
@@ -47,8 +48,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   historyRawCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
     gap: 8,
@@ -56,18 +57,18 @@ const styles = StyleSheet.create({
   },
   previewModeBadge: {
     alignSelf: "flex-start",
-    backgroundColor: "#EAF6F1",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.wash,
+    borderColor: palette.accentBorder,
     borderRadius: 999,
     borderWidth: 1,
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     paddingHorizontal: 10,
     paddingVertical: 5
   },
   recordType: {
-    color: "#3FA67F",
+    color: palette.brand,
     flexShrink: 1,
     fontSize: 13,
     fontWeight: "800"

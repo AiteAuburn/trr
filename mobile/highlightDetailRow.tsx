@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 type HighlightDetailRowProps = {
@@ -21,13 +22,13 @@ const styles = StyleSheet.create({
     gap: 10
   },
   recordType: {
-    color: "#3FA67F",
+    color: palette.brand,
     flexShrink: 1,
     fontSize: 13,
     fontWeight: "800"
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19

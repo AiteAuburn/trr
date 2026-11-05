@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 import type { FutureModuleCard } from "./futureModuleDisplay";
 import { HighlightBulletRow } from "./highlightBulletRow";
 import type { AppScreen } from "./navigationConfig";
@@ -116,14 +118,14 @@ export function FutureModuleCardList({ cards, labels, onDestinationPress }: Futu
 
 const styles = StyleSheet.create({
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
   },
   iconCircleSmall: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     height: 40,
     justifyContent: "center",
@@ -134,13 +136,13 @@ const styles = StyleSheet.create({
     paddingVertical: 2
   },
   label: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   },
   recordCard: {
-    backgroundColor: "#ffffff",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 20,
     borderWidth: 1,
     gap: 8,
@@ -148,7 +150,7 @@ const styles = StyleSheet.create({
     padding: 14
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",
@@ -162,18 +164,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   recordType: {
-    color: "#3FA67F",
+    color: palette.brand,
     flexShrink: 1,
     fontSize: 13,
     fontWeight: "800"
   },
   secondaryButtonText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   },
   warningText: {
-    color: "#C85D5D",
+    color: palette.danger,
     fontSize: 13,
     fontWeight: "800",
     lineHeight: 19

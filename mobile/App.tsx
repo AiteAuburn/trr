@@ -1,11 +1,14 @@
+import { palette } from "./designTokens";
+import { RecordingGlyph, ScreenTransition, SuccessMark, useReducedMotion } from "./interfaceMotion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  Alert,
   ActivityIndicator,
   BackHandler,
+  Keyboard,
   KeyboardAvoidingView,
   Linking,
   Platform,
-  Pressable,
   SafeAreaView,
   ScrollView,
   Share,
@@ -15,21 +18,30 @@ import {
   TextInput,
   View
 } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 import {
-  RecordingPresets,
   requestRecordingPermissionsAsync,
   setAudioModeAsync,
-  useAudioRecorder,
-  type AudioRecorder,
 } from "expo-audio";
 import {
   benchmarkNativeLlama,
   benchmarkNativeWhisper,
   checkNativeLocalModules,
   parseWithNativeLlama,
-  transcribeWithNativeWhisper
+  transcribeWithNativeWhisper,
 } from "./nativeLocalModels";
-import { downloadModel, listDownloadedModels, type DownloadedModel } from "./modelStorage";
+import {
+  defaultWhisperModel,
+  downloadModel,
+  ensureDefaultWhisperModel,
+  listDownloadedModels,
+  type DownloadedModel
+} from "./modelStorage";
+import {
+  discardPhoneSpeechAudio,
+  startPhoneSpeechCapture,
+  type PhoneSpeechCapture
+} from "./phoneSpeechCapture";
 import {
   authAccessTokenMaxLength,
   clearStoredAuthSession,
@@ -49,14 +61,18 @@ import {
 import {
   allowMobileDevAuth,
   defaultApiBaseUrl,
+  devAwsApiBaseUrl,
+  devLocalApiBaseUrl,
+  enableDevServerSwitcher,
   enableDebugTools,
   initialVisualSmokeScreen,
   maxMobileRecordCacheLimit,
-  mobileDevAuthEmail,
   mobileRecordSyncLimit,
   mobileReportQueryLimit,
   sampleText
 } from "./appRuntimeConfig";
+import { DevBackendSwitcher, type DevBackendTarget } from "./devBackendSwitcher";
+import { EmailPasswordAuthScreen } from "./emailPasswordAuthScreen";
 import {
   aiSaveConfirmState,
   previewActionReturnState,
@@ -170,7 +186,6 @@ import {
   primaryTabTarget,
   screenChrome,
   transcriptReviewReturnTargetForScreen,
-  visualSmokeBootIgnoredDisplayMessages,
   visualSmokeBootSkippedDisplayMessages,
   visualSmokeDeepLinkStatusMessage,
   visualSmokeRouteFromDeepLinkUrl,
@@ -392,6 +407,7 @@ import {
   recordingFinishedStatusMessage,
   recordingLimitReachedStatusMessage,
   recordingPermissionDeniedStatusMessage,
+  recordingPhoneSpeechFallbackStatusMessage,
   recordingQuotaExhaustedStatusMessage,
   recordingResetStatusMessage,
   recordingRuntimeDisplayBundle,
@@ -401,7 +417,6 @@ import {
   recordingTextFallbackStatusMessage,
   recordingWhisperEmptyStatusMessage,
   recordingWhisperFailureStatusMessage,
-  recordingWhisperMissingModelStatusMessage,
   recordingWhisperProgressStatusMessage,
   recordingWhisperSuccessStatusMessage,
   shouldOpenTodayRecordingTranscriptReview,
@@ -523,7 +538,6 @@ import {
   backendUrlChangedDisplayMessages,
   boundDevResetResponse,
   bootFailureDisplayMessages,
-  devLoginDisabledDisplayMessages,
   devResetBusyStatusMessage,
   devResetFailureMessages,
   devResetProgressStatusMessage,
@@ -702,7 +716,6 @@ import {
   captureVoiceQuotaCopy,
   isVoiceQuotaLow,
   membershipStatusReturnSubscriptionStatusMessage,
-  menuReturnStatusMessage,
   selectedModelDisplayLabel,
   selectedModelRuntimeDisplayLabel,
   settingsAccountSecurityOpenStatusMessage,
@@ -890,6 +903,7 @@ import { SettingsRowList, type SettingsDisplayRow } from "./settingsRowList";
 import { SubscriptionChecklist } from "./subscriptionChecklist";
 import { SubscriptionComparisonList } from "./subscriptionComparisonList";
 import { TranscriptDraftInput } from "./transcriptDraftInput";
+import { ParserLoadingView } from "./parserLoadingView";
 import { FoodCommunitySearchField } from "./foodCommunitySearchField";
 import { FoodCommunityDetailShareList } from "./foodCommunityDetailShareList";
 import { FoodCommunityItemList } from "./foodCommunityItemList";
@@ -928,8 +942,11 @@ import type {
 
 type NativeBenchmarkResult = Awaited<ReturnType<typeof benchmarkNativeWhisper>> | Awaited<ReturnType<typeof benchmarkNativeLlama>>;
 
+type MainScrollHandle = ScrollView;
+
 export default function App() {
-  const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
+  const mainScrollRef = useRef<MainScrollHandle>(null);
+  const reduceMotion = useReducedMotion();
   const [currentScreen, setCurrentScreen] = useState<AppScreen>(initialVisualSmokeScreen ?? "today");
   const [apiBaseUrl, setApiBaseUrl] = useState(defaultApiBaseUrl);
   const [account, setAccount] = useState<Account | null>(null);
@@ -1059,9 +1076,16 @@ export default function App() {
   const latestYearReviewSyncKey = useRef("");
   const foodShareInFlight = useRef(false);
   const storeRedemptionInFlight = useRef(false);
-  const audioRecordingRef = useRef<AudioRecorder | null>(null);
+  const audioRecordingRef = useRef<PhoneSpeechCapture | null>(null);
+  const recordingAudioUriRef = useRef<string | null>(null);
+  const recordingNativeTranscriptRef = useRef("");
+  const recordingWhisperModelPathRef = useRef("");
   const recordingStartInFlight = useRef(false);
   const recordingStopInFlight = useRef(false);
+  const recordingPressReleased = useRef(false);
+  const recordingStartedAtRef = useRef<number | null>(null);
+  const [recordingFeedback, setRecordingFeedback] = useState("");
+  const enableDevTranscriptSample = allowMobileDevAuth && (enableDevServerSwitcher || enableDebugTools);
   const visualSmokePreviewActive = useRef(Boolean(initialVisualSmokeScreen));
   const [nativeStatus, setNativeStatus] = useState(() => nativeDebugDefaultState().status);
   const [whisperModelPath, setWhisperModelPath] = useState("");
@@ -1131,6 +1155,14 @@ export default function App() {
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
 
   const normalizedApiBaseUrl = useMemo(() => normalizeApiBaseUrl(apiBaseUrl), [apiBaseUrl]);
+  const normalizedDevLocalApiBaseUrl = normalizeApiBaseUrl(devLocalApiBaseUrl);
+  const normalizedDevAwsApiBaseUrl = normalizeApiBaseUrl(devAwsApiBaseUrl);
+  const selectedDevBackendTarget: DevBackendTarget | null =
+    normalizedApiBaseUrl === normalizedDevLocalApiBaseUrl
+      ? "local"
+      : normalizedApiBaseUrl === normalizedDevAwsApiBaseUrl
+        ? "aws"
+        : null;
   const activeProfile = activeProfileForId(profiles, activeProfileId);
   const selectedSttModel = selectedSttModelOption(models, sttModelId);
   const selectedLlmModel = selectedLlmModelOption(models, llmModelId);
@@ -1308,6 +1340,8 @@ export default function App() {
     voiceQuota.remaining_seconds_today <= 120;
   const quotaTrialDaysLeft = trialDaysLeft(voiceQuota?.trial_ends_at);
   const isAnyRequestInFlight = isBusy || isQuotaSyncing || isReportLoading || isAuthOperationInFlight;
+  const isParserPreviewLoading =
+    currentScreen === "transcriptReview" && isBusy && parsePreviewInFlight.current;
   const previewState = previewRecordState(preview);
   const unsavedPreviewRecordCount = previewState.recordCount;
   const unsavedPreviewRecordDisplayCount = previewState.displayCount;
@@ -1409,18 +1443,12 @@ export default function App() {
     lastSaveEntryMethod,
     hasUnsavedPreviewRecords: saveSuccessViewState.hasUnsavedPreviewRecords,
     protectedBackendReady,
-    parserModelReady,
-    parserModelUnavailableMessage: parserModelUnavailableDisplayMessage,
     recordSyncLimit: mobileRecordSyncDisplayLimit,
     lowConfidenceRecordCount: lowConfidencePreviewRecordDisplayCount,
     rejectedPreviewEventCount: rejectedPreviewEventDisplayCount,
     unsavedPreviewRecordCount: unsavedPreviewRecordDisplayCount
   });
   const aiSaveConfirmChecklistItems = recordWorkflowRuntimeChecklistDisplay.aiSaveConfirmItems;
-  const aiReviewCostBoundaryChecklistItems =
-    recordWorkflowStaticChecklistDisplay.aiReviewCostBoundaryItems;
-  const transcriptReviewCostBoundaryChecklistItems =
-    recordWorkflowRuntimeChecklistDisplay.transcriptReviewCostBoundaryItems;
   const saveSuccessBoundaryChecklistItems = recordWorkflowRuntimeChecklistDisplay.saveSuccessBoundaryItems;
   const recordStatusRuntimeChecklistDisplay =
     recordStatusRuntimeChecklistDisplayBundle(mobileRecordSyncDisplayLimit);
@@ -1687,7 +1715,7 @@ export default function App() {
   const foodCommunityRankingRows = foodCommunityDisplay.rankingRows;
   const visibleStoreProducts = storeDisplay.visibleProducts;
   const storeRedemptionBoundaryRows = storeDisplay.redemptionBoundaryRows;
-  const settingsRuntimeDisplay = useMemo(() => settingsRuntimeDisplayBundle(), []);
+  const settingsRuntimeDisplay = useMemo(() => settingsRuntimeDisplayBundle(enableDebugTools), []);
   const settingsStaticDisplay = settingsRuntimeDisplay.settings;
   const settingsDisplayRows = settingsStaticDisplay.settingsRows;
   const settingsChoiceDisplay = useMemo(
@@ -2268,7 +2296,6 @@ export default function App() {
   const recordsAtCacheLimit = recordSyncBoundaryDisplay.recordsAtCacheLimit;
   const canLoadMoreRecords = recordSyncBoundaryDisplay.canLoadMoreRecords;
   const historySyncBoundaryDisplayText = recordSyncBoundaryDisplay.history;
-  const analysisSyncBoundaryDisplayText = recordSyncBoundaryDisplay.analysis;
   const detailedReportNoteItems = analysisRuntimeBoundaryDisplay.detailedReportNoteItems;
 
   function openTranscriptReview() {
@@ -2344,6 +2371,23 @@ export default function App() {
 
   function fillTranscriptSampleDraft() {
     updateTranscriptDraft(sampleText, "sample");
+  }
+
+  function fillDevelopmentTranscript() {
+    if (!enableDevTranscriptSample || isAnyRequestInFlight || isRecordingPreview ||
+        recordingStartInFlight.current || recordingStopInFlight.current || audioRecordingRef.current) {
+      return;
+    }
+    // Explicit test input may be parsed after confirmation; static UI samples remain blocked.
+    // Keep an existing draft intact instead of silently replacing it.
+    if (!transcript.trim()) {
+      updateTranscriptDraft(sampleText, "user");
+      setRecordingFeedback("已填入測試文字。按「下一步整理」才會送到目前的伺服器，確認儲存後才會新增紀錄。");
+    } else {
+      setRecordingFeedback("已保留目前文字，沒有覆蓋草稿。若要填入新範例，請先按「重新輸入」清空內容。");
+    }
+    if (currentScreen !== "transcriptReview") setTranscriptReviewReturnScreen(currentScreen);
+    openScreenWithStatus("transcriptReview", transcriptReviewReadyStatusMessage());
   }
 
   function setManualRecordDateTimeInputs(dateTime: { date: string; time: string }) {
@@ -2852,7 +2896,7 @@ export default function App() {
     }
     const boundedAccount = boundAccount(accountResponse);
     setAccount(boundedAccount);
-    await loadVoiceQuota(boundedAccount.id, tokenForHeaders);
+    await loadVoiceQuota(boundedAccount.id, tokenForHeaders, bootKey);
 
     if (latestBootKey.current !== bootKey) {
       return boundedAccount;
@@ -3005,6 +3049,22 @@ export default function App() {
     setApiBaseUrl(nextValue);
   }
 
+  function switchDevelopmentBackend(target: DevBackendTarget) {
+    if (isAnyRequestInFlight) {
+      setStatus(busyActionStatusMessage());
+      return;
+    }
+    const nextApiBaseUrl =
+      target === "local" ? normalizedDevLocalApiBaseUrl : normalizedDevAwsApiBaseUrl;
+    if (nextApiBaseUrl === normalizedApiBaseUrl) {
+      return;
+    }
+    clearMobileSessionState();
+    setApiBaseUrl(nextApiBaseUrl);
+    openScreen("today");
+    void boot(nextApiBaseUrl);
+  }
+
   function handleHeaderAction() {
     if (isAnyRequestInFlight) {
       setStatus(busyActionStatusMessage());
@@ -3053,20 +3113,41 @@ export default function App() {
     openScreen("menu");
   }
 
+  function openWhisperModelDownloadPrompt() {
+    Alert.alert(
+      "下載離線語音模型",
+      `首次下載約 ${defaultWhisperModel.sizeLabel}，之後可在本機離線辨識，錄音不會上傳。要現在下載嗎？`,
+      [
+        { text: "稍後", style: "cancel" },
+        { text: "下載模型", onPress: downloadWhisperModelFromSettings }
+      ],
+      { cancelable: true }
+    );
+  }
+
   async function startRecordingPreview() {
-    if (recordingStartInFlight.current || recordingStopInFlight.current || audioRecordingRef.current) {
+    if (isAnyRequestInFlight || recordingStartInFlight.current || recordingStopInFlight.current || audioRecordingRef.current) {
       setStatus(busyActionStatusMessage());
       return;
     }
     if (voiceQuota && voiceQuota.remaining_seconds_today <= 0) {
-      setStatus(recordingQuotaExhaustedStatusMessage());
+      showRecordingFeedback(recordingQuotaExhaustedStatusMessage());
       return;
     }
+    const installedWhisperModel = whisperModelPath.trim() ||
+      downloadedModels.find((model) => model.fileName === defaultWhisperModel.fileName)?.uri || "";
+    recordingWhisperModelPathRef.current = installedWhisperModel;
     recordingStartInFlight.current = true;
+    recordingPressReleased.current = false;
+    setRecordingFeedback("");
     try {
       const permission = await requestRecordingPermissionsAsync();
       if (!permission.granted) {
-        setStatus(recordingPermissionDeniedStatusMessage());
+        showRecordingFeedback(recordingPermissionDeniedStatusMessage());
+        return;
+      }
+      if (recordingPressReleased.current) {
+        showRecordingFeedback(recordingFinishedStatusMessage(0));
         return;
       }
       await setAudioModeAsync({
@@ -3075,74 +3156,113 @@ export default function App() {
         shouldPlayInBackground: false,
         interruptionMode: "duckOthers"
       });
-      await audioRecorder.prepareToRecordAsync();
-      audioRecorder.record();
-      audioRecordingRef.current = audioRecorder;
+      const capture = await startPhoneSpeechCapture();
+      audioRecordingRef.current = capture;
       const now = Date.now();
+      recordingStartedAtRef.current = now;
       setIsRecordingPreview(true);
       setRecordingStartedAt(now);
       setRecordingElapsedSeconds(0);
       setPreview(null);
       setAudioPath("");
-      setStatus(recordingStartedStatusMessage(Boolean(voiceQuota && voiceQuota.remaining_seconds_today <= 120)));
+      recordingAudioUriRef.current = null;
+      recordingNativeTranscriptRef.current = "";
+      setStatus(recordingStartedStatusMessage(
+        Boolean(voiceQuota && voiceQuota.remaining_seconds_today <= 120),
+        !installedWhisperModel
+      ));
     } catch (error) {
       audioRecordingRef.current = null;
       clearRecordingPreviewRuntime();
-      setStatus(recordingStartFailureStatusMessage(error));
+      showRecordingFeedback(recordingStartFailureStatusMessage(error));
+      try {
+        await setAudioModeAsync({ allowsRecording: false, playsInSilentMode: true });
+      } catch {
+        // Keep the original user-facing failure; do not expose native error details.
+      }
     } finally {
       recordingStartInFlight.current = false;
+      // A fast press-out can arrive while permissions/audio preparation are still pending.
+      if (recordingPressReleased.current && audioRecordingRef.current) {
+        await finishRecordingPreview();
+      }
     }
+  }
+
+  function showRecordingFeedback(message: string) {
+    setRecordingFeedback(message);
+    setStatus(message);
+    mainScrollRef.current?.scrollTo({ y: 0, animated: true });
   }
 
   function clearRecordingPreviewRuntime(elapsedSeconds = 0) {
     setIsRecordingPreview(false);
     setRecordingStartedAt(null);
     setRecordingElapsedSeconds(elapsedSeconds);
+    recordingStartedAtRef.current = null;
   }
 
   function resetRecordingPreview() {
+    void discardPhoneSpeechAudio(recordingAudioUriRef.current);
+    recordingAudioUriRef.current = null;
+    recordingNativeTranscriptRef.current = "";
+    void audioRecordingRef.current?.release().catch(() => undefined);
     audioRecordingRef.current = null;
     clearRecordingPreviewRuntime();
+    setRecordingFeedback("");
     setStatus(recordingResetStatusMessage());
   }
 
   async function transcribeRecordingToReview(
     returnScreen: AppScreen,
-    sourceAudioPath: string,
+    sourceAudioUri: string | null,
+    phoneTranscript: string,
+    modelPath: string,
     voiceSeconds: number
   ) {
-    const safeAudioPath = nativeDebugInputValue(sourceAudioPath.trim());
-    const safeModelPath = nativeDebugInputValue(whisperModelPath.trim());
-    if (!safeAudioPath) {
-      setStatus(recordingTextFallbackStatusMessage());
-      return false;
-    }
-    if (!safeModelPath) {
-      setStatus(recordingWhisperMissingModelStatusMessage());
-      return false;
-    }
+    const safeModelPath = nativeDebugInputValue(modelPath.trim());
     setIsBusy(true);
-    setStatus(recordingWhisperProgressStatusMessage());
+    let text = "";
+    let whisperFailed = false;
     try {
-      const text = await transcribeWithNativeWhisper({
-        modelPath: safeModelPath,
-        audioPath: safeAudioPath
-      });
+      if (safeModelPath && sourceAudioUri) {
+        showRecordingFeedback(recordingWhisperProgressStatusMessage());
+        try {
+          text = await transcribeWithNativeWhisper({ modelPath: safeModelPath, audioPath: sourceAudioUri });
+        } catch {
+          whisperFailed = true;
+        }
+      }
+      if (!text.trim()) {
+        whisperFailed = Boolean(safeModelPath && sourceAudioUri);
+        text = phoneTranscript.trim();
+      }
       const boundedText = text.slice(0, maxTranscriptTextLength);
       if (!boundedText.trim()) {
-        setStatus(recordingWhisperEmptyStatusMessage());
+        showRecordingFeedback(recordingWhisperEmptyStatusMessage());
         return false;
       }
       updateTranscriptDraft(boundedText, "voice", voiceSeconds);
+      recordingAudioUriRef.current = null;
+      recordingNativeTranscriptRef.current = "";
       clearRecordingPreviewRuntime();
       setPreview(null);
       setTranscriptReviewReturnScreen(returnScreen);
-      openScreenWithStatus("transcriptReview", recordingWhisperSuccessStatusMessage());
+      openScreenWithStatus(
+        "transcriptReview",
+        whisperFailed || !safeModelPath || !sourceAudioUri
+          ? recordingPhoneSpeechFallbackStatusMessage()
+          : recordingWhisperSuccessStatusMessage()
+      );
+      setRecordingFeedback("");
       return true;
     } catch (error) {
-      setStatus(recordingWhisperFailureStatusMessage(error));
+      showRecordingFeedback(recordingWhisperFailureStatusMessage(error));
       return false;
     } finally {
+      await discardPhoneSpeechAudio(sourceAudioUri);
+      recordingAudioUriRef.current = null;
+      recordingNativeTranscriptRef.current = "";
       setIsBusy(false);
     }
   }
@@ -3151,16 +3271,23 @@ export default function App() {
     const boundedSeconds = clampNumber(recordingElapsedSeconds, 0, maxMobileCountValue);
     if (boundedSeconds <= 1) {
       resetRecordingPreview();
+      showRecordingFeedback(recordingFinishedStatusMessage(0));
       return;
     }
-    const transcribed = await transcribeRecordingToReview(returnScreen, audioPath, boundedSeconds);
+    const transcribed = await transcribeRecordingToReview(
+      returnScreen,
+      recordingAudioUriRef.current,
+      recordingNativeTranscriptRef.current,
+      recordingWhisperModelPathRef.current,
+      boundedSeconds
+    );
     if (transcribed) {
       return;
     }
     clearRecordingPreviewRuntime();
     setPreview(null);
     setTranscriptReviewReturnScreen(returnScreen);
-    openScreenWithStatus("record", recordingTextFallbackStatusMessage());
+    openScreen(returnScreen);
   }
 
   function useTodayRecordingResultTextFallback() {
@@ -3172,7 +3299,7 @@ export default function App() {
   }
 
   async function finishRecordingPreview(reason: "release" | "limit" = "release") {
-    if (!isRecordingPreview) {
+    if (!audioRecordingRef.current) {
       return;
     }
     if (recordingStopInFlight.current) {
@@ -3180,51 +3307,78 @@ export default function App() {
     }
     recordingStopInFlight.current = true;
     const rawElapsedSeconds =
-      recordingStartedAt === null ? recordingElapsedSeconds : Math.ceil((Date.now() - recordingStartedAt) / 1000);
+      recordingStartedAtRef.current === null ? 0 : Math.ceil((Date.now() - recordingStartedAtRef.current) / 1000);
     const elapsedSeconds = clampNumber(
       rawElapsedSeconds,
       0,
       recordingEffectiveLimitSeconds(voiceQuota)
     );
     const recording = audioRecordingRef.current;
-    let capturedAudioPath = "";
+    let capturedAudioUri: string | null = null;
+    let phoneTranscript = "";
+    let stopFailed = false;
     audioRecordingRef.current = null;
     try {
       if (recording) {
-        await recording.stop();
-        const uri = recording.uri;
-        capturedAudioPath = uri ? nativeDebugInputValue(uri) : "";
-        setAudioPath(capturedAudioPath);
+        const result = await recording.stop();
+        capturedAudioUri = result.audioUri;
+        phoneTranscript = result.transcript;
+        recordingAudioUriRef.current = capturedAudioUri;
+        recordingNativeTranscriptRef.current = phoneTranscript;
       }
-      await setAudioModeAsync({
-        allowsRecording: false,
-        playsInSilentMode: true,
-        shouldPlayInBackground: false,
-        interruptionMode: "duckOthers"
-      });
       setStatus(
         reason === "limit"
           ? recordingLimitReachedStatusMessage(recordingEffectiveLimitSeconds(voiceQuota))
           : recordingFinishedStatusMessage(elapsedSeconds)
       );
     } catch (error) {
-      setStatus(recordingStopFailureStatusMessage(error));
+      stopFailed = true;
+      showRecordingFeedback(recordingStopFailureStatusMessage(error));
     } finally {
+      try {
+        await setAudioModeAsync({
+          allowsRecording: false,
+          playsInSilentMode: true,
+          shouldPlayInBackground: false,
+          interruptionMode: "duckOthers"
+        });
+      } catch (error) {
+        stopFailed = true;
+        showRecordingFeedback(recordingStopFailureStatusMessage(error));
+      }
       clearRecordingPreviewRuntime(elapsedSeconds);
       recordingStopInFlight.current = false;
     }
+    if (stopFailed) return;
+    if (elapsedSeconds <= 1 || (!capturedAudioUri && !phoneTranscript.trim())) {
+      void discardPhoneSpeechAudio(capturedAudioUri);
+      recordingAudioUriRef.current = null;
+      recordingNativeTranscriptRef.current = "";
+      clearRecordingPreviewRuntime();
+      showRecordingFeedback(elapsedSeconds <= 1
+        ? recordingFinishedStatusMessage(elapsedSeconds)
+        : recordingWhisperEmptyStatusMessage());
+      return;
+    }
     if (shouldOpenTodayRecordingTranscriptReview(currentScreen, elapsedSeconds)) {
-      if (capturedAudioPath && whisperModelPath.trim()) {
-        void transcribeRecordingToReview("today", capturedAudioPath, elapsedSeconds);
+      if (capturedAudioUri || phoneTranscript.trim()) {
+        void transcribeRecordingToReview(
+          "today",
+          capturedAudioUri,
+          phoneTranscript,
+          recordingWhisperModelPathRef.current,
+          elapsedSeconds
+        );
         return;
       }
-      setPreview(null);
-      setTranscriptReviewReturnScreen("today");
-      openScreenWithStatus("transcriptReview", recordingTextFallbackStatusMessage());
+      // Do not open an empty editor or mistake a previous draft for new speech.
+      showRecordingFeedback(recordingTextFallbackStatusMessage());
     }
   }
 
   function releaseRecordingPreview() {
+    recordingPressReleased.current = true;
+    if (recordingStartInFlight.current) return;
     void finishRecordingPreview();
   }
 
@@ -3634,6 +3788,7 @@ export default function App() {
   }
 
   function startParserPreviewRequest() {
+    Keyboard.dismiss();
     parsePreviewInFlight.current = true;
     setIsBusy(true);
   }
@@ -4178,14 +4333,19 @@ export default function App() {
     setStatus(aiSaveFailureManualFallbackStatusMessage());
   }
 
-  async function loadVoiceQuota(accountId: string, tokenOverride = accessToken) {
+  async function loadVoiceQuota(
+    accountId: string,
+    tokenOverride = accessToken,
+    apiBaseUrlOverride = normalizedApiBaseUrl
+  ) {
     const tokenForHeaders = tokenOverride.trim();
     if ((!protectedAuthReady && !tokenForHeaders) || accountId.trim().length === 0) {
       clearVoiceQuotaStatus(voiceQuotaUnavailableStatusMessage(protectedAccountBackendUnavailableMessage));
       setIsQuotaSyncing(false);
       return;
     }
-    const quotaKey = `${normalizedApiBaseUrl}:${accountId}`;
+    const quotaApiBaseUrl = normalizeApiBaseUrl(apiBaseUrlOverride);
+    const quotaKey = `${quotaApiBaseUrl}:${accountId}`;
     latestQuotaSyncKey.current = quotaKey;
     if (quotaSyncInFlightKeys.current.has(quotaKey)) {
       return;
@@ -4194,7 +4354,7 @@ export default function App() {
     setIsQuotaSyncing(true);
     try {
       const quota = await requestJson<VoiceQuota>(
-        normalizedApiBaseUrl,
+        quotaApiBaseUrl,
         "/subscriptions/voice-quota",
         { headers: protectedRequestHeaders(accountId, tokenForHeaders) }
       );
@@ -4418,10 +4578,6 @@ export default function App() {
 
   function pressPrimaryTab(screen: { id: AppScreen }) {
     openPrimaryTab(primaryTabTarget(screen));
-  }
-
-  function returnFromMenu() {
-    openScreenWithStatus(menuReturnScreen, menuReturnStatusMessage(menuReturnScreen));
   }
 
   function openMenuTargetRoute(target: AppScreen) {
@@ -6049,98 +6205,93 @@ export default function App() {
     }
   }
 
-  async function boot() {
+  async function completeEmailPasswordAuth(
+    mode: "login" | "register",
+    email: string,
+    password: string,
+    displayName: string
+  ) {
+    if (isAuthOperationInFlight) return;
+    const bootKey = normalizedApiBaseUrl;
+    latestBootKey.current = bootKey;
+    setIsAuthOperationInFlight(true);
+    setIsBusy(true);
+    setAuthActionStatus(mode === "login" ? "正在安全登入…" : "正在建立帳號…");
+    try {
+      const response = await requestJson<AuthTokenResponse>(bootKey, `/auth/${mode === "login" ? "login" : "register"}`, {
+        method: "POST",
+        body: JSON.stringify({ email, password, ...(mode === "register" && displayName ? { display_name: displayName } : {}) })
+      });
+      const bounded = boundAuthTokenResponse(response);
+      if (!bounded) throw new Error("登入回應格式無效。");
+      const stored = await writeStoredAuthSession({ accessToken: bounded.access_token, refreshToken: bounded.refresh_token });
+      if (!stored.ok || !stored.session) throw new Error("無法安全保存登入狀態，請確認裝置安全儲存空間可用。");
+      setAccessToken(stored.session.accessToken);
+      setRefreshToken(stored.session.refreshToken);
+      setTokenStorageStatus("登入狀態已安全保存於裝置。");
+      await bootstrapAuthenticatedAccount(bootKey, stored.session.accessToken);
+      if (latestBootKey.current === bootKey) setAuthActionStatus("");
+    } catch (error) {
+      clearMobileSessionState();
+      const message = error instanceof Error ? error.message : "";
+      setAuthActionStatus(
+        message.includes("failed: 401") ? "電子郵件或密碼不正確，請再確認一次。"
+          : message.includes("failed: 409") ? "這個電子郵件已註冊，請改為登入。"
+            : message.includes("failed: 429") ? "嘗試次數過多，請稍後再試。"
+              : message.includes("failed: 503") ? "登入服務暫時尚未設定完成，請稍後再試。"
+                : "目前無法登入，請檢查連線後再試。"
+      );
+    } finally {
+      setIsAuthOperationInFlight(false);
+      setIsBusy(false);
+    }
+  }
+
+  async function boot(apiBaseUrlOverride = apiBaseUrl) {
     if (visualSmokePreviewActive.current) {
       const display = visualSmokeBootSkippedDisplayMessages();
       setStatus(display.status);
       setAuthActionStatus(display.authStatus);
       return;
     }
-    const bootKey = normalizeApiBaseUrl(apiBaseUrl);
+    const bootKey = normalizeApiBaseUrl(apiBaseUrlOverride);
     latestBootKey.current = bootKey;
-    if (isBusy || bootInFlight.current) {
-      return;
-    }
-    if (!allowMobileDevAuth) {
-      const display = devLoginDisabledDisplayMessages();
-      clearMobileSessionState({ clearAuthTokens: false });
-      setStatus(display.status);
-      setAuthActionStatus(display.authStatus);
-      return;
-    }
+    if (bootInFlight.current) return;
     bootInFlight.current = true;
+    const stored = await readStoredAuthSession();
+    if (!stored.ok || !stored.session) {
+      if (!stored.ok) {
+        await clearStoredAuthSession();
+        setAuthActionStatus("無法讀取安全登入狀態，請重新登入。");
+      }
+      setTokenStorageStatus(stored.ok ? "尚未登入。" : "安全登入狀態讀取失敗，已清除本機狀態。");
+      bootInFlight.current = false;
+      return;
+    }
     setIsBusy(true);
     setStatus(backendReconnectProgressStatusMessage());
-    setPreview(null);
     try {
-      const login = await requestJson<Account>(bootKey, "/auth/dev-login", {
+      const refreshed = await requestJson<AuthTokenResponse>(bootKey, "/auth/refresh", {
         method: "POST",
-        body: JSON.stringify({
-          email: mobileDevAuthEmail,
-          display_name: "Mobile Dev"
-        })
+        body: JSON.stringify({ refresh_token: stored.session.refreshToken })
       });
       if (latestBootKey.current !== bootKey) {
         return;
       }
-      const boundedLogin = boundAccount(login);
-      setAccount(boundedLogin);
-      await loadVoiceQuota(boundedLogin.id);
-
-      if (latestBootKey.current !== bootKey) {
-        return;
-      }
-      const modelOptionsResponse = await requestJson<AiModelOptions>(bootKey, "/ai/models", {
-        headers: protectedRequestHeaders(boundedLogin.id, accessToken)
-      });
-      if (latestBootKey.current !== bootKey) {
-        return;
-      }
-      const modelOptions = boundAiModelOptions(modelOptionsResponse);
-      setModels(modelOptions);
-      const defaultStt = defaultSttModelOption(modelOptions);
-      if (defaultStt) {
-        setSttModelId(defaultStt.id);
-      }
-      const preferredLlm = preferredLlmModelOption(modelOptions);
-      if (preferredLlm) {
-        setLlmModelId(preferredLlm.id);
-      }
-
-      const profileHeaders = protectedRequestHeaders(boundedLogin.id, accessToken);
-      let nextProfiles = await requestJson<Profile[]>(bootKey, "/profiles", {
-        headers: profileHeaders
-      });
-      if (latestBootKey.current !== bootKey) {
-        return;
-      }
-      if (nextProfiles.length === 0) {
-        const created = await requestJson<Profile>(bootKey, "/profiles", {
-          method: "POST",
-          headers: profileHeaders,
-          body: JSON.stringify({ display_name: "自己", relationship: "self" })
-        });
-        if (latestBootKey.current !== bootKey) {
-          return;
-        }
-        nextProfiles = [created];
-      }
-      const boundedProfiles = boundProfiles(nextProfiles);
-      setProfiles(boundedProfiles);
-      setActiveProfileId(boundedProfiles[0]?.id ?? "");
+      const bounded = boundAuthTokenResponse(refreshed);
+      if (!bounded) throw new Error("登入狀態已失效，請重新登入。");
+      const nextStored = await writeStoredAuthSession({ accessToken: bounded.access_token, refreshToken: bounded.refresh_token });
+      if (!nextStored.ok || !nextStored.session) throw new Error("無法安全保存登入狀態。");
+      setAccessToken(nextStored.session.accessToken);
+      setRefreshToken(nextStored.session.refreshToken);
+      await bootstrapAuthenticatedAccount(bootKey, nextStored.session.accessToken);
+      if (latestBootKey.current !== bootKey) return;
       setStatus(backendReconnectSuccessStatusMessage());
     } catch (error) {
       if (latestBootKey.current === bootKey) {
-        if (visualSmokePreviewActive.current) {
-          const display = visualSmokeBootIgnoredDisplayMessages();
-          setStatus(display.status);
-          setAuthActionStatus(display.authStatus);
-          return;
-        }
-        const failureDisplay = backendReconnectFailureDisplayMessages(error);
+        await clearStoredAuthSession();
         clearMobileSessionState();
-        setStatus(failureDisplay.status);
-        setAuthActionStatus(failureDisplay.authStatus);
+        setAuthActionStatus(error instanceof Error ? error.message : "登入狀態已失效，請重新登入。");
       }
     } finally {
       if (latestBootKey.current === bootKey) {
@@ -7207,6 +7358,28 @@ export default function App() {
     }
   }
 
+  async function downloadWhisperModelFromSettings() {
+    if (isBusy || isAnyRequestInFlight) return;
+    setIsBusy(true);
+    setDownloadProgress(0);
+    setStatus(`正在下載離線語音模型 ${defaultWhisperModel.sizeLabel}…`);
+    try {
+      const uri = await ensureDefaultWhisperModel((progress) => {
+        setDownloadProgress(progress);
+        setStatus(`正在下載離線語音模型 ${Math.round(progress * 100)}%`);
+      });
+      setWhisperModelPath(nativeDebugInputValue(uri));
+      await refreshDownloadedModels();
+      setDownloadProgress(1);
+      setStatus("語音模型已備妥；之後可離線辨識。");
+    } catch (error) {
+      setDownloadProgress(0);
+      showRecordingFeedback(recordingWhisperFailureStatusMessage(error));
+    } finally {
+      setIsBusy(false);
+    }
+  }
+
   function handleDownloadedModelsRefreshFailure(error: unknown, showStatus: boolean) {
     const nextState = nativeDownloadedModelsFailureState(error);
     applyNativeStatusState(nextState);
@@ -7595,38 +7768,6 @@ export default function App() {
 
   useEffect(() => {
     if (initialVisualSmokeScreen) {
-      return;
-    }
-    let cancelled = false;
-    void readStoredAuthSession().then((result) => {
-      if (cancelled) {
-        return;
-      }
-      if (!result.ok) {
-        setAccessToken("");
-        setRefreshToken("");
-        setTokenStorageStatus(
-          result.reason === "secure_store_unavailable"
-            ? "SecureStore 不可用；正式 token storage fail closed。"
-            : "安全 token storage 讀取失敗；已拒用本機 token。"
-        );
-        return;
-      }
-      if (!result.session) {
-        setTokenStorageStatus("SecureStore 無已保存 session。");
-        return;
-      }
-      setAccessToken(result.session.accessToken);
-      setRefreshToken(result.session.refreshToken);
-      setTokenStorageStatus("SecureStore 已載入短效 access token；refresh token 未顯示。");
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (initialVisualSmokeScreen) {
       activateVisualSmokePreview();
       const display = visualSmokeBootSkippedDisplayMessages();
       setStatus(display.status);
@@ -7637,8 +7778,16 @@ export default function App() {
     void refreshDownloadedModels();
   }, []);
 
+  useEffect(() => () => {
+    void audioRecordingRef.current?.release().catch(() => undefined);
+    void discardPhoneSpeechAudio(recordingAudioUriRef.current);
+  }, []);
+
   useEffect(() => {
     const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
+      if (isParserPreviewLoading) {
+        return true;
+      }
       if (shouldGuardDailyRecordLeave) {
         requestDailyRecordLeaveGuard();
         return true;
@@ -7646,7 +7795,7 @@ export default function App() {
       return false;
     });
     return () => subscription.remove();
-  }, [shouldGuardDailyRecordLeave]);
+  }, [isParserPreviewLoading, shouldGuardDailyRecordLeave]);
 
   useEffect(() => {
     if (!isRecordingPreview || recordingStartedAt === null) {
@@ -7664,13 +7813,18 @@ export default function App() {
   }, [isRecordingPreview, recordingStartedAt, voiceQuota?.remaining_seconds_today]);
 
   useEffect(() => {
-    if (currentScreen !== "today" || homeSpeechExamples.length <= 1) {
+    if (currentScreen !== "today" || isRecordingPreview || reduceMotion || homeSpeechExamples.length <= 1) {
       return;
     }
     const timer = setInterval(() => {
       setHomeExampleIndex((value) => (value + 1) % homeSpeechExamples.length);
-    }, 4500);
+    }, 9000);
     return () => clearInterval(timer);
+  }, [currentScreen, isRecordingPreview, reduceMotion]);
+
+  useEffect(() => {
+    Keyboard.dismiss();
+    mainScrollRef.current?.scrollTo({ y: 0, animated: false });
   }, [currentScreen]);
 
   useEffect(() => {
@@ -7724,6 +7878,21 @@ export default function App() {
     }
   }, [currentScreen, account?.id, activeProfileId, protectedBackendReady]);
 
+  if (!account && !(typeof __DEV__ !== "undefined" && __DEV__ && initialVisualSmokeScreen)) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar barStyle="dark-content" />
+        <EmailPasswordAuthScreen
+          busy={isBusy || isAuthOperationInFlight}
+          status={authActionStatus}
+          onSubmit={(mode, email, password, displayName) => {
+            void completeEmailPasswordAuth(mode, email, password, displayName);
+          }}
+        />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" />
@@ -7732,14 +7901,25 @@ export default function App() {
         style={styles.keyboardAvoidingRoot}
       >
       <ScrollView
+        ref={mainScrollRef}
         style={styles.mainScroll}
         contentContainerStyle={mainScrollContainerStyle}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
+        {enableDevServerSwitcher && allowMobileDevAuth ? (
+          <DevBackendSwitcher
+            disabled={isAnyRequestInFlight}
+            selectedTarget={selectedDevBackendTarget}
+            onTargetPress={switchDevelopmentBackend}
+          />
+        ) : null}
         <View style={styles.header}>
-          <View>
+          <View style={styles.headerCopy}>
             <Text style={styles.title}>糖錄錄</Text>
-            {currentChrome.subtitle ? <Text style={styles.subtitle}>{currentChrome.subtitle}</Text> : null}
+            {enableDebugTools && currentChrome.subtitle ? (
+              <Text style={styles.subtitle}>{currentChrome.subtitle}</Text>
+            ) : null}
           </View>
           <Pressable
             accessibilityLabel={headerActionDisplayAccessibilityLabel}
@@ -7753,6 +7933,29 @@ export default function App() {
           </Pressable>
         </View>
 
+        {["today", "record", "transcriptReview"].includes(currentScreen) && !isParserPreviewLoading && (recordingFeedback || enableDevTranscriptSample) ? (
+          <View style={styles.captureFeedbackSection}>
+            {recordingFeedback ? (
+              <View accessibilityRole="alert" accessibilityLiveRegion="polite" style={styles.captureFeedbackCard}>
+                <Text style={styles.captureFeedbackText}>{recordingFeedback}</Text>
+              </View>
+            ) : null}
+            {enableDevTranscriptSample ? (
+              <Pressable
+                accessibilityLabel="測試：填入預設文字"
+                accessibilityRole="button"
+                accessibilityState={{ disabled: isAnyRequestInFlight || isRecordingPreview }}
+                disabled={isAnyRequestInFlight || isRecordingPreview}
+                style={[styles.devSampleButton, isAnyRequestInFlight || isRecordingPreview ? styles.buttonDisabled : null]}
+                onPress={fillDevelopmentTranscript}
+              >
+                <Text style={styles.devSampleButtonText}>測試：填入預設文字</Text>
+              </Pressable>
+            ) : null}
+          </View>
+        ) : null}
+
+        <ScreenTransition screen={currentScreen}>
         {showPrimaryTabs ? (
           <ScrollView horizontal keyboardShouldPersistTaps="handled" showsHorizontalScrollIndicator={false} style={styles.topTabs}>
             {primaryTabItems.map((screen) => {
@@ -7790,14 +7993,14 @@ export default function App() {
           </ScrollView>
         ) : null}
 
-        {currentScreen !== "today" ? (
+        {currentScreen !== "today" && !isParserPreviewLoading && (enableDebugTools || isBusy) ? (
           <View style={styles.statusRow}>
             {isBusy ? <ActivityIndicator /> : null}
             <Text style={styles.status}>{status}</Text>
           </View>
         ) : null}
 
-        {showMvpFlowStepper ? (
+        {showMvpFlowStepper && !isParserPreviewLoading ? (
           <View style={styles.flowStepperCard}>
             {mvpFlowSteps.map((step, index) => {
               const isActive = mvpFlowStepIsActive(index, mvpFlowStepIndex);
@@ -7835,20 +8038,25 @@ export default function App() {
             <Pressable
               accessibilityLabel={recordingButtonDisplayAccessibilityLabel}
               accessibilityRole="button"
+              accessibilityState={{ disabled: isAnyRequestInFlight }}
+              disabled={isAnyRequestInFlight}
               style={[
                 styles.homeMicButton,
+                isAnyRequestInFlight ? styles.buttonDisabled : null,
                 isRecordingPreview ? styles.homeMicButtonActive : null
               ]}
               onPressIn={startRecordingPreview}
               onPressOut={releaseRecordingPreview}
             >
-              <Text style={styles.homeMicIcon}>🎙</Text>
+              <RecordingGlyph active={isRecordingPreview} />
             </Pressable>
             <Text style={styles.homeHint}>按住開始說話記錄</Text>
             <Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>
-            <Text style={styles.homeModelStatus}>{homeRecordingModelStatusDisplayText}</Text>
+            {enableDebugTools ? (
+              <Text style={styles.homeModelStatus}>{homeRecordingModelStatusDisplayText}</Text>
+            ) : null}
             <View style={styles.homeExamplePanel}>
-              <Text style={styles.homeExampleTitle}>範例（怎麼說都可以）</Text>
+              <Text style={styles.homeExampleTitle}>你可以這樣說</Text>
               <View style={styles.homeExampleMetaRow}>
                 <Text style={styles.homeExampleIndex}>{homeSpeechExampleLabel(homeCurrentSpeechExample)}</Text>
                 <View
@@ -7884,7 +8092,8 @@ export default function App() {
                 items={quickEntryModeDisplayItemsForRender}
                 onModePress={handleRecordQuickEntryMode}
               />
-              <View style={styles.inlineInfoBlock}>
+              {enableDebugTools ? (
+                <View style={styles.inlineInfoBlock}>
                 <Text style={styles.label}>{coreFlowDisplayLabels.parseSettings}</Text>
                 <Text style={styles.evidence}>
                   LLM：{selectedModelDisplayLabel(selectedLlmModel, llmModelId)} · {selectedModelRuntimeDisplayLabel(selectedLlmModel)}
@@ -7893,7 +8102,8 @@ export default function App() {
                   STT：{selectedModelDisplayLabel(selectedSttModel, sttModelId)} · {selectedModelRuntimeDisplayLabel(selectedSttModel)}
                 </Text>
                 <RecordFlowChecklist items={recordEntrySettingsChecklistItems} />
-              </View>
+                </View>
+              ) : null}
               <View style={styles.voiceCaptureCard}>
                 <Pressable
                   accessibilityLabel={recordingButtonDisplayAccessibilityLabel}
@@ -7918,7 +8128,9 @@ export default function App() {
                     {captureVoiceQuotaCopy(voiceQuota)}
                   </Text>
                   <Text style={styles.evidence}>{recordingLimitDisplayText}</Text>
-                  <Text style={styles.evidence}>{recordPageRecordingPreviewBoundaryDisplayText}</Text>
+                  {enableDebugTools ? (
+                    <Text style={styles.evidence}>{recordPageRecordingPreviewBoundaryDisplayText}</Text>
+                  ) : null}
                 </View>
               </View>
               {!isRecordingPreview && recordingElapsedSeconds > 0 ? (
@@ -7957,6 +8169,7 @@ export default function App() {
                   onFillSamplePress={fillTranscriptSampleDraft}
                   onManualAddPress={openRecordManualRecord}
                   onNextPress={openTranscriptReview}
+                  showFillSample={enableDebugTools}
                 />
               {transcriptValidationError ? (
                 <Text style={transcript.trim() ? styles.warningText : styles.evidence}>
@@ -7978,10 +8191,6 @@ export default function App() {
               <Text style={styles.countText}>{unsavedPreviewRecordDisplayCount} 筆</Text>
             </View>
             <View style={styles.aiReviewList}>
-              <View style={styles.inlineInfoBlock}>
-                <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.costBoundaryBadge}</Text>
-                <AiFlowChecklist items={aiReviewCostBoundaryChecklistItems} />
-              </View>
               {previewState.hasRecords ? (
                 <View style={styles.aiReviewCard}>
                   <View style={styles.iconCircleSmall}>
@@ -8148,11 +8357,15 @@ export default function App() {
                 <Text style={styles.warningText}>{aiSaveBackendBlockedDisplayText}</Text>
               </View>
             ) : null}
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{coreFlowDisplayLabels.preSubmitCheck}</Text>
-              <AiFlowChecklist items={aiSaveConfirmChecklistItems} />
-            </View>
-            <FutureBoundaryGrid rows={aiSaveConfirmBoundaryRows} />
+            {enableDebugTools ? (
+              <>
+                <View style={styles.inlineInfoBlock}>
+                  <Text style={styles.label}>{coreFlowDisplayLabels.preSubmitCheck}</Text>
+                  <AiFlowChecklist items={aiSaveConfirmChecklistItems} />
+                </View>
+                <FutureBoundaryGrid rows={aiSaveConfirmBoundaryRows} />
+              </>
+            ) : null}
           </View>
         ) : null}
 
@@ -8183,10 +8396,10 @@ export default function App() {
                 <Text style={styles.evidence}>{aiRemoveConfirmSourceDisplayText}</Text>
               </View>
             </View>
-            <View style={styles.inlineInfoBlock}>
+            {enableDebugTools ? <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.removeScope}</Text>
               <AiFlowChecklist items={aiCandidateRemoveChecklistItems} />
-            </View>
+            </View> : null}
             <DangerConfirmActionRow
               cancelAccessibilityLabel={coreFlowDisplayLabels.cancelAccessibility}
               cancelLabel={coreFlowDisplayLabels.cancel}
@@ -8209,10 +8422,10 @@ export default function App() {
                 {lastSaveErrorSummaryDisplayText}
               </Text>
             </View>
-            <View style={styles.inlineInfoBlock}>
+            {enableDebugTools ? <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.failureBoundary}</Text>
               <AiFlowChecklist items={aiSaveFailureChecklistItems} />
-            </View>
+            </View> : null}
             <AiSaveFailureActionRow
               backAccessibilityLabel={coreFlowDisplayLabels.backAiConfirmAccessibility}
               backLabel={coreFlowDisplayLabels.backAiConfirm}
@@ -8228,7 +8441,9 @@ export default function App() {
           </View>
         ) : null}
 
-        {currentScreen === "transcriptReview" ? (
+        {isParserPreviewLoading ? <ParserLoadingView /> : null}
+
+        {currentScreen === "transcriptReview" && !isParserPreviewLoading ? (
           <View style={styles.pageSection}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>確認文字內容</Text>
@@ -8253,10 +8468,6 @@ export default function App() {
             <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.preOrganizeHint}</Text>
               <Text style={styles.evidence}>{transcriptReviewPreParseGuidanceDisplayText}</Text>
-            </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{coreFlowDisplayLabels.costBoundary}</Text>
-              <RecordFlowChecklist items={transcriptReviewCostBoundaryChecklistItems} />
             </View>
             <TranscriptReviewActionRow
               isSubmitDisabled={
@@ -8481,9 +8692,7 @@ export default function App() {
         {currentScreen === "saveSuccess" ? (
           <View style={styles.pageSection}>
             <View style={styles.successHero}>
-              <View style={styles.successIconCircle}>
-                <Text style={styles.successIconText}>✓</Text>
-              </View>
+              <SuccessMark />
               <Text style={styles.sectionTitle}>
                 {hasPartialAiSave
                   ? "部分儲存完成"
@@ -8508,21 +8717,23 @@ export default function App() {
               <Text style={styles.evidence}>
               {saveSuccessViewState.isManualSave
                   ? hasManualFallbackWithAiCandidates
-                    ? `這筆資料由手動表單直接建立，沒有呼叫 parser 或 LLM；仍有 ${unsavedPreviewRecordDisplayCount} 筆 AI 候選保留在確認流程。`
-                    : "這筆資料由手動表單直接建立，沒有呼叫 parser 或 LLM；你可以回到今日紀錄查看，也可以繼續新增下一筆。"
+                    ? `這筆紀錄已儲存。還有 ${unsavedPreviewRecordDisplayCount} 筆整理內容等你確認。`
+                    : "已記下這一筆。每一次記錄，都能幫你更了解自己的日常。"
                   : saveSuccessViewState.hasUnsavedPreviewRecords
                     ? `已有部分紀錄儲存成功，仍有 ${unsavedPreviewRecordDisplayCount} 筆候選紀錄尚未儲存；不會自動重試或再次呼叫 AI。`
-                    : "你可以回到今日紀錄查看，也可以繼續新增下一筆。AI 原始文字只用於確認流程；儲存後已清空目前輸入。"}
+                    : "已記下這一刻。需要回顧時，紀錄都在歷史頁裡。"}
               </Text>
             </View>
-            <View style={styles.inlineInfoBlock}>
+            {enableDebugTools ? <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.postSaveBoundary}</Text>
               <OutcomeChecklist items={saveSuccessBoundaryChecklistItems} />
-            </View>
+            </View> : null}
+            {enableDebugTools ? (
             <RecordResultDestinationGrid
               items={saveSuccessDestinationItems}
               onDestinationPress={openSaveSuccessDestinationCard}
             />
+            ) : null}
             <SaveSuccessActionRow
               canContinueManual={saveSuccessViewState.canContinueManual}
               canContinueRecordEntry={saveSuccessViewState.canContinueRecordEntry}
@@ -8544,7 +8755,7 @@ export default function App() {
               returnTodayAccessibilityLabel={coreFlowDisplayLabels.saveSuccessReturnTodayAccessibility}
               returnTodayLabel={coreFlowDisplayLabels.backToday}
               shouldPauseEntryActions={saveSuccessViewState.shouldPauseEntryActions}
-              showDetail={Boolean(selectedRecord)}
+              showDetail={Boolean(selectedRecord) && !saveSuccessViewState.hasUnsavedPreviewRecords}
               voiceTextLabel={coreFlowDisplayLabels.voiceText}
             />
           </View>
@@ -8561,20 +8772,22 @@ export default function App() {
                 {lastDeletedSummary || "紀錄已從目前清單移除。"}
               </Text>
             </View>
-            <View style={styles.inlineInfoBlock}>
+            {enableDebugTools ? <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.deleteResult}</Text>
               <Text style={styles.evidence}>
                 若其他裝置或 backend 狀態需要確認，請回到設定重新連線或稍後同步；目前不會保留本機 undo 副本。
               </Text>
-            </View>
-            <View style={styles.inlineInfoBlock}>
+            </View> : null}
+            {enableDebugTools ? <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.postDeleteBoundary}</Text>
               <OutcomeChecklist items={deleteSuccessBoundaryChecklistItems} />
-            </View>
+            </View> : null}
+            {enableDebugTools ? (
             <RecordResultDestinationGrid
               items={deleteSuccessDestinationItems}
               onDestinationPress={openDeleteSuccessDestinationCard}
             />
+            ) : null}
             <DeleteSuccessActionRow
               historyAccessibilityLabel={coreFlowDisplayLabels.deleteSuccessHistoryAccessibility}
               historyLabel={coreFlowDisplayLabels.viewHistory}
@@ -8589,28 +8802,28 @@ export default function App() {
         {currentScreen === "updateSuccess" ? (
           <View style={styles.pageSection}>
             <View style={styles.successHero}>
-              <View style={styles.successIconCircle}>
-                <Text style={styles.successIconText}>✓</Text>
-              </View>
+              <SuccessMark />
               <Text style={styles.sectionTitle}>更新完成</Text>
               <Text style={styles.evidence}>
                 {lastUpdatedSummary || "紀錄已更新。"}
               </Text>
             </View>
-            <View style={styles.inlineInfoBlock}>
+            {enableDebugTools ? <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.updateResult}</Text>
               <Text style={styles.evidence}>
                 已更新目前本機清單中的紀錄；若需要確認其他裝置狀態，可稍後重新同步。
               </Text>
-            </View>
-            <View style={styles.inlineInfoBlock}>
+            </View> : null}
+            {enableDebugTools ? <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.postUpdateBoundary}</Text>
               <OutcomeChecklist items={updateSuccessBoundaryChecklistItems} />
-            </View>
+            </View> : null}
+            {enableDebugTools ? (
             <RecordResultDestinationGrid
               items={updateSuccessDestinationItems}
               onDestinationPress={openUpdateSuccessDestinationCard}
             />
+            ) : null}
             <UpdateSuccessActionRow
               detailAccessibilityLabel={coreFlowDisplayLabels.updatedRecordDetailAccessibility}
               detailLabel={coreFlowDisplayLabels.viewDetail}
@@ -8628,7 +8841,7 @@ export default function App() {
             <ManualRecordHeaderIntro
               backAccessibilityLabel={coreFlowDisplayLabels.manualReturnAccessibility}
               backLabel={coreFlowDisplayLabels.back}
-              introText="不經 AI parser，直接建立結構化紀錄；可節省 LLM token，仍走後端驗證與權限檢查。"
+              introText="選擇類型，填入你想記下的內容。下一步會再讓你確認。"
               title="手動新增紀錄"
               onBackPress={returnFromManualRecord}
             />
@@ -8776,14 +8989,17 @@ export default function App() {
         {currentScreen === "history" ? (
           <View style={styles.pageSection}>
             <Text style={styles.sectionTitle}>歷史紀錄</Text>
-            <HistoryIntroStatusBlocks
-              boundaryItems={historyBoundaryChecklistItems}
-              boundaryTitle={coreFlowDisplayLabels.historyDataBoundary}
-              syncBody={recordsStatusDisplayText}
-              syncTitle={coreFlowDisplayLabels.recordSyncStatus}
-            />
+            {enableDebugTools ? (
+              <HistoryIntroStatusBlocks
+                boundaryItems={historyBoundaryChecklistItems}
+                boundaryTitle={coreFlowDisplayLabels.historyDataBoundary}
+                syncBody={recordsStatusDisplayText}
+                syncTitle={coreFlowDisplayLabels.recordSyncStatus}
+              />
+            ) : null}
             <HistoryCalendarMonthPicker
               days={historyCalendarDisplayItems}
+              firstWeekday={(historyCalendarMonthStart.getDay() + 6) % 7}
               nextMonthAccessibilityLabel={historyNextMonthAccessibilityLabel}
               nextMonthLabel={historyNextMonthButtonLabel}
               previousMonthAccessibilityLabel={historyPreviousMonthAccessibilityLabel}
@@ -8899,10 +9115,10 @@ export default function App() {
               recordSummary={selectedRecordDisplayItem.payloadSummary}
               recordTypeLabel={selectedRecordDisplayItem.typeLabel}
             />
-            <View style={styles.inlineInfoBlock}>
+            {enableDebugTools ? <View style={styles.inlineInfoBlock}>
               <Text style={styles.label}>{coreFlowDisplayLabels.deletePreConfirm}</Text>
               <InsightFlowChecklist items={deleteConfirmChecklistItems} />
-            </View>
+            </View> : null}
             <DangerConfirmActionRow
               cancelAccessibilityLabel={coreFlowDisplayLabels.recordDeleteCancelAccessibility}
               cancelDisabled={isBusy}
@@ -9091,14 +9307,18 @@ export default function App() {
           <View style={styles.pageSection}>
             <Text style={styles.sectionTitle}>基本分析</Text>
             <Text style={styles.evidence}>{analysisSafetyIntroDisplayText}</Text>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{coreFlowDisplayLabels.recordSyncStatus}</Text>
-              <Text style={styles.evidence}>{recordsStatusDisplayText}</Text>
-            </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{coreFlowDisplayLabels.analysisReportStatus}</Text>
-              <Text style={styles.evidence}>{reportStatusDisplayText}</Text>
-            </View>
+            {enableDebugTools ? (
+              <>
+                <View style={styles.inlineInfoBlock}>
+                  <Text style={styles.label}>{coreFlowDisplayLabels.recordSyncStatus}</Text>
+                  <Text style={styles.evidence}>{recordsStatusDisplayText}</Text>
+                </View>
+                <View style={styles.inlineInfoBlock}>
+                  <Text style={styles.label}>{coreFlowDisplayLabels.analysisReportStatus}</Text>
+                  <Text style={styles.evidence}>{reportStatusDisplayText}</Text>
+                </View>
+              </>
+            ) : null}
             <AnalysisRangeSelector
               options={analysisRangeDisplayOptions}
               optionKey={analysisRangeOptionKey}
@@ -9205,14 +9425,10 @@ export default function App() {
                 returnLabel={coreFlowDisplayLabels.backTodayAlt}
               />
             ) : null}
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{coreFlowDisplayLabels.analysisDataBoundary}</Text>
-              <InsightFlowChecklist items={analysisBoundaryChecklistItems} />
-            </View>
-            {recordDisplayState.isAtSyncBoundary ? (
+            {enableDebugTools ? (
               <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{coreFlowDisplayLabels.analysisSyncBoundary}</Text>
-                <Text style={styles.evidence}>{analysisSyncBoundaryDisplayText}</Text>
+                <Text style={styles.label}>{coreFlowDisplayLabels.analysisDataBoundary}</Text>
+                <InsightFlowChecklist items={analysisBoundaryChecklistItems} />
               </View>
             ) : null}
             <Pressable
@@ -9242,10 +9458,12 @@ export default function App() {
               </Pressable>
             </View>
             <Text style={styles.evidence}>{reportStatusDisplayText}</Text>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.previewModeBadge}>{reportSourceDisplayLabel}</Text>
-              <Text style={styles.evidence}>{reportSourceDisplayCopy}</Text>
-            </View>
+            {enableDebugTools ? (
+              <View style={styles.inlineInfoBlock}>
+                <Text style={styles.previewModeBadge}>{reportSourceDisplayLabel}</Text>
+                <Text style={styles.evidence}>{reportSourceDisplayCopy}</Text>
+              </View>
+            ) : null}
             <View style={styles.heroCardFeature}>
               <View style={styles.heroIconBubble}>
                 <Text style={styles.heroIconText}>報</Text>
@@ -9256,7 +9474,9 @@ export default function App() {
                 <Text style={styles.evidence}>{reportGeneratedAtDisplayText}</Text>
               </View>
             </View>
-            <DetailedReportBoundaryGrid rows={detailedReportBoundaryRows} />
+            {enableDebugTools ? (
+              <DetailedReportBoundaryGrid rows={detailedReportBoundaryRows} />
+            ) : null}
             <MetricGrid rows={detailedReportMetricRows} />
             {reportRecordCount === 0 ? (
               <InsightEmptyActionRow
@@ -9502,9 +9722,6 @@ export default function App() {
                 <Text style={styles.sectionTitle}>功能選單</Text>
                 <Text style={styles.evidence}>快速前往你需要的功能。</Text>
               </View>
-              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromMenu}>
-                <Text style={styles.closeButtonText}>×</Text>
-              </Pressable>
             </View>
             <MenuDestinationGrid items={menuDisplayItems} onDestinationPress={openMenuDestination} />
             {enableDebugTools ? (
@@ -9520,7 +9737,7 @@ export default function App() {
                 <Text style={styles.secondaryButtonText}>{auxiliaryDisplayLabels.showMoreFeatures}</Text>
               </Pressable>
             ) : null}
-            {allowMobileDevAuth ? (
+            {allowMobileDevAuth && enableDebugTools ? (
               <View style={styles.devResetInline}>
                 <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.devOnly}</Text>
                 <Text style={styles.evidence}>
@@ -9969,7 +10186,7 @@ export default function App() {
         {currentScreen === "settings" ? (
           <View style={styles.pageSection}>
             <Text style={styles.sectionTitle}>設定</Text>
-            <Text style={styles.evidence}>管理帳號、提醒與使用偏好。</Text>
+            <Text style={styles.evidence}>管理帳號與使用偏好。</Text>
             <Pressable
               accessibilityLabel={accountSecurityCardAccessibilityLabel}
               accessibilityRole="button"
@@ -9985,8 +10202,12 @@ export default function App() {
                   {accountLoginDisplayText}
                 </Text>
                 <Text style={styles.evidence}>{activeProfileInlineDisplayText}</Text>
-                <Text style={styles.previewModeBadge}>{authModeDisplayLabel}</Text>
-                <Text style={styles.evidence}>{authModeDisplayCopy}</Text>
+                {enableDebugTools ? (
+                  <>
+                    <Text style={styles.previewModeBadge}>{authModeDisplayLabel}</Text>
+                    <Text style={styles.evidence}>{authModeDisplayCopy}</Text>
+                  </>
+                ) : null}
               </View>
               <Text style={styles.settingsChevron}>›</Text>
             </Pressable>
@@ -9995,6 +10216,30 @@ export default function App() {
               quotaHelperText={settingsQuotaHelperDisplayText}
               rows={settingsDisplayRows}
             />
+            <View style={styles.inlineInfoBlock}>
+              <Text style={styles.label}>離線語音辨識</Text>
+              <Text style={styles.evidence}>
+                {downloadedModels.some((model) => model.fileName === defaultWhisperModel.fileName)
+                  ? "多語言 Whisper 模型已下載；錄音會在本機辨識，不會上傳音檔。"
+                  : `首次需下載 ${defaultWhisperModel.sizeLabel} 的多語言 Whisper 模型；下載後可離線辨識。`}
+              </Text>
+              {!downloadedModels.some((model) => model.fileName === defaultWhisperModel.fileName) ? (
+                <Pressable
+                  accessibilityLabel="下載離線語音辨識模型"
+                  accessibilityRole="button"
+                  accessibilityState={{ disabled: isBusy || isAnyRequestInFlight }}
+                  disabled={isBusy || isAnyRequestInFlight}
+                  style={styles.secondaryButton}
+                  onPress={downloadWhisperModelFromSettings}
+                >
+                  <Text style={styles.secondaryButtonText}>
+                    {isBusy && downloadProgress > 0 && downloadProgress < 1
+                      ? `下載中 ${Math.round(downloadProgress * 100)}%`
+                      : `下載 Whisper 模型（${defaultWhisperModel.sizeLabel}）`}
+                  </Text>
+                </Pressable>
+              ) : null}
+            </View>
             <Pressable
               accessibilityLabel={settingsSubscriptionDisplayLabels.localClearAccessibility}
               accessibilityRole="button"
@@ -10009,7 +10254,8 @@ export default function App() {
                 <Text style={styles.evidence}>{authActionStatusDisplayText}</Text>
               </View>
             ) : null}
-            <View style={styles.inlineInfoBlock}>
+            {enableDebugTools ? (
+              <View style={styles.inlineInfoBlock}>
               <Text style={styles.previewModeBadge}>進階設定</Text>
               <Text style={styles.evidence}>
                 Backend、模型與 Dev Client 工具預設收合，避免一般使用者誤觸成本或環境設定。
@@ -10025,8 +10271,9 @@ export default function App() {
                   {advancedSettingsToggleDisplayLabel}
                 </Text>
               </Pressable>
-            </View>
-            {showAdvancedSettings ? (
+              </View>
+            ) : null}
+            {showAdvancedSettings && enableDebugTools ? (
               <>
                 <View style={styles.developerSettingsBox}>
                   <Text style={styles.label}>{auxiliaryDisplayLabels.developerSettings}</Text>
@@ -10086,7 +10333,8 @@ export default function App() {
                 />
               </>
             ) : null}
-            <View style={styles.rejectedBox}>
+            {enableDebugTools ? (
+              <View style={styles.rejectedBox}>
               <Text style={styles.label}>本機 Whisper 模型</Text>
               <Text style={styles.evidence}>
                 選擇已下載的本機 Whisper 模型，供首頁與記錄頁錄音轉文字使用；不呼叫雲端、不上傳音檔。
@@ -10108,7 +10356,8 @@ export default function App() {
               >
                 <Text style={styles.secondaryButtonText}>{recordingModelRefreshDisplayLabel}</Text>
               </Pressable>
-            </View>
+              </View>
+            ) : null}
             {showAdvancedSettings && enableDebugTools ? (
               <View style={styles.rejectedBox}>
                 <Text style={styles.label}>{auxiliaryDisplayLabels.nativeDevClient}</Text>
@@ -10189,12 +10438,8 @@ export default function App() {
             <View style={styles.sectionHeader}>
               <View>
                 <Text style={styles.sectionTitle}>帳號與登入安全</Text>
-                <Text style={styles.evidence}>把 dev auth、正式登入與 session 邊界分清楚。</Text>
+                <Text style={styles.evidence}>管理登入狀態與裝置工作階段。</Text>
               </View>
-              <SettingsSubpageCloseButton
-                accessibilityLabel={auxiliaryDisplayLabels.closeReturn}
-                onPress={returnFromSettingsSubpage}
-              />
             </View>
             <View style={styles.accountCard}>
               <View style={styles.iconCircle}>
@@ -10203,60 +10448,68 @@ export default function App() {
               <View style={styles.timelineContent}>
                 <Text style={styles.recordContent}>{accountDisplayName}</Text>
                 <Text style={styles.evidence}>{accountEmailDisplayText}</Text>
-                <Text style={styles.previewModeBadge}>{authModeDisplayLabel}</Text>
-                <Text style={styles.evidence}>{authModeDisplayCopy}</Text>
+                {enableDebugTools ? (
+                  <>
+                    <Text style={styles.previewModeBadge}>{authModeDisplayLabel}</Text>
+                    <Text style={styles.evidence}>{authModeDisplayCopy}</Text>
+                  </>
+                ) : null}
               </View>
             </View>
-            <SettingsBoundaryGrid rows={accountSecurityBoundaryRows} />
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authProviderPreview}</Text>
-              <Text style={styles.evidence}>{accountSecurityProviderBoundaryDisplayText}</Text>
-            </View>
-            <AuthProviderPreviewList
-              disabled={isAuthOperationInFlight}
-              items={authProviderDisplayItems}
-              onProviderPress={pressAuthProviderPreview}
-            />
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{settingsSubscriptionDisplayLabels.sessionPreview}</Text>
-              <Text style={styles.evidence}>{accountSecuritySessionBoundaryDisplayText}</Text>
-            </View>
-            <AccountSecurityActionGrid
-              disabled={isAuthOperationInFlight}
-              loadSessionsAccessibilityLabel={settingsSubscriptionDisplayLabels.loadSessionsAccessibility}
-              loadSessionsLabel={settingsSubscriptionDisplayLabels.loadSessions}
-              logoutAllAccessibilityLabel={settingsSubscriptionDisplayLabels.logoutAllAccessibility}
-              logoutAllLabel={settingsSubscriptionDisplayLabels.logoutAll}
-              logoutLocalAccessibilityLabel={settingsSubscriptionDisplayLabels.logoutLocalAccessibility}
-              logoutLocalLabel={settingsSubscriptionDisplayLabels.logoutLocal}
-              onLoadSessionsPress={loadAuthSessionsFromSecurity}
-              onLogoutAllPress={logoutAllAuthSessionsFromSecurity}
-              onLogoutLocalPress={logoutAuthSessionFromSecurity}
-              onRefreshSessionPress={refreshAuthSessionFromSecurity}
-              refreshSessionAccessibilityLabel={settingsSubscriptionDisplayLabels.refreshSessionAccessibility}
-              refreshSessionLabel={settingsSubscriptionDisplayLabels.refreshSession}
-            />
-            {authSessionDisplayItems.length > 0 ? (
-              <AuthSessionDisplayList items={authSessionDisplayItems} />
+            {enableDebugTools ? (
+              <>
+                <SettingsBoundaryGrid rows={accountSecurityBoundaryRows} />
+                <View style={styles.inlineInfoBlock}>
+                  <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authProviderPreview}</Text>
+                  <Text style={styles.evidence}>{accountSecurityProviderBoundaryDisplayText}</Text>
+                </View>
+                <AuthProviderPreviewList
+                  disabled={isAuthOperationInFlight}
+                  items={authProviderDisplayItems}
+                  onProviderPress={pressAuthProviderPreview}
+                />
+                <View style={styles.inlineInfoBlock}>
+                  <Text style={styles.label}>{settingsSubscriptionDisplayLabels.sessionPreview}</Text>
+                  <Text style={styles.evidence}>{accountSecuritySessionBoundaryDisplayText}</Text>
+                </View>
+                <AccountSecurityActionGrid
+                  disabled={isAuthOperationInFlight}
+                  loadSessionsAccessibilityLabel={settingsSubscriptionDisplayLabels.loadSessionsAccessibility}
+                  loadSessionsLabel={settingsSubscriptionDisplayLabels.loadSessions}
+                  logoutAllAccessibilityLabel={settingsSubscriptionDisplayLabels.logoutAllAccessibility}
+                  logoutAllLabel={settingsSubscriptionDisplayLabels.logoutAll}
+                  logoutLocalAccessibilityLabel={settingsSubscriptionDisplayLabels.logoutLocalAccessibility}
+                  logoutLocalLabel={settingsSubscriptionDisplayLabels.logoutLocal}
+                  onLoadSessionsPress={loadAuthSessionsFromSecurity}
+                  onLogoutAllPress={logoutAllAuthSessionsFromSecurity}
+                  onLogoutLocalPress={logoutAuthSessionFromSecurity}
+                  onRefreshSessionPress={refreshAuthSessionFromSecurity}
+                  refreshSessionAccessibilityLabel={settingsSubscriptionDisplayLabels.refreshSessionAccessibility}
+                  refreshSessionLabel={settingsSubscriptionDisplayLabels.refreshSession}
+                />
+                {authSessionDisplayItems.length > 0 ? (
+                  <AuthSessionDisplayList items={authSessionDisplayItems} />
+                ) : null}
+                <SessionManagementPreviewList
+                  items={sessionManagementDisplayItems}
+                  onSessionPress={pressAuthSessionManagementPreview}
+                />
+                <View style={styles.inlineInfoBlock}>
+                  <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authReadiness}</Text>
+                  <Text style={styles.evidence}>{accountSecurityReadinessBoundaryDisplayText}</Text>
+                  <Text style={styles.evidence}>{tokenStorageStatusDisplayText}</Text>
+                  <ProductionAuthReadinessList items={productionAuthReadinessDisplayRows} />
+                </View>
+                <View style={styles.inlineInfoBlock}>
+                  <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authBoundary}</Text>
+                  <SettingsChecklist items={authBoundaryChecklistItems} />
+                </View>
+                <View style={styles.inlineInfoBlock}>
+                  <Text style={styles.label}>{settingsSubscriptionDisplayLabels.noAction}</Text>
+                  <Text style={styles.evidence}>{accountSecurityNoActionBoundaryDisplayText}</Text>
+                </View>
+              </>
             ) : null}
-            <SessionManagementPreviewList
-              items={sessionManagementDisplayItems}
-              onSessionPress={pressAuthSessionManagementPreview}
-            />
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authReadiness}</Text>
-              <Text style={styles.evidence}>{accountSecurityReadinessBoundaryDisplayText}</Text>
-              <Text style={styles.evidence}>{tokenStorageStatusDisplayText}</Text>
-              <ProductionAuthReadinessList items={productionAuthReadinessDisplayRows} />
-            </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{settingsSubscriptionDisplayLabels.authBoundary}</Text>
-              <SettingsChecklist items={authBoundaryChecklistItems} />
-            </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{settingsSubscriptionDisplayLabels.noAction}</Text>
-              <Text style={styles.evidence}>{accountSecurityNoActionBoundaryDisplayText}</Text>
-            </View>
             <SettingsSubpageActionRow
               actionAccessibilityLabel={settingsSubscriptionDisplayLabels.localClearAccessibility}
               actionLabel={settingsSubscriptionDisplayLabels.localClearButton}
@@ -10329,15 +10582,13 @@ export default function App() {
                 <Text style={styles.sectionTitle}>錄音額度</Text>
                 <Text style={styles.evidence}>{recordingQuotaIntroDisplayText}</Text>
               </View>
-              <SettingsSubpageCloseButton
-                accessibilityLabel={auxiliaryDisplayLabels.closeReturn}
-                onPress={returnFromSettingsSubpage}
-              />
             </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.quotaControl}</Text>
-              <Text style={styles.evidence}>{recordingQuotaControlDisplayText}</Text>
-            </View>
+            {enableDebugTools ? (
+              <View style={styles.inlineInfoBlock}>
+                <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.quotaControl}</Text>
+                <Text style={styles.evidence}>{recordingQuotaControlDisplayText}</Text>
+              </View>
+            ) : null}
             <View style={styles.quotaCard}>
               <View style={styles.sectionHeader}>
                 <Text style={styles.label}>{settingsSubscriptionDisplayLabels.voiceUsageStatus}</Text>
@@ -10352,15 +10603,19 @@ export default function App() {
               </View>
               <Text style={styles.evidence}>{quotaDailyLimitDisplayText}</Text>
             </View>
-            <SettingsBoundaryGrid rows={recordingQuotaBoundaryRows} />
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
-              <SettingsChecklist items={quotaReadinessChecklistItems} />
-            </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{settingsSubscriptionDisplayLabels.dataCostBoundary}</Text>
-              <Text style={styles.evidence}>{recordingQuotaDataBoundaryDisplayText}</Text>
-            </View>
+            {enableDebugTools ? (
+              <>
+                <SettingsBoundaryGrid rows={recordingQuotaBoundaryRows} />
+                <View style={styles.inlineInfoBlock}>
+                  <Text style={styles.label}>{settingsSubscriptionDisplayLabels.formalReadiness}</Text>
+                  <SettingsChecklist items={quotaReadinessChecklistItems} />
+                </View>
+                <View style={styles.inlineInfoBlock}>
+                  <Text style={styles.label}>{settingsSubscriptionDisplayLabels.dataUsageNotes}</Text>
+                  <Text style={styles.evidence}>{recordingQuotaDataBoundaryDisplayText}</Text>
+                </View>
+              </>
+            ) : null}
             <SettingsSubpageActionRow
               actionAccessibilityLabel={recordingQuotaSyncAccessibilityDisplayLabel}
               actionDisabled={isQuotaSyncing}
@@ -10474,10 +10729,14 @@ export default function App() {
                 </View>
               </View>
             ))}
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{auxiliaryDisplayLabels.tutorialSafety}</Text>
-              <SettingsChecklist items={tutorialSafetyChecklistItems} />
-            </View>
+            {enableDebugTools ? (
+              <View style={styles.inlineInfoBlock}>
+                <Text style={styles.label}>{auxiliaryDisplayLabels.tutorialSafety}</Text>
+                <SettingsChecklist items={tutorialSafetyChecklistItems} />
+              </View>
+            ) : (
+              <Text style={styles.evidence}>請確認 AI 整理內容；本 App 不提供診斷或治療建議。</Text>
+            )}
             <Pressable
               accessibilityLabel={auxiliaryDisplayLabels.tutorialStartAccessibility}
               accessibilityRole="button"
@@ -10869,6 +11128,7 @@ export default function App() {
             </Pressable>
           </View>
         ) : null}
+        </ScreenTransition>
       </ScrollView>
       {isDailyRecordFixedSaveDockVisible ? (
         <View style={styles.fixedSaveBarDock}>
@@ -10912,7 +11172,9 @@ export default function App() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#FAFAF8"
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight ?? 24 : 0,
+    paddingBottom: Platform.OS === "android" ? 24 : 0,
+    backgroundColor: palette.canvas
   },
   keyboardAvoidingRoot: {
     flex: 1
@@ -10921,10 +11183,13 @@ const styles = StyleSheet.create({
     flex: 1
   },
   container: {
-    paddingHorizontal: 24,
-    paddingTop: 18,
-    paddingBottom: 40,
-    gap: 16
+    paddingHorizontal: 22,
+    paddingTop: 10,
+    paddingBottom: 32,
+    gap: 20,
+    width: "100%",
+    maxWidth: 620,
+    alignSelf: "center"
   },
   containerWithFixedSaveBar: {
     paddingBottom: 148
@@ -10932,34 +11197,70 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     flexDirection: "row",
+    gap: 12,
     justifyContent: "space-between",
     paddingTop: 12,
     paddingBottom: 8
   },
+  headerCopy: {
+    flex: 1,
+    minWidth: 0
+  },
+  captureFeedbackSection: {
+    gap: 10
+  },
+  captureFeedbackCard: {
+    backgroundColor: palette.wash,
+    borderRadius: 16,
+    padding: 16
+  },
+  captureFeedbackText: {
+    color: palette.ink,
+    fontSize: 15,
+    lineHeight: 24
+  },
+  devSampleButton: {
+    alignSelf: "flex-start",
+    backgroundColor: palette.wash,
+    borderColor: palette.accentBorder,
+    borderRadius: 14,
+    borderWidth: 1,
+    minHeight: 44,
+    justifyContent: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 10
+  },
+  devSampleButtonText: {
+    color: palette.brand,
+    fontSize: 14,
+    fontWeight: "700"
+  },
   title: {
-    color: "#0F3F37",
-    fontSize: 40,
-    fontWeight: "800"
+    color: palette.ink,
+    fontSize: 28,
+    fontWeight: "700",
+    letterSpacing: 1
   },
   subtitle: {
-    color: "#5F666A",
+    color: palette.secondary,
     fontSize: 16,
     marginTop: 6
   },
   menuButton: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.wash,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
+    flexShrink: 0,
     height: 48,
     justifyContent: "center",
     width: 48
   },
   menuButtonText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 22,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   menuButtonDisabled: {
     opacity: 0.45
@@ -10968,8 +11269,8 @@ const styles = StyleSheet.create({
     marginHorizontal: -4
   },
   tabPill: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 999,
     borderWidth: 1,
     marginHorizontal: 4,
@@ -10979,20 +11280,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   tabPillActive: {
-    backgroundColor: "#3FA67F",
-    borderColor: "#3FA67F"
+    backgroundColor: palette.brand,
+    borderColor: palette.brand
   },
   tabPillDisabled: {
-    backgroundColor: "#F7FCFA",
+    backgroundColor: palette.subtle,
     opacity: 0.55
   },
   tabPillText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   },
   tabPillTextActive: {
-    color: "#FFFFFF"
+    color: palette.surface
   },
   tabPillTextDisabled: {
     color: "#9AA3A0"
@@ -11000,15 +11301,15 @@ const styles = StyleSheet.create({
   summaryPill: {
     alignItems: "center",
     alignSelf: "center",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 999,
     borderWidth: 1,
     paddingHorizontal: 18,
     paddingVertical: 12
   },
   summaryPillText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 15,
     fontWeight: "800"
   },
@@ -11017,8 +11318,8 @@ const styles = StyleSheet.create({
   },
   emptyStateCard: {
     alignItems: "flex-start",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 24,
     borderWidth: 1,
     flexDirection: "row",
@@ -11028,8 +11329,8 @@ const styles = StyleSheet.create({
   },
   timelineCard: {
     alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 24,
     borderWidth: 1,
     flexDirection: "row",
@@ -11037,7 +11338,7 @@ const styles = StyleSheet.create({
     gap: 14,
     minHeight: 72,
     padding: 16,
-    shadowColor: "#0F3F37",
+    shadowColor: palette.ink,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
     shadowRadius: 14,
@@ -11045,7 +11346,7 @@ const styles = StyleSheet.create({
   },
   iconCircle: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     height: 48,
     justifyContent: "center",
@@ -11053,7 +11354,7 @@ const styles = StyleSheet.create({
   },
   iconCircleMuted: {
     alignItems: "center",
-    backgroundColor: "#F1F3F2",
+    backgroundColor: palette.neutral,
     borderRadius: 999,
     height: 48,
     justifyContent: "center",
@@ -11061,7 +11362,7 @@ const styles = StyleSheet.create({
   },
   iconCircleSmall: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     height: 40,
     justifyContent: "center",
@@ -11073,8 +11374,8 @@ const styles = StyleSheet.create({
   },
   accountCard: {
     alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 24,
     borderWidth: 1,
     flexDirection: "row",
@@ -11088,8 +11389,8 @@ const styles = StyleSheet.create({
   },
   settingsRow: {
     alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
     flexDirection: "row",
@@ -11099,32 +11400,32 @@ const styles = StyleSheet.create({
     padding: 14
   },
   settingsChevron: {
-    color: "#3FA67F",
+    color: palette.brand,
     fontSize: 28,
     fontWeight: "600"
   },
   developerSettingsBox: {
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 22,
     borderWidth: 1,
     gap: 10,
     padding: 14
   },
   pageSection: {
-    gap: 14
+    gap: 18
   },
   label: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   },
   input: {
-    backgroundColor: "#ffffff",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
-    color: "#1E1E1E",
+    color: palette.text,
     fontSize: 16,
     paddingHorizontal: 14,
     paddingVertical: 12
@@ -11143,54 +11444,53 @@ const styles = StyleSheet.create({
   homeMinimalSection: {
     alignItems: "center",
     flex: 1,
-    gap: 12,
+    gap: 8,
     justifyContent: "flex-start",
-    minHeight: 620,
-    paddingBottom: 42,
-    paddingTop: 14
+    paddingBottom: 20,
+    paddingTop: 16
   },
   homeMicButton: {
     alignItems: "center",
-    backgroundColor: "#3FA67F",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.brand,
+    borderColor: palette.accentBorder,
     borderRadius: 999,
     borderWidth: 8,
     height: 220,
     justifyContent: "center",
-    marginTop: 24,
-    shadowColor: "#0F3F37",
+    marginTop: 28,
+    shadowColor: palette.ink,
     shadowOffset: { width: 0, height: 16 },
-    shadowOpacity: 0.14,
-    shadowRadius: 28,
+    shadowOpacity: 0.12,
+    shadowRadius: 22,
     width: 220
   },
   homeMicButtonActive: {
-    backgroundColor: "#0F3F37",
+    backgroundColor: palette.ink,
     transform: [{ scale: 0.98 }]
   },
   homeMicIcon: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 72,
     lineHeight: 84
   },
   homeHint: {
-    color: "#8A9690",
+    color: palette.ink,
     fontSize: 18,
     fontWeight: "700",
     lineHeight: 26,
-    marginTop: 8,
+    marginTop: 16,
     textAlign: "center"
   },
   homeHintSecondary: {
-    color: "#8A9690",
+    color: palette.muted,
     fontSize: 15,
-    fontWeight: "700",
+    fontWeight: "400",
     lineHeight: 22,
     minHeight: 22,
     textAlign: "center"
   },
   homeModelStatus: {
-    color: "#9AA5A0",
+    color: palette.muted,
     fontSize: 12,
     fontWeight: "800",
     lineHeight: 17,
@@ -11198,29 +11498,29 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   homeExamplePanel: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
     gap: 4,
-    marginTop: 8,
+    marginTop: 24,
     maxWidth: 360,
     paddingHorizontal: 16,
     paddingVertical: 14,
     width: "100%"
   },
   homeExampleTitle: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 15,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 22,
     textAlign: "left"
   },
   homeExampleIndex: {
-    color: "#3FA67F",
+    color: palette.brand,
     flexShrink: 1,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 18,
     textAlign: "left"
   },
@@ -11245,20 +11545,20 @@ const styles = StyleSheet.create({
     width: 6
   },
   homeExampleDotActive: {
-    backgroundColor: "#3FA67F",
+    backgroundColor: palette.brand,
     width: 16
   },
   homeExampleText: {
-    color: "#3D4642",
+    color: palette.text,
     fontSize: 14,
-    fontWeight: "700",
-    lineHeight: 21,
+    fontWeight: "400",
+    lineHeight: 23,
     textAlign: "left"
   },
   voiceCaptureCard: {
     alignItems: "center",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 24,
     borderWidth: 1,
     flexDirection: "row",
@@ -11267,7 +11567,7 @@ const styles = StyleSheet.create({
   },
   recordHoldButton: {
     alignItems: "center",
-    backgroundColor: "#3FA67F",
+    backgroundColor: palette.brand,
     borderRadius: 999,
     height: 108,
     justifyContent: "center",
@@ -11275,28 +11575,28 @@ const styles = StyleSheet.create({
     width: 108
   },
   recordHoldButtonActive: {
-    backgroundColor: "#0F3F37"
+    backgroundColor: palette.ink
   },
   recordHoldIcon: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 26
   },
   recordHoldText: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 14,
-    fontWeight: "900",
+    fontWeight: "700",
     marginTop: 6
   },
   recordingResultCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 22,
     borderWidth: 1,
     gap: 10,
     padding: 14
   },
   transcriptReviewInput: {
-    minHeight: 320,
+    minHeight: 240,
     lineHeight: 26,
     fontSize: 18
   },
@@ -11316,21 +11616,18 @@ const styles = StyleSheet.create({
     minHeight: 24
   },
   status: {
-    color: "#5F666A",
+    color: palette.secondary,
     flex: 1,
     fontSize: 13
   },
   flowStepperCard: {
     alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D6EEE4",
-    borderRadius: 22,
-    borderWidth: 1,
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 8,
     justifyContent: "space-between",
-    padding: 12
+    paddingVertical: 12,
+    marginBottom: 20
   },
   flowStepItem: {
     alignItems: "center",
@@ -11340,8 +11637,8 @@ const styles = StyleSheet.create({
   },
   flowStepDot: {
     alignItems: "center",
-    backgroundColor: "#F1F3F2",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.neutral,
+    borderColor: palette.border,
     borderRadius: 999,
     borderWidth: 1,
     height: 28,
@@ -11349,33 +11646,34 @@ const styles = StyleSheet.create({
     width: 28
   },
   flowStepDotActive: {
-    backgroundColor: "#3FA67F",
-    borderColor: "#3FA67F"
+    backgroundColor: palette.brand,
+    borderColor: palette.brand
   },
   flowStepDotDone: {
-    backgroundColor: "#0F3F37",
-    borderColor: "#0F3F37"
+    backgroundColor: palette.ink,
+    borderColor: palette.ink
   },
   flowStepDotText: {
-    color: "#5F666A",
+    color: palette.secondary,
     fontSize: 12,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   flowStepDotTextActive: {
-    color: "#FFFFFF"
+    color: palette.surface
   },
   flowStepLabel: {
-    color: "#5F666A",
+    color: palette.secondary,
     fontSize: 11,
     fontWeight: "800",
+    maxWidth: "100%",
     textAlign: "center"
   },
   flowStepLabelActive: {
-    color: "#0F3F37"
+    color: palette.ink
   },
   chip: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 999,
     borderWidth: 1,
     marginRight: 8,
@@ -11385,23 +11683,23 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   chipSelected: {
-    backgroundColor: "#3FA67F",
-    borderColor: "#3FA67F"
+    backgroundColor: palette.brand,
+    borderColor: palette.brand
   },
   chipDisabled: {
-    backgroundColor: "#F1F3F2",
+    backgroundColor: palette.neutral,
     opacity: 0.55
   },
   chipText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 13,
     fontWeight: "800"
   },
   chipTextSelected: {
-    color: "#ffffff"
+    color: palette.surface
   },
   chipTextDisabled: {
-    color: "#5F666A"
+    color: palette.secondary
   },
   actionRow: {
     flexWrap: "wrap",
@@ -11416,10 +11714,10 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     alignItems: "center",
-    backgroundColor: "#3FA67F",
-    borderRadius: 22,
+    backgroundColor: palette.brand,
+    borderRadius: 16,
     justifyContent: "center",
-    minHeight: 44,
+    minHeight: 52,
     minWidth: 96,
     paddingHorizontal: 20,
     paddingVertical: 14
@@ -11429,45 +11727,45 @@ const styles = StyleSheet.create({
   },
   primaryButtonFull: {
     alignItems: "center",
-    backgroundColor: "#3FA67F",
-    borderRadius: 24,
+    backgroundColor: palette.brand,
+    borderRadius: 16,
     minHeight: 58,
     justifyContent: "center",
     paddingHorizontal: 20,
     paddingVertical: 16
   },
   primaryButtonText: {
-    color: "#ffffff",
+    color: palette.surface,
     fontSize: 15,
     fontWeight: "800"
   },
   secondaryButton: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
-    borderRadius: 22,
+    backgroundColor: palette.wash,
+    borderRadius: 16,
     justifyContent: "center",
-    minHeight: 44,
+    minHeight: 52,
     paddingHorizontal: 16,
     paddingVertical: 14
   },
   secondaryButtonText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   },
   dangerButton: {
     alignItems: "center",
-    backgroundColor: "#FCEEEE",
-    borderRadius: 22,
+    backgroundColor: palette.dangerWash,
+    borderRadius: 16,
     justifyContent: "center",
-    minHeight: 44,
+    minHeight: 52,
     paddingHorizontal: 16,
     paddingVertical: 14
   },
   dangerButtonText: {
-    color: "#C85D5D",
+    color: palette.danger,
     fontSize: 14,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   sectionHeader: {
     alignItems: "flex-start",
@@ -11477,9 +11775,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   sectionTitle: {
-    color: "#0F3F37",
-    fontSize: 20,
-    fontWeight: "800"
+    color: palette.ink,
+    fontSize: 24,
+    fontWeight: "700",
+    lineHeight: 32
   },
   segmentRow: {
     flexDirection: "row",
@@ -11487,8 +11786,8 @@ const styles = StyleSheet.create({
     gap: 8
   },
   segmentPill: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 999,
     borderWidth: 1,
     minHeight: 44,
@@ -11497,21 +11796,21 @@ const styles = StyleSheet.create({
     paddingVertical: 8
   },
   segmentActive: {
-    backgroundColor: "#3FA67F",
-    borderColor: "#3FA67F"
+    backgroundColor: palette.brand,
+    borderColor: palette.brand
   },
   segmentText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 13,
     fontWeight: "800"
   },
   segmentTextActive: {
-    color: "#FFFFFF"
+    color: palette.surface
   },
   dateRangeCard: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.wash,
+    borderColor: palette.accentBorder,
     borderRadius: 20,
     borderWidth: 1,
     flexDirection: "row",
@@ -11540,8 +11839,8 @@ const styles = StyleSheet.create({
   },
   historyMonthButton: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#3FA67F",
+    backgroundColor: palette.surface,
+    borderColor: palette.brand,
     borderRadius: 14,
     borderWidth: 1,
     justifyContent: "center",
@@ -11564,30 +11863,30 @@ const styles = StyleSheet.create({
     width: 46
   },
   historyCalendarDayMuted: {
-    backgroundColor: "#F1F4F2"
+    backgroundColor: palette.neutral
   },
   historyCalendarDayHasRecords: {
-    backgroundColor: "#EAF6F1",
-    borderColor: "#3FA67F",
+    backgroundColor: palette.wash,
+    borderColor: palette.brand,
     borderWidth: 1
   },
   historyCalendarDaySelected: {
-    backgroundColor: "#0F3F37",
-    borderColor: "#0F3F37"
+    backgroundColor: palette.ink,
+    borderColor: palette.ink
   },
   historyCalendarDayText: {
-    color: "#8A9690",
+    color: palette.muted,
     fontSize: 14,
     fontWeight: "800"
   },
   historyCalendarDayTextActive: {
-    color: "#0F3F37"
+    color: palette.ink
   },
   historyCalendarDayTextSelected: {
-    color: "#FFFFFF"
+    color: palette.surface
   },
   historyCalendarDot: {
-    backgroundColor: "#3FA67F",
+    backgroundColor: palette.brand,
     borderRadius: 999,
     bottom: 6,
     height: 5,
@@ -11601,19 +11900,19 @@ const styles = StyleSheet.create({
     gap: 10
   },
   historyItem: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
-    color: "#1E1E1E",
+    color: palette.text,
     fontSize: 15,
     fontWeight: "700",
     lineHeight: 21,
     padding: 14
   },
   historyItemButton: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
     gap: 4,
@@ -11627,15 +11926,15 @@ const styles = StyleSheet.create({
     gap: 10
   },
   detailHero: {
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 24,
     gap: 6,
     padding: 20
   },
   detailValue: {
-    color: "#3FA67F",
+    color: palette.brand,
     fontSize: 32,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 38
   },
   detailRows: {
@@ -11652,8 +11951,8 @@ const styles = StyleSheet.create({
   },
   detailRow: {
     alignItems: "flex-start",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 18,
     borderWidth: 1,
     flexDirection: "row",
@@ -11678,8 +11977,8 @@ const styles = StyleSheet.create({
   },
   chartTooltip: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.wash,
+    borderColor: palette.accentBorder,
     borderRadius: 16,
     borderWidth: 1,
     minWidth: 72,
@@ -11687,18 +11986,18 @@ const styles = StyleSheet.create({
     paddingVertical: 8
   },
   chartTooltipValue: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 20,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   chartTooltipLabel: {
-    color: "#5F666A",
+    color: palette.secondary,
     fontSize: 12,
     fontWeight: "800"
   },
   lineChartCanvas: {
-    backgroundColor: "#F7FCFA",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.subtle,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
     height: 148,
@@ -11707,7 +12006,7 @@ const styles = StyleSheet.create({
     paddingTop: 14
   },
   chartGridLineTop: {
-    backgroundColor: "#E3E8E5",
+    backgroundColor: palette.border,
     height: 1,
     left: 10,
     position: "absolute",
@@ -11715,7 +12014,7 @@ const styles = StyleSheet.create({
     top: 22
   },
   chartGridLineMiddle: {
-    backgroundColor: "#E3E8E5",
+    backgroundColor: palette.border,
     height: 1,
     left: 10,
     opacity: 0.8,
@@ -11724,7 +12023,7 @@ const styles = StyleSheet.create({
     top: 74
   },
   chartGridLineBottom: {
-    backgroundColor: "#E3E8E5",
+    backgroundColor: palette.border,
     bottom: 20,
     height: 1,
     left: 10,
@@ -11755,8 +12054,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(63, 166, 127, 0.28)"
   },
   lineChartPoint: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#3FA67F",
+    backgroundColor: palette.surface,
+    borderColor: palette.brand,
     borderRadius: 999,
     borderWidth: 3,
     height: 16,
@@ -11764,13 +12063,13 @@ const styles = StyleSheet.create({
     width: 16
   },
   lineChartPointSelected: {
-    backgroundColor: "#3FA67F",
-    borderColor: "#0F3F37",
+    backgroundColor: palette.brand,
+    borderColor: palette.ink,
     height: 20,
     width: 20
   },
   lineChartConnector: {
-    backgroundColor: "#3FA67F",
+    backgroundColor: palette.brand,
     borderRadius: 999,
     height: 3,
     left: -28,
@@ -11784,7 +12083,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   chartAxisLabel: {
-    color: "#5F666A",
+    color: palette.secondary,
     flex: 1,
     fontSize: 11,
     fontWeight: "800",
@@ -11796,8 +12095,8 @@ const styles = StyleSheet.create({
     gap: 10
   },
   metricCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 20,
     borderWidth: 1,
     flexGrow: 1,
@@ -11805,20 +12104,20 @@ const styles = StyleSheet.create({
     padding: 14
   },
   metricValue: {
-    color: "#3FA67F",
+    color: palette.brand,
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: "700",
     marginTop: 4
   },
   previewModeBadge: {
     alignSelf: "flex-start",
-    backgroundColor: "#EAF6F1",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.wash,
+    borderColor: palette.accentBorder,
     borderRadius: 999,
     borderWidth: 1,
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     paddingHorizontal: 10,
     paddingVertical: 5
   },
@@ -11828,8 +12127,8 @@ const styles = StyleSheet.create({
     gap: 10
   },
   reportBoundaryCard: {
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 18,
     borderWidth: 1,
     flexGrow: 1,
@@ -11837,22 +12136,19 @@ const styles = StyleSheet.create({
     padding: 12
   },
   infoBanner: {
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 18,
     padding: 12
   },
   successHero: {
     alignItems: "center",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
-    borderRadius: 24,
-    borderWidth: 1,
     gap: 8,
-    padding: 22
+    paddingVertical: 34,
+    paddingHorizontal: 16
   },
   successIconCircle: {
     alignItems: "center",
-    backgroundColor: "#3FA67F",
+    backgroundColor: palette.brand,
     borderRadius: 999,
     height: 64,
     justifyContent: "center",
@@ -11860,30 +12156,30 @@ const styles = StyleSheet.create({
   },
   dangerIconCircle: {
     alignItems: "center",
-    backgroundColor: "#C85D5D",
+    backgroundColor: palette.danger,
     borderRadius: 999,
     height: 64,
     justifyContent: "center",
     width: 64
   },
   successIconText: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 32,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   pricingCard: {
     gap: 10,
     paddingVertical: 2
   },
   priceText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 30,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   subscriptionStatusCard: {
     alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 24,
     borderWidth: 1,
     flexDirection: "row",
@@ -11893,21 +12189,21 @@ const styles = StyleSheet.create({
     padding: 16
   },
   quotaCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 24,
     borderWidth: 1,
     gap: 10,
     padding: 16
   },
   quotaBarTrack: {
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     height: 12,
     overflow: "hidden"
   },
   quotaBarFill: {
-    backgroundColor: "#3FA67F",
+    backgroundColor: palette.brand,
     borderRadius: 999,
     height: 12
   },
@@ -11919,7 +12215,7 @@ const styles = StyleSheet.create({
     gap: 12
   },
   warningText: {
-    color: "#C85D5D",
+    color: palette.danger,
     fontSize: 13,
     fontWeight: "800",
     lineHeight: 19
@@ -11934,26 +12230,26 @@ const styles = StyleSheet.create({
     gap: 12
   },
   planCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 22,
     borderWidth: 1,
     gap: 8,
     padding: 16
   },
   planCardRecommended: {
-    backgroundColor: "#F7FCFA",
-    borderColor: "#3FA67F"
+    backgroundColor: palette.subtle,
+    borderColor: palette.brand
   },
   planPriceText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 24,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   comparisonRow: {
     alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
     flexDirection: "row",
@@ -11962,15 +12258,15 @@ const styles = StyleSheet.create({
     padding: 12
   },
   comparisonFeature: {
-    color: "#0F3F37",
+    color: palette.ink,
     flex: 1,
     flexShrink: 1,
     fontSize: 13,
-    fontWeight: "900",
+    fontWeight: "700",
     minWidth: 86
   },
   comparisonCell: {
-    color: "#5F666A",
+    color: palette.secondary,
     flex: 1,
     flexShrink: 1,
     fontSize: 12,
@@ -11980,11 +12276,11 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   comparisonCellStrong: {
-    color: "#3FA67F",
+    color: palette.brand,
     flex: 1,
     flexShrink: 1,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 17,
     minWidth: 74,
     textAlign: "center"
@@ -11996,8 +12292,8 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.wash,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
     height: 44,
@@ -12005,15 +12301,15 @@ const styles = StyleSheet.create({
     width: 44
   },
   closeButtonText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 28,
     fontWeight: "800",
     lineHeight: 30
   },
   menuCard: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 24,
     borderWidth: 1,
     gap: 12,
@@ -12024,7 +12320,7 @@ const styles = StyleSheet.create({
   },
   menuIconCenter: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     height: 64,
     justifyContent: "center",
@@ -12034,15 +12330,15 @@ const styles = StyleSheet.create({
     fontSize: 26
   },
   menuLabel: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 16,
-    fontWeight: "900",
+    fontWeight: "700",
     textAlign: "center"
   },
   moreButton: {
     alignItems: "center",
     alignSelf: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     flexDirection: "row",
     gap: 10,
@@ -12053,7 +12349,7 @@ const styles = StyleSheet.create({
   },
   moreActionIcon: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: palette.surface,
     borderRadius: 999,
     height: 34,
     justifyContent: "center",
@@ -12066,8 +12362,8 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   visualSmokeRouteChip: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 999,
     borderWidth: 1,
     minHeight: 40,
@@ -12075,7 +12371,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8
   },
   visualSmokeRouteChipText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800",
     lineHeight: 20
@@ -12088,15 +12384,15 @@ const styles = StyleSheet.create({
     paddingTop: 16
   },
   heroCard: {
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 24,
     gap: 6,
     padding: 20
   },
   heroCardFeature: {
     alignItems: "flex-start",
-    backgroundColor: "#EAF6F1",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.wash,
+    borderColor: palette.accentBorder,
     borderRadius: 24,
     borderWidth: 1,
     flexDirection: "row",
@@ -12106,21 +12402,21 @@ const styles = StyleSheet.create({
   },
   heroIconBubble: {
     alignItems: "center",
-    backgroundColor: "#3FA67F",
+    backgroundColor: palette.brand,
     borderRadius: 999,
     height: 64,
     justifyContent: "center",
     width: 64
   },
   heroIconText: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 26,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   heroNumber: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 30,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 36
   },
   openSection: {
@@ -12133,8 +12429,8 @@ const styles = StyleSheet.create({
     gap: 14
   },
   highlightCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 24,
     borderWidth: 1,
     gap: 10,
@@ -12151,8 +12447,8 @@ const styles = StyleSheet.create({
   },
   productCard: {
     alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 24,
     borderWidth: 1,
     flexDirection: "row",
@@ -12162,31 +12458,31 @@ const styles = StyleSheet.create({
   },
   productImage: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 18,
     height: 72,
     justifyContent: "center",
     width: 72
   },
   productImageText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 24,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   productBadge: {
     alignSelf: "flex-start",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
-    color: "#3FA67F",
+    color: palette.brand,
     fontSize: 11,
-    fontWeight: "900",
+    fontWeight: "700",
     paddingHorizontal: 8,
     paddingVertical: 4
   },
   visionResultCard: {
     alignItems: "center",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 18,
     borderWidth: 1,
     flexDirection: "row",
@@ -12195,14 +12491,14 @@ const styles = StyleSheet.create({
     padding: 14
   },
   foodMetricValue: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 18,
-    fontWeight: "900",
+    fontWeight: "700",
     marginTop: 4
   },
   roundActionButton: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     height: 44,
     justifyContent: "center",
@@ -12210,7 +12506,7 @@ const styles = StyleSheet.create({
   },
   uploadBox: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderColor: "#9EDBC4",
     borderRadius: 24,
     borderStyle: "dashed",
@@ -12221,27 +12517,27 @@ const styles = StyleSheet.create({
     padding: 24
   },
   countText: {
-    color: "#5F666A",
+    color: palette.secondary,
     fontSize: 13,
     fontWeight: "700"
   },
   dailyRecordDateCard: {
-    backgroundColor: "#EAF6F1",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.wash,
+    borderColor: palette.accentBorder,
     borderRadius: 18,
     borderWidth: 1,
     gap: 4,
     padding: 14
   },
   dailyRecordDateText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 22,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 28
   },
   dailySummaryCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.surface,
+    borderColor: palette.accentBorder,
     borderRadius: 20,
     borderWidth: 1,
     gap: 10,
@@ -12249,8 +12545,8 @@ const styles = StyleSheet.create({
   },
   todayTranscriptButton: {
     alignItems: "center",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 18,
     borderWidth: 1,
     flexDirection: "row",
@@ -12268,8 +12564,8 @@ const styles = StyleSheet.create({
     padding: 14
   },
   fixedSaveBar: {
-    backgroundColor: "#FAFAF8",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.canvas,
+    borderColor: palette.border,
     borderRadius: 22,
     borderWidth: 1,
     flexDirection: "row",
@@ -12279,8 +12575,8 @@ const styles = StyleSheet.create({
     padding: 12
   },
   fixedSaveBarDock: {
-    backgroundColor: "#FAFAF8",
-    borderTopColor: "#E3E8E5",
+    backgroundColor: palette.canvas,
+    borderTopColor: palette.border,
     borderTopWidth: 1,
     paddingBottom: 12,
     paddingHorizontal: 24,
@@ -12291,8 +12587,8 @@ const styles = StyleSheet.create({
   },
   aiReviewCard: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.surface,
+    borderColor: palette.accentBorder,
     borderRadius: 20,
     borderWidth: 1,
     flexDirection: "row",
@@ -12304,8 +12600,8 @@ const styles = StyleSheet.create({
     gap: 10
   },
   postSaveCard: {
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 18,
     borderWidth: 1,
     gap: 4,
@@ -12313,8 +12609,8 @@ const styles = StyleSheet.create({
     padding: 14
   },
   recordCard: {
-    backgroundColor: "#ffffff",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 20,
     borderWidth: 1,
     minHeight: 72,
@@ -12322,8 +12618,8 @@ const styles = StyleSheet.create({
     gap: 8
   },
   recordCardSelected: {
-    backgroundColor: "#F7FCFA",
-    borderColor: "#3FA67F"
+    backgroundColor: palette.subtle,
+    borderColor: palette.brand
   },
   recordHeader: {
     alignItems: "flex-start",
@@ -12333,26 +12629,26 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   recordType: {
-    color: "#3FA67F",
+    color: palette.brand,
     flexShrink: 1,
     fontSize: 13,
     fontWeight: "800"
   },
   confidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 12,
     fontWeight: "700"
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",
     lineHeight: 22
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
@@ -12362,25 +12658,25 @@ const styles = StyleSheet.create({
     paddingVertical: 2
   },
   rejectedText: {
-    color: "#9a3412",
+    color: palette.warning,
     fontSize: 13
   },
   rejectedEventCard: {
-    backgroundColor: "#FFF8ED",
-    borderColor: "#EFD6B8",
+    backgroundColor: palette.warningWash,
+    borderColor: palette.warningBorder,
     borderRadius: 14,
     borderWidth: 1,
     gap: 4,
     padding: 10
   },
   emptyText: {
-    color: "#5F666A",
+    color: palette.secondary,
     fontSize: 14
   },
   debugOutput: {
-    backgroundColor: "#0F3F37",
+    backgroundColor: palette.ink,
     borderRadius: 18,
-    color: "#EAF6F1",
+    color: palette.wash,
     fontSize: 12,
     lineHeight: 18,
     padding: 10

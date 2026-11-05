@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 type HistoryDailySummaryCardProps = {
   accessibilityLabel: string;
@@ -49,28 +51,28 @@ export function HistoryDailySummaryCard({
 
 const styles = StyleSheet.create({
   confidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 12,
     fontWeight: "700"
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
   },
   historyDailySummaryCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
     gap: 8,
     padding: 14
   },
   historyDailySummaryCardSelected: {
-    backgroundColor: "#EAF6F1",
-    borderColor: "#3FA67F"
+    backgroundColor: palette.wash,
+    borderColor: palette.brand
   },
   historyDailySummaryHeader: {
     alignItems: "flex-start",
@@ -80,27 +82,27 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   historyItemText: {
-    color: "#1E1E1E",
+    color: palette.text,
     fontSize: 15,
     fontWeight: "800",
     lineHeight: 21
   },
   historyStatusPill: {
-    backgroundColor: "#DCEFE7",
+    backgroundColor: palette.accentBorder,
     borderRadius: 999,
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 16,
     paddingHorizontal: 9,
     paddingVertical: 5
   },
   historyStatusPillMuted: {
-    backgroundColor: "#F1F4F2",
+    backgroundColor: palette.neutral,
     borderRadius: 999,
-    color: "#5F666A",
+    color: palette.secondary,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 16,
     paddingHorizontal: 9,
     paddingVertical: 5
@@ -114,7 +116,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end"
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",

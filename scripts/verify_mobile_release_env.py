@@ -53,6 +53,7 @@ def _effective_env() -> dict[str, str]:
         "EXPO_PUBLIC_API_BASE_URL",
         "EXPO_PUBLIC_ALLOW_DEV_AUTH",
         "EXPO_PUBLIC_ENABLE_DEBUG_TOOLS",
+        "EXPO_PUBLIC_ENABLE_DEV_SERVER_SWITCHER",
         "EXPO_PUBLIC_VISUAL_SMOKE_INITIAL_ROUTE",
     ):
         if key in os.environ:
@@ -78,6 +79,8 @@ def verify(allow_local_api: bool) -> list[str]:
         errors.append("EXPO_PUBLIC_ALLOW_DEV_AUTH must be false or omitted for release-style mobile builds")
     if _is_true(env.get("EXPO_PUBLIC_ENABLE_DEBUG_TOOLS", "")):
         errors.append("EXPO_PUBLIC_ENABLE_DEBUG_TOOLS must be false or omitted for release-style mobile builds")
+    if _is_true(env.get("EXPO_PUBLIC_ENABLE_DEV_SERVER_SWITCHER", "")):
+        errors.append("EXPO_PUBLIC_ENABLE_DEV_SERVER_SWITCHER must be false or omitted for release-style mobile builds")
     if env.get("EXPO_PUBLIC_VISUAL_SMOKE_INITIAL_ROUTE", "").strip():
         errors.append("EXPO_PUBLIC_VISUAL_SMOKE_INITIAL_ROUTE must be unset for release-style mobile builds")
     return errors
@@ -96,7 +99,7 @@ def main() -> int:
         for error in errors:
             print(f"Mobile release env verification failed: {error}", file=sys.stderr)
         return 1
-    print("Mobile release env verified: dev auth disabled, debug tools disabled, release API boundary set.")
+    print("Mobile release env verified: dev auth, debug tools, and server switcher disabled; release API boundary set.")
     return 0
 
 

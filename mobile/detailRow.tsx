@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import type { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -18,8 +19,8 @@ export function DetailRow({ label, value }: DetailRowProps) {
 const styles = StyleSheet.create({
   detailRow: {
     alignItems: "flex-start",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 18,
     borderWidth: 1,
     flexDirection: "row",
@@ -29,12 +30,12 @@ const styles = StyleSheet.create({
     padding: 14
   },
   label: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",

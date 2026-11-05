@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 type HistorySelectedSummaryCardProps = {
@@ -25,8 +26,8 @@ export function HistorySelectedSummaryCard({ sourceLabel, summaryText, syncLabel
 
 const styles = StyleSheet.create({
   dailySummaryCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.surface,
+    borderColor: palette.accentBorder,
     borderRadius: 20,
     borderWidth: 1,
     gap: 10,
@@ -40,21 +41,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   historyStatusPill: {
-    backgroundColor: "#DCEFE7",
+    backgroundColor: palette.accentBorder,
     borderRadius: 999,
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 16,
     paddingHorizontal: 9,
     paddingVertical: 5
   },
   historyStatusPillMuted: {
-    backgroundColor: "#F1F4F2",
+    backgroundColor: palette.neutral,
     borderRadius: 999,
-    color: "#5F666A",
+    color: palette.secondary,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 16,
     paddingHorizontal: 9,
     paddingVertical: 5
@@ -69,18 +70,18 @@ const styles = StyleSheet.create({
   },
   previewModeBadge: {
     alignSelf: "flex-start",
-    backgroundColor: "#EAF6F1",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.wash,
+    borderColor: palette.accentBorder,
     borderRadius: 999,
     borderWidth: 1,
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     paddingHorizontal: 10,
     paddingVertical: 5
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",

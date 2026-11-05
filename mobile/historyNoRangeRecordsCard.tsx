@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 type HistoryNoRangeRecordsCardProps = {
@@ -22,8 +23,8 @@ export function HistoryNoRangeRecordsCard({ body, title }: HistoryNoRangeRecords
 const styles = StyleSheet.create({
   emptyStateCard: {
     alignItems: "flex-start",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 24,
     borderWidth: 1,
     flexDirection: "row",
@@ -32,21 +33,21 @@ const styles = StyleSheet.create({
     padding: 16
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
   },
   iconCircle: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     height: 48,
     justifyContent: "center",
     width: 48
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",

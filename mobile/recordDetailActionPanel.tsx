@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 type RecordDetailActionPanelProps = {
   canManageRecord: boolean;
@@ -66,20 +68,20 @@ const styles = StyleSheet.create({
     paddingVertical: 12
   },
   dangerButtonText: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 15,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
   },
   secondaryButton: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#3FA67F",
+    backgroundColor: palette.surface,
+    borderColor: palette.brand,
     borderRadius: 16,
     borderWidth: 1,
     justifyContent: "center",
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12
   },
   secondaryButtonText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   }

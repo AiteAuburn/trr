@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 export type MembershipFeatureRow = {
@@ -36,15 +37,15 @@ export function MembershipFeatureList({ rows }: MembershipFeatureListProps) {
 
 const styles = StyleSheet.create({
   confidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 12,
     fontWeight: "700"
   },
   detailRow: {
     alignItems: "flex-start",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 18,
     borderWidth: 1,
     flexDirection: "row",
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
     padding: 14
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",

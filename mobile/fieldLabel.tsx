@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 type FieldLabelProps = {
@@ -16,7 +17,7 @@ export function FieldLabel({ icon, label }: FieldLabelProps) {
 
 const styles = StyleSheet.create({
   label: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   },
@@ -26,9 +27,9 @@ const styles = StyleSheet.create({
     gap: 8
   },
   fieldLabelIcon: {
-    color: "#3FA67F",
+    color: palette.brand,
     fontSize: 15,
-    fontWeight: "900",
+    fontWeight: "700",
     minWidth: 20,
     textAlign: "center"
   }

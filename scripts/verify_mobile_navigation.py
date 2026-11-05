@@ -12,6 +12,7 @@ APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
 API_CLIENT_PATH = REPO_ROOT / "mobile" / "apiClient.ts"
 APP_TYPES_PATH = REPO_ROOT / "mobile" / "appTypes.ts"
 APP_RUNTIME_CONFIG_PATH = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
+DEV_BACKEND_SWITCHER_PATH = REPO_ROOT / "mobile" / "devBackendSwitcher.tsx"
 APP_VIEW_STATE_PATH = REPO_ROOT / "mobile" / "appViewState.ts"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 AI_FLOW_CHECKLIST_PATH = REPO_ROOT / "mobile" / "aiFlowChecklist.tsx"
@@ -162,6 +163,7 @@ FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommuni
 FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareTextFields.tsx"
 STORE_SEARCH_FIELD_PATH = REPO_ROOT / "mobile" / "storeSearchField.tsx"
 TRANSCRIPT_REVIEW_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "transcriptReviewActionRow.tsx"
+PARSER_LOADING_VIEW_PATH = REPO_ROOT / "mobile" / "parserLoadingView.tsx"
 UPDATE_SUCCESS_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "updateSuccessActionRow.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
@@ -1440,6 +1442,7 @@ def main() -> int:
     api_client_content = API_CLIENT_PATH.read_text(encoding="utf-8")
     app_types_content = APP_TYPES_PATH.read_text(encoding="utf-8")
     app_runtime_config_content = APP_RUNTIME_CONFIG_PATH.read_text(encoding="utf-8")
+    dev_backend_switcher_content = DEV_BACKEND_SWITCHER_PATH.read_text(encoding="utf-8")
     app_view_state_content = APP_VIEW_STATE_PATH.read_text(encoding="utf-8")
     navigation_content = NAVIGATION_CONFIG_PATH.read_text(encoding="utf-8")
     ai_flow_checklist_content = AI_FLOW_CHECKLIST_PATH.read_text(encoding="utf-8")
@@ -1601,6 +1604,7 @@ def main() -> int:
     food_community_share_text_fields_content = FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH.read_text(encoding="utf-8")
     store_search_field_content = STORE_SEARCH_FIELD_PATH.read_text(encoding="utf-8")
     transcript_review_action_row_content = TRANSCRIPT_REVIEW_ACTION_ROW_PATH.read_text(encoding="utf-8")
+    parser_loading_view_content = PARSER_LOADING_VIEW_PATH.read_text(encoding="utf-8")
     update_success_action_row_content = UPDATE_SUCCESS_ACTION_ROW_PATH.read_text(encoding="utf-8")
     date_time_transforms_content = DATE_TIME_TRANSFORMS_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
@@ -1652,6 +1656,7 @@ def main() -> int:
         for label, marker in (
             ("app runtime default API base URL", "export const defaultApiBaseUrl ="),
             ("app runtime debug flag", "export const enableDebugTools = process.env.EXPO_PUBLIC_ENABLE_DEBUG_TOOLS === \"true\";"),
+            ("app runtime server switcher flag", "export const enableDevServerSwitcher ="),
             ("app runtime dev auth flag", "export const allowMobileDevAuth = process.env.EXPO_PUBLIC_ALLOW_DEV_AUTH === \"true\";"),
             ("app runtime visual smoke route", "export const initialVisualSmokeScreen = normalizeVisualSmokeInitialRoute("),
             ("app runtime sample transcript", "export const sampleText ="),
@@ -1692,7 +1697,7 @@ def main() -> int:
             ("daily record detail row label", "<Text style={styles.confidence}>{label}</Text>"),
             ("daily record detail row value", "<Text style={styles.evidence}>{value}</Text>"),
             ("daily record detail row style", "detailRow: {"),
-            ("daily record detail row background", 'backgroundColor: "#F7FCFA"'),
+            ("daily record detail row background", 'backgroundColor: palette.subtle'),
             ("daily record detail row evidence line height", "lineHeight: 19"),
         ):
             _assert_contains(label, daily_record_detail_row_content, marker)
@@ -1723,7 +1728,7 @@ def main() -> int:
             ("delete confirm preview record summary", "<Text style={styles.recordContent}>{recordSummary}</Text>"),
             ("delete confirm preview record meta", "<Text style={styles.evidence}>{recordMetaText}</Text>"),
             ("delete confirm preview card style", "emptyStateCard: {"),
-            ("delete confirm preview danger icon style", 'backgroundColor: "#C85D5D"'),
+            ("delete confirm preview danger icon style", 'backgroundColor: palette.danger'),
         ):
             _assert_contains(label, delete_confirm_preview_block_content, marker)
         for label, marker in (
@@ -1874,7 +1879,7 @@ def main() -> int:
             ("history detail mode tabs active style", "isSelected ? styles.segmentActive : null"),
             ("history detail mode tabs active text style", "isSelected ? styles.segmentTextActive : null"),
             ("history detail mode tabs pill min height", "minHeight: 44"),
-            ("history detail mode tabs active color", 'backgroundColor: "#3FA67F"'),
+            ("history detail mode tabs active color", 'backgroundColor: palette.brand'),
         ):
             _assert_contains(label, history_detail_mode_tabs_content, marker)
         for label, marker in (
@@ -1893,8 +1898,8 @@ def main() -> int:
             ("history no-range records card title", "<Text style={styles.recordContent}>{title}</Text>"),
             ("history no-range records card body", "<Text style={styles.evidence}>{body}</Text>"),
             ("history no-range records card style", "emptyStateCard: {"),
-            ("history no-range records card background", 'backgroundColor: "#F7FCFA"'),
-            ("history no-range records card border", 'borderColor: "#D6EEE4"'),
+            ("history no-range records card background", 'backgroundColor: palette.subtle'),
+            ("history no-range records card border", 'borderColor: palette.accentBorder'),
         ):
             _assert_contains(label, history_no_range_records_card_content, marker)
         for label, marker in (
@@ -1902,7 +1907,7 @@ def main() -> int:
             ("history no-record status title", "<Text style={styles.label}>{title}</Text>"),
             ("history no-record status body", "<Text style={styles.evidence}>{body}</Text>"),
             ("history no-record status style", "inlineInfoBlock: {"),
-            ("history no-record status label color", 'color: "#0F3F37"'),
+            ("history no-record status label color", 'color: palette.ink'),
             ("history no-record status evidence line height", "lineHeight: 19"),
         ):
             _assert_contains(label, history_no_record_status_block_content, marker)
@@ -1913,7 +1918,7 @@ def main() -> int:
             ("history raw transcript card source label", "<Text style={styles.previewModeBadge}>{sourceStatusLabel}</Text>"),
             ("history raw transcript card raw text", "<Text style={styles.evidence}>{rawText}</Text>"),
             ("history raw transcript card style", "historyRawCard: {"),
-            ("history raw transcript card border", 'borderColor: "#E3E8E5"'),
+            ("history raw transcript card border", 'borderColor: palette.border'),
         ):
             _assert_contains(label, history_raw_transcript_card_content, marker)
         for label, marker in (
@@ -1921,7 +1926,7 @@ def main() -> int:
             ("history selected date header date label", "<Text style={styles.label}>{dateLabel}</Text>"),
             ("history selected date header storage label", "<Text style={styles.evidence}>{storageLabel}</Text>"),
             ("history selected date header section style", "sectionHeader: {"),
-            ("history selected date header label color", 'color: "#0F3F37"'),
+            ("history selected date header label color", 'color: palette.ink'),
             ("history selected date header evidence line height", "lineHeight: 19"),
         ):
             _assert_contains(label, history_selected_date_header_content, marker)
@@ -1946,7 +1951,7 @@ def main() -> int:
             ("history selected summary card sync pill", "<Text style={styles.historyStatusPill}>{syncLabel}</Text>"),
             ("history selected summary card source pill", "<Text style={styles.historyStatusPillMuted}>{sourceLabel}</Text>"),
             ("history selected summary card style", "dailySummaryCard: {"),
-            ("history selected summary card background", 'backgroundColor: "#FFFFFF"'),
+            ("history selected summary card background", 'backgroundColor: palette.surface'),
         ):
             _assert_contains(label, history_selected_summary_card_content, marker)
         for label, marker in (
@@ -1971,10 +1976,10 @@ def main() -> int:
             ("detail row component", "export function DetailRow({ label, value }: DetailRowProps)"),
             ("detail row string label fallback", 'typeof label === "string" ? <Text style={styles.label}>{label}</Text> : label'),
             ("detail row style", "detailRow: {"),
-            ("detail row card background", 'backgroundColor: "#F7FCFA"'),
+            ("detail row card background", 'backgroundColor: palette.subtle'),
             ("detail row card padding", "padding: 14"),
             ("detail row record content style", "recordContent: {"),
-            ("detail row record content color", 'color: "#1E1E1E"'),
+            ("detail row record content color", 'color: palette.text'),
             ("detail row record content line height", "lineHeight: 22"),
         ):
             _assert_contains(label, detail_row_content, marker)
@@ -1982,7 +1987,7 @@ def main() -> int:
             ("highlight bullet row component", "export function HighlightBulletRow({ text }: HighlightBulletRowProps)"),
             ("highlight bullet row bullet", "<Text style={styles.recordType}>•</Text>"),
             ("highlight bullet row style", "highlightRow: {"),
-            ("highlight bullet record type color", 'color: "#3FA67F"'),
+            ("highlight bullet record type color", 'color: palette.brand'),
             ("highlight bullet evidence line height", "lineHeight: 19"),
             ("record detail boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("record update highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
@@ -2015,7 +2020,7 @@ def main() -> int:
             ("highlight detail row label", "<Text style={styles.recordType}>{label}</Text>"),
             ("highlight detail row value", "<Text style={styles.evidence}>{value}</Text>"),
             ("highlight detail row style", "highlightRow: {"),
-            ("highlight detail record type color", 'color: "#3FA67F"'),
+            ("highlight detail record type color", 'color: palette.brand'),
             ("highlight detail evidence line height", "lineHeight: 19"),
         ):
             _assert_contains(label, highlight_detail_row_content, marker)
@@ -2157,7 +2162,7 @@ def main() -> int:
             ("metric card label", "<Text style={styles.confidence}>{label}</Text>"),
             ("metric card value", "<Text style={styles.metricValue}>{value}</Text>"),
             ("metric card style", "metricCard: {"),
-            ("metric card value color", 'color: "#3FA67F"'),
+            ("metric card value color", 'color: palette.brand'),
             ("metric card minimum width", 'minWidth: "46%"'),
         ):
             _assert_contains(label, metric_card_content, marker)
@@ -3078,11 +3083,11 @@ def main() -> int:
         ):
             _assert_not_contains(label, content, marker)
         default_stt_helper_marker = "const defaultStt = defaultSttModelOption(modelOptions);"
-        if content.count(default_stt_helper_marker) < 2:
-            raise AssertionError("Default STT helper must be used in both boot and dev reconnect model selection paths.")
+        if content.count(default_stt_helper_marker) < 1 or "async function bootstrapAuthenticatedAccount" not in content:
+            raise AssertionError("Default STT helper must be applied from the shared authenticated-account bootstrap path.")
         preferred_llm_helper_marker = "const preferredLlm = preferredLlmModelOption(modelOptions);"
-        if content.count(preferred_llm_helper_marker) < 2:
-            raise AssertionError("Preferred LLM helper must be used in both boot and dev reconnect model selection paths.")
+        if content.count(preferred_llm_helper_marker) < 1 or "async function bootstrapAuthenticatedAccount" not in content:
+            raise AssertionError("Preferred LLM helper must be applied from the shared authenticated-account bootstrap path.")
         _assert_not_contains(
             "direct default STT boot fallback",
             content,
@@ -3417,7 +3422,7 @@ def main() -> int:
         _assert_contains(
             "recording reset uses runtime clear helper",
             content,
-            "function resetRecordingPreview() {\n    audioRecordingRef.current = null;\n    clearRecordingPreviewRuntime();",
+            "function resetRecordingPreview() {\n    void discardPhoneSpeechAudio(recordingAudioUriRef.current);\n    recordingAudioUriRef.current = null;\n    recordingNativeTranscriptRef.current = \"\";\n    void audioRecordingRef.current?.release().catch(() => undefined);\n    audioRecordingRef.current = null;\n    clearRecordingPreviewRuntime();",
         )
         recording_result_action_block = _function_block(content, "handleRecordingResultPrimaryAction")
         for label, marker in (
@@ -3426,7 +3431,7 @@ def main() -> int:
             ("recording short result reset action", "resetRecordingPreview();"),
             ("recording short result no transcription", "return;"),
             ("recording text fallback runtime clear", "clearRecordingPreviewRuntime();"),
-            ("recording text fallback open status helper binding", 'openScreenWithStatus("record", recordingTextFallbackStatusMessage());'),
+            ("recording failed transcription returns without hiding feedback", 'openScreen(returnScreen);'),
         ):
             _assert_contains(label, recording_result_action_block, marker)
         finish_recording_block = _function_block(content, "finishRecordingPreview")
@@ -3441,9 +3446,9 @@ def main() -> int:
             "if (shouldOpenTodayRecordingTranscriptReview(currentScreen, elapsedSeconds)) {",
         )
         _assert_contains(
-            "native whisper success runtime clear helper binding",
+            "speech transcription success runtime clear helper binding",
             content,
-            'updateTranscriptDraft(boundedText, "voice", voiceSeconds);\n      clearRecordingPreviewRuntime();\n      setPreview(null);\n      setTranscriptReviewReturnScreen(returnScreen);\n      openScreenWithStatus("transcriptReview", recordingWhisperSuccessStatusMessage());',
+            'updateTranscriptDraft(boundedText, "voice", voiceSeconds);\n      recordingAudioUriRef.current = null;\n      recordingNativeTranscriptRef.current = "";\n      clearRecordingPreviewRuntime();\n      setPreview(null);\n      setTranscriptReviewReturnScreen(returnScreen);',
         )
         _assert_contains(
             "parse transcript progress clears parser preview helper binding",
@@ -3568,7 +3573,7 @@ def main() -> int:
         _assert_contains(
             "recording start failure runtime clear helper binding",
             content,
-            "audioRecordingRef.current = null;\n      clearRecordingPreviewRuntime();\n      setStatus(recordingStartFailureStatusMessage(error));",
+            "audioRecordingRef.current = null;\n      clearRecordingPreviewRuntime();\n      showRecordingFeedback(recordingStartFailureStatusMessage(error));",
         )
         _assert_contains(
             "home recording finish transcript helper",
@@ -3583,7 +3588,7 @@ def main() -> int:
         _assert_contains(
             "home recording optional whisper handoff guard",
             finish_recording_block,
-            "if (capturedAudioPath && whisperModelPath.trim()) {",
+            'if (capturedAudioUri || phoneTranscript.trim()) {',
         )
         _assert_contains(
             "recording result home fallback action",
@@ -3831,11 +3836,6 @@ def main() -> int:
             "recordWorkflowGuardRuntimeDisplayBundle,",
         )
         _assert_contains(
-            "AI review checklist static bundle binding",
-            content,
-            "recordWorkflowStaticChecklistDisplay.aiReviewCostBoundaryItems;",
-        )
-        _assert_contains(
             "AI review runtime display helper binding",
             content,
             "const aiReviewRuntimeDisplay = aiReviewRuntimeDisplayBundle({",
@@ -3895,11 +3895,6 @@ def main() -> int:
             "AI save confirm submit display binding",
             content,
             "const aiSaveConfirmSubmitDisplayLabel = aiSaveConfirmDisplay.submit;",
-        )
-        _assert_contains(
-            "transcript review checklist runtime bundle binding",
-            content,
-            "const transcriptReviewCostBoundaryChecklistItems =\n    recordWorkflowRuntimeChecklistDisplay.transcriptReviewCostBoundaryItems;",
         )
         _assert_contains(
             "transcript review runtime display helper binding",
@@ -3996,16 +3991,6 @@ def main() -> int:
             "record workflow runtime checklist backend input",
             content,
             "protectedBackendReady,",
-        )
-        _assert_contains(
-            "record workflow runtime checklist parser ready input",
-            content,
-            "parserModelReady,",
-        )
-        _assert_contains(
-            "record workflow runtime checklist parser unavailable input",
-            content,
-            "parserModelUnavailableMessage: parserModelUnavailableDisplayMessage",
         )
         _assert_contains(
             "record workflow runtime checklist unsaved count input",
@@ -7280,16 +7265,6 @@ def main() -> int:
             'accessibilityRole="button"\n          style={styles.menuCard}',
         )
         _assert_contains(
-            "menu return handler",
-            content,
-            "function returnFromMenu()",
-        )
-        _assert_contains(
-            "menu return status helper binding",
-            content,
-            "openScreenWithStatus(menuReturnScreen, menuReturnStatusMessage(menuReturnScreen));",
-        )
-        _assert_contains(
             "menu destination handler",
             content,
             "function openMenuDestination(target: AppScreen)",
@@ -7347,8 +7322,8 @@ def main() -> int:
             ("menu destination label style", "menuLabel: {"),
         ):
             _assert_contains(label, menu_destination_grid_content, marker)
-        _assert_contains(
-            "menu return binding",
+        _assert_not_contains(
+            "menu duplicate return binding",
             content,
             "onPress={returnFromMenu}",
         )
@@ -7396,6 +7371,11 @@ def main() -> int:
             "dev reset accessibility",
             content,
             "accessibilityLabel={auxiliaryDisplayLabels.devResetAccessibility}",
+        )
+        _assert_contains(
+            "dev reset requires auth and debug tools",
+            content,
+            "{allowMobileDevAuth && enableDebugTools ? (\n              <View style={styles.devResetInline}>",
         )
         _assert_contains(
             "visual smoke route jump list",
@@ -7957,11 +7937,6 @@ def main() -> int:
             content,
             "const display = visualSmokeBootSkippedDisplayMessages();",
         )
-        _assert_contains(
-            "visual smoke boot ignored display binding",
-            content,
-            "const display = visualSmokeBootIgnoredDisplayMessages();",
-        )
         for label, marker in (
             ("visual smoke route jump grid component", "export function VisualSmokeRouteJumpGrid"),
             ("visual smoke route jump item type", "export type VisualSmokeRouteJumpItem ="),
@@ -8156,9 +8131,7 @@ def main() -> int:
             ("minimal home active mic style", "styles.homeMicButtonActive"),
             ("guided home card component binding", "<HomeGuidanceCard />"),
             ("guided home tagline", "想說什麼就說什麼"),
-            ("guided home non-button copy", "上面這排不是按鈕喔"),
-            ("guided home flexible format copy", "想說什麼就說什麼，不用照固定格式"),
-            ("guided home examples title", "範例（怎麼說都可以）"),
+            ("guided home examples title", "你可以這樣說"),
             ("guided home example carousel state", "const [homeExampleIndex, setHomeExampleIndex] = useState(0);"),
             ("guided home example carousel interval", "setHomeExampleIndex((value) => (value + 1) % homeSpeechExamples.length);"),
             ("guided home example meta row", "styles.homeExampleMetaRow"),
@@ -8181,10 +8154,9 @@ def main() -> int:
             ("minimal home mic press in", "onPressIn={startRecordingPreview}"),
             ("minimal home mic press out", "onPressOut={releaseRecordingPreview}"),
             ("recording release wrapper", "function releaseRecordingPreview()"),
-            ("minimal home conditional subtitle", "{currentChrome.subtitle ? <Text style={styles.subtitle}>{currentChrome.subtitle}</Text> : null}"),
-            ("native audio recorder hook import", "useAudioRecorder,"),
-            ("native audio recording preset", "const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);"),
-            ("native audio recording ref", "const audioRecordingRef = useRef<AudioRecorder | null>(null);"),
+            ("debug-only chrome subtitle", "{enableDebugTools && currentChrome.subtitle ? ("),
+            ("phone speech capture helper import", "startPhoneSpeechCapture"),
+            ("phone speech capture ref", "const audioRecordingRef = useRef<PhoneSpeechCapture | null>(null);"),
             ("native recording start guard", "const recordingStartInFlight = useRef(false);"),
             ("native recording stop guard", "const recordingStopInFlight = useRef(false);"),
             ("recording boundary runtime field binding", "const recordingBoundaryDisplay = recordingRuntimeDisplay.boundary;"),
@@ -8195,21 +8167,18 @@ def main() -> int:
             ("recording finish effective limit clamp", "recordingEffectiveLimitSeconds(voiceQuota)"),
             ("native microphone permission request", "await requestRecordingPermissionsAsync();"),
             ("native recording mode", "await setAudioModeAsync({"),
-            ("native recording preparation", "await audioRecorder.prepareToRecordAsync();"),
-            ("native recording start", "audioRecorder.record();"),
-            ("native recording ref assignment", "audioRecordingRef.current = audioRecorder;"),
-            ("native recording stop", "await recording.stop();"),
-            ("native recording uri", "const uri = recording.uri;"),
-            ("native recording uri bounded", "capturedAudioPath = uri ? nativeDebugInputValue(uri) : \"\";"),
+            ("phone speech recording start", "const capture = await startPhoneSpeechCapture();"),
+            ("phone speech recording ref assignment", "audioRecordingRef.current = capture;"),
+            ("phone speech recording stop", "const result = await recording.stop();"),
             ("native recording transcribe helper", "async function transcribeRecordingToReview("),
-            ("native recording whisper call", "const text = await transcribeWithNativeWhisper({"),
+            ("native recording whisper call", "text = await transcribeWithNativeWhisper({ modelPath: safeModelPath, audioPath: sourceAudioUri });"),
             ("native recording bounded transcript", "const boundedText = text.slice(0, maxTranscriptTextLength);"),
             ("native recording voice seconds state", "const [transcriptVoiceSeconds, setTranscriptVoiceSeconds] = useState(0);"),
             ("native recording transcript source", 'source: "user" | "sample" | "voice" = "user"'),
             ("native recording voice seconds draft", "setTranscriptVoiceSeconds("),
-            ("native recording transcript confirmation", 'openScreenWithStatus("transcriptReview", recordingWhisperSuccessStatusMessage());'),
-            ("home recording whisper handoff", 'void transcribeRecordingToReview("today", capturedAudioPath, elapsedSeconds);'),
-            ("home recording fallback transcript review", 'setTranscriptReviewReturnScreen("today");\n      openScreenWithStatus("transcriptReview", recordingTextFallbackStatusMessage());'),
+            ("native recording transcript confirmation", '"transcriptReview",\n        whisperFailed || !safeModelPath || !sourceAudioUri\n          ? recordingPhoneSpeechFallbackStatusMessage()'),
+            ("home recording whisper handoff", 'void transcribeRecordingToReview(\n          "today",\n          capturedAudioUri,\n          phoneTranscript,'),
+            ("home recording fallback stays visible without opening empty review", 'showRecordingFeedback(recordingTextFallbackStatusMessage());'),
             ("parse request body helper", "function parserPreviewRequestBody("),
             ("parse request body helper internals", "const modelIds = parserPreviewModelIds();\n    return {\n      profile_id: profileId,\n      transcript: text,\n      stt_model_id: modelIds.sttModelId,\n      llm_model_id: modelIds.llmModelId,\n      occurred_at: occurredAt,\n      voice_seconds: voiceSeconds"),
             ("parse request model ids helper", "function parserPreviewModelIds()"),
@@ -8339,7 +8308,7 @@ def main() -> int:
             ("minimal home block secondary hint", "<Text style={styles.homeHintSecondary}>{homeRecordingSecondaryHintDisplayText}</Text>"),
             ("minimal home block model status", "<Text style={styles.homeModelStatus}>{homeRecordingModelStatusDisplayText}</Text>"),
             ("guided home block example panel", "styles.homeExamplePanel"),
-            ("guided home block example title", "<Text style={styles.homeExampleTitle}>範例（怎麼說都可以）</Text>"),
+            ("guided home block example title", "<Text style={styles.homeExampleTitle}>你可以這樣說</Text>"),
             ("guided home block example pagination", "styles.homeExamplePagination"),
         ):
             _assert_contains(label, today_home_block, marker)
@@ -8353,10 +8322,6 @@ def main() -> int:
             ("guided home card item key binding", "key={homeGuidanceItemKey(item)}"),
             ("guided home card item icon binding", "{homeGuidanceItemIcon(item)}"),
             ("guided home card item label binding", "{homeGuidanceItemLabel(item)}"),
-            ("guided home card info icon", "styles.homeGuidanceInfoIcon"),
-            ("guided home card info icon text", "<Text style={styles.homeGuidanceInfoIconText}>i</Text>"),
-            ("guided home card info row", "styles.homeGuidanceInfoRow"),
-            ("guided home card non-button copy", "上面這排不是按鈕喔"),
             ("guided home row key helper", "function homeGuidanceRowKey(rowIndex: number)"),
             ("guided home row key helper fields", "return `home-guidance-row-${rowIndex}`;"),
             ("guided home row key helper binding", "key={homeGuidanceRowKey(rowIndex)}"),
@@ -8378,6 +8343,16 @@ def main() -> int:
         ):
             source = home_guidance_card_content if "home example" not in label else recording_copy_content
             _assert_contains(label, source, marker)
+        _assert_not_contains(
+            "guided home removed instructional paragraph",
+            home_guidance_card_content,
+            "上面這排不是按鈕喔",
+        )
+        _assert_not_contains(
+            "guided home removed info icon",
+            home_guidance_card_content,
+            "homeGuidanceInfoIcon",
+        )
         for label, marker in (
             ("guided home example label helper import", "homeSpeechExampleLabel,"),
             ("guided home example label helper binding", "{homeSpeechExampleLabel(homeCurrentSpeechExample)}"),
@@ -8434,7 +8409,7 @@ def main() -> int:
         ):
             _assert_not_contains(label, home_example_block, marker)
         _assert_contains("minimal home starts near top", _style_block(content, "homeMinimalSection"), 'justifyContent: "flex-start"')
-        _assert_contains("minimal home reduced top padding", _style_block(content, "homeMinimalSection"), "paddingTop: 14")
+        _assert_contains("minimal home reduced top padding", _style_block(content, "homeMinimalSection"), "paddingTop: 16")
         _assert_contains("minimal home model status style", _style_block(content, "homeModelStatus"), "fontSize: 12")
         for style_name in ("homeExampleTitle", "homeExampleIndex", "homeExampleText"):
             _assert_contains(
@@ -8505,15 +8480,12 @@ def main() -> int:
             ("transcript review status model unavailable binding", "modelUnavailable: boundUiMessage(`${value.parserModelUnavailableMessage}，請先在設定選擇可用模型。`)"),
             ("transcript review status display bundle helper", "function transcriptReviewStatusDisplayBundle(value: {"),
             ("transcript review status display bundle delegates", "return transcriptReviewStatusDisplayTexts(value);"),
-            ("transcript review cost boundary checklist helper", "function transcriptReviewCostBoundaryChecklistDisplayItems("),
-            ("transcript review empty parser guard copy", "空文字、過長文字或範例文字不會送 parser。"),
-            ("transcript review no batch history copy", "下一步整理只送目前這段文字一次，不會批次載入歷史紀錄。"),
             ("transcript validation helper", "function validateTranscriptForParser(value: string)"),
             ("transcript validation numeric density helper", "function countNumericValues(value: string)"),
             ("transcript validation max length copy", "文字過長，請縮短到 ${maxTranscriptTextLength} 字內，或分批整理"),
             ("transcript validation numeric density copy", "數字太多，請分批整理，避免 parser 成本過高"),
-            ("transcript review intro copy", "確認目前輸入或本機 Whisper 轉出的紀錄文字"),
-            ("transcript review sample warning copy", "避免不必要的 parser / LLM 成本"),
+            ("transcript review intro copy", "看看文字是否正確，有需要的話可以直接修改。"),
+            ("transcript review sample warning copy", "這是示範內容。換成你自己的紀錄，就可以開始整理。"),
         ):
             _assert_contains(label, recording_copy_content, marker)
         for label, marker in (
@@ -8756,6 +8728,7 @@ def main() -> int:
             ("core sample action binding", "onFillSamplePress={fillTranscriptSampleDraft}"),
             ("core manual action binding", "onManualAddPress={openRecordManualRecord}"),
             ("core next action binding", "onNextPress={openTranscriptReview}"),
+            ("core sample debug visibility binding", "showFillSample={enableDebugTools}"),
             ("core entry button role", 'accessibilityRole="button"'),
         ):
             _assert_contains(label, content, marker)
@@ -8769,6 +8742,7 @@ def main() -> int:
             ("core flow entry sample handler prop", "onPress={onFillSamplePress}"),
             ("core flow entry manual handler prop", "onPress={onManualAddPress}"),
             ("core flow entry next handler prop", "onPress={onNextPress}"),
+            ("core flow entry sample visibility prop", "showFillSample ? ("),
             ("core flow entry sample label prop", "{fillSampleLabel}"),
             ("core flow entry manual label prop", "{manualAddLabel}"),
             ("core flow entry next label prop", "{nextLabel}"),
@@ -8830,6 +8804,59 @@ def main() -> int:
             ("transcript review action row secondary style", "secondaryButton: {"),
         ):
             _assert_contains(label, transcript_review_action_row_content, marker)
+        for label, marker in (
+            ("development backend switcher component", "export function DevBackendSwitcher"),
+            ("development backend local target", 'onTargetPress("local")'),
+            ("development backend AWS target", 'onTargetPress("aws")'),
+            ("development backend switcher button role", 'accessibilityRole="button"'),
+            ("development backend switcher disabled state", "accessibilityState={{ disabled: localDisabled, selected: localSelected }}"),
+            ("development backend switcher selected state", "accessibilityState={{ disabled: awsDisabled, selected: awsSelected }}"),
+            ("development backend switcher local handler", "onPress={pressLocalTarget}"),
+            ("development backend switcher AWS handler", "onPress={pressAwsTarget}"),
+        ):
+            _assert_contains(label, dev_backend_switcher_content, marker)
+        for label, marker in (
+            ("development local API environment", "EXPO_PUBLIC_LOCAL_API_BASE_URL"),
+            ("development AWS API environment", "EXPO_PUBLIC_AWS_API_BASE_URL"),
+        ):
+            _assert_contains(label, app_runtime_config_content, marker)
+        for label, marker in (
+            ("development backend switcher dedicated gate", "{enableDevServerSwitcher && allowMobileDevAuth ? ("),
+            ("development backend switcher render", "<DevBackendSwitcher"),
+            ("development backend switch handler", "function switchDevelopmentBackend(target: DevBackendTarget)"),
+            ("development backend switch session isolation", "clearMobileSessionState();\n    setApiBaseUrl(nextApiBaseUrl);"),
+            ("development backend switch safe destination", 'openScreen("today");'),
+            ("development backend switch immediate reconnect", "void boot(nextApiBaseUrl);"),
+            ("backend boot URL override", "async function boot(apiBaseUrlOverride = apiBaseUrl)"),
+            ("quota backend URL override", "apiBaseUrlOverride = normalizedApiBaseUrl"),
+            ("authenticated bootstrap quota backend binding", "await loadVoiceQuota(boundedAccount.id, tokenForHeaders, bootKey);"),
+        ):
+            _assert_contains(label, content, marker)
+        for label, source, marker in (
+            ("AI review no cost boundary block", content, "auxiliaryDisplayLabels.costBoundaryBadge"),
+            ("transcript review no cost boundary block", content, "coreFlowDisplayLabels.costBoundary"),
+            ("first-version no cost boundary label", first_version_flow_copy_content, 'costBoundary: boundDisplayText("本次成本邊界"'),
+            ("shared display no cost boundary badge", shared_display_items_content, 'costBoundaryBadge: boundDisplayText("成本邊界"'),
+        ):
+            _assert_not_contains(label, source, marker)
+        for label, marker in (
+            ("parser loading view component", "export function ParserLoadingView"),
+            ("parser loading progress role", 'accessibilityRole="progressbar"'),
+            ("parser loading live region", 'accessibilityLiveRegion="polite"'),
+            ("parser loading indeterminate value", 'accessibilityValue={{ text: "處理中" }}'),
+            ("parser loading confirmation copy", "確認之前，不會儲存"),
+            ("parser loading indicator", '<ActivityIndicator color={palette.surface} size="large" />'),
+        ):
+            _assert_contains(label, parser_loading_view_content, marker)
+        for label, marker in (
+            ("parser loading state binding", 'const isParserPreviewLoading ='),
+            ("parser loading request ref binding", 'currentScreen === "transcriptReview" && isBusy && parsePreviewInFlight.current'),
+            ("parser loading keyboard dismissal", "Keyboard.dismiss();"),
+            ("parser loading screen render", "{isParserPreviewLoading ? <ParserLoadingView /> : null}"),
+            ("parser loading transcript form lock", 'currentScreen === "transcriptReview" && !isParserPreviewLoading'),
+            ("parser loading Android back lock", "if (isParserPreviewLoading) {\n        return true;"),
+        ):
+            _assert_contains(label, content, marker)
         for label, marker in (
             ("confirmation return edit accessibility label", 'returnEditAccessibility: boundDisplayText("返回文字修改，保留目前輸入且不重新呼叫 AI", maxDisplayDetailTextLength)'),
             ("confirmation save confirm accessibility label", 'enterSaveConfirmAccessibility: boundDisplayText("進入每日紀錄頁，不儲存也不重新呼叫 AI", maxDisplayDetailTextLength)'),
@@ -9003,7 +9030,7 @@ def main() -> int:
             ("daily record leave guard android back listener", 'BackHandler.addEventListener("hardwareBackPress"'),
             ("daily record leave guard android branch", "if (shouldGuardDailyRecordLeave)"),
             ("daily record leave guard android handled", "return true;"),
-            ("daily record leave guard android dependency", "}, [shouldGuardDailyRecordLeave]);"),
+            ("daily record leave guard android dependency", "}, [isParserPreviewLoading, shouldGuardDailyRecordLeave]);"),
             ("daily record leave guard render condition", "{shouldShowDailyRecordLeaveGuard ? ("),
             ("daily record leave guard render card", "styles.dailyLeaveGuardCard"),
             ("daily record leave guard action row binding", "<DangerConfirmActionRow"),
@@ -9304,9 +9331,6 @@ def main() -> int:
             ("AI review display texts no preview body binding", "noPreviewBody: aiReviewNoPreviewBodyCopy()"),
             ("AI review display texts rejected events binding", "rejectedEvents: aiReviewRejectedEventsCopy()"),
             ("AI review display texts backend required binding", "backendRequired: aiReviewBackendRequiredCopy()"),
-            ("AI review cost boundary checklist helper", "function aiReviewCostBoundaryChecklistDisplayItems()"),
-            ("AI review cost boundary parser copy", "此頁只顯示 parser 已回傳的候選紀錄。"),
-            ("AI review cost boundary no rerun copy", "逐筆編輯、移除或進入儲存確認都不會重新呼叫 AI。"),
             ("record entry settings checklist helper", "function recordEntrySettingsChecklistDisplayItems(isBackendReady: boolean)"),
             ("record entry settings manual parser copy", "手動新增可完全避開 AI parser，適合補登明確紀錄。"),
             ("record entry settings no history copy", "文字整理每次只送出目前文字一次，不批次載入歷史紀錄。"),
@@ -9339,9 +9363,6 @@ def main() -> int:
             ("record workflow runtime checklist bundle save confirm rows", "aiSaveConfirmBoundaryRows: aiSaveConfirmBoundaryDisplayRows("),
             ("record workflow runtime checklist bundle low confidence rows", "value.lowConfidenceRecordCount,"),
             ("record workflow runtime checklist bundle rejected rows", "value.rejectedPreviewEventCount"),
-            ("record workflow runtime checklist bundle transcript review", "transcriptReviewCostBoundaryItems: transcriptReviewCostBoundaryChecklistDisplayItems("),
-            ("record workflow runtime checklist bundle parser ready", "value.parserModelReady,"),
-            ("record workflow runtime checklist bundle parser unavailable", "value.parserModelUnavailableMessage"),
             ("record workflow runtime checklist bundle save success", "saveSuccessBoundaryItems: saveSuccessBoundaryChecklistDisplayItems("),
             ("record workflow runtime checklist bundle save entry", "value.lastSaveEntryMethod,"),
             ("record workflow runtime checklist bundle unsaved preview", "value.hasUnsavedPreviewRecords,"),
@@ -9390,7 +9411,6 @@ def main() -> int:
             ("AI candidate remove checklist scope copy", "只影響目前 AI 整理確認清單。"),
             ("AI candidate remove checklist saved record copy", "已經儲存的正式紀錄不受影響。"),
             ("record workflow static checklist bundle helper", "function recordWorkflowStaticChecklistDisplayBundle()"),
-            ("record workflow static checklist bundle ai review", "aiReviewCostBoundaryItems: aiReviewCostBoundaryChecklistDisplayItems()"),
             ("record workflow static checklist bundle manual submit", "manualSubmitItems: manualSubmitChecklistDisplayItems()"),
             ("record workflow static checklist bundle record detail", "recordDetailBoundaryItems: recordDetailBoundaryChecklistDisplayItems()"),
             ("record workflow static checklist bundle candidate remove", "aiCandidateRemoveItems: aiCandidateRemoveChecklistDisplayItems()"),
@@ -9433,7 +9453,7 @@ def main() -> int:
             ("parser availability parser binding", "parserModelUnavailable: boundUiMessage(value.parserModelUnavailableMessage)"),
             ("parser availability backend binding", "protectedBackendUnavailable: boundUiMessage(value.protectedBackendUnavailableMessage)"),
             ("preview record edit boundary copy", "這裡只修改待確認候選紀錄"),
-            ("manual record confirm no AI copy", "這筆紀錄不經 AI parser"),
+            ("manual record explicit confirmation copy", "確認日期與內容是否正確，按下確認建立後才會儲存。"),
             ("manual record return no create copy", "未送出 create request，也未呼叫 AI"),
             ("record detail return no AI copy", "只使用已載入紀錄，不呼叫 AI"),
             ("record detail boundary single record copy", "只顯示目前已載入的單筆紀錄，不額外查詢完整歷史。"),
@@ -9764,7 +9784,7 @@ def main() -> int:
             ("delete confirm ready status helper", "function deleteConfirmReadyStatusMessage()"),
             ("delete confirm return status helper", "function deleteConfirmReturnStatusMessage()"),
             ("delete confirm checklist helper", "function deleteConfirmChecklistDisplayItems()"),
-            ("delete confirm intro copy", "刪除後會從目前清單移除"),
+            ("delete confirm intro copy", "刪除後無法復原。只有這筆紀錄會被移除，其他紀錄不受影響。"),
             ("delete confirm no request copy", "按下確認刪除前不會送出 delete request"),
             ("delete confirm cancel status copy", "已取消刪除；紀錄保留"),
             ("delete confirm single record copy", "只會刪除目前選取的這一筆紀錄。"),
@@ -9804,7 +9824,7 @@ def main() -> int:
             ("record status runtime checklist bundle helper", "function recordStatusRuntimeChecklistDisplayBundle(recordSyncLimit: number)"),
             ("record status runtime checklist static binding", "static: recordStatusStaticChecklistDisplayBundle()"),
             ("record status runtime checklist success binding", "success: recordStatusSuccessChecklistDisplayBundle(recordSyncLimit)"),
-            ("record edit intro copy", "欄位會轉成後端結構化 payload"),
+            ("record edit intro copy", "調整內容後，記得儲存修改。"),
             ("record edit no update copy", "按下儲存修改前不會送出 update request"),
             ("record result destination no retry copy", "不會重新送出 backend request 或呼叫 AI"),
             ("delete success no restore copy", "成功頁不保留被刪除紀錄的本機復原副本。"),
@@ -9844,7 +9864,6 @@ def main() -> int:
             ("record sync boundary records-at-limit binding", "const recordsAtCacheLimit = recordSyncBoundaryDisplay.recordsAtCacheLimit;"),
             ("record sync boundary load-more binding", "const canLoadMoreRecords = recordSyncBoundaryDisplay.canLoadMoreRecords;"),
             ("record sync boundary history display binding", "const historySyncBoundaryDisplayText = recordSyncBoundaryDisplay.history;"),
-            ("record sync boundary analysis display binding", "const analysisSyncBoundaryDisplayText = recordSyncBoundaryDisplay.analysis;"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
@@ -10032,8 +10051,8 @@ def main() -> int:
             ("minimal home secondary hint", "放開即結束"),
             ("minimal home recording seconds copy", "已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒，放開即結束"),
             ("minimal home recording model status helper", "function homeRecordingModelStatusCopy(hasWhisperModel: boolean)"),
-            ("minimal home recording model whisper copy", "目前語音識別：本機 Whisper"),
-            ("minimal home recording model fallback copy", "目前語音識別：內建文字確認"),
+            ("minimal home recording model whisper copy", "語音辨識：本機 Whisper 優先；手機備援可能需要網路"),
+            ("minimal home recording model fallback copy", "語音辨識：手機內建服務，可能需要網路"),
             ("recording limit reached status", "function recordingLimitReachedStatusMessage(limitSeconds: number)"),
             ("native recording no direct parser boundary", "確認後再交給 AI 整理"),
         ):
@@ -10605,7 +10624,7 @@ def main() -> int:
         if history_structured_index == -1 or history_raw_index == -1 or history_structured_index > history_raw_index:
             raise AssertionError("History structured AI-organized records must render before raw transcript branch.")
         for label, marker in (
-            ("history intro status blocks binding", "<HistoryIntroStatusBlocks\n              boundaryItems={historyBoundaryChecklistItems}"),
+            ("history intro status blocks binding", "<HistoryIntroStatusBlocks\n                boundaryItems={historyBoundaryChecklistItems}"),
             ("history intro status boundary title binding", "boundaryTitle={coreFlowDisplayLabels.historyDataBoundary}"),
             ("history intro status sync body binding", "syncBody={recordsStatusDisplayText}"),
             ("history intro status sync title binding", "syncTitle={coreFlowDisplayLabels.recordSyncStatus}"),
@@ -12108,18 +12127,18 @@ def main() -> int:
         _assert_contains(
             "AI Review rejected event warning row",
             rejected_event_block,
-            'backgroundColor: "#FFF8ED"',
+            'backgroundColor: palette.warningWash',
         )
         detail_row_block = _style_block(content, "detailRow")
         _assert_contains(
             "detail row open info background",
             detail_row_block,
-            'backgroundColor: "#F7FCFA"',
+            'backgroundColor: palette.subtle',
         )
         _assert_contains(
             "detail row open info border",
             detail_row_block,
-            'borderColor: "#D6EEE4"',
+            'borderColor: palette.accentBorder',
         )
         _assert_contains(
             "detail row wrapping",
@@ -12141,7 +12160,7 @@ def main() -> int:
         _assert_contains(
             "settings row single-layer background",
             settings_row_block,
-            'backgroundColor: "#FFFFFF"',
+            'backgroundColor: palette.surface',
         )
         _assert_contains(
             "settings row wrapping",
@@ -12316,13 +12335,11 @@ def main() -> int:
             ("delete success boundary checklist items binding", "items={deleteSuccessBoundaryChecklistItems}"),
             ("update success boundary checklist items binding", "items={updateSuccessBoundaryChecklistItems}"),
             ("AI flow checklist binding", "<AiFlowChecklist"),
-            ("AI review cost checklist items binding", "items={aiReviewCostBoundaryChecklistItems}"),
             ("AI save confirm checklist items binding", "items={aiSaveConfirmChecklistItems}"),
             ("AI candidate remove checklist items binding", "items={aiCandidateRemoveChecklistItems}"),
             ("AI save failure checklist items binding", "items={aiSaveFailureChecklistItems}"),
             ("record flow checklist binding", "<RecordFlowChecklist"),
             ("record entry settings checklist items binding", "items={recordEntrySettingsChecklistItems}"),
-            ("transcript review cost checklist items binding", "items={transcriptReviewCostBoundaryChecklistItems}"),
             ("insight flow checklist binding", "<InsightFlowChecklist"),
             ("delete confirm checklist items binding", "items={deleteConfirmChecklistItems}"),
             ("analysis boundary checklist items binding", "items={analysisBoundaryChecklistItems}"),
@@ -12413,8 +12430,8 @@ def main() -> int:
             "const settingsDisplayRows = settingsStaticDisplay.settingsRows;",
         )
         for label, marker in (
-            ("settings static display bundle helper", "function settingsStaticDisplayBundle()"),
-            ("settings static display bundle settings rows", "settingsRows: settingsDisplayRows()"),
+            ("settings static display bundle helper", "function settingsStaticDisplayBundle(includeInternalTools = true)"),
+            ("settings static display bundle settings rows", "settingsRows: settingsDisplayRows(includeInternalTools)"),
             ("settings static display bundle tutorial steps", "tutorialSteps: tutorialDisplaySteps()"),
             ("settings static display bundle auth provider", "authProviderItems: authProviderDisplayItems()"),
             ("settings static display bundle session management", "sessionManagementItems: sessionManagementDisplayItems()"),
@@ -12428,13 +12445,13 @@ def main() -> int:
             ("settings static display bundle privacy boundary rows", "privacyBoundaryRows: privacyBoundaryDisplayRows()"),
             ("settings static display bundle privacy readiness checklist", "privacyReadinessChecklistItems: privacyReadinessChecklistDisplayItems()"),
             ("settings static display bundle tutorial safety checklist", "tutorialSafetyChecklistItems: tutorialSafetyChecklistDisplayItems()"),
-            ("settings runtime display bundle helper", "function settingsRuntimeDisplayBundle()"),
-            ("settings runtime display bundle binding", "settings: settingsStaticDisplayBundle()"),
+            ("settings runtime display bundle helper", "function settingsRuntimeDisplayBundle(includeInternalTools = true)"),
+            ("settings runtime display bundle binding", "settings: settingsStaticDisplayBundle(includeInternalTools)"),
         ):
             _assert_contains(label, settings_static_display_bundle_content, marker)
         for label, marker in (
             ("settings runtime display bundle import", "settingsRuntimeDisplayBundle"),
-            ("settings runtime display bundle binding", "const settingsRuntimeDisplay = useMemo(() => settingsRuntimeDisplayBundle(), []);"),
+            ("settings runtime display bundle binding", "const settingsRuntimeDisplay = useMemo(() => settingsRuntimeDisplayBundle(enableDebugTools), []);"),
             ("settings runtime field binding", "const settingsStaticDisplay = settingsRuntimeDisplay.settings;"),
         ):
             _assert_contains(label, content, marker)
@@ -12472,8 +12489,9 @@ def main() -> int:
         )
         for label, marker in (
             ("settings rows config", "export const settingsRows: SettingsRow[] = ["),
-            ("settings display rows helper", "export function settingsDisplayRows()"),
-            ("settings display rows map", "return settingsRows.map(settingsRowDisplayItem);"),
+            ("settings display rows helper", "export function settingsDisplayRows(includeInternalTools = true)"),
+            ("settings release row allowlist", 'const launchSettingsRowIds = new Set(["quota", "tutorial"]);'),
+            ("settings display rows map", "return visibleRows.map(settingsRowDisplayItem);"),
             ("settings subpage target helper", 'export function settingsRowSubpageTarget(row: Pick<SettingsRow, "id">): AppScreen | null'),
             ("settings auth subpage target", 'return "accountSecurity";'),
             ("settings subscription management subpage target", 'return "subscriptionManagement";'),
@@ -12629,7 +12647,6 @@ def main() -> int:
                 f"{list_name}.map((item) => (",
             )
         for list_name in (
-            "aiReviewCostBoundaryChecklistItems",
             "aiSaveConfirmChecklistItems",
             "aiCandidateRemoveChecklistItems",
             "aiSaveFailureChecklistItems",
@@ -12641,7 +12658,6 @@ def main() -> int:
             )
         for list_name in (
             "recordEntrySettingsChecklistItems",
-            "transcriptReviewCostBoundaryChecklistItems",
         ):
             _assert_not_contains(
                 f"{list_name} direct record flow checklist map",
@@ -14372,7 +14388,7 @@ def main() -> int:
             ("auth load sessions accessibility label", "loadSessionsAccessibility: boundDisplayText(\"載入 sessions，只顯示 bounded session metadata\", maxDisplayDetailTextLength)"),
             ("auth logout local accessibility label", "logoutLocalAccessibility: boundDisplayText(\"登出本機，revoke session 並清除本機安全 token\", maxDisplayDetailTextLength)"),
             ("auth logout all accessibility label", "logoutAllAccessibility: boundDisplayText(\"登出全部裝置，revoke backend sessions 並清除本機 token\", maxDisplayDetailTextLength)"),
-            ("settings local clear accessibility label", "localClearAccessibility: boundDisplayText(\"清除本機 session 與預覽狀態，不刪除 backend 紀錄\", maxDisplayDetailTextLength)"),
+            ("settings local clear accessibility label", "localClearAccessibility: boundDisplayText(\"登出這台裝置並清除本機登入狀態，不刪除雲端紀錄\", maxDisplayDetailTextLength)"),
             ("advanced settings toggle accessibility label", "advancedSettingsToggleAccessibility: boundDisplayText(\"展開或收合進階設定，不連線 backend 或啟動模型\", maxDisplayDetailTextLength)"),
             ("backend reconnect accessibility label", "backendReconnectAccessibility: boundDisplayText(\"重新連線 backend，會清除 stale session/model/record state\", maxDisplayDetailTextLength)"),
             ("profile edit accessibility label", "editIntegrationAccessibility: boundDisplayText(\"查看個人資料編輯整合狀態，不寫入個資或照護對象\", maxDisplayDetailTextLength)"),
@@ -14817,7 +14833,7 @@ def main() -> int:
         _assert_contains(
             "comparison row single-layer background",
             comparison_row_block,
-            'backgroundColor: "#FFFFFF"',
+            'backgroundColor: palette.surface',
         )
         _assert_contains(
             "comparison row wrapping",
@@ -14833,7 +14849,7 @@ def main() -> int:
         _assert_contains(
             "future hero card single-layer background",
             hero_card_feature_block,
-            'backgroundColor: "#EAF6F1"',
+            'backgroundColor: palette.wash',
         )
         for label, marker in (
             ("future modules open handler", "function openFutureModulesFromMenu()"),
@@ -18020,7 +18036,7 @@ def main() -> int:
         _assert_contains(
             "store product card single-layer background",
             product_card_block,
-            'backgroundColor: "#FFFFFF"',
+            'backgroundColor: palette.surface',
         )
         achievement_card_block = _style_block(achievement_category_section_list_content, "achievementCard")
         _assert_contains(
@@ -18031,7 +18047,7 @@ def main() -> int:
         _assert_contains(
             "achievement card single-layer background",
             achievement_card_block,
-            'backgroundColor: "#FFFFFF"',
+            'backgroundColor: palette.surface',
         )
         achievement_badge_block = _style_block(achievement_unlocked_card_list_content, "achievementBadge")
         _assert_contains(

@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, View } from "react-native";
 
 import { RecordTextField } from "./recordTextField";
@@ -63,11 +64,11 @@ const styles = StyleSheet.create({
     gap: 10
   },
   input: {
-    backgroundColor: "#ffffff",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
-    color: "#1E1E1E",
+    color: palette.text,
     fontSize: 16,
     minHeight: 52,
     paddingHorizontal: 14,

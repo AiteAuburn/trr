@@ -1,8 +1,10 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 import { DetailRow } from "./detailRow";
 import { FieldLabel } from "./fieldLabel";
 import { HighlightBulletRow } from "./highlightBulletRow";
+import { enableDebugTools } from "./appRuntimeConfig";
 
 type RecordDetailInfoRow = {
   label: string;
@@ -82,25 +84,25 @@ export function RecordDetailInfoPanel({
         <DetailRow label={<FieldLabel icon={"🚶"} label={"運動"} />} value={exerciseValue} />
         <DetailRow label={<FieldLabel icon={"💊"} label={"用藥"} />} value={medicationValue} />
       </View>
-      <View style={styles.inlineInfoBlock}>
+      {enableDebugTools ? <View style={styles.inlineInfoBlock}>
         <Text style={styles.label}>{boundaryTitle}</Text>
         {boundaryItems.map((item) => (
           <HighlightBulletRow key={item} text={item} />
         ))}
-      </View>
+      </View> : null}
     </>
   );
 }
 
 const styles = StyleSheet.create({
   confidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 12,
     fontWeight: "700"
   },
   detailHero: {
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 24,
     gap: 6,
     padding: 20
@@ -110,13 +112,13 @@ const styles = StyleSheet.create({
     paddingVertical: 2
   },
   detailValue: {
-    color: "#3FA67F",
+    color: palette.brand,
     fontSize: 32,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 38
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2
   },
   label: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   }

@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 type MetricCardProps = {
@@ -22,8 +23,8 @@ const styles = StyleSheet.create({
     lineHeight: 18
   },
   metricCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 20,
     borderWidth: 1,
     flexGrow: 1,
@@ -31,9 +32,9 @@ const styles = StyleSheet.create({
     padding: 14
   },
   metricValue: {
-    color: "#3FA67F",
+    color: palette.brand,
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: "700",
     marginTop: 4
   }
 });

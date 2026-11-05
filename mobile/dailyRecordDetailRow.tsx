@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 type DailyRecordDetailRowProps = {
@@ -16,15 +17,15 @@ export function DailyRecordDetailRow({ label, value }: DailyRecordDetailRowProps
 
 const styles = StyleSheet.create({
   confidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 12,
     fontWeight: "700"
   },
   detailRow: {
     alignItems: "flex-start",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 18,
     borderWidth: 1,
     flexDirection: "row",
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     padding: 14
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19

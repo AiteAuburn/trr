@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 import { FieldLabel } from "./fieldLabel";
 import { RecordTextField, recordTextFieldStyles } from "./recordTextField";
@@ -89,12 +91,12 @@ const styles = StyleSheet.create({
     gap: 8
   },
   segmentActive: {
-    backgroundColor: "#3FA67F",
-    borderColor: "#3FA67F"
+    backgroundColor: palette.brand,
+    borderColor: palette.brand
   },
   segmentPill: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 999,
     borderWidth: 1,
     justifyContent: "center",
@@ -108,11 +110,11 @@ const styles = StyleSheet.create({
     gap: 8
   },
   segmentText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 13,
     fontWeight: "800"
   },
   segmentTextActive: {
-    color: "#FFFFFF"
+    color: palette.surface
   }
 });

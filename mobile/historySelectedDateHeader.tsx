@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 type HistorySelectedDateHeaderProps = {
@@ -18,13 +19,13 @@ export function HistorySelectedDateHeader({ dateLabel, storageLabel }: HistorySe
 
 const styles = StyleSheet.create({
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
   },
   label: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   },

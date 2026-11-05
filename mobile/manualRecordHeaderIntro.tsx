@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 type ManualRecordHeaderIntroProps = {
   backAccessibilityLabel: string;
@@ -35,22 +37,22 @@ export function ManualRecordHeaderIntro({
 
 const styles = StyleSheet.create({
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
   },
   secondaryButton: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
-    borderRadius: 22,
+    backgroundColor: palette.wash,
+    borderRadius: 16,
     justifyContent: "center",
-    minHeight: 44,
+    minHeight: 52,
     paddingHorizontal: 16,
     paddingVertical: 14
   },
   secondaryButtonText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   },
@@ -62,7 +64,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   sectionTitle: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 20,
     fontWeight: "800"
   }

@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 type SettingsSubpageCloseButtonProps = {
   accessibilityLabel: string;
@@ -24,8 +26,8 @@ export function SettingsSubpageCloseButton({
 const styles = StyleSheet.create({
   closeButton: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.wash,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
     height: 44,
@@ -33,7 +35,7 @@ const styles = StyleSheet.create({
     width: 44
   },
   closeButtonText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 28,
     fontWeight: "800",
     lineHeight: 30

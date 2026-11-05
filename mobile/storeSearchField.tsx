@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
 type StoreSearchFieldProps = {
@@ -33,8 +34,8 @@ export function StoreSearchField({
 const styles = StyleSheet.create({
   searchField: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 20,
     borderWidth: 1,
     flexDirection: "row",
@@ -43,12 +44,12 @@ const styles = StyleSheet.create({
     paddingVertical: 12
   },
   searchIcon: {
-    color: "#3FA67F",
+    color: palette.brand,
     fontSize: 18,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   searchInput: {
-    color: "#1E1E1E",
+    color: palette.text,
     flex: 1,
     fontSize: 16,
     padding: 0

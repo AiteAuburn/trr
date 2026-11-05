@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 import { HighlightBulletRow } from "./highlightBulletRow";
@@ -33,7 +34,7 @@ export function HistoryIntroStatusBlocks({
 
 const styles = StyleSheet.create({
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2
   },
   label: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   }

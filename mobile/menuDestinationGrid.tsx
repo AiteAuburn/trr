@@ -1,5 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 import type { AppScreen } from "./navigationConfig";
+import { NavigationGlyph } from "./navigationGlyph";
 
 export type MenuDestinationItem = {
   accessibilityLabel: string;
@@ -33,6 +36,15 @@ function menuDestinationLabel(item: MenuDestinationItem) {
   return item.label;
 }
 
+function menuDestinationHint(item: MenuDestinationItem) {
+  switch (item.target) {
+    case "today": return "用一句話，記下今天";
+    case "history": return "每一天的紀錄，都在這裡";
+    case "analysis": return "看見數字背後的變化";
+    default: return "調整成適合自己的方式";
+  }
+}
+
 export function MenuDestinationGrid({ items, onDestinationPress }: MenuDestinationGridProps) {
   return (
     <View style={styles.menuGrid}>
@@ -45,9 +57,13 @@ export function MenuDestinationGrid({ items, onDestinationPress }: MenuDestinati
           onPress={() => onDestinationPress(menuDestinationTarget(item))}
         >
           <View style={styles.menuIconCenter}>
-            <Text style={styles.menuIconText}>{menuDestinationIcon(item)}</Text>
+            <NavigationGlyph>{menuDestinationIcon(item)}</NavigationGlyph>
           </View>
+          <View style={styles.menuCopy}>
           <Text style={styles.menuLabel}>{menuDestinationLabel(item)}</Text>
+          <Text style={styles.menuHint}>{menuDestinationHint(item)}</Text>
+          </View>
+          <Text accessible={false} style={styles.chevron}>›</Text>
         </Pressable>
       ))}
     </View>
@@ -57,15 +73,15 @@ export function MenuDestinationGrid({ items, onDestinationPress }: MenuDestinati
 const styles = StyleSheet.create({
   menuCard: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 24,
     borderWidth: 1,
-    gap: 12,
-    justifyContent: "center",
-    minHeight: 118,
-    padding: 16,
-    width: "47%"
+    flexDirection: "row",
+    gap: 16,
+    minHeight: 96,
+    padding: 18,
+    width: "100%"
   },
   menuGrid: {
     flexDirection: "row",
@@ -74,19 +90,22 @@ const styles = StyleSheet.create({
   },
   menuIconCenter: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
-    borderRadius: 999,
-    height: 64,
+    backgroundColor: palette.wash,
+    borderRadius: 18,
+    height: 52,
     justifyContent: "center",
-    width: 64
+    width: 52
   },
   menuIconText: {
     fontSize: 26
   },
   menuLabel: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 16,
-    fontWeight: "900",
-    textAlign: "center"
-  }
+    fontWeight: "700",
+    textAlign: "left"
+  },
+  menuCopy: { flex: 1, gap: 5 },
+  menuHint: { color: palette.secondary, fontSize: 12, lineHeight: 18 },
+  chevron: { color: palette.secondary, fontSize: 26 }
 });

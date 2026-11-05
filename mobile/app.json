@@ -18,7 +18,18 @@
     },
     "plugins": [
       "expo-audio",
-      "expo-asset"
+      "expo-asset",
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "糖錄錄需要麥克風權限來將語音轉成文字。",
+          "androidSpeechServicePackages": [
+            "com.google.android.googlequicksearchbox",
+            "com.google.android.tts",
+            "com.google.android.as"
+          ]
+        }
+      ]
     ],
     "extra": {
       "apiBaseUrl": "http://localhost:8000"

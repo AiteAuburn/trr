@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 import type { AppScreen } from "./navigationConfig";
 
 export type SettingsDisplayRow = {
@@ -63,28 +65,28 @@ export function SettingsRowList({ onRowPress, quotaHelperText, rows }: SettingsR
 
 const styles = StyleSheet.create({
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
   },
   iconCircleSmall: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     height: 40,
     justifyContent: "center",
     width: 40
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",
     lineHeight: 22
   },
   settingsChevron: {
-    color: "#3FA67F",
+    color: palette.brand,
     fontSize: 28,
     fontWeight: "600"
   },
@@ -93,8 +95,8 @@ const styles = StyleSheet.create({
   },
   settingsRow: {
     alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
     flexDirection: "row",

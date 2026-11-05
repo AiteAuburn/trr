@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 export type ProductionAuthReadinessItem = {
@@ -32,7 +33,7 @@ export function ProductionAuthReadinessList({ items }: ProductionAuthReadinessLi
 
 const styles = StyleSheet.create({
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
@@ -44,18 +45,18 @@ const styles = StyleSheet.create({
   },
   previewModeBadge: {
     alignSelf: "flex-start",
-    backgroundColor: "#EAF6F1",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.wash,
+    borderColor: palette.accentBorder,
     borderRadius: 999,
     borderWidth: 1,
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     paddingHorizontal: 10,
     paddingVertical: 5
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",

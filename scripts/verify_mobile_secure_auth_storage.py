@@ -16,6 +16,7 @@ AUTH_REQUEST_HEADERS_PATH = MOBILE_DIR / "authRequestHeaders.ts"
 AUTH_STATUS_COPY_PATH = MOBILE_DIR / "authStatusCopy.ts"
 CHALLENGE_PATH = MOBILE_DIR / "authProviderChallenge.ts"
 APP_PATH = MOBILE_DIR / "App.tsx"
+AUTH_SCREEN_PATH = MOBILE_DIR / "emailPasswordAuthScreen.tsx"
 PACKAGE_PATH = MOBILE_DIR / "package.json"
 
 
@@ -27,6 +28,7 @@ def main() -> int:
     auth_status_copy = AUTH_STATUS_COPY_PATH.read_text(encoding="utf-8") if AUTH_STATUS_COPY_PATH.exists() else ""
     challenge = CHALLENGE_PATH.read_text(encoding="utf-8") if CHALLENGE_PATH.exists() else ""
     app = APP_PATH.read_text(encoding="utf-8")
+    auth_screen = AUTH_SCREEN_PATH.read_text(encoding="utf-8") if AUTH_SCREEN_PATH.exists() else ""
     package = json.loads(PACKAGE_PATH.read_text(encoding="utf-8"))
 
     if "expo-secure-store" not in package.get("dependencies", {}):
@@ -89,8 +91,12 @@ def main() -> int:
         "clearStoredAuthSession",
         "authAccessTokenMaxLength",
         "tokenStorageStatus",
-        "clearMobileSessionState({ clearAuthTokens: false })",
-        "SecureStore 不可用；正式 token storage fail closed。",
+        "EmailPasswordAuthScreen",
+        "completeEmailPasswordAuth",
+        'mode === "login" ? "login" : "register"',
+        'requestJson<AuthTokenResponse>(bootKey, "/auth/refresh"',
+        "if (!account && !(typeof __DEV__ !== \"undefined\" && __DEV__ && initialVisualSmokeScreen))",
+        '"尚未登入。"',
         "refresh token 未顯示",
         "refreshProductionAuthSession",
         'requestJson<AuthTokenResponse>(normalizedApiBaseUrl, "/auth/refresh"',
@@ -122,6 +128,19 @@ def main() -> int:
     ):
         if marker not in app:
             errors.append(f"mobile/App.tsx missing secure auth marker: {marker}")
+    if '"/auth/dev-login"' in app:
+        errors.append("mobile/App.tsx must not automatically sign users in with the development endpoint")
+    for marker in (
+        "export function EmailPasswordAuthScreen",
+        'accessibilityLabel="電子郵件"',
+        'accessibilityLabel="密碼"',
+        "maxLength={320}",
+        "maxLength={128}",
+        "至少需要 12 個字元",
+        "keyboardShouldPersistTaps=\"handled\"",
+    ):
+        if marker not in auth_screen:
+            errors.append(f"mobile/emailPasswordAuthScreen.tsx missing sign-in form marker: {marker}")
     if "4096" in app and "authAccessTokenMaxLength" not in app:
         errors.append("mobile/App.tsx must use authAccessTokenMaxLength instead of inline token limits")
     errors.extend(verify_protected_request_header_boundary(app, auth_transforms, auth_request_headers, auth_status_copy))

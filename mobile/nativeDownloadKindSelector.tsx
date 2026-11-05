@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 type NativeDownloadKind = "whisper" | "llama";
 
@@ -82,8 +84,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end"
   },
   chip: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 999,
     borderWidth: 1,
     justifyContent: "center",
@@ -93,19 +95,19 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   chipDisabled: {
-    backgroundColor: "#F1F3F2",
+    backgroundColor: palette.neutral,
     opacity: 0.55
   },
   chipSelected: {
-    backgroundColor: "#3FA67F",
-    borderColor: "#3FA67F"
+    backgroundColor: palette.brand,
+    borderColor: palette.brand
   },
   chipText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 13,
     fontWeight: "800"
   },
   chipTextSelected: {
-    color: "#ffffff"
+    color: palette.surface
   }
 });

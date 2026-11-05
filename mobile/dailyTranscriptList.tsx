@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 export type DailyTranscriptDisplayItem = {
@@ -41,14 +42,14 @@ export function DailyTranscriptList({ items }: DailyTranscriptListProps) {
 
 const styles = StyleSheet.create({
   confidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 12,
     fontWeight: "700"
   },
   dailyTranscriptItem: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 16,
     borderWidth: 1,
     gap: 4,
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     gap: 8
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19

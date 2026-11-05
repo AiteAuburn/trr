@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 import type { CommunityLeaderboardDisplaySection } from "./futureModuleDisplay";
 
@@ -68,7 +69,7 @@ export function RankingLeaderboardList({ sections }: RankingLeaderboardListProps
 
 const styles = StyleSheet.create({
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
@@ -79,8 +80,8 @@ const styles = StyleSheet.create({
     gap: 8
   },
   inlineInfoBlock: {
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 16,
     borderWidth: 1,
     gap: 8,
@@ -88,19 +89,19 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   label: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",
     lineHeight: 22
   },
   recordType: {
-    color: "#3FA67F",
+    color: palette.brand,
     fontSize: 15,
     fontWeight: "800"
   },

@@ -163,7 +163,7 @@ export function recordDeleteSummaryMessage(count: number) {
 
 export function deleteConfirmIntroCopy() {
   return boundDisplayText(
-    "刪除後會從目前清單移除；目前不保留本機復原副本。若 backend 已同步，請以後端狀態為準。",
+    "刪除後無法復原。只有這筆紀錄會被移除，其他紀錄不受影響。",
     maxDisplayDetailTextLength
   );
 }
@@ -230,7 +230,7 @@ export function deleteConfirmChecklistDisplayItems() {
 
 export function recordEditIntroCopy() {
   return boundDisplayText(
-    "修改以下內容，然後儲存。欄位會轉成後端結構化 payload。",
+    "調整內容後，記得儲存修改。",
     maxDisplayDetailTextLength
   );
 }

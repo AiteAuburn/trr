@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "main": "expo/AppEntry",
   "scripts": {
+    "postinstall": "node ../scripts/patch_mobile_pcm_recorder.cjs",
     "start": "expo start",
     "start:dev": "expo start --dev-client",
     "prebuild": "expo prebuild",
@@ -19,6 +20,11 @@
     "verify:android-release-signing": "python3 ../scripts/verify_android_release_signing.py",
     "verify:android-apk-scripts": "python3 ../scripts/verify_android_apk_scripts.py",
     "verify:native-config": "python3 ../scripts/verify_mobile_native_config.py",
+    "verify:design-tokens": "python3 ../scripts/verify_ui_design_tokens.py",
+    "test:recording-flow": "node ../scripts/test_mobile_recording_flow.cjs",
+    "test:phone-speech": "node ../scripts/test_mobile_phone_speech_capture.cjs",
+    "test:whisper-pcm": "node ../scripts/test_mobile_whisper_pcm.cjs",
+    "test:model-storage": "node ../scripts/test_mobile_model_storage.cjs",
     "visual-smoke:harness": "python3 ../scripts/generate_mobile_visual_smoke_harness.py",
     "visual-smoke:harness:verify-artifact": "python3 ../scripts/verify_mobile_visual_smoke_harness_artifact.py",
     "apk:android-prereqs": "python3 ../scripts/check_android_apk_build_prereqs.py",
@@ -26,7 +32,7 @@
     "preflight:android-apk:internal": "npm run verify:release-env -- --allow-local-api && npm run verify:android-release-signing -- --allow-debug-signing && npm run apk:android-prereqs",
     "visual-smoke:android-prereqs": "python3 ../scripts/check_android_visual_smoke_prereqs.py",
     "visual-smoke:android-blockers": "python3 ../scripts/check_android_visual_smoke_blockers.py",
-    "quality": "npm run typecheck && npm run verify:navigation && npm run verify:ui-spec-coverage && npm run verify:visual-smoke-routes && npm run verify:visual-smoke-harness && npm run verify:secure-auth-storage && npm run verify:android-apk-scripts && npm run verify:native-config"
+    "quality": "npm run typecheck && npm run verify:navigation && npm run verify:ui-spec-coverage && npm run verify:visual-smoke-routes && npm run verify:visual-smoke-harness && npm run verify:secure-auth-storage && npm run verify:android-apk-scripts && npm run verify:native-config && npm run verify:design-tokens && npm run test:recording-flow && npm run test:phone-speech && npm run test:whisper-pcm && npm run test:model-storage"
   },
   "expo": {
     "doctor": {
@@ -37,11 +43,13 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~57.0.9",
-    "expo": "~57.0.12",
+    "@fugood/react-native-audio-pcm-stream": "1.1.4",
+    "expo": "~57.0.25",
     "expo-asset": "~57.0.10",
     "expo-audio": "~57.0.3",
-    "expo-dev-client": "~57.0.11",
+    "expo-dev-client": "~57.0.19",
     "expo-file-system": "~57.0.2",
+    "expo-speech-recognition": "^57.0.0",
     "expo-secure-store": "~57.0.1",
     "llama.rn": "0.12.9",
     "react": "19.2.3",
@@ -50,6 +58,7 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.4",
+    "babel-preset-expo": "~57.0.6",
     "typescript": "~6.0.3"
   },
   "overrides": {

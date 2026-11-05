@@ -1,5 +1,13 @@
 import * as FileSystem from "expo-file-system/legacy";
 
+export const defaultWhisperModel = {
+  fileName: "ggml-base-q5_1.bin",
+  sizeLabel: "約 57 MiB",
+  minimumBytes: 50 * 1024 * 1024,
+  maximumBytes: 65 * 1024 * 1024,
+  url: "https://huggingface.co/ggerganov/whisper.cpp/resolve/5359861c739e955e79d9a303bcbc70fb988958b1/ggml-base-q5_1.bin?download=true"
+} as const;
+
 export type DownloadedModel = {
   kind: "whisper" | "llama";
   fileName: string;
@@ -101,4 +109,29 @@ export async function downloadModel({
     throw new Error("Downloaded model checksum did not match.");
   }
   return result.uri;
+}
+
+export async function ensureDefaultWhisperModel(onProgress?: (progress: number) => void) {
+  const directory = await ensureModelDirectory();
+  const uri = `${directory}${defaultWhisperModel.fileName}`;
+  const current = await FileSystem.getInfoAsync(uri);
+  if (current.exists && "size" in current && current.size >= defaultWhisperModel.minimumBytes && current.size <= defaultWhisperModel.maximumBytes) {
+    return uri;
+  }
+  if (current.exists) {
+    await FileSystem.deleteAsync(uri, { idempotent: true });
+  }
+
+  const downloadedUri = await downloadModel({
+    url: defaultWhisperModel.url,
+    kind: "whisper",
+    maxBytes: defaultWhisperModel.maximumBytes,
+    onProgress
+  });
+  const downloaded = await FileSystem.getInfoAsync(downloadedUri);
+  if (!downloaded.exists || !("size" in downloaded) || downloaded.size < defaultWhisperModel.minimumBytes) {
+    await FileSystem.deleteAsync(downloadedUri, { idempotent: true });
+    throw new Error("Whisper model download was incomplete.");
+  }
+  return downloadedUri;
 }

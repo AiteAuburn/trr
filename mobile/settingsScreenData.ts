@@ -44,6 +44,8 @@ export const settingsRows: SettingsRow[] = [
   { id: "subscription", label: "訂閱管理", icon: "卡", helper: "試用、年費與方案管理" }
 ];
 
+const launchSettingsRowIds = new Set(["quota", "tutorial"]);
+
 export const authProviderPreviews: ReadonlyArray<AuthProviderPreview> = [
   {
     provider: "apple",
@@ -150,8 +152,11 @@ export function settingsRowDisplayItem(value: SettingsRow) {
   };
 }
 
-export function settingsDisplayRows() {
-  return settingsRows.map(settingsRowDisplayItem);
+export function settingsDisplayRows(includeInternalTools = true) {
+  const visibleRows = includeInternalTools
+    ? settingsRows
+    : settingsRows.filter((row) => launchSettingsRowIds.has(row.id));
+  return visibleRows.map(settingsRowDisplayItem);
 }
 
 export function settingsRowSubpageTarget(row: Pick<SettingsRow, "id">): AppScreen | null {

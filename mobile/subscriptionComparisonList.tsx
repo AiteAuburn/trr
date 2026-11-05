@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 
 export type SubscriptionComparisonRow = {
@@ -42,7 +43,7 @@ export function SubscriptionComparisonList({ rows }: SubscriptionComparisonListP
 
 const styles = StyleSheet.create({
   comparisonCell: {
-    color: "#5F666A",
+    color: palette.secondary,
     flex: 1,
     flexShrink: 1,
     fontSize: 12,
@@ -52,27 +53,27 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   comparisonCellStrong: {
-    color: "#3FA67F",
+    color: palette.brand,
     flex: 1,
     flexShrink: 1,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 17,
     minWidth: 74,
     textAlign: "center"
   },
   comparisonFeature: {
-    color: "#0F3F37",
+    color: palette.ink,
     flex: 1,
     flexShrink: 1,
     fontSize: 13,
-    fontWeight: "900",
+    fontWeight: "700",
     minWidth: 86
   },
   comparisonRow: {
     alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 18,
     borderWidth: 1,
     flexDirection: "row",

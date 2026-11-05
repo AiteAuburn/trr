@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 export type HistoryCalendarDayItem = {
   accessibilityLabel: string;
@@ -10,6 +12,7 @@ export type HistoryCalendarDayItem = {
 
 type HistoryCalendarMonthPickerProps<TDay extends HistoryCalendarDayItem> = {
   days: TDay[];
+  firstWeekday: number;
   nextMonthAccessibilityLabel: string;
   nextMonthLabel: string;
   previousMonthAccessibilityLabel: string;
@@ -22,6 +25,7 @@ type HistoryCalendarMonthPickerProps<TDay extends HistoryCalendarDayItem> = {
 
 export function HistoryCalendarMonthPicker<TDay extends HistoryCalendarDayItem>({
   days,
+  firstWeekday,
   nextMonthAccessibilityLabel,
   nextMonthLabel,
   previousMonthAccessibilityLabel,
@@ -58,6 +62,12 @@ export function HistoryCalendarMonthPicker<TDay extends HistoryCalendarDayItem>(
         </View>
       </View>
       <View style={styles.historyCalendarGrid}>
+        {["一", "二", "三", "四", "五", "六", "日"].map((label) => (
+          <Text key={label} style={styles.weekday}>{label}</Text>
+        ))}
+        {Array.from({ length: Math.min(6, Math.max(0, Math.trunc(firstWeekday) || 0)) }, (_, index) => (
+          <View key={`empty-${index}`} style={styles.calendarSpacer} />
+        ))}
         {days.map((item) => (
           <Pressable
             key={item.key}
@@ -90,7 +100,7 @@ export function HistoryCalendarMonthPicker<TDay extends HistoryCalendarDayItem>(
 
 const styles = StyleSheet.create({
   confidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 12,
     fontWeight: "700"
@@ -98,36 +108,36 @@ const styles = StyleSheet.create({
   historyCalendarDay: {
     alignItems: "center",
     borderRadius: 14,
-    height: 46,
+    minHeight: 48,
     justifyContent: "center",
     position: "relative",
-    width: 46
+    width: "14.28%"
   },
   historyCalendarDayHasRecords: {
-    backgroundColor: "#EAF6F1",
-    borderColor: "#3FA67F",
+    backgroundColor: palette.wash,
+    borderColor: palette.brand,
     borderWidth: 1
   },
   historyCalendarDayMuted: {
-    backgroundColor: "#F1F4F2"
+    backgroundColor: "transparent"
   },
   historyCalendarDaySelected: {
-    backgroundColor: "#0F3F37",
-    borderColor: "#0F3F37"
+    backgroundColor: palette.ink,
+    borderColor: palette.ink
   },
   historyCalendarDayText: {
-    color: "#8A9690",
+    color: palette.muted,
     fontSize: 14,
     fontWeight: "800"
   },
   historyCalendarDayTextActive: {
-    color: "#0F3F37"
+    color: palette.ink
   },
   historyCalendarDayTextSelected: {
-    color: "#FFFFFF"
+    color: palette.surface
   },
   historyCalendarDot: {
-    backgroundColor: "#3FA67F",
+    backgroundColor: palette.brand,
     borderRadius: 999,
     bottom: 6,
     height: 5,
@@ -137,7 +147,7 @@ const styles = StyleSheet.create({
   historyCalendarGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8
+    rowGap: 6
   },
   historyCalendarHeader: {
     alignItems: "flex-start",
@@ -153,26 +163,28 @@ const styles = StyleSheet.create({
   },
   historyMonthButton: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#3FA67F",
+    backgroundColor: palette.surface,
+    borderColor: palette.brand,
     borderRadius: 14,
     borderWidth: 1,
     justifyContent: "center",
-    minHeight: 40,
+    minHeight: 44,
     minWidth: 68,
     paddingHorizontal: 10,
     paddingVertical: 8
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",
     lineHeight: 22
   },
   secondaryButtonText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
-  }
+  },
+  weekday: { color: palette.secondary, fontSize: 12, width: "14.28%", textAlign: "center", paddingVertical: 10 },
+  calendarSpacer: { width: "14.28%", minHeight: 48 }
 });

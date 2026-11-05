@@ -115,9 +115,30 @@ export async function transcribeWithNativeWhisper({
   audioPath
 }: WhisperTranscribeInput) {
   const { initWhisper } = await import("whisper.rn");
-  const context = await initWhisper({ filePath: modelPath, useGpu: true });
+  const context = await initWhisper({ filePath: modelPath, useGpu: false });
   try {
     const { promise } = context.transcribe(audioPath, {
+      language: "zh",
+      translate: false
+    });
+    const result = await promise;
+    return result.result.trim();
+  } finally {
+    await context.release();
+  }
+}
+
+export async function transcribePcmWithNativeWhisper({
+  modelPath,
+  audioData
+}: {
+  modelPath: string;
+  audioData: ArrayBuffer;
+}) {
+  const { initWhisper } = await import("whisper.rn");
+  const context = await initWhisper({ filePath: modelPath, useGpu: false });
+  try {
+    const { promise } = context.transcribeData(audioData, {
       language: "zh",
       translate: false
     });

@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 import { achievementStreakBadgeColor, type AchievementDisplayItem } from "./futureModuleDisplay";
 
@@ -131,15 +132,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8
   },
   achievementBadgeIcon: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 16,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 18
   },
   achievementBadgeLevel: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 17,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 20
   },
   achievementBadgeStreak: {
@@ -148,8 +149,8 @@ const styles = StyleSheet.create({
   },
   achievementCard: {
     alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 24,
     borderWidth: 1,
     flexDirection: "row",
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
     padding: 16
   },
   achievementProgressFill: {
-    backgroundColor: "#3FA67F",
+    backgroundColor: palette.brand,
     borderRadius: 999,
     height: 8
   },
@@ -166,45 +167,45 @@ const styles = StyleSheet.create({
     backgroundColor: achievementStreakBadgeColor
   },
   achievementProgressTrack: {
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     height: 8,
     marginTop: 8,
     overflow: "hidden"
   },
   achievementUnlocked: {
-    backgroundColor: "#F7FCFA",
+    backgroundColor: palette.subtle,
     borderColor: "#9EDBC4"
   },
   confidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 12,
     fontWeight: "700"
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
   },
   label: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   openSection: {
     gap: 10
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",
     lineHeight: 22
   },
   recordType: {
-    color: "#3FA67F",
+    color: palette.brand,
     fontSize: 15,
     fontWeight: "800"
   },

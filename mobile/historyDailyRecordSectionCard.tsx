@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 import { DailyRecordDetailRow } from "./dailyRecordDetailRow";
 
@@ -98,27 +100,27 @@ export function HistoryDailyRecordSectionCard<TEntry extends HistoryDailyRecordE
 
 const styles = StyleSheet.create({
   confidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 12,
     fontWeight: "700"
   },
   countText: {
-    color: "#5F666A",
+    color: palette.secondary,
     fontSize: 13,
     fontWeight: "700"
   },
   dailyRecordEntryCard: {
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 18,
     borderWidth: 1,
     gap: 10,
     padding: 12
   },
   dailyRecordSectionCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.surface,
+    borderColor: palette.accentBorder,
     borderRadius: 20,
     borderWidth: 1,
     gap: 12,
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
@@ -142,19 +144,19 @@ const styles = StyleSheet.create({
   },
   iconCircleSmall: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     height: 40,
     justifyContent: "center",
     width: 40
   },
   label: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",

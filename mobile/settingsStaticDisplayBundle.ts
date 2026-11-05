@@ -17,9 +17,9 @@ import {
   tutorialDisplaySteps
 } from "./settingsScreenData";
 
-export function settingsStaticDisplayBundle() {
+export function settingsStaticDisplayBundle(includeInternalTools = true) {
   return {
-    settingsRows: settingsDisplayRows(),
+    settingsRows: settingsDisplayRows(includeInternalTools),
     tutorialSteps: tutorialDisplaySteps(),
     authProviderItems: authProviderDisplayItems(),
     sessionManagementItems: sessionManagementDisplayItems(),
@@ -36,8 +36,8 @@ export function settingsStaticDisplayBundle() {
   };
 }
 
-export function settingsRuntimeDisplayBundle() {
+export function settingsRuntimeDisplayBundle(includeInternalTools = true) {
   return {
-    settings: settingsStaticDisplayBundle()
+    settings: settingsStaticDisplayBundle(includeInternalTools)
   };
 }

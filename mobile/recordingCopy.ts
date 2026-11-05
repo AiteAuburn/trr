@@ -38,7 +38,12 @@ export function recordingQuotaExhaustedStatusMessage() {
   return boundUiMessage("今日錄音額度已用完，請改用文字或手動新增。");
 }
 
-export function recordingStartedStatusMessage(isLowQuota: boolean) {
+export function recordingStartedStatusMessage(isLowQuota: boolean, usingPhoneSpeech = false) {
+  if (usingPhoneSpeech) {
+    return boundUiMessage(isLowQuota
+      ? "錄音中，使用手機語音服務；今日額度剩餘不到 2 分鐘。"
+      : "錄音中，使用手機語音服務；辨識是否需要網路依手機設定。放開即結束。");
+  }
   return boundUiMessage(isLowQuota ? "錄音中；今日錄音額度剩餘不到 2 分鐘。" : "錄音中，放開即結束。");
 }
 
@@ -47,7 +52,7 @@ export function recordingResetStatusMessage() {
 }
 
 export function recordingTextFallbackStatusMessage() {
-  return boundUiMessage("錄音已結束；尚未設定 Whisper 模型，請用文字輸入，確認後再交給 AI 整理。");
+  return boundUiMessage("這次尚未產生文字。語音辨識尚未準備好，請改用文字輸入，確認後再交給 AI 整理。");
 }
 
 export function recordingPermissionDeniedStatusMessage() {
@@ -70,8 +75,8 @@ export function recordingFinishedStatusMessage(elapsedSeconds: number) {
   const boundedSeconds = clampNumber(elapsedSeconds, 0, maxMobileCountValue);
   return boundUiMessage(
     boundedSeconds <= 1
-      ? "錄音太短，請按住說完後再放開。"
-      : "錄音已結束；音檔已保留於本機，可用 Whisper 轉文字後進入確認。"
+      ? "這次沒有收到可用的語音。請按住按鈕，說完後再放開。"
+      : "錄音已結束，正在整理辨識文字。"
   );
 }
 
@@ -80,7 +85,7 @@ export function shouldOpenTodayRecordingTranscriptReview(currentScreen: AppScree
 }
 
 export function recordingWhisperMissingModelStatusMessage() {
-  return boundUiMessage("錄音已保留；請先在設定填入 Whisper model path，或改用文字輸入。");
+  return recordingTextFallbackStatusMessage();
 }
 
 export function recordingWhisperProgressStatusMessage() {
@@ -91,8 +96,12 @@ export function recordingWhisperSuccessStatusMessage() {
   return boundUiMessage("錄音已轉成文字；請確認內容後再交給 AI 整理。");
 }
 
+export function recordingPhoneSpeechFallbackStatusMessage() {
+  return boundUiMessage("已使用手機語音辨識；辨識服務可能需要網路，請確認文字後再交給 AI 整理。");
+}
+
 export function recordingWhisperEmptyStatusMessage() {
-  return boundUiMessage("Whisper 沒有產生文字；請重新錄音或改用文字輸入。");
+  return boundUiMessage("這次沒有辨識到文字。請靠近麥克風再說一次，或改用文字輸入；原有文字不會被更改。");
 }
 
 export function recordingWhisperFailureStatusMessage(error: unknown) {
@@ -116,19 +125,19 @@ export function transcriptClearedStatusMessage() {
 }
 
 export function transcriptReviewIntroCopy() {
-  return boundDisplayText("確認目前輸入或本機 Whisper 轉出的紀錄文字，若有錯誤可直接修改。", maxDisplayDetailTextLength);
+  return boundDisplayText("看看文字是否正確，有需要的話可以直接修改。", maxDisplayDetailTextLength);
 }
 
 export function transcriptReviewPreParseGuidanceCopy() {
   return boundDisplayText(
-    "確認後，AI 會幫你整理成血糖、飲食與運動紀錄；範例文字不會送 parser。",
+    "下一步會整理成不同類型的紀錄，確認之前不會儲存。",
     maxDisplayDetailTextLength
   );
 }
 
 export function transcriptReviewSampleWarningCopy() {
   return boundDisplayText(
-    "目前是範例文字；請改成自己的紀錄內容後再整理，避免不必要的 parser / LLM 成本。",
+    "這是示範內容。換成你自己的紀錄，就可以開始整理。",
     maxDisplayDetailTextLength
   );
 }
@@ -264,23 +273,6 @@ export function transcriptReviewStatusDisplayBundle(value: {
   return transcriptReviewStatusDisplayTexts(value);
 }
 
-export function transcriptReviewCostBoundaryChecklistDisplayItems(
-  isBackendReady: boolean,
-  isParserModelReady: boolean,
-  parserModelUnavailableMessage: string
-) {
-  return [
-    "空文字、過長文字或範例文字不會送 parser。",
-    "下一步整理只送目前這段文字一次，不會批次載入歷史紀錄。",
-    "手動新增可完全避開 AI parser，適合補登明確紀錄。",
-    isBackendReady
-      ? isParserModelReady
-        ? "backend ready；送出前仍會先做前端長度與數字密度檢查。"
-        : boundUiMessage(`${parserModelUnavailableMessage}；目前不能送 parser，避免無效模型請求。`)
-      : boundUiMessage("backend 尚未 ready；目前不能送 parser，避免無效重試。")
-  ].map((item) => boundDisplayText(item, maxDisplayDetailTextLength));
-}
-
 export function validateTranscriptForParser(value: string) {
   const normalized = value.trim();
   if (!normalized) {
@@ -296,7 +288,7 @@ export function validateTranscriptForParser(value: string) {
 }
 
 export function recordingIdlePreviewCopy() {
-  return boundDisplayText("放開後保留本機音檔；轉文字需接 Whisper 或改用下方文字輸入", maxDisplayDetailTextLength);
+  return boundDisplayText("放開後由 Whisper 或手機語音服務轉成文字，再進入確認。", maxDisplayDetailTextLength);
 }
 
 export function recordingActivePreviewCopy(elapsedSeconds: number) {
@@ -315,28 +307,30 @@ export function homeRecordingSecondaryHint(isRecording: boolean, elapsedSeconds:
 
 export function homeRecordingModelStatusCopy(hasWhisperModel: boolean) {
   return boundDisplayText(
-    hasWhisperModel ? "目前語音識別：本機 Whisper" : "目前語音識別：內建文字確認",
+    hasWhisperModel
+      ? "語音辨識：本機 Whisper 優先；手機備援可能需要網路"
+      : "語音辨識：手機內建服務，可能需要網路",
     80
   );
 }
 
 export function homeRecordingPreviewBoundaryCopy() {
   return boundDisplayText(
-    "首頁按住會使用 expo-audio 擷取本機音檔；放開只停止錄音，不自動呼叫 STT、AI、LLM 或寫入 backend。",
+    "按住時由手機語音服務辨識並暫存音檔；若本機 Whisper 可用則優先使用，否則採用手機結果。手機服務可能使用網路；確認前不會呼叫 AI 或儲存紀錄。",
     maxDisplayDetailTextLength
   );
 }
 
 export function recordPageRecordingPreviewBoundaryCopy() {
   return boundDisplayText(
-    "按住會使用 expo-audio 擷取本機音檔；若已設定 Whisper model path，可轉文字後進入確認，儲存前仍必須先文字確認。",
+    "按住時由手機語音服務辨識並暫存音檔；本機 Whisper 可用時優先使用。手機服務可能使用網路；辨識文字需先確認，才會整理或儲存。",
     maxDisplayDetailTextLength
   );
 }
 
 export function recordingSimulatedResultCopy(elapsedSeconds: number) {
   return boundDisplayText(
-    `錄音已擷取 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒；可用 Whisper 轉文字後確認，或改用文字輸入。`,
+    `已錄音 ${clampNumber(elapsedSeconds, 0, maxMobileCountValue)} 秒；Whisper 或手機語音服務完成辨識後，可確認文字。`,
     maxDisplayDetailTextLength
   );
 }
@@ -362,14 +356,14 @@ export function recordingResultBodyCopy(elapsedSeconds: number) {
   return boundDisplayText(
     boundedSeconds <= 1
       ? "錄音時間太短，建議重新按住錄音。"
-      : "錄音已結束並保留本機音檔；已設定 Whisper 時可轉文字後確認，否則請改用下方文字輸入。",
+      : "錄音已結束；Whisper 或手機語音服務會提供辨識文字，確認後再交給 AI 整理。",
     maxDisplayDetailTextLength
   );
 }
 
 export function recordingResultPrimaryActionLabel(elapsedSeconds: number) {
   const boundedSeconds = clampNumber(elapsedSeconds, 0, maxMobileCountValue);
-  return boundDisplayText(boundedSeconds <= 1 ? "再錄一次" : "使用文字輸入", maxDisplayTextLength);
+  return boundDisplayText(boundedSeconds <= 1 ? "再錄一次" : "確認辨識文字", maxDisplayTextLength);
 }
 
 export function recordingResultDisplayBundle(elapsedSeconds: number) {

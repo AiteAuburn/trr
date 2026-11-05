@@ -1,6 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 import { HighlightBulletRow } from "./highlightBulletRow";
+import { enableDebugTools } from "./appRuntimeConfig";
 
 type ManualRecordConfirmFooterActionsProps = {
   checklistItems: string[];
@@ -31,12 +34,12 @@ export function ManualRecordConfirmFooterActions({
 }: ManualRecordConfirmFooterActionsProps) {
   return (
     <>
-      <View style={styles.inlineInfoBlock}>
+      {enableDebugTools ? <View style={styles.inlineInfoBlock}>
         <Text style={styles.label}>{preCheckTitle}</Text>
         {checklistItems.map((item) => (
           <HighlightBulletRow key={item} text={item} />
         ))}
-      </View>
+      </View> : null}
       <View style={styles.actionRow}>
         <Pressable
           accessibilityLabel={returnAccessibilityLabel}
@@ -78,13 +81,13 @@ const styles = StyleSheet.create({
     paddingVertical: 2
   },
   label: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   },
   primaryButton: {
     alignItems: "center",
-    backgroundColor: "#3FA67F",
+    backgroundColor: palette.brand,
     borderRadius: 16,
     justifyContent: "center",
     minHeight: 48,
@@ -92,14 +95,14 @@ const styles = StyleSheet.create({
     paddingVertical: 12
   },
   primaryButtonText: {
-    color: "#FFFFFF",
+    color: palette.surface,
     fontSize: 15,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   secondaryButton: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#3FA67F",
+    backgroundColor: palette.surface,
+    borderColor: palette.brand,
     borderRadius: 16,
     borderWidth: 1,
     justifyContent: "center",
@@ -108,12 +111,12 @@ const styles = StyleSheet.create({
     paddingVertical: 12
   },
   secondaryButtonText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 14,
     fontWeight: "800"
   },
   warningText: {
-    color: "#C85D5D",
+    color: palette.danger,
     fontSize: 13,
     fontWeight: "700",
     lineHeight: 19

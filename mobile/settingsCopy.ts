@@ -161,11 +161,6 @@ export function settingsSubpageReturnStatusMessage() {
   return boundUiMessage("已返回設定；子頁預覽不會呼叫 AI、LLM 或寫入 backend。");
 }
 
-export function menuReturnStatusMessage(target: AppScreen) {
-  const targetLabel = target === "today" ? "今日紀錄" : target === "record" ? "快速記錄" : "上一頁";
-  return boundUiMessage(`已返回${targetLabel}；功能選單導覽不呼叫 AI、LLM、STT、Vision 或 backend write。`);
-}
-
 export function membershipStatusReturnSubscriptionStatusMessage() {
   return boundUiMessage("已返回會員方案；會員狀態頁只讀取目前同步資料，不會呼叫付款或 AI。");
 }

@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 export type AuthProviderPreviewListItem = {
   accessibilityLabel: string;
@@ -52,8 +54,8 @@ export function AuthProviderPreviewList<Item extends AuthProviderPreviewListItem
 const styles = StyleSheet.create({
   aiReviewCard: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.surface,
+    borderColor: palette.accentBorder,
     borderRadius: 20,
     borderWidth: 1,
     flexDirection: "row",
@@ -68,14 +70,14 @@ const styles = StyleSheet.create({
     opacity: 0.45
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
   },
   iconCircleSmall: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     height: 40,
     justifyContent: "center",
@@ -83,18 +85,18 @@ const styles = StyleSheet.create({
   },
   previewModeBadge: {
     alignSelf: "flex-start",
-    backgroundColor: "#EAF6F1",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.wash,
+    borderColor: palette.accentBorder,
     borderRadius: 999,
     borderWidth: 1,
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     paddingHorizontal: 10,
     paddingVertical: 5
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",

@@ -1,4 +1,6 @@
-import { Pressable, ScrollView, StyleSheet, Text } from "react-native";
+import { palette } from "./designTokens";
+import { ScrollView, StyleSheet, Text } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 export type SettingsProfileChoiceItem = {
   accessibilityLabel: string;
@@ -54,8 +56,8 @@ export function SettingsProfileChoiceSelector({
 
 const styles = StyleSheet.create({
   chip: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 999,
     borderWidth: 1,
     marginRight: 8,
@@ -65,19 +67,19 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   chipDisabled: {
-    backgroundColor: "#F1F3F2",
+    backgroundColor: palette.neutral,
     opacity: 0.55
   },
   chipSelected: {
-    backgroundColor: "#3FA67F",
-    borderColor: "#3FA67F"
+    backgroundColor: palette.brand,
+    borderColor: palette.brand
   },
   chipText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 13,
     fontWeight: "800"
   },
   chipTextSelected: {
-    color: "#ffffff"
+    color: palette.surface
   }
 });

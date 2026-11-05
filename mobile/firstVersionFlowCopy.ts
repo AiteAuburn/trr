@@ -102,7 +102,6 @@ export function coreFlowSectionLabels() {
     back: boundDisplayText("返回", maxDisplayTextLength),
     backAccessibility: boundDisplayText("返回上一個輸入頁，不送 parser 或寫入資料", maxDisplayDetailTextLength),
     preOrganizeHint: boundDisplayText("整理前提示", maxDisplayTextLength),
-    costBoundary: boundDisplayText("本次成本邊界", maxDisplayTextLength),
     retryInput: boundDisplayText("重新輸入", maxDisplayTextLength),
     retryInputAccessibility: boundDisplayText("重新輸入並清除候選暫存，不呼叫 AI 或 backend", maxDisplayDetailTextLength),
     switchManualAdd: boundDisplayText("改用手動新增", maxDisplayTextLength),

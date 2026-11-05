@@ -1,3 +1,4 @@
+import { palette } from "./designTokens";
 import { StyleSheet, Text, View } from "react-native";
 import { AiCandidateActionRow } from "./aiCandidateActionRow";
 
@@ -125,30 +126,30 @@ export function AiCandidateList({
 
 const styles = StyleSheet.create({
   aiReviewCardStack: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.surface,
+    borderColor: palette.accentBorder,
     borderRadius: 20,
     borderWidth: 1,
     gap: 10,
     padding: 14
   },
   confidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 12,
     fontWeight: "700"
   },
   confidencePill: {
     alignItems: "center",
-    backgroundColor: "#F7FCFA",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.subtle,
+    borderColor: palette.accentBorder,
     borderRadius: 999,
     borderWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: 5
   },
   evidence: {
-    color: "#5F666A",
+    color: palette.secondary,
     flexShrink: 1,
     fontSize: 13,
     lineHeight: 19
@@ -161,14 +162,14 @@ const styles = StyleSheet.create({
   },
   iconCircleSmall: {
     alignItems: "center",
-    backgroundColor: "#EAF6F1",
+    backgroundColor: palette.wash,
     borderRadius: 999,
     height: 40,
     justifyContent: "center",
     width: 40
   },
   recordContent: {
-    color: "#1E1E1E",
+    color: palette.text,
     flexShrink: 1,
     fontSize: 16,
     fontWeight: "700",
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
     gap: 3
   },
   warningText: {
-    color: "#C85D5D",
+    color: palette.danger,
     fontSize: 13,
     fontWeight: "800",
     lineHeight: 19

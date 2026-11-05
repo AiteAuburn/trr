@@ -1,4 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { palette } from "./designTokens";
+import { StyleSheet, Text, View } from "react-native";
+import { TactilePressable as Pressable } from "./tactilePressable";
 
 export type RecordingWhisperModelChoiceItem = {
   accessibilityLabel: string;
@@ -59,8 +61,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end"
   },
   chip: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E3E8E5",
+    backgroundColor: palette.surface,
+    borderColor: palette.border,
     borderRadius: 999,
     borderWidth: 1,
     marginRight: 8,
@@ -70,26 +72,26 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   chipSelected: {
-    backgroundColor: "#3FA67F",
-    borderColor: "#3FA67F"
+    backgroundColor: palette.brand,
+    borderColor: palette.brand
   },
   chipText: {
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 13,
     fontWeight: "800"
   },
   chipTextSelected: {
-    color: "#ffffff"
+    color: palette.surface
   },
   previewModeBadge: {
     alignSelf: "flex-start",
-    backgroundColor: "#EAF6F1",
-    borderColor: "#D6EEE4",
+    backgroundColor: palette.wash,
+    borderColor: palette.accentBorder,
     borderRadius: 999,
     borderWidth: 1,
-    color: "#0F3F37",
+    color: palette.ink,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     paddingHorizontal: 10,
     paddingVertical: 5
   }

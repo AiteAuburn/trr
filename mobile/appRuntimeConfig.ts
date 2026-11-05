@@ -2,10 +2,14 @@ import { normalizeVisualSmokeInitialRoute } from "./navigationConfig";
 
 export const defaultApiBaseUrl =
   process.env.EXPO_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+export const devLocalApiBaseUrl =
+  process.env.EXPO_PUBLIC_LOCAL_API_BASE_URL ?? "http://10.0.2.2:8000";
+export const devAwsApiBaseUrl =
+  process.env.EXPO_PUBLIC_AWS_API_BASE_URL ?? "https://api.example.com/api";
+export const enableDevServerSwitcher =
+  process.env.EXPO_PUBLIC_ENABLE_DEV_SERVER_SWITCHER === "true";
 export const enableDebugTools = process.env.EXPO_PUBLIC_ENABLE_DEBUG_TOOLS === "true";
 export const allowMobileDevAuth = process.env.EXPO_PUBLIC_ALLOW_DEV_AUTH === "true";
-export const mobileDevAuthEmail =
-  process.env.EXPO_PUBLIC_DEV_AUTH_EMAIL ?? "owner@example.com";
 export const visualSmokeInitialRoute = process.env.EXPO_PUBLIC_VISUAL_SMOKE_INITIAL_ROUTE ?? "";
 
 export const sampleText =
