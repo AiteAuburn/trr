@@ -11,27 +11,16 @@ import {
 } from "./App";
 
 describe("App", () => {
-  it("renders the product name and primary recording action", () => {
+  it("renders a mandatory email login gate before any product features", () => {
     const html = renderToString(<App />).replaceAll("<!-- -->", "");
 
-    expect(html).toContain("糖錄錄");
-    expect(html).toContain("首頁 · 快速記錄");
-    expect(html).toContain("開啟功能選單");
-    expect(html).toContain("目前對象");
-    expect(html).toContain("今日 0 筆");
-    expect(html).toContain("試用版");
-    expect(html).toContain("今日已用 0:00");
-    expect(html).toContain("按住說話");
-    expect(html).toContain("整理預覽");
-    expect(html).toContain("即時辨識");
-    expect(html).not.toContain("STT 模型");
-    expect(html).not.toContain("LLM 模型");
-    expect(html).not.toContain("語音操作解析");
-    expect(html).not.toContain("Command Debug");
-    expect(html).not.toContain("LLM Debug");
-    expect(html).not.toContain("即時 LLM Debug");
-    expect(html).toContain("正在記錄");
-    expect(html).toContain("自己");
+    expect(html).toContain("歡迎回來");
+    expect(html).toContain("電子郵件");
+    expect(html).toContain('type="password"');
+    expect(html).toContain("登入");
+    expect(html).toContain("建立帳號");
+    expect(html).not.toContain("aria-label=\"主要功能\"");
+    expect(html).not.toContain("按住說話");
   });
 
   it("maps structured parser errors to non-PHI user guidance", () => {

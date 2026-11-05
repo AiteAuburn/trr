@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { transcribeWithTransformersWhisper } from "./transformersSpeech";
+import { RecordFields } from "./RecordFields";
 
 type HealthResponse = {
   status: string;
@@ -11,6 +12,12 @@ type Account = {
   id: string;
   email: string;
   display_name: string;
+};
+
+type AuthTokenResponse = {
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
 };
 
 type Profile = {
@@ -234,7 +241,8 @@ type SpeechRecognitionLike = {
 type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
-const devAuthEmail = import.meta.env.VITE_DEV_AUTH_EMAIL ?? "owner@example.com";
+const authRefreshStorageKey = "bloodsugar.auth.refreshToken";
+let activeAccessToken = "";
 const enableDebugTools = import.meta.env.VITE_ENABLE_DEBUG_TOOLS === "true";
 const voicePlan = import.meta.env.VITE_VOICE_PLAN === "paid" ? "paid" : "trial";
 const trialDailyVoiceSeconds = Number(import.meta.env.VITE_TRIAL_DAILY_VOICE_SECONDS ?? 300);
@@ -261,6 +269,10 @@ const appViews: Array<{ id: AppViewId; label: string; description: string }> = [
   { id: "foodPhoto", label: "食物拍照", description: "未來預覽" },
   { id: "settings", label: "帳號設定", description: "對象與系統" },
 ];
+
+const primaryViews = appViews.filter((view) =>
+  ["home", "today", "history", "analysis"].includes(view.id),
+);
 
 const tutorialSteps = [
   {
@@ -662,6 +674,16 @@ export function formatApiErrorMessage(
   return `${path} failed: ${status}`;
 }
 
+function emailPasswordErrorMessage(error: unknown) {
+  if (error instanceof ApiError) {
+    if (error.code === "invalid_credentials") return "電子郵件或密碼不正確，請再確認一次。";
+    if (error.code === "account_already_exists" || error.status === 409) return "這個電子郵件已註冊，請改為登入。";
+    if (error.status === 429) return "嘗試次數過多，請稍後再試。";
+    if (error.status === 503) return "登入服務暫時尚未設定完成，請稍後再試。";
+  }
+  return "目前無法登入，請檢查連線後再試。";
+}
+
 export function formatParserProgressErrorMessage(event: {
   code?: string;
   hint?: string;
@@ -694,11 +716,41 @@ async function apiErrorFromResponse(path: string, response: Response) {
 }
 
 async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${apiBaseUrl}${path}`, init);
+  const headers = new Headers(init?.headers);
+  if (init?.body && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+  if (activeAccessToken) headers.set("Authorization", `Bearer ${activeAccessToken}`);
+  const response = await fetch(`${apiBaseUrl}${path}`, { ...init, headers });
   if (!response.ok) {
     throw await apiErrorFromResponse(path, response);
   }
   return (await response.json()) as T;
+}
+
+function storeWebAuthSession(accessToken: string, refreshToken: string) {
+  const access = accessToken.trim();
+  const refresh = refreshToken.trim();
+  if (!access || access.length > 4096 || !refresh || refresh.length > 512) {
+    throw new Error("登入回應無效，請重新登入。");
+  }
+  if (typeof window !== "undefined") window.sessionStorage.setItem(authRefreshStorageKey, refresh);
+  activeAccessToken = access;
+}
+
+function readWebRefreshToken() {
+  try {
+    return typeof window === "undefined" ? "" : window.sessionStorage.getItem(authRefreshStorageKey) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function clearWebAuthSession() {
+  activeAccessToken = "";
+  try {
+    if (typeof window !== "undefined") window.sessionStorage.removeItem(authRefreshStorageKey);
+  } catch {
+    // Keep the in-memory access token cleared even when browser storage is unavailable.
+  }
 }
 
 async function createProfile(accountId: string, displayName: string, relationship: string) {
@@ -747,9 +799,11 @@ async function updateRecord(accountId: string, recordId: string, payload: Record
 }
 
 async function deleteRecord(accountId: string, recordId: string) {
+  const headers = new Headers({ "X-Account-Id": accountId });
+  if (activeAccessToken) headers.set("Authorization", `Bearer ${activeAccessToken}`);
   const response = await fetch(`${apiBaseUrl}/records/${recordId}`, {
     method: "DELETE",
-    headers: { "X-Account-Id": accountId },
+    headers,
   });
   if (!response.ok) {
     throw await apiErrorFromResponse(`/records/${recordId}`, response);
@@ -789,12 +843,11 @@ async function streamParsePreviewProgress(
   voiceSeconds: number,
   onEvent: (event: ParseProgressEvent) => void,
 ) {
+  const headers = new Headers({ "Content-Type": "application/json", "X-Account-Id": accountId });
+  if (activeAccessToken) headers.set("Authorization", `Bearer ${activeAccessToken}`);
   const response = await fetch(`${apiBaseUrl}/ai/parse-preview/progress-stream`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Account-Id": accountId,
-    },
+    headers,
     body: JSON.stringify({
       profile_id: profileId,
       transcript,
@@ -879,12 +932,11 @@ async function streamLlmDebugOutput(
   if (!enableDebugTools) {
     throw new Error("Debug tools are disabled.");
   }
+  const headers = new Headers({ "Content-Type": "application/json", "X-Account-Id": accountId });
+  if (activeAccessToken) headers.set("Authorization", `Bearer ${activeAccessToken}`);
   const response = await fetch(`${apiBaseUrl}/ai/parse-preview/debug-stream`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Account-Id": accountId,
-    },
+    headers,
     body: JSON.stringify({
       profile_id: profileId,
       transcript,
@@ -923,6 +975,13 @@ export function App() {
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [account, setAccount] = useState<Account | null>(null);
+  const [authReady, setAuthReady] = useState(true);
+  const [authMode, setAuthMode] = useState<"login" | "register">("login");
+  const [authEmail, setAuthEmail] = useState("");
+  const [authPassword, setAuthPassword] = useState("");
+  const [authDisplayName, setAuthDisplayName] = useState("");
+  const [authBusy, setAuthBusy] = useState(false);
+  const [authMessage, setAuthMessage] = useState("");
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [activeProfileId, setActiveProfileId] = useState<string>("");
   const [profileName, setProfileName] = useState("");
@@ -936,6 +995,10 @@ export function App() {
   const [records, setRecords] = useState<RecordItem[]>([]);
   const [selectedRecord, setSelectedRecord] = useState<RecordItem | null>(null);
   const [recordEditText, setRecordEditText] = useState("");
+  const [isMutating, setIsMutating] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const mutationLock = useRef(false);
+  const previewLock = useRef(false);
   const [recordStatus, setRecordStatus] = useState("輸入文字後可先整理預覽。");
   const [aiModels, setAiModels] = useState<AiModelOptions | null>(null);
   const [selectedSttModel, setSelectedSttModel] = useState("browser-web-speech");
@@ -970,33 +1033,42 @@ export function App() {
   }, []);
 
   useEffect(() => {
-    async function loadProfiles() {
+    async function restoreSession() {
       try {
-        const login = await requestJson<Account>("/auth/dev-login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: devAuthEmail, display_name: "Owner" }),
+        const refreshToken = readWebRefreshToken();
+        if (!refreshToken) return;
+        const tokens = await requestJson<AuthTokenResponse>("/auth/refresh", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refresh_token: refreshToken }),
         });
-        setAccount(login);
-        const models = await requestJson<AiModelOptions>("/ai/models", {
-          headers: { "X-Account-Id": login.id },
-        });
+        storeWebAuthSession(tokens.access_token, tokens.refresh_token);
+        const current = await requestJson<Account>("/auth/me");
+        setAccount(current);
+      } catch {
+        clearWebAuthSession();
+      } finally {
+        setAuthReady(true);
+      }
+    }
+    void restoreSession();
+  }, []);
+
+  useEffect(() => {
+    const accountId = account?.id ?? "";
+    if (!accountId) return;
+    async function loadAccountData() {
+      try {
+        const [models, quota] = await Promise.all([
+          requestJson<AiModelOptions>("/ai/models", { headers: { "X-Account-Id": accountId } }),
+          getVoiceQuota(accountId),
+        ]);
         setAiModels(models);
         setSelectedSttModel(models.stt_models.find((model) => model.available)?.id ?? "");
         setSelectedLlmModel(pickInitialLlmModel(models.llm_models));
-        const quota = await getVoiceQuota(login.id);
         setVoiceQuota(quota);
         setVoiceSecondsUsedToday(quota.used_seconds_today);
-
-        let nextProfiles = await requestJson<Profile[]>("/profiles", {
-          headers: { "X-Account-Id": login.id },
-        });
-
-        if (nextProfiles.length === 0) {
-          const self = await createProfile(login.id, "自己", "self");
-          nextProfiles = [self];
-        }
-
+        let nextProfiles = await requestJson<Profile[]>("/profiles", { headers: { "X-Account-Id": accountId } });
+        if (nextProfiles.length === 0) nextProfiles = [await createProfile(accountId, "自己", "self")];
         setProfiles(nextProfiles);
         setActiveProfileId((current) => current || nextProfiles[0]?.id || "");
         setProfileStatus("已連到 API");
@@ -1004,9 +1076,62 @@ export function App() {
         setProfileStatus(err instanceof Error ? err.message : "紀錄對象載入失敗");
       }
     }
+    void loadAccountData();
+  }, [account?.id]);
 
-    void loadProfiles();
-  }, []);
+  async function submitEmailPassword(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setAuthBusy(true);
+    setAuthMessage("");
+    try {
+      const tokens = await requestJson<AuthTokenResponse>(`/auth/${authMode === "login" ? "login" : "register"}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: authEmail.trim(),
+          password: authPassword,
+          ...(authMode === "register" && authDisplayName.trim() ? { display_name: authDisplayName.trim() } : {}),
+        }),
+      });
+      storeWebAuthSession(tokens.access_token, tokens.refresh_token);
+      const current = await requestJson<Account>("/auth/me");
+      setAccount(current);
+      setAuthPassword("");
+    } catch (err: unknown) {
+      clearWebAuthSession();
+      setAuthMessage(emailPasswordErrorMessage(err));
+    } finally {
+      setAuthBusy(false);
+    }
+  }
+
+  async function logout() {
+    const refreshToken = readWebRefreshToken();
+    try {
+      if (refreshToken) await requestJson<{ revoked: boolean }>("/auth/logout", {
+        method: "POST", body: JSON.stringify({ refresh_token: refreshToken }),
+      });
+    } catch {
+      // Revoke locally even if the backend is temporarily unreachable.
+    } finally {
+      clearWebAuthSession();
+      setAccount(null);
+      setProfiles([]);
+      setRecords([]);
+      setAuthReady(true);
+    }
+  }
+
+  /*
+   * User data loading starts only after /auth/me succeeds. The refresh token
+   * stays tab-scoped; the short-lived access token remains in memory.
+   */
+  useEffect(() => {
+    if (!account) {
+      setProfiles([]);
+      setActiveProfileId("");
+    }
+  }, [account?.id]);
 
   const activeProfile =
     profiles.find((profile) => profile.id === activeProfileId) ?? profiles[0] ?? null;
@@ -1317,6 +1442,7 @@ export function App() {
   }
 
   async function handleBuildPreview(skipTranscriptReview = false) {
+    if (previewLock.current || mutationLock.current || isListening) return;
     if (!account || !activeProfile || transcript.trim().length === 0) {
       setRecordStatus("請先輸入要記錄的內容。");
       return;
@@ -1327,6 +1453,7 @@ export function App() {
       return;
     }
 
+    previewLock.current = true;
     setIsTranscriptReviewOpen(false);
     setIsProcessingPreview(true);
     setActiveAtomicEvent(null);
@@ -1451,6 +1578,7 @@ export function App() {
       setActiveAtomicEvent(null);
       setRecordStatus(err instanceof Error ? err.message : "整理預覽失敗");
     } finally {
+      previewLock.current = false;
       setIsProcessingPreview(false);
     }
   }
@@ -1564,12 +1692,14 @@ export function App() {
   }
 
   async function handleSaveRecord() {
-    if (!account || pendingRecords.length === 0) {
+    if (!account || pendingRecords.length === 0 || mutationLock.current) {
       return;
     }
     if (!window.confirm("確認儲存這些結構化紀錄？")) {
       return;
     }
+    mutationLock.current = true;
+    setIsMutating(true);
 
     setProcessingSteps([
       ...completeProcessingSteps(parseProcessingPlan),
@@ -1582,10 +1712,12 @@ export function App() {
     ]);
     setRecordStatus("正在儲存紀錄...");
     try {
-      const savedRecords = await Promise.all(
-        pendingRecords.map((pendingRecord) => createRecord(account.id, pendingRecord)),
-      );
-      setRecords((current) => [...savedRecords, ...current]);
+      // Remove each acknowledged item immediately so a partial failure is retry-safe.
+      for (const pendingRecord of pendingRecords) {
+        const savedRecord = await createRecord(account.id, pendingRecord);
+        setRecords((current) => [savedRecord, ...current]);
+        setPendingRecords((current) => current.filter((item) => item !== pendingRecord));
+      }
       setTranscript("");
       setPendingRecords([]);
       setIsTranscriptReviewOpen(false);
@@ -1600,7 +1732,10 @@ export function App() {
       setProcessingSteps((current) =>
         current.map((step) => (step.id === "save" ? { ...step, status: "error" } : step)),
       );
-      setRecordStatus(err instanceof Error ? err.message : "紀錄儲存失敗");
+      setRecordStatus(enableDebugTools && err instanceof Error ? err.message : "還有紀錄尚未儲存。內容已保留，請稍後再試。");
+    } finally {
+      mutationLock.current = false;
+      setIsMutating(false);
     }
   }
 
@@ -1624,14 +1759,19 @@ export function App() {
   }
 
   function openRecordDetail(record: RecordItem) {
+    if (mutationLock.current) return;
+    setIsDeleteConfirmOpen(false);
     setSelectedRecord(record);
     setRecordEditText(JSON.stringify(record.payload_json, null, 2));
+    window.scrollTo({ top: 0, behavior: "instant" });
   }
 
   async function handleUpdateSelectedRecord() {
-    if (!account || !selectedRecord) {
+    if (!account || !selectedRecord || mutationLock.current) {
       return;
     }
+    mutationLock.current = true;
+    setIsMutating(true);
     try {
       const payload = JSON.parse(recordEditText) as unknown;
       if (typeof payload !== "object" || payload === null || Array.isArray(payload)) {
@@ -1650,24 +1790,30 @@ export function App() {
       setRecordStatus("紀錄已更新。");
     } catch (err: unknown) {
       setRecordStatus(err instanceof Error ? `更新失敗：${err.message}` : "更新失敗");
+    } finally {
+      mutationLock.current = false;
+      setIsMutating(false);
     }
   }
 
   async function handleDeleteSelectedRecord() {
-    if (!account || !selectedRecord) {
+    if (!account || !selectedRecord || !isDeleteConfirmOpen || mutationLock.current) {
       return;
     }
-    if (!window.confirm("確認刪除這筆紀錄？")) {
-      return;
-    }
+    mutationLock.current = true;
+    setIsMutating(true);
     try {
       await deleteRecord(account.id, selectedRecord.id);
       setRecords((current) => current.filter((record) => record.id !== selectedRecord.id));
       setSelectedRecord(null);
       setRecordEditText("");
+      setIsDeleteConfirmOpen(false);
       setRecordStatus("紀錄已刪除。");
     } catch (err: unknown) {
       setRecordStatus(err instanceof Error ? `刪除失敗：${err.message}` : "刪除失敗");
+    } finally {
+      mutationLock.current = false;
+      setIsMutating(false);
     }
   }
 
@@ -1681,7 +1827,7 @@ export function App() {
             100,
         );
   const shouldShowLoadingSheet =
-    isListening || isProcessingPreview || (enableDebugTools && isStreamingLlmDebug);
+    isProcessingPreview || (enableDebugTools && isStreamingLlmDebug);
   const todayRecords = records.filter((record) => isSameLocalDate(record.occurred_at, new Date()));
   const sevenDayRecords = records.filter((record) => isWithinDays(record.occurred_at, 7));
   const thirtyDayRecords = records.filter((record) => isWithinDays(record.occurred_at, 30));
@@ -1736,8 +1882,42 @@ export function App() {
     : 2;
 
   function switchView(view: AppViewId) {
+    if (previewLock.current || mutationLock.current || isListening) return;
+    if (selectedRecord && recordEditText !== JSON.stringify(selectedRecord.payload_json, null, 2)
+      && !window.confirm("尚有未儲存的修改。確定離開？")) return;
+    setSelectedRecord(null);
+    setIsDeleteConfirmOpen(false);
     setCurrentView(view);
     setIsMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }
+
+  if (!account) {
+    return (
+      <main className="auth-shell">
+        <section className="auth-card" aria-labelledby="auth-title">
+          <div className="auth-mark" aria-hidden="true">糖</div>
+          <p className="eyebrow">TANG LU LU</p>
+          <h1 id="auth-title">{authReady ? (authMode === "login" ? "歡迎回來" : "建立你的帳號") : "正在確認登入狀態"}</h1>
+          <p className="summary">登入後即可安全保存與查看你的健康紀錄。</p>
+          {!authReady ? <p className="muted" role="status">正在安全檢查你的登入狀態…</p> : (
+            <form className="auth-form" onSubmit={(event) => void submitEmailPassword(event)}>
+              {authMode === "register" ? (
+                <label>顯示名稱（選填）<input autoComplete="name" maxLength={120} onChange={(event) => setAuthDisplayName(event.target.value)} value={authDisplayName} /></label>
+              ) : null}
+              <label>電子郵件<input autoComplete="email" autoCapitalize="none" maxLength={320} required type="email" onChange={(event) => setAuthEmail(event.target.value)} value={authEmail} /></label>
+              <label>密碼<input autoComplete={authMode === "register" ? "new-password" : "current-password"} minLength={12} maxLength={128} required type="password" onChange={(event) => setAuthPassword(event.target.value)} value={authPassword} /></label>
+              {authMessage ? <p className="auth-error" role="alert">{authMessage}</p> : null}
+              <button className="auth-submit" disabled={authBusy} type="submit">{authBusy ? "請稍候…" : authMode === "login" ? "登入" : "建立帳號"}</button>
+              <button className="auth-switch" disabled={authBusy} onClick={() => { setAuthMode(authMode === "login" ? "register" : "login"); setAuthMessage(""); }} type="button">
+                {authMode === "login" ? "還沒有帳號？建立帳號" : "已有帳號？返回登入"}
+              </button>
+              <p className="auth-footnote">Google 等其他登入方式將於後續版本提供。</p>
+            </form>
+          )}
+        </section>
+      </main>
+    );
   }
 
   return (
@@ -1756,14 +1936,19 @@ export function App() {
             type="button"
             aria-expanded={isMenuOpen}
             aria-label="開啟功能選單"
+            disabled={isProcessingPreview || isStreamingLlmDebug || isMutating || isListening}
             onClick={() => setIsMenuOpen((current) => !current)}
           >
             ☰
           </button>
         </div>
+        <div className="account-strip"><span>{account.email}</span><button className="account-logout" onClick={() => void logout()} type="button">登出</button></div>
         {isMenuOpen ? (
           <nav className="app-menu" aria-label="功能選單">
-            {appViews.map((view) => (
+            {appViews.filter((view) =>
+              !primaryViews.some((primaryView) => primaryView.id === view.id)
+              && (enableDebugTools || ["tutorial", "settings"].includes(view.id)),
+            ).map((view) => (
               <button
                 className={view.id === currentView ? "active" : ""}
                 key={view.id}
@@ -1778,12 +1963,27 @@ export function App() {
         ) : null}
       </section>
 
+      <nav className="core-nav" aria-label="主要功能">
+        {primaryViews.map((view) => (
+          <button
+            aria-current={currentView === view.id ? "page" : undefined}
+            className="core-nav-button"
+            disabled={isProcessingPreview || isStreamingLlmDebug || isMutating || isListening}
+            key={view.id}
+            onClick={() => switchView(view.id)}
+            type="button"
+          >
+            {view.id === "home" ? "記錄" : view.id === "today" ? "今日" : view.id === "history" ? "歷史" : "分析"}
+          </button>
+        ))}
+      </nav>
+
       <section className="active-context" aria-label="Active profile context">
         <strong>目前對象：{activeProfile?.display_name ?? "自己"}</strong>
         <span>今日 {todayRecords.length} 筆 · 全部 {records.length} 筆</span>
       </section>
 
-      {currentView === "settings" ? (
+      {enableDebugTools && currentView === "settings" ? (
         <section className="panel" aria-label="Backend health">
         <div>
           <h2>Backend</h2>
@@ -1839,7 +2039,7 @@ export function App() {
         </section>
       ) : null}
 
-      {currentView === "settings" ? (
+      {enableDebugTools && currentView === "settings" ? (
         <section className="settings-panel" aria-label="AI model settings">
           <div>
             <h2>AI 設定</h2>
@@ -1892,32 +2092,57 @@ export function App() {
         </section>
       ) : null}
 
-      {currentView === "home" ? (
-        <section className="recorder" aria-label="Record mock">
-        <div className="profile">正在記錄：{activeProfile?.display_name ?? "自己"}</div>
-        <div className="quota-hint" aria-label="Voice quota status">
-          <span>{voicePlanLabel()}</span>
-          <strong>{voiceQuotaStatus()}</strong>
+      {currentView === "home" && !isTranscriptReviewOpen && !shouldShowLoadingSheet && pendingRecords.length === 0 ? (
+        <section className="recorder" aria-label="開始記錄">
+        <div className="home-intro">
+          <h2>每天一點，照顧好自己</h2>
+          <p>從今天的一件小事開始，說給我聽。</p>
+          <div className="record-directions"><span>血糖</span><span>餐點</span><span>運動</span><span>用藥</span></div>
         </div>
+        <div className="profile">正在記錄：{activeProfile?.display_name ?? "自己"}</div>
         <button
           type="button"
+          className={`voice-button${isListening ? " listening" : ""}`}
           disabled={isProcessingPreview || isStreamingLlmDebug}
+          aria-label={isListening ? "放開結束錄音" : "按住說話"}
           onMouseDown={handleStartVoiceInput}
           onMouseUp={handleStopVoiceInput}
           onMouseLeave={handleStopVoiceInput}
           onTouchStart={handleStartVoiceInput}
           onTouchEnd={handleStopVoiceInput}
+          onTouchCancel={handleStopVoiceInput}
+          onKeyDown={(event) => {
+            if ((event.key === " " || event.key === "Enter") && !event.repeat) {
+              event.preventDefault();
+              void handleStartVoiceInput();
+            }
+          }}
+          onKeyUp={(event) => {
+            if (event.key === " " || event.key === "Enter") {
+              event.preventDefault();
+              handleStopVoiceInput();
+            }
+          }}
+          onBlur={handleStopVoiceInput}
         >
-          {isListening ? "辨識中..." : "按住說話"}
+          <svg viewBox="0 0 32 40" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+            <rect x="10" y="2" width="12" height="23" rx="6" /><path d="M5 19v2a11 11 0 0 0 22 0v-2M16 32v6M10 38h12" />
+          </svg>
+          <span>{isListening ? "放開完成" : "按住說話"}</span>
         </button>
-        <textarea
+        <div className="quota-hint" aria-label="Voice quota status">
+          <span>{voicePlanLabel()}</span><strong>{voiceQuotaStatus()}</strong>
+        </div>
+        <label><span>也可以用文字記錄</span><textarea
+          aria-label="要記錄的內容"
+          disabled={isListening}
           placeholder="也可以直接輸入：今天早上空腹血糖 138..."
           value={transcript}
           onChange={(event) => {
             setTranscript(event.target.value);
           }}
-        />
-        <div className="live-transcript" aria-label="Live speech result">
+        /></label>
+        {isListening ? <div className="live-transcript" aria-label="Live speech result" aria-live="polite">
           <div>
             <strong>即時辨識</strong>
             <p>{liveInterimTranscript || "尚無即時結果"}</p>
@@ -1926,11 +2151,11 @@ export function App() {
             <strong>已確認文字</strong>
             <p>{liveFinalTranscript || transcript || "尚無確認文字"}</p>
           </div>
-        </div>
+        </div> : null}
         <button
-          className="secondary-action"
+          className="primary-action"
           type="button"
-          disabled={isProcessingPreview || isStreamingLlmDebug}
+          disabled={isProcessingPreview || isStreamingLlmDebug || isListening || !transcript.trim()}
           onClick={() => void handleBuildPreview()}
         >
           {isProcessingPreview ? "整理中..." : "整理預覽"}
@@ -1945,7 +2170,6 @@ export function App() {
             {isStreamingLlmDebug ? "LLM 串流中..." : "即時 LLM Debug"}
           </button>
         ) : null}
-        <p className="muted">{recordStatus}</p>
         </section>
       ) : null}
 
@@ -1956,6 +2180,8 @@ export function App() {
             <p className="muted">可先修改辨識內容，下一步才會交給 AI 整理。</p>
           </div>
           <textarea
+            aria-label="確認與修改記錄文字"
+            disabled={isProcessingPreview}
             value={transcript}
             onChange={(event) => {
               setTranscript(event.target.value);
@@ -1965,7 +2191,7 @@ export function App() {
             <button type="button" onClick={() => setIsTranscriptReviewOpen(false)}>
               重新修改
             </button>
-            <button type="button" onClick={() => void handleBuildPreview(true)}>
+            <button type="button" disabled={isProcessingPreview || !transcript.trim()} onClick={() => void handleBuildPreview(true)}>
               下一步整理
             </button>
           </div>
@@ -1976,12 +2202,10 @@ export function App() {
         <section className="loading-sheet" aria-live="polite" aria-label="Loading status">
           <div className="spinner" aria-hidden="true" />
           <div>
-            <strong>{activeProcessingStep?.label ?? "處理中"}</strong>
-            <p>{activeProcessingStep?.detail ?? recordStatus}</p>
+            <strong>把日常，整理成紀錄</strong>
+            <p>{enableDebugTools ? activeProcessingStep?.detail : "血糖、餐點、運動與用藥，會各自找到位置。整理好後，再由你確認。"}</p>
           </div>
-          <div className="progress-meter" aria-label={`處理進度 ${processingProgress}%`}>
-            <span style={{ width: `${processingProgress}%` }} />
-          </div>
+          <small>確認之前，不會儲存</small>
           {enableDebugTools && activeAtomicEvent ? (
             <div className="atomic-now">
               <span>
@@ -1993,7 +2217,7 @@ export function App() {
         </section>
       ) : null}
 
-      {processingSteps.length > 0 ? (
+      {enableDebugTools && processingSteps.length > 0 ? (
         <section className="processing-panel" aria-label="Processing status">
           <div className="processing-head">
             <div>
@@ -2089,11 +2313,11 @@ export function App() {
         </section>
       ) : null}
 
-      {pendingRecords.length > 0 ? (
+      {pendingRecords.length > 0 && !isProcessingPreview ? (
         <section className="confirmation" aria-label="Record confirmation">
           <div>
-            <h2>待確認整理卡</h2>
-            <p className="muted">由選定 LLM 模型產生候選紀錄；確認後才會儲存。</p>
+            <h2>看看整理得對不對</h2>
+            <p className="muted">共 {pendingRecords.length} 筆，可在下方調整。確認後才會儲存。</p>
           </div>
           {pendingRecords.map((pendingRecord, index) => (
             <dl key={`${pendingRecord.record_type}-${index}`}>
@@ -2103,11 +2327,7 @@ export function App() {
               </div>
               <div>
                 <dt>類型</dt>
-                <dd>{pendingRecord.record_type}</dd>
-              </div>
-              <div>
-                <dt>信心</dt>
-                <dd>{Math.round((pendingRecord.confidence ?? 0) * 100)}%</dd>
+                <dd>{recordTypeLabel(pendingRecord.record_type)}</dd>
               </div>
               <div>
                 <dt>內容</dt>
@@ -2116,31 +2336,27 @@ export function App() {
               <div>
                 <dt>編輯</dt>
                 <dd>
-                  <textarea
-                    defaultValue={JSON.stringify(pendingRecord.payload_json, null, 2)}
-                    aria-label={`編輯候選紀錄 ${index + 1}`}
-                    onBlur={(event) =>
-                      updatePendingRecordPayloadFromText(index, event.currentTarget.value)
-                    }
-                  />
+                  <RecordFields value={pendingRecord.payload_json} disabled={isMutating}
+                    prefix={`候選紀錄 ${index + 1}`}
+                    onChange={(payload) => updatePendingRecordPayloadFromText(index, JSON.stringify(payload))} />
                 </dd>
               </div>
               <div>
                 <dt>原文</dt>
                 <dd>{recordEvidence(pendingRecord.metadata_json)}</dd>
               </div>
-              <div>
+              {enableDebugTools ? <div>
                 <dt>判斷</dt>
                 <dd>{pendingRecord.decision_trace}</dd>
-              </div>
+              </div> : null}
             </dl>
           ))}
           <div className="confirmation-actions">
-            <button type="button" onClick={() => setPendingRecords([])}>
-              修改
+            <button type="button" disabled={isMutating} onClick={() => { setPendingRecords([]); setIsTranscriptReviewOpen(true); }}>
+              返回文字
             </button>
-            <button type="button" onClick={() => void handleSaveRecord()}>
-              確認儲存
+            <button type="button" disabled={isMutating} onClick={() => void handleSaveRecord()}>
+              {isMutating ? "儲存中…" : "確認儲存"}
             </button>
           </div>
         </section>
@@ -2150,30 +2366,36 @@ export function App() {
         <section className="record-detail" aria-label="Record detail">
           <div>
             <h2>紀錄詳情</h2>
-            <p className="muted">可編輯結構化欄位；更新與刪除會走後端權限檢查與 audit event。</p>
+            <p className="muted">調整內容後，記得儲存修改。</p>
           </div>
           <div className="record-hero">
-            <span>{selectedRecord.record_type}</span>
+            <span>{recordTypeLabel(selectedRecord.record_type)}</span>
             <strong>{formatRecordPayload(selectedRecord.record_type, selectedRecord.payload_json)}</strong>
             <small>{new Date(selectedRecord.occurred_at).toLocaleString()}</small>
           </div>
-          <label className="json-editor">
-            <span>payload_json</span>
-            <textarea
-              value={recordEditText}
-              onChange={(event) => setRecordEditText(event.target.value)}
-            />
-          </label>
+          <RecordFields key={selectedRecord.id} value={JSON.parse(recordEditText) as Record<string, unknown>} disabled={isMutating}
+            onChange={(payload) => setRecordEditText(JSON.stringify(payload, null, 2))} />
           <div className="confirmation-actions">
-            <button type="button" onClick={() => void handleDeleteSelectedRecord()}>
+            <button className="danger-action" type="button" disabled={isMutating} onClick={() => setIsDeleteConfirmOpen(true)}>
               刪除
             </button>
-            <button type="button" onClick={() => void handleUpdateSelectedRecord()}>
-              儲存修改
+            <button type="button" disabled={isMutating || isDeleteConfirmOpen} onClick={() => void handleUpdateSelectedRecord()}>
+              {isMutating ? "處理中…" : "儲存修改"}
             </button>
           </div>
+          {isDeleteConfirmOpen ? <div className="delete-warning" role="alert">
+            <p>確定刪除這筆紀錄嗎？刪除後無法從此畫面復原。</p>
+            <div className="confirmation-actions">
+              <button type="button" disabled={isMutating} onClick={() => setIsDeleteConfirmOpen(false)}>保留紀錄</button>
+              <button type="button" className="danger-action" disabled={isMutating} onClick={() => void handleDeleteSelectedRecord()}>確認刪除</button>
+            </div>
+          </div> : null}
         </section>
       ) : null}
+
+      {!shouldShowLoadingSheet ? <p className={`muted flow-feedback${recordStatus === "紀錄已儲存。" ? " saved-feedback" : ""}`} role="status">
+        {recordStatus === "紀錄已儲存。" ? <span aria-hidden="true">✓</span> : null}{recordStatus}
+      </p> : null}
 
       {currentView === "today" ? (
         <section className="records" aria-label="Today records">
