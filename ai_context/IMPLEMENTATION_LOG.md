@@ -13,7 +13,386 @@
 後續:
 ```
 
+## 2026-11-05
+
+### 全專案審查後的安全修正、測試修復與 repo 清理
+
+類型：bugfix / test / infra / docs
+
+檔案：`backend/app/core/config.py`、`backend/app/services/usage_analytics.py`、`backend/app/services/operational_events.py`、`backend/app/api/admin.py`、`backend/app/api/ai.py`、`backend/tests/conftest.py`（新增）、`backend/tests/test_config.py`、`backend/tests/test_auth_password.py`、`backend/tests/test_admin_analytics.py`、`backend/tests/test_ai_pipeline.py`、`backend/tests/test_ai_token_usage.py`、`infra/lightsail/initialize-env.sh`、`.gitignore`、`agents/PRODUCTION_AI_INSTRUCTIONS.md`、`ai_context/architecture.md`、`ai_context/MINIMAL_PRODUCTION_STACK.md`；刪除或取消追蹤的檔案列於摘要。
+
+摘要：
+
+- 安全：`ALLOW_DEV_AUTH=true` 只允許在 `APP_ENV` 為 local/test/development，其他環境（含 staging）啟動即失敗；`dev_auth_enabled` 在這些環境一律為 false。Lightsail `initialize-env.sh` 改寫入 `ALLOW_DEV_AUTH=false`。注意：已部署的 staging 若 `.env` 仍為 true，部署新版後端會拒絕啟動，需先手動改成 false；依賴 dev 登入的舊 APK 需改用 Email／密碼登入。
+- Bug：`capture_ai_token_usage` 在串流回應中於不同 context 重設 ContextVar 會丟 `ValueError`，導致 `/ai/parse-preview/progress-stream` 出錯；改為重設失敗時清空目前 context 的值。
+- 測試環境：新增 `tests/conftest.py` 固定測試所需設定（開 dev 登入、清空 JWT／admin／DeepSeek／Gemma 設定、關閉 repair fallback），避免 compose 預設 `ALLOW_DEV_AUTH=false` 與開發者本機 `.env` 影響測試，也避免測試誤連真實雲端模型。
+- 過期測試：Email 註冊測試的清理改用 SQL DELETE 讓資料庫 cascade（ORM delete 會把 auth session 外鍵設成 null）；Ollama 測試補上新的必填 `model_id`；admin 營運事件測試改用相對時間（API 只回傳 30 天內事件）。
+- mypy：修正 `object` 型別收窄與測試檔缺少的型別註記，共 30 個錯誤。
+- 清理：刪除根目錄誤建的 `NUL`、9 個 Zone.Identifier、空的 `.codex`、無對應 package.json 的根目錄 `package-lock.json`、空的 `references/`、`tmp_visual_smoke_pull/` 截圖、已被 migration 取代的 `infra/minimal/schema.sql`、`ai_context/skills.md`、過期的 `ai_context/PRODUCTION_AI_INSTRUCTIONS.md`、未使用的 `model_manifest.*.json`、藍圖的 docx 副本；`.idea/`、`mobile/.expo/`、llama.rn 建置時複製的 `ggml-hexagon/*.so` 取消追蹤並加入 `.gitignore`。
+
+驗證：
+
+- 隔離的 compose 專案（不載入本機 `.env`、不綁 host port）：migration 到 `20261003_0034`、`ruff check .`、`mypy .`（138 檔無錯誤）、backend pytest 全數通過；8 個 repo 合約腳本與 mobile native-config／android-apk-scripts 驗證通過。
+
+後續：
+
+- 登入 Lightsail 主機將 `.env` 的 `ALLOW_DEV_AUTH` 改為 false 後再部署；確認舊 APK 使用者改走 Email 登入。
+- 仍待決定：DeepSeek 是否保留與使用者同意流程、`ai_parse_audit` 原始逐字稿保存期限、正式 release keystore、K8s／infra/minimal／MVP 外功能去留、`TASK_QUEUE.md` 與本 log 封存。
+- mobile `expo-speech-recognition` 安裝問題仍在，mobile typecheck 尚未恢復。
+
+## 2026-10-23
+
+### Whisper 失敗時改用手機語音辨識備援
+
+類型：feature / native / test
+
+檔案：`mobile/App.tsx`、`mobile/phoneSpeechCapture.ts`、`mobile/recordingCopy.ts`、`mobile/app.json`、Android manifest、mobile package/lockfile、mobile navigation verifier 與語音流程測試。
+
+摘要：
+
+- 使用 Expo SDK 57 相容的 `expo-speech-recognition` 接上 Android 系統語音辨識；同次錄音先取得手機辨識文字，同時於支援的 Android 版本暫存本機 WAV，若 Whisper 模型與音檔可用便優先以 `whisper.rn` 處理，否則採用手機結果。
+- 無 Whisper 模型時不再阻止錄音；Whisper 出錯或結果為空時回退手機文字。文字仍需使用者確認才會進入 AI 整理；錄音檔在轉錄完成、短錄音、取消或離開頁面時盡力刪除。
+- UI 說明手機語音服務可能需要網路；Android 12 以下停用不支援的 continuous/persisted audio 選項，仍保留手機辨識文字備援。
+
+驗證：
+
+- 手機語音 capture mock 測試、14 項錄音流程測試、mobile navigation verifier、native config verifier 與本次涉及檔案的 `git diff --check` 通過。
+- 本機 `node_modules` 目錄有既存巢狀結構，安裝依賴時遇到 `ENOTEMPTY`；套件已加入 package/lockfile，但未能在本機安裝實際原生模組。TypeScript 檢查因此無法解析 `expo-speech-recognition`，APK 未重建；Android 真機辨識仍未驗證。
+
+後續：
+
+- 以不覆蓋現有依賴資料的方式完成 `expo-speech-recognition` 安裝，重跑 mobile typecheck/quality 並建置 arm64 測試 APK；之後在 Android 手機驗證權限、離線/網路服務、Whisper 成功與失敗備援、音檔清理和實際轉錄。
+
+## 2026-10-08
+
+### Android `whisper.rn` PCM capture and internal test APK
+
+類型：feature / native / test / build
+
+檔案：`mobile/App.tsx`、`mobile/whisperPcmCapture.ts`、`mobile/modelStorage.ts`、`mobile/nativeLocalModels.ts`、`mobile/package.json`、`mobile/package-lock.json`、Android ProGuard/configuration, and `scripts/test_mobile_whisper_pcm.cjs`.
+
+摘要：
+
+- Android 本機語音辨識改用 16 kHz、單聲道、16-bit PCM 錄音，將 PCM 原始 bytes 以 `ArrayBuffer` 傳入 `whisper.rn` 支援的 JSI `transcribeData` 路徑；模型選用約 57 MiB 的 `ggml-base-q5_1.bin`，首次下載前詢問使用者並保存至應用程式私有儲存空間。
+- 等待 Android `AudioRecord` 初始化完成才進入錄音，並以可重現的 postinstall patch 讓原生 stop 等錄音執行緒排空最後一個 PCM event 後才完成；之後移除 listener。加入 Whisper release keep rules、PCM/JSI handoff、模型私有儲存/下載、錄音流程測試，以及失敗時的使用者回饋。Whisper 使用 CPU；未包含模型檔於 APK。
+- 產生 arm64-v8a Android internal test APK。套件 `app.bloodsugar.mobile`、版本 `0.1.0`、min SDK 24、target SDK 36；以 Android debug key 簽署，不是 Play Store/prod-signed APK。
+
+驗證：
+
+- `npm --prefix mobile run quality` 通過：TypeScript、navigation/UI/native config guards、13 項錄音流程測試，以及 PCM→Whisper JSI handoff、成功/失敗釋放 context、原生 stop drain 和 pinned 模型下載/持久快取/不完整檔清理測試。
+- Release Gradle `assembleRelease` 成功；APK signature 驗證通過，package/ABI 檢查為 `app.bloodsugar.mobile` / `arm64-v8a`，且 APK 內含 `librnwhisper` 與 PCM recorder 整合。
+- 交付檔：`mobile/android/app/build/outputs/apk/release/app-whisper-arm64-test.apk`；SHA-256 `2ecc48be1aa93de8394488cf292c100d09acd072394b9d4107b3d4927bf627f5`。
+- 因目前沒有可連接的 Android 手機，尚未驗證真機麥克風權限、模型下載、實際 Whisper transcription、裝置效能或安裝啟動；此 APK 交付不能視為真機驗收。
+
+後續：
+
+- 將 APK 安裝到 arm64 Android 手機，允許麥克風權限、同意下載模型，測試中英文短句與較長語音、低記憶體/下載失敗處理、辨識延遲與記憶體；依結果調整模型大小及錄音生命週期。
+
+## 2026-10-03
+
+### Required email/password sign-in for the Android app and website
+
+類型：feature / security / migration / test / docs
+
+檔案：`backend/app/api/auth.py`、`backend/app/schemas/auth.py`、`backend/app/services/password_auth.py`、`backend/app/models/account.py`、`backend/alembic/versions/20261003_0034_email_password_auth.py`、`mobile/App.tsx`、`mobile/emailPasswordAuthScreen.tsx`、`web/src/App.tsx`、`web/src/styles.css`、auth configuration, verification scripts, and security/UI documentation.
+
+摘要：
+
+- 新增 Email/password 註冊與登入；密碼保存為隨機 salt 的 PBKDF2-HMAC-SHA256 hash，登入錯誤採通用回覆，登入與註冊皆有限流。Account 可容納無密碼的後續 provider 登入；本次未接 Google SDK / 帳號綁定。
+- Android 與網站入口移除自動 dev-login。未登入時只顯示登入／註冊；登入後才載入 profiles、額度、模型與健康紀錄。Android 使用 SecureStore，網站採短效 access token 記憶體暫存與分頁 sessionStorage refresh token。
+- 本機及 Lightsail 範例預設停用 header dev auth；本機 `.env` 另使用未提交的隨機 JWT signing key。新增 accounts.password_hash nullable 欄位，不改寫既有帳號或健康資料。
+
+驗證：
+
+- Local Alembic migration `20261003_0034` 已套用；本機 `/health` 回 200、僅帶 `X-Account-Id` 的受保護讀取回 401、`/auth/dev-login` 回 404、未註冊 Email/password login 回 401。
+- Backend Email/password、OIDC、route policy、config 測試 31 項通過；website 11 tests、TypeScript + production build 通過；mobile quality gate 通過，包含 typecheck、安全 token storage、navigation/UI guards 與 13 項錄音流程測試；deployment config verifier 通過。
+- 未執行 AWS 部署。Android APK / emulator runtime 尚未驗證：目前 WSL 指向 Windows Android SDK，APK prereq verifier 判定不可從此 WSL 建置，且環境沒有 `powershell.exe` / `adb` 命令。
+
+後續：
+
+- 以 Windows PowerShell 的 Android SDK 建立含此登入頁的 APK，在 emulator 實測註冊、登出、重開恢復 session 與錯誤提示；之後再決定是否部署 migration/backend 到 AWS。
+
+## 2026-09-26
+
+### Empty recording feedback and emulator text shortcut
+
+類型：bugfix / feature / test
+
+檔案：`mobile/App.tsx`、`recordingCopy.ts`、`package.json`、`scripts/verify_mobile_navigation.py`、`scripts/test_mobile_recording_flow.cjs`。
+
+摘要：
+
+- 首頁及錄音相關頁面加入不依賴 debug 開關的可見提示。過短、無音檔、空白辨識、缺少辨識模型、權限與錄音錯誤都有明確結果；空白結果不開啟空的確認頁、不覆蓋既有文字。
+- 以 ref 記住放開與開始時間，修正權限/準備階段快速放開後，錄音仍繼續的競態；停止失敗仍恢復音訊模式。
+- 開發驗證加上 debug 或伺服器切換開關時，顯示「測試：填入預設文字」。只填入本機確認草稿；需明確按下一步才送 parser，仍需確認才儲存。已有文字時保留，不覆蓋。
+- 原有純 UI sample 的 parser 阻擋保留。正式設定隱藏且 handler 拒絕此測試入口。
+
+驗證：
+
+- Mobile quality gate passed；新增 13 項使用實際 App handler 與音訊/狀態 doubles 的可重跑測試，涵蓋快速放開、空白/成功辨識、缺模型、權限、失敗清理、防重複停止、測試草稿與正式版 guard。
+- Windows release task build passed，`install -r` 更新 emulator-5556 成功並開啟本機模式。實際短按麥克風後顯示空白/過短提示且未進入空白確認頁；測試按鈕填入合成草稿、顯示確認頁與提示，下一步整理按鈕 enabled。
+- 只驗證空白/過短提示與文字捷徑，不以 doubles 測試宣稱真實 Whisper 辨識已驗證。模擬器畫面證據：`/tmp/bloodsugar-empty-recording.png`、`/tmp/bloodsugar-test-text-review.png`。
+- 本輪不更新 AWS、不寫入真實健康紀錄；不記錄音訊、實際 transcript、模型輸出、token 或 secret。
+
+### Android + website shared UI foundation and flow polish
+
+類型：feature / bugfix / test / docs
+
+檔案：
+
+- `mobile/designTokens.ts`、`interfaceMotion.tsx`、`navigationGlyph.tsx`、`tactilePressable.tsx`、`App.tsx` 與共用 UI 元件。
+- `mobile/historyCalendarMonthPicker.tsx`、`parserLoadingView.tsx` 與紀錄確認流程文案。
+- `web/src/App.tsx`、`RecordFields.tsx`、`styles.css`、`AdminApp.tsx`、`admin.css`。
+- `scripts/ui_smoke_web.cjs`、`verify_ui_design_tokens.py`、`verify_mobile_navigation.py`。
+- `ai_context/UI_UX_SPEC.md`、`UI_REVIEW_2026_09.md`。
+
+摘要：
+
+- 依使用者確認，範圍同時包含 Android、網站及 admin。統一深綠/暖白色彩、字級、卡片、圓角與操作回饋。
+- 加入尊重減少動態效果的進頁、錄音呼吸、整理讀取與成功標記；不增加圖像或動畫套件。
+- 修正 Android 頂端狀態列重疊、月曆六欄換行與星期未對齊。精簡確認/手動/詳情/刪除/完成頁工程說明。
+- 補強 320dp 窄版標題/導覽按鈕空間、首頁提示兩列排列與流程標籤寬度。
+- 網站以一般欄位取代 JSON 編輯，整理期間鎖定操作；防止連點重送，部分儲存成功時不再重送已收到成功回覆的項目。
+- admin 套用相同品牌系統，保留桌面資訊密度及窄版表格局部捲動。
+- 既有 backend、infra、環境與套件更新未回退；本輪沒有 AWS 部署或 DB migration。
+
+驗證：
+
+- mobile quality gate passed：41 routes、33 canonical screen groups、typecheck、navigation、visual-smoke、storage、APK/native config。
+- 共用色彩及主文字對比檢查 passed；主按鈕白字對比 5.69:1。加入 mobile quality 指令供後續改版重跑。
+- Android release task build passed，UI APK 於 emulator-5556 更新安裝成功；41 個本機範例路由原生截圖，另補 15 個 320dp 窄版畫面，測試後恢復原密度。
+- 交付前強制重建一般環境 bundle 並以 `install -r` 更新；已開啟首頁、關閉 debug 面板、點選本機伺服器，密度恢復 420dpi。APK 校驗值記於 UI review，未清除 app 資料。
+- web typecheck/lint、11 unit tests、production build passed；既有 Transformers 大 chunk 提示仍存在。
+- Chromium synthetic browser checks passed：53 captures，320/390/1280px，包含 admin/未來預覽、整理鎖定、重複點擊、部分儲存失敗與 parser 草稿恢復。真實 API 呼叫為 0。
+- Vite 在 Windows 掛載目錄未即時看到部分檔案變更，已重新啟動並使用 polling，重跑最新 UI 的完整檢查。
+- 日常網站另啟於既有 CORS 允許的 5173；本機 health/dev-login/models/voice-quota/profiles/records 皆 200，UI 顯示「已連到 API」。只記錄 endpoint/status，不輸出使用者資料；未呼叫 AI 或儲存健康紀錄。
+- PHI-safe artifacts 位於 `/tmp/bloodsugar-ui-native/`、`/tmp/bloodsugar-ui-web/`；只使用合成資料，未保存 secrets、真實健康內容或模型輸出。
+- Scoped `git diff --check -- mobile web scripts ai_context` passed；既有 IDE cache 的 CRLF whitespace 未修改。
+
+界線：
+
+- 此為 UI/UX 與本機開發 APK 交付，不代表 AWS 已更新、商店上線就緒、語音/模型實測或留存率已改善。
+- 完整版面、重跑方式與未涵蓋的 accessibility/runtime 範圍見 `UI_REVIEW_2026_09.md`。
+
+### Local backend and DeepSeek connectivity smoke
+
+類型：test / infra
+
+檔案：
+
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- 啟動本機 Docker Compose backend 與 PostgreSQL；local `/healthz`、`/readyz` 均正常回傳 200。
+- 使用本機 API 的正確選項 ID `deepseek-chat` 執行最小 parser smoke；backend request routing、模型選項驗證與 fail-closed 錯誤處理正常。
+- 初次重啟只重啟程序、不更新 container environment；確認 host 與 container key fingerprint 不一致後，以 `--force-recreate` 重新建立 backend，且未動 PostgreSQL volume。
+- 更新後 provider-safe preflight 回覆 200，最小 `/ai/parse-preview` structured preview 回覆 200；未記錄或輸出 secret、token、PHI、request body 或模型原始輸出。
+
+後續：
+
+- Lightsail 仍需以同一個有效 credential 更新並重新建立 backend container，不能只做 process restart；完成後再執行遠端 health/readiness/parser smoke。
+
+### Android emulator Dev Client surface compatibility smoke
+
+類型：bugfix / test
+
+檔案：
+
+- `mobile/android/gradle.properties`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Emulator 的 Dev Client 載入 Metro bundle 時回報 `SurfaceRegistryBinding::startSurface failed. Global was not installed.`；嘗試關閉 Android New Architecture 進行相容性測試，但 `llama.rn` 依賴 New Architecture codegen，導致 APK compile failure，因此已恢復 `newArchEnabled=true`。
+
+### Android emulator launch recovery
+
+類型：bugfix / verification
+
+檔案：
+
+- `mobile/package.json`
+- `mobile/package-lock.json`
+- `mobile/android/app/build/outputs/apk/release/app-release.apk`
+
+摘要：
+
+- 補回遺漏的 `babel-preset-expo` devDependency，讓 release bundle 與 Metro 使用完整 Expo Babel 設定。
+- Windows `assembleRelease --no-daemon` passed；Whisper、llama 與 Expo native modules 均完成編譯。
+- 新 APK 以 `adb install -r` 安裝至 `emulator-5556` 成功，`MainActivity` 成為 resumed activity。
+- bounded logcat 未再出現 `SurfaceRegistryBinding`、`Global was not installed` 或 fatal exception；React Native bundle 已執行。
+
+驗證：
+
+- `ReactNativeJS: Running "main"` confirmed。
+- 仍需在可見 UI 上操作一次錄音/模型流程，才能完成 Whisper 模型下載與實際轉錄驗證。
+
+驗證：
+
+- 原始 Dev Client / Metro transport 已確認可連線；錯誤發生在 native surface 初始化階段，不是 local backend 或 DeepSeek parser。原始設定下 Whisper native module compile 通過；目前尚未能進入 App UI 確認模型檔案是否已下載。
+
+後續：
+
+- 需另開 issue 評估 Expo SDK 57 / React Native 0.86 / Expo Dev Client surface 相容性；不能以關閉 New Architecture 解決，因 `llama.rn` 會無法編譯。
+
+## 2026-09-15
+
+### Consumer parser UI cleanup and isolated development server switch
+
+類型：feature / cleanup / test
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/appRuntimeConfig.ts`
+- `mobile/firstVersionFlowCopy.ts`
+- `mobile/sharedDisplayItems.ts`
+- `mobile/recordWorkflowCopy.ts`
+- `mobile/recordingCopy.ts`
+- `mobile/subscriptionCopy.ts`
+- `mobile/.env.example`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_ui_spec_coverage.py`
+- `scripts/verify_mobile_visual_smoke_routes.py`
+- `scripts/verify_mobile_release_env.py`
+- `scripts/verify_deployment_config.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- 從文字確認與 AI 整理確認頁移除「本次成本邊界」與 parser/AI 工程 checklist，保留使用者需要的整理提示、候選紀錄、必要警告與恢復操作；失敗後的恢復提示也改為一般使用者語言，不再顯示 parser 術語。
+- 錄音額度頁的「資料與成本邊界」改為一般使用者語言「資料使用說明」。
+- 新增獨立 `EXPO_PUBLIC_ENABLE_DEV_SERVER_SWITCHER`；內部測試 APK 可顯示本機/AWS 切換器，同時關閉 visual-smoke、模型設定與其他 debug 工程資訊。
+- Release env gate 明確禁止 server switcher，避免 production build 誤帶內部 endpoint 控制項。
+- Token/model usage aggregation 與 admin analytics 未刪除；本次只收斂 mobile consumer UI。
+
+驗證：
+
+- Mobile full quality gate passed，包含 TypeScript、navigation、UI spec coverage、visual-smoke、secure storage、APK script 與 native config verifier。
+- Deployment config example verifier passed；AI pipeline regression 以 Docker backend 執行，77 tests passed。
+- Windows `assembleRelease` passed；更新後內部測試 APK 為 186,603,549 bytes，SHA-256 `08added42b8438542742d12fcce183f91e2792cf5d80bc56edbce9708478931f`。
+- APK 已安裝至 `emulator-5556`；首頁 runtime screenshot 與 UI dump 確認仍顯示本機/AWS switcher，並且不顯示成本邊界或其他首頁 debug 工程內容。封裝後的 JS bundle 也未包含「本次成本邊界」、「成本邊界」或「資料與成本邊界」字串。
+- Provider-safe preflight 仍回覆 DeepSeek 401 authentication error；目前的「AI 整理服務暫時無法完成」不是新 mobile regression，需更新 server-side credential 才能恢復真實 V4 parse。
+
+後續：
+
+- 更新有效 DeepSeek API key 後，重跑 fallback-disabled synthetic parse、APK parser flow 與 AWS deployment smoke。
+
 ## 2026-09-14
+
+### Development local / AWS backend switch and DeepSeek V4 preflight
+
+類型：feature / infra / test
+
+檔案：
+
+- `.env.example`
+- `mobile/.env.example`
+- `mobile/App.tsx`
+- `mobile/appRuntimeConfig.ts`
+- `mobile/devBackendSwitcher.tsx`
+- `mobile/android/app/src/main/AndroidManifest.xml`
+- `mobile/android/app/src/main/res/xml/network_security_config.xml`
+- `scripts/verify_mobile_navigation.py`
+- `scripts/verify_mobile_native_config.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- 開發版 App 最上方新增高辨識度「本機 / AWS」server switcher；只有 dev auth 與 debug tools 同時啟用才顯示，一般 release surface 不會出現。
+- 切換 server 會先清除上一個 endpoint 的登入、token、profile、model、quota、record、parser candidate 與 request-key state，再返回 Today，直接使用新 endpoint 重新建立 dev session，避免跨 server 狀態或 credential 混用。
+- 新增獨立 local/AWS API environment variables；Android emulator 的 local target 使用 `10.0.2.2` host bridge，AWS target 保留 HTTPS `/api` shared route。
+- Android network security 僅對 emulator loopback hosts 開放 cleartext，其他 HTTP 仍由 base policy 拒絕；不放寬 AWS 或 production transport。
+- 本機 backend parser physical model 已切到 DeepSeek V4 Flash，並在 deterministic fallback 關閉時執行合成資料 preflight。
+
+驗證：
+
+- Mobile full quality gate passed，包含 TypeScript、navigation、UI spec、visual-smoke、secure storage、APK script 與 native config verifier。
+- 本機 backend health/readiness passed；安全設定檢查確認 parser URL/key presence、V4 physical model ID 與 fallback disabled。
+- Windows `assembleRelease` passed；更新後 APK 為 186,606,077 bytes，SHA-256 `6ea30e216901794d357d928a1782644b361ee0b832d3c59d215d951d0b53ecd1`，安裝至 `emulator-5556` 成功。AWS → 本機切換後，UI selected/disabled accessibility state 正確，且本機 backend 實際收到並以 200 完成 dev-login、voice quota、models、profiles 與 records requests；再切回 AWS 後 App process 保持運行，遠端 health/readiness 均為 200。
+- Android network security verifier 與 packaged release build passed；cleartext allowlist 只包含 emulator loopback hosts，base config 保持拒絕其他 HTTP。
+- 真實 provider preflight 未通過：DeepSeek API 對目前本機保存的 credential 回覆 401 authentication failure，因此 `/ai/parse-preview` 正確 fail closed 為 502；沒有把 deterministic fallback 當成 V4 成功，也沒有記錄或輸出 secret。
+
+後續：
+
+- 需以有效的新 DeepSeek API key 更新本機與 Lightsail secret environment，重新執行 fallback-disabled synthetic parse；只有 200 structured preview 才可標記 V4 通過。
+- V4 本機與 APK server-switch smoke 通過後，才更新 Lightsail backend 並執行遠端 health/readiness/parser smoke。
+
+### Parser waiting experience and DeepSeek structured-output recovery
+
+類型：bugfix / feature / infra / test
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/parserLoadingView.tsx`
+- `mobile/recordWorkflowCopy.ts`
+- `backend/app/services/ai_pipeline.py`
+- `backend/tests/test_ai_pipeline.py`
+- `infra/lightsail/compose.yml`
+- `scripts/verify_deployment_config.py`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/UI_UX_SPEC.md`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- Parser 送出後關閉鍵盤並以專用的 indeterminate AI 整理畫面取代文字表單；等待期間鎖住 header、primary tabs 與 Android hardware back，避免修改文字、切換頁面或重複送出。
+- Parser 502 在一般 mobile UI 改成 bounded 中文恢復訊息；失敗後保留原文字供使用者修改或重試，不顯示 raw endpoint/status error。
+- Staging synthetic smoke confirmed backend health/readiness remained 200 while a structured parse could return 502；問題邊界位於 upstream/model structured output，不是 APK base URL、TLS、Caddy、登入或 backend readiness。
+- DeepSeek parser request 明確停用 V4 thinking，避免 reasoning 消耗 compact JSON output budget；仍保留 JSON mode、固定溫度與既有 hard token cap。
+- Lightsail 啟用既有 deterministic repair fallback；fallback 不送第二次 AI request、不增加 token 成本，並保留 confirmation 與 parser repair provenance。
+- 補強 deterministic repair 對散步、大寫 medication name 與 bounded health-observation note 的處理，避免 provider output 失敗時靜默漏掉常見事件。
+
+驗證：
+
+- Mobile full quality gate passed，包括 TypeScript、navigation、UI spec、visual-smoke、secure auth storage、APK scripts 與 native config verifier。
+- Backend `tests/test_ai_pipeline.py` passed：77 tests，包含單次 provider failure 只執行一次 zero-token deterministic repair 的回歸；另通過 AI cost-boundary 與 deployment-config verifier。
+- Lightsail Compose config passed；缺少本機 secret/env 時只顯示預期的 variable warnings。
+- Windows `assembleRelease` passed；APK 為 186,602,549 bytes，SHA-256 `ef8663240704a5736f3a1f91c7a9439fda9b2e977feee6e2912c3c20f50e8ee0`，安裝至 `emulator-5556` 成功。實際 parser 操作的等待畫面已截圖檢查，輸入與 action controls 在等待期間不渲染，返回按鈕呈 disabled；程序保持運行且 bounded crash log 沒有 React Native JS 或 Android fatal error。
+
+後續：
+
+- 目前變更尚未部署到 Lightsail；AWS CLI session 已不存在，需重新登入後 recreate backend/Caddy service，再用 synthetic parse smoke 確認遠端不再回 502。
+- 正式環境仍需監控 upstream HTTP status、structured-output repair 次數與 token aggregate；不可記錄 transcript、prompt、raw model output 或其他 PHI。
+
+### First-version mobile release surface cleanup
+
+類型：feature / cleanup / test
+
+檔案：
+
+- `mobile/App.tsx`
+- `mobile/coreFlowEntryActionRow.tsx`
+- `mobile/homeGuidanceCard.tsx`
+- `mobile/settingsCopy.ts`
+- `mobile/settingsScreenData.ts`
+- `mobile/settingsStaticDisplayBundle.ts`
+- `scripts/verify_mobile_navigation.py`
+- `ai_context/IMPLEMENTATION_LOG.md`
+
+摘要：
+
+- 將 development authentication 與 internal/debug UI 顯示權限分離；僅允許 dev auth 不再顯示資料重置或 visual-smoke 工具。
+- 一般 APK 隱藏 Backend URL、模型選擇、本機模型下載、Dev Client、範例填入、parser/model 狀態、成本與資料邊界清單，以及未完成的設定入口。
+- 第一版設定頁只保留帳號卡、錄音額度與使用教學；未完成的 auth provider、提醒、隱私與訂閱頁仍可由 debug visual-smoke 驗證，但不出現在 release surface。
+- 簡化首頁說明、全域狀態與重複頁首；一般使用者只在操作進行中看到全域狀態，登出動作改成使用者語言。
+- 保留既有自動測試與 future route 程式碼，避免刪除尚在驗證中的安全邊界；本次只收斂可達且可見的第一版介面。
+
+驗證：
+
+- Mobile full quality gate passed，包括 TypeScript、navigation、UI spec、visual-smoke、secure auth storage、APK scripts 與 native config verifier。
+- Windows `assembleRelease` passed；APK 為 186,599,797 bytes，SHA-256 `094f5b289d77bd91afe3e9bf2cc2bf392f93441b9cb87fd519524c3029bc1d64`。
+- `adb install -r` 在 `emulator-5556` 成功；首頁、選單與精簡設定頁以 synthetic/demo display content 完成視覺檢查，程序保持運行且沒有 `FATAL EXCEPTION` 或 React Native JS error。
+- Production preflight 仍依設計阻擋目前的 dev auth 設定；此 APK 是內部 staging artifact，不是可交付顧客或商店的 production build。
+
+後續：
+
+- 正式上線前完成 OIDC、production keystore，並從 production dependency/build 移除 Expo dev client。
+- 以 Android App Bundle 與 ABI split 減少下載大小；再依第一版功能決定是否保留 bundled local Llama/Whisper native runtime。
 
 ### Shared website, admin analytics, and APK staging rollout
 
@@ -70494,3 +70873,100 @@
 後續：
 
 - Next implementation slice should start with T041 UI visual baseline alignment.
+
+### 管理後台使用者稽核、個人解析紀錄與遠端模型錯誤日誌
+
+類型：功能
+
+檔案：
+
+- `backend/app/api/admin.py`
+- `backend/app/api/ai.py`
+- `backend/app/main.py`
+- `backend/app/models/ai_parse_audit.py`
+- `backend/app/services/ai_pipeline.py`
+- `backend/app/services/usage_analytics.py`
+- `backend/alembic/versions/20260926_0032_admin_parse_audits.py`
+- `web/src/AdminApp.tsx`
+- `web/src/admin.css`
+- 本機 `.env`（僅保存密碼雜湊及 session secret）
+
+摘要：
+
+- `/admin` 加入使用者搜尋、個人資料、解析提交原文、AI 結果、模型 ID、逐次 tokens，以及已確認每日紀錄/健康紀錄檢視；API 使用 admin session 保護並設定 `Cache-Control: no-store`。
+- 新增每次解析一筆的稽核資料，以帳戶/個人資料關聯，集中保存 transcript、解析結果和按 provider/model 聚合的 token 用量，避免每個模型呼叫重複複製原文。
+- app 的同步解析與網站 progress-stream 都會記錄成功/失敗結果；遠端模型錯誤使用結構化 log，只記錯誤類型、HTTP 狀態、provider/model 與 batch，不輸出 request、response、原文或 API key。
+- 本機管理員使用先前指定的帳密；設定只存 PBKDF2 密碼雜湊與隨機 session secret，沒有把明文密碼寫入 `.env`。
+
+驗證：
+
+- `ruff check` 涉及的 Python 檔案通過。
+- Python `compileall` 通過。
+- `npm --prefix web run build` 通過（Vite 提示既有大型 bundle chunk，非 build failure）。
+- 本機 migration `20260926_0032` 成功升級至 head；backend 已重建，`/health` 回應正常且 admin 設定已載入；未部署 AWS。
+- 依本次工作範圍未新增或執行測試。
+
+後續：
+
+- 手動登入 `/admin` 檢視結果；若要使用 AWS，需另行審核並部署相同 migration/backend，這次沒有變更遠端。
+
+### 後台即時營運事件與高訊噪 logging
+
+類型：功能 / logging
+
+檔案：
+
+- `backend/app/core/logging.py`
+- `backend/app/services/operational_events.py`
+- `backend/app/models/operational_event.py`
+- `backend/app/api/admin.py`
+- `backend/app/main.py`
+- `backend/alembic/versions/20260926_0033_operational_event_log.py`
+- `web/src/AdminApp.tsx`、`web/src/admin.css`
+- `ai_context/security_compliance.md`
+
+摘要：
+
+- `/admin` 新增即時重要事件面板，每 10 秒更新；API 僅限管理員 session，回應使用 `Cache-Control: no-store`。
+- 遠端模型錯誤、無效模型 JSON、API 5xx、慢請求、解析稽核寫入失敗及重要登入拒絕會記錄事件；事件依分鐘與安全維度合併，保存 30 天，包含 provider/model、錯誤類型、狀態碼、batch、耗時與 request ID。
+- stdout JSON formatter 僅輸出 allowlist 欄位；重複警告節流，停用日常 request access log 與高噪音 HTTP client debug。事件不包含 transcript、request/response body、模型原始輸出、認證資料或 API key。
+- 一般成功請求不逐筆輸出 log；API 用量仍以每日 aggregate 保留。管理員讀取使用者健康資料與解析稽核會另寫 audit metadata，不複製內容至營運事件 log。
+
+驗證：
+
+- Ruff、Python compileall、web build 及 migration compatibility verifier 通過；聚焦測試 5 項通過。
+- 本機 migration `20260926_0033` 已升級至 head；先前 runtime smoke 確認未登入拒絕、登入 session 可讀事件 feed、事件有到達、10 秒輪詢與 no-store header。synthetic event 已在 smoke 結束時刪除。
+- 本次重新檢查時 Ruff 與 compileall 通過；本次 shell 環境缺少 FastAPI，因此無法在此重跑 DB-connected pytest；Docker socket 權限拒絕，無法在此確認/重啟本機容器。未部署 AWS。
+
+後續：
+
+- 本機 Docker daemon 可用後重新開啟 backend/web，登入 `/admin` 確認實際資料；持續維持 AWS 部署為獨立且待授權步驟。
+
+## 2026-09-27
+
+### 網站主要導覽與視覺層次微調
+
+類型：feature / UI / test / docs
+
+檔案：
+
+- `web/src/App.tsx`、`web/src/App.test.tsx`、`web/src/styles.css`
+- `web/src/AdminApp.tsx`、`web/src/admin.css`
+- `scripts/ui_smoke_web.cjs`
+- `ai_context/UI_UX_SPEC.md`
+
+摘要：
+
+- 網站常用的記錄、今日、歷史、分析改為常駐主要導覽；手機底部固定、支援 safe area，桌面置於頁首下。低頻設定/教學保留於功能選單，進行中錄音、AI 整理及資料修改時依既有 busy state 鎖定導覽。
+- 柔化網站背景、活動對象資訊帶與卡片層次；admin 保持原資訊架構，只加上輕微深度與 hover 回饋。登入、API、資料寫入與確認儲存流程未變更。
+- 更新 UI spec 與 browser smoke 導覽 helper；只修改網站，Android 原生畫面未改。
+
+驗證：
+
+- Web production build 通過（Vite 有既有大型 transformer chunk 提示）；ESLint 通過；Vitest 11 項測試通過；`git diff --check` 通過。
+- Browser smoke 因 sandbox 禁止在 `127.0.0.1:4173` listen（EPERM）未能重跑；因此本次沒有新的瀏覽器截圖/實機視覺簽核。
+- 未更新 AWS、未連接正式 API、未使用真實健康資料。
+
+後續：
+
+- 若要擴大到 Android 原生，可沿用同一導覽優先級檢查；另以瀏覽器截圖和實機寬度完成視覺簽核後再調整細節。

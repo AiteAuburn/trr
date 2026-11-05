@@ -157,6 +157,11 @@ Backend bootstrap status：
 - AI transcripts with too many candidate numeric values are rejected before model availability lookup, profile lookup, quota work, parser execution, or LLM work.
 - Request validation error details are JSON-safe and bounded after sanitization, including validator context values, and continue to omit raw `input`.
 - Structured JSON log string fields are length-bounded before serialization.
+- The JSON log formatter emits only an explicit allowlist of operational fields (event/source, route/method, request/trace id, provider/model, status/error type, timing); raw URL paths, request/response bodies, headers, transcripts, and exception text are excluded.
+- Routine API requests are counted in compact daily aggregates instead of printing one stdout line per request; local and production Uvicorn access logs are disabled.
+- Operational events persist only high-signal model/upstream failures, API 5xx, slow requests, and auth/admin blocks; duplicates are minute-bucketed, counts/max latency are merged, and old rows are pruned after 30 days.
+- Authenticated `/admin/events` exposes operational events plus safe account/admin access-audit metadata and refreshes in the web admin every 10 seconds; the feed never returns transcript, health payload, email/search text, credentials, or model response bodies.
+- Admin login/logout, user-directory searches, and admin views of account health data are written to `audit_logs`; user record/daily-record/report/year-review reads and auth session lifecycle actions are also audited with actor, resource/scope, result/count metadata, and request ID.
 - Shared sensitive-data redaction is bounded by depth, container width, and string length before returning redacted structures.
 - Record payload and metadata JSON are bounded by depth, node count, container width, and string length before permission lookup, sanitizer recursion, schema validation, or DB write work.
 - Record payload/metadata storage sanitizers are bounded by depth, container width, and string length, and remove raw transcript/source/free text before DB storage.
@@ -296,6 +301,8 @@ Backend bootstrap status：
 - Record read/write assertions are centralized so future caregiver, doctor, export, and share scopes can be added without duplicating ownership joins across routers.
 
 ## 6. Authentication
+
+MVP 登入要求：Android 與網站在未驗證前只顯示 Email / 密碼登入或註冊介面，不載入任何帳號健康資料。新密碼至少 12、至多 128 個字元；資料庫只存每帳號隨機 salt 的 PBKDF2-HMAC-SHA256 雜湊，不存明文。登入錯誤使用相同回覆，登入依 client 與 email 雜湊鍵限流，註冊依 client 限流；登入/註冊只記錄方法、結果及 request id，不記錄 email、密碼或 token。Access JWT 短效，refresh token 只存其 hash；Android 使用 SecureStore，網站 refresh token 僅存 tab-scoped sessionStorage、access token 僅存記憶體。OAuth 後續應透過 provider identity 綁定至既有 account，不應覆寫密碼或建立重複健康資料帳號。
 
 使用者：
 

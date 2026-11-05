@@ -1,10 +1,17 @@
 # 糖錄錄 App 介面與流程規格
 
-最後更新：2026-06-02
+最後更新：2026-09-26
 
 文件定位：本文件是糖錄錄目前 UI / UX 的 canonical 規格，提供給 AI coding agent、設計工具與前後端實作使用。MVP / future 範圍仍以 `ai_context/ENGINEERING_BLUEPRINT_V1.md` 與 `ai_context/TASK_QUEUE.md` 為準；成就榜、年度回顧、商城、食物拍照分析屬於 future module，除非 task 明確要求，不應混入 MVP 首頁。
 
 ## 1. App 定位
+
+### 1.1 登入入口（MVP）
+
+- Android 與網站初次進入先顯示 Email / 密碼登入介面；未登入不得渲染首頁、導覽、紀錄、個人 profile 或分析資料。
+- 提供登入與 Email 註冊切換；註冊可填顯示名稱，密碼至少 12 字元。登入成功後才載入帳號資料；有效 session 可安全續期。
+- 登出會撤銷 refresh session 並回到登入入口。Google 等 provider 暫不呈現為可用登入，未來以帳號綁定流程擴充。
+- 登入頁沿用暖白底、深綠品牌色、圓角卡片與清楚欄位標籤；錯誤不洩漏帳號是否存在以外的敏感資訊。
 
 「糖錄錄」是一款血糖、飲食、運動紀錄 App。核心特色是讓使用者用語音快速記錄每日血糖、飲食與運動，系統再用 AI 自動整理成結構化紀錄，並提供趨勢分析、歷史查詢、會員方案、成就與年度回顧。
 
@@ -27,17 +34,20 @@
 
 ## 2. 視覺設計系統
 
+本版範圍包含 Android App、網站與 `/admin`。共用視覺語言，不強迫營運表格採用手機單欄版型。新增功能沿用 `mobile/designTokens.ts` 與 `web/src/styles.css` 的色彩角色，不再自行新增相近的綠色與灰色。
+
 ### 2.1 色彩
 
 ```text
-主色 / 深墨綠: #0F3F37
-品牌綠 / 按鈕綠: #3FA67F 或 #46B58B
-淡綠背景: #EAF6F1
-灰色文字: #5F666A
-淺灰邊框: #E3E8E5
-錯誤紅 / 刪除紅: #C85D5D
+主色 / 深墨綠: #183F36
+品牌綠 / 按鈕綠: #26735D
+淡綠背景: #EAF2EA
+內文: #29473E
+灰色文字: #62766C
+淺灰邊框: #DFE7DD
+錯誤紅 / 刪除紅: #AA4548
 卡片背景: #FFFFFF
-頁面背景: #FAFAF8 或 #FFFFFF
+頁面背景: #F7F8F4
 ```
 
 使用規則：
@@ -53,20 +63,22 @@
 使用繁體中文無襯線字體，例如 Noto Sans TC、PingFang TC 或系統字體。
 
 ```text
-頁面標題: 36-44px, bold, 深綠色
-頁面副標: 16-18px, medium, 灰色
-卡片標題: 20-24px, bold, 深綠色或接近黑色
-數值: 32-56px, bold, 品牌綠
-按鈕文字: 20-24px, bold, 白色或品牌綠
-小字 / 單位: 14-16px, 灰色
+品牌標題: 28px, semibold/bold, 深綠色
+頁面標題: 24px, semibold/bold
+內文: 14-17px, regular, 1.5-1.7 行高
+卡片標題: 16-20px, semibold
+數值: 28-40px, bold, 品牌綠
+按鈕文字: 14-16px, semibold, 白色或品牌綠
+輔助文字 / 單位: 12-14px, 灰色
 ```
 
 ### 2.3 共同版面
 
-- 所有主要頁面使用 iPhone 風格直式畫面。
-- 左右內距約 28-32px。
+- App 使用直式畫面；網站採響應式置中閱讀欄，最大 680px，admin 最大 1240px。
+- 網站將「記錄、今日、歷史、分析」設為常駐主要導覽；窄螢幕固定在底部並避開 safe area，桌面放在頁首下方。設定、教學與低頻入口保留於功能選單。Android 原生導覽規則另依其 primary tabs 規格。
+- App 左右內距 22px；網站 20-28px。
 - 卡片圓角約 20-28px。
-- 按鈕圓角約 18-28px。
+- 一般按鈕圓角 16px；錄音主按鈕維持圓形。
 - 卡片使用白底、淺灰邊框、輕微陰影。
 - Icon 多放在淡綠圓形背景中。
 - 右上角常見圓角方形 menu 按鈕，內含三條橫線。
@@ -82,8 +94,8 @@
 
 Primary button：
 
-- 高度約 56-64px。
-- 綠色或柔和綠色漸層。
+- 高度約 48-52px，小型互動目標至少 44px。
+- 深綠實色，確保白字辨識度。
 - 白字，bold。
 - 大圓角。
 - 可搭配 icon。
@@ -93,6 +105,16 @@ Secondary button：
 - 白底。
 - 綠色邊框。
 - 綠色文字。
+
+### 2.5 回饋與簡化原則（2026-09）
+
+- 進頁採 220ms 淡入與 6px 位移；錄音/整理只使用柔和呼吸，成功標記只播放一次。遵守系統減少動態效果，App 在背景時停止循環動畫。
+- parser 處理中鎖定文字與離頁入口；不可用虛假的百分比表示未知進度。完成後由使用者確認，不自動儲存。
+- 首頁避免空白即時辨識框與模型細節。工程用 API、token、payload、成本與權限檢查說明留在 debug 模式；保留真正影響使用者的未儲存、無法復原、離線及權限提醒。
+- 網站的候選/詳情編輯使用一般欄位，不要求使用者編輯 JSON。刪除要先確認，送出期間鎖定操作，單次成功回覆後不得因部分失敗再重送該筆。
+- 月曆固定七欄，星期一開頭，依每月第一天補空格；不可使用固定像素日格造成窄螢幕換行。
+- 未完成的商城、食物拍照等功能維持預覽與停用邊界，不因美術改版假裝已可使用。
+- 本輪可驗證版面、流程與防重送；留存率提升仍須之後以真實使用資料驗證，不視為設計完成的已證實效果。
 
 Card：
 
@@ -124,8 +146,8 @@ Icon：
 使用者進入首頁
 -> 首頁只顯示大型麥克風按鈕與「按住開始說話記錄」「放開即結束」提示
 -> 使用者按住首頁麥克風開始錄音 preview
--> 放開麥克風結束錄音 preview，進入文字確認 / 記錄流程
--> 歷史紀錄與基本分析等第一版功能從右上角漢堡選單進入；成就榜、商城、食物社群與其他未來功能先隱藏於一般使用者選單外
+-> 放開麥克風結束錄音；辨識成功才進入文字確認，過短或空白則在原頁顯示清楚提示
+-> 網站可從常駐主要導覽切換記錄、今日、歷史與分析；Android 原生版沿用漢堡選單進入歷史與基本分析。成就榜、商城、食物社群與其他未來功能先隱藏於一般使用者選單外
 -> 使用者說出紀錄內容
 -> 系統顯示語音文字稿，使用者可修正
 -> 點擊下一步整理
@@ -181,7 +203,7 @@ Analysis range selection 與 chart point tooltip selection 必須走 dedicated h
 Account Security、Profile Settings、Recording Quota、Reminder Settings 與 Privacy Settings 的 preview action status 不可在 JSX handler 內即時呼叫 `boundUiMessage` 組字；應使用 render 前 derived 的 bounded status message。
 Profile Settings、Recording Quota、Reminder Settings 與 Privacy Settings 的返回、編輯整合、額度同步、通知整合與隱私整合 CTA 必須有 render 前 bounded accessibility label 與 `accessibilityRole="button"`；label 不可暗示已寫入個資、上傳錄音/逐字稿、建立通知排程、匯出刪除或公開資料。
 Settings advanced 區塊的照護對象、LLM 與 STT 選項 chip 必須在 render 前轉成 bounded display item，並提供 bounded accessibility label、`accessibilityRole="button"` 與 selected/disabled accessibility state；profile/model 名稱可來自 backend，但不可直接把 raw display name、model id 或未 bounded model label 串進 JSX 或輔助工具文字。
-Settings 的本機 Whisper 模型選擇區必須可在非 debug 模式顯示已下載 Whisper 模型短檔名與 checksum 前綴，供 Home / Record 錄音轉文字使用；不可顯示完整本機 URI，不可下載遠端模型，不可上傳音檔，也不可呼叫雲端 AI。Settings native debug 的下載類型 chip、native module check、model download、Whisper、Llama 與 Benchmark Pressable 必須有 render 前 bounded accessibility label、`accessibilityRole="button"` 與 disabled/selected accessibility state；label 必須說明只操作本機模型或本機檔案狀態，不可暗示會送出健康資料、呼叫雲端 AI、保留完整 raw model output 或寫入正式紀錄。
+Settings 的離線語音辨識區必須在非 debug 模式顯示模型是否已備妥，首次下載前明確告知模型約 57 MiB，並由使用者主動確認後才從固定、版本鎖定的官方 Whisper 模型來源下載；下載後供 Home / Record 本機轉錄使用。不可顯示完整本機 URI，不可上傳音檔，也不可因模型下載呼叫雲端 AI。Settings native debug 的下載類型 chip、native module check、model download、Whisper、Llama 與 Benchmark Pressable 必須有 render 前 bounded accessibility label、`accessibilityRole="button"` 與 disabled/selected accessibility state；label 必須說明只操作本機模型或本機檔案狀態，不可暗示會送出健康資料、呼叫雲端 AI、保留完整 raw model output 或寫入正式紀錄。
 
 Account Security 的 auth provider 與 session management preview rows 必須先轉成 bounded display item。session management Pressable handler 只可設定 `item.actionStatus`；auth provider Pressable handler 只可呼叫 bounded provider challenge helper，不可用 row title 在 JSX handler 內即時組登入或 session status 文案。JSX `onPress` 必須呼叫 row press wrapper，不直接呼叫底層 provider challenge 或 session status handler。
 Account Security 的 provider preview row、session management preview row、refresh/load/logout/logout-all CTA 必須有 render 前 bounded accessibility label 與 `accessibilityRole="button"`；label 不可顯示 raw token、raw device fingerprint、raw claims 或 provider token。
@@ -203,7 +225,10 @@ Record update/delete 的進行中、成功、失敗與結果摘要 UI status 也
 Manual record create 的 backend unavailable、進行中、成功、失敗與結果摘要 UI status 必須透過 bounded display helper 產生；包含顯示筆數的摘要必須先 clamp，再組成顯示文字。
 
 Parser submit 的 backend unavailable、model unavailable、範例文字阻擋、進行中、成功、失敗與 recovery UI status 必須透過 bounded display helper 產生；成功候選筆數必須先 clamp，再組成顯示文字。
+Parser request 開始時必須關閉鍵盤並以專用、indeterminate 的整理畫面取代文字表單；等待期間不得顯示或允許操作 transcript input、重試、送出、header navigation、primary tabs 或 Android hardware back。成功後進入 AI 確認，失敗後回到保留原文字的確認頁，且一般 UI 不可直接顯示 raw endpoint/status error。
 Record 流程的「填入範例」必須走 dedicated bounded handler；不可在 JSX Pressable callback 內直接呼叫 `updateTranscriptDraft(sampleText, "sample")`。範例文字只能用於查看確認 UI，仍不可送 parser 或寫入資料。
+
+另外提供使用者要求的開發測試入口「測試：填入預設文字」：只在 `allowMobileDevAuth && (enableDevServerSwitcher || enableDebugTools)` 顯示，handler 也必須檢查同一開關與忙碌/錄音狀態。此入口填入可編輯的測試草稿並開啟確認頁，允許使用者明確按下一步後測試所選伺服器；填入本身不能呼叫 parser 或儲存。已有草稿時保留，不能無聲覆蓋。此入口與不能送 parser 的靜態 UI sample 分開。
 Record 流程的重錄、使用錄音文字、填入範例、手動新增、文字記錄、下一步整理與查看分析 CTA 必須有 render 前 bounded accessibility label 與 `accessibilityRole="button"`；label 需說明本機 Whisper、AI/LLM、parser、寫入資料或只使用已載入紀錄的邊界，下一步整理 disabled 時也必須提供 accessibility disabled state。Home 頁只保留 mic Pressable，不顯示上述 CTA。
 
 AI candidate edit/remove 的開啟編輯、移除確認、移除結果、編輯成功與編輯失敗 UI status 必須透過 bounded display helper 產生；移除後剩餘候選筆數必須先 clamp，再組成顯示文字。
@@ -284,7 +309,8 @@ AI 候選編輯、手動新增與正式紀錄編輯的日期、時間、欄位�
 - 麥克風按鈕仍為第一操作重心；下方顯示淺色提示字：「按住開始說話記錄」與「放開即結束」。按住錄音時，第二行提示可在同一個 `homeHintSecondary` 位置改顯示「已錄音 X 秒，放開即結束」。第二行下方可顯示一行很小的目前語音識別模式：已選本機 Whisper 時顯示「目前語音識別：本機 Whisper」，未選模型時顯示「目前語音識別：內建文字確認」；此文字不可是 Pressable，不可觸發 STT/AI/backend。
 - 麥克風下方顯示範例輪播區，標題為「範例（怎麼說都可以）」，自動輪播自然聊天型、簡潔紀錄型、想到什麼說什麼型、生活日記型等說話方式。範例區標題、序號與內文都必須左對齊，並顯示 pagination dots 讓使用者知道目前是哪一個範例；不可是 CTA，不可觸發 AI / STT / backend，也不可讓使用者誤認為必須照固定格式念。
 - Mobile navigation verifier 必須從 Today/Home render block 內確認引導標語、非按鈕提示區、說明文字、範例輪播與兩行錄音提示存在，不能只用全檔文字 marker 間接判斷；也必須守住按住時的秒數提示由 bounded helper 產生。Verifier 也必須確認首頁 render block 只有一個 Pressable 麥克風控制，不含 primary/secondary button、section title、status/evidence copy、inline info block 或 record/timeline card surface，且 `homeMicButton` 維持大型圓形尺寸，不可縮成一般 CTA。Today/Home chrome 必須保留空 subtitle 且不可設定 `backTo` 或 `actionLabel` 覆蓋 header fallback；右上角 header button 必須使用 `☰` fallback 開啟功能選單。
-- 首頁按住麥克風使用 `expo-av` 啟動本機錄音；放開停止錄音並保留 bounded audio URI。測試版本錄音結束後必須直接進入文字確認 / 語音記錄介面：若已設定 Whisper model path，可轉文字後進入文字確認；若尚未設定 Whisper，也要進入文字確認頁讓使用者補文字。不可直接呼叫 AI / LLM parser、不中途建立紀錄、不寫入 backend。
+- 首頁按住麥克風使用 `expo-audio` 啟動本機錄音；放開停止錄音並保留 bounded audio URI。辨識成功才進入文字確認。過短、缺音檔、空白辨識、缺模型與權限/錄音錯誤須顯示不受 debug 開關影響的可見提示，不可只寫入首頁隱藏的 status，也不可把舊草稿當作本次辨識結果。權限或準備尚未完成就放開時，必須取消或隨即停止錄音。不可直接呼叫 AI / LLM parser、不中途建立紀錄、不寫入 backend。
+- 測試版可在首頁 header 下方的獨立開發工具區顯示「測試：填入預設文字」；正式版仍維持單一麥克風操作重心。錄音提示支援 accessibility live region，並能在畫面上方看到。
 - 第一版功能入口只保留今日錄音、歷史紀錄、基本分析與必要設定；成就榜、年度回顧、商城、食物社群、社群排行與未來擴充入口不可出現在一般使用者 menu。未來 route 可保留給 debug / visual-smoke，但必須在 `enableDebugTools` 下才可見。
 - Primary tabs 只可保留今日、記錄與選單；歷史紀錄與基本分析不可出現在 primary tabs，必須透過右上角漢堡選單進入。History / Analysis screen chrome 必須維持 hamburger fallback，不可改成 back arrow 或 close action 取代 menu 入口。
 - Mobile navigation verifier 必須檢查第一版功能選單 top-level destination id 與使用者可見 label parity，守住「今日錄音」、「歷史紀錄」、「基本分析」、「設定」，並確認成就榜、商城、食物社群等未來功能不在一般 menu 曝光。
@@ -686,6 +712,9 @@ Dev-only visual smoke route jump：
 - 一般使用者不應在預設設定頁直接看到成本、模型或環境設定。
 - 進階設定入口使用 inline 區塊，不使用提示卡或白色 panel；只有展開後的實際開發設定表單可使用單層容器。
 - Debug / Dev Client 工具只能在 debug build 或明確啟用 `EXPO_PUBLIC_ENABLE_DEBUG_TOOLS` 時顯示。
+- 只有 `EXPO_PUBLIC_ENABLE_DEV_SERVER_SWITCHER=true` 且 `EXPO_PUBLIC_ALLOW_DEV_AUTH=true` 的內部測試版，才可在全 App 最上方顯示「本機 / AWS」server switcher。兩個 endpoint 必須分別來自 `EXPO_PUBLIC_LOCAL_API_BASE_URL` 與 `EXPO_PUBLIC_AWS_API_BASE_URL`；一般 release 不顯示此控制項。Server switcher 必須與其他 debug tools 分離，內部測試 APK 可保留 server switcher 而不顯示 visual-smoke、模型與工程邊界內容。
+- 開發版切換 server 時必須鎖住重複操作、清除前一個 server 的 account、token、profile、model、quota、record、parser candidate 與 request-key state，返回 Today 後使用新 URL 重新 dev-login、載入額度、models 與 profiles；不可把舊 server 的 bearer token、account id、profile id 或 cached health data 帶到新 server。
+- Android standalone 測試 APK 只可為 emulator loopback hosts（`10.0.2.2`、`127.0.0.1`、`localhost`）開放 cleartext；network security base config 必須繼續拒絕其他 HTTP，AWS / production API 必須使用 HTTPS。
 - 設定、帳號安全、個人資料、錄音額度、提醒、隱私與 Dev Client 的所有 action/status 文字必須先經 bounded display helper 再 render。
 - 設定與帳號安全頁的 local clear、provider challenge、session refresh/load/logout、session preview status、profile edit preview、quota sync、notification preview 與 privacy preview 必須走 dedicated handler；不可在 JSX Pressable 內直接 set action status、直接清除本機 session 或直接啟動 auth/quota async call。
 - 設定進階區的展開/收合、backend reconnect、照護對象切換、STT/LLM model selection、native download kind、native module check、model download、Whisper/Llama/benchmark actions 必須走 dedicated handler；不可在 JSX Pressable 內直接 set profile/model/download state 或直接啟動 backend/native async call。照護對象與模型 chip、native download kind chip 的 JSX `onPress` 必須呼叫 option press wrapper，不直接呼叫底層 profile/model/download state boundary handler，也不可直接把 `profile.sourceId` 或 `model.id` 傳入底層 option handler。
@@ -852,7 +881,7 @@ Dev-only visual smoke route jump：
 - 顯示今日語音用量、剩餘時間、方案狀態與低干擾提醒規則。
 - 目前只做 quota 狀態預覽；不呼叫 parser、不呼叫 AI、不上傳音檔、不保存逐字稿。
 - 額度資料只能來自 backend entitlement / quota API，mobile 不自行信任本機計數。
-- 「額度控制」與「資料與成本邊界」說明使用 inline 區塊，不使用 banner 或 warning card；此頁只讓 quota bar 與狀態摘要使用卡片。
+- 內部測試版的「額度控制」與「資料使用說明」使用 inline 區塊，不使用 banner 或 warning card；一般使用者版本只保留 quota bar 與必要狀態摘要。
 
 頁面內容：
 
@@ -874,13 +903,13 @@ Dev-only visual smoke route jump：
   - 錄音開始前先檢查剩餘額度。
   - parser 成功或失敗都要有一致的 usage commit / rollback 規則。
   - 價格、優惠資格、試用與付費上限由 entitlement 決定。
-- 資料與成本邊界：
+- 內部資料使用說明：
   - 不呼叫 parser。
   - 不呼叫 AI。
   - 不上傳音檔。
   - 不保存逐字稿。
   - 只有使用者手動同步時才讀取 backend quota 狀態。
-- 資料與成本邊界 copy 必須透過 bounded display helper 產生；不可在 JSX 內直接寫 parser/audio/quota fallback 文案。
+- 內部資料使用說明 copy 必須透過 bounded display helper 產生；不可在 JSX 內直接寫 parser/audio/quota fallback 文案。
 - 錄音額度頁的 intro、額度控制說明與同步額度按鈕 label 必須透過 bounded display helper 產生；不可在 JSX 中直接寫 quota / entitlement boundary copy 或 busy label。
 
 底部按鈕：
@@ -1673,18 +1702,13 @@ AI 分析結果：
 
 - 固定整理前提示使用 inline guidance，不使用 banner card 或額外白色 panel。
 - 「確認後，AI 會幫你整理成血糖、飲食與運動紀錄。」。
-- 本次成本邊界 inline checklist：
-  - 空文字、過長文字或範例文字不送 parser。
-  - 下一步整理只送目前這段文字一次，不批次載入歷史紀錄。
-  - 手動新增可完全避開 AI parser，適合補登明確紀錄。
-  - backend 未 ready 時不可送 parser，避免無效重試與額外成本。
+- 文字確認頁不顯示「本次成本邊界」、parser request 次數或其他工程實作 checklist；只保留一句整理前提示、輸入驗證與可採取的恢復操作。
 - 文字輸入與文字確認欄位必須同時使用 input-level `maxLength` 與 setter-level 截斷，避免超長 transcript 先進入 mobile state 再由 validation 擋下。
 - 文字輸入、文字確認與 parser recovery 的 validation/status 顯示文字必須先經 bounded display helper 再 render；disabled 判斷仍依原始 validation 結果。
 - 進入文字確認、返回修改與重新輸入清空文字的狀態文字必須透過 bounded display helper 產生；不可在 handler 或 Pressable 內直接組文字確認流程 status。
 - 文字確認頁返回與重新輸入必須使用 dedicated handler：返回保留目前文字但清掉 parser preview / 編輯 / 移除候選狀態；重新輸入清空文字、範例旗標、錄音預覽與候選狀態後回到來源頁。兩者都不可呼叫 AI / STT / Vision、不可寫入紀錄、不可在 JSX handler 內直接堆疊多個 state 操作。
 - 文字確認頁 parser recovery 的手動新增 CTA 必須使用 dedicated handler；handler 清掉候選編輯 / 移除暫存後進入手動新增，不重送 parser、不呼叫 AI / LLM / STT、不送 backend write request。
 - 文字確認頁的 backend unavailable 與 parser model unavailable 警告必須先轉成 bounded display text；不可在 JSX 內直接組 protected backend 或 model unavailable message。
-- 文字確認頁的成本邊界 checklist 必須在 render 前轉成 bounded display item；不可在 JSX 內直接 map raw checklist 文案。
 - 文字確認頁的 intro、整理前提示、範例文字 warning 與本機 preflight passed 狀態必須透過 bounded display helper 產生；不可在 JSX 內直接寫固定 parser/STT/cost guidance。
 - `parseTranscript` handler 本身必須 fail-closed：若 protected backend 尚未 ready，即使被間接呼叫也只更新安全狀態文字並停留在文字確認頁，不送 `/ai/parse-preview`。
 - `parseTranscript` handler 本身也必須檢查目前 STT / LLM model option 是否存在且 available；模型尚未載入或未啟用時只更新安全狀態文字，不送 `/ai/parse-preview`。
@@ -1709,14 +1733,8 @@ AI 分析結果：
 
 資料卡片列表：
 
-- 成本邊界 inline checklist，不使用 banner card：
-  - 此頁只顯示 parser 已回傳的候選紀錄。
-- 逐筆編輯、移除或查看每日紀錄都不會重新呼叫 AI。
-  - 未建立片段不會自動儲存，也不會自動重跑 parser。
-  - 返回修改後，只有再次按下一步整理才會產生新的 parser / AI 成本。
-  - mobile 不保留 raw prompt、raw model output 或模型 debug trace。
+- AI 整理確認頁不顯示成本邊界、parser 重跑規則或 raw-output 工程 checklist；只顯示候選紀錄、必要警告與使用者操作。
 - parser preview response 寫入 mobile state 前必須 bounded：不保留 transcript / normalized_text raw echo，segments / candidate records / rejected events 有固定筆數上限，id/type/source/reason/decision trace/source text 都有固定欄位長度上限。
-- AI 整理確認頁的成本邊界 checklist 必須在 render 前轉成 bounded display item；不可在 JSX 內直接 map raw checklist 文案。
 - AI 候選卡的日期標籤、payload 摘要、source_text、decision trace、rejected event text/reason 與 confidence percent 必須在 render 前 bounded/clamped；不可直接 render raw metadata 或未 clamp 的信心分數。
 - AI 整理確認頁的 rejected event 顯示列必須先轉成 bounded display item；source text 與 reason label 不可在 JSX 內直接呼叫 helper 後 render。
 - Rejected event 外層使用開放式 inline stack；只有單筆 rejected event 使用淡色警示列，避免 warning panel 裡再包白色卡片。

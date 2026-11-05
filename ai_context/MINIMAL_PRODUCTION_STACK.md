@@ -53,7 +53,6 @@ bloodsugar/
       docker-compose.yml
       .env.example
       nginx.conf
-      schema.sql
       backup.sh
       restore.sh
   ai_context/
@@ -132,7 +131,6 @@ Required runtime behavior:
 Canonical minimal schema reference:
 
 ```text
-infra/minimal/schema.sql
 backend/alembic/versions/
 ```
 

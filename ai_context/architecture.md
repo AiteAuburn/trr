@@ -1072,7 +1072,6 @@ VAD 用途：
 - `ai_context/subscription_family_model.md`：訂閱、權益與家庭共享抽象模型。
 - `ai_context/efficiency_cost_strategy.md`：效率與雲端成本策略。
 - `skills.md`：AI / engineering 執行總規範，其他文件若衝突以此為準。
-- `ai_context/PRODUCTION_AI_INSTRUCTIONS.md`：薄引用文件，供需要固定檔名的 AI 工具讀取。
 - `ai_context/MASTER_ROADMAP.md`：整理後的總 roadmap。
 - `ai_context/IMPLEMENTATION_PLAN.md`：工程 implementation plan。
 - `ai_context/TASK_QUEUE.md`：一個接一個執行的任務隊列。

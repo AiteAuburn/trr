@@ -30,7 +30,21 @@ Current design baseline:
 
 ## Active
 
-No active task. Production-foundation goal slices T2341-T2345 are complete; external launch blockers remain tracked in `ai_context/PRODUCTION_READINESS_REVIEW.md`.
+### T2346: Add phone speech recognition as Whisper fallback
+
+Status: active
+
+Completed so far:
+
+- Added Android system speech recognition to the recording flow; use Whisper first when available and the same-session phone transcript if Whisper is unavailable or fails.
+- Added explicit network-use disclosure and best-effort deletion of temporary audio.
+- Added capture/recording fallback tests and updated navigation/native configuration guards.
+
+Remaining acceptance:
+
+- Install the pinned native dependency without disturbing existing `node_modules`, then pass mobile typecheck and quality.
+- Build the arm64 Android test APK and verify microphone permission, speech capture, Whisper-first behavior, phone fallback, and temporary-audio cleanup on a real phone.
+- Do not mark complete based only on mocks or APK inspection.
 
 ## Next Up
 
