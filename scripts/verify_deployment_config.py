@@ -12,7 +12,6 @@ LOCAL_ENV = REPO_ROOT / ".env.example"
 MINIMAL_ENV = REPO_ROOT / "infra" / "minimal" / ".env.example"
 K8S_CONFIGMAP = REPO_ROOT / "infra" / "k8s" / "configmap.yaml"
 K8S_SECRET_EXAMPLE = REPO_ROOT / "infra" / "k8s" / "secret.example.yaml"
-CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 BACKEND_PROJECT = REPO_ROOT / "backend" / "pyproject.toml"
 BACKEND_PROD_DOCKERFILE = REPO_ROOT / "backend" / "Dockerfile.prod"
 AWS_TERRAFORM_MAIN = REPO_ROOT / "infra" / "aws" / "terraform" / "main.tf"
@@ -96,31 +95,6 @@ def _require_not_contains(
     value = values.get(key, "")
     if forbidden in value:
         errors.append(f"{label}: {key} must not contain {forbidden!r}")
-
-
-def _verify_ci_workflow(errors: list[str]) -> None:
-    workflow = CI_WORKFLOW.read_text(encoding="utf-8")
-    required_markers = (
-        "\n  push:\n    branches:\n      - main\n",
-        "\n  pull_request:\n    branches:\n      - main\n",
-        "\n  workflow_dispatch:\n",
-        "\npermissions:\n  contents: read\n",
-        "npm audit --audit-level=high",
-        "bloodsugar-backend-release",
-        "bloodsugar-web-release",
-        "bloodsugar-proxy-release",
-        "TRIVY_SBOM_SOURCES: rekor",
-        "python scripts/verify_release_contract.py",
-        "python scripts/verify_feature_flags.py",
-        "python scripts/verify_api_migration_compatibility.py",
-    )
-    for marker in required_markers:
-        if marker not in workflow:
-            errors.append(f".github/workflows/ci.yml: missing required CI guard {marker.strip()!r}")
-    if "security-events: write" in workflow:
-        errors.append(
-            ".github/workflows/ci.yml: security-events write permission is unused and must remain disabled"
-        )
 
 
 def _verify_backend_production_dependencies(errors: list[str]) -> None:
@@ -331,7 +305,6 @@ def main() -> int:
     if "app:app@db" in k8s_secret:
         errors.append("infra/k8s/secret.example.yaml must not copy local Compose DB credentials")
 
-    _verify_ci_workflow(errors)
     _verify_backend_production_dependencies(errors)
     _verify_aws_terraform(errors)
     _verify_lightsail_staging(errors)

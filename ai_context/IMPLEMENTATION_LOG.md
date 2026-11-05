@@ -15,6 +15,26 @@
 
 ## 2026-11-05
 
+### 移除 GitHub Actions CI
+
+類型：infra
+
+檔案：`.github/workflows/ci.yml`（刪除）、`scripts/verify_deployment_config.py`、`CLAUDE.md`。
+
+摘要：
+
+- 依需求移除 GitHub Actions workflow；GitHub 帳號因付款問題被鎖，job 也未曾啟動。
+- `verify_deployment_config.py` 移除要求 `ci.yml` 存在與內容的檢查，其餘部署設定檢查不變。
+- CLAUDE.md 改為說明沒有雲端 CI，合併前在本機執行品質檢查（見 `ai_context/REPO_QUALITY_WORKFLOW.md`）。
+
+驗證：
+
+- 8 個 repo 合約腳本在本機通過。
+
+後續：
+
+- 之後沒有自動的 gitleaks、Trivy、`pip-audit`／`npm audit` 掃描；需要時在本機手動跑。
+
 ### 全專案審查後的安全修正、測試修復與 repo 清理
 
 類型：bugfix / test / infra / docs

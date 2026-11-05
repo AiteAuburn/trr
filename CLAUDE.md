@@ -67,7 +67,7 @@ cd mobile && npm run start        # Expo; EXPO_PUBLIC_API_BASE_URL points at the
 
 Android release APKs: run `npm run preflight:android-apk:internal` (or `:production`) in `mobile/`, then `.\gradlew.bat assembleRelease` in `mobile\android` from PowerShell on Windows. Do not run Linux Gradle in WSL against the Windows SDK path. Full runbook: `docs/ANDROID_RELEASE_SHARING.md`.
 
-Repo-level contract checks that CI runs before the Docker steps (pure Python, run from root):
+Repo-level contract checks (pure Python, run from root):
 
 ```bash
 python scripts/verify_backend_constraints.py         # direct deps pinned in backend/constraints.txt
@@ -79,7 +79,7 @@ python scripts/verify_release_contract.py
 python scripts/verify_minimal_backup_restore.py
 ```
 
-CI (`.github/workflows/ci.yml`) runs all of the above plus mobile `npm ci && npm run quality`, gitleaks, `pip-audit`, `npm audit --audit-level=high`, and Trivy scans of the `Dockerfile.prod` images.
+There is no hosted CI (the GitHub Actions workflow was removed in 2026-11). Run the relevant commands above locally before merging; the full gate is listed in `ai_context/REPO_QUALITY_WORKFLOW.md`.
 
 ## Architecture
 
