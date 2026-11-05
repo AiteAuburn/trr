@@ -1,4 +1,4 @@
-.PHONY: backend web mobile mobile-quality dev test down build ollama qwen25 gemma3 llama32
+.PHONY: backend web mobile mobile-quality dev test check down build ollama qwen25 gemma3 llama32
 
 backend:
 	docker compose up backend
@@ -15,9 +15,15 @@ mobile-quality:
 dev:
 	docker compose up db backend web
 
+# Note: runs against the `make dev` database, and the backend suite clears every table.
+# Prefer `make check`, which uses its own database.
 test:
 	docker compose run --rm backend pytest
 	docker compose run --rm web npm test -- --run
+
+# Full local quality gate (contract scripts, backend, web, mobile) in an isolated compose project.
+check:
+	bash scripts/check.sh
 
 build:
 	docker compose build

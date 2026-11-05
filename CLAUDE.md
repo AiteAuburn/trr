@@ -79,7 +79,7 @@ python scripts/verify_release_contract.py
 python scripts/verify_minimal_backup_restore.py
 ```
 
-There is no hosted CI (the GitHub Actions workflow was removed in 2026-11). Run the relevant commands above locally before merging; the full gate is listed in `ai_context/REPO_QUALITY_WORKFLOW.md`.
+There is no hosted CI (the GitHub Actions workflow was removed in 2026-11). Run `make check` (from WSL/Linux) before merging: it runs the contract scripts, then backend migrations/ruff/mypy/pytest and web lint/typecheck/tests in a separate compose project (`COMPOSE_PROJECT_NAME=bloodsugar_check`, `compose.check.yml`, no host ports, no root `.env`), then mobile `npm run quality` if `node` is on PATH. Plain `make test` uses the `make dev` database, and the backend suite clears every table, so avoid it when local dev data matters.
 
 ## Architecture
 

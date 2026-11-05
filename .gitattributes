@@ -1,0 +1,4 @@
+# Shell scripts and the Makefile run under bash/make (WSL, Linux, containers);
+# keep LF even on Windows checkouts with core.autocrlf=true.
+*.sh text eol=lf
+Makefile text eol=lf

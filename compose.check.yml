@@ -1,0 +1,9 @@
+# Overlay used by scripts/check.sh (make check): no host ports, so the check
+# run can sit next to a running `make dev` stack without port conflicts.
+services:
+  db:
+    ports: !reset []
+  backend:
+    ports: !reset []
+  web:
+    ports: !reset []

@@ -15,6 +15,26 @@
 
 ## 2026-11-05
 
+### 新增 make check 本機品質檢查
+
+類型：infra
+
+檔案：`Makefile`、`scripts/check.sh`（新增）、`compose.check.yml`（新增）、`.gitattributes`（新增）、`CLAUDE.md`。
+
+摘要：
+
+- `make check` 取代已移除的 CI：依序跑 8 個 repo 合約腳本、建置 backend/web image、migration、ruff、mypy、pytest、web lint/typecheck/test；有 `node` 時再跑 mobile `npm run quality`，沒有則明確顯示略過。
+- 使用獨立 compose 專案 `bloodsugar_check`（獨立資料庫 volume、不綁 host port、不載入根目錄 `.env`），結束時自動 `down -v`，不會清掉 `make dev` 的資料。`make test` 加註會使用開發資料庫且測試會清空所有資料表。
+- `.gitattributes` 讓 `*.sh` 與 Makefile 在 Windows checkout 時維持 LF，避免 WSL 執行失敗。
+
+驗證：
+
+- WSL 執行 `make check`：合約腳本通過、backend 337 tests 通過、web 11 tests 通過；mobile 因 WSL 無 node 略過。執行後無殘留容器。
+
+後續：
+
+- WSL 若要涵蓋 mobile，需安裝 Linux 版 Node；或在 Windows 端另跑 `cd mobile && npm run quality`。
+
 ### 移除 GitHub Actions CI
 
 類型：infra
