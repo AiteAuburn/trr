@@ -14,8 +14,7 @@ step "Repo contract scripts"
 for script in \
   verify_backend_constraints \
   verify_backend_ai_cost_boundaries \
-  verify_minimal_backup_restore \
-  verify_k8s_manifests \
+  verify_backup_restore \
   verify_deployment_config \
   verify_release_contract \
   verify_feature_flags \

@@ -14,7 +14,7 @@ APP_PATH = REPO_ROOT / "mobile" / "App.tsx"
 NAVIGATION_CONFIG_PATH = REPO_ROOT / "mobile" / "navigationConfig.ts"
 SPEC_PATH = REPO_ROOT / "ai_context" / "UI_UX_SPEC.md"
 HARNESS_PATH = REPO_ROOT / "scripts" / "generate_mobile_visual_smoke_harness.py"
-EXPECTED_APP_SCREEN_COUNT = 41
+EXPECTED_APP_SCREEN_COUNT = 36
 
 
 @dataclass(frozen=True)
@@ -44,20 +44,16 @@ CANONICAL_SPEC_SCREENS = (
     SpecScreen("4.8.1", "手動新增確認頁", "manualRecordConfirm", ("ManualRecordConfirmPreviewBlock", "ManualRecordConfirmFooterActions")),
     SpecScreen("4.9", "使用教學頁", "tutorial", ("tutorialDisplaySteps.map", "tutorialSafetyChecklistItems")),
     SpecScreen("4.10", "會員方案狀態頁", "membershipStatus", ("rows={membershipFeatureRows}", "membershipTrialHeroLabelDisplayText")),
-    SpecScreen("4.11", "成就榜頁", "achievements", ("<AchievementUnlockedCardList", "<AchievementCategorySectionList sections={achievementCategoryDisplaySections} />", "achievementBadgeDisplaySummary")),
     SpecScreen(
         "4.12",
         "年度回顧頁",
         "yearReview",
         ("rows={yearlyReviewMetricRows}", "rows={yearlyHealthOutcomeRows}", "yearlyAiObservationDisplayText"),
     ),
-    SpecScreen("4.13", "商城頁", "store", ("rows={storeRedemptionBoundaryRows}", "visibleStoreProducts")),
     SpecScreen("4.14", "食物拍照分析頁", "foodPhoto", ("items={foodPhotoReadinessChecklistItems}", "styles.uploadBox")),
     SpecScreen("4.14.1", "未來模組詳情頁", "futureModuleDetail", ("selectedFutureModuleDisplay", "futureModuleDetailBoundaryDisplayText")),
     SpecScreen("4.14.2", "醫師 / 醫院合作預覽頁", "doctorShare", ("items={doctorShareReadinessChecklistItems}", "doctorShareActionStatus")),
     SpecScreen("4.14.3", "HealthKit / Health Connect / 血糖機預覽頁", "healthIntegration", ("items={healthIntegrationReadinessChecklistItems}", "healthIntegrationActionStatus")),
-    SpecScreen("4.14.4", "食物社群頁", "community", ("<SegmentSelector\n              options={foodCommunityCategoryDisplayOptions}", "rows={foodCommunityShareFieldRows}")),
-    SpecScreen("4.14.5", "排行榜預覽頁", "ranking", ("<RankingLeaderboardList sections={rankingLeaderboardSections} />", "<FutureReadinessChecklist items={rankingReadinessChecklistItems} />", "rankingActionStatus")),
     SpecScreen("4.15", "文字確認頁", "transcriptReview", ("<TranscriptReviewActionRow", "parseTranscript")),
     SpecScreen("4.16", "AI 整理確認頁", "aiReview", ("items={previewRecordDisplayItems}", "rejectedPreviewDisplayItems.map")),
     SpecScreen("4.16.0", "AI 候選移除確認頁", "aiRemoveConfirm", ("removePreviewRecord", "items={aiCandidateRemoveChecklistItems}")),

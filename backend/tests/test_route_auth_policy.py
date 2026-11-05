@@ -1,17 +1,14 @@
 from fastapi.routing import APIRoute
 
 from app.api import (
-    achievements,
     admin,
     ai,
     auth,
-    community,
     daily_records,
     dev,
     profiles,
     records,
     reports,
-    store,
     subscriptions,
     year_reviews,
 )
@@ -22,17 +19,14 @@ from app.services.route_auth_policy import PUBLIC_ROUTE_REASONS
 
 
 ROUTERS = (
-    achievements.router,
     admin.router,
     ai.router,
     auth.router,
-    community.router,
     daily_records.router,
     dev.router,
     profiles.router,
     records.router,
     reports.router,
-    store.router,
     subscriptions.router,
     year_reviews.router,
 )

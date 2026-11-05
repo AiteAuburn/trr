@@ -9,14 +9,8 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 LOCAL_ENV = REPO_ROOT / ".env.example"
-MINIMAL_ENV = REPO_ROOT / "infra" / "minimal" / ".env.example"
-K8S_CONFIGMAP = REPO_ROOT / "infra" / "k8s" / "configmap.yaml"
-K8S_SECRET_EXAMPLE = REPO_ROOT / "infra" / "k8s" / "secret.example.yaml"
 BACKEND_PROJECT = REPO_ROOT / "backend" / "pyproject.toml"
 BACKEND_PROD_DOCKERFILE = REPO_ROOT / "backend" / "Dockerfile.prod"
-AWS_TERRAFORM_MAIN = REPO_ROOT / "infra" / "aws" / "terraform" / "main.tf"
-AWS_TERRAFORM_VARIABLES = REPO_ROOT / "infra" / "aws" / "terraform" / "variables.tf"
-AWS_TERRAFORM_EXAMPLE = REPO_ROOT / "infra" / "aws" / "terraform" / "terraform.tfvars.example"
 LIGHTSAIL_COMPOSE = REPO_ROOT / "infra" / "lightsail" / "compose.yml"
 LIGHTSAIL_ENV = REPO_ROOT / "infra" / "lightsail" / ".env.example"
 LIGHTSAIL_CADDY = REPO_ROOT / "infra" / "lightsail" / "Caddyfile"
@@ -38,18 +32,25 @@ def _parse_env_file(path: Path) -> dict[str, str]:
     return values
 
 
-def _parse_configmap_data(path: Path) -> dict[str, str]:
+def _parse_compose_service_env(path: Path, service: str) -> dict[str, str]:
+    """Read `KEY: value` pairs from one service's `environment:` block in a compose file."""
     values: dict[str, str] = {}
-    in_data = False
+    in_service = False
+    in_environment = False
     for line in path.read_text(encoding="utf-8").splitlines():
-        if line.strip() == "data:":
-            in_data = True
+        if re.match(r"^  [a-z]", line):
+            in_service = line.strip() == f"{service}:"
+            in_environment = False
             continue
-        if not in_data:
+        if not in_service:
             continue
-        match = re.match(r"\s{2}([A-Z0-9_]+):\s*\"?([^\"#]+)\"?\s*$", line)
-        if match is not None:
-            values[match.group(1)] = match.group(2).strip()
+        if re.match(r"^    [a-z_]+:", line):
+            in_environment = line.strip() == "environment:"
+            continue
+        if in_environment:
+            match = re.match(r"^      ([A-Z0-9_]+):\s*\"?([^\"#]*)\"?\s*$", line)
+            if match is not None:
+                values[match.group(1)] = match.group(2).strip()
     return values
 
 
@@ -116,41 +117,6 @@ def _verify_backend_production_dependencies(errors: list[str]) -> None:
             errors.append(f"backend/pyproject.toml: missing required runtime package {package}")
         if package.lower() not in dockerfile.lower():
             errors.append(f"backend/Dockerfile.prod: missing required runtime package {package}")
-
-
-def _verify_aws_terraform(errors: list[str]) -> None:
-    paths = (AWS_TERRAFORM_MAIN, AWS_TERRAFORM_VARIABLES, AWS_TERRAFORM_EXAMPLE)
-    for path in paths:
-        if not path.is_file():
-            errors.append(f"{path.relative_to(REPO_ROOT)}: required AWS Terraform file is missing")
-            return
-
-    main = AWS_TERRAFORM_MAIN.read_text(encoding="utf-8")
-    variables = AWS_TERRAFORM_VARIABLES.read_text(encoding="utf-8")
-    example = AWS_TERRAFORM_EXAMPLE.read_text(encoding="utf-8")
-    required_main_markers = (
-        'manage_master_user_password = true',
-        'publicly_accessible         = false',
-        'storage_encrypted           = true',
-        'image_tag_mutability = "IMMUTABLE"',
-        'scan_on_push = true',
-        'valueFrom = "${aws_secretsmanager_secret.runtime.arn}:${key}::"',
-        'value = "https://api.deepseek.com/v1/chat/completions"',
-        'var.desired_count == 0 || var.certificate_arn != ""',
-        'assign_public_ip = false',
-    )
-    for marker in required_main_markers:
-        if marker not in main:
-            errors.append(f"infra/aws/terraform/main.tf: missing security marker {marker!r}")
-
-    if "DEEPSEEK_API_KEY" not in main:
-        errors.append("infra/aws/terraform/main.tf: DeepSeek secret injection is missing")
-    if re.search(r'name\s*=\s*"DEEPSEEK_API_KEY"\s*,?\s*value\s*=', main):
-        errors.append("infra/aws/terraform/main.tf: DeepSeek key must not be a plaintext environment value")
-    if "DEEPSEEK_API_KEY" in variables or "DEEPSEEK_API_KEY" in example:
-        errors.append("AWS Terraform inputs must not accept the DeepSeek API key as Terraform state")
-    if 'desired_count          = 0' not in example:
-        errors.append("terraform.tfvars.example must bootstrap with desired_count=0")
 
 
 def _verify_lightsail_staging(errors: list[str]) -> None:
@@ -238,9 +204,6 @@ def _verify_authentication_defaults(local_env: dict[str, str], errors: list[str]
 def main() -> int:
     errors: list[str] = []
     local_env = _parse_env_file(LOCAL_ENV)
-    minimal_env = _parse_env_file(MINIMAL_ENV)
-    k8s_config = _parse_configmap_data(K8S_CONFIGMAP)
-    k8s_secret = K8S_SECRET_EXAMPLE.read_text(encoding="utf-8")
 
     _require(local_env, "APP_ENV", "local", label=".env.example", errors=errors)
     _require(local_env, "ENABLE_DEBUG_TOOLS", "false", label=".env.example", errors=errors)
@@ -261,52 +224,30 @@ def main() -> int:
         errors=errors,
     )
 
-    for key in ("APP_ENV", "LOG_LEVEL", "ENABLE_DEBUG_TOOLS", "ALLOW_DEV_AUTH"):
-        expected = {
-            "APP_ENV": "production",
-            "LOG_LEVEL": "info",
-            "ENABLE_DEBUG_TOOLS": "false",
-            "ALLOW_DEV_AUTH": "false",
-        }[key]
-        _require(minimal_env, key, expected, label="infra/minimal/.env.example", errors=errors)
-        _require(k8s_config, key, expected, label="infra/k8s/configmap.yaml", errors=errors)
-
-    for values, label in (
-        (minimal_env, "infra/minimal/.env.example"),
-        (k8s_config, "infra/k8s/configmap.yaml"),
-    ):
-        _require(values, "LOCAL_LLM_REPAIR_FALLBACK_ENABLED", "true", label=label, errors=errors)
-        _require_int_at_most(values, "LOCAL_LLM_MAX_TOKENS", 900, label=label, errors=errors)
-        _require_int_at_most(values, "LOCAL_LLM_TIMEOUT_SECONDS", 45, label=label, errors=errors)
-        _require_not_contains(values, "BACKEND_CORS_ORIGINS", "*", label=label, errors=errors)
-        _require(values, "VITE_ENABLE_DEBUG_TOOLS", "false", label=label, errors=errors)
-        if not values.get("AUTH_JWT_ISSUER"):
-            errors.append(f"{label}: AUTH_JWT_ISSUER must be set for production JWT validation")
-        if not values.get("AUTH_JWT_AUDIENCE"):
-            errors.append(f"{label}: AUTH_JWT_AUDIENCE must be set for production JWT validation")
-        _require(values, "AUTH_JWT_REQUIRE_JTI", "true", label=label, errors=errors)
-        if not values.get("AUTH_OIDC_JWKS_URL"):
-            errors.append(f"{label}: AUTH_OIDC_JWKS_URL must be set for production OIDC login exchange")
-        if values.get("AUTH_OIDC_JWKS_URL", "").startswith("http://"):
-            errors.append(f"{label}: AUTH_OIDC_JWKS_URL must use https")
-        if not values.get("AUTH_OIDC_ISSUER"):
-            errors.append(f"{label}: AUTH_OIDC_ISSUER must be set for production OIDC login exchange")
-        if not values.get("AUTH_OIDC_AUDIENCE"):
-            errors.append(f"{label}: AUTH_OIDC_AUDIENCE must be set for production OIDC login exchange")
-        _require_int_at_most(values, "AUTH_OIDC_MAX_AGE_SECONDS", 3600, label=label, errors=errors)
-        _require_int_at_most(values, "AUTH_LOGIN_CLIENT_RATE_LIMIT_COUNT", 100, label=label, errors=errors)
-
-    if "managed-postgres" not in k8s_secret:
-        errors.append("infra/k8s/secret.example.yaml should show a managed PostgreSQL endpoint")
-    if "managed-redis" not in k8s_secret:
-        errors.append("infra/k8s/secret.example.yaml should show a managed Redis endpoint")
-    if "AUTH_JWT_SECRET" not in k8s_secret:
-        errors.append("infra/k8s/secret.example.yaml should include AUTH_JWT_SECRET")
-    if "app:app@db" in k8s_secret:
-        errors.append("infra/k8s/secret.example.yaml must not copy local Compose DB credentials")
+    # The Lightsail stack is the only deployment target; hold its backend to the
+    # same safety limits a production deployment needs.
+    label = "infra/lightsail/compose.yml (backend)"
+    backend_env = _parse_compose_service_env(LIGHTSAIL_COMPOSE, "backend")
+    _require(backend_env, "LOG_LEVEL", "info", label=label, errors=errors)
+    _require(backend_env, "ENABLE_DEBUG_TOOLS", "false", label=label, errors=errors)
+    _require(backend_env, "ALLOW_DEV_AUTH", "${ALLOW_DEV_AUTH:-false}", label=label, errors=errors)
+    _require(backend_env, "AUTH_JWT_REQUIRE_JTI", "true", label=label, errors=errors)
+    _require(backend_env, "AUTH_JWT_ISSUER", "${AUTH_JWT_ISSUER}", label=label, errors=errors)
+    _require(backend_env, "AUTH_JWT_AUDIENCE", "${AUTH_JWT_AUDIENCE}", label=label, errors=errors)
+    _require_int_at_most(backend_env, "LOCAL_LLM_MAX_TOKENS", 900, label=label, errors=errors)
+    _require_int_at_most(backend_env, "LOCAL_LLM_TIMEOUT_SECONDS", 45, label=label, errors=errors)
+    _require_int_at_most(backend_env, "MAX_REQUEST_BODY_BYTES", 1048576, label=label, errors=errors)
+    _require_int_at_most(backend_env, "AUTH_LOGIN_CLIENT_RATE_LIMIT_COUNT", 100, label=label, errors=errors)
+    _require_not_contains(backend_env, "BACKEND_CORS_ORIGINS", "*", label=label, errors=errors)
+    lightsail_env = _parse_env_file(LIGHTSAIL_ENV)
+    _require(lightsail_env, "ALLOW_DEV_AUTH", "false", label="infra/lightsail/.env.example", errors=errors)
+    _require_not_contains(
+        lightsail_env, "BACKEND_CORS_ORIGINS", "*", label="infra/lightsail/.env.example", errors=errors
+    )
+    if r"printf 'ALLOW_DEV_AUTH=false\n'" not in LIGHTSAIL_INITIALIZE_ENV.read_text(encoding="utf-8"):
+        errors.append("infra/lightsail/initialize-env.sh must write ALLOW_DEV_AUTH=false")
 
     _verify_backend_production_dependencies(errors)
-    _verify_aws_terraform(errors)
     _verify_lightsail_staging(errors)
     _verify_authentication_defaults(local_env, errors)
 

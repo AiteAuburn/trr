@@ -35,3 +35,6 @@ tmp_visual_smoke_pull/
 # Android build caches and assets copied from node_modules/llama.rn at build time.
 mobile/android/.kotlin/
 mobile/android/app/src/main/assets/ggml-hexagon/
+
+# Database dumps from infra/lightsail/backup.sh (contain health data)
+backups/

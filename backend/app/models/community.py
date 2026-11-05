@@ -1,8 +1,17 @@
+"""Retired community / store table mirrors.
+
+The food community sharing, points, leaderboard, and store redemption features were
+removed from the MVP. These tables are kept (and mapped here) only for migration
+compatibility: the API migration policy allows expand-only migrations, so the tables
+cannot be dropped, and keeping them in the ORM metadata stops Alembic autogenerate from
+proposing destructive drops. Do not add new readers or writers.
+"""
+
 from datetime import datetime
 from uuid import UUID, uuid4
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, Index, Integer, String, UniqueConstraint, func
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
 
@@ -23,8 +32,6 @@ class FoodItem(Base):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
     )
-
-    shares = relationship("FoodShare", back_populates="food_item")
 
     __table_args__ = (
         UniqueConstraint("category", "normalized_name", name="uq_food_item_category_normalized_name"),
@@ -51,8 +58,6 @@ class FoodShare(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
-
-    food_item = relationship("FoodItem", back_populates="shares")
 
     __table_args__ = (
         Index("ix_food_shares_food_item_eaten_created_id", "food_item_id", "eaten_at", "created_at", "id"),

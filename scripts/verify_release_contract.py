@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the production rolling-release and rollback contract."""
+"""Verify the release and rollback contract for the Lightsail deployment."""
 
 from __future__ import annotations
 
@@ -18,38 +18,41 @@ def require(text: str, marker: str, source: str, errors: list[str]) -> None:
 def main() -> int:
     errors: list[str] = []
     contract = json.loads((ROOT / "infra/release-contract.json").read_text(encoding="utf-8"))
-    backend = (ROOT / "infra/k8s/backend.yaml").read_text(encoding="utf-8")
-    migration = (ROOT / "infra/k8s/migration-job.yaml").read_text(encoding="utf-8")
-    configmap = (ROOT / "infra/k8s/configmap.yaml").read_text(encoding="utf-8")
+    compose = (ROOT / "infra/lightsail/compose.yml").read_text(encoding="utf-8")
     main_py = (ROOT / "backend/app/main.py").read_text(encoding="utf-8")
-    runbook = (ROOT / "ai_context/ZERO_DOWNTIME_RELEASE_RUNBOOK.md").read_text(encoding="utf-8")
+    runbook = (ROOT / "ai_context/DEPLOYMENT.md").read_text(encoding="utf-8")
 
-    if contract.get("schema_version") != 1:
-        errors.append("release contract schema_version must be 1")
-    if contract.get("rollout_policy", {}).get("max_unavailable") != 0:
-        errors.append("release contract must require max_unavailable=0")
+    if contract.get("schema_version") != 2:
+        errors.append("release contract schema_version must be 2")
+    if contract.get("deployment_target") != "infra/lightsail/compose.yml":
+        errors.append("release contract must name infra/lightsail/compose.yml as the deployment target")
     if contract.get("database_policy", {}).get("automatic_downgrade") is not False:
         errors.append("release contract must prohibit automatic database downgrade")
-    if contract.get("artifact_policy", {}).get("backend_and_migration_use_same_digest") is not True:
-        errors.append("release contract must bind backend and migration to the same digest")
+    if contract.get("database_policy", {}).get("backup_before_migration") is not True:
+        errors.append("release contract must require a backup before migrations")
+    if contract.get("artifact_policy", {}).get("backend_and_migration_use_same_image") is not True:
+        errors.append("release contract must run migrations with the backend image")
+    rollout = contract.get("rollout_policy", {})
+    for key, value in (("readiness_path", "/readyz"), ("liveness_path", "/healthz"), ("release_identity_path", "/version")):
+        if rollout.get(key) != value:
+            errors.append(f"release contract rollout_policy.{key} must be {value}")
 
-    for marker in ("maxUnavailable: 0", "minReadySeconds: 10", "progressDeadlineSeconds: 300", "path: /readyz", "path: /healthz"):
-        require(backend, marker, "infra/k8s/backend.yaml", errors)
-    backend_image = next((line.strip() for line in backend.splitlines() if line.strip().startswith("image:")), "")
-    migration_image = next((line.strip() for line in migration.splitlines() if line.strip().startswith("image:")), "")
-    if backend_image != migration_image:
-        errors.append("backend and migration image references must stay identical")
-    for marker in ("RELEASE_ID:", "GIT_SHA:", "API_CONTRACT_VERSION:"):
-        require(configmap, marker, "infra/k8s/configmap.yaml", errors)
-    for marker in ('@app.get("/version")', '"release_id": settings.release_id', '"git_sha": settings.git_sha', '"api_contract_version": settings.api_contract_version'):
+    # The backend container only counts as up once /readyz answers.
+    backend_block = compose.split("\n  backend:", maxsplit=1)[-1].split("\n  web:", maxsplit=1)[0]
+    require(backend_block, "http://127.0.0.1:8000/readyz", "infra/lightsail/compose.yml (backend healthcheck)", errors)
+    require(compose, "condition: service_healthy", "infra/lightsail/compose.yml", errors)
+
+    for marker in ('@app.get("/healthz")', '@app.get("/readyz")', '@app.get("/version")', '"release_id": settings.release_id', '"git_sha": settings.git_sha', '"api_contract_version": settings.api_contract_version'):
         require(main_py, marker, "backend/app/main.py", errors)
-    for marker in ("expand/contract", "immutable digest", "Do not automatically downgrade", "15 minutes", "signed mobile"):
-        require(runbook, marker, "ai_context/ZERO_DOWNTIME_RELEASE_RUNBOOK.md", errors)
+
+    # The runbook must keep the steps that make a release reversible.
+    for marker in ("expand/contract", "infra/lightsail/backup.sh", "run --rm backend alembic upgrade head", "/version", "15 分鐘", "不自動降版資料庫", "簽章"):
+        require(runbook, marker, "ai_context/DEPLOYMENT.md", errors)
 
     if errors:
         print("\n".join(errors))
         return 1
-    print("Release contract verified: immutable artifacts, expand/contract migrations, readiness-gated rolling updates, and application-first rollback.")
+    print("Release contract verified: backup before expand-only migrations, readiness-gated restart, and application-first rollback.")
     return 0
 
 

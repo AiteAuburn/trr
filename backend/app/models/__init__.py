@@ -1,4 +1,8 @@
 from app.models.account import Account
+
+# AchievementUnlock, CommunityPointLedger, CommunityPublicProfile, FoodItem, FoodShare and
+# StoreRedemption belong to retired features. They stay mapped only so the kept tables
+# remain in Alembic metadata (expand-only migration policy); see their modules.
 from app.models.achievement import AchievementUnlock
 from app.models.ai_parse_audit import AiParseAudit
 from app.models.analytics import AiTokenUsageDaily, ApiUsageDaily

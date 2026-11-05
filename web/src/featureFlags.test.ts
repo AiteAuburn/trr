@@ -14,15 +14,11 @@ describe("public feature flags", () => {
       flags: {
         food_photo_analysis: true,
         health_integrations: "true",
-        community_sharing: 1,
-        store_redemptions: false,
         unknown_feature: true,
       },
     })).toEqual({
       food_photo_analysis: true,
       health_integrations: false,
-      community_sharing: false,
-      store_redemptions: false,
     });
   });
 

@@ -57,7 +57,6 @@ ANALYSIS_COPY_PATH = REPO_ROOT / "mobile" / "analysisCopy.ts"
 ANALYSIS_DATA_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisDataTransforms.ts"
 ANALYSIS_METRIC_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "analysisMetricTransforms.ts"
 ANALYSIS_RANGE_SELECTOR_PATH = REPO_ROOT / "mobile" / "analysisRangeSelector.tsx"
-SEGMENT_SELECTOR_PATH = REPO_ROOT / "mobile" / "segmentSelector.tsx"
 SETTINGS_SUBPAGE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "settingsSubpageActionRow.tsx"
 SETTINGS_SUBPAGE_CLOSE_BUTTON_PATH = REPO_ROOT / "mobile" / "settingsSubpageCloseButton.tsx"
 ANALYSIS_SCREEN_DATA_PATH = REPO_ROOT / "mobile" / "analysisScreenData.ts"
@@ -84,8 +83,6 @@ AUTH_STATUS_COPY_PATH = REPO_ROOT / "mobile" / "authStatusCopy.ts"
 SHARED_DISPLAY_ITEMS_PATH = REPO_ROOT / "mobile" / "sharedDisplayItems.ts"
 FUTURE_MODULE_DISPLAY_PATH = REPO_ROOT / "mobile" / "futureModuleDisplay.ts"
 YEAR_REVIEW_SHARE_FILE_PATH = REPO_ROOT / "mobile" / "yearReviewShareFile.ts"
-ACHIEVEMENT_CATEGORY_SECTION_LIST_PATH = REPO_ROOT / "mobile" / "achievementCategorySectionList.tsx"
-ACHIEVEMENT_UNLOCKED_CARD_LIST_PATH = REPO_ROOT / "mobile" / "achievementUnlockedCardList.tsx"
 AI_CANDIDATE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiCandidateActionRow.tsx"
 AI_CANDIDATE_LIST_PATH = REPO_ROOT / "mobile" / "aiCandidateList.tsx"
 AI_SAVE_FAILURE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "aiSaveFailureActionRow.tsx"
@@ -97,14 +94,9 @@ DANGER_CONFIRM_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "dangerConfirmActionRow.
 DELETE_CONFIRM_PREVIEW_BLOCK_PATH = REPO_ROOT / "mobile" / "deleteConfirmPreviewBlock.tsx"
 DELETE_SUCCESS_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "deleteSuccessActionRow.tsx"
 DOWNLOADED_MODEL_LIST_PATH = REPO_ROOT / "mobile" / "downloadedModelList.tsx"
-COMMUNITY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "communityActionRow.tsx"
 DOCTOR_SHARE_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "doctorShareActionRow.tsx"
 FOOD_PHOTO_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "foodPhotoActionRow.tsx"
-FOOD_COMMUNITY_DETAIL_SHARE_LIST_PATH = REPO_ROOT / "mobile" / "foodCommunityDetailShareList.tsx"
-FOOD_COMMUNITY_ITEM_LIST_PATH = REPO_ROOT / "mobile" / "foodCommunityItemList.tsx"
 HEALTH_INTEGRATION_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "healthIntegrationActionRow.tsx"
-RANKING_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "rankingActionRow.tsx"
-RANKING_LEADERBOARD_LIST_PATH = REPO_ROOT / "mobile" / "rankingLeaderboardList.tsx"
 HISTORY_CALENDAR_MONTH_PICKER_PATH = REPO_ROOT / "mobile" / "historyCalendarMonthPicker.tsx"
 HISTORY_DAILY_RECORD_SECTION_CARD_PATH = REPO_ROOT / "mobile" / "historyDailyRecordSectionCard.tsx"
 HISTORY_DAILY_SUMMARY_CARD_PATH = REPO_ROOT / "mobile" / "historyDailySummaryCard.tsx"
@@ -121,7 +113,6 @@ HISTORY_SYNC_BOUNDARY_BLOCK_PATH = REPO_ROOT / "mobile" / "historySyncBoundaryBl
 FIELD_LABEL_PATH = REPO_ROOT / "mobile" / "fieldLabel.tsx"
 DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "detailRow.tsx"
 HIGHLIGHT_BULLET_ROW_PATH = REPO_ROOT / "mobile" / "highlightBulletRow.tsx"
-HIGHLIGHT_DETAIL_LIST_PATH = REPO_ROOT / "mobile" / "highlightDetailList.tsx"
 HIGHLIGHT_DETAIL_ROW_PATH = REPO_ROOT / "mobile" / "highlightDetailRow.tsx"
 INSIGHT_EMPTY_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "insightEmptyActionRow.tsx"
 MANUAL_RECORD_CREATE_PREVIEW_ACTION_PATH = REPO_ROOT / "mobile" / "manualRecordCreatePreviewAction.tsx"
@@ -155,24 +146,14 @@ RECORDING_WHISPER_MODEL_SELECTOR_PATH = REPO_ROOT / "mobile" / "recordingWhisper
 RECORD_OPTION_FIELD_PATH = REPO_ROOT / "mobile" / "recordOptionField.tsx"
 RECORD_TEXT_FIELD_PATH = REPO_ROOT / "mobile" / "recordTextField.tsx"
 SAVE_SUCCESS_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "saveSuccessActionRow.tsx"
-COMMUNITY_PUBLIC_DISPLAY_NAME_FIELD_PATH = REPO_ROOT / "mobile" / "communityPublicDisplayNameField.tsx"
-FOOD_COMMUNITY_SEARCH_FIELD_PATH = REPO_ROOT / "mobile" / "foodCommunitySearchField.tsx"
-FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareDateTimeFields.tsx"
-FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH = REPO_ROOT / "mobile" / "foodCommunityShareTextFields.tsx"
-STORE_SEARCH_FIELD_PATH = REPO_ROOT / "mobile" / "storeSearchField.tsx"
 TRANSCRIPT_REVIEW_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "transcriptReviewActionRow.tsx"
 PARSER_LOADING_VIEW_PATH = REPO_ROOT / "mobile" / "parserLoadingView.tsx"
 UPDATE_SUCCESS_ACTION_ROW_PATH = REPO_ROOT / "mobile" / "updateSuccessActionRow.tsx"
 DATE_TIME_TRANSFORMS_PATH = REPO_ROOT / "mobile" / "dateTimeTransforms.ts"
 MOBILE_BOUNDS_PATH = REPO_ROOT / "mobile" / "mobileBounds.ts"
 README_PATH = REPO_ROOT / "README.md"
-ACHIEVEMENTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "achievements.py"
-ACHIEVEMENT_CATALOG_PATH = REPO_ROOT / "backend" / "app" / "services" / "achievement_catalog.py"
 YEAR_REVIEW_SNAPSHOTS_PATH = REPO_ROOT / "backend" / "app" / "services" / "year_review_snapshots.py"
 YEAR_REVIEWS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "year_reviews.py"
-COMMUNITY_SCHEMA_PATH = REPO_ROOT / "backend" / "app" / "schemas" / "community.py"
-COMMUNITY_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "community.py"
-STORE_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "store.py"
 DEV_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "dev.py"
 DAILY_RECORDS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "daily_records.py"
 DAILY_RECORD_SCHEMA_PATH = REPO_ROOT / "backend" / "app" / "schemas" / "daily_record.py"
@@ -181,29 +162,13 @@ DAILY_RECORD_MIGRATION_PATH = (
     REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0030_daily_records.py"
 )
 DAILY_RECORD_TEST_PATH = REPO_ROOT / "backend" / "tests" / "test_daily_records.py"
-COMMUNITY_MODEL_PATH = REPO_ROOT / "backend" / "app" / "models" / "community.py"
-COMMUNITY_FOOD_INDEX_MIGRATION_PATH = (
-    REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0024_community_food_lookup_indexes.py"
-)
-COMMUNITY_FOOD_LATEST_INDEX_MIGRATION_PATH = (
-    REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0025_community_food_share_latest_index.py"
-)
-COMMUNITY_LEADERBOARD_INDEX_MIGRATION_PATH = (
-    REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0026_community_leaderboard_indexes.py"
-)
-STORE_REDEMPTION_INDEX_MIGRATION_PATH = (
-    REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0027_store_redemption_wallet_index.py"
-)
 YEAR_REVIEW_SHARE_CONSTRAINT_MIGRATION_PATH = (
     REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0028_year_review_share_package_constraints.py"
-)
-COMMUNITY_POINT_LEDGER_SOURCE_MIGRATION_PATH = (
-    REPO_ROOT / "backend" / "alembic" / "versions" / "20260430_0029_community_point_ledger_source_unique.py"
 )
 REPORTS_API_PATH = REPO_ROOT / "backend" / "app" / "api" / "reports.py"
 REPORTING_SERVICE_PATH = REPO_ROOT / "backend" / "app" / "services" / "reporting.py"
 REPORTS_TEST_PATH = REPO_ROOT / "backend" / "tests" / "test_reports.py"
-COMMUNITY_STORE_YEAR_REVIEW_TEST_PATH = REPO_ROOT / "backend" / "tests" / "test_community_store_year_review.py"
+YEAR_REVIEW_TEST_PATH = REPO_ROOT / "backend" / "tests" / "test_year_review.py"
 
 EXPECTED_MENU_DESTINATIONS = {
     "today",
@@ -222,48 +187,23 @@ EXPECTED_MENU_LABELS = {
 EXPECTED_FUTURE_TARGETS = {
     "doctorShare",
     "healthIntegration",
-    "community",
-    "ranking",
-    "store",
     "foodPhoto",
 }
 
 EXPECTED_MENU_BACK_TARGETS = {
     "subscription",
     "tutorial",
-    "achievements",
     "yearReview",
-    "store",
     "settings",
     "foodPhoto",
 }
 
 EXPECTED_PREVIEW_RETURN_CTA_SCREENS = {
-    "achievements",
     "yearReview",
-    "store",
     "foodPhoto",
 }
 
-EXPECTED_ACHIEVEMENT_LEVELS = (10, 50, 100, 150, 200, 250)
-EXPECTED_ACHIEVEMENT_CATEGORIES = (
-    ("glucose", "血糖記錄", "glucose", "血"),
-    ("meal", "飲食記錄", "meal", "食"),
-    ("exercise", "運動記錄", "exercise", "動"),
-)
 
-EXPECTED_FOOD_COMMUNITY_CATEGORIES = (
-    ("vegetable", "vegetables", "蔬菜"),
-    ("meat", "meat", "肉類"),
-    ("seafood", "seafood", "海鮮"),
-    ("egg", "eggs", "蛋類"),
-    ("bean", "beans", "豆類"),
-    ("starch", "starches", "澱粉類"),
-    ("drink", "drinks", "飲料"),
-    ("fruit", "fruit", "水果"),
-    ("snack", "snacks", "零食"),
-    ("supplement", "supplements", "保健食品"),
-)
 
 MIN_TOUCH_TARGET_STYLE_RULES = {
     "menuButton": ("height", 44),
@@ -400,332 +340,8 @@ def _function_block(content: str, function_name: str) -> str:
     )
 
 
-def _verify_achievement_contract(
-    content: str,
-    future_module_display_content: str,
-    achievement_unlocked_card_list_content: str,
-) -> None:
-    readme_content = README_PATH.read_text(encoding="utf-8")
-    backend_content = ACHIEVEMENTS_API_PATH.read_text(encoding="utf-8")
-    catalog_content = ACHIEVEMENT_CATALOG_PATH.read_text(encoding="utf-8")
-    year_review_content = YEAR_REVIEW_SNAPSHOTS_PATH.read_text(encoding="utf-8")
-    mobile_level_marker = f"export const achievementLevels = [{', '.join(str(level) for level in EXPECTED_ACHIEVEMENT_LEVELS)}];"
-    catalog_level_marker = f"ACHIEVEMENT_LEVELS = ({', '.join(str(level) for level in EXPECTED_ACHIEVEMENT_LEVELS)})"
-    _assert_contains("mobile achievement levels", future_module_display_content, mobile_level_marker)
-    _assert_contains("backend shared achievement levels", catalog_content, catalog_level_marker)
-    _assert_contains("backend achievement catalog import", backend_content, "from app.services.achievement_catalog import (")
-    _assert_contains(
-        "year review achievement catalog import",
-        year_review_content,
-        "from app.services.achievement_catalog import ACHIEVEMENT_CATEGORY_DEFINITIONS, achievement_levels_for_progress",
-    )
-    _assert_contains("year review persisted unlock model import", year_review_content, "AchievementUnlock")
-    _assert_not_contains("year review local achievement levels", year_review_content, catalog_level_marker)
-    _assert_not_contains("achievement api local achievement levels", backend_content, catalog_level_marker)
-    for label, marker in (
-        ("year review cumulative badge counts", "cumulative_counts = tuple("),
-        ("year review streak badge counts", "streak_counts = tuple("),
-        ("year review achieved badge summary helper", "def achieved_badge_summary("),
-        ("year review dynamic cumulative badge levels", "achievement_levels_for_progress(cumulative_count)"),
-        ("year review dynamic streak badge levels", "achievement_levels_for_progress(streak_count)"),
-        ("year review persisted unlock query", "select(AchievementUnlock).where(AchievementUnlock.profile_id == profile_id)"),
-        ("year review achieved badge source", "achieved_badges, highest_badge = achieved_badge_summary("),
-        ("year review glucose bool guard", "if isinstance(value, bool):"),
-        ("year review glucose numeric string parsing", "return float(value.strip())"),
-        ("year review DeepSeek summary helper", "def deepseek_year_review_ai_summary("),
-        ("year review DeepSeek system prompt", "YEAR_REVIEW_AI_SYSTEM_PROMPT = ("),
-        ("year review DeepSeek aggregate payload", '"annual_stats": [metric.model_dump(mode="json") for metric in annual_stats]'),
-        ("year review DeepSeek health outcomes payload", '"health_outcomes": [metric.model_dump(mode="json") for metric in health_outcomes]'),
-        ("year review DeepSeek JSON response format", '"response_format": {"type": "json_object"}'),
-        ("year review deterministic fallback helper", "def deterministic_year_review_ai_summary("),
-        ("README Year Review DeepSeek prompt documented", "你是糖錄錄年度回顧摘要助手。只根據使用者提供的年度聚合統計撰寫繁體中文回顧"),
-        ("README Year Review DeepSeek prompt analysis", "Year Review prompt 分析："),
-        ("README Year Review DeepSeek aggregate-only analysis", "DeepSeek 不會收到 raw records、food items、profile id、occurred_at、raw transcript、raw prompt 或 raw model output"),
-        ("README Year Review DeepSeek fallback analysis", "DeepSeek 未設定、HTTP 失敗、回應過大、JSON 無效或缺欄位時，backend 會回到 deterministic fallback"),
-    ):
-        target_content = readme_content if label.startswith("README ") else year_review_content
-        _assert_contains(label, target_content, marker)
-
-    for category, label, record_type, icon in EXPECTED_ACHIEVEMENT_CATEGORIES:
-        _assert_contains(
-            f"mobile achievement category {category}",
-            future_module_display_content,
-            f'{{ id: "{category}", label: "{label}", recordType: "{record_type}", cumulativeIcon: "{icon}",',
-        )
-        _assert_contains(f"backend achievement category {category}", catalog_content, f'"id": "{category}"')
-        _assert_contains(f"backend achievement label {category}", catalog_content, f'"label": "{label}"')
-        _assert_contains(f"backend achievement record type {category}", catalog_content, f'"record_type": "{record_type}"')
-        _assert_contains(f"backend achievement icon {category}", catalog_content, f'"cumulative_icon": "{icon}"')
-        _assert_contains(
-            f"mobile cumulative id {category}",
-            future_module_display_content,
-            f'id: `${{definition.id}}-cumulative-${{level}}`',
-        )
-        _assert_contains(
-            f"mobile streak id {category}",
-            future_module_display_content,
-            f'id: `${{definition.id}}-streak-${{level}}`',
-        )
-
-    for label, marker in (
-        ("mobile local achievement item helper", "export function localAchievementItemsForDefinition("),
-        ("mobile cumulative kind", 'kind: "cumulative"'),
-        ("mobile cumulative label", 'kindLabel: "累積型"'),
-        ("mobile cumulative shared category icon", "icon: definition.cumulativeIcon"),
-        ("mobile cumulative level color", "const badgeColor = achievementLevelColors[levelIndex] ?? definition.cumulativeColor"),
-        ("mobile local achievement records helper", "export function localAchievementItemsForRecords(records: RecordItem[]): AchievementItem[]"),
-        ("mobile local achievement max record count", "const maxObservedRecords = records.length;"),
-        ("mobile local achievement max streak", "const maxObservedStreak = Math.max("),
-        ("mobile local achievement dynamic levels binding", "const dynamicLevels = achievementDynamicLevels(maxObservedRecords, maxObservedStreak);"),
-        ("mobile local achievement cumulative progress", "const cumulativeProgress = records.filter((record) => record.record_type === definition.recordType).length;"),
-        ("mobile local achievement streak progress", "const streakProgress = currentRecordTypeStreakDays(records, definition.recordType);"),
-        ("mobile local achievement item helper binding", "localAchievementItemsForDefinition(definition, dynamicLevels, cumulativeProgress, streakProgress)"),
-        ("mobile local achievement records helper binding", "localAchievementItemsForRecords(recordsForDisplay)"),
-        ("mobile streak kind", 'kind: "streak"'),
-        ("mobile streak label", 'kindLabel: "連續型"'),
-        ("mobile streak independent icon", 'icon: "連"'),
-        ("mobile streak independent style", 'displayItem.kind === "streak" ? styles.achievementBadgeStreak : null'),
-        ("mobile badge level number", "{achievementUnlockedCardLevel(displayItem)}"),
-        ("backend cumulative kind", 'kind="cumulative"'),
-        ("backend cumulative label", 'kind_label="累積型"'),
-        ("backend cumulative shared category icon", 'icon=str(definition["cumulative_icon"])'),
-        ("backend cumulative level color", "badge_color=badge_color"),
-        ("backend dynamic achievement levels", "levels = achievement_levels_for_progress(max_progress)"),
-        ("backend persisted unlock level helper", "def _max_persisted_unlock_level(unlocks: dict[str, AchievementUnlock]) -> int:"),
-        ("backend summary includes persisted unlock levels", "max_progress = max(max_progress, _max_persisted_unlock_level(unlocks_by_id))"),
-        ("backend unlock history includes persisted unlock levels", "levels = achievement_levels_for_progress(max(max_progress, _max_persisted_unlock_level(unlocks_by_id)))"),
-        ("backend streak kind", 'kind="streak"'),
-        ("backend streak label", 'kind_label="連續型"'),
-        ("backend streak independent icon", 'icon="連"'),
-        ("backend streak independent color", "badge_color=ACHIEVEMENT_STREAK_BADGE_COLOR"),
-    ):
-        if label.startswith("backend"):
-            haystack = backend_content
-        elif label in {
-            "mobile streak independent style",
-            "mobile badge level number",
-        }:
-            haystack = achievement_unlocked_card_list_content
-        elif label == "mobile local achievement records helper binding":
-            haystack = content
-        else:
-            haystack = future_module_display_content
-        _assert_contains(label, haystack, marker)
-    tests_content = COMMUNITY_STORE_YEAR_REVIEW_TEST_PATH.read_text(encoding="utf-8")
-    _assert_contains(
-        "achievement persisted extended unlock regression",
-        tests_content,
-        "test_achievement_persisted_unlocks_keep_extended_levels_without_active_records",
-    )
-    _assert_contains(
-        "year review persisted unlock regression",
-        tests_content,
-        "test_year_review_includes_persisted_achievement_unlocks_after_active_progress_drops",
-    )
-    _assert_contains(
-        "year review DeepSeek bounded summary regression",
-        tests_content,
-        "test_year_review_uses_deepseek_for_bounded_ai_summary_when_configured",
-    )
-    for label, marker in (
-        ("year review DeepSeek aggregate prompt parsed", "aggregate_payload = json.loads(aggregate_prompt)"),
-        ("year review DeepSeek aggregate prompt exact keys", 'assert set(aggregate_payload) == {"year", "annual_stats", "health_outcomes", "instructions"}'),
-        ("year review DeepSeek instructions aggregate-only", 'assert "只能使用上述聚合統計" in aggregate_payload["instructions"]'),
-        ("year review DeepSeek raw records instruction", 'assert "raw records" in aggregate_payload["instructions"]'),
-        ("year review DeepSeek no raw transcript prompt", 'assert "raw_transcript" not in aggregate_prompt'),
-        ("year review DeepSeek no raw prompt", 'assert "raw prompt" not in aggregate_prompt'),
-        ("year review DeepSeek no raw model output", 'assert "raw model output" not in aggregate_prompt'),
-    ):
-        _assert_contains(label, tests_content, marker)
 
 
-def _verify_food_community_category_contract(content: str, future_module_display_content: str) -> None:
-    backend_content = COMMUNITY_SCHEMA_PATH.read_text(encoding="utf-8")
-    backend_api_content = COMMUNITY_API_PATH.read_text(encoding="utf-8")
-    backend_store_content = STORE_API_PATH.read_text(encoding="utf-8")
-    backend_model_content = COMMUNITY_MODEL_PATH.read_text(encoding="utf-8")
-    backend_index_migration_content = COMMUNITY_FOOD_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
-    backend_latest_index_migration_content = COMMUNITY_FOOD_LATEST_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
-    backend_leaderboard_index_migration_content = COMMUNITY_LEADERBOARD_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
-    backend_store_index_migration_content = STORE_REDEMPTION_INDEX_MIGRATION_PATH.read_text(encoding="utf-8")
-    backend_point_ledger_source_migration_content = COMMUNITY_POINT_LEDGER_SOURCE_MIGRATION_PATH.read_text(encoding="utf-8")
-    food_item_model_block = _match_block(
-        backend_model_content,
-        r"class FoodItem\(Base\):([\s\S]*?)\n\nclass FoodShare",
-        "FoodItem model block",
-    )
-    store_redemption_model_block = _match_block(
-        backend_model_content,
-        r"class StoreRedemption\(Base\):([\s\S]*?)\Z",
-        "StoreRedemption model block",
-    )
-    _assert_contains(
-        "food community mobile fallback categories",
-        future_module_display_content,
-        "export const foodCommunityCategories: Array<{ id: FoodCommunityCategory; label: string }> = [",
-    )
-    _assert_contains("food community backend labels", backend_content, "FOOD_CATEGORY_LABELS: dict[FoodCategory, str] = {")
-    _assert_contains("food community category count schema", backend_content, "food_count: int = Field(default=0, ge=0, le=1_000_000)")
-    _assert_contains("food community category sample schema", backend_content, "sample_foods: list[str] = Field(default_factory=list, max_length=3)")
-    _assert_contains("food community api-to-mobile mapper", future_module_display_content, "export function mobileFoodCategoryFromApi(value: string)")
-    _assert_contains("food community mobile-to-api mapper", future_module_display_content, "export function apiFoodCategoryFromMobile(value: FoodCommunityCategory)")
-    _assert_contains(
-        "food community mobile individual food items",
-        future_module_display_content,
-        "export const foodCommunityItems: FoodCommunityItem[] = [",
-    )
-    _assert_contains("food community category count response", backend_api_content, "select(FoodItem.category, func.count(FoodItem.id)).group_by(FoodItem.category)")
-    _assert_contains("food community category sample response", backend_api_content, "sample_foods=sample_foods_by_category.get(code, [])")
-    _assert_contains("food community mobile category count state", future_module_display_content, "foodCount: clampNumber(category.food_count ?? 0, 0, maxMobileCountValue)")
-    _assert_contains("food community mobile category samples state", future_module_display_content, "sampleFoods: (category.sample_foods ?? [])")
-    _assert_contains("food community category summary render", content, "{foodCommunityCategorySummary(selectedFoodCommunityCategoryDisplay)}")
-    _assert_contains(
-        "food community detail newest eaten share ordering",
-        backend_api_content,
-        ".order_by(FoodShare.eaten_at.desc(), FoodShare.created_at.desc(), FoodShare.id.desc())",
-    )
-    for label, marker in (
-        ("food community reject client glucose delta dependency", "async def reject_client_supplied_glucose_delta(request: Request) -> None:"),
-        ("food community client delta structured error code", '"code": "food_glucose_delta_client_supplied"'),
-        ("food community client delta structured error message", '"message": "glucose_delta is calculated by the server and must not be supplied."'),
-        ("food community client delta dependency binding", "_: None = Depends(reject_client_supplied_glucose_delta),"),
-        ("food community server calculated glucose delta", "glucose_delta=payload.after_glucose - payload.before_glucose"),
-        ("community leaderboard public account id masked", "CommunityLeaderboardEntry(account_id=None, display_name=display_name, score=int(score or 0))"),
-        ("community leaderboard opt-in only", "CommunityPublicProfile.leaderboard_opt_in.is_(True)"),
-        ("food community batched list stats helper", "def _food_stats_for_items(db: Session, food_item_ids: list[UUID]) -> dict[UUID, FoodStatsRead]:"),
-        ("food community batched list stats grouping", ".group_by(FoodShare.food_item_id)"),
-        ("food community list uses batched stats", "stats_by_food_id = _food_stats_for_items(db, [item.id for item in items])"),
-    ):
-        _assert_contains(label, backend_api_content, marker)
-    for label, marker in (
-        ("food item normalized name ORM index", 'Index("ix_food_items_normalized_name", "normalized_name")'),
-        (
-            "food share latest detail ORM index",
-            'Index("ix_food_shares_food_item_eaten_created_id", "food_item_id", "eaten_at", "created_at", "id")',
-        ),
-        (
-            "food share leaderboard ORM index",
-            'Index("ix_food_shares_account_food_item", "account_id", "food_item_id")',
-        ),
-        (
-            "community point leaderboard ORM index",
-            'Index("ix_community_point_ledger_account_delta", "account_id", "delta")',
-        ),
-        (
-            "community point ledger source ORM uniqueness",
-            'UniqueConstraint("source_type", "source_id", name="uq_community_point_ledger_source")',
-        ),
-        (
-            "community profile leaderboard ORM index",
-            'Index("ix_community_public_profiles_opt_in_display", "leaderboard_opt_in", "display_name", "account_id")',
-        ),
-    ):
-        _assert_contains(label, backend_model_content, marker)
-    _assert_contains(
-        "store redemption wallet ORM index on StoreRedemption",
-        store_redemption_model_block,
-        'Index("ix_store_redemptions_account_created_id", "account_id", "created_at", "id")',
-    )
-    if 'Index("ix_store_redemptions_account_created_id", "account_id", "created_at", "id")' in food_item_model_block:
-        raise AssertionError("store redemption wallet ORM index must not be declared on FoodItem.")
-    for label, marker in (
-        ("food item normalized name migration index", 'op.create_index("ix_food_items_normalized_name", "food_items", ["normalized_name"])'),
-    ):
-        _assert_contains(label, backend_index_migration_content, marker)
-    for label, marker in (
-        ("food share previous latest detail migration drop", 'op.drop_index("ix_food_shares_food_item_eaten_created", table_name="food_shares")'),
-        ("food share latest detail migration index", '"ix_food_shares_food_item_eaten_created_id"'),
-        ("food share latest detail migration columns", '["food_item_id", "eaten_at", "created_at", "id"]'),
-    ):
-        _assert_contains(label, backend_latest_index_migration_content, marker)
-    for label, marker in (
-        ("food share leaderboard migration index", '"ix_food_shares_account_food_item"'),
-        ("food share leaderboard migration columns", '["account_id", "food_item_id"]'),
-        ("community point leaderboard migration index", '"ix_community_point_ledger_account_delta"'),
-        ("community point leaderboard migration columns", '["account_id", "delta"]'),
-        ("community profile leaderboard migration index", '"ix_community_public_profiles_opt_in_display"'),
-        ("community profile leaderboard migration columns", '["leaderboard_opt_in", "display_name", "account_id"]'),
-    ):
-        _assert_contains(label, backend_leaderboard_index_migration_content, marker)
-    for label, marker in (
-        ("store points balance conditional earned aggregate", "case((CommunityPointLedger.delta > 0, CommunityPointLedger.delta), else_=0)"),
-        ("store points balance conditional redeemed aggregate", "case((CommunityPointLedger.delta < 0, -CommunityPointLedger.delta), else_=0)"),
-        ("store points balance account scoped query", ".where(CommunityPointLedger.account_id == account_id)"),
-        ("store points balance single aggregate result", ").one()"),
-    ):
-        _assert_contains(label, backend_store_content, marker)
-    for label, marker in (
-        ("store redemption wallet migration index", '"ix_store_redemptions_account_created_id"'),
-        ("store redemption wallet migration columns", '["account_id", "created_at", "id"]'),
-    ):
-        _assert_contains(label, backend_store_index_migration_content, marker)
-    for label, marker in (
-        ("community point ledger source migration constraint", '"uq_community_point_ledger_source"'),
-        ("community point ledger source migration table", '"community_point_ledger"'),
-        ("community point ledger source migration columns", '["source_type", "source_id"]'),
-    ):
-        _assert_contains(label, backend_point_ledger_source_migration_content, marker)
-    backend_contract_tests_content = COMMUNITY_STORE_YEAR_REVIEW_TEST_PATH.read_text(encoding="utf-8")
-    _assert_contains(
-        "community point ledger duplicate source regression",
-        backend_contract_tests_content,
-        "test_community_point_ledger_declares_unique_source_constraint",
-    )
-    for label, marker in (
-        ("food community API average delta signed clamp", "averageRise: clampNumber(Math.round(stats.average_glucose_delta ?? 0), -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
-        ("food community API max delta signed clamp", "maximumRise: clampNumber(stats.max_glucose_delta ?? 0, -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
-        ("food community API min delta signed clamp", "minimumRise: clampNumber(stats.min_glucose_delta ?? 0, -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
-        ("food community API share delta signed clamp", "glucoseDelta: clampNumber(share.glucose_delta, -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
-    ):
-        _assert_contains(label, future_module_display_content, marker)
-    for label, marker in (
-        ("food community individual share delta signed clamp", "const rise = clampNumber(value.glucoseDelta ?? after - before, -maxMobileGlucoseValue, maxMobileGlucoseValue);"),
-        ("food community individual share delta copy", "血糖變化 ${rise} mg/dL"),
-        ("food community display average delta signed clamp", "const averageRise = clampNumber(value.averageRise, -maxMobileGlucoseValue, maxMobileGlucoseValue);"),
-        ("food community display max delta signed clamp", "const maximumRise = clampNumber(value.maximumRise, -maxMobileGlucoseValue, maxMobileGlucoseValue);"),
-        ("food community display min delta signed clamp", "const minimumRise = clampNumber(value.minimumRise, -maxMobileGlucoseValue, maxMobileGlucoseValue);"),
-    ):
-        _assert_contains(label, future_module_display_content, marker)
-    _assert_not_contains(
-        "community leaderboard must not expose account id",
-        backend_api_content,
-        "CommunityLeaderboardEntry(account_id=account_id",
-    )
-    _assert_not_contains(
-        "food community schema must not raise raw client delta validation error",
-        backend_content,
-        "glucose_delta is calculated by the server and must not be supplied.",
-    )
-
-    for mobile_id, api_code, label in EXPECTED_FOOD_COMMUNITY_CATEGORIES:
-        _assert_contains(
-            f"mobile food category {mobile_id}",
-            future_module_display_content,
-            f'{{ id: "{mobile_id}", label: "{label}" }}',
-        )
-        _assert_contains(
-            f"mobile individual food item category {mobile_id}",
-            future_module_display_content,
-            f'category: "{mobile_id}"',
-        )
-        _assert_contains(f"backend food category {api_code}", backend_content, f'"{api_code}": "{label}"')
-        if mobile_id == api_code:
-            _assert_contains(
-                f"food category direct api mapping {mobile_id}",
-                future_module_display_content,
-                f'value === "{mobile_id}"',
-            )
-        else:
-            _assert_contains(
-                f"food category api-to-mobile mapping {api_code}",
-                future_module_display_content,
-                f'value === "{api_code}"',
-            )
-            _assert_contains(
-                f"food category mobile-to-api mapping {mobile_id}",
-                future_module_display_content,
-                f'value === "{mobile_id}"',
-            )
 
 
 def _verify_daily_record_contract(content: str, daily_transcript_content: str) -> None:
@@ -973,7 +589,6 @@ def _pressable_label_source_errors(content: str) -> list[str]:
         "dailyRecordEntryRemoveAccessibilityLabel(item)",
         "destinationCardAccessibilityLabel(item)",
         "editOptionAccessibilityLabel(option)",
-        "foodCommunityCategoryOptionAccessibilityLabel(category)",
         "futureModuleCardAccessibilityLabel(item)",
         "analysisRangeOptionAccessibilityLabel(item)",
         "menuDestinationAccessibilityLabel(item)",
@@ -981,11 +596,7 @@ def _pressable_label_source_errors(content: str) -> list[str]:
         "quickEntryModeAccessibilityLabel(item)",
         "recordingWhisperModelAccessibilityLabel(model)",
         "settingsDisplayRowAccessibilityLabel(row)",
-        "storeCategoryOptionAccessibilityLabel(category)",
         "visualSmokeRouteAccessibilityLabel(item)",
-        "foodCommunityListItemAccessibilityLabel(item)",
-        "storeProductActionAccessibilityLabel(product)",
-        "storeRedemptionActionAccessibilityLabel(product)",
     }
     search_from = 0
     while True:
@@ -1485,7 +1096,6 @@ def main() -> int:
     analysis_data_content = ANALYSIS_DATA_TRANSFORMS_PATH.read_text(encoding="utf-8")
     analysis_metric_content = ANALYSIS_METRIC_TRANSFORMS_PATH.read_text(encoding="utf-8")
     analysis_range_selector_content = ANALYSIS_RANGE_SELECTOR_PATH.read_text(encoding="utf-8")
-    segment_selector_content = SEGMENT_SELECTOR_PATH.read_text(encoding="utf-8")
     settings_subpage_action_row_content = SETTINGS_SUBPAGE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     settings_subpage_close_button_content = SETTINGS_SUBPAGE_CLOSE_BUTTON_PATH.read_text(encoding="utf-8")
     analysis_screen_data_content = ANALYSIS_SCREEN_DATA_PATH.read_text(encoding="utf-8")
@@ -1513,8 +1123,6 @@ def main() -> int:
     future_module_display_content = FUTURE_MODULE_DISPLAY_PATH.read_text(encoding="utf-8")
     mobile_bounds_content = MOBILE_BOUNDS_PATH.read_text(encoding="utf-8")
     year_review_share_file_content = YEAR_REVIEW_SHARE_FILE_PATH.read_text(encoding="utf-8")
-    achievement_category_section_list_content = ACHIEVEMENT_CATEGORY_SECTION_LIST_PATH.read_text(encoding="utf-8")
-    achievement_unlocked_card_list_content = ACHIEVEMENT_UNLOCKED_CARD_LIST_PATH.read_text(encoding="utf-8")
     ai_candidate_action_row_content = AI_CANDIDATE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     ai_candidate_list_content = AI_CANDIDATE_LIST_PATH.read_text(encoding="utf-8")
     ai_save_failure_action_row_content = AI_SAVE_FAILURE_ACTION_ROW_PATH.read_text(encoding="utf-8")
@@ -1526,14 +1134,9 @@ def main() -> int:
     delete_confirm_preview_block_content = DELETE_CONFIRM_PREVIEW_BLOCK_PATH.read_text(encoding="utf-8")
     delete_success_action_row_content = DELETE_SUCCESS_ACTION_ROW_PATH.read_text(encoding="utf-8")
     downloaded_model_list_content = DOWNLOADED_MODEL_LIST_PATH.read_text(encoding="utf-8")
-    community_action_row_content = COMMUNITY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     doctor_share_action_row_content = DOCTOR_SHARE_ACTION_ROW_PATH.read_text(encoding="utf-8")
     food_photo_action_row_content = FOOD_PHOTO_ACTION_ROW_PATH.read_text(encoding="utf-8")
-    food_community_detail_share_list_content = FOOD_COMMUNITY_DETAIL_SHARE_LIST_PATH.read_text(encoding="utf-8")
-    food_community_item_list_content = FOOD_COMMUNITY_ITEM_LIST_PATH.read_text(encoding="utf-8")
     health_integration_action_row_content = HEALTH_INTEGRATION_ACTION_ROW_PATH.read_text(encoding="utf-8")
-    ranking_action_row_content = RANKING_ACTION_ROW_PATH.read_text(encoding="utf-8")
-    ranking_leaderboard_list_content = RANKING_LEADERBOARD_LIST_PATH.read_text(encoding="utf-8")
     history_calendar_month_picker_content = HISTORY_CALENDAR_MONTH_PICKER_PATH.read_text(encoding="utf-8")
     history_daily_record_section_card_content = HISTORY_DAILY_RECORD_SECTION_CARD_PATH.read_text(encoding="utf-8")
     history_daily_summary_card_content = HISTORY_DAILY_SUMMARY_CARD_PATH.read_text(encoding="utf-8")
@@ -1550,7 +1153,6 @@ def main() -> int:
     field_label_content = FIELD_LABEL_PATH.read_text(encoding="utf-8")
     detail_row_content = DETAIL_ROW_PATH.read_text(encoding="utf-8")
     highlight_bullet_row_content = HIGHLIGHT_BULLET_ROW_PATH.read_text(encoding="utf-8")
-    highlight_detail_list_content = HIGHLIGHT_DETAIL_LIST_PATH.read_text(encoding="utf-8")
     highlight_detail_row_content = HIGHLIGHT_DETAIL_ROW_PATH.read_text(encoding="utf-8")
     insight_empty_action_row_content = INSIGHT_EMPTY_ACTION_ROW_PATH.read_text(encoding="utf-8")
     manual_record_create_preview_action_content = MANUAL_RECORD_CREATE_PREVIEW_ACTION_PATH.read_text(
@@ -1590,15 +1192,6 @@ def main() -> int:
     record_option_field_content = RECORD_OPTION_FIELD_PATH.read_text(encoding="utf-8")
     record_text_field_content = RECORD_TEXT_FIELD_PATH.read_text(encoding="utf-8")
     save_success_action_row_content = SAVE_SUCCESS_ACTION_ROW_PATH.read_text(encoding="utf-8")
-    community_public_display_name_field_content = COMMUNITY_PUBLIC_DISPLAY_NAME_FIELD_PATH.read_text(
-        encoding="utf-8"
-    )
-    food_community_search_field_content = FOOD_COMMUNITY_SEARCH_FIELD_PATH.read_text(encoding="utf-8")
-    food_community_share_date_time_fields_content = FOOD_COMMUNITY_SHARE_DATE_TIME_FIELDS_PATH.read_text(
-        encoding="utf-8"
-    )
-    food_community_share_text_fields_content = FOOD_COMMUNITY_SHARE_TEXT_FIELDS_PATH.read_text(encoding="utf-8")
-    store_search_field_content = STORE_SEARCH_FIELD_PATH.read_text(encoding="utf-8")
     transcript_review_action_row_content = TRANSCRIPT_REVIEW_ACTION_ROW_PATH.read_text(encoding="utf-8")
     parser_loading_view_content = PARSER_LOADING_VIEW_PATH.read_text(encoding="utf-8")
     update_success_action_row_content = UPDATE_SUCCESS_ACTION_ROW_PATH.read_text(encoding="utf-8")
@@ -1634,8 +1227,6 @@ def main() -> int:
             missing = sorted(EXPECTED_FUTURE_TARGETS - future_targets)
             raise AssertionError("future module targets missing: " + ", ".join(missing))
 
-        _verify_achievement_contract(content, future_module_display_content, achievement_unlocked_card_list_content)
-        _verify_food_community_category_contract(content, future_module_display_content)
         for label, marker in (
             ("api client json request", "export async function requestJson<T>("),
             ("api client no-content request", "export async function requestNoContent(apiBaseUrl: string, path: string, init?: RequestInit)"),
@@ -1676,16 +1267,7 @@ def main() -> int:
             ("shared auxiliary labels helper", "export function auxiliarySectionLabels()"),
             ("shared auxiliary visual smoke copy", "visualSmokeRouteCopy: boundDisplayText("),
             ("shared auxiliary transcript input label", 'transcriptInputAccessibility: boundDisplayText("紀錄文字輸入", maxDisplayTextLength)'),
-            ("shared auxiliary store cart checkout label", 'storeCartCheckoutAccessibility: boundDisplayText("結帳尚未開放，不建立訂單或付款", maxDisplayDetailTextLength)'),
-            ("shared auxiliary store point mall badge", 'storePreview: boundDisplayText("點數商城", maxDisplayTextLength)'),
             ("shared auxiliary year review source label", 'yearReviewSource: boundDisplayText("年度回顧來源", maxDisplayTextLength)'),
-            ("shared auxiliary food community share food name label", 'foodCommunityShareFoodNameAccessibility: boundDisplayText("輸入食物名稱", maxDisplayTextLength),'),
-            ("shared auxiliary food community share eaten date label", 'foodCommunityShareEatenDateAccessibility: boundDisplayText("輸入食物分享食用日期", maxDisplayTextLength),'),
-            ("shared auxiliary food community share eaten time label", 'foodCommunityShareEatenTimeAccessibility: boundDisplayText("輸入食物分享食用時間", maxDisplayTextLength),'),
-            ("shared auxiliary food community share before glucose label", 'foodCommunityShareBeforeGlucoseAccessibility: boundDisplayText("輸入食用前血糖", maxDisplayTextLength),'),
-            ("shared auxiliary food community share after glucose label", 'foodCommunityShareAfterGlucoseAccessibility: boundDisplayText("輸入食用後血糖", maxDisplayTextLength),'),
-            ("shared auxiliary food community share note label", 'foodCommunityShareNoteAccessibility: boundDisplayText("輸入食物分享備註心得", maxDisplayTextLength),'),
-            ("shared auxiliary community public display name label", 'communityPublicDisplayNameAccessibility: boundDisplayText("輸入社群公開顯示名稱", maxDisplayTextLength),'),
         ):
             _assert_contains(label, shared_display_items_content, marker)
         for label, marker in (
@@ -1728,26 +1310,6 @@ def main() -> int:
         ):
             _assert_contains(label, delete_confirm_preview_block_content, marker)
         for label, marker in (
-            ("community action row component", "export function CommunityActionRow"),
-            ("community action row share accessibility prop", "accessibilityLabel={shareAccessibilityLabel}"),
-            ("community action row post accessibility prop", "accessibilityLabel={postAccessibilityLabel}"),
-            ("community action row privacy accessibility prop", "accessibilityLabel={privacyAccessibilityLabel}"),
-            ("community action row button role", 'accessibilityRole="button"'),
-            ("community action row disabled state prop", "accessibilityState={{ disabled: isShareDisabled }}"),
-            ("community action row disabled prop", "disabled={isShareDisabled}"),
-            ("community action row share handler prop", "onPress={onSharePress}"),
-            ("community action row post handler prop", "onPress={onPostPress}"),
-            ("community action row privacy handler prop", "onPress={onPrivacyPress}"),
-            ("community action row share label", "{shareLabel}"),
-            ("community action row post label", "{postLabel}"),
-            ("community action row privacy label", "{privacyLabel}"),
-            ("community action row disabled style", "isShareDisabled ? styles.buttonDisabled : null"),
-            ("community action row shell style", "actionRow: {"),
-            ("community action row secondary style", "secondaryButton: {"),
-            ("community action row disabled style definition", "buttonDisabled: {"),
-        ):
-            _assert_contains(label, community_action_row_content, marker)
-        for label, marker in (
             ("doctor share action row component", "export function DoctorShareActionRow"),
             ("doctor share action row token accessibility prop", "accessibilityLabel={tokenAccessibilityLabel}"),
             ("doctor share action row report accessibility prop", "accessibilityLabel={reportAccessibilityLabel}"),
@@ -1783,19 +1345,6 @@ def main() -> int:
             ("health integration action row secondary style", "secondaryButton: {"),
         ):
             _assert_contains(label, health_integration_action_row_content, marker)
-        for label, marker in (
-            ("ranking action row component", "export function RankingActionRow"),
-            ("ranking action row public accessibility prop", "accessibilityLabel={publicAccessibilityLabel}"),
-            ("ranking action row opt-in accessibility prop", "accessibilityLabel={optInAccessibilityLabel}"),
-            ("ranking action row button role", 'accessibilityRole="button"'),
-            ("ranking action row public handler prop", "onPress={onPublicPress}"),
-            ("ranking action row opt-in handler prop", "onPress={onOptInPress}"),
-            ("ranking action row public label", "{publicLabel}"),
-            ("ranking action row opt-in label", "{optInLabel}"),
-            ("ranking action row shell style", "actionRow: {"),
-            ("ranking action row secondary style", "secondaryButton: {"),
-        ):
-            _assert_contains(label, ranking_action_row_content, marker)
         for label, marker in (
             ("history calendar month picker component", "export function HistoryCalendarMonthPicker<TDay extends HistoryCalendarDayItem>({"),
             ("history calendar month picker title", "<Text style={styles.recordContent}>{title}</Text>"),
@@ -1989,8 +1538,6 @@ def main() -> int:
             ("record update highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("manual submit highlight bullet row", "checklistItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
             ("history boundary highlight bullet row", "boundaryItems.map((item) => (\n          <HighlightBulletRow key={item} text={item} />"),
-            ("community readiness checklist component binding", "<FutureReadinessChecklist items={communityReadinessChecklistItems} />"),
-            ("ranking readiness checklist component binding", "<FutureReadinessChecklist items={rankingReadinessChecklistItems} />"),
             ("future module requirement key helper import", "futureModuleRequirementKey,"),
             ("future module requirement text helper import", "futureModuleRequirementText,"),
             ("future module card requirements highlight bullet row", "futureModuleCardRequirements(item).map((requirement) => (\n              <HighlightBulletRow key={futureModuleRequirementKey(requirement)} text={futureModuleRequirementText(requirement)} />"),
@@ -2006,7 +1553,7 @@ def main() -> int:
                 target_content = manual_record_confirm_footer_actions_content
             elif label.startswith("future module card requirements "):
                 target_content = future_module_card_list_content
-            elif label.startswith(("delete confirm ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ", "tutorial safety ", "detailed report notes ", "subscription readiness ", "subscription management readiness ", "doctor share readiness ", "health integration readiness ", "community readiness ", "ranking readiness ", "store checkout readiness ", "food photo empty result ", "food photo readiness ", "future module requirement ", "future module detail requirements ")):
+            elif label.startswith(("delete confirm ", "transcript review ", "ai review ", "ai save confirm ", "save success ", "delete success ", "update success ", "analysis boundary ", "record entry settings ", "ai candidate remove ", "ai save failure ", "auth boundary ", "profile readiness ", "quota readiness ", "reminder readiness ", "privacy readiness ", "tutorial safety ", "detailed report notes ", "subscription readiness ", "subscription management readiness ", "doctor share readiness ", "health integration readiness ", "food photo empty result ", "food photo readiness ", "future module requirement ", "future module detail requirements ")):
                 target_content = content
             else:
                 target_content = highlight_bullet_row_content
@@ -2020,21 +1567,6 @@ def main() -> int:
             ("highlight detail evidence line height", "lineHeight: 19"),
         ):
             _assert_contains(label, highlight_detail_row_content, marker)
-        for label, marker in (
-            ("highlight detail list component", "export function HighlightDetailList"),
-            ("highlight detail list row type", "export type HighlightDetailListRow ="),
-            ("highlight detail list rows prop", "rows: HighlightDetailListRow[]"),
-            ("highlight detail list row key helper", "function highlightDetailListRowKey(row: HighlightDetailListRow)"),
-            ("highlight detail list row key helper fields", "return row.label;"),
-            ("highlight detail list row key binding", "key={highlightDetailListRowKey(row)}"),
-            ("highlight detail list row label helper", "function highlightDetailListRowLabel(row: HighlightDetailListRow)"),
-            ("highlight detail list row label helper fields", "return row.label;"),
-            ("highlight detail list row label binding", "label={highlightDetailListRowLabel(row)}"),
-            ("highlight detail list row value helper", "function highlightDetailListRowValue(row: HighlightDetailListRow)"),
-            ("highlight detail list row value helper fields", "return row.value;"),
-            ("highlight detail list row value binding", "value={highlightDetailListRowValue(row)}"),
-        ):
-            _assert_contains(label, highlight_detail_list_content, marker)
         for label, marker in (
             ("insight empty action row component", "export function InsightEmptyActionRow"),
             ("insight empty action row manual accessibility prop", "accessibilityLabel={manualAccessibilityLabel}"),
@@ -2408,19 +1940,6 @@ def main() -> int:
         ):
             _assert_contains(label, record_text_field_content, marker)
         for label, marker in (
-            ("community public display name field component", "export function CommunityPublicDisplayNameField"),
-            ("community public display name field accessibility prop", "accessibilityLabel={accessibilityLabel}"),
-            ("community public display name field value prop", "value={value}"),
-            ("community public display name field handler prop", "onChangeText={onChangeText}"),
-            ("community public display name field max length prop", "maxLength={maxLength}"),
-            ("community public display name field placeholder", 'placeholder="社群公開顯示名稱"'),
-            ("community public display name field normalization", 'autoCapitalize="none"'),
-            ("community public display name field autocorrect", "autoCorrect={false}"),
-            ("community public display name field input style", "input: {"),
-            ("community public display name field min height", "minHeight: 52"),
-        ):
-            _assert_contains(label, community_public_display_name_field_content, marker)
-        for label, marker in (
             ("backend url field component", "export function BackendUrlField"),
             ("backend url field accessibility prop", "accessibilityLabel={accessibilityLabel}"),
             ("backend url field value prop", "value={value}"),
@@ -2534,84 +2053,6 @@ def main() -> int:
             ("native download kind selector llama label", 'label="Llama"'),
         ):
             _assert_contains(label, native_download_kind_selector_content, marker)
-        for label, marker in (
-            ("food community search field component", "export function FoodCommunitySearchField"),
-            ("food community search field accessibility prop", "accessibilityLabel={accessibilityLabel}"),
-            ("food community search field value prop", "value={value}"),
-            ("food community search field handler prop", "onChangeText={onChangeText}"),
-            ("food community search field max length prop", "maxLength={maxLength}"),
-            ("food community search field placeholder", 'placeholder="搜尋食物名稱"'),
-            ("food community search field normalization", 'autoCapitalize="none"'),
-            ("food community search field autocorrect", "autoCorrect={false}"),
-            ("food community search field input style", "input: {"),
-            ("food community search field min height", "minHeight: 52"),
-        ):
-            _assert_contains(label, food_community_search_field_content, marker)
-        for label, marker in (
-            ("food community share date time fields component", "export function FoodCommunityShareDateTimeFields"),
-            ("food community share date time shared field", "<RecordTextField"),
-            ("food community share date icon", 'icon={"📅"}'),
-            ("food community share date label prop", "label={dateLabel}"),
-            ("food community share date accessibility prop", "accessibilityLabel={dateAccessibilityLabel}"),
-            ("food community share date value prop", "value={dateValue}"),
-            ("food community share date handler prop", "onChangeText={onDateChange}"),
-            ("food community share date max length prop", "maxLength={dateMaxLength}"),
-            ("food community share date placeholder", 'placeholder="2026-04-29"'),
-            ("food community share time icon", 'icon={"🕒"}'),
-            ("food community share time label prop", "label={timeLabel}"),
-            ("food community share time accessibility prop", "accessibilityLabel={timeAccessibilityLabel}"),
-            ("food community share time value prop", "value={timeValue}"),
-            ("food community share time handler prop", "onChangeText={onTimeChange}"),
-            ("food community share time max length prop", "maxLength={timeMaxLength}"),
-            ("food community share time placeholder", 'placeholder="08:10"'),
-            ("food community share date time row style", "dateTimeRow: {"),
-            ("food community share date time field style", "dateTimeField: {"),
-        ):
-            _assert_contains(label, food_community_share_date_time_fields_content, marker)
-        for label, marker in (
-            ("food community share text fields component", "export function FoodCommunityShareTextFields"),
-            ("food community share text fields date time slot", "{dateTimeFields}"),
-            ("food community share food name accessibility prop", "accessibilityLabel={foodNameAccessibilityLabel}"),
-            ("food community share food name value prop", "value={foodNameValue}"),
-            ("food community share food name handler prop", "onChangeText={onFoodNameChange}"),
-            ("food community share food name max length prop", "maxLength={foodNameMaxLength}"),
-            ("food community share food name placeholder", 'placeholder="食物名稱"'),
-            ("food community share before glucose accessibility prop", "accessibilityLabel={beforeGlucoseAccessibilityLabel}"),
-            ("food community share before glucose value prop", "value={beforeGlucoseValue}"),
-            ("food community share before glucose handler prop", "onChangeText={onBeforeGlucoseChange}"),
-            ("food community share before glucose keyboard prop", 'keyboardType="numeric"'),
-            ("food community share before glucose max length prop", "maxLength={3}"),
-            ("food community share before glucose placeholder", 'placeholder="食用前血糖"'),
-            ("food community share after glucose accessibility prop", "accessibilityLabel={afterGlucoseAccessibilityLabel}"),
-            ("food community share after glucose value prop", "value={afterGlucoseValue}"),
-            ("food community share after glucose handler prop", "onChangeText={onAfterGlucoseChange}"),
-            ("food community share after glucose placeholder", 'placeholder="食用後血糖"'),
-            ("food community share note accessibility prop", "accessibilityLabel={noteAccessibilityLabel}"),
-            ("food community share note value prop", "value={noteValue}"),
-            ("food community share note handler prop", "onChangeText={onNoteChange}"),
-            ("food community share note max length prop", "maxLength={noteMaxLength}"),
-            ("food community share note placeholder", 'placeholder="備註心得"'),
-            ("food community share note multiline", "multiline"),
-            ("food community share note text align", 'textAlignVertical="top"'),
-            ("food community share text fields input style", "input: {"),
-            ("food community share text fields multiline style", "multilineField: {"),
-        ):
-            _assert_contains(label, food_community_share_text_fields_content, marker)
-        for label, marker in (
-            ("store search field component", "export function StoreSearchField"),
-            ("store search field accessibility prop", "accessibilityLabel={accessibilityLabel}"),
-            ("store search field icon", "<Text style={styles.searchIcon}>⌕</Text>"),
-            ("store search field value prop", "value={value}"),
-            ("store search field handler prop", "onChangeText={onChangeText}"),
-            ("store search field max length prop", "maxLength={maxLength}"),
-            ("store search field placeholder", 'placeholder="搜尋商品"'),
-            ("store search field normalization", 'autoCapitalize="none"'),
-            ("store search field autocorrect", "autoCorrect={false}"),
-            ("store search field wrapper style", "searchField: {"),
-            ("store search field icon style", "searchIcon: {"),
-            ("store search field input style", "searchInput: {"),
-        ):
-            _assert_contains(label, store_search_field_content, marker)
         for label, marker in (
             ("manual record exercise fields component", "export function ManualRecordExerciseFields"),
             ("manual record exercise shared field", "<RecordTextField"),
@@ -3002,8 +2443,6 @@ def main() -> int:
             ("selected LLM model helper import", "selectedLlmModelOption"),
             ("active profile helper import", "activeProfileForId,"),
             ("active profile helper binding", "const activeProfile = activeProfileForId(profiles, activeProfileId);"),
-            ("account public display settings helper import", "accountPublicDisplayNameForSettings,"),
-            ("account public display settings helper binding", "const accountPublicDisplayNameDisplayText = accountPublicDisplayNameForSettings(communityPublicSettings, account);"),
             ("selected STT model helper binding", "const selectedSttModel = selectedSttModelOption(models, sttModelId);"),
             ("selected LLM model helper binding", "const selectedLlmModel = selectedLlmModelOption(models, llmModelId);"),
             ("deepseek record parse request binding", "function parserPreviewModelIds() {\n    return {\n      sttModelId,\n      llmModelId"),
@@ -3069,7 +2508,6 @@ def main() -> int:
             ("local default STT model helper", "function defaultSttModelOption(modelOptions: AiModelOptions)"),
             ("local preferred LLM model helper", "function preferredLlmModelOption(modelOptions: AiModelOptions)"),
             ("direct active profile lookup", "profiles.find((profile) => profile.id === activeProfileId)"),
-            ("direct account public display fallback", "communityPublicSettings?.display_name ?? accountPublicDisplayNameText(account)"),
             ("direct parser model ready length check", "const parserModelReady = parserModelUnavailableMessage.length === 0;"),
             ("direct parser model unavailable text binding", "const parserModelUnavailableMessage = parserModelUnavailableText(selectedLlmModel, selectedSttModel);"),
             ("direct parser model ready helper binding", "const parserModelReady = parserModelReadyFromMessage(parserModelUnavailableMessage);"),
@@ -3119,7 +2557,6 @@ def main() -> int:
         for label, marker in (
             ("history primary tab", 'id: "history"'),
             ("analysis primary tab", 'id: "analysis"'),
-            ("achievements primary tab", 'id: "achievements"'),
         ):
             _assert_not_contains(label, primary_screens_block, marker)
         screen_chrome_block = navigation_content
@@ -3158,16 +2595,8 @@ def main() -> int:
         )
         for label, marker in (
             (
-                "destination return achievements bundle label",
-                "achievements: returnDestinationButtonLabel(value.achievementsReturnScreen)",
-            ),
-            (
                 "destination return year review bundle label",
                 "yearReview: returnDestinationButtonLabel(value.yearReviewReturnScreen)",
-            ),
-            (
-                "destination return store bundle label",
-                "store: returnDestinationButtonLabel(value.storeReturnScreen)",
             ),
             (
                 "destination return food photo bundle label",
@@ -4144,31 +3573,6 @@ def main() -> int:
             "futurePreviewReadinessStaticDisplay.healthIntegrationItems;",
         )
         _assert_contains(
-            "community readiness static display binding",
-            content,
-            "const communityReadinessChecklistItems = futurePreviewReadinessStaticDisplay.communityItems;",
-        )
-        _assert_contains(
-            "ranking readiness static display binding",
-            content,
-            "const rankingReadinessChecklistItems = futurePreviewReadinessStaticDisplay.rankingItems;",
-        )
-        _assert_contains(
-            "store preview runtime display bundle binding",
-            content,
-            "const storePreviewRuntimeDisplay = storePreviewRuntimeDisplayBundle();",
-        )
-        _assert_contains(
-            "store preview runtime field binding",
-            content,
-            "const storePreviewStaticDisplay = storePreviewRuntimeDisplay.preview;",
-        )
-        _assert_contains(
-            "store checkout readiness checklist helper binding",
-            content,
-            "const storeCheckoutReadinessChecklistItems = storePreviewStaticDisplay.checkoutReadinessItems;",
-        )
-        _assert_contains(
             "food photo preview runtime display bundle binding",
             content,
             "const foodPhotoPreviewRuntimeDisplay = foodPhotoPreviewRuntimeDisplayBundle();",
@@ -4375,11 +3779,6 @@ def main() -> int:
             "const healthIntegrationBoundaryRows = futureBoundaryRowsDisplay.healthIntegration;",
         )
         _assert_contains(
-            "ranking boundary rows helper binding",
-            content,
-            "const rankingBoundaryRows = futureBoundaryRowsDisplay.ranking;",
-        )
-        _assert_contains(
             "privacy boundary rows static display binding",
             content,
             "const privacyBoundaryRows = settingsStaticDisplay.privacyBoundaryRows;",
@@ -4463,11 +3862,6 @@ def main() -> int:
             "direct profile no action boundary copy binding",
             content,
             "const profileNoActionBoundaryDisplayText = profileNoActionBoundaryCopy();",
-        )
-        _assert_contains(
-            "community boundary rows helper binding",
-            content,
-            "const communityBoundaryRows = futureBoundaryRowsDisplay.community;",
         )
         _assert_contains(
             "AI save confirm guarded return binding",
@@ -6110,11 +5504,9 @@ def main() -> int:
         for label, marker in (
             ("dev reset includes year review share packages", "YearReviewSharePackage,"),
             ("dev reset includes year review snapshots", "YearReviewSnapshot,"),
-            ("dev reset includes achievement unlocks", "AchievementUnlock,"),
         ):
             _assert_contains(label, dev_api_content, marker)
         for label, marker in (
-            ("dev reset tests achievement deleted count", 'body["deleted_counts"]["achievement_unlocks"] >= 1'),
             ("dev reset tests year review package deleted count", 'body["deleted_counts"]["year_review_share_packages"] >= 1'),
             ("dev reset tests year review snapshot deleted count", 'body["deleted_counts"]["year_review_snapshots"] >= 1'),
         ):
@@ -6508,11 +5900,6 @@ def main() -> int:
             "manual create success helper",
             content,
             "function handleManualRecordCreateSuccess(created: RecordItem)",
-        )
-        _assert_contains(
-            "manual create success helper state",
-            content,
-            "setRecords((current) => boundRecordsList([created, ...current]));\n    selectRecordForResult(created);\n    seedEmptyManualRecordStateForNow();\n    openSaveSuccessResult(manualRecordCreateSummaryMessage(1), \"manual\", manualRecordReturnScreen);\n    setStatus(manualRecordCreateSuccessStatusMessage());\n    syncAchievementsAfterRecordSave();",
         )
         _assert_contains(
             "manual create success helper binding",
@@ -7270,11 +6657,6 @@ def main() -> int:
             "function openMenuTargetRoute(target: AppScreen)",
         )
         _assert_contains(
-            "menu target route community binding",
-            content,
-            'openCommunity("menu");',
-        )
-        _assert_contains(
             "menu target route fallback",
             content,
             "return false;\n  }\n\n  function openMenuDestination(target: AppScreen)",
@@ -7658,11 +7040,6 @@ def main() -> int:
             'openManualRecord("menu");',
         )
         _assert_contains(
-            "visual smoke menu return route store cart binding",
-            content,
-            'setStoreReturnScreen("menu");\n      openStoreCart();',
-        )
-        _assert_contains(
             "visual smoke menu return route food photo binding",
             content,
             'openFoodPhoto("menu");',
@@ -7773,26 +7150,6 @@ def main() -> int:
             'openFuturePreviewScreen(\n      "healthIntegration",\n      returnScreen,\n      setHealthIntegrationReturnScreen,\n      setHealthIntegrationActionStatus\n    );',
         )
         _assert_contains(
-            "community future preview opener helper binding",
-            content,
-            'openFuturePreviewScreen("community", returnScreen, setCommunityReturnScreen, setCommunityActionStatus);',
-        )
-        _assert_contains(
-            "community screen opener keeps sync calls binding",
-            content,
-            'openFuturePreviewScreen("community", returnScreen, setCommunityReturnScreen, setCommunityActionStatus);\n    void loadCommunityPublicSettings();\n    void loadFoodCommunityCategories();\n    void loadCommunityFoods();',
-        )
-        _assert_contains(
-            "ranking future preview opener helper binding",
-            content,
-            'openFuturePreviewScreen("ranking", returnScreen, setRankingReturnScreen, setRankingActionStatus);',
-        )
-        _assert_contains(
-            "ranking screen opener keeps leaderboard sync binding",
-            content,
-            'openFuturePreviewScreen("ranking", returnScreen, setRankingReturnScreen, setRankingActionStatus);\n    void loadCommunityLeaderboards();',
-        )
-        _assert_contains(
             "doctor share future preview return action helper binding",
             content,
             "returnFromFuturePreviewScreen(doctorShareReturnScreen);",
@@ -7806,11 +7163,6 @@ def main() -> int:
             "visual smoke future module route doctor binding",
             content,
             'openDoctorShare("futureModules");',
-        )
-        _assert_contains(
-            "visual smoke future module route ranking binding",
-            content,
-            'openRanking("futureModules");',
         )
         _assert_contains(
             "visual smoke future module route fallback",
@@ -8005,11 +7357,6 @@ def main() -> int:
             "visual smoke route jump accessibility binding",
             visual_smoke_route_jump_grid_content,
             "accessibilityLabel={visualSmokeRouteAccessibilityLabel(item)}",
-        )
-        _assert_contains(
-            "store product action accessibility",
-            content,
-            "accessibilityLabel={storeProductActionAccessibilityLabel(product)}",
         )
         _assert_contains(
             "food photo upload accessibility",
@@ -9055,7 +8402,6 @@ def main() -> int:
             ("daily record save selected result helper", "function selectDailyRecordSaveResult(createdRecords: RecordItem[])"),
             ("daily record save selected result helper binding", "applyDailyRecordSaveCreatedRecords(createdRecords);\n    selectDailyRecordSaveResult(createdRecords);"),
             ("daily record save success result helper", "function openDailyRecordSaveSuccessResult(savedCount: number)"),
-            ("daily record save success result helper internals", "setLastSaveErrorSummary(\"\");\n    openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), \"ai\", \"today\");\n    setStatus(aiSaveSuccessStatusMessage());\n    syncAchievementsAfterRecordSave();"),
             ("daily record save success helper fields", "clearDailyRecordSaveDraftState();\n    applyDailyRecordSaveCreatedRecords(createdRecords);"),
             ("daily record save success helper binding", "handleDailyRecordSaveSuccess(saveResponse, recordsToSave.length);"),
             ("daily record save failure helper", "function handleDailyRecordSaveFailure(error: unknown)"),
@@ -10956,21 +10302,6 @@ def main() -> int:
             "<AnalysisRangeSelector\n              options={analysisRangeDisplayOptions}",
         )
         for label, marker in (
-            ("segment selector component", "export function SegmentSelector<TOption>"),
-            ("segment selector options map", "options.map((option) => {"),
-            ("segment selector selected constant", "const optionSelected = isSelected(option);"),
-            ("segment selector option key", "key={optionKey(option)}"),
-            ("segment selector accessibility", "accessibilityLabel={optionAccessibilityLabel(option)}"),
-            ("segment selector button role", 'accessibilityRole="button"'),
-            ("segment selector selected state", "accessibilityState={{ selected: optionSelected }}"),
-            ("segment selector selected pill style", "style={[styles.segmentPill, optionSelected ? styles.segmentActive : null]}"),
-            ("segment selector press handler", "onPress={() => onOptionPress(option)}"),
-            ("segment selector selected text style", "style={[styles.segmentText, optionSelected ? styles.segmentTextActive : null]}"),
-            ("segment selector label", "{optionLabel(option)}"),
-            ("segment selector compact target", "minHeight: 44"),
-        ):
-            _assert_contains(label, segment_selector_content, marker)
-        for label, marker in (
             ("account security action grid component", "export function AccountSecurityActionGrid"),
             ("account security action grid shared button", "function AccountSecurityActionButton"),
             ("account security action grid refresh accessibility prop", "accessibilityLabel={refreshSessionAccessibilityLabel}"),
@@ -11353,7 +10684,6 @@ def main() -> int:
         for label, marker in (
             ("manual type chip accessibility binding", "accessibilityLabel={manualRecordTypeOptionAccessibilityLabel(type)}"),
             ("shared option chip accessibility binding", "accessibilityLabel={editOptionAccessibilityLabel(option)}"),
-            ("store category accessibility binding", "optionAccessibilityLabel={storeCategoryOptionAccessibilityLabel}"),
             ("analysis range accessibility binding", "optionAccessibilityLabel={analysisRangeOptionAccessibilityLabel}"),
             ("manual type chip button role", 'accessibilityRole="button"'),
             ("manual type chip selected state", "accessibilityState={{ selected: typeSelected }}"),
@@ -11381,7 +10711,6 @@ def main() -> int:
             ("record edit glucose unit selected state", 'selectedValue={recordEditFieldValue(recordEditFields, "glucoseUnit")}'),
             ("record edit glucose timing selected state", 'selectedValue={recordEditFieldValue(recordEditFields, "glucoseTiming")}'),
             ("record edit meal selected state", 'selectedValue={recordEditFieldValue(recordEditFields, "mealType")}'),
-            ("store category selected state", "isSelected={(category) => storeCategoryOptionSelected(category, storeCategory)}"),
         ):
             if label.startswith("manual glucose "):
                 target_content = manual_record_glucose_fields_content
@@ -12249,7 +11578,6 @@ def main() -> int:
             ("doctor share readiness checklist items binding", "items={doctorShareReadinessChecklistItems}"),
             ("health integration readiness checklist items binding", "items={healthIntegrationReadinessChecklistItems}"),
             ("commerce readiness checklist binding", "<CommerceReadinessChecklist"),
-            ("store checkout readiness checklist items binding", "items={storeCheckoutReadinessChecklistItems}"),
             ("food photo empty result checklist items binding", "items={foodPhotoEmptyResultChecklistItems}"),
             ("food photo readiness checklist items binding", "items={foodPhotoReadinessChecklistItems}"),
             ("outcome checklist binding", "<OutcomeChecklist"),
@@ -12549,7 +11877,6 @@ def main() -> int:
                 f"{list_name}.map((item) => (",
             )
         for list_name in (
-            "storeCheckoutReadinessChecklistItems",
             "foodPhotoEmptyResultChecklistItems",
             "foodPhotoReadinessChecklistItems",
         ):
@@ -13101,400 +12428,15 @@ def main() -> int:
             ("doctor share report status handler", "function showDoctorShareReportBoundaryStatus()"),
             ("health integration permission status handler", "function showHealthIntegrationPermissionStatus()"),
             ("health integration meter status handler", "function showHealthIntegrationMeterStatus()"),
-            ("community preview display bundle import", "communityPreviewDisplayBundle,"),
-            ("community preview display bundle binding", "const communityPreviewDisplay = communityPreviewDisplayBundle({"),
-            ("community preview display label binding", "const communityPreviewLabelDisplay = communityPreviewDisplay.labels;"),
-            ("community close accessibility display label binding", "const communityCloseAccessibilityDisplayLabel = communityPreviewLabelDisplay.closeAccessibility;"),
-            ("community close accessibility helper binding", "accessibilityLabel={communityCloseAccessibilityDisplayLabel}"),
-            ("community preview boundary badge display label binding", "const communityPreviewBoundaryBadgeDisplayLabel = communityPreviewLabelDisplay.boundaryBadge;"),
-            ("community preview boundary badge helper binding", "{communityPreviewBoundaryBadgeDisplayLabel}"),
-            ("community preview boundary copy display text binding", "const communityPreviewBoundaryCopyDisplayText = communityPreviewLabelDisplay.boundaryCopy;"),
-            ("community preview boundary copy helper binding", "{communityPreviewBoundaryCopyDisplayText}"),
-            ("community post accessibility display label binding", "const communityPostAccessibilityDisplayLabel = communityPreviewLabelDisplay.postAccessibility;"),
-            ("community post accessibility helper binding", "postAccessibilityLabel={communityPostAccessibilityDisplayLabel}"),
-            ("community post button display label binding", "const communityPostButtonDisplayLabel = communityPreviewLabelDisplay.postButton;"),
-            ("community post button helper binding", "{communityPostButtonDisplayLabel}"),
-            ("community privacy accessibility display label binding", "const communityPrivacyAccessibilityDisplayLabel = communityPreviewLabelDisplay.privacyAccessibility;"),
-            ("community privacy accessibility helper binding", "privacyAccessibilityLabel={communityPrivacyAccessibilityDisplayLabel}"),
-            ("community action status label display binding", "const communityActionStatusDisplayLabel = communityPreviewLabelDisplay.actionStatusLabel;"),
-            ("community action status label helper binding", "{communityActionStatusDisplayLabel}"),
-            ("community action status text display binding", "const communityActionStatusDisplayCopy = communityPreviewLabelDisplay.actionStatusCopy;"),
-            ("community action status text helper binding", "{communityActionStatusDisplayCopy}"),
-            ("community action status visible helper import", "communityActionStatusVisible,"),
-            ("community action status visible helper binding", "{communityActionStatusVisible(communityActionStatus) ? ("),
-            ("community readiness section label display binding", "const communityReadinessSectionDisplayLabel = communityPreviewLabelDisplay.readinessSection;"),
-            ("community readiness section label helper binding", "{communityReadinessSectionDisplayLabel}"),
-            ("community readiness checklist component binding", "<FutureReadinessChecklist items={communityReadinessChecklistItems} />"),
-            ("community return future modules accessibility display label binding", "const communityReturnFutureModulesAccessibilityDisplayLabel = communityPreviewLabelDisplay.returnAccessibility;"),
-            ("community return future modules accessibility helper binding", "accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}"),
-            ("community return future modules button display label binding", "const communityReturnFutureModulesButtonDisplayLabel = communityPreviewLabelDisplay.returnButton;"),
-            ("community return future modules button helper binding", "{communityReturnFutureModulesButtonDisplayLabel}"),
-            ("community return future modules press helper", "function communityReturnFutureModulesPressHandler()"),
-            ("community return future modules press helper fields", "return returnFromCommunityPreview;"),
-            ("community return future modules press target binding", "const communityReturnFutureModulesPressTarget = communityReturnFutureModulesPressHandler();"),
-            ("community return future modules press helper binding", "onPress={communityReturnFutureModulesPressTarget}"),
             ("future boundary grid binding", "<FutureBoundaryGrid"),
             ("doctor share boundary grid rows binding", "rows={doctorShareBoundaryRows}"),
             ("health integration boundary grid rows binding", "rows={healthIntegrationBoundaryRows}"),
-            ("community screen title helper import", "communityScreenTitleLabel,"),
-            ("community screen title helper binding", "{communityScreenTitleLabel()}"),
-            ("community screen subtitle helper import", "communityScreenSubtitleCopy,"),
-            ("community screen subtitle helper binding", "{communityScreenSubtitleCopy()}"),
-            ("community posting status handler", "function showCommunityPostingStatus()"),
-            ("community privacy status handler", "function showCommunityPrivacyStatus()"),
-            ("food community item list component binding", "<FoodCommunityItemList"),
-            ("food community item list items binding", "items={visibleFoodCommunityItems}"),
-            ("food community item list select binding", "onSelectItem={pressFoodCommunityItem}"),
-            ("food community item list selected binding", "selectedItem={selectedFoodCommunityItem}"),
-            ("food community item list component", "export function FoodCommunityItemList"),
-            ("food community item list item type", "export type FoodCommunityListDisplayItem ="),
-            ("food community item list items prop", "items: readonly FoodCommunityListDisplayItem[]"),
-            ("food community item list selected prop", "selectedItem: FoodCommunityListDisplayItem | null"),
-            ("food community item list select prop", "onSelectItem: (item: FoodCommunityListDisplayItem) => void"),
-            ("food community database section label helper import", "foodCommunityDatabaseSectionLabel,"),
-            ("food community database section label helper binding", "{foodCommunityDatabaseSectionLabel()}"),
-            ("food community database intro copy helper import", "foodCommunityDatabaseIntroCopy,"),
-            ("food community database intro copy helper binding", "{foodCommunityDatabaseIntroCopy()}"),
-            ("food community backend-aware empty copy", "backend ready 時會依搜尋同步，未連線時只篩選本機預覽。"),
-            ("food community list empty title helper", "function foodCommunityListEmptyTitle()"),
-            ("food community list empty title helper fields", 'return "沒有符合的食物";'),
-            ("food community list empty title helper binding", "{foodCommunityListEmptyTitle()}"),
-            ("food community list empty copy helper", "function foodCommunityListEmptyCopy()"),
-            ("food community list empty copy helper binding", "{foodCommunityListEmptyCopy()}"),
-            ("food community point rows helper binding", "const foodCommunityPointRows = foodCommunityDisplay.pointRows;"),
-            ("food community syncs store points on open", 'if (currentScreen === "community") {\n      void loadCommunityPublicSettings();\n      void loadFoodCommunityCategories();\n      void loadCommunityFoods();\n      void loadStoreCatalogAndPoints();'),
-            ("food community share count detail label helper import", "foodCommunityDetailShareCountLabel,"),
-            ("food community share count detail label helper binding", "{foodCommunityDetailShareCountLabel()}"),
-            ("food community average rise detail label helper import", "foodCommunityDetailAverageRiseLabel,"),
-            ("food community average rise detail label helper binding", "{foodCommunityDetailAverageRiseLabel()}"),
-            ("food community maximum rise detail label helper import", "foodCommunityDetailMaximumRiseLabel,"),
-            ("food community maximum rise detail label helper binding", "{foodCommunityDetailMaximumRiseLabel()}"),
-            ("food community minimum rise detail label helper import", "foodCommunityDetailMinimumRiseLabel,"),
-            ("food community minimum rise detail label helper binding", "{foodCommunityDetailMinimumRiseLabel()}"),
-            ("food community average rise unit", "{foodCommunityDetailAverageRiseDisplayText(selectedFoodCommunityItem)}"),
-            ("food community maximum rise unit", "{foodCommunityDetailMaximumRiseDisplayText(selectedFoodCommunityItem)}"),
-            ("food community minimum rise unit", "{foodCommunityDetailMinimumRiseDisplayText(selectedFoodCommunityItem)}"),
-            ("food community detail share list component binding", "<FoodCommunityDetailShareList shares={foodCommunityDetailIndividualShares(selectedFoodCommunityItem)} />"),
-            ("food community detail share list component", "export function FoodCommunityDetailShareList"),
-            ("food community detail share list item type", "export type FoodCommunityDetailShareListItem ="),
-            ("food community detail share list shares prop", "shares: readonly FoodCommunityDetailShareListItem[]"),
-            ("food community individual share render", "shares.map((share) =>"),
-            ("food community individual share empty state", "尚未有可顯示的個別分享紀錄。"),
-            ("food community share eaten date label helper import", "foodCommunityShareEatenDateLabel,"),
-            ("food community share eaten date label helper binding", 'dateLabel={foodCommunityShareEatenDateLabel()}'),
-            ("food community share eaten time label helper import", "foodCommunityShareEatenTimeLabel,"),
-            ("food community share eaten time label helper binding", 'timeLabel={foodCommunityShareEatenTimeLabel()}'),
-            ("food community detail sync function", "async function loadFoodCommunityDetail(itemId: string)"),
-            ("food community detail endpoint", "`/community/foods/${boundedItemId}`"),
-            ("food community list response transform helper binding", "const nextItems = foodCommunityItemsFromApi(foods);"),
-            ("food community list default item helper import", "foodCommunityListDefaultItemId,"),
-            ("food community list default item helper binding", "const nextSelectedItemId = foodCommunityListDefaultItemId(nextItems, selectedFoodCommunityItemId);"),
-            ("food community list item title helper", "function foodCommunityListItemTitle(item: { title: string })"),
-            ("food community list item title helper fields", "return item.title;"),
-            ("food community list item title helper binding", "{foodCommunityListItemTitle(item)}"),
-            ("food community list item metric summary helper", "function foodCommunityListItemMetricSummary(item: { metricSummary: string })"),
-            ("food community list item metric summary helper fields", "return item.metricSummary;"),
-            ("food community list item metric summary helper binding", "{foodCommunityListItemMetricSummary(item)}"),
-            ("food community category summary helper import", "foodCommunityCategorySummary,"),
-            ("food community category summary helper binding", "{foodCommunityCategorySummary(selectedFoodCommunityCategoryDisplay)}"),
-            ("food community detail list refresh", "void loadFoodCommunityDetail(nextSelectedItemId);"),
-            ("food community detail selected refresh", "void loadFoodCommunityDetail(boundedItemId);"),
-            ("food community detail selected item helper import", "foodCommunityDetailSelectedItemId,"),
-            ("food community detail selected item helper binding", "setSelectedFoodCommunityItemId(foodCommunityDetailSelectedItemId(detailedItem));"),
-            ("food community detail refresh items helper binding", "foodCommunityItemsWithDetail(current, detailedItem)"),
-            ("food community detail status title helper import", "foodCommunityDetailStatusTitle,"),
-            ("food community detail title display helper import", "foodCommunityDetailTitleDisplayText,"),
-            ("food community detail title display helper binding", "{foodCommunityDetailTitleDisplayText(selectedFoodCommunityItem)}"),
-            ("food community detail panel visible helper import", "foodCommunityDetailPanelVisible,"),
-            ("food community detail panel visible helper binding", "foodCommunityDetailPanelVisible(selectedFoodCommunityItem) ? ("),
-            ("food community detail share count display helper import", "foodCommunityDetailShareCountDisplayText,"),
-            ("food community detail share count display helper binding", "{foodCommunityDetailShareCountDisplayText(selectedFoodCommunityItem)}"),
-            ("food community detail average rise display helper import", "foodCommunityDetailAverageRiseDisplayText,"),
-            ("food community detail average rise display helper binding", "{foodCommunityDetailAverageRiseDisplayText(selectedFoodCommunityItem)}"),
-            ("food community detail maximum rise display helper import", "foodCommunityDetailMaximumRiseDisplayText,"),
-            ("food community detail maximum rise display helper binding", "{foodCommunityDetailMaximumRiseDisplayText(selectedFoodCommunityItem)}"),
-            ("food community detail minimum rise display helper import", "foodCommunityDetailMinimumRiseDisplayText,"),
-            ("food community detail minimum rise display helper binding", "{foodCommunityDetailMinimumRiseDisplayText(selectedFoodCommunityItem)}"),
-            ("food community detail individual share section label helper import", "foodCommunityDetailIndividualShareSectionLabel,"),
-            ("food community detail individual share section label helper binding", "{foodCommunityDetailIndividualShareSectionLabel()}"),
-            ("food community detail individual share empty text helper", "function foodCommunityDetailIndividualShareEmptyText()"),
-            ("food community detail individual share empty text helper fields", 'return "尚未有可顯示的個別分享紀錄。";'),
-            ("food community detail individual share empty text helper binding", "{foodCommunityDetailIndividualShareEmptyText()}"),
-            ("food community detail individual shares helper import", "foodCommunityDetailIndividualShares,"),
-            ("food community detail has individual shares helper", "function foodCommunityDetailHasIndividualShares(shares: readonly FoodCommunityDetailShareListItem[])"),
-            ("food community detail has individual shares helper fields", "return shares.length > 0;"),
-            ("food community detail has individual shares helper binding", "foodCommunityDetailHasIndividualShares(shares) ? ("),
-            ("food community detail individual shares map helper binding", "shares.map((share) =>"),
-            ("food community detail share row id helper", "function foodCommunityDetailShareRowId(share: { id: string })"),
-            ("food community detail share row id helper fields", "return share.id;"),
-            ("food community detail share row id helper binding", "key={foodCommunityDetailShareRowId(share)}"),
-            ("food community detail share row summary helper", "function foodCommunityDetailShareRowSummary(share: { summary: string })"),
-            ("food community detail share row summary helper fields", "return share.summary;"),
-            ("food community detail share row summary helper binding", "{foodCommunityDetailShareRowSummary(share)}"),
-            ("food community detail share row note helper", "function foodCommunityDetailShareRowNote(share: { note: string })"),
-            ("food community detail share row note helper fields", "return share.note;"),
-            ("food community detail share row note helper binding", "{foodCommunityDetailShareRowNote(share)}"),
-            ("highlight detail list binding", "<HighlightDetailList"),
-            ("food community share field rows list binding", "rows={foodCommunityShareFieldRows}"),
-            ("food community point grid rows binding", "rows={foodCommunityPointRows}"),
-            ("food community ranking rows list binding", "rows={foodCommunityRankingRows}"),
-            ("food community detail status example count helper import", "foodCommunityDetailStatusExampleCount,"),
-            ("food community detail status title helper binding", "itemTitle: foodCommunityDetailStatusTitle(detailedItem),"),
-            ("food community detail status example count helper binding", "exampleCount: foodCommunityDetailStatusExampleCount(detailedItem)"),
-            ("food community detail status helper binding", "const detailStatus = foodCommunityDetailStatusMessages({"),
-            ("food community detail in-flight guard", "foodCommunityDetailInFlightKeys.current.has(detailKey)"),
-            ("food community detail in-flight status binding", "setCommunityActionStatus(detailStatus.inFlight);"),
-            ("food community detail loading status binding", "setCommunityActionStatus(detailStatus.loading);"),
-            ("food community detail success status binding", "setCommunityActionStatus(\n        foodCommunityDetailStatusMessages({"),
-            ("food community detail failure status binding", "setCommunityActionStatus(detailStatus.failure);"),
-            ("food community share food name display helper import", "foodCommunityShareFoodNameDisplayText,"),
-            ("food community share food name display helper binding", "const foodName = foodCommunityShareFoodNameDisplayText(foodCommunityShareFields, selectedFoodCommunityItem);"),
-            ("food community share category helper import", "foodCommunityShareCategory,"),
-            ("food community share category helper binding", "category: apiFoodCategoryFromMobile(foodCommunityShareCategory(selectedFoodCommunityItem)),"),
-            ("food community share section label helper import", "foodCommunityShareSectionLabel,"),
-            ("food community share section label helper binding", "{foodCommunityShareSectionLabel()}"),
-            ("food community ranking section label helper import", "foodCommunityRankingSectionLabel,"),
-            ("food community ranking section label helper binding", "{foodCommunityRankingSectionLabel()}"),
-            ("food community points store bridge copy helper import", "foodCommunityPointsStoreBridgeCopy,"),
-            ("food community points store bridge copy helper binding", "{foodCommunityPointsStoreBridgeCopy()}"),
-            ("community public name preview label helper import", "communityPublicNamePreviewLabel,"),
-            ("community public name preview label helper binding", "{communityPublicNamePreviewLabel()}"),
-            ("community hero icon label helper import", "communityHeroIconLabel,"),
-            ("community hero icon label helper binding", "{communityHeroIconLabel()}"),
-            ("community public profile save accessibility display label binding", "const communityPublicProfileSaveAccessibilityDisplayLabel = communityPreviewLabelDisplay.publicProfileSaveAccessibility;"),
-            ("community public profile save accessibility pressable binding", "accessibilityLabel={communityPublicProfileSaveAccessibilityDisplayLabel}"),
-            ("community public profile save button display label binding", "const communityPublicProfileSaveButtonDisplayLabel = communityPreviewLabelDisplay.publicProfileSaveButton;"),
-            ("community public profile save button text binding", "{communityPublicProfileSaveButtonDisplayLabel}"),
-            ("community boundary grid rows binding", "rows={communityBoundaryRows}"),
-            ("ranking screen title helper import", "rankingScreenTitleLabel,"),
-            ("ranking screen title helper binding", "{rankingScreenTitleLabel()}"),
-            ("ranking screen subtitle helper import", "rankingScreenSubtitleCopy,"),
-            ("ranking screen subtitle helper binding", "{rankingScreenSubtitleCopy()}"),
-            ("ranking local streak preview label helper import", "rankingLocalStreakPreviewLabel,"),
-            ("ranking local streak preview label helper binding", "{rankingLocalStreakPreviewLabel()}"),
-            ("ranking local preview boundary copy display text binding", "{rankingLocalPreviewBoundaryDisplayText}"),
-            ("ranking hero icon label helper import", "rankingHeroIconLabel,"),
-            ("ranking hero icon label helper binding", "{rankingHeroIconLabel()}"),
-            ("ranking streak display text helper import", "rankingStreakDisplayText,"),
-            ("ranking streak display text helper binding", "{rankingStreakDisplayText(rankingStreakDisplayDays)}"),
-            ("ranking boundary grid rows binding", "rows={rankingBoundaryRows}"),
-            ("ranking leaderboard list component binding", "<RankingLeaderboardList sections={rankingLeaderboardSections} />"),
-            ("ranking leaderboard list component", "export function RankingLeaderboardList"),
-            ("ranking leaderboard list sections prop", "sections: readonly CommunityLeaderboardDisplaySection[]"),
-            ("ranking leaderboard section renderer", "sections.map((section) => ("),
-            ("ranking leaderboard section key helper", "function rankingLeaderboardSectionKey(section: CommunityLeaderboardDisplaySection)"),
-            ("ranking leaderboard section key helper fields", "return section.type;"),
-            ("ranking leaderboard section key helper binding", "key={rankingLeaderboardSectionKey(section)}"),
-            ("ranking leaderboard section label helper", "function rankingLeaderboardSectionLabel(section: CommunityLeaderboardDisplaySection)"),
-            ("ranking leaderboard section label helper fields", "return section.label;"),
-            ("ranking leaderboard section label helper binding", "{rankingLeaderboardSectionLabel(section)}"),
-            ("ranking leaderboard section has entries helper", "function rankingLeaderboardSectionHasEntries(section: CommunityLeaderboardDisplaySection)"),
-            ("ranking leaderboard section has entries helper fields", "return section.entries.length > 0;"),
-            ("ranking leaderboard section has entries helper binding", "{rankingLeaderboardSectionHasEntries(section) ? ("),
-            ("ranking leaderboard section entries helper", "function rankingLeaderboardSectionEntries(section: CommunityLeaderboardDisplaySection)"),
-            ("ranking leaderboard section entries helper fields", "return section.entries;"),
-            ("ranking leaderboard section entries helper binding", "rankingLeaderboardSectionEntries(section).map((entry) => ("),
-            ("ranking leaderboard entry key helper", 'function rankingLeaderboardEntryKey(entry: CommunityLeaderboardDisplaySection["entries"][number])'),
-            ("ranking leaderboard entry key helper fields", "return entry.id;"),
-            ("ranking leaderboard entry key helper binding", "key={rankingLeaderboardEntryKey(entry)}"),
-            ("ranking leaderboard entry rank label helper", 'function rankingLeaderboardEntryRankLabel(entry: CommunityLeaderboardDisplaySection["entries"][number])'),
-            ("ranking leaderboard entry rank label helper fields", "return entry.rankLabel;"),
-            ("ranking leaderboard entry rank label helper binding", "{rankingLeaderboardEntryRankLabel(entry)}"),
-            ("ranking leaderboard entry display name helper", 'function rankingLeaderboardEntryDisplayName(entry: CommunityLeaderboardDisplaySection["entries"][number])'),
-            ("ranking leaderboard entry display name helper fields", "return entry.displayName;"),
-            ("ranking leaderboard entry display name helper binding", "{rankingLeaderboardEntryDisplayName(entry)}"),
-            ("ranking leaderboard entry score label helper", 'function rankingLeaderboardEntryScoreLabel(entry: CommunityLeaderboardDisplaySection["entries"][number])'),
-            ("ranking leaderboard entry score label helper fields", "return entry.scoreLabel;"),
-            ("ranking leaderboard entry score label helper binding", "{rankingLeaderboardEntryScoreLabel(entry)}"),
-            ("ranking leaderboard section empty copy helper", "function rankingLeaderboardSectionEmptyCopy(section: CommunityLeaderboardDisplaySection)"),
-            ("ranking leaderboard section empty copy helper fields", "return section.emptyCopy;"),
-            ("ranking leaderboard section empty copy helper binding", "{rankingLeaderboardSectionEmptyCopy(section)}"),
-            ("ranking readiness display label binding", "const rankingReadinessSectionDisplayLabel = rankingPreviewDisplay.readinessSection;"),
-            ("ranking readiness display label render", "{rankingReadinessSectionDisplayLabel}"),
-            ("ranking readiness checklist component binding", "<FutureReadinessChecklist items={rankingReadinessChecklistItems} />"),
-            ("ranking preview display bundle import", "rankingPreviewDisplayBundle,"),
-            ("ranking preview display bundle binding", "const rankingPreviewDisplay = rankingPreviewDisplayBundle({"),
-            ("ranking preview display boundary input", "boundaryDisplay: rankingPreviewBoundaryDisplay"),
-            ("ranking preview display labels binding", "const rankingPreviewLabelDisplay = rankingPreviewDisplay.labels;"),
-            ("ranking preview boundary badge display binding", "const rankingPreviewBoundaryBadgeDisplayLabel = rankingPreviewDisplay.boundaryBadge;"),
-            ("ranking preview boundary copy display binding", "const rankingPreviewBoundaryCopyDisplayText = rankingPreviewDisplay.boundaryCopy;"),
-            ("ranking close accessibility display label binding", "const rankingCloseAccessibilityDisplayLabel = rankingPreviewLabelDisplay.closeAccessibility;"),
-            ("ranking close accessibility helper binding", "accessibilityLabel={rankingCloseAccessibilityDisplayLabel}"),
-            ("ranking close button display label binding", "const rankingCloseButtonDisplayLabel = rankingPreviewLabelDisplay.closeButton;"),
-            ("ranking close button helper binding", "{rankingCloseButtonDisplayLabel}"),
-            ("ranking close press helper", "function rankingClosePressHandler()"),
-            ("ranking close press helper fields", "return returnFromRankingPreview;"),
-            ("ranking close press target binding", "const rankingClosePressTarget = rankingClosePressHandler();"),
-            ("ranking close press helper binding", "onPress={rankingClosePressTarget}"),
-            ("ranking preview boundary badge helper binding", "{rankingPreviewBoundaryBadgeDisplayLabel}"),
-            ("ranking preview boundary copy helper binding", "{rankingPreviewBoundaryCopyDisplayText}"),
-            ("ranking public action accessibility display label binding", "const rankingPublicActionAccessibilityDisplayLabel = rankingPreviewLabelDisplay.publicAccessibility;"),
-            ("ranking public action accessibility helper binding", "publicAccessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}"),
-            ("ranking public action button display label binding", "const rankingPublicActionButtonDisplayLabel = rankingPreviewLabelDisplay.publicButton;"),
-            ("ranking public action button helper binding", "publicLabel={rankingPublicActionButtonDisplayLabel}"),
-            ("ranking public action press helper", "function rankingPublicActionPressHandler()"),
-            ("ranking public action press helper fields", "return showRankingPublicStatus;"),
-            ("ranking public action press target binding", "const rankingPublicActionPressTarget = rankingPublicActionPressHandler();"),
-            ("ranking public action press helper binding", "onPublicPress={rankingPublicActionPressTarget}"),
-            ("ranking opt-in action accessibility display label binding", "const rankingOptInAccessibilityDisplayLabel = rankingPreviewLabelDisplay.optInAccessibility;"),
-            ("ranking opt-in action button display label binding", "const rankingOptInButtonDisplayLabel = rankingPreviewLabelDisplay.optInButton;"),
-            ("ranking opt-in action press helper", "function rankingOptInActionPressHandler()"),
-            ("ranking opt-in action press helper fields", "return showRankingOptInStatus;"),
-            ("ranking opt-in action press target binding", "const rankingOptInActionPressTarget = rankingOptInActionPressHandler();"),
-            ("ranking opt-in action press helper binding", "onOptInPress={rankingOptInActionPressTarget}"),
-            ("ranking action status display label binding", "const rankingActionStatusDisplayLabel = rankingPreviewDisplay.actionStatusLabel;"),
-            ("ranking action status display label render", "{rankingActionStatusDisplayLabel}"),
-            ("ranking action status display copy binding", "const rankingActionStatusDisplayCopy = rankingPreviewDisplay.actionStatusCopy;"),
-            ("ranking action status display copy render", "{rankingActionStatusDisplayCopy}"),
-            ("ranking action status visible helper import", "rankingActionStatusVisible,"),
-            ("ranking action status visible helper binding", "{rankingActionStatusVisible(rankingActionStatus) ? ("),
-            ("ranking return future modules accessibility display label binding", "const rankingReturnFutureModulesAccessibilityDisplayLabel = rankingPreviewLabelDisplay.returnAccessibility;"),
-            ("ranking return future modules accessibility helper binding", "accessibilityLabel={rankingReturnFutureModulesAccessibilityDisplayLabel}"),
-            ("ranking return future modules button display label binding", "const rankingReturnFutureModulesButtonDisplayLabel = rankingPreviewLabelDisplay.returnButton;"),
-            ("ranking return future modules button helper binding", "{rankingReturnFutureModulesButtonDisplayLabel}"),
-            ("ranking return future modules press helper", "function rankingReturnFutureModulesPressHandler()"),
-            ("ranking return future modules press helper fields", "return returnFromRankingPreview;"),
-            ("ranking return future modules press target binding", "const rankingReturnFutureModulesPressTarget = rankingReturnFutureModulesPressHandler();"),
-            ("ranking return future modules press helper binding", "onPress={rankingReturnFutureModulesPressTarget}"),
-            ("community public display name max length helper import", "communityPublicDisplayNameMaxLength,"),
-            ("community public display name accessibility auxiliary binding", "accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}"),
-            ("community public display name max length helper binding", "maxLength={communityPublicDisplayNameMaxLength()}"),
-            ("food community share food name accessibility auxiliary binding", "foodNameAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
-            ("food community share eaten date accessibility auxiliary binding", "dateAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
-            ("food community share eaten time accessibility auxiliary binding", "timeAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
-            ("food community share before glucose accessibility auxiliary binding", "beforeGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}"),
-            ("food community share after glucose accessibility auxiliary binding", "afterGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareAfterGlucoseAccessibility}"),
-            ("food community share note accessibility auxiliary binding", "noteAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}"),
-            ("food community category api type import", "type FoodCommunityApiCategoryRead,"),
-            ("food community backend category state", "const [foodCommunityBackendCategories, setFoodCommunityBackendCategories]"),
-            ("food community backend category options", "const foodCommunityCategoriesForDisplay = foodCommunityDisplay.categoriesForDisplay;"),
-            ("food community category sync function", "async function loadFoodCommunityCategories()"),
-            ("food community category endpoint", '"/community/foods/categories"'),
-            ("food community category response transform binding", "const mappedCategories = foodCommunityCategoriesFromApi(categories);"),
-            ("food community category open sync", "void loadFoodCommunityCategories();"),
-            ("food community runtime display bundle import", "foodCommunityRuntimeDisplayBundle,"),
-            ("food community runtime display bundle helper binding", "const foodCommunityRuntimeDisplay = useMemo("),
-            ("food community runtime display bundle invocation", "foodCommunityRuntimeDisplayBundle({"),
-            ("food community runtime display field binding", "const foodCommunityDisplay = foodCommunityRuntimeDisplay.community;"),
-            ("food community runtime display bundle backend categories", "backendCategories: foodCommunityBackendCategories"),
-            ("food community runtime display bundle backend items", "backendItems: foodCommunityBackendItems"),
-            ("food community runtime display bundle selected category", "selectedCategory: foodCommunityCategory"),
-            ("food community sync status helper binding", "const foodCommunitySyncStatus = foodCommunitySyncStatusMessages({"),
-            ("food community sync unavailable status binding", "setCommunityActionStatus(foodCommunitySyncStatus.unavailable);"),
-            ("food community backend search query variable", "const searchQuery = foodCommunitySearchText.trim();"),
-            ("food community backend search all categories", 'const category = searchQuery ? "" : apiFoodCategoryFromMobile(foodCommunityCategory);'),
-            ("food community backend category only without search", 'if (category) {\n      query.set("category", category);\n    }'),
-            ("food community backend all categories cache key", 'category || "all-categories"'),
-            ("food community sync in-flight status binding", "setCommunityActionStatus(foodCommunitySyncStatus.inFlight);"),
-            ("food community sync loading status binding", "setCommunityActionStatus(foodCommunitySyncStatus.loading);"),
-            ("food community sync success status binding", "setCommunityActionStatus(\n        foodCommunitySyncStatusMessages({"),
-            ("food community sync failure status binding", "setCommunityActionStatus(foodCommunitySyncStatus.failure);"),
-            ("food community share field rows helper binding", "const foodCommunityShareFieldRows = foodCommunityDisplay.shareFieldRows;"),
-            ("food community point rows helper binding", "const foodCommunityPointRows = foodCommunityDisplay.pointRows;"),
-            ("food community ranking rows helper binding", "const foodCommunityRankingRows = foodCommunityDisplay.rankingRows;"),
-            ("community action display helper binding", "const communityActionDisplay = communityPreviewDisplay.actions;"),
-            ("food community share bounded button label", "const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;"),
-            ("food community share bounded accessibility label", "const foodCommunityShareAccessibilityDisplayLabel = communityActionDisplay.foodCommunityShareAccessibility;"),
-            ("food community backend-aware leaderboard label", "{foodCommunityRankingSectionLabel()}"),
-            ("food community share food name updater", "function updateFoodCommunityFoodName(value: string)"),
-            ("food community share food name input helper binding", "foodName: foodCommunityShareFoodNameInputValue(value)"),
-            ("food community share food name max length helper import", "foodCommunityShareFoodNameMaxLength,"),
-            ("food community share eaten date updater", "function updateFoodCommunityEatenDate(value: string)"),
-            ("food community share eaten time updater", "function updateFoodCommunityEatenTime(value: string)"),
-            ("food community share food name input", "foodNameAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}"),
-            ("food community share food name max length binding", "foodNameMaxLength={foodCommunityShareFoodNameMaxLength()}"),
-            ("food community share food name binding", "onFoodNameChange={updateFoodCommunityFoodName}"),
-            ("food community share eaten date input", "dateAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}"),
-            ("food community share eaten time input", "timeAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}"),
-            ("food community share before glucose input", "beforeGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}"),
-            ("food community share after glucose input", "afterGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareAfterGlucoseAccessibility}"),
-            ("food community share note input helper binding", "note: foodCommunityShareNoteInputValue(value)"),
-            ("food community share note max length helper import", "foodCommunityShareNoteMaxLength,"),
-            ("food community share note input", "noteAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}"),
-            ("food community share note max length binding", "noteMaxLength={foodCommunityShareNoteMaxLength()}"),
-            ("food community share eaten date binding", "onDateChange={updateFoodCommunityEatenDate}"),
-            ("food community share eaten time binding", "onTimeChange={updateFoodCommunityEatenTime}"),
-            ("food community share eaten date max length", "dateMaxLength={maxDateInputLength}"),
-            ("food community share eaten time max length", "timeMaxLength={maxTimeInputLength}"),
-            ("food community share food name payload", "food_name: foodName"),
-            ("food community share eaten_at payload", "eaten_at: eatenAt"),
-            ("food community share eaten_at local parser", "eatenAt = localDateTimeToIso(foodCommunityShareFields.eatenDate, foodCommunityShareFields.eatenTime);"),
-            ("food community share before glucose payload", "before_glucose: beforeGlucose"),
-            ("food community share after glucose payload", "after_glucose: afterGlucose"),
-            ("food community share status helper binding", "const shareStatus = foodCommunityShareStatusMessages({"),
-            ("food community share visual-smoke binding", "setCommunityActionStatus(shareStatus.visualSmoke);"),
-            ("food community share unavailable binding", "setCommunityActionStatus(shareStatus.unavailable);"),
-            ("food community share in-flight binding", "setCommunityActionStatus(shareStatus.inFlight);"),
-            ("food community share food name validation", "setCommunityActionStatus(shareStatus.missingFoodName);"),
-            ("food community share glucose validation binding", "setCommunityActionStatus(shareStatus.invalidGlucose);"),
-            ("food community share time validation binding", "timeErrorMessage: error instanceof Error ? error.message : \"食用時間格式不正確。\""),
-            ("food community share loading status binding", "setCommunityActionStatus(shareStatus.loading);"),
-            ("food community share update helper binding", "setFoodCommunityBackendItems((current) => foodCommunityItemsWithShareUpdateFromApi(current, response.food));"),
-            ("food community share selected id helper binding", "setSelectedFoodCommunityItemId(foodCommunityShareSelectedItemIdFromApi(response.food));"),
-            ("food community share success status binding", "setCommunityActionStatus(\n        foodCommunityShareStatusMessages({"),
-            ("food community share failure status binding", "setCommunityActionStatus(shareStatus.failure);"),
-            ("community public settings status helper binding", "const publicSettingsStatus = communityPublicSettingsStatusMessages({"),
-            ("community public settings load failure binding", "communityPublicSettingsStatusMessages({\n          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,"),
-            ("community public settings visual-smoke binding", "setCommunityActionStatus(publicSettingsStatus.visualSmoke);"),
-            ("community public settings unavailable binding", "setCommunityActionStatus(publicSettingsStatus.unavailable);"),
-            ("community public settings missing name binding", "setCommunityActionStatus(publicSettingsStatus.missingDisplayName);"),
-            ("community public display name draft input helper binding", "setCommunityPublicDisplayNameDraft(communityPublicDisplayNameDraftInputValue(value));"),
-            ("community public settings success binding", "setCommunityActionStatus(\n        communityPublicSettingsStatusMessages({"),
-            ("community public settings failure binding", "setCommunityActionStatus(publicSettingsStatus.failure);"),
-            ("food community search input handler", "function updateFoodCommunitySearchInput(value: string)"),
-            ("food community category select handler", "function selectFoodCommunityCategory(category: FoodCommunityCategory)"),
-            ("food community category press handler", "function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
-            ("food community category option key helper import", "foodCommunityCategoryOptionKey,"),
-            ("food community category option key helper binding", "optionKey={foodCommunityCategoryOptionKey}"),
-            ("food community category option accessibility label helper import", "foodCommunityCategoryOptionAccessibilityLabel,"),
-            ("food community category option accessibility label helper binding", "optionAccessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel}"),
-            ("food community category option label helper import", "foodCommunityCategoryOptionLabel,"),
-            ("food community category option label helper binding", "optionLabel={foodCommunityCategoryOptionLabel}"),
-            ("food community category option selected helper import", "foodCommunityCategoryOptionSelected,"),
-            ("food community category option selected helper binding", "isSelected={(category) => foodCommunityCategoryOptionSelected(category, foodCommunityCategory)}"),
-            ("food community item select handler", "function selectFoodCommunityItem(itemId: string)"),
-            ("food community item press handler", "function pressFoodCommunityItem(item: { id: string })"),
-            ("food community item target helper import", "foodCommunityItemTarget,"),
-            ("food community item target helper binding", "selectFoodCommunityItem(foodCommunityItemTarget(item));"),
-            ("food community list item key helper", "function foodCommunityListItemKey(item: FoodCommunityListDisplayItem)"),
-            ("food community list item key helper fields", "return item.id;"),
-            ("food community list item key helper binding", "key={foodCommunityListItemKey(item)}"),
-            ("food community list item accessibility label helper", "function foodCommunityListItemAccessibilityLabel(item: FoodCommunityListDisplayItem)"),
-            ("food community list item accessibility label helper fields", "return item.accessibilityLabel;"),
-            ("food community list item accessibility label helper binding", "accessibilityLabel={foodCommunityListItemAccessibilityLabel(item)}"),
-            ("food community list item selected helper", "function foodCommunityListItemSelected("),
-            ("food community list item selected helper fields", "return selectedItem?.id === item.id;"),
-            ("food community list item selected helper state binding", "accessibilityState={{ selected: foodCommunityListItemSelected(item, selectedItem) }}"),
-            ("food community list item selected helper style binding", "foodCommunityListItemSelected(item, selectedItem) ? styles.recordCardSelected : null"),
-            ("food community list empty helper", "function foodCommunityListIsEmpty(items: readonly FoodCommunityListDisplayItem[])"),
-            ("food community list empty helper fields", "return items.length === 0;"),
-            ("food community list empty helper binding", "foodCommunityListIsEmpty(items) ? ("),
-            ("food community share status handler", "function showFoodCommunityShareStatus()"),
-            ("commerce search input value helper", "function commerceSearchInputValue(value: string)"),
-            ("commerce search input value helper fields", "return boundStoreSearchText(value);"),
-            ("food community search input helper binding", "setFoodCommunitySearchText(commerceSearchInputValue(value));"),
-            ("ranking public status handler", "function showRankingPublicStatus()"),
-            ("ranking opt-in status handler", "function showRankingOptInStatus()"),
             ("doctor share action row binding", "<DoctorShareActionRow"),
             ("doctor share token status binding", "onTokenPress={showDoctorShareTokenStatus}"),
             ("doctor share report status binding", "onReportPress={showDoctorShareReportBoundaryStatus}"),
             ("health integration action row binding", "<HealthIntegrationActionRow"),
             ("health integration permission status binding", "onPermissionPress={showHealthIntegrationPermissionStatus}"),
             ("health integration meter status binding", "onMeterPress={showHealthIntegrationMeterStatus}"),
-            ("community action row binding", "<CommunityActionRow"),
-            ("community posting status binding", "onPostPress={showCommunityPostingStatus}"),
-            ("community privacy status binding", "onPrivacyPress={showCommunityPrivacyStatus}"),
-            ("food community search input binding", "onChangeText={updateFoodCommunitySearchInput}"),
-            ("food community category press binding", "onOptionPress={pressFoodCommunityCategoryOption}"),
-            ("food community item press binding", "onPress={() => pressFoodCommunityItem(item, onSelectItem)}"),
-            ("food community share status binding", "onSharePress={showFoodCommunityShareStatus}"),
-            ("food community share accessibility binding", "shareAccessibilityLabel={foodCommunityShareAccessibilityDisplayLabel}"),
-            ("food community share button label binding", "shareLabel={foodCommunityShareButtonDisplayLabel}"),
-            ("ranking action row binding", "<RankingActionRow"),
-            ("ranking public status binding", "onPublicPress={rankingPublicActionPressTarget}"),
-            ("ranking opt-in status binding", "onOptInPress={rankingOptInActionPressTarget}"),
-            ("ranking opt-in dynamic button label", "const rankingOptInButtonDisplayLabel = rankingPreviewLabelDisplay.optInButton;"),
-            ("ranking opt-in dynamic accessibility label", "const rankingOptInAccessibilityDisplayLabel = rankingPreviewLabelDisplay.optInAccessibility;"),
             ("doctor token accessibility binding", "tokenAccessibilityLabel={futurePreviewDisplayLabels.doctorTokenAccessibility}"),
             ("doctor report accessibility binding", "reportAccessibilityLabel={futurePreviewDisplayLabels.doctorReportAccessibility}"),
             ("doctor token label binding", "tokenLabel={futurePreviewDisplayLabels.doctorTokenButton}"),
@@ -13503,112 +12445,16 @@ def main() -> int:
             ("health meter accessibility binding", "meterAccessibilityLabel={futurePreviewDisplayLabels.healthMeterAccessibility}"),
             ("health permission label binding", "permissionLabel={futurePreviewDisplayLabels.healthPermissionButton}"),
             ("health meter label binding", "meterLabel={futurePreviewDisplayLabels.healthMeterButton}"),
-            ("community post accessibility binding", "postAccessibilityLabel={communityPostAccessibilityDisplayLabel}"),
-            ("community privacy accessibility binding", "privacyAccessibilityLabel={communityPrivacyAccessibilityDisplayLabel}"),
-            ("community post button binding", "postLabel={communityPostButtonDisplayLabel}"),
-            ("community privacy dynamic button binding", "privacyLabel={rankingOptInButtonDisplayLabel}"),
-            ("food community share disabled binding", "isShareDisabled={isBusy || !protectedAccountBackendReady}"),
-            ("food community promoted title", "{communityScreenTitleLabel()}"),
-            ("ranking promoted title", "{rankingScreenTitleLabel()}"),
-            ("food community search accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}"),
-            ("food community category accessibility binding", "optionAccessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel}"),
-            ("food community category selected state", "isSelected={(category) => foodCommunityCategoryOptionSelected(category, foodCommunityCategory)}"),
-            ("food community item accessibility binding", "accessibilityLabel={foodCommunityListItemAccessibilityLabel(item)}"),
-            ("food community selected state", "accessibilityState={{ selected: foodCommunityListItemSelected(item, selectedItem) }}"),
-            ("food community share fields", "rows={foodCommunityShareFieldRows}"),
-            ("food community point rows", "rows={foodCommunityPointRows}"),
-            ("food community ranking rows", "rows={foodCommunityRankingRows}"),
-            ("ranking backend sync function", "async function loadCommunityLeaderboards()"),
-            ("ranking sync status helper binding", "const leaderboardSyncStatus = communityLeaderboardSyncStatusMessages({"),
-            ("ranking sync unavailable status binding", "setRankingActionStatus(leaderboardSyncStatus.unavailable);"),
-            ("ranking sync in-flight status binding", "setRankingActionStatus(leaderboardSyncStatus.inFlight);"),
-            ("ranking sync loading status binding", "setRankingActionStatus(leaderboardSyncStatus.loading);"),
-            ("ranking sync success status binding", "setRankingActionStatus(\n        communityLeaderboardSyncStatusMessages({"),
-            ("ranking sync failure status binding", "setRankingActionStatus(leaderboardSyncStatus.failure);"),
-            ("ranking backend endpoint", "`/community/leaderboards?${query.toString()}`"),
-            ("ranking types helper binding", "communityLeaderboardTypes.map((leaderboardType) => {"),
-            ("ranking display sections helper binding", "const displaySections = communityLeaderboardDisplaySections(sections);"),
-            ("ranking display sections state", "const [rankingLeaderboardSections, setRankingLeaderboardSections]"),
-            ("ranking section render", "<RankingLeaderboardList sections={rankingLeaderboardSections} />"),
-            ("ranking entry render", "rankingLeaderboardSectionEntries(section).map((entry) =>"),
-            ("ranking public status loads backend", "void loadCommunityLeaderboards();"),
-            ("ranking public accessibility binding", "publicAccessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}"),
-            ("ranking public button label binding", "publicLabel={rankingPublicActionButtonDisplayLabel}"),
-            ("ranking opt-in accessibility binding", "optInAccessibilityLabel={rankingOptInAccessibilityDisplayLabel}"),
-            ("ranking opt-in button label binding", "optInLabel={rankingOptInButtonDisplayLabel}"),
-            ("ranking opt-in dynamic accessibility binding", "optInAccessibilityLabel={rankingOptInAccessibilityDisplayLabel}"),
-            ("ranking opt-in dynamic button binding", "optInLabel={rankingOptInButtonDisplayLabel}"),
-            ("future preview return accessibility binding", "accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}"),
             ("future preview secondary CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
-            source = (
-                ranking_leaderboard_list_content
-                if (
-                    label.startswith("ranking leaderboard") and label != "ranking leaderboard list component binding"
-                )
-                or label == "ranking entry render"
-                else food_community_item_list_content
-                if (
-                    label.startswith("food community list item")
-                    or label.startswith("food community list empty")
-                    or label == "food community backend-aware empty copy"
-                    or label == "food community item list component"
-                    or label == "food community item list item type"
-                    or label == "food community item list items prop"
-                    or label == "food community item list selected prop"
-                    or label == "food community item list select prop"
-                    or label == "food community item accessibility binding"
-                    or label == "food community selected state"
-                    or label == "food community item press binding"
-                )
-                else food_community_detail_share_list_content
-                if (
-                    label.startswith("food community detail share list")
-                    or label.startswith("food community detail has individual shares")
-                    or label == "food community detail individual shares map helper binding"
-                    or label.startswith("food community detail individual share empty")
-                    or label.startswith("food community detail share row")
-                    or label == "food community individual share render"
-                    or label == "food community individual share empty state"
-                )
-                and label != "food community detail share list component binding"
-                else content
-            )
             _assert_contains(label, source, marker)
         for label, marker in (
             ("direct auth status display texts binding", "const authStatusDisplay = authStatusDisplayTexts({"),
             ("direct native status display texts binding", "const nativeStatusDisplay = nativeStatusDisplayTexts(nativeStatus);"),
             ("direct settings subpage status display texts binding", "const settingsSubpageStatusDisplay = settingsSubpageStatusDisplayTexts({"),
-            ("direct store preview display texts binding", "const storePreviewDisplay = storePreviewDisplayTexts(storeActionStatus);"),
-            ("direct community action display texts binding", "const communityActionDisplay = communityActionDisplayTexts({"),
-            ("direct community close accessibility binding", "const communityCloseAccessibilityDisplayLabel = futurePreviewCloseAccessibilityLabel(auxiliaryDisplayLabels.closeReturn);"),
-            ("direct community preview boundary badge binding", "const communityPreviewBoundaryBadgeDisplayLabel = futurePreviewBoundaryBadgeLabel(communityPreviewBoundaryDisplay);"),
-            ("direct community preview boundary copy binding", "const communityPreviewBoundaryCopyDisplayText = futurePreviewBoundaryCopyText(communityPreviewBoundaryDisplay);"),
-            ("direct community post accessibility binding", "const communityPostAccessibilityDisplayLabel = communityPostAccessibilityLabel(futurePreviewDisplayLabels);"),
-            ("direct community post button binding", "const communityPostButtonDisplayLabel = communityPostButtonLabel(futurePreviewDisplayLabels);"),
-            ("direct community privacy accessibility binding", "const communityPrivacyAccessibilityDisplayLabel = communityPrivacyAccessibilityLabel(futurePreviewDisplayLabels);"),
-            ("direct community action status label binding", "const communityActionStatusDisplayLabel = communityActionStatusLabel(futurePreviewDisplayLabels);"),
-            ("direct community action status copy binding", "const communityActionStatusDisplayCopy = communityActionStatusText(communityActionStatusDisplayText);"),
-            ("direct community readiness section binding", "const communityReadinessSectionDisplayLabel = futurePreviewReadinessSectionLabel(futurePreviewDisplayLabels);"),
-            ("direct community return accessibility binding", "const communityReturnFutureModulesAccessibilityDisplayLabel = futurePreviewReturnAccessibilityLabel(futurePreviewDisplayLabels);"),
-            ("direct community return button binding", "const communityReturnFutureModulesButtonDisplayLabel = futurePreviewReturnButtonLabel(futurePreviewDisplayLabels);"),
-            ("direct community public profile save accessibility binding", "const communityPublicProfileSaveAccessibilityDisplayLabel = communityPublicProfileSaveAccessibilityLabel();"),
-            ("direct community public profile save button binding", "const communityPublicProfileSaveButtonDisplayLabel = communityPublicProfileSaveButtonLabel();"),
-            ("direct ranking opt-in button binding", "const rankingOptInButtonDisplayLabel = rankingOptInActionButtonLabel(communityActionDisplay.rankingOptInButton);"),
-            ("direct ranking opt-in accessibility binding", "const rankingOptInAccessibilityDisplayLabel = rankingOptInActionAccessibilityLabel(communityActionDisplay.rankingOptInAccessibility);"),
-            ("direct ranking close button binding", "const rankingCloseButtonDisplayLabel = rankingCloseButtonLabel();"),
-            ("direct ranking close accessibility binding", "const rankingCloseAccessibilityDisplayLabel = futurePreviewCloseAccessibilityLabel(auxiliaryDisplayLabels.closeReturn);"),
-            ("direct ranking public button binding", "const rankingPublicActionButtonDisplayLabel = rankingPublicActionButtonLabel(futurePreviewDisplayLabels);"),
-            ("direct ranking public accessibility binding", "const rankingPublicActionAccessibilityDisplayLabel = rankingPublicActionAccessibilityLabel(futurePreviewDisplayLabels);"),
-            ("direct ranking return button binding", "const rankingReturnFutureModulesButtonDisplayLabel = futurePreviewReturnButtonLabel(futurePreviewDisplayLabels);"),
-            ("direct ranking return accessibility binding", "const rankingReturnFutureModulesAccessibilityDisplayLabel = futurePreviewReturnAccessibilityLabel(futurePreviewDisplayLabels);"),
-            ("direct ranking readiness section binding", "const rankingReadinessSectionDisplayLabel = futurePreviewReadinessSectionLabel(futurePreviewDisplayLabels);"),
-            ("direct ranking action status label binding", "const rankingActionStatusDisplayLabel = rankingActionStatusLabel(futurePreviewDisplayLabels);"),
-            ("direct ranking action status copy binding", "const rankingActionStatusDisplayCopy = rankingActionStatusText(rankingActionStatusDisplayText);"),
             ("direct year review generation label binding", "const yearReviewGenerationDisplayText = nextYearReviewGenerationLabel(new Date());"),
             ("direct year review boundary copy binding", "const yearReviewBoundaryDisplayText = yearReviewBoundaryDisplayCopy();"),
             ("direct future preview status display texts binding", "const futurePreviewStatusDisplay = futurePreviewStatusDisplayTexts({"),
-            ("direct achievement year review status display texts binding", "const achievementYearReviewStatusDisplay = achievementYearReviewStatusDisplayTexts({"),
             ("direct account security auth mode display texts binding", "const accountSecurityAuthModeDisplay = accountSecurityAuthModeDisplayTexts({"),
             ("direct history calendar display texts binding", "const historyCalendarDisplay = historyCalendarDisplayTexts(historyCalendarMonthStart, selectedHistoryDate);"),
             ("direct history calendar display bundle binding", "const historyCalendarDisplay = historyCalendarDisplayBundle(historyCalendarMonthStart, selectedHistoryDate);"),
@@ -13773,26 +12619,6 @@ def main() -> int:
             ("downloaded model list models binding", "models={downloadedModels}"),
         ):
             _assert_contains(label, content, marker)
-        _assert_not_contains(
-            "direct food community share food name bound display binding",
-            content,
-            "const foodName = boundDisplayText(",
-        )
-        _assert_not_contains(
-            "direct food community share food name input bound display binding",
-            content,
-            "foodName: boundDisplayText(value, maxDisplayTextLength)",
-        )
-        _assert_not_contains(
-            "direct community public display name draft bound display binding",
-            content,
-            "setCommunityPublicDisplayNameDraft(boundDisplayText(value, maxDisplayTextLength));",
-        )
-        _assert_not_contains(
-            "direct food community share note bound display binding",
-            content,
-            "note: boundDisplayText(value, maxDisplayDetailTextLength)",
-        )
         for label, marker in (
             ("direct recording quota intro copy binding", "const recordingQuotaIntroDisplayText = recordingQuotaIntroCopy();"),
             ("direct recording quota control copy binding", "const recordingQuotaControlDisplayText = recordingQuotaControlCopy();"),
@@ -14115,7 +12941,6 @@ def main() -> int:
             ("privacy boundary ai cost row", "0 次呼叫"),
             ("privacy readiness checklist helper", "function privacyReadinessChecklistDisplayItems()"),
             ("privacy readiness notification minimization copy", "通知內容最小化：推播不可包含血糖數值、完整餐點或用藥內容。"),
-            ("privacy readiness opt-in copy", "資料分享 opt-in / opt-out：醫師、照護者、社群與排行榜都必須分開授權。"),
             ("privacy readiness revoke copy", "撤銷與到期：任何 share token、grant、公開顯示都必須可撤回。"),
         ):
             _assert_contains(label, settings_copy_content, marker)
@@ -14196,10 +13021,6 @@ def main() -> int:
             ("account email fallback copy", "尚未取得登入識別"),
             ("account login display helper", "function accountLoginDisplayValue(account: AccountDisplaySource | null)"),
             ("account login display copy", "Email 登入・${account.email}"),
-            ("account public display helper", "function accountPublicDisplayNameText(account: AccountDisplaySource | null)"),
-            ("account public display fallback copy", "尚未設定"),
-            ("account public settings display helper", "function accountPublicDisplayNameForSettings("),
-            ("account public settings display helper fields", "return publicSettings?.display_name ?? accountPublicDisplayNameText(account);"),
             ("doctor share account boundary helper", "function doctorShareAccountBoundaryText(account: AccountDisplaySource | null)"),
             ("doctor share connected copy", "已連線帳號；正式分享仍需 production auth、權限與授權碼流程。"),
             ("doctor share disconnected copy", "尚未連線帳號；不可建立任何外部分享。"),
@@ -14412,257 +13233,12 @@ def main() -> int:
             ("subscription effective recording limit remaining clamp", "Math.min(mobileSingleRecordingLimitSeconds, quota.remaining_seconds_today)"),
         ):
             _assert_contains(label, subscription_transforms_content, marker)
-        for label, marker in (
-            ("food community visual smoke promoted label", '{ id: "community", label: "食物社群" }'),
-            ("food community screen chrome backend-ready subtitle", 'community: { subtitle: "同步食物升糖資料庫、分享、點數與公開排名。", backTo: "futureModules", actionLabel: "‹" }'),
-            ("ranking screen chrome backend-ready subtitle", 'ranking: { subtitle: "查看 opt-in 公開社群排行與非敏感分數。", backTo: "futureModules", actionLabel: "‹" }'),
-            ("store screen chrome backend-ready subtitle", 'store: { subtitle: "同步點數商城、兌換券與購物車邊界。", backTo: "menu", actionLabel: "‹" }'),
-        ):
-            _assert_contains(label, navigation_content, marker)
-        _assert_not_contains(
-            "food community hidden from first-version menu",
-            _match_block(
-                navigation_content,
-                r"const menuScreens:[\s\S]*?= \[([\s\S]*?)\];",
-                "menuScreens",
-            ),
-            'id: "community"',
-        )
-        _assert_not_contains(
-            "achievements hidden from first-version menu",
-            _match_block(
-                navigation_content,
-                r"const menuScreens:[\s\S]*?= \[([\s\S]*?)\];",
-                "menuScreens",
-            ),
-            'id: "achievements"',
-        )
-        _assert_not_contains(
-            "store hidden from first-version menu",
-            _match_block(
-                navigation_content,
-                r"const menuScreens:[\s\S]*?= \[([\s\S]*?)\];",
-                "menuScreens",
-            ),
-            'id: "store"',
-        )
         _assert_contains(
             "future modules hidden outside debug tools",
             content,
             "{enableDebugTools ? (\n              <Pressable\n                accessibilityLabel={auxiliaryDisplayLabels.showMoreFeaturesAccessibility}",
         )
-        _assert_not_contains(
-            "food community stale inline share accessibility label",
-            content,
-            'accessibilityLabel="送出食物分享，backend 會計算升糖幅度並建立社群點數"',
-        )
-        _assert_not_contains(
-            "store boundary must not claim points ledger unfinished",
-            content,
-            '["正式啟用前", "需完成點數帳本、庫存、訂單、付款與 rollback"]',
-        )
-        submit_food_share_block = _match_block(
-            content,
-            r"async function submitFoodCommunityShare\(\) \{([\s\S]*?)\n  async function redeemStoreProduct",
-            "submitFoodCommunityShare function block",
-        )
-        _assert_not_contains(
-            "food community share payload client glucose delta",
-            submit_food_share_block,
-            "glucose_delta",
-        )
-        _assert_not_contains(
-            "food community share must not force current timestamp",
-            submit_food_share_block,
-            "new Date().toISOString()",
-        )
-        _assert_contains(
-            "food community share refreshes store points",
-            submit_food_share_block,
-            "void loadStoreCatalogAndPoints();",
-        )
-        _assert_contains(
-            "food community share refreshes leaderboards",
-            submit_food_share_block,
-            "void loadCommunityLeaderboards();",
-        )
-        save_public_settings_block = _match_block(
-            content,
-            r"async function saveCommunityPublicSettings\(nextOptIn\?: boolean\) \{([\s\S]*?)\n  async function loadCommunityLeaderboards",
-            "saveCommunityPublicSettings function block",
-        )
-        _assert_contains(
-            "community settings save refreshes leaderboards",
-            save_public_settings_block,
-            "void loadCommunityLeaderboards();",
-        )
-        ranking_opt_in_block = _function_block(content, "showRankingOptInStatus")
-        _assert_contains(
-            "ranking opt-in toggles community settings",
-            ranking_opt_in_block,
-            "void saveCommunityPublicSettings(!(communityPublicSettings?.leaderboard_opt_in ?? false));",
-        )
-        _assert_not_contains(
-            "ranking opt-in stale status-only handler",
-            ranking_opt_in_block,
-            "setRankingActionStatus(rankingOptInStatusMessage);",
-        )
-        _assert_not_contains(
-            "ranking stale opt-in unavailable copy",
-            content,
-            "opt-in 尚未啟用",
-        )
-        _assert_not_contains(
-            "food community stale leaderboard reserved label",
-            content,
-            "社群排行榜預留",
-        )
-        _assert_not_contains(
-            "food community stale reserved menu label",
-            content,
-            "食物社群（預留）",
-        )
-        _assert_not_contains(
-            "food community stale visual smoke preview label",
-            content,
-            '{ id: "community", label: "社群預覽" }',
-        )
-        _assert_not_contains(
-            "food community stale preview chrome subtitle",
-            content,
-            "社群交流與公開資料邊界預覽。",
-        )
-        _assert_not_contains(
-            "ranking stale reserved menu label",
-            content,
-            "社群排行（預留）",
-        )
-        _assert_not_contains(
-            "ranking stale preview chrome subtitle",
-            content,
-            "排行榜統計與公開排名 opt-in 預覽。",
-        )
-        _assert_not_contains(
-            "store stale future chrome subtitle",
-            content,
-            "瀏覽未來商城與優惠入口。",
-        )
-        _assert_not_contains(
-            "food community stale disabled badge",
-            content,
-            "社群未啟用",
-        )
-        redeem_store_block = _match_block(
-            content,
-            r"async function redeemStoreProduct\(product: ReturnType<typeof storeProductDisplayItem>\) \{([\s\S]*?)\n  async function useStoreRedemption",
-            "redeemStoreProduct function block",
-        )
-        _assert_contains(
-            "store redemption success refreshes catalog points wallet",
-            redeem_store_block,
-            "void loadStoreCatalogAndPoints();",
-        )
-        _assert_contains(
-            "store redemption reward id fail closed",
-            redeem_store_block,
-            'const rewardId = storeProductRewardId(product);\n    if (!rewardId) {\n      setStoreActionStatus(redeemStatus.invalidProduct);\n      return;\n    }',
-        )
-        _assert_contains(
-            "store redemption reward id payload helper binding",
-            redeem_store_block,
-            "body: JSON.stringify({ reward_code: rewardId })",
-        )
-        _assert_contains(
-            "store redemption action status helper binding",
-            redeem_store_block,
-            "setStoreActionStatus(storeProductActionStatus(product));",
-        )
-        _assert_contains(
-            "store redemption product title helper binding",
-            redeem_store_block,
-            "productTitle: storeProductRedeemTitle(product),",
-        )
-        _assert_not_contains(
-            "store redemption direct product id fail closed",
-            redeem_store_block,
-            "if (!product.id) {",
-        )
-        _assert_not_contains(
-            "store redemption direct product id payload",
-            redeem_store_block,
-            "body: JSON.stringify({ reward_code: product.id })",
-        )
-        _assert_not_contains(
-            "store redemption direct product action status",
-            redeem_store_block,
-            "setStoreActionStatus(product.actionStatus);",
-        )
-        _assert_not_contains(
-            "store redemption direct product title status",
-            redeem_store_block,
-            "productTitle: product.title,",
-        )
-        use_redemption_block = _match_block(
-            content,
-            r"async function useStoreRedemption\(redemption: ReturnType<typeof storeRedemptionDisplayItem>\) \{([\s\S]*?)\n  async function boot",
-            "useStoreRedemption function block",
-        )
-        _assert_contains(
-            "store redemption use refreshes catalog points wallet",
-            use_redemption_block,
-            "void loadStoreCatalogAndPoints();",
-        )
-        _assert_contains(
-            "store redemption id fail closed",
-            use_redemption_block,
-            'const redemptionId = storeRedemptionUseId(redemption);\n    if (!redemptionId) {\n      setStoreActionStatus(redemptionUseStatus.invalid);\n      return;\n    }',
-        )
-        _assert_contains(
-            "store redemption use endpoint helper binding",
-            use_redemption_block,
-            "`/store/redemptions/${redemptionId}/use`",
-        )
-        _assert_contains(
-            "store redemption use title helper binding",
-            use_redemption_block,
-            "redemptionTitle: storeRedemptionUseTitle(redemption),",
-        )
-        _assert_contains(
-            "store redemption use status label helper binding",
-            use_redemption_block,
-            "statusLabel: storeRedemptionUseStatusLabel(redemption),",
-        )
-        _assert_not_contains(
-            "store redemption direct id fail closed",
-            use_redemption_block,
-            "if (!redemption.id) {",
-        )
-        _assert_not_contains(
-            "store redemption direct id endpoint",
-            use_redemption_block,
-            "`/store/redemptions/${redemption.id}/use`",
-        )
-        _assert_not_contains(
-            "store redemption direct title status",
-            use_redemption_block,
-            "redemptionTitle: redemption.title,",
-        )
-        _assert_not_contains(
-            "store redemption direct status label status",
-            use_redemption_block,
-            "statusLabel: redemption.statusLabel,",
-        )
         for label, marker in (
-            ("food community stale no-backend empty copy", "目前不查詢 backend"),
-            ("food community stale local-preview-only intro copy", "目前為本機預覽，不取代理論資料或醫療建議。"),
-            ("food community stale disabled share status copy", "食物分享尚未啟用；目前不寫入食物資料庫、不建立積分、不更新排行榜，也不串接商城兌換。"),
-            ("store stale no-issue boundary copy", "但仍不發券、不建立出貨訂單，也不處理付款"),
-            ("store stale redeemable reservation-only copy", "可用社群點數建立兌換 reservation；實際發券、出貨或 entitlement 仍需後續 fulfillment。"),
-            ("store stale cart incentive-unwired copy", "需等商品、庫存、優惠、付款與退款規則完成後再接 backend。"),
-            ("store stale points ledger unavailable copy", "點數兌換流程尚未接上點數帳本"),
-            ("store stale cart CTA label", "查看兌換整合狀態"),
-            ("store stale cart CTA no-points copy", "查看點數兌換整合狀態，不扣點、不建立訂單或付款"),
-            ("store stale visual smoke no-issue copy", "商城預覽不得扣點、發券、啟動結帳或金流整合。"),
             ("tutorial stale no-whisper copy", "目前不會自動轉文字；請改用文字輸入，未來接上 STT 後也會先進文字確認。"),
             ("year review stale no-share-image copy", "分享圖片尚未產生；需等年度摘要素材、隱私遮罩與分享權限完成後再啟用。"),
             ("year review stale no-privacy-mask copy", "尚未產生正式年度素材、分享圖或隱私遮罩。"),
@@ -14728,16 +13304,6 @@ def main() -> int:
             ("direct daily record menu type-label binding", "dailyRecordEntryMenuOpenStatusMessage(item.typeLabel)"),
             ("direct daily record edit index binding", 'openPreviewRecordEdit(item.index, "aiSaveConfirm")'),
             ("direct daily record delete index binding", 'openPreviewRecordRemoveConfirm(item.index, "aiSaveConfirm")'),
-            ("direct achievement save success display bundle import", "achievementSaveSuccessDisplayBundle,"),
-            ("direct achievement save success display bundle binding", "const achievementSaveSuccessDisplay = achievementSaveSuccessDisplayBundle(achievementNewlyUnlockedDisplayItems);"),
-            ("direct achievement category display bundle import", "achievementCategoryDisplayBundle,"),
-            ("direct achievement category display bundle invocation", "() => achievementCategoryDisplayBundle(achievementDisplayItems),"),
-            ("direct store display bundle import", "storeDisplayBundle,"),
-            ("direct store display bundle binding", "const storeDisplay = useMemo("),
-            ("direct store display bundle invocation", "storeDisplayBundle({"),
-            ("direct food community display bundle import", "foodCommunityDisplayBundle,"),
-            ("direct food community display bundle binding", "const foodCommunityDisplay = useMemo("),
-            ("direct food community display bundle invocation", "foodCommunityDisplayBundle({"),
         ):
             _assert_not_contains(label, content, marker)
         pricing_card_block = _style_block(content, "pricingCard")
@@ -14779,7 +13345,6 @@ def main() -> int:
             ("future module detail return handler", "function returnFromFutureModuleDetail()"),
             ("future module target route handler", "function openFutureModuleTargetRoute(target: AppScreen)"),
             ("future module target route doctor binding", 'openDoctorShare("futureModules");'),
-            ("future module target route achievement binding", 'openAchievements("futureModules");'),
             ("future module target route fallback", "return false;\n  }\n\n  function openFutureModuleDestination(target: AppScreen | undefined, module: FutureModuleCard)"),
             ("future module destination handler", "function openFutureModuleDestination(target: AppScreen | undefined, module: FutureModuleCard)"),
             ("future module target route helper binding", "if (openFutureModuleTargetRoute(target)) {"),
@@ -14793,11 +13358,9 @@ def main() -> int:
             ("selected future module runtime display invocation", "() => selectedFutureModuleRuntimeDisplayBundle({ selectedModule: selectedFutureModule }),"),
             ("selected future module runtime display field binding", "const selectedFutureModuleDisplay = selectedFutureModuleRuntimeDisplay.selectedModule;"),
             ("future preview status display helper binding", "const futurePreviewStatusDisplay = futurePreviewStatusDisplayBundle({"),
-            ("future preview status leaderboard input", "leaderboardOptIn: communityPublicSettings?.leaderboard_opt_in ?? false"),
             ("future preview status future action binding", "const futureModuleActionStatusDisplayText = futurePreviewStatusDisplay.futureModuleAction;"),
             ("future preview status doctor token binding", "const doctorShareTokenStatusMessage = futurePreviewStatusDisplay.doctorShareToken;"),
             ("future preview status health permission binding", "const healthIntegrationPermissionStatusMessage = futurePreviewStatusDisplay.healthIntegrationPermission;"),
-            ("future preview status community share binding", "const foodCommunityShareStatusMessage = futurePreviewStatusDisplay.foodCommunityShare;"),
             ("menu preview return screen helper", "function menuPreviewReturnScreen(returnScreen: AppScreen, selfScreen: AppScreen)"),
             ("menu preview return screen helper fields", 'return returnScreen === selfScreen ? "menu" : returnScreen;'),
             ("menu preview screen opener helper", "function openMenuPreviewScreen(\n    screen: AppScreen,\n    returnScreen: AppScreen,"),
@@ -14805,168 +13368,13 @@ def main() -> int:
             ("subscription menu preview opener helper binding", 'openMenuPreviewScreen("subscription", returnScreen, setSubscriptionReturnScreen);'),
             ("tutorial menu preview opener helper binding", 'openMenuPreviewScreen("tutorial", returnScreen, setTutorialReturnScreen);'),
             ("food photo menu preview opener helper binding", 'openMenuPreviewScreen("foodPhoto", returnScreen, setFoodPhotoReturnScreen);'),
-            ("achievements menu preview opener helper binding", 'openMenuPreviewScreen("achievements", returnScreen, setAchievementsReturnScreen);'),
-            ("achievements screen opener keeps sync binding", 'openMenuPreviewScreen("achievements", returnScreen, setAchievementsReturnScreen);\n    void loadAchievementSummary();'),
             ("year review menu preview opener helper binding", 'openMenuPreviewScreen("yearReview", returnScreen, setYearReviewReturnScreen);'),
             ("year review screen opener keeps sync binding", 'openMenuPreviewScreen("yearReview", returnScreen, setYearReviewReturnScreen);\n    void loadYearReview();'),
-            ("store menu preview opener helper binding", 'openMenuPreviewScreen("store", returnScreen, setStoreReturnScreen);'),
-            ("store screen opener keeps catalog sync binding", 'openMenuPreviewScreen("store", returnScreen, setStoreReturnScreen);\n    void loadStoreCatalogAndPoints();'),
-            ("achievement/year review status display helper binding", "const achievementYearReviewStatusDisplay = achievementYearReviewStatusDisplayBundle({"),
-            ("achievement action status display binding", "const achievementActionStatusDisplayText = achievementYearReviewStatusDisplay.achievementAction;"),
-            ("year review action status display binding", "const yearReviewActionStatusDisplayText = achievementYearReviewStatusDisplay.yearReviewAction;"),
             ("doctor share return handler", "function returnFromDoctorSharePreview()"),
             ("health integration return handler", "function returnFromHealthIntegrationPreview()"),
-            ("community return handler", "function returnFromCommunityPreview()"),
-            ("ranking return handler", "function returnFromRankingPreview()"),
-            ("achievements return handler", "function returnFromAchievements()"),
             ("year review return handler", "function returnFromYearReview()"),
-            ("store cart open handler", "function openStoreCart()"),
-            ("store cart open status helper binding", 'openScreenWithStatus("storeCart", commercePreviewOpenCartStatusMessage());'),
-            ("store return handler", "function returnFromStore()"),
-            ("store cart return store handler", "function returnFromStoreCartToStore()"),
-            ("store cart return status helper binding", 'openScreenWithStatus("store", commercePreviewReturnStoreStatusMessage());'),
             ("food photo return handler", "function returnFromFoodPhoto()"),
-            ("achievement integration status handler", "function showAchievementIntegrationStatus()"),
             ("year review share status handler", "function showYearReviewShareStatus()"),
-            ("achievement display items helper binding", "const achievementDisplayItems = useMemo(() => buildAchievementDisplayItems(achievements), [achievements]);"),
-            ("achievement runtime display bundle import", "achievementRuntimeDisplayBundle,"),
-            ("achievement runtime display bundle binding", "const achievementRuntimeDisplay = useMemo("),
-            ("achievement runtime display bundle invocation", "achievementRuntimeDisplayBundle({"),
-            ("achievement runtime save success field binding", "const saveSuccessNewlyUnlockedDisplayItems = achievementRuntimeDisplay.saveSuccess.newlyUnlockedItems;"),
-            ("achievement badge summary helper binding", "const achievementBadgeDisplaySummary = achievementBadgeSummary(achievementDisplayItems);"),
-            ("achievement unlocked summary binding", "achievementBadgeDisplaySummary.unlockedCount"),
-            ("achievement next remaining summary binding", "achievementBadgeDisplaySummary.nextRemaining"),
-            ("store search input handler", "function updateStoreSearchInput(value: string)"),
-            ("store search input helper binding", "setStoreSearchText(commerceSearchInputValue(value));"),
-            ("store category select handler", "function selectStoreCategory(category: StoreCategory)"),
-            ("store category option press handler", "function pressStoreCategoryOption(category: ReturnType<typeof storeCategoryDisplayItem>)"),
-            ("store category target helper import", "storeCategoryTarget,"),
-            ("store category target helper binding", "selectStoreCategory(storeCategoryTarget(category));"),
-            ("store category option key helper import", "storeCategoryOptionKey,"),
-            ("store category option key helper binding", "optionKey={storeCategoryOptionKey}"),
-            ("store category option accessibility helper import", "storeCategoryOptionAccessibilityLabel,"),
-            ("store category option accessibility helper binding", "optionAccessibilityLabel={storeCategoryOptionAccessibilityLabel}"),
-            ("store category option label helper import", "storeCategoryOptionLabel,"),
-            ("store category option label helper binding", "optionLabel={storeCategoryOptionLabel}"),
-            ("store category option selected helper import", "storeCategoryOptionSelected,"),
-            ("store category option selected helper binding", "isSelected={(category) => storeCategoryOptionSelected(category, storeCategory)}"),
-            ("store runtime display bundle import", "storeRuntimeDisplayBundle,"),
-            ("store runtime display bundle helper binding", "const storeRuntimeDisplay = useMemo("),
-            ("store runtime display bundle invocation", "storeRuntimeDisplayBundle({"),
-            ("store runtime display field binding", "const storeDisplay = storeRuntimeDisplay.store;"),
-            ("store runtime display bundle backend products", "backendProducts: storeBackendProducts"),
-            ("store runtime display bundle fallback products", "fallbackProducts: storeProducts"),
-            ("store category display items helper binding", "const storeCategoryDisplayOptions = storeDisplay.categoryDisplayOptions;"),
-            ("store product display items helper binding", "const storeProductDisplayItems = storeDisplay.productDisplayItems;"),
-            ("store visible helper binding", "const visibleStoreProducts = storeDisplay.visibleProducts;"),
-            ("food community category display items helper binding", "const foodCommunityCategoryDisplayOptions = foodCommunityDisplay.categoryDisplayOptions;"),
-            ("food community category default item helper import", "foodCommunityCategoryDefaultItemId,"),
-            ("food community category select handler", "function selectFoodCommunityCategory(category: FoodCommunityCategory)"),
-            ("food community category default item helper binding", "setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(foodCommunityItemsForDisplay, category));"),
-            ("food community category option press handler", "function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
-            ("food community category option key helper import", "foodCommunityCategoryOptionKey,"),
-            ("food community category option key helper binding", "optionKey={foodCommunityCategoryOptionKey}"),
-            ("food community category option accessibility label helper import", "foodCommunityCategoryOptionAccessibilityLabel,"),
-            ("food community category option accessibility label helper binding", "optionAccessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel}"),
-            ("food community category option label helper import", "foodCommunityCategoryOptionLabel,"),
-            ("food community category option label helper binding", "optionLabel={foodCommunityCategoryOptionLabel}"),
-            ("food community category option selected helper import", "foodCommunityCategoryOptionSelected,"),
-            ("food community category option selected helper binding", "isSelected={(category) => foodCommunityCategoryOptionSelected(category, foodCommunityCategory)}"),
-            ("food community category target helper import", "foodCommunityCategoryTarget,"),
-            ("food community category target helper binding", "selectFoodCommunityCategory(foodCommunityCategoryTarget(category));"),
-            ("food community list item key helper", "function foodCommunityListItemKey(item: FoodCommunityListDisplayItem)"),
-            ("food community list item key helper fields", "return item.id;"),
-            ("food community list item key helper binding", "key={foodCommunityListItemKey(item)}"),
-            ("food community list item accessibility label helper", "function foodCommunityListItemAccessibilityLabel(item: FoodCommunityListDisplayItem)"),
-            ("food community list item accessibility label helper fields", "return item.accessibilityLabel;"),
-            ("food community list item accessibility label helper binding", "accessibilityLabel={foodCommunityListItemAccessibilityLabel(item)}"),
-            ("food community list item selected helper", "function foodCommunityListItemSelected("),
-            ("food community list item selected helper fields", "return selectedItem?.id === item.id;"),
-            ("food community list item selected helper state binding", "accessibilityState={{ selected: foodCommunityListItemSelected(item, selectedItem) }}"),
-            ("food community list item selected helper style binding", "foodCommunityListItemSelected(item, selectedItem) ? styles.recordCardSelected : null"),
-            ("food community list empty helper", "function foodCommunityListIsEmpty(items: readonly FoodCommunityListDisplayItem[])"),
-            ("food community list empty helper fields", "return items.length === 0;"),
-            ("food community list empty helper binding", "foodCommunityListIsEmpty(items) ? ("),
-            ("store product status handler", "function showStoreProductStatus(actionStatus: string)"),
-            ("store product action status helper import", "storeProductActionStatus,"),
-            ("store product card key helper import", "storeProductCardKey,"),
-            ("store product card key helper binding", "key={storeProductCardKey(product)}"),
-            ("store product card icon helper import", "storeProductCardIcon,"),
-            ("store product card icon helper binding", "{storeProductCardIcon(product)}"),
-            ("store product card title helper import", "storeProductCardTitle,"),
-            ("store product card title helper binding", "{storeProductCardTitle(product)}"),
-            ("store product card badge helper import", "storeProductCardBadge,"),
-            ("store product card badge helper binding", "storeProductCardBadge(product) ?"),
-            ("store product card description helper import", "storeProductCardDescription,"),
-            ("store product card description helper binding", "{storeProductCardDescription(product)}"),
-            ("store product card points helper import", "storeProductCardPointsCost,"),
-            ("store product card points helper binding", "{storeProductCardPointsCost(product)}"),
-            ("store product reward id helper import", "storeProductRewardId,"),
-            ("store product redeem title helper import", "storeProductRedeemTitle,"),
-            ("store product action label helper import", "storeProductActionLabel,"),
-            ("store product action accessibility helper import", "storeProductActionAccessibilityLabel,"),
-            ("store redemption use id helper import", "storeRedemptionUseId,"),
-            ("store redemption use title helper import", "storeRedemptionUseTitle,"),
-            ("store redemption use status label helper import", "storeRedemptionUseStatusLabel,"),
-            ("store redemption card key helper import", "storeRedemptionCardKey,"),
-            ("store redemption card key helper binding", "key={storeRedemptionCardKey(product)}"),
-            ("store redemption card title helper import", "storeRedemptionCardTitle,"),
-            ("store redemption card title helper binding", "{storeRedemptionCardTitle(product)}"),
-            ("store redemption card status helper import", "storeRedemptionCardStatusLabel,"),
-            ("store redemption card status helper binding", "{storeRedemptionCardStatusLabel(product)}"),
-            ("store redemption card subtitle helper import", "storeRedemptionCardSubtitle,"),
-            ("store redemption card subtitle helper binding", "{storeRedemptionCardSubtitle(product)}"),
-            ("store redemption action disabled helper import", "storeRedemptionActionDisabled,"),
-            ("store redemption action label helper import", "storeRedemptionActionLabel,"),
-            ("store redemption action accessibility helper import", "storeRedemptionActionAccessibilityLabel,"),
-            ("store redemption boundary grid rows binding", "rows={storeRedemptionBoundaryRows}"),
-            ("store product status press handler", "function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
-            ("store redemption status press handler", "function pressStoreRedemptionStatus(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
-            ("store catalog sync function", "async function loadStoreCatalogAndPoints()"),
-            ("store sync status helper binding", "const storeSyncStatus = storeCatalogSyncStatusMessages({"),
-            ("store sync unavailable status binding", "setStoreActionStatus(storeSyncStatus.unavailable);"),
-            ("store sync in-flight status binding", "setStoreActionStatus(storeSyncStatus.inFlight);"),
-            ("store sync loading status binding", "setStoreActionStatus(storeSyncStatus.loading);"),
-            ("store sync success status binding", "setStoreActionStatus(\n        storeCatalogSyncStatusMessages({"),
-            ("store sync failure status binding", "setStoreActionStatus(storeSyncStatus.failure);"),
-            ("store rewards endpoint", 'requestJson<StoreRewardApiInput[]>(normalizedApiBaseUrl, "/store/rewards"'),
-            ("store points endpoint", 'requestJson<StoreApiPointsBalance>(normalizedApiBaseUrl, "/store/points"'),
-            ("store redemptions endpoint", 'requestJson<StoreApiRedemption[]>(normalizedApiBaseUrl, "/store/redemptions?limit=20"'),
-            ("store products response transform binding", "setStoreBackendProducts(storeProductsFromApi(rewards));"),
-            ("store redemptions response transform binding", "setStoreRedemptions(storeRedemptionsFromApi(redemptions));"),
-            ("store redemption wallet helper binding", "const storeRedemptionDisplayItems = storeDisplay.redemptionDisplayItems;"),
-            ("store redemption boundary rows helper binding", "const storeRedemptionBoundaryRows = storeDisplay.redemptionBoundaryRows;"),
-            ("store redemption post endpoint", '"/store/redemptions"'),
-            ("store redemption reward payload", "body: JSON.stringify({ reward_code: rewardId })"),
-            ("store redemption use endpoint", "`/store/redemptions/${redemptionId}/use`"),
-            ("store redemption wallet label", "我的兌換券"),
-            ("store empty wallet all reward types copy", "尚未同步兌換紀錄；完成食物分享取得點數後可兌換優惠券、折扣碼、特殊徽章或會員福利。"),
-            ("store redemption wallet render", "storeRedemptionDisplayItems.map((product) =>"),
-            ("store redemption action binding", "onPress={() => pressStoreRedemptionStatus(product)}"),
-            ("store redemption disabled helper accessibility state", "accessibilityState={{ disabled: storeRedemptionActionDisabled(product) }}"),
-            ("store redemption disabled helper style", "storeRedemptionActionDisabled(product) ? styles.buttonDisabled : null"),
-            ("store redemption disabled helper prop", "disabled={storeRedemptionActionDisabled(product)}"),
-            ("store redemption action label helper binding", "{storeRedemptionActionLabel(product)}"),
-            ("store redemption action accessibility helper binding", "accessibilityLabel={storeRedemptionActionAccessibilityLabel(product)}"),
-            ("store redemption boundary rows", "rows={storeRedemptionBoundaryRows}"),
-            ("store redeem status helper binding", "const redeemStatus = storeRedeemStatusMessages({"),
-            ("store redeem visual-smoke status binding", "setStoreActionStatus(redeemStatus.visualSmoke);"),
-            ("store redeem unavailable status binding", "setStoreActionStatus(redeemStatus.unavailable);"),
-            ("store redeem invalid product status binding", "setStoreActionStatus(redeemStatus.invalidProduct);"),
-            ("store redeem in-flight status binding", "setStoreActionStatus(redeemStatus.inFlight);"),
-            ("store redeem loading status binding", "setStoreActionStatus(redeemStatus.loading);"),
-            ("store redeem success status binding", "setStoreActionStatus(\n        storeRedeemStatusMessages({"),
-            ("store redeem failure status binding", "setStoreActionStatus(redeemStatus.failure);"),
-            ("store redemption use status helper binding", "const redemptionUseStatus = storeRedemptionUseStatusMessages({"),
-            ("store redemption use visual-smoke status binding", "setStoreActionStatus(redemptionUseStatus.visualSmoke);"),
-            ("store redemption use unavailable status binding", "setStoreActionStatus(redemptionUseStatus.unavailable);"),
-            ("store redemption use unusable status binding", "setStoreActionStatus(redemptionUseStatus.unusable);"),
-            ("store redemption use invalid status binding", "setStoreActionStatus(redemptionUseStatus.invalid);"),
-            ("store redemption use in-flight status binding", "setStoreActionStatus(redemptionUseStatus.inFlight);"),
-            ("store redemption use loading status binding", "setStoreActionStatus(redemptionUseStatus.loading);"),
-            ("store redemption use success status binding", "setStoreActionStatus(\n        storeRedemptionUseStatusMessages({"),
-            ("store redemption use failure status binding", "setStoreActionStatus(redemptionUseStatus.failure);"),
-            ("store product action label binding", "{storeProductActionLabel(product)}"),
             ("food photo upload status handler", "function showFoodPhotoUploadStatus()"),
             ("food photo integration status handler", "function showFoodPhotoIntegrationStatus()"),
             ("food photo retake status handler", "function showFoodPhotoRetakeStatus()"),
@@ -14979,128 +13387,14 @@ def main() -> int:
             ("future module implementation order display binding", "const futureModuleImplementationOrderDisplayText = futureModuleDetailDisplay.implementationOrder;"),
             ("doctor share return binding", "onPress={returnFromDoctorSharePreview}"),
             ("health integration return binding", "onPress={returnFromHealthIntegrationPreview}"),
-            ("community return binding", "onPress={returnFromCommunityPreview}"),
-            ("ranking return binding", "onPress={rankingReturnFutureModulesPressTarget}"),
-            ("achievements return binding", "onPress={returnFromAchievements}"),
             ("year review return binding", "onPress={returnFromYearReview}"),
-            ("store cart open binding", "onPress={openStoreCart}"),
-            ("store return binding", "onPress={returnFromStore}"),
-            ("store cart return store binding", "onPress={returnFromStoreCartToStore}"),
             ("food photo return binding", "onPress={returnFromFoodPhoto}"),
-            ("achievement integration status binding", "onPress={showAchievementIntegrationStatus}"),
             ("year review share status binding", "onPress={showYearReviewShareStatus}"),
-            ("store search input binding", "onChangeText={updateStoreSearchInput}"),
-            ("store category option press binding", "onOptionPress={pressStoreCategoryOption}"),
-            ("store product status press binding", "onPress={() => pressStoreProductStatus(product)}"),
             ("food photo upload status binding", "onPress={showFoodPhotoUploadStatus}"),
             ("food photo action row binding", "<FoodPhotoActionRow"),
             ("food photo integration status binding", "onPress={showFoodPhotoIntegrationStatus}"),
             ("food photo retake status binding", "onPress={showFoodPhotoRetakeStatus}"),
-            ("achievement integration accessibility binding", "accessibilityLabel={achievementIntegrationAccessibilityDisplayLabel}"),
-            ("achievement screen display helper binding", "const achievementScreenDisplay = achievementScreenDisplayBundle(nextAchievementDisplayDays);"),
-            ("achievement preview boundary display binding", "const achievementPreviewBoundaryDisplayText = achievementScreenDisplay.previewBoundary;"),
-            ("achievement local computation display binding", "const achievementLocalComputationDisplayText = achievementScreenDisplay.localComputation;"),
-            ("achievement next badge display binding", "const achievementNextBadgeDisplayText = achievementScreenDisplay.nextBadge;"),
-            ("achievement integration button display binding", "const achievementIntegrationButtonDisplayLabel = achievementScreenDisplay.integrationButton;"),
-            ("achievement integration accessibility display binding", "const achievementIntegrationAccessibilityDisplayLabel = achievementScreenDisplay.integrationAccessibility;"),
-            ("achievement newly unlocked state", "const [achievementNewlyUnlockedItems, setAchievementNewlyUnlockedItems] = useState<AchievementItem[]>([])"),
-            ("achievement newly unlocked display items", "const achievementNewlyUnlockedDisplayItems = useMemo("),
-            ("achievement limited display helper binding", "limitedAchievementDisplayItems(achievementNewlyUnlockedItems)"),
-            ("achievement runtime save success field binding", "const saveSuccessNewlyUnlockedDisplayItems = achievementRuntimeDisplay.saveSuccess.newlyUnlockedItems;"),
-            ("achievement runtime display bundle import", "achievementRuntimeDisplayBundle,"),
-            ("achievement runtime display bundle binding", "const achievementRuntimeDisplay = useMemo("),
-            ("achievement runtime display bundle invocation", "achievementRuntimeDisplayBundle({"),
-            ("achievement category runtime field binding", "const achievementCategoryDisplay = achievementRuntimeDisplay.categories;"),
-            ("achievement category sections bundle field binding", "const achievementCategoryDisplaySections = achievementCategoryDisplay.categorySections;"),
-            ("achievement newly unlocked helper binding", "setAchievementNewlyUnlockedItems(achievementNewlyUnlockedItemsForSync(mappedSummaryItems, syncUnlocks));"),
-            ("achievement newly unlocked section", "本次新解鎖"),
-            ("achievement save success newly unlocked section", "新解鎖成就"),
-            ("achievement save success newly unlocked render", "items={saveSuccessNewlyUnlockedDisplayItems}"),
-            ("achievement unlocked card list component", "export function AchievementUnlockedCardList"),
-            ("achievement unlocked card list items prop", "items: readonly AchievementDisplayItem[]"),
-            ("achievement unlocked card list key prefix prop", "keyPrefix: string"),
-            ("achievement unlocked card list badge label prop", "badgeLabel: string"),
-            ("achievement unlocked card list title prop", "title: string"),
-            ("achievement unlocked card list item renderer", "items.map((displayItem) => ("),
-            ("achievement unlocked card key helper", "function achievementUnlockedCardKey(prefix: string, displayItem: AchievementDisplayItem)"),
-            ("achievement unlocked card badge style helper", "function achievementUnlockedCardBadgeStyle(displayItem: AchievementDisplayItem)"),
-            ("achievement unlocked card badge style helper fields", 'displayItem.kind === "streak" ? styles.achievementBadgeStreak : null'),
-            ("achievement unlocked card icon helper", "function achievementUnlockedCardIcon(displayItem: AchievementDisplayItem)"),
-            ("achievement unlocked card icon helper binding", "{achievementUnlockedCardIcon(displayItem)}"),
-            ("achievement unlocked card level helper", "function achievementUnlockedCardLevel(displayItem: AchievementDisplayItem)"),
-            ("achievement unlocked card level helper binding", "{achievementUnlockedCardLevel(displayItem)}"),
-            ("achievement unlocked card title helper", "function achievementUnlockedCardTitle(displayItem: AchievementDisplayItem)"),
-            ("achievement unlocked card title helper binding", "{achievementUnlockedCardTitle(displayItem)}"),
-            ("achievement unlocked card detail helper", "function achievementUnlockedCardDetail(displayItem: AchievementDisplayItem)"),
-            ("achievement unlocked card detail helper fields", "return `${displayItem.kindLabel} · ${achievementUnlockDisplayDate(displayItem.unlockedAt)}`;"),
-            ("achievement unlocked card detail helper binding", "{achievementUnlockedCardDetail(displayItem)}"),
-            ("achievement save-success unlocked card key prefix binding", 'keyPrefix="save-success-new-unlock"'),
-            ("achievement newly unlocked card key prefix binding", 'keyPrefix="new-unlock"'),
-            ("achievement unlocked card key prefix binding", 'keyPrefix="unlock"'),
-            ("achievement newly unlocked list binding", "items={achievementNewlyUnlockedDisplayItems}"),
-            ("achievement unlocked list binding", "items={achievementUnlockedDisplayItems}"),
-            ("achievement category section list component binding", "<AchievementCategorySectionList sections={achievementCategoryDisplaySections} />"),
-            ("achievement category section list component", "export function AchievementCategorySectionList"),
-            ("achievement category section list item type", "export type AchievementCategoryDisplaySectionListItem ="),
-            ("achievement category section list sections prop", "sections: readonly AchievementCategoryDisplaySectionListItem[]"),
-            ("achievement category section renderer", "sections.map((section) => ("),
-            ("achievement progress card key helper", "function achievementProgressCardKey(displayItem: AchievementDisplayItem)"),
-            ("achievement progress card key helper binding", "key={achievementProgressCardKey(displayItem)}"),
-            ("achievement progress card accessibility helper", "function achievementProgressCardAccessibilityLabel(displayItem: AchievementDisplayItem)"),
-            ("achievement progress card accessibility helper binding", "accessibilityLabel={achievementProgressCardAccessibilityLabel(displayItem)}"),
-            ("achievement progress card unlocked helper", "function achievementProgressCardIsUnlocked(displayItem: AchievementDisplayItem)"),
-            ("achievement progress card unlocked helper fields", "return displayItem.progress >= displayItem.target;"),
-            ("achievement progress card ratio helper", "function achievementProgressCardRatio(displayItem: AchievementDisplayItem)"),
-            ("achievement progress card ratio helper fields", "return Math.min(1, displayItem.progress / displayItem.target);"),
-            ("achievement progress card style helper", "function achievementProgressCardStyle(displayItem: AchievementDisplayItem)"),
-            ("achievement progress card style helper binding", "style={achievementProgressCardStyle(displayItem)}"),
-            ("achievement progress card status style helper", "function achievementProgressCardStatusStyle(displayItem: AchievementDisplayItem)"),
-            ("achievement progress card status text helper", "function achievementProgressCardStatusText(displayItem: AchievementDisplayItem)"),
-            ("achievement progress card status binding", "{achievementProgressCardStatusText(displayItem)}"),
-            ("achievement progress card detail helper", "function achievementProgressCardDetail(displayItem: AchievementDisplayItem)"),
-            ("achievement progress card detail helper fields", "return `${displayItem.kindLabel} · ${displayItem.description}`;"),
-            ("achievement progress card detail helper binding", "{achievementProgressCardDetail(displayItem)}"),
-            ("achievement progress card fill style helper", "function achievementProgressCardFillStyle(displayItem: AchievementDisplayItem)"),
-            ("achievement progress card fill style helper binding", "style={achievementProgressCardFillStyle(displayItem)}"),
-            ("achievement progress card badge style helper", "function achievementProgressCardBadgeStyle(displayItem: AchievementDisplayItem)"),
-            ("achievement progress card badge style binding", "style={achievementProgressCardBadgeStyle(displayItem)}"),
-            ("achievement progress card icon helper", "function achievementProgressCardIcon(displayItem: AchievementDisplayItem)"),
-            ("achievement progress card icon binding", "{achievementProgressCardIcon(displayItem)}"),
-            ("achievement progress card level helper", "function achievementProgressCardLevel(displayItem: AchievementDisplayItem)"),
-            ("achievement progress card level binding", "{achievementProgressCardLevel(displayItem)}"),
-            ("achievement progress card title helper", "function achievementProgressCardTitle(displayItem: AchievementDisplayItem)"),
-            ("achievement progress card title binding", "{achievementProgressCardTitle(displayItem)}"),
-            ("achievement category section key helper", "function achievementCategorySectionKey(section: AchievementCategoryDisplaySectionListItem)"),
-            ("achievement category section key helper fields", "return section.key;"),
-            ("achievement category section key binding", "key={achievementCategorySectionKey(section)}"),
-            ("achievement category section label helper", "function achievementCategorySectionLabel(section: AchievementCategoryDisplaySectionListItem)"),
-            ("achievement category section label helper fields", "return section.label;"),
-            ("achievement category section label binding", "{achievementCategorySectionLabel(section)}"),
-            ("achievement category section items helper", "function achievementCategorySectionItems(section: AchievementCategoryDisplaySectionListItem)"),
-            ("achievement category section items helper fields", "return section.items;"),
-            ("achievement category section items binding", "achievementCategorySectionItems(section).map((displayItem) => {"),
-            ("achievement unlocked history endpoint", "`/achievements/unlocks?${query.toString()}`"),
-            ("achievement summary response transform binding", "const mappedSummaryItems = achievementItemsFromApi(summary.items);"),
-            ("achievement unlock response transform binding", "setAchievementUnlockedItems(achievementUnlocksFromApi(unlocks));"),
-            ("achievement sync status helper binding", "const achievementSyncStatus = achievementSyncStatusMessages({"),
-            ("achievement sync unavailable status binding", "setAchievementActionStatus(achievementSyncStatus.unavailable);"),
-            ("achievement sync in-flight status binding", "setAchievementActionStatus(achievementSyncStatus.inFlight);"),
-            ("achievement sync loading status binding", "setAchievementActionStatus(achievementSyncStatus.loading);"),
-            ("achievement sync endpoint", "syncUnlocks ? `/achievements/sync?${query.toString()}` : `/achievements/summary?${query.toString()}`"),
-            ("achievement sync method post", 'method: syncUnlocks ? "POST" : "GET"'),
-            ("achievement sync success status binding", "setAchievementActionStatus(\n        achievementSyncStatusMessages({"),
-            ("achievement sync failure status binding", "setAchievementActionStatus(achievementSyncStatus.failure);"),
-            ("achievement sync handler passes true", "void loadAchievementSummary(true);"),
-            ("achievement post-save sync helper", "function syncAchievementsAfterRecordSave()"),
-            ("achievement AI save success sync", "setStatus(aiSaveSuccessStatusMessage());\n    syncAchievementsAfterRecordSave();"),
-            ("achievement AI daily save transactional response", "const saveResponse = await requestDailyRecordSave(saveContext.account.id, saveContext.preview, recordsToSave);"),
-            ("achievement manual create sync", "setStatus(manualRecordCreateSuccessStatusMessage());\n    syncAchievementsAfterRecordSave();"),
-            ("achievement category sections", "<AchievementCategorySectionList sections={achievementCategoryDisplaySections} />"),
-            ("achievement section item render", "achievementCategorySectionItems(section).map"),
-            ("achievement streak style", "displayItem.kind === \"streak\" ? styles.achievementBadgeStreak : null"),
-            ("achievement badge level render", "{achievementUnlockedCardLevel(displayItem)}"),
-            ("achievement accessibility binding", "accessibilityLabel={achievementProgressCardAccessibilityLabel(displayItem)}"),
-            ("achievement progress ratio bounded", "return Math.min(1, displayItem.progress / displayItem.target);"),
+            ("AI daily save transactional response", "const saveResponse = await requestDailyRecordSave(saveContext.account.id, saveContext.preview, recordsToSave);"),
             ("year review boundary copy bundle binding", "const yearReviewBoundaryCopy = yearReviewBoundaryCopyBundle(new Date());"),
             ("year review generation display value", "const yearReviewGenerationDisplayText = yearReviewBoundaryCopy.generationLabel;"),
             ("year review header display bundle binding", "const yearReviewHeaderDisplay = yearReviewHeaderDisplayBundle({"),
@@ -15111,9 +13405,6 @@ def main() -> int:
             ("year review hero title render", "{yearReviewHeroTitleDisplayText}"),
             ("year review record stats helper binding", "const yearlyRecordStats = useMemo("),
             ("year review record stats records binding", "yearlyReviewRecordStats(records, yearReviewTargetDisplayYear)"),
-            ("year review achievement badge summary binding", "const yearlyAchievementBadgeSummary = achievementBadgeSummary(achievementDisplayItems);"),
-            ("year review unlocked badge count summary binding", "yearlyAchievementBadgeSummary.unlockedCount"),
-            ("year review highest badge level summary binding", "yearlyAchievementBadgeSummary.highestLevel"),
             ("year review glucose count helper binding", "const yearlyGlucoseRecordDisplayCount = clampNumber(yearlyRecordStats.glucoseRecords.length, 0, maxMobileCountValue);"),
             ("year review live calculation display value", "const yearReviewLiveCalculationDisplayText = yearReviewHeaderDisplay.liveCalculation;"),
             ("year review rows display bundle import", "yearReviewRowsDisplayBundle,"),
@@ -15176,17 +13467,6 @@ def main() -> int:
             ("year review revoke endpoint", "`/year-reviews/share-packages/${targetSharePackageId}/revoke`"),
             ("year review revoke success status binding", "setYearReviewActionStatus(\n        yearReviewRevokeStatusMessages({"),
             ("year review revoke failure status binding", "setYearReviewActionStatus(revokeStatus.failure);"),
-            ("store product button role", 'accessibilityRole="button"\n                  style={styles.roundActionButton}'),
-            ("store preview display helper binding", "const storePreviewDisplay = storePreviewDisplayBundle(storeActionStatus);"),
-            ("store preview runtime display bundle import", "storePreviewRuntimeDisplayBundle,"),
-            ("store preview runtime display bundle binding", "const storePreviewRuntimeDisplay = storePreviewRuntimeDisplayBundle();"),
-            ("store preview runtime field binding", "const storePreviewStaticDisplay = storePreviewRuntimeDisplay.preview;"),
-            ("store cart unavailable display binding", "const storeCartUnavailableDisplay = storePreviewStaticDisplay.cartUnavailable;"),
-            ("store empty search display binding", "const storeEmptySearchDisplay = storePreviewStaticDisplay.emptySearch;"),
-            ("store action status display binding", "const storeActionStatusDisplayText = storePreviewDisplay.actionStatus;"),
-            ("store preview boundary display binding", "const storePreviewBoundaryDisplayText = storePreviewDisplay.previewBoundary;"),
-            ("store cart accessibility display binding", "const storeCartButtonAccessibilityDisplayLabel = storePreviewDisplay.cartButtonAccessibility;"),
-            ("store cart accessibility binding", "accessibilityLabel={storeCartButtonAccessibilityDisplayLabel}"),
             ("food photo upload button role", 'accessibilityRole="button"\n              style={styles.uploadBox}'),
             ("food photo display bundle helper binding", "const foodPhotoDisplay = foodPhotoDisplayBundle(foodPhotoActionStatus);"),
             ("food photo action status display binding", "const foodPhotoActionStatusDisplayText = foodPhotoDisplay.status.action;"),
@@ -15199,51 +13479,10 @@ def main() -> int:
             ("future commerce secondary CTA button role", 'accessibilityRole="button"\n              style={styles.secondaryButton}'),
             ("future commerce action row CTA button role", 'accessibilityRole="button"\n                style={styles.secondaryButton}'),
         ):
-            source = (
-                achievement_unlocked_card_list_content
-                if (
-                    label.startswith("achievement unlocked card list")
-                    or label == "achievement unlocked card key helper"
-                    or label.startswith("achievement unlocked card badge")
-                    or label.startswith("achievement unlocked card icon")
-                    or label.startswith("achievement unlocked card level")
-                    or label.startswith("achievement unlocked card title")
-                    or label.startswith("achievement unlocked card detail")
-                    or label == "achievement badge level render"
-                )
-                else achievement_category_section_list_content
-                if (
-                    label.startswith("achievement progress")
-                    or label.startswith("achievement category section key")
-                    or label.startswith("achievement category section label")
-                    or label.startswith("achievement category section items")
-                    or label.startswith("achievement category section list")
-                    or label == "achievement category section renderer"
-                    or label == "achievement section item render"
-                    or label == "achievement streak style"
-                    or label == "achievement accessibility binding"
-                    or label == "achievement progress ratio bounded"
-                )
-                and label != "achievement category section list component binding"
-                else food_community_item_list_content
-                if (
-                    label.startswith("food community list item")
-                    or label.startswith("food community list empty")
-                    or label == "food community item accessibility binding"
-                    or label == "food community selected state"
-                    or label == "food community item press binding"
-                )
-                else content
-            )
             _assert_contains(label, source, marker)
         for label, marker in (
             ("direct future module detail boundary copy binding", "const futureModuleDetailBoundaryDisplayText = futureModuleDetailBoundaryCopy();"),
             ("direct future module implementation order copy binding", "const futureModuleImplementationOrderDisplayText = futureModuleImplementationOrderCopy();"),
-            ("direct achievement preview boundary copy binding", "const achievementPreviewBoundaryDisplayText = achievementPreviewBoundaryCopy();"),
-            ("direct achievement local computation copy binding", "const achievementLocalComputationDisplayText = achievementLocalComputationCopy();"),
-            ("direct achievement next badge copy binding", "const achievementNextBadgeDisplayText = achievementNextBadgeCopy(nextAchievementDisplayDays);"),
-            ("direct achievement integration button binding", "const achievementIntegrationButtonDisplayLabel = achievementIntegrationButtonLabel();"),
-            ("direct achievement integration accessibility binding", "const achievementIntegrationAccessibilityDisplayLabel = achievementIntegrationButtonAccessibilityLabel();"),
             ("direct year review header display texts binding", "const yearReviewHeaderDisplay = yearReviewHeaderDisplayTexts({"),
         ):
             _assert_not_contains(label, content, marker)
@@ -15328,13 +13567,6 @@ def main() -> int:
             ("direct year review local health rows import", "  localYearlyHealthOutcomeDisplayRows,"),
         ):
             _assert_not_contains(label, content, marker)
-        for label, marker in (
-            ("direct achievement save success newly unlocked helper binding", "const saveSuccessNewlyUnlockedDisplayItems = saveSuccessNewlyUnlockedAchievementDisplayItems("),
-            ("direct achievement save success newly unlocked helper import", "  saveSuccessNewlyUnlockedAchievementDisplayItems,"),
-            ("direct achievement category sections helper binding", "buildAchievementCategoryDisplaySections(achievementDisplayItems)"),
-            ("direct achievement category sections helper import", "  buildAchievementCategoryDisplaySections,"),
-        ):
-            _assert_not_contains(label, content, marker)
         _assert_not_contains(
             "direct year review share filename bound display binding",
             content,
@@ -15375,21 +13607,12 @@ def main() -> int:
         ):
             _assert_contains(label, year_review_share_file_content, marker)
         for label, marker in (
-            ("achievements return accessibility label", 'achievementsReturnAccessibility: boundDisplayText("返回上一個功能入口，不寫入成就資料", maxDisplayDetailTextLength)'),
             ("year review return accessibility label", 'yearReviewReturnAccessibility: boundDisplayText("返回上一個功能入口，不產生分享圖或公開資料", maxDisplayDetailTextLength)'),
-            ("store return accessibility label", 'storeReturnAccessibility: boundDisplayText("返回上一個功能入口，不建立訂單或付款", maxDisplayDetailTextLength)'),
-            ("store cart checkout accessibility label", 'storeCartCheckoutAccessibility: boundDisplayText("結帳尚未開放，不建立訂單或付款", maxDisplayDetailTextLength)'),
-            ("store cart return accessibility label", 'storeCartReturnAccessibility: boundDisplayText("返回商城，不建立訂單或付款", maxDisplayDetailTextLength)'),
             ("food photo return accessibility label", 'foodPhotoReturnAccessibility: boundDisplayText("返回上一個功能入口，不讀取照片或呼叫 Vision", maxDisplayDetailTextLength)'),
         ):
             _assert_contains(label, shared_display_items_content, marker)
         for label, marker in (
-            ("achievements return accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.achievementsReturnAccessibility}"),
             ("year review return accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.yearReviewReturnAccessibility}"),
-            ("store return accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.storeReturnAccessibility}"),
-            ("store cart checkout accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.storeCartCheckoutAccessibility}"),
-            ("store cart checkout disabled state", "accessibilityState={{ disabled: true }}"),
-            ("store cart return accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.storeCartReturnAccessibility}"),
             ("food photo return accessibility binding", "accessibilityLabel={auxiliaryDisplayLabels.foodPhotoReturnAccessibility}"),
         ):
             _assert_contains(label, content, marker)
@@ -15421,9 +13644,10 @@ def main() -> int:
             ("year review header display bundle delegates", "return yearReviewHeaderDisplayTexts(value);"),
             ("year review backend-saved boundary", "年度回顧由 backend snapshot 保存年度統計、AI-style 觀察與鼓勵；不提供診療建議或療效宣稱。"),
             ("year review backend metric rows helper", "export function backendYearReviewMetricDisplayRows(summary: YearReviewApiResponse | null)"),
-            ("year review backend metric rows slice", "summary?.annual_stats.slice(0, 7).map"),
             ("year review backend health rows helper", "export function backendYearReviewHealthOutcomeDisplayRows(summary: YearReviewApiResponse | null)"),
             ("year review backend health rows slice", "summary?.health_outcomes.slice(0, 3).map"),
+            ("year review retired badge stat keys", 'const retiredYearReviewStatKeys = new Set(["achieved_badges", "highest_badge_level"]);'),
+            ("year review backend metric rows filter retired stats by key", ".filter((item) => !retiredYearReviewStatKeys.has(item.key))"),
             ("year review share unavailable status helper", "export function yearReviewShareUnavailableStatusMessage()"),
             ("year review backend-aware share fallback", "backend ready 時可準備隱私遮罩分享卡並開啟原生分享。"),
             ("year review share filename display helper", "export function yearReviewShareFilenameDisplayText(filename: string)"),
@@ -15446,55 +13670,7 @@ def main() -> int:
         ):
             _assert_contains(label, future_module_display_content, marker)
         for label, marker in (
-            ("achievement levels", "export const achievementLevels = [10, 50, 100, 150, 200, 250];"),
-            ("achievement dynamic levels helper", "export function achievementDynamicLevels(maxObservedRecords: number, maxObservedStreak: number)"),
-            ("achievement records helper", "export function localAchievementItemsForRecords(records: RecordItem[]): AchievementItem[]"),
-            ("achievement dynamic levels next level", "nextLevel <= maxObservedLevel + achievementLevelStep"),
-            ("achievement categories", "export const achievementCategoryDefinitions: Array<{"),
-            ("achievement target lower bound", "const target = Math.max(1, boundAchievementProgress(value.target));"),
-            ("achievement progress clamped to target", "const progress = Math.min(target, boundAchievementProgress(value.progress, target));"),
-            ("achievement display items helper", "export function achievementDisplayItems(items: AchievementItem[])"),
-            ("achievement display items map", "return items.map(achievementDisplayItem);"),
-            ("achievement limited display helper", "export function limitedAchievementDisplayItems(items: AchievementItem[])"),
-            ("achievement limited display slice", "return items.slice(0, maxListItems).map(achievementDisplayItem);"),
-            ("achievement save success newly unlocked helper", "export function saveSuccessNewlyUnlockedAchievementDisplayItems(items: AchievementDisplayItem[])"),
-            ("achievement save success newly unlocked slice", "return items.slice(0, 3);"),
-            ("achievement save success display bundle helper", "export function achievementSaveSuccessDisplayBundle(items: AchievementDisplayItem[])"),
-            ("achievement save success display bundle newly unlocked binding", "newlyUnlockedItems: saveSuccessNewlyUnlockedAchievementDisplayItems(items)"),
-            ("achievement category sections helper", "export function buildAchievementCategoryDisplaySections(items: AchievementDisplayItem[])"),
-            ("achievement category display bundle helper", "export function achievementCategoryDisplayBundle(items: AchievementDisplayItem[])"),
-            ("achievement category display bundle sections binding", "categorySections: buildAchievementCategoryDisplaySections(items)"),
-            ("achievement runtime display bundle helper", "export function achievementRuntimeDisplayBundle(value: {"),
-            ("achievement runtime save success binding", "saveSuccess: achievementSaveSuccessDisplayBundle(value.newlyUnlockedDisplayItems)"),
-            ("achievement runtime categories binding", "categories: achievementCategoryDisplayBundle(value.displayItems)"),
-            ("achievement category section key", "key: boundIdentifier(`achievement-section-${definition.id}`),"),
-            ("achievement category section filter", "items: items.filter((item) => item.category === definition.id)"),
-            ("achievement badge summary helper", "export function achievementBadgeSummary(items: AchievementDisplayItem[])"),
-            ("achievement badge summary unlocked filter", "const unlockedItems = items.filter((item) => item.progress >= item.target);"),
-            ("achievement badge summary highest level", ".sort((first, second) => second - first)[0] ?? 0"),
-            ("achievement badge summary next remaining", "nextRemaining"),
-            ("achievement API transform helper", "export function achievementItemFromApi(value: AchievementApiItem): AchievementItem"),
-            ("achievement API summary transform helper", "export function achievementItemsFromApi(values: AchievementApiItem[]): AchievementItem[]"),
-            ("achievement API summary transform bound", "return values.slice(0, maxListItems * 6).map(achievementItemFromApi);"),
-            ("achievement API unlock transform helper", "export function achievementUnlocksFromApi(values: AchievementApiUnlock[]): AchievementItem[]"),
-            ("achievement API unlock transform bound", "return values.slice(0, maxListItems).map(achievementItemFromApi);"),
-            ("achievement newly unlocked sync helper", "export function achievementNewlyUnlockedItemsForSync(items: AchievementItem[], syncUnlocks: boolean): AchievementItem[]"),
-            ("achievement newly unlocked sync helper filter", "return syncUnlocks ? items.filter((item) => item.newlyUnlocked) : [];"),
-            ("achievement unlock date helper", "export function achievementUnlockDisplayDate(value?: string | null)"),
-        ):
-            _assert_contains(label, future_module_display_content, marker)
-        for label, marker in (
             ("future module cards static config", "export const futureModuleCards: FutureModuleCard[] = ["),
-            ("future module food community database card title", 'title: "食物社群資料庫"'),
-            ("future module food community database card readiness", "資料庫、分享、點數與排行榜已接 backend；貼文留言治理仍待正式開放。"),
-            ("future module food community governance-only requirements", 'requirements: ["貼文、留言、封鎖、檢舉與審核流程", "公開分享刪除與撤回治理", "退出後歷史資料撤回與 audit event"]'),
-            ("future module store backend-ready readiness", "點數兌換與兌換券已接 backend；購物車、出貨、付款與法務仍待完成。"),
-            ("store future card special badge copy", "點數商城、優惠券、商品折扣、特殊徽章與會員獎勵入口。"),
-            ("future module store remaining-commerce requirements", 'requirements: ["購物車、庫存 reservation 與 rollback", "出貨訂單、付款與退款流程", "商品法務、客服與履約稽核"]'),
-            ("ranking backend-ready future module copy", "分享次數、貢獻度與食物測試達人榜單已接 backend"),
-            ("ranking future module governance-only requirements", 'requirements: ["封鎖、檢舉與審核流程", "榜單爭議處理與公開名稱違規處置", "排名退出後歷史資料撤回流程"]'),
-            ("achievement future module backend-ready readiness", "成就 taxonomy、backend summary、解鎖同步與已保存徽章已接上；公開展示 opt-in 與撤回治理仍待完成。"),
-            ("achievement future module governance-only requirements", 'requirements: ["公開展示 opt-in 與跨使用者展示", "成就展示撤回治理", "公開徽章稽核與違規處置"]'),
             ("year review future module backend-ready readiness", "年度 snapshot、隱私遮罩分享卡與原生分享已接 backend；外部平台深度整合與刪除治理仍待完成。"),
             ("year review future module governance-only requirements", 'requirements: ["外部平台深度整合與權限細節", "分享 package 刪除與撤回治理", "外部分享稽核與違規處置"]'),
             ("future module display card helper", "export function futureModuleCardDisplayItem(value: FutureModuleCard)"),
@@ -15526,346 +13702,10 @@ def main() -> int:
             ("future preview status display texts helper", "export function futurePreviewStatusDisplayTexts(value: {"),
             ("future preview status display bundle helper", "export function futurePreviewStatusDisplayBundle(value: {"),
             ("future preview status display bundle text spread", "...futurePreviewStatusDisplayTexts(value),"),
-            ("future preview status display bundle boundary rows", "boundaryRows: futureBoundaryRowsDisplayBundle(value.leaderboardOptIn)"),
             ("future preview status action binding", "futureModuleAction: boundUiMessage(value.futureModuleActionStatus)"),
             ("future preview doctor token status copy", "授權碼尚未啟用；目前不會建立 profile grant、share token、QR code 或醫師端 session。"),
             ("future preview doctor report status copy", "回診摘要可沿用 bounded detailed report 設計，最多 ${boundedReportLimit} 筆"),
             ("future preview health permission status copy", "平台權限尚未啟用；目前不會請求 HealthKit / Health Connect 權限"),
-            ("future preview community share status copy", "backend ready 時可送出食物分享、建立社群點數並刷新排行榜與商城點數"),
-            ("community leaderboard type", 'export type CommunityLeaderboardType = "share_count" | "contribution" | "food_tester";'),
-            ("community leaderboard api response type", "export type CommunityLeaderboardApiResponse = {"),
-            ("community leaderboard display section type", "export type CommunityLeaderboardDisplaySection = {"),
-            ("community leaderboard types helper", 'export const communityLeaderboardTypes: CommunityLeaderboardType[] = ["share_count", "contribution", "food_tester"];'),
-            ("ranking display section helper", "export function communityLeaderboardDisplaySection(value: CommunityLeaderboardApiResponse): CommunityLeaderboardDisplaySection"),
-            ("ranking display section type guard", "const type = communityLeaderboardTypes.includes(value.leaderboard_type)"),
-            ("ranking display sections helper", "export function communityLeaderboardDisplaySections("),
-            ("ranking display sections helper map", "return values.map(communityLeaderboardDisplaySection);"),
-            ("ranking contribution label", "return \"貢獻度排行\";"),
-            ("ranking food tester label", "return \"食物測試達人排行\";"),
-            ("ranking share count label", "return \"分享次數排行\";"),
-            ("ranking contribution score label", "return `${boundedScore} 點`;"),
-            ("ranking empty copy", "目前沒有 opt-in 的公開榜單資料。"),
-            ("community public settings type", "export type CommunityPublicSettings = {"),
-            ("community public settings bound helper", "export function boundCommunityPublicSettings(value: CommunityPublicSettings): CommunityPublicSettings"),
-            ("community public display name fallback", 'display_name: boundDisplayText(value.display_name || "糖友", maxDisplayTextLength)'),
-            ("community public leaderboard opt-in boolean", "leaderboard_opt_in: Boolean(value.leaderboard_opt_in)"),
-            ("community public display name draft input helper", "export function communityPublicDisplayNameDraftInputValue(value: string)"),
-            ("community public display name draft input helper binding", "return boundDisplayText(value, maxDisplayTextLength);"),
-            ("food community category type", "export type FoodCommunityCategory ="),
-            ("food community item type", "export type FoodCommunityItem = {"),
-            ("food community api item type", "export type FoodCommunityApiItem = {"),
-            ("food community api share response type", "export type FoodCommunityApiShareResponse = {"),
-            ("food community api item transform helper", "export function foodCommunityItemFromApi(value: FoodCommunityApiItem): FoodCommunityItem"),
-            ("food community api items transform helper", "export function foodCommunityItemsFromApi(values: FoodCommunityApiItem[])"),
-            ("food community api items transform helper internals", "return values.slice(0, maxListItems * 4).map(foodCommunityItemFromApi);"),
-            ("food community share update transform helper", "export function foodCommunityItemsWithShareUpdateFromApi(current: FoodCommunityItem[], value: FoodCommunityApiItem)"),
-            ("food community share update transform filter", "...current.filter((item) => item.id !== updatedFood.id)"),
-            ("food community share selected id transform helper", "export function foodCommunityShareSelectedItemIdFromApi(value: FoodCommunityApiItem)"),
-            ("food community share selected id transform field", "return foodCommunityItemFromApi(value).id;"),
-            ("food community backend share mapping", "examples: (value.shares ?? []).slice(0, 3).map((share) => ({"),
-            ("food community share fields type", "export type FoodCommunityShareFields = {"),
-            ("food community share food name field", "foodName: string;"),
-            ("food community empty share fields helper", "export function emptyFoodCommunityShareFields(): FoodCommunityShareFields"),
-            ("food community empty share fields current time", "const nowInputs = localDateTimeInputs(new Date());"),
-            ("food community category display helper", "export function foodCommunityCategoryDisplayItem(value: { id: FoodCommunityCategory; label: string; foodCount?: number; sampleFoods?: string[] })"),
-            ("food community category display items helper", "export function foodCommunityCategoryDisplayItems("),
-            ("food community category display items map", "return values.map(foodCommunityCategoryDisplayItem);"),
-            ("food community category display item type", "export type FoodCommunityCategoryDisplayItem = ReturnType<typeof foodCommunityCategoryDisplayItem>;"),
-            ("food community category target helper", "export function foodCommunityCategoryTarget(category: FoodCommunityCategoryDisplayItem)"),
-            ("food community category target helper fields", "return category.value;"),
-            ("food community category option key helper", "export function foodCommunityCategoryOptionKey(category: FoodCommunityCategoryDisplayItem)"),
-            ("food community category option key helper fields", "return category.value;"),
-            ("food community category option accessibility label helper", "export function foodCommunityCategoryOptionAccessibilityLabel(category: FoodCommunityCategoryDisplayItem)"),
-            ("food community category option accessibility label helper fields", "return category.accessibilityLabel;"),
-            ("food community category option label helper", "export function foodCommunityCategoryOptionLabel(category: FoodCommunityCategoryDisplayItem)"),
-            ("food community category option label helper fields", "return category.label;"),
-            ("food community category option selected helper", "export function foodCommunityCategoryOptionSelected("),
-            ("food community category option selected helper fields", "return selectedCategory === category.value;"),
-            ("food community api categories transform helper", "export function foodCommunityCategoriesFromApi(values: FoodCommunityApiCategoryRead[])"),
-            ("food community api categories transform helper limit", "return values.slice(0, foodCommunityCategories.length).map((category) => ({"),
-            ("food community api categories sample food limit", ".slice(0, 3)\n      .map((food) => boundDisplayText(food, 40))\n      .filter(Boolean)"),
-            ("food community category accessibility copy", "accessibilityLabel: boundDisplayText(`切換食物分類：${label}，${summary}`, maxDisplayDetailTextLength)"),
-            ("food community share display helper", "export function foodCommunityShareDisplayItem(value: FoodCommunityShare)"),
-            ("food community share display summary", "summary: boundDisplayText(`食用前 ${before}，食用後 ${after}，血糖變化 ${rise} mg/dL`, maxDisplayDetailTextLength)"),
-            ("food community item display helper", "export function foodCommunityItemDisplayItem(value: FoodCommunityItem)"),
-            ("food community item display item type", "export type FoodCommunityItemDisplayItem = ReturnType<typeof foodCommunityItemDisplayItem>;"),
-            ("food community detail selected item helper", "export function foodCommunityDetailSelectedItemId(item: { id: string })"),
-            ("food community detail selected item helper fields", "return item.id;"),
-            ("food community detail status title helper", "export function foodCommunityDetailStatusTitle(item: { title: string })"),
-            ("food community detail status title helper fields", "return item.title;"),
-            ("food community detail title helper", "export function foodCommunityDetailTitle(item: { title: string })"),
-            ("food community detail title helper fields", "return item.title;"),
-            ("food community detail title display helper", "export function foodCommunityDetailTitleDisplayText(item: { title: string })"),
-            ("food community detail title display helper fields", "return `${foodCommunityDetailTitle(item)} 資料頁`;"),
-            ("food community detail panel visible helper", "export function foodCommunityDetailPanelVisible("),
-            ("food community detail panel visible helper type guard", "): item is FoodCommunityItemDisplayItem"),
-            ("food community detail panel visible helper fields", "return item !== null;"),
-            ("food community detail share count helper", "export function foodCommunityDetailShareCount(item: { shareCount: number })"),
-            ("food community detail share count helper fields", "return item.shareCount;"),
-            ("food community detail share count display helper", "export function foodCommunityDetailShareCountDisplayText(item: { shareCount: number })"),
-            ("food community detail share count display helper fields", "return String(foodCommunityDetailShareCount(item));"),
-            ("food community share count detail label helper", "export function foodCommunityDetailShareCountLabel()"),
-            ("food community share count detail label helper fields", 'return "分享總人數";'),
-            ("food community detail average rise helper", "export function foodCommunityDetailAverageRise(item: { averageRise: number })"),
-            ("food community detail average rise helper fields", "return item.averageRise;"),
-            ("food community detail average rise display helper", "export function foodCommunityDetailAverageRiseDisplayText(item: { averageRise: number })"),
-            ("food community detail average rise display helper fields", "return `${foodCommunityDetailAverageRise(item)} mg/dL`;"),
-            ("food community average rise detail label helper", "export function foodCommunityDetailAverageRiseLabel()"),
-            ("food community average rise detail label helper fields", 'return "實際升糖參考值（平均）";'),
-            ("food community detail maximum rise helper", "export function foodCommunityDetailMaximumRise(item: { maximumRise: number })"),
-            ("food community detail maximum rise helper fields", "return item.maximumRise;"),
-            ("food community detail maximum rise display helper", "export function foodCommunityDetailMaximumRiseDisplayText(item: { maximumRise: number })"),
-            ("food community detail maximum rise display helper fields", "return `${foodCommunityDetailMaximumRise(item)} mg/dL`;"),
-            ("food community maximum rise detail label helper", "export function foodCommunityDetailMaximumRiseLabel()"),
-            ("food community maximum rise detail label helper fields", 'return "最高上升血糖";'),
-            ("food community detail minimum rise helper", "export function foodCommunityDetailMinimumRise(item: { minimumRise: number })"),
-            ("food community detail minimum rise helper fields", "return item.minimumRise;"),
-            ("food community detail minimum rise display helper", "export function foodCommunityDetailMinimumRiseDisplayText(item: { minimumRise: number })"),
-            ("food community detail minimum rise display helper fields", "return `${foodCommunityDetailMinimumRise(item)} mg/dL`;"),
-            ("food community minimum rise detail label helper", "export function foodCommunityDetailMinimumRiseLabel()"),
-            ("food community minimum rise detail label helper fields", 'return "最低上升血糖";'),
-            ("food community detail individual share section label helper", "export function foodCommunityDetailIndividualShareSectionLabel()"),
-            ("food community detail individual share section label helper fields", 'return "個別分享紀錄";'),
-            ("food community detail individual shares helper", "export function foodCommunityDetailIndividualShares(item: {"),
-            ("food community detail individual shares helper fields", "return item.individualShareDisplayItems;"),
-            ("food community detail status example count helper", "export function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] })"),
-            ("food community detail status example count helper fields", "return item.examples.length;"),
-            ("food community category summary helper", "export function foodCommunityCategorySummary(category: { summary: string })"),
-            ("food community category summary helper fields", "return category.summary;"),
-            ("food community database section label helper", "export function foodCommunityDatabaseSectionLabel()"),
-            ("food community database section label helper fields", 'return "食物血糖資料庫";'),
-            ("food community database intro copy helper", "export function foodCommunityDatabaseIntroCopy()"),
-            ("food community database intro copy helper fields", "建立華人使用者真實食物升糖資料庫，以實際食用前後血糖分享取代理論與網路傳言"),
-            ("food community share fallback food name helper", "export function foodCommunityShareFallbackFoodName(item: { title: string })"),
-            ("food community share fallback food name helper fields", "return item.title;"),
-            ("food community share food name display helper", "export function foodCommunityShareFoodNameDisplayText("),
-            ("food community share food name display helper binding", "return boundDisplayText(fields.foodName || foodCommunityShareFallbackFoodName(item), maxDisplayTextLength).trim();"),
-            ("food community share food name input helper", "export function foodCommunityShareFoodNameInputValue(value: string)"),
-            ("food community share food name input helper binding", "return boundDisplayText(value, maxDisplayTextLength);"),
-            ("food community share food name max length helper", "export function foodCommunityShareFoodNameMaxLength()"),
-            ("food community share food name max length helper binding", "return maxDisplayTextLength;"),
-            ("food community share note input helper", "export function foodCommunityShareNoteInputValue(value: string)"),
-            ("food community share note input helper binding", "return boundDisplayText(value, maxDisplayDetailTextLength);"),
-            ("food community share note max length helper", "export function foodCommunityShareNoteMaxLength()"),
-            ("food community share note max length helper binding", "return maxDisplayDetailTextLength;"),
-            ("community public display name max length helper", "export function communityPublicDisplayNameMaxLength()"),
-            ("community public display name max length helper binding", "return maxDisplayTextLength;"),
-            ("food community share category helper", "export function foodCommunityShareCategory(item: { category: FoodCommunityCategory })"),
-            ("food community share category helper fields", "return item.category;"),
-            ("food community share section label helper", "export function foodCommunityShareSectionLabel()"),
-            ("food community share section label helper fields", 'return "食物分享紀錄";'),
-            ("food community share eaten date label helper", "export function foodCommunityShareEatenDateLabel()"),
-            ("food community share eaten date label helper fields", 'return "食用日期";'),
-            ("food community share eaten time label helper", "export function foodCommunityShareEatenTimeLabel()"),
-            ("food community share eaten time label helper fields", 'return "食用時間";'),
-            ("food community ranking section label helper", "export function foodCommunityRankingSectionLabel()"),
-            ("food community ranking section label helper fields", 'return "社群排行榜";'),
-            ("food community points store bridge copy helper", "export function foodCommunityPointsStoreBridgeCopy()"),
-            ("food community points store bridge copy helper fields", "點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利"),
-            ("food community category default item helper", "export function foodCommunityCategoryDefaultItemId(items: Array<{ id: string; category: FoodCommunityCategory }>, category: FoodCommunityCategory)"),
-            ("food community category default item helper lookup", "const firstMatch = items.find((item) => item.category === category);"),
-            ("food community category default item helper fields", "return firstMatch?.id ?? \"\";"),
-            ("food community list default item helper", "export function foodCommunityListDefaultItemId(items: Array<{ id: string }>, fallbackId: string)"),
-            ("food community list default item helper fields", "return items[0]?.id ?? fallbackId;"),
-            ("food community item target helper", "export function foodCommunityItemTarget(item: { id: string })"),
-            ("food community item target helper fields", "return item.id;"),
-            ("food community item display items helper", "export function foodCommunityItemDisplayItems(items: FoodCommunityItem[])"),
-            ("food community item display items map", "return items.map(foodCommunityItemDisplayItem);"),
-            ("food community detail refresh items helper", "export function foodCommunityItemsWithDetail(items: FoodCommunityItem[], detailedItem: FoodCommunityItem)"),
-            ("food community detail refresh items helper comparison", "return items.map((item) => (item.id === detailedItem.id ? detailedItem : item));"),
-            ("food community backend-ready item accessibility", "同步已載入食物分享統計與個別紀錄"),
-            ("food community metric summary reference value", "metricSummary: boundDisplayText(\n      `${shareCount} 人分享，實際升糖參考值 ${averageRise} mg/dL`,"),
-            ("food community individual share display items", "individualShareDisplayItems: value.examples.map(foodCommunityShareDisplayItem).slice(0, 3)"),
-            ("food community item metric summary", "`${shareCount} 人分享，實際升糖參考值 ${averageRise} mg/dL`"),
-            ("food community visible helper", "export function visibleFoodCommunityDisplayItems("),
-            ("food community search bypasses category filter", "const matchesCategory = query.length > 0 || item.category === category;"),
-            ("food community search aliases", "item.aliases.some((alias) => alias.toLowerCase().includes(query))"),
-            ("food community selected helper", "export function selectedFoodCommunityDisplayItem("),
-            ("food community selected fallback order", "items.find((item) => item.id === selectedItemId) ?? visibleItems[0] ?? items[0] ?? null"),
-            ("community action display texts helper", "export function communityActionDisplayTexts(value: {"),
-            ("community action display bundle helper", "export function communityActionDisplayBundle(value: {"),
-            ("community action display bundle delegates", "return communityActionDisplayTexts(value);"),
-            ("community preview display bundle helper", "export function communityPreviewDisplayBundle(value: {"),
-            ("community preview display bundle labels binding", "labels: communityPreviewLabelDisplayBundle(value),"),
-            ("community preview display bundle actions binding", "actions: communityActionDisplayBundle({"),
-            ("community action share button binding", "foodCommunityShareButton,"),
-            ("community action share accessibility binding", "foodCommunityShareAccessibility: boundDisplayText("),
-            ("community action ranking button binding", "rankingOptInButton,"),
-            ("community action ranking accessibility binding", "rankingOptInAccessibility: boundDisplayText("),
-            ("food community sync status helper", "export function foodCommunitySyncStatusMessages(value: {"),
-            ("food community sync unavailable fallback", "backend account 尚未 ready"),
-            ("food community sync in-flight copy", "正在同步食物社群資料庫，請稍候。"),
-            ("food community sync loading copy", "正在同步 backend 食物社群資料庫。"),
-            ("food community sync item count clamp", "clampNumber(value.itemCount, 0, maxMobileCountValue)"),
-            ("food community sync failure copy", "食物社群資料庫同步失敗；目前保留本機預覽資料。"),
-            ("food community detail status helper", "export function foodCommunityDetailStatusMessages(value: {"),
-            ("food community detail in-flight copy", "正在同步食物個別分享紀錄，請稍候。"),
-            ("food community detail loading copy", "正在同步食物個別分享紀錄。"),
-            ("food community detail title bound", "boundDisplayText(value.itemTitle, maxDisplayTextLength)"),
-            ("food community detail example count clamp", "clampNumber(\n        value.exampleCount,"),
-            ("food community detail failure copy", "食物個別分享紀錄同步失敗；目前保留已載入資料。"),
-            ("community public settings status helper", "export function communityPublicSettingsStatusMessages(value: {"),
-            ("community public settings load failure copy", "社群公開設定同步失敗；公開排名保持預設關閉。"),
-            ("community public settings unavailable fallback", "backend account 尚未 ready"),
-            ("community public settings missing name copy", "請輸入公開顯示名稱後再更新社群公開設定。"),
-            ("community public settings opt-in enabled copy", "已開啟排行榜 opt-in；公開榜單只顯示公開名稱與非敏感統計。"),
-            ("community public settings failure copy", "社群公開設定更新失敗；未變更排行榜 opt-in。"),
-            ("food community share status helper", "export function foodCommunityShareStatusMessages(value: {"),
-            ("food community share visual-smoke copy", "Visual smoke 預覽不送出食物分享，也不寫入點數或排行榜。"),
-            ("food community share unavailable fallback", "請先選擇食物"),
-            ("food community share glucose validation copy", "請輸入 20-600 mg/dL 之間的食用前與食用後血糖。"),
-            ("food community share awarded points clamp", "clampNumber(value.awardedPoints, 0, maxMobileCountValue)"),
-            ("food community share failure copy", "食物分享送出失敗；沒有建立點數、排行榜或商城兌換。"),
-            ("community leaderboard sync status helper", "export function communityLeaderboardSyncStatusMessages(value: {"),
-            ("community leaderboard sync unavailable fallback", "backend account 尚未 ready"),
-            ("community leaderboard sync in-flight copy", "正在同步公開排行榜，請稍候。"),
-            ("community leaderboard sync loading copy", "正在同步 backend 公開排行榜。"),
-            ("community leaderboard sync success count clamp", "clampNumber(value.sectionCount, 0, maxMobileCountValue)"),
-            ("community leaderboard sync failure copy", "公開排行榜同步失敗；目前保留本機連續記錄預覽。"),
-            ("food community display bundle helper", "export function foodCommunityDisplayBundle(value: {"),
-            ("food community runtime display bundle helper", "export function foodCommunityRuntimeDisplayBundle(value: Parameters<typeof foodCommunityDisplayBundle>[0])"),
-            ("food community runtime display bundle field", "community: foodCommunityDisplayBundle(value)"),
-            ("food community display bundle category fallback", "value.backendCategories.length > 0 ? value.backendCategories : value.fallbackCategories"),
-            ("food community display bundle item fallback", "value.backendItems.length > 0 ? value.backendItems : value.fallbackItems"),
-            ("food community display bundle visible items", "const visibleItems = visibleFoodCommunityDisplayItems(itemDisplayItems, value.selectedCategory, value.searchText);"),
-            ("food community display bundle selected item", "const selectedItem = selectedFoodCommunityDisplayItem(itemDisplayItems, visibleItems, value.selectedItemId);"),
-            ("food community display bundle share rows", "shareFieldRows: foodCommunityShareFieldDisplayRows(value.shareFields, selectedItem?.title)"),
-            ("food community share field rows helper", "export function foodCommunityShareFieldDisplayRows("),
-            ("food community share eaten time row", '"食用時間"'),
-            ("food community share calculated rise row", '"血糖上升值"'),
-            ("food community share calculated rise expression", "Number(fields.afterGlucose) - Number(fields.beforeGlucose)"),
-            ("food community share calculated rise signed clamp", "clampNumber(Number(fields.afterGlucose) - Number(fields.beforeGlucose), -maxMobileGlucoseValue, maxMobileGlucoseValue)"),
-            ("food community share auto-calculation fallback", '"系統自動計算"'),
-            ("food community point rows helper", "export function foodCommunityPointDisplayRows(pointsBalance: StoreApiPointsBalance | null)"),
-            ("food community point use row", "點數用途"),
-            ("food community ranking rows helper", "export function foodCommunityRankingDisplayRows()"),
-            ("food community ranking share count row", "分享次數排行"),
-            ("food community ranking contribution row", "貢獻度排行"),
-            ("food community ranking food tester row", "食物測試達人排行"),
-            ("store redeemable fulfillment helper", "export function storeRedeemableFulfillmentCopy(category: StoreCategory): string"),
-            ("store immediate coupon discount code copy", "送出後 backend 會扣點並立即發出優惠券或折扣碼。"),
-            ("store reservation fulfillment copy", "送出後 backend 會扣點並建立兌換 reservation，後續仍需 fulfillment。"),
-            ("store product type", "export type StoreProduct = {"),
-            ("store reward api input type", "export type StoreRewardApiInput = {"),
-            ("store points balance api type", "export type StoreApiPointsBalance = {"),
-            ("store redemption api type", "export type StoreApiRedemption = {"),
-            ("store categories static config", "export const storeCategories: Array<{ id: StoreCategory; label: string }> = ["),
-            ("store coupon redemption category", '{ id: "coupons", label: "優惠券" }'),
-            ("store supplement discount category", '{ id: "supplementDiscounts", label: "保健食品折扣" }'),
-            ("store partner product category", '{ id: "partnerProducts", label: "合作商品" }'),
-            ("store special badge category", '{ id: "specialBadges", label: "特殊徽章" }'),
-            ("store member benefit category", '{ id: "memberBenefits", label: "特殊會員福利" }'),
-            ("store products static config", "export const storeProducts: StoreProduct[] = ["),
-            ("store fallback coupon backend code", 'id: "coupon_50"'),
-            ("store fallback coupon backend points", 'pointsCost: "100 點"'),
-            ("store fallback supplement backend code", 'id: "supplement_discount_10"'),
-            ("store fallback supplement backend points", 'pointsCost: "150 點"'),
-            ("store fallback partner product backend code", 'id: "partner_product_trial"'),
-            ("store fallback partner product backend points", 'pointsCost: "300 點"'),
-            ("store fallback special badge backend code", 'id: "annual_member_badge"'),
-            ("store fallback special badge backend points", 'pointsCost: "80 點"'),
-            ("store fallback member benefit backend code", 'id: "member_benefit_pack"'),
-            ("store fallback member benefit backend points", 'pointsCost: "500 點"'),
-            ("store special badge product", 'id: "annual_member_badge"'),
-            ("store category display helper", "export function storeCategoryDisplayItem(value: { id: StoreCategory; label: string })"),
-            ("store category display items helper", "export function storeCategoryDisplayItems(values: Array<{ id: StoreCategory; label: string }>)"),
-            ("store category display items map", "return values.map(storeCategoryDisplayItem);"),
-            ("store category accessibility copy", "accessibilityLabel: boundDisplayText(`切換商城分類：${label}，不建立訂單或付款`, maxDisplayDetailTextLength)"),
-            ("store category display item type", "export type StoreCategoryDisplayItem = ReturnType<typeof storeCategoryDisplayItem>;"),
-            ("store category target helper", "export function storeCategoryTarget(category: StoreCategoryDisplayItem)"),
-            ("store category target helper fields", "return category.value;"),
-            ("store category option key helper", "export function storeCategoryOptionKey(category: StoreCategoryDisplayItem)"),
-            ("store category option key helper fields", "return storeCategoryTarget(category);"),
-            ("store category option accessibility helper", "export function storeCategoryOptionAccessibilityLabel(category: StoreCategoryDisplayItem)"),
-            ("store category option accessibility helper fields", "return category.accessibilityLabel;"),
-            ("store category option label helper", "export function storeCategoryOptionLabel(category: StoreCategoryDisplayItem)"),
-            ("store category option label helper fields", "return category.label;"),
-            ("store category option selected helper", "export function storeCategoryOptionSelected(category: StoreCategoryDisplayItem, selectedCategory: StoreCategory)"),
-            ("store category option selected helper fields", "return storeCategoryTarget(category) === selectedCategory;"),
-            ("store product display helper", "export function storeProductDisplayItem(value: StoreProduct)"),
-            ("store product display items helper", "export function storeProductDisplayItems(products: StoreProduct[])"),
-            ("store product display items map", "return products.map(storeProductDisplayItem);"),
-            ("store product display item type", "export type StoreProductDisplayItem = ReturnType<typeof storeProductDisplayItem>;"),
-            ("store product action status helper", "export function storeProductActionStatus(product: StoreProductDisplayItem)"),
-            ("store product action status helper fields", "return product.actionStatus;"),
-            ("store product card key helper", "export function storeProductCardKey(product: StoreProductDisplayItem)"),
-            ("store product card key helper fields", "return product.id;"),
-            ("store product card icon helper", "export function storeProductCardIcon(product: StoreProductDisplayItem)"),
-            ("store product card icon helper fields", "return product.icon;"),
-            ("store product card title helper", "export function storeProductCardTitle(product: StoreProductDisplayItem)"),
-            ("store product card title helper fields", "return product.title;"),
-            ("store product card badge helper", "export function storeProductCardBadge(product: StoreProductDisplayItem)"),
-            ("store product card badge helper fields", "return product.badge;"),
-            ("store product card description helper", "export function storeProductCardDescription(product: StoreProductDisplayItem)"),
-            ("store product card description helper fields", "return product.description;"),
-            ("store product card points helper", "export function storeProductCardPointsCost(product: StoreProductDisplayItem)"),
-            ("store product card points helper fields", "return product.pointsCost;"),
-            ("store product reward id helper", "export function storeProductRewardId(product: StoreProductDisplayItem)"),
-            ("store product reward id helper fields", "return product.id;"),
-            ("store product redeem title helper", "export function storeProductRedeemTitle(product: StoreProductDisplayItem)"),
-            ("store product redeem title helper fields", "return product.title;"),
-            ("store product action label helper", "export function storeProductActionLabel(product: StoreProductDisplayItem)"),
-            ("store product action label helper fields", 'return product.rewardStatus === "redeemable" ? "兌" : "›";'),
-            ("store product action accessibility helper", "export function storeProductActionAccessibilityLabel(product: StoreProductDisplayItem)"),
-            ("store product action accessibility helper fields", "return product.actionAccessibilityLabel;"),
-            ("store product display points cost field", "pointsCost: boundDisplayText(value.pointsCost || \"點數未設定\", 40)"),
-            ("store product display redeemable status copy", "`${title} 可用社群點數兌換；${storeRedeemableFulfillmentCopy(value.category)}`"),
-            ("store product display preview status copy", "`${title} 目前只顯示點數兌換預覽；點數扣抵、庫存、結帳、訂單與 entitlement 寫入尚未啟用。`"),
-            ("store visible product helper", "export function visibleStoreProductDisplayItems("),
-            ("store visible product category match", "const matchesCategory = product.category === category;"),
-            ("store visible product search fields", "`${product.title} ${product.description} ${product.pointsCost}`.toLowerCase().includes(query)"),
-            ("store display bundle helper", "export function storeDisplayBundle(value: {"),
-            ("store display bundle product fallback", "value.backendProducts.length > 0 ? value.backendProducts : value.fallbackProducts"),
-            ("store display bundle product items", "const productDisplayItems = storeProductDisplayItems(productsForDisplay);"),
-            ("store display bundle wallet items", "redemptionDisplayItems: storeRedemptionWalletDisplayItems(value.redemptions)"),
-            ("store display bundle visible products", "visibleProducts: visibleStoreProductDisplayItems(productDisplayItems, value.selectedCategory, value.searchText)"),
-            ("store display bundle boundary rows", "redemptionBoundaryRows: storeRedemptionBoundaryDisplayRows("),
-            ("store runtime display bundle helper", "export function storeRuntimeDisplayBundle(value: Parameters<typeof storeDisplayBundle>[0])"),
-            ("store runtime display bundle field", "store: storeDisplayBundle(value)"),
-            ("store backend category transform helper", "export function storeCategoryFromApi(value: StoreRewardApiCategory): StoreCategory"),
-            ("store backend special badge mapping", 'if (value === "special_badges")'),
-            ("store backend reward product transform helper", "export function storeProductFromApi(value: StoreRewardApiInput): StoreProduct"),
-            ("store backend reward fallback title", 'title: boundDisplayText(value.title || "兌換項目", maxDisplayTextLength)'),
-            ("store backend reward products transform helper", "export function storeProductsFromApi(values: StoreRewardApiInput[]): StoreProduct[]"),
-            ("store backend reward products transform bound", "return values.slice(0, maxListItems * 2).map(storeProductFromApi);"),
-            ("store backend redemptions transform helper", "export function storeRedemptionsFromApi(values: StoreApiRedemption[]): StoreApiRedemption[]"),
-            ("store backend redemptions transform bound", "return values.slice(0, maxListItems * 2);"),
-            ("store redemption display input type", "export type StoreRedemptionDisplayInput = {"),
-            ("store redemption display helper", "export function storeRedemptionDisplayItem(value: StoreRedemptionDisplayInput)"),
-            ("store redemption display item type", "export type StoreRedemptionDisplayItem = ReturnType<typeof storeRedemptionDisplayItem>;"),
-            ("store redemption use id helper", "export function storeRedemptionUseId(redemption: StoreRedemptionDisplayItem)"),
-            ("store redemption use id helper fields", "return redemption.id;"),
-            ("store redemption use title helper", "export function storeRedemptionUseTitle(redemption: StoreRedemptionDisplayItem)"),
-            ("store redemption use title helper fields", "return redemption.title;"),
-            ("store redemption use status label helper", "export function storeRedemptionUseStatusLabel(redemption: StoreRedemptionDisplayItem)"),
-            ("store redemption use status label helper fields", "return redemption.statusLabel;"),
-            ("store redemption card key helper", "export function storeRedemptionCardKey(redemption: StoreRedemptionDisplayItem)"),
-            ("store redemption card key helper fields", "return redemption.id;"),
-            ("store redemption card title helper", "export function storeRedemptionCardTitle(redemption: StoreRedemptionDisplayItem)"),
-            ("store redemption card title helper fields", "return redemption.title;"),
-            ("store redemption card status helper", "export function storeRedemptionCardStatusLabel(redemption: StoreRedemptionDisplayItem)"),
-            ("store redemption card status helper fields", "return redemption.statusLabel;"),
-            ("store redemption card subtitle helper", "export function storeRedemptionCardSubtitle(redemption: StoreRedemptionDisplayItem)"),
-            ("store redemption card subtitle helper fields", "return redemption.subtitle;"),
-            ("store redemption action disabled helper", "export function storeRedemptionActionDisabled(redemption: StoreRedemptionDisplayItem)"),
-            ("store redemption action disabled helper fields", "return !redemption.isUsable;"),
-            ("store redemption action label helper", "export function storeRedemptionActionLabel(redemption: StoreRedemptionDisplayItem)"),
-            ("store redemption action label helper fields", "return redemption.actionLabel;"),
-            ("store redemption action accessibility helper", "export function storeRedemptionActionAccessibilityLabel(redemption: StoreRedemptionDisplayItem)"),
-            ("store redemption action accessibility helper fields", "return redemption.actionAccessibilityLabel;"),
-            ("store redemption wallet display helper", "export function storeRedemptionWalletDisplayItems(items: StoreRedemptionDisplayInput[])"),
-            ("store redemption wallet max list bound", "return items.slice(0, maxListItems).map(storeRedemptionDisplayItem);"),
-            ("store redemption usable issued status", 'status === "issued" &&'),
-            ("store redemption usable code required", "Boolean(code) &&"),
-            ("store redemption usable coupon types", '(value.fulfillment_type === "coupon" || value.fulfillment_type === "discount_code") &&'),
-            ("store redemption usable unused only", "!value.used_at;"),
-            ("store redemption boundary rows helper", "export function storeRedemptionBoundaryDisplayRows("),
-            ("store points balance boundary row", '"點數餘額"'),
-            ("store special badge redemption boundary", "優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利"),
-            ("store backend-ready remaining boundary", '["仍待完成", "庫存、出貨訂單、付款與 rollback"]'),
-            ("store redemption unfinished boundary row", "庫存、出貨訂單、付款與 rollback"),
-            ("store redemption backend catalog status copy", "已讀取 backend catalog"),
-            ("store redemption local preview status copy", "本機預覽，不扣點、不建訂單、不發券"),
             ("future preview boundary helper", "function futurePreviewBoundaryDisplayItem(badge: string, copy: string)"),
             ("doctor share preview boundary helper", "export function doctorSharePreviewBoundaryDisplayItem()"),
             ("doctor share preview boundary copy", "目前不產生授權碼、不建立 share token、不新增 grants、不呼叫醫師端 API"),
@@ -15884,80 +13724,19 @@ def main() -> int:
             ("health integration readiness authorization copy", "使用者授權、撤權與資料刪除流程"),
             ("health integration readiness sync copy", "import batch id、sync status 與錯誤復原"),
             ("health integration readiness duplicate copy", "duplicate detection，避免同一筆血糖被重複匯入"),
-            ("community preview boundary helper", "export function communityPreviewBoundaryDisplayItem()"),
-            ("community preview boundary copy", "backend ready 時可同步食物資料庫、送出食物分享、建立點數並刷新排行榜"),
-            ("community public name preview label helper", "export function communityPublicNamePreviewLabel()"),
-            ("community public name preview label helper fields", 'return "公開顯示名稱預覽";'),
-            ("community hero icon label helper", "export function communityHeroIconLabel()"),
-            ("community hero icon label helper fields", 'return "群";'),
-            ("community public profile save accessibility helper", "export function communityPublicProfileSaveAccessibilityLabel()"),
-            ("community public profile save accessibility helper fields", 'return "儲存社群公開顯示名稱，不公開健康數值";'),
-            ("community public profile save button helper", "export function communityPublicProfileSaveButtonLabel()"),
-            ("community public profile save button helper fields", 'return "儲存公開名稱";'),
-            ("community screen title helper", "export function communityScreenTitleLabel()"),
-            ("community screen title helper fields", 'return "食物社群";'),
-            ("community screen subtitle helper", "export function communityScreenSubtitleCopy()"),
-            ("community screen subtitle helper fields", 'return "同步真實食物升糖分享、點數與公開排行榜；貼文留言治理仍待正式開放。";'),
-            ("community public name boundary copy helper", "export function communityPublicNameBoundaryCopy()"),
-            ("community public name boundary copy", "公開名稱與排行榜 opt-in 已可同步 backend；健康紀錄仍預設私密"),
-            ("community boundary rows helper", "export function communityBoundaryDisplayRows(isLeaderboardOptedIn: boolean)"),
-            ("community boundary records row", "健康紀錄"),
-            ("community boundary public ranking row", "公開排名"),
-            ("community boundary moderation row", "留言治理"),
-            ("community boundary ai cost row", "0 次呼叫"),
-            ("community readiness checklist helper", "export function communityReadinessChecklistDisplayItems()"),
-            ("community readiness moderation copy", "社群貼文、留言、封鎖、檢舉與審核流程"),
-            ("community readiness opt-in copy", "健康資料不可自動公開，分享需明確 opt-in"),
-            ("community readiness audit copy", "公開分享刪除、撤回與 audit-friendly event stream"),
-            ("ranking preview boundary helper", "export function rankingPreviewBoundaryDisplayItem()"),
-            ("ranking preview boundary copy", "一般操作路徑只讀取 opt-in 公開榜單與非敏感統計"),
-            ("ranking screen title helper", "export function rankingScreenTitleLabel()"),
-            ("ranking screen title helper fields", 'return "社群排行";'),
-            ("ranking screen subtitle helper", "export function rankingScreenSubtitleCopy()"),
-            ("ranking screen subtitle helper fields", 'return "同步分享次數、貢獻度與食物測試達人公開榜單；只顯示 opt-in 使用者的非敏感分數。";'),
-            ("ranking local streak preview label helper", "export function rankingLocalStreakPreviewLabel()"),
-            ("ranking local streak preview label helper fields", 'return "本機連續記錄預覽";'),
-            ("ranking hero icon label helper", "export function rankingHeroIconLabel()"),
-            ("ranking hero icon label helper fields", 'return "榜";'),
-            ("ranking streak display label helper", "export function rankingStreakDisplayLabel(days: number)"),
-            ("ranking streak display label helper fields", "return `${days} 天`;"),
-            ("ranking streak display text helper", "export function rankingStreakDisplayText(days: number)"),
-            ("ranking streak display text helper fields", "return rankingStreakDisplayLabel(days);"),
-            ("ranking close button helper", "export function rankingCloseButtonLabel()"),
-            ("ranking close button helper fields", 'return "×";'),
-            ("ranking local preview boundary copy helper", "export function rankingLocalPreviewBoundaryCopy()"),
-            ("ranking local preview boundary copy", "本機連續天數僅供自己查看；公開榜單只使用 backend 已聚合的 opt-in 社群統計"),
             ("future preview boundary copy bundle helper", "export function futurePreviewBoundaryCopyBundle()"),
             ("future preview boundary copy bundle doctor share", "doctorShareBackend: doctorShareBackendBoundaryCopy()"),
             ("future preview boundary copy bundle health integration", "healthIntegrationExternalData: healthIntegrationExternalDataBoundaryCopy()"),
-            ("future preview boundary copy bundle community", "communityPublicName: communityPublicNameBoundaryCopy()"),
-            ("future preview boundary copy bundle ranking", "rankingLocalPreview: rankingLocalPreviewBoundaryCopy()"),
-            ("ranking boundary rows helper", "export function rankingBoundaryDisplayRows()"),
-            ("ranking boundary public row", "公開排名"),
-            ("ranking boundary data row", "非敏感統計"),
-            ("ranking boundary health value row", "健康數值"),
-            ("ranking boundary ai cost row", "0 次呼叫"),
-            ("ranking readiness checklist helper", "export function rankingReadinessChecklistDisplayItems()"),
-            ("ranking readiness moderation copy", "封鎖、檢舉與審核流程"),
-            ("ranking readiness dispute copy", "榜單爭議處理與公開名稱違規處置"),
-            ("ranking readiness audit copy", "退出排名後的歷史資料撤回與 audit event"),
             ("future preview readiness static display bundle helper", "export function futurePreviewReadinessStaticDisplayBundle()"),
             ("future preview readiness static display bundle health", "healthIntegrationItems: healthIntegrationReadinessChecklistDisplayItems()"),
-            ("future preview readiness static display bundle community", "communityItems: communityReadinessChecklistDisplayItems()"),
-            ("future preview readiness static display bundle ranking", "rankingItems: rankingReadinessChecklistDisplayItems()"),
             ("future preview readiness runtime display bundle helper", "export function futurePreviewReadinessRuntimeDisplayBundle()"),
             ("future preview readiness runtime display bundle binding", "readiness: futurePreviewReadinessStaticDisplayBundle()"),
-            ("future boundary rows display bundle helper", "export function futureBoundaryRowsDisplayBundle(isLeaderboardOptedIn: boolean)"),
             ("future boundary rows display bundle health integration", "healthIntegration: healthIntegrationBoundaryDisplayRows()"),
-            ("future boundary rows display bundle community", "community: communityBoundaryDisplayRows(isLeaderboardOptedIn)"),
-            ("future boundary rows display bundle ranking", "ranking: rankingBoundaryDisplayRows()"),
             ("reminder preview boundary helper", "export function reminderPreviewBoundaryDisplayItem()"),
             ("privacy preview boundary helper", "export function privacyPreviewBoundaryDisplayItem()"),
             ("future preview boundary display bundle helper", "export function futurePreviewBoundaryDisplayBundle()"),
             ("future preview boundary display bundle doctor share", "doctorShare: doctorSharePreviewBoundaryDisplayItem()"),
             ("future preview boundary display bundle health integration", "healthIntegration: healthIntegrationPreviewBoundaryDisplayItem()"),
-            ("future preview boundary display bundle community", "community: communityPreviewBoundaryDisplayItem()"),
-            ("future preview boundary display bundle ranking", "ranking: rankingPreviewBoundaryDisplayItem()"),
             ("future preview boundary display bundle reminder", "reminder: reminderPreviewBoundaryDisplayItem()"),
             ("future preview boundary display bundle privacy", "privacy: privacyPreviewBoundaryDisplayItem()"),
             ("future preview boundary runtime display bundle helper", "export function futurePreviewBoundaryRuntimeDisplayBundle()"),
@@ -15995,94 +13774,12 @@ def main() -> int:
             ("food photo display bundle retake button", "retakeButton: foodPhotoRetakeButtonLabel()"),
             ("food photo display bundle integration accessibility", "integrationAccessibility: foodPhotoIntegrationButtonAccessibilityLabel()"),
             ("food photo display bundle retake accessibility", "retakeAccessibility: foodPhotoRetakeButtonAccessibilityLabel()"),
-            ("store cart unavailable display helper", "export function storeCartUnavailableDisplayItem()"),
-            ("store cart unavailable copy", "目前不建立訂單、不保留購物車內容，也不處理付款或折價券。"),
-            ("store cart backend order flow evidence", "需等購物車、庫存、出貨、付款與退款規則完成後再接 backend order flow。"),
-            ("store checkout readiness checklist helper", "export function storeCheckoutReadinessChecklistDisplayItems()"),
-            ("store preview static display bundle helper", "export function storePreviewStaticDisplayBundle()"),
-            ("store preview static checkout binding", "checkoutReadinessItems: storeCheckoutReadinessChecklistDisplayItems()"),
-            ("store preview static cart unavailable binding", "cartUnavailable: storeCartUnavailableDisplayItem()"),
-            ("store preview static empty search binding", "emptySearch: storeEmptySearchDisplayItem()"),
-            ("store preview runtime display bundle helper", "export function storePreviewRuntimeDisplayBundle()"),
-            ("store preview runtime display bundle binding", "preview: storePreviewStaticDisplayBundle()"),
-            ("store checkout readiness catalog copy", "商品目錄、庫存與價格來源"),
-            ("store checkout readiness inventory rollback copy", "購物車持久化、庫存 reservation 與 rollback 規則"),
-            ("store checkout readiness payment copy", "付款金流、receipt validation 與退款流程"),
-            ("store checkout readiness service audit copy", "訂單狀態、出貨狀態與客服稽核"),
-            ("store cart open status helper", "export function commercePreviewOpenCartStatusMessage()"),
-            ("store cart open status copy", "已開啟購物車整合狀態；preview 不建立 cart、order、payment 或 backend write。"),
-            ("store cart return status helper", "export function commercePreviewReturnStoreStatusMessage()"),
-            ("store cart return status copy", "已返回商城；購物車整合狀態不建立訂單、不保存購物車，也不處理付款。"),
-            ("store preview boundary copy helper", "export function storePreviewBoundaryCopy()"),
-            ("store preview boundary copy", "點數商城一般操作路徑會同步 backend 目錄與點數"),
-            ("store backend-aware boundary copy", "優惠券與保健食品折扣可立即發碼，合作商品與會員福利仍需後續 fulfillment"),
-            ("store empty search display helper", "export function storeEmptySearchDisplayItem()"),
-            ("store cart integration button label", 'return boundDisplayText("查看購物車整合狀態", maxDisplayTextLength);'),
-            ("store cart accessibility helper", "export function storeCartButtonAccessibilityLabel()"),
-            ("store cart integration accessibility", "查看購物車、出貨訂單與付款整合狀態；不建立訂單或付款"),
-            ("store local boundary copy helper", "export function storeLocalBoundaryCopy()"),
-            ("store local boundary copy", "商城目前可同步點數、發出優惠券 / 折扣碼並建立兌換紀錄"),
-            ("store cart intro copy helper", "export function storeCartIntroCopy()"),
-            ("store backend-aware cart intro copy", "點數帳本、兌換券與折扣碼已可同步；購物車、出貨訂單與付款仍未接上。"),
-            ("store checkout readiness title helper", "export function storeCheckoutReadinessTitle()"),
-            ("store preview display texts helper", "export function storePreviewDisplayTexts(actionStatus: string)"),
-            ("store preview display bundle helper", "export function storePreviewDisplayBundle(actionStatus: string)"),
-            ("store preview display bundle delegates", "return storePreviewDisplayTexts(actionStatus);"),
-            ("store preview display action binding", "actionStatus: boundUiMessage(actionStatus)"),
-            ("store preview display boundary binding", "previewBoundary: storePreviewBoundaryCopy()"),
-            ("store preview display cart accessibility binding", "cartButtonAccessibility: storeCartButtonAccessibilityLabel()"),
-            ("store preview display checkout title binding", "checkoutReadinessTitle: storeCheckoutReadinessTitle()"),
-            ("store catalog sync status helper", "export function storeCatalogSyncStatusMessages(value: {"),
-            ("store catalog sync unavailable fallback", "backend account 尚未 ready"),
-            ("store catalog sync in-flight copy", "正在同步商城點數與兌換目錄，請稍候。"),
-            ("store catalog sync loading copy", "正在同步 backend 商城目錄與社群點數。"),
-            ("store catalog sync redemption clamp", "clampNumber(value.redemptionCount, 0, maxMobileCountValue)"),
-            ("store catalog sync balance clamp", "clampNumber(\n        value.pointsBalance,"),
-            ("store catalog sync failure copy", "商城目錄、點數或兌換券同步失敗；目前保留本機預覽資料。"),
-            ("store redeem status helper", "export function storeRedeemStatusMessages(value: {"),
-            ("store redeem visual-smoke copy", "Visual smoke 預覽不送出商城兌換，也不扣點。"),
-            ("store redeem unavailable fallback", "backend account 尚未 ready"),
-            ("store redeem invalid product copy", "商城兌換項目識別無效；目前不送出兌換。"),
-            ("store redeem product title bound", "boundDisplayText(value.productTitle, maxDisplayTextLength)"),
-            ("store redeem points clamp", "clampNumber(\n        value.pointsCost,"),
-            ("store redeem failure copy", "兌換失敗；可能點數不足或該商品仍未開放 fulfillment。"),
-            ("store redemption use status helper", "export function storeRedemptionUseStatusMessages(value: {"),
-            ("store redemption use visual-smoke copy", "Visual smoke 預覽不標記兌換券使用，也不更新 backend 狀態。"),
-            ("store redemption use unavailable fallback", "backend account 尚未 ready"),
-            ("store redemption use title bound", "boundDisplayText(value.redemptionTitle, maxDisplayTextLength)"),
-            ("store redemption use status label bound", "value.statusLabel,\n        maxDisplayTextLength"),
-            ("store redemption use invalid copy", "兌換券識別無效；目前不更新兌換券狀態。"),
-            ("store redemption use in-flight copy", "商城兌換狀態更新中，請稍候。"),
-            ("store redemption use success identifier bound", "boundIdentifier(value.usedIdentifier)"),
-            ("store redemption use failure copy", "兌換券狀態更新失敗；可能已使用、已失效或不屬於目前帳號。"),
-            ("achievement preview boundary copy helper", "export function achievementPreviewBoundaryCopy()"),
-            ("achievement preview boundary copy", "成就可同步 backend 依記錄聚合的 MVP 徽章摘要"),
-            ("achievement local computation copy helper", "export function achievementLocalComputationCopy()"),
-            ("achievement local computation copy", "成就摘要只讀取既有紀錄並聚合進度"),
-            ("achievement next badge copy helper", "export function achievementNextBadgeCopy(remainingProgress: number)"),
-            ("achievement integration accessibility helper", "export function achievementIntegrationButtonAccessibilityLabel()"),
-            ("achievement sync unlock button label", 'return boundDisplayText("同步徽章解鎖", maxDisplayTextLength);'),
-            ("achievement sync unlock accessibility copy", "同步成就徽章解鎖紀錄，不更新排行榜或公開資料"),
-            ("achievement screen display bundle helper", "export function achievementScreenDisplayBundle(nextBadgeRemainingProgress: number)"),
-            ("achievement screen display preview boundary binding", "previewBoundary: achievementPreviewBoundaryCopy()"),
-            ("achievement screen display next badge binding", "nextBadge: achievementNextBadgeCopy(nextBadgeRemainingProgress)"),
-            ("achievement screen display integration button binding", "integrationButton: achievementIntegrationButtonLabel()"),
-            ("achievement screen display integration accessibility binding", "integrationAccessibility: achievementIntegrationButtonAccessibilityLabel()"),
-            ("achievement sync status helper", "export function achievementSyncStatusMessages(value: {"),
-            ("achievement sync unavailable fallback", "backend 尚未 ready"),
-            ("achievement sync loading summary copy", "正在讀取 backend 成就摘要。"),
-            ("achievement sync loading unlock copy", "正在同步 backend 徽章解鎖紀錄。"),
-            ("achievement sync success unlock copy", "已同步 backend 徽章解鎖"),
-            ("achievement sync success summary copy", "已讀取 backend 成就摘要"),
-            ("achievement sync failure copy", "成就摘要同步失敗；目前保留本機已載入紀錄推算。"),
             ("year review preview boundary copy helper", "export function yearReviewPreviewBoundaryCopy()"),
             ("year review backend-aware snapshot boundary", "backend ready 時同步保存年度 snapshot，並準備 privacy-masked 年度分享 package；離線時使用已載入紀錄即時計算。"),
             ("year review hero title helper", "export function yearReviewHeroTitleCopy(targetYear: number)"),
             ("year review hero title copy", "return boundDisplayText(`前一年度 ${targetYear} 年回顧`, maxDisplayTextLength);"),
             ("year review live calculation copy helper", "export function yearReviewLiveCalculationCopy(targetYear: number, generationLabel: string)"),
             ("year review backend snapshot live copy", "同步成功後會使用 backend snapshot。"),
-            ("year review badge material copy helper", "export function yearReviewBadgeMaterialCopy()"),
-            ("year review backend-aware badge material", "年度分享卡使用 backend 隱私遮罩摘要。"),
             ("year review share accessibility helper", "export function yearReviewShareButtonAccessibilityLabel()"),
             ("year review local metric rows helper", "export function localYearlyReviewMetricDisplayRows("),
             ("year review annual record days", '["本年度總記錄天數",'),
@@ -16090,8 +13787,6 @@ def main() -> int:
             ("year review annual meal count", '["本年度飲食記錄次數",'),
             ("year review annual exercise count", '["本年度運動記錄次數",'),
             ("year review annual longest streak", '["最長連續記錄天數",'),
-            ("year review annual achieved badges", '["達成徽章數量",'),
-            ("year review annual highest badge", '["解鎖最高等級徽章",'),
             ("year review local health rows helper", "export function localYearlyHealthOutcomeDisplayRows("),
             ("year review average glucose outcome", '["年平均血糖",'),
             ("year review highest glucose outcome", '["年度最高血糖",'),
@@ -16114,100 +13809,33 @@ def main() -> int:
             ("year review insight glucose average evidence", "前一年度血糖紀錄平均值為 ${value.averageGlucose} mg/dL。"),
             ("year review insight backend observation fallback", "value.backendObservation"),
             ("year review insight backend encouragement fallback", "value.backendEncouragement"),
-            ("achievement/year review status display texts helper", "export function achievementYearReviewStatusDisplayTexts(value: {"),
-            ("achievement/year review status display bundle helper", "export function achievementYearReviewStatusDisplayBundle(value: {"),
-            ("achievement/year review status display bundle delegates", "return achievementYearReviewStatusDisplayTexts(value);"),
-            ("achievement status display binding", "achievementAction: boundUiMessage(value.achievementActionStatus)"),
             ("year review status display binding", "yearReviewAction: boundUiMessage(value.yearReviewActionStatus)"),
             ("future preview section labels helper", "export function futurePreviewSectionLabels()"),
             ("future preview section labels type", "export type FuturePreviewSectionLabels = ReturnType<typeof futurePreviewSectionLabels>;"),
             ("future preview close accessibility helper", "export function futurePreviewCloseAccessibilityLabel(label: string)"),
             ("future preview close accessibility fields", "return label;"),
-            ("future preview boundary badge helper", "export function futurePreviewBoundaryBadgeLabel(display: { badge: string })"),
-            ("future preview boundary badge fields", "return display.badge;"),
             ("future preview boundary copy helper", "export function futurePreviewBoundaryCopyText(display: { copy: string })"),
             ("future preview boundary copy fields", "return display.copy;"),
-            ("community post accessibility helper", "export function communityPostAccessibilityLabel(labels: FuturePreviewSectionLabels)"),
-            ("community post accessibility helper fields", "return labels.communityPostAccessibility;"),
-            ("community post button helper", "export function communityPostButtonLabel(labels: FuturePreviewSectionLabels)"),
-            ("community post button helper fields", "return labels.communityPostButton;"),
-            ("community privacy accessibility helper", "export function communityPrivacyAccessibilityLabel(labels: FuturePreviewSectionLabels)"),
-            ("community privacy accessibility helper fields", "return labels.communityPrivacyAccessibility;"),
-            ("community action status label helper", "export function communityActionStatusLabel(labels: FuturePreviewSectionLabels)"),
-            ("community action status label helper fields", "return labels.communityStatus;"),
-            ("community action status text helper", "export function communityActionStatusText(text: string)"),
-            ("community action status text helper fields", "return text;"),
-            ("community action status visible helper", "export function communityActionStatusVisible(status: string)"),
-            ("community action status visible helper fields", "return Boolean(status);"),
-            ("community preview label display bundle helper", "export function communityPreviewLabelDisplayBundle(value: {"),
-            ("community preview label display bundle close", "closeAccessibility: futurePreviewCloseAccessibilityLabel(value.closeLabel)"),
-            ("community preview label display bundle badge", "boundaryBadge: futurePreviewBoundaryBadgeLabel(value.boundaryDisplay)"),
-            ("community preview label display bundle copy", "boundaryCopy: futurePreviewBoundaryCopyText(value.boundaryDisplay)"),
-            ("community preview label display bundle post accessibility", "postAccessibility: communityPostAccessibilityLabel(value.labels)"),
-            ("community preview label display bundle post button", "postButton: communityPostButtonLabel(value.labels)"),
-            ("community preview label display bundle privacy", "privacyAccessibility: communityPrivacyAccessibilityLabel(value.labels)"),
-            ("community preview label display bundle action status label", "actionStatusLabel: communityActionStatusLabel(value.labels)"),
-            ("community preview label display bundle action status copy", "actionStatusCopy: communityActionStatusText(value.actionStatusText)"),
-            ("community preview label display bundle readiness", "readinessSection: futurePreviewReadinessSectionLabel(value.labels)"),
-            ("community preview label display bundle return accessibility", "returnAccessibility: futurePreviewReturnAccessibilityLabel(value.labels)"),
-            ("community preview label display bundle return button", "returnButton: futurePreviewReturnButtonLabel(value.labels)"),
-            ("community preview label display bundle public save accessibility", "publicProfileSaveAccessibility: communityPublicProfileSaveAccessibilityLabel()"),
-            ("community preview label display bundle public save button", "publicProfileSaveButton: communityPublicProfileSaveButtonLabel()"),
             ("future preview readiness section label helper", "export function futurePreviewReadinessSectionLabel(labels: FuturePreviewSectionLabels)"),
             ("future preview readiness section label helper fields", "return labels.formalReadiness;"),
             ("future preview return accessibility helper", "export function futurePreviewReturnAccessibilityLabel(labels: FuturePreviewSectionLabels)"),
             ("future preview return accessibility helper fields", "return labels.returnFutureModulesAccessibility;"),
             ("future preview return button helper", "export function futurePreviewReturnButtonLabel(labels: FuturePreviewSectionLabels)"),
             ("future preview return button helper fields", "return labels.returnFutureModules;"),
-            ("ranking public action accessibility helper", "export function rankingPublicActionAccessibilityLabel(labels: FuturePreviewSectionLabels)"),
-            ("ranking public action accessibility helper fields", "return labels.rankingPublicAccessibility;"),
-            ("ranking public action button helper", "export function rankingPublicActionButtonLabel(labels: FuturePreviewSectionLabels)"),
-            ("ranking public action button helper fields", "return labels.rankingPublicButton;"),
-            ("ranking opt-in action accessibility helper", "export function rankingOptInActionAccessibilityLabel(label: string)"),
-            ("ranking opt-in action accessibility helper fields", "return label;"),
-            ("ranking opt-in action button helper", "export function rankingOptInActionButtonLabel(label: string)"),
-            ("ranking opt-in action button helper fields", "return label;"),
-            ("ranking preview label display bundle helper", "export function rankingPreviewLabelDisplayBundle(value: {"),
-            ("ranking preview label display bundle opt in button", "optInButton: rankingOptInActionButtonLabel(value.optInButton)"),
-            ("ranking preview label display bundle opt in accessibility", "optInAccessibility: rankingOptInActionAccessibilityLabel(value.optInAccessibility)"),
-            ("ranking preview label display bundle close button", "closeButton: rankingCloseButtonLabel()"),
-            ("ranking preview label display bundle close accessibility", "closeAccessibility: futurePreviewCloseAccessibilityLabel(value.closeLabel)"),
-            ("ranking preview label display bundle public button", "publicButton: rankingPublicActionButtonLabel(value.labels)"),
-            ("ranking preview label display bundle public accessibility", "publicAccessibility: rankingPublicActionAccessibilityLabel(value.labels)"),
-            ("ranking preview label display bundle return button", "returnButton: futurePreviewReturnButtonLabel(value.labels)"),
-            ("ranking preview label display bundle return accessibility", "returnAccessibility: futurePreviewReturnAccessibilityLabel(value.labels)"),
-            ("ranking preview display bundle helper", "export function rankingPreviewDisplayBundle(value: {"),
-            ("ranking preview display bundle labels binding", "labels: rankingPreviewLabelDisplayBundle(value),"),
-            ("ranking preview display bundle boundary badge binding", "boundaryBadge: futurePreviewBoundaryBadgeLabel(value.boundaryDisplay),"),
-            ("ranking preview display bundle boundary copy binding", "boundaryCopy: futurePreviewBoundaryCopyText(value.boundaryDisplay),"),
-            ("ranking preview display bundle readiness binding", "readinessSection: futurePreviewReadinessSectionLabel(value.labels),"),
-            ("ranking preview display bundle status label binding", "actionStatusLabel: rankingActionStatusLabel(value.labels),"),
-            ("ranking preview display bundle status copy binding", "actionStatusCopy: rankingActionStatusText(value.actionStatusText)"),
-            ("ranking action status label helper", "export function rankingActionStatusLabel(labels: FuturePreviewSectionLabels)"),
-            ("ranking action status label helper fields", "return labels.rankingStatus;"),
-            ("ranking action status text helper", "export function rankingActionStatusText(text: string)"),
-            ("ranking action status visible helper", "export function rankingActionStatusVisible(status: string)"),
             ("doctor token accessibility label", "doctorTokenAccessibility: boundDisplayText(`${doctorTokenButton}，只顯示授權碼與 share token 邊界`, maxDisplayDetailTextLength)"),
             ("doctor report accessibility label", "doctorReportAccessibility: boundDisplayText(`${doctorReportButton}，只顯示報表與醫師端唯讀邊界`, maxDisplayDetailTextLength)"),
             ("health permission accessibility label", "healthPermissionAccessibility: boundDisplayText(`${healthPermissionButton}，不請求平台權限或讀取健康資料`, maxDisplayDetailTextLength)"),
             ("health meter accessibility label", "healthMeterAccessibility: boundDisplayText(`${healthMeterButton}，不掃描血糖機或寫入紀錄`, maxDisplayDetailTextLength)"),
-            ("community post accessibility label", "communityPostAccessibility: boundDisplayText(`${communityPostButton}，不建立貼文或公開紀錄`, maxDisplayDetailTextLength)"),
-            ("community privacy accessibility label", "communityPrivacyAccessibility: boundDisplayText(`${communityPrivacyButton}，只顯示公開資料邊界`, maxDisplayDetailTextLength)"),
-            ("ranking public accessibility label", "rankingPublicAccessibility: boundDisplayText(`${rankingPublicButton}，只讀取 opt-in 公開榜單，不公開健康數值`, maxDisplayDetailTextLength)"),
             ("future preview return accessibility label", "returnFutureModulesAccessibility: boundDisplayText(\"返回未來擴充，不建立 future module 資料或呼叫 backend\", maxDisplayDetailTextLength)"),
         ):
             _assert_contains(label, future_module_display_content, marker)
         for label, marker in (
             ("future boundary rows runtime display binding", "const futureBoundaryRowsDisplay = futurePreviewStatusDisplay.boundaryRows;"),
             ("future boundary rows display bundle health binding", "const healthIntegrationBoundaryRows = futureBoundaryRowsDisplay.healthIntegration;"),
-            ("future boundary rows display bundle community binding", "const communityBoundaryRows = futureBoundaryRowsDisplay.community;"),
-            ("future boundary rows display bundle ranking binding", "const rankingBoundaryRows = futureBoundaryRowsDisplay.ranking;"),
             ("future preview readiness runtime display bundle import", "futurePreviewReadinessRuntimeDisplayBundle,"),
             ("future preview readiness runtime display bundle binding", "const futurePreviewReadinessRuntimeDisplay = futurePreviewReadinessRuntimeDisplayBundle();"),
             ("future preview readiness runtime field binding", "const futurePreviewReadinessStaticDisplay = futurePreviewReadinessRuntimeDisplay.readiness;"),
             ("future preview readiness static display bundle health binding", "futurePreviewReadinessStaticDisplay.healthIntegrationItems;"),
-            ("future preview readiness static display bundle community binding", "const communityReadinessChecklistItems = futurePreviewReadinessStaticDisplay.communityItems;"),
-            ("future preview readiness static display bundle ranking binding", "const rankingReadinessChecklistItems = futurePreviewReadinessStaticDisplay.rankingItems;"),
         ):
             _assert_contains(label, content, marker)
         for label, marker in (
@@ -16219,14 +13847,8 @@ def main() -> int:
             _assert_not_contains(label, content, marker)
         for label, marker in (
             ("direct health integration boundary rows binding", "const healthIntegrationBoundaryRows = healthIntegrationBoundaryDisplayRows();"),
-            ("direct community boundary rows binding", "const communityBoundaryRows = communityBoundaryDisplayRows("),
-            ("direct ranking boundary rows binding", "const rankingBoundaryRows = rankingBoundaryDisplayRows();"),
             ("direct health integration readiness binding", "healthIntegrationReadinessChecklistDisplayItems();"),
-            ("direct community readiness binding", "const communityReadinessChecklistItems = communityReadinessChecklistDisplayItems();"),
-            ("direct ranking readiness binding", "const rankingReadinessChecklistItems = rankingReadinessChecklistDisplayItems();"),
             ("direct health integration readiness import", "  healthIntegrationReadinessChecklistDisplayItems,"),
-            ("direct community readiness import", "  communityReadinessChecklistDisplayItems,"),
-            ("direct ranking readiness import", "  rankingReadinessChecklistDisplayItems,"),
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (
@@ -16234,15 +13856,11 @@ def main() -> int:
             ("future preview boundary copy bundle binding", "const futurePreviewBoundaryCopy = futurePreviewBoundaryCopyBundle();"),
             ("future preview boundary copy bundle doctor share binding", "const doctorShareBackendBoundaryDisplayText = futurePreviewBoundaryCopy.doctorShareBackend;"),
             ("future preview boundary copy bundle health integration binding", "const healthIntegrationExternalDataBoundaryDisplayText = futurePreviewBoundaryCopy.healthIntegrationExternalData;"),
-            ("future preview boundary copy bundle community binding", "const communityPublicNameBoundaryDisplayText = futurePreviewBoundaryCopy.communityPublicName;"),
-            ("future preview boundary copy bundle ranking binding", "const rankingLocalPreviewBoundaryDisplayText = futurePreviewBoundaryCopy.rankingLocalPreview;"),
             ("future preview boundary runtime display bundle import", "futurePreviewBoundaryRuntimeDisplayBundle,"),
             ("future preview boundary runtime display bundle binding", "const futurePreviewBoundaryRuntimeDisplay = futurePreviewBoundaryRuntimeDisplayBundle();"),
             ("future preview boundary runtime field binding", "const futurePreviewBoundaryDisplay = futurePreviewBoundaryRuntimeDisplay.boundary;"),
             ("future preview boundary display bundle doctor share binding", "const doctorSharePreviewBoundaryDisplay = futurePreviewBoundaryDisplay.doctorShare;"),
             ("future preview boundary display bundle health integration binding", "const healthIntegrationPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.healthIntegration;"),
-            ("future preview boundary display bundle community binding", "const communityPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.community;"),
-            ("future preview boundary display bundle ranking binding", "const rankingPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.ranking;"),
             ("future preview boundary display bundle reminder binding", "const reminderPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.reminder;"),
             ("future preview boundary display bundle privacy binding", "const privacyPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.privacy;"),
         ):
@@ -16250,12 +13868,8 @@ def main() -> int:
         for label, marker in (
             ("direct doctor share backend boundary copy binding", "const doctorShareBackendBoundaryDisplayText = doctorShareBackendBoundaryCopy();"),
             ("direct health integration external boundary copy binding", "const healthIntegrationExternalDataBoundaryDisplayText = healthIntegrationExternalDataBoundaryCopy();"),
-            ("direct community public name boundary copy binding", "const communityPublicNameBoundaryDisplayText = communityPublicNameBoundaryCopy();"),
-            ("direct ranking local preview boundary copy binding", "const rankingLocalPreviewBoundaryDisplayText = rankingLocalPreviewBoundaryCopy();"),
             ("direct doctor share preview boundary item binding", "const doctorSharePreviewBoundaryDisplay = doctorSharePreviewBoundaryDisplayItem();"),
             ("direct health integration preview boundary item binding", "const healthIntegrationPreviewBoundaryDisplay = healthIntegrationPreviewBoundaryDisplayItem();"),
-            ("direct community preview boundary item binding", "const communityPreviewBoundaryDisplay = communityPreviewBoundaryDisplayItem();"),
-            ("direct ranking preview boundary item binding", "const rankingPreviewBoundaryDisplay = rankingPreviewBoundaryDisplayItem();"),
             ("direct reminder preview boundary item binding", "const reminderPreviewBoundaryDisplay = reminderPreviewBoundaryDisplayItem();"),
             ("direct privacy preview boundary item binding", "const privacyPreviewBoundaryDisplay = privacyPreviewBoundaryDisplayItem();"),
             ("direct future preview boundary display bundle import", "  futurePreviewBoundaryDisplayBundle,"),
@@ -16303,21 +13917,9 @@ def main() -> int:
         ):
             _assert_not_contains(label, content, marker)
         for label, marker in (
-            ("food community stale future store bridge copy", "點數未來可串接商城兌換優惠券、商品折扣、特殊徽章與會員福利。"),
-            ("store stale empty wallet coupon-only copy", "尚未同步兌換券；完成食物分享取得點數後可兌換優惠券或折扣碼。"),
             ("year review stale future module privacy incomplete copy", "需先累積年度資料、完成隱私遮罩與分享權限。"),
             ("year review stale future module requirements", 'requirements: ["年度 aggregate job 或報表查詢", "分享圖隱私遮罩", "使用者分享與刪除控制"]'),
             ("year review stale future module backend-ready requirements", 'requirements: ["每年 1 月 1 日自動產生", "privacy-masked share package", "外部平台深度整合與刪除治理"]'),
-            ("achievement stale future module backend incomplete copy", "需先完成 achievement definitions、後端同步與隱私邊界。"),
-            ("achievement stale future module requirements", 'requirements: ["streak days 與 badge definitions", "achievement records 同步", "公開展示需使用者 opt-in"]'),
-            ("achievement stale future module backend-ready requirements", 'requirements: ["三大分類與動態級距", "backend summary / sync / unlocks", "公開展示 opt-in 與撤回治理"]'),
-            ("community stale future module public opt-in requirement", 'requirements: ["公開顯示名稱與排行榜 opt-in", "食物分享、點數與排行榜同步", "貼文、留言、封鎖、檢舉與審核流程"]'),
-            ("community readiness stale public settings incomplete copy", "公開顯示名稱與可見範圍設定"),
-            ("ranking readiness stale opt-in incomplete copy", "user public ranking opt-in 與退出流程"),
-            ("ranking future module stale opt-in requirement", 'requirements: ["user public ranking opt-in", "ranking stats structure", "排名退出與歷史資料撤回流程"]'),
-            ("ranking stale future module backend-ready requirement", 'requirements: ["三種公開榜單同步", "封鎖、檢舉與審核流程", "排名退出後歷史資料撤回流程"]'),
-            ("store stale future module points ledger requirement", 'requirements: ["點數帳本與兌換券狀態", "購物車、出貨訂單與付款", "退款、履約與商品法務審核"]'),
-            ("store checkout stale coupon rules incomplete copy", "購物車持久化、優惠券與折扣規則"),
         ):
             _assert_not_contains(label, content, marker)
         year_reviews_api_content = YEAR_REVIEWS_API_PATH.read_text(encoding="utf-8")
@@ -16363,7 +13965,7 @@ def main() -> int:
             _assert_contains(label.replace("ORM", "migration"), year_review_share_constraint_migration_content, marker)
             if marker in year_review_snapshot_model_block:
                 raise AssertionError(f"{label} must not be declared on YearReviewSnapshot.")
-        year_review_tests_content = COMMUNITY_STORE_YEAR_REVIEW_TEST_PATH.read_text(encoding="utf-8")
+        year_review_tests_content = YEAR_REVIEW_TEST_PATH.read_text(encoding="utf-8")
         for label, marker in (
             ("year review share package constraint metadata regression", "test_year_review_share_package_constraints_are_declared_on_share_package_model"),
             ("year review unfinished year share-card test path", 'f"/year-reviews/{unfinished_year}/share-card?profile_id={profile_id}"'),
@@ -16414,21 +14016,6 @@ def main() -> int:
             "year review share does not pass raw snapshot payload",
             year_review_share_block,
             "message: JSON.stringify",
-        )
-        _assert_not_contains(
-            "year review share does not store raw reported package id",
-            year_review_share_block,
-            "setYearReviewSharePackageId(reportedPackage.share_package_id)",
-        )
-        _assert_not_contains(
-            "year review share does not store raw confirmed package id",
-            year_review_share_block,
-            "setYearReviewSharePackageId(sharePackage.share_package_id)",
-        )
-        _assert_not_contains(
-            "store search direct setter binding",
-            content,
-            "onChangeText={(value) => setStoreSearchText(boundStoreSearchText(value))}",
         )
         _assert_not_contains(
             "account security direct boundary grid map",
@@ -16690,692 +14277,6 @@ def main() -> int:
         ):
             _assert_not_contains(label, content, marker)
         _assert_not_contains(
-            "food community search direct handler bound input",
-            content,
-            "setFoodCommunitySearchText(boundStoreSearchText(value));",
-        )
-        _assert_not_contains(
-            "store search direct handler bound input",
-            content,
-            "setStoreSearchText(boundStoreSearchText(value));",
-        )
-        _assert_not_contains(
-            "store category direct selection binding",
-            content,
-            "onPress={() => selectStoreCategory(category.value)}",
-        )
-        _assert_not_contains(
-            "store category direct handler value binding",
-            content,
-            "selectStoreCategory(category.value);",
-        )
-        for label, marker in (
-            ("local store category target helper", "function storeCategoryTarget(category: ReturnType<typeof storeCategoryDisplayItem>)"),
-            ("local store category key helper", "function storeCategoryOptionKey(category: ReturnType<typeof storeCategoryDisplayItem>)"),
-            ("local store category accessibility helper", "function storeCategoryOptionAccessibilityLabel(category: ReturnType<typeof storeCategoryDisplayItem>)"),
-            ("local store category label helper", "function storeCategoryOptionLabel(category: ReturnType<typeof storeCategoryDisplayItem>)"),
-            ("local store category selected helper", "function storeCategoryOptionSelected(category: ReturnType<typeof storeCategoryDisplayItem>, selectedCategory: StoreCategory)"),
-        ):
-            _assert_not_contains(label, content, marker)
-        for label, marker in (
-            ("direct store category key binding", "key={category.value}"),
-            ("direct store category accessibility binding", "accessibilityLabel={category.accessibilityLabel}"),
-            ("direct store category selected state binding", "storeCategory === category.value"),
-            ("direct store category label binding", "{category.label}"),
-        ):
-            _assert_not_contains(label, content, marker)
-        _assert_not_contains(
-            "food community category direct handler value binding",
-            content,
-            "selectFoodCommunityCategory(category.value);",
-        )
-        for label, marker in (
-            ("local food community category target helper", "function foodCommunityCategoryTarget(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
-            ("local food community category key helper", "function foodCommunityCategoryOptionKey(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
-            ("local food community category accessibility helper", "function foodCommunityCategoryOptionAccessibilityLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
-            ("local food community category label helper", "function foodCommunityCategoryOptionLabel(category: ReturnType<typeof foodCommunityCategoryDisplayItem>)"),
-            ("local food community category selected helper", "function foodCommunityCategoryOptionSelected(category: ReturnType<typeof foodCommunityCategoryDisplayItem>, selectedCategory: FoodCommunityCategory)"),
-            ("local food community detail selected item helper", "function foodCommunityDetailSelectedItemId(item: { id: string })"),
-            ("local food community detail status title helper", "function foodCommunityDetailStatusTitle(item: { title: string })"),
-            ("local food community detail title helper", "function foodCommunityDetailTitle(item: { title: string })"),
-            ("local food community detail title display helper", "function foodCommunityDetailTitleDisplayText(item: { title: string })"),
-            ("local food community detail panel visible helper", "function foodCommunityDetailPanelVisible(item: ReturnType<typeof foodCommunityItemDisplayItem> | null): item is ReturnType<typeof foodCommunityItemDisplayItem>"),
-            ("local food community detail share count helper", "function foodCommunityDetailShareCount(item: { shareCount: number })"),
-            ("local food community detail share count display helper", "function foodCommunityDetailShareCountDisplayText(item: { shareCount: number })"),
-            ("local food community detail share count label helper", "function foodCommunityDetailShareCountLabel()"),
-            ("local food community detail average rise helper", "function foodCommunityDetailAverageRise(item: { averageRise: number })"),
-            ("local food community detail average rise display helper", "function foodCommunityDetailAverageRiseDisplayText(item: { averageRise: number })"),
-            ("local food community detail average rise label helper", "function foodCommunityDetailAverageRiseLabel()"),
-            ("local food community detail maximum rise helper", "function foodCommunityDetailMaximumRise(item: { maximumRise: number })"),
-            ("local food community detail maximum rise display helper", "function foodCommunityDetailMaximumRiseDisplayText(item: { maximumRise: number })"),
-            ("local food community detail maximum rise label helper", "function foodCommunityDetailMaximumRiseLabel()"),
-            ("local food community detail minimum rise helper", "function foodCommunityDetailMinimumRise(item: { minimumRise: number })"),
-            ("local food community detail minimum rise display helper", "function foodCommunityDetailMinimumRiseDisplayText(item: { minimumRise: number })"),
-            ("local food community detail minimum rise label helper", "function foodCommunityDetailMinimumRiseLabel()"),
-            ("local food community detail individual share section label helper", "function foodCommunityDetailIndividualShareSectionLabel()"),
-            ("local food community detail individual shares helper", "function foodCommunityDetailIndividualShares(item: { individualShareDisplayItems: Array<{ id: string; summary: string; note: string }> })"),
-            ("local food community detail status example count helper", "function foodCommunityDetailStatusExampleCount(item: { examples: unknown[] })"),
-            ("local food community category summary helper", "function foodCommunityCategorySummary(category: { summary: string })"),
-            ("local food community database section label helper", "function foodCommunityDatabaseSectionLabel()"),
-            ("local food community database intro copy helper", "function foodCommunityDatabaseIntroCopy()"),
-            ("local food community share fallback food name helper", "function foodCommunityShareFallbackFoodName(item: { title: string })"),
-            ("local food community share category helper", "function foodCommunityShareCategory(item: { category: FoodCommunityCategory })"),
-            ("local food community share section label helper", "function foodCommunityShareSectionLabel()"),
-            ("local food community share eaten date label helper", "function foodCommunityShareEatenDateLabel()"),
-            ("local food community share eaten time label helper", "function foodCommunityShareEatenTimeLabel()"),
-            ("local food community ranking section label helper", "function foodCommunityRankingSectionLabel()"),
-            ("local food community points store bridge copy helper", "function foodCommunityPointsStoreBridgeCopy()"),
-            ("local food community category default item helper", "function foodCommunityCategoryDefaultItemId(category: FoodCommunityCategory)"),
-            ("local food community list default item helper", "function foodCommunityListDefaultItemId(items: Array<{ id: string }>, fallbackId: string)"),
-            ("local food community item target helper", "function foodCommunityItemTarget(item: { id: string })"),
-            ("local community public name preview label helper", "function communityPublicNamePreviewLabel()"),
-            ("local community hero icon label helper", "function communityHeroIconLabel()"),
-            ("local community public profile save accessibility helper", "function communityPublicProfileSaveAccessibilityLabel()"),
-            ("local community public profile save button helper", "function communityPublicProfileSaveButtonLabel()"),
-            ("local community screen title helper", "function communityScreenTitleLabel()"),
-            ("local community screen subtitle helper", "function communityScreenSubtitleCopy()"),
-            ("local community close accessibility helper", "function communityCloseAccessibilityLabel()"),
-            ("local community preview boundary badge helper", "function communityPreviewBoundaryBadgeLabel()"),
-            ("local community preview boundary copy helper", "function communityPreviewBoundaryCopyText()"),
-            ("local community post accessibility helper", "function communityPostAccessibilityLabel()"),
-            ("local community post button helper", "function communityPostButtonLabel()"),
-            ("local community privacy accessibility helper", "function communityPrivacyAccessibilityLabel()"),
-            ("local community action status label helper", "function communityActionStatusLabel()"),
-            ("local community action status text helper", "function communityActionStatusText()"),
-            ("local community action status visible helper", "function communityActionStatusVisible()"),
-            ("local community readiness section label helper", "function communityReadinessSectionLabel()"),
-            ("local community return future modules accessibility helper", "function communityReturnFutureModulesAccessibilityLabel()"),
-            ("local community return future modules button helper", "function communityReturnFutureModulesButtonLabel()"),
-            ("local ranking screen title helper", "function rankingScreenTitleLabel()"),
-            ("local ranking screen subtitle helper", "function rankingScreenSubtitleCopy()"),
-            ("local ranking local streak preview label helper", "function rankingLocalStreakPreviewLabel()"),
-            ("local ranking hero icon label helper", "function rankingHeroIconLabel()"),
-            ("local ranking streak display label helper", "function rankingStreakDisplayLabel(days: number)"),
-            ("local ranking streak display text helper", "function rankingStreakDisplayText()"),
-            ("local ranking streak display text days helper", "function rankingStreakDisplayText(days: number)"),
-            ("local ranking close button helper", "function rankingCloseButtonLabel()"),
-            ("local ranking local preview boundary copy helper", "function rankingLocalPreviewBoundaryCopyText()"),
-            ("local ranking readiness section label helper", "function rankingReadinessSectionLabel()"),
-            ("local ranking close accessibility helper", "function rankingCloseAccessibilityLabel()"),
-            ("local ranking preview boundary badge helper", "function rankingPreviewBoundaryBadgeLabel()"),
-            ("local ranking preview boundary copy helper", "function rankingPreviewBoundaryCopyText()"),
-            ("local ranking public action accessibility helper", "function rankingPublicActionAccessibilityLabel()"),
-            ("local ranking public action button helper", "function rankingPublicActionButtonLabel()"),
-            ("local ranking opt-in action accessibility helper", "function rankingOptInActionAccessibilityLabel(label: string)"),
-            ("local ranking opt-in action button helper", "function rankingOptInActionButtonLabel(label: string)"),
-            ("local ranking action status label helper", "function rankingActionStatusLabel()"),
-            ("local ranking action status text helper", "function rankingActionStatusText()"),
-            ("local ranking action status visible helper", "function rankingActionStatusVisible()"),
-            ("local ranking return future modules accessibility helper", "function rankingReturnFutureModulesAccessibilityLabel()"),
-            ("local ranking return future modules button helper", "function rankingReturnFutureModulesButtonLabel()"),
-        ):
-            _assert_not_contains(label, content, marker)
-        _assert_not_contains(
-            "food community category direct option key binding",
-            content,
-            "foodCommunityCategoryDisplayOptions.map((category) => (\n                <Pressable\n                  key={category.value}",
-        )
-        _assert_not_contains(
-            "food community category direct accessibility label binding",
-            content,
-            "key={foodCommunityCategoryOptionKey(category)}\n                  accessibilityLabel={category.accessibilityLabel}",
-        )
-        _assert_not_contains(
-            "food community category direct selected state binding",
-            content,
-            "accessibilityState={{ selected: foodCommunityCategory === category.value }}",
-        )
-        _assert_not_contains(
-            "food community category direct selected active style binding",
-            content,
-            "foodCommunityCategory === category.value ? styles.segmentActive : null",
-        )
-        _assert_not_contains(
-            "food community category direct selected text style binding",
-            content,
-            "foodCommunityCategory === category.value ? styles.segmentTextActive : null",
-        )
-        _assert_not_contains(
-            "food community category direct label binding",
-            content,
-            "foodCommunityCategoryOptionSelected(category, foodCommunityCategory) ? styles.segmentTextActive : null\n                    ]}\n                  >\n                    {category.label}",
-        )
-        _assert_not_contains(
-            "food community category direct default item selection",
-            content,
-            "setSelectedFoodCommunityItemId(firstMatch?.id ?? \"\");",
-        )
-        _assert_not_contains(
-            "food community direct list default item selection",
-            content,
-            "setSelectedFoodCommunityItemId(nextItems[0]?.id ?? selectedFoodCommunityItemId);",
-        )
-        _assert_not_contains(
-            "food community direct list detail refresh",
-            content,
-            "void loadFoodCommunityDetail(nextItems[0].id);",
-        )
-        _assert_not_contains(
-            "food community direct list item key binding",
-            content,
-            "visibleFoodCommunityItems.map((item) => (\n                <Pressable\n                  key={item.id}",
-        )
-        _assert_not_contains(
-            "food community direct list item map in App",
-            content,
-            "visibleFoodCommunityItems.map((item) => (",
-        )
-        _assert_not_contains(
-            "food community direct list item accessibility label binding",
-            content,
-            "key={foodCommunityListItemKey(item)}\n                  accessibilityLabel={item.accessibilityLabel}",
-        )
-        _assert_not_contains(
-            "food community direct list item selected state binding",
-            content,
-            "accessibilityState={{ selected: selectedFoodCommunityItem?.id === item.id }}",
-        )
-        _assert_not_contains(
-            "food community direct list item selected style binding",
-            content,
-            "selectedFoodCommunityItem?.id === item.id ? styles.recordCardSelected : null",
-        )
-        _assert_not_contains(
-            "food community direct list empty binding",
-            content,
-            "visibleFoodCommunityItems.length === 0 ? (",
-        )
-        _assert_not_contains(
-            "food community direct list item title binding",
-            content,
-            "<Text style={styles.recordContent}>{item.title}</Text>\n                    <Text style={styles.evidence}>{item.metricSummary}</Text>",
-        )
-        _assert_not_contains(
-            "food community direct list item metric summary binding",
-            content,
-            "{item.metricSummary}",
-        )
-        _assert_not_contains(
-            "food community direct category summary binding",
-            content,
-            "{selectedFoodCommunityCategoryDisplay.summary}",
-        )
-        _assert_not_contains(
-            "food community direct detail selected item binding",
-            content,
-            "setSelectedFoodCommunityItemId(detailedItem.id);",
-        )
-        _assert_not_contains(
-            "food community direct detail panel visibility binding",
-            content,
-            "{selectedFoodCommunityItem ? (",
-        )
-        _assert_not_contains(
-            "food community direct detail refresh item comparison",
-            content,
-            "item.id === detailedItem.id",
-        )
-        _assert_not_contains(
-            "food community direct detail refresh item map",
-            content,
-            "current.map((item) => (item.id === detailedItemId ? detailedItem : item))",
-        )
-        _assert_not_contains(
-            "food community direct list response map",
-            content,
-            "foods.slice(0, maxListItems * 4).map(foodCommunityItemFromApi)",
-        )
-        _assert_not_contains(
-            "food community direct category response map",
-            content,
-            "categories.slice(0, foodCommunityCategories.length).map((category) => ({",
-        )
-        _assert_not_contains(
-            "food community direct detail status title binding",
-            content,
-            "itemTitle: detailedItem.title,",
-        )
-        _assert_not_contains(
-            "food community direct detail status example count binding",
-            content,
-            "exampleCount: detailedItem.examples.length",
-        )
-        _assert_not_contains(
-            "food community direct share selected item binding",
-            content,
-            "setSelectedFoodCommunityItemId(updatedFood.id);",
-        )
-        _assert_not_contains(
-            "food community share selected item local helper",
-            content,
-            "function foodCommunityShareSelectedItemId(item: { id: string })",
-        )
-        _assert_not_contains(
-            "food community share refresh item local helper",
-            content,
-            "function foodCommunityShareRefreshItemId(item: { id: string })",
-        )
-        _assert_not_contains(
-            "food community direct share response item transform",
-            content,
-            "const updatedFood = foodCommunityItemFromApi(response.food);",
-        )
-        _assert_not_contains(
-            "food community direct share refresh item filter",
-            content,
-            "item.id !== updatedFood.id",
-        )
-        _assert_not_contains(
-            "food community direct share refresh id filter",
-            content,
-            "item.id !== updatedFoodId",
-        )
-        _assert_not_contains(
-            "food community direct share fallback food name binding",
-            content,
-            "foodCommunityShareFields.foodName || selectedFoodCommunityItem.title",
-        )
-        _assert_not_contains(
-            "food community direct detail title binding",
-            content,
-            "{selectedFoodCommunityItem.title} 資料頁",
-        )
-        _assert_not_contains(
-            "food community direct detail title display binding",
-            content,
-            "{foodCommunityDetailTitle(selectedFoodCommunityItem)} 資料頁",
-        )
-        _assert_not_contains(
-            "food community direct detail share count binding",
-            content,
-            "{selectedFoodCommunityItem.shareCount}",
-        )
-        _assert_not_contains(
-            "food community direct detail share count display binding",
-            content,
-            "{foodCommunityDetailShareCount(selectedFoodCommunityItem)}",
-        )
-        _assert_not_contains(
-            "food community direct detail average rise binding",
-            content,
-            "{selectedFoodCommunityItem.averageRise} mg/dL",
-        )
-        _assert_not_contains(
-            "food community direct detail average rise display binding",
-            content,
-            "{foodCommunityDetailAverageRise(selectedFoodCommunityItem)} mg/dL",
-        )
-        _assert_not_contains(
-            "food community direct detail maximum rise binding",
-            content,
-            "{selectedFoodCommunityItem.maximumRise} mg/dL",
-        )
-        _assert_not_contains(
-            "food community direct detail maximum rise display binding",
-            content,
-            "{foodCommunityDetailMaximumRise(selectedFoodCommunityItem)} mg/dL",
-        )
-        _assert_not_contains(
-            "food community direct detail minimum rise binding",
-            content,
-            "{selectedFoodCommunityItem.minimumRise} mg/dL",
-        )
-        _assert_not_contains(
-            "food community direct detail minimum rise display binding",
-            content,
-            "{foodCommunityDetailMinimumRise(selectedFoodCommunityItem)} mg/dL",
-        )
-        _assert_not_contains(
-            "food community direct share food name max length binding",
-            content,
-            "foodNameMaxLength={maxDisplayTextLength}",
-        )
-        _assert_not_contains(
-            "community direct action display bundle binding",
-            content,
-            "const communityActionDisplay = communityActionDisplayBundle({",
-        )
-        _assert_not_contains(
-            "community stale action display bundle import",
-            content,
-            "  communityActionDisplayBundle,",
-        )
-        _assert_not_contains(
-            "community direct preview label display bundle binding",
-            content,
-            "const communityPreviewLabelDisplay = communityPreviewLabelDisplayBundle({",
-        )
-        _assert_not_contains(
-            "community stale preview label display bundle import",
-            content,
-            "  communityPreviewLabelDisplayBundle,",
-        )
-        _assert_not_contains(
-            "food community direct share note max length binding",
-            content,
-            "noteMaxLength={maxDisplayDetailTextLength}",
-        )
-        _assert_not_contains(
-            "community public direct display name max length binding",
-            content,
-            "maxLength={maxDisplayTextLength}",
-        )
-        _assert_not_contains(
-            "food community direct detail individual share section label binding",
-            content,
-            "<Text style={styles.label}>個別分享紀錄</Text>",
-        )
-        _assert_not_contains(
-            "food community direct detail individual share empty text binding",
-            content,
-            "<Text style={styles.evidence}>尚未有可顯示的個別分享紀錄。</Text>",
-        )
-        _assert_not_contains(
-            "food community direct detail individual shares binding",
-            content,
-            "selectedFoodCommunityItem.individualShareDisplayItems",
-        )
-        _assert_not_contains(
-            "food community direct detail individual shares length binding",
-            content,
-            "foodCommunityDetailIndividualShares(selectedFoodCommunityItem).length > 0",
-        )
-        _assert_not_contains(
-            "food community direct detail share row id binding",
-            content,
-            "key={share.id}",
-        )
-        _assert_not_contains(
-            "food community direct detail share row summary binding",
-            content,
-            "{share.summary}",
-        )
-        _assert_not_contains(
-            "food community direct detail share row note binding",
-            content,
-            "{share.note}",
-        )
-        _assert_not_contains(
-            "food community direct share eaten date label binding",
-            content,
-            '<FieldLabel icon={"📅"} label={"食用日期"} />',
-        )
-        _assert_not_contains(
-            "food community direct share eaten time label binding",
-            content,
-            '<FieldLabel icon={"🕒"} label={"食用時間"} />',
-        )
-        _assert_not_contains(
-            "food community direct share category binding",
-            content,
-            "category: apiFoodCategoryFromMobile(selectedFoodCommunityItem.category),",
-        )
-        _assert_not_contains(
-            "food community direct share section label binding",
-            content,
-            "<Text style={styles.label}>食物分享紀錄</Text>",
-        )
-        _assert_not_contains(
-            "food community direct share food name accessibility binding",
-            content,
-            'accessibilityLabel="輸入食物名稱"',
-        )
-        _assert_not_contains(
-            "food community direct share eaten date accessibility binding",
-            content,
-            'accessibilityLabel="輸入食物分享食用日期"',
-        )
-        _assert_not_contains(
-            "food community direct share eaten time accessibility binding",
-            content,
-            'accessibilityLabel="輸入食物分享食用時間"',
-        )
-        _assert_not_contains(
-            "food community direct share before glucose accessibility binding",
-            content,
-            'accessibilityLabel="輸入食用前血糖"',
-        )
-        _assert_not_contains(
-            "food community direct share after glucose accessibility binding",
-            content,
-            'accessibilityLabel="輸入食用後血糖"',
-        )
-        _assert_not_contains(
-            "food community direct share note accessibility binding",
-            content,
-            'accessibilityLabel="輸入食物分享備註心得"',
-        )
-        _assert_not_contains(
-            "food community direct ranking section label binding",
-            content,
-            "<Text style={styles.label}>社群排行榜</Text>",
-        )
-        _assert_not_contains(
-            "food community direct points store bridge copy binding",
-            content,
-            "<Text style={styles.evidence}>點數已串接商城，可兌換優惠券、商品折扣、特殊徽章與會員福利；出貨、付款與治理流程仍待正式開放。</Text>",
-        )
-        _assert_not_contains(
-            "food community direct share field row map",
-            content,
-            "foodCommunityShareFieldRows.map((row) => (",
-        )
-        _assert_not_contains(
-            "food community direct share field row key binding",
-            content,
-            "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />",
-        )
-        _assert_not_contains(
-            "food community direct share field row label binding",
-            content,
-            "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityShareFieldRowKey(row)}\n                  label={row.label}",
-        )
-        _assert_not_contains(
-            "food community direct share field row value binding",
-            content,
-            "foodCommunityShareFieldRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityShareFieldRowKey(row)}\n                  label={foodCommunityShareFieldRowLabel(row)}\n                  value={row.value}",
-        )
-        _assert_not_contains(
-            "food community direct ranking row map",
-            content,
-            "foodCommunityRankingRows.map((row) => (",
-        )
-        _assert_not_contains(
-            "food community direct ranking row key binding",
-            content,
-            "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow key={row.label} label={row.label} value={row.value} />",
-        )
-        _assert_not_contains(
-            "food community direct ranking row label binding",
-            content,
-            "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityRankingRowKey(row)}\n                  label={row.label}",
-        )
-        _assert_not_contains(
-            "food community direct ranking row value binding",
-            content,
-            "foodCommunityRankingRows.map((row) => (\n                <HighlightDetailRow\n                  key={foodCommunityRankingRowKey(row)}\n                  label={foodCommunityRankingRowLabel(row)}\n                  value={row.value}",
-        )
-        _assert_not_contains(
-            "food community direct point row map",
-            content,
-            "foodCommunityPointRows.map((row) => (",
-        )
-        _assert_not_contains(
-            "food community direct point row key binding",
-            content,
-            "foodCommunityPointRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
-        )
-        _assert_not_contains(
-            "food community direct point row label binding",
-            content,
-            "foodCommunityPointRows.map((row) => (\n                <View key={foodCommunityPointRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
-        )
-        _assert_not_contains(
-            "food community direct point row value binding",
-            content,
-            "foodCommunityPointRows.map((row) => (\n                <View key={foodCommunityPointRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{foodCommunityPointRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
-        )
-        _assert_not_contains(
-            "community direct public name preview label binding",
-            content,
-            "<Text style={styles.evidence}>公開顯示名稱預覽</Text>",
-        )
-        _assert_not_contains(
-            "community direct hero icon label binding",
-            content,
-            "<Text style={styles.heroIconText}>群</Text>",
-        )
-        _assert_not_contains(
-            "community direct public display name accessibility binding",
-            content,
-            'accessibilityLabel="輸入社群公開顯示名稱"',
-        )
-        _assert_not_contains(
-            "community direct public profile save accessibility binding",
-            content,
-            'accessibilityLabel="儲存社群公開顯示名稱，不公開健康數值"',
-        )
-        _assert_not_contains(
-            "community direct public profile save button text binding",
-            content,
-            "<Text style={styles.secondaryButtonText}>儲存公開名稱</Text>",
-        )
-        _assert_not_contains(
-            "community direct privacy opt-in ternary button text binding",
-            content,
-            '{communityPublicSettings?.leaderboard_opt_in ? "關閉排行榜 opt-in" : "開啟排行榜 opt-in"}',
-        )
-        _assert_not_contains(
-            "ranking direct screen title binding",
-            content,
-            '<Text style={styles.sectionTitle}>社群排行</Text>',
-        )
-        _assert_not_contains(
-            "ranking direct screen subtitle copy binding",
-            content,
-            '<Text style={styles.evidence}>同步分享次數、貢獻度與食物測試達人公開榜單；只顯示 opt-in 使用者的非敏感分數。</Text>',
-        )
-        _assert_not_contains(
-            "ranking direct local streak preview label binding",
-            content,
-            '<Text style={styles.evidence}>本機連續記錄預覽</Text>',
-        )
-        _assert_not_contains(
-            "ranking direct hero icon label binding",
-            content,
-            '<Text style={styles.heroIconText}>榜</Text>',
-        )
-        _assert_not_contains(
-            "ranking direct streak display label binding",
-            content,
-            '<Text style={styles.heroNumber}>{rankingStreakDisplayDays} 天</Text>',
-        )
-        _assert_not_contains(
-            "ranking direct streak display label helper argument binding",
-            content,
-            "<Text style={styles.evidence}>{rankingLocalStreakPreviewLabel()}</Text>\n                <Text style={styles.heroNumber}>{rankingStreakDisplayLabel(rankingStreakDisplayDays)}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct local preview boundary copy binding",
-            content,
-            "<Text style={styles.evidence}>{rankingLocalStreakPreviewLabel()}</Text>\n                <Text style={styles.heroNumber}>{rankingStreakDisplayLabel(rankingStreakDisplayDays)}</Text>\n                <Text style={styles.evidence}>{rankingLocalPreviewBoundaryDisplayText}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct boundary row map",
-            content,
-            "rankingBoundaryRows.map((row) => (",
-        )
-        _assert_not_contains(
-            "ranking direct boundary row key binding",
-            content,
-            "rankingBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
-        )
-        _assert_not_contains(
-            "ranking direct boundary row label binding",
-            content,
-            "rankingBoundaryRows.map((row) => (\n                <View key={rankingBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct boundary row value binding",
-            content,
-            "rankingBoundaryRows.map((row) => (\n                <View key={rankingBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{rankingBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct leaderboard section key binding",
-            content,
-            "rankingLeaderboardSections.map((section) => (\n              <View key={section.type} style={styles.inlineInfoBlock}>",
-        )
-        _assert_not_contains(
-            "ranking direct leaderboard section map",
-            content,
-            "rankingLeaderboardSections.map((section) => (",
-        )
-        _assert_not_contains(
-            "ranking direct leaderboard type array",
-            content,
-            'const rankingTypes: CommunityLeaderboardType[] = ["share_count", "contribution", "food_tester"];',
-        )
-        _assert_not_contains(
-            "ranking direct display section response map",
-            content,
-            "sections.map(communityLeaderboardDisplaySection)",
-        )
-        _assert_not_contains(
-            "ranking direct leaderboard section label binding",
-            content,
-            "rankingLeaderboardSections.map((section) => (\n              <View key={rankingLeaderboardSectionKey(section)} style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{section.label}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct leaderboard entry key binding",
-            content,
-            "section.entries.map((entry) => (\n                    <View key={entry.id} style={styles.highlightRow}>",
-        )
-        _assert_not_contains(
-            "ranking direct leaderboard entry rank label binding",
-            content,
-            "section.entries.map((entry) => (\n                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>\n                      <Text style={styles.recordType}>{entry.rankLabel}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct leaderboard entry display name binding",
-            content,
-            "section.entries.map((entry) => (\n                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>\n                      <Text style={styles.recordType}>{rankingLeaderboardEntryRankLabel(entry)}</Text>\n                      <View style={styles.timelineContent}>\n                        <Text style={styles.recordContent}>{entry.displayName}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct leaderboard entry score label binding",
-            content,
-            "section.entries.map((entry) => (\n                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>\n                      <Text style={styles.recordType}>{rankingLeaderboardEntryRankLabel(entry)}</Text>\n                      <View style={styles.timelineContent}>\n                        <Text style={styles.recordContent}>{rankingLeaderboardEntryDisplayName(entry)}</Text>\n                        <Text style={styles.evidence}>{entry.scoreLabel}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct leaderboard section empty copy binding",
-            content,
-            "rankingLeaderboardSections.map((section) => (\n              <View key={rankingLeaderboardSectionKey(section)} style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingLeaderboardSectionLabel(section)}</Text>\n                {section.entries.length > 0 ? (\n                  section.entries.map((entry) => (\n                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>\n                      <Text style={styles.recordType}>{rankingLeaderboardEntryRankLabel(entry)}</Text>\n                      <View style={styles.timelineContent}>\n                        <Text style={styles.recordContent}>{rankingLeaderboardEntryDisplayName(entry)}</Text>\n                        <Text style={styles.evidence}>{rankingLeaderboardEntryScoreLabel(entry)}</Text>\n                      </View>\n                    </View>\n                  ))\n                ) : (\n                  <Text style={styles.evidence}>{section.emptyCopy}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct leaderboard section entries condition binding",
-            content,
-            "rankingLeaderboardSections.map((section) => (\n              <View key={rankingLeaderboardSectionKey(section)} style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingLeaderboardSectionLabel(section)}</Text>\n                {section.entries.length > 0 ? (",
-        )
-        _assert_not_contains(
-            "ranking direct readiness section label binding",
-            content,
-            "rankingLeaderboardSections.map((section) => (\n              <View key={rankingLeaderboardSectionKey(section)} style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingLeaderboardSectionLabel(section)}</Text>\n                {section.entries.length > 0 ? (\n                  section.entries.map((entry) => (\n                    <View key={rankingLeaderboardEntryKey(entry)} style={styles.highlightRow}>\n                      <Text style={styles.recordType}>{rankingLeaderboardEntryRankLabel(entry)}</Text>\n                      <View style={styles.timelineContent}>\n                        <Text style={styles.recordContent}>{rankingLeaderboardEntryDisplayName(entry)}</Text>\n                        <Text style={styles.evidence}>{rankingLeaderboardEntryScoreLabel(entry)}</Text>\n                      </View>\n                    </View>\n                  ))\n                ) : (\n                  <Text style={styles.evidence}>{rankingLeaderboardSectionEmptyCopy(section)}</Text>\n                )}\n              </View>\n            ))}\n            <View style={styles.inlineInfoBlock}>\n              <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct readiness checklist item key binding",
-            content,
-            "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />",
-        )
-        _assert_not_contains(
-            "ranking direct readiness checklist item text binding",
-            content,
-            "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={item} />",
-        )
-        _assert_not_contains(
-            "ranking direct readiness checklist helper binding",
-            content,
-            "rankingReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={rankingReadinessChecklistItemKey(item)} text={rankingReadinessChecklistItemText(item)} />",
-        )
-        _assert_not_contains(
             "doctor share direct boundary row map",
             content,
             "doctorShareBoundaryRows.map((row) => (",
@@ -17416,251 +14317,6 @@ def main() -> int:
             "healthIntegrationBoundaryRows.map((row) => (\n                <View key={healthIntegrationBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{healthIntegrationBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
-            "community direct close accessibility binding",
-            content,
-            '<Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromCommunityPreview}>',
-        )
-        _assert_not_contains(
-            "community direct preview boundary badge binding",
-            content,
-            "<View style={styles.inlineInfoBlock}>\n              <Text style={styles.previewModeBadge}>{communityPreviewBoundaryDisplay.badge}</Text>",
-        )
-        _assert_not_contains(
-            "community direct preview boundary copy binding",
-            content,
-            "<Text style={styles.previewModeBadge}>{communityPreviewBoundaryBadgeDisplayLabel}</Text>\n              <Text style={styles.evidence}>{communityPreviewBoundaryDisplay.copy}</Text>",
-        )
-        _assert_not_contains(
-            "community direct post accessibility binding",
-            content,
-            "accessibilityLabel={futurePreviewDisplayLabels.communityPostAccessibility}\n                accessibilityRole=\"button\"\n                style={styles.secondaryButton}\n                onPress={showCommunityPostingStatus}",
-        )
-        _assert_not_contains(
-            "community direct post button binding",
-            content,
-            "<Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.communityPostButton}</Text>",
-        )
-        _assert_not_contains(
-            "community direct privacy accessibility binding",
-            content,
-            "accessibilityLabel={futurePreviewDisplayLabels.communityPrivacyAccessibility}\n                accessibilityRole=\"button\"\n                style={styles.secondaryButton}\n                onPress={showCommunityPrivacyStatus}",
-        )
-        _assert_not_contains(
-            "community direct action status label binding",
-            content,
-            "{communityActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{futurePreviewDisplayLabels.communityStatus}</Text>",
-        )
-        _assert_not_contains(
-            "community direct action status text binding",
-            content,
-            "{communityActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>\n                <Text style={styles.evidence}>{communityActionStatusDisplayText}</Text>",
-        )
-        _assert_not_contains(
-            "community direct action status visibility binding",
-            content,
-            "{communityActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>\n                <Text style={styles.evidence}>{communityActionStatusDisplayCopy}</Text>",
-        )
-        _assert_not_contains(
-            "community direct readiness section label binding",
-            content,
-            "<View style={styles.inlineInfoBlock}>\n              <Text style={styles.label}>{futurePreviewDisplayLabels.formalReadiness}</Text>\n              {communityReadinessChecklistItems.map((item) => (",
-        )
-        _assert_not_contains(
-            "community direct readiness checklist item key binding",
-            content,
-            "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow key={item} text={item} />",
-        )
-        _assert_not_contains(
-            "community direct readiness checklist item text binding",
-            content,
-            "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={item}",
-        )
-        _assert_not_contains(
-            "community direct readiness checklist helper binding",
-            content,
-            "communityReadinessChecklistItems.map((item) => (\n                <HighlightBulletRow\n                  key={communityReadinessChecklistItemKey(item)}\n                  text={communityReadinessChecklistItemText(item)}",
-        )
-        _assert_not_contains(
-            "community direct boundary row map",
-            content,
-            "communityBoundaryRows.map((row) => (",
-        )
-        _assert_not_contains(
-            "community direct boundary row key binding",
-            content,
-            "communityBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
-        )
-        _assert_not_contains(
-            "community direct boundary row label binding",
-            content,
-            "communityBoundaryRows.map((row) => (\n                <View key={communityBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
-        )
-        _assert_not_contains(
-            "community direct boundary row value binding",
-            content,
-            "communityBoundaryRows.map((row) => (\n                <View key={communityBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{communityBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
-        )
-        _assert_not_contains(
-            "community direct return future modules accessibility binding",
-            content,
-            "{communityActionStatusVisible() ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>\n                <Text style={styles.evidence}>{communityActionStatusDisplayCopy}</Text>\n              </View>\n            ) : null}\n            <Pressable\n              accessibilityLabel={futurePreviewDisplayLabels.returnFutureModulesAccessibility}",
-        )
-        _assert_not_contains(
-            "community direct return future modules button binding",
-            content,
-            "<Pressable\n              accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}\n              accessibilityRole=\"button\"\n              style={styles.secondaryButton}\n              onPress={returnFromCommunityPreview}\n            >\n              <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.returnFutureModules}</Text>",
-        )
-        _assert_not_contains(
-            "community direct return future modules press binding",
-            content,
-            "<Pressable\n              accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}\n              accessibilityRole=\"button\"\n              style={styles.secondaryButton}\n              onPress={returnFromCommunityPreview}\n            >\n              <Text style={styles.secondaryButtonText}>{communityReturnFutureModulesButtonDisplayLabel}</Text>",
-        )
-        _assert_not_contains(
-            "community direct screen title binding",
-            content,
-            "<Text style={styles.sectionTitle}>食物社群</Text>",
-        )
-        _assert_not_contains(
-            "community direct screen subtitle binding",
-            content,
-            "<Text style={styles.evidence}>同步真實食物升糖分享、點數與公開排行榜；貼文留言治理仍待正式開放。</Text>",
-        )
-        _assert_not_contains(
-            "food community direct database section label binding",
-            content,
-            "<Text style={styles.label}>食物血糖資料庫</Text>",
-        )
-        _assert_not_contains(
-            "food community direct database intro copy binding",
-            content,
-            "<Text style={styles.evidence}>建立華人使用者真實食物升糖資料庫，以實際食用前後血糖分享取代理論與網路傳言；backend ready 時同步真實分享，visual smoke 或 backend unavailable 時才顯示本機預覽。</Text>",
-        )
-        _assert_not_contains(
-            "food community direct list empty title binding",
-            content,
-            "<Text style={styles.label}>沒有符合的食物</Text>",
-        )
-        _assert_not_contains(
-            "food community direct list empty copy binding",
-            content,
-            "<Text style={styles.evidence}>可清除搜尋文字或切換分類；backend ready 時會依搜尋同步，未連線時只篩選本機預覽。</Text>",
-        )
-        _assert_not_contains(
-            "food community direct share count detail label binding",
-            content,
-            "<Text style={styles.confidence}>分享總人數</Text>",
-        )
-        _assert_not_contains(
-            "food community direct average rise detail label binding",
-            content,
-            "<Text style={styles.confidence}>實際升糖參考值（平均）</Text>",
-        )
-        _assert_not_contains(
-            "food community direct maximum rise detail label binding",
-            content,
-            "<Text style={styles.confidence}>最高上升血糖</Text>",
-        )
-        _assert_not_contains(
-            "food community direct minimum rise detail label binding",
-            content,
-            "<Text style={styles.confidence}>最低上升血糖</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct close accessibility binding",
-            content,
-            "<Text style={styles.sectionTitle}>{rankingScreenTitleLabel()}</Text>\n                <Text style={styles.evidence}>{rankingScreenSubtitleCopy()}</Text>\n              </View>\n              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole=\"button\" style={styles.closeButton} onPress={returnFromRankingPreview}>",
-        )
-        _assert_not_contains(
-            "ranking direct close button binding",
-            content,
-            "<Text style={styles.sectionTitle}>{rankingScreenTitleLabel()}</Text>\n                <Text style={styles.evidence}>{rankingScreenSubtitleCopy()}</Text>\n              </View>\n              <Pressable accessibilityLabel={rankingCloseAccessibilityDisplayLabel} accessibilityRole=\"button\" style={styles.closeButton} onPress={returnFromRankingPreview}>\n                <Text style={styles.closeButtonText}>×</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct close press binding",
-            content,
-            "<Text style={styles.sectionTitle}>{rankingScreenTitleLabel()}</Text>\n                <Text style={styles.evidence}>{rankingScreenSubtitleCopy()}</Text>\n              </View>\n              <Pressable accessibilityLabel={rankingCloseAccessibilityDisplayLabel} accessibilityRole=\"button\" style={styles.closeButton} onPress={returnFromRankingPreview}>",
-        )
-        _assert_not_contains(
-            "ranking direct preview boundary badge binding",
-            content,
-            "<Pressable accessibilityLabel={rankingCloseAccessibilityDisplayLabel} accessibilityRole=\"button\" style={styles.closeButton} onPress={returnFromRankingPreview}>\n                <Text style={styles.closeButtonText}>{rankingCloseButtonDisplayLabel}</Text>\n              </Pressable>\n            </View>\n            <View style={styles.inlineInfoBlock}>\n              <Text style={styles.previewModeBadge}>{rankingPreviewBoundaryDisplay.badge}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct preview boundary copy binding",
-            content,
-            "<View style={styles.inlineInfoBlock}>\n              <Text style={styles.previewModeBadge}>{rankingPreviewBoundaryBadgeLabel()}</Text>\n              <Text style={styles.evidence}>{rankingPreviewBoundaryDisplay.copy}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct action status label binding",
-            content,
-            "{rankingActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{futurePreviewDisplayLabels.rankingStatus}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct action status text binding",
-            content,
-            "{rankingActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingActionStatusLabel()}</Text>\n                <Text style={styles.evidence}>{rankingActionStatusDisplayText}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct action status label helper render",
-            content,
-            "{rankingActionStatusLabel(futurePreviewDisplayLabels)}",
-        )
-        _assert_not_contains(
-            "ranking direct action status text helper render",
-            content,
-            "{rankingActionStatusText(rankingActionStatusDisplayText)}",
-        )
-        _assert_not_contains(
-            "ranking direct readiness helper render",
-            content,
-            "{futurePreviewReadinessSectionLabel(futurePreviewDisplayLabels)}",
-        )
-        _assert_not_contains(
-            "ranking direct boundary badge helper render",
-            content,
-            "{futurePreviewBoundaryBadgeLabel(rankingPreviewBoundaryDisplay)}",
-        )
-        _assert_not_contains(
-            "ranking direct boundary copy helper render",
-            content,
-            "{futurePreviewBoundaryCopyText(rankingPreviewBoundaryDisplay)}",
-        )
-        _assert_not_contains(
-            "ranking stale boundary badge helper import",
-            content,
-            "  futurePreviewBoundaryBadgeLabel,",
-        )
-        _assert_not_contains(
-            "ranking stale boundary copy helper import",
-            content,
-            "  futurePreviewBoundaryCopyText,",
-        )
-        _assert_not_contains(
-            "ranking direct preview label display bundle binding",
-            content,
-            "const rankingPreviewLabelDisplay = rankingPreviewLabelDisplayBundle({",
-        )
-        _assert_not_contains(
-            "ranking stale preview label display bundle import",
-            content,
-            "  rankingPreviewLabelDisplayBundle,",
-        )
-        _assert_not_contains(
-            "ranking stale action status label import",
-            content,
-            "  rankingActionStatusLabel,",
-        )
-        _assert_not_contains(
-            "ranking stale action status text import",
-            content,
-            "  rankingActionStatusText,",
-        )
-        _assert_not_contains(
-            "ranking stale readiness section import",
-            content,
-            "  futurePreviewReadinessSectionLabel,",
-        )
-        _assert_not_contains(
             "future preview stale close accessibility import",
             content,
             "  futurePreviewCloseAccessibilityLabel,",
@@ -17674,265 +14330,6 @@ def main() -> int:
             "future preview stale return button import",
             content,
             "  futurePreviewReturnButtonLabel,",
-        )
-        _assert_not_contains(
-            "store direct checkout readiness helper binding",
-            content,
-            "const storeCheckoutReadinessChecklistItems = storeCheckoutReadinessChecklistDisplayItems();",
-        )
-        _assert_not_contains(
-            "store direct cart unavailable helper binding",
-            content,
-            "const storeCartUnavailableDisplay = storeCartUnavailableDisplayItem();",
-        )
-        _assert_not_contains(
-            "store direct empty search helper binding",
-            content,
-            "const storeEmptySearchDisplay = storeEmptySearchDisplayItem();",
-        )
-        _assert_not_contains(
-            "store direct static display bundle binding",
-            content,
-            "const storePreviewStaticDisplay = storePreviewStaticDisplayBundle();",
-        )
-        _assert_not_contains(
-            "store stale static display bundle import",
-            content,
-            "  storePreviewStaticDisplayBundle,",
-        )
-        _assert_not_contains(
-            "store stale cart unavailable helper import",
-            content,
-            "  storeCartUnavailableDisplayItem,",
-        )
-        _assert_not_contains(
-            "store stale checkout readiness helper import",
-            content,
-            "  storeCheckoutReadinessChecklistDisplayItems,",
-        )
-        _assert_not_contains(
-            "store stale empty search helper import",
-            content,
-            "  storeEmptySearchDisplayItem,",
-        )
-        _assert_not_contains(
-            "ranking direct action status visibility binding",
-            content,
-            "{rankingActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingActionStatusLabel()}</Text>\n                <Text style={styles.evidence}>{rankingActionStatusText()}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct return future modules accessibility binding",
-            content,
-            "{rankingActionStatus ? (\n              <View style={styles.inlineInfoBlock}>\n                <Text style={styles.label}>{rankingActionStatusLabel()}</Text>\n                <Text style={styles.evidence}>{rankingActionStatusText()}</Text>\n              </View>\n            ) : null}\n            <Pressable\n              accessibilityLabel={futurePreviewDisplayLabels.returnFutureModulesAccessibility}",
-        )
-        _assert_not_contains(
-            "ranking direct return future modules button binding",
-            content,
-            "<Pressable\n              accessibilityLabel={rankingReturnFutureModulesAccessibilityDisplayLabel}\n              accessibilityRole=\"button\"\n              style={styles.secondaryButton}\n              onPress={returnFromRankingPreview}\n            >\n              <Text style={styles.secondaryButtonText}>{futurePreviewDisplayLabels.returnFutureModules}</Text>",
-        )
-        _assert_not_contains(
-            "ranking direct return future modules press binding",
-            content,
-            "<Pressable\n              accessibilityLabel={rankingReturnFutureModulesAccessibilityDisplayLabel}\n              accessibilityRole=\"button\"\n              style={styles.secondaryButton}\n              onPress={returnFromRankingPreview}",
-        )
-        _assert_not_contains(
-            "ranking direct public action press binding",
-            content,
-            "<Pressable\n                accessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}\n                accessibilityRole=\"button\"\n                style={styles.secondaryButton}\n                onPress={showRankingPublicStatus}",
-        )
-        _assert_not_contains(
-            "ranking direct opt-in action press binding",
-            content,
-            "<Pressable\n                accessibilityLabel={rankingOptInAccessibilityDisplayLabel}\n                accessibilityRole=\"button\"\n                style={styles.secondaryButton}\n                onPress={showRankingOptInStatus}",
-        )
-        _assert_not_contains(
-            "food community item direct handler id binding",
-            content,
-            "selectFoodCommunityItem(item.id);",
-        )
-        _assert_not_contains(
-            "store product direct status binding",
-            content,
-            "onPress={() => showStoreProductStatus(product.actionStatus)}",
-        )
-        _assert_not_contains(
-            "store product direct action label binding",
-            content,
-            '{product.rewardStatus === "redeemable" ? "兌" : auxiliaryDisplayLabels.productOpenArrow}',
-        )
-        _assert_not_contains(
-            "store product direct action accessibility binding",
-            content,
-            "accessibilityLabel={product.actionAccessibilityLabel}\n                  accessibilityRole=\"button\"\n                  style={styles.roundActionButton}\n                  onPress={() => pressStoreProductStatus(product)}",
-        )
-        for label, marker in (
-            ("local store product action status helper", "function storeProductActionStatus(product: ReturnType<typeof storeProductDisplayItem>)"),
-            ("local store product card key helper", "function storeProductCardKey(product: ReturnType<typeof storeProductDisplayItem>)"),
-            ("local store product card icon helper", "function storeProductCardIcon(product: ReturnType<typeof storeProductDisplayItem>)"),
-            ("local store product card title helper", "function storeProductCardTitle(product: ReturnType<typeof storeProductDisplayItem>)"),
-            ("local store product card badge helper", "function storeProductCardBadge(product: ReturnType<typeof storeProductDisplayItem>)"),
-            ("local store product card description helper", "function storeProductCardDescription(product: ReturnType<typeof storeProductDisplayItem>)"),
-            ("local store product card points helper", "function storeProductCardPointsCost(product: ReturnType<typeof storeProductDisplayItem>)"),
-            ("local store product reward id helper", "function storeProductRewardId(product: ReturnType<typeof storeProductDisplayItem>)"),
-            ("local store product redeem title helper", "function storeProductRedeemTitle(product: ReturnType<typeof storeProductDisplayItem>)"),
-            ("local store product action label helper", "function storeProductActionLabel(product: ReturnType<typeof storeProductDisplayItem>)"),
-            ("local store product action accessibility helper", "function storeProductActionAccessibilityLabel(product: ReturnType<typeof storeProductDisplayItem>)"),
-            ("local store redemption use id helper", "function storeRedemptionUseId(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
-            ("local store redemption use title helper", "function storeRedemptionUseTitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
-            ("local store redemption use status label helper", "function storeRedemptionUseStatusLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
-            ("local store redemption card key helper", "function storeRedemptionCardKey(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
-            ("local store redemption card title helper", "function storeRedemptionCardTitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
-            ("local store redemption card status helper", "function storeRedemptionCardStatusLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
-            ("local store redemption card subtitle helper", "function storeRedemptionCardSubtitle(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
-            ("local store redemption action disabled helper", "function storeRedemptionActionDisabled(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
-            ("local store redemption action label helper", "function storeRedemptionActionLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
-            ("local store redemption action accessibility helper", "function storeRedemptionActionAccessibilityLabel(redemption: ReturnType<typeof storeRedemptionDisplayItem>)"),
-        ):
-            _assert_not_contains(label, content, marker)
-        _assert_not_contains(
-            "store products direct response transform",
-            content,
-            "rewards.slice(0, maxListItems * 2).map(storeProductFromApi)",
-        )
-        _assert_not_contains(
-            "store redemptions direct response transform",
-            content,
-            "redemptions.slice(0, maxListItems * 2)",
-        )
-        store_product_card_render_block = _match_block(
-            content,
-            r"visibleStoreProducts\.length > 0 \? visibleStoreProducts\.map\(\(product\) => \(([\s\S]*?storeProductActionLabel\(product\)[\s\S]*?</Pressable>)",
-            "store product card render block",
-        )
-        for label, marker in (
-            ("direct store product card key binding", "key={product.id}"),
-            ("direct store product card icon binding", "{product.icon}"),
-            ("direct store product card title binding", "{product.title}"),
-            ("direct store product card badge conditional", "{product.badge ?"),
-            ("direct store product card badge text", "{product.badge}</Text>"),
-            ("direct store product card description binding", "{product.description}"),
-            ("direct store product card points binding", "{product.pointsCost}"),
-        ):
-            _assert_not_contains(label, store_product_card_render_block, marker)
-        _assert_not_contains(
-            "store redemption direct disabled binding",
-            content,
-            "!product.isUsable",
-        )
-        _assert_not_contains(
-            "store redemption direct action label binding",
-            content,
-            "{product.actionLabel}",
-        )
-        _assert_not_contains(
-            "store redemption direct action accessibility binding",
-            content,
-            "accessibilityLabel={product.actionAccessibilityLabel}",
-        )
-        store_redemption_card_render_block = _match_block(
-            content,
-            r"storeRedemptionDisplayItems\.map\(\(product\) => \(([\s\S]*?storeRedemptionActionLabel\(product\)[\s\S]*?</Pressable>)",
-            "store redemption card render block",
-        )
-        for label, marker in (
-            ("direct store redemption card key binding", "key={product.id}"),
-            ("direct store redemption card title binding", "{product.title}"),
-            ("direct store redemption card status binding", "{product.statusLabel}"),
-            ("direct store redemption card subtitle binding", "{product.subtitle}"),
-        ):
-            _assert_not_contains(label, store_redemption_card_render_block, marker)
-        for label, marker in (
-            ("direct save success unlocked achievement card map", "saveSuccessNewlyUnlockedDisplayItems.map((displayItem) =>"),
-            ("direct newly unlocked achievement card map", "achievementNewlyUnlockedDisplayItems.map((displayItem) =>"),
-            ("direct unlocked achievement card map", "achievementUnlockedDisplayItems.map((displayItem) =>"),
-        ):
-            _assert_not_contains(label, content, marker)
-        _assert_not_contains(
-            "achievement summary direct response transform",
-            content,
-            "summary.items.slice(0, maxListItems * 6).map(achievementItemFromApi)",
-        )
-        _assert_not_contains(
-            "achievement unlock direct response transform",
-            content,
-            "unlocks.slice(0, maxListItems).map(achievementItemFromApi)",
-        )
-        _assert_not_contains(
-            "achievement newly unlocked direct filter",
-            content,
-            "mappedSummaryItems.filter((item) => item.newlyUnlocked)",
-        )
-        achievement_unlocked_card_render_block = _match_block(
-            achievement_unlocked_card_list_content,
-            r"items\.map\(\(displayItem\) => \(([\s\S]*?achievementUnlockedCardDetail\(displayItem\)[\s\S]*?</View>\n\s*)\)",
-            "achievement unlocked card list render block",
-        )
-        for label, marker in (
-            ("direct achievement unlocked card id binding", "displayItem.id"),
-            ("direct achievement unlocked card streak binding", 'displayItem.kind === "streak"'),
-            ("direct achievement unlocked card color binding", "displayItem.badgeColor"),
-            ("direct achievement unlocked card icon binding", "{displayItem.icon}"),
-            ("direct achievement unlocked card level binding", "{displayItem.level}"),
-            ("direct achievement unlocked card title binding", "{displayItem.title}"),
-            ("direct achievement unlocked card kind label binding", "displayItem.kindLabel"),
-            ("direct achievement unlocked card date binding", "displayItem.unlockedAt"),
-        ):
-            _assert_not_contains(label, achievement_unlocked_card_render_block, marker)
-        achievement_progress_card_render_block = _match_block(
-            achievement_category_section_list_content,
-            r"achievementCategorySectionItems\(section\)\.map\(\(displayItem\) => \{([\s\S]*?achievementProgressCardFillStyle\(displayItem\)[\s\S]*?</View>)",
-            "achievement progress card render block",
-        )
-        for label, marker in (
-            ("direct achievement progress id binding", "displayItem.id"),
-            ("direct achievement progress accessibility binding", "displayItem.accessibilityLabel"),
-            ("direct achievement progress unlocked comparison", "displayItem.progress >= displayItem.target"),
-            ("direct achievement progress ratio", "displayItem.progress / displayItem.target"),
-            ("direct achievement progress streak binding", 'displayItem.kind === "streak"'),
-            ("direct achievement progress color binding", "displayItem.badgeColor"),
-            ("direct achievement progress icon binding", "{displayItem.icon}"),
-            ("direct achievement progress level binding", "{displayItem.level}"),
-            ("direct achievement progress title binding", "{displayItem.title}"),
-            ("direct achievement progress label binding", "displayItem.progressLabel"),
-            ("direct achievement progress kind label binding", "displayItem.kindLabel"),
-            ("direct achievement progress description binding", "displayItem.description"),
-        ):
-            _assert_not_contains(label, achievement_progress_card_render_block, marker)
-        _assert_not_contains(
-            "direct achievement category section map in App",
-            content,
-            "achievementCategoryDisplaySections.map((section) =>",
-        )
-        achievement_category_section_render_block = _match_block(
-            achievement_category_section_list_content,
-            r"sections\.map\(\(section\) => \(([\s\S]*?achievementCategorySectionItems\(section\)[\s\S]*?</View>\n\s*)\)\)",
-            "achievement category section render block",
-        )
-        for label, marker in (
-            ("direct achievement category section key binding", "key={section.key}"),
-            ("direct achievement category section label binding", "{section.label}"),
-            ("direct achievement category section items binding", "section.items.map"),
-        ):
-            _assert_not_contains(label, achievement_category_section_render_block, marker)
-        _assert_not_contains(
-            "store redemption direct boundary row map",
-            content,
-            "storeRedemptionBoundaryRows.map((row) => (",
-        )
-        _assert_not_contains(
-            "store redemption direct boundary row key binding",
-            content,
-            "storeRedemptionBoundaryRows.map((row) => (\n                <View key={row.label} style={styles.reportBoundaryCard}>",
-        )
-        _assert_not_contains(
-            "store redemption direct boundary row label binding",
-            content,
-            "storeRedemptionBoundaryRows.map((row) => (\n                <View key={storeRedemptionBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{row.label}</Text>",
-        )
-        _assert_not_contains(
-            "store redemption direct boundary row value binding",
-            content,
-            "storeRedemptionBoundaryRows.map((row) => (\n                <View key={storeRedemptionBoundaryRowKey(row)} style={styles.reportBoundaryCard}>\n                  <Text style={styles.confidence}>{storeRedemptionBoundaryRowLabel(row)}</Text>\n                  <Text style={styles.recordType}>{row.value}</Text>",
         )
         _assert_not_contains(
             "future module direct destination binding",
@@ -17959,35 +14356,6 @@ def main() -> int:
             "store product card single-layer background",
             product_card_block,
             'backgroundColor: palette.surface',
-        )
-        achievement_card_block = _style_block(achievement_category_section_list_content, "achievementCard")
-        _assert_contains(
-            "achievement card wrapping",
-            achievement_card_block,
-            'flexWrap: "wrap"',
-        )
-        _assert_contains(
-            "achievement card single-layer background",
-            achievement_card_block,
-            'backgroundColor: palette.surface',
-        )
-        achievement_badge_block = _style_block(achievement_unlocked_card_list_content, "achievementBadge")
-        _assert_contains(
-            "achievement badge stable width",
-            achievement_badge_block,
-            "minWidth: 58",
-        )
-        achievement_streak_badge_block = _style_block(achievement_unlocked_card_list_content, "achievementBadgeStreak")
-        _assert_contains(
-            "achievement streak badge independent shape",
-            achievement_streak_badge_block,
-            "borderRadius: 999",
-        )
-        year_badge_row_block = _style_block(content, "yearBadgeRow")
-        _assert_contains(
-            "year review badge row wrapping",
-            year_badge_row_block,
-            'flexWrap: "wrap"',
         )
         for style_name in (
             "emptyStateCard",
@@ -18135,10 +14503,8 @@ def main() -> int:
             "inline press-argument guard, "
             "ScrollView keyboard tap and keyboard-avoiding guards, "
             "TextInput update/value/placeholder/accessibility/maxLength/aligned-editable-state/keyboard-normalization/numeric-keyboard/multiline-layout/style-boundary guard, "
-            "future and commerce card wrapping, "
-            "achievement and year review wrapping, "
-            "achievement taxonomy parity, "
-            "food category parity, "
+            "future card wrapping, "
+            "year review wrapping, "
             "shared card wrapping styles, "
             "debug-gated visual smoke route jumps."
         )

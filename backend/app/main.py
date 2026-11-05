@@ -13,17 +13,14 @@ from starlette.responses import Response
 from starlette.types import Message, Receive
 
 from app.api import (
-    achievements,
     admin,
     ai,
     auth,
-    community,
     daily_records,
     dev,
     profiles,
     records,
     reports,
-    store,
     subscriptions,
     year_reviews,
 )
@@ -43,13 +40,11 @@ JSON_BODY_PREFIXES = (
     "/admin/",
     "/ai/",
     "/auth/",
-    "/community/",
     "/daily-records",
     "/dev/",
     "/profiles",
     "/records",
     "/reports",
-    "/store/",
     "/year-reviews",
 )
 CONTENT_LENGTH_PATTERN = re.compile(r"^[0-9]{1,20}$")
@@ -80,16 +75,13 @@ app.add_middleware(
 )
 
 app.include_router(ai.router)
-app.include_router(achievements.router)
 app.include_router(admin.router)
 app.include_router(auth.router)
-app.include_router(community.router)
 app.include_router(daily_records.router)
 app.include_router(dev.router)
 app.include_router(profiles.router)
 app.include_router(records.router)
 app.include_router(reports.router)
-app.include_router(store.router)
 app.include_router(subscriptions.router)
 app.include_router(year_reviews.router)
 

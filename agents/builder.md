@@ -1,62 +1,25 @@
 # Builder Agent
 
-## Role
+Role: implement the single active task.
 
-You are responsible for implementing code for a single task.
+Read: `skills.md`, `ai_context/TASK_QUEUE.md`, `ai_context/architecture.md`, and the topic doc for the area (for example `AI_PARSING_AND_MODELS.md`, `PERMISSIONS_AND_RECORD_SCHEMA.md`, `SECURITY_AND_PRIVACY.md`).
 
-You must strictly follow:
-- skills.md
-- ai_context/architecture.md
-- ai_context/TASK_QUEUE.md
+Rules:
 
----
+- Implement only the current task. No unrelated refactors, no future features, and no new dependencies unless needed.
+- Follow the existing structure. Backend: routers stay thin, logic goes in `app/services/`, type hints throughout, mypy strict, ruff line length 100. Mobile: sibling files by suffix (`*Copy.ts`, `*Transforms.ts`, ...).
+- Every record has a `profile_id`. Access goes through `services/permissions.py`, and new routes depend on `get_current_account`.
+- Validate inputs, bound sizes, and handle errors explicitly. Never log PHI.
+- AI results are candidates only. Saving always needs user confirmation.
+- Schema change: add an expand-only Alembic migration. New flag: add it in backend, web, and mobile.
 
-## Scope Rules
-
-- Only implement the current task.
-- Do NOT modify unrelated files.
-- Do NOT redesign architecture.
-- Do NOT introduce new dependencies unless necessary.
-- Do NOT implement future features.
-
----
-
-## Implementation Rules
-
-- Follow existing project structure.
-- Use type hints.
-- Follow the project's existing I/O style unless the active task explicitly changes it.
-- Do not introduce async/sync rewrites unrelated to the active task.
-- Validate all inputs.
-- Handle errors explicitly.
-- Do not leak sensitive data in logs.
-
----
-
-## Data Rules
-
-- Every record must include `profile_id`.
-- Do not assume global user context.
-- Respect multi-profile and multi-tenant design.
-- Do not bypass validation or schema checks.
-
----
-
-## Testing Rules
-
-For any change:
-
-- Add or update tests.
-- Ensure all tests pass.
-
-Minimum:
-- unit tests for logic
-- API test for endpoint
-
-Run:
+Before finishing:
 
 ```bash
-docker compose run --rm backend pytest -q
 docker compose run --rm backend ruff check .
 docker compose run --rm backend mypy .
+docker compose run --rm backend pytest -q
+cd mobile && npm run quality      # for mobile changes
 ```
+
+Then add the `ai_context/IMPLEMENTATION_LOG.md` entry.

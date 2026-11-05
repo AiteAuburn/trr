@@ -1,19 +1,20 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "api_contract_version": "1",
+  "deployment_target": "infra/lightsail/compose.yml",
   "artifact_policy": {
     "build_once": true,
-    "promote_by_immutable_digest": true,
-    "backend_and_migration_use_same_digest": true
+    "backend_and_migration_use_same_image": true,
+    "record_git_sha_per_release": true
   },
   "database_policy": {
     "strategy": "expand-contract",
+    "backup_before_migration": true,
     "automatic_downgrade": false,
     "contract_after_supported_clients_expire": true
   },
   "rollout_policy": {
-    "strategy": "canary-then-rolling",
-    "max_unavailable": 0,
+    "strategy": "single-host-recreate",
     "readiness_path": "/readyz",
     "liveness_path": "/healthz",
     "release_identity_path": "/version",
@@ -22,6 +23,6 @@
   "rollback_policy": {
     "application_first": true,
     "database_downgrade": false,
-    "require_previous_artifact_digest": true
+    "require_previous_git_sha": true
   }
 }

@@ -378,8 +378,6 @@ def test_feature_flags_fail_closed_by_default() -> None:
         "flags": {
             "food_photo_analysis": False,
             "health_integrations": False,
-            "community_sharing": False,
-            "store_redemptions": False,
         },
     }
 

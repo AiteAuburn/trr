@@ -102,7 +102,6 @@ export function subscriptionManagementDisplayRows() {
 
 export const privacyControlRows = [
   ["醫師 / 照護者分享", "尚未啟用", "需要授權碼、到期、撤銷與唯讀範圍。"],
-  ["社群公開資料", "預設關閉", "任何紀錄公開前都要逐項 opt-in。"],
   ["資料匯出 / 刪除", "待後端流程", "需要身份驗證、批次狀態與稽核紀錄。"]
 ] as const;
 

@@ -31,15 +31,10 @@ export type AppScreen =
   | "reminderSettings"
   | "privacySettings"
   | "tutorial"
-  | "achievements"
   | "yearReview"
-  | "store"
-  | "storeCart"
   | "foodPhoto"
   | "doctorShare"
   | "healthIntegration"
-  | "community"
-  | "ranking"
   | "futureModuleDetail"
   | "futureModules";
 
@@ -88,17 +83,12 @@ const screenChrome: Record<AppScreen, { subtitle: string; backTo?: AppScreen; ac
   reminderSettings: { subtitle: "規劃記錄提醒與通知權限邊界。", backTo: "settings", actionLabel: "‹" },
   privacySettings: { subtitle: "查看通知、分享與資料權利邊界。", backTo: "settings", actionLabel: "‹" },
   tutorial: { subtitle: "簡單 4 步驟，輕鬆記錄每一天。", backTo: "menu", actionLabel: "‹" },
-  achievements: { subtitle: "完成挑戰，養成穩定記錄習慣。", backTo: "menu", actionLabel: "‹" },
   yearReview: { subtitle: "看看前一年度的控糖成果。", backTo: "menu", actionLabel: "‹" },
-  store: { subtitle: "同步點數商城、兌換券與購物車邊界。", backTo: "menu", actionLabel: "‹" },
-  storeCart: { subtitle: "確認未來購物車與結帳狀態。", backTo: "store", actionLabel: "‹" },
   foodPhoto: { subtitle: "食物拍照分析預覽，Vision 尚未串接。", backTo: "menu", actionLabel: "‹" },
   doctorShare: { subtitle: "醫師合作授權與回診報表預覽。", backTo: "futureModules", actionLabel: "‹" },
   healthIntegration: { subtitle: "健康平台與血糖機匯入預覽。", backTo: "futureModules", actionLabel: "‹" },
-  community: { subtitle: "同步食物升糖資料庫、分享、點數與公開排名。", backTo: "futureModules", actionLabel: "‹" },
-  ranking: { subtitle: "查看 opt-in 公開社群排行與非敏感分數。", backTo: "futureModules", actionLabel: "‹" },
   futureModuleDetail: { subtitle: "查看未來模組的啟用條件與安全邊界。", backTo: "futureModules", actionLabel: "‹" },
-  futureModules: { subtitle: "預留醫師、社群、串接與圖片辨識入口。", backTo: "menu", actionLabel: "‹" }
+  futureModules: { subtitle: "預留醫師、串接與圖片辨識入口。", backTo: "menu", actionLabel: "‹" }
 };
 
 const menuScreens: Array<{ id: AppScreen; label: string; icon: string }> = [
@@ -143,12 +133,7 @@ const visualSmokeRouteJumps: Array<{ id: AppScreen; label: string }> = [
   { id: "futureModuleDetail", label: "未來模組詳情" },
   { id: "doctorShare", label: "醫師合作" },
   { id: "healthIntegration", label: "健康串接" },
-  { id: "community", label: "食物社群" },
-  { id: "ranking", label: "排行榜" },
-  { id: "achievements", label: "成就榜" },
   { id: "yearReview", label: "年度回顧" },
-  { id: "store", label: "商城" },
-  { id: "storeCart", label: "購物車" },
   { id: "foodPhoto", label: "食物拍照" }
 ];
 
@@ -164,11 +149,7 @@ type HeaderBackTargetState = {
   foodPhotoReturnScreen: AppScreen;
   doctorShareReturnScreen: AppScreen;
   healthIntegrationReturnScreen: AppScreen;
-  communityReturnScreen: AppScreen;
-  rankingReturnScreen: AppScreen;
-  achievementsReturnScreen: AppScreen;
   yearReviewReturnScreen: AppScreen;
-  storeReturnScreen: AppScreen;
   saveSuccessReturnScreen: AppScreen;
 };
 
@@ -251,20 +232,8 @@ function headerBackTargetForScreen(
   if (currentScreen === "healthIntegration") {
     return state.healthIntegrationReturnScreen;
   }
-  if (currentScreen === "community") {
-    return state.communityReturnScreen;
-  }
-  if (currentScreen === "ranking") {
-    return state.rankingReturnScreen;
-  }
-  if (currentScreen === "achievements") {
-    return state.achievementsReturnScreen;
-  }
   if (currentScreen === "yearReview") {
     return state.yearReviewReturnScreen;
-  }
-  if (currentScreen === "store") {
-    return state.storeReturnScreen;
   }
   if (currentScreen === "saveSuccess") {
     return state.saveSuccessReturnScreen;

@@ -1,171 +1,100 @@
 # 糖錄錄 AI / Engineering Skills
 
-用途：這份文件是糖錄錄專案給 AI 開發工具、工程師與產品規劃協作者使用的最高層工作規範。其他 `ai_context` 與 `agents` 文件若與本文件衝突，以本文件為準；細節文件只補充領域內容，不重複定義通用工程規則。
+這是專案最高層的工作規範，給 AI 開發工具與工程師使用。`ai_context/` 與 `agents/` 的文件若與本文件衝突，以本文件為準。
 
-## 1. 文件優先順序
+## 1. 文件地圖
 
-1. `skills.md`：AI 與工程執行總規範。
-2. `ai_context/TASK_QUEUE.md`：目前正在做什麼，一次只做一個 active task。
-3. `ai_context/MASTER_ROADMAP.md`：長期產品與階段路線。
-4. `ai_context/IMPLEMENTATION_PLAN.md`：工程落地順序。
-5. `ai_context/security_compliance.md`：安全、同步、HIPAA 導向細節。
-6. `ai_context/local_model_playbook.md`：本地模型輸入、輸出與解析規則。
-7. `agents/*.md`：agent 角色分工與入口指標，不保存權威產品或工程規範。
+| 文件 | 內容 |
+|---|---|
+| `skills.md` | 本文件：不可違反的規則 |
+| `ai_context/TASK_QUEUE.md` | 目前在做什麼（一次一個 active task） |
+| `ai_context/PRODUCT_ROADMAP.md` | 產品方向、唯一的 Phase 編號、未決事項 |
+| `ai_context/PRODUCTION_READINESS.md` | 上線缺口與目前違反的規則 |
+| `ai_context/architecture.md` | 實際技術架構 |
+| `ai_context/AI_PARSING_AND_MODELS.md` | AI 解析流程、模型、上限 |
+| `ai_context/VOICE_INPUT.md` | 錄音流程、語音額度、語音指令 |
+| `ai_context/SECURITY_AND_PRIVACY.md` | PHI、logging、資料流向 |
+| `ai_context/PERMISSIONS_AND_RECORD_SCHEMA.md` | 權限服務、授權、紀錄格式 |
+| `ai_context/SUBSCRIPTIONS_AND_FAMILY.md` | 訂閱、權益、家庭模型 |
+| `ai_context/REPO_QUALITY_WORKFLOW.md` | 本機環境與品質檢查 |
+| `ai_context/DEPLOYMENT.md` | Lightsail 部署、發版、回滾、備份 |
+| `ai_context/UI_UX_SPEC.md` | 介面規格 |
+| `ai_context/MOBILE_VISUAL_SMOKE_WORKFLOW.md` | 手機畫面 smoke 檢查 |
+| `ai_context/IMPLEMENTATION_LOG.md` | 每次變更的紀錄 |
 
-## 2. 產品北極星
+## 2. 產品原則
 
-糖錄錄先從血糖控制切入，長期往慢病管理平台與個人健康資料平台擴展。
-
-核心原則：
-- 支援多國語言，至少有英文和中文。
-- 能自動就自動。
-- 能拍照就拍照。
-- 能語音就語音。
-- 手動輸入只做兜底。
-- 操作必須簡單，降低中老年人與照顧者長期使用負擔。
+- 語音優先：能語音就語音，能拍照就拍照，能自動就自動，手動輸入只做兜底。
+- 操作簡單，讓中老年人與照護者能長期使用。
+- **每次 AI 整理結果都必須讓使用者確認後才儲存。** Parser 只產生候選，不可直接寫入。
+- 不做診斷、不給治療或藥物劑量建議。
 - 家庭方案只共享訂閱權益，不預設共享健康資料。
-- 每次 AI 整理結果都必須讓使用者確認後才儲存。
 
-## 3. 技術北極星
+## 3. AI 架構（目前實況）
 
-第一版以 local-first 為主：
-
-- 一般紀錄必須能在本地完成 `audio -> text -> local LLM -> structured records`。
-- 原始音檔預設不保存。
-- 雲端不做第一版 AI 主流程。
-- 未來 OpenAI access 只能作為高級版或合規 fallback，且預設關閉。
-- 本地處理等待時間目標為 5 到 10 秒。
-- 不假設有所謂「簡單句」可以跳過本地 LLM；第一版核心解析主流程以本地 LLM 產生固定 JSON。
-- 可以用字典、schema、validator 輔助，但不要讓規則系統取代主解析流程。
+- 語音轉文字：手機系統語音辨識（`expo-speech-recognition`，可能使用 Google 雲端）；使用者下載 Whisper 模型後，在 Android 13+ 優先用 `whisper.rn` 在本機處理。
+- 解析：後端 `/ai/parse-preview`。設定 DeepSeek 時預設用 DeepSeek（雲端），會送出分段後的使用者原話。Ollama / Gemma 是開發用的本地選項。手機上的 `llama.rn` 只在 debug tools。
+- 資料：存在伺服器 PostgreSQL。手機沒有本機資料庫。
+- 原始音檔不上傳、不保存。
+- 舊規則「第一版全部在本地完成、雲端不做 AI」**已不符合現況**。是否保留雲端解析，以及需要什麼使用者同意，**仍未決定**（`PRODUCT_ROADMAP.md` D1、D3）。在決定之前：
+  - 不可新增其他第三方 AI 或分析服務來接收 PHI；
+  - 不可擴大送往 DeepSeek 的資料（例如完整紀錄、profile 資料）；
+  - 年度回顧只能送聚合統計；
+  - 所有新的 PHI 外送都要先有使用者同意與合規評估。
 
 ## 4. AI 輸出規範
 
-本地 LLM 必須輸出固定 JSON，不輸出自由文字作為儲存來源。
-
-要求：
-
-- 使用 JSON schema / grammar constrained output。
-- 每筆候選紀錄都要包含 `record_type`、`occurred_at`、`payload_json`、`metadata_json`、`source`、`confidence`。
-- 日期、數值、餐別、用藥、運動與模糊欄位都要標示是否需要使用者確認。
-- 不要求、不顯示、不保存完整 chain-of-thought。
-- 若需要稽核，只保存短版 `decision_trace`，內容限於可檢查的摘要理由，例如「辨識到空腹與 138，因此建立 glucose record」。
-- `decision_trace` 不可包含長篇內部推理、PHI 以外的推測、醫療建議或模型自我描述。
+- 模型只輸出固定 JSON（compact IR：`records`、`rejected`、`needs_confirmation`），不使用自由文字作為儲存來源。
+- 後端驗證 schema 後，每筆候選要有 `record_type`、`occurred_at`、`payload_json`、`metadata_json`、`source`、`confidence`、`decision_trace`、`needs_confirmation`。
+- 不確定的日期、數值、餐別、用藥要標示，讓使用者確認。
+- 不要求、不顯示、不保存 chain-of-thought。最多保留短版 `decision_trace`（可檢查的摘要，不含醫療建議或推測）。
 
 ## 5. 資料與安全底線
 
-所有健康資料都先視為 sensitive health data。
+所有健康資料都視為 PHI。
 
 禁止：
 
-- 把 PHI 傳到非 HIPAA compliant API。
-- 把語音轉錄、血糖值、飲食照片、用藥紀錄、報告或 prompt 寫入一般 log。
-- 用 production data 做 staging 測試。
-- 把 API key、DB password、OpenAI key、signing key 放進 repo。
-- token plaintext 儲存在 App 一般 storage。
+- 把語音轉錄、血糖值、飲食、用藥、報告、prompt 或 model output 寫入一般 log、analytics、error report、audit metadata。
+- 在 `records.payload_json` / `metadata_json` 存原始 transcript 或 source text。
+- 用 production data 做 staging 或本機測試。
+- 把 API key、DB password、JWT secret、signing key 放進 repo、image 或 App。
+- 把 token 存在 App 一般 storage（只能用 SecureStore）。
+- 在 local / test / development 以外開啟 `ALLOW_DEV_AUTH` 或 debug tools。
 
 必做：
 
-- local DB 加密。
-- biometric auth 保護敏感頁面。
-- token 存 Keychain / Keystore 或等效安全儲存。
-- 敏感頁面支援防截圖或背景遮罩。
-- server side sync 要做 access control、audit log、data integrity、backup / recovery。
-- log redaction 預設開啟。
+- 每個 route 都要認證，除非列在 `PUBLIC_ROUTE_REASONS` 並寫明理由。
+- 讀寫健康資料都經過 `services/permissions.py`。
+- 寫入動作寫 audit event（不含 PHI）。
+- log redaction 預設開啟（`core/logging.py`、`core/redaction.py`）。
+- 新的資料保存要訂保存期限。目前原始逐字稿無期限保存，是已知違反（`PRODUCTION_READINESS.md` B2）。
 
-## 6. 工程執行規範
+## 6. 工程規範
 
-優先順序：
+- 一次只做 `ai_context/TASK_QUEUE.md` 的一個 active task；完成後更新狀態。
+- 每次變更（bugfix、feature、infra、docs、test）都在 `ai_context/IMPLEMENTATION_LOG.md` 加一筆有日期的紀錄：日期、類型、檔案、摘要、驗證、後續。log 必須 PHI-safe。
+- 資料庫 schema 變更必須有 Alembic migration。
+- Migration 只能 expand（`migration_phase = "expand"`），要與前一版 App 相容；不做破壞性 contract migration（`infra/api-migration-compatibility.json`）。
+- 新功能必須有測試。
+- 不做與當前 task 無關的大型重構。
+- Feature flag 要在 backend、web、mobile 三處同時新增，預設關閉。
+- 文件：產生的文件放 `ai_context/`，外部或使用者提供的參考放 `references/`，`agents/*.md` 只放角色提示與指標。
+- 不做 Kubernetes、microservices、multi-region、常駐 GPU，除非有明確需求與成本理由。
 
-1. 先做能跑的 Docker-first 骨架。
-2. 再做 profile、records、report、sync、安全基礎。
-3. 再接 local AI pipeline。
-4. 最後才進 mobile native integration 與醫院平台。
+## 7. 品質檢查與部署
 
-工作方式：
+- 沒有雲端 CI。合併前在 WSL/Linux 跑 `make check`；mobile 改動另跑 `cd mobile && npm run quality`。細節見 `ai_context/REPO_QUALITY_WORKFLOW.md`。
+- 唯一的部署目標是 `infra/lightsail/`（單機 staging）。部署、回滾、備份見 `ai_context/DEPLOYMENT.md`。
+- Migration 前先備份；回滾先回應用程式，不自動降版資料庫。
+- staging 與未來 production 要分開 DB、key、logging level。
 
-- 一次只處理 `ai_context/TASK_QUEUE.md` 的一個 active task。
-- 完成後把 task 移到 Done，下一個 task 才改成 active。
-- 一般生成文件放 `ai_context/`。
-- 使用者提供或外部參考資料放 `references/`。
-- `skills.md` 是本次允許例外，固定放在 repo root。
-- `agents/` 只放 agent 角色提示與 pointer，不複製 roadmap、architecture、security、task queue 的完整內容。
-- 不做 Kubernetes、microservices、multi-region、always-on GPU，除非已經有明確需求與成本理由。
-- 新功能必須有對應測試。
-- 有資料庫 schema 變更必須有 migration。
-- 不做和當前 task 無關的大型重構。
+## 8. Definition of Done
 
-## 7. Docker 與本機開發
-
-目標：
-
-- 一行啟 backend。
-- 一行啟 web 模擬前端。
-- 本機開發與未來 staging / production Docker image 路徑一致。
-
-基本命令：
-
-```bash
-docker compose up -d backend
-docker compose up -d web
-docker compose run --rm backend pytest -q
-docker compose run --rm web npm test -- --run
-```
-
-## 8. CI/CD 底線
-
-Pull request 必跑：
-
-- lint
-- type check
-- unit test
-- integration test
-- Docker build
-- dependency scan
-- secret scan
-- container image scan
-- SAST
-- API auth test
-- permission test
-
-Production deployment：
-
-- staging 與 production 必須分開 DB、bucket、API key、LLM key、logging level。
-- merge to main 後先 deploy staging。
-- staging smoke test 通過後 manual approval。
-- production deploy 後 health check。
-- 必須可 rollback。
-- migration 前先備份。
-- 早期 production 不做完全自動部署。
-
-## 9. AWS 與可擴展性方向
-
-原則：
-
-- managed service 優先。
-- 小客戶與早期版本用低成本 serverless / container。
-- 大客戶以 tenant、KMS key、資料隔離層級、SLA、audit workflow 升級。
-- 不為了「未來可能很大」而提前導入高維運成本架構。
-
-優先候選：
-
-- ECS Fargate 或 Lambda container 作為 backend runtime。
-- RDS / Aurora 或 DynamoDB 視資料模型成熟度決定。
-- S3 + KMS 作為檔案與備份。
-- Cognito / OIDC 作為 authentication 基礎。
-- CloudWatch / managed logs 作為初期 observability。
-- GitHub Actions OIDC assume AWS role，不使用長期 AWS access key。
-
-## 10. Definition Of Done
-
-功能完成必須符合：
-
-- code implemented。
-- tests added / updated。
-- lint / typecheck / tests pass。
-- API contract 或文件更新。
-- migration added if needed。
-- auth / permission impact checked。
-- logs do not leak sensitive data。
-- Docker local flow works。
-- rollback path clear for deployable changes。
-- `ai_context/TASK_QUEUE.md` 狀態更新。
+- 程式完成，測試新增或更新。
+- 相關檢查通過（`make check` / `npm run quality`）。
+- 需要時有 migration，且為 expand-only。
+- 已檢查 auth / permission 影響。
+- log 不洩漏 PHI。
+- API contract 或文件已更新。
+- `TASK_QUEUE.md` 狀態與 `IMPLEMENTATION_LOG.md` 已更新。

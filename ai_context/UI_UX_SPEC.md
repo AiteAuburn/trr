@@ -2,7 +2,7 @@
 
 最後更新：2026-09-26
 
-文件定位：本文件是糖錄錄目前 UI / UX 的 canonical 規格，提供給 AI coding agent、設計工具與前後端實作使用。MVP / future 範圍仍以 `ai_context/ENGINEERING_BLUEPRINT_V1.md` 與 `ai_context/TASK_QUEUE.md` 為準；成就榜、年度回顧、商城、食物拍照分析屬於 future module，除非 task 明確要求，不應混入 MVP 首頁。
+文件定位：本文件是糖錄錄目前 UI / UX 的 canonical 規格，提供給 AI coding agent、設計工具與前後端實作使用。MVP / future 範圍仍以 `ai_context/PRODUCT_ROADMAP.md` 與 `ai_context/TASK_QUEUE.md` 為準；年度回顧、食物拍照分析屬於 future module，除非 task 明確要求，不應混入 MVP 首頁。成就榜、商城、食物社群與排行榜已自產品移除（2026-11），不再保留 route 或預覽頁。
 
 ## 1. App 定位
 
@@ -13,7 +13,7 @@
 - 登出會撤銷 refresh session 並回到登入入口。Google 等 provider 暫不呈現為可用登入，未來以帳號綁定流程擴充。
 - 登入頁沿用暖白底、深綠品牌色、圓角卡片與清楚欄位標籤；錯誤不洩漏帳號是否存在以外的敏感資訊。
 
-「糖錄錄」是一款血糖、飲食、運動紀錄 App。核心特色是讓使用者用語音快速記錄每日血糖、飲食與運動，系統再用 AI 自動整理成結構化紀錄，並提供趨勢分析、歷史查詢、會員方案、成就與年度回顧。
+「糖錄錄」是一款血糖、飲食、運動紀錄 App。核心特色是讓使用者用語音快速記錄每日血糖、飲食與運動，系統再用 AI 自動整理成結構化紀錄，並提供趨勢分析、歷史查詢、會員方案與年度回顧。
 
 整體設計風格是乾淨、溫和、健康感。主色為深綠與薄荷綠，背景為白色或極淡綠色，搭配圓角卡片、柔和陰影與大型留白。
 
@@ -83,7 +83,7 @@
 - Icon 多放在淡綠圓形背景中。
 - 右上角常見圓角方形 menu 按鈕，內含三條橫線。
 - Mobile 需遵守 safe area inset。
-- 記錄、文字確認、AI 整理確認、AI 儲存確認、AI 候選移除確認、候選紀錄編輯、手動新增、手動新增確認、儲存完成、更新完成、刪除完成、記錄詳情、編輯記錄、刪除確認、歷史、分析、詳細報告、功能選單、會員方案、訂閱管理、會員狀態、設定、帳號安全、個人資料、錄音額度、提醒設定、使用教學、未來擴充、未來模組詳情、醫師合作、健康串接、社群、排行榜、成就榜、年度回顧、商城、購物車狀態、食物拍照分析等內容/目的地頁面不可再用整頁白色 panel 包住內容；頁面本身保持開放背景，只讓真正的列表項目、圖表、提示與操作區塊使用卡片。
+- 記錄、文字確認、AI 整理確認、AI 儲存確認、AI 候選移除確認、候選紀錄編輯、手動新增、手動新增確認、儲存完成、更新完成、刪除完成、記錄詳情、編輯記錄、刪除確認、歷史、分析、詳細報告、功能選單、會員方案、訂閱管理、會員狀態、設定、帳號安全、個人資料、錄音額度、提醒設定、使用教學、未來擴充、未來模組詳情、醫師合作、健康串接、年度回顧狀態、食物拍照分析等內容/目的地頁面不可再用整頁白色 panel 包住內容；頁面本身保持開放背景，只讓真正的列表項目、圖表、提示與操作區塊使用卡片。
 - 避免「panel 裡再放 panel」造成雙層白框與過度縮排；如果需要分組，使用留白、標題、分隔或單層卡片。
 - 歷史、分析、功能選單這類高密度頁面尤其不可把整組 controls / 說明文字再包成大白卡；資料邊界、同步邊界、成本邊界等說明應優先用開放式 inline 區塊，只有日期 input、紀錄 row、圖表、統計格、menu item 等真正互動或可掃描物件使用卡片。
 - 未來擴充、設定、訂閱與教學等 dense preview 頁面也遵守同一規則：啟用前條件、正式整合前置項、成本/權限/隱私邊界用 inline checklist，不再放進另一張白卡；真正需要掃描或點擊的狀態卡、統計格、商品卡、紀錄卡才使用白色卡片。
@@ -113,7 +113,7 @@ Secondary button：
 - 首頁避免空白即時辨識框與模型細節。工程用 API、token、payload、成本與權限檢查說明留在 debug 模式；保留真正影響使用者的未儲存、無法復原、離線及權限提醒。
 - 網站的候選/詳情編輯使用一般欄位，不要求使用者編輯 JSON。刪除要先確認，送出期間鎖定操作，單次成功回覆後不得因部分失敗再重送該筆。
 - 月曆固定七欄，星期一開頭，依每月第一天補空格；不可使用固定像素日格造成窄螢幕換行。
-- 未完成的商城、食物拍照等功能維持預覽與停用邊界，不因美術改版假裝已可使用。
+- 未完成的食物拍照等功能維持預覽與停用邊界，不因美術改版假裝已可使用。
 - 本輪可驗證版面、流程與防重送；留存率提升仍須之後以真實使用資料驗證，不視為設計完成的已證實效果。
 
 Card：
@@ -147,7 +147,7 @@ Icon：
 -> 首頁顯示日期、「想記什麼，直接說出來」、大型麥克風與「點一下開始說話」「說完再點一下，或停 3 秒自動結束」提示
 -> 使用者點一下麥克風開始錄音；說話時文字即時出現在畫面上，按鈕下方顯示經過時間
 -> 再點一下、停頓 3 秒或達到 60 秒上限即結束錄音；過短或空白則在原頁顯示清楚提示
--> 網站可從常駐主要導覽切換記錄、今日、歷史與分析；Android 原生版沿用漢堡選單進入歷史與基本分析。成就榜、商城、食物社群與其他未來功能先隱藏於一般使用者選單外
+-> 網站可從常駐主要導覽切換記錄、今日、歷史與分析；Android 原生版沿用漢堡選單進入歷史與基本分析。年度回顧、食物拍照與其他未來功能先隱藏於一般使用者選單外
 -> 辨識成功後直接交給 AI 整理（整理中畫面顯示「你說的」文字與「正在幫你整理」，不顯示假百分比）；整理中可按「取消」回到文字確認頁，晚到的結果會被忽略
 -> AI 整理確認頁同時顯示「你說：…」文字（可按「改文字」修正）與整理好的卡片；沒聽清楚的卡片用琥珀色標示
 -> 使用者按「存起來（N 筆）」才寫入；或按「重新說一次」放棄這次結果
@@ -167,16 +167,6 @@ Protected backend / account / model 尚未 ready 時，handler 必須 fail-close
 
 Future module card/detail 的 title、description、readiness、safety、icon 與 requirements 必須在渲染前 bounded；requirements 需限制筆數與單項長度，避免未來改由 backend/config 載入時把過長 roadmap 文案直接撐進 UI。
 
-Achievement / badge preview 的 id、title、description、icon、progress 與 target 在渲染前必須 bounded / clamped；progress bar 不可使用 NaN、Infinity、負數或超過 target 的數值，避免未來接 backend badge definitions 時造成 UI state 或 layout 異常。Mobile navigation verifier 必須守住 target 至少為 1、progress 不超過 target、progress ratio 不超過 1。
-- Achievement preview 的整合狀態按鈕必須走 dedicated handler；不可在 JSX Pressable 內直接呼叫 `setAchievementActionStatus`。
-
-Store preview 商品資料即使目前是本機常數，id、category、badge、title、description、price 與 icon 也必須先轉成 bounded display item 再用於搜尋、渲染或 action status，避免未來接 backend 商品目錄時保留過長商品文案、價格字串或 icon。
-- Store product action status 必須由 bounded product display item 產生；商品按鈕不可在 JSX handler 內用 raw title 即時組狀態訊息。
-- Store category selection 與 product action status 必須走 dedicated handler；不可在 JSX Pressable 內直接呼叫 `setStoreCategory` 或 `setStoreActionStatus`。Store category tab 與 product action button JSX `onPress` 必須呼叫 press wrapper，不直接呼叫底層 category selection 或 product status handler。
-
-Store category tabs 必須在 render 前轉成 bounded display options；raw category id 只可用於篩選與選取狀態，label 不可直接從 `storeCategories` raw config render。
-Store search input 必須走 dedicated bounded handler；不可在 JSX TextInput callback 內直接呼叫 `setStoreSearchText(boundStoreSearchText(value))`，避免未來接 backend 商品目錄時搜尋字串繞過長度界線。
-
 Record 頁的 quick-entry mode 卡必須是可操作 Pressable，不可只是展示文字。每個 quick-entry item 的 key、label、copy、icon 與 accessibility label 都必須在 render 前 bounded；handler 必須共用 bounded mode action，語音只提示點一下大型錄音按鈕、文字切到 record 流程、手動新增進入 manual record，不可在 quick-entry handler 內呼叫 AI / STT / Vision、建立紀錄、寫入資料或假造錄音結果。Home 頁不得顯示 quick-entry mode 卡。
 Record quick-entry card 的來源頁選擇必須走 dedicated wrapper；不可在 JSX callback 內直接呼叫 `handleQuickEntryMode(item.key, "today")` 或 `handleQuickEntryMode(item.key, "record")`。Quick-entry card JSX `onPress` 必須呼叫 item press wrapper，不直接呼叫底層來源頁 quick-entry handler 並傳入 `item.key`。
 
@@ -192,7 +182,7 @@ History 使用月曆選取日期，不顯示也不保留 range tabs 或自訂日
 Analysis 的時間範圍 tabs 必須先轉成 bounded display options；raw range id 只可用於選取狀態、篩選與圖表查詢，不可直接從 raw range config render label。
 Analysis range selection 與 chart point tooltip selection 必須走 dedicated handler；不可在 JSX Pressable 內直接呼叫 `setAnalysisRange` 或 `setSelectedAnalysisPointIndex`。Analysis range tab 與 chart point JSX `onPress` 必須呼叫 option/point press wrapper，不直接呼叫底層 range selection 或 point toggle handler。
 
-所有 `reportBoundaryGrid` / 邊界卡 / 狀態摘要卡的 label/value 必須先轉成 bounded status metric display item 再 render；AI Save Confirm、Detailed Report、錄音額度、隱私設定、醫師合作、健康串接、社群與排行榜都不可直接 render raw tuple value。
+所有 `reportBoundaryGrid` / 邊界卡 / 狀態摘要卡的 label/value 必須先轉成 bounded status metric display item 再 render；AI Save Confirm、Detailed Report、錄音額度、隱私設定、醫師合作與健康串接都不可直接 render raw tuple value。
 上述 boundary grid 必須使用 render 前命名的 bounded rows，例如 `aiSaveConfirmBoundaryRows`、`detailedReportBoundaryRows`、future-module boundary rows、`recordingQuotaBoundaryRows` 與 `privacyBoundaryRows`；JSX 內不可直接宣告 raw `[label, value]` tuple 再 map。
 
 非邊界的 metric/detail tuple 也必須在 render 前轉成 bounded display item；Detailed Report 指標、會員專屬功能列、年度回顧統計列不可直接 render raw tuple label/value。
@@ -242,26 +232,26 @@ Whisper 產生的 transcript 必須保留 bounded `transcriptVoiceSeconds`，送
 
 核心記錄流程、AI 確認/儲存、手動新增/確認、儲存/更新/刪除結果、歷史、詳情、編輯、分析與詳細報告的 section/action labels 必須透過 bounded display helper 產生；不可在 JSX 中直接寫 repeated core-flow labels。
 
-Tutorial、Menu、debug/native controls、achievement/year-review/store/food-photo status labels 與 auxiliary preview badges/action labels 必須透過 bounded display helper 產生；不可在 JSX 中直接寫 remaining auxiliary labels。
+Tutorial、Menu、debug/native controls、year-review/food-photo status labels 與 auxiliary preview badges/action labels 必須透過 bounded display helper 產生；不可在 JSX 中直接寫 remaining auxiliary labels。
 Settings native debug 的模型下載 URL、Whisper model path、audio path 與 Llama model path input 必須走 dedicated bounded handler；不可在 JSX TextInput callback 內直接呼叫 `setModelUrl`、`setWhisperModelPath`、`setAudioPath` 或 `setLlamaModelPath` 搭配 `boundNativeDebugInput`。
 
-Future-module 與 commerce / Vision preview checklist 也必須在 render 前轉成 bounded display item；Doctor Share、Health Integration、Community、Ranking、Store Cart 與 Food Photo Analysis 不可直接 render 固定陣列原文。
+Future-module 與 Vision preview checklist 也必須在 render 前轉成 bounded display item；Doctor Share、Health Integration 與 Food Photo Analysis 不可直接 render 固定陣列原文。
 
 Future Modules 清單卡必須在 render 前轉成 bounded display card；raw module object 只可用於詳情頁導覽與 target 行為，title / description / readiness / safety / requirements / icon 不可在 JSX 內即時計算後 render。
 Future Modules 清單卡必須有 bounded accessibility label；label 由 render 前 display item 產生，不可在 JSX 內直接串 raw module title。
 
 Future Module Detail 的 selected module 顯示也必須先轉成 bounded display item；raw selected module 只可用於狀態與導覽，不可直接在 JSX 內呼叫 futureModuleText / futureModuleIcon / futureModuleRequirements。
 
-Doctor Share、Health Integration、Community 與 Ranking 的 preview action status 不可在 JSX handler 內即時呼叫 `boundUiMessage` 組字；應使用 render 前 derived 的 bounded status message。
-Doctor Share、Health Integration、Community 與 Ranking 的 preview CTA 必須有 render 前 bounded accessibility label 與 `accessibilityRole="button"`；label 需說明只顯示授權/權限/公開資料/排名邊界，不可暗示已建立 share token、讀取健康資料、公開貼文或上傳排名。
+Doctor Share 與 Health Integration 的 preview action status 不可在 JSX handler 內即時呼叫 `boundUiMessage` 組字；應使用 render 前 derived 的 bounded status message。
+Doctor Share 與 Health Integration 的 preview CTA 必須有 render 前 bounded accessibility label 與 `accessibilityRole="button"`；label 需說明只顯示授權/權限邊界，不可暗示已建立 share token 或讀取健康資料。
 
 Food Photo Analysis 的 upload / integration / retake preview action status 不可在 JSX handler 內即時呼叫 `boundUiMessage` 組字；應使用 render 前 derived 的 bounded status message。
 Food Photo Analysis 的 upload / integration / retake preview action status 必須走 dedicated handler；不可在 JSX Pressable 內直接呼叫 `setFoodPhotoActionStatus`。
-Achievement、Year Review、Store 與 Food Photo 的 integration / share / cart / upload / retake CTA 必須有 render 前 bounded accessibility label 與 `accessibilityRole="button"`；label 不可暗示已寫入成就、產生分享圖、建立訂單付款、讀取照片或呼叫 Vision。
-Achievement、Year Review、Store、Store Cart 與 Food Photo 的底部返回 / disabled checkout CTA 必須有 render 前 bounded accessibility label、`accessibilityRole="button"` 與 disabled checkout accessibility state；label 不可暗示已寫入成就、產生分享圖、建立訂單付款、讀取照片或呼叫 Vision。
+Year Review 與 Food Photo 的 share / upload / retake CTA 必須有 render 前 bounded accessibility label 與 `accessibilityRole="button"`；label 不可暗示已產生分享圖、讀取照片或呼叫 Vision。
+Year Review 與 Food Photo 的底部返回 CTA 必須有 render 前 bounded accessibility label 與 `accessibilityRole="button"`；label 不可暗示已產生分享圖、讀取照片或呼叫 Vision。
 
 表單 option chips 與 subscription comparison rows 必須在 render 前轉成 bounded display item；血糖單位、血糖情境、餐別與會員功能比較不可直接 render raw option/comparison tuple。
-血糖單位、血糖情境、餐別與商城分類 chips 必須由 render 前 bounded display item 提供 accessibility label，並在 Pressable 上標示 `accessibilityRole="button"` 與 selected accessibility state；label 不可直接串 raw option tuple，也不可暗示會送 parser、建立訂單或付款。
+血糖單位、血糖情境與餐別 chips 必須由 render 前 bounded display item 提供 accessibility label，並在 Pressable 上標示 `accessibilityRole="button"` 與 selected accessibility state；label 不可直接串 raw option tuple，也不可暗示會送 parser。
 History / Analysis range chips 必須由 render 前 bounded display item 提供 accessibility label，並在 Pressable 上標示 `accessibilityRole="button"` 與 selected accessibility state；label 必須說明只篩選或分析已載入紀錄，不可暗示會查詢 backend、呼叫 AI 或寫入資料。
 Analysis chart point Pressable 必須提供 bounded accessibility label、`accessibilityRole="button"` 與 selected accessibility state；label 只可顯示 bounded 日期/點位與圖表值，不可使用 raw record id 或 raw payload。
 
@@ -311,9 +301,9 @@ AI 候選編輯、手動新增與正式紀錄編輯的日期、時間、欄位�
 - Mobile navigation verifier 必須從 Today/Home render block 內確認：只有一個錄音麥克風控制（以錄音 accessibility label 計），點擊切換錄音、取消、今天 chip、打字 fallback、計時與兩行提示存在；不含 primary/secondary button、section title、evidence copy、inline info block 或紀錄卡；`homeMicButton` 維持大型圓形尺寸。Today/Home chrome 必須保留空 subtitle 且右上角 header button 使用 `☰` fallback 開啟功能選單。
 - 錄音使用手機語音服務（`expo-speech-recognition`，interim results 即時回傳文字），本機 Whisper 模型存在時優先轉寫。過短、空白辨識、權限與錄音錯誤須顯示不受 debug 開關影響的可見提示，不可把舊草稿當作本次辨識結果。麥克風尚未準備好就再點一下時，必須在準備完成後隨即停止。錄音流程本身不呼叫 AI parser、不建立紀錄；辨識成功後由獨立 effect 交給 parser，寫入仍需使用者在確認頁按「存起來」。
 - 測試版可在首頁 header 下方的獨立開發工具區顯示「測試：填入預設文字」；正式版仍維持單一麥克風操作重心。錄音提示支援 accessibility live region，並能在畫面上方看到。
-- 第一版功能入口只保留今日錄音、歷史紀錄、基本分析與必要設定；成就榜、年度回顧、商城、食物社群、社群排行與未來擴充入口不可出現在一般使用者 menu。未來 route 可保留給 debug / visual-smoke，但必須在 `enableDebugTools` 下才可見。
+- 第一版功能入口只保留今日錄音、歷史紀錄、基本分析與必要設定；年度回顧、食物拍照與未來擴充入口不可出現在一般使用者 menu。未來 route 可保留給 debug / visual-smoke，但必須在 `enableDebugTools` 下才可見。
 - Primary tabs 只可保留今日、記錄與選單；歷史紀錄與基本分析不可出現在 primary tabs，必須透過右上角漢堡選單進入。History / Analysis screen chrome 必須維持 hamburger fallback，不可改成 back arrow 或 close action 取代 menu 入口。
-- Mobile navigation verifier 必須檢查第一版功能選單 top-level destination id 與使用者可見 label parity，守住「今日錄音」、「歷史紀錄」、「基本分析」、「設定」，並確認成就榜、商城、食物社群等未來功能不在一般 menu 曝光。
+- Mobile navigation verifier 必須檢查第一版功能選單 top-level destination id 與使用者可見 label parity，守住「今日錄音」、「歷史紀錄」、「基本分析」、「設定」，並確認年度回顧、食物拍照等未來功能不在一般 menu 曝光。
 - 不顯示 `MVP`、`預留` 或其他 stage badge；首頁是一般使用者的主要錄音入口。
 - 紀錄同步 handler 必須先檢查 protected backend readiness；backend account、active profile 或 protected auth 未 ready 時只更新 inline status，不送 `/records` 查詢。
 - 紀錄同步的 initial / unavailable / loading / success / failure UI status 必須透過 bounded display helper 產生；不可在 state 初始化、session reset 或 sync handler 內直接用 raw backend message、raw response count 或固定同步字串組 UI status。
@@ -603,7 +593,7 @@ AI 候選編輯、手動新增與正式紀錄編輯的日期、時間、欄位�
 - Dev reset 只在開發模式顯示，外層使用 inline warning 區塊與上分隔線，不使用另一張警示卡片，避免功能選單底部出現 nested panel。
 - Visual smoke route jump 只可在 `EXPO_PUBLIC_ALLOW_DEV_AUTH=true` 且 `EXPO_PUBLIC_ENABLE_DEBUG_TOOLS=true` 的本機開發環境顯示；用途是穩定進入 MVP、account-critical 與 future preview routes 做截圖，不可呼叫 backend、寫入資料、觸發 AI / LLM / Vision / payment，也不可在 production / staging 顯示。
 - Production auth token persistence must use native secure storage only. Mobile may load bounded access / refresh token state through `SecureStore` / Keychain / Keystore, must fail closed when unavailable, and must not fallback to AsyncStorage, ordinary file storage, logs, alerts, or visual-smoke manifests.
-- `EXPO_PUBLIC_VISUAL_SMOKE_INITIAL_ROUTE` 只可在本機 dev auth 與 debug tools 同時開啟時生效；支援 route 至少包含所有 `AppScreen`：Today、Record、Transcript Review、AI Review、AI candidate edit/remove confirm、AI Save Confirm / Failure、Save Success、Manual Record / Confirm、History、Record Detail、Edit Record、Delete Confirm / Success、Update Success、Analysis、Detailed Report、Subscription、Settings、Tutorial、Menu、account settings，以及 future / doctor / health / community / ranking / commerce / food photo preview routes。其他環境或未知 route 必須忽略並回到一般 Today 首頁。
+- `EXPO_PUBLIC_VISUAL_SMOKE_INITIAL_ROUTE` 只可在本機 dev auth 與 debug tools 同時開啟時生效；支援 route 至少包含所有 `AppScreen`：Today、Record、Transcript Review、AI Review、AI candidate edit/remove confirm、AI Save Confirm / Failure、Save Success、Manual Record / Confirm、History、Record Detail、Edit Record、Delete Confirm / Success、Update Success、Analysis、Detailed Report、Subscription、Settings、Tutorial、Menu、account settings，以及 future / doctor / health / year review / food photo preview routes。其他環境或未知 route 必須忽略並回到一般 Today 首頁。
 - Visual-smoke initial route 啟動時必須跳過 backend boot / dev-login / model refresh，避免 local demo state 被 backend unavailable cleanup 清掉，也避免截圖流程產生 API、token、AI、STT、Vision、payment 或 database side effect。
 - Visual-smoke route jump chip JSX `onPress` 必須呼叫 route press wrapper，不直接呼叫底層 route jump handler；route jump handler 仍必須保留 dev-auth/debug-tools 雙 gate。
 - `npm run verify:ui-spec-coverage` 必須同時檢查 canonical 4.x sections 與全部 41 個 `AppScreen` route：每個 AppScreen 都要有 `screenChrome`、render branch、visual-smoke route jump 與 static harness route，避免 mobile 回退成單頁 placeholder 或只有部分分頁有 evidence。
@@ -615,7 +605,7 @@ AI 候選編輯、手動新增與正式紀錄編輯的日期、時間、欄位�
 - Android APK prereq checker 必須檢查 root `build.gradle` 的 configured `buildToolsVersion` 在目前執行環境可用；WSL/Linux 跑 Gradle 時不能只看到 Windows SDK 的 `aapt.exe` 就判定 ready，必須要求對應 Linux binary `aapt`，否則 preflight 應先回 blocker，避免 `assembleRelease` 到 `lintVitalReportRelease` 才報 build-tools corrupted。
 - Android APK 文件與 prereq recommendation 必須明確區分 `local.properties` 的 SDK path：Windows PowerShell / `gradlew.bat` 需使用 `C:/.../Android/Sdk`；WSL/Linux `./gradlew` 需使用 Linux SDK path，例如 `/home/aite/Android/Sdk`。`/mnt/c/.../Android/Sdk` 只表示 WSL 可讀到 Windows SDK，不代表 Linux Gradle 可使用該 SDK build-tools。
 - `npm run visual-smoke:harness` 是 Android runtime 截圖被本機 native/dev-client 問題阻擋時的非 production fallback，只能產生 seeded demo PNG 與 manifest 供人工檢查 MVP/account-critical 與 future / commerce / food photo preview route 的版面；不可接 Expo runtime、backend、database、AI / LLM / Vision / STT、payment 或 production credentials，也不可把 harness evidence 誤記為真機/模擬器截圖。
-- `npm run verify:visual-smoke-harness` 必須納入 `npm run quality`，檢查 fallback harness route list、route title / CTA alignment、每個 route 的固定內容 section count 與非空 section heading/copy、static renderer marker、PHI-safe manifest flags，以及不得 import 或執行 subprocess / network / payment / OpenAI 類呼叫。這是 fallback evidence path 的 source-level contract，不取代 native visual smoke。Harness route list 需涵蓋全部 `AppScreen`，包含 Today、Record、History、Analysis、Detailed Report、Settings、Tutorial、Menu、Subscription、Transcript Review、AI Review、AI candidate edit/remove confirm、AI Save Confirm / Failure、Save Success、Delete/Update result pages、Record Detail、Edit Record、Delete Confirm、Manual Record / Confirm、Subscription Management、Membership Status、account settings，以及 future / doctor / health / community / ranking / commerce / food photo preview routes。
+- `npm run verify:visual-smoke-harness` 必須納入 `npm run quality`，檢查 fallback harness route list、route title / CTA alignment、每個 route 的固定內容 section count 與非空 section heading/copy、static renderer marker、PHI-safe manifest flags，以及不得 import 或執行 subprocess / network / payment / OpenAI 類呼叫。這是 fallback evidence path 的 source-level contract，不取代 native visual smoke。Harness route list 需涵蓋全部 `AppScreen`，包含 Today、Record、History、Analysis、Detailed Report、Settings、Tutorial、Menu、Subscription、Transcript Review、AI Review、AI candidate edit/remove confirm、AI Save Confirm / Failure、Save Success、Delete/Update result pages、Record Detail、Edit Record、Delete Confirm、Manual Record / Confirm、Subscription Management、Membership Status、account settings，以及 future / doctor / health / year review / food photo preview routes。
 - `npm run visual-smoke:harness:verify-artifact -- --output-dir <evidence-dir>` 用於檢查實際產出的 harness manifest / PNG evidence：需確認 41 個 route、canonical manifest titles / CTAs / section counts / section headings、390x844 PNG、非空白圖像、manifest checks 與 PHI-safe safety flags。這是本機 evidence verifier，不應放進 CI quality，因為它依賴 `/tmp` evidence 目錄。
 - `npm run visual-smoke:android-prereqs` 用於 native screenshot 前的本機 SDK / AVD readiness 檢查；它只讀取 SDK tools、system image、AVD config，確認是否有非 16 KB screenshot target，不可清除 app data、啟動 Expo、呼叫 backend、寫資料或觸發 AI / LLM / Vision / STT / payment。
 
@@ -625,9 +615,7 @@ AI 候選編輯、手動新增與正式紀錄編輯的日期、時間、欄位�
 - 歷史紀錄：文件加時鐘 icon。
 - 基本分析：長條圖 icon。
 - 會員方案：人物加星星 icon。
-- 成就榜：獎盃 icon。
 - 年度回顧：循環 calendar icon。
-- 商城：購物袋 icon。
 - 設定：齒輪 icon。
 
 底部小按鈕：
@@ -649,7 +637,7 @@ Dev-only visual smoke route jump：
 
 - 只在本機 dev auth 與 debug tools 同時開啟時顯示。
 - 入口標示 `DEV ONLY` 與 `Visual smoke routes`。
-- 只做本機 route navigation，方便截圖檢查 MVP/account-critical pages 與 Future Modules、Future Module Detail、成就榜、年度回顧、商城、購物車、食物拍照等 preview pages。
+- 只做本機 route navigation，方便截圖檢查 MVP/account-critical pages 與 Future Modules、Future Module Detail、年度回顧、食物拍照等 preview pages。
 - 不可呼叫 backend、不寫資料、不觸發 AI / LLM / Vision / payment。
 - 若需要 deterministic startup 截圖，可用 `EXPO_PUBLIC_VISUAL_SMOKE_INITIAL_ROUTE` 直接開啟指定 preview route；此變數不得在 production / staging 生效。
 
@@ -964,7 +952,7 @@ Dev-only visual smoke route jump：
 
 功能：
 
-- 顯示通知內容、健康資料分享、醫師授權、社群公開、資料匯出與刪除的安全邊界。
+- 顯示通知內容、健康資料分享、醫師授權、資料匯出與刪除的安全邊界。
 - 目前只做 UI 預覽，不寫入偏好、不建立分享、不匯出資料、不呼叫 API。
 - 所有健康紀錄預設私密，任何分享或公開都必須明確 opt-in。
 
@@ -981,12 +969,11 @@ Dev-only visual smoke route jump：
   - AI 成本：0 次呼叫。
 - 正式啟用前需要完成：
   - 通知內容最小化：推播不可包含血糖數值、完整餐點或用藥內容。
-  - 資料分享 opt-in / opt-out：醫師、照護者、社群與排行榜都必須分開授權。
+  - 資料分享 opt-in / opt-out：醫師與照護者分享都必須分開授權。
   - 資料匯出與刪除請求：需有狀態追蹤、身份驗證與 audit trail。
   - 撤銷與到期：任何 share token、grant、公開顯示都必須可撤回。
 - 預留控制項目：
   - 醫師 / 照護者分享：尚未啟用。
-  - 社群公開資料：預設關閉。
   - 資料匯出 / 刪除：待後端流程。
 - 預留控制項目的 title/status/copy tuple 必須在 render 前轉成 bounded display item；不可在 JSX 內直接解構 raw tuple。
 
@@ -1252,62 +1239,6 @@ Dev-only visual smoke route jump：
 
 底部文字按鈕：「管理方案」。
 
-### 4.11 成就榜頁
-
-目前狀態：
-
-- MVP 第一階段徽章頁已可同步 backend 成就摘要、同步成就解鎖紀錄，並顯示本次新解鎖與已保存徽章。
-- Backend `/achievements/summary` 只讀取既有 records 進行聚合，回傳三大分類的累積型與連續型徽章進度；`/achievements/sync` 會保存 newly unlocked achievement records，`/achievements/unlocks` 會回傳已保存徽章紀錄；上述路徑不更新排行榜、不呼叫 AI。
-- Mobile 在 backend ready 時同步 summary；backend 不可用或 visual-smoke route 時保留 mobile 已載入紀錄的本機推算 fallback。
-- Future Module 的成就榜 / 徽章 card 也必須使用 backend-ready 語氣：成就 taxonomy、backend summary、解鎖同步與已保存徽章已接上；readiness requirements 不可再把三大分類、動態級距、backend summary、sync 或 unlocks 列為未完成，只可列公開展示 opt-in、跨使用者展示、撤回治理、公開徽章稽核或類似後續公開流程。
-- 正式公開排名或跨使用者展示前仍需完成 public opt-in、隱私邊界與撤回流程。
-
-頁面內容：
-
-- 標題：「成就榜」。
-- 副標：「完成挑戰，養成穩定記錄習慣」。
-- 左上角：返回箭頭。
-- Inline 說明：「本機預覽」，不使用 banner card；文案需說明 backend summary 可同步且 visual smoke / backend unavailable 時維持本機 fallback。
-- 成就 hero 的 unlocked count、next badge progress 與進度數字必須使用 bounded/clamped display values；不可直接 render 未 bounded backend aggregate。
-- 成就整合狀態文字必須先經 bounded display helper 再 render，避免未來 backend/config-driven copy 過長。
-- 成就同步按鈕必須走 dedicated handler 並呼叫 bounded backend loader；不可在 JSX handler 內直接組 status message 或呼叫 raw request。
-- 成就榜的 backend/fallback 說明、本機計算/不寫入邊界、下一徽章提示與徽章同步按鈕 label 必須透過 bounded display helper 產生；不可在 JSX 中直接組進度或 preview boundary copy。
-
-徽章資料模型：
-
-- 分類固定為「血糖記錄」、「飲食記錄」、「運動記錄」。
-- 每個分類都要有「累積型成就」與「連續型成就」。
-- 級距先提供 `10`、`50`、`100`、`150`、`200`、`250`；達到最高基礎級距後，backend summary、mobile fallback 與年度回顧需以每 `50` 進度延伸下一級距，例如 `300`。
-- 同一分類的累積型徽章共用同款徽章圖樣，只更換顏色與等級數字。
-- 連續型徽章採獨立款式，仍只用顏色與等級數字區分級距。
-- MVP 階段 backend summary 使用 profile 既有 records 計算累積筆數與分類連續天數；mobile fallback 使用已載入紀錄計算同一套徽章，不做公開排名或跨使用者展示承諾。
-- Backend 成就 taxonomy 必須以共用 achievement catalog 作為唯一來源；`/achievements/summary` 與 Year Review snapshot service 都必須引用同一套基礎級距與動態延伸 helper，年度回顧不可私有定義徽章級距。
-- Mobile navigation verifier 必須同時檢查 mobile fallback、backend achievement catalog、backend `/achievements/summary` 與 Year Review snapshot service 的成就 taxonomy parity：三大分類、基礎六個級距、250 後動態延伸、累積/連續型、累積型共用分類圖樣、連續型獨立圖樣與 badge level number 都不可漂移。Backend integration test 也必須驗證每個分類各有基礎 6 張累積型與 6 張連續型徽章、250 後可延伸到下一級距、累積型同分類共用 icon、累積型基礎六個級距共用同一套顏色序列、連續型共用獨立 icon/color，且級距順序完整。
-
-上方總覽卡：
-
-- 大獎盃 icon。
-- 「已解鎖」。
-- 大數字：目前已解鎖徽章數。
-- 「項成就」。
-- 「下一個徽章還差 N 點進度」。
-
-徽章列表：
-
-- 依分類 section 呈現：血糖記錄、飲食記錄、運動記錄。
-- 每個分類下列出累積型與連續型的各級距徽章。
-- 成就卡必須是單層卡片且可 wrap；徽章、標題、狀態與進度在小螢幕不可互相擠壓。
-- 徽章本體必須顯示分類/類型圖樣與級距數字。
-- 未完成徽章顯示 bounded `progress/target`，完成徽章顯示「完成」。
-- 每張卡都有進度條；連續型進度條與徽章外觀使用獨立樣式。
-
-底部按鈕：
-
-- MVP 操作：「同步徽章解鎖」。
-- 點擊後 POST `/achievements/sync` 同步 backend 成就解鎖，讀取 `/achievements/unlocks` 顯示已保存徽章，並顯示「徽章整合狀態」inline status，不使用 banner card 或額外白色 panel。Mobile navigation verifier 必須守住 sync button label、POST `/achievements/sync`、讀取 unlock history，以及本次新解鎖區塊。
-- 返回功能必須走 dedicated handler 並設定 bounded preview return status；不可在 JSX 中直接呼叫 `setCurrentScreen(achievementsReturnScreen)`。
-- 正式 achievement records、公開排名 opt-in 與撤回流程完成後才可改為「查看全部徽章」或公開展示。
-
 ### 4.12 年度回顧頁
 
 目前狀態：
@@ -1319,14 +1250,14 @@ Dev-only visual smoke route jump：
 - 年度 AI 觀察在 `DEEPSEEK_PARSER_URL` 與 `DEEPSEEK_API_KEY` 設定齊全時可呼叫 DeepSeek JSON mode；request 只能包含年度 `annual_stats`、`health_outcomes` 與固定 instructions，不可傳 raw records、food item、occurred_at、profile id、raw transcript、raw prompt 或 raw model output。DeepSeek 未設定、HTTP 失敗、回應過大或 JSON/schema 無效時必須回 deterministic fallback，不可阻斷 snapshot 產生。
 - README DeepSeek section 必須列出 Year Review 使用的 system prompt 與 prompt 分析，說明只吃年度聚合統計、只輸出 `important_observation` / `encouragement` JSON、不得收到 raw records / raw transcript / profile id / raw prompt / raw model output，並說明 deterministic fallback。Mobile navigation verifier 必須守住 README 這段文件，避免年度回顧 DeepSeek prompt 只留在 code 而沒有可審核說明。
 - Backend regression 必須解析 DeepSeek 年度回顧 user prompt，確認 payload keys 只包含 `year`、`annual_stats`、`health_outcomes` 與 `instructions`，且 instructions 明確限制只能使用聚合統計；測試也必須守住不包含 food item、`occurred_at`、profile id、raw transcript、raw prompt 或 raw model output。
-- Backend 已有 `/year-reviews/{year}/share-card` contract，可從 snapshot 產生 privacy-masked public summary card payload；預設只含記錄天數、最長連續、達成徽章與最高級距等低敏摘要，不包含平均/最高/最低血糖數值，且 `external_share_enabled=false`。
+- Backend 已有 `/year-reviews/{year}/share-card` contract，可從 snapshot 產生 privacy-masked public summary card payload；預設只含記錄天數、最長連續、飲食與運動記錄次數等低敏摘要，不包含平均/最高/最低血糖數值，且 `external_share_enabled=false`。
 - Backend 已有 `/year-reviews/{year}/share-card/asset` contract，可產生 privacy-masked SVG share-card asset、mime type、filename、alt text 與 checksum；mobile 只可顯示 bounded asset metadata，不可把 raw SVG 直接放入狀態訊息或分享文字。若要分享卡片素材，mobile 必須先把 privacy-masked SVG 寫入本機 cache，並只把安全 file URI 交給原生分享面板。
 - Backend 已有 `/year-reviews/{year}/share-card/confirm` contract，必須收到 `privacy_acknowledged=true` 才回傳 share package；未確認隱私遮罩必須 fail-closed。Share package 可標示 `external_share_enabled=true`，mobile 可用 React Native `Share.share` 開啟原生分享面板，分享內容只能使用 privacy-masked `share_text` 與 privacy-masked SVG file URI，不可分享血糖數值、snapshot payload、raw JSON 或未 bounded raw SVG string。
 - Backend regression 必須確認 Year Review share-card、SVG asset 與 confirmed share package 不含 health outcome keys、中文血糖結果標籤、實際血糖數值或 `mg/dL` 片段；公開分享只保留低敏年度摘要。
 - Backend regression 也必須檢查 confirmed share package 整包 JSON 不含 `annual_stats`、`health_outcomes`、`ai_summary`、`summary_json` 或年度血糖成果片段；允許 `snapshot_id` 作為授權/追蹤識別，但不可回傳 snapshot payload。
 - Year Review share package revoke 必須 idempotent；重複撤回不可刷新 `revoked_at`，且 revoked package 不可再接收 opened/dismissed share result update。
 - Backend regression 必須確認 share result update 會保存 `last_share_result`：opened 後再 dismissed 時 status 仍保持 opened 但 last result 更新為 dismissed；未 opened 的 dismissed package 則 status 與 last result 都為 dismissed。
-- Backend 已有可排程 command：`python -m app.jobs.generate_year_review_snapshots --year YYYY`；Kubernetes deployment foundation 已有 `infra/k8s/year-review-cronjob.yaml` 在每年 1 月 1 日呼叫，預設 year 為前一年度，且只產生缺漏 snapshots。Backend regression 必須確認 batch 重跑不會刷新既有 snapshot id、`generated_at` 或 summary，即使 snapshot 產生後又新增同年度紀錄；summary baseline 必須用獨立副本比對，避免 mutable JSON 參照掩蓋重算。
+- Backend 已有可排程 command：`python -m app.jobs.generate_year_review_snapshots --year YYYY`，預設 year 為前一年度，且只產生缺漏 snapshots。目前沒有排程，需在 Lightsail 上每年 1 月 1 日手動執行（`ai_context/DEPLOYMENT.md`）。Backend regression 必須確認 batch 重跑不會刷新既有 snapshot id、`generated_at` 或 summary，即使 snapshot 產生後又新增同年度紀錄；summary baseline 必須用獨立副本比對，避免 mutable JSON 參照掩蓋重算。
 - Backend test 必須直接驗證 scheduler default target year：在 1 月 1 日執行 `generate_year_review_snapshots` 不帶 `--year` 時，目標年度為前一個 calendar year，避免年度回顧排程誤產生當年度空報告。
 - Kubernetes manifest verifier 必須同時檢查 Year Review CronJob 的 January 1 schedule、command target，並 fail-closed 禁止 manifest 帶入 `--year`，讓部署排程使用 backend default-year contract。
 - 正式啟用前仍需完成平台分享權限細節與外部社群平台的深度整合。
@@ -1347,7 +1278,7 @@ Dev-only visual smoke route jump：
 - 年度回顧分享整合狀態按鈕必須走 dedicated handler；不可在 JSX Pressable 內直接呼叫 `setYearReviewActionStatus`。
 - 年度回顧邊界說明與分享未啟用狀態也必須透過 bounded display helper 產生；不可在 JSX 或 component body 內直接寫年度素材/分享權限 fallback 文案。
 - 年度血糖平均/最高/最低提示必須先轉成 bounded display text 或 metric row；不可在 JSX 內直接把 numeric metric 插入長句。
-- 年度回顧的來源說明、hero 總記錄句、hero 資料來源提示、徽章素材 fallback 與分享整合按鈕 label 必須透過 bounded display helper 產生；不可在 JSX 中直接組紀錄次數或年度素材 fallback copy。
+- 年度回顧的來源說明、hero 總記錄句、hero 資料來源提示與分享整合按鈕 label 必須透過 bounded display helper 產生；不可在 JSX 中直接組紀錄次數或年度素材 fallback copy。
 - 年度回顧 hero title 必須透過 bounded display helper 顯示「前一年度 YYYY 年回顧」，不可在 JSX 內直接組 `${year} 年回顧`；排程規則 copy 必須明確包含「每年 1 月 1 日自動產生前一年度回顧」。
 
 年度總覽卡：
@@ -1365,10 +1296,7 @@ Dev-only visual smoke route jump：
 - 本年度飲食記錄次數。
 - 本年度運動記錄次數。
 - 最長連續記錄天數。
-- 達成徽章數量。
-- 解鎖最高等級徽章。
-- 達成徽章數量與解鎖最高等級徽章必須沿用成就榜 taxonomy：三類累積型進度與三類連續型進度都要納入，不可只用年度累積筆數計算。
-- Mobile fallback 與 backend `annual_stats` label 必須維持上述七個統計列；mobile navigation verifier 必須守住年度統計 rows render 與七個 label，UI spec coverage 也必須把年度統計 rows 視為年度回顧 canonical marker，避免只留下健康成果或分享卡。
+- Mobile fallback 與 backend `annual_stats` label 必須維持上述五個統計列；舊版已保存 snapshot 仍可能帶有 `achieved_badges` / `highest_badge_level` 兩列（共七列），mobile 必須以 key 過濾掉這兩列、不可依 index 讀取，新舊 snapshot 都只顯示五個統計列。mobile navigation verifier 必須守住年度統計 rows render，UI spec coverage 也必須把年度統計 rows 視為年度回顧 canonical marker，避免只留下健康成果或分享卡。
 
 年度健康成果：
 
@@ -1390,12 +1318,6 @@ AI 年度觀察與鼓勵：
 - 正式版才可由年度報表服務產生 AI 整理年度重要觀察與 AI 年度總結。
 - Backend integration test 必須守住 `important_observation` 與 `encouragement` 兩個 kind，且文字不可為空；重要觀察需包含年度、記錄天數、血糖次數與年平均血糖摘要。
 
-徽章卡：
-
-- 年度徽章 row 必須可 wrap；icon、標題與說明在小螢幕不可被固定橫排壓窄。
-- 標題：「年度鼓勵徽章」。
-- 說明：「恭喜你持續記錄、照顧自己！」與「你的努力值得這枚徽章！」。
-
 底部按鈕：
 
 - MVP 預覽狀態：「查看分享整合狀態」。
@@ -1403,59 +1325,6 @@ AI 年度觀察與鼓勵：
 - 正式啟用後可產生卡片或報告，並在使用者確認隱私遮罩後分享至社群媒體。
 - 返回功能必須走 dedicated handler 並設定 bounded preview return status；不可在 JSX 中直接呼叫 `setCurrentScreen(yearReviewReturnScreen)`。
 - SVG/圖片附件分享、分享後狀態追蹤與撤回/刪除流程完成後才可改為完整「分享我的年度回顧」。
-
-### 4.13 商城頁
-
-頁面內容：
-
-- 標題：「商城」。
-- 左上角：返回箭頭。
-- Inline 說明：「點數商城」，不使用 banner card。
-- 搜尋框 placeholder：「搜尋商品」，左側放大鏡 icon。
-- 搜尋框必須使用 input-level `maxLength` 與 setter-level 截斷；一般操作路徑會先同步 backend reward catalog / points / redemption wallet，再對已同步目錄做本機搜尋篩選；backend unavailable 或 visual-smoke route 時才使用本機 fallback catalog。搜尋不可呼叫 AI，也不可查詢付款、出貨或外部商品 API。
-- 商城必須明確呈現點數兌換架構：點數來源、可兌換項目、已啟用的兌換能力、仍待完成的庫存 / 出貨 / 付款條件。
-- Backend 已有 `/store/rewards`、`/store/points`、`/store/redemptions` 與 `/store/redemptions/{id}/use` contract；redeemable rewards 會寫入 redemption 與點數 ledger，preview-only rewards 必須回 `reward_not_redeemable`，不存在的 reward code 必須回結構化 `reward_not_found` 且不可建立 redemption 或改變點數，點數不足必須回 `insufficient_points` 且不可建立 redemption 或扣成負餘額。不存在或不屬於目前 account 的 redemption use request 必須回結構化 `redemption_not_found`，不可改變任一帳號的 redemption wallet 或點數，也不可洩漏其他帳號 wallet 狀態。Reserved 特殊徽章或其他非 issued coupon/discount redemption use request 必須回 `redemption_not_usable`，不可標記 used、不可改變點數。已使用的 coupon/discount 二次 use 必須回 `redemption_not_usable`，不可刷新 `used_at` 或改變點數。優惠券與保健食品折扣可 immediate issue bounded fulfillment code；合作商品、會員福利與出貨/付款仍需後續 fulfillment。Mobile 一般操作路徑會同步 reward catalog/points/redemption wallet，按可兌換項目才送 redemption；visual-smoke route 必須維持本機 demo 且不扣點。
-- Backend store regression test 必須守住五個 reward categories：優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利；也必須鎖住各 reward 的 code、中文 title、category、points cost 與 redeemable/preview status。五個分類皆為可兌換項目；優惠券與保健食品折扣可 immediate issue bounded fulfillment code，合作商品、特殊徽章與特殊會員福利只建立 reservation，後續 fulfillment 完成前不可被 `/use` 當成 issued coupon/discount code 使用。
-- 點數來源：食物分享、完整前後血糖、審核通過。
-- 可兌換項目：優惠券、保健食品折扣、合作商品、特殊徽章、特殊會員福利。
-- 目前一般操作路徑可扣點、發出優惠券/折扣碼、顯示「我的兌換券」，並可將 unused issued coupon/discount code 標記為已使用；仍不建立出貨訂單、不處理付款。商城文案必須清楚區分優惠券 / 保健食品折扣的 immediate code issue，以及合作商品 / 會員福利仍需 reservation + 後續 fulfillment，不可再宣稱所有可兌換項目都「仍不發券」。
-- Store 邊界 rows 不可再把「點數帳本」列為正式啟用前未完成項；點數帳本、catalog、兌換券 wallet 已有 backend/mobile contract，仍待完成的只能列庫存、出貨訂單、付款、rollback 或法務/客服流程。
-- Store Future Module card 的 readiness requirements 不可再把點數帳本、兌換券狀態、reward catalog 或 coupon/discount-code issue 列為未完成；requirements 只能列購物車、庫存 reservation / rollback、出貨訂單、付款、退款、法務、客服與履約稽核等剩餘正式交易能力。
-
-分類 tab：
-
-- 「優惠券」。
-- 「保健食品折扣」。
-- 「合作商品」。
-- 「特殊徽章」。
-- 「特殊會員福利」。
-- 預設示例選中：「優惠券」。
-
-商品卡：
-
-- 商品卡必須是單層可掃描卡片，可 wrap；圖片、商品內容與箭頭按鈕在小螢幕不可互相擠壓或被外層 panel 再縮排。
-- 合作通路 50 元優惠券：backend reward code `coupon_50`，點數成本 `100 點`，redeemable，可 immediate issue bounded coupon code。
-- 保健食品 9 折折扣：backend reward code `supplement_discount_10`，點數成本 `150 點`，redeemable，可 immediate issue bounded discount code，說明不可宣稱醫療療效。
-- 合作商品體驗兌換：backend reward code `partner_product_trial`，點數成本 `300 點`，redeemable，只建立 reservation，需完成商品目錄、庫存、出貨與客服稽核。
-- 特殊會員徽章：backend reward code `annual_member_badge`，點數成本 `80 點`，redeemable，只建立 reservation，需完成 badge inventory、持有紀錄與撤回規則。
-- 特殊會員福利包：backend reward code `member_benefit_pack`，點數成本 `500 點`，redeemable，只建立 reservation，需完成 entitlement、到期與 rollback 規則。
-- Mobile fallback catalog 必須使用與 backend reward catalog 相同的 code、title、category、points cost 與 redeemable/preview badge，避免 backend unavailable 或 visual-smoke 時展示不同兌換成本。
-- 點擊商品箭頭後顯示「商品整合狀態」inline status，不使用 banner card 或額外白色 panel。
-- 商品整合狀態文字必須先經 bounded display helper 再 render，避免未來 commerce backend/config copy 過長。
-- 商品卡的點數成本必須由 bounded display item 提供，不可直接 render raw product config。
-- 點數商城說明、搜尋無結果 title/copy/evidence、購物車整合 CTA、商城本機導覽邊界、兌換 intro、結帳 readiness 標題與返回商城 label 必須透過 bounded display helper 產生；不可在 JSX 內直接寫 commerce preview/cart fallback 文案。
-- 「我的兌換券」列表必須由 bounded redemption display item 提供 title、subtitle、status label、accessibility label 與 action label；不可直接 render raw fulfillment code、reward code 或 backend status。只有 `issued` 且未使用的 coupon/discount code 可顯示可操作使用按鈕，已使用或 reserved 狀態必須 disabled。
-- Store reward code 與 redemption id 必須先經 bounded display item / `boundIdentifier` 後才能送 `/store/redemptions` 或 `/store/redemptions/{id}/use`；bounded id 為空時 mobile 必須 fail closed，只顯示 bounded status，不建立兌換、不更新兌換券狀態。
-- Mobile navigation verifier 必須守住 Store 一般操作路徑會同步 `/store/rewards`、`/store/points`、`/store/redemptions`，redeemable 商品會 POST `/store/redemptions`，兌換成功與兌換券使用成功後都必須刷新 catalog / points / wallet，我的兌換券會 render bounded redemption display item，且 usable 判斷必須同時符合 `issued`、有 fulfillment code、fulfillment type 為 coupon/discount code、尚未 used，只有 usable coupon/discount 才能 POST `/store/redemptions/{id}/use`。
-
-底部固定按鈕：
-
-- 購物車/付款整合狀態：「查看購物車整合狀態」。
-- 進入購物車整合狀態、返回商城與返回來源頁都必須走 dedicated handler 並設定 bounded commerce / preview status；不可在 JSX 中直接呼叫 `setCurrentScreen("storeCart")`、`setCurrentScreen("store")` 或 `setCurrentScreen(storeReturnScreen)`。
-- 點數帳本、商品目錄、coupon/discount-code issue 與 coupon use status 已有 backend contract；購物車整合頁不得再宣稱點數帳本尚未接上。庫存、購物車、結帳、出貨訂單與付款完成後才可改為完整「查看購物車」或商品兌換流程。
-- 購物車整合頁不得再把「優惠」整體列為未接 backend，因為 coupon/discount-code issue 與 coupon use status 已有 backend contract；未完成項應描述為購物車、庫存、出貨、付款與退款規則或 backend order flow。
-- 購物車預覽頁若顯示結帳按鈕，必須是 disabled 狀態且文字為「結帳整合尚未啟用」，不可顯示可操作的「前往結帳」。
-- 購物車 preview 的 unavailable title/copy/evidence、法務提示與 disabled checkout label 必須透過 bounded display helper 產生；不可在 JSX 內直接寫 commerce fallback 文案。
 
 ### 4.14 食物拍照分析頁
 
@@ -1515,7 +1384,7 @@ AI 分析結果：
 目前狀態：
 
 - Future module / 本機預留詳情。
-- 從未來擴充清單點擊尚未有完整預覽頁的模組時開啟，例如醫師 / 醫院合作、社群、排行榜、HealthKit / Health Connect / 血糖機。
+- 從未來擴充清單點擊尚未有完整預覽頁的模組時開啟，例如醫師 / 醫院合作、HealthKit / Health Connect / 血糖機。
 - 目前只顯示工程前置條件、資料安全邊界與正式啟用順序，不呼叫 API、不寫入資料、不啟動背景工作、不呼叫 AI。
 
 頁面內容：
@@ -1527,20 +1396,20 @@ AI 分析結果：
 - Future preview 族群共用的 readiness/status/return/action labels，例如啟用前條件、正式啟用前需要完成、整合狀態、MVP 範圍邊界、目前狀態、建議實作順序、返回未來擴充與各狀態按鈕 label，必須透過 bounded display helper 產生；不可在 JSX 中直接寫 repeated future-preview section labels。
 - 狀態卡：顯示 readiness 與 safety。
 - 啟用前條件清單：顯示該模組 required backend / permission / privacy / cost 控制項；清單使用開放式 inline checklist，不放進白色卡片，避免未來模組卡片內再包一張 panel。
-- 建議實作順序：production auth -> 權限模型 -> schema/source 欄位 -> audit trail -> 外部分享/排行/匯入/圖片分析；使用「建議實作順序」inline block，不使用 banner card 或額外白色 panel。
+- 建議實作順序：production auth -> 權限模型 -> schema/source 欄位 -> audit trail -> 外部分享/匯入/圖片分析；使用「建議實作順序」inline block，不使用 banner card 或額外白色 panel。
 - 返回按鈕：「返回未來擴充」。
 
 互動：
 
 - 從未來擴充清單進入時，返回應回到未來擴充清單。
 - 不可把未完成模組導向空白頁或只顯示 toast；需要保留可檢視的本機預覽內容，方便後續分支實作。
-- 未來擴充清單若連到已存在的預覽頁，例如成就榜、年度回顧、商城或食物拍照分析，該預覽頁返回應回到未來擴充清單；從 Menu 進入時則返回 Menu。
+- 未來擴充清單若連到已存在的預覽頁，例如年度回顧或食物拍照分析，該預覽頁返回應回到未來擴充清單；從 Menu 進入時則返回 Menu。
 - 未來擴充清單內的整合狀態回饋顯示為「未來模組整合狀態」inline status，不使用 banner card 或額外白色 panel。
 - 未來擴充清單與 future module preview 的整合狀態文字必須先經 bounded display helper 再 render。
 - 未來擴充清單、preview detail 與 preview target 切換時的 action status clear 也必須透過 shared reset helper；不可在入口 handler 或卡片 Pressable 內直接設定空字串。
 - Menu 進入未來擴充、未來擴充返回 Menu、以及未來模組詳情返回未來擴充都必須使用 dedicated handler；handler 只更新 App 內導覽與 bounded status，不呼叫 backend / AI / Vision / payment。
 - 未來擴充清單卡片進入 preview target 或 detail 時必須走 dedicated handler；不可在卡片 Pressable JSX 中直接寫多分支 `setCurrentScreen(...)` route transition。Future module card JSX `onPress` 必須呼叫 card press wrapper，不直接呼叫底層 future module destination handler。
-- 醫師合作、健康串接、社群與排行榜 preview 的狀態按鈕也必須走 dedicated handler；不可在 JSX Pressable 內直接呼叫 `setDoctorShareActionStatus`、`setHealthIntegrationActionStatus`、`setCommunityActionStatus` 或 `setRankingActionStatus`。
+- 醫師合作與健康串接 preview 的狀態按鈕也必須走 dedicated handler；不可在 JSX Pressable 內直接呼叫 `setDoctorShareActionStatus` 或 `setHealthIntegrationActionStatus`。
 - 未來擴充清單底部的 MVP 範圍說明顯示為「MVP 範圍邊界」inline block，不使用 banner card 或額外白色 panel。
 
 ### 4.14.2 醫師 / 醫院合作預覽頁
@@ -1599,85 +1468,6 @@ AI 分析結果：
 - 進入健康串接 preview 時的整合狀態清除必須使用 shared reset helper，不可在 handler 內直接設定空字串。
 - 健康串接 preview 的 Header 返回與底部返回 CTA 必須使用 dedicated handler；handler 只回到既有 return target 並更新 bounded status，不請求權限、不讀取外部資料、不呼叫 backend / AI。
 - 外部資料不可覆蓋手動紀錄；正式匯入後仍需保留來源、同步批次、同步狀態與去重證據。
-
-### 4.14.4 食物社群頁
-
-目前狀態：
-
-- 一般操作路徑已可同步第二階段食物社群資料庫、公開資料邊界、使用者 opt-in、食物分享、點數與排行榜；仍不建立貼文、不送出留言、不公開健康紀錄。
-- Visual-smoke route 與 backend unavailable 時才顯示本機預覽，不寫入 food database、不建立積分、不更新排行榜、不串接商城。
-- Mobile 食物資料庫一般操作路徑會同步 backend food database；visual-smoke route 與 backend unavailable 時仍顯示本機 preview，不寫入 food database、不建立積分、不更新排行榜、不串接商城。Community / Food Community copy 必須區分 backend-ready 一般操作與 visual-smoke/backend-unavailable fallback，不可再宣稱食物資料庫「目前不查詢 backend」或食物分享「尚未啟用」。
-- Backend 已有 `/community/foods/categories`、`/community/foods`、`/community/foods/{id}`、`/community/foods/shares` 與 `/community/leaderboards` contract；食物分享會 upsert food item、計算升糖幅度、寫入 share、給點數並更新排行榜聚合。
-- Backend 已有 `/community/settings` 公開顯示名稱與 leaderboard opt-in contract；leaderboard 只顯示 opted-in accounts，且顯示公開社群名稱，不直接顯示 raw account display name。公開顯示名稱 trim 後不可為空白；空白更新必須回結構化 `community_display_name_blank`，且不可改變既有公開名稱或 opt-in 狀態。
-
-頁面內容：
-
-- 標題：「食物社群」。
-- Inline 說明：「食物社群」，不使用 banner card。
-- 食物血糖資料庫定位必須明確顯示「華人使用者真實食物升糖資料庫」與「以實際食用前後血糖分享取代理論與網路傳言」；此為資料產品定位，不代表公開個人健康紀錄，也不可新增未經同意的識別資料或健康資料公開。
-- 食物血糖資料庫 preview 必須顯示大分類：蔬菜、肉類、海鮮、蛋類、豆類、澱粉類、飲料、水果、零食、保健食品；一般操作路徑會先同步 `/community/foods/categories` 的 backend label、該分類個別食物數與最多 3 個代表食物，backend unavailable 或 visual-smoke 時才使用本機 fallback。Backend integration test 必須直接驗證 `/community/foods/categories` 回傳這十個 code/label 且順序穩定，空分類回 `food_count: 0` 與空 `sample_foods`，有資料分類可回個別食物摘要。
-- Mobile navigation verifier 必須同時檢查 mobile fallback、mobile API category mapper 與 backend `FOOD_CATEGORY_LABELS` 的十個食物大分類 parity；特別要守住 backend plural code（例如 `snacks`）與 mobile singular display id（例如 `snack`）的雙向 mapping。Verifier 也必須確認 mobile fallback `foodCommunityItems` 每個大分類至少有一個可點擊的個別食物項目，避免只剩分類 tab 而沒有資料庫內容。
-- 食物搜尋可直接搜尋食物名稱，不必從分類進入；有搜尋文字且未指定 category 時 mobile 與 backend query 都必須跨分類搜尋，有指定 category 時只回該分類，沒有搜尋文字時才套用目前分類 tab。Backend query trim 後不可為空白，空白 query 必須回結構化 `food_query_blank`，不可被當成 wildcard 全資料查詢。Backend integration test 必須證明同分類同 normalized food name 會 upsert/聚合到同一 food item，不同分類同名食物會建立獨立 food item，避免大型升糖資料庫跨分類污染。一般操作路徑會同步 backend food database，visual-smoke route 與 backend unavailable 時才只篩選本機 preview。
-- 食物列表項目可點擊選中，顯示食物資料頁；一般操作路徑點擊 backend food item 時會讀取 `/community/foods/{id}` 取得個別分享紀錄，visual-smoke 或本機 preview item 不呼叫 detail API。不存在的 backend food item 必須回結構化 `food_not_found`，不可讓 mobile 依賴 raw error string 判斷。
-- 食物列表項目的 accessibility label 必須描述食物資料頁會顯示已載入的分享統計與個別紀錄；不可把一般操作路徑宣稱成「只顯示本機預覽」。
-- 食物資料頁顯示：分享總人數、實際升糖參考值（平均）、最高上升血糖、最低上升血糖、個別分享紀錄；平均 / 最高 / 最低上升血糖數值必須顯示 `mg/dL` 單位，列表摘要也必須顯示分享人數與「實際升糖參考值」平均升糖，讓每項食物的實測升糖參考值在 UI 上直接可見。食物血糖變化必須保留 signed delta，若食用後血糖低於食用前，backend 與 mobile 都不可把負值改顯示為 0；個別分享紀錄也必須優先使用 backend `glucose_delta` 並以 signed `mg/dL` 顯示「血糖變化」。個別分享紀錄必須依食用時間由新到舊呈現，避免最新實測資料被舊紀錄壓在後面。Backend integration test 必須直接覆蓋 `/community/foods/{id}` detail response、同食物多筆 share 聚合、個別分享欄位、個別分享排序、負向 `glucose_delta` 聚合，以及不帶 category 的 direct food-name search。Mobile navigation verifier 必須守住四個食物資料頁統計欄位、列表實際升糖參考值摘要、mobile signed delta clamp、個別分享 signed delta 顯示，以及 backend detail shares 的 `eaten_at desc` 排序契約。
-- 食物分享紀錄欄位：食物名稱、食用時間、食用前血糖、食用後血糖、血糖上升值、備註心得；食物名稱可由使用者直接輸入，空白時才 fallback 到目前選取食物；食用時間必須提供食用日期與食用時間 input，並用既有 local date/time parser 產生 `eaten_at`，不可只用送出當下 `new Date().toISOString()` 代替使用者指定時間。上升值由系統自動計算，且表單預覽必須用 signed clamp 顯示 `after_glucose - before_glucose`，不可把血糖下降改成 `0`。Mobile navigation verifier 必須守住 share form 顯示 `食用時間` row、日期/時間 input、`血糖上升值` 自動計算 row，且送出 `/community/foods/shares` payload 只能傳 `before_glucose` / `after_glucose`，不可傳 client-side `glucose_delta`。Backend API preflight 必須拒絕 client-supplied `glucose_delta`，回結構化 `food_glucose_delta_client_supplied`，且 response 不可 echo 食物名稱、心得或完整 input；mobile navigation verifier 也必須守住 backend preflight dependency、structured error code/message、schema 不可用 raw validation error 寫法，以及 server-calculated `glucose_delta=after-before`。Backend integration test 必須證明送入 `glucose_delta` 時回 422，且不可建立 food item、food share 或點數 ledger。正常 share success path 必須由 server 使用 `after_glucose - before_glucose` 自算並回寫 share/stats，不信任 client-provided rise value。Backend schema 必須 trim food name，拒絕全空白或非字串名稱；全空白食物名稱必須回結構化 `food_name_blank`，避免 mobile 依賴 raw validation message，且不可建立 food item、food share 或點數 ledger；optional 份量/心得全空白時正規化為 `null`，避免大型食物升糖資料庫保存空白公開欄位。食用時間不可在未來且必須包含 timezone；未來 `eaten_at` 必須回結構化 `invalid_record_time` 且 message 指向 `eaten_at`，缺 timezone 必須回結構化 `invalid_datetime` 且 `field=eaten_at`；上述 invalid `eaten_at` path 不可建立 food item、food share 或點數 ledger。
-- 社群積分預留：分享資料得點數，完整前後血糖可加權，通過審核後可進排行榜。
-- 社群排行榜：backend `/community/leaderboards` 必須支援分享次數排行、貢獻度排行、食物測試達人排行，且 integration test 必須驗證 opt-in 後三種榜單都會包含公開名稱與正確分數；未 opt-in 或後續 opt-out 時不得出現在公開榜單。食物測試達人分數必須以 distinct food item 計算，同食物重複分享只增加分享次數與貢獻度，不增加 food_tester 分數。同分榜單必須用公開顯示名稱與 account id 作穩定排序，避免公開排名在同分時漂移。
-- Food Community 頁內排行榜小節標題必須是「社群排行榜」，不可再顯示「預留」或 `opt-in 尚未啟用`，因為一般操作路徑已可透過 backend 同步公開設定與三種榜單；Ranking Future Module card 的 readiness requirements 不可再把三種公開榜單同步列為未完成，未完成的仍是封鎖、檢舉、審核、榜單爭議處理、公開名稱違規處置、退出後歷史資料撤回與 audit event。
-- 點數與商城已在一般操作路徑串接：食物分享成功後會刷新商城點數 / 兌換券，點數可兌換優惠券、商品折扣、特殊徽章與會員福利。Community 文案不可再寫「點數未來可串接商城」；Store 空兌換紀錄文案也不可只提優惠券 / 折扣碼而漏掉特殊徽章或會員福利 reservation。
-- Food Community Future Module card 的 readiness requirements 不可再把公開顯示名稱、排行榜 opt-in、食物分享、點數或排行榜同步列為未完成；requirements 只能列貼文、留言、封鎖、檢舉、審核、公開分享刪除 / 撤回治理、退出後歷史資料撤回與 audit event 等剩餘治理能力。
-- 公開顯示名稱：一般操作路徑顯示 `/community/settings` 的 public display name，未同步時 fallback 到 bounded account display name；可由使用者更新。
-- Future preview hero / 狀態摘要卡必須是單層淡綠卡，可 wrap；不可在卡內再包另一層白色 panel。
-- 公開顯示名稱預覽的 account display name / fallback 必須透過 bounded display helper 產生；不可在 JSX 內直接依 account 條件組 fallback copy。
-- 食物社群 badge/copy 與公開顯示名稱 boundary 說明必須透過 bounded display helper 產生；不可在 JSX 內直接寫 future preview boundary 文案。
-- 食物分類、食物列表、食物資料頁、分享欄位、積分 rows 與排行榜 rows 必須在 render 前轉成 bounded display item；不可直接 render raw preview config。
-- 邊界卡：健康紀錄預設私密、公開內容需 opt-in、留言治理需封鎖 / 檢舉 / 審核、AI 成本 `0 次呼叫`。
-- 啟用前條件：公開 / 私密可見範圍、貼文留言治理、刪除撤回與 audit-friendly event stream；display name 與 leaderboard opt-in 已有 backend/mobile contract。
-- 狀態按鈕：「查看食物分享狀態」、「查看發文狀態」、「查看隱私邊界」。
-
-互動：
-
-- 從未來擴充清單進入時，返回應回到未來擴充清單。
-- 點擊食物分類或更新搜尋會重新同步 backend food database；visual-smoke route 不查詢 backend、不寫入資料庫。
-- 點擊送出食物分享會在 protected backend ready 時寫入 food share、建立點數，並刷新商城點數 / 兌換券與社群排行榜資料；visual-smoke route 或 backend unavailable 時不得寫入 food database、點數或排行榜。Mobile navigation verifier 必須守住分享成功路徑同時觸發 store points refresh 與 leaderboard refresh。
-- 食物分享送出 CTA 的 button label 與 accessibility label 必須先轉成 bounded display text；不可在 JSX 內直接寫送出分享 accessibility copy。
-- 點擊排行榜 opt-in 會更新 `/community/settings`，更新成功後必須刷新 `/community/leaderboards`，讓公開榜單立即反映加入或退出；關閉後仍可分享食物與獲得點數，但不進公開 leaderboard。Mobile navigation verifier 必須守住公開設定 save path 會觸發 leaderboard refresh。
-- 點擊發文或隱私狀態按鈕只顯示 integration status，不建立貼文、不送出留言、不公開健康紀錄。
-- 發文或隱私狀態按鈕的回饋顯示為「社群整合狀態」inline status，不使用 banner card 或額外白色 panel。
-- 社群整合狀態文字必須先經 bounded display helper 再 render。
-- 進入社群 preview 時的整合狀態清除必須使用 shared reset helper，不可在 handler 內直接設定空字串。
-- 社群 preview 的 Header 返回與底部返回 CTA 必須使用 dedicated handler；handler 只回到既有 return target 並更新 bounded status，不建立貼文、不公開紀錄、不呼叫 backend / AI。
-
-### 4.14.5 排行榜預覽頁
-
-目前狀態：
-
-- 公開榜單一般操作路徑已接 backend leaderboard read 與 opt-in 設定。
-- 一般操作路徑會同步 backend `/community/leaderboards` 的分享次數、貢獻度與食物測試達人榜單，只顯示 opt-in 使用者的公開名稱與非敏感分數；public leaderboard response 不可暴露 raw account id。
-- Visual-smoke route 與 backend unavailable 時只用 mobile 已載入紀錄計算非敏感連續記錄天數，不公開排名、不寫 ranking stats、不呼叫 API。
-
-頁面內容：
-
-- 標題：「社群排行」。
-- Inline 說明：「公開榜單」，不使用 banner card。
-- 本機連續記錄預覽：顯示目前已載入紀錄推算出的連續天數。
-- 公開榜單區塊：分享次數排行、貢獻度排行、食物測試達人排行；每筆只顯示排名、公開顯示名稱與對應非敏感分數，不顯示或傳遞 raw account id。
-- Future preview hero / 狀態摘要卡必須是單層淡綠卡，可 wrap；不可在卡內再包另一層白色 panel。
-- 本機連續記錄預覽天數必須使用 display-only clamped value；不可直接 render 未 bounded streak 計算結果。
-- 公開榜單 badge/copy、本機連續記錄 preview boundary 說明與公開榜單 entries 必須透過 bounded display helper 產生；不可在 JSX 內直接寫 future preview boundary 文案或直接 render raw leaderboard payload。
-- 邊界卡：公開排名預設關閉、排名資料只允許非敏感統計、健康數值不可公開、AI 成本 `0 次呼叫`。
-- 啟用前條件只可列尚未完成的治理與撤回能力：封鎖 / 檢舉、審核流程、榜單爭議處理、公開名稱違規處置、退出後歷史資料撤回與 audit event。不可再把 public ranking opt-in / opt-out、ranking stats structure 或公開顯示名稱列為未完成，因為一般操作路徑已接 backend `/community/settings` 與 `/community/leaderboards`。
-- 狀態按鈕：「查看排名狀態」、「查看 Opt-in 邊界」。
-
-互動：
-
-- 從未來擴充清單進入時，返回應回到未來擴充清單。
-- 點擊排名狀態按鈕會同步 `/community/leaderboards`；點擊排行榜 opt-in 按鈕必須走 `/community/settings` 更新公開排名 opt-in，並沿用 community settings 成功後刷新 leaderboard 的 path，不建立 ranking stats、不上傳 streak、不公開健康數值。
-- 排名或 opt-in 狀態按鈕的回饋顯示為「排行榜整合狀態」inline status，不使用 banner card 或額外白色 panel。
-- 排行榜整合狀態文字必須先經 bounded display helper 再 render。
-- 進入排行榜 preview 時的整合狀態清除必須使用 shared reset helper，不可在 handler 內直接設定空字串。
-- 排行榜 preview 的 Header 返回與底部返回 CTA 必須使用 dedicated handler；handler 只回到既有 return target 並更新 bounded status，不建立排名資料、不呼叫 backend / AI。
 
 ### 4.15 文字確認頁
 
@@ -1991,16 +1781,14 @@ Guardrails:
 ├── 歷史紀錄 -> 歷史紀錄頁
 ├── 基本分析 -> 基本分析頁
 ├── 會員方案 -> 會員方案頁
-├── 成就榜 -> 成就榜頁
 ├── 年度回顧 -> 年度回顧頁
-├── 商城 -> 商城頁
 └── 設定 -> 設定頁
 
 Header 行為規則：
 - 主頁右上角漢堡按鈕開啟功能選單時，功能選單的 X 返回原本主頁。
 - 子頁 header 若顯示返回箭頭且目標是功能選單，必須直接回到既有功能選單，不可重新把功能選單當成 modal 開啟，避免按 X 又回到剛離開的子頁。
 - Header 的漢堡 / 返回 / 關閉符號與各頁 X close button 必須提供 concise Traditional Chinese `accessibilityLabel`；不可只讓輔助工具讀到符號。
-- 所有 mobile `Pressable` opening tag 都必須有明確 `accessibilityLabel` 與 `accessibilityRole="button"`；label 必須靜態或 bounded，不可包含 PHI、raw record payload、backend/raw model 內容、secret 或 token。這包含 header/close、錄音按鈕、tabs/chips、功能選單卡、查看更多功能、開發測試重置、商城商品箭頭、食物拍照 upload 區與所有底部返回 CTA。`Pressable` 的 `accessibilityLabel` 來源只可使用短靜態字串、bounded display label object、render 前產生的 `*.accessibilityLabel` display item 欄位，或命名的 bounded accessibility label 變數；不可在 JSX label 內使用 inline template、helper call、raw state、backend/config/model value 或 record payload。任何帶有 `disabled=` 的 `Pressable` 也必須提供對應且條件一致的 `accessibilityState` disabled state，讓視覺 disabled、實際 disabled prop 與輔助工具狀態一致。
+- 所有 mobile `Pressable` opening tag 都必須有明確 `accessibilityLabel` 與 `accessibilityRole="button"`；label 必須靜態或 bounded，不可包含 PHI、raw record payload、backend/raw model 內容、secret 或 token。這包含 header/close、錄音按鈕、tabs/chips、功能選單卡、查看更多功能、開發測試重置、食物拍照 upload 區與所有底部返回 CTA。`Pressable` 的 `accessibilityLabel` 來源只可使用短靜態字串、bounded display label object、render 前產生的 `*.accessibilityLabel` display item 欄位，或命名的 bounded accessibility label 變數；不可在 JSX label 內使用 inline template、helper call、raw state、backend/config/model value 或 record payload。任何帶有 `disabled=` 的 `Pressable` 也必須提供對應且條件一致的 `accessibilityState` disabled state，讓視覺 disabled、實際 disabled prop 與輔助工具狀態一致。
 - 主要導覽卡與多頁入口 Pressable 必須標示 `accessibilityRole="button"`，至少包含 primary tabs、Record quick-entry、功能選單卡、查看更多功能、Future Modules 清單卡、result-page destination cards、設定帳號卡與設定列表 rows。Home 頁只保留大型 mic Pressable。
 - Primary tabs、segmented pills 與 selection chips 若使用 selected/active 視覺樣式，也必須提供條件一致的 `accessibilityState.selected`；錄音中的 active 狀態不當作 selected option。
 - 所有 mobile `TextInput` 必須有 concise Traditional Chinese `accessibilityLabel` 與 `maxLength`；不可只依靠 placeholder、相鄰 label 或 handler 內 bounding。輸入欄位 label 必須是短靜態文字或 render 前 bounded 的 `auxiliaryDisplayLabels.*` reference，不可包含 PHI、raw transcript、raw model output、secret、token、raw backend/config value 或 inline template。`maxLength` 必須對應既有 bounded update wrapper 的長度上限，避免未來新增欄位時讓 raw transcript、backend/config string、本機模型路徑或搜尋字串繞過元件層硬限制。任何帶有 `editable=` 的 `TextInput` 也必須提供對應且條件一致的 `accessibilityState` disabled state，讓 busy/disabled 視覺狀態、實際 editable prop 與輔助工具狀態一致。所有 `TextInput` 必須明確設定 `autoCapitalize="none"` 與 `autoCorrect={false}`，避免行動鍵盤自動改寫日期、JSON、藥名、模型路徑、搜尋字串或待整理 transcript。血糖值與運動分鐘數等 structured numeric inputs 必須使用 `keyboardType="numeric"`，搭配既有 bounded update wrapper 與提交前範圍驗證。任何 `multiline` TextInput 必須設定 `textAlignVertical="top"`，並使用已命名的高度邊界 style（`homeTranscriptInput`、`transcriptInput`、`transcriptReviewInput`、`jsonInput` 或 `multilineField`）；這些 style 必須維持明確 `minHeight` 與 `lineHeight`，讓 transcript、飲食內容、tags 與 fallback JSON 在 Android/iOS 上維持可預期的長文字輸入佈局。
@@ -2008,18 +1796,14 @@ Header 行為規則：
 - 互動卡片與 row Pressable，例如 account card、settings row、timeline/history row、AI review row、post-save destination card、future/detail record card、menu card 與 food photo upload box，也必須有明確 `minHeight` 或固定高度，不可只靠當前文字內容撐出可點擊區。
 - 所有 mobile `ScrollView` 必須設定 `keyboardShouldPersistTaps="handled"`，讓使用者在鍵盤開啟時仍可點按 CTA、tabs、chips、模型選項或返回控制，不因鍵盤 dismissal 吞掉操作。
 - 主表單 `ScrollView` 必須包在 `KeyboardAvoidingView` 中，使用 iOS `padding` / Android `height` behavior 與 `flex: 1` root style，避免鍵盤遮住 transcript、手動新增、編輯、設定與 native debug form 的輸入欄位或底部 CTA。
-- 小螢幕上卡片 row 與 header row 必須允許長文字換行或 shrink；section header、record header、comparison row、quota stats、achievement/product/year badge row 不可用固定單行擠壓主要內容。
+- 小螢幕上卡片 row 與 header row 必須允許長文字換行或 shrink；section header、record header、comparison row、quota stats、product row 不可用固定單行擠壓主要內容。
 - 共用的 empty state、timeline card、account card、flow stepper、subscription status card 與 plan card header 都必須支援 wrap；這些是單層可掃描物件，不可因固定橫排讓文字被擠壓或造成二層 panel 感。
 - 修改 `AppScreen`、`screenChrome`、功能選單、未來模組 target 或 shared preview return CTA 時，必須跑 `npm run verify:navigation` in `mobile/`，確認 screen coverage、menu destinations、menu return behavior 與 preview return CTA 沒有回歸。
-- 成就榜、年度回顧、商城、食物拍照分析等可從 Menu 或未來擴充進入的 preview 頁，底部也必須有明確返回 CTA；從 Menu 進入顯示回功能選單，從未來擴充進入顯示回未來擴充。
+- 年度回顧、食物拍照分析等可從 Menu 或未來擴充進入的 preview 頁，底部也必須有明確返回 CTA；從 Menu 進入顯示回功能選單，從未來擴充進入顯示回未來擴充。
 
 未來擴充
 ├── 醫師 / 醫院合作 -> 醫師 / 醫院合作預覽頁
-├── 食物社群資料庫 -> 食物社群頁
-├── 成就榜 / 徽章 -> 成就榜頁
-├── 排行榜 -> 排行榜預覽頁
 ├── 年度回顧 -> 年度回顧頁
-├── 商城 -> 商城頁
 ├── 食物拍照辨識 -> 食物拍照分析頁
 ├── 血糖機 / HealthKit / Health Connect -> HealthKit / Health Connect / 血糖機預覽頁
 └── 其他預留模組 -> 未來模組詳情頁
@@ -2048,15 +1832,13 @@ Main screens:
 2. History screen with month calendar mode, lit dates for days with records, dim dates for empty days, selected-date AI-organized records first, and an original speech-to-text view.
 3. Analytics screen with 本週／本月／自訂日期區間 tabs, bounded custom start/end date inputs, blood glucose trend line chart, summary cards for highest glucose, lowest glucose, average glucose, total glucose measurements, before-meal count, after-meal count, and bounded detailed-report view that shows data source, AI cost 0, query limit, and no-medical-advice boundary.
 4. Subscription screen with trial and yearly membership plan, feature comparison table, inline payment-disconnected boundary text, and「查看試用整合狀態」button until store payment is wired.
-5. Menu screen with grid shortcuts for first version: 今日錄音, 歷史紀錄, 基本分析, 設定. 成就榜、年度回顧、商城、食物社群、社群排行與未來擴充入口只可在 debug / visual-smoke 或未來正式開放時顯示.
+5. Menu screen with grid shortcuts for first version: 今日錄音, 歷史紀錄, 基本分析, 設定. 年度回顧、食物拍照與未來擴充入口只可在 debug / visual-smoke 或未來正式開放時顯示.
 6. Settings screen with user profile, personal info, reminders, recording quota, privacy, tutorial, subscription management, and「清除本機狀態」button until production logout/token revoke is wired; keep Backend URL, model selection, and Dev Client tools collapsed under advanced settings.
 7. Record detail screen showing date, time, type, status, value, note, exercise, medication, with edit and delete buttons.
 8. Edit record form with date, time, type, glucose value, context, meal, exercise, medication, note, save and cancel.
 9. Tutorial screen explaining four steps: hold-to-record preview, use/edit text input, confirm AI candidate records, save complete.
 10. Membership status screen showing trial ending in 2 days and yearly subscription price NT$1,490.
-11. Achievement screen showing unlocked achievements, completed badges, locked badges, progress bars.
 12. Yearly review preview screen showing annual statistics and「查看分享整合狀態」button until share image/privacy masking are wired.
-13. Store preview screen with search, categories, product cards, inline commerce-preview boundary text, and「查看購物車整合狀態」button until cart/checkout/payment are wired.
 14. Food photo analysis preview screen with upload area, inline Vision-not-wired boundary text, and empty analysis state until camera/upload/Vision are wired.
 15. Text confirmation screen with editable text and buttons「重新輸入」and「下一步整理」; local Whisper transcripts can enter here, but users must confirm before AI organization or save.
 16. AI organized confirmation screen showing structured cards for date/time, glucose, meal, exercise, each editable, with「確認儲存」button.
@@ -2079,10 +1861,7 @@ MVP 必須優先完成：
 
 Future 預留但不阻塞 MVP：
 
-- 成就榜。
 - 年度回顧。
-- 商城。
 - 食物拍照分析。
 - 醫師 / 醫院合作。
-- 社群與排行榜。
 - Future module 卡片在尚未有預覽頁時仍可點擊，但只能顯示「查看整合狀態」與啟用前條件，不可呼叫 backend、AI、外部平台或寫入資料。

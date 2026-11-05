@@ -5,7 +5,6 @@ export const maxIdentifierTextLength = 128;
 export const maxDisplayTextLength = 120;
 export const maxDisplayDetailTextLength = 240;
 export const maxTranscriptTextLength = 1200;
-export const maxStoreSearchTextLength = 80;
 export const maxBackendUrlLength = 256;
 export const maxNativeDebugInputLength = 1024;
 export const maxUiMessageLength = 300;
@@ -20,10 +19,6 @@ export function normalizeApiBaseUrl(value: string) {
 
 export function boundNativeDebugInput(value: string) {
   return value.slice(0, maxNativeDebugInputLength);
-}
-
-export function boundStoreSearchText(value: string) {
-  return value.slice(0, maxStoreSearchTextLength);
 }
 
 export function boundUiMessage(value: string) {

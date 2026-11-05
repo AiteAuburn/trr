@@ -32,6 +32,9 @@ services:
       - /tmp:size=32m,mode=1777
     environment:
       APP_ENV: staging
+      # Set at deploy time so /version shows which build is running.
+      RELEASE_ID: ${RELEASE_ID:-unset}
+      GIT_SHA: ${GIT_SHA:-unknown}
       LOG_LEVEL: info
       ENABLE_DEBUG_TOOLS: "false"
       ALLOW_DEV_AUTH: ${ALLOW_DEV_AUTH:-false}

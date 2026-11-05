@@ -45,12 +45,7 @@ REQUIRED_HARNESS_ROUTES = {
     "futureModuleDetail",
     "doctorShare",
     "healthIntegration",
-    "community",
-    "ranking",
-    "achievements",
     "yearReview",
-    "store",
-    "storeCart",
     "foodPhoto",
 }
 
@@ -91,12 +86,7 @@ REQUIRED_HARNESS_TITLES = {
     "futureModuleDetail": "未來模組詳情",
     "doctorShare": "醫師 / 醫院合作",
     "healthIntegration": "HealthKit / Health Connect / 血糖機",
-    "community": "食物社群",
-    "ranking": "社群排行",
-    "achievements": "成就榜",
     "yearReview": "年度回顧",
-    "store": "商城",
-    "storeCart": "購物車",
     "foodPhoto": "食物拍照分析",
 }
 
@@ -135,12 +125,7 @@ REQUIRED_HARNESS_CTAS = {
     "futureModuleDetail": "返回未來擴充",
     "doctorShare": "查看授權狀態",
     "healthIntegration": "查看權限狀態",
-    "community": "查看食物分享狀態",
-    "ranking": "查看排名狀態",
-    "achievements": "返回功能選單",
     "yearReview": "查看分享整合狀態",
-    "store": "查看購物車整合狀態",
-    "storeCart": "返回商城",
     "foodPhoto": "返回功能選單",
 }
 

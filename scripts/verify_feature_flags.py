@@ -11,8 +11,6 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED = {
     "food_photo_analysis",
     "health_integrations",
-    "community_sharing",
-    "store_redemptions",
 }
 
 
@@ -43,7 +41,7 @@ def main() -> int:
         if f"feature_{name}: bool = False" not in backend_config:
             errors.append(f"backend/app/core/config.py must default FEATURE_{name.upper()} to false")
 
-    for env_path in (ROOT / ".env.example", ROOT / "infra/minimal/.env.example", ROOT / "infra/k8s/configmap.yaml"):
+    for env_path in (ROOT / ".env.example",):
         content = env_path.read_text(encoding="utf-8")
         for name in EXPECTED:
             env_name = f"FEATURE_{name.upper()}"

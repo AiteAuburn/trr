@@ -1,75 +1,15 @@
 # Development Workflow
 
-## Rule 0
-Always read:
-- skills.md
-- ai_context/architecture.md
-- ai_context/TASK_QUEUE.md
+Always read `skills.md` (wins on conflict), `ai_context/TASK_QUEUE.md`, and `ai_context/architecture.md` first.
 
----
+| Step | Role | Do |
+|---|---|---|
+| 1. Plan | Planner (`agents/planner.md`) | Pick one task from Next Up and mark it active |
+| 2. Architecture check | Builder (small tasks) | Confirm the design fits `ai_context/architecture.md`; note any breaking change explicitly |
+| 3. Implement | Builder (`agents/builder.md`) | Change only what the task needs |
+| 4. Test | Tester (`agents/tester.md`) | Add tests, run the gates |
+| 5. Security review | Any | No PHI in logs, no secrets in code, auth and permission correct, inputs validated (`ai_context/SECURITY_AND_PRIVACY.md`) |
+| 6. Close | Any | `make check` passes (plus mobile `npm run quality` for mobile changes); update `TASK_QUEUE.md`; add an `IMPLEMENTATION_LOG.md` entry |
+| 7. Deploy | Operator | Only to Lightsail staging, following `ai_context/DEPLOYMENT.md` |
 
-## Step 1: Planning
-
-Agent: Planner
-
-- pick one task from TASK_QUEUE
-- break into small steps if needed
-- mark task as active
-
----
-
-## Step 2: Architecture Check
-
-Agent: Architect (optional for small tasks)
-
-- verify design fits architecture.md
-- no breaking change without explicit note
-
----
-
-## Step 3: Implementation
-
-Agent: Builder
-
-- implement only the current task
-- do not modify unrelated files
-- follow coding rules in skills.md
-
----
-
-## Step 4: Testing
-
-Agent: Tester
-
-- add tests for new logic
-- run all tests
-- fix failures
-
----
-
-## Step 5: Security Review
-
-Agent: Security Reviewer
-
-Check:
-- no PHI in logs
-- no secrets in code
-- auth + permission correct
-- input validation exists
-
----
-
-## Step 6: Final Review
-
-- confirm tests pass
-- confirm CI would pass
-- update TASK_QUEUE status
-
----
-
-## Step 7: Merge / Deploy
-
-- push code
-- CI runs
-- deploy staging
-- manual approve production
+There is no hosted CI. Commit, push, and deploy only when the user asks.

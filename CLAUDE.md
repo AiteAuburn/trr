@@ -10,11 +10,11 @@ Three apps share one backend:
 
 - `backend/` — FastAPI + SQLAlchemy 2 + Alembic on PostgreSQL 16 (Python 3.12, mypy strict, ruff line-length 100).
 - `web/` — Vite + React 19 web simulator of the mobile flow, plus the web admin console (`AdminApp.tsx`, usage analytics).
-- `mobile/` — React Native + Expo app (the primary product). Native local models (`whisper.rn`, `llama.rn`) only work in an Expo dev-client build, not Expo Go.
+- `mobile/` — React Native + Expo app (the primary product, voice-first). Speech-to-text uses the phone's system recognizer (`expo-speech-recognition`), with an optional on-device `whisper.rn` pass if the user downloaded the model; parsing always goes through the backend. Native modules (`whisper.rn`, `llama.rn` (debug tools only)) only work in an Expo dev-client or release build, not Expo Go. There is no on-device database.
 
 ## Governing docs
 
-`skills.md` at the repo root is the top-level rules document and wins over everything in `ai_context/` and `agents/`. Read it, `ai_context/architecture.md`, and `ai_context/TASK_QUEUE.md` before starting non-trivial work. Key rules from it:
+`skills.md` at the repo root is the top-level rules document and wins over everything in `ai_context/` and `agents/`; its §1 maps every doc in `ai_context/`. Read it, `ai_context/architecture.md`, and `ai_context/TASK_QUEUE.md` before starting non-trivial work. Open product decisions (DeepSeek PHI consent, transcript retention, release keystore, voice-quota trust, ...) are listed in `ai_context/PRODUCT_ROADMAP.md` §4 and tracked in `ai_context/PRODUCTION_READINESS.md`; do not treat them as resolved. Key rules from it:
 
 - Work on one active task from `ai_context/TASK_QUEUE.md` at a time; update its status when done.
 - Every change (bugfix, feature, infra, docs, test) adds a dated entry to `ai_context/IMPLEMENTATION_LOG.md` with: date, type, files changed, summary, verification, follow-up. The log must stay PHI-safe (no real transcripts, health values, prompts, model output, tokens).
@@ -73,10 +73,10 @@ Repo-level contract checks (pure Python, run from root):
 python scripts/verify_backend_constraints.py         # direct deps pinned in backend/constraints.txt
 python scripts/verify_feature_flags.py               # flag parity across backend/web/mobile, default off
 python scripts/verify_api_migration_compatibility.py # API contract version + migration policy
-python scripts/verify_deployment_config.py
-python scripts/verify_k8s_manifests.py
-python scripts/verify_release_contract.py
-python scripts/verify_minimal_backup_restore.py
+python scripts/verify_backend_ai_cost_boundaries.py # parser token/segment caps
+python scripts/verify_deployment_config.py           # production-safe env/Dockerfile/Lightsail defaults
+python scripts/verify_release_contract.py            # Lightsail release/rollback contract + ai_context/DEPLOYMENT.md markers
+python scripts/verify_backup_restore.py              # infra/lightsail/backup.sh + restore.sh guards
 ```
 
 There is no hosted CI (the GitHub Actions workflow was removed in 2026-11). Run `make check` (from WSL/Linux) before merging: it runs the contract scripts, then backend migrations/ruff/mypy/pytest and web lint/typecheck/tests in a separate compose project (`COMPOSE_PROJECT_NAME=bloodsugar_check`, `compose.check.yml`, no host ports, no root `.env`), then mobile `npm run quality` if `node` is on PATH. Plain `make test` uses the `make dev` database, and the backend suite clears every table, so avoid it when local dev data matters.
@@ -95,7 +95,7 @@ There is no hosted CI (the GitHub Actions workflow was removed in 2026-11). Run 
 ### Auth and permissions
 
 - Every route must depend on `get_current_account` (`app/api/deps.py`) unless it is listed with a reason in `PUBLIC_ROUTE_REASONS` in `app/services/route_auth_policy.py`. `tests/test_route_auth_policy.py` fails on any new unlisted unauthenticated route.
-- In local/test/development the caller can be identified by the `X-Account-Id` header after `POST /auth/dev-login`. Config refuses to start with `ALLOW_DEV_AUTH=true` in any other `APP_ENV` (staging included). Otherwise a Bearer JWT is validated (HS256 secret or JWKS) and checked against the revocation denylist. Email/password, OIDC exchange, and rotating refresh sessions are in `api/auth.py` + `services/auth_sessions.py`.
+- In local/test/development with dev auth on, the caller can be identified by the `X-Account-Id` header after `POST /auth/dev-login` (dev auth defaults on when `ALLOW_DEV_AUTH` is unset, but `docker-compose.yml` sets it to `false`; set `ALLOW_DEV_AUTH=true` in `.env` to use it). Config refuses to start with `ALLOW_DEV_AUTH=true` in any other `APP_ENV` (staging included). Otherwise a Bearer JWT is validated (HS256 secret or JWKS) and checked against the revocation denylist. Email/password, OIDC exchange, and rotating refresh sessions are in `api/auth.py` + `services/auth_sessions.py`.
 - Data is owned by `UserProfile`s under an `Account` (an account can manage family profiles). Access checks go through `app/services/permissions.py` (`assert_can_read_profile`, `assert_can_write_profile`, `assert_can_read_record`, ...), which also resolves `ProfileAccessGrant` scopes. Writes must emit audit events (`services/audit.py`) without PHI.
 - The admin console uses a separate username/password-hash login with an HttpOnly session cookie (`services/admin_auth.py`, `api/admin.py`).
 
@@ -105,7 +105,7 @@ There is no hosted CI (the GitHub Actions workflow was removed in 2026-11). Run 
 
 ### AI parsing pipeline
 
-`app/services/ai_pipeline.py` turns a transcript into candidate records for `/ai/parse-preview` (plus a progress SSE stream and `/ai/command-proposal`). It normalizes and splits the transcript into segments, enforces complexity/density budgets, sends a segmented prompt to the selected model, and parses a compact IR (`records`, `rejected`, `needs_confirmation`) that is mapped back to full records. Model choice comes from `runtime_llm_models()`: DeepSeek (hosted, default when `DEEPSEEK_PARSER_URL` + `DEEPSEEK_API_KEY` are set), Ollama local models (qwen2.5 / gemma3 / llama3.2), or a Gemma4 endpoint. Token caps come from `LOCAL_LLM_MAX_TOKENS`; `scripts/verify_backend_ai_cost_boundaries.py` guards these limits. Parse audits and token usage are recorded PHI-free. Fixture transcripts live in `backend/tests/parser_cases/`. The year review (`services/year_review_snapshots.py`) only sends precomputed aggregates to DeepSeek and falls back to deterministic text on any failure.
+`app/services/ai_pipeline.py` turns a transcript into candidate records for `/ai/parse-preview` (plus an NDJSON progress stream; `/ai/command-proposal` is keyword-based and calls no LLM). It normalizes and splits the transcript into segments, enforces complexity/density budgets, sends a segmented prompt to the selected model, and parses a compact IR (`records`, `rejected`, `needs_confirmation`) that is mapped back to full records. Model choice comes from `runtime_llm_models()`: DeepSeek (hosted, default when `DEEPSEEK_PARSER_URL` + `DEEPSEEK_API_KEY` are set), Ollama local models (qwen2.5 / gemma3 / llama3.2), or a Gemma4 endpoint. Token caps come from `LOCAL_LLM_MAX_TOKENS`; `scripts/verify_backend_ai_cost_boundaries.py` guards these limits. DeepSeek receives the segmented user transcript text. Token usage is recorded PHI-free, but `ai_parse_audits.transcript_text` (and `daily_records.transcript_entries_json`) store the raw transcript with no expiry, which is a known open item. Details: `ai_context/AI_PARSING_AND_MODELS.md`. Fixture transcripts live in `backend/tests/parser_cases/`. The year review (`services/year_review_snapshots.py`) only sends precomputed aggregates to DeepSeek and falls back to deterministic text on any failure.
 
 ### Migrations and API compatibility
 
@@ -123,4 +123,4 @@ Mobile env is set through `EXPO_PUBLIC_*` variables (`mobile/.env.example`). Dev
 
 ### Deployment
 
-The backend is a stateless container (`Dockerfile.prod`, runs as non-root). Deployment targets live in `infra/`: `minimal/` (self-hosted Compose + proxy), `lightsail/` (current low-cost staging), `k8s/`, `aws/`. Runbooks are in `ai_context/CLOUD_DEPLOYMENT_GUIDE.md` and `ai_context/ZERO_DOWNTIME_RELEASE_RUNBOOK.md`.
+The backend is a stateless container (`Dockerfile.prod`, runs as non-root). The only deployment target is `infra/lightsail/`: single-host Docker Compose staging (Caddy, web, backend, Postgres) with hosted DeepSeek, for internal APK testing only, not real users. Backup/restore scripts are `infra/lightsail/backup.sh` / `restore.sh`. Runbook: `ai_context/DEPLOYMENT.md`.

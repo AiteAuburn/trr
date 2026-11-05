@@ -1,3 +1,12 @@
+"""Retired achievements table mirror.
+
+The achievements feature was removed from the MVP. The table is kept (and mapped
+here) only for migration compatibility: the API migration policy allows expand-only
+migrations, so the table cannot be dropped, and keeping it in the ORM metadata stops
+Alembic autogenerate from proposing a destructive drop. Do not add new readers or
+writers.
+"""
+
 from datetime import datetime
 from uuid import UUID, uuid4
 

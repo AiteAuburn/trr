@@ -8,15 +8,11 @@ from app.core.config import Settings
 FeatureFlagName = Literal[
     "food_photo_analysis",
     "health_integrations",
-    "community_sharing",
-    "store_redemptions",
 ]
 
 PUBLIC_FEATURE_FLAGS: tuple[FeatureFlagName, ...] = (
     "food_photo_analysis",
     "health_integrations",
-    "community_sharing",
-    "store_redemptions",
 )
 
 
@@ -33,7 +29,5 @@ def public_feature_flag_payload(settings: Settings) -> PublicFeatureFlagPayload:
         "flags": {
             "food_photo_analysis": settings.feature_food_photo_analysis,
             "health_integrations": settings.feature_health_integrations,
-            "community_sharing": settings.feature_community_sharing,
-            "store_redemptions": settings.feature_store_redemptions,
         },
     }

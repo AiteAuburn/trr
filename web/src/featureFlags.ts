@@ -1,8 +1,6 @@
 export const publicFeatureFlagNames = [
   "food_photo_analysis",
   "health_integrations",
-  "community_sharing",
-  "store_redemptions",
 ] as const;
 
 export type PublicFeatureFlagName = (typeof publicFeatureFlagNames)[number];
@@ -11,8 +9,6 @@ export type PublicFeatureFlags = Record<PublicFeatureFlagName, boolean>;
 export const disabledPublicFeatureFlags: PublicFeatureFlags = {
   food_photo_analysis: false,
   health_integrations: false,
-  community_sharing: false,
-  store_redemptions: false,
 };
 
 export function parsePublicFeatureFlags(value: unknown): PublicFeatureFlags {

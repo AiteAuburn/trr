@@ -27,7 +27,7 @@
 
 必須：
 
-- API URL 使用 HTTPS production endpoint。
+- API URL 使用 HTTPS endpoint。目前唯一的後端是 Lightsail staging：`EXPO_PUBLIC_API_BASE_URL=https://DOMAIN/api`（見 `ai_context/DEPLOYMENT.md`）。staging 只給內部測試，不可放真實使用者資料。
 - `EXPO_PUBLIC_ALLOW_DEV_AUTH=false`。
 - `EXPO_PUBLIC_ENABLE_DEBUG_TOOLS=false`。
 - 不設定 `EXPO_PUBLIC_VISUAL_SMOKE_INITIAL_ROUTE`。
@@ -119,3 +119,5 @@ rtk npm run verify:android-release-signing
 ```
 
 通過。
+
+正式 keystore 尚未決定，追蹤於 `ai_context/TASK_QUEUE.md`（T2351）與 `ai_context/PRODUCTION_READINESS.md`（B4）。

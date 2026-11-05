@@ -80,9 +80,7 @@ type AppViewId =
   | "settings"
   | "tutorial"
   | "trialStatus"
-  | "achievements"
   | "yearReview"
-  | "store"
   | "foodPhoto";
 type HistoryRange = "all" | "today" | "7d" | "30d" | "date";
 type AnalysisRange = "7d" | "30d";
@@ -263,9 +261,7 @@ const appViews: Array<{ id: AppViewId; label: string; description: string }> = [
   { id: "subscription", label: "訂閱方案", description: "試用與權益" },
   { id: "tutorial", label: "使用教學", description: "四步驟上手" },
   { id: "trialStatus", label: "試用狀態", description: "到期與續訂" },
-  { id: "achievements", label: "成就榜", description: "未來預覽" },
   { id: "yearReview", label: "年度回顧", description: "未來預覽" },
-  { id: "store", label: "商城", description: "未來預覽" },
   { id: "foodPhoto", label: "食物拍照", description: "未來預覽" },
   { id: "settings", label: "帳號設定", description: "對象與系統" },
 ];
@@ -290,35 +286,6 @@ const tutorialSteps = [
   {
     title: "儲存完成",
     description: "確認後送出，即可加入今日紀錄。",
-  },
-];
-
-const achievementPreview = [
-  { title: "連續記錄 7 天", description: "恭喜你！已連續記錄 7 天", status: "完成" },
-  { title: "連續記錄 30 天", description: "太棒了！已連續記錄 30 天", status: "完成" },
-  { title: "早晨血糖達人", description: "連續 7 天記錄早晨空腹血糖", status: "完成" },
-  { title: "運動小能手", description: "連續 30 天記錄並完成運動", status: "24/30 天" },
-  { title: "體重管理家", description: "連續 14 天記錄體重", status: "5/14 天" },
-];
-
-const storePreview = [
-  {
-    tag: "人氣",
-    title: "苦瓜胜肽膠囊",
-    description: "幫助維持健康代謝的商品預覽。",
-    price: "NT$880",
-  },
-  {
-    tag: "推薦",
-    title: "控糖飲食指南",
-    description: "飲食記錄與營養觀念參考書預覽。",
-    price: "NT$320",
-  },
-  {
-    tag: "會員",
-    title: "會員專屬折價券",
-    description: "優惠券介面預覽，尚未啟用交易。",
-    price: "NT$100 折價券",
   },
 ];
 
@@ -2619,34 +2586,6 @@ export function App() {
         </section>
       ) : null}
 
-      {currentView === "achievements" ? (
-        <section className="future-panel" aria-label="Achievements preview">
-          <div>
-            <h2>成就榜</h2>
-            <p className="muted">Future read-only preview；不影響 MVP 紀錄流程。</p>
-          </div>
-          <div className="hero-card subtle">
-            <span>已解鎖</span>
-            <strong>8 項成就</strong>
-            <p>下一個徽章還差 3 天。正式版會由後端 streak / achievement table 計算。</p>
-          </div>
-          <div className="achievement-list">
-            {achievementPreview.map((achievement) => (
-              <article className="achievement-card" key={achievement.title}>
-                <div>
-                  <strong>{achievement.title}</strong>
-                  <p>{achievement.description}</p>
-                </div>
-                <span>{achievement.status}</span>
-              </article>
-            ))}
-          </div>
-          <button className="secondary-action" type="button" disabled>
-            查看全部徽章（尚未啟用）
-          </button>
-        </section>
-      ) : null}
-
       {currentView === "yearReview" ? (
         <section className="future-panel" aria-label="Year review preview">
           <div>
@@ -2684,39 +2623,6 @@ export function App() {
           </div>
           <button className="secondary-action" type="button" disabled>
             分享我的年度回顧（尚未啟用）
-          </button>
-        </section>
-      ) : null}
-
-      {currentView === "store" ? (
-        <section className="future-panel" aria-label="Store preview">
-          <div>
-            <h2>商城</h2>
-            <p className="muted">商品卡是 未來預覽；本機預覽不處理購買、付款或庫存。</p>
-          </div>
-          <label className="date-filter">
-            <span>搜尋商品</span>
-            <input value="" placeholder="搜尋商品" readOnly />
-          </label>
-          <div className="range-tabs" aria-label="Store categories">
-            <button className="active" type="button">
-              保健食品
-            </button>
-            <button type="button">書籍</button>
-            <button type="button">優惠券</button>
-          </div>
-          <div className="store-list">
-            {storePreview.map((product) => (
-              <article className="store-card" key={product.title}>
-                <span>{product.tag}</span>
-                <strong>{product.title}</strong>
-                <p>{product.description}</p>
-                <b>{product.price}</b>
-              </article>
-            ))}
-          </div>
-          <button className="secondary-action" type="button" disabled>
-            查看購物車（尚未啟用）
           </button>
         </section>
       ) : null}

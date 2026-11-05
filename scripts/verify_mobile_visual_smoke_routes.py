@@ -209,33 +209,6 @@ VISUAL_SMOKE_ROUTES = {
         "rows={healthIntegrationBoundaryRows}",
         "onPress={returnFromHealthIntegrationPreview}",
     ],
-    "community": [
-        'currentScreen === "community"',
-        "<SegmentSelector\n              options={foodCommunityCategoryDisplayOptions}",
-        "<FoodCommunityItemList",
-        "<FoodCommunityDetailShareList",
-        "rows={foodCommunityShareFieldRows}",
-        "rows={foodCommunityPointRows}",
-        "<FutureReadinessChecklist items={communityReadinessChecklistItems} />",
-        "rows={communityBoundaryRows}",
-        "onPress={returnFromCommunityPreview}",
-    ],
-    "ranking": [
-        'currentScreen === "ranking"',
-        "<RankingLeaderboardList sections={rankingLeaderboardSections} />",
-        "<FutureReadinessChecklist items={rankingReadinessChecklistItems} />",
-        "rows={rankingBoundaryRows}",
-        "onPress={rankingReturnFutureModulesPressTarget}",
-    ],
-    "achievements": [
-        'currentScreen === "achievements"',
-        "成就榜",
-        "achievementNewlyUnlockedDisplayItems",
-        "<AchievementUnlockedCardList",
-        "<AchievementCategorySectionList sections={achievementCategoryDisplaySections} />",
-        "achievementsReturnButtonDisplayLabel",
-        "onPress={returnFromAchievements}",
-    ],
     "yearReview": [
         'currentScreen === "yearReview"',
         "年度回顧",
@@ -244,25 +217,6 @@ VISUAL_SMOKE_ROUTES = {
         "yearlyAiObservationDisplayText",
         "yearReviewReturnButtonDisplayLabel",
         "onPress={returnFromYearReview}",
-    ],
-    "store": [
-        'currentScreen === "store"',
-        "商城",
-        "rows={storeRedemptionBoundaryRows}",
-        "<SegmentSelector\n              options={storeCategoryDisplayOptions}",
-        "visibleStoreProducts",
-        "storeCartButtonDisplayLabel",
-        "storeReturnButtonDisplayLabel",
-        "onPress={openStoreCart}",
-        "onPress={returnFromStore}",
-    ],
-    "storeCart": [
-        'currentScreen === "storeCart"',
-        "購物車",
-        "items={storeCheckoutReadinessChecklistItems}",
-        "disabled",
-        "storeCartReturnButtonDisplayLabel",
-        "onPress={returnFromStoreCartToStore}",
     ],
     "foodPhoto": [
         'currentScreen === "foodPhoto"',
@@ -309,12 +263,7 @@ VISUAL_SMOKE_ROUTE_IDENTITIES = {
     "futureModuleDetail": "selectedFutureModuleDisplay.title",
     "doctorShare": "醫師 / 醫院合作",
     "healthIntegration": "HealthKit / Health Connect / 血糖機",
-    "community": "communityScreenTitleLabel()",
-    "ranking": "rankingScreenTitleLabel()",
-    "achievements": "成就榜",
     "yearReview": "年度回顧",
-    "store": "商城",
-    "storeCart": "購物車",
     "foodPhoto": "食物拍照分析",
 }
 
@@ -338,9 +287,7 @@ FORBIDDEN_ROUTE_JUMP_TOKENS = {
 }
 
 ROUTES_WITH_RETURN_LABEL = {
-    "achievements",
     "yearReview",
-    "store",
     "foodPhoto",
 }
 

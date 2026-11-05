@@ -1,179 +1,91 @@
 # 糖錄錄
 
-Docker-first development skeleton for the blood sugar recording app.
+Voice-first blood-sugar recording app. The user speaks (or types), the backend parses the transcript into candidate records, and nothing is saved until the user confirms.
+
+- `backend/`: FastAPI + PostgreSQL 16
+- `web/`: web simulator of the mobile flow, plus the admin console at `/admin`
+- `mobile/`: React Native + Expo Android app (the product)
+
+Rules and docs: start with `skills.md`. Planning and design docs are in `ai_context/` (see the table at the end).
 
 ## Run Locally
 
-Backend:
-
 ```bash
-docker compose up backend
-```
-
-Web simulator:
-
-```bash
-docker compose up web
-```
-
-All services:
-
-```bash
-make dev
-```
-
-Backend health:
-
-```text
-http://localhost:8000/health
-```
-
-Web:
-
-```text
-http://localhost:5173
-```
-
-Local defaults are intentionally developer-friendly:
-
-- `APP_ENV=local`
-- `ALLOW_DEV_AUTH=true`
-- `ENABLE_DEBUG_TOOLS=false`
-- local PostgreSQL in Docker
-- local web API endpoint at `http://localhost:8000`
-
-Do not reuse local credentials in staging or production.
-
-## Docker Compose
-
-Development Compose:
-
-```bash
+cp .env.example .env          # never commit .env
 docker compose up -d db backend web
 docker compose run --rm backend alembic upgrade head
 ```
 
-Minimal production-style Compose:
+Or `make dev`.
 
-```bash
-cp infra/minimal/.env.example infra/minimal/.env
-# edit every change-me value before first boot
-docker compose --env-file infra/minimal/.env -f infra/minimal/docker-compose.yml up -d
-```
+- Backend health: `http://localhost:8000/health`
+- Web: `http://localhost:5173`
 
-Production-style defaults disable dev auth and debug tools:
+Local defaults (`docker-compose.yml`, `.env.example`):
 
-```text
-APP_ENV=production
-ALLOW_DEV_AUTH=false
-ENABLE_DEBUG_TOOLS=false
-VITE_ENABLE_DEBUG_TOOLS=false
-```
-
-If `AUTH_JWT_SECRET` is configured for the bootstrap HS256 auth path in production,
-also set `AUTH_JWT_ISSUER` and `AUTH_JWT_AUDIENCE`; production config rejects
-issuerless or audienceless JWT validation.
-Production also requires `AUTH_JWT_REQUIRE_JTI=true` so accepted access tokens
-can be checked against the revocation denylist.
-
-The production backend image runs as a non-root `app` user. The production web image uses `nginxinc/nginx-unprivileged`.
-
-## Cloud Deployment
-
-The backend is designed to run as a stateless container. Use managed services for durable state and secrets.
-
-Required production posture:
-
-- managed PostgreSQL: Cloud SQL, RDS, or Aurora
-- cloud secret manager: Google Secret Manager, AWS Secrets Manager, or SSM Parameter Store
-- private database networking
-- no long-lived cloud keys in repo, images, or app config
-- workload identity / GitHub Actions OIDC / task roles for cloud access
-- `ALLOW_DEV_AUTH=false`
+- `APP_ENV=local`
+- `ALLOW_DEV_AUTH=false`. Set it to `true` in `.env` to use `/auth/dev-login`. Config only allows that in local/test/development and refuses to start with it in staging or production.
 - `ENABLE_DEBUG_TOOLS=false`
+- local PostgreSQL in Docker
+- web API endpoint `http://localhost:8000`
 
-GCP options:
+Email/password login needs `AUTH_JWT_SECRET`. Do not reuse local credentials anywhere else.
 
-- Cloud Run for the simplest backend deployment.
-- GKE when Kubernetes HPA, ingress policy, workers, or network policy are needed.
-- Cloud SQL for PostgreSQL.
-- Secret Manager for `DATABASE_URL` and future auth/payment/API secrets.
-- Artifact Registry for container images.
+Production config also rejects debug tools, wildcard CORS, and weak JWT settings. If `AUTH_JWT_SECRET` is used in production, `AUTH_JWT_ISSUER`, `AUTH_JWT_AUDIENCE`, and `AUTH_JWT_REQUIRE_JTI=true` are required.
 
-AWS options:
+Quality gate before merging (from WSL/Linux): `make check`. Details: `ai_context/REPO_QUALITY_WORKFLOW.md`.
 
-- ECS Fargate for the simplest backend container deployment.
-- EKS when Kubernetes HPA, ingress policy, workers, or network policy are needed.
-- RDS or Aurora PostgreSQL for database.
-- Secrets Manager or SSM Parameter Store for secrets.
-- ECR for container images.
+## Deployment
 
-Detailed runbooks:
+The only deployment target is `infra/lightsail/`: a single AWS Lightsail host running Docker Compose (Caddy, web, backend, PostgreSQL) with hosted DeepSeek parsing. It is **staging for internal APK testing**. It is not highly available and must not hold real user data yet.
 
-- `ai_context/CLOUD_DEPLOYMENT_GUIDE.md`
-- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`
-- `ai_context/REPO_QUALITY_WORKFLOW.md`
+Runbook (first deploy, release, rollback, backup/restore): `ai_context/DEPLOYMENT.md`. Open release blockers: `ai_context/PRODUCTION_READINESS.md`.
 
-Production blocker: backend JWT/JWKS validation, provider-neutral OIDC exchange,
-refresh sessions, revocation, and secure mobile token storage exist, but actual
-Apple / Google / Email native callbacks and the end-user permission/session UX
-are not complete. Do not expose the API to real users until those callbacks and
-scoped profile flows pass production end-to-end validation.
+## Mobile
 
-## Mobile Preview
-
-The `mobile/` app is a React Native + Expo preview shell. It connects to the same backend and lets you test the mobile-first flow without using the web simulator.
-
-Mobile env defaults are documented in `mobile/.env.example`.
-For local Expo or Android Studio work, copy it first:
+The mobile app is the primary product. Env defaults are in `mobile/.env.example`:
 
 ```bash
 cd mobile
 cp .env.example .env
+npm run start            # Expo; EXPO_PUBLIC_API_BASE_URL points at the backend
 ```
 
-On Windows WSL, start the backend:
+Current mobile scope:
 
-```bash
-docker compose up -d db backend ollama
-```
+- email/password login (Apple / Google not wired yet); dev login only with `EXPO_PUBLIC_ALLOW_DEV_AUTH=true`
+- profile loading and first-profile creation
+- voice-first home: tap the mic to start and tap again to stop; auto-stop after 3 s of silence; 60 s cap
+- speech-to-text through the phone's speech recognizer (`expo-speech-recognition`, which may use Google's cloud service), plus an optional on-device Whisper pass after the user downloads the model in Settings (Android 13+)
+- transcript goes straight to `/ai/parse-preview`, with cancel
+- single confirm page, then save, then 存好了
+- Today timeline, history, basic analysis, year review
 
-On Mac, connect to the Windows LAN IP:
-
-```bash
-cd mobile
-EXPO_PUBLIC_API_BASE_URL=http://WINDOWS_LAN_IP:8000 npm run start
-```
-
-For production-like mobile builds, disable dev login explicitly:
+Native modules (`whisper.rn`, `llama.rn`, PCM recorder) need a dev client or release build, not Expo Go:
 
 ```bash
 cd mobile
-EXPO_PUBLIC_API_BASE_URL=https://api.example.com \
-EXPO_PUBLIC_ALLOW_DEV_AUTH=false \
-EXPO_PUBLIC_ENABLE_DEBUG_TOOLS=false \
-npm run start
+npm run prebuild
+npm run start:dev
 ```
 
-With `EXPO_PUBLIC_ALLOW_DEV_AUTH=false`, the mobile app will not call
-`/auth/dev-login`; protected actions remain unavailable until a real provider
-callback completes the configured OIDC exchange. Successful exchanged sessions
-are stored through the existing SecureStore boundary.
-Mobile dev auth is opt-in, so omitting `EXPO_PUBLIC_ALLOW_DEV_AUTH=true` has
-the same fail-closed behavior.
+`llama.rn` is used only in debug tools (`EXPO_PUBLIC_ENABLE_DEBUG_TOOLS=true`). Model files are never committed.
 
-Then open the Expo app in an iOS simulator or scan the QR code from a phone. The app also has an editable Backend URL field, so you can change the IP without rebuilding.
-
-Before and after mobile UI/navigation changes, run the local quality gate:
+Before and after mobile UI or navigation changes:
 
 ```bash
 cd mobile
 npm run quality
 ```
 
-This runs TypeScript checking and the source-level navigation verifier without starting Expo, backend, AI, auth, payment, or database services.
+This runs TypeScript checking, the source-level verifiers, and the node flow tests, without starting Expo, the backend, AI, or a database. After major layout changes, also run the visual smoke checklist in `ai_context/MOBILE_VISUAL_SMOKE_WORKFLOW.md`, using seeded/demo data only.
 
-After major mobile layout changes, also run the visual smoke checklist in `ai_context/MOBILE_VISUAL_SMOKE_WORKFLOW.md`. Keep screenshots local, use seeded/sample/demo content only, and do not use backend writes, AI, LLM, Vision, STT, payments, production credentials, or real health data for evidence.
+If a phone cannot reach WSL services over LAN, run these in an Administrator PowerShell on Windows:
+
+```powershell
+New-NetFirewallRule -DisplayName "BloodSugar Backend 8000" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8000
+New-NetFirewallRule -DisplayName "BloodSugar Expo Metro 8081" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8081
+```
 
 ### Android APK Export
 
@@ -204,10 +116,11 @@ mobile/android/app/build/outputs/apk/release/app-release.apk
 To make a release APK that can be shared with another Android phone:
 
 1. Choose the release type.
-   - Internal install smoke: allowed only for trusted testers, may use a local
-     API URL, and may temporarily use debug signing.
-   - Production-like distribution: must use an HTTPS production API URL, dev
-     auth disabled, debug tools disabled, and a real release signing config.
+   - Internal install smoke: trusted testers only. May use a local API URL and
+     may temporarily use debug signing.
+   - Production-like distribution: must use an HTTPS API URL (for Lightsail
+     staging, `https://DOMAIN/api`), dev auth disabled, debug tools disabled,
+     and a real release signing config.
 2. Run the matching preflight from `mobile/` before building:
 
 ```bash
@@ -224,44 +137,20 @@ cd mobile/android
 ./gradlew assembleRelease
 ```
 
-4. Share this file with the tester:
-
-```text
-mobile/android/app/build/outputs/apk/release/app-release.apk
-```
+4. Share `mobile/android/app/build/outputs/apk/release/app-release.apk` with the tester.
 
 The tester can install it by opening the APK on Android and allowing installs
 from that file source when prompted, or by using `adb install app-release.apk`.
 This release APK embeds the Expo JavaScript bundle and assets, so the tester
 does not need `npm run start`, `npx expo start`, Metro, or a development
-server. Do not share `assembleDebug` APKs for standalone testing because debug
+server. Do not share `assembleDebug` APKs for standalone testing, because debug
 APKs still expect Metro.
 
-Before building, check the local Android environment:
-
-```bash
-cd mobile
-npm run apk:android-prereqs
-```
-
-For production-like APKs, also verify the bundled Expo public env before
-building and confirm the Android release signing is not debug-signed:
-
-```bash
-cd mobile
-npm run verify:release-env
-npm run verify:android-release-signing
-```
-
-This fails if the build would include dev auth, debug tools, visual-smoke route
-shortcuts, localhost, emulator, LAN, or non-HTTPS API URLs. For internal release
-APK smoke tests against a local backend, local API URLs can be allowed while
-still blocking dev auth and debug tools:
-
-```bash
-cd mobile
-python3 ../scripts/verify_mobile_release_env.py --allow-local-api
-```
+Check the local Android environment with `npm run apk:android-prereqs`. For
+production-like APKs, `npm run verify:release-env` and
+`npm run verify:android-release-signing` fail if the build would include dev
+auth, debug tools, visual-smoke route shortcuts, localhost, emulator, LAN, or
+non-HTTPS API URLs, or if release is debug-signed.
 
 On Windows, prefer PowerShell for APK export because `mobile/android/local.properties`
 must use the Windows Android SDK path:
@@ -274,90 +163,45 @@ cd D:\bloodsugar\mobile\android
 ```
 
 Do not run Linux Gradle in WSL against the Windows SDK path from
-`local.properties`, including `/mnt/c/.../Android/Sdk`; Linux Gradle expects
+`local.properties`, including `/mnt/c/.../Android/Sdk`. Linux Gradle expects
 Linux tool binaries such as `aapt`, while the Windows SDK contains `aapt.exe`,
-and Gradle can report the build-tools as corrupted. For WSL-only APK builds,
-install a Linux Android SDK and set `sdk.dir` to that Linux SDK path, such as
-`/home/aite/Android/Sdk`.
+so Gradle can report the build-tools as corrupted. For WSL-only APK builds,
+install a Linux Android SDK and point `sdk.dir` at it.
 
 The current release build is still signed with the debug keystore in
 `mobile/android/app/build.gradle`. That is acceptable for internal install
-tests only; production distribution needs a real release keystore and signing
-config.
+tests only; production distribution needs a real release keystore (open item).
 
-For that internal install smoke path, make the exception explicit:
+## AI Parsing (DeepSeek)
 
-```bash
-cd mobile
-python3 ../scripts/verify_android_release_signing.py --allow-debug-signing
-```
-
-Current mobile scope:
-
-- dev login for local development only
-- profile loading / first profile creation
-- LLM model selection
-- text transcript input
-- parse preview
-- confirmation cards
-- save records
-- recent records
-
-### DeepSeek Parser Connection
-
-Backend can run DeepSeek as the parser model (`deepseek-chat`) when `DEEPSEEK_PARSER_URL`
-and `DEEPSEEK_API_KEY` are configured.
-
-1. Copy env and set keys:
+The backend uses DeepSeek as the default parser (`llm_model_id` `deepseek-chat`)
+when `DEEPSEEK_PARSER_URL` and `DEEPSEEK_API_KEY` are set:
 
 ```bash
-cp .env.example .env
-# set these values
+# in .env
 DEEPSEEK_PARSER_URL=https://api.deepseek.com/v1/chat/completions
 DEEPSEEK_API_KEY=sk-...
-```
-
-2. Restart backend:
-
-```bash
 docker compose up -d backend
 ```
 
-3. DeepSeek is the first backend LLM model option and the default
-   `/ai/parse-preview`, `/ai/parse-preview/progress-stream`, and
-   `/ai/command-proposal` processing model when it is configured. In app
-   settings, keep `DeepSeek Chat` selected unless you are intentionally testing
-   a local model.
+- `DEEPSEEK_MODEL_ID` selects the upstream model. The config default is
+  `deepseek-chat`; `.env.example` and Lightsail use `deepseek-v4-flash`.
+- The prompts come from `DEEPSEEK_SYSTEM_PROMPT` / `DEEPSEEK_ANALYSIS_ADDENDUM`
+  when set, otherwise from the constants in `backend/app/services/ai_pipeline.py`.
+  The model must return only the compact IR (`records`, `rejected`,
+  `needs_confirmation`). The backend validates it and the user confirms.
+- Requests carry the segmented transcript text, with per-batch `max_tokens`
+  bounded by `LOCAL_LLM_MAX_TOKENS`.
+- **Privacy:** this sends the user's own words to a third-party API without an
+  explicit consent screen. That is an open decision; see
+  `ai_context/PRODUCT_ROADMAP.md`.
+- Local alternatives for development: Ollama (`docker compose up -d ollama`,
+  then `make qwen25` / `make gemma3` / `make llama32`) or a Gemma4 endpoint
+  (`GEMMA4_PARSER_URL`).
 
-DeepSeek system prompts used by backend (these values come from `.env` and can be hot-swapped):
+Full pipeline, models, and limits: `ai_context/AI_PARSING_AND_MODELS.md`.
 
-```text
-你是中文健康記錄轉錄解析器（只做結構化抽取，不做醫療建議或判斷）。你僅能根據 transcript 內容抽取 compact IR 欄位：records、rejected、needs_confirmation；不得編造任何欄位。請只輸出精簡、合法、可直接 parse 的 JSON：
-1) records: 每筆紀錄需具備 schema 規定欄位；2) rejected: 無法確認或可能有歧義的內容；3) needs_confirmation 必須為 true。
-
-分析規則：
-1. 先判斷可驗證性，能對應到 transcript 的片段才進入 records；無法確認者放入 rejected。
-2. 只保留逐字明確、可追溯的數值/時間/單位；缺值或可疑內容一律拒絕。
-3. 不輸出醫療建議、不輸出 raw transcript、不輸出額外說明文字，只回傳最小 schema JSON。
-
-You are a health record parser. Return compact JSON only. Use segment_id. Do not repeat transcript text. Do not provide medical advice. Do not guess missing values.
-```
-
-Prompt 分析（你可以直接改 `DEEPSEEK_SYSTEM_PROMPT` / `DEEPSEEK_ANALYSIS_ADDENDUM`）：
-
-分析邏輯：  
-1. 這段 prompt 先限制角色為「純抽取器」：不處理建議、不編故事，只保留結構化輸出。  
-2. `DEEPSEEK_SYSTEM_PROMPT` 強制只輸出 backend compact IR：`records`、`rejected`、`needs_confirmation`，避免 DeepSeek 回傳 API response schema 或自創欄位。  
-3. `DEEPSEEK_ANALYSIS_ADDENDUM` 再加上可驗證性、拒絕策略與確認閘門，讓模型在不確定時偏向保守。  
-4. 實務上可用結果：  
-   - 低確信片段會進入 `rejected`，降低錯錄。  
-   - 只要 transcript 有精準片段，才會進入 `records`，並留在 schema gate 之後再寫入。  
-   - `records` 與 `rejected` 都不含 PHI 外洩文字，後端與前端只做有限長度回傳。
-
-若要微調精度，可以先調 `DEEPSEEK_ANALYSIS_ADDENDUM`（偏嚴可增加保守詞句、偏鬆可放寬「可接受不確定」條件）。  
-DeepSeek requests use the same compact segmented IR prompt as local parser
-models, with per-batch `max_tokens` bounded by `LOCAL_LLM_MAX_TOKENS`; hosted
-DeepSeek calls do not send Ollama-only `keep_alive` fields.
+### Year Review
 
 Year Review also uses DeepSeek when the same endpoint/key are configured. This prompt is fixed in backend code because it only accepts precomputed yearly aggregates, not transcripts or records:
 
@@ -372,62 +216,29 @@ Year Review prompt 分析：
 3. User payload 的 instructions 明確限制「只能使用上述聚合統計」，所以 DeepSeek 不會收到 raw records、food items、profile id、occurred_at、raw transcript、raw prompt 或 raw model output。
 4. DeepSeek 未設定、HTTP 失敗、回應過大、JSON 無效或缺欄位時，backend 會回到 deterministic fallback，不阻斷年度回顧產生。
 
-Native voice, `whisper.rn`, encrypted SQLite, biometrics, and `llama.rn` require Expo prebuild / dev client and are planned after the shell is stable.
-
-### iPhone Dev Client For Local Models
-
-Expo Go cannot load `whisper.rn` or `llama.rn` because they are native modules. Use a development build:
-
-```bash
-cd mobile
-npm run prebuild
-npm run ios
-npm run start:dev
-```
-
-The current native model adapter supports:
-
-- `whisper.rn` file transcription from a local Whisper model path and audio file path
-- `llama.rn` GGUF completion with JSON schema constrained output
-- model download into app document storage from a test URL
-- picking a downloaded model path for Whisper or Llama tests
-
-Model files are not committed to the repo. Keep them outside git and load them by local file path during testing.
-
-Expo Go can still run the UI-only mobile shell, but it cannot execute `whisper.rn` or `llama.rn`. The native module buttons are for dev-client builds only and are hidden unless `EXPO_PUBLIC_ENABLE_DEBUG_TOOLS=true`.
-
-If an iPhone cannot reach WSL services over LAN, run these commands in an Administrator PowerShell on Windows:
-
-```powershell
-New-NetFirewallRule -DisplayName "BloodSugar Backend 8000" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8000
-New-NetFirewallRule -DisplayName "BloodSugar Expo Metro 8081" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8081
-```
-
 ## Rules
 
-- Do not commit real `.env` files.
+- Do not commit real `.env` files, keys, or model files.
 - Do not use production data locally or in staging.
 - Do not log PHI or sensitive health data.
 
-## Planning Docs
+## Docs
 
-- `ai_context/ENGINEERING_BLUEPRINT_V1.md`: unified MVP / future architecture, page tree, module notes, and blueprint tasks.
-- `ai_context/UI_UX_SPEC.md`: complete UI / UX design system, screen specs, navigation, animation, and implementation guardrails.
-- `ai_context/MVP_INFORMATION_ARCHITECTURE.md`: MVP route map for Home, Today, History, Basic Analysis, Subscription, and Settings.
-- `ai_context/VOICE_RECORDING_QUOTA_CONTRACT.md`: MVP voice quota, single-recording limit, warning behavior, and silent-audio rejection contract.
-- `ai_context/SUBSCRIPTION_ENTITLEMENT_SCHEMA.md`: plans, subscriptions, entitlements, usage counters, and voice quota enforcement contract.
-- `ai_context/PERMISSIONS_AND_SCHEMA_REGISTRY.md`: central permission service, record schema registry, report date-window, and request-id logging notes.
-- `ai_context/MOBILE_NATIVE_AI_SPIKE.md`: Expo Dev Client local Whisper/Llama spike, benchmark harness, and checksum proof notes.
-- `ai_context/VOICE_COMMAND_EXECUTION_POLICY.md`: non-write voice action execution and audit policy.
-- `ai_context/MINIMAL_PRODUCTION_STACK.md`: minimal self-hosted Docker Compose production stack, security checklist, backups, token strategy, and Kubernetes migration path.
-- `ai_context/CLOUD_DEPLOYMENT_GUIDE.md`: GCP Cloud Run/GKE and AWS ECS/EKS deployment guide with secret and IAM assumptions.
-- `ai_context/PRODUCTION_HARDENING_AUDIT.md`: module-by-module production hardening audit, risk list, and prioritized implementation plan.
-- `ai_context/PRODUCTION_GRADE_DESIGN_AUDIT.md`: production-grade design audit, fixed risks, remaining risks, and extensibility/scaling recommendations.
-- `ai_context/PRODUCTION_DEPLOYMENT_ARCHITECTURE.md`: Kubernetes, autoscaling, managed database, Redis, CI/CD, observability, and security deployment blueprint.
-- `infra/k8s/README.md`: initial Kubernetes manifests for namespace, deployment, service, ingress, HPA, PDB, network policy, secret shape, and migration job.
-- `ai_context/REPO_QUALITY_WORKFLOW.md`: repeatable backend, web, mobile, infra, release, and debug-incident quality gates.
-- `ai_context/IMPLEMENTATION_LOG.md`: dated PHI-safe log for every bug fix or implementation change.
-- `ai_context/architecture.md`: technical architecture and local-first product direction.
-- `ai_context/MASTER_ROADMAP.md`: long-term product phases.
-- `ai_context/IMPLEMENTATION_PLAN.md`: engineering implementation order.
-- `ai_context/TASK_QUEUE.md`: current implementation queue and completed task evidence.
+| File | Content |
+|---|---|
+| `skills.md` | Top-level rules (wins over everything else) |
+| `ai_context/TASK_QUEUE.md` | Current task queue |
+| `ai_context/PRODUCT_ROADMAP.md` | Product direction, phases, open decisions |
+| `ai_context/PRODUCTION_READINESS.md` | Release blockers and gaps |
+| `ai_context/architecture.md` | Technical architecture |
+| `ai_context/AI_PARSING_AND_MODELS.md` | AI parsing pipeline, models, limits |
+| `ai_context/VOICE_INPUT.md` | Recording flow, voice quota, voice commands |
+| `ai_context/SECURITY_AND_PRIVACY.md` | PHI rules, logging, data flows |
+| `ai_context/PERMISSIONS_AND_RECORD_SCHEMA.md` | Permission service, grants, record types |
+| `ai_context/SUBSCRIPTIONS_AND_FAMILY.md` | Plans, entitlements, family model |
+| `ai_context/REPO_QUALITY_WORKFLOW.md` | Local stack and quality gates |
+| `ai_context/DEPLOYMENT.md` | Lightsail deploy, release, rollback, backup |
+| `ai_context/UI_UX_SPEC.md` | UI/UX spec |
+| `ai_context/MOBILE_VISUAL_SMOKE_WORKFLOW.md` | Mobile visual smoke checks |
+| `ai_context/IMPLEMENTATION_LOG.md` | Dated PHI-safe change log |
+| `docs/ANDROID_RELEASE_SHARING.md` | Android release APK runbook (Chinese) |

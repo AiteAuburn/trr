@@ -210,15 +210,11 @@ export function returnDestinationButtonLabel(destination: AppScreen) {
 }
 
 export function returnDestinationButtonDisplayBundle(value: {
-  achievementsReturnScreen: AppScreen;
   yearReviewReturnScreen: AppScreen;
-  storeReturnScreen: AppScreen;
   foodPhotoReturnScreen: AppScreen;
 }) {
   return {
-    achievements: returnDestinationButtonLabel(value.achievementsReturnScreen),
     yearReview: returnDestinationButtonLabel(value.yearReviewReturnScreen),
-    store: returnDestinationButtonLabel(value.storeReturnScreen),
     foodPhoto: returnDestinationButtonLabel(value.foodPhotoReturnScreen)
   };
 }

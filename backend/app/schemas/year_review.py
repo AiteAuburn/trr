@@ -22,7 +22,9 @@ class YearReviewRead(BaseModel):
     generated_for_previous_year: bool
     generated_at: datetime | None = None
     source: Literal["snapshot", "generated"]
-    annual_stats: list[YearReviewMetric] = Field(min_length=7, max_length=7)
+    # New summaries carry 5 stats. Snapshots stored before the achievements feature was
+    # removed carry 7 (with badge metrics) and must still load.
+    annual_stats: list[YearReviewMetric] = Field(min_length=5, max_length=7)
     health_outcomes: list[YearReviewMetric] = Field(min_length=3, max_length=3)
     ai_summary: list[YearReviewObservation] = Field(min_length=2, max_length=2)
 

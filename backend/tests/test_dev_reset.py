@@ -8,7 +8,7 @@ from sqlalchemy import select
 from app.core.config import get_settings
 from app.db.session import SessionLocal
 from app.main import app
-from app.models import AchievementUnlock, YearReviewSharePackage, YearReviewSnapshot
+from app.models import YearReviewSharePackage, YearReviewSnapshot
 from tests.helpers import create_account_and_profile, create_record
 
 
@@ -31,16 +31,6 @@ def test_dev_reset_clears_development_data() -> None:
         {"value": 120, "unit": "mg/dL"},
     )
     with SessionLocal() as db:
-        db.add(
-            AchievementUnlock(
-                profile_id=UUID(profile_id),
-                achievement_id="glucose-cumulative-10",
-                category="glucose",
-                kind="cumulative",
-                level=10,
-                unlocked_at=datetime(2026, 1, 2, 8, 0, tzinfo=UTC),
-            )
-        )
         snapshot = YearReviewSnapshot(
             profile_id=UUID(profile_id),
             year=2025,
@@ -75,13 +65,11 @@ def test_dev_reset_clears_development_data() -> None:
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "reset"
-    assert body["deleted_counts"]["achievement_unlocks"] >= 1
     assert body["deleted_counts"]["year_review_share_packages"] >= 1
     assert body["deleted_counts"]["year_review_snapshots"] >= 1
     assert body["deleted_counts"]["records"] >= 1
     assert body["deleted_counts"]["accounts"] >= 1
     with SessionLocal() as db:
-        assert list(db.scalars(select(AchievementUnlock).where(AchievementUnlock.profile_id == UUID(profile_id)))) == []
         assert list(db.scalars(select(YearReviewSharePackage).where(YearReviewSharePackage.profile_id == UUID(profile_id)))) == []
         assert list(db.scalars(select(YearReviewSnapshot).where(YearReviewSnapshot.profile_id == UUID(profile_id)))) == []
 

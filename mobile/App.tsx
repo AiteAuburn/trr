@@ -83,7 +83,6 @@ import {
 import { AnalysisCustomDateRangeFields } from "./analysisCustomDateRangeFields";
 import {
   boundIdentifier,
-  boundStoreSearchText,
   clampNullableNumber,
   clampNumber,
   maxBackendUrlLength,
@@ -93,7 +92,6 @@ import {
   maxMobileGlucoseValue,
   maxMobilePreviewRecords,
   maxNativeDebugInputLength,
-  maxStoreSearchTextLength,
   maxTimeInputLength,
   maxTranscriptTextLength,
   normalizeApiBaseUrl
@@ -193,84 +191,8 @@ import {
   type AppScreen
 } from "./navigationConfig";
 import {
-  achievementBadgeSummary,
-  achievementDisplayItems as buildAchievementDisplayItems,
-  achievementItemsFromApi,
-  achievementNewlyUnlockedItemsForSync,
-  achievementRuntimeDisplayBundle,
-  achievementScreenDisplayBundle,
-  achievementSyncStatusMessages,
-  achievementUnlocksFromApi,
   foodPhotoDisplayBundle,
   foodPhotoPreviewRuntimeDisplayBundle,
-  apiFoodCategoryFromMobile,
-  boundCommunityPublicSettings,
-  commercePreviewOpenCartStatusMessage,
-  commercePreviewReturnStoreStatusMessage,
-  communityActionStatusVisible,
-  communityHeroIconLabel,
-  communityLeaderboardSyncStatusMessages,
-  communityLeaderboardDisplaySections,
-  communityLeaderboardTypes,
-  communityPreviewDisplayBundle,
-  communityPublicDisplayNameMaxLength,
-  communityPublicDisplayNameDraftInputValue,
-  communityPublicNamePreviewLabel,
-  communityPublicSettingsStatusMessages,
-  emptyFoodCommunityShareFields,
-  communityScreenSubtitleCopy,
-  communityScreenTitleLabel,
-  foodCommunityCategoriesFromApi,
-  foodCommunityCategories,
-  foodCommunityCategoryDefaultItemId,
-  foodCommunityCategoryDisplayItem,
-  foodCommunityCategoryOptionAccessibilityLabel,
-  foodCommunityCategoryOptionKey,
-  foodCommunityCategoryOptionLabel,
-  foodCommunityCategoryOptionSelected,
-  foodCommunityCategorySummary,
-  foodCommunityCategoryTarget,
-  foodCommunityDatabaseIntroCopy,
-  foodCommunityDatabaseSectionLabel,
-  foodCommunityDetailAverageRiseDisplayText,
-  foodCommunityDetailAverageRiseLabel,
-  foodCommunityDetailIndividualShares,
-  foodCommunityDetailIndividualShareSectionLabel,
-  foodCommunityDetailMaximumRiseDisplayText,
-  foodCommunityDetailMaximumRiseLabel,
-  foodCommunityDetailMinimumRiseDisplayText,
-  foodCommunityDetailMinimumRiseLabel,
-  foodCommunityDetailPanelVisible,
-  foodCommunityDetailSelectedItemId,
-  foodCommunityDetailShareCountDisplayText,
-  foodCommunityDetailShareCountLabel,
-  foodCommunityDetailStatusMessages,
-  foodCommunityDetailStatusExampleCount,
-  foodCommunityDetailStatusTitle,
-  foodCommunityDetailTitleDisplayText,
-  foodCommunityRuntimeDisplayBundle,
-  foodCommunityItemDisplayItem,
-  foodCommunityItemFromApi,
-  foodCommunityItemsFromApi,
-  foodCommunityItemsWithShareUpdateFromApi,
-  foodCommunityItemsWithDetail,
-  foodCommunityItemTarget,
-  foodCommunityItems,
-  foodCommunityListDefaultItemId,
-  foodCommunityPointsStoreBridgeCopy,
-  foodCommunityRankingSectionLabel,
-  foodCommunityShareCategory,
-  foodCommunityShareEatenDateLabel,
-  foodCommunityShareEatenTimeLabel,
-  foodCommunityShareFoodNameDisplayText,
-  foodCommunityShareFoodNameInputValue,
-  foodCommunityShareFoodNameMaxLength,
-  foodCommunityShareNoteInputValue,
-  foodCommunityShareNoteMaxLength,
-  foodCommunityShareSectionLabel,
-  foodCommunityShareStatusMessages,
-  foodCommunityShareSelectedItemIdFromApi,
-  foodCommunitySyncStatusMessages,
   futureModuleCards,
   futureModuleCardsRuntimeDisplayBundle,
   futureModuleDetailDisplayBundle,
@@ -285,57 +207,8 @@ import {
   futurePreviewReturnStatusMessage,
   futurePreviewSectionLabels,
   futurePreviewStatusDisplayBundle,
-  achievementYearReviewStatusDisplayBundle,
-  limitedAchievementDisplayItems,
-  localAchievementItemsForRecords,
-  rankingActionStatusVisible,
-  rankingHeroIconLabel,
-  rankingLocalStreakPreviewLabel,
-  rankingPreviewDisplayBundle,
-  rankingScreenSubtitleCopy,
-  rankingScreenTitleLabel,
-  rankingStreakDisplayText,
   selectedFutureModuleRuntimeDisplayBundle,
   localYearlyHighlightDisplayItems,
-  storeCategories,
-  storeCategoryDisplayItem,
-  storeCategoryOptionAccessibilityLabel,
-  storeCategoryOptionKey,
-  storeCategoryOptionLabel,
-  storeCategoryOptionSelected,
-  storeCategoryTarget,
-  storeCatalogSyncStatusMessages,
-  storePreviewDisplayBundle,
-  storePreviewRuntimeDisplayBundle,
-  storeRedeemStatusMessages,
-  storeRedemptionUseStatusMessages,
-  storeRuntimeDisplayBundle,
-  storeProductsFromApi,
-  storeProductActionAccessibilityLabel,
-  storeProductActionLabel,
-  storeProductActionStatus,
-  storeProductCardBadge,
-  storeProductCardDescription,
-  storeProductCardIcon,
-  storeProductCardKey,
-  storeProductCardPointsCost,
-  storeProductCardTitle,
-  storeProductDisplayItem,
-  storeProductRedeemTitle,
-  storeProductRewardId,
-  storeProducts,
-  storeRedemptionActionAccessibilityLabel,
-  storeRedemptionActionDisabled,
-  storeRedemptionActionLabel,
-  storeRedemptionCardKey,
-  storeRedemptionCardStatusLabel,
-  storeRedemptionCardSubtitle,
-  storeRedemptionCardTitle,
-  storeRedemptionDisplayItem,
-  storeRedemptionUseId,
-  storeRedemptionUseStatusLabel,
-  storeRedemptionUseTitle,
-  storeRedemptionsFromApi,
   yearReviewBoundaryCopyBundle,
   yearReviewBackendAiSummaryTexts,
   yearReviewHeaderDisplayBundle,
@@ -345,27 +218,11 @@ import {
   yearReviewShareFilenameDisplayText,
   yearReviewShareMessageDisplayText,
   yearReviewShareUnavailableStatusMessage,
+  yearReviewStatusDisplayBundle,
   yearReviewRevokeStatusMessages,
   yearReviewSyncStatusMessages,
   yearReviewTargetYear,
-  type AchievementApiSummary,
-  type AchievementApiUnlock,
-  type AchievementItem,
-  type CommunityLeaderboardApiResponse,
-  type CommunityLeaderboardDisplaySection,
-  type CommunityPublicSettings,
-  type FoodCommunityApiCategoryRead,
-  type FoodCommunityApiItem,
-  type FoodCommunityApiShareResponse,
-  type FoodCommunityCategory,
-  type FoodCommunityItem,
-  type FoodCommunityShareFields,
   type FutureModuleCard,
-  type StoreApiPointsBalance,
-  type StoreApiRedemption,
-  type StoreCategory,
-  type StoreProduct,
-  type StoreRewardApiInput,
   type YearReviewApiResponse,
   type YearReviewApiShareAsset,
   type YearReviewApiSharePackage
@@ -392,7 +249,6 @@ import {
 } from "./sharedDisplayItems";
 import { recordFormRuntimeDisplayBundle } from "./recordFormDisplayBundle";
 import {
-  accountPublicDisplayNameForSettings,
   accountRuntimeDisplayBundle,
   doctorShareRuntimeDisplayBundle,
   profileSettingsBoundaryDisplayRowsForState
@@ -684,7 +540,6 @@ import {
   averageNumber,
   beforeMealGlucoseCount as countBeforeMealGlucose,
   boundBasicReport,
-  currentRecordStreakDays,
   highestNumber,
   lowestNumber,
   recordTypeCount,
@@ -805,8 +660,6 @@ import {
 } from "./authTransforms";
 import { protectedRequestHeaders } from "./authRequestHeaders";
 import { writeYearReviewShareAssetFile } from "./yearReviewShareFile";
-import { AchievementCategorySectionList } from "./achievementCategorySectionList";
-import { AchievementUnlockedCardList } from "./achievementUnlockedCardList";
 import { AiCandidateList } from "./aiCandidateList";
 import { AiFlowChecklist } from "./aiFlowChecklist";
 import { AiSaveFailureActionRow } from "./aiSaveFailureActionRow";
@@ -820,12 +673,9 @@ import { FutureBoundaryGrid } from "./futureBoundaryGrid";
 import { FutureReadinessChecklist } from "./futureReadinessChecklist";
 import { DetailRow } from "./detailRow";
 import { DetailedReportBoundaryGrid } from "./detailedReportBoundaryGrid";
-import { CommunityActionRow } from "./communityActionRow";
 import { DoctorShareActionRow } from "./doctorShareActionRow";
 import { FoodPhotoActionRow } from "./foodPhotoActionRow";
 import { HealthIntegrationActionRow } from "./healthIntegrationActionRow";
-import { RankingActionRow } from "./rankingActionRow";
-import { RankingLeaderboardList } from "./rankingLeaderboardList";
 import { HistoryCalendarMonthPicker } from "./historyCalendarMonthPicker";
 import { HistoryDailySummaryTable } from "./historyDailySummaryTable";
 import { HistoryIntroStatusBlocks } from "./historyIntroStatusBlocks";
@@ -838,10 +688,8 @@ import { authSessionManagementActionStatus, boundAuthSessionItems } from "./auth
 import { AuthSessionDisplayList } from "./authSessionDisplayList";
 import { BackendUrlField } from "./backendUrlField";
 import { HighlightBulletRow } from "./highlightBulletRow";
-import { HighlightDetailList } from "./highlightDetailList";
 import { InsightFlowChecklist } from "./insightFlowChecklist";
 import { InsightEmptyActionRow } from "./insightEmptyActionRow";
-import { CommunityPublicDisplayNameField } from "./communityPublicDisplayNameField";
 import { CommerceReadinessChecklist } from "./commerceReadinessChecklist";
 import { DailyTranscriptList } from "./dailyTranscriptList";
 import { ManualRecordCreatePreviewAction } from "./manualRecordCreatePreviewAction";
@@ -906,13 +754,7 @@ import { TranscriptDraftInput } from "./transcriptDraftInput";
 import { ParserLoadingView } from "./parserLoadingView";
 import { TodayTimeline } from "./todayTimeline";
 import { todayTimelineDisplayItems, todayTimelineSummary } from "./todayTimelineTransforms";
-import { FoodCommunitySearchField } from "./foodCommunitySearchField";
-import { FoodCommunityDetailShareList } from "./foodCommunityDetailShareList";
-import { FoodCommunityItemList } from "./foodCommunityItemList";
-import { FoodCommunityShareDateTimeFields } from "./foodCommunityShareDateTimeFields";
-import { FoodCommunityShareTextFields } from "./foodCommunityShareTextFields";
 import { FutureModuleCardList } from "./futureModuleCardList";
-import { SegmentSelector } from "./segmentSelector";
 import {
   SettingsModelChoiceSelector,
   settingsModelChoiceTarget
@@ -924,7 +766,6 @@ import {
 import { SettingsSubpageActionRow } from "./settingsSubpageActionRow";
 import { SettingsSubpageCloseButton } from "./settingsSubpageCloseButton";
 import { SessionManagementPreviewList } from "./sessionManagementPreviewList";
-import { StoreSearchField } from "./storeSearchField";
 import { SubscriptionSubpageActionRow } from "./subscriptionSubpageActionRow";
 import { SubscriptionSubpageCloseButton } from "./subscriptionSubpageCloseButton";
 import { TranscriptReviewActionRow } from "./transcriptReviewActionRow";
@@ -993,11 +834,7 @@ export default function App() {
   const [foodPhotoReturnScreen, setFoodPhotoReturnScreen] = useState<AppScreen>("menu");
   const [doctorShareReturnScreen, setDoctorShareReturnScreen] = useState<AppScreen>("futureModules");
   const [healthIntegrationReturnScreen, setHealthIntegrationReturnScreen] = useState<AppScreen>("futureModules");
-  const [communityReturnScreen, setCommunityReturnScreen] = useState<AppScreen>("futureModules");
-  const [rankingReturnScreen, setRankingReturnScreen] = useState<AppScreen>("futureModules");
-  const [achievementsReturnScreen, setAchievementsReturnScreen] = useState<AppScreen>("menu");
   const [yearReviewReturnScreen, setYearReviewReturnScreen] = useState<AppScreen>("menu");
-  const [storeReturnScreen, setStoreReturnScreen] = useState<AppScreen>("menu");
   const [saveSuccessReturnScreen, setSaveSuccessReturnScreen] = useState<AppScreen>("today");
   const [lastSavedSummary, setLastSavedSummary] = useState(
     initialVisualSmokeScreen === "saveSuccess" ? "Visual smoke demo save result." : ""
@@ -1069,20 +906,8 @@ export default function App() {
   const recordUpdateInFlight = useRef(false);
   const recordDeleteInFlight = useRef(false);
   const manualCreateInFlight = useRef(false);
-  const communitySyncInFlightKeys = useRef<Set<string>>(new Set());
-  const latestCommunitySyncKey = useRef("");
-  const foodCommunityDetailInFlightKeys = useRef<Set<string>>(new Set());
-  const latestFoodCommunityDetailKey = useRef("");
-  const rankingSyncInFlightKeys = useRef<Set<string>>(new Set());
-  const latestRankingSyncKey = useRef("");
-  const storeSyncInFlightKeys = useRef<Set<string>>(new Set());
-  const latestStoreSyncKey = useRef("");
-  const achievementSyncInFlightKeys = useRef<Set<string>>(new Set());
-  const latestAchievementSyncKey = useRef("");
   const yearReviewSyncInFlightKeys = useRef<Set<string>>(new Set());
   const latestYearReviewSyncKey = useRef("");
-  const foodShareInFlight = useRef(false);
-  const storeRedemptionInFlight = useRef(false);
   const audioRecordingRef = useRef<PhoneSpeechCapture | null>(null);
   const recordingAudioUriRef = useRef<string | null>(null);
   const recordingNativeTranscriptRef = useRef("");
@@ -1133,30 +958,9 @@ export default function App() {
   const [analysisCustomStart, setAnalysisCustomStart] = useState(formatLocalDateInput(startOfCurrentMonth()));
   const [analysisCustomEnd, setAnalysisCustomEnd] = useState(formatLocalDateInput(new Date()));
   const [selectedAnalysisPointIndex, setSelectedAnalysisPointIndex] = useState<number | null>(null);
-  const [storeCategory, setStoreCategory] = useState<StoreCategory>("coupons");
-  const [storeSearchText, setStoreSearchText] = useState("");
-  const [storeActionStatus, setStoreActionStatus] = useState("");
-  const [storeBackendProducts, setStoreBackendProducts] = useState<StoreProduct[]>([]);
-  const [storePointsBalance, setStorePointsBalance] = useState<StoreApiPointsBalance | null>(null);
-  const [storeRedemptions, setStoreRedemptions] = useState<StoreApiRedemption[]>([]);
   const [foodPhotoActionStatus, setFoodPhotoActionStatus] = useState("");
   const [doctorShareActionStatus, setDoctorShareActionStatus] = useState(previewActionClearStatusMessage());
   const [healthIntegrationActionStatus, setHealthIntegrationActionStatus] = useState(previewActionClearStatusMessage());
-  const [communityActionStatus, setCommunityActionStatus] = useState(previewActionClearStatusMessage());
-  const [foodCommunityCategory, setFoodCommunityCategory] = useState<FoodCommunityCategory>("vegetable");
-  const [foodCommunityBackendCategories, setFoodCommunityBackendCategories] = useState<Array<{ id: FoodCommunityCategory; label: string; foodCount: number; sampleFoods: string[] }>>([]);
-  const [foodCommunitySearchText, setFoodCommunitySearchText] = useState("");
-  const [selectedFoodCommunityItemId, setSelectedFoodCommunityItemId] = useState("leafy-greens");
-  const [foodCommunityBackendItems, setFoodCommunityBackendItems] = useState<FoodCommunityItem[]>([]);
-  const [foodCommunityShareFields, setFoodCommunityShareFields] = useState<FoodCommunityShareFields>(() => emptyFoodCommunityShareFields());
-  const [communityPublicSettings, setCommunityPublicSettings] = useState<CommunityPublicSettings | null>(null);
-  const [communityPublicDisplayNameDraft, setCommunityPublicDisplayNameDraft] = useState("");
-  const [rankingActionStatus, setRankingActionStatus] = useState(previewActionClearStatusMessage());
-  const [rankingLeaderboardSections, setRankingLeaderboardSections] = useState<CommunityLeaderboardDisplaySection[]>([]);
-  const [achievementBackendItems, setAchievementBackendItems] = useState<AchievementItem[]>([]);
-  const [achievementNewlyUnlockedItems, setAchievementNewlyUnlockedItems] = useState<AchievementItem[]>([]);
-  const [achievementUnlockedItems, setAchievementUnlockedItems] = useState<AchievementItem[]>([]);
-  const [achievementActionStatus, setAchievementActionStatus] = useState("");
   const [yearReviewActionStatus, setYearReviewActionStatus] = useState("");
   const [yearReviewBackendSummary, setYearReviewBackendSummary] = useState<YearReviewApiResponse | null>(null);
   const [yearReviewSharePackageId, setYearReviewSharePackageId] = useState("");
@@ -1204,7 +1008,6 @@ export default function App() {
   const activeProfileLabel = activeProfileDisplay.label;
   const activeProfileInlineDisplayText = activeProfileDisplay.inline;
   const activeProfileRelationshipDisplayText = activeProfileDisplay.relationship;
-  const accountPublicDisplayNameDisplayText = accountPublicDisplayNameForSettings(communityPublicSettings, account);
   const accountSecurityAuthModeDisplay = accountRuntimeDisplay.authMode;
   const authModeDisplayLabel = accountSecurityAuthModeDisplay.label;
   const authModeDisplayCopy = accountSecurityAuthModeDisplay.copy;
@@ -1508,11 +1311,7 @@ export default function App() {
     foodPhotoReturnScreen,
     doctorShareReturnScreen,
     healthIntegrationReturnScreen,
-    communityReturnScreen,
-    rankingReturnScreen,
-    achievementsReturnScreen,
     yearReviewReturnScreen,
-    storeReturnScreen,
     saveSuccessReturnScreen
   });
   const primaryTabNavigation = primaryTabNavigationState({ currentScreen, isAnyRequestInFlight });
@@ -1525,47 +1324,9 @@ export default function App() {
   });
   const mvpFlowStepIndex = mvpFlowStepper.stepIndex;
   const showMvpFlowStepper = mvpFlowStepper.show;
-  const localAchievements = useMemo<AchievementItem[]>(
-    () => localAchievementItemsForRecords(recordsForDisplay),
-    [recordsForDisplay]
-  );
-  const achievements = achievementBackendItems.length > 0 ? achievementBackendItems : localAchievements;
-  const achievementDisplayItems = useMemo(() => buildAchievementDisplayItems(achievements), [achievements]);
-  const achievementUnlockedDisplayItems = useMemo(
-    () => limitedAchievementDisplayItems(achievementUnlockedItems),
-    [achievementUnlockedItems]
-  );
-  const achievementNewlyUnlockedDisplayItems = useMemo(
-    () => limitedAchievementDisplayItems(achievementNewlyUnlockedItems),
-    [achievementNewlyUnlockedItems]
-  );
-  const achievementRuntimeDisplay = useMemo(
-    () =>
-      achievementRuntimeDisplayBundle({
-        displayItems: achievementDisplayItems,
-        newlyUnlockedDisplayItems: achievementNewlyUnlockedDisplayItems
-      }),
-    [achievementDisplayItems, achievementNewlyUnlockedDisplayItems]
-  );
-  const saveSuccessNewlyUnlockedDisplayItems = achievementRuntimeDisplay.saveSuccess.newlyUnlockedItems;
-  const achievementCategoryDisplay = achievementRuntimeDisplay.categories;
-  const achievementCategoryDisplaySections = achievementCategoryDisplay.categorySections;
-  const achievementBadgeDisplaySummary = achievementBadgeSummary(achievementDisplayItems);
-  const unlockedAchievementDisplayCount = clampNumber(
-    achievementBadgeDisplaySummary.unlockedCount,
-    0,
-    maxMobileCountValue
-  );
-  const nextAchievementDisplayDays = clampNumber(
-    achievementBadgeDisplaySummary.nextRemaining,
-    0,
-    maxMobileCountValue
-  );
-  const achievementYearReviewStatusDisplay = achievementYearReviewStatusDisplayBundle({
-    achievementActionStatus,
+  const yearReviewStatusDisplay = yearReviewStatusDisplayBundle({
     yearReviewActionStatus
   });
-  const achievementActionStatusDisplayText = achievementYearReviewStatusDisplay.achievementAction;
   const currentYear = new Date().getFullYear();
   const yearReviewTargetDisplayYear = yearReviewTargetYear(new Date());
   const yearReviewBoundaryCopy = yearReviewBoundaryCopyBundle(new Date());
@@ -1573,17 +1334,6 @@ export default function App() {
   const yearlyRecordStats = useMemo(
     () => yearlyReviewRecordStats(records, yearReviewTargetDisplayYear),
     [records, yearReviewTargetDisplayYear]
-  );
-  const yearlyAchievementBadgeSummary = achievementBadgeSummary(achievementDisplayItems);
-  const yearlyUnlockedBadgeDisplayCount = clampNumber(
-    yearlyAchievementBadgeSummary.unlockedCount,
-    0,
-    maxMobileCountValue
-  );
-  const yearlyHighestBadgeDisplayLevel = clampNumber(
-    yearlyAchievementBadgeSummary.highestLevel,
-    0,
-    maxMobileCountValue
   );
   const yearlyRecordDayDisplayCount = clampNumber(yearlyRecordStats.recordDayCount, 0, maxMobileCountValue);
   const yearlyGlucoseAverageDisplayValue = clampNullableNumber(yearlyRecordStats.glucoseAverage, 0, maxMobileGlucoseValue);
@@ -1604,8 +1354,6 @@ export default function App() {
     yearlyMealRecordDisplayCount,
     yearlyExerciseRecordDisplayCount,
     yearlyLongestStreakDisplayDays,
-    yearlyUnlockedBadgeDisplayCount,
-    yearlyHighestBadgeDisplayLevel,
     yearlyGlucoseAverageDisplayValue,
     yearlyGlucoseHighestDisplayValue,
     yearlyGlucoseLowestDisplayValue
@@ -1628,7 +1376,7 @@ export default function App() {
   const yearlyGlucoseAverageDisplayText = yearlyInsightDisplayTexts.glucoseAverage;
   const yearlyAiObservationDisplayText = yearlyInsightDisplayTexts.aiObservation;
   const yearlyAiEncouragementDisplayText = yearlyInsightDisplayTexts.aiEncouragement;
-  const yearReviewActionStatusDisplayText = achievementYearReviewStatusDisplay.yearReviewAction;
+  const yearReviewActionStatusDisplayText = yearReviewStatusDisplay.yearReviewAction;
   const yearReviewShareStatusMessage = yearReviewShareUnavailableStatusMessage();
   const yearReviewBoundaryDisplayText = yearReviewBoundaryCopy.boundaryCopy;
   const futurePreviewBoundaryRuntimeDisplay = futurePreviewBoundaryRuntimeDisplayBundle();
@@ -1638,10 +1386,6 @@ export default function App() {
   const doctorShareBackendBoundaryDisplayText = futurePreviewBoundaryCopy.doctorShareBackend;
   const healthIntegrationPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.healthIntegration;
   const healthIntegrationExternalDataBoundaryDisplayText = futurePreviewBoundaryCopy.healthIntegrationExternalData;
-  const communityPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.community;
-  const communityPublicNameBoundaryDisplayText = futurePreviewBoundaryCopy.communityPublicName;
-  const rankingPreviewBoundaryDisplay = futurePreviewBoundaryDisplay.ranking;
-  const rankingLocalPreviewBoundaryDisplayText = futurePreviewBoundaryCopy.rankingLocalPreview;
   const settingsBoundaryCopy = settingsBoundaryCopyBundle();
   const modelSelectionBoundaryDisplayText = settingsBoundaryCopy.modelSelection;
   const accountSecurityBoundaryCopy = accountSecurityBoundaryCopyBundle();
@@ -1680,60 +1424,6 @@ export default function App() {
   const recordingElapsedSecondsDisplayText = recordingResultDisplay.elapsed;
   const recordingResultBodyDisplayText = recordingResultDisplay.body;
   const recordingResultPrimaryActionDisplayText = recordingResultDisplay.primaryAction;
-  const storeRuntimeDisplay = useMemo(
-    () =>
-      storeRuntimeDisplayBundle({
-        backendProducts: storeBackendProducts,
-        fallbackProducts: storeProducts,
-        categories: storeCategories,
-        selectedCategory: storeCategory,
-        searchText: storeSearchText,
-        redemptions: storeRedemptions,
-        pointsBalance: storePointsBalance
-      }),
-    [storeBackendProducts, storeCategory, storePointsBalance, storeRedemptions, storeSearchText]
-  );
-  const storeDisplay = storeRuntimeDisplay.store;
-  const storeProductsForDisplay = storeDisplay.productsForDisplay;
-  const storeProductDisplayItems = storeDisplay.productDisplayItems;
-  const storeRedemptionDisplayItems = storeDisplay.redemptionDisplayItems;
-  const storeCategoryDisplayOptions = storeDisplay.categoryDisplayOptions;
-  const foodCommunityRuntimeDisplay = useMemo(
-    () =>
-      foodCommunityRuntimeDisplayBundle({
-        backendCategories: foodCommunityBackendCategories,
-        fallbackCategories: foodCommunityCategories,
-        backendItems: foodCommunityBackendItems,
-        fallbackItems: foodCommunityItems,
-        selectedCategory: foodCommunityCategory,
-        searchText: foodCommunitySearchText,
-        selectedItemId: selectedFoodCommunityItemId,
-        shareFields: foodCommunityShareFields,
-        pointsBalance: storePointsBalance
-      }),
-    [
-      foodCommunityBackendCategories,
-      foodCommunityBackendItems,
-      foodCommunityCategory,
-      foodCommunitySearchText,
-      foodCommunityShareFields,
-      selectedFoodCommunityItemId,
-      storePointsBalance
-    ]
-  );
-  const foodCommunityDisplay = foodCommunityRuntimeDisplay.community;
-  const foodCommunityCategoriesForDisplay = foodCommunityDisplay.categoriesForDisplay;
-  const foodCommunityCategoryDisplayOptions = foodCommunityDisplay.categoryDisplayOptions;
-  const selectedFoodCommunityCategoryDisplay = foodCommunityDisplay.selectedCategoryDisplay;
-  const foodCommunityItemsForDisplay = foodCommunityDisplay.itemsForDisplay;
-  const foodCommunityDisplayItems = foodCommunityDisplay.itemDisplayItems;
-  const visibleFoodCommunityItems = foodCommunityDisplay.visibleItems;
-  const selectedFoodCommunityItem = foodCommunityDisplay.selectedItem;
-  const foodCommunityShareFieldRows = foodCommunityDisplay.shareFieldRows;
-  const foodCommunityPointRows = foodCommunityDisplay.pointRows;
-  const foodCommunityRankingRows = foodCommunityDisplay.rankingRows;
-  const visibleStoreProducts = storeDisplay.visibleProducts;
-  const storeRedemptionBoundaryRows = storeDisplay.redemptionBoundaryRows;
   const settingsRuntimeDisplay = useMemo(() => settingsRuntimeDisplayBundle(enableDebugTools), []);
   const settingsStaticDisplay = settingsRuntimeDisplay.settings;
   const settingsDisplayRows = settingsStaticDisplay.settingsRows;
@@ -1818,12 +1508,6 @@ export default function App() {
   const futurePreviewReadinessStaticDisplay = futurePreviewReadinessRuntimeDisplay.readiness;
   const healthIntegrationReadinessChecklistItems =
     futurePreviewReadinessStaticDisplay.healthIntegrationItems;
-  const communityReadinessChecklistItems = futurePreviewReadinessStaticDisplay.communityItems;
-  const rankingReadinessChecklistItems = futurePreviewReadinessStaticDisplay.rankingItems;
-  const storePreviewRuntimeDisplay = storePreviewRuntimeDisplayBundle();
-  const storePreviewStaticDisplay = storePreviewRuntimeDisplay.preview;
-  const storeCheckoutReadinessChecklistItems = storePreviewStaticDisplay.checkoutReadinessItems;
-  const storeCartUnavailableDisplay = storePreviewStaticDisplay.cartUnavailable;
   const foodPhotoPreviewRuntimeDisplay = foodPhotoPreviewRuntimeDisplayBundle();
   const foodPhotoPreviewStaticDisplay = foodPhotoPreviewRuntimeDisplay.preview;
   const foodPhotoVisionBoundaryDisplay = foodPhotoPreviewStaticDisplay.visionBoundary;
@@ -1876,84 +1560,15 @@ export default function App() {
     futureModuleActionStatus,
     doctorShareActionStatus,
     healthIntegrationActionStatus,
-    communityActionStatus,
-    rankingActionStatus,
-    leaderboardOptIn: communityPublicSettings?.leaderboard_opt_in ?? false,
     reportLimit: mobileReportQueryDisplayLimit
   });
   const futureModuleActionStatusDisplayText = futurePreviewStatusDisplay.futureModuleAction;
   const doctorShareActionStatusDisplayText = futurePreviewStatusDisplay.doctorShareAction;
   const healthIntegrationActionStatusDisplayText = futurePreviewStatusDisplay.healthIntegrationAction;
-  const communityActionStatusDisplayText = futurePreviewStatusDisplay.communityAction;
-  const rankingActionStatusDisplayText = futurePreviewStatusDisplay.rankingAction;
   const doctorShareTokenStatusMessage = futurePreviewStatusDisplay.doctorShareToken;
   const doctorShareReportBoundaryStatusMessage = futurePreviewStatusDisplay.doctorShareReportBoundary;
   const healthIntegrationPermissionStatusMessage = futurePreviewStatusDisplay.healthIntegrationPermission;
   const healthIntegrationMeterStatusMessage = futurePreviewStatusDisplay.healthIntegrationMeter;
-  const communityPostingStatusMessage = futurePreviewStatusDisplay.communityPosting;
-  const communityPrivacyStatusMessage = futurePreviewStatusDisplay.communityPrivacy;
-  const foodCommunityShareStatusMessage = futurePreviewStatusDisplay.foodCommunityShare;
-  const communityPreviewDisplay = communityPreviewDisplayBundle({
-    labels: futurePreviewDisplayLabels,
-    boundaryDisplay: communityPreviewBoundaryDisplay,
-    closeLabel: auxiliaryDisplayLabels.closeReturn,
-    actionStatusText: communityActionStatusDisplayText,
-    leaderboardOptIn: communityPublicSettings?.leaderboard_opt_in ?? false
-  });
-  const communityActionDisplay = communityPreviewDisplay.actions;
-  const foodCommunityShareButtonDisplayLabel = communityActionDisplay.foodCommunityShareButton;
-  const foodCommunityShareAccessibilityDisplayLabel = communityActionDisplay.foodCommunityShareAccessibility;
-  const communityPreviewLabelDisplay = communityPreviewDisplay.labels;
-  const communityCloseAccessibilityDisplayLabel = communityPreviewLabelDisplay.closeAccessibility;
-  const communityPreviewBoundaryBadgeDisplayLabel = communityPreviewLabelDisplay.boundaryBadge;
-  const communityPreviewBoundaryCopyDisplayText = communityPreviewLabelDisplay.boundaryCopy;
-  const communityPostAccessibilityDisplayLabel = communityPreviewLabelDisplay.postAccessibility;
-  const communityPostButtonDisplayLabel = communityPreviewLabelDisplay.postButton;
-  const communityPrivacyAccessibilityDisplayLabel = communityPreviewLabelDisplay.privacyAccessibility;
-  const communityActionStatusDisplayLabel = communityPreviewLabelDisplay.actionStatusLabel;
-  const communityActionStatusDisplayCopy = communityPreviewLabelDisplay.actionStatusCopy;
-  const communityReadinessSectionDisplayLabel = communityPreviewLabelDisplay.readinessSection;
-  const communityReturnFutureModulesAccessibilityDisplayLabel = communityPreviewLabelDisplay.returnAccessibility;
-  const communityReturnFutureModulesButtonDisplayLabel = communityPreviewLabelDisplay.returnButton;
-  const communityReturnFutureModulesPressTarget = communityReturnFutureModulesPressHandler();
-  const communityPublicProfileSaveAccessibilityDisplayLabel = communityPreviewLabelDisplay.publicProfileSaveAccessibility;
-  const communityPublicProfileSaveButtonDisplayLabel = communityPreviewLabelDisplay.publicProfileSaveButton;
-  const storePreviewDisplay = storePreviewDisplayBundle(storeActionStatus);
-  const storeActionStatusDisplayText = storePreviewDisplay.actionStatus;
-  const storePreviewBoundaryDisplayText = storePreviewDisplay.previewBoundary;
-  const storeEmptySearchDisplay = storePreviewStaticDisplay.emptySearch;
-  const storeCartButtonDisplayLabel = storePreviewDisplay.cartButton;
-  const storeCartButtonAccessibilityDisplayLabel = storePreviewDisplay.cartButtonAccessibility;
-  const storeLocalBoundaryDisplayText = storePreviewDisplay.localBoundary;
-  const storeCartIntroDisplayText = storePreviewDisplay.cartIntro;
-  const storeCheckoutReadinessTitleDisplayText = storePreviewDisplay.checkoutReadinessTitle;
-  const storeCartReturnButtonDisplayLabel = storePreviewDisplay.cartReturnButton;
-  const rankingPreviewDisplay = rankingPreviewDisplayBundle({
-    labels: futurePreviewDisplayLabels,
-    boundaryDisplay: rankingPreviewBoundaryDisplay,
-    closeLabel: auxiliaryDisplayLabels.closeReturn,
-    optInButton: communityActionDisplay.rankingOptInButton,
-    optInAccessibility: communityActionDisplay.rankingOptInAccessibility,
-    actionStatusText: rankingActionStatusDisplayText
-  });
-  const rankingPreviewLabelDisplay = rankingPreviewDisplay.labels;
-  const rankingPreviewBoundaryBadgeDisplayLabel = rankingPreviewDisplay.boundaryBadge;
-  const rankingPreviewBoundaryCopyDisplayText = rankingPreviewDisplay.boundaryCopy;
-  const rankingOptInButtonDisplayLabel = rankingPreviewLabelDisplay.optInButton;
-  const rankingOptInAccessibilityDisplayLabel = rankingPreviewLabelDisplay.optInAccessibility;
-  const rankingOptInActionPressTarget = rankingOptInActionPressHandler();
-  const rankingCloseButtonDisplayLabel = rankingPreviewLabelDisplay.closeButton;
-  const rankingCloseAccessibilityDisplayLabel = rankingPreviewLabelDisplay.closeAccessibility;
-  const rankingClosePressTarget = rankingClosePressHandler();
-  const rankingPublicActionButtonDisplayLabel = rankingPreviewLabelDisplay.publicButton;
-  const rankingPublicActionAccessibilityDisplayLabel = rankingPreviewLabelDisplay.publicAccessibility;
-  const rankingPublicActionPressTarget = rankingPublicActionPressHandler();
-  const rankingReadinessSectionDisplayLabel = rankingPreviewDisplay.readinessSection;
-  const rankingActionStatusDisplayLabel = rankingPreviewDisplay.actionStatusLabel;
-  const rankingActionStatusDisplayCopy = rankingPreviewDisplay.actionStatusCopy;
-  const rankingReturnFutureModulesButtonDisplayLabel = rankingPreviewLabelDisplay.returnButton;
-  const rankingReturnFutureModulesAccessibilityDisplayLabel = rankingPreviewLabelDisplay.returnAccessibility;
-  const rankingReturnFutureModulesPressTarget = rankingReturnFutureModulesPressHandler();
   const foodPhotoDisplay = foodPhotoDisplayBundle(foodPhotoActionStatus);
   const foodPhotoActionStatusDisplayText = foodPhotoDisplay.status.action;
   const foodPhotoUploadStatusMessage = foodPhotoDisplay.status.upload;
@@ -2031,7 +1646,6 @@ export default function App() {
   const todayRecordSummaryDisplay = firstVersionOverviewRuntimeDisplay.todayRecordSummary;
   const todayRecordSummaryDisplayText = todayRecordSummaryDisplay.summary;
   const historyRecordDisplayCount = recordDisplayState.displayCount;
-  const rankingStreakDisplayDays = clampNumber(currentRecordStreakDays(records), 0, maxMobileCountValue);
   const analysisMetricInput = buildAnalysisMetricInput({
     report: activeAnalysisReport,
     localAverage: averageGlucose,
@@ -2060,8 +1674,6 @@ export default function App() {
   const doctorShareBoundaryRows = doctorShareStaticDisplay.boundaryRows;
   const futureBoundaryRowsDisplay = futurePreviewStatusDisplay.boundaryRows;
   const healthIntegrationBoundaryRows = futureBoundaryRowsDisplay.healthIntegration;
-  const communityBoundaryRows = futureBoundaryRowsDisplay.community;
-  const rankingBoundaryRows = futureBoundaryRowsDisplay.ranking;
   const recordingQuotaBoundaryRows = subscriptionRuntimeDisplay.recordingQuotaBoundaryRows;
   const privacyBoundaryRows = settingsStaticDisplay.privacyBoundaryRows;
   const previewRecordDisplay = previewRecordDisplayBundle({
@@ -2155,14 +1767,10 @@ export default function App() {
   const recordingModelRefreshAccessibilityDisplayLabel = nativeActionDisplay.recordingModelRefreshAccessibility;
   const downloadedWhisperModelChoiceItems = settingsChoiceDisplay.downloadedWhisperModelChoiceItems;
   const returnDestinationButtonDisplay = returnDestinationButtonDisplayBundle({
-    achievementsReturnScreen,
     yearReviewReturnScreen,
-    storeReturnScreen,
     foodPhotoReturnScreen
   });
-  const achievementsReturnButtonDisplayLabel = returnDestinationButtonDisplay.achievements;
   const yearReviewReturnButtonDisplayLabel = returnDestinationButtonDisplay.yearReview;
-  const storeReturnButtonDisplayLabel = returnDestinationButtonDisplay.store;
   const foodPhotoReturnButtonDisplayLabel = returnDestinationButtonDisplay.foodPhoto;
   const coreAccessibilityDisplay = coreAccessibilityDisplayBundle({
     chrome: currentChrome,
@@ -2195,12 +1803,6 @@ export default function App() {
   const futureModuleDetailDisplay = futureModuleDetailDisplayBundle();
   const futureModuleDetailBoundaryDisplayText = futureModuleDetailDisplay.boundary;
   const futureModuleImplementationOrderDisplayText = futureModuleDetailDisplay.implementationOrder;
-  const achievementScreenDisplay = achievementScreenDisplayBundle(nextAchievementDisplayDays);
-  const achievementPreviewBoundaryDisplayText = achievementScreenDisplay.previewBoundary;
-  const achievementLocalComputationDisplayText = achievementScreenDisplay.localComputation;
-  const achievementNextBadgeDisplayText = achievementScreenDisplay.nextBadge;
-  const achievementIntegrationButtonDisplayLabel = achievementScreenDisplay.integrationButton;
-  const achievementIntegrationAccessibilityDisplayLabel = achievementScreenDisplay.integrationAccessibility;
   const yearReviewHeaderDisplay = yearReviewHeaderDisplayBundle({
     targetYear: yearReviewTargetDisplayYear,
     recordCount: yearlyRecordDisplayCount,
@@ -2213,7 +1815,6 @@ export default function App() {
   const yearReviewHeroRecordCountDisplayText = yearReviewHeaderDisplay.heroRecordCount;
   const yearReviewLiveCalculationDisplayText = yearReviewHeaderDisplay.liveCalculation;
   const yearReviewSourceDisplayText = yearReviewHeaderDisplay.source;
-  const yearReviewBadgeMaterialDisplayText = yearReviewHeaderDisplay.badgeMaterial;
   const yearReviewShareButtonDisplayLabel = yearReviewHeaderDisplay.shareButtonLabel;
   const yearReviewShareAccessibilityDisplayLabel = yearReviewHeaderDisplay.shareAccessibilityLabel;
   const yearReviewRevokeShareButtonDisplayLabel = yearReviewHeaderDisplay.revokeShareButtonLabel;
@@ -4682,14 +4283,6 @@ export default function App() {
   }
 
   function openMenuTargetRoute(target: AppScreen) {
-    if (target === "community") {
-      openCommunity("menu");
-      return true;
-    }
-    if (target === "ranking") {
-      openRanking("menu");
-      return true;
-    }
     if (target === "manualRecord") {
       openManualRecord("menu");
       return true;
@@ -4706,16 +4299,8 @@ export default function App() {
       openFoodPhoto("menu");
       return true;
     }
-    if (target === "achievements") {
-      openAchievements("menu");
-      return true;
-    }
     if (target === "yearReview") {
       openYearReview("menu");
-      return true;
-    }
-    if (target === "store") {
-      openStore("menu");
       return true;
     }
     return false;
@@ -4894,139 +4479,8 @@ export default function App() {
     setHealthIntegrationActionStatus(healthIntegrationMeterStatusMessage);
   }
 
-  function openCommunity(returnScreen: AppScreen = currentScreen) {
-    openFuturePreviewScreen("community", returnScreen, setCommunityReturnScreen, setCommunityActionStatus);
-    void loadCommunityPublicSettings();
-    void loadFoodCommunityCategories();
-    void loadCommunityFoods();
-  }
-
-  function returnFromCommunityPreview() {
-    returnFromFuturePreviewScreen(communityReturnScreen);
-  }
-
-  function showCommunityPostingStatus() {
-    setCommunityActionStatus(communityPostingStatusMessage);
-  }
-
-  function showCommunityPrivacyStatus() {
-    void saveCommunityPublicSettings(!(communityPublicSettings?.leaderboard_opt_in ?? false));
-  }
-
-  function saveCommunityPublicProfile() {
-    void saveCommunityPublicSettings();
-  }
-
-  function commerceSearchInputValue(value: string) {
-    return boundStoreSearchText(value);
-  }
-
-  function updateFoodCommunitySearchInput(value: string) {
-    setFoodCommunitySearchText(commerceSearchInputValue(value));
-  }
-
-  function updateFoodCommunityFoodName(value: string) {
-    setFoodCommunityShareFields((current) => ({
-      ...current,
-      foodName: foodCommunityShareFoodNameInputValue(value)
-    }));
-  }
-
-  function updateFoodCommunityEatenDate(value: string) {
-    setFoodCommunityShareFields((current) => ({
-      ...current,
-      eatenDate: boundDateInputText(value)
-    }));
-  }
-
-  function updateFoodCommunityEatenTime(value: string) {
-    setFoodCommunityShareFields((current) => ({
-      ...current,
-      eatenTime: boundTimeInputText(value)
-    }));
-  }
-
-  function communityReturnFutureModulesPressHandler() {
-    return returnFromCommunityPreview;
-  }
-
-  function rankingClosePressHandler() {
-    return returnFromRankingPreview;
-  }
-
-  function rankingPublicActionPressHandler() {
-    return showRankingPublicStatus;
-  }
-
-  function rankingOptInActionPressHandler() {
-    return showRankingOptInStatus;
-  }
-
-  function rankingReturnFutureModulesPressHandler() {
-    return returnFromRankingPreview;
-  }
-
-  function selectFoodCommunityCategory(category: FoodCommunityCategory) {
-    setFoodCommunityCategory(category);
-    setSelectedFoodCommunityItemId(foodCommunityCategoryDefaultItemId(foodCommunityItemsForDisplay, category));
-  }
-
-  function pressFoodCommunityCategoryOption(category: ReturnType<typeof foodCommunityCategoryDisplayItem>) {
-    selectFoodCommunityCategory(foodCommunityCategoryTarget(category));
-  }
-
-  function selectFoodCommunityItem(itemId: string) {
-    const boundedItemId = boundIdentifier(itemId);
-    setSelectedFoodCommunityItemId(boundedItemId);
-    if (foodCommunityBackendItems.some((item) => item.id === boundedItemId)) {
-      void loadFoodCommunityDetail(boundedItemId);
-    }
-  }
-
-  function pressFoodCommunityItem(item: { id: string }) {
-    selectFoodCommunityItem(foodCommunityItemTarget(item));
-  }
-
-  function showFoodCommunityShareStatus() {
-    void submitFoodCommunityShare();
-  }
-
-  function openRanking(returnScreen: AppScreen = currentScreen) {
-    openFuturePreviewScreen("ranking", returnScreen, setRankingReturnScreen, setRankingActionStatus);
-    void loadCommunityLeaderboards();
-  }
-
-  function returnFromRankingPreview() {
-    returnFromFuturePreviewScreen(rankingReturnScreen);
-  }
-
-  function showRankingPublicStatus() {
-    void loadCommunityLeaderboards();
-  }
-
-  function showRankingOptInStatus() {
-    void saveCommunityPublicSettings(!(communityPublicSettings?.leaderboard_opt_in ?? false));
-  }
-
   function menuPreviewReturnScreen(returnScreen: AppScreen, selfScreen: AppScreen) {
     return returnScreen === selfScreen ? "menu" : returnScreen;
-  }
-
-  function openAchievements(returnScreen: AppScreen = currentScreen) {
-    openMenuPreviewScreen("achievements", returnScreen, setAchievementsReturnScreen);
-    void loadAchievementSummary();
-  }
-
-  function returnFromAchievements() {
-    returnFromFuturePreviewScreen(achievementsReturnScreen);
-  }
-
-  function showAchievementIntegrationStatus() {
-    void loadAchievementSummary(true);
-  }
-
-  function syncAchievementsAfterRecordSave() {
-    void loadAchievementSummary(true);
   }
 
   function openYearReview(returnScreen: AppScreen = currentScreen) {
@@ -5044,47 +4498,6 @@ export default function App() {
 
   function revokeYearReviewShareStatus() {
     void revokeYearReviewSharePackage();
-  }
-
-  function openStore(returnScreen: AppScreen = currentScreen) {
-    openMenuPreviewScreen("store", returnScreen, setStoreReturnScreen);
-    void loadStoreCatalogAndPoints();
-  }
-
-  function updateStoreSearchInput(value: string) {
-    setStoreSearchText(commerceSearchInputValue(value));
-  }
-
-  function selectStoreCategory(category: StoreCategory) {
-    setStoreCategory(category);
-  }
-
-  function pressStoreCategoryOption(category: ReturnType<typeof storeCategoryDisplayItem>) {
-    selectStoreCategory(storeCategoryTarget(category));
-  }
-
-  function showStoreProductStatus(actionStatus: string) {
-    setStoreActionStatus(actionStatus);
-  }
-
-  function pressStoreProductStatus(product: ReturnType<typeof storeProductDisplayItem>) {
-    void redeemStoreProduct(product);
-  }
-
-  function pressStoreRedemptionStatus(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
-    void useStoreRedemption(redemption);
-  }
-
-  function openStoreCart() {
-    openScreenWithStatus("storeCart", commercePreviewOpenCartStatusMessage());
-  }
-
-  function returnFromStore() {
-    returnFromFuturePreviewScreen(storeReturnScreen);
-  }
-
-  function returnFromStoreCartToStore() {
-    openScreenWithStatus("store", commercePreviewReturnStoreStatusMessage());
   }
 
   function showFoodPhotoUploadStatus() {
@@ -5224,21 +4637,8 @@ export default function App() {
       openTutorial("menu");
       return true;
     }
-    if (target === "achievements") {
-      openAchievements("menu");
-      return true;
-    }
     if (target === "yearReview") {
       openYearReview("menu");
-      return true;
-    }
-    if (target === "store") {
-      openStore("menu");
-      return true;
-    }
-    if (target === "storeCart") {
-      setStoreReturnScreen("menu");
-      openStoreCart();
       return true;
     }
     if (target === "foodPhoto") {
@@ -5259,14 +4659,6 @@ export default function App() {
     }
     if (target === "healthIntegration") {
       openHealthIntegration("futureModules");
-      return true;
-    }
-    if (target === "community") {
-      openCommunity("futureModules");
-      return true;
-    }
-    if (target === "ranking") {
-      openRanking("futureModules");
       return true;
     }
     return false;
@@ -5377,24 +4769,8 @@ export default function App() {
       openHealthIntegration("futureModules");
       return true;
     }
-    if (target === "community") {
-      openCommunity("futureModules");
-      return true;
-    }
-    if (target === "ranking") {
-      openRanking("futureModules");
-      return true;
-    }
-    if (target === "achievements") {
-      openAchievements("futureModules");
-      return true;
-    }
     if (target === "yearReview") {
       openYearReview("futureModules");
-      return true;
-    }
-    if (target === "store") {
-      openStore("futureModules");
       return true;
     }
     return false;
@@ -5479,420 +4855,6 @@ export default function App() {
   async function openDetailedReport() {
     openScreen("detailedReport");
     await loadBasicReportForCurrentRange("detailed");
-  }
-
-  async function loadCommunityFoods() {
-    if (visualSmokePreviewActive.current) {
-      return;
-    }
-    const foodCommunitySyncStatus = foodCommunitySyncStatusMessages({
-      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-      itemCount: 0
-    });
-    if (!protectedAccountBackendReady || !account) {
-      setCommunityActionStatus(foodCommunitySyncStatus.unavailable);
-      return;
-    }
-    const searchQuery = foodCommunitySearchText.trim();
-    const category = searchQuery ? "" : apiFoodCategoryFromMobile(foodCommunityCategory);
-    const query = new URLSearchParams({
-      limit: "50"
-    });
-    if (category) {
-      query.set("category", category);
-    }
-    if (searchQuery) {
-      query.set("query", searchQuery);
-    }
-    const communityKey = [
-      normalizedApiBaseUrl,
-      account.id,
-      category || "all-categories",
-      searchQuery
-    ].join(":");
-    latestCommunitySyncKey.current = communityKey;
-    if (communitySyncInFlightKeys.current.has(communityKey)) {
-      setCommunityActionStatus(foodCommunitySyncStatus.inFlight);
-      return;
-    }
-    communitySyncInFlightKeys.current.add(communityKey);
-    setCommunityActionStatus(foodCommunitySyncStatus.loading);
-    try {
-      const foods = await requestJson<FoodCommunityApiItem[]>(
-        normalizedApiBaseUrl,
-        `/community/foods?${query.toString()}`,
-        { headers: protectedRequestHeaders(account.id, accessToken) }
-      );
-      if (latestCommunitySyncKey.current !== communityKey) {
-        return;
-      }
-      const nextItems = foodCommunityItemsFromApi(foods);
-      setFoodCommunityBackendItems(nextItems);
-      const nextSelectedItemId = foodCommunityListDefaultItemId(nextItems, selectedFoodCommunityItemId);
-      setSelectedFoodCommunityItemId(nextSelectedItemId);
-      if (nextSelectedItemId) {
-        void loadFoodCommunityDetail(nextSelectedItemId);
-      }
-      setCommunityActionStatus(
-        foodCommunitySyncStatusMessages({
-          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-          itemCount: nextItems.length
-        }).success
-      );
-    } catch {
-      if (latestCommunitySyncKey.current === communityKey) {
-        setFoodCommunityBackendItems([]);
-        setCommunityActionStatus(foodCommunitySyncStatus.failure);
-      }
-    } finally {
-      communitySyncInFlightKeys.current.delete(communityKey);
-    }
-  }
-
-  async function loadFoodCommunityCategories() {
-    if (visualSmokePreviewActive.current) {
-      return;
-    }
-    if (!protectedAccountBackendReady || !account) {
-      return;
-    }
-    try {
-      const categories = await requestJson<FoodCommunityApiCategoryRead[]>(
-        normalizedApiBaseUrl,
-        "/community/foods/categories",
-        { headers: protectedRequestHeaders(account.id, accessToken) }
-      );
-      const mappedCategories = foodCommunityCategoriesFromApi(categories);
-      setFoodCommunityBackendCategories(mappedCategories.length > 0 ? mappedCategories : []);
-    } catch {
-      setFoodCommunityBackendCategories([]);
-    }
-  }
-
-  async function loadFoodCommunityDetail(itemId: string) {
-    if (visualSmokePreviewActive.current) {
-      return;
-    }
-    if (!protectedAccountBackendReady || !account) {
-      return;
-    }
-    const boundedItemId = boundIdentifier(itemId);
-    if (!boundedItemId) {
-      return;
-    }
-    const detailKey = [normalizedApiBaseUrl, account.id, boundedItemId].join(":");
-    const detailStatus = foodCommunityDetailStatusMessages({
-      itemTitle: "",
-      exampleCount: 0
-    });
-    latestFoodCommunityDetailKey.current = detailKey;
-    if (foodCommunityDetailInFlightKeys.current.has(detailKey)) {
-      setCommunityActionStatus(detailStatus.inFlight);
-      return;
-    }
-    foodCommunityDetailInFlightKeys.current.add(detailKey);
-    setCommunityActionStatus(detailStatus.loading);
-    try {
-      const detail = await requestJson<FoodCommunityApiItem>(
-        normalizedApiBaseUrl,
-        `/community/foods/${boundedItemId}`,
-        { headers: protectedRequestHeaders(account.id, accessToken) }
-      );
-      if (latestFoodCommunityDetailKey.current !== detailKey) {
-        return;
-      }
-      const detailedItem = foodCommunityItemFromApi(detail);
-      setFoodCommunityBackendItems((current) =>
-        foodCommunityItemsWithDetail(current, detailedItem)
-      );
-      setSelectedFoodCommunityItemId(foodCommunityDetailSelectedItemId(detailedItem));
-      setCommunityActionStatus(
-        foodCommunityDetailStatusMessages({
-          itemTitle: foodCommunityDetailStatusTitle(detailedItem),
-          exampleCount: foodCommunityDetailStatusExampleCount(detailedItem)
-        }).success
-      );
-    } catch {
-      if (latestFoodCommunityDetailKey.current === detailKey) {
-        setCommunityActionStatus(detailStatus.failure);
-      }
-    } finally {
-      foodCommunityDetailInFlightKeys.current.delete(detailKey);
-    }
-  }
-
-  async function loadCommunityPublicSettings() {
-    if (visualSmokePreviewActive.current) {
-      return;
-    }
-    if (!protectedAccountBackendReady || !account) {
-      return;
-    }
-    try {
-      const settings = await requestJson<CommunityPublicSettings>(
-        normalizedApiBaseUrl,
-        "/community/settings",
-        { headers: protectedRequestHeaders(account.id, accessToken) }
-      );
-      const boundedSettings = boundCommunityPublicSettings(settings);
-      setCommunityPublicSettings(boundedSettings);
-      setCommunityPublicDisplayNameDraft(boundedSettings.display_name);
-    } catch {
-      setCommunityActionStatus(
-        communityPublicSettingsStatusMessages({
-          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-          leaderboardOptIn: false
-        }).loadFailure
-      );
-    }
-  }
-
-  function updateCommunityPublicDisplayNameDraft(value: string) {
-    setCommunityPublicDisplayNameDraft(communityPublicDisplayNameDraftInputValue(value));
-  }
-
-  async function saveCommunityPublicSettings(nextOptIn?: boolean) {
-    const publicSettingsStatus = communityPublicSettingsStatusMessages({
-      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-      leaderboardOptIn: nextOptIn ?? communityPublicSettings?.leaderboard_opt_in ?? false
-    });
-    if (visualSmokePreviewActive.current) {
-      setCommunityActionStatus(publicSettingsStatus.visualSmoke);
-      return;
-    }
-    if (!protectedAccountBackendReady || !account) {
-      setCommunityActionStatus(publicSettingsStatus.unavailable);
-      return;
-    }
-    const displayName = (communityPublicDisplayNameDraft || accountPublicDisplayNameDisplayText).trim();
-    if (!displayName) {
-      setCommunityActionStatus(publicSettingsStatus.missingDisplayName);
-      return;
-    }
-    try {
-      const settings = await requestJson<CommunityPublicSettings>(
-        normalizedApiBaseUrl,
-        "/community/settings",
-        {
-          method: "PATCH",
-          headers: protectedRequestHeaders(account.id, accessToken),
-          body: JSON.stringify({
-            display_name: displayName,
-            leaderboard_opt_in: nextOptIn ?? communityPublicSettings?.leaderboard_opt_in ?? false
-          })
-        }
-      );
-      const boundedSettings = boundCommunityPublicSettings(settings);
-      setCommunityPublicSettings(boundedSettings);
-      setCommunityPublicDisplayNameDraft(boundedSettings.display_name);
-      setCommunityActionStatus(
-        communityPublicSettingsStatusMessages({
-          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-          leaderboardOptIn: boundedSettings.leaderboard_opt_in
-        }).success
-      );
-      void loadCommunityLeaderboards();
-    } catch {
-      setCommunityActionStatus(publicSettingsStatus.failure);
-    }
-  }
-
-  async function loadCommunityLeaderboards() {
-    if (visualSmokePreviewActive.current) {
-      return;
-    }
-    const leaderboardSyncStatus = communityLeaderboardSyncStatusMessages({
-      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-      sectionCount: 0,
-      entryCount: 0
-    });
-    if (!protectedAccountBackendReady || !account) {
-      setRankingActionStatus(leaderboardSyncStatus.unavailable);
-      return;
-    }
-    const rankingKey = [normalizedApiBaseUrl, account.id, communityPublicSettings?.leaderboard_opt_in ?? false].join(":");
-    latestRankingSyncKey.current = rankingKey;
-    if (rankingSyncInFlightKeys.current.has(rankingKey)) {
-      setRankingActionStatus(leaderboardSyncStatus.inFlight);
-      return;
-    }
-    rankingSyncInFlightKeys.current.add(rankingKey);
-    setRankingActionStatus(leaderboardSyncStatus.loading);
-    try {
-      const sections = await Promise.all(
-        communityLeaderboardTypes.map((leaderboardType) => {
-          const query = new URLSearchParams({ leaderboard_type: leaderboardType, limit: "10" });
-          return requestJson<CommunityLeaderboardApiResponse>(
-            normalizedApiBaseUrl,
-            `/community/leaderboards?${query.toString()}`,
-            { headers: protectedRequestHeaders(account.id, accessToken) }
-          );
-        })
-      );
-      if (latestRankingSyncKey.current !== rankingKey) {
-        return;
-      }
-      const displaySections = communityLeaderboardDisplaySections(sections);
-      const entryCount = displaySections.reduce((total, section) => total + section.entries.length, 0);
-      setRankingLeaderboardSections(displaySections);
-      setRankingActionStatus(
-        communityLeaderboardSyncStatusMessages({
-          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-          sectionCount: displaySections.length,
-          entryCount
-        }).success
-      );
-    } catch {
-      if (latestRankingSyncKey.current === rankingKey) {
-        setRankingLeaderboardSections([]);
-        setRankingActionStatus(leaderboardSyncStatus.failure);
-      }
-    } finally {
-      rankingSyncInFlightKeys.current.delete(rankingKey);
-    }
-  }
-
-  async function loadStoreCatalogAndPoints() {
-    if (visualSmokePreviewActive.current) {
-      return;
-    }
-    const storeSyncStatus = storeCatalogSyncStatusMessages({
-      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-      redemptionCount: 0,
-      pointsBalance: 0
-    });
-    if (!protectedAccountBackendReady || !account) {
-      setStoreActionStatus(storeSyncStatus.unavailable);
-      return;
-    }
-    const storeKey = [normalizedApiBaseUrl, account.id].join(":");
-    latestStoreSyncKey.current = storeKey;
-    if (storeSyncInFlightKeys.current.has(storeKey)) {
-      setStoreActionStatus(storeSyncStatus.inFlight);
-      return;
-    }
-    storeSyncInFlightKeys.current.add(storeKey);
-    setStoreActionStatus(storeSyncStatus.loading);
-    try {
-      const [rewards, points, redemptions] = await Promise.all([
-        requestJson<StoreRewardApiInput[]>(normalizedApiBaseUrl, "/store/rewards", {
-          headers: protectedRequestHeaders(account.id, accessToken)
-        }),
-        requestJson<StoreApiPointsBalance>(normalizedApiBaseUrl, "/store/points", {
-          headers: protectedRequestHeaders(account.id, accessToken)
-        }),
-        requestJson<StoreApiRedemption[]>(normalizedApiBaseUrl, "/store/redemptions?limit=20", {
-          headers: protectedRequestHeaders(account.id, accessToken)
-        })
-      ]);
-      if (latestStoreSyncKey.current !== storeKey) {
-        return;
-      }
-      setStoreBackendProducts(storeProductsFromApi(rewards));
-      setStorePointsBalance({
-        balance: clampNumber(points.balance, 0, maxMobileCountValue),
-        lifetime_earned: clampNumber(points.lifetime_earned, 0, maxMobileCountValue),
-        lifetime_redeemed: clampNumber(points.lifetime_redeemed, 0, maxMobileCountValue)
-      });
-      setStoreRedemptions(storeRedemptionsFromApi(redemptions));
-      setStoreActionStatus(
-        storeCatalogSyncStatusMessages({
-          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-          redemptionCount: redemptions.length,
-          pointsBalance: points.balance
-        }).success
-      );
-    } catch {
-      if (latestStoreSyncKey.current === storeKey) {
-        setStoreBackendProducts([]);
-        setStorePointsBalance(null);
-        setStoreRedemptions([]);
-        setStoreActionStatus(storeSyncStatus.failure);
-      }
-    } finally {
-      storeSyncInFlightKeys.current.delete(storeKey);
-    }
-  }
-
-  async function loadAchievementSummary(syncUnlocks = false) {
-    if (visualSmokePreviewActive.current) {
-      return;
-    }
-    const achievementSyncStatus = achievementSyncStatusMessages({
-      backendUnavailableMessage: protectedBackendUnavailableMessage,
-      syncUnlocks,
-      unlockedCount: 0,
-      persistedUnlockCount: 0,
-      newlyUnlockedCount: 0,
-      nextRemaining: 0,
-      unlockHistoryCopy: "已讀取解鎖紀錄"
-    });
-    if (!protectedBackendReady || !account || !activeProfile) {
-      setAchievementBackendItems([]);
-      setAchievementNewlyUnlockedItems([]);
-      setAchievementUnlockedItems([]);
-      setAchievementActionStatus(achievementSyncStatus.unavailable);
-      return;
-    }
-    const achievementKey = [normalizedApiBaseUrl, account.id, activeProfile.id].join(":");
-    latestAchievementSyncKey.current = achievementKey;
-    if (achievementSyncInFlightKeys.current.has(achievementKey)) {
-      setAchievementActionStatus(achievementSyncStatus.inFlight);
-      return;
-    }
-    achievementSyncInFlightKeys.current.add(achievementKey);
-    setAchievementActionStatus(achievementSyncStatus.loading);
-    try {
-      const query = new URLSearchParams({ profile_id: activeProfile.id });
-      const summary = await requestJson<AchievementApiSummary>(
-        normalizedApiBaseUrl,
-        syncUnlocks ? `/achievements/sync?${query.toString()}` : `/achievements/summary?${query.toString()}`,
-        {
-          method: syncUnlocks ? "POST" : "GET",
-          headers: protectedRequestHeaders(account.id, accessToken)
-        }
-      );
-      if (latestAchievementSyncKey.current !== achievementKey) {
-        return;
-      }
-      const mappedSummaryItems = achievementItemsFromApi(summary.items);
-      setAchievementBackendItems(mappedSummaryItems);
-      setAchievementNewlyUnlockedItems(achievementNewlyUnlockedItemsForSync(mappedSummaryItems, syncUnlocks));
-      let unlockHistoryCopy = "已讀取解鎖紀錄";
-      try {
-        const unlocks = await requestJson<AchievementApiUnlock[]>(
-          normalizedApiBaseUrl,
-          `/achievements/unlocks?${query.toString()}`,
-          { headers: protectedRequestHeaders(account.id, accessToken) }
-        );
-        setAchievementUnlockedItems(achievementUnlocksFromApi(unlocks));
-      } catch {
-        setAchievementUnlockedItems([]);
-        unlockHistoryCopy = "解鎖紀錄讀取失敗";
-      }
-      const persistedUnlockCount = clampNumber(summary.persisted_unlocked_count, 0, maxMobileCountValue);
-      const newlyUnlockedCount = clampNumber(summary.newly_unlocked_count, 0, maxMobileCountValue);
-      setAchievementActionStatus(
-        achievementSyncStatusMessages({
-          backendUnavailableMessage: protectedBackendUnavailableMessage,
-          syncUnlocks,
-          unlockedCount: summary.unlocked_count,
-          persistedUnlockCount,
-          newlyUnlockedCount,
-          nextRemaining: summary.next_remaining,
-          unlockHistoryCopy
-        }).success
-      );
-    } catch {
-      if (latestAchievementSyncKey.current === achievementKey) {
-        setAchievementBackendItems([]);
-        setAchievementNewlyUnlockedItems([]);
-        setAchievementUnlockedItems([]);
-        setAchievementActionStatus(achievementSyncStatus.failure);
-      }
-    } finally {
-      achievementSyncInFlightKeys.current.delete(achievementKey);
-    }
   }
 
   async function loadYearReview() {
@@ -6074,235 +5036,6 @@ export default function App() {
       );
     } catch {
       setYearReviewActionStatus(revokeStatus.failure);
-    }
-  }
-
-  function updateFoodCommunityBeforeGlucose(value: string) {
-    setFoodCommunityShareFields((current) => ({
-      ...current,
-      beforeGlucose: value.replace(/[^0-9]/g, "").slice(0, 3)
-    }));
-  }
-
-  function updateFoodCommunityAfterGlucose(value: string) {
-    setFoodCommunityShareFields((current) => ({
-      ...current,
-      afterGlucose: value.replace(/[^0-9]/g, "").slice(0, 3)
-    }));
-  }
-
-  function updateFoodCommunityNote(value: string) {
-    setFoodCommunityShareFields((current) => ({
-      ...current,
-      note: foodCommunityShareNoteInputValue(value)
-    }));
-  }
-
-  async function submitFoodCommunityShare() {
-    const shareStatus = foodCommunityShareStatusMessages({
-      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-      awardedPoints: 0,
-      timeErrorMessage: ""
-    });
-    if (visualSmokePreviewActive.current) {
-      setCommunityActionStatus(shareStatus.visualSmoke);
-      return;
-    }
-    if (!protectedAccountBackendReady || !account || !selectedFoodCommunityItem) {
-      setCommunityActionStatus(shareStatus.unavailable);
-      return;
-    }
-    if (foodShareInFlight.current) {
-      setCommunityActionStatus(shareStatus.inFlight);
-      return;
-    }
-    const beforeGlucose = Number(foodCommunityShareFields.beforeGlucose);
-    const afterGlucose = Number(foodCommunityShareFields.afterGlucose);
-    const foodName = foodCommunityShareFoodNameDisplayText(foodCommunityShareFields, selectedFoodCommunityItem);
-    if (!foodName) {
-      setCommunityActionStatus(shareStatus.missingFoodName);
-      return;
-    }
-    if (
-      !Number.isFinite(beforeGlucose) ||
-      !Number.isFinite(afterGlucose) ||
-      beforeGlucose < 20 ||
-      beforeGlucose > maxMobileGlucoseValue ||
-      afterGlucose < 20 ||
-      afterGlucose > maxMobileGlucoseValue
-    ) {
-      setCommunityActionStatus(shareStatus.invalidGlucose);
-      return;
-    }
-    let eatenAt = "";
-    try {
-      eatenAt = localDateTimeToIso(foodCommunityShareFields.eatenDate, foodCommunityShareFields.eatenTime);
-    } catch (error) {
-      setCommunityActionStatus(
-        foodCommunityShareStatusMessages({
-          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-          awardedPoints: 0,
-          timeErrorMessage: error instanceof Error ? error.message : "食用時間格式不正確。"
-        }).invalidTime
-      );
-      return;
-    }
-    foodShareInFlight.current = true;
-    setIsBusy(true);
-    setCommunityActionStatus(shareStatus.loading);
-    try {
-      const response = await requestJson<FoodCommunityApiShareResponse>(
-        normalizedApiBaseUrl,
-        "/community/foods/shares",
-        {
-          method: "POST",
-          headers: protectedRequestHeaders(account.id, accessToken),
-          body: JSON.stringify({
-            food_name: foodName,
-            category: apiFoodCategoryFromMobile(foodCommunityShareCategory(selectedFoodCommunityItem)),
-            eaten_at: eatenAt,
-            before_glucose: beforeGlucose,
-            after_glucose: afterGlucose,
-            public_note: foodCommunityShareFields.note || undefined
-          })
-        }
-      );
-      setFoodCommunityBackendItems((current) => foodCommunityItemsWithShareUpdateFromApi(current, response.food));
-      setSelectedFoodCommunityItemId(foodCommunityShareSelectedItemIdFromApi(response.food));
-      setFoodCommunityShareFields(emptyFoodCommunityShareFields());
-      setCommunityActionStatus(
-        foodCommunityShareStatusMessages({
-          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-          awardedPoints: response.awarded_points,
-          timeErrorMessage: ""
-        }).success
-      );
-      void loadStoreCatalogAndPoints();
-      void loadCommunityLeaderboards();
-    } catch {
-      setCommunityActionStatus(shareStatus.failure);
-    } finally {
-      foodShareInFlight.current = false;
-      setIsBusy(false);
-    }
-  }
-
-  async function redeemStoreProduct(product: ReturnType<typeof storeProductDisplayItem>) {
-    const redeemStatus = storeRedeemStatusMessages({
-      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-      productTitle: storeProductRedeemTitle(product),
-      fulfillmentCopy: "",
-      pointsCost: 0
-    });
-    if (visualSmokePreviewActive.current) {
-      setStoreActionStatus(redeemStatus.visualSmoke);
-      return;
-    }
-    if (!protectedAccountBackendReady || !account) {
-      setStoreActionStatus(redeemStatus.unavailable);
-      return;
-    }
-    if (product.rewardStatus !== "redeemable") {
-      setStoreActionStatus(storeProductActionStatus(product));
-      return;
-    }
-    const rewardId = storeProductRewardId(product);
-    if (!rewardId) {
-      setStoreActionStatus(redeemStatus.invalidProduct);
-      return;
-    }
-    if (storeRedemptionInFlight.current) {
-      setStoreActionStatus(redeemStatus.inFlight);
-      return;
-    }
-    storeRedemptionInFlight.current = true;
-    setIsBusy(true);
-    setStoreActionStatus(redeemStatus.loading);
-    try {
-      const redemption = await requestJson<StoreApiRedemption>(
-        normalizedApiBaseUrl,
-        "/store/redemptions",
-        {
-          method: "POST",
-          headers: protectedRequestHeaders(account.id, accessToken),
-          body: JSON.stringify({ reward_code: rewardId })
-        }
-      );
-      const fulfillmentCopy =
-        redemption.status === "issued" && redemption.fulfillment_code
-          ? `已發出 ${redemption.fulfillment_type === "discount_code" ? "折扣碼" : "優惠券"}：${boundIdentifier(redemption.fulfillment_code)}`
-          : `已建立兌換 reservation：${boundIdentifier(redemption.reward_code)}`;
-      setStoreActionStatus(
-        storeRedeemStatusMessages({
-          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-          productTitle: storeProductRedeemTitle(product),
-          fulfillmentCopy,
-          pointsCost: redemption.points_cost
-        }).success
-      );
-      void loadStoreCatalogAndPoints();
-    } catch {
-      setStoreActionStatus(redeemStatus.failure);
-    } finally {
-      storeRedemptionInFlight.current = false;
-      setIsBusy(false);
-    }
-  }
-
-  async function useStoreRedemption(redemption: ReturnType<typeof storeRedemptionDisplayItem>) {
-    const redemptionUseStatus = storeRedemptionUseStatusMessages({
-      backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-      redemptionTitle: storeRedemptionUseTitle(redemption),
-      statusLabel: storeRedemptionUseStatusLabel(redemption),
-      usedIdentifier: ""
-    });
-    if (visualSmokePreviewActive.current) {
-      setStoreActionStatus(redemptionUseStatus.visualSmoke);
-      return;
-    }
-    if (!protectedAccountBackendReady || !account) {
-      setStoreActionStatus(redemptionUseStatus.unavailable);
-      return;
-    }
-    if (!redemption.isUsable) {
-      setStoreActionStatus(redemptionUseStatus.unusable);
-      return;
-    }
-    const redemptionId = storeRedemptionUseId(redemption);
-    if (!redemptionId) {
-      setStoreActionStatus(redemptionUseStatus.invalid);
-      return;
-    }
-    if (storeRedemptionInFlight.current) {
-      setStoreActionStatus(redemptionUseStatus.inFlight);
-      return;
-    }
-    storeRedemptionInFlight.current = true;
-    setIsBusy(true);
-    setStoreActionStatus(redemptionUseStatus.loading);
-    try {
-      const usedRedemption = await requestJson<StoreApiRedemption>(
-        normalizedApiBaseUrl,
-        `/store/redemptions/${redemptionId}/use`,
-        {
-          method: "POST",
-          headers: protectedRequestHeaders(account.id, accessToken)
-        }
-      );
-      setStoreActionStatus(
-        storeRedemptionUseStatusMessages({
-          backendUnavailableMessage: protectedAccountBackendUnavailableMessage,
-          redemptionTitle: storeRedemptionUseTitle(redemption),
-          statusLabel: storeRedemptionUseStatusLabel(redemption),
-          usedIdentifier: usedRedemption.fulfillment_code || usedRedemption.reward_code
-        }).success
-      );
-      void loadStoreCatalogAndPoints();
-    } catch {
-      setStoreActionStatus(redemptionUseStatus.failure);
-    } finally {
-      storeRedemptionInFlight.current = false;
-      setIsBusy(false);
     }
   }
 
@@ -6600,7 +5333,6 @@ export default function App() {
     setLastSaveErrorSummary("");
     openSaveSuccessResult(aiSaveSuccessSummaryMessage(savedCount), "ai", "today");
     setStatus(aiSaveSuccessStatusMessage());
-    syncAchievementsAfterRecordSave();
   }
 
   function handleDailyRecordSaveSuccess(saveResponse: DailyRecordSaveResponse, savedCount: number) {
@@ -7352,7 +6084,6 @@ export default function App() {
     seedEmptyManualRecordStateForNow();
     openSaveSuccessResult(manualRecordCreateSummaryMessage(1), "manual", manualRecordReturnScreen);
     setStatus(manualRecordCreateSuccessStatusMessage());
-    syncAchievementsAfterRecordSave();
   }
 
   function handleManualRecordCreateFailure(error: unknown) {
@@ -7969,33 +6700,6 @@ export default function App() {
     analysisCustomStart,
     analysisCustomEnd,
   ]);
-
-  useEffect(() => {
-    if (currentScreen === "community") {
-      void loadCommunityPublicSettings();
-      void loadFoodCommunityCategories();
-      void loadCommunityFoods();
-      void loadStoreCatalogAndPoints();
-    }
-  }, [currentScreen, foodCommunityCategory, foodCommunitySearchText, account?.id, protectedAccountBackendReady]);
-
-  useEffect(() => {
-    if (currentScreen === "ranking") {
-      void loadCommunityLeaderboards();
-    }
-  }, [currentScreen, account?.id, protectedAccountBackendReady, communityPublicSettings?.leaderboard_opt_in]);
-
-  useEffect(() => {
-    if (currentScreen === "store") {
-      void loadStoreCatalogAndPoints();
-    }
-  }, [currentScreen, account?.id, protectedAccountBackendReady]);
-
-  useEffect(() => {
-    if (currentScreen === "achievements") {
-      void loadAchievementSummary();
-    }
-  }, [currentScreen, account?.id, activeProfileId, protectedBackendReady]);
 
   useEffect(() => {
     if (currentScreen === "yearReview") {
@@ -8916,14 +7620,6 @@ export default function App() {
                 {isPlainVoiceSaveSuccess ? `今天一共 ${todayRecords.length} 筆紀錄` : lastSavedSummaryDisplayText}
               </Text>
             </View>
-            {saveSuccessNewlyUnlockedDisplayItems.length > 0 ? (
-              <AchievementUnlockedCardList
-                badgeLabel="新解鎖"
-                items={saveSuccessNewlyUnlockedDisplayItems}
-                keyPrefix="save-success-new-unlock"
-                title="新解鎖成就"
-              />
-            ) : null}
             {isPlainVoiceSaveSuccess ? (
               <View style={styles.savedActions}>
                 <Pressable
@@ -10196,228 +8892,6 @@ export default function App() {
           </View>
         ) : null}
 
-        {currentScreen === "community" ? (
-          <View style={styles.pageSection}>
-            <View style={styles.sectionHeader}>
-              <View>
-                <Text style={styles.sectionTitle}>{communityScreenTitleLabel()}</Text>
-                <Text style={styles.evidence}>{communityScreenSubtitleCopy()}</Text>
-              </View>
-              <Pressable accessibilityLabel={communityCloseAccessibilityDisplayLabel} accessibilityRole="button" style={styles.closeButton} onPress={returnFromCommunityPreview}>
-                <Text style={styles.closeButtonText}>×</Text>
-              </Pressable>
-            </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.previewModeBadge}>{communityPreviewBoundaryBadgeDisplayLabel}</Text>
-              <Text style={styles.evidence}>{communityPreviewBoundaryCopyDisplayText}</Text>
-            </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{foodCommunityDatabaseSectionLabel()}</Text>
-              <Text style={styles.evidence}>{foodCommunityDatabaseIntroCopy()}</Text>
-            </View>
-            <FoodCommunitySearchField
-              accessibilityLabel={auxiliaryDisplayLabels.foodCommunitySearchInputAccessibility}
-              value={foodCommunitySearchText}
-              onChangeText={updateFoodCommunitySearchInput}
-              maxLength={maxStoreSearchTextLength}
-            />
-            <SegmentSelector
-              options={foodCommunityCategoryDisplayOptions}
-              optionKey={foodCommunityCategoryOptionKey}
-              optionAccessibilityLabel={foodCommunityCategoryOptionAccessibilityLabel}
-              optionLabel={foodCommunityCategoryOptionLabel}
-              isSelected={(category) => foodCommunityCategoryOptionSelected(category, foodCommunityCategory)}
-              onOptionPress={pressFoodCommunityCategoryOption}
-            />
-            {selectedFoodCommunityCategoryDisplay ? (
-              <Text style={styles.evidence}>{foodCommunityCategorySummary(selectedFoodCommunityCategoryDisplay)}</Text>
-            ) : null}
-            <FoodCommunityItemList
-              items={visibleFoodCommunityItems}
-              onSelectItem={pressFoodCommunityItem}
-              selectedItem={selectedFoodCommunityItem}
-            />
-            {foodCommunityDetailPanelVisible(selectedFoodCommunityItem) ? (
-              <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{foodCommunityDetailTitleDisplayText(selectedFoodCommunityItem)}</Text>
-                <View style={styles.reportBoundaryGrid}>
-                  <View style={styles.reportBoundaryCard}>
-                    <Text style={styles.confidence}>{foodCommunityDetailShareCountLabel()}</Text>
-                    <Text style={styles.recordType}>{foodCommunityDetailShareCountDisplayText(selectedFoodCommunityItem)}</Text>
-                  </View>
-                  <View style={styles.reportBoundaryCard}>
-                    <Text style={styles.confidence}>{foodCommunityDetailAverageRiseLabel()}</Text>
-                    <Text style={styles.recordType}>{foodCommunityDetailAverageRiseDisplayText(selectedFoodCommunityItem)}</Text>
-                  </View>
-                  <View style={styles.reportBoundaryCard}>
-                    <Text style={styles.confidence}>{foodCommunityDetailMaximumRiseLabel()}</Text>
-                    <Text style={styles.recordType}>{foodCommunityDetailMaximumRiseDisplayText(selectedFoodCommunityItem)}</Text>
-                  </View>
-                  <View style={styles.reportBoundaryCard}>
-                    <Text style={styles.confidence}>{foodCommunityDetailMinimumRiseLabel()}</Text>
-                    <Text style={styles.recordType}>{foodCommunityDetailMinimumRiseDisplayText(selectedFoodCommunityItem)}</Text>
-                  </View>
-                </View>
-                <Text style={styles.label}>{foodCommunityDetailIndividualShareSectionLabel()}</Text>
-                <FoodCommunityDetailShareList shares={foodCommunityDetailIndividualShares(selectedFoodCommunityItem)} />
-              </View>
-            ) : null}
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{foodCommunityShareSectionLabel()}</Text>
-              <FoodCommunityShareTextFields
-                foodNameAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareFoodNameAccessibility}
-                foodNameValue={foodCommunityShareFields.foodName}
-                foodNameMaxLength={foodCommunityShareFoodNameMaxLength()}
-                dateTimeFields={
-                  <FoodCommunityShareDateTimeFields
-                    dateAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenDateAccessibility}
-                    dateLabel={foodCommunityShareEatenDateLabel()}
-                    dateMaxLength={maxDateInputLength}
-                    dateValue={foodCommunityShareFields.eatenDate}
-                    timeAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareEatenTimeAccessibility}
-                    timeLabel={foodCommunityShareEatenTimeLabel()}
-                    timeMaxLength={maxTimeInputLength}
-                    timeValue={foodCommunityShareFields.eatenTime}
-                    onDateChange={updateFoodCommunityEatenDate}
-                    onTimeChange={updateFoodCommunityEatenTime}
-                  />
-                }
-                beforeGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareBeforeGlucoseAccessibility}
-                beforeGlucoseValue={foodCommunityShareFields.beforeGlucose}
-                afterGlucoseAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareAfterGlucoseAccessibility}
-                afterGlucoseValue={foodCommunityShareFields.afterGlucose}
-                noteAccessibilityLabel={auxiliaryDisplayLabels.foodCommunityShareNoteAccessibility}
-                noteValue={foodCommunityShareFields.note}
-                noteMaxLength={foodCommunityShareNoteMaxLength()}
-                onFoodNameChange={updateFoodCommunityFoodName}
-                onBeforeGlucoseChange={updateFoodCommunityBeforeGlucose}
-                onAfterGlucoseChange={updateFoodCommunityAfterGlucose}
-                onNoteChange={updateFoodCommunityNote}
-              />
-              <HighlightDetailList rows={foodCommunityShareFieldRows} />
-            </View>
-            <FutureBoundaryGrid rows={foodCommunityPointRows} />
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{foodCommunityRankingSectionLabel()}</Text>
-              <HighlightDetailList rows={foodCommunityRankingRows} />
-              <Text style={styles.evidence}>{foodCommunityPointsStoreBridgeCopy()}</Text>
-            </View>
-            <View style={styles.heroCardFeature}>
-              <View style={styles.heroIconBubble}>
-                <Text style={styles.heroIconText}>{communityHeroIconLabel()}</Text>
-              </View>
-              <View style={styles.timelineContent}>
-                <Text style={styles.evidence}>{communityPublicNamePreviewLabel()}</Text>
-                <Text style={styles.heroNumber}>{accountPublicDisplayNameDisplayText}</Text>
-                <Text style={styles.evidence}>{communityPublicNameBoundaryDisplayText}</Text>
-                <CommunityPublicDisplayNameField
-                  accessibilityLabel={auxiliaryDisplayLabels.communityPublicDisplayNameAccessibility}
-                  value={communityPublicDisplayNameDraft}
-                  onChangeText={updateCommunityPublicDisplayNameDraft}
-                  maxLength={communityPublicDisplayNameMaxLength()}
-                />
-                <Pressable
-                  accessibilityLabel={communityPublicProfileSaveAccessibilityDisplayLabel}
-                  accessibilityRole="button"
-                  accessibilityState={{ disabled: isBusy || !protectedAccountBackendReady }}
-                  style={[styles.secondaryButton, isBusy || !protectedAccountBackendReady ? styles.buttonDisabled : null]}
-                  disabled={isBusy || !protectedAccountBackendReady}
-                  onPress={saveCommunityPublicProfile}
-                >
-                  <Text style={styles.secondaryButtonText}>{communityPublicProfileSaveButtonDisplayLabel}</Text>
-                </Pressable>
-              </View>
-            </View>
-            <FutureBoundaryGrid rows={communityBoundaryRows} />
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{communityReadinessSectionDisplayLabel}</Text>
-              <FutureReadinessChecklist items={communityReadinessChecklistItems} />
-            </View>
-            <CommunityActionRow
-              isShareDisabled={isBusy || !protectedAccountBackendReady}
-              onPostPress={showCommunityPostingStatus}
-              onPrivacyPress={showCommunityPrivacyStatus}
-              onSharePress={showFoodCommunityShareStatus}
-              postAccessibilityLabel={communityPostAccessibilityDisplayLabel}
-              postLabel={communityPostButtonDisplayLabel}
-              privacyAccessibilityLabel={communityPrivacyAccessibilityDisplayLabel}
-              privacyLabel={rankingOptInButtonDisplayLabel}
-              shareAccessibilityLabel={foodCommunityShareAccessibilityDisplayLabel}
-              shareLabel={foodCommunityShareButtonDisplayLabel}
-            />
-            {communityActionStatusVisible(communityActionStatus) ? (
-              <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{communityActionStatusDisplayLabel}</Text>
-                <Text style={styles.evidence}>{communityActionStatusDisplayCopy}</Text>
-              </View>
-            ) : null}
-            <Pressable
-              accessibilityLabel={communityReturnFutureModulesAccessibilityDisplayLabel}
-              accessibilityRole="button"
-              style={styles.secondaryButton}
-              onPress={communityReturnFutureModulesPressTarget}
-            >
-              <Text style={styles.secondaryButtonText}>{communityReturnFutureModulesButtonDisplayLabel}</Text>
-            </Pressable>
-          </View>
-        ) : null}
-
-        {currentScreen === "ranking" ? (
-          <View style={styles.pageSection}>
-            <View style={styles.sectionHeader}>
-              <View>
-                <Text style={styles.sectionTitle}>{rankingScreenTitleLabel()}</Text>
-                <Text style={styles.evidence}>{rankingScreenSubtitleCopy()}</Text>
-              </View>
-              <Pressable accessibilityLabel={rankingCloseAccessibilityDisplayLabel} accessibilityRole="button" style={styles.closeButton} onPress={rankingClosePressTarget}>
-                <Text style={styles.closeButtonText}>{rankingCloseButtonDisplayLabel}</Text>
-              </Pressable>
-            </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.previewModeBadge}>{rankingPreviewBoundaryBadgeDisplayLabel}</Text>
-              <Text style={styles.evidence}>{rankingPreviewBoundaryCopyDisplayText}</Text>
-            </View>
-            <View style={styles.heroCardFeature}>
-              <View style={styles.heroIconBubble}>
-                <Text style={styles.heroIconText}>{rankingHeroIconLabel()}</Text>
-              </View>
-              <View style={styles.timelineContent}>
-                <Text style={styles.evidence}>{rankingLocalStreakPreviewLabel()}</Text>
-                <Text style={styles.heroNumber}>{rankingStreakDisplayText(rankingStreakDisplayDays)}</Text>
-                <Text style={styles.evidence}>{rankingLocalPreviewBoundaryDisplayText}</Text>
-              </View>
-            </View>
-            <FutureBoundaryGrid rows={rankingBoundaryRows} />
-            <RankingLeaderboardList sections={rankingLeaderboardSections} />
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{rankingReadinessSectionDisplayLabel}</Text>
-              <FutureReadinessChecklist items={rankingReadinessChecklistItems} />
-            </View>
-            <RankingActionRow
-              onOptInPress={rankingOptInActionPressTarget}
-              onPublicPress={rankingPublicActionPressTarget}
-              optInAccessibilityLabel={rankingOptInAccessibilityDisplayLabel}
-              optInLabel={rankingOptInButtonDisplayLabel}
-              publicAccessibilityLabel={rankingPublicActionAccessibilityDisplayLabel}
-              publicLabel={rankingPublicActionButtonDisplayLabel}
-            />
-            {rankingActionStatusVisible(rankingActionStatus) ? (
-              <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{rankingActionStatusDisplayLabel}</Text>
-                <Text style={styles.evidence}>{rankingActionStatusDisplayCopy}</Text>
-              </View>
-            ) : null}
-            <Pressable
-              accessibilityLabel={rankingReturnFutureModulesAccessibilityDisplayLabel}
-              accessibilityRole="button"
-              style={styles.secondaryButton}
-              onPress={rankingReturnFutureModulesPressTarget}
-            >
-              <Text style={styles.secondaryButtonText}>{rankingReturnFutureModulesButtonDisplayLabel}</Text>
-            </Pressable>
-          </View>
-        ) : null}
-
         {currentScreen === "settings" ? (
           <View style={styles.pageSection}>
             <Text style={styles.sectionTitle}>設定</Text>
@@ -10991,66 +9465,6 @@ export default function App() {
           </View>
         ) : null}
 
-        {currentScreen === "achievements" ? (
-          <View style={styles.pageSection}>
-            <Text style={styles.sectionTitle}>成就榜</Text>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.localPreview}</Text>
-              <Text style={styles.evidence}>{achievementPreviewBoundaryDisplayText}</Text>
-            </View>
-            <View style={styles.heroCardFeature}>
-              <View style={styles.heroIconBubble}>
-                <Text style={styles.heroIconText}>🏆</Text>
-              </View>
-              <View style={styles.timelineContent}>
-                <Text style={styles.evidence}>{auxiliaryDisplayLabels.unlocked}</Text>
-                <Text style={styles.heroNumber}>{unlockedAchievementDisplayCount} 項成就</Text>
-                <Text style={styles.evidence}>{achievementNextBadgeDisplayText}</Text>
-              </View>
-            </View>
-            {achievementNewlyUnlockedDisplayItems.length > 0 ? (
-              <AchievementUnlockedCardList
-                badgeLabel="新解鎖"
-                items={achievementNewlyUnlockedDisplayItems}
-                keyPrefix="new-unlock"
-                title="本次新解鎖"
-              />
-            ) : null}
-            {achievementUnlockedDisplayItems.length > 0 ? (
-              <AchievementUnlockedCardList
-                badgeLabel="已保存"
-                items={achievementUnlockedDisplayItems}
-                keyPrefix="unlock"
-                title="已解鎖徽章"
-              />
-            ) : null}
-            <AchievementCategorySectionList sections={achievementCategoryDisplaySections} />
-            <Text style={styles.evidence}>{achievementLocalComputationDisplayText}</Text>
-            <Pressable
-              accessibilityLabel={achievementIntegrationAccessibilityDisplayLabel}
-              accessibilityRole="button"
-              style={styles.secondaryButton}
-              onPress={showAchievementIntegrationStatus}
-            >
-              <Text style={styles.secondaryButtonText}>{achievementIntegrationButtonDisplayLabel}</Text>
-            </Pressable>
-            {achievementActionStatus ? (
-              <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{auxiliaryDisplayLabels.achievementStatus}</Text>
-                <Text style={styles.evidence}>{achievementActionStatusDisplayText}</Text>
-              </View>
-            ) : null}
-            <Pressable
-              accessibilityLabel={auxiliaryDisplayLabels.achievementsReturnAccessibility}
-              accessibilityRole="button"
-              style={styles.secondaryButton}
-              onPress={returnFromAchievements}
-            >
-              <Text style={styles.secondaryButtonText}>{achievementsReturnButtonDisplayLabel}</Text>
-            </Pressable>
-          </View>
-        ) : null}
-
         {currentScreen === "yearReview" ? (
           <View style={styles.pageSection}>
             <Text style={styles.sectionTitle}>年度回顧</Text>
@@ -11096,18 +9510,6 @@ export default function App() {
               <Text style={styles.label}>{auxiliaryDisplayLabels.yearReviewBoundary}</Text>
               <Text style={styles.evidence}>{yearReviewBoundaryDisplayText}</Text>
             </View>
-            <View style={styles.highlightCard}>
-              <View style={styles.yearBadgeRow}>
-                <View style={styles.heroIconBubble}>
-                  <Text style={styles.heroIconText}>✓</Text>
-                </View>
-                <View style={styles.timelineContent}>
-                  <Text style={styles.label}>{auxiliaryDisplayLabels.yearEncouragementBadge}</Text>
-                  <Text style={styles.recordContent}>恭喜你持續記錄、照顧自己！</Text>
-                  <Text style={styles.evidence}>{yearReviewBadgeMaterialDisplayText}</Text>
-                </View>
-              </View>
-            </View>
             <Pressable
               accessibilityLabel={yearReviewShareAccessibilityDisplayLabel}
               accessibilityRole="button"
@@ -11139,168 +9541,6 @@ export default function App() {
               onPress={returnFromYearReview}
             >
               <Text style={styles.secondaryButtonText}>{yearReviewReturnButtonDisplayLabel}</Text>
-            </Pressable>
-          </View>
-        ) : null}
-
-        {currentScreen === "store" ? (
-          <View style={styles.pageSection}>
-            <Text style={styles.sectionTitle}>商城</Text>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.previewModeBadge}>{auxiliaryDisplayLabels.storePreview}</Text>
-              <Text style={styles.evidence}>{storePreviewBoundaryDisplayText}</Text>
-            </View>
-            <FutureBoundaryGrid rows={storeRedemptionBoundaryRows} />
-            <StoreSearchField
-              accessibilityLabel={auxiliaryDisplayLabels.storeSearchInputAccessibility}
-              value={storeSearchText}
-              onChangeText={updateStoreSearchInput}
-              maxLength={maxStoreSearchTextLength}
-            />
-            <SegmentSelector
-              options={storeCategoryDisplayOptions}
-              optionKey={storeCategoryOptionKey}
-              optionAccessibilityLabel={storeCategoryOptionAccessibilityLabel}
-              optionLabel={storeCategoryOptionLabel}
-              isSelected={(category) => storeCategoryOptionSelected(category, storeCategory)}
-              onOptionPress={pressStoreCategoryOption}
-            />
-            {visibleStoreProducts.length > 0 ? visibleStoreProducts.map((product) => (
-              <View key={storeProductCardKey(product)} style={styles.productCard}>
-                <View style={styles.productImage}>
-                  <Text style={styles.productImageText}>{storeProductCardIcon(product)}</Text>
-                </View>
-                <View style={styles.timelineContent}>
-                  <View style={styles.sectionHeader}>
-                    <Text style={styles.recordContent}>{storeProductCardTitle(product)}</Text>
-                    {storeProductCardBadge(product) ? <Text style={styles.productBadge}>{storeProductCardBadge(product)}</Text> : null}
-                  </View>
-                  <Text style={styles.evidence}>{storeProductCardDescription(product)}</Text>
-                  <Text style={styles.planPriceText}>{storeProductCardPointsCost(product)}</Text>
-                </View>
-                <Pressable
-                  accessibilityLabel={storeProductActionAccessibilityLabel(product)}
-                  accessibilityRole="button"
-                  style={styles.roundActionButton}
-                  onPress={() => pressStoreProductStatus(product)}
-                >
-                  <Text style={styles.secondaryButtonText}>{storeProductActionLabel(product)}</Text>
-                </Pressable>
-              </View>
-            )) : (
-              <View style={styles.emptyStateCard}>
-                <View style={styles.iconCircleMuted}>
-                  <Text>搜</Text>
-                </View>
-                <View style={styles.timelineContent}>
-                  <Text style={styles.recordType}>{storeEmptySearchDisplay.title}</Text>
-                  <Text style={styles.recordContent}>{storeEmptySearchDisplay.copy}</Text>
-                  <Text style={styles.evidence}>{storeEmptySearchDisplay.evidence}</Text>
-                </View>
-              </View>
-            )}
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>我的兌換券</Text>
-              {storeRedemptionDisplayItems.length > 0 ? (
-                storeRedemptionDisplayItems.map((product) => (
-                  <View key={storeRedemptionCardKey(product)} style={styles.productCard}>
-                    <View style={styles.productImage}>
-                      <Text style={styles.productImageText}>券</Text>
-                    </View>
-                    <View style={styles.timelineContent}>
-                      <View style={styles.sectionHeader}>
-                        <Text style={styles.recordContent}>{storeRedemptionCardTitle(product)}</Text>
-                        <Text style={styles.productBadge}>{storeRedemptionCardStatusLabel(product)}</Text>
-                      </View>
-                      <Text style={styles.evidence}>{storeRedemptionCardSubtitle(product)}</Text>
-                    </View>
-                    <Pressable
-                      accessibilityLabel={storeRedemptionActionAccessibilityLabel(product)}
-                      accessibilityRole="button"
-                      accessibilityState={{ disabled: storeRedemptionActionDisabled(product) }}
-                      style={[
-                        styles.roundActionButton,
-                        storeRedemptionActionDisabled(product) ? styles.buttonDisabled : null
-                      ]}
-                      disabled={storeRedemptionActionDisabled(product)}
-                      onPress={() => pressStoreRedemptionStatus(product)}
-                    >
-                      <Text style={styles.secondaryButtonText}>{storeRedemptionActionLabel(product)}</Text>
-                    </Pressable>
-                  </View>
-                ))
-              ) : (
-                <Text style={styles.evidence}>尚未同步兌換紀錄；完成食物分享取得點數後可兌換優惠券、折扣碼、特殊徽章或會員福利。</Text>
-              )}
-            </View>
-            {storeActionStatus ? (
-              <View style={styles.inlineInfoBlock}>
-                <Text style={styles.label}>{auxiliaryDisplayLabels.storeProductStatus}</Text>
-                <Text style={styles.evidence}>{storeActionStatusDisplayText}</Text>
-              </View>
-            ) : null}
-            <Pressable
-              accessibilityLabel={storeCartButtonAccessibilityDisplayLabel}
-              accessibilityRole="button"
-              style={styles.primaryButtonFull}
-              onPress={openStoreCart}
-            >
-              <Text style={styles.primaryButtonText}>{storeCartButtonDisplayLabel}</Text>
-            </Pressable>
-            <Text style={styles.evidence}>{storeLocalBoundaryDisplayText}</Text>
-            <Pressable
-              accessibilityLabel={auxiliaryDisplayLabels.storeReturnAccessibility}
-              accessibilityRole="button"
-              style={styles.secondaryButton}
-              onPress={returnFromStore}
-            >
-              <Text style={styles.secondaryButtonText}>{storeReturnButtonDisplayLabel}</Text>
-            </Pressable>
-          </View>
-        ) : null}
-
-        {currentScreen === "storeCart" ? (
-          <View style={styles.pageSection}>
-            <View style={styles.sectionHeader}>
-              <View>
-                <Text style={styles.sectionTitle}>購物車</Text>
-                <Text style={styles.evidence}>{storeCartIntroDisplayText}</Text>
-              </View>
-              <Pressable accessibilityLabel={auxiliaryDisplayLabels.closeReturn} accessibilityRole="button" style={styles.closeButton} onPress={returnFromStoreCartToStore}>
-                <Text style={styles.closeButtonText}>×</Text>
-              </Pressable>
-            </View>
-            <View style={styles.emptyStateCard}>
-              <View style={styles.iconCircleMuted}>
-                <Text>袋</Text>
-              </View>
-              <View style={styles.timelineContent}>
-                <Text style={styles.recordType}>{storeCartUnavailableDisplay.title}</Text>
-                <Text style={styles.recordContent}>{storeCartUnavailableDisplay.copy}</Text>
-                <Text style={styles.evidence}>{storeCartUnavailableDisplay.evidence}</Text>
-              </View>
-            </View>
-            <View style={styles.inlineInfoBlock}>
-              <Text style={styles.label}>{storeCheckoutReadinessTitleDisplayText}</Text>
-              <CommerceReadinessChecklist items={storeCheckoutReadinessChecklistItems} />
-              <Text style={styles.warningText}>{storeCartUnavailableDisplay.legalWarning}</Text>
-            </View>
-            <Pressable
-              accessibilityLabel={auxiliaryDisplayLabels.storeCartCheckoutAccessibility}
-              accessibilityRole="button"
-              accessibilityState={{ disabled: true }}
-              style={[styles.primaryButtonFull, styles.buttonDisabled]}
-              disabled
-            >
-              <Text style={styles.primaryButtonText}>{storeCartUnavailableDisplay.checkoutLabel}</Text>
-            </Pressable>
-            <Pressable
-              accessibilityLabel={auxiliaryDisplayLabels.storeCartReturnAccessibility}
-              accessibilityRole="button"
-              style={styles.secondaryButton}
-              onPress={returnFromStoreCartToStore}
-            >
-              <Text style={styles.secondaryButtonText}>{storeCartReturnButtonDisplayLabel}</Text>
             </Pressable>
           </View>
         ) : null}
@@ -12781,12 +11021,6 @@ const styles = StyleSheet.create({
   },
   openSection: {
     gap: 10
-  },
-  yearBadgeRow: {
-    alignItems: "flex-start",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 14
   },
   highlightCard: {
     backgroundColor: palette.surface,

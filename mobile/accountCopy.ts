@@ -25,17 +25,6 @@ export function accountLoginDisplayValue(account: AccountDisplaySource | null) {
     : boundDisplayText("尚未連線帳號");
 }
 
-export function accountPublicDisplayNameText(account: AccountDisplaySource | null) {
-  return account ? accountDisplayNameDisplayText(account) : boundDisplayText("尚未設定");
-}
-
-export function accountPublicDisplayNameForSettings(
-  publicSettings: { display_name?: string | null } | null,
-  account: AccountDisplaySource | null
-) {
-  return publicSettings?.display_name ?? accountPublicDisplayNameText(account);
-}
-
 export function doctorShareAccountBoundaryText(account: AccountDisplaySource | null) {
   return boundDisplayText(
     account
