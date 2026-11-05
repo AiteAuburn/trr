@@ -1,7 +1,7 @@
 from datetime import date
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -30,12 +30,13 @@ MAX_DAILY_TRANSCRIPT_ENTRIES = 100
 
 @router.get("", response_model=list[DailyRecordRead])
 def list_daily_records(
+    request: Request,
     profile_id: UUID = Query(),
     record_date: date | None = Query(default=None),
     limit: int = Query(default=31, ge=1, le=366),
     account: Account = Depends(get_current_account),
     db: Session = Depends(get_db),
-) -> list[DailyRecord]:
+) -> list[DailyRecordRead]:
     assert_can_read_profile(profile_id, account, db)
     statement = (
         select(DailyRecord)
@@ -45,7 +46,23 @@ def list_daily_records(
     )
     if record_date is not None:
         statement = statement.where(DailyRecord.record_date == record_date)
-    return list(db.scalars(statement))
+    daily_records = list(db.scalars(statement))
+    response_records = [DailyRecordRead.model_validate(item) for item in daily_records]
+    write_audit_event(
+        db,
+        actor_account_id=account.id,
+        profile_id=profile_id,
+        action="daily_record.list_viewed",
+        resource_type="daily_record_collection",
+        metadata_json={
+            "request_id": getattr(request.state, "request_id", ""),
+            "record_count": len(daily_records),
+            "limit": limit,
+            "record_date_filter": record_date is not None,
+        },
+    )
+    db.commit()
+    return response_records
 
 
 @router.post("/save", response_model=DailyRecordSaveResponse, status_code=201)

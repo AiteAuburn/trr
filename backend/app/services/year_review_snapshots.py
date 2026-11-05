@@ -22,6 +22,7 @@ from app.schemas.year_review import (
 from app.services.achievement_catalog import ACHIEVEMENT_CATEGORY_DEFINITIONS, achievement_levels_for_progress
 from app.services.audit import write_audit_event
 from app.services.usage_analytics import safe_record_ai_token_usage
+from app.services.operational_events import safe_record_operational_event
 
 YEAR_REVIEW_GENERATION_BATCH_SIZE = 500
 YEAR_REVIEW_AI_RESPONSE_CHAR_BUDGET = 4000
@@ -359,7 +360,7 @@ def deepseek_year_review_ai_summary(
         usage_recorded = True
         content = _extract_openai_compatible_message_content(response_payload)
         summary_payload = json.loads(content)
-    except (httpx.HTTPError, json.JSONDecodeError, ValueError):
+    except (httpx.HTTPError, json.JSONDecodeError, ValueError) as exc:
         if not usage_recorded:
             safe_record_ai_token_usage(
                 provider="deepseek",
@@ -367,6 +368,17 @@ def deepseek_year_review_ai_summary(
                 succeeded=False,
                 usage=None,
             )
+        safe_record_operational_event(
+            event_code="year_review_model_request_failed",
+            source="year_review",
+            severity="ERROR",
+            provider="deepseek",
+            model_id=settings.deepseek_model_id,
+            http_status=exc.response.status_code
+            if isinstance(exc, httpx.HTTPStatusError)
+            else 0,
+            error_type=type(exc).__name__,
+        )
         return None
 
     if not isinstance(summary_payload, dict):

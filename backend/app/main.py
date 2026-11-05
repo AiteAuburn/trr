@@ -1,4 +1,3 @@
-import logging
 import re
 from collections.abc import Awaitable, Callable
 from time import perf_counter
@@ -29,15 +28,15 @@ from app.api import (
     year_reviews,
 )
 from app.core.config import get_settings
-from app.core.logging import configure_logging
+from app.core.logging import configure_logging, request_log_context
 from app.core.metrics import http_metrics
 from app.services.feature_flags import PublicFeatureFlagPayload, public_feature_flag_payload
 from app.db.session import engine
+from app.services.operational_events import safe_record_operational_event
 from app.services.usage_analytics import safe_record_api_usage
 
 settings = get_settings()
 configure_logging(settings.log_level)
-logger = logging.getLogger("app.request")
 
 JSON_BODY_METHODS = {"PATCH", "POST"}
 JSON_BODY_PREFIXES = (
@@ -59,6 +58,7 @@ TRACEPARENT_PATTERN = re.compile(
     r"^[0-9a-f]{2}-([0-9a-f]{32})-[0-9a-f]{16}-[0-9a-f]{2}$"
 )
 ZERO_TRACE_ID = "0" * 32
+SLOW_API_REQUEST_THRESHOLD_MS = 5000
 MAX_VALIDATION_ERRORS = 32
 MAX_VALIDATION_DETAIL_DEPTH = 4
 MAX_VALIDATION_DETAIL_NODES = 128
@@ -258,6 +258,25 @@ async def log_requests(
     started_at = perf_counter()
     request_id = _request_id_from_header(request.headers.get("X-Request-ID"))
     trace_id = _trace_id_from_header(request.headers.get("traceparent"))
+    request.state.request_id = request_id
+    caught_exception_type = ""
+
+    async def safely_call_next(incoming_request: Request) -> Response:
+        nonlocal caught_exception_type
+        try:
+            with request_log_context(request_id, trace_id):
+                return await call_next(incoming_request)
+        except Exception as exc:
+            caught_exception_type = type(exc).__name__
+            return JSONResponse(
+                status_code=500,
+                content={
+                    "detail": {
+                        "code": "internal_server_error",
+                        "message": "Internal server error.",
+                    }
+                },
+            )
     response: Response
     content_length = request.headers.get("content-length")
     try:
@@ -287,7 +306,7 @@ async def log_requests(
                         },
                     )
                 else:
-                    response = await call_next(request)
+                    response = await safely_call_next(request)
         elif (
             _requires_json_body_guard(request)
             and request_body_bytes is not None
@@ -304,9 +323,11 @@ async def log_requests(
                 },
             )
         else:
-            response = await call_next(request)
+            response = await safely_call_next(request)
     response.headers["X-Request-ID"] = request_id
     response.headers["X-Trace-ID"] = trace_id
+    if request.url.path == "/admin" or request.url.path.startswith("/admin/"):
+        response.headers["Cache-Control"] = "no-store"
     duration_seconds = perf_counter() - started_at
     duration_ms = round(duration_seconds * 1000, 2)
     route = getattr(request.scope.get("route"), "path", "unmatched")
@@ -322,18 +343,31 @@ async def log_requests(
         status_code=response.status_code,
         duration_seconds=duration_seconds,
     )
-    logger.info(
-        "request",
-        extra={
-            "duration_ms": duration_ms,
-            "event": "http_request",
-            "method": request.method,
-            "path": request.url.path,
-            "request_id": request_id,
-            "status": response.status_code,
-            "trace_id": trace_id,
-        },
-    )
+    if response.status_code >= 500:
+        safe_record_operational_event(
+            event_code="api_server_error",
+            source="api",
+            severity="ERROR",
+            route=route,
+            method=request.method,
+            http_status=response.status_code,
+            error_type=caught_exception_type or "http_5xx_response",
+            duration_ms=round(duration_ms),
+            request_id=request_id,
+            trace_id=trace_id,
+        )
+    elif duration_ms >= SLOW_API_REQUEST_THRESHOLD_MS:
+        safe_record_operational_event(
+            event_code="slow_api_request",
+            source="api",
+            severity="WARNING",
+            route=route,
+            method=request.method,
+            http_status=response.status_code,
+            duration_ms=round(duration_ms),
+            request_id=request_id,
+            trace_id=trace_id,
+        )
     return response
 
 

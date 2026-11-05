@@ -32,6 +32,7 @@ from app.services.record_sanitization import (
 )
 from app.services.record_schema_registry import validate_payload_with_registry
 from app.services.record_validation import RecordType
+from app.services.operational_events import safe_record_operational_event
 from app.services.usage_analytics import safe_record_ai_token_usage
 
 GEMMA4_LLM_MODEL_ID = "gemma-4-e2b-local-pending"
@@ -692,6 +693,7 @@ def _is_negative_event(text: str) -> bool:
 
 
 def _segment_type(text: str) -> SegmentType:
+    normalized = text.lower()
     if _is_negative_event(text):
         return "negative_event"
     if any(keyword in text for keyword in ("血糖", "空腹", "飯前", "飯後", "睡前", "又量", "再量")):
@@ -700,7 +702,7 @@ def _segment_type(text: str) -> SegmentType:
         return "meal"
     if any(keyword in text for keyword in ("散步", "走路", "運動", "伸展", "跑步", "騎車", "游泳")):
         return "exercise"
-    if any(keyword in text for keyword in ("藥", "用藥", "吃藥", "胰島素", "metformin")):
+    if any(keyword in normalized for keyword in ("藥", "用藥", "吃藥", "胰島素", "metformin")):
         return "medication"
     if any(keyword in text for keyword in ("血壓", "收縮壓", "舒張壓")):
         return "vital"
@@ -714,6 +716,24 @@ def _exercise_items(text: str) -> list[str]:
         if keyword in text:
             return [keyword]
     return []
+
+
+def _health_observation_tags(text: str) -> list[str]:
+    normalized = text.lower()
+    return [
+        keyword
+        for keyword in ("口渴", "頭暈", "噁心", "疲倦", "不舒服", "疼痛", "睡眠", "精神")
+        if keyword in normalized
+    ]
+
+
+def _medication_name(text: str) -> str:
+    normalized = text.lower()
+    if "metformin" in normalized:
+        return "Metformin"
+    if "胰島素" in normalized:
+        return "胰島素"
+    return "unknown"
 
 
 def _certainty(text: str) -> Certainty:
@@ -1020,6 +1040,9 @@ def _convert_note_record(record: dict[str, object]) -> dict[str, object] | None:
             converted["items"] = [evidence]
         return converted
 
+    if _health_observation_tags(evidence):
+        return converted
+
     return None
 
 
@@ -1296,6 +1319,26 @@ def compact_ir_to_parse_preview(
                     llm_model_id=llm_model_id,
                     confidence=ir_record.confidence,
                     decision_trace="LLM IR extracted medication.",
+                )
+            )
+            continue
+
+        if ir_record.type == "note" and _health_observation_tags(evidence):
+            records.append(
+                _record(
+                    profile_id=profile_id,
+                    record_type="note",
+                    occurred_at=record_time,
+                    payload_json={
+                        "kind": "health_observation",
+                        "tags": _health_observation_tags(evidence),
+                    },
+                    transcript=normalized_text,
+                    source_text=evidence,
+                    stt_model_id=stt_model_id,
+                    llm_model_id=llm_model_id,
+                    confidence=ir_record.confidence,
+                    decision_trace="LLM IR extracted a health observation.",
                 )
             )
             continue
@@ -1870,6 +1913,8 @@ def _local_parser_request_body(
     }
     if keep_alive is not None:
         body["keep_alive"] = keep_alive
+    if llm_model_id == DEEPSEEK_LLM_MODEL_ID:
+        body["thinking"] = {"type": "disabled"}
     return body
 
 
@@ -2018,6 +2063,19 @@ def _request_local_parser_json(
                 succeeded=False,
                 usage=None,
             )
+        if usage_provider and usage_model_id:
+            safe_record_operational_event(
+                event_code="remote_model_request_failed",
+                source="ai_pipeline",
+                severity="ERROR",
+                provider=usage_provider,
+                model_id=usage_model_id,
+                error_type=type(exc).__name__,
+                http_status=exc.response.status_code
+                if isinstance(exc, httpx.HTTPStatusError)
+                else 0,
+                batch_number=batch_number,
+            )
         raise LocalParserError(f"Local parser request failed on batch {batch_number}: {exc}") from exc
     try:
         payload = json.loads(response_text)
@@ -2028,6 +2086,16 @@ def _request_local_parser_json(
                 model_id=usage_model_id,
                 succeeded=False,
                 usage=None,
+            )
+        if usage_provider and usage_model_id:
+            safe_record_operational_event(
+                event_code="remote_model_invalid_http_json",
+                source="ai_pipeline",
+                severity="ERROR",
+                provider=usage_provider,
+                model_id=usage_model_id,
+                error_type=type(exc).__name__,
+                batch_number=batch_number,
             )
         raise LocalParserError("Local parser returned non-JSON HTTP response") from exc
 
@@ -2046,6 +2114,16 @@ def _request_local_parser_json(
         json_candidate = _extract_json_object(content)
         return json.loads(json_candidate)
     except json.JSONDecodeError as exc:
+        if usage_provider and usage_model_id:
+            safe_record_operational_event(
+                event_code="remote_model_invalid_result_json",
+                source="ai_pipeline",
+                severity="ERROR",
+                provider=usage_provider,
+                model_id=usage_model_id,
+                error_type=type(exc).__name__,
+                batch_number=batch_number,
+            )
         raise LocalParserError(
             f"Local parser batch {batch_number} returned invalid JSON. "
             + _json_decode_error_message(
@@ -2062,6 +2140,7 @@ def _request_ollama_structured_json(
     body: dict[str, object],
     timeout_seconds: float,
     batch_number: int,
+    model_id: str,
 ) -> object:
     try:
         with httpx.Client(timeout=timeout_seconds) as client:
@@ -2072,11 +2151,36 @@ def _request_ollama_structured_json(
                 parser_name="Ollama structured parser",
             )
     except httpx.HTTPError as exc:
+        safe_record_ai_token_usage(
+            provider="ollama",
+            model_id=model_id,
+            succeeded=False,
+            usage=None,
+        )
         raise LocalParserError(f"Ollama structured request failed on batch {batch_number}: {exc}") from exc
     try:
         payload = json.loads(response_text)
     except json.JSONDecodeError as exc:
+        safe_record_ai_token_usage(
+            provider="ollama",
+            model_id=model_id,
+            succeeded=False,
+            usage=None,
+        )
         raise LocalParserError("Ollama returned non-JSON HTTP response") from exc
+
+    usage = payload.get("usage") if isinstance(payload, dict) else None
+    if not isinstance(usage, dict) and isinstance(payload, dict):
+        usage = {
+            "prompt_tokens": payload.get("prompt_eval_count"),
+            "completion_tokens": payload.get("eval_count"),
+        }
+    safe_record_ai_token_usage(
+        provider="ollama",
+        model_id=model_id,
+        succeeded=True,
+        usage=usage,
+    )
 
     content = _extract_ollama_chat_content(payload)
     validate_local_parser_response_size(content, parser_name="Ollama structured parser")
@@ -2182,8 +2286,18 @@ def _call_openai_compatible_local_parser(
                 timeout_seconds=timeout_seconds,
                 batch_number=batch_number,
                 headers=headers,
-                usage_provider="deepseek" if llm_model_id == DEEPSEEK_LLM_MODEL_ID else None,
-                usage_model_id=model_id if llm_model_id == DEEPSEEK_LLM_MODEL_ID else None,
+                usage_provider=(
+                    "deepseek"
+                    if llm_model_id == DEEPSEEK_LLM_MODEL_ID
+                    else "gemma4"
+                    if llm_model_id == GEMMA4_LLM_MODEL_ID
+                    else None
+                ),
+                usage_model_id=(
+                    model_id
+                    if llm_model_id in {DEEPSEEK_LLM_MODEL_ID, GEMMA4_LLM_MODEL_ID}
+                    else None
+                ),
             )
             compact_candidate = _normalize_compact_ir_candidate(
                 parsed,
@@ -2283,6 +2397,7 @@ def _call_ollama_structured_parser(
                 body=body,
                 timeout_seconds=timeout_seconds,
                 batch_number=batch_number,
+                model_id=model_id,
             )
             compact_candidate = _normalize_compact_ir_candidate(
                 parsed,
@@ -2640,7 +2755,7 @@ def parse_transcript_to_records(
             return records
 
     for index, clause in enumerate(clauses):
-        if not any(keyword in clause for keyword in ("走路", "運動", "跑步", "騎車", "游泳")):
+        if not any(keyword in clause for keyword in ("散步", "走路", "運動", "伸展", "跑步", "騎車", "游泳")):
             continue
         next_clause = clauses[index + 1] if index + 1 < len(clauses) else ""
         source_text = clause
@@ -2654,7 +2769,7 @@ def parse_transcript_to_records(
                 record_type="exercise",
                 occurred_at=record_time,
                 payload_json={
-                    "activity": "走路" if "走路" in source_text else "運動",
+                    "activity": (_exercise_items(source_text) or ["運動"])[0],
                     "minutes": minutes,
                 },
                 transcript=normalized,
@@ -2668,22 +2783,57 @@ def parse_transcript_to_records(
         if len(records) >= MAX_PARSE_PREVIEW_RECORDS:
             return records
 
-    if any(keyword in normalized for keyword in ("藥", "用藥", "吃藥", "胰島素", "metformin")):
+    medication_clause = next(
+        (
+            clause
+            for clause in clauses
+            if any(
+                keyword in clause.lower()
+                for keyword in ("藥", "用藥", "吃藥", "胰島素", "metformin")
+            )
+        ),
+        None,
+    )
+    if medication_clause is not None:
         records.append(
             _record(
                 profile_id=profile_id,
                 record_type="medication",
                 occurred_at=record_time,
                 payload_json={
-                    "name": "unknown",
+                    "name": _medication_name(medication_clause),
                     "taken": True,
                 },
                 transcript=normalized,
-                source_text=normalized,
+                source_text=medication_clause,
                 stt_model_id=stt_model_id,
                 llm_model_id=llm_model_id,
                 confidence=0.62,
                 decision_trace="偵測到用藥語意，建立 medication 候選紀錄。",
+            )
+        )
+        if len(records) >= MAX_PARSE_PREVIEW_RECORDS:
+            return records
+
+    for clause in clauses:
+        observation_tags = _health_observation_tags(clause)
+        if not observation_tags:
+            continue
+        records.append(
+            _record(
+                profile_id=profile_id,
+                record_type="note",
+                occurred_at=record_time,
+                payload_json={
+                    "kind": "health_observation",
+                    "tags": observation_tags,
+                },
+                transcript=normalized,
+                source_text=clause,
+                stt_model_id=stt_model_id,
+                llm_model_id=llm_model_id,
+                confidence=0.58,
+                decision_trace="偵測到身體狀況語意，建立 note 候選紀錄。",
             )
         )
         if len(records) >= MAX_PARSE_PREVIEW_RECORDS:

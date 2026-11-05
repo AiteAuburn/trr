@@ -1,21 +1,23 @@
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 from fastapi.testclient import TestClient
+from pytest import MonkeyPatch
 from sqlalchemy import delete, select
 
 from app.api import admin as admin_api
-from app.core.config import get_settings
+from app.core.config import Settings, get_settings
 from app.db.session import SessionLocal
 from app.main import app
-from app.models import AiTokenUsageDaily, ApiUsageDaily, RateLimitCounter
+from app.models import AiTokenUsageDaily, ApiUsageDaily, OperationalEvent, RateLimitCounter
 from app.services.admin_auth import hash_admin_password, verify_admin_password
+from app.services.operational_events import record_operational_event
 from app.services.usage_analytics import record_ai_token_usage, record_api_usage
 
 
 TEST_ADMIN_PASSWORD = "test-admin-password"
 
 
-def _admin_settings(**updates: object):
+def _admin_settings(**updates: object) -> Settings:
     return get_settings().model_copy(
         update={
             "app_env": "test",
@@ -34,6 +36,7 @@ def _clear_admin_test_rows() -> None:
     with SessionLocal() as db:
         db.execute(delete(ApiUsageDaily))
         db.execute(delete(AiTokenUsageDaily))
+        db.execute(delete(OperationalEvent))
         db.execute(delete(RateLimitCounter).where(RateLimitCounter.scope == "admin_login_client"))
         db.commit()
 
@@ -57,7 +60,7 @@ def test_admin_password_hash_is_salted_and_never_stores_plaintext() -> None:
     assert verify_admin_password(TEST_ADMIN_PASSWORD, "malformed") is False
 
 
-def test_admin_login_sets_http_only_session_and_protects_usage(monkeypatch) -> None:
+def test_admin_login_sets_http_only_session_and_protects_usage(monkeypatch: MonkeyPatch) -> None:
     _clear_admin_test_rows()
     monkeypatch.setattr(admin_api, "get_settings", _admin_settings)
     client = TestClient(app)
@@ -86,7 +89,68 @@ def test_admin_login_sets_http_only_session_and_protects_usage(monkeypatch) -> N
     assert client.get("/admin/session").status_code == 401
 
 
-def test_admin_login_is_rate_limited_and_does_not_echo_password(monkeypatch) -> None:
+def test_operational_events_merge_repeats_and_admin_can_review_them(monkeypatch: MonkeyPatch) -> None:
+    _clear_admin_test_rows()
+    # Relative to now: the admin events view only returns the last 30 days.
+    start = (datetime.now(UTC) - timedelta(hours=1)).replace(second=10, microsecond=0)
+    with SessionLocal() as db:
+        record_operational_event(
+            event_code="remote_model_request_failed",
+            source="ai_pipeline",
+            severity="ERROR",
+            provider="deepseek",
+            model_id="deepseek-v4-flash",
+            route="/ai/parse-preview",
+            method="POST",
+            http_status=502,
+            error_type="HTTPStatusError",
+            duration_ms=2400,
+            request_id="request-1",
+            now=start,
+            db=db,
+        )
+        record_operational_event(
+            event_code="remote_model_request_failed",
+            source="ai_pipeline",
+            severity="ERROR",
+            provider="deepseek",
+            model_id="deepseek-v4-flash",
+            route="/ai/parse-preview",
+            method="POST",
+            http_status=502,
+            error_type="HTTPStatusError",
+            duration_ms=5100,
+            request_id="request-2",
+            now=start.replace(second=40),
+            db=db,
+        )
+        db.commit()
+        rows = list(db.scalars(select(OperationalEvent)))
+        assert len(rows) == 1
+        assert rows[0].event_count == 2
+        assert rows[0].duration_ms_max == 5100
+        assert rows[0].latest_request_id == "request-2"
+
+    monkeypatch.setattr(admin_api, "get_settings", _admin_settings)
+    client = TestClient(app)
+    denied = client.get("/admin/events")
+    assert denied.status_code == 401
+    _login(client)
+    response = client.get("/admin/events?limit=10")
+
+    assert response.status_code == 200
+    events = response.json()["events"]
+    event = next(item for item in events if item["event_code"] == "remote_model_request_failed")
+    assert event["event_code"] == "remote_model_request_failed"
+    assert event["model_id"] == "deepseek-v4-flash"
+    assert event["event_count"] == 2
+    assert event["duration_ms_max"] == 5100
+    assert "transcript" not in event
+    assert any(item["event_code"] == "admin.login" for item in events)
+    _clear_admin_test_rows()
+
+
+def test_admin_login_is_rate_limited_and_does_not_echo_password(monkeypatch: MonkeyPatch) -> None:
     _clear_admin_test_rows()
     monkeypatch.setattr(
         admin_api,
@@ -105,7 +169,7 @@ def test_admin_login_is_rate_limited_and_does_not_echo_password(monkeypatch) -> 
     assert bad_password not in second.text
 
 
-def test_daily_usage_upserts_compact_rows_and_admin_returns_model_tokens(monkeypatch) -> None:
+def test_daily_usage_upserts_compact_rows_and_admin_returns_model_tokens(monkeypatch: MonkeyPatch) -> None:
     _clear_admin_test_rows()
     today = datetime.now(UTC).date()
     with SessionLocal() as db:
@@ -178,7 +242,7 @@ def test_daily_usage_upserts_compact_rows_and_admin_returns_model_tokens(monkeyp
     _clear_admin_test_rows()
 
 
-def test_admin_is_fail_closed_when_server_credentials_are_absent(monkeypatch) -> None:
+def test_admin_is_fail_closed_when_server_credentials_are_absent(monkeypatch: MonkeyPatch) -> None:
     _clear_admin_test_rows()
     monkeypatch.setattr(
         admin_api,

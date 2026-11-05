@@ -1,19 +1,24 @@
-import logging
 import re
+from contextlib import contextmanager
+from contextvars import ContextVar
 from collections.abc import Mapping
 from datetime import UTC, date, datetime, timedelta
-from typing import Any
+from decimal import Decimal
+from typing import Any, Iterator
 
 from sqlalchemy import case, func, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
+from app.core.logging import log_throttled_warning
 from app.db.session import SessionLocal
 from app.models import AiTokenUsageDaily, ApiUsageDaily
 
 
-logger = logging.getLogger("app.analytics")
+_AI_USAGE_CAPTURE: ContextVar[list[dict[str, object]] | None] = ContextVar(
+    "ai_usage_capture", default=None
+)
 
 MAX_ROUTE_LENGTH = 160
 MAX_PROVIDER_LENGTH = 32
@@ -88,6 +93,21 @@ def record_ai_token_usage(
         model_id, max_length=MAX_MODEL_ID_LENGTH, fallback="unknown"
     )
     input_tokens, output_tokens, total_tokens, usage_reported = _token_counts(usage)
+    captured_usage = _AI_USAGE_CAPTURE.get()
+    if captured_usage is not None:
+        captured_usage.append(
+            {
+                "provider": normalized_provider,
+                "model_id": normalized_model_id,
+                "request_count": 1,
+                "success_count": int(succeeded),
+                "failure_count": int(not succeeded),
+                "usage_reported_count": int(usage_reported),
+                "input_tokens": input_tokens,
+                "output_tokens": output_tokens,
+                "total_tokens": total_tokens,
+            }
+        )
     values = {
         "bucket_date": bucket_date or datetime.now(UTC).date(),
         "provider": normalized_provider,
@@ -123,14 +143,35 @@ def safe_record_api_usage(**kwargs: Any) -> None:
     try:
         record_api_usage(**kwargs)
     except (SQLAlchemyError, ValueError):
-        logger.warning("api_usage_aggregate_write_failed", exc_info=False)
+        log_throttled_warning(
+            "app.analytics", "api_usage_aggregate_write_failed", source="analytics"
+        )
 
 
 def safe_record_ai_token_usage(**kwargs: Any) -> None:
     try:
         record_ai_token_usage(**kwargs)
     except (SQLAlchemyError, ValueError):
-        logger.warning("ai_token_usage_aggregate_write_failed", exc_info=False)
+        log_throttled_warning(
+            "app.analytics", "ai_token_usage_aggregate_write_failed", source="analytics"
+        )
+
+
+@contextmanager
+def capture_ai_token_usage() -> Iterator[list[dict[str, object]]]:
+    """Collect per-request model counters while retaining the global daily aggregate."""
+    events: list[dict[str, object]] = []
+    token = _AI_USAGE_CAPTURE.set(events)
+    try:
+        yield events
+    finally:
+        try:
+            _AI_USAGE_CAPTURE.reset(token)
+        except ValueError:
+            # Streaming responses advance sync generators in the threadpool, and each
+            # step runs in a fresh context copy, so the token can belong to another
+            # context. Clearing the value in the current copy is equivalent here.
+            _AI_USAGE_CAPTURE.set(None)
 
 
 def usage_overview(*, days: int, db: Session) -> dict[str, object]:
@@ -286,8 +327,15 @@ def _bounded_token_count(value: object) -> int:
     return min(max(value, 0), MAX_TOKEN_COUNT)
 
 
+def _aggregate_int(value: object) -> int:
+    # SQL SUM() returns int, Decimal or None depending on the driver and column.
+    if isinstance(value, bool) or not isinstance(value, (int, float, Decimal)):
+        return 0
+    return int(value)
+
+
 def _average_millis(duration_micros: object, request_count: object) -> float:
-    count = int(request_count or 0)
+    count = _aggregate_int(request_count)
     if count <= 0:
         return 0.0
-    return round(int(duration_micros or 0) / count / 1000, 2)
+    return float(round(_aggregate_int(duration_micros) / count / 1000, 2))

@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -36,13 +36,14 @@ def get_owned_profile(profile_id: UUID, account: Account, db: Session) -> UserPr
 
 @router.get("", response_model=list[RecordRead])
 def list_records(
+    request: Request,
     profile_id: UUID = Query(),
     before: datetime | None = Query(default=None),
     before_created_at: datetime | None = Query(default=None),
     limit: int = Query(default=100, ge=1, le=500),
     account: Account = Depends(get_current_account),
     db: Session = Depends(get_db),
-) -> list[Record]:
+) -> list[RecordRead]:
     validate_record_list_cursor(before=before, before_created_at=before_created_at)
     assert_can_read_profile(profile_id, account, db)
     statement = (
@@ -59,7 +60,22 @@ def list_records(
                 (Record.occurred_at < before)
                 | ((Record.occurred_at == before) & (Record.created_at < before_created_at))
             )
-    return list(db.scalars(statement))
+    records = list(db.scalars(statement))
+    response_records = [RecordRead.model_validate(record) for record in records]
+    write_audit_event(
+        db,
+        actor_account_id=account.id,
+        profile_id=profile_id,
+        action="record.list_viewed",
+        resource_type="record_collection",
+        metadata_json={
+            "request_id": getattr(request.state, "request_id", ""),
+            "record_count": len(records),
+            "limit": limit,
+        },
+    )
+    db.commit()
+    return response_records
 
 
 def validate_record_list_cursor(
@@ -86,11 +102,24 @@ def get_owned_record(record_id: UUID, account: Account, db: Session) -> Record:
 
 @router.get("/{record_id}", response_model=RecordRead)
 def get_record(
+    request: Request,
     record_id: UUID,
     account: Account = Depends(get_current_account),
     db: Session = Depends(get_db),
-) -> Record:
-    return get_owned_record(record_id, account, db)
+) -> RecordRead:
+    record = get_owned_record(record_id, account, db)
+    response_record = RecordRead.model_validate(record)
+    write_audit_event(
+        db,
+        actor_account_id=account.id,
+        profile_id=record.profile_id,
+        action="record.viewed",
+        resource_type="record",
+        resource_id=record.id,
+        metadata_json={"request_id": getattr(request.state, "request_id", "")},
+    )
+    db.commit()
+    return response_record
 
 
 @router.patch("/{record_id}", response_model=RecordRead)

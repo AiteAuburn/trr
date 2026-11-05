@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -30,6 +30,27 @@ from app.services.year_review_snapshots import (
 )
 
 router = APIRouter(prefix="/year-reviews", tags=["year-reviews"])
+
+
+def _audit_year_review_view(
+    *,
+    request: Request,
+    db: Session,
+    account: Account,
+    profile_id: UUID,
+    action: str,
+    resource_id: UUID | None = None,
+) -> None:
+    write_audit_event(
+        db,
+        actor_account_id=account.id,
+        profile_id=profile_id,
+        action=action,
+        resource_type="year_review",
+        resource_id=resource_id,
+        metadata_json={"request_id": getattr(request.state, "request_id", "")},
+    )
+    db.commit()
 
 
 def _validate_completed_review_year(year: int) -> None:
@@ -69,6 +90,7 @@ def _get_authorized_share_package(
 @router.get("/{year}", response_model=YearReviewRead)
 def get_year_review(
     year: int,
+    request: Request,
     profile_id: UUID = Query(),
     account: Account = Depends(get_current_account),
     db: Session = Depends(get_db),
@@ -84,12 +106,21 @@ def get_year_review(
     if created:
         db.commit()
         db.refresh(snapshot)
+    _audit_year_review_view(
+        request=request,
+        db=db,
+        account=account,
+        profile_id=profile_id,
+        action="year_review.viewed",
+        resource_id=snapshot.id,
+    )
     return snapshot_read(snapshot)
 
 
 @router.get("/{year}/share-card", response_model=YearReviewShareCardRead)
 def get_year_review_share_card(
     year: int,
+    request: Request,
     profile_id: UUID = Query(),
     account: Account = Depends(get_current_account),
     db: Session = Depends(get_db),
@@ -105,12 +136,21 @@ def get_year_review_share_card(
     if created:
         db.commit()
         db.refresh(snapshot)
+    _audit_year_review_view(
+        request=request,
+        db=db,
+        account=account,
+        profile_id=profile_id,
+        action="year_review.share_card_viewed",
+        resource_id=snapshot.id,
+    )
     return build_year_review_share_card(snapshot)
 
 
 @router.get("/{year}/share-card/asset", response_model=YearReviewShareAssetRead)
 def get_year_review_share_asset(
     year: int,
+    request: Request,
     profile_id: UUID = Query(),
     account: Account = Depends(get_current_account),
     db: Session = Depends(get_db),
@@ -126,6 +166,14 @@ def get_year_review_share_asset(
     if created:
         db.commit()
         db.refresh(snapshot)
+    _audit_year_review_view(
+        request=request,
+        db=db,
+        account=account,
+        profile_id=profile_id,
+        action="year_review.share_asset_viewed",
+        resource_id=snapshot.id,
+    )
     return build_year_review_share_asset(snapshot)
 
 
@@ -178,10 +226,19 @@ def confirm_year_review_share_card(
 @router.get("/share-packages/{share_package_id}", response_model=YearReviewSharePackageRead)
 def get_year_review_share_package(
     share_package_id: UUID,
+    request: Request,
     account: Account = Depends(get_current_account),
     db: Session = Depends(get_db),
 ) -> YearReviewSharePackageRead:
     share_package, snapshot = _get_authorized_share_package(share_package_id, account, db)
+    _audit_year_review_view(
+        request=request,
+        db=db,
+        account=account,
+        profile_id=share_package.profile_id,
+        action="year_review.share_package_viewed",
+        resource_id=share_package.id,
+    )
     return build_year_review_share_package(snapshot, share_package)
 
 

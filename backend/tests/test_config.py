@@ -48,6 +48,27 @@ def test_production_rejects_explicit_dev_auth() -> None:
         )
 
 
+def test_staging_rejects_explicit_dev_auth() -> None:
+    with pytest.raises(ValidationError, match="ALLOW_DEV_AUTH"):
+        Settings(
+            app_env="staging",
+            allow_dev_auth=True,
+            log_level="info",
+            backend_cors_origins="https://staging.example.com",
+        )
+
+
+def test_staging_never_enables_dev_auth_by_default() -> None:
+    settings = Settings(
+        app_env="staging",
+        allow_dev_auth=None,
+        log_level="info",
+        backend_cors_origins="https://staging.example.com",
+    )
+
+    assert settings.dev_auth_enabled is False
+
+
 def test_production_rejects_weak_jwt_secret() -> None:
     with pytest.raises(ValidationError, match="AUTH_JWT_SECRET"):
         Settings(
@@ -358,6 +379,7 @@ def test_configure_logging_suppresses_noisy_http_client_debug_logs() -> None:
     configure_logging("debug")
 
     assert logging.getLogger().getEffectiveLevel() == logging.DEBUG
+    assert logging.getLogger("asyncio").getEffectiveLevel() == logging.WARNING
     assert logging.getLogger("httpcore").getEffectiveLevel() == logging.WARNING
     assert logging.getLogger("httpx").getEffectiveLevel() == logging.WARNING
 
@@ -376,7 +398,13 @@ def test_phi_safe_json_formatter_only_emits_allowlisted_extra_fields() -> None:
     record.trace_id = "1234567890abcdef1234567890abcdef"
     record.event = "http_request"
     record.method = "POST"
-    record.path = "/ai/parse-preview"
+    record.path = "/admin/users/real-account-id"
+    record.route = "/admin/users/{account_id}"
+    record.provider = "deepseek"
+    record.model_id = "deepseek-v4-flash"
+    record.http_status = 502
+    record.error_type = "HTTPStatusError"
+    record.source = "ai_pipeline"
     record.status = 200
     record.duration_ms = 12.34
     record.transcript = "should not be serialized"
@@ -391,7 +419,13 @@ def test_phi_safe_json_formatter_only_emits_allowlisted_extra_fields() -> None:
     assert payload["trace_id"] == "1234567890abcdef1234567890abcdef"
     assert payload["event"] == "http_request"
     assert payload["method"] == "POST"
-    assert payload["path"] == "/ai/parse-preview"
+    assert payload["route"] == "/admin/users/{account_id}"
+    assert payload["provider"] == "deepseek"
+    assert payload["model_id"] == "deepseek-v4-flash"
+    assert payload["http_status"] == 502
+    assert payload["error_type"] == "HTTPStatusError"
+    assert "path" not in payload
+    assert "real-account-id" not in formatted
     assert payload["status"] == 200
     assert payload["duration_ms"] == 12.34
     assert "transcript" not in payload
@@ -417,7 +451,7 @@ def test_phi_safe_json_formatter_bounds_string_fields() -> None:
     record.trace_id = long_value
     record.event = long_value
     record.method = "POST"
-    record.path = f"/ai/{long_value}"
+    record.route = f"/ai/{long_value}"
     record.status = 200
     record.duration_ms = 12.34
 
@@ -429,4 +463,4 @@ def test_phi_safe_json_formatter_bounds_string_fields() -> None:
     assert payload["request_id"] == "x" * MAX_LOG_STRING_LENGTH
     assert payload["trace_id"] == "x" * MAX_LOG_STRING_LENGTH
     assert payload["event"] == "x" * MAX_LOG_STRING_LENGTH
-    assert len(payload["path"]) == MAX_LOG_STRING_LENGTH
+    assert len(payload["route"]) == MAX_LOG_STRING_LENGTH

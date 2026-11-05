@@ -7,6 +7,7 @@ from pydantic import BaseModel, EmailStr, Field, RootModel, field_validator
 
 ACCESS_TOKEN_MAX_LENGTH = 4096
 AUTH_DISPLAY_NAME_MAX_LENGTH = 120
+AUTH_PASSWORD_MAX_LENGTH = 128
 AUTH_SESSION_LIST_MAX_COUNT = 500
 DEVICE_FINGERPRINT_MAX_LENGTH = 256
 ID_TOKEN_MAX_LENGTH = 4096
@@ -44,6 +45,48 @@ class DevLoginResponse(BaseModel):
     display_name: str = Field(min_length=1, max_length=AUTH_DISPLAY_NAME_MAX_LENGTH)
 
     model_config = {"from_attributes": True}
+
+
+class EmailPasswordRequest(BaseModel):
+    email: EmailStr
+    password: str = Field(min_length=12, max_length=AUTH_PASSWORD_MAX_LENGTH)
+    device_fingerprint: str | None = Field(default=None, max_length=DEVICE_FINGERPRINT_MAX_LENGTH)
+
+    @field_validator("email", mode="before")
+    @classmethod
+    def normalize_email(cls, value: object) -> object:
+        return value.strip().lower() if isinstance(value, str) else value
+
+    @field_validator("password", mode="before")
+    @classmethod
+    def validate_password_size(cls, value: object) -> object:
+        if isinstance(value, str) and len(value.encode("utf-8")) > AUTH_PASSWORD_MAX_LENGTH * 4:
+            raise ValueError("password is too long")
+        return value
+
+    @field_validator("device_fingerprint", mode="before")
+    @classmethod
+    def normalize_auth_device_fingerprint(cls, value: object) -> object:
+        if value is None:
+            return None
+        if isinstance(value, str):
+            normalized = value.strip()
+            return normalized or None
+        return value
+
+
+class EmailPasswordRegisterRequest(EmailPasswordRequest):
+    display_name: str | None = Field(default=None, min_length=1, max_length=AUTH_DISPLAY_NAME_MAX_LENGTH)
+
+    @field_validator("display_name")
+    @classmethod
+    def normalize_registration_display_name(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        normalized = value.strip()
+        if not normalized:
+            raise ValueError("display_name must not be blank")
+        return normalized
 
 
 class RefreshTokenRequest(BaseModel):

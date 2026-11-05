@@ -11,6 +11,8 @@ PUBLIC_ROUTE_REASONS: dict[tuple[str, str], str] = {
     ("GET", "/version"): "PHI-safe release identity",
     ("GET", "/feature-flags"): "public fail-closed feature availability",
     ("POST", "/auth/dev-login"): "environment-gated local/test login",
+    ("POST", "/auth/register"): "rate-limited email/password account registration",
+    ("POST", "/auth/login"): "rate-limited email/password credential exchange",
     ("POST", "/auth/oidc-login"): "rate-limited identity-token exchange",
     ("POST", "/auth/refresh"): "rate-limited rotating refresh-token exchange",
     ("POST", "/auth/logout"): "rate-limited refresh-token revocation",

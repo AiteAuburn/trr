@@ -10,7 +10,7 @@ from app.api.deps import get_current_account
 from app.api.records import get_owned_profile
 from app.core.config import get_settings
 from app.db.session import SessionLocal, get_db
-from app.models import Account
+from app.models import Account, AiParseAudit
 from app.schemas.ai import (
     AiModelOption,
     AiModelOptionsResponse,
@@ -47,6 +47,8 @@ from app.services.entitlements import (
 )
 from app.services.rate_limits import consume_fixed_window_rate_limit, normalize_retry_after_seconds
 from app.services.record_time_validation import validate_record_occurred_at
+from app.services.operational_events import safe_record_operational_event
+from app.services.usage_analytics import capture_ai_token_usage
 
 router = APIRouter(prefix="/ai", tags=["ai"])
 
@@ -234,37 +236,145 @@ def stream_progress_with_success_voice_quota(
     source: Iterator[str],
     account_id: UUID,
     voice_seconds: int,
+    profile_id: UUID | None = None,
+    transcript: str | None = None,
+    stt_model_id: str | None = None,
+    llm_model_id: str | None = None,
 ) -> Iterator[str]:
-    for line in source:
-        if len(line) > MAX_PROGRESS_STREAM_EVENT_CHARS:
-            yield stream_error_event(
-                {
-                    "code": "progress_event_too_large",
-                    "message": "Parser progress event exceeded safe size.",
-                    "hint": "retry_with_shorter_input",
-                }
-            )
-            return
-
+    status_value = "interrupted"
+    error_code: str | None = None
+    result_json: dict[str, object] | None = None
+    with capture_ai_token_usage() as usage_events:
         try:
-            event_payload = json.loads(line)
-        except json.JSONDecodeError:
-            yield line
-            continue
+            for line in source:
+                if len(line) > MAX_PROGRESS_STREAM_EVENT_CHARS:
+                    status_value = "failed"
+                    error_code = "progress_event_too_large"
+                    yield stream_error_event(
+                        {
+                            "code": error_code,
+                            "message": "Parser progress event exceeded safe size.",
+                            "hint": "retry_with_shorter_input",
+                        }
+                    )
+                    return
 
-        if event_payload.get("event") != "final":
-            yield line
-            continue
+                try:
+                    event_payload = json.loads(line)
+                except json.JSONDecodeError:
+                    yield line
+                    continue
 
-        with SessionLocal() as quota_db:
-            try:
-                require_voice_quota_for_account_id(account_id, voice_seconds, quota_db)
-                quota_db.commit()
-            except HTTPException as exc:
-                quota_db.rollback()
-                yield voice_quota_stream_error(exc)
-                return
-        yield line
+                if event_payload.get("event") == "final":
+                    with SessionLocal() as quota_db:
+                        try:
+                            require_voice_quota_for_account_id(account_id, voice_seconds, quota_db)
+                            quota_db.commit()
+                        except HTTPException as exc:
+                            quota_db.rollback()
+                            status_value = "failed"
+                            error_code = "voice_quota_exceeded"
+                            yield voice_quota_stream_error(exc)
+                            return
+                    preview_value = event_payload.get("preview")
+                    if isinstance(preview_value, dict):
+                        result_json = preview_value
+                    status_value = "succeeded"
+                elif event_payload.get("event") == "error":
+                    status_value = "failed"
+                    code_value = event_payload.get("code")
+                    error_code = code_value[:80] if isinstance(code_value, str) else "parser_failed"
+                yield line
+        finally:
+            if (
+                profile_id is not None
+                and transcript is not None
+                and stt_model_id is not None
+                and llm_model_id is not None
+            ):
+                _persist_parse_audit(
+                    account_id=account_id,
+                    profile_id=profile_id,
+                    transcript=transcript,
+                    stt_model_id=stt_model_id,
+                    llm_model_id=llm_model_id,
+                    status_value=status_value,
+                    usage_events=usage_events,
+                    result_json=result_json,
+                    error_code=error_code,
+                )
+
+
+def _usage_int(value: object) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        return 0
+    return value
+
+
+def _persist_parse_audit(
+    *,
+    account_id: UUID,
+    profile_id: UUID,
+    transcript: str,
+    stt_model_id: str,
+    llm_model_id: str,
+    status_value: str,
+    usage_events: list[dict[str, object]],
+    result_json: dict[str, object] | None,
+    error_code: str | None,
+) -> None:
+    totals: dict[str, dict[str, object]] = {}
+    for event in usage_events:
+        key = f"{event['provider']}:{event['model_id']}"
+        current = totals.setdefault(
+            key,
+            {
+                "provider": event["provider"],
+                "model_id": event["model_id"],
+                "request_count": 0,
+                "success_count": 0,
+                "failure_count": 0,
+                "usage_reported_count": 0,
+                "input_tokens": 0,
+                "output_tokens": 0,
+                "total_tokens": 0,
+            },
+        )
+        for field in (
+            "request_count",
+            "success_count",
+            "failure_count",
+            "usage_reported_count",
+            "input_tokens",
+            "output_tokens",
+            "total_tokens",
+        ):
+            current[field] = _usage_int(current[field]) + _usage_int(event[field])
+    usage_json = list(totals.values())
+    audit = AiParseAudit(
+        account_id=account_id,
+        profile_id=profile_id,
+        transcript_text=transcript[:4000],
+        stt_model_id=stt_model_id[:120],
+        llm_model_id=llm_model_id[:120],
+        status=status_value,
+        result_json=result_json,
+        usage_json=usage_json,
+        input_tokens=sum(_usage_int(item["input_tokens"]) for item in usage_json),
+        output_tokens=sum(_usage_int(item["output_tokens"]) for item in usage_json),
+        total_tokens=sum(_usage_int(item["total_tokens"]) for item in usage_json),
+        error_code=error_code,
+    )
+    try:
+        with SessionLocal() as audit_db:
+            audit_db.add(audit)
+            audit_db.commit()
+    except Exception:
+        safe_record_operational_event(
+            event_code="parse_audit_write_failed",
+            source="ai_api",
+            severity="WARNING",
+        )
 
 
 @router.get("/models", response_model=AiModelOptionsResponse)
@@ -287,28 +397,64 @@ def parse_preview(
     db.commit()
     require_voice_quota(account, payload.voice_seconds, db)
 
-    try:
-        preview = build_parse_preview(
-            profile_id=payload.profile_id,
-            transcript=payload.transcript,
-            stt_model_id=payload.stt_model_id,
-            llm_model_id=payload.llm_model_id,
-            occurred_at=payload.occurred_at,
-        )
-        db.commit()
-        return preview
-    except LocalParserUnavailableError as exc:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail=parser_unavailable_detail(exc),
-        ) from exc
-    except LocalParserError as exc:
-        db.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_502_BAD_GATEWAY,
-            detail=parser_failed_detail(),
-        ) from exc
+    with capture_ai_token_usage() as usage_events:
+        try:
+            preview = build_parse_preview(
+                profile_id=payload.profile_id,
+                transcript=payload.transcript,
+                stt_model_id=payload.stt_model_id,
+                llm_model_id=payload.llm_model_id,
+                occurred_at=payload.occurred_at,
+            )
+            db.commit()
+            analysis_json = preview.model_dump(mode="json")
+            analysis_json.pop("transcript", None)
+            _persist_parse_audit(
+                account_id=account.id,
+                profile_id=payload.profile_id,
+                transcript=payload.transcript,
+                stt_model_id=payload.stt_model_id,
+                llm_model_id=payload.llm_model_id,
+                status_value="succeeded",
+                usage_events=usage_events,
+                result_json=analysis_json,
+                error_code=None,
+            )
+            return preview
+        except LocalParserUnavailableError as exc:
+            db.rollback()
+            _persist_parse_audit(
+                account_id=account.id,
+                profile_id=payload.profile_id,
+                transcript=payload.transcript,
+                stt_model_id=payload.stt_model_id,
+                llm_model_id=payload.llm_model_id,
+                status_value="failed",
+                usage_events=usage_events,
+                result_json=None,
+                error_code="parser_unavailable",
+            )
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=parser_unavailable_detail(exc),
+            ) from exc
+        except LocalParserError as exc:
+            db.rollback()
+            _persist_parse_audit(
+                account_id=account.id,
+                profile_id=payload.profile_id,
+                transcript=payload.transcript,
+                stt_model_id=payload.stt_model_id,
+                llm_model_id=payload.llm_model_id,
+                status_value="failed",
+                usage_events=usage_events,
+                result_json=None,
+                error_code="parser_failed",
+            )
+            raise HTTPException(
+                status_code=status.HTTP_502_BAD_GATEWAY,
+                detail=parser_failed_detail(),
+            ) from exc
 
 
 @router.post("/parse-preview/debug-stream")
@@ -372,6 +518,10 @@ def parse_preview_progress_stream(
             ),
             account_id=account.id,
             voice_seconds=payload.voice_seconds,
+            profile_id=payload.profile_id,
+            transcript=payload.transcript.strip(),
+            stt_model_id=payload.stt_model_id,
+            llm_model_id=payload.llm_model_id,
         ),
         media_type="application/x-ndjson; charset=utf-8",
     )

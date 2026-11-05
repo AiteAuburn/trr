@@ -18,6 +18,7 @@ MAX_MODEL_ID_LENGTH = 120
 MAX_KEEP_ALIVE_LENGTH = 32
 MAX_RELEASE_METADATA_LENGTH = 128
 DATABASE_URL_ALLOWED_DRIVERS = frozenset({"postgresql", "postgresql+psycopg"})
+DEV_AUTH_ALLOWED_ENVS = frozenset({"local", "test", "development"})
 MODEL_ID_PATTERN = re.compile(r"^[A-Za-z0-9._:/+-]+$")
 KEEP_ALIVE_PATTERN = re.compile(r"^(-1|0|[0-9]{1,6}(ms|s|m|h))$")
 ADMIN_USERNAME_PATTERN = re.compile(r"^[A-Za-z0-9_.-]{1,64}$")
@@ -56,6 +57,10 @@ class Settings(BaseSettings):
     auth_oidc_max_age_seconds: int = Field(default=3600, ge=60, le=86_400)
     auth_login_client_rate_limit_count: int = Field(default=30, ge=1, le=10_000)
     auth_login_client_rate_limit_window_seconds: int = Field(default=60, ge=1, le=86_400)
+    auth_login_email_rate_limit_count: int = Field(default=8, ge=1, le=1_000)
+    auth_login_email_rate_limit_window_seconds: int = Field(default=900, ge=1, le=86_400)
+    auth_register_client_rate_limit_count: int = Field(default=5, ge=1, le=1_000)
+    auth_register_client_rate_limit_window_seconds: int = Field(default=3600, ge=1, le=86_400)
     auth_refresh_token_days: int = Field(default=30, ge=1, le=365)
     auth_refresh_rate_limit_count: int = Field(default=10, ge=1, le=1_000)
     auth_refresh_rate_limit_window_seconds: int = Field(default=60, ge=1, le=86_400)
@@ -240,6 +245,13 @@ class Settings(BaseSettings):
             )
         if self.admin_session_secret and len(self.admin_session_secret) < 32:
             raise ValueError("ADMIN_SESSION_SECRET must be at least 32 characters")
+        # Dev login takes an email with no password, so any internet-reachable
+        # environment (staging included) must refuse to start with it enabled.
+        if self.allow_dev_auth and self.app_env not in DEV_AUTH_ALLOWED_ENVS:
+            raise ValueError(
+                f"ALLOW_DEV_AUTH must be false when APP_ENV is {self.app_env}; "
+                "it is only allowed in local, test, or development"
+            )
         if self.app_env == "production":
             if self.allow_dev_auth:
                 raise ValueError("ALLOW_DEV_AUTH must be false in production")
@@ -281,9 +293,11 @@ class Settings(BaseSettings):
 
     @property
     def dev_auth_enabled(self) -> bool:
+        if self.app_env not in DEV_AUTH_ALLOWED_ENVS:
+            return False
         if self.allow_dev_auth is not None:
             return self.allow_dev_auth
-        return self.app_env in {"local", "test", "development"}
+        return True
 
     @property
     def gemma4_parser_endpoint(self) -> AnyUrl | None:

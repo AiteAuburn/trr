@@ -1070,6 +1070,74 @@ def test_compact_ir_maps_to_record_preview() -> None:
     assert preview.rejected_events[0].source_text == "中午沒量血糖"
 
 
+def test_compact_ir_maps_health_observation_note() -> None:
+    parser_ir = CompactParserIr.model_validate(
+        {
+            "records": [
+                {
+                    "type": "note",
+                    "segment_id": "seg_001",
+                    "evidence": "下午有一點口渴",
+                }
+            ],
+            "rejected": [],
+            "needs_confirmation": True,
+        }
+    )
+
+    preview = compact_ir_to_parse_preview(
+        profile_id=UUID("00000000-0000-0000-0000-000000000001"),
+        transcript="下午有一點口渴。",
+        normalized_text="下午有一點口渴。",
+        stt_model_id="browser-web-speech",
+        llm_model_id=DEEPSEEK_LLM_MODEL_ID,
+        occurred_at=datetime(2026, 9, 15, tzinfo=UTC),
+        parser_ir=parser_ir,
+    )
+
+    assert len(preview.records) == 1
+    assert preview.records[0].record_type == "note"
+    assert preview.records[0].payload_json == {
+        "kind": "health_observation",
+        "tags": ["口渴"],
+    }
+
+
+def test_deterministic_repair_keeps_common_multievent_health_records() -> None:
+    transcript = (
+        "今天早上 7 點起床後量空腹血糖 128 mg/dL。"
+        "早餐吃了一個蛋餅和一杯無糖豆漿。"
+        "中午 12 點半吃雞腿便當，飯後兩小時血糖 165。"
+        "下午散步 30 分鐘。"
+        "晚上 8 點服用 Metformin 500 mg 一顆。"
+        "下午有一點口渴。"
+    )
+
+    records = parse_transcript_to_records(
+        profile_id=UUID("00000000-0000-0000-0000-000000000001"),
+        transcript=transcript,
+        stt_model_id="browser-web-speech",
+        llm_model_id=DEEPSEEK_LLM_MODEL_ID,
+        occurred_at=datetime(2026, 9, 15, tzinfo=UTC),
+    )
+
+    assert [record.record_type for record in records] == [
+        "glucose",
+        "glucose",
+        "meal",
+        "meal",
+        "exercise",
+        "medication",
+        "note",
+    ]
+    assert records[4].payload_json == {"activity": "散步", "minutes": 30}
+    assert records[5].payload_json == {"name": "Metformin", "taken": True}
+    assert records[6].payload_json == {
+        "kind": "health_observation",
+        "tags": ["口渴"],
+    }
+
+
 def test_storage_compatible_preview_records_sanitize_and_reject_invalid_payloads() -> None:
     _, profile_id = create_account_and_profile(TestClient(app), "preview-storage-gate")
     occurred_at = datetime(2026, 4, 30, 8, 0, tzinfo=UTC)
@@ -1504,6 +1572,7 @@ def test_ollama_response_size_guard_runs_before_json_parsing(monkeypatch: pytest
             body={"model": "qwen2.5:1.5b"},
             timeout_seconds=1.0,
             batch_number=1,
+            model_id="qwen2.5:1.5b",
         )
     except LocalParserError as exc:
         message = str(exc)
@@ -2129,6 +2198,7 @@ def test_deepseek_request_body_sends_prompt_as_system_message(monkeypatch: pytes
         "content": "Atomic segments:\nseg_001: 血糖 120",
     }
     assert body["response_format"] == {"type": "json_object"}
+    assert body["thinking"] == {"type": "disabled"}
     assert "keep_alive" not in body
 
 
@@ -2143,6 +2213,59 @@ def test_local_openai_compatible_request_body_keeps_local_keep_alive() -> None:
     )
 
     assert body["keep_alive"] == "30m"
+    assert "thinking" not in body
+
+
+def test_deepseek_failure_uses_one_zero_token_deterministic_repair(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from app.services import ai_pipeline
+
+    parser_calls = 0
+
+    def fail_parser_request(**_: object) -> object:
+        nonlocal parser_calls
+        parser_calls += 1
+        raise LocalParserError("provider returned an unusable structured response")
+
+    monkeypatch.setattr(
+        ai_pipeline,
+        "get_settings",
+        lambda: get_settings().model_copy(
+            update={"local_llm_repair_fallback_enabled": True}
+        ),
+    )
+    monkeypatch.setattr(ai_pipeline, "_request_local_parser_json", fail_parser_request)
+
+    transcript = (
+        "空腹血糖 128。早餐吃蛋餅。下午散步 30 分鐘。"
+        "晚上服用 Metformin。下午有一點口渴。"
+    )
+    preview = ai_pipeline._call_openai_compatible_local_parser(
+        profile_id=UUID("00000000-0000-0000-0000-000000000001"),
+        transcript=transcript,
+        normalized_text=transcript,
+        stt_model_id="browser-web-speech",
+        llm_model_id=DEEPSEEK_LLM_MODEL_ID,
+        occurred_at=datetime(2026, 9, 15, tzinfo=UTC),
+        parser_url="https://api.deepseek.example/v1/chat/completions",
+        model_id="deepseek-v4-flash",
+        timeout_seconds=1,
+        headers={"Authorization": "Bearer test-placeholder"},
+    )
+
+    assert parser_calls == 1
+    assert [record.record_type for record in preview.records] == [
+        "glucose",
+        "meal",
+        "exercise",
+        "medication",
+        "note",
+    ]
+    assert all(
+        record.metadata_json.get("parser_repair") == "local_llm_batch_parse_fallback"
+        for record in preview.records
+    )
 
 
 def test_parse_preview_accepts_static_llm_without_runtime_model_lookup(monkeypatch: pytest.MonkeyPatch) -> None:
