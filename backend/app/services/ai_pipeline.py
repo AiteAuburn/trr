@@ -221,11 +221,11 @@ STT_MODELS = [
 LLM_MODELS = [
     AiModelOption(
         id=DEEPSEEK_LLM_MODEL_ID,
-        label="DeepSeek Chat",
+        label="AI 智慧整理",
         kind="llm",
         runtime="server_api",
         available=True,
-        description="OpenAI-compatible DeepSeek parser. Requires DEEPSEEK_PARSER_URL and DEEPSEEK_API_KEY.",
+        description="Server-side AI parser.",
     ),
     AiModelOption(
         id="local-llm-schema-stub",
@@ -311,7 +311,7 @@ def runtime_llm_models() -> list[AiModelOption]:
             has_parser = bool(settings.deepseek_parser_url)
             has_key = bool(settings.deepseek_api_key)
             can_use = has_parser and has_key
-            suffix = " DeepSeek chat endpoint ready." if can_use else " Set DEEPSEEK_PARSER_URL and DEEPSEEK_API_KEY."
+            suffix = " Ready." if can_use else " Not configured on the server."
             adjusted.append(
                 model.model_copy(
                     update={

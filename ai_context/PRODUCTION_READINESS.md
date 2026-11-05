@@ -10,7 +10,6 @@ Status date: 2026-11-05. This is the single readiness doc. It replaces PRODUCTIO
 
 | # | Item | Current state | Needed |
 |---|---|---|---|
-| B1 | Cloud parsing without consent (D1) | `/ai/parse-preview` sends segmented user transcripts to DeepSeek by default. There is no consent screen and no BAA. **This conflicts with the old local-only rule; `skills.md` §3 records it as an open decision.** | Decide: explicit opt-in consent plus privacy text, or go back to local models |
 | B2 | Raw transcript retention (D2) | `ai_parse_audits.transcript_text` and `daily_records.transcript_entries_json` keep raw text with no expiry. Admins can read parse audits in `/admin/users/{id}`. | Set a retention period with a scheduled purge, or stop storing raw text; limit admin access |
 | B3 | Phone speech may go to Google (D3) | `expo-speech-recognition` has no on-device requirement | Disclose and get consent, or require on-device / Whisper |
 | B4 | Release signing (D4) | `mobile/android/app/build.gradle` signs release with the debug keystore | Real keystore plus custody process; `verify:android-release-signing` passes |
@@ -49,9 +48,11 @@ Status date: 2026-11-05. This is the single readiness doc. It replaces PRODUCTIO
 - Lightsail: DB on an internal network, backend not exposed, Caddy TLS with HSTS, non-root read-only backend container, USD 10/month budget alert.
 - Local merge gate `make check`.
 
+Cloud parsing (D1) was decided on 2026-11-05: no in-app consent step, and the vendor is not named in the UI. Still needed before a store release: the privacy policy and the Google Play Data safety form must say that health text is processed by a third-party AI service (the vendor does not have to be named).
+
 ## 5. Order of work
 
-1. B1–B3 privacy decisions (product owner), then implement consent or retention.
+1. B2–B3 privacy decisions (product owner), then implement retention.
 2. B5 server config, B4 signing, B6 restore drill.
 3. Fix the mobile verifiers after the feature removal so `npm run quality` passes.
 4. B7 real-device run.

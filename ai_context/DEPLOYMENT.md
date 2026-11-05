@@ -119,7 +119,7 @@ dc() { docker compose --env-file infra/lightsail/.env -f infra/lightsail/compose
 | 項目 | 現況 | 要做的事 |
 |---|---|---|
 | dev 登入 | `compose.yml` 預設 false，但伺服器上的 `.env` 要自己確認 | 登入伺服器確認 `ALLOW_DEV_AUTH=false`。 |
-| DeepSeek 健康資料外送 | 逐字稿原文送到 DeepSeek，沒有使用者同意流程 | 二選一：加明確同意 + 文件改為雲端解析；或改回本地模型。 |
+| 隱私揭露 | 依 D1 決定，App 內不設 AI 同意、介面不顯示廠商名 | 隱私權政策與 Google Play 資料安全表單揭露「由第三方 AI 服務處理」。 |
 | 原始逐字稿保存 | `ai_parse_audit` 永久保存逐字稿 | 改存長度/雜湊，或加保存期限。 |
 | APK 簽章 | 正式版仍用 debug keystore | 建立正式 keystore（`docs/ANDROID_RELEASE_SHARING.md`）。 |
 | 頻率限制 | uvicorn 只信任 127.0.0.1 的 proxy header，後端看到的 IP 都是 Caddy | 設定 `FORWARDED_ALLOW_IPS`，否則登入限制是全站共用。 |

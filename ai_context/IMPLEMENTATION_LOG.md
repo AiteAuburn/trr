@@ -17,6 +17,30 @@
 
 ## 2026-11-05
 
+### 雲端解析定案：不設 App 內同意、介面不顯示 AI 供應商（T2348）
+
+類型：feature / docs / test
+
+檔案：`backend/app/services/ai_pipeline.py`、`backend/app/api/ai.py`、`backend/tests/test_ai_pipeline.py`、`mobile/settingsCopy.ts`、`scripts/verify_mobile_navigation.py`、`skills.md`、`CLAUDE.md`、`README.md`、`ai_context/{PRODUCT_ROADMAP,PRODUCTION_READINESS,AI_PARSING_AND_MODELS,SECURITY_AND_PRIVACY,SUBSCRIPTIONS_AND_FAMILY,DEPLOYMENT,TASK_QUEUE}.md`。
+
+摘要：
+
+- 產品決定（D1）：維持後端雲端解析，App 內不另設 AI 同意步驟，移除 T2348。
+- `/ai/models` 的 `deepseek-chat` 選項標籤改為「AI 智慧整理」，說明文字改為中性、不含廠商名與環境變數名；未設定時的錯誤 hint 從 `set_deepseek_parser_url_and_key` 改為 `server_parser_not_configured`。模型 id 不變，相容已安裝 APK。
+- 手機設定頁「雲端 fallback 在 v1 預設停用」與實際不符，改為「AI 智慧整理需要網路連線」。
+- 測試新增：模型標籤與說明不可包含供應商名稱。
+- 文件記錄此決定；廠商名稱只留在後端設定、內部文件與管理後台。
+
+驗證：
+
+- 手機 `npm run quality` 通過。`make check` 的合約腳本、ruff、mypy、web 全過；pytest 第一次 3 筆 `tests/test_auth_refresh.py` 失敗（refresh 頻率限制與登出撤銷，與本次改動無關），單獨重跑兩次 30/30、完整重跑 317 passed，判定為機器變慢時的時間相關 flaky。
+
+後續：
+
+- 隱私權政策與 Google Play 資料安全表單仍需揭露「由第三方 AI 服務處理」（可不寫廠商名）。
+- D3（手機語音辨識是否要求 on-device）仍未決定。
+- `tests/test_auth_refresh.py` 在機器忙碌時偶發失敗，之後值得改成不依賴實際時間。
+
 ### 收斂到語音記錄 MVP：移除範圍外功能、未部署的 infra，整理文件（T2347）
 
 類型：feature / infra / docs / test

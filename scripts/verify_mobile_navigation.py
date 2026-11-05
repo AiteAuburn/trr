@@ -12912,7 +12912,7 @@ def main() -> int:
             ("settings boundary copy bundle recording quota binding", "recordingQuotaData: recordingQuotaDataBoundaryCopy()"),
             ("settings quota readiness checklist helper", "function quotaReadinessChecklistDisplayItems()"),
             ("settings model local runtime copy", "本地模型"),
-            ("settings model fallback disabled copy", "雲端 fallback 在 v1 預設停用"),
+            ("settings model availability copy", "AI 智慧整理需要網路連線"),
             ("settings quota production auth copy", "quota API 必須由 production auth 驗證 account / profile，不信任前端傳入的使用量。"),
             ("settings quota rollback copy", "錄音開始時先檢查剩餘額度；parser 成功或失敗都要有一致的 usage rollback / commit 規則。"),
             ("settings quota low warning copy", "接近剩餘 2 分鐘才提醒；避免首頁長期顯示倒數造成壓力。"),

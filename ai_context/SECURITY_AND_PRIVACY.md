@@ -15,7 +15,7 @@
 | 流向 | 送出內容 | 狀態 |
 |---|---|---|
 | App → 後端（HTTPS） | transcript、候選紀錄、確認後紀錄 | 預期行為 |
-| 後端 → DeepSeek（`api.deepseek.com`） | 分段後的使用者原話（每段 ≤160 字） | **沒有使用者同意流程，DeepSeek 也沒有 BAA**（D1） |
+| 後端 → DeepSeek（`api.deepseek.com`） | 分段後的使用者原話（每段 ≤160 字） | 依 D1 決定不設 App 內同意，介面不顯示廠商名；DeepSeek 沒有 BAA。隱私權政策需揭露第三方 AI 處理 |
 | 後端 → DeepSeek（年度回顧） | 只有年度聚合統計 | 符合最小化 |
 | 手機 → 系統語音服務（通常 Google） | 錄音 | 未要求 on-device，可能上雲（D3） |
 | 手機 → Hugging Face | 下載 Whisper 模型（不送使用者資料） | 只檢查檔案大小，無 checksum |

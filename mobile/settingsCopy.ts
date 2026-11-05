@@ -235,7 +235,7 @@ export function selectedModelRuntimeDisplayLabel(
 }
 
 export function modelSelectionBoundaryCopy() {
-  return boundDisplayText("未啟用模型不可選；雲端 fallback 在 v1 預設停用。", maxDisplayDetailTextLength);
+  return boundDisplayText("未啟用模型不可選；AI 智慧整理需要網路連線。", maxDisplayDetailTextLength);
 }
 
 export function recordingQuotaDataBoundaryCopy() {

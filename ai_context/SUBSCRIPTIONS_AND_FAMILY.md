@@ -53,4 +53,4 @@
 ## 4. 未決
 
 - 付費主軸、金流供應商、試用到期後的行為（`PRODUCT_ROADMAP.md` D7）。
-- 高級版雲端 AI 是否成為 entitlement；若要送 PHI 給第三方，需先有合規條件（BAA）與使用者同意。
+- 高級版雲端 AI 是否成為 entitlement（雲端解析本身依 `PRODUCT_ROADMAP.md` D1 已決定）。

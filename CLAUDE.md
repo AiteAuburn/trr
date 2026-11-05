@@ -10,11 +10,11 @@ Three apps share one backend:
 
 - `backend/` — FastAPI + SQLAlchemy 2 + Alembic on PostgreSQL 16 (Python 3.12, mypy strict, ruff line-length 100).
 - `web/` — Vite + React 19 web simulator of the mobile flow, plus the web admin console (`AdminApp.tsx`, usage analytics).
-- `mobile/` — React Native + Expo app (the primary product, voice-first). Speech-to-text uses the phone's system recognizer (`expo-speech-recognition`), with an optional on-device `whisper.rn` pass if the user downloaded the model; parsing always goes through the backend. Native modules (`whisper.rn`, `llama.rn` (debug tools only)) only work in an Expo dev-client or release build, not Expo Go. There is no on-device database.
+- `mobile/` — React Native + Expo app (the primary product, voice-first). The app never names the AI vendor to users (the parser shows as 「AI 智慧整理」); keep vendor names out of user-facing copy and the `/ai/models` label. Speech-to-text uses the phone's system recognizer (`expo-speech-recognition`), with an optional on-device `whisper.rn` pass if the user downloaded the model; parsing always goes through the backend. Native modules (`whisper.rn`, `llama.rn` (debug tools only)) only work in an Expo dev-client or release build, not Expo Go. There is no on-device database.
 
 ## Governing docs
 
-`skills.md` at the repo root is the top-level rules document and wins over everything in `ai_context/` and `agents/`; its §1 maps every doc in `ai_context/`. Read it, `ai_context/architecture.md`, and `ai_context/TASK_QUEUE.md` before starting non-trivial work. Open product decisions (DeepSeek PHI consent, transcript retention, release keystore, voice-quota trust, ...) are listed in `ai_context/PRODUCT_ROADMAP.md` §4 and tracked in `ai_context/PRODUCTION_READINESS.md`; do not treat them as resolved. Key rules from it:
+`skills.md` at the repo root is the top-level rules document and wins over everything in `ai_context/` and `agents/`; its §1 maps every doc in `ai_context/`. Read it, `ai_context/architecture.md`, and `ai_context/TASK_QUEUE.md` before starting non-trivial work. Open product decisions (transcript retention, release keystore, voice-quota trust, ...) are listed in `ai_context/PRODUCT_ROADMAP.md` §4 and tracked in `ai_context/PRODUCTION_READINESS.md`; do not treat them as resolved. Key rules from it:
 
 - Work on one active task from `ai_context/TASK_QUEUE.md` at a time; update its status when done.
 - Every change (bugfix, feature, infra, docs, test) adds a dated entry to `ai_context/IMPLEMENTATION_LOG.md` with: date, type, files changed, summary, verification, follow-up. The log must stay PHI-safe (no real transcripts, health values, prompts, model output, tokens).

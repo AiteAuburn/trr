@@ -69,7 +69,7 @@ def parser_unavailable_detail(exc: LocalParserUnavailableError) -> dict[str, str
     if "GEMMA4_PARSER_URL" in raw_message:
         hint = "set_gemma4_parser_url"
     if "DEEPSEEK_PARSER_URL" in raw_message or "DEEPSEEK_API_KEY" in raw_message:
-        hint = "set_deepseek_parser_url_and_key"
+        hint = "server_parser_not_configured"
     return {
         "code": "local_parser_unavailable",
         "message": "Selected local parser is not available.",
@@ -89,7 +89,7 @@ def unavailable_llm_detail(llm_model_id: str) -> dict[str, str]:
     if llm_model_id == GEMMA4_LLM_MODEL_ID:
         hint = "set_gemma4_parser_url"
     if llm_model_id == DEEPSEEK_LLM_MODEL_ID:
-        hint = "set_deepseek_parser_url_and_key"
+        hint = "server_parser_not_configured"
     return {
         "code": "llm_model_unavailable",
         "message": "Selected LLM model is not available.",

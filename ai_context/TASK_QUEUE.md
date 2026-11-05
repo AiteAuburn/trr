@@ -16,10 +16,6 @@ None. Pick the next task from Next Up.
 
 ## Next Up
 
-### T2348: Decide cloud-parsing consent (D1, D3)
-
-Product decision first: add explicit opt-in consent for DeepSeek parsing and phone speech recognition, or go back to local models. Then implement the choice, including consent copy, a stored consent state, server-side refusal to call DeepSeek without consent, and tests. Update `skills.md` §3 once decided.
-
 ### T2349: Raw transcript retention (D2)
 
 Decide the retention period for `ai_parse_audits.transcript_text` and `daily_records.transcript_entries_json`. Add a scheduled purge (or stop storing raw text), restrict admin visibility, and add tests. If the schema changes, use an expand-only migration.
@@ -56,6 +52,7 @@ Use `AbortController` in mobile so cancel actually stops the request, and make s
 
 | When | What |
 |---|---|
+| 2026-11 | T2348: cloud parsing decided (D1). No in-app consent step; the AI vendor is never named in the UI (「AI 智慧整理」) |
 | 2026-11 | T2347: cut scope to the voice-first MVP. Removed store, community, ranking and achievements (tables kept), deleted k8s/aws/minimal infra, moved backup/restore to Lightsail, consolidated `ai_context/` from 42 to 14 docs |
 | 2026-11 | Voice-first mobile redesign: big mic home, tap start/stop, 3 s silence auto-stop, 60 s cap, straight to AI parsing with cancel, single confirm page, 存好了, Today timeline |
 | 2026-11 | `make check` local gate replaces the removed GitHub Actions CI; security fixes after a full review (dev auth refused outside local/test/development) |

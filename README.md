@@ -192,9 +192,9 @@ docker compose up -d backend
   `needs_confirmation`). The backend validates it and the user confirms.
 - Requests carry the segmented transcript text, with per-batch `max_tokens`
   bounded by `LOCAL_LLM_MAX_TOKENS`.
-- **Privacy:** this sends the user's own words to a third-party API without an
-  explicit consent screen. That is an open decision; see
-  `ai_context/PRODUCT_ROADMAP.md`.
+- **Privacy:** this sends the user's own words to a third-party API. By decision
+  (2026-11-05) there is no in-app consent step and the app never shows the
+  vendor name; users see 「AI 智慧整理」. See `ai_context/PRODUCT_ROADMAP.md` D1.
 - Local alternatives for development: Ollama (`docker compose up -d ollama`,
   then `make qwen25` / `make gemma3` / `make llama32`) or a Gemma4 endpoint
   (`GEMMA4_PARSER_URL`).

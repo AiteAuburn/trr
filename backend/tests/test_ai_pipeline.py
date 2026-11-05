@@ -2139,7 +2139,10 @@ def test_deepseek_model_option_requires_endpoint_and_key(monkeypatch: pytest.Mon
 
     assert deepseek.runtime == "server_api"
     assert deepseek.available is True
-    assert "DeepSeek chat endpoint ready." in deepseek.description
+    assert deepseek.description.endswith(" Ready.")
+    # Users see this catalog entry, so it must not name the AI vendor.
+    assert "deepseek" not in deepseek.label.lower()
+    assert "deepseek" not in deepseek.description.lower()
 
 
 def test_deepseek_system_prompt_includes_configured_prompt_analysis_and_base(monkeypatch: pytest.MonkeyPatch) -> None:

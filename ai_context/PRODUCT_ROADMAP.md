@@ -50,11 +50,14 @@
 
 ## 4. 未決事項（Open decisions）
 
+已決定：
+
+- **D1 雲端 AI 解析**（2026-11-05）：維持後端送 DeepSeek 解析。App 內不設 AI 同意步驟；使用者介面不顯示供應商名稱，統一稱「AI 智慧整理」。隱私權政策與 Google Play 資料安全表單仍需揭露「由第三方 AI 服務處理」（可不寫廠商名）。
+
 以下尚未決定，文件與程式碼都不可假裝已解決：
 
 | # | 議題 | 現況 | 選項 |
 |---|---|---|---|
-| D1 | 雲端 AI 解析的 PHI 同意與定位 | 逐字稿（分段後）送 DeepSeek，App 內沒有明確同意 | 加入明確的雲端解析同意與說明；或回到本地模型為主 |
 | D2 | 原始逐字稿保存 | `ai_parse_audits.transcript_text` 與 `daily_records.transcript_entries_json` 無期限保存，管理後台看得到 | 訂保存期限與清除 job；或不保存原文 |
 | D3 | 手機語音辨識走雲端 | 系統辨識未要求 on-device，可能送 Google | 說明並取得同意；或要求 on-device／改以 Whisper 為主 |
 | D4 | Release 簽章 | release APK 仍用 debug keystore 簽 | 建立正式 keystore 與保管流程 |

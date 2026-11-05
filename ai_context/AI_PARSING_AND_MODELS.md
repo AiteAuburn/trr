@@ -4,7 +4,7 @@
 
 ## 1. 現況一句話
 
-App 把文字 transcript 送到後端；後端預設把**分段後的逐字稿**送 DeepSeek（雲端）產生 compact IR，再由後端驗證、對回完整候選紀錄，交給使用者確認。這違反舊的「本地優先」目標，PHI 同意流程仍未決定（`PRODUCT_ROADMAP.md` D1）。
+App 把文字 transcript 送到後端；後端預設把**分段後的逐字稿**送 DeepSeek（雲端）產生 compact IR，再由後端驗證、對回完整候選紀錄，交給使用者確認。這取代了舊的「本地優先」目標。依 2026-11-05 決定（`PRODUCT_ROADMAP.md` D1），App 內不設 AI 同意步驟，使用者介面也不顯示供應商名稱：`/ai/models` 的 `deepseek-chat` 選項標籤是「AI 智慧整理」，說明文字與錯誤 hint（`server_parser_not_configured`）都不含廠商名。模型 id 維持 `deepseek-chat`，以相容已安裝的 APK。
 
 ## 2. 端點
 
