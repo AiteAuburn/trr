@@ -25,9 +25,6 @@ LIGHTSAIL_BUDGET = REPO_ROOT / "infra" / "lightsail" / "create-budget.ps1"
 LIGHTSAIL_INITIALIZE_ENV = REPO_ROOT / "infra" / "lightsail" / "initialize-env.sh"
 LIGHTSAIL_SET_DEEPSEEK_KEY = REPO_ROOT / "infra" / "lightsail" / "set-deepseek-key.sh"
 LIGHTSAIL_SET_ADMIN_CREDENTIALS = REPO_ROOT / "infra" / "lightsail" / "set-admin-credentials.sh"
-WEB_APP = REPO_ROOT / "web" / "src" / "App.tsx"
-WEB_PROD_DOCKERFILE = REPO_ROOT / "web" / "Dockerfile.prod"
-MOBILE_RUNTIME_CONFIG = REPO_ROOT / "mobile" / "appRuntimeConfig.ts"
 MOBILE_ENV_EXAMPLE = REPO_ROOT / "mobile" / ".env.example"
 
 
@@ -210,6 +207,7 @@ def _verify_lightsail_staging(errors: list[str]) -> None:
         'internal: true',
         'VITE_API_BASE_URL: /api',
         'ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}',
+        'LOCAL_LLM_REPAIR_FALLBACK_ENABLED: "true"',
     )
     for marker in required_compose_markers:
         if marker not in compose:
@@ -258,32 +256,9 @@ def _verify_lightsail_staging(errors: list[str]) -> None:
             errors.append(f"{label}: must never store a plaintext admin password assignment")
 
 
-def _verify_shared_dev_account(local_env: dict[str, str], errors: list[str]) -> None:
-    web_email = local_env.get("VITE_DEV_AUTH_EMAIL", "").strip()
-    mobile_email = local_env.get("EXPO_PUBLIC_DEV_AUTH_EMAIL", "").strip()
-    if not web_email or web_email != mobile_email:
-        errors.append(".env.example: Web and mobile must use the same non-empty dev account email")
-        return
-    local_part, separator, domain = web_email.rpartition("@")
-    if (
-        separator != "@"
-        or not local_part
-        or "." not in domain
-        or domain.lower().endswith((".local", ".test", ".invalid"))
-    ):
-        errors.append(".env.example: shared dev account must use an EmailStr-compatible domain")
-        return
-    for path in (
-        WEB_APP,
-        WEB_PROD_DOCKERFILE,
-        LIGHTSAIL_COMPOSE,
-        MOBILE_RUNTIME_CONFIG,
-        MOBILE_ENV_EXAMPLE,
-    ):
-        if web_email not in path.read_text(encoding="utf-8"):
-            errors.append(
-                f"{path.relative_to(REPO_ROOT)}: shared dev account must match .env.example"
-            )
+def _verify_authentication_defaults(local_env: dict[str, str], errors: list[str]) -> None:
+    _require(local_env, "ALLOW_DEV_AUTH", "false", label=".env.example", errors=errors)
+    _require(local_env, "EXPO_PUBLIC_ALLOW_DEV_AUTH", "false", label=".env.example", errors=errors)
 
 
 def main() -> int:
@@ -297,6 +272,13 @@ def main() -> int:
     _require(local_env, "ENABLE_DEBUG_TOOLS", "false", label=".env.example", errors=errors)
     _require(local_env, "VITE_ENABLE_DEBUG_TOOLS", "false", label=".env.example", errors=errors)
     _require(local_env, "EXPO_PUBLIC_ENABLE_DEBUG_TOOLS", "false", label=".env.example", errors=errors)
+    _require(
+        _parse_env_file(MOBILE_ENV_EXAMPLE),
+        "EXPO_PUBLIC_ENABLE_DEV_SERVER_SWITCHER",
+        "false",
+        label="mobile/.env.example",
+        errors=errors,
+    )
     _require_int_at_most(
         local_env,
         "LOCAL_LLM_MAX_TOKENS",
@@ -353,7 +335,7 @@ def main() -> int:
     _verify_backend_production_dependencies(errors)
     _verify_aws_terraform(errors)
     _verify_lightsail_staging(errors)
-    _verify_shared_dev_account(local_env, errors)
+    _verify_authentication_defaults(local_env, errors)
 
     if errors:
         for error in errors:

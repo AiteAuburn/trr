@@ -21,7 +21,7 @@ umask 077
   printf 'POSTGRES_USER=app\n'
   printf 'POSTGRES_PASSWORD=%s\n' "${db_password}"
   printf 'DATABASE_URL=postgresql+psycopg://app:%s@db:5432/bloodsugar\n' "${db_password}"
-  printf 'ALLOW_DEV_AUTH=true\n'
+  printf 'ALLOW_DEV_AUTH=false\n'
   printf 'AUTH_JWT_SECRET=%s\n' "${jwt_secret}"
   printf 'AUTH_JWT_ISSUER=https://%s\n' "${domain}"
   printf 'AUTH_JWT_AUDIENCE=bloodsugar-api\n'
