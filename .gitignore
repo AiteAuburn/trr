@@ -23,4 +23,15 @@ coverage/
 crash.log
 
 .DS_Store
-*:Zone.Identifier
+# Browser download markers; WSL stores the ":" as a private-use character, so match the suffix.
+*Zone.Identifier
+
+# IDE state
+.idea/
+
+# Scratch folder for adb screenshot pulls (see ai_context/MOBILE_VISUAL_SMOKE_WORKFLOW.md).
+tmp_visual_smoke_pull/
+
+# Android build caches and assets copied from node_modules/llama.rn at build time.
+mobile/android/.kotlin/
+mobile/android/app/src/main/assets/ggml-hexagon/
