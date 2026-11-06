@@ -15,6 +15,30 @@
 後續:
 ```
 
+## 2026-11-06
+
+### 手機語音辨識優先在本機（D3）
+
+類型：feature / test / docs
+
+檔案：`mobile/phoneSpeechCapture.ts`、`scripts/test_mobile_phone_speech_capture.cjs`、`skills.md`、`README.md`、`ai_context/{VOICE_INPUT,PRODUCT_ROADMAP,PRODUCTION_READINESS,SECURITY_AND_PRIVACY,TASK_QUEUE}.md`。
+
+摘要：
+
+- 錄音流程不變：有 Whisper 模型時先用 Whisper 在本機轉文字，失敗或空白時用同一段錄音的手機系統辨識結果。
+- 手機系統辨識改成能在本機就在本機（`requiresOnDeviceRecognition`）：iOS 由系統判斷；Android 13+ 只在已安裝台灣中文離線語音包時開啟（沒裝語音包時強制本機會辨識失敗）。Android 14+ 沒有語音包時，背景要求下載一次；Android 13 會跳對話框，所以不要求。
+- 做不到本機辨識的手機（Android 12 以下、沒有語音包、系統不支援）照舊用手機一般的辨識（可能上雲，免費），每支手機都能用語音。
+- 產品決定 D3 定案，從未決清單移除。
+
+驗證：
+
+- `node scripts/test_mobile_phone_speech_capture.cjs` 通過：語音包已裝時開啟本機、沒裝時關閉並只要求下載一次、Android 13 不下載、Android 12 不開啟、系統不支援或查詢失敗時關閉、iOS 開啟、各種台灣中文 locale 名稱。
+- 手機 `npm run quality` 全部通過（typecheck、所有 verifier、錄音流程 17/17、phone speech、Whisper PCM、model storage、今天時間軸）。
+
+後續：
+
+- 真機驗收（T2352）：裝好離線語音包後開飛航模式測試，以及沒有語音包的手機。
+
 ## 2026-11-05
 
 ### 雲端解析定案：不設 App 內同意、介面不顯示 AI 供應商（T2348）

@@ -38,8 +38,50 @@ export type PhoneSpeechCaptureOptions = {
   onEnd?: () => void;
 };
 
+const recognitionLocale = "zh-TW";
+
+/** Recognizers name Taiwan Mandarin differently (zh-TW, zh_TW, zh-Hant-TW, cmn-Hant-TW). */
+export function isTaiwanChineseLocale(locale: string) {
+  const normalized = locale.trim().toLowerCase().replace(/_/g, "-");
+  return ["zh-tw", "zh-hant-tw", "cmn-tw", "cmn-hant-tw"].includes(normalized);
+}
+
+type OnDeviceRecognitionModule = {
+  supportsOnDeviceRecognition: () => boolean;
+  getSupportedLocales: (options: object) => Promise<{ locales: string[]; installedLocales: string[] }>;
+  androidTriggerOfflineModelDownload: (options: { locale: string }) => Promise<unknown>;
+};
+
+let offlineModelDownloadRequested = false;
+
+/**
+ * Whether this phone can recognize Taiwan Mandarin without sending audio over the network.
+ * Recognition stays on the phone when it can; otherwise the phone's normal (possibly
+ * cloud) recognizer is used so voice input keeps working on every device.
+ */
+export async function canRecognizeOnDevice(module: OnDeviceRecognitionModule): Promise<boolean> {
+  try {
+    if (!module.supportsOnDeviceRecognition()) return false;
+    // iOS only turns on-device mode on when the recognizer supports it, so the flag is safe there.
+    if (Platform.OS !== "android") return true;
+    // Android 13+ creates a strict on-device recognizer, which fails if the language pack is missing.
+    if (Number(Platform.Version) < 33) return false;
+    const { locales, installedLocales } = await module.getSupportedLocales({});
+    if (installedLocales.some(isTaiwanChineseLocale)) return true;
+    // Android 14+ downloads the pack quietly in the background (13 would open a dialog mid-recording).
+    if (!offlineModelDownloadRequested && Number(Platform.Version) >= 34 && locales.some(isTaiwanChineseLocale)) {
+      offlineModelDownloadRequested = true;
+      void module.androidTriggerOfflineModelDownload({ locale: recognitionLocale }).catch(() => undefined);
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
+
 export async function startPhoneSpeechCapture(options: PhoneSpeechCaptureOptions = {}): Promise<PhoneSpeechCapture> {
   const { ExpoSpeechRecognitionModule } = await import("expo-speech-recognition");
+  const onDevice = await canRecognizeOnDevice(ExpoSpeechRecognitionModule);
   let finished = false;
   let ended = false;
   let audioUri: string | null = null;
@@ -89,10 +131,11 @@ export async function startPhoneSpeechCapture(options: PhoneSpeechCaptureOptions
     const androidSupportsPersistedAudio =
       Platform.OS !== "android" || Number(Platform.Version) >= 33;
     ExpoSpeechRecognitionModule.start({
-      lang: "zh-TW",
+      lang: recognitionLocale,
       interimResults: true,
       continuous: androidSupportsContinuousRecognition,
       maxAlternatives: 1,
+      requiresOnDeviceRecognition: onDevice,
       ...(androidSupportsPersistedAudio ? { recordingOptions: { persist: true } } : {})
     });
   } catch (startError) {

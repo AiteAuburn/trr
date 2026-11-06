@@ -32,14 +32,14 @@ If a parse preflight check fails, the user stays on the transcript page with the
 
 | Engine | When | Privacy |
 |---|---|---|
-| Phone system recognizer, via `expo-speech-recognition` (`mobile/phoneSpeechCapture.ts`) | Always; gives live text | `lang: "zh-TW"`; no `requiresOnDeviceRecognition`, so the Android service (Google packages listed in `app.json`) may use the cloud. UI copy says network use depends on phone settings. |
+| Phone system recognizer, via `expo-speech-recognition` (`mobile/phoneSpeechCapture.ts`) | Always; gives live text | `lang: "zh-TW"`. On-device when the phone can (`canRecognizeOnDevice`): iOS whenever the recognizer supports it; Android 13+ only when the Taiwan Mandarin offline pack is installed (Android 14+ requests the pack download once in the background). Otherwise the phone's normal recognizer, which may use the cloud (free, no app cost). |
 | Whisper via `whisper.rn` (`nativeLocalModels.ts`) | Only if the user downloaded the Whisper model **and** the recognizer saved an audio file (`recordingOptions.persist`, Android 13 / API 33+) | On-device. Runs on the saved file as a second pass. |
 
 Fallback order: Whisper on the saved file, then the phone transcript if Whisper fails or returns empty, then an "empty" message. The temporary audio file is deleted in every case. Raw audio is never uploaded or kept.
 
 Web simulator (`web/src/App.tsx`): Browser Web Speech, or MediaRecorder plus in-browser Whisper (`transformersSpeech.ts`). It is not the product path.
 
-Open: phone recognition may send audio to Google without explicit consent (`PRODUCT_ROADMAP.md` D3).
+Decided (`PRODUCT_ROADMAP.md` D3, 2026-11-06): on-device first, the normal recognizer only on phones that cannot recognize on-device.
 
 ## 3. Voice quota
 

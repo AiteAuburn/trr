@@ -11,7 +11,6 @@ Status date: 2026-11-05. This is the single readiness doc. It replaces PRODUCTIO
 | # | Item | Current state | Needed |
 |---|---|---|---|
 | B2 | Raw transcript retention (D2) | `ai_parse_audits.transcript_text` and `daily_records.transcript_entries_json` keep raw text with no expiry. Admins can read parse audits in `/admin/users/{id}`. | Set a retention period with a scheduled purge, or stop storing raw text; limit admin access |
-| B3 | Phone speech may go to Google (D3) | `expo-speech-recognition` has no on-device requirement | Disclose and get consent, or require on-device / Whisper |
 | B4 | Release signing (D4) | `mobile/android/app/build.gradle` signs release with the debug keystore | Real keystore plus custody process; `verify:android-release-signing` passes |
 | B5 | Staging dev auth (D6) | Config refuses `ALLOW_DEV_AUTH=true` outside local/test/development; the server `.env` still has to be changed by hand | Set `ALLOW_DEV_AUTH=false` on the host, redeploy, confirm `/auth/dev-login` returns 404 |
 | B6 | Backup and restore evidence | `infra/lightsail/backup.sh` / `restore.sh` exist (checked by `scripts/verify_backup_restore.py`); no restore drill recorded | Run and record a restore drill with RPO/RTO; back up before every migration |
@@ -52,7 +51,7 @@ Cloud parsing (D1) was decided on 2026-11-05: no in-app consent step, and the ve
 
 ## 5. Order of work
 
-1. B2–B3 privacy decisions (product owner), then implement retention.
+1. B2 privacy decision (product owner), then implement retention.
 2. B5 server config, B4 signing, B6 restore drill.
 3. Fix the mobile verifiers after the feature removal so `npm run quality` passes.
 4. B7 real-device run.

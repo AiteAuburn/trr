@@ -32,7 +32,7 @@
 
 ## 3. AI 架構（目前實況）
 
-- 語音轉文字：手機系統語音辨識（`expo-speech-recognition`，可能使用 Google 雲端）；使用者下載 Whisper 模型後，在 Android 13+ 優先用 `whisper.rn` 在本機處理。
+- 語音轉文字：使用者下載 Whisper 模型後，在 Android 13+ 優先用 `whisper.rn` 在本機處理；失敗時用手機系統語音辨識（`expo-speech-recognition`）的結果。系統辨識能在本機就在本機，做不到時才用手機一般的辨識（可能上雲）。
 - 解析：後端 `/ai/parse-preview`。設定 DeepSeek 時預設用 DeepSeek（雲端），會送出分段後的使用者原話。Ollama / Gemma 是開發用的本地選項。手機上的 `llama.rn` 只在 debug tools。
 - 資料：存在伺服器 PostgreSQL。手機沒有本機資料庫。
 - 原始音檔不上傳、不保存。
@@ -42,7 +42,6 @@
   - 不可新增其他第三方 AI 或分析服務來接收 PHI；
   - 不可擴大送往 DeepSeek 的資料（例如完整紀錄、profile 資料）；
   - 年度回顧只能送聚合統計。
-- 手機語音辨識是否要求 on-device 仍未決定（D3）。
 
 ## 4. AI 輸出規範
 

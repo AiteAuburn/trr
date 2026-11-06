@@ -56,7 +56,7 @@ Current mobile scope:
 - email/password login (Apple / Google not wired yet); dev login only with `EXPO_PUBLIC_ALLOW_DEV_AUTH=true`
 - profile loading and first-profile creation
 - voice-first home: tap the mic to start and tap again to stop; auto-stop after 3 s of silence; 60 s cap
-- speech-to-text through the phone's speech recognizer (`expo-speech-recognition`, which may use Google's cloud service), plus an optional on-device Whisper pass after the user downloads the model in Settings (Android 13+)
+- speech-to-text through the phone's speech recognizer (`expo-speech-recognition`, on-device when the phone supports it, otherwise the phone's normal recognizer), plus an optional on-device Whisper pass after the user downloads the model in Settings (Android 13+); if Whisper fails, the phone transcript is used
 - transcript goes straight to `/ai/parse-preview`, with cancel
 - single confirm page, then save, then 存好了
 - Today timeline, history, basic analysis, year review

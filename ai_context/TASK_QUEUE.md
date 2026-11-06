@@ -30,7 +30,7 @@ Create a real Android release keystore with a custody plan, wire the signing con
 
 ### T2352: Real-device voice flow acceptance
 
-Install a release APK on a real Android phone against staging. Verify microphone permission, tap start/stop, 3 s auto-stop, 60 s cap, Whisper-first with phone fallback, temp-audio deletion, parse cancel, confirm, save, and the Today timeline. Do not mark done on mocks or emulator alone.
+Install a release APK on a real Android phone against staging. Verify microphone permission, tap start/stop, 3 s auto-stop, 60 s cap, Whisper-first with phone fallback, phone recognition staying on-device when the Taiwan Mandarin offline pack is installed (try airplane mode) and working without the pack, temp-audio deletion, parse cancel, confirm, save, and the Today timeline. Do not mark done on mocks or emulator alone.
 
 ### T2353: Server-side voice quota trust (D5)
 
@@ -52,6 +52,7 @@ Use `AbortController` in mobile so cancel actually stops the request, and make s
 
 | When | What |
 |---|---|
+| 2026-11 | D3 decided: phone speech recognition runs on-device when the phone can, otherwise the normal recognizer; Whisper failures fall back to it |
 | 2026-11 | T2348: cloud parsing decided (D1). No in-app consent step; the AI vendor is never named in the UI (「AI 智慧整理」) |
 | 2026-11 | T2347: cut scope to the voice-first MVP. Removed store, community, ranking and achievements (tables kept), deleted k8s/aws/minimal infra, moved backup/restore to Lightsail, consolidated `ai_context/` from 42 to 14 docs |
 | 2026-11 | Voice-first mobile redesign: big mic home, tap start/stop, 3 s silence auto-stop, 60 s cap, straight to AI parsing with cancel, single confirm page, 存好了, Today timeline |

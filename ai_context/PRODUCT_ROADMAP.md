@@ -20,7 +20,7 @@
 | 項目 | 狀態 |
 |---|---|
 | Android App（Expo SDK 57） | 語音優先：首頁大麥克風，點一下開始／再點一下結束，停頓 3 秒自動停止，單次上限 60 秒 |
-| 語音轉文字 | 手機系統語音辨識（`expo-speech-recognition`，通常是 Google 雲端服務）；使用者下載 Whisper 模型後，Android 13+ 會先用 `whisper.rn` 在本機重轉 |
+| 語音轉文字 | 使用者下載 Whisper 模型後，Android 13+ 先用 `whisper.rn` 在本機轉文字；失敗時用手機系統語音辨識的結果。系統辨識能在本機就在本機（iOS、裝了離線中文語音包的 Android 13+），否則用手機一般的辨識（可能上雲，免費） |
 | AI 整理 | 後端 `/ai/parse-preview`；有設定時預設用 DeepSeek（雲端），Ollama / Gemma 只是開發用 |
 | 確認與儲存 | 單一確認頁 → 存起來 → 「存好了」；可取消整理、改文字、重說 |
 | 檢視 | 今天時間軸、歷史、基本分析、年度回顧 |
@@ -53,13 +53,13 @@
 已決定：
 
 - **D1 雲端 AI 解析**（2026-11-05）：維持後端送 DeepSeek 解析。App 內不設 AI 同意步驟；使用者介面不顯示供應商名稱，統一稱「AI 智慧整理」。隱私權政策與 Google Play 資料安全表單仍需揭露「由第三方 AI 服務處理」（可不寫廠商名）。
+- **D3 手機語音辨識**（2026-11-06）：Whisper 失敗時用手機系統辨識；系統辨識優先在本機（`requiresOnDeviceRecognition`）。手機做不到本機辨識時，改用手機一般的辨識（可能上雲，免費），讓每支手機都能用語音。
 
 以下尚未決定，文件與程式碼都不可假裝已解決：
 
 | # | 議題 | 現況 | 選項 |
 |---|---|---|---|
 | D2 | 原始逐字稿保存 | `ai_parse_audits.transcript_text` 與 `daily_records.transcript_entries_json` 無期限保存，管理後台看得到 | 訂保存期限與清除 job；或不保存原文 |
-| D3 | 手機語音辨識走雲端 | 系統辨識未要求 on-device，可能送 Google | 說明並取得同意；或要求 on-device／改以 Whisper 為主 |
 | D4 | Release 簽章 | release APK 仍用 debug keystore 簽 | 建立正式 keystore 與保管流程 |
 | D5 | 語音額度信任來源 | `voice_seconds` 由 client 回報，伺服器不量音檔 | 接受（成本風險低）；或伺服器端估算／收音檔長度 |
 | D6 | Staging dev 登入 | 程式已拒絕 staging 開 `ALLOW_DEV_AUTH`；主機 `.env` 仍需人工改成 false | 運維動作，待執行 |
