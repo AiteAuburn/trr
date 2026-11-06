@@ -38,3 +38,6 @@ mobile/android/app/src/main/assets/ggml-hexagon/
 
 # Database dumps from infra/lightsail/backup.sh (contain health data)
 backups/
+
+# Local CodeGraph index (per machine)
+.codegraph/
