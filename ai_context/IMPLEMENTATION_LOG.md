@@ -15,6 +15,53 @@
 後續:
 ```
 
+## 2026-11-07
+
+### 內部測試 APK，修正 Windows SDK 路徑檢查
+
+類型：bugfix / infra
+
+檔案：`scripts/check_android_apk_build_prereqs.py`、`ai_context/IMPLEMENTATION_LOG.md`。
+
+摘要：
+
+- `check_android_apk_build_prereqs.py` 在原生 Windows 上也把 `sdk.dir=C:/...` 轉成 `/mnt/c/...`，導致照手冊設定 Windows 路徑後，`preflight:android-apk:internal` 仍回報 SDK 不存在。改成只有 Linux/WSL 才轉換。
+- 本機 `mobile/android/local.properties`（不進 git）改成 `sdk.dir=C:/Users/robin/AppData/Local/Android/Sdk`。
+- 用 PowerShell 建置 internal release APK，指向 Lightsail staging；建置時用環境變數關閉 dev 登入、伺服器切換器、debug 工具，沒有改開發用的 `mobile/.env`。Windows 上的 `cmd` 不會在目前資料夾找執行檔，所以要用 `.\gradlew.bat`。
+
+驗證：
+
+- `npm run preflight:android-apk:internal` 通過（release env、debug signing 允許、`apk_build_ready: true`）；`python scripts/verify_android_apk_scripts.py` 通過。
+- `assembleRelease` 成功，`createBundleReleaseJsAndAssets` 有重跑；`@expo/env` 在相同環境下讀到三個開關都是 false；bundle 內含 staging API 網址。
+
+後續：
+
+- 仍是 debug keystore 簽章，只能給可信任的內部測試者（T2351 / B4）。
+- APK 約 187 MB（包含所有 CPU 架構與原生模型套件），之後可考慮只打 arm64-v8a。
+
+### Lightsail staging 部署 `2026-11-07.1`
+
+類型：infra / docs
+
+檔案：`ai_context/DEPLOYMENT.md`、`ai_context/IMPLEMENTATION_LOG.md`（伺服器上：`/opt/bloodsugar` 的 `backend/`、`web/`、`infra/lightsail/`）。
+
+摘要：
+
+- 伺服器原本跑 2026-09-12 的程式（`/version` 顯示 `release_id: local`），舊版 `compose.yml` 的 `ALLOW_DEV_AUTH` 預設 true，dev 登入對外開著。操作者已在伺服器 `.env` 改成 `ALLOW_DEV_AUTH=false`。
+- 依 `DEPLOYMENT.md` 第 3 節部署 commit `4cbcd98`：先把伺服器舊程式打包成 `backups/code-pre-20261107.tgz`、舊映像加上 `rollback-20261107` 標籤；用 `git archive` 匯出後 rsync（不碰 `.env`、`backups/`）；`backup.sh` 備份資料庫；建置後端與網頁映像；migration `20260912_0031` → `20261003_0034`；重啟服務，Caddy 重新建立以讀到新的 `Caddyfile`。
+- 從開發機用 SSH（WSL `~/.ssh/config` 的 `bloodsugar`）連線。
+
+驗證：
+
+- `/api/version` 顯示 `release_id 2026-11-07.1`、`git_sha 4cbcd98…`；`/api/readyz`、`/api/healthz`、`/`、`/admin` 都是 200。
+- `POST /api/auth/dev-login` 回 404；未登入的 `/api/ai/models` 回 401；已移除的 `/api/achievements` 回 404。
+- 部署後 10 分鐘內後端與 Caddy log 沒有 error。
+
+後續：
+
+- 用內部測試帳號在手機跑一次 錄音 → 解析 → 確認 → 存（本次沒有在伺服器上建立測試帳號）。
+- 回滾：`docker tag lightsail-backend:rollback-20261107 lightsail-backend` 和 `lightsail-web` 同樣做，再 `dc up -d`；或解開 `code-pre-20261107.tgz` 重新建置。資料庫 schema 只加不刪，不需要降版。
+
 ## 2026-11-06
 
 ### 手機語音辨識優先在本機（D3）

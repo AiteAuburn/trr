@@ -66,6 +66,9 @@ def _is_mounted_windows_sdk_path(value: str) -> bool:
 def _sdk_path(value: str) -> Path | None:
     if not value:
         return None
+    # Native Windows reads C:/... directly; only Linux/WSL needs the /mnt/<drive> form.
+    if os.name == "nt":
+        return Path(value)
     windows_as_wsl = _windows_path_to_wsl(value)
     if windows_as_wsl is not None:
         return windows_as_wsl

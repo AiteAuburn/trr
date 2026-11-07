@@ -67,6 +67,8 @@ backend 另接 public 網路，只為了連出 api.deepseek.com
 
 ## 3. 每次發版
 
+**登入伺服器**：Lightsail 主控台（Virginia 區）點主機的 Connect using SSH，或在開發機用 `ssh -i <Lightsail 預設金鑰> ubuntu@<主機 IP>`（金鑰在 Lightsail 的 Account → SSH keys 下載，權限設成只有自己可讀）。防火牆的 22 埠只開放操作者 IP；連不上時到主機的 Networking → IPv4 Firewall，把現在的 IP 加進 SSH 規則。
+
 以下指令都在 `/opt/bloodsugar` 執行，先設定：
 
 ```bash
@@ -79,7 +81,7 @@ dc() { docker compose --env-file infra/lightsail/.env -f infra/lightsail/compose
 3. **建置一次**：`dc build backend web`。migration 和後端用同一個映像。
 4. **先備份**：`sh infra/lightsail/backup.sh`，確認 `backups/` 裡有新的 `.dump`。
 5. **migration**：`dc run --rm backend alembic upgrade head`。只允許 expand/contract 的 expand 階段（只加不刪），舊版程式要能繼續用新 schema。規則在 `infra/api-migration-compatibility.json`。
-6. **重啟**：`dc up -d`。Caddy 等後端的 `/readyz` 通過才轉流量。單機重建會有幾秒中斷，這是已知取捨。
+6. **重啟**：`dc up -d`。Caddy 等後端的 `/readyz` 通過才轉流量。單機重建會有幾秒中斷，這是已知取捨。如果這次改了 `Caddyfile`，再跑 `dc up -d --force-recreate caddy`：它是單一檔案掛載，換檔後舊容器還看著舊檔。
 7. **確認**：`/readyz` 是 ready、`/version` 的 `release_id` / `git_sha` 是這一版，再用假資料跑一次 錄音 → 解析 → 確認 → 存。
 8. **觀察 15 分鐘**：看 5xx、登入失敗、解析失敗、回應時間（後台用量頁、`dc logs backend`）。
 
@@ -118,7 +120,6 @@ dc() { docker compose --env-file infra/lightsail/.env -f infra/lightsail/compose
 
 | 項目 | 現況 | 要做的事 |
 |---|---|---|
-| dev 登入 | `compose.yml` 預設 false，但伺服器上的 `.env` 要自己確認 | 登入伺服器確認 `ALLOW_DEV_AUTH=false`。 |
 | 隱私揭露 | 依 D1 決定，App 內不設 AI 同意、介面不顯示廠商名 | 隱私權政策與 Google Play 資料安全表單揭露「由第三方 AI 服務處理」。 |
 | 原始逐字稿保存 | `ai_parse_audit` 永久保存逐字稿 | 改存長度/雜湊，或加保存期限。 |
 | APK 簽章 | 正式版仍用 debug keystore | 建立正式 keystore（`docs/ANDROID_RELEASE_SHARING.md`）。 |
