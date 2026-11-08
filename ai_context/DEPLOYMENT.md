@@ -42,6 +42,7 @@ backend 另接 public 網路，只為了連出 api.deepseek.com
 | `LOCAL_LLM_TIMEOUT_SECONDS` / `LOCAL_LLM_MAX_TOKENS` | `45` / `900` | 成本與延遲上限，`verify_deployment_config.py` 檢查上限。 |
 | `LOCAL_LLM_REPAIR_FALLBACK_ENABLED` | `true` | 模型失敗時改用規則解析，不會再打第二次 AI。 |
 | `MAX_REQUEST_BODY_BYTES` | `1048576` | 請求最大 1 MiB。 |
+| `FORWARDED_ALLOW_IPS` | `*` | 信任 Caddy 傳來的 `X-Forwarded-For`，頻率限制才看得到真正的來源 IP。後端 8000 不對外，而且 Caddy 會用連線的真實 IP 覆蓋使用者自帶的標頭，所以不能偽造。 |
 | `RELEASE_ID` / `GIT_SHA` | 部署時傳入 | `/version` 用來確認跑的是哪一版。 |
 
 秘密值只放在伺服器上的 `infra/lightsail/.env`（權限 600，不進 git）：資料庫密碼、`AUTH_JWT_SECRET`、`DEEPSEEK_API_KEY`、`ADMIN_PASSWORD_HASH`、`ADMIN_SESSION_SECRET`。
@@ -123,8 +124,6 @@ dc() { docker compose --env-file infra/lightsail/.env -f infra/lightsail/compose
 | 隱私揭露 | 依 D1 決定，App 內不設 AI 同意、介面不顯示廠商名 | 隱私權政策與 Google Play 資料安全表單揭露「由第三方 AI 服務處理」。 |
 | 原始逐字稿保存 | `ai_parse_audit` 永久保存逐字稿 | 改存長度/雜湊，或加保存期限。 |
 | APK 簽章 | 正式版仍用 debug keystore | 建立正式 keystore（`docs/ANDROID_RELEASE_SHARING.md`）。 |
-| 頻率限制 | uvicorn 只信任 127.0.0.1 的 proxy header，後端看到的 IP 都是 Caddy | 設定 `FORWARDED_ALLOW_IPS`，否則登入限制是全站共用。 |
-| `/metrics` | 經 Caddy 對外公開 | 從 `@legacy_api` 移除，或加認證。 |
 | 備份 | 只有手動、只在同一台主機 | 加排程和異地加密備份，並實際演練一次還原。 |
 | 監控 | 只有 log 和後台用量頁 | 至少加外部 uptime 檢查和磁碟空間告警。 |
 

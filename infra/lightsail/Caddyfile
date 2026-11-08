@@ -16,7 +16,7 @@
 		}
 
 		# Temporary compatibility for the already-installed APK and existing probes.
-		@legacy_api path /health /healthz /readyz /metrics /version /feature-flags /auth/* /profiles /profiles/* /records /records/* /ai/* /daily-records /daily-records/* /reports/* /subscriptions/* /year-reviews/*
+		@legacy_api path /health /healthz /readyz /version /feature-flags /auth/* /profiles /profiles/* /records /records/* /ai/* /daily-records /daily-records/* /reports/* /subscriptions/* /year-reviews/*
 		handle @legacy_api {
 			reverse_proxy backend:8000
 		}

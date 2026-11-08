@@ -40,7 +40,7 @@ Android App (Expo)            Web 模擬器 / 管理後台 (Vite + React 19)
 
 | Router | 路徑 |
 |---|---|
-| main | `GET /health`、`/healthz`、`/readyz`、`/metrics`、`/version`、`/feature-flags`（皆公開） |
+| main | `GET /health`、`/healthz`、`/readyz`、`/version`、`/feature-flags`（公開）；`GET /metrics`（需要後台管理員 session cookie） |
 | auth | `POST /auth/register`、`/login`、`/dev-login`、`/oidc-login`、`/refresh`、`/logout`（公開）；`GET /auth/me`、`POST /auth/logout-all`、`GET /auth/sessions`、`DELETE /auth/sessions/{id}` |
 | ai | `GET /ai/models`；`POST /ai/parse-preview`、`/ai/parse-preview/progress-stream`、`/ai/parse-preview/debug-stream`（僅 debug tools）、`/ai/command-proposal` |
 | records | `GET/POST /records`、`GET/PATCH/DELETE /records/{id}`（軟刪除） |
@@ -127,6 +127,6 @@ App 的 token 只存 `expo-secure-store`（`mobile/authTokenStorage.ts`）。網
 ## 9. 可觀測性
 
 - `core/logging.py`：JSON log，只輸出 allowlist 欄位（request_id、trace_id、route、method、http_status、event_code、model_id、provider、duration_ms 等）。
-- `/metrics`：Prometheus，route pattern 層級，不含 query、body。
+- `/metrics`：Prometheus，route pattern 層級，不含 query、body。只有後台管理員能讀（`get_current_admin`），後台「API 與指標」頁會解析顯示。
 - 管理後台：每日 API 與 token 用量、operational events（模型錯誤、5xx、慢請求、登入事件）。
 - 尚無告警、dashboard 或 trace exporter。

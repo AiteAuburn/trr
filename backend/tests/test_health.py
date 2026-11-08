@@ -1,9 +1,12 @@
 import asyncio
 import json
+from collections.abc import Iterator
 
+import pytest
 from fastapi.testclient import TestClient
 from starlette.types import Message, Scope
 
+from app.api.admin import get_current_admin
 from app.core.metrics import MAX_METRIC_LABEL_VALUE_LENGTH, http_metrics
 from app.main import (
     MAX_VALIDATION_DETAIL_CONTAINER_LENGTH,
@@ -382,9 +385,29 @@ def test_feature_flags_fail_closed_by_default() -> None:
     }
 
 
+@pytest.fixture(autouse=True)
+def _clear_admin_override() -> Iterator[None]:
+    yield
+    app.dependency_overrides.pop(get_current_admin, None)
+
+
+def _admin_client() -> TestClient:
+    app.dependency_overrides[get_current_admin] = lambda: "admin"
+    return TestClient(app)
+
+
+def test_metrics_endpoint_requires_admin_session() -> None:
+    app.dependency_overrides.pop(get_current_admin, None)
+    response = TestClient(app).get("/metrics")
+
+    assert response.status_code == 401
+    assert response.json()["detail"]["code"] == "admin_auth_required"
+    assert "app_http_requests_total" not in response.text
+
+
 def test_metrics_endpoint_exposes_phi_safe_route_metrics() -> None:
     http_metrics.reset()
-    client = TestClient(app)
+    client = _admin_client()
 
     health_response = client.get("/healthz?transcript=should-not-appear")
     metrics_response = client.get("/metrics")
@@ -409,9 +432,10 @@ def test_metrics_endpoint_exposes_phi_safe_parser_metrics() -> None:
         reason="local_parser_failed",
     )
 
-    response = TestClient(app).get("/metrics")
+    response = _admin_client().get("/metrics")
 
     assert response.status_code == 200
+    assert response.headers["cache-control"] == "no-store"
     body = response.text
     assert (
         'app_parser_results_total{model_id="ollama-qwen2.5-1.5b",'
@@ -446,7 +470,7 @@ def test_metrics_labels_are_normalized_and_bounded() -> None:
 
 def test_metrics_endpoint_exposes_phi_safe_db_timing_metrics() -> None:
     http_metrics.reset()
-    client = TestClient(app)
+    client = _admin_client()
 
     ready_response = client.get("/readyz")
     metrics_response = client.get("/metrics")

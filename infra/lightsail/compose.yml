@@ -36,6 +36,10 @@ services:
       RELEASE_ID: ${RELEASE_ID:-unset}
       GIT_SHA: ${GIT_SHA:-unknown}
       LOG_LEVEL: info
+      # Trust X-Forwarded-For from Caddy so rate limits see the real client IP.
+      # Safe because port 8000 is never published; Caddy overwrites any
+      # client-sent X-Forwarded-For with the connecting address.
+      FORWARDED_ALLOW_IPS: "*"
       ENABLE_DEBUG_TOOLS: "false"
       ALLOW_DEV_AUTH: ${ALLOW_DEV_AUTH:-false}
       DATABASE_URL: ${DATABASE_URL}

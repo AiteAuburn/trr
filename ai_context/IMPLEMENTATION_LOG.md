@@ -17,6 +17,31 @@
 
 ## 2026-11-07
 
+### `/metrics` 只給管理員、頻率限制看真實 IP、後台改版（staging `2026-11-07.2`）
+
+類型：bugfix / feature / infra / docs
+
+檔案：`backend/app/main.py`、`backend/app/services/route_auth_policy.py`、`backend/tests/test_health.py`、`infra/lightsail/{compose.yml,Caddyfile}`、`scripts/verify_deployment_config.py`、`web/src/{AdminApp.tsx,AdminApp.test.tsx,admin.css,adminMetrics.ts,adminMetrics.test.ts,main.tsx}`、`ai_context/{architecture,DEPLOYMENT,PRODUCTION_READINESS,IMPLEMENTATION_LOG}.md`。
+
+摘要：
+
+- `/metrics` 原本經 Caddy 對外公開。改成依賴 `get_current_admin`（後台 session cookie），從公開路由清單移除，Caddy 舊路徑清單也拿掉 `/metrics`。
+- 後端看到的來源 IP 原本都是 Caddy，登入頻率限制變成全站共用。Lightsail backend 加 `FORWARDED_ALLOW_IPS: "*"`：8000 不對外，Caddy 會用連線的真實 IP 覆蓋使用者自帶的 `X-Forwarded-For`。`verify_deployment_config.py` 檢查這個設定、backend 沒有 `ports:`、Caddy 舊路徑沒有 `/metrics`。
+- 管理後台改版（先用 Claude Design 出稿）：左側導覽分成總覽、使用者、系統事件、API 與指標，網址 hash 可以直接開某一頁。逐字稿、AI 結果、健康紀錄預設遮住，按「顯示內容」才看得到（打開使用者資料本來就會寫 `admin.user_health_data_view` 稽核）。每日圖表補滿整段期間。新的「API 與指標」頁解析 `/metrics` 顯示 AI 解析結果、資料庫操作、HTTP 狀態。左上角依網址顯示 LOCAL / STAGING。
+- 部署時這些改動還沒 commit：用臨時 git index 打包工作目錄（不動分支和 staging area），`/version` 的 `git_sha` 是 `675f995…+wip`。
+
+驗證：
+
+- 後端 ruff、mypy、全部 318 個測試通過；新增「未登入讀 `/metrics` 回 401」測試。網頁 lint、typecheck、18 個測試通過（含 Prometheus 解析、日期補滿、hash 對應頁面）。
+- 本機用臨時測試管理員實際看過四個頁面與登入頁；看完已恢復原本 `.env` 的管理員設定並刪除臨時密碼。
+- Staging：`/api/version` 是 `2026-11-07.2`；`/api/metrics` 未登入 401、`/metrics` 404、`/admin` 200、dev 登入 404；容器內 uvicorn `forwarded_allow_ips = *`；部署後 log 沒有 error。
+
+後續：
+
+- commit 這批改動後，下次部署會有乾淨的 `git_sha`。
+- 回滾：`lightsail-backend:rollback-20261107b`、`lightsail-web:rollback-20261107b`，舊程式在 `backups/code-pre-20261107b.tgz`。
+- `ai_context/FEATURE_STATUS.md`（另一份盤點）裡描述的後台現況要對照這次改版更新。
+
 ### 內部測試 APK，修正 Windows SDK 路徑檢查
 
 類型：bugfix / infra

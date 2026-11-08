@@ -148,6 +148,7 @@ def _verify_lightsail_staging(errors: list[str]) -> None:
         'VITE_API_BASE_URL: /api',
         'ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-}',
         'LOCAL_LLM_REPAIR_FALLBACK_ENABLED: "true"',
+        'FORWARDED_ALLOW_IPS: "*"',
     )
     for marker in required_compose_markers:
         if marker not in compose:
@@ -168,6 +169,11 @@ def _verify_lightsail_staging(errors: list[str]) -> None:
         or "reverse_proxy web:8080" not in caddy
     ):
         errors.append("Lightsail Caddyfile must terminate HTTPS and proxy to backend")
+    legacy_paths = re.search(r"@legacy_api path ([^\n]+)", caddy)
+    if legacy_paths and "/metrics" in legacy_paths.group(1).split():
+        errors.append("Lightsail Caddyfile must not expose /metrics on the legacy unprefixed path")
+    if "ports:" in backend_block:
+        errors.append("Lightsail backend must not publish ports; FORWARDED_ALLOW_IPS trusts every peer")
     for marker in ('Amount = "10"', 'NotificationType = "ACTUAL"', 'Threshold = 80', 'NotificationType = "FORECASTED"'):
         if marker not in budget:
             errors.append(f"Lightsail budget script: missing guard {marker!r}")

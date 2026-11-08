@@ -7,7 +7,6 @@ PUBLIC_ROUTE_REASONS: dict[tuple[str, str], str] = {
     ("GET", "/health"): "legacy load-balancer health check",
     ("GET", "/healthz"): "process liveness probe",
     ("GET", "/readyz"): "traffic readiness probe",
-    ("GET", "/metrics"): "cluster-internal metrics scrape",
     ("GET", "/version"): "PHI-safe release identity",
     ("GET", "/feature-flags"): "public fail-closed feature availability",
     ("POST", "/auth/dev-login"): "environment-gated local/test login",

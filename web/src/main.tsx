@@ -9,7 +9,7 @@ const RootApp = window.location.pathname.startsWith("/admin")
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Suspense fallback={<main className="admin-shell"><p>正在載入…</p></main>}>
+    <Suspense fallback={<main className="admin-login-shell"><p className="admin-status">正在載入…</p></main>}>
       <RootApp />
     </Suspense>
   </React.StrictMode>

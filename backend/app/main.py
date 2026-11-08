@@ -3,7 +3,7 @@ from collections.abc import Awaitable, Callable
 from time import perf_counter
 from uuid import uuid4
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
@@ -364,10 +364,12 @@ async def log_requests(
 
 
 @app.get("/metrics", response_class=PlainTextResponse)
-def metrics() -> PlainTextResponse:
+def metrics(_admin: str = Depends(admin.get_current_admin)) -> PlainTextResponse:
+    """Prometheus text for the admin console; requires the admin session cookie."""
     return PlainTextResponse(
         http_metrics.render_prometheus(),
         media_type="text/plain; version=0.0.4; charset=utf-8",
+        headers={"Cache-Control": "no-store"},
     )
 
 
